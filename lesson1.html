@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inglês Abre Portas – Lesson 1</title>
+<style>
+ body{font:17px/1.5 system-ui;max-width:750px;margin:0 auto;padding:16px}
+ ::selection{background:#ffe08a}
+ #bar{position:fixed;top:10px;right:10px;background:#fff;border:2px solid #14908f;
+   padding:8px;border-radius:12px;display:none;z-index:9}
+ #bar button{margin:2px;padding:8px 12px;border:0;border-radius:8px;
+   background:#14908f;color:#fff;font-size:15px;cursor:pointer}
+ .take{border:1px solid #bbb;border-radius:10px;padding:8px;margin:8px 0;background:#fafafa}
+ h1,h2{color:#14908f}
+</style>
+</head>
+<body>
+<div id="bar">
+ <button onclick="hear()">▶ Hear</button>
+ <button onclick="rec()">⏺ Record & Check</button>
+</div>
+
+<h1>Lesson 1 — You Already Know English</h1>
+
+<p><b>Abertura (PT):</b> Você já sabe centenas de palavras em inglês — só ainda não sabe.
+São os <i>cognatos</i>, palavras parecidas com o português. Metas de hoje: (1) descobrir o
+código dos sufixos, (2) sentir a batida do inglês, (3) ler seu primeiro texto em voz alta.
+SOLO: use ▶ em tudo e grave a si mesmo pelo menos uma vez.</p>
+
+<h2>1. Leia em voz alta (destaque qualquer linha → ▶)</h2>
+<p><b>KIDS:</b><br>
+A: Yo, that video is incredible!<br>
+B: Obviously. My favorite creator is super original.<br>
+A: The music is awesome too. Totally different.<br>
+B: Yeah! And the edit is professional. Not basic, not cringe.</p>
+<p><b>BUSINESS:</b><br>
+A: Welcome. I'm Marina, the new project manager.<br>
+B: A pleasure. I'm Daniel, responsible for international sales.<br>
+A: Excellent. My experience is in technology projects.<br>
+B: Perfect. Our office is modern and the team is very professional.</p>
+<p><b>NSFW (18+):</b><br>
+A: Holy shit, that party was incredible.<br>
+B: Honestly? The place looked pretentious, I didn't expect much.<br>
+A: But the DJ was fucking amazing.<br>
+B: Okay, you're right. Obviously the music was perfect.</p>
+<p><i>(PT: perceba quanto você entendeu sem traduzir nada. Isso é um cognato.)</i></p>
+
+<h2>2. Sound Lab ‍🦺 (PT)</h2>
+<p>Inglês tem batida: palavras importantes são fortes; palavrinhas (the, a, is) encolhem
+para "ə" (o schwa, um "ã" murmurado). Bata palma nas fortes: infor<b>MA</b>tion,
+in<b>CRED</b>ible, pro<b>FES</b>sional, o<b>RIG</b>inal. Agora diga:
+"The inforMAtion is inCREDible" — o "the" quase some: "thuh".
+O Certo, nosso pastor‑alemão, ouve a batida. Você também vai ouvir.</p>
+
+<h2>3. Gramática de hoje (quase nenhuma — de propósito)</h2>
+<p>A ordem é a mesma do português: The team is professional = O time é profissional.
+Adjetivo não muda no plural: modern office / modern offices (nunca "moderns").</p>
+
+<h2>4. Cognate Boost — o código dos sufixos</h2>
+<p>-ção → -tion: informação→information, nação→nation<br>
+-dade → -ty: possibilidade→possibility, necessidade→necessity<br>
+Iguais: professional, original, obvious, excellent, modern, pretentious<br>
+Falsos amigos: actually = na verdade; push = empurrar; pretend = fingir.</p>
+
+<h2>5. Your turn (fale em voz alta; use ⏺)</h2>
+<p>1) Diga 3 cognatos que você conhece. 2) Leia o diálogo da sua versão de novo,
+com a batida. 3) Diga "The information is incredible" 3 vezes, cada vez mais rápido.</p>
+
+<h2>6. Quiz 1 — SEM CONSULTA</h2>
+<p><i>(PT: sem anotações, sem tradutor, sem IA. O quiz diagnostica o que ficou em você;
+usar consulta aqui anula o propósito e desperdiça seu tempo e o do professor.
+No estudo pessoal, use tudo.)</i><br>
+A) Escreva em inglês: informação____ diferente____ necessário____ profissional____ incrível____ óbvio____<br>
+B) Circule a sílaba forte: information / incredible / professional / original<br>
+C) ▶ Listening (professor ou ▶): escreva a frase que ouvir.<br>
+D) ⏺ Speaking: grave a segunda linha do seu diálogo; escute e compare com o ▶.</p>
+
+<h2>🎙 Your recordings</h2>
+<div id="takes"></div>
+
+<script>
+let sel='';
+document.addEventListener('mouseup',()=>{
+  sel=(window.getSelection()+'').trim();
+  document.getElementById('bar').style.display = sel? 'block':'none';
+});
+function hear(){
+  const u=new SpeechSynthesisUtterance(sel);
+  u.lang='en-US'; u.rate=0.95;
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
+}
+async function rec(){
+  let stream;
+  try{ stream=await navigator.mediaDevices.getUserMedia({audio:true}); }
+  catch(e){ window.open(location.href,'_blank');
+    alert('Microphone blocked inside the site — I opened this page in its own tab. Record there.');
+    return; }
+  const mr=new MediaRecorder(stream), ch=[];
+  mr.ondataavailable=e=>ch.push(e.data); mr.start();
+  const R=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
+  R.lang='en-US'; let heard='';
+  R.onresult=e=>heard=e.results[0][0].transcript;
+  R.start();
+  setTimeout(()=>{ mr.stop(); R.stop(); stream.getTracks().forEach(t=>t.stop()); show(heard); },6000);
+  function show(heard){
+    const url=URL.createObjectURL(new Blob(ch,{type:'audio/webm'}));
+    const score=scoreIt(sel,heard);
+    const d=document.createElement('div'); d.className='take';
+    d.innerHTML='<b>'+score+'% match</b><br><i>You tried:</i> '+sel+
+      '<br><i>Computer heard:</i> '+(heard||'(nothing)')+
+      '<br><audio controls src="'+url+'"></audio>';
+    document.getElementById('takes').prepend(d);
+  }
+}
+function scoreIt(a,b){
+  if(!b) return 0;
+  const W=x=>x.toLowerCase().replace(/[^a-z' ]/g,'').split(/\s+/);
+  const A=W(a), B=W(b); let h=0;
+  B.forEach(w=>{ if(A.includes(w)) h++; });
+  return Math.round(100*h/A.length);
+}
+</script>
+</body>
+</html>
