@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inglês Abre Portas — Portal</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+<header class="brand">
+ <img src="logo.png" alt="Inglês Certo EUA" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'">
+ <h1>INGLÊS <span>ABRE PORTAS</span></h1>
+ <p class="script">Vamos lá</p>
+</header>
+<main>
+ <div class="card center">
+   <p class="dim">Entre com a conta Google cadastrada pelo professor.</p>
+   <div id="gbtn"></div>
+ </div>
+ <div id="app"></div>
+ <p id="debug" class="dim"></p>
+</main>
+<footer>MATERIAIS SIMPLES E INOVADORES · INGLES CERTO EUA</footer>
+<script>
+const CLIENT_ID="872457390510-jsk9pooj688ogvp6hs9ca4js3iqk5n69.apps.googleusercontent.com";   // ← seu ID do portal antigo
+const SECRET="abreportas2025";
+const LESSON_COUNT=1;
+const TN={kids:"Kids 🛹",business:"Business 💼",nsfw:"Adultos 🔞"};
+const $=id=>document.getElementById(id);
+const log=m=>{debug.innerHTML+="› "+m+"<br>";console.log(m)};
+const h=s=>{let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x};
+let user=null,access=null,teacher=false,tries=0;
+
+window.addEventListener("load",boot);
+function boot(){
+ if(!window.google){ if(++tries<5){setTimeout(boot,1200);return;}
+   log("ERRO: o script do Google não carregou. Verifique a internet e recarregue.");return;}
+ google.accounts.id.initialize({client_id:CLIENT_ID,callback:onSignIn});
+ google.accounts.id.renderButton($("gbtn"),{theme:"outline",size:"large",shape:"pill"});
+ log("pronto — botão carregado.");
+}
+function onSignIn(resp){
+ try{
+   let b=resp.credential.split(".")[1].replace(/-/g,"+").replace(/_/g,"/");
+   while(b.length%4)b+="=";
+   const p=JSON.parse(atob(b));
+   user={email:p.email,name:p.name};
+   log("login OK: "+user.email);
+   start();
+ }catch(e){log("ERRO no login: "+e.message);}
+}
+async function start(){
+ try{
+   const r=await fetch("access.json?"+Date.now());
+   if(!r.ok)throw new Error("access.json não encontrado (HTTP "+r.status+"). Envie access.json à raiz do repositório.");
+   access=await r.json();
+ }catch(e){$("app").innerHTML='<div class="card">⚠️ '+e.message+"</div>";log("ERRO: "+e.message);return;}
+ access.teachers=access.teachers||[];access.students=access.students||{};
+ teacher=access.teachers.includes(user.email);
+ const stu=access.students[user.email];
+ log("access.json OK · professor="+teacher+" · aluno="+!!stu);
+ if(!teacher&&!stu){$("app").innerHTML='<div class="card">⛔ <b>'+user.email+
+   "</b> não está cadastrado.<br>Fale com seu professor.</div>";return;}
+ render(stu);
+}
+const prog=()=>JSON.parse(localStorage.getItem("prog_"+user.email)||"{}");
+function go(t,i){sessionStorage.gate=JSON.stringify({email:user.email,track:t,teacher,sig:h(user.email+t+SECRET)});location="lesson"+i+".html";}
+function render(stu){
+ const p=prog();
+ let html='<div class="card">Olá, <b>'+user.name+"</b>! "+(teacher?"<b>Modo professor:</b> você entra nas 3 versões.":"Sua versão: <b>"+TN[stu.track]+"</b>.")+"</div>";
+ for(const t of (teacher?["kids","business","nsfw"]:[stu.track])){
+   html+='<div class="card"><h3>'+TN[t]+"</h3>";let cont=null;
+   for(let i=1;i<=LESSON_COUNT;i++){const d=p[t+"_"+i];if(!d&&!cont)cont=i;
+     html+='<div class="row">'+(d?'<span class="done">✅ Lição '+i+(d.score!=null?" · quiz "+d.score+"%":"")+"</span>":'<span class="todo">⬜ Lição '+i+"</span>")+' <button onclick="go(\''+t+"\',"+i+')">abrir</button></div>';}
+   if(cont)html+='<button onclick="go(\''+t+"\","+cont+')">▶ Continuar da lição '+cont+"</button>";
+   html+='<button onclick="share(\''+t+'\')">📤 Enviar progresso</button></div>';}
+ $("app").innerHTML=html;log("índice pronto ✔");
+}
+function share(t){const p=prog();let s="Inglês Abre Portas — "+user.name+" ("+TN[t]+"):%0A";
+ for(let i=1;i<=LESSON_COUNT;i++)s+="Lição "+i+": "+(p[t+"_"+i]?"concluída":"pendente")+"%0A";
+ window.open("https://wa.me/?text="+s);}
+</script>
+</body>
+</html>
