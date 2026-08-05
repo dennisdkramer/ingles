@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inglês Abre Portas — Portal</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+body{font:16px system-ui;max-width:760px;margin:0 auto;padding:16px;background:#faf7f2}
+h1,h3{color:#14908f}.card{border:2px solid #14908f;border-radius:12px;padding:12px;margin:10px 0;background:#fff}
+button{background:#14908f;color:#fff;border:0;border-radius:8px;padding:10px 14px;cursor:pointer;margin:4px}
+.done{color:#0a7a3a}.todo{color:#b00020}.dim{color:#666}a{color:#14908f}
+</style></head><body>
+<h1>🦺 Inglês Abre Portas</h1>
+<p class="dim">Entre com a conta Google cadastrada pelo professor.</p>
+<div id="gbtn"></div><div id="app"></div>
+<script>
+const CLIENT_ID="872457390510-jsk9pooj688ogvp6hs9ca4js3iqk5n69.apps.googleusercontent.com";           // ← passo 5 abaixo
+const SECRET="abreportas2025";                        // mesma do lesson1.html
+const LESSON_COUNT=1;                                 // aumente ao publicar lições
+const TN={kids:"Kids 🛹",business:"Business 💼",nsfw:"Adultos 🔞"};
+let user=null,access=null,teacher=false;
+const h=s=>{let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x};
+window.onload=()=>{google.accounts.id.initialize({client_id:CLIENT_ID,callback:r=>{
+  user=JSON.parse(atob(r.credential.split('.')[1]));start();}});
+  google.accounts.id.renderButton(gbtn,{theme:"outline",size:"large"});};
+async function start(){
+  access=await(await fetch('access.json?'+Date.now())).json();
+  teacher=access.teachers.includes(user.email);
+  const stu=access.students[user.email];
+  if(!teacher&&!stu){app.innerHTML=`<div class="card">⛔ <b>${user.email}</b> não está cadastrado.
+    Fale com seu professor para liberar seu acesso.</div>`;return;}
+  render(stu);
+}
+const prog=()=>JSON.parse(localStorage.getItem('prog_'+user.email)||'{}');
+function go(t,i){sessionStorage.gate=JSON.stringify({email:user.email,track:t,
+  teacher,sig:h(user.email+t+SECRET)});location='lesson'+i+'.html';}
+function render(stu){
+  const p=prog();let html=`<div class="card">Olá, <b>${user.name}</b>!
+   ${teacher?'<b>Modo professor:</b> você entra nas 3 versões.':'Sua versão: <b>'+TN[stu.track]+'</b>.'}</div>`;
+  for(const t of (teacher?['kids','business','nsfw']:[stu.track])){
+    html+=`<div class="card"><h3>${TN[t]}</h3>`;let cont=null;
+    for(let i=1;i<=LESSON_COUNT;i++){const d=p[t+'_'+i];
+      if(!d&&!cont)cont=i;
+      html+=`<div>${d?`<span class="done">✅ Lição ${i}${d.score!=null?' · quiz '+d.score+'%':''}</span>`
+        :`<span class="todo">⬜ Lição ${i}</span>`}
+        — <button onclick="go('${t}',${i})">abrir</button></div>`;}
+    if(cont)html+=`<button onclick="go('${t}',${cont})">▶ Continuar da lição ${cont}</button>`;
+    html+=`<button onclick="share('${t}')">📤 Enviar meu progresso</button></div>`;}
+  app.innerHTML=html;
+}
+function share(t){const p=prog();let s='Inglês Abre Portas — '+user.name+' ('+TN[t]+'):%0A';
+  for(let i=1;i<=LESSON_COUNT;i++)s+='Lição '+i+': '+(p[t+'_'+i]?'concluída':'pendente')+'%0A';
+  window.open('https://wa.me/?text='+s);}
+</script></body></html>
