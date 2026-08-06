@@ -270,7 +270,7 @@ async function showAnchor(a,x,y){
  openPop(a,x,y,html);
  const au=pop.querySelector("audio");
  if(au){if(au.dataset.b){const b=Uint8Array.from(atob(au.dataset.b),c=>c.charCodeAt(0));au.src=URL.createObjectURL(new Blob([b],{type:"audio/webm"}));}
-  else if(au.dataset.f){fetch(BACKPACK+"?action=file&id="+au.dataset.f).then(r=>r.json()).then(j=>{const b=Uint8Array.from(atob(j.b64),c=>c.charCodeAt(0));au.src=URL.createObjectURL(new Blob([b],{type:j.mime}));});}}
+else if(au.dataset.f){au.src="https://drive.google.com/uc?export=download&id="+au.dataset.f;}
  pop.querySelector("#pR").onclick=()=>rec(a);
  pop.querySelector("#pN").onclick=()=>{pop.insertAdjacentHTML("beforeend",'<textarea id="nt" rows="2" placeholder="nova anotação…"></textarea><br><button id="ns">💾 salvar</button>');
   pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();if(v)send({action:"add",type:"note",anchor:a,data:v});closePop();};};
