@@ -20,6 +20,7 @@ async function loadLayer(){
   layer=(await r.json()).rows||[];}catch(e){layer=[];}
  const sKeys=new Set(layer.map(x=>x.anchor+"|"+x.type)),sIds=new Set(layer.map(x=>x.id));
  for(const row of Object.values(localGet()))if(!sIds.has(row.id)&&!sKeys.has(row.anchor+"|"+row.type))layer.push(row);
+ const loc2=localGet();layer.forEach(r=>{if(r.type==="rec"&&!r.b64){for(const k in loc2){const q=loc2[k];if(q.type==="rec"&&q.anchor===r.anchor&&q.b64){r.b64=q.b64;break}}}});
  const s=layer.map(x=>x.id).join(",");if(s===sig)return;sig=s;
  const set=layer.find(x=>x.type==="setting");auxOn=!set||!JSON.parse(set.data||"{}").auxOff;
  document.getElementById("draw").style.display=auxOn?"":"none";
@@ -64,8 +65,9 @@ async function showAnchor(a,x,y){
  html+='<button id="pR">⏺ '+(recs.length?"regravar":"gravar")+'</button><button id="pN">📝 anotar</button> <button id="pX">fechar</button>';
  openPop(a,x,y,html);
  const au=pop.querySelector("audio");
- if(au){if(au.dataset.b){const b=Uint8Array.from(atob(au.dataset.b),c=>c.charCodeAt(0));au.src=URL.createObjectURL(new Blob([b],{type:"audio/webm"}));}
-  else if(au.dataset.f){au.src="https://drive.google.com/uc?export=download&id="+au.dataset.f;}}
+ if(au){au.onerror=()=>{pop.insertAdjacentHTML("beforeend",'<div class="dim">⚠ o áudio não carregou.</div>')};
+  if(au.dataset.b){const b=Uint8Array.from(atob(au.dataset.b),c=>c.charCodeAt(0));au.src=URL.createObjectURL(new Blob([b],{type:"audio/webm"}));}
+  else if(au.dataset.f){fetch(BACKPACK+"?action=file&id="+au.dataset.f).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(j=>{if(!j.b64)throw new Error("resposta sem áudio");const b=Uint8Array.from(atob(j.b64),c=>c.charCodeAt(0));au.src=URL.createObjectURL(new Blob([b],{type:j.mime||"audio/webm"}))}).catch(er=>{pop.insertAdjacentHTML("beforeend",'<div class="dim">⚠ erro ao buscar no caderno: '+er.message+"</div>");au.src="https://docs.google.com/uc?export=open&id="+au.dataset.f;});}}
  pop.querySelector("#pR").onclick=()=>rec(a);
  pop.querySelector("#pN").onclick=()=>{pop.insertAdjacentHTML("beforeend",'<textarea id="nt" rows="2" placeholder="nova anotação…"></textarea><br><button id="ns">💾 salvar</button>');
   pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();if(v)send({action:"add",type:"note",anchor:a,data:v});closePop();};};
