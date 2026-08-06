@@ -24,7 +24,6 @@ mark.nb.has-note::after{content:"📝";font-size:.75em}
 .pop{position:fixed;z-index:9;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:12px;max-width:360px;max-height:70vh;overflow:auto}
 .pop textarea{width:100%;margin:6px 0}
 #toast{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:8px 16px;border-radius:10px;z-index:99;display:none;font-weight:600;box-shadow:3px 3px 0 var(--tan)}
-#dbg{display:none;color:#8a8072;font-size:12px}
 input.gap{border:0;border-bottom:2px solid var(--tan);background:#fff8ea;font:inherit;width:9em}
 input.gap.ok{border-color:var(--ok);background:#e8f5ec}input.gap.bad{border-color:var(--bad);background:#fbeaea}
 fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8px 12px}
@@ -136,23 +135,76 @@ O resto é corrigido automaticamente acima.</p></details>
 </div>
 <br><button id="done">✅ Concluí esta lição</button>
 <h2>📒 Caderno compartilhado</h2><div id="feed" class="card"></div>
-<p id="dbg"></p>
 </main>
 <footer>MATERIAIS SIMPLES E INOVADORES · INGLES CERTO EUA</footer>
 <div id="modal" class="pop" style="display:none;left:50%;top:38%;transform:translateX(-50%);text-align:center">
 <b>Lição concluída! ✅</b><p id="latest">🎉 Você chegou na lição mais recente deste livro!</p>
 <button id="mNext" style="display:none">▶ Próxima lição</button><button id="mIndex">📚 Voltar ao índice</button></div>
+
 <script>
-window.addEventListener("error",e=>{const d=document.getElementById("dbg");d.style.display="block";d.innerHTML+="› ERRO: "+e.message+"<br>"});
+/* ========= MOTOR 1 (popup, gravação, caderno) ========= */
+window.addEventListener("error",e=>{let b=document.getElementById("errb");
+ if(!b){b=document.createElement("div");b.id="errb";b.style.cssText="background:#a33327;color:#fff;padding:8px 12px;font:14px system-ui;text-align:center";document.body.prepend(b);}
+ b.innerHTML="⚠ ERRO: "+e.message;});
 const BACKPACK="https://script.google.com/macros/s/AKfycbwEUbkjKeL3PVEJs0Pu6CX8vJXCHe3ilV4xojiUX4WvdFWdHdWjvJJlU-n_uHgio9ui/exec";
 const SECRET="abreportas2025", TRACK="business", L=1, COUNT=1;
 const h=s=>{let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x};
+const norm=s=>(s||"").toLowerCase().replace(/[^a-z']/g,"");
 let gate=null;try{gate=JSON.parse(sessionStorage.gate)}catch(e){}
 if(!gate||h(gate.email+gate.track+SECRET)!==gate.sig||(!gate.teacher&&gate.track!==TRACK))location.replace("../portal.html");
 const who=()=>gate.teacher?"prof":"aluno";
 let STUDENT=gate.email, layer=[], sig="", auxOn=true;
-document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="en-US";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)});
+const LKEY="nb_"+gate.email+"_"+TRACK+"_"+L;
+const localGet=()=>{try{return JSON.parse(localStorage.getItem(LKEY)||"{}")}catch(e){return{}}};
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(t._x);t._x=setTimeout(()=>t.style.display="none",2600)}
+function send(o){o.email=STUDENT;o.lesson=L;o.author=who();o.id=Date.now()+"_"+Math.floor(Math.random()*9999);
+ const keep=Object.assign({},o);
+ try{const s=localGet();s[o.id]=keep;localStorage.setItem(LKEY,JSON.stringify(s))}
+ catch(e){try{delete keep.b64;const s=localGet();s[o.id]=keep;localStorage.setItem(LKEY,JSON.stringify(s))}catch(e2){}}
+ fetch(BACKPACK,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(o)}).catch(()=>{});
+ setTimeout(()=>{sig="";loadLayer()},600);
+ setTimeout(async()=>{try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L);
+  const rows=(await r.json()).rows||[];toast(rows.some(x=>x.id===o.id)?"💾 salvo no caderno compartilhado ✔":"⚠ salvo apenas neste dispositivo");}
+  catch(e){toast("⚠ salvo apenas neste dispositivo")}},1800);}
+let pop=null;const closePop=()=>{if(pop){pop.remove();pop=null}};
+function openPop(t,x,y,html){closePop();pop=document.createElement("div");pop.className="pop";pop.style.left=x+"px";pop.style.top=y+"px";pop.innerHTML=html;document.body.appendChild(pop);return pop}
+document.addEventListener("mousedown",e=>{if(pop&&!pop.contains(e.target))closePop()});
+document.addEventListener("mouseup",e=>{try{
+ const t=getSelection().toString().trim();
+ if(t.length<3||t.length>200||e.target.closest(".pop"))return;
+ const x=Math.min(e.clientX,innerWidth-370),y=e.clientY+8;
+ openPop(t,x,y,'<b style="font-size:14px">'+t.slice(0,42)+(t.length>42?"…":"")+'</b><br><button id="pH">▶ Hear</button><button id="pR">⏺ Record</button><button id="pN">📝 Note</button>');
+ pop.querySelector("#pH").onclick=()=>{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
+ pop.querySelector("#pR").onclick=()=>rec(t);
+ pop.querySelector("#pN").onclick=()=>{openPop(t,x,y,'<textarea id="nt" rows="3" placeholder="escreva a anotação…"></textarea><br><button id="ns">💾 salvar</button> <button id="px">cancelar</button>');
+  pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();if(v)send({action:"add",type:"note",anchor:t,data:v});closePop();};
+  pop.querySelector("#px").onclick=closePop;};
+}catch(err){let b=document.getElementById("errb");if(b)b.innerHTML+=" · popup: "+err.message}});
+document.addEventListener("click",e=>{const m=e.target.closest("mark.nb");if(!m)return;e.stopPropagation();
+ if(window.showAnchor)showAnchor(m.dataset.a,Math.min(e.clientX,innerWidth-370),e.clientY+8)});
+async function rec(t){let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){alert("Microfone bloqueado — abra a lição em aba própria.");return}
+ closePop();const mr=new MediaRecorder(stream),ch=[];mr.ondataavailable=e=>ch.push(e.data);mr.start();
+ const R=new(window.SpeechRecognition||window.webkitSpeechRecognition)();R.lang="en-US";let heard="";
+ R.onresult=e=>heard=e.results[0][0].transcript;try{R.start()}catch(e){}
+ setTimeout(()=>{mr.stop();try{R.stop()}catch(e){}stream.getTracks().forEach(x=>x.stop());
+  const f=new FileReader();f.onload=()=>{const fb=feedback(t,heard);
+   send({action:"add",type:"rec",anchor:t,b64:f.result.split(",")[1],mime:"audio/webm",data:JSON.stringify({score:fb.score,heard,fb:fb.msg})})};
+  f.readAsDataURL(new Blob(ch,{type:"audio/webm"}))},6000)}
+function feedback(target,heard){const T=norm(target).split(/\s+/),H=norm(heard).split(/\s+/);
+ if(!heard)return{score:0,msg:"Não ouvi nada — fale perto do microfone."};
+ let ok=0;const notes=[];T.forEach((w,i)=>{const hw=H[i];if(hw===w)ok++;else notes.push(hint(w,hw||"(sumiu)"))});
+ if(H.length!==T.length)notes.push("Ritmo: "+H.length+" palavras ouvidas vs "+T.length+" do alvo — as palavrinhas (to, the, a) quase somem.");
+ return{score:Math.round(100*ok/T.length),msg:ok===T.length?"🎉 Soou nativo!":"Ouvi: “"+heard+"”. "+notes.join(" ")}}
+function hint(w,hw){let tip="";
+ if(/th/.test(w)&&/^[tdfv]/.test(hw))tip="“th” = língua entre os dentes (ouça com ▶).";
+ if(/s$/.test(w)&&!/s$/.test(hw))tip="O “s” final sumiu.";
+ return 'Alvo: “'+w+'” (o computador entendeu “'+hw+'”).'+(tip?" "+tip:" Ouça o trecho com ▶ e compare.")}
+window.__A=true;
+</script>
+
+<script>
+/* ========= MOTOR 2 (topbar, camadas, quiz) ========= */
+document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="en-US";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)});
 (async()=>{try{
  let extra="";
  if(gate.teacher){
@@ -167,19 +219,7 @@ function toast(m){const t=document.getElementById("toast");t.textContent=m;t.sty
  document.getElementById("sync").onclick=()=>{sig="";loadLayer()};
  document.getElementById("draw").onclick=drawToggle;
  loadLayer();setInterval(loadLayer,15000);
-}catch(e){const d=document.getElementById("dbg");d.style.display="block";d.innerHTML+="› ERRO topbar: "+e.message}})();
-/* ---- caderno: espelho local + nuvem ---- */
-const LKEY="nb_"+gate.email+"_"+TRACK+"_"+L;
-const localGet=()=>{try{return JSON.parse(localStorage.getItem(LKEY)||"{}")}catch(e){return{}}};
-function send(o){o.email=STUDENT;o.lesson=L;o.author=who();o.id=Date.now()+"_"+Math.floor(Math.random()*9999);
- const keep=Object.assign({},o);
- try{const s=localGet();s[o.id]=keep;localStorage.setItem(LKEY,JSON.stringify(s))}
- catch(e){try{delete keep.b64;const s=localGet();s[o.id]=keep;localStorage.setItem(LKEY,JSON.stringify(s))}catch(e2){}}
- fetch(BACKPACK,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(o)}).catch(()=>{});
- setTimeout(()=>{sig="";loadLayer()},600);
- setTimeout(async()=>{try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L);
-  const rows=(await r.json()).rows||[];toast(rows.some(x=>x.id===o.id)?"💾 salvo no caderno compartilhado ✔":"⚠ salvo apenas neste dispositivo");}
-  catch(e){toast("⚠ salvo apenas neste dispositivo")}},1800);}
+}catch(e){let b=document.getElementById("errb");if(b)b.innerHTML+=" · topbar: "+e.message}})();
 async function loadLayer(){
  try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L);
   layer=(await r.json()).rows||[];}catch(e){layer=[];}
@@ -211,8 +251,7 @@ function ensureMark(t,type){
  if(m)m.classList.add("has-"+type);
 }
 async function placeImg(it){
- if(!it.fileId&&!it.b64)return;
- let j;
+ if(!it.fileId&&!it.b64)return;let j;
  if(it.fileId){const r=await fetch(BACKPACK+"?action=file&id="+it.fileId);j=await r.json();}
  else j={b64:it.b64,mime:it.mime||"image/png"};
  const d=JSON.parse(it.data||"{}");
@@ -220,22 +259,6 @@ async function placeImg(it){
  const img=document.createElement("img");img.className="nbImg";img.src=URL.createObjectURL(new Blob([b],{type:j.mime}));
  img.style.top=(d.top||0)+"px";document.getElementById("page").appendChild(img);
 }
-/* ---- popup de seleção ---- */
-let pop=null;const closePop=()=>{if(pop){pop.remove();pop=null}};
-document.addEventListener("mousedown",e=>{if(pop&&!pop.contains(e.target))closePop()});
-document.addEventListener("mouseup",e=>{try{
- const t=getSelection().toString().trim();
- if(t.length<3||t.length>200||e.target.closest(".pop"))return;
- const x=Math.min(e.clientX,innerWidth-370),y=e.clientY+8;
- openPop(t,x,y,'<b style="font-size:14px">'+t.slice(0,42)+(t.length>42?"…":"")+'</b><br><button id="pH">▶ Hear</button><button id="pR">⏺ Record</button><button id="pN">📝 Note</button>');
- pop.querySelector("#pH").onclick=()=>{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
- pop.querySelector("#pR").onclick=()=>rec(t);
- pop.querySelector("#pN").onclick=()=>{openPop(t,x,y,'<textarea id="nt" rows="3" placeholder="escreva a anotação…"></textarea><br><button id="ns">💾 salvar</button> <button id="px">cancelar</button>');
-  pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();if(v)send({action:"add",type:"note",anchor:t,data:v});closePop();};
-  pop.querySelector("#px").onclick=closePop;};
-}catch(err){const d=document.getElementById("dbg");d.style.display="block";d.innerHTML+="› ERRO popup: "+err.message}});
-document.addEventListener("click",e=>{const m=e.target.closest("mark.nb");if(!m)return;e.stopPropagation();showAnchor(m.dataset.a,Math.min(e.clientX,innerWidth-370),e.clientY+8)});
-function openPop(t,x,y,html){closePop();pop=document.createElement("div");pop.className="pop";pop.style.left=x+"px";pop.style.top=y+"px";pop.innerHTML=html;document.body.appendChild(pop);return pop}
 async function showAnchor(a,x,y){
  const items=layer.filter(z=>z.anchor===a&&(z.type==="rec"||z.type==="note"));
  let html='<b style="font-size:14px">'+a.slice(0,46)+"</b><br>";
@@ -253,26 +276,6 @@ async function showAnchor(a,x,y){
   pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();if(v)send({action:"add",type:"note",anchor:a,data:v});closePop();};};
  pop.querySelector("#pX").onclick=closePop;
 }
-/* ---- gravação + feedback ---- */
-async function rec(t){let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){alert("Microfone bloqueado — abra a lição em aba própria.");return}
- closePop();const mr=new MediaRecorder(stream),ch=[];mr.ondataavailable=e=>ch.push(e.data);mr.start();
- const R=new(window.SpeechRecognition||window.webkitSpeechRecognition)();R.lang="en-US";let heard="";
- R.onresult=e=>heard=e.results[0][0].transcript;try{R.start()}catch(e){}
- setTimeout(()=>{mr.stop();try{R.stop()}catch(e){}stream.getTracks().forEach(x=>x.stop());
-  const f=new FileReader();f.onload=()=>{const fb=feedback(t,heard);
-   send({action:"add",type:"rec",anchor:t,b64:f.result.split(",")[1],mime:"audio/webm",data:JSON.stringify({score:fb.score,heard,fb:fb.msg})})};
-  f.readAsDataURL(new Blob(ch,{type:"audio/webm"}))},6000)}
-const norm=s=>(s||"").toLowerCase().replace(/[^a-z']/g,"");
-function feedback(target,heard){const T=norm(target).split(/\s+/),H=norm(heard).split(/\s+/);
- if(!heard)return{score:0,msg:"Não ouvi nada — fale perto do microfone."};
- let ok=0;const notes=[];T.forEach((w,i)=>{const hw=H[i];if(hw===w)ok++;else notes.push(hint(w,hw||"(sumiu)"))});
- if(H.length!==T.length)notes.push("Ritmo: "+H.length+" palavras ouvidas vs "+T.length+" do alvo — as palavrinhas (to, the, a) quase somem.");
- return{score:Math.round(100*ok/T.length),msg:ok===T.length?"🎉 Soou nativo!":"Ouvi: “"+heard+"”. "+notes.join(" ")}}
-function hint(w,hw){let tip="";
- if(/th/.test(w)&&/^[tdfv]/.test(hw))tip="“th” = língua entre os dentes (ouça com ▶).";
- if(/s$/.test(w)&&!/s$/.test(hw))tip="O “s” final sumiu.";
- return 'Alvo: “'+w+'” (o computador entendeu “'+hw+'”).'+(tip?" "+tip:" Ouça o trecho com ▶ e compare.")}
-/* ---- rabisco + colar imagem ---- */
 let cv,ctx,drawing=false,drawTop=0;
 function drawToggle(){if(!auxOn)return;
  if(!drawing){drawing=true;drawTop=scrollY;
@@ -289,7 +292,6 @@ document.addEventListener("paste",e=>{if(!auxOn)return;
  const f=it.getAsFile(),r=new FileReader();
  r.onload=()=>send({action:"add",type:"img",b64:r.result.split(",")[1],mime:f.type,data:JSON.stringify({top:scrollY})});
  r.readAsDataURL(f)});
-/* ---- quiz + concluir ---- */
 function grade(scope,type){let ok=0,tot=0,det=[];
  scope.querySelectorAll("input.gap").forEach(i=>{tot++;const good=(i.dataset.a||"").split("|").map(norm).includes(norm(i.value));
   i.classList.toggle("ok",good);i.classList.toggle("bad",!good);if(good)ok++;det.push({q:i.dataset.a,you:i.value,ok:good})});
@@ -301,11 +303,19 @@ function grade(scope,type){let ok=0,tot=0,det=[];
   localStorage.setItem("prog_"+gate.email,JSON.stringify(p));}}
 bPrac.onclick=()=>grade(prac,"practice");
 bQuiz.onclick=()=>grade(quiz,"quiz");
-sendTr.onclick=()=>{send({action:"add",type:"note",anchor:"Traduções do quiz",data:trw.value});};
+sendTr.onclick=()=>{send({action:"add",type:"note",anchor:"Traduções do quiz",data:trw.value})};
 done.onclick=()=>{const p=JSON.parse(localStorage.getItem("prog_"+gate.email)||"{}");
  p[TRACK+"_"+L]=Object.assign(p[TRACK+"_"+L]||{},{done:true,date:Date.now()});
  localStorage.setItem("prog_"+gate.email,JSON.stringify(p));send({action:"add",type:"done",data:"{}"});
  if(L>=COUNT)mNext.style.display="none";modal.style.display="block"};
 mNext.onclick=()=>location="lesson"+(L+1)+".html";
 mIndex.onclick=()=>location="../portal.html";
-</script></body></html>
+window.__B=true;
+</script>
+
+<script>
+/* ========= AUTO-CHECK ========= */
+if(!window.__A)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ O arquivo chegou INCOMPLETO (motor 1). Apague todo o código e cole de novo, conferindo o final.</div>');
+else if(!window.__B)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ O arquivo chegou INCOMPLETO (motor 2). Apague todo o código e cole de novo, conferindo o final.</div>');
+</script>
+</body></html>
