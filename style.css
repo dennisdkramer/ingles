@@ -22,6 +22,11 @@ mark.nb.has-note::after{content:"📝";font-size:.75em}
 .pop{position:fixed;z-index:9;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:12px;max-width:360px;max-height:70vh;overflow:auto}
 .pop textarea{width:100%;margin:6px 0}
 #toast{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:8px 16px;border-radius:10px;z-index:99;display:none;font-weight:600;box-shadow:3px 3px 0 var(--tan)}
+.recind{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:99}
+.spin{width:14px;height:14px;border:2px solid var(--ink);border-top-color:transparent;border-radius:50%;animation:sp 1s linear infinite;display:inline-block;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.pulse{animation:pu 1s infinite;display:inline-block}
+@keyframes pu{50%{opacity:.25}}
 input.gap{border:0;border-bottom:2px solid var(--tan);background:#fff8ea;font:inherit;width:9em}
 input.gap.ok{border-color:var(--ok);background:#e8f5ec}input.gap.bad{border-color:var(--bad);background:#fbeaea}
 fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8px 12px}
