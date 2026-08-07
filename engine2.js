@@ -80,4 +80,5 @@ function drawToggle(){if(!auxOn)return;
   cv=document.createElement("canvas");cv.width=innerWidth;cv.height=innerHeight;
   cv.style.cssText="position:fixed;inset:0;z-index:8;cursor:crosshair";document.body.appendChild(cv);
   ctx=cv.getContext("2d");ctx.strokeStyle="#b3261e";ctx.lineWidth=3;ctx.lineCap="round";
-  cv.onpointerdown=e=>{ctx.beginPath();ctx.moveTo(e.clientX,e.clientY);cv.setPointerCapture(e.pointerId);ctx._d=1                      
+  cv.onpointerdown=e=>{ctx.beginPath();ctx.moveTo(e.clientX,e.clientY);cv.setPointerCapture(e.pointerId);ctx._d=1             
+                       
