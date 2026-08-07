@@ -101,3 +101,4 @@ function hint(w,hw){let tip="";
  if(/s$/.test(w)&&!/s$/.test(hw))tip="O “s” final sumiu.";
  return 'Alvo: “'+w+'” (o computador entendeu “'+hw+'”).'+(tip?" "+tip:" Ouça o trecho com ▶ e compare.")}
 window.__A=true;
+
