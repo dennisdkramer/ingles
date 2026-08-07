@@ -80,5 +80,32 @@ function drawToggle(){if(!auxOn)return;
   cv=document.createElement("canvas");cv.width=innerWidth;cv.height=innerHeight;
   cv.style.cssText="position:fixed;inset:0;z-index:8;cursor:crosshair";document.body.appendChild(cv);
   ctx=cv.getContext("2d");ctx.strokeStyle="#b3261e";ctx.lineWidth=3;ctx.lineCap="round";
-  cv.onpointerdown=e=>{ctx.beginPath();ctx.moveTo(e.clientX,e.clientY);cv.setPointerCapture(e.pointerId);ctx._d=1             
-                       
+  cv.onpointerdown=e=>{ctx.beginPath();ctx.moveTo(e.clientX,e.clientY);cv.setPointerCapture(e.pointerId);ctx._d=1};
+  cv.onpointermove=e=>{if(ctx._d){ctx.lineTo(e.clientX,e.clientY);ctx.stroke()}};
+  cv.onpointerup=()=>ctx._d=0;draw.textContent="💾 salvar rabisco";}
+ else{drawing=false;const b64=cv.toDataURL("image/png").split(",")[1];cv.remove();draw.textContent="✏️ rabiscar";
+  send({action:"add",type:"draw",b64,mime:"image/png",data:JSON.stringify({top:drawTop})})}}
+document.addEventListener("paste",e=>{if(!auxOn)return;
+ const it=[...e.clipboardData.items].find(i=>i.type.startsWith("image/"));if(!it)return;
+ const f=it.getAsFile(),r=new FileReader();
+ r.onload=()=>send({action:"add",type:"img",b64:r.result.split(",")[1],mime:f.type,data:JSON.stringify({top:scrollY})});
+ r.readAsDataURL(f)});
+function grade(scope,type){let ok=0,tot=0,det=[];
+ scope.querySelectorAll("input.gap").forEach(i=>{tot++;const good=(i.dataset.a||"").split("|").map(norm).includes(norm(i.value));
+  i.classList.toggle("ok",good);i.classList.toggle("bad",!good);if(good)ok++;det.push({q:i.dataset.a,you:i.value,ok:good})});
+ scope.querySelectorAll("fieldset[data-c]").forEach(f=>{tot++;const s=f.querySelector("input:checked");const good=!!s&&s.value===f.dataset.c;
+  f.classList.toggle("ok",good);f.classList.toggle("bad",!good);if(good)ok++;det.push({q:f.dataset.q,ok:good})});
+ const pct=tot?Math.round(100*ok/tot):0;scope.querySelector(".res").innerHTML="Resultado: <b>"+ok+"/"+tot+" ("+pct+"%)</b>";
+ if(type==="quiz"){send({action:"add",type:"quiz",data:JSON.stringify({score:pct,det})});
+  const p=JSON.parse(localStorage.getItem("prog_"+gate.email)||"{}");p[TRACK+"_"+L]=Object.assign(p[TRACK+"_"+L]||{},{score:pct});
+  localStorage.setItem("prog_"+gate.email,JSON.stringify(p));}}
+bPrac.onclick=()=>grade(prac,"practice");
+bQuiz.onclick=()=>grade(quiz,"quiz");
+sendTr.onclick=()=>{send({action:"add",type:"note",anchor:"Traduções do quiz",data:trw.value})};
+done.onclick=()=>{const p=JSON.parse(localStorage.getItem("prog_"+gate.email)||"{}");
+ p[TRACK+"_"+L]=Object.assign(p[TRACK+"_"+L]||{},{done:true,date:Date.now()});
+ localStorage.setItem("prog_"+gate.email,JSON.stringify(p));send({action:"add",type:"done",data:"{}"});
+ if(L>=COUNT)mNext.style.display="none";modal.style.display="block"};
+mNext.onclick=()=>location="lesson"+(L+1)+".html";
+mIndex.onclick=()=>location="../portal.html";
+window.__B=true;
