@@ -54,13 +54,15 @@ async function placeImg(it){
 async function showAnchor(a,x,y){
  window.currentAnchor=a;
  const items=layer.filter(z=>z.anchor===a&&(z.type==="rec"||z.type==="note"));
+ const recs=items.filter(z=>z.type==="rec");
+ const notes=items.filter(z=>z.type==="note");
+ const note=notes.length?notes[notes.length-1]:null;
  let html='<b style="font-size:14px">'+a.slice(0,46)+'</b><div id="auhold"></div>';
- items.filter(z=>z.type==="note").forEach(z=>{html+='<div style="margin:4px 0;border-left:3px solid var(--blue);padding:2px 6px"><i>'+z.author+":</i> "+z.data+"</div>"});
- html+='<button id="pH">▶ Hear</button><button id="pR">⏺ '+(items.some(z=>z.type==="rec")?"regravar":"gravar")+'</button><button id="pN">📝 anotar</button> <button id="pX">fechar</button>';
+ if(note)html+='<div style="margin:4px 0;border-left:3px solid var(--blue);padding:2px 6px"><i>'+note.author+":</i> "+note.data+"</div>";
+ html+='<span style="white-space:nowrap"><button id="pH">▶ Hear</button><button id="pR">⏺ Record</button><button id="pN">📝 Note</button><button id="pX">✖ Close</button></span>';
  openPop(a,x,y,html);
  pop.querySelector("#pH").onclick=()=>{const u=new SpeechSynthesisUtterance(a);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
  const hold=pop.querySelector("#auhold");
- const recs=items.filter(z=>z.type==="rec");
  const it=recs.length?recs[recs.length-1]:null;
  const cached=audioCache["a:"+a]||(it&&it.fileId?audioCache["f:"+it.fileId]:null);
  if(it||cached){
@@ -80,8 +82,9 @@ async function showAnchor(a,x,y){
   }
  }
  pop.querySelector("#pR").onclick=()=>rec(a);
- pop.querySelector("#pN").onclick=()=>{pop.insertAdjacentHTML("beforeend",'<textarea id="nt" rows="2" placeholder="nova anotação…"></textarea><br><button id="ns">💾 salvar</button>');
-  pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();if(v)send({action:"add",type:"note",anchor:a,data:v});closePop();};};
+ pop.querySelector("#pN").onclick=()=>{pop.insertAdjacentHTML("beforeend",'<textarea id="nt" rows="2" placeholder="write a note…"></textarea><br><button id="ns">💾 Save</button>');
+  const ta=pop.querySelector("#nt");if(note)ta.value=note.data;
+  pop.querySelector("#ns").onclick=()=>{const v=ta.value.trim();if(v)send({action:"add",type:"note",anchor:a,data:v});closePop();};};
  pop.querySelector("#pX").onclick=closePop;
 }
 let cv,ctx,drawing=false,drawTop=0;
