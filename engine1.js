@@ -69,22 +69,28 @@ async function rec(t){let stream;try{stream=await navigator.mediaDevices.getUser
  document.body.appendChild(ind);
  const mr=new MediaRecorder(stream),ch=[];
  mr.ondataavailable=e=>{if(e.data&&e.data.size>0)ch.push(e.data)};
+ mr.start();
  const R=new(window.SpeechRecognition||window.webkitSpeechRecognition)();R.lang="en-US";let heard="";
- R.onresult=e=>heard=e.results[0][0].transcript;try{R.start()}catch(e){}
+ R.onresult=e=>{try{heard=e.results[0][0].transcript}catch(e2){}};try{R.start()}catch(e){}
  let ac=null,an=null,buf=null,lastLoud=0,everLoud=false,done=false;const t0=Date.now();
  try{ac=new(window.AudioContext||window.webkitAudioContext)();
   const srcn=ac.createMediaStreamSource(stream);an=ac.createAnalyser();an.fftSize=512;srcn.connect(an);
   buf=new Uint8Array(an.frequencyBinCount);}catch(e){}
  let sil=null;
  const finish=()=>{if(done)return;done=true;if(sil)clearInterval(sil);
-  try{R.stop()}catch(e){}stream.getTracks().forEach(x=>x.stop());if(ac)ac.close();
+  try{R.stop()}catch(e){}
   ind.innerHTML='<span class="spin"></span> processando…';
-  mr.onstop=()=>{const blob=new Blob(ch,{type:"audio/webm"});
+  let sent=false;
+  const process=()=>{if(sent)return;sent=true;
+   const blob=new Blob(ch,{type:"audio/webm"});
    const f=new FileReader();f.onload=()=>{const fb=feedback(t,heard);
     send({action:"add",type:"rec",anchor:t,b64:f.result.split(",")[1],mime:"audio/webm",data:JSON.stringify({score:fb.score,heard,fb:fb.msg})});
     ind.remove();};
    f.readAsDataURL(blob);};
-  mr.stop();};
+  mr.onstop=process;
+  try{mr.stop()}catch(e){process()}
+  setTimeout(()=>{stream.getTracks().forEach(x=>x.stop());if(ac)ac.close()},300);
+  setTimeout(process,2000);};
  sil=setInterval(()=>{
   if(an){an.getByteTimeDomainData(buf);let loud=false;
    for(let i=0;i<buf.length;i++){if(Math.abs(buf[i]-128)>14){loud=true;break}}
