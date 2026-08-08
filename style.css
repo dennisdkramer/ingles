@@ -36,3 +36,4 @@ label{margin-right:10px;cursor:pointer}
 .nbImg{position:absolute;left:8px;max-width:92%;pointer-events:none;border:3px solid var(--tan);border-radius:10px}
 #feed{font-size:14px}#feed div{border-left:3px solid var(--tan);padding:2px 8px;margin:4px 0;background:#fff8}
 footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#8a8072}
+
