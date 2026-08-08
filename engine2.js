@@ -55,7 +55,7 @@ async function showAnchor(a,x,y){
  const items=layer.filter(z=>z.anchor===a&&(z.type==="rec"||z.type==="note"));
  let html='<b style="font-size:14px">'+a.slice(0,46)+'</b><div id="auhold"></div>';
  items.filter(z=>z.type==="note").forEach(z=>{html+='<div style="margin:4px 0;border-left:3px solid var(--blue);padding:2px 6px"><i>'+z.author+":</i> "+z.data+"</div>"});
- html+='<button id="pR">⏺ '+(items.some(z=>z.type==="rec")?"regravar":"gravar")+'</button><button id="pN">📝 anotar</button> <button id="pX">fechar</button>';
+ html+='<button id="pH">▶ Hear</button><button id="pR">⏺ '+(items.some(z=>z.type==="rec")?"regravar":"gravar")+'</button><button id="pN">📝 anotar</button> <button id="pX">fechar</button>';
  openPop(a,x,y,html);
  const hold=pop.querySelector("#auhold");
  const recs=items.filter(z=>z.type==="rec");
@@ -69,6 +69,8 @@ async function showAnchor(a,x,y){
   else if(it.fileId){fetch(BACKPACK+"?action=file&id="+it.fileId).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(j=>{if(!j.b64)throw new Error("resposta sem áudio");au.src=b64url(j.b64,j.mime)}).catch(()=>{au.src="https://docs.google.com/uc?export=open&id="+it.fileId;hold.insertAdjacentHTML("beforeend",'<div class="dim">↻ tentando pelo Drive…</div>')});}
   else hold.insertAdjacentHTML("beforeend",'<div class="dim">⚠ esta gravação ficou sem áudio neste dispositivo.</div>');
  }
+  pop.querySelector("#pH").onclick=()=>{const u=new SpeechSynthesisUtterance(a);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
+ pop.querySelector("#pH").onclick=()=>{const u=new SpeechSynthesisUtterance(a);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
  pop.querySelector("#pR").onclick=()=>rec(a);
  pop.querySelector("#pN").onclick=()=>{pop.insertAdjacentHTML("beforeend",'<textarea id="nt" rows="2" placeholder="nova anotação…"></textarea><br><button id="ns">💾 salvar</button>');
   pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();if(v)send({action:"add",type:"note",anchor:a,data:v});closePop();};};
