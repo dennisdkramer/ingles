@@ -1,4 +1,4 @@
-/* MOTOR 2 — topbar, camadas, quiz, áudio robusto */
+/* MOTOR 2 — topbar, camadas, quiz, áudio com cache */
 document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="en-US";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)});
 (async()=>{try{
  let extra="";
@@ -20,11 +20,11 @@ async function loadLayer(){
   layer=(await r.json()).rows||[];}catch(e){layer=[];}
  const sKeys=new Set(layer.map(x=>x.anchor+"|"+x.type)),sIds=new Set(layer.map(x=>x.id));
  for(const row of Object.values(localGet()))if(!sIds.has(row.id)&&!sKeys.has(row.anchor+"|"+row.type))layer.push(row);
- const loc2=localGet();
- layer.forEach(rw=>{if(rw.type==="rec"&&!rw.b64){for(const k in loc2){const q=loc2[k];if(q.type==="rec"&&q.anchor===rw.anchor&&q.b64){rw.b64=q.b64;break}}}});
  const s=layer.map(x=>x.id).join(",");if(s===sig)return;sig=s;
  const set=layer.find(x=>x.type==="setting");auxOn=!set||!JSON.parse(set.data||"{}").auxOff;
  document.getElementById("draw").style.display=auxOn?"":"none";
+ layer.forEach(it=>{if(it.type==="rec"&&it.fileId&&!audioCache["f:"+it.fileId]){
+  fetch(BACKPACK+"?action=file&id="+it.fileId).then(r=>r.json()).then(j=>{if(j.b64)audioCache["f:"+it.fileId]=b64url(j.b64,j.mime)}).catch(()=>{});}});
  renderLayer();
 }
 function renderLayer(){
@@ -52,25 +52,33 @@ async function placeImg(it){
  img.style.top=(d.top||0)+"px";document.getElementById("page").appendChild(img);
 }
 async function showAnchor(a,x,y){
+ window.currentAnchor=a;
  const items=layer.filter(z=>z.anchor===a&&(z.type==="rec"||z.type==="note"));
  let html='<b style="font-size:14px">'+a.slice(0,46)+'</b><div id="auhold"></div>';
  items.filter(z=>z.type==="note").forEach(z=>{html+='<div style="margin:4px 0;border-left:3px solid var(--blue);padding:2px 6px"><i>'+z.author+":</i> "+z.data+"</div>"});
  html+='<button id="pH">▶ Hear</button><button id="pR">⏺ '+(items.some(z=>z.type==="rec")?"regravar":"gravar")+'</button><button id="pN">📝 anotar</button> <button id="pX">fechar</button>';
  openPop(a,x,y,html);
+ pop.querySelector("#pH").onclick=()=>{const u=new SpeechSynthesisUtterance(a);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
  const hold=pop.querySelector("#auhold");
  const recs=items.filter(z=>z.type==="rec");
- if(hold&&recs.length){
-  const it=recs[recs.length-1],d=JSON.parse(it.data||"{}");
+ const it=recs.length?recs[recs.length-1]:null;
+ const cached=audioCache["a:"+a]||(it&&it.fileId?audioCache["f:"+it.fileId]:null);
+ if(it||cached){
   const au=document.createElement("audio");au.controls=true;au.style.width="100%";
   au.onerror=()=>{hold.insertAdjacentHTML("beforeend",'<div class="dim">⚠ o áudio não carregou.</div>')};
   hold.appendChild(au);
-  hold.insertAdjacentHTML("beforeend",'<div class="dim">'+(d.fb||"")+"</div>");
-  if(it.b64){au.src=b64url(it.b64);}
-  else if(it.fileId){fetch(BACKPACK+"?action=file&id="+it.fileId).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(j=>{if(!j.b64)throw new Error("resposta sem áudio");au.src=b64url(j.b64,j.mime)}).catch(()=>{au.src="https://docs.google.com/uc?export=open&id="+it.fileId;hold.insertAdjacentHTML("beforeend",'<div class="dim">↻ tentando pelo Drive…</div>')});}
-  else hold.insertAdjacentHTML("beforeend",'<div class="dim">⚠ esta gravação ficou sem áudio neste dispositivo.</div>');
+  if(it){const d=JSON.parse(it.data||"{}");if(d.fb)hold.insertAdjacentHTML("beforeend",'<div class="dim">'+d.fb+"</div>");}
+  if(cached){au.src=cached;}
+  else if(it&&it.fileId){
+   hold.insertAdjacentHTML("beforeend",'<div class="dim" id="ldmsg"><span class="spin"></span> carregando…</div>');
+   const kill=setTimeout(()=>{const m=document.getElementById("ldmsg");if(m)m.innerHTML="⚠ nao encontrado";},4000);
+   fetch(BACKPACK+"?action=file&id="+it.fileId).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(j=>{
+    if(!j.b64)throw new Error("sem áudio");
+    const u=b64url(j.b64,j.mime);audioCache["f:"+it.fileId]=u;au.src=u;clearTimeout(kill);
+    const m=document.getElementById("ldmsg");if(m)m.remove();}).catch(()=>{clearTimeout(kill);
+    const m=document.getElementById("ldmsg");if(m)m.innerHTML="⚠ nao encontrado";});
+  }
  }
-  pop.querySelector("#pH").onclick=()=>{const u=new SpeechSynthesisUtterance(a);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
- pop.querySelector("#pH").onclick=()=>{const u=new SpeechSynthesisUtterance(a);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
  pop.querySelector("#pR").onclick=()=>rec(a);
  pop.querySelector("#pN").onclick=()=>{pop.insertAdjacentHTML("beforeend",'<textarea id="nt" rows="2" placeholder="nova anotação…"></textarea><br><button id="ns">💾 salvar</button>');
   pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();if(v)send({action:"add",type:"note",anchor:a,data:v});closePop();};};
