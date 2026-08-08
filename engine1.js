@@ -13,9 +13,8 @@ const localGet=()=>{try{return JSON.parse(localStorage.getItem(LKEY)||"{}")}catc
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(t._x);t._x=setTimeout(()=>t.style.display="none",2600)}
 function b64url(b64,mime){const b=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));return URL.createObjectURL(new Blob([b],{type:mime||"audio/webm"}))}
 function send(o){o.email=STUDENT;o.lesson=L;o.author=who();o.id=Date.now()+"_"+Math.floor(Math.random()*9999);
- const keep=Object.assign({},o);
- try{const s=localGet();s[o.id]=keep;localStorage.setItem(LKEY,JSON.stringify(s))}
- catch(e){try{delete keep.b64;const s=localGet();s[o.id]=keep;localStorage.setItem(LKEY,JSON.stringify(s))}catch(e2){}}
+ const keep=Object.assign({},o);delete keep.b64;
+ try{const s=localGet();s[o.id]=keep;localStorage.setItem(LKEY,JSON.stringify(s))}catch(e){}
  fetch(BACKPACK,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(o)}).catch(()=>{});
  setTimeout(()=>{sig="";loadLayer()},600);
  setTimeout(async()=>{try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L);
@@ -68,7 +67,8 @@ async function rec(t){let stream;try{stream=await navigator.mediaDevices.getUser
  const ind=document.createElement("div");ind.className="pop recind";
  ind.innerHTML='<span class="pulse">🎙</span> gravando… <b style="font-size:12px">'+t.slice(0,30)+"</b>";
  document.body.appendChild(ind);
- const mr=new MediaRecorder(stream),ch=[];mr.ondataavailable=e=>ch.push(e.data);mr.start();
+ const mr=new MediaRecorder(stream),ch=[];
+ mr.ondataavailable=e=>{if(e.data&&e.data.size>0)ch.push(e.data)};
  const R=new(window.SpeechRecognition||window.webkitSpeechRecognition)();R.lang="en-US";let heard="";
  R.onresult=e=>heard=e.results[0][0].transcript;try{R.start()}catch(e){}
  let ac=null,an=null,buf=null,lastLoud=0,everLoud=false,done=false;const t0=Date.now();
@@ -77,20 +77,21 @@ async function rec(t){let stream;try{stream=await navigator.mediaDevices.getUser
   buf=new Uint8Array(an.frequencyBinCount);}catch(e){}
  let sil=null;
  const finish=()=>{if(done)return;done=true;if(sil)clearInterval(sil);
-  mr.stop();try{R.stop()}catch(e){}stream.getTracks().forEach(x=>x.stop());if(ac)ac.close();
+  try{R.stop()}catch(e){}stream.getTracks().forEach(x=>x.stop());if(ac)ac.close();
   ind.innerHTML='<span class="spin"></span> processando…';
-  const f=new FileReader();f.onload=()=>{const fb=feedback(t,heard);
-   send({action:"add",type:"rec",anchor:t,b64:f.result.split(",")[1],mime:"audio/webm",data:JSON.stringify({score:fb.score,heard,fb:fb.msg})});
-   ind.remove();};
-  f.readAsDataURL(new Blob(ch,{type:"audio/webm"}));};
+  mr.onstop=()=>{const blob=new Blob(ch,{type:"audio/webm"});
+   const f=new FileReader();f.onload=()=>{const fb=feedback(t,heard);
+    send({action:"add",type:"rec",anchor:t,b64:f.result.split(",")[1],mime:"audio/webm",data:JSON.stringify({score:fb.score,heard,fb:fb.msg})});
+    ind.remove();};
+   f.readAsDataURL(blob);};
+  mr.stop();};
  sil=setInterval(()=>{
   if(an){an.getByteTimeDomainData(buf);let loud=false;
    for(let i=0;i<buf.length;i++){if(Math.abs(buf[i]-128)>14){loud=true;break}}
    if(loud){lastLoud=Date.now();everLoud=true}
    if(everLoud&&Date.now()-lastLoud>2000)return finish();}
   if(Date.now()-t0>10000)return finish();
- },100);
-}
+ },100);}
 function feedback(target,heard){const T=norm(target).split(/\s+/),H=norm(heard).split(/\s+/);
  if(!heard)return{score:0,msg:"Não ouvi nada — fale perto do microfone."};
  let ok=0;const notes=[];T.forEach((w,i)=>{const hw=H[i];if(hw===w)ok++;else notes.push(hint(w,hw||"(sumiu)"))});
