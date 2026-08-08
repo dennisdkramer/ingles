@@ -1,4 +1,4 @@
-/* MOTOR 2 — topbar, camadas, quiz, áudio com cache */
+/* MOTOR 2 — topbar, camadas, quiz, áudio com cache, desenho persistente */
 document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="en-US";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)});
 (async()=>{try{
  let extra="";
@@ -8,7 +8,7 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
   extra=' <select id="sel"><option value="'+gate.email+'">demo (você)</option>'+st.map(([e,s])=>'<option value="'+e+'">'+(s.name||e)+"</option>").join("")+"</select>";
   if(TRACK==="kids")extra+=' <button id="mute">🔕 aux off</button>';
  }
- topbar.innerHTML='🦺 '+gate.email+' · <b>'+TRACK+'</b> · <a href="../portal.html">índice</a> · <button id="sync">🔄</button> · <button id="draw">✏️ rabiscar</button> · <span class="dim">Ctrl+V cola imagem</span>'+extra;
+ topbar.innerHTML='🦺 '+gate.email+' · <b>'+TRACK+'</b> · <a href="../portal.html">Index</a> · <button id="sync">🔄</button> · <button id="draw">✏️ Draw</button> · <span class="dim">Ctrl+V pastes an image</span>'+extra;
  if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";loadLayer()};
   const m=document.getElementById("mute");if(m)m.onclick=()=>{auxOn=!auxOn;send({action:"set",data:JSON.stringify({auxOff:!auxOn})});m.textContent=auxOn?"🔕 aux off":"🔔 aux on"};}
  document.getElementById("sync").onclick=()=>{sig="";loadLayer()};
@@ -43,9 +43,9 @@ function renderLayer(){
  if(!feed.innerHTML)feed.innerHTML='<div class="dim">Nada ainda — destaque um texto e anote ou grave algo.</div>';
 }
 async function placeImg(it){
- if(!it.fileId&&!it.b64)return;let j;
- if(it.fileId){try{const r=await fetch(BACKPACK+"?action=file&id="+it.fileId);j=await r.json();}catch(e){return}}
- else j={b64:it.b64,mime:it.mime||"image/png"};
+ let j=null;
+ if(it.b64)j={b64:it.b64,mime:it.mime||"image/png"};
+ else if(it.fileId){try{const r=await fetch(BACKPACK+"?action=file&id="+it.fileId);j=await r.json();}catch(e){return}}
  if(!j||!j.b64)return;
  const d=JSON.parse(it.data||"{}");
  const img=document.createElement("img");img.className="nbImg";img.src=b64url(j.b64,j.mime);
@@ -87,17 +87,30 @@ async function showAnchor(a,x,y){
   pop.querySelector("#ns").onclick=()=>{const v=ta.value.trim();if(v)send({action:"add",type:"note",anchor:a,data:v});closePop();};};
  pop.querySelector("#pX").onclick=closePop;
 }
-let cv,ctx,drawing=false,drawTop=0;
+/* desenho: barra flutuante própria (nunca fica presa) + Esc + persistente */
+let cv,ctx,drawing=false,drawTop=0,drawbar=null;
 function drawToggle(){if(!auxOn)return;
  if(!drawing){drawing=true;drawTop=scrollY;
   cv=document.createElement("canvas");cv.width=innerWidth;cv.height=innerHeight;
-  cv.style.cssText="position:fixed;inset:0;z-index:8;cursor:crosshair";document.body.appendChild(cv);
+  cv.style.cssText="position:fixed;inset:0;z-index:8;cursor:crosshair;touch-action:none";document.body.appendChild(cv);
   ctx=cv.getContext("2d");ctx.strokeStyle="#b3261e";ctx.lineWidth=3;ctx.lineCap="round";
   cv.onpointerdown=e=>{ctx.beginPath();ctx.moveTo(e.clientX,e.clientY);cv.setPointerCapture(e.pointerId);ctx._d=1};
   cv.onpointermove=e=>{if(ctx._d){ctx.lineTo(e.clientX,e.clientY);ctx.stroke()}};
-  cv.onpointerup=()=>ctx._d=0;draw.textContent="💾 salvar rabisco";}
- else{drawing=false;const b64=cv.toDataURL("image/png").split(",")[1];cv.remove();draw.textContent="✏️ rabiscar";
-  send({action:"add",type:"draw",b64,mime:"image/png",data:JSON.stringify({top:drawTop})})}}
+  cv.onpointerup=()=>ctx._d=0;
+  drawbar=document.createElement("div");drawbar.className="pop";
+  drawbar.style.cssText="position:fixed;top:10px;right:10px;z-index:12";
+  drawbar.innerHTML='<button id="dSave">💾 Save drawing</button> <button id="dCancel">✖ Cancel</button>';
+  document.body.appendChild(drawbar);
+  drawbar.querySelector("#dSave").onclick=()=>endDraw(true);
+  drawbar.querySelector("#dCancel").onclick=()=>endDraw(false);
+ } else endDraw(true);}
+function endDraw(save){drawing=false;
+ if(drawbar){drawbar.remove();drawbar=null}
+ if(!cv)return;
+ if(save){const b64=cv.toDataURL("image/png").split(",")[1];
+  send({action:"add",type:"draw",b64,mime:"image/png",data:JSON.stringify({top:drawTop})});}
+ cv.remove();cv=null;}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&drawing)endDraw(false)});
 document.addEventListener("paste",e=>{if(!auxOn)return;
  const it=[...e.clipboardData.items].find(i=>i.type.startsWith("image/"));if(!it)return;
  const f=it.getAsFile(),r=new FileReader();
