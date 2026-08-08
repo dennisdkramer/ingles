@@ -1,4 +1,4 @@
-/* MOTOR 1 — popup, gravação, caderno, âncoras robustas */
+/* MOTOR 1 — popup, gravação, caderno, âncoras robustas, seleção mobile */
 window.addEventListener("error",e=>{let b=document.getElementById("errb");
  if(!b){b=document.createElement("div");b.id="errb";b.style.cssText="background:#a33327;color:#fff;padding:8px 12px;font:14px system-ui;text-align:center";document.body.prepend(b);}
  b.innerHTML="⚠ ERRO: "+e.message;});
@@ -15,7 +15,9 @@ let popXY={x:20,y:90};
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(t._x);t._x=setTimeout(()=>t.style.display="none",2600)}
 function b64url(b64,mime){const b=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));return URL.createObjectURL(new Blob([b],{type:mime||"audio/webm"}))}
 function send(o){o.email=STUDENT;o.lesson=L;o.author=who();o.id=Date.now()+"_"+Math.floor(Math.random()*9999);
- const keep=Object.assign({},o);delete keep.b64;
+ const keep=Object.assign({},o);
+ if(o.type!=="draw"&&o.type!=="img")delete keep.b64;
+ if(keep.b64&&keep.b64.length>2500000)delete keep.b64;
  try{const s=localGet();s[o.id]=keep;localStorage.setItem(LKEY,JSON.stringify(s))}catch(e){}
  fetch(BACKPACK,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(o)}).catch(()=>{});
  setTimeout(()=>{sig="";loadLayer()},600);
@@ -23,15 +25,24 @@ function send(o){o.email=STUDENT;o.lesson=L;o.author=who();o.id=Date.now()+"_"+M
  setTimeout(async()=>{try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L);
   const rows=(await r.json()).rows||[];toast(rows.some(x=>x.id===o.id)?"💾 salvo no caderno compartilhado ✔":"⚠ salvo apenas neste dispositivo");}
   catch(e){toast("⚠ salvo apenas neste dispositivo")}},1800);}
-let pop=null,pendingRange=null;
-const closePop=()=>{if(pop){pop.remove();pop=null}};
-function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("div");pop.className="pop";pop.style.left=x+"px";pop.style.top=y+"px";pop.innerHTML=html;document.body.appendChild(pop);return pop}
+let pop=null,pendingRange=null,lastSelText="";
+const closePop=()=>{if(pop){pop.remove();pop=null}lastSelText=""};
+function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("div");pop.className="pop";
+ pop.style.left=x+"px";pop.style.top=y+"px";pop.style.maxWidth="min(380px, calc(100vw - 16px))";
+ pop.innerHTML=html;document.body.appendChild(pop);return pop}
 document.addEventListener("mousedown",e=>{if(pop&&!pop.contains(e.target))closePop()});
-document.addEventListener("mouseup",e=>{try{
- const t=getSelection().toString().trim();
- if(t.length<3||t.length>200||e.target.closest(".pop"))return;
- pendingRange=getSelection().rangeCount?getSelection().getRangeAt(0).cloneRange():null;
- const x=Math.min(e.clientX,innerWidth-380),y=e.clientY+8;
+/* seleção: abre só quando a seleção MUDA (funciona em mobile; não dispara ao clicar em botões) */
+function trySelPopup(){
+ const sel=getSelection();const t=sel?sel.toString().trim():"";
+ if(!t||t.length<3||t.length>200)return;
+ if(t===lastSelText)return;
+ if(!sel.rangeCount)return;
+ const r=sel.getRangeAt(0);
+ const n=r.commonAncestorContainer;const el=n.nodeType===1?n:n.parentElement;
+ if(el&&el.closest(".pop,script,style,button,textarea,input,select,a,label"))return;
+ pendingRange=r.cloneRange();
+ const rect=r.getBoundingClientRect();
+ const x=Math.max(8,Math.min(rect.left||20,innerWidth-380)),y=(rect.bottom||60)+8;
  openPop(t,x,y,'<b style="font-size:14px">'+t.slice(0,42)+(t.length>42?"…":"")+'</b><br><span style="white-space:nowrap"><button id="pH">▶ Hear</button><button id="pR">⏺ Record</button><button id="pN">📝 Note</button></span>');
  pop.querySelector("#pH").onclick=()=>{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
  pop.querySelector("#pR").onclick=()=>{wrapRange(t,pendingRange);rec(t)};
@@ -39,9 +50,13 @@ document.addEventListener("mouseup",e=>{try{
   openPop(t,x,y,'<textarea id="nt" rows="3" placeholder="write a note…"></textarea><br><button id="ns">💾 Save</button> <button id="px">Cancel</button>');
   pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();if(v)send({action:"add",type:"note",anchor:t,data:v});closePop();};
   pop.querySelector("#px").onclick=closePop;};
-}catch(err){let b=document.getElementById("errb");if(b)b.innerHTML+=" · popup: "+err.message}});
+ lastSelText=t;
+}
+let selTimer=null;
+document.addEventListener("selectionchange",()=>{clearTimeout(selTimer);selTimer=setTimeout(trySelPopup,350)});
+document.addEventListener("touchend",()=>{clearTimeout(selTimer);selTimer=setTimeout(trySelPopup,450)});
 document.addEventListener("click",e=>{const m=e.target.closest("mark.nb");if(!m)return;e.stopPropagation();
- if(window.showAnchor)showAnchor(m.dataset.a,Math.min(e.clientX,innerWidth-380),e.clientY+8)});
+ if(window.showAnchor)showAnchor(m.dataset.a,Math.max(8,Math.min(e.clientX,innerWidth-380)),e.clientY+8)});
 function wrapRange(t,r){if(!r)return document.querySelector('mark.nb[data-a="'+CSS.escape(t)+'"]');
  const m=document.createElement("mark");m.className="nb";m.dataset.a=t;
  try{m.appendChild(r.extractContents());r.insertNode(m)}catch(e){return null}
