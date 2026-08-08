@@ -31,17 +31,17 @@ document.addEventListener("mouseup",e=>{try{
  const t=getSelection().toString().trim();
  if(t.length<3||t.length>200||e.target.closest(".pop"))return;
  pendingRange=getSelection().rangeCount?getSelection().getRangeAt(0).cloneRange():null;
- const x=Math.min(e.clientX,innerWidth-370),y=e.clientY+8;
- openPop(t,x,y,'<b style="font-size:14px">'+t.slice(0,42)+(t.length>42?"…":"")+'</b><br><button id="pH">▶ Hear</button><button id="pR">⏺ Record</button><button id="pN">📝 Note</button>');
+ const x=Math.min(e.clientX,innerWidth-380),y=e.clientY+8;
+ openPop(t,x,y,'<b style="font-size:14px">'+t.slice(0,42)+(t.length>42?"…":"")+'</b><br><span style="white-space:nowrap"><button id="pH">▶ Hear</button><button id="pR">⏺ Record</button><button id="pN">📝 Note</button></span>');
  pop.querySelector("#pH").onclick=()=>{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
  pop.querySelector("#pR").onclick=()=>{wrapRange(t,pendingRange);rec(t)};
  pop.querySelector("#pN").onclick=()=>{wrapRange(t,pendingRange);
-  openPop(t,x,y,'<textarea id="nt" rows="3" placeholder="escreva a anotação…"></textarea><br><button id="ns">💾 salvar</button> <button id="px">cancelar</button>');
+  openPop(t,x,y,'<textarea id="nt" rows="3" placeholder="write a note…"></textarea><br><button id="ns">💾 Save</button> <button id="px">Cancel</button>');
   pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();if(v)send({action:"add",type:"note",anchor:t,data:v});closePop();};
   pop.querySelector("#px").onclick=closePop;};
 }catch(err){let b=document.getElementById("errb");if(b)b.innerHTML+=" · popup: "+err.message}});
 document.addEventListener("click",e=>{const m=e.target.closest("mark.nb");if(!m)return;e.stopPropagation();
- if(window.showAnchor)showAnchor(m.dataset.a,Math.min(e.clientX,innerWidth-370),e.clientY+8)});
+ if(window.showAnchor)showAnchor(m.dataset.a,Math.min(e.clientX,innerWidth-380),e.clientY+8)});
 function wrapRange(t,r){if(!r)return document.querySelector('mark.nb[data-a="'+CSS.escape(t)+'"]');
  const m=document.createElement("mark");m.className="nb";m.dataset.a=t;
  try{m.appendChild(r.extractContents());r.insertNode(m)}catch(e){return null}
@@ -73,7 +73,7 @@ async function rec(t){let stream;try{stream=await navigator.mediaDevices.getUser
  const R=new(window.SpeechRecognition||window.webkitSpeechRecognition)();R.lang="en-US";let heard="";
  R.onresult=e=>{try{heard=e.results[0][0].transcript}catch(e2){}};try{R.start()}catch(e){}
  let ac=null,an=null,buf=null,lastLoud=0,everLoud=false,done=false;const t0=Date.now();
- try{ac=new(window.AudioContext||window.webkitAudioContext());
+ try{ac=new(window.AudioContext||window.webkitAudioContext)();
   const srcn=ac.createMediaStreamSource(stream);an=ac.createAnalyser();an.fftSize=512;srcn.connect(an);
   buf=new Uint8Array(an.frequencyBinCount);}catch(e){}
  let sil=null;
@@ -99,13 +99,11 @@ async function rec(t){let stream;try{stream=await navigator.mediaDevices.getUser
    if(everLoud&&Date.now()-lastLoud>2000)return finish();}
   if(Date.now()-t0>10000)return finish();
  },100);}
-function feedback(target,heard){const T=norm(target).split(/\s+/),H=norm(heard).split(/\s+/);
- if(!heard)return{score:0,msg:"Não ouvi nada — fale perto do microfone."};
- let ok=0;const notes=[];T.forEach((w,i)=>{const hw=H[i];if(hw===w)ok++;else notes.push(hint(w,hw||"(sumiu)"))});
- if(H.length!==T.length)notes.push("Ritmo: "+H.length+" palavras ouvidas vs "+T.length+" do alvo — as palavrinhas (to, the, a) quase somem.");
- return{score:Math.round(100*ok/T.length),msg:ok===T.length?"🎉 Soou nativo!":"Ouvi: “"+heard+"”. "+notes.join(" ")}}
-function hint(w,hw){let tip="";
- if(/th/.test(w)&&/^[tdfv]/.test(hw))tip="“th” = língua entre os dentes (ouça com ▶).";
- if(/s$/.test(w)&&!/s$/.test(hw))tip="O “s” final sumiu.";
- return 'Alvo: “'+w+'” (o computador entendeu “'+hw+'”).'+(tip?" "+tip:" Ouça o trecho com ▶ e compare.")}
+function feedback(target,heard){
+ const tok=s=>(s||"").toLowerCase().split(/[^a-z']+/).filter(Boolean);
+ const T=tok(target),H=tok(heard);
+ if(!heard)return{score:0,msg:"Alvo: "+target+"<br>Ouvi: (nada)"};
+ let ok=0;T.forEach((w,i)=>{if(H[i]===w)ok++});
+ return{score:Math.round(100*ok/Math.max(T.length,1)),msg:"Alvo: "+target+"<br>Ouvi: "+heard};
+}
 window.__A=true;
