@@ -49,9 +49,15 @@ async function placeImg(it){
  if(!j||!j.b64)return;
  const d=JSON.parse(it.data||"{}");
  const img=document.createElement("img");img.className="nbImg";img.src=b64url(j.b64,j.mime);
- img.style.top=(d.top||0)+"px";img.style.border="0";
- // Only allow deletion while holding Shift - no cursor change, no interference with normal interaction
+ img.style.top=(d.top||0)+"px";img.style.border="0";img.style.pointerEvents="none";
+ // Only clickable for deletion while holding Shift - otherwise completely inert
  if(it.author===who()||gate.teacher){
+  document.addEventListener("keydown",function shiftHandler(e){
+   if(e.key==="Shift"){img.style.pointerEvents="auto";img.style.cursor="pointer";}
+  });
+  document.addEventListener("keyup",function shiftHandler(e){
+   if(e.key==="Shift"){img.style.pointerEvents="none";img.style.cursor="default";}
+  });
   img.onmousedown=(e)=>{if(e.shiftKey){e.preventDefault();e.stopPropagation();if(confirm("Delete this drawing?")){
    // Remove from local layer array immediately to prevent reappearance on reload
    const idx=layer.findIndex(x=>x.id===it.id);if(idx>=0)layer.splice(idx,1);
