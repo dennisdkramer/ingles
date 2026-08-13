@@ -49,12 +49,12 @@ async function placeImg(it){
  if(!j||!j.b64)return;
  const d=JSON.parse(it.data||"{}");
  const img=document.createElement("img");img.className="nbImg";img.src=b64url(j.b64,j.mime);
- img.style.top=(d.top||0)+"px";
+ img.style.top=(d.top||0)+"px";img.style.border="0";
  // Delete on click (only for owner or teacher) - requires holding Shift to prevent accidental clicks
  if(it.author===who()||gate.teacher){
   img.style.cursor="pointer";
   img.title="Shift+Click to delete this drawing";
-  img.onclick=(e)=>{if(e.shiftKey){send({action:"del",id:it.id,type:it.type});img.remove();}};
+  img.onclick=(e)=>{if(e.shiftKey){if(confirm("Delete this drawing?")){send({action:"del",id:it.id,type:it.type});img.remove();}}};
  }
  document.getElementById("page").appendChild(img);
 }
