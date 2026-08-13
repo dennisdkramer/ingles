@@ -8,7 +8,7 @@ let gate=null;try{gate=JSON.parse(sessionStorage.gate)}catch(e){}
 if(!gate||h(gate.email+gate.track+SECRET)!==gate.sig||(!gate.teacher&&gate.track!==TRACK))location.replace("../portal.html");
 const who=()=>gate.teacher?"prof":"aluno";
 let STUDENT=gate.email, layer=[], sig="", auxOn=true;
-const LKEY="nb_"+gate.email+"_"+TRACK+"_"+L;
+const LKEY="nb_"+STUDENT+"_"+TRACK+"_"+L;
 const localGet=()=>{try{return JSON.parse(localStorage.getItem(LKEY)||"{}")}catch(e){return{}}};
 const audioCache={};
 let popXY={x:20,y:90};
