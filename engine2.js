@@ -48,20 +48,28 @@ async function placeImg(it){
  else if(it.fileId){try{const r=await fetch(BACKPACK+"?action=file&id="+it.fileId);j=await r.json();}catch(e){return}}
  if(!j||!j.b64)return;
  const d=JSON.parse(it.data||"{}");
+ const pageRect=document.getElementById("page").getBoundingClientRect();
  const img=document.createElement("img");img.className="nbImg";img.src=b64url(j.b64,j.mime);
- img.style.top=(d.top||0)+"px";img.style.border="0";img.style.pointerEvents="none";
+ // Position relative to the page container, not viewport
+ img.style.position="absolute";
+ img.style.left="20px";
+ img.style.top=((d.top||0)-pageRect.top+scrollY)+"px";
+ img.style.maxWidth="calc(100% - 40px)";
+ img.style.border="0";
+ img.style.pointerEvents="none";
  // Only clickable for deletion while holding Shift - otherwise completely inert
  if(it.author===who()||gate.teacher){
-  document.addEventListener("keydown",function shiftHandler(e){
-   if(e.key==="Shift"){img.style.pointerEvents="auto";img.style.cursor="pointer";}
-  });
-  document.addEventListener("keyup",function shiftHandler(e){
-   if(e.key==="Shift"){img.style.pointerEvents="none";img.style.cursor="default";}
-  });
   img.onmousedown=(e)=>{if(e.shiftKey){e.preventDefault();e.stopPropagation();if(confirm("Delete this drawing?")){
-   // Remove from local layer array immediately to prevent reappearance on reload
-   const idx=layer.findIndex(x=>x.id===it.id);if(idx>=0)layer.splice(idx,1);
-   send({action:"del",id:it.id,type:it.type});img.remove();}}};
+   // Send delete to server first, then remove locally after confirmation
+   send({action:"del",id:it.id,type:it.type});
+   // Remove from DOM immediately
+   img.remove();
+   // Remove from local layer array to prevent reappearance
+   const idx=layer.findIndex(x=>x.id===it.id);
+   if(idx>=0)layer.splice(idx,1);
+   // Update signature to prevent reload from restoring
+   sig=layer.map(x=>x.id).join(",");
+  }}};
  }
  document.getElementById("page").appendChild(img);
 }
