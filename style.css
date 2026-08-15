@@ -6,7 +6,8 @@ header.brand{text-align:center;padding:20px 14px 0}header.brand img{width:120px;
 h1 span{display:block;font-size:.42em;letter-spacing:.5em}
 .script{font-family:Caveat,cursive;font-size:clamp(26px,5vw,38px);margin:2px 0 0;transform:rotate(-2deg)}
 main{max-width:780px;margin:0 auto;padding:8px 14px 30px}
-.page-container{max-width:780px;margin:0 auto;background:var(--paper);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--tan);padding:24px 28px;position:relative;min-height:1000px}
+.page-container{max-width:780px;margin:0 auto;background:var(--paper);border:2px solid var(--ink);border-radius:0;box-shadow:none;padding:0;position:relative;min-height:1200px;width:780px;overflow:visible}
+.page-fixed{position:relative;width:780px;height:1200px;background:var(--paper);margin:0 auto}
 .card{background:var(--paper);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--tan);padding:14px 18px;margin:14px 0}
 .row{margin:6px 0}
 button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;margin:4px 4px 4px 0;font:600 14px 'Public Sans';cursor:pointer;box-shadow:3px 3px 0 var(--tan)}
