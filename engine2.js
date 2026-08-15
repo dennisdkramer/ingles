@@ -21,6 +21,7 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
 
 let mode="off";
 let undoStack=[];
+let deletedIds=new Set(); /* Track deleted IDs locally to prevent reappearance */
 
 function pushUndo(action){
  undoStack.push(action);
@@ -52,6 +53,7 @@ function doUndo(){
  updateUndoButton();
  if(last.type==="draw"||last.type==="highlight"){
   send({action:"del",id:last.id,type:last.type});
+  deletedIds.add(last.id);
   const idx=layer.findIndex(it=>it.id===last.id);
   if(idx>=0){layer.splice(idx,1);sig=layer.map(x=>x.id).join(",");}
   const el=document.querySelector('[data-id="'+last.id+'"]');
@@ -62,6 +64,7 @@ function doUndo(){
   const r=last.el.querySelector('input[value="'+last.prev+'"]');
   if(r)r.checked=true;
  }else if(last.type==="delete"){
+  deletedIds.delete(last.item.id);
   send({action:"add",type:last.item.type,b64:last.item.b64,mime:last.item.mime,data:JSON.stringify(last.item.data||{}),id:last.item.id});
   layer.push(last.item);
   sig=layer.map(x=>x.id).join(",");
@@ -189,6 +192,8 @@ function checkDeleteAt(x,y,pageRect){
 
 async function loadLayer(){
  try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L+"&ver="+LAYER_VER);layer=(await r.json()).rows||[];}catch(e){layer=[];}
+ /* Filter out any IDs that were locally deleted to prevent reappearance */
+ layer=layer.filter(it=>!deletedIds.has(it.id));
  const sKeys=new Set(layer.map(x=>x.anchor+"|"+x.type)),sIds=new Set(layer.map(x=>x.id));
  for(const row of Object.values(localGet()))if(!sIds.has(row.id)&&!sKeys.has(row.anchor+"|"+row.type))layer.push(row);
  const s=layer.map(x=>x.id).join(",");if(s===sig)return;sig=s;
