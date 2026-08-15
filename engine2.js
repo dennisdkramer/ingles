@@ -1,4 +1,5 @@
 /* MOTOR 2 — topbar, camadas, quiz, áudio com cache, desenho/realce persistentes */
+const LAYER_VER="v2-clear-all-20240815"; /* Bump this to wipe all drawings/notes/recordings */
 document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="en-US";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)});
 (async()=>{try{
  let extra="";
@@ -187,7 +188,7 @@ function checkDeleteAt(x,y,pageRect){
 }
 
 async function loadLayer(){
- try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L);layer=(await r.json()).rows||[];}catch(e){layer=[];}
+ try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L+"&ver="+LAYER_VER);layer=(await r.json()).rows||[];}catch(e){layer=[];}
  const sKeys=new Set(layer.map(x=>x.anchor+"|"+x.type)),sIds=new Set(layer.map(x=>x.id));
  for(const row of Object.values(localGet()))if(!sIds.has(row.id)&&!sKeys.has(row.anchor+"|"+row.type))layer.push(row);
  const s=layer.map(x=>x.id).join(",");if(s===sig)return;sig=s;
