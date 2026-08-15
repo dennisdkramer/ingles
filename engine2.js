@@ -1,5 +1,17 @@
 /* MOTOR 2 — topbar, camadas, quiz, áudio com cache, desenho/realce persistentes */
-const LAYER_VER="v2-clear-all-20240815"; /* Bump this to wipe all drawings/notes/recordings */
+const LAYER_VER="v3-fixed-deletion-20240815"; /* Bump to wipe all drawings/notes/recordings */
+
+// Load deletedIds from localStorage on init
+let deletedIds = new Set();
+try {
+    const saved = localStorage.getItem("deletedIds_" + TRACK + "_" + L);
+    if (saved) deletedIds = new Set(JSON.parse(saved));
+} catch(e) {}
+
+function persistDeletedIds() {
+    localStorage.setItem("deletedIds_" + TRACK + "_" + L, JSON.stringify([...deletedIds]));
+}
+
 document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="en-US";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)});
 (async()=>{try{
  let extra="";
@@ -54,6 +66,7 @@ function doUndo(){
  if(last.type==="draw"||last.type==="highlight"){
   send({action:"del",id:last.id,type:last.type});
   deletedIds.add(last.id);
+  persistDeletedIds();
   const idx=layer.findIndex(it=>it.id===last.id);
   if(idx>=0){layer.splice(idx,1);sig=layer.map(x=>x.id).join(",");}
   const el=document.querySelector('[data-id="'+last.id+'"]');
@@ -65,6 +78,7 @@ function doUndo(){
   if(r)r.checked=true;
  }else if(last.type==="delete"){
   deletedIds.delete(last.item.id);
+  persistDeletedIds();
   send({action:"add",type:last.item.type,b64:last.item.b64,mime:last.item.mime,data:JSON.stringify(last.item.data||{}),id:last.item.id});
   layer.push(last.item);
   sig=layer.map(x=>x.id).join(",");
@@ -181,6 +195,8 @@ function checkDeleteAt(x,y,pageRect){
    if(item&&(item.author===who()||gate.teacher)){
     const itemCopy={...item};
     send({action:"del",id:item.id,type:item.type});
+    deletedIds.add(item.id);
+    persistDeletedIds();
     const idx=layer.findIndex(it=>it.id===id);
     if(idx>=0){layer.splice(idx,1);sig=layer.map(x=>x.id).join(",");}
     found.remove();
