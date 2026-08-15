@@ -161,6 +161,11 @@ function checkDeleteAt(x,y){
    const item=layer.find(it=>it.id===id);
    if(item&&(item.author===who()||gate.teacher)){
     send({action:"del",id:item.id,type:item.type});
+    // Remove from local layer array immediately to prevent reappearance
+    const idx=layer.findIndex(it=>it.id===id);
+    if(idx>=0)layer.splice(idx,1);
+    // Update signature to prevent reload from restoring
+    sig=layer.map(x=>x.id).join(",");
     found.remove();
     pushUndo({type:"draw",id:item.id});
    }
@@ -204,6 +209,7 @@ async function placeImg(it){
  const d=JSON.parse(it.data||"{}");
  const img=document.createElement("img");img.className="nbImg";img.dataset.id=it.id;
  img.src=b64url(j.b64,j.mime);
- img.style.cssText="position:absolute;left:20px;top:"+((d.top||0)-document.getElementById("page").offsetTop+scrollY)+"px;max-width:calc(100% - 40px);border:0;pointer-events:none;z-index:4";
+ img.style.cssText="position:absolute;left:20px;top:"+((d.top||0)-document.getElementById("page").offsetTop+scrollY)+"px;max-width:calc(100% - 40px);border:0;z-index:4";
  document.getElementById("page").appendChild(img);
 }
+window.__B=true;
