@@ -33,7 +33,7 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
 
 let mode="off";
 let undoStack=[];
-let deletedIds=new Set(); /* Track deleted IDs locally to prevent reappearance */
+/* deletedIds already declared at line 5 */
 
 function pushUndo(action){
  undoStack.push(action);
