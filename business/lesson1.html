@@ -1,5 +1,5 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
-<!-- build: 2026-08-15T00:39:59Z -->
+<!-- build: 2026-08-15T01:15:00Z -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Business · Lição 1 — Inglês Abre Portas</title>
 <link rel="stylesheet" href="../style.css">
@@ -7,7 +7,7 @@
 <div id="toast"></div>
 <header class="brand"><img src="../logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>BUSINESS <span>LIVRO 1 · LIÇÃO 1</span></h1></header>
 <div id="topbar" class="dim" style="text-align:center"></div>
-<main id="page">
+<main id="page"><div class="page-container">
 <h1>Introductions, Cognates & the Vowel Truth</h1>
 <p class="card pt"><b>Abertura:</b> Hoje você descobre que <i>já sabe</i> centenas de palavras, aprende suas primeiras frases,
 entende 3 regras de como o inglês funciona e a verdade mais importante da pronúncia: <i>as vogais não têm som fixo</i>.
@@ -121,4 +121,6 @@ const SECRET="abreportas2025", TRACK="business", L=1, COUNT=1;
 if(!window.__A)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine1.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');
 else if(!window.__B)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine2.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');
 </script>
+<script>window.addEventListener('beforeunload',()=>{const pc=document.querySelector('.page-container');if(pc)pc.innerHTML=pc.innerHTML.replace(/<canvas[^>]*><\/canvas>/g,'')});</script>
+</div></main>
 </body></html>

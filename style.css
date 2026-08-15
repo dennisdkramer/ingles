@@ -5,7 +5,8 @@ header.brand{text-align:center;padding:20px 14px 0}header.brand img{width:120px;
 .logoFallback{font-size:52px}h1{font-family:'Playfair Display',serif;letter-spacing:.14em;font-size:clamp(22px,5vw,38px);margin:8px 0 0}
 h1 span{display:block;font-size:.42em;letter-spacing:.5em}
 .script{font-family:Caveat,cursive;font-size:clamp(26px,5vw,38px);margin:2px 0 0;transform:rotate(-2deg)}
-main{max-width:780px;margin:0 auto;padding:8px 14px 30px;position:relative}
+main{max-width:780px;margin:0 auto;padding:8px 14px 30px}
+.page-container{max-width:780px;margin:0 auto;background:var(--paper);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--tan);padding:24px 28px;position:relative;min-height:1000px}
 .card{background:var(--paper);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--tan);padding:14px 18px;margin:14px 0}
 .row{margin:6px 0}
 button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;margin:4px 4px 4px 0;font:600 14px 'Public Sans';cursor:pointer;box-shadow:3px 3px 0 var(--tan)}
@@ -33,7 +34,9 @@ input.gap.ok{border-color:var(--ok);background:#e8f5ec}input.gap.bad{border-colo
 fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8px 12px}
 fieldset.ok{border-color:var(--ok);background:#e8f5ec}fieldset.bad{border-color:var(--bad);background:#fbeaea}
 label{margin-right:10px;cursor:pointer}
-.nbImg{position:absolute;left:8px;max-width:92%;border:0}
+.nbImg{position:absolute;border:0;pointer-events:none}
+.nbHl{position:absolute;pointer-events:none}
 #feed{font-size:14px}#feed div{border-left:3px solid var(--tan);padding:2px 8px;margin:4px 0;background:#fff8}
 footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#8a8072}
+@media print{body{background:white}header,.dim,#topbar,#feed,footer{display:none!important}.page-container{box-shadow:none;border:0;margin:0;padding:0}}
 
