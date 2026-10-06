@@ -68,8 +68,11 @@ THIS FILE WINS. Violating a HARD RULE is a bug to fix immediately, not a judgmen
   (18+, swearing, AAVE-aware). Own folder, own lesson order, own voice.
 
 ## HR-8. KNOWN OPEN ISSUES (carry forward until closed with evidence)
-- Old drawings/notes/recordings still visible on live site despite Sheet deletion —
-  suspect: stale rows resynced, localStorage ghosts, or backend serving old data.
+- [CLOSED Oct 6, commit 5970eac] Old drawings/notes/recordings reappearing despite
+  Sheet deletion — root cause was localStorage ghosts; code now wipes them on load.
+  Owner confirmed drawings gone on live site. Re-open only if they return.
+- OWNER REPORTED (latest): drawing function "still has problems" — specific symptoms
+  not yet described. Ask owner for exact repro steps before touching engine2.js.
 - Drawing interactions (shift+click draw / shift+right-click delete / ctrl+click
   highlight / ctrl+z undo / touch gestures / 3-way toggle / floating undo button)
   need manual browser testing by owner; jsdom QA cannot verify real clicks/canvas.
