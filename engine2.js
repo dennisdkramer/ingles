@@ -1,16 +1,8 @@
 /* MOTOR 2 — topbar, camadas, quiz, áudio com cache, desenho/realce persistentes */
-const LAYER_VER="v3-fixed-deletion-20240815"; /* Bump to wipe all drawings/notes/recordings */
+const LAYER_VER="v4-server-truth-20261006"; /* Bump to mark a fresh data era */
 
-// Load deletedIds from localStorage on init
-let deletedIds = new Set();
-try {
-    const saved = localStorage.getItem("deletedIds_" + TRACK + "_" + L);
-    if (saved) deletedIds = new Set(JSON.parse(saved));
-} catch(e) {}
-
-function persistDeletedIds() {
-    localStorage.setItem("deletedIds_" + TRACK + "_" + L, JSON.stringify([...deletedIds]));
-}
+/* One-time cleanup of legacy shadow lists from the old buggy deletion system */
+try{for(const k of Object.keys(localStorage))if(k.startsWith("deletedIds_"))localStorage.removeItem(k)}catch(e){}
 
 document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="en-US";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)});
 (async()=>{try{
@@ -33,7 +25,6 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
 
 let mode="off";
 let undoStack=[];
-/* deletedIds already declared at line 5 */
 
 function pushUndo(action){
  undoStack.push(action);
@@ -65,10 +56,6 @@ function doUndo(){
  updateUndoButton();
  if(last.type==="draw"||last.type==="highlight"){
   send({action:"del",id:last.id,type:last.type});
-  deletedIds.add(last.id);
-  persistDeletedIds();
-  const idx=layer.findIndex(it=>it.id===last.id);
-  if(idx>=0){layer.splice(idx,1);sig=layer.map(x=>x.id).join(",");}
   const el=document.querySelector('[data-id="'+last.id+'"]');
   if(el)el.remove();
  }else if(last.type==="input"){
@@ -77,13 +64,8 @@ function doUndo(){
   const r=last.el.querySelector('input[value="'+last.prev+'"]');
   if(r)r.checked=true;
  }else if(last.type==="delete"){
-  deletedIds.delete(last.item.id);
-  persistDeletedIds();
+  /* re-add the item with its original id — server stores it again */
   send({action:"add",type:last.item.type,b64:last.item.b64,mime:last.item.mime,data:JSON.stringify(last.item.data||{}),id:last.item.id});
-  layer.push(last.item);
-  sig=layer.map(x=>x.id).join(",");
-  if(last.item.type==="draw")placeImg(last.item);
-  if(last.item.type==="highlight")renderHighlight(last.item);
  }
 }
 
@@ -195,10 +177,6 @@ function checkDeleteAt(x,y,pageRect){
    if(item&&(item.author===who()||gate.teacher)){
     const itemCopy={...item};
     send({action:"del",id:item.id,type:item.type});
-    deletedIds.add(item.id);
-    persistDeletedIds();
-    const idx=layer.findIndex(it=>it.id===id);
-    if(idx>=0){layer.splice(idx,1);sig=layer.map(x=>x.id).join(",");}
     found.remove();
     pushUndo({type:"delete",id:item.id,item:itemCopy});
    }
@@ -207,11 +185,11 @@ function checkDeleteAt(x,y,pageRect){
 }
 
 async function loadLayer(){
- try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L+"&ver="+LAYER_VER);layer=(await r.json()).rows||[];}catch(e){layer=[];}
- /* Filter out any IDs that were locally deleted to prevent reappearance */
- layer=layer.filter(it=>!deletedIds.has(it.id));
- const sKeys=new Set(layer.map(x=>x.anchor+"|"+x.type)),sIds=new Set(layer.map(x=>x.id));
- for(const row of Object.values(localGet()))if(!sIds.has(row.id)&&!sKeys.has(row.anchor+"|"+row.type))layer.push(row);
+ let rows=[];
+ try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L+"&ver="+LAYER_VER+"&t="+Date.now());rows=(await r.json()).rows||[];}catch(e){rows=[];}
+ /* Server is the source of truth: rebuild layer from scratch every sync.
+    No localStorage merge, no deletedIds shadow list — deletions are real on the server now. */
+ layer=rows;
  const s=layer.map(x=>x.id).join(",");if(s===sig)return;sig=s;
  const set=layer.find(x=>x.type==="setting");auxOn=!set||!JSON.parse(set.data||"{}").auxOff;
  if(set&&JSON.parse(set.data||"{}").mode){mode=JSON.parse(set.data||"{}").mode;if(document.getElementById("modeToggle"))document.getElementById("modeToggle").value=mode;}

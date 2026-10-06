@@ -14,17 +14,32 @@ const audioCache={};
 let popXY={x:20,y:90};
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(t._x);t._x=setTimeout(()=>t.style.display="none",2600)}
 function b64url(b64,mime){const b=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));return URL.createObjectURL(new Blob([b],{type:mime||"audio/webm"}))}
-function send(o){o.email=STUDENT;o.lesson=L;o.author=who();o.id=Date.now()+"_"+Math.floor(Math.random()*9999);
- const keep=Object.assign({},o);
- if(o.type!=="draw"&&o.type!=="img")delete keep.b64;
- if(keep.b64&&keep.b64.length>2500000)delete keep.b64;
- try{const s=localGet();s[o.id]=keep;localStorage.setItem(LKEY,JSON.stringify(s))}catch(e){}
- fetch(BACKPACK,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(o)}).catch(()=>{});
- setTimeout(()=>{sig="";loadLayer()},600);
+function send(o){o.email=STUDENT;o.lesson=L;o.author=who();
+ const isDel=(o.action==="del");
+ if(!isDel&&!o.id)o.id=Date.now()+"_"+Math.floor(Math.random()*9999);
+ fetch(BACKPACK,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(o)})
+  .then(r=>r.json())
+  .then(j=>{
+   if(isDel){
+    if(j&&j.result==="deleted"){
+     toast("🗑 apagado ✔");
+     loadLayer();
+     return;
+    }
+    toast("⚠ falha ao apagar (servidor)");
+    return;
+   }
+   if(j&&j.result==="ok"){loadLayer();return;}
+   throw new Error((j&&j.error)||"resposta inválida");
+  })
+  .catch(err=>{
+   /* server unavailable or errored → keep a local copy so nothing is lost this session */
+   if(!isDel){try{const s=localGet();s[o.id]=o;localStorage.setItem(LKEY,JSON.stringify(s))}catch(e){}
+    toast("⚠ salvo apenas neste dispositivo");}
+   else toast("⚠ servidor indisponível — apagar não confirmou");
+  });
  setTimeout(()=>{if(window.currentAnchor&&window.currentAnchor===o.anchor&&pop&&window.showAnchor)window.showAnchor(o.anchor,popXY.x,popXY.y)},900);
- setTimeout(async()=>{try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L);
-  const rows=(await r.json()).rows||[];toast(rows.some(x=>x.id===o.id)?"💾 salvo no caderno compartilhado ✔":"⚠ salvo apenas neste dispositivo");}
-  catch(e){toast("⚠ salvo apenas neste dispositivo")}},1800);}
+ setTimeout(loadLayer,1800);}
 let pop=null,pendingRange=null,lastSelText="";
 const closePop=()=>{if(pop){pop.remove();pop=null}lastSelText=""};
 function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("div");pop.className="pop";
