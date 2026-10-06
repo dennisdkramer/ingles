@@ -1,8 +1,10 @@
 /* MOTOR 2 — topbar, camadas, quiz, áudio com cache, desenho/realce persistentes */
 const LAYER_VER="v4-server-truth-20261006"; /* Bump to mark a fresh data era */
 
-/* One-time cleanup of legacy shadow lists from the old buggy deletion system */
-try{for(const k of Object.keys(localStorage))if(k.startsWith("deletedIds_"))localStorage.removeItem(k)}catch(e){}
+/* One-time cleanup of ALL legacy local ghosts: shadow lists + device-only layer copies.
+   Server is now the single source of truth; any nb_* localStorage entry is a ghost
+   from the old "salvo apenas nesse dispositivo" system and must go. */
+try{for(const k of Object.keys(localStorage))if(k.startsWith("deletedIds_")||k.startsWith("nb_"))localStorage.removeItem(k)}catch(e){}
 
 document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="en-US";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)});
 (async()=>{try{
