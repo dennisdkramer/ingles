@@ -95,3 +95,54 @@ THIS FILE WINS. Violating a HARD RULE is a bug to fix immediately, not a judgmen
 - Whenever the owner says "from now on…", "always…", "never…" — I MUST append the
   rule here in the same turn, then follow it thereafter. This file is the persistent
   memory; conversations are not.
+
+## HR-11. SITE FORMATTING — FROZEN CONTRACT (do NOT change unless owner asks)
+These are current facts of style.css / layout. Any task that touches formatting must
+check this section first and preserve everything not explicitly being changed.
+
+### Brand tokens (CSS vars, :root in style.css) — never rename or re-tint:
+- --cream:#f4eddd (page background) · --paper:#fdfaf2 (content surfaces)
+- --ink:#182136 (text, borders, buttons) · --tan:#b9854c (accents, shadows)
+- --rose:#d9c1ba · --ok:#177245 (correct/green) · --bad:#a33327 (wrong/red)
+- --ptw:#96601f (Portuguese words) · --blue:#1d4ed8 + --bluebg:#dbeafe (notes)
+
+### Fonts (Google Fonts import at top of style.css):
+- Playfair Display 700/900 → h1, h2 (headings, letter-spacing .14em)
+- Caveat 700 → .script class (handwritten accents, rotated -2deg)
+- Public Sans 400/600/700 → body text, base font 17px/1.6
+
+### Layout skeleton (every lesson page):
+- header.brand (centered logo 120px w/ rose drop-shadow) → main#page
+  → .page-container (FIXED width:780px, min-height:1200px, paper bg,
+  2px solid ink border, NO radius/shadow, position:relative — drawings anchor here)
+  → .page-fixed (780x1200 exact). Content does NOT compress dynamically;
+  fixed page = PDF-like canvas so drawings stay pinned to specific words.
+- Cards: .card = paper bg, 2px ink border, 16px radius, 5px 5px 0 tan hard shadow.
+- Buttons: ink bg, cream text, 10px radius, 3px 3px 0 tan shadow, 600 14px Public Sans.
+- Links: ink color, weight 600. Dim text: #8a8072 13px.
+
+### Exercise/markup conventions (style.css classes — keep semantics):
+- .ptw = Portuguese word in exercises: italic, --ptw color, weight 600. (pedagogy)
+- input.gap = fill-in blank: transparent, 2px tan bottom border, #fff8ea bg;
+  .gap.ok green tint / .gap.bad red tint after grading.
+- fieldset = quiz block, dashed tan border, 12px radius; ok/bad tints as above.
+- details (gabarito) = #fff8ea, dashed tan border — answers always inside <details>.
+- mark.nb phrase marks: has-rec = underline 2px --ok + 🎙 suffix;
+  has-note = bluebg fill + blue text + 📝 suffix. No other mark styling.
+- .pop selection popup = fixed, paper, 2px ink border, 14px radius, tan hard shadow,
+  max-width 380px; its buttons small (12.5px, one line, English labels).
+- #toast = fixed top-center pill, ink/cream. .recind recording indicator top-center.
+- .nbImg drawings: position:absolute INSIDE .page-container, border:0,
+  pointer-events:none (interact only via global shift/ctrl key handlers).
+- @media print: hides header/#topbar/#feed/footer, strips container border/shadow.
+
+### Sizing philosophy (owner directive):
+- Controls/hotkey text/buttons: minimum size an average person comfortably sees,
+  clicks, reads. Do not enlarge "for beauty"; do not shrink below comfortable.
+- Undo/back button floats top-right for BOTH teacher and student; other controls
+  + hotkey legend sit at top of each lesson.
+
+### What I must NOT do when asked for unrelated changes:
+- Not alter colors, fonts, page width (780px), card/button shadow style, mark
+  semantics, or popup design. If a change would touch any of these, I say so
+  explicitly and wait for approval before editing.
