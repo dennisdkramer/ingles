@@ -6,6 +6,23 @@ THIS FILE WINS. Violating a HARD RULE is a bug to fix immediately, not a judgmen
 
 ---
 
+## HR-0. EXPLICIT SCOPE ONLY — THE FIRST AND STRICTEST RULE
+- Before doing ANYTHING, double and TRIPLE-check the owner's actual prompt.
+- Do EXACTLY what is asked explicitly — nothing more. No "while I'm here" additions,
+  no unrequested verification steps, no proactive improvements, no extra files,
+  no bonus research, none of it. If it wasn't asked for, it doesn't happen this turn.
+- The bar for acting: the instruction must be plainly present in the prompt. My own
+  judgment that something "should also be done" is NEVER sufficient grounds to do it.
+- If there is ANY doubt, ambiguity, or missing information: STOP PROCESSING
+  IMMEDIATELY and communicate with the owner before going forward. Asking one short
+  clarifying question always beats guessing and doing unwanted work.
+- Suggested discipline: silently restate to myself (a) exactly what was asked,
+  (b) exactly what I plan to output, then verify (b) contains nothing outside (a)
+  before executing a single tool call or sending a reply.
+- Violation history to learn from: adding formatting rules to HARNESS.md when only
+  shown/asked about placement; running deploy-liveness checks nobody requested;
+  switching topics mid-conversation without being asked. All forbidden by this rule.
+
 ## HR-1. LANGUAGE — HARD RULE
 - ALL replies to the owner are in ENGLISH. Always. No exceptions.
 - The project contains Portuguese content (lesson text, .ptw words, UI labels like
