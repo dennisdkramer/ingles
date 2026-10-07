@@ -2,6 +2,7 @@
 
 ## RULE 1 — EXECUTE REQUESTED CHANGES VIA THE LOOP
 When the owner requests a change, go straight to the update loop (RULE 6) and execute it — do NOT stall, deliberate, or leave the request unimplemented. Exception: if there is concrete reasoning not to proceed (e.g. the request conflicts with a contract in FORMAT.md/FUNCTION.md, is ambiguous enough that guessing risks damage, or is technically impossible), STOP and report back to the owner with the reason instead of executing or silently skipping. Stay within the explicit scope of the request; anything beyond it is proposed, not done.
+CRITICAL: "Done" means committed AND pushed AND verified live per RULE 6. NEVER claim a change was made without pasted proof (git log + curl) in the same turn. A reply describing work that has no corresponding commit/push is a violation. <!-- build: 2026-10-07T00:00:00Z -->
 
 ## RULE 2 — LANGUAGE
 Default language is English. Use Portuguese only when specifically requested.
