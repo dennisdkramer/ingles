@@ -15,9 +15,10 @@ Reference this file whenever a task touches site appearance. Preserve everything
 - Public Sans 400/600/700 → body, base 17px/1.6
 
 ## Layout
-- header.brand (centered logo 120px, rose drop-shadow) → main#page → .page-container
-- .page-container: FIXED 1200px wide (owner change 2026-10-07: ALL page content must stay inside this drawable area; overflow:hidden clips anything that would escape), min-height 1200px, paper bg, 2px solid ink border, no radius/shadow, position:relative (drawings anchor here)
-- .page-fixed: 1200x1200 exact (width:100% of container). Content never compresses dynamically (PDF-like canvas; drawings pin to specific words)
+- header.brand (centered logo 120px, rose drop-shadow) → main#page → .page-container (DRAWABLE AREA) → .content-area (CONTENT AREA)
+- .page-container = DRAWABLE AREA: fixed 1400px wide, height GROWS with content (no min-height, no clipping). Paper bg, 2px solid ink border, no radius/shadow, position:relative (drawings anchor here). ALL page content — including the footer — lives inside it.
+- .content-area = CONTENT AREA: 1200px wide, centered inside the drawable area → exactly 100px margin on each side. All body content (text, cards, buttons, feed) sits here; drawings (.nbImg/.nbHl) anchor to .page-container and may extend into the 100px side margins.
+- (removed 2026-10-07: .page-fixed 1200x1200 exact canvas + container overflow:hidden/min-height — owner now requires content-dependent height and a 1400px drawable / 1200px content split)
 - .card: paper bg, 2px ink border, 16px radius, 5px 5px 0 tan hard shadow
 - Buttons: ink bg, cream text, 10px radius, 3px 3px 0 tan shadow, weight 600, 14px Public Sans
 - Links: ink, weight 600. Dim text: #8a8072, 13px

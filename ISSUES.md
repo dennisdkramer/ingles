@@ -2,7 +2,7 @@
 
 ## OPEN
 - Drawing function "still has problems" (owner, Oct 6). Exact symptoms/repro steps NOT yet provided. Do not touch engine2.js drawing code until owner describes them.
-- Fixed page layout: owner reported text still compresses dynamically despite .page-container work. Needs re-verification on live site + fix.
+- [Oct 7] business/lesson1.html had malformed markup committed in HEAD: stray `</div></main>` after the scripts and a duplicate `<footer>` (browser auto-corrects, but layout is unpredictable — likely contributor to owner's "text still compresses dynamically" report). Cleaned up as part of the 1400px drawable-area rework; watch for any residual rendering oddities on that page.
 - Undo/back button, 3-way toggle, highlight layer, touch gestures: implemented in code per FUNCTION.md but never verified by owner in a real browser. jsdom QA cannot test canvas/real clicks.
 - Lesson layout "significantly prettier and more consistent": pending owner iteration.
 
