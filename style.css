@@ -1,10 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&display=swap');
 :root{--cream:#f4eddd;--paper:#fdfaf2;--ink:#182136;--tan:#b9854c;--rose:#d9c1ba;--ok:#177245;--bad:#a33327;--ptw:#96601f;--blue:#1d4ed8;--bluebg:#dbeafe}
 *{box-sizing:border-box}body{margin:0;font:17px/1.6 'Public Sans',system-ui,sans-serif;background:var(--cream);color:var(--ink)}
-header.brand{text-align:center;padding:20px 14px 0}
-.control-bar{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;max-width:1400px;margin:10px auto 0;padding:8px 14px;font-size:13px;border-top:2px solid var(--tan);border-bottom:2px solid var(--tan)}
-.control-bar #undoBtn{padding:4px 10px;font-size:13px;border-radius:6px;background:var(--ink);color:var(--cream);border:0;cursor:pointer;box-shadow:2px 2px 0 var(--tan)}
-.control-bar #sync{padding:4px 10px;font-size:13px;border-radius:6px;cursor:pointer}header.brand img{width:120px;filter:drop-shadow(3px 4px 0 var(--rose))}
+header.brand{text-align:center;padding:20px 14px 0}header.brand img{width:120px;filter:drop-shadow(3px 4px 0 var(--rose))}
 .logoFallback{font-size:52px}h1{font-family:'Playfair Display',serif;letter-spacing:.14em;font-size:clamp(22px,5vw,38px);margin:8px 0 0}
 h1 span{display:block;font-size:.42em;letter-spacing:.5em}
 .script{font-family:Caveat,cursive;font-size:clamp(26px,5vw,38px);margin:2px 0 0;transform:rotate(-2deg)}

@@ -14,8 +14,7 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
   const st=Object.entries(ac.students||{}).filter(([e,s])=>s.track===TRACK);
   extra=' <select id="sel"><option value="'+gate.email+'">demo (você)</option>'+st.map(([e,s])=>'<option value="'+e+'">'+(s.name||e)+"</option>").join("")+"</select>";
   if(TRACK==="kids")extra+=' <button id="mute">🔕 aux off</button>';}
- topbar.innerHTML='<span class="cb-id">🦺 '+gate.email+' · <b>'+({kids:"Kids",business:"Business",nsfw:"Adults"}[TRACK]||TRACK)+'</b></span> · <a href="../portal.html">Home</a> · <button id="sync" title="Reload layer from server">🔄 Sync</button> · <button id="undoBtn" title="Undo last drawing or highlight (Ctrl+Z)" style="display:none">↶ Undo</button> · <span class="dim cb-help">Shift+click = draw · Shift+right-click = erase · Ctrl+click = highlight · Ctrl+Z = undo</span>'+extra;
- updateUndoButton();
+ topbar.innerHTML='🦺 '+gate.email+' · <b>'+TRACK+'</b> · <a href="../portal.html">Index</a> · <button id="sync">🔄</button> · <span class="dim">Shift+clique=desenhar · Shift+dir=apagar · Ctrl+clique=realçar · Ctrl+Z=desfazer</span>'+extra;
  if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";loadLayer()};
   const m=document.getElementById("mute");if(m)m.onclick=()=>{auxOn=!auxOn;send({action:"set",data:JSON.stringify({auxOff:!auxOn})});m.textContent=auxOn?"🔕 aux off":"🔔 aux on";};}
  topbar.insertAdjacentHTML("beforeend",' <select id="modeToggle"><option value="off">off</option><option value="limit">limit</option><option value="teacher">teacher only</option></select>');
@@ -44,10 +43,13 @@ function setupUndo(){
  document.addEventListener("keydown",e=>{
   if((e.ctrlKey||e.metaKey)&&e.key==="z"){e.preventDefault();doUndo();}
  });
- // The Undo button itself lives in the control bar (#topbar), created in topbar.innerHTML above.
- const ub=document.getElementById("undoBtn");
- if(ub)ub.onclick=()=>doUndo();
- updateUndoButton();
+ const ub=document.createElement("button");
+ ub.id="undoBtn";
+ ub.textContent="↶ Desfazer";
+ ub.title="Desfazer (Ctrl+Z)";
+ ub.style.cssText="position:fixed;top:10px;right:10px;z-index:1000;padding:6px 10px;font-size:13px;border-radius:6px;background:var(--ink);color:var(--cream);border:0;cursor:pointer;box-shadow:2px 2px 0 var(--tan);display:none;";
+ ub.onclick=()=>doUndo();
+ document.body.appendChild(ub);
 }
 
 function doUndo(){
