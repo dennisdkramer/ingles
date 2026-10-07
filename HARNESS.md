@@ -1,8 +1,9 @@
 # HARNESS — binding contract. Read at the start of EVERY session, before any other action.
 
-## RULE 1 — EXECUTE REQUESTED CHANGES VIA THE LOOP
-When the owner requests a change, go straight to the update loop (RULE 6) and execute it — do NOT stall, deliberate, or leave the request unimplemented. Exception: if there is concrete reasoning not to proceed (e.g. the request conflicts with a contract in FORMAT.md/FUNCTION.md, is ambiguous enough that guessing risks damage, or is technically impossible), STOP and report back to the owner with the reason instead of executing or silently skipping. Stay within the explicit scope of the request; anything beyond it is proposed, not done.
-CRITICAL: "Done" means committed AND pushed AND verified live per RULE 6. NEVER claim a change was made without pasted proof (git log + curl) in the same turn. A reply describing work that has no corresponding commit/push is a violation. <!-- build: 2026-10-07T00:00:00Z -->
+## RULE 1 — EXPLICIT SCOPE ONLY + EXECUTE VIA THE LOOP
+Before any action, thinking, updates, or responses: confirm what is explicitly requested in the owner's prompt. Do exactly that and NOTHING more. If you think something should also be done, propose it in a reply and wait. If anything is unclear, stop processing immediately and communicate with the owner before going forward.
+When the owner requests a change, go straight to the update loop (RULE 6) and execute it — do NOT stall, deliberate, or leave the request unimplemented. Exception: if there is concrete reasoning not to proceed (conflict with FORMAT.md/FUNCTION.md contracts, ambiguity where guessing risks damage, technical impossibility), STOP and report back with the reason instead of executing or silently skipping.
+CRITICAL: "Done" means committed AND pushed AND verified live per RULE 6. NEVER claim a change was made without pasted proof (git log + curl) in the same turn. A reply describing work that has no corresponding commit/push is a violation. <!-- build: 2026-10-07T06:50:00Z -->
 
 ## RULE 2 — LANGUAGE
 Default language is English. Use Portuguese only when specifically requested.
