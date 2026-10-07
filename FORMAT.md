@@ -16,8 +16,8 @@ Reference this file whenever a task touches site appearance. Preserve everything
 
 ## Layout
 - header.brand (centered logo 120px, rose drop-shadow) → main#page → .page-container
-- .page-container: FIXED 780px wide, min-height 1200px, paper bg, 2px solid ink border, no radius/shadow, position:relative (drawings anchor here)
-- .page-fixed: 780x1200 exact. Content never compresses dynamically (PDF-like canvas; drawings pin to specific words)
+- .page-container: FIXED 1200px wide (owner change 2026-10-07: ALL page content must stay inside this drawable area; overflow:hidden clips anything that would escape), min-height 1200px, paper bg, 2px solid ink border, no radius/shadow, position:relative (drawings anchor here)
+- .page-fixed: 1200x1200 exact (width:100% of container). Content never compresses dynamically (PDF-like canvas; drawings pin to specific words)
 - .card: paper bg, 2px ink border, 16px radius, 5px 5px 0 tan hard shadow
 - Buttons: ink bg, cream text, 10px radius, 3px 3px 0 tan shadow, weight 600, 14px Public Sans
 - Links: ink, weight 600. Dim text: #8a8072, 13px
