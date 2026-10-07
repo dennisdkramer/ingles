@@ -15,7 +15,7 @@ Reference this file whenever a task touches site appearance. Preserve everything
 - Public Sans 400/600/700 → body, base 17px/1.6
 
 ## Layout
-- header.brand (centered logo 120px, rose drop-shadow) → main#page → .page-container (DRAWABLE AREA) → .content-area (CONTENT AREA)
+- header.brand (English text, centered logo 120px, rose drop-shadow) → #controlbar .control-bar (the "control bar": Undo button + account/session info + tools + hotkey legend, English) → main#page → .page-container (DRAWABLE AREA) → .content-area (CONTENT AREA)
 - .page-container = DRAWABLE AREA: fixed 1400px wide, height GROWS with content (no min-height, no clipping). Paper bg, 2px solid ink border, no radius/shadow, position:relative (drawings anchor here). ALL page content — including the footer — lives inside it.
 - .content-area = CONTENT AREA: 1200px wide, centered inside the drawable area → exactly 100px margin on each side. All body content (text, cards, buttons, feed) sits here; drawings (.nbImg/.nbHl) anchor to .page-container and may extend into the 100px side margins.
 - (removed 2026-10-07: .page-fixed 1200x1200 exact canvas + container overflow:hidden/min-height — owner now requires content-dependent height and a 1400px drawable / 1200px content split)
@@ -32,8 +32,8 @@ Reference this file whenever a task touches site appearance. Preserve everything
 - .pop selection popup = fixed, paper, 2px ink border, 14px radius, tan hard shadow, max-width 380px; buttons small (12.5px, one line, English labels)
 - #toast = fixed top-center pill, ink/cream; .recind recording indicator top-center
 - .nbImg drawings: position:absolute INSIDE .page-container, border:0, pointer-events:none (interact only via global shift/ctrl handlers)
-- @media print: hides header/#topbar/#feed/footer, strips container border/shadow
+- @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow
 
 ## Sizing philosophy
 - Controls/hotkey text/buttons: minimum size an average person comfortably sees, clicks, reads. Never enlarge "for beauty"; never shrink below comfortable.
-- Undo/back button floats top-right for teacher AND student; other controls + hotkey legend at top of each lesson.
+- Undo button lives in the control bar (line below the header), hidden until there is something to undo; other controls + hotkey legend also in the control bar. All control-bar text is English. Header text is English on all 5 pages.

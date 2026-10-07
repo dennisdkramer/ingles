@@ -1,4 +1,4 @@
-/* MOTOR 2 — topbar, camadas, quiz, áudio com cache, desenho/realce persistentes */
+/* MOTOR 2 — control bar, camadas, quiz, áudio com cache, desenho/realce persistentes */
 const LAYER_VER="v4-server-truth-20261006"; /* Bump to mark a fresh data era */
 
 /* One-time cleanup of ALL legacy local ghosts: shadow lists + device-only layer copies.
@@ -12,18 +12,19 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
  if(gate.teacher){
   const ac=await(await fetch("../access.json?"+Date.now())).json();
   const st=Object.entries(ac.students||{}).filter(([e,s])=>s.track===TRACK);
-  extra=' <select id="sel"><option value="'+gate.email+'">demo (você)</option>'+st.map(([e,s])=>'<option value="'+e+'">'+(s.name||e)+"</option>").join("")+"</select>";
+  extra=' <select id="sel"><option value="'+gate.email+'">demo (you)</option>'+st.map(([e,s])=>'<option value="'+e+'">'+(s.name||e)+"</option>").join("")+"</select>";
   if(TRACK==="kids")extra+=' <button id="mute">🔕 aux off</button>';}
- topbar.innerHTML='🦺 '+gate.email+' · <b>'+TRACK+'</b> · <a href="../portal.html">Index</a> · <button id="sync">🔄</button> · <span class="dim">Shift+clique=desenhar · Shift+dir=apagar · Ctrl+clique=realçar · Ctrl+Z=desfazer</span>'+extra;
+ const bar=document.getElementById("controlbar")||topbar;
+ bar.innerHTML='<button id="undoBtn" title="Undo (Ctrl+Z)">↶ Undo</button> · 🦺 '+gate.email+' · <b>'+TRACK+'</b> · <a href="../portal.html">Index</a> · <button id="sync" title="Sync now">🔄 Sync</button> · <span class="dim">Shift+click=draw · Shift+right-click=erase · Ctrl+click=highlight · Ctrl+Z=undo</span>'+extra;
  if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";loadLayer()};
   const m=document.getElementById("mute");if(m)m.onclick=()=>{auxOn=!auxOn;send({action:"set",data:JSON.stringify({auxOff:!auxOn})});m.textContent=auxOn?"🔕 aux off":"🔔 aux on";};}
- topbar.insertAdjacentHTML("beforeend",' <select id="modeToggle"><option value="off">off</option><option value="limit">limit</option><option value="teacher">teacher only</option></select>');
+ bar.insertAdjacentHTML("beforeend",' <select id="modeToggle"><option value="off">visibility off</option><option value="limit">limited</option><option value="teacher">teacher only</option></select>');
  const modeSel=document.getElementById("modeToggle");
  modeSel.onchange=()=>{mode=modeSel.value;send({action:"set",data:JSON.stringify({mode})});};
  document.getElementById("sync").onclick=()=>{sig="";loadLayer()};
  loadLayer();setInterval(loadLayer,15000);
  setupUndo();setupDrawing();
-}catch(e){let b=document.getElementById("errb");if(b)b.innerHTML+=" · topbar: "+e.message}})();
+}catch(e){let b=document.getElementById("errb");if(b)b.innerHTML+=" · control bar: "+e.message}})();
 
 let mode="off";
 let undoStack=[];
@@ -43,13 +44,8 @@ function setupUndo(){
  document.addEventListener("keydown",e=>{
   if((e.ctrlKey||e.metaKey)&&e.key==="z"){e.preventDefault();doUndo();}
  });
- const ub=document.createElement("button");
- ub.id="undoBtn";
- ub.textContent="↶ Desfazer";
- ub.title="Desfazer (Ctrl+Z)";
- ub.style.cssText="position:fixed;top:10px;right:10px;z-index:1000;padding:6px 10px;font-size:13px;border-radius:6px;background:var(--ink);color:var(--cream);border:0;cursor:pointer;box-shadow:2px 2px 0 var(--tan);display:none;";
- ub.onclick=()=>doUndo();
- document.body.appendChild(ub);
+ const ub=document.getElementById("undoBtn");
+ if(ub){ub.style.display="none";ub.onclick=()=>doUndo();}
 }
 
 function doUndo(){

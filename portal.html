@@ -1,11 +1,12 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<!doctype html><html lang="en"><head><meta charset="utf-8">
 <!-- build: 2026-10-07T06:15:45Z -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Inglês Abre Portas — Portal</title>
+<title>English Opens Doors — Portal</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head><body>
-<header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>INGLÊS <span>ABRE PORTAS</span></h1><p class="script">Vamos lá</p></header>
+<header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>ENGLISH <span>OPENS DOORS</span></h1><p class="script">Let's go</p></header>
+<div id="controlbar" class="control-bar"><span id="acct" class="dim" hidden></span> <button id="logout" hidden>Logout</button></div>
 <main><div class="page-container"><div class="content-area">
  <div class="card center" id="gcard"><p class="dim">Entre com a conta Google cadastrada pelo professor.</p><div id="gbtn"></div></div>
  <div id="app"></div><p id="debug" class="dim"></p>
@@ -38,7 +39,7 @@ async function start(){
  teacher=access.teachers.includes(user.email);
  const stu=access.students[user.email];
  if(!teacher&&!stu){$("app").innerHTML='<div class="card">⛔ <b>'+user.email+'</b> não está cadastrado.<br>Fale com seu professor.</div>';return}
- render(stu);
+ render(stu);showAcct();
 }
 const prog=()=>JSON.parse(localStorage.getItem("prog_"+user.email)||"{}");
 function go(t,i){sessionStorage.gate=JSON.stringify({email:user.email,track:t,teacher,sig:h(user.email+t+SECRET)});location=t+"/lesson"+i+".html";}
@@ -57,6 +58,7 @@ function render(stu){
  if(cont)html+='<button onclick="go(\''+t+"\',"+cont+')">▶ Continuar da lição '+cont+"</button>";
  html+='</div>';$("app").innerHTML=html;log("índice pronto ✔");
 }
+function showAcct(){const c=$("controlbar").querySelector("#acct"),lo=$("controlbar").querySelector("#logout");c.hidden=false;c.innerHTML="Signed in: <b>"+user.email+"</b>";lo.hidden=false;lo.onclick=logout;}
 function logout(){delete localStorage.sess;location.reload();}
 </script></body></html>
 
