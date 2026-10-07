@@ -1,7 +1,7 @@
 # HARNESS — binding contract. Read at the start of EVERY session, before any other action.
 
-## RULE 1 — EXPLICIT SCOPE ONLY
-Before any action, thinking, updates, or responses: confirm what is explicitly requested in the owner's prompt. Do exactly that and NOTHING more. If you think something should also be done, propose it in a reply and wait. If anything is unclear, stop processing immediately and communicate with the owner before going forward.
+## RULE 1 — EXECUTE REQUESTED CHANGES VIA THE LOOP
+When the owner requests a change, go straight to the update loop (RULE 6) and execute it — do NOT stall, deliberate, or leave the request unimplemented. Exception: if there is concrete reasoning not to proceed (e.g. the request conflicts with a contract in FORMAT.md/FUNCTION.md, is ambiguous enough that guessing risks damage, or is technically impossible), STOP and report back to the owner with the reason instead of executing or silently skipping. Stay within the explicit scope of the request; anything beyond it is proposed, not done.
 
 ## RULE 2 — LANGUAGE
 Default language is English. Use Portuguese only when specifically requested.
