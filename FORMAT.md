@@ -37,3 +37,9 @@ Reference this file whenever a task touches site appearance. Preserve everything
 ## Sizing philosophy
 - Controls/hotkey text/buttons: minimum size an average person comfortably sees, clicks, reads. Never enlarge "for beauty"; never shrink below comfortable.
 - Undo/back button floats top-right for teacher AND student; other controls + hotkey legend at top of each lesson.
+
+## Header & Control Bar (updated 2026-10-07)
+- All header text is ENGLISH. Brand header: `ENGLISH OPENS DOORS` (+ `Let's go` tagline on portal pages); lesson headers: `KIDS/BUSINESS/ADULTS — BOOK 1 · LESSON 1`. Page `<title>`s are English too.
+- CONTROL BAR: the line directly below the header, `<div id="topbar" class="control-bar">` on lesson pages (populated by engine2.js). Portal pages show a static `.control-bar.placeholder` ("Loading…") since they have no session gate.
+- Control bar contents (lesson pages, left→right): identity chip (🦺 email · track), Home link (→ portal.html), 🔄 Sync button, ↶ Undo button (hidden until undo stack non-empty; Ctrl+Z also works), keyboard-help hints, then teacher-only extras (student selector, mode selector, Kids aux-mute).
+- The Undo button lives IN the control bar (the old fixed top-right floating button was removed).
