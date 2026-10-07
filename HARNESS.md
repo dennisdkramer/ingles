@@ -14,6 +14,8 @@ If a prompt is too long or complicated and risks confusion: save it verbatim to 
 ## RULE 4 — VERIFIED CLAIMS ONLY
 Only make claims you have verified within this turn, with pasted terminal output as proof (curl, node --check, git log, QA run). No proof → say "not yet verified". Never restate a past success without re-checking current state first.
 
+**Turn-intent rule:** Before acting, classify the user's message: is it a *request to change* or a *question/report about state*? Questions and reports are answered ONLY — never silently promote them into change requests. If a message names a prior action that appears wrong (e.g., "troubleshoot why you did X"), the correct response is diagnosis plus a proposal; do NOT modify or revert anything until the owner explicitly says which remedy to apply. When in doubt about intent, ask before touching files.
+
 ## RULE 5 — STOP ON DOUBT
 Stop and communicate if you encounter any problem, question, or doubt. No guessing.
 
