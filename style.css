@@ -40,8 +40,6 @@ input.gap.ok{border-color:var(--ok);background:#e8f5ec}input.gap.bad{border-colo
 fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8px 12px}
 fieldset.ok{border-color:var(--ok);background:#e8f5ec}fieldset.bad{border-color:var(--bad);background:#fbeaea}
 label{margin-right:10px;cursor:pointer}
-.nbImg{position:absolute;border:0;pointer-events:none}
-.nbHl{position:absolute;pointer-events:none}
 #feed{font-size:14px}#feed div{border-left:3px solid var(--tan);padding:2px 8px;margin:4px 0;background:#fff8}
 footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#8a8072}
 @media print{body{background:white}header,.dim,#topbar,#controlbar,#feed,footer{display:none!important}.page-container{box-shadow:none;border:0;margin:0;padding:0}.content-area{width:auto;max-width:none}}
