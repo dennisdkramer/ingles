@@ -1,7 +1,7 @@
 # ISSUES — status log (open/closed issues, repro notes). Not rules; see HARNESS.md.
 
 ## OPEN
-- Drawing function "still has problems" (owner, Oct 6). Exact symptoms/repro steps NOT yet provided. Do not touch engine2.js drawing code until owner describes them.
+- [CLOSED 2026-10-11] Drawing/highlight functions REMOVED entirely from engine2.js + style.css per owner request (commit 11457fb), ahead of a rebuild whose parameters the owner will define in the harness. Prior open issue ("drawing still has problems", Oct 6) is moot — code no longer exists. Rebuild = next task, awaiting owner's parameter spec. NOTE: any existing draw/highlayer items in server layer rows are now ignored by renderLayer (not rendered); they remain in the Sheet untouched.
 - [Oct 7] business/lesson1.html had malformed markup committed in HEAD: stray `</div></main>` after the scripts and a duplicate `<footer>` (browser auto-corrects, but layout is unpredictable — likely contributor to owner's "text still compresses dynamically" report). Cleaned up as part of the 1400px drawable-area rework; watch for any residual rendering oddities on that page.
 - Undo/back button, 3-way toggle, highlight layer, touch gestures: implemented in code per FUNCTION.md but never verified by owner in a real browser. jsdom QA cannot test canvas/real clicks.
 - Lesson layout "significantly prettier and more consistent": pending owner iteration.
