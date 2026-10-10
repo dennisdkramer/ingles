@@ -75,14 +75,12 @@ async function loadLayer(){
 }
 
 function renderLayer(){
- document.querySelectorAll("mark.nb").forEach(m=>m.classList.remove("has-rec","has-note","has-hl"));
- window.__HL={};
+ document.querySelectorAll("mark.nb").forEach(m=>m.classList.remove("has-rec","has-note"));
  feed.innerHTML="";
  layer.forEach(it=>{
-  if((it.type==="rec"||it.type==="note"||it.type==="hl")&&it.anchor){
+  if((it.type==="rec"||it.type==="note")&&it.anchor){
    const m=document.querySelector('mark.nb[data-a="'+CSS.escape(it.anchor)+'"]');
-   if(m)m.classList.add("has-"+(it.type==="hl"?"hl":it.type));else ensureMark(it.anchor,it.type==="hl"?"hl":it.type);
-   if(it.type==="hl")window.__HL[it.anchor]=it.id;}
+   if(m)m.classList.add("has-"+it.type);else ensureMark(it.anchor,it.type);}
   if(it.type==="quiz"||it.type==="done"||(it.type==="note"&&!it.anchor)){
    const d=JSON.parse(it.data||"{}");
    feed.innerHTML+="<div>"+(it.type==="done"?"✅ concluída":it.type==="quiz"?"📝 quiz "+d.score+"%":"📝 "+(it.anchor||"traduções"))+" · <i>"+it.author+"</i></div>";}

@@ -26,8 +26,6 @@ mark.nb.has-rec{text-decoration:underline;text-decoration-thickness:2px;text-und
 mark.nb.has-rec::after{content:"🎙";font-size:.75em}
 mark.nb.has-note{background:var(--bluebg);color:var(--blue)}
 mark.nb.has-note::after{content:"📝";font-size:.75em}
-/* realce persistente — Ctrl+seleção cria, Ctrl+clique apaga (owner rebuild 2026-10-11) */
-mark.nb.has-hl{position:relative;z-index:-1;background:#ffe970;color:inherit}
 .pop{position:fixed;z-index:9;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:12px;max-width:380px;max-height:70vh;overflow:auto}
 .pop button{padding:4px 9px;margin:2px 3px 2px 0;font-size:12.5px;border-radius:8px;box-shadow:2px 2px 0 var(--tan)}
 .pop textarea{width:100%;margin:6px 0}
