@@ -47,11 +47,17 @@ function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("
  pop.innerHTML=html;document.body.appendChild(pop);return pop}
 document.addEventListener("mousedown",e=>{if(pop&&!pop.contains(e.target))closePop()});
 /* seleção: abre só quando a seleção MUDA (funciona em mobile; não dispara ao clicar em botões) */
+let ctrlHeld=false,lastCtrlKey=0;
+document.addEventListener("keydown",e=>{if(e.key==="Control"||e.key==="Meta"){ctrlHeld=true;lastCtrlKey=Date.now()}});
+document.addEventListener("keyup",e=>{if(e.key==="Control"||e.key==="Meta")ctrlHeld=false});
+window.addEventListener("blur",()=>{ctrlHeld=false});
 function trySelPopup(){
  const sel=getSelection();const t=sel?sel.toString().trim():"";
  if(!t||t.length<3||t.length>200)return;
  if(t===lastSelText)return;
  if(!sel.rangeCount)return;
+ /* Ctrl+seleção = realce persistente — bypassa o popup ▶/⏺/📝 (owner spec 2026-10-11) */
+ if(ctrlHeld||(window.__hlLast&&Date.now()-window.__hlLast<500)){window.__hlLast=Date.now();closePop();return hlApply(sel.getRangeAt(0),t)}
  const r=sel.getRangeAt(0);
  const n=r.commonAncestorContainer;const el=n.nodeType===1?n:n.parentElement;
  if(el&&el.closest(".pop,script,style,button,textarea,input,select,a,label"))return;
@@ -71,7 +77,35 @@ let selTimer=null;
 document.addEventListener("selectionchange",()=>{clearTimeout(selTimer);selTimer=setTimeout(trySelPopup,350)});
 document.addEventListener("touchend",()=>{clearTimeout(selTimer);selTimer=setTimeout(trySelPopup,450)});
 document.addEventListener("click",e=>{const m=e.target.closest("mark.nb");if(!m)return;e.stopPropagation();
+ /* Ctrl+clique em qualquer ponto do texto realçado = apagar o realce permanentemente (owner spec 2026-10-11) */
+ if((e.ctrlKey||e.metaKey)&&m.classList.contains("has-hl"))return hlDelete(m,e);
  if(window.showAnchor)showAnchor(m.dataset.a,Math.max(8,Math.min(e.clientX,innerWidth-380)),e.clientY+8)});
+/* ---------- REALCE PERSISTENTE (rebuild 2026-10-11, owner spec) ----------
+   Criar: segurar Ctrl durante uma seleção de texto → aplica realce amarelo persistente,
+   SEM abrir o popup ▶/⏺/📝. Salvo no servidor por aluno+track+lição → visível para o
+   aluno e para o professor (modo professor seleciona o aluno).
+   Apagar: Ctrl+clique em qualquer ponto dentro do texto realçado → exclusão permanente. */
+window.__HL={}; /* anchor -> id da linha no servidor */
+let hlSeq=0;
+function hlApply(r,t){
+ try{
+  const m=wrapRange(t,r);
+  if(!m){toast("⚠ não foi possível realçar esse trecho");return}
+  m.classList.add("has-hl");
+  getSelection().removeAllRanges();
+  if(window.__HL[t]){toast("✨ já realçado");return}
+  const hid="hl"+Date.now()+"_"+(++hlSeq);window.__HL[t]=hid; /* registro imediato: a sincronização do servidor chega depois com o id real */
+  send({action:"add",type:"hl",anchor:t,id:hid});
+  toast("✨ realçado — Ctrl+clique para apagar");
+ }catch(e){try{toast("⚠ realce: "+e.message)}catch(e2){}}
+}
+function hlDelete(m,e){
+ e.preventDefault();e.stopPropagation();
+ const t=m.dataset.a,id=window.__HL[t];
+ closePop();
+ if(id){send({action:"del",id:id});pushUndo({type:"delete",item:{type:"hl",anchor:t,data:"",id:id}});}
+ else{m.classList.remove("has-hl");if(!m.classList.length)m.replaceWith(...m.childNodes)}
+}
 function wrapRange(t,r){if(!r)return document.querySelector('mark.nb[data-a="'+CSS.escape(t)+'"]');
  const m=document.createElement("mark");m.className="nb";m.dataset.a=t;
  try{m.appendChild(r.extractContents());r.insertNode(m)}catch(e){return null}

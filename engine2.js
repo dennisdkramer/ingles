@@ -15,14 +15,13 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
   extra=' <select id="sel"><option value="'+gate.email+'">demo (you)</option>'+st.map(([e,s])=>'<option value="'+e+'">'+(s.name||e)+"</option>").join("")+"</select>";
   if(TRACK==="kids")extra+=' <button id="mute">🔕 aux off</button>';}
  const bar=document.getElementById("controlbar")||topbar;
- bar.innerHTML='<button id="undoBtn" title="Undo (Ctrl+Z)">↶ Undo</button> · 🦺 '+gate.email+' · <b>'+TRACK+'</b> · <a href="../portal.html">Index</a> · <button id="sync" title="Sync now">🔄 Sync</button> · <span class="dim">Ctrl+Z=undo</span>'+extra;
+ bar.innerHTML='<button id="undoBtn" title="Undo (Ctrl+Z)">↶ Undo</button> · 🦺 '+gate.email+' · <b>'+TRACK+'</b> · <a href="../portal.html">Index</a> · <span class="dim">Ctrl+Z=undo</span>'+extra;
  if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";loadLayer()};
   const m=document.getElementById("mute");if(m)m.onclick=()=>{auxOn=!auxOn;send({action:"set",data:JSON.stringify({auxOff:!auxOn})});m.textContent=auxOn?"🔕 aux off":"🔔 aux on";};}
  bar.insertAdjacentHTML("beforeend",' <select id="modeToggle"><option value="off">visibility off</option><option value="limit">limited</option><option value="teacher">teacher only</option></select>');
  const modeSel=document.getElementById("modeToggle");
  modeSel.onchange=()=>{mode=modeSel.value;send({action:"set",data:JSON.stringify({mode})});};
- document.getElementById("sync").onclick=()=>{sig="";loadLayer()};
- loadLayer();setInterval(loadLayer,15000);
+ loadLayer();
  setupUndo();
 }catch(e){let b=document.getElementById("errb");if(b)b.innerHTML+=" · control bar: "+e.message}})();
 
@@ -76,17 +75,30 @@ async function loadLayer(){
 }
 
 function renderLayer(){
- document.querySelectorAll("mark.nb").forEach(m=>m.classList.remove("has-rec","has-note"));
+ document.querySelectorAll("mark.nb").forEach(m=>m.classList.remove("has-rec","has-note","has-hl"));
+ window.__HL={};
  feed.innerHTML="";
  layer.forEach(it=>{
-  if((it.type==="rec"||it.type==="note")&&it.anchor){
+  if((it.type==="rec"||it.type==="note"||it.type==="hl")&&it.anchor){
    const m=document.querySelector('mark.nb[data-a="'+CSS.escape(it.anchor)+'"]');
-   if(m)m.classList.add("has-"+it.type);else ensureMark(it.anchor,it.type);}
+   if(m)m.classList.add("has-"+(it.type==="hl"?"hl":it.type));else ensureMark(it.anchor,it.type==="hl"?"hl":it.type);
+   if(it.type==="hl")window.__HL[it.anchor]=it.id;}
   if(it.type==="quiz"||it.type==="done"||(it.type==="note"&&!it.anchor)){
    const d=JSON.parse(it.data||"{}");
    feed.innerHTML+="<div>"+(it.type==="done"?"✅ concluída":it.type==="quiz"?"📝 quiz "+d.score+"%":"📝 "+(it.anchor||"traduções"))+" · <i>"+it.author+"</i></div>";}
  });
  if(!feed.innerHTML)feed.innerHTML='<div class="dim">Nada ainda — destaque um texto e anote ou grave algo.</div>';
 }
+
+/* fallback: showAnchor saiu junto com o código de desenho removido (commit 11457fb);
+   sem isto, clique simples em uma frase marcada lançaria ReferenceError no handler de click.
+   Reapresenta o popup ▶ Hear / ⏺ Record / 📝 Note para a âncora clicada. */
+if(typeof window.showAnchor!=="function"){window.showAnchor=function(a,x,y){openPop(a,x,y,'<b style="font-size:14px">'+String(a).slice(0,42)+(a.length>42?"…":"")+'</b><br><span style="white-space:nowrap"><button id="pH">▶ Hear</button><button id="pR">⏺ Record</button><button id="pN">📝 Note</button></span>');
+ pop.querySelector("#pH").onclick=()=>{const u=new SpeechSynthesisUtterance(a);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
+ pop.querySelector("#pR").onclick=()=>{wrapRange(a,null);rec(a)};
+ pop.querySelector("#pN").onclick=()=>{wrapRange(a,null);
+  openPop(a,x,y,'<textarea id="nt" rows="3" placeholder="write a note…"></textarea><br><button id="ns">💾 Save</button> <button id="px">Cancel</button>');
+  pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();if(v)send({action:"add",type:"note",anchor:a,data:v});closePop()};
+  pop.querySelector("#px").onclick=closePop};}}
 
 window.__B=true;
