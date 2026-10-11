@@ -58,7 +58,20 @@ function doUndo(){
   if(r)r.checked=true;
  }else if(last.type==="delete"){
   /* re-add the item with its original id — server stores it again */
-  send({action:"add",type:last.item.type,b64:last.item.b64,mime:last.item.mime,data:JSON.stringify(last.item.data||{}),id:last.item.id});
+  send({action:"add",type:last.item.type,anchor:last.item.anchor,b64:last.item.b64,mime:last.item.mime,data:JSON.stringify(last.item.data||{}),id:last.item.id});
+ }else if(last.type==="hl"){
+  if(last.kind==="add"){
+   /* undo a new highlight = take it away again */
+   if(last.id)send({action:"del",id:last.id});
+   hlUnwrap(last.el);closePop();
+  }else if(last.kind==="color"){
+   /* undo a recolour = paint the previous colour back */
+   if(last.el)hlPaint(last.el,last.from);
+   if(last.id)send({action:"set",type:"hl",anchor:last.anchor,data:JSON.stringify({color:last.from}),id:last.id});
+  }else if(last.kind==="del"){
+   /* undo a deletion = store the highlight again (renderLayer rebuilds the mark from the anchor) */
+   send({action:"add",type:"hl",anchor:last.item.anchor,data:JSON.stringify(last.item.data||{}),id:last.item.id});
+  }
  }
 }
 
@@ -75,12 +88,14 @@ async function loadLayer(){
 }
 
 function renderLayer(){
- document.querySelectorAll("mark.nb").forEach(m=>m.classList.remove("has-rec","has-note"));
+ document.querySelectorAll("mark.nb").forEach(m=>{m.classList.remove("has-rec","has-note","has-hl","hl-yellow","hl-red","hl-green");delete m.dataset.hlid;});
  feed.innerHTML="";
  layer.forEach(it=>{
-  if((it.type==="rec"||it.type==="note")&&it.anchor){
-   const m=document.querySelector('mark.nb[data-a="'+CSS.escape(it.anchor)+'"]');
-   if(m)m.classList.add("has-"+it.type);else ensureMark(it.anchor,it.type);}
+  if((it.type==="rec"||it.type==="note"||it.type==="hl")&&it.anchor){
+   const q='mark.nb[data-a="'+CSS.escape(it.anchor)+'"]';
+   let m=document.querySelector(q);
+   if(m)m.classList.add("has-"+it.type);else{ensureMark(it.anchor,it.type);m=document.querySelector(q);}
+   if(m&&it.type==="hl"){m.dataset.hlid=it.id;hlPaint(m,(JSON.parse(it.data||"{}").color)||"yellow");}}
   if(it.type==="quiz"||it.type==="done"||(it.type==="note"&&!it.anchor)){
    const d=JSON.parse(it.data||"{}");
    feed.innerHTML+="<div>"+(it.type==="done"?"✅ concluída":it.type==="quiz"?"📝 quiz "+d.score+"%":"📝 "+(it.anchor||"traduções"))+" · <i>"+it.author+"</i></div>";}

@@ -14,7 +14,8 @@
  * - Console errors during page load
  * - Basic engine initialization (__A, __B flags)
  * - Selection popup logic
- * - Drawing creation/deletion logic (algorithmic)
+ * - Highlight logic: Ctrl+select creates a text-range mark, colour palette recolours it,
+ *   undo entry is pushed, Ctrl+click deletes it
  */
 
 import { JSDOM } from 'jsdom';
@@ -189,6 +190,10 @@ async function testPage(serverUrl, pageName, track = 'business') {
             window.matchMedia = () => ({ matches: false, addListener: () => {}, removeListener: () => {} });
             window.requestAnimationFrame = (cb) => setTimeout(cb, 0);
             window.cancelAnimationFrame = (id) => clearTimeout(id);
+
+            // jsdom ships no fetch: expose the Node-side mock on the page so engine
+            // send()/loadLayer() behave like they do in a browser
+            window.fetch = (...args) => global.fetch(...args);
             
             // Mock getBoundingClientRect for selection popup positioning
             const mockRect = { top: 0, left: 0, right: 100, bottom: 20, width: 100, height: 20, x: 0, y: 0 };
@@ -289,6 +294,74 @@ async function testPage(serverUrl, pageName, track = 'business') {
             } else {
                 console.log('   ✅ Selection popup appears on text selection');
             }
+        }
+
+        // Test highlight feature: Ctrl+select creates, palette recolours, undo entry, Ctrl+click deletes
+        const hlHost = Array.from(
+            window.document.querySelectorAll('.content-area p, .content-area li, .content-area td')
+        ).find(el => el.querySelectorAll('*').length === 0 && el.textContent.trim().length > 12);
+
+        if (hlHost && hlHost.firstChild && hlHost.firstChild.nodeType === 3) {
+            const tn = hlHost.firstChild;
+            const hlRange = window.document.createRange();
+            hlRange.setStart(tn, 0);
+            hlRange.setEnd(tn, Math.min(12, tn.data.length));
+            const hlSel = window.getSelection();
+            hlSel.removeAllRanges();
+            // hold Ctrl FIRST (exactly like a real Ctrl+drag) so only the highlight path runs
+            window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Control', bubbles: true }));
+            hlSel.addRange(hlRange);
+            // the engine debounces selectionchange by 350ms
+            window.document.dispatchEvent(new window.Event('selectionchange', { bubbles: true }));
+            await new Promise(resolve => setTimeout(resolve, 450));
+
+            const hl = window.document.querySelector('mark.nb.has-hl');
+            if (!hl) {
+                errors.push('[FAIL] Ctrl+select did not create a highlight (mark.nb.has-hl)');
+            } else {
+                console.log('   ✅ Ctrl+select creates a text-range highlight');
+                console.log(`      anchor="${hl.dataset.a}" color=${hl.classList.contains('hl-yellow') ? 'yellow' : '?'}`);
+                if (!hl.dataset.hlid) {
+                    errors.push('[FAIL] highlight mark has no dataset.hlid (cannot be set/deleted server-side)');
+                }
+
+                const swatch = window.document.querySelector('.hlpal button[data-c="red"]');
+                if (!swatch) {
+                    errors.push('[FAIL] highlight colour palette (.hlpal) did not appear after creating');
+                } else {
+                    console.log('   ✅ Colour palette appears after creating a highlight');
+                    swatch.click();
+                    if (!hl.classList.contains('hl-red')) {
+                        errors.push('[FAIL] colour palette click did not recolour the highlight');
+                    } else {
+                        console.log('   ✅ Colour palette recolours the highlight (yellow → red)');
+                    }
+                }
+
+                let undoOk = null;
+                try {
+                    const before = window.eval('undoStack.length');
+                    window.eval('doUndo()');
+                    undoOk = before > 0 && window.eval('undoStack.length') === before - 1;
+                } catch (e) { undoOk = null; }
+                if (undoOk === true) {
+                    console.log('   ✅ Highlight pushes an undo entry (consumed by undo)');
+                } else if (undoOk === false) {
+                    errors.push('[FAIL] highlight did not push a usable undo entry');
+                } else {
+                    console.log('   ⏭  highlight undo check skipped (undoStack not inspectable)');
+                }
+
+                // Ctrl+click inside the highlight deletes it
+                hl.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true, ctrlKey: true }));
+                if (window.document.querySelector('mark.nb.has-hl')) {
+                    errors.push('[FAIL] Ctrl+click did not delete the highlight');
+                } else {
+                    console.log('   ✅ Ctrl+click deletes the highlight');
+                }
+            }
+        } else {
+            console.log('   ⏭  highlight test skipped (no plain-text paragraph found)');
         }
 
         // Test drawing practice button if exists

@@ -29,6 +29,16 @@ mark.nb.has-note::after{content:"📝";font-size:.75em}
 .pop{position:fixed;z-index:9;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:12px;max-width:380px;max-height:70vh;overflow:auto}
 .pop button{padding:4px 9px;margin:2px 3px 2px 0;font-size:12.5px;border-radius:8px;box-shadow:2px 2px 0 var(--tan)}
 .pop textarea{width:100%;margin:6px 0}
+/* HIGHLIGHT (owner spec 2026-10-11): text-range mark, semi-transparent, rounded ends, pegged to text */
+mark.nb.has-hl{background:rgba(255,233,112,.55);border-radius:4px;padding:0 3px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+mark.nb.has-hl.hl-yellow{background:rgba(255,233,112,.55)}
+mark.nb.has-hl.hl-red{background:rgba(255,64,64,.34)}
+mark.nb.has-hl.hl-green{background:rgba(64,200,96,.34)}
+mark.nb.has-note.has-hl{color:var(--blue)}
+/* tiny colour palette: yellow / transparent red / transparent green */
+.pop.hlpalpop{padding:6px;border-radius:12px}
+.hlpal{display:flex;align-items:center;gap:6px}
+.hlpal button{width:20px;height:20px;min-width:20px;padding:0;margin:0;border:2px solid var(--ink);border-radius:6px;box-shadow:none;cursor:pointer}
 #toast{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:8px 16px;border-radius:10px;z-index:99;display:none;font-weight:600;box-shadow:3px 3px 0 var(--tan)}
 .recind{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:99}
 .spin{width:14px;height:14px;border:2px solid var(--ink);border-top-color:transparent;border-radius:50%;animation:sp 1s linear infinite;display:inline-block;vertical-align:-2px}

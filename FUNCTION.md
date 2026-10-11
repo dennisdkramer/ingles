@@ -3,28 +3,41 @@ Reference this file whenever a task touches lesson functionality. Preserve every
 
 ## Persistence & identity
 - ALL user data persists server-side (Apps Script Sheet "IAP_backpack!layer" + Drive "IAP_uploads"), and is separate PER STUDENT AND PER BOOK (track). No cross-contamination between students or between tracks.
-- Drawings, recordings, notes, filled-in fields, answered questions: all persistent.
+- Recordings, notes, highlights, drawings, filled-in fields, answered questions: all persistent.
 - localStorage must never be a source of truth (ghost-data bug of Oct 2026); server is sole source.
 
-## Drawing / annotation interactions (owner spec)
+## Highlight (text range) — owner spec 2026-10-11
+- Ctrl+hold while selecting text = create a highlight. The highlighted STRING is the anchor, so the mark is pegged to the text: it survives window resize, zoom, font changes and reflow. It may span several lines of the same block (paragraph, list item, cell, heading) but never crosses a block boundary.
+- Ctrl+drag over an existing highlight MERGES: any highlight that overlaps or merely touches the new selection becomes part of one single highlight, extended to cover both. Overlaps never accumulate as separate marks.
+- Ctrl+click inside a highlight = delete it. One action: no confirmation, no popup.
+- While Ctrl is held (and for ~1s after release) the Hear / Record / Note popup is SUPPRESSED — Ctrl gestures only ever highlight. A normal selection (no Ctrl) still opens that popup exactly as before.
+- Look: semi-transparent yellow fill that keeps the text readable, rounded ends on every line fragment, no border, no icon.
+- After a highlight is created, a tiny colour palette pops 10px above the LAST highlighted character with three swatches: yellow / transparent red / transparent green. Clicking a swatch recolours the highlight and closes the palette; any click elsewhere or any key press closes it too.
+- Coexistence: recording (underlined + 🎙), note (blue + 📝) and highlight can live on the SAME span — none of them replaces another.
+- PC only: highlights have no touch gesture.
+- Persistence: server row type "hl", anchor = the highlighted string, data = {"color":"yellow|red|green"}; a recolour is a "set" on the same id. No backend change needed (add/set/del already accept any type).
+- DOM contract: mark.nb[data-a=<string>] carrying class has-hl + one of hl-yellow/hl-red/hl-green; dataset.hlid = server row id (used for set/del/undo).
+
+## Drawing (paused — spec kept for reference, no code ships)
 - Shift+click = draw; auto-save after each stroke; NO popup, NO Save/Cancel bar — seamless.
 - Shift+right-click = delete. Deletion must hit only the actual drawn element (~5px proximity to the stroke), NOT a bounding box around it. One action, no popup, no delay.
-- Ctrl+click = yellow highlighter; highlight sits on a layer BELOW the text. Highlight deletion merged with drawing deletion (same gesture).
 - Touch: 2-finger tap = enter/stay in draw mode; 3-finger tap = highlight; 4-finger tap = delete mode (if natively detectable), one tap deletes instantly.
 - Drawings are borderless and anchored to FIXED page positions (can point at specific words); they never interfere with text selection (pointer-events:none except during modifier gestures).
+- Status 2026-10-11: the drawing engine is gone from engine2.js (removed with commit 11457fb) and has not been rebuilt — nothing in the site implements these gestures today.
 
 ## Undo
-- Ctrl+z reverts sequentially: deletions, drawings, typing, field selections.
+- Ctrl+z reverts sequentially: highlights (create / recolour / delete), deletions, typing, field selections.
 - A back/undo button also exists, usable by teacher AND student, floating top-right of the page.
 - Undo history covers both teacher and student actions sequentially.
 
 ## Teacher/student control
 - 3-way toggle: off (no function) / limit (disable student draw + undo) / teacher-only (disable all student interaction).
+- Target contract (owner decision 2026-10-11), NOT enforced by any code yet: this toggle must become a MODE TOGGLE that disables every student page interaction — selection popup, highlight create/delete/recolour, typing in the gap inputs, quiz answering, recording, notes and undo — while the teacher keeps full function. "teacher only" remains the strictest level.
 - Toggle + hotkey legend at top of each lesson; sizing per FORMAT.md.
 
 ## Engines & pages
-- engine1.js = gate (sessionStorage sig check), selection popup (▶ Hear / ⏺ Record / 📝 Note), recording (stops after 2s silence, 🎙 indicator, spinner), notes, anchors, send() to backend.
-- engine2.js = topbar, layer sync (15s), quiz grading, drawing/highlight/delete, showAnchor (audio cache, "carregando…", 4s → "nao encontrado").
+- engine1.js = gate (sessionStorage sig check), selection popup (▶ Hear / ⏺ Record / 📝 Note), Ctrl text-range highlight gestures (create / merge / delete / colour palette), recording (stops after 2s silence, 🎙 indicator, spinner), notes, anchors, send() to backend.
+- engine2.js = topbar, layer sync (15s), quiz grading, highlight render/delete (mark.nb.has-hl + colour class + dataset.hlid) and undo, showAnchor (audio cache, "carregando…", 4s → "nao encontrado").
 - Lessons are content-only files: config consts (TRACK, LESSON, SECRET, BACKPACK…) + engine includes. Engines/style always ship as full files.
 - Gate hash: h(s){let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x} applied to email+track+SECRET ("abreportas2025"); invalid/missing gate → redirect to portal.html.
 - Backend actions: POST add/set/del; GET ping/layer/file/dbg. ?action=dbg returns server log.
