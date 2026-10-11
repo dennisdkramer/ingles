@@ -3,7 +3,7 @@ Reference this file whenever a task touches lesson functionality. Preserve every
 
 ## Persistence & identity
 - ALL user data persists server-side (Apps Script Sheet "IAP_backpack!layer" + Drive "IAP_uploads"), and is separate PER STUDENT AND PER BOOK (track). No cross-contamination between students or between tracks.
-- Recordings, notes, highlights, drawings, filled-in fields, answered questions: all persistent.
+- Recordings, notes, highlights, filled-in fields, answered questions: all persistent.
 - localStorage must never be a source of truth (ghost-data bug of Oct 2026); server is sole source.
 
 ## Highlight (text range) — owner spec 2026-10-11
@@ -18,20 +18,13 @@ Reference this file whenever a task touches lesson functionality. Preserve every
 - Persistence: server row type "hl", anchor = the highlighted string, data = {"color":"yellow|red|green"}; a recolour is a "set" on the same id. No backend change needed (add/set/del already accept any type).
 - DOM contract: mark.nb[data-a=<string>] carrying class has-hl + one of hl-yellow/hl-red/hl-green; dataset.hlid = server row id (used for set/del/undo).
 
-## Drawing (paused — spec kept for reference, no code ships)
-- Shift+click = draw; auto-save after each stroke; NO popup, NO Save/Cancel bar — seamless.
-- Shift+right-click = delete. Deletion must hit only the actual drawn element (~5px proximity to the stroke), NOT a bounding box around it. One action, no popup, no delay.
-- Touch: 2-finger tap = enter/stay in draw mode; 3-finger tap = highlight; 4-finger tap = delete mode (if natively detectable), one tap deletes instantly.
-- Drawings are borderless and anchored to FIXED page positions (can point at specific words); they never interfere with text selection (pointer-events:none except during modifier gestures).
-- Status 2026-10-11: the drawing engine is gone from engine2.js (removed with commit 11457fb) and has not been rebuilt — nothing in the site implements these gestures today.
-
 ## Undo
 - Ctrl+z reverts sequentially: highlights (create / recolour / delete), deletions, typing, field selections.
 - A back/undo button also exists, usable by teacher AND student, floating top-right of the page.
 - Undo history covers both teacher and student actions sequentially.
 
 ## Teacher/student control
-- 3-way toggle: off (no function) / limit (disable student draw + undo) / teacher-only (disable all student interaction).
+- 3-way toggle (id modeToggle) in the control bar: "visibility off" / "limited" / "teacher only". The selected value is sent to the server and — only if a stored row carries it — written back into the select on load. NO level is enforced by any code today: none of the three values changes what the student can do.
 - Target contract (owner decision 2026-10-11), NOT enforced by any code yet: this toggle must become a MODE TOGGLE that disables every student page interaction — selection popup, highlight create/delete/recolour, typing in the gap inputs, quiz answering, recording, notes and undo — while the teacher keeps full function. "teacher only" remains the strictest level.
 - Toggle + hotkey legend at top of each lesson; sizing per FORMAT.md.
 
