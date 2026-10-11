@@ -24,9 +24,9 @@ Reference this file whenever a task touches lesson functionality. Preserve every
 - Undo history covers both teacher and student actions sequentially.
 
 ## Teacher/student control
-- 3-way toggle (id modeToggle) in the control bar: "visibility off" / "limited" / "teacher only". The selected value is sent to the server and — only if a stored row carries it — written back into the select on load. NO level is enforced by any code today: none of the three values changes what the student can do.
-- Target contract (owner decision 2026-10-11), NOT enforced by any code yet: this toggle must become a MODE TOGGLE that disables every student page interaction — selection popup, highlight create/delete/recolour, typing in the gap inputs, quiz answering, recording, notes and undo — while the teacher keeps full function. "teacher only" remains the strictest level.
-- Toggle + hotkey legend at top of each lesson; sizing per FORMAT.md.
+- There is NO per-student permission level and no visibility toggle anywhere in the code (removed 2026-10-11 as dead code: its value was sent to the server but never read, so it never changed behaviour). Teacher and student see the same page functionality.
+- The only teacher-only control is the student selector in the control bar ("demo (you)" + students of the current track); changing it switches which student's layer is loaded and shown.
+- Hotkey legend at top of each lesson; sizing per FORMAT.md.
 
 ## Engines & pages
 - engine1.js = gate (sessionStorage sig check), selection popup (▶ Hear / ⏺ Record / 📝 Note), Ctrl text-range highlight gestures (create / merge / delete / colour palette), recording (stops after 2s silence, 🎙 indicator, spinner), notes, anchors, send() to backend.

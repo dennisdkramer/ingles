@@ -2,7 +2,7 @@
  * QA Smoke Test for Inglês Abre Portas
  * 
  * COVERAGE LIMITATIONS (jsdom fallback):
- * - No real browser rendering (CSS layout, canvas drawing not tested)
+ * - No real browser rendering (CSS layout not tested)
  * - No actual media stream recording (fake mic not available)
  * - No visual popup positioning verification
  * - sessionStorage simulated via mocks
@@ -364,20 +364,6 @@ async function testPage(serverUrl, pageName, track = 'business') {
             console.log('   ⏭  highlight test skipped (no plain-text paragraph found)');
         }
 
-        // Test drawing practice button if exists
-        const bPrac = window.document.getElementById('bPrac');
-        if (bPrac) {
-            // Simulate click
-            bPrac.click();
-            await new Promise(resolve => setTimeout(resolve, 300));
-            
-            // Check if result prints (look for any new content or canvas)
-            const canvas = window.document.querySelector('canvas');
-            const nb = window.document.getElementById('nb');
-            if (canvas || nb) {
-                console.log('   ✅ Drawing practice area initialized');
-            }
-        }
     }
 
     window.close();
@@ -389,7 +375,7 @@ async function main() {
     console.log('🔍 Inglês Abre Portas — QA Smoke Test (jsdom fallback)\n');
     console.log('⚠️  Running in jsdom mode (no real browser):\n' +
                 '   • No CSS layout/visual tests\n' +
-                '   • No canvas/drawing visual verification\n' +
+                '   • No real click/selection fidelity\n' +
                 '   • No real media stream (recording mocked)\n' +
                 '   • sessionStorage/localStorage mocked\n' +
                 '   • External network requests ignored\n');

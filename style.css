@@ -9,9 +9,9 @@ header.brand{text-align:center;padding:20px 14px 0}
 h1 span{display:block;font-size:.42em;letter-spacing:.5em}
 .script{font-family:Caveat,cursive;font-size:clamp(26px,5vw,38px);margin:2px 0 0;transform:rotate(-2deg)}
 main{width:1400px;max-width:100%;margin:0 auto;padding:8px 14px 30px}
-/* .page-container = DRAWABLE AREA: 1400px wide, height grows with content (owner change 2026-10-07) */
+/* .page-container = PAGE AREA: 1400px wide, height grows with content (owner change 2026-10-07) */
 .page-container{margin:0 auto;background:var(--paper);border:2px solid var(--ink);border-radius:0;box-shadow:none;padding:0;position:relative;width:1400px;max-width:100%}
-/* .content-area = CONTENT AREA: 1200px (100px margin each side inside the drawable area); ALL page content lives here */
+/* .content-area = CONTENT AREA: 1200px (100px margin each side inside the page area); ALL page content lives here */
 .content-area{width:1200px;max-width:calc(100% - 200px);margin:0 auto;padding:16px 0}
 .card{background:var(--paper);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--tan);padding:14px 18px;margin:14px 0}
 .row{margin:6px 0}

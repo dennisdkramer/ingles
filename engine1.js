@@ -7,7 +7,7 @@ const norm=s=>(s||"").toLowerCase().replace(/[^a-z']/g,"");
 let gate=null;try{gate=JSON.parse(sessionStorage.gate)}catch(e){}
 if(!gate||h(gate.email+gate.track+SECRET)!==gate.sig||(!gate.teacher&&gate.track!==TRACK))location.replace("../portal.html");
 const who=()=>gate.teacher?"prof":"aluno";
-let STUDENT=gate.email, layer=[], sig="", auxOn=true;
+let STUDENT=gate.email, layer=[], sig="";
 const LKEY="nb_"+STUDENT+"_"+TRACK+"_"+L;
 const localGet=()=>{try{return JSON.parse(localStorage.getItem(LKEY)||"{}")}catch(e){return{}}};
 const audioCache={};

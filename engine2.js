@@ -1,4 +1,4 @@
-/* MOTOR 2 — control bar, camadas, quiz, áudio com cache, desenho/realce persistentes */
+/* MOTOR 2 — control bar, camadas, quiz, áudio com cache, realces persistentes */
 const LAYER_VER="v4-server-truth-20261006"; /* Bump to mark a fresh data era */
 
 /* One-time cleanup of ALL legacy local ghosts: shadow lists + device-only layer copies.
@@ -12,20 +12,14 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
  if(gate.teacher){
   const ac=await(await fetch("../access.json?"+Date.now())).json();
   const st=Object.entries(ac.students||{}).filter(([e,s])=>s.track===TRACK);
-  extra=' <select id="sel"><option value="'+gate.email+'">demo (you)</option>'+st.map(([e,s])=>'<option value="'+e+'">'+(s.name||e)+"</option>").join("")+"</select>";
-  if(TRACK==="kids")extra+=' <button id="mute">🔕 aux off</button>';}
+  extra=' <select id="sel"><option value="'+gate.email+'">demo (you)</option>'+st.map(([e,s])=>'<option value="'+e+'">'+(s.name||e)+"</option>").join("")+"</select>";}
  const bar=document.getElementById("controlbar")||topbar;
  bar.innerHTML='<button id="undoBtn" title="Undo (Ctrl+Z)">↶ Undo</button> · 🦺 '+gate.email+' · <b>'+TRACK+'</b> · <a href="../portal.html">Index</a> · <span class="dim">Ctrl+Z=undo</span>'+extra;
- if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";loadLayer()};
-  const m=document.getElementById("mute");if(m)m.onclick=()=>{auxOn=!auxOn;send({action:"set",data:JSON.stringify({auxOff:!auxOn})});m.textContent=auxOn?"🔕 aux off":"🔔 aux on";};}
- bar.insertAdjacentHTML("beforeend",' <select id="modeToggle"><option value="off">visibility off</option><option value="limit">limited</option><option value="teacher">teacher only</option></select>');
- const modeSel=document.getElementById("modeToggle");
- modeSel.onchange=()=>{mode=modeSel.value;send({action:"set",data:JSON.stringify({mode})});};
+ if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";loadLayer()};}
  loadLayer();
  setupUndo();
 }catch(e){let b=document.getElementById("errb");if(b)b.innerHTML+=" · control bar: "+e.message}})();
 
-let mode="off";
 let undoStack=[];
 
 function pushUndo(action){
@@ -82,8 +76,6 @@ async function loadLayer(){
     No localStorage merge, no deletedIds shadow list — deletions are real on the server now. */
  layer=rows;
  const s=layer.map(x=>x.id).join(",");if(s===sig)return;sig=s;
- const set=layer.find(x=>x.type==="setting");auxOn=!set||!JSON.parse(set.data||"{}").auxOff;
- if(set&&JSON.parse(set.data||"{}").mode){mode=JSON.parse(set.data||"{}").mode;if(document.getElementById("modeToggle"))document.getElementById("modeToggle").value=mode;}
  renderLayer();
 }
 
@@ -103,7 +95,7 @@ function renderLayer(){
  if(!feed.innerHTML)feed.innerHTML='<div class="dim">Nada ainda — destaque um texto e anote ou grave algo.</div>';
 }
 
-/* fallback: showAnchor saiu junto com o código de desenho removido (commit 11457fb);
+/* fallback: nenhum engine define window.showAnchor;
    sem isto, clique simples em uma frase marcada lançaria ReferenceError no handler de click.
    Reapresenta o popup ▶ Hear / ⏺ Record / 📝 Note para a âncora clicada. */
 if(typeof window.showAnchor!=="function"){window.showAnchor=function(a,x,y){openPop(a,x,y,'<b style="font-size:14px">'+String(a).slice(0,42)+(a.length>42?"…":"")+'</b><br><span style="white-space:nowrap"><button id="pH">▶ Hear</button><button id="pR">⏺ Record</button><button id="pN">📝 Note</button></span>');

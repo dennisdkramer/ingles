@@ -15,10 +15,9 @@ Reference this file whenever a task touches site appearance. Preserve everything
 - Public Sans 400/600/700 → body, base 17px/1.6
 
 ## Layout
-- header.brand (English text, centered logo 120px, rose drop-shadow) → #controlbar .control-bar (the "control bar": Undo button + account/session info + tools + hotkey legend, English) → main#page → .page-container (DRAWABLE AREA) → .content-area (CONTENT AREA)
-- .page-container = DRAWABLE AREA: fixed 1400px wide, height GROWS with content (no min-height, no clipping). Paper bg, 2px solid ink border, no radius/shadow, position:relative (drawings anchor here). ALL page content — including the footer — lives inside it.
-- .content-area = CONTENT AREA: 1200px wide, centered inside the drawable area → exactly 100px margin on each side. All body content (text, cards, buttons, feed) sits here; drawings (.nbImg/.nbHl) anchor to .page-container and may extend into the 100px side margins.
-- (removed 2026-10-07: .page-fixed 1200x1200 exact canvas + container overflow:hidden/min-height — owner now requires content-dependent height and a 1400px drawable / 1200px content split)
+- header.brand (English text, centered logo 120px, rose drop-shadow) → #controlbar .control-bar (the "control bar": Undo button + account/session info + tools + hotkey legend, English) → main#page → .page-container (PAGE AREA) → .content-area (CONTENT AREA)
+- .page-container = PAGE AREA: fixed 1400px wide, height GROWS with content (no min-height, no clipping). Paper bg, 2px solid ink border, no radius/shadow, position:relative. ALL page content — including the footer — lives inside it.
+- .content-area = CONTENT AREA: 1200px wide, centered inside the page area → exactly 100px margin on each side. All body content (text, cards, buttons, feed) sits here.
 - .card: paper bg, 2px ink border, 16px radius, 5px 5px 0 tan hard shadow
 - Buttons: ink bg, cream text, 10px radius, 3px 3px 0 tan shadow, weight 600, 14px Public Sans
 - Links: ink, weight 600. Dim text: #8a8072, 13px
@@ -31,7 +30,6 @@ Reference this file whenever a task touches site appearance. Preserve everything
 - mark.nb: has-rec = underline 2px --ok + 🎙 suffix; has-note = bluebg fill + blue text + 📝 suffix; no other mark styling
 - .pop selection popup = fixed, paper, 2px ink border, 14px radius, tan hard shadow, max-width 380px; buttons small (12.5px, one line, English labels)
 - #toast = fixed top-center pill, ink/cream; .recind recording indicator top-center
-- .nbImg drawings: position:absolute INSIDE .page-container, border:0, pointer-events:none (interact only via global shift/ctrl handlers)
 - @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow
 
 ## Sizing philosophy
