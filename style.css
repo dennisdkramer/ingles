@@ -24,25 +24,34 @@ details{background:#fff8ea;border:2px dashed var(--tan);border-radius:12px;paddi
 mark.nb{background:transparent;cursor:pointer;padding:0 1px}
 mark.nb.has-rec{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;text-decoration-color:var(--ok)}
 mark.nb.has-rec::after{content:"🎙";font-size:.75em}
-/* note/recording layer = mark.nb. The note's blue is a very light wash painted on its OWN layer
-   (background-image paints above background-color), so a highlight covering the same span keeps
-   its own background instead of being hidden by the note — the two never interfere. */
+/* note/recording layer = mark.nb — the ONLY layer that lives in the text DOM. Highlights are
+   painted separately over the text (#hlLayer, see below), so a note and a highlight can overlap
+   in any way and both stay whole. The note's blue is a very light wash (background-image) so it
+   stays visible underneath a highlight. */
 mark.nb.has-note{color:var(--blue);background-image:linear-gradient(var(--bluebg),var(--bluebg))}
 mark.nb.has-note::after{content:"📝";font-size:.75em}
 .pop{position:fixed;z-index:9;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:12px;max-width:380px;max-height:70vh;overflow:auto}
 .pop button{padding:4px 9px;margin:2px 3px 2px 0;font-size:12.5px;border-radius:8px;box-shadow:2px 2px 0 var(--tan)}
 .pop textarea{width:100%;margin:6px 0}
-/* HIGHLIGHT = its OWN layer (mark.hl, never mark.nb): a highlight can therefore never be
-   combined with, hidden by, or clickable through a note/recording. It changes nothing about
-   mouseover/cursor — the only interaction it has is Ctrl+click to delete (see FUNCTION.md). */
-mark.hl{background-color:rgba(255,233,112,.55);border-radius:4px;padding:0 3px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
-mark.hl.hl-yellow{background-color:rgba(255,233,112,.55)}
-mark.hl.hl-red{background-color:rgba(255,64,64,.34)}
-mark.hl.hl-green{background-color:rgba(64,200,96,.34)}
-/* tiny colour palette: yellow / transparent red / transparent green */
+/* HIGHLIGHT = its OWN PAINT LAYER (#hlLayer, never mark.nb). A highlight is a translucent
+   rectangle measured from the text range and painted over the text by #hlLayer, so it is NOT part
+   of the text DOM: it can cross a note/recording in any way and both stay whole. The layer keeps
+   pointer-events:none (clicking/dragging/selecting text is never blocked) and no z-index (so it
+   creates no stacking context and stays under .pop/#toast) — the only interaction a highlight has
+   is Ctrl+click to delete (see FUNCTION.md). */
+#hlLayer{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
+#hlLayer .hlr{position:absolute;border-radius:3px}
+#hlLayer .hlr-yellow{background:rgba(255,233,112,.55)}
+#hlLayer .hlr-red{background:rgba(255,64,64,.34)}
+#hlLayer .hlr-green{background:rgba(64,200,96,.34)}
+/* tiny colour palette: yellow / transparent red / transparent green (the single source of truth
+   for the colours: the swatch backgrounds are defined here, not inline in the engine) */
 .pop.hlpalpop{padding:6px;border-radius:12px}
 .hlpal{display:flex;align-items:center;gap:6px}
 .hlpal button{width:20px;height:20px;min-width:20px;padding:0;margin:0;border:2px solid var(--ink);border-radius:6px;box-shadow:none;cursor:pointer}
+.hlpal button[data-c="yellow"]{background:rgba(255,233,112,.85)}
+.hlpal button[data-c="red"]{background:rgba(255,64,64,.7)}
+.hlpal button[data-c="green"]{background:rgba(64,200,96,.7)}
 #toast{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:8px 16px;border-radius:10px;z-index:99;display:none;font-weight:600;box-shadow:3px 3px 0 var(--tan)}
 .recind{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:99}
 .spin{width:14px;height:14px;border:2px solid var(--ink);border-top-color:transparent;border-radius:50%;animation:sp 1s linear infinite;display:inline-block;vertical-align:-2px}

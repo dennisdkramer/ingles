@@ -14,10 +14,16 @@
  * - Console errors during page load
  * - Basic engine initialization (__A, __B flags)
  * - Selection popup logic
- * - Highlight logic: Ctrl held at mousedown AND at mouseup creates a text-range mark on its own
- *   layer (mark.hl); Ctrl released before mouseup creates nothing; the Hear/Record/Note popup
- *   stays shut for the whole Ctrl gesture; colour palette recolours it; undo entry is pushed;
- *   Ctrl+click deletes it; the removed dead controls never come back
+ * - Highlight logic: Ctrl held at mousedown AND at mouseup creates a highlight on its OWN paint
+ *   layer (#hlLayer — never an element inside the text); Ctrl released before mouseup creates
+ *   nothing; the Hear/Record/Note popup stays shut for the whole Ctrl gesture; the colour palette
+ *   recolours it; it pushes an undo entry; Ctrl+click on the painted rectangle deletes it; a
+ *   highlight may cross a note/recording and BOTH stay whole (the two layers never interact);
+ *   the removed dead controls never come back
+ *
+ * SCOPE (owner decision 2026-10-11): lesson pages are developed on business/lesson1.html ONLY
+ * until the feature set is final. kids/, nsfw/ and the login pages (index.html/portal.html) are
+ * parked here on purpose — add their testPage() calls back in main() once business is done.
  */
 
 import { JSDOM } from 'jsdom';
@@ -122,6 +128,35 @@ function mockFetch() {
     };
 }
 
+/* jsdom implements no layout: Range#getClientRects is missing and every element rect is 0x0.
+   The highlight layer is geometry-driven (a text range is measured into painted rectangles and
+   Ctrl+click is hit-tested against them), so the harness installs a deterministic fake layout:
+   8px per character, 40 characters per line, 20px per line, starting at (10, 30). */
+function installFakeLayout(window) {
+    const CHAR = 8, PER = 40, LINE = 20, LEFT = 10, TOP = 30;
+    const doc = window.document;
+    const charOffset = (node) => {
+        if (!node) return -1;
+        const w = doc.createTreeWalker(doc.body, window.NodeFilter.SHOW_TEXT);
+        let sum = 0, n;
+        while ((n = w.nextNode())) { if (n === node) return sum; sum += n.data.length; }
+        return -1;
+    };
+    window.Range.prototype.getClientRects = function () {
+        const s = charOffset(this.startContainer), e = charOffset(this.endContainer);
+        if (s < 0 || e < 0) return [];
+        const from = s + (this.startOffset || 0), to = e + (this.endOffset || 0);
+        const out = [];
+        for (let i = from; i < to;) {
+            const col = i % PER, row = Math.floor(i / PER), take = Math.min(to - i, PER - col);
+            const left = LEFT + col * CHAR, top = TOP + row * LINE;
+            out.push({ left, top, width: take * CHAR, height: LINE, right: left + take * CHAR, bottom: top + LINE, x: left, y: top });
+            i += take;
+        }
+        return out;
+    };
+}
+
 async function testPage(serverUrl, pageName, track = 'business') {
     console.log(`\n🧪 Testing ${pageName}...`);
     const errors = [];
@@ -202,6 +237,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
             window.Element.prototype.getBoundingClientRect = function() { return mockRect; };
             window.HTMLElement.prototype.getBoundingClientRect = function() { return mockRect; };
             window.Range.prototype.getBoundingClientRect = function() { return mockRect; };
+            installFakeLayout(window);
             
             // Mock localStorage (delete first, then define property)
             delete window.localStorage;
@@ -298,11 +334,13 @@ async function testPage(serverUrl, pageName, track = 'business') {
             }
         }
 
-        // Test highlight feature: the Ctrl gesture gate (mousedown+mouseup), its own layer
-        // (mark.hl), colour palette, undo entry, Ctrl+click delete, and the dead controls staying gone
+        /* ---- HIGHLIGHT: its own paint layer (#hlLayer) with ZERO interaction with the note layer.
+           jsdom has no layout, so installFakeLayout() gave the page deterministic fake geometry
+           (8px per character, 40 chars per line, 20px per line). That makes the overlay real work:
+           text range → painted rectangles → Ctrl+click hit test. */
         const hlHost = Array.from(
             window.document.querySelectorAll('.content-area p, .content-area li, .content-area td')
-        ).find(el => el.querySelectorAll('*').length === 0 && el.textContent.trim().length > 12);
+        ).find(el => el.querySelectorAll('*').length === 0 && el.textContent.trim().length > 18);
 
         if (hlHost && hlHost.firstChild && hlHost.firstChild.nodeType === 3) {
             const tn = hlHost.firstChild;
@@ -310,99 +348,156 @@ async function testPage(serverUrl, pageName, track = 'business') {
             hlRange.setStart(tn, 0);
             hlRange.setEnd(tn, Math.min(12, tn.data.length));
             const hlSel = window.getSelection();
-            hlSel.removeAllRanges();
-            // (a) Ctrl held at mousedown but RELEASED before mouseup → nothing happens
-            window.document.dispatchEvent(new window.MouseEvent('mousedown', { bubbles: true, cancelable: true, ctrlKey: true }));
-            window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Control', bubbles: true }));
-            hlSel.addRange(hlRange);
-            window.document.dispatchEvent(new window.Event('selectionchange', { bubbles: true }));
-            window.document.dispatchEvent(new window.KeyboardEvent('keyup', { key: 'Control', bubbles: true }));
-            window.document.dispatchEvent(new window.MouseEvent('mouseup', { bubbles: true, cancelable: true, ctrlKey: false }));
-            // the engine debounces selectionchange by 350ms
-            await new Promise(resolve => setTimeout(resolve, 450));
-            if (window.document.querySelector('mark.hl')) {
+            const rects = () => window.document.querySelectorAll('#hlLayer .hlr');
+            const recCount = () => { try { return window.eval('hlList.length'); } catch (e) { return -1; } };
+            const gesture = async (range, { ctrlDown = true, ctrlUp = true, to = [40, 30] } = {}) => {
+                window.document.dispatchEvent(new window.MouseEvent('mousedown', { bubbles: true, cancelable: true, ctrlKey: ctrlDown, clientX: 1, clientY: 1 }));
+                if (ctrlDown) window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Control', bubbles: true }));
+                hlSel.removeAllRanges();
+                hlSel.addRange(range);
+                window.document.dispatchEvent(new window.Event('selectionchange', { bubbles: true }));
+                if (!ctrlUp) window.document.dispatchEvent(new window.KeyboardEvent('keyup', { key: 'Control', bubbles: true }));
+                window.document.dispatchEvent(new window.MouseEvent('mouseup', { bubbles: true, cancelable: true, ctrlKey: ctrlUp, clientX: to[0], clientY: to[1] }));
+                await new Promise(resolve => setTimeout(resolve, 450));   // engine debounces selectionchange by 350ms
+            };
+
+            /* (a) Ctrl held at mousedown but RELEASED before mouseup → nothing happens */
+            await gesture(hlRange, { ctrlUp: false });
+            if (rects().length || recCount() !== 0) {
                 errors.push('[FAIL] Ctrl released before mouseup still created a highlight (Ctrl must be held at BOTH ends)');
             } else {
                 console.log('   ✅ Ctrl released before mouseup creates no highlight');
             }
 
-            // (b) Ctrl held at mousedown AND at mouseup → the highlight runs, on its own layer
-            window.document.dispatchEvent(new window.MouseEvent('mousedown', { bubbles: true, cancelable: true, ctrlKey: true }));
-            window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Control', bubbles: true }));
-            hlSel.removeAllRanges();
-            hlSel.addRange(hlRange);
-            window.document.dispatchEvent(new window.Event('selectionchange', { bubbles: true }));
-            window.document.dispatchEvent(new window.MouseEvent('mouseup', { bubbles: true, cancelable: true, ctrlKey: true }));
-            await new Promise(resolve => setTimeout(resolve, 450));
+            /* (b) Ctrl at mousedown AND at mouseup → the highlight runs on its own paint layer */
+            await gesture(hlRange);
             if (window.document.querySelector('.pop #pH, .pop #pR, .pop #pN')) {
                 errors.push('[FAIL] the Ctrl highlight gesture opened the Hear/Record/Note popup');
             } else {
                 console.log('   ✅ the Ctrl gesture keeps the Hear/Record/Note popup shut');
             }
-
-            const hl = window.document.querySelector('mark.hl');
-            if (!hl) {
-                errors.push('[FAIL] Ctrl at mousedown+mouseup did not create a highlight (mark.hl)');
+            if (!rects().length) {
+                errors.push('[FAIL] Ctrl at mousedown+mouseup painted no highlight rectangle around the selection');
             } else {
-                console.log('   ✅ Ctrl at mousedown+mouseup creates a text-range highlight');
-                console.log(`      anchor="${hl.dataset.a}" color=${hl.classList.contains('hl-yellow') ? 'yellow' : '?'}`);
-                if (hl.classList.contains('nb') || hl.classList.contains('has-hl') || hl.classList.contains('has-note') || hl.classList.contains('has-rec')) {
-                    errors.push('[FAIL] the highlight shares the note/recording layer (mark.nb/has-*) instead of its own mark.hl');
-                } else {
-                    console.log('   ✅ The highlight lives on its own layer (mark.hl, never mark.nb)');
+                console.log(`   ✅ Ctrl at mousedown+mouseup paints a highlight on its own layer (${rects().length} rect)`);
+                console.log(`      anchor="${window.eval('hlList[0].anchor')}" start=${window.eval('hlList[0].start')} end=${window.eval('hlList[0].end')} color=${window.eval('hlList[0].color')}`);
+                if (!rects()[0].dataset.hlid) {
+                    errors.push('[FAIL] the painted highlight has no id (cannot be set/deleted server-side)');
                 }
-                if (!hl.dataset.hlid) {
-                    errors.push('[FAIL] highlight mark has no dataset.hlid (cannot be set/deleted server-side)');
+                if (window.eval('hlList[0].b') == null) {
+                    errors.push('[FAIL] the highlight was not anchored by block + character offset');
                 }
+            }
+            /* it must not be an element of the text */
+            if (window.document.querySelector('mark.hl')) {
+                errors.push('[FAIL] the highlight was inserted into the text (mark.hl) instead of its own paint layer');
+            } else {
+                console.log('   ✅ The highlight is not in the text DOM (no mark.hl — painted on its own layer)');
+            }
 
-                const swatch = window.document.querySelector('.hlpal button[data-c="red"]');
-                if (!swatch) {
-                    errors.push('[FAIL] highlight colour palette (.hlpal) did not appear after creating');
+            /* (c) the colour palette recolours the paint layer */
+            const swatch = window.document.querySelector('.hlpal button[data-c="red"]');
+            if (!swatch) {
+                errors.push('[FAIL] highlight colour palette (.hlpal) did not appear after creating');
+            } else {
+                swatch.click();
+                const cls = rects()[0] ? rects()[0].className : '';
+                if (cls.indexOf('hlr-red') < 0 || window.eval('hlList[0].color') !== 'red') {
+                    errors.push('[FAIL] colour palette click did not recolour the highlight');
                 } else {
-                    console.log('   ✅ Colour palette appears after creating a highlight');
-                    swatch.click();
-                    if (!hl.classList.contains('hl-red')) {
-                        errors.push('[FAIL] colour palette click did not recolour the highlight');
+                    console.log('   ✅ Colour palette recolours the highlight (yellow → red)');
+                }
+            }
+
+            /* (d) undo entry */
+            let undoOk = null;
+            try {
+                const before = window.eval('undoStack.length');
+                window.eval('doUndo()');
+                undoOk = before > 0 && window.eval('undoStack.length') === before - 1;
+            } catch (e) { undoOk = null; }
+            if (undoOk === true) {
+                console.log('   ✅ Highlight pushes an undo entry (consumed by undo)');
+            } else if (undoOk === false) {
+                errors.push('[FAIL] highlight did not push a usable undo entry');
+            } else {
+                console.log('   ⏭  highlight undo check skipped (undoStack not inspectable)');
+            }
+            try { window.eval('hlList=[]; hlReflow()'); } catch (e) {}
+            /* (e) a note/recording mark and a highlight may intersect: BOTH stay whole, nothing is
+               refused, nothing is split — the two layers never talk to each other */
+            const noteFrom = 4, noteTo = Math.min(14, tn.data.length - 4);
+            const nRange = window.document.createRange();
+            nRange.setStart(tn, noteFrom);
+            nRange.setEnd(tn, noteTo);
+            const nb = window.document.createElement('mark');
+            nb.className = 'nb has-note';
+            nb.dataset.a = tn.data.slice(noteFrom, noteTo);
+            try { nb.appendChild(nRange.extractContents()); nRange.insertNode(nb); } catch (e) {}
+            const nbBefore = window.document.querySelector('mark.nb') ? window.document.querySelector('mark.nb').outerHTML : '';
+            const textBefore = hlHost.textContent;
+
+            const walk = window.document.createTreeWalker(hlHost, window.NodeFilter.SHOW_TEXT);
+            const txts = []; let w2;
+            while ((w2 = walk.nextNode())) txts.push(w2);
+            if (!nbBefore || txts.length < 3) {
+                console.log('   ⏭  layer-independence test skipped (could not build a note mark)');
+            } else {
+                /* the selection starts BEFORE the note and ends AFTER it: a crossing highlight */
+                const crossRange = window.document.createRange();
+                crossRange.setStart(txts[0], 2);
+                crossRange.setEnd(txts[txts.length - 1], Math.min(3, txts[txts.length - 1].data.length));
+                await gesture(crossRange);
+
+                const toastEl = window.document.getElementById('toast');
+                if (toastEl && /atravessar/.test(toastEl.textContent || '')) {
+                    errors.push('[FAIL] a highlight crossing a note was still refused (the layers must never interact)');
+                } else {
+                    console.log('   ✅ A highlight crossing a note/recording is never refused');
+                }
+                if (recCount() !== 1 || !rects().length) {
+                    errors.push('[FAIL] a highlight crossing a note/recording was not created');
+                } else {
+                    const start = window.eval('hlList[0].start'), end = window.eval('hlList[0].end');
+                    if (start > noteFrom || end < noteTo) {
+                        errors.push(`[FAIL] the crossing highlight lost part of the selection (start=${start} end=${end}, note=${noteFrom}..${noteTo})`);
                     } else {
-                        console.log('   ✅ Colour palette recolours the highlight (yellow → red)');
+                        console.log(`   ✅ The crossing highlight keeps the whole range (${start}..${end}, note ${noteFrom}..${noteTo} inside it)`);
                     }
                 }
-
-                let undoOk = null;
-                try {
-                    const before = window.eval('undoStack.length');
-                    window.eval('doUndo()');
-                    undoOk = before > 0 && window.eval('undoStack.length') === before - 1;
-                } catch (e) { undoOk = null; }
-                if (undoOk === true) {
-                    console.log('   ✅ Highlight pushes an undo entry (consumed by undo)');
-                } else if (undoOk === false) {
-                    errors.push('[FAIL] highlight did not push a usable undo entry');
+                const nbNow = window.document.querySelector('mark.nb');
+                if (!nbNow || nbNow.outerHTML !== nbBefore) {
+                    errors.push('[FAIL] the note/recording mark was changed by the highlight (the layers must not interact)');
                 } else {
-                    console.log('   ⏭  highlight undo check skipped (undoStack not inspectable)');
+                    console.log('   ✅ The note/recording mark is untouched by the highlight (both exist, whole and separate)');
+                }
+                if (hlHost.textContent !== textBefore) {
+                    errors.push('[FAIL] the page text changed while highlighting (the text DOM must never be touched)');
+                } else {
+                    console.log('   ✅ The page text is unchanged (highlights are painted, never inserted)');
                 }
 
-                // Ctrl+click inside a highlight deletes it (the only interaction it has). Recreate one
-                // first: the undo check above consumed the original, and a real user clicks seconds later.
-                window.document.dispatchEvent(new window.MouseEvent('mousedown', { bubbles: true, cancelable: true, ctrlKey: true }));
-                hlSel.removeAllRanges();
-                hlSel.addRange(hlRange);
-                window.document.dispatchEvent(new window.MouseEvent('mouseup', { bubbles: true, cancelable: true, ctrlKey: true }));
-                await new Promise(resolve => setTimeout(resolve, 700));
-                const hl2 = window.document.querySelector('mark.hl');
-                if (!hl2) {
-                    errors.push('[FAIL] could not recreate a highlight for the Ctrl+click delete test');
+                /* (f) Ctrl+click on the painted rectangle deletes the highlight, not the note */
+                await new Promise(resolve => setTimeout(resolve, 700));   /* hlJustRan guard = 600ms */
+                const r0 = rects()[0];
+                if (!r0) {
+                    errors.push('[FAIL] no painted rectangle to Ctrl+click for the delete test');
                 } else {
-                    hl2.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true, ctrlKey: true }));
-                    if (window.document.querySelector('mark.hl')) {
-                        errors.push('[FAIL] Ctrl+click did not delete the highlight');
+                    const cx = parseFloat(r0.style.left) + parseFloat(r0.style.width) / 2;
+                    const cy = parseFloat(r0.style.top) + parseFloat(r0.style.height) / 2;
+                    window.document.body.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true, ctrlKey: true, clientX: cx, clientY: cy }));
+                    const nbAfter = window.document.querySelector('mark.nb');
+                    if (rects().length || recCount() !== 0) {
+                        errors.push('[FAIL] Ctrl+click on the painted highlight did not delete it');
+                    } else if (!nbAfter || nbAfter.outerHTML !== nbBefore) {
+                        errors.push('[FAIL] deleting the highlight also touched the note/recording mark');
                     } else {
-                        console.log('   ✅ Ctrl+click deletes the highlight');
+                        console.log('   ✅ Ctrl+click deletes the highlight and leaves the note/recording whole');
                     }
                 }
             }
 
-            // The removed dead controls must stay gone (they were never wired to any engine)
+            /* (g) the removed dead controls must stay gone (they were never wired to any engine) */
             const dead = ['bPrac', 'bQuiz', 'sendTr', 'done', 'mNext', 'mIndex', 'modeToggle', 'mute']
                 .filter(id => window.document.getElementById(id));
             if (dead.length) {
@@ -442,41 +537,15 @@ async function main() {
 
     const allErrors = [];
 
-    // Test portal.html
-    try {
-        const errs = await testPage(serverUrl, 'portal.html');
-        allErrors.push(...errs);
-    } catch (e) {
-        allErrors.push(`[portal.html] ${e.message}`);
-    }
-
-    // Test business/lesson1.html
-    try {
-        const errs = await testPage(serverUrl, 'business/lesson1.html', 'business');
-        allErrors.push(...errs);
-    } catch (e) {
-        allErrors.push(`[business/lesson1.html] ${e.message}`);
-    }
-
-    // Test kids/lesson1.html if exists
-    const kidsL1 = path.join(ROOT, 'kids', 'lesson1.html');
-    if (fs.existsSync(kidsL1)) {
+    /* SCOPE: business only (owner decision 2026-10-11) — one page, one track, one run.
+       Parked until the business build is final: portal.html (login pages), kids/lesson1.html,
+       nsfw/lesson1.html. Re-enable by adding their testPage() entry back to this list. */
+    for (const [page, track] of [['business/lesson1.html', 'business']]) {
         try {
-            const errs = await testPage(serverUrl, 'kids/lesson1.html', 'kids');
+            const errs = await testPage(serverUrl, page, track);
             allErrors.push(...errs);
         } catch (e) {
-            allErrors.push(`[kids/lesson1.html] ${e.message}`);
-        }
-    }
-
-    // Test nsfw/lesson1.html if exists
-    const nsfwL1 = path.join(ROOT, 'nsfw', 'lesson1.html');
-    if (fs.existsSync(nsfwL1)) {
-        try {
-            const errs = await testPage(serverUrl, 'nsfw/lesson1.html', 'nsfw');
-            allErrors.push(...errs);
-        } catch (e) {
-            allErrors.push(`[nsfw/lesson1.html] ${e.message}`);
+            allErrors.push(`[${page}] ${e.message}`);
         }
     }
 

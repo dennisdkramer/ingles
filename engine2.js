@@ -57,13 +57,15 @@ function doUndo(){
   if(last.kind==="add"){
    /* undo a new highlight = take it away again */
    if(last.id)send({action:"del",id:last.id});
-   hlUnwrap(last.el);closePop();
+   hlDrop(last.id);closePop();
   }else if(last.kind==="color"){
    /* undo a recolour = paint the previous colour back */
-   if(last.el)hlPaint(last.el,last.from);
-   if(last.id)send({action:"set",type:"hl",anchor:last.anchor,data:JSON.stringify({color:last.from}),id:last.id});
+   const rec=hlById(last.id);
+   if(rec)hlSetColor(rec,last.from);
+   if(last.id)send({action:"set",type:"hl",anchor:last.anchor,data:JSON.stringify({color:last.from,b:rec?rec.b:last.b,o:rec?rec.start:last.start}),id:last.id});
   }else if(last.kind==="del"){
-   /* undo a deletion = store the highlight again (renderLayer rebuilds the mark from the anchor) */
+   /* undo a deletion = put the record back here and now, then store it again */
+   hlReadd(last.item);
    send({action:"add",type:"hl",anchor:last.item.anchor,data:JSON.stringify(last.item.data||{}),id:last.item.id});
   }
  }
@@ -81,17 +83,13 @@ async function loadLayer(){
 
 function renderLayer(){
  document.querySelectorAll("mark.nb").forEach(m=>{m.classList.remove("has-rec","has-note")});
- /* highlight layer (mark.hl): an element whose server row is gone disappears; the ones still
-    stored are kept exactly as they are, so undo keeps working on the live element */
- const hlAnchors=new Set();
- layer.forEach(it=>{if(it.type==="hl"&&it.anchor)hlAnchors.add(it.anchor)});
- document.querySelectorAll("mark.hl").forEach(m=>{if(!hlAnchors.has(m.dataset.a))hlUnwrap(m)});
  feed.innerHTML="";
+ /* highlight layer (#hlLayer): the records are the only truth here, so a highlight whose server
+    row is gone disappears and the ones still stored are rebuilt from their row (anchor + offsets,
+    or the anchor text alone for old rows). The text DOM is never touched: highlights are painted
+    over the text, notes/recordings are elements inside it. */
  layer.forEach(it=>{
-  if(it.type==="hl"&&it.anchor){
-   const m=hlEnsure(it.anchor);
-   if(m){m.dataset.hlid=it.id;hlPaint(m,(JSON.parse(it.data||"{}").color)||"yellow")}
-  }
+  if(it.type==="hl"&&it.anchor)hlRestore(it);
   if((it.type==="rec"||it.type==="note")&&it.anchor){
    const q='mark.nb[data-a="'+CSS.escape(it.anchor)+'"]';
    let m=document.querySelector(q);
@@ -101,6 +99,11 @@ function renderLayer(){
    const d=JSON.parse(it.data||"{}");
    feed.innerHTML+="<div>"+(it.type==="done"?"✅ concluída":it.type==="quiz"?"📝 quiz "+d.score+"%":"📝 "+(it.anchor||"traduções"))+" · <i>"+it.author+"</i></div>";}
  });
+ /* a highlight whose server row no longer exists leaves the layer (the server is the truth);
+    one created seconds ago stays put until the save round-trips */
+ const hlIds=new Set(layer.filter(it=>it.type==="hl"&&it.anchor).map(it=>it.id));
+ hlList=hlList.filter(rec=>hlIds.has(rec.id)||(rec.pending&&Date.now()-rec.pending<6000));
+ hlReflow();
  if(!feed.innerHTML)feed.innerHTML='<div class="dim">Nada ainda — destaque um texto e anote ou grave algo.</div>';
 }
 

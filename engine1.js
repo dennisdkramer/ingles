@@ -77,14 +77,17 @@ function trySelPopup(){
 let selTimer=null;
 document.addEventListener("selectionchange",()=>{clearTimeout(selTimer);selTimer=setTimeout(trySelPopup,350)});
 document.addEventListener("touchend",()=>{clearTimeout(selTimer);selTimer=setTimeout(trySelPopup,450)});
-document.addEventListener("click",e=>{const nb=e.target.closest("mark.nb"),h=e.target.closest("mark.hl");
- /* Ctrl+click inside a highlight = delete it. That is the ONLY interaction a highlight has:
-    it adds no popup, no hover state and no cursor change to the text. */
+document.addEventListener("click",e=>{const nb=e.target.closest("mark.nb");
+ /* Ctrl+click on a painted highlight = delete it. That is the ONLY interaction a highlight has:
+    the layer is pointer-events:none (so it never blocks a click, a drag or a selection), which
+    is why the click is hit-tested against the painted rectangles here. It adds no popup, no
+    hover state and no cursor change to the text. */
  if(e.ctrlKey||e.metaKey){
-  if(h&&Date.now()-hlJustRan>600){e.preventDefault();e.stopPropagation();hlDelete(h)}
+  if(Date.now()-hlJustRan>600){const rec=hlAtPoint(e.clientX,e.clientY);
+   if(rec){e.preventDefault();e.stopPropagation();hlDelete(rec)}}
   return;
  }
- if(!nb)return; /* a bare highlight (its own layer) is not clickable */
+ if(!nb)return; /* a bare highlight (painted on its own layer) is not clickable */
  e.stopPropagation();
  if(window.showAnchor)showAnchor(nb.dataset.a,Math.max(8,Math.min(e.clientX,innerWidth-380)),e.clientY+8)});
 function wrapRange(t,r){if(!r)return document.querySelector('mark.nb[data-a="'+CSS.escape(t)+'"]');
@@ -107,24 +110,28 @@ function ensureMark(t,type){
   try{m.appendChild(r.extractContents());r.insertNode(m)}catch(e){return}}
  m.classList.add("has-"+type);
 }
-/* ---- HIGHLIGHT (owner spec 2026-10-11, reworked) — its OWN layer (mark.hl), PC only ----------
+/* ---- HIGHLIGHT (owner spec 2026-10-11 #2) — its OWN PAINT LAYER, never inside the text ------
    Ctrl held at MOUSEDOWN over a selection  → the Hear / Record / Note functions are suppressed
                                               for that whole gesture
    Ctrl STILL held at MOUSEUP               → the selected string becomes a highlight
                                               (nothing else ever triggers a highlight)
-   Ctrl + click inside a highlight          → delete that highlight (the ONLY interaction it has)
+   Ctrl + click on a painted highlight      → delete that highlight (the ONLY interaction it has)
    Ctrl + drag over a highlight             → merge/extend HIGHLIGHTS only (overlapping or touching
-                                              highlights become one)
-   A highlight is its own element (mark.hl) and NEVER a note/recording mark (mark.nb): it adds no
-   click handler, no hover state and no cursor change, and it never combines with, triggers or
-   changes anything about a note or a recording. A selection whose start or end sits inside a
-   note/recording mark is refused (that mark would otherwise be split, cloned or moved).
-   Highlights are pegged to TEXT (survive resize/zoom), may span lines inside ONE block, never
-   cross block elements.
-   After creating, a tiny colour palette pops 10px above the LAST highlighted character
+                                              highlights of the same block become one)
+   A highlight is NOT part of the text: it is a translucent rectangle overlay (#hlLayer,
+   pointer-events:none) measured from the text range. The text DOM belongs to the note/recording
+   layer (mark.nb) alone, so the two layers have ZERO interaction — a highlight may cross a note
+   or a recording in any way, both stay whole and complete, and neither ever splits, moves,
+   clones, hides, blocks or suppresses the other. A highlight adds no click handler, no hover
+   state and no cursor change to the text.
+   A highlight is anchored by TEXT + (block index, character offset), so it survives a reload and
+   is re-measured (reflow) on resize/zoom and whenever the page re-lays-out.
+   It may span lines inside ONE block, never across block elements.
+   After creating, a tiny colour palette pops above the LAST painted rectangle
    (yellow / transparent red / transparent green); any click or key press closes it. */
-const HL_COLORS={yellow:"rgba(255,233,112,.55)",red:"rgba(255,64,64,.34)",green:"rgba(64,200,96,.34)"};
 const HL_BLOCK=/^(ADDRESS|ARTICLE|ASIDE|BLOCKQUOTE|DD|DETAILS|DIALOG|DIV|DL|DT|FIELDSET|FIGCAPTION|FIGURE|FOOTER|FORM|H[1-6]|HEADER|HR|LI|MAIN|NAV|OL|P|PRE|SECTION|TABLE|TBODY|TD|TFOOT|TH|THEAD|TR|UL)$/;
+const HL_BLOCKSEL="p,li,fieldset,h1,h2,h3,h4,h5,h6,dd,dt,td,th,blockquote,figcaption,summary,pre,div";
+const HL_COLORNAMES=["yellow","red","green"];
 let ctrlHeld=false,lastCtrlUp=0;
 document.addEventListener("keydown",e=>{if(e.key==="Control"||e.key==="Meta")ctrlHeld=true},true);
 document.addEventListener("keyup",e=>{if(e.key==="Control"||e.key==="Meta"){ctrlHeld=false;lastCtrlUp=Date.now()}},true);
@@ -135,14 +142,18 @@ addEventListener("blur",()=>{ctrlHeld=false;hlDownCtrl=false;hlSuppressUntil=0})
    hlSuppressUntil = keep that suppression for ~1.2s after the gesture so the debounced
                   selectionchange cannot re-open the popup behind our back
    hlJustRan    = a highlight was created this instant (stops the click that browsers fire at the
-                  end of a drag from being read as a Ctrl+click delete) */
-let hlDownCtrl=false,hlSuppressUntil=0,hlJustRan=0;
+                  end of a drag from being read as a Ctrl+click delete)
+   hlDownXY     = where the gesture started: a Ctrl+click (no movement) is a DELETE, a Ctrl+drag
+                  (movement) is a new/extended highlight — even when it starts on a highlight */
+let hlDownCtrl=false,hlSuppressUntil=0,hlJustRan=0,hlDownXY=null;
 document.addEventListener("mousedown",e=>{const c=!!(e.ctrlKey||e.metaKey);hlDownCtrl=c;
+ hlDownXY={x:e.clientX,y:e.clientY};
  hlSuppressUntil=c?Number.MAX_SAFE_INTEGER:0},true);
 document.addEventListener("mouseup",e=>{const was=hlDownCtrl;hlDownCtrl=false;
  if(!was)return;
  hlSuppressUntil=Date.now()+1200;
- if(e.ctrlKey||e.metaKey||ctrlHeld)hlFromSelection()},true);
+ const moved=!hlDownXY||Math.abs(e.clientX-hlDownXY.x)>4||Math.abs(e.clientY-hlDownXY.y)>4;
+ if(moved&&(e.ctrlKey||e.metaKey||ctrlHeld))hlFromSelection()},true);
 /* runs on mouseup only: Ctrl at mousedown AND still held now → highlight the selected string */
 function hlFromSelection(){
  const sel=getSelection();if(!sel||!sel.rangeCount)return;
@@ -154,18 +165,20 @@ function hlFromSelection(){
 }
 /* any key press closes the colour palette (but never the note textarea popup) */
 document.addEventListener("keydown",()=>{if(pop&&pop.classList.contains("hlpalpop"))closePop()},true);
-function hlClosest(node){const el=node&&(node.nodeType===1?node:node.parentElement);return el&&el.closest?el.closest("mark.hl"):null}
-/* the note/recording layer around a node — the two layers must never touch each other */
-function hlNbClosest(node){const el=node&&(node.nodeType===1?node:node.parentElement);return el&&el.closest?el.closest("mark.nb"):null}
-function hlColorOf(m){return m.classList.contains("hl-red")?"red":m.classList.contains("hl-green")?"green":"yellow"}
-function hlPaint(m,c){m.classList.remove("hl-yellow","hl-red","hl-green");m.classList.add("hl-"+(HL_COLORS[c]?c:"yellow"))}
-/* put the text back: drop the highlight ELEMENT only — a note/recording mark around it is
-   never touched, and if the highlight lived inside one, the note simply stays as it was */
-function hlUnwrap(m){
- if(!m||!m.parentNode)return;
- const p=m.parentNode;while(m.firstChild)p.insertBefore(m.firstChild,m);p.removeChild(m);
-}
-/* (node,offset) → character offset, counted over all text inside root */
+/* ---- the highlight paint layer: rectangles measured from the text, nothing else -------------- */
+let hlList=[]; /* live highlights — a highlight exists HERE and nowhere else in the DOM */
+function hlLayerEl(){let L=document.getElementById("hlLayer");
+ if(!L){L=document.createElement("div");L.id="hlLayer";L.setAttribute("aria-hidden","true");document.body.appendChild(L)}
+ return L}
+/* every text block of the page in document order = the offset ruler of the highlights and the
+   block a highlight is allowed to live in (a highlight never crosses blocks) */
+function hlBlocks(){return [...document.querySelectorAll(HL_BLOCKSEL)].filter(el=>!el.closest(".pop,#hlLayer,script,style"))}
+function hlBlockOf(node){const el=node&&(node.nodeType===1?node:node.parentElement);return el&&el.closest?el.closest(HL_BLOCKSEL):null}
+function hlBlockEl(i){if(i==null||i<0)return null;const b=hlBlocks();return i<b.length?b[i]:null}
+function hlById(id){return hlList.find(r=>r.id===id)||null}
+const hlColorOk=c=>HL_COLORNAMES.indexOf(c)>=0?c:"yellow";
+/* (node,offset) → character offset, counted over all the text inside root. Notes/recordings are
+   text too, so the highlight keeps its offsets whatever the note layer wraps around. */
 function hlOffset(root,node,off){
  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let a=0,n;
  while(n=w.nextNode()){if(n===node)return a+off;a+=n.data.length}
@@ -177,97 +190,123 @@ function hlPosition(root,at){
  while(n=w.nextNode()){const len=n.data.length;if(at<=a+len)return{n,off:at-a};a+=len}
  return null;
 }
-function hlDelete(m){
- if(!m)return;
- const id=m.dataset.hlid,anchor=m.dataset.a;
- hlUnwrap(m);
- if(typeof pushUndo==="function")pushUndo({type:"hl",kind:"del",item:{type:"hl",anchor,data:{color:"yellow"},id}});
+/* the character offsets of a record → a live text Range */
+function hlRangeOf(rec){const bl=hlBlockEl(rec.b);if(!bl)return null;
+ const a=hlPosition(bl,rec.start),b=hlPosition(bl,rec.end);if(!a||!b)return null;
+ const r=document.createRange();
+ try{r.setStart(a.n,a.off);r.setEnd(b.n,b.off)}catch(e){return null}
+ return r}
+/* the painted rectangles of one highlight, in DOCUMENT coordinates */
+function hlRectList(rec){const r=hlRangeOf(rec);if(!r)return [];
+ let list=[];try{list=r.getClientRects?[...r.getClientRects()]:[]}catch(e){list=[]}
+ if(!list.length){try{const b=r.getBoundingClientRect();if(b&&(b.width||b.height))list=[b]}catch(e){}}
+ const sx=window.scrollX||0,sy=window.scrollY||0;
+ return list.filter(b=>b.width>0||b.height>0).map(b=>({left:b.left+sx,top:b.top+sy,width:b.width,height:b.height}))}
+/* repaint the layer from the records: it never touches a single text node */
+function hlReflow(){const L=hlLayerEl();L.innerHTML="";
+ hlList.forEach(rec=>{rec.rects=hlRectList(rec);
+  rec.rects.forEach(r=>{const d=document.createElement("div");
+   d.className="hlr hlr-"+rec.color;d.dataset.hlid=rec.id;
+   d.style.left=Math.round(r.left)+"px";d.style.top=Math.round(r.top)+"px";
+   d.style.width=Math.round(r.width)+"px";d.style.height=Math.round(r.height)+"px";
+   L.appendChild(d)})})}
+/* Ctrl+click hit test: the layer is pointer-events:none, so the click lands on the text below */
+function hlAtPoint(x,y){const sx=window.scrollX||0,sy=window.scrollY||0;
+ return hlList.find(rec=>(rec.rects||[]).some(r=>x+sx>=r.left&&x+sx<=r.left+r.width&&y+sy>=r.top&&y+sy<=r.top+r.height))||null}
+/* re-measure when the page re-lays-out: resize/zoom, web fonts, <details>, any mouseup */
+let hlReflowTimer=0;
+function hlQueueReflow(){clearTimeout(hlReflowTimer);hlReflowTimer=setTimeout(hlReflow,80)}
+addEventListener("resize",hlQueueReflow);
+addEventListener("load",hlQueueReflow);
+document.addEventListener("toggle",hlQueueReflow,true);
+document.addEventListener("mouseup",()=>{if(hlList.length)hlQueueReflow()},true);
+if(document.fonts&&document.fonts.ready)try{document.fonts.ready.then(hlQueueReflow)}catch(e){}
+function hlSetColor(rec,c){if(!rec)return null;rec.color=hlColorOk(c);hlReflow();return rec}
+function hlDrop(id){hlList=hlList.filter(r=>r.id!==id);hlReflow()}
+/* put a deleted highlight back (undo): same id, same place, same colour */
+function hlReadd(item){if(!item)return null;
+ hlList=hlList.filter(r=>r.id!==item.id);
+ return hlRestore({id:item.id,anchor:item.anchor,data:JSON.stringify(item.data||{})})}
+function hlDelete(rec){if(!rec)return;
+ const id=rec.id,anchor=rec.anchor,data={color:rec.color,b:rec.b,o:rec.start};
+ hlDrop(id);
+ if(typeof pushUndo==="function")pushUndo({type:"hl",kind:"del",item:{type:"hl",anchor,data,id}});
  closePop();
  /* network last: a failed save must never undo what the user just saw */
- if(id)send({action:"del",id});
+ if(id)send({action:"del",id})}
+/* ---- where a stored highlight lives: (block index, character offset) with text fallbacks ----
+   The text+offset anchor wins over the anchor text alone, so two identical strings highlighted
+   in the same block keep their own places. Old rows carry only the anchor text (fallback). */
+function hlLocate(anchor,bHint,oHint){
+ const t=String(anchor||"");if(!t)return null;
+ const bl=hlBlocks();
+ if(bHint!=null&&oHint!=null&&bl[bHint]){try{if(bl[bHint].textContent.substr(oHint,t.length)===t)return{b:bHint,start:oHint}}catch(e){}}
+ if(bHint!=null&&bl[bHint]){const i=bl[bHint].textContent.indexOf(t);if(i>=0)return{b:bHint,start:i}}
+ for(let i=0;i<bl.length;i++){const j=bl[i].textContent.indexOf(t);if(j>=0)return{b:i,start:j}}
+ return null;
 }
-/* the highlight wrapper: always a NEW mark.hl — never a note/recording mark (mark.nb) */
-function hlWrap(text,r){
- if(!r)return null;
- const m=document.createElement("mark");m.className="hl";m.dataset.a=text;
- try{m.appendChild(r.extractContents());r.insertNode(m)}catch(e){return null}
- return m;
+function hlMake(anchor,color,b,start,id){
+ const t=String(anchor);
+ const rec={id:id||Date.now()+"_"+Math.floor(Math.random()*9999),anchor:t,color:hlColorOk(color),
+  b:b,start:Number(start),end:Number(start)+t.length};
+ rec.rects=hlRectList(rec);hlList.push(rec);hlReflow();return rec;
 }
-const hlByAnchor=t=>document.querySelector('mark.hl[data-a="'+CSS.escape(t)+'"]');
-/* text → range for the HIGHLIGHT layer: text inside a note/recording mark is fair game,
-   text already inside a highlight is not (a highlight never nests in another highlight) */
-function hlFindRange(t){
- const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
- const nodes=[];let all="";let n;
- while(n=w.nextNode()){if(n.parentElement&&n.parentElement.closest("script,style,.pop,mark.hl"))continue;nodes.push({n,start:all.length});all+=n.data;}
- const i=all.indexOf(t);if(i<0)return null;const end=i+t.length;let a=null,b=null;
- for(const o of nodes){if(!a&&o.start<=i&&i<o.start+o.n.data.length)a={n:o.n,off:i-o.start};
-  if(!b&&o.start<end&&end<=o.start+o.n.data.length)b={n:o.n,off:end-o.start};}
- if(!a||!b)return null;
- const r=document.createRange();r.setStart(a.n,a.off);r.setEnd(b.n,b.off);return r;
+/* renderLayer helper: the live highlight for a server row, rebuilt from the row when missing */
+function hlRestore(row){
+ const anchor=String((row&&row.anchor)||"");if(!anchor)return null;
+ let d={};try{d=JSON.parse(row.data||"{}")}catch(e){}
+ let rec=hlById(row.id);
+ if(rec){rec.pending=0;rec.color=hlColorOk(d.color);return rec}
+ const spot=hlLocate(anchor,d.b,d.o);
+ if(!spot||spot.start<0)return null;       /* that text is not on the page any more */
+ rec=hlMake(anchor,d.color,spot.b,spot.start,row.id);
+ rec.pending=0;return rec;
 }
-/* renderLayer helper: the highlight element for an anchor, rebuilt from the text when missing */
-function hlEnsure(t){const m=hlByAnchor(t);if(m)return m;const r=hlFindRange(t);return r?hlWrap(t,r):null}
 function hlApply(r){
  if(!r)return;
- /* The note/recording layer must never be split, cloned or moved by a highlight: when the
-    selection starts or ends INSIDE a note/recording mark, the gesture is refused outright.
-    (Both ends inside the SAME mark is safe — the highlight nests inside it, nothing changes.) */
- if(hlNbClosest(r.startContainer)!==hlNbClosest(r.endContainer)){toast("Destaque não pode atravessar uma nota ou gravação.");return}
- /* grow out of (and swallow) whatever HIGHLIGHT the selection start/end sits inside */
- const mS=hlClosest(r.startContainer),mE=hlClosest(r.endContainer);
- try{if(mS)r.setStartBefore(mS);if(mE)r.setEndAfter(mE)}catch(e){}
- if(hlNbClosest(r.startContainer)!==hlNbClosest(r.endContainer)){toast("Destaque não pode atravessar uma nota ou gravação.");return}
- const root=(()=>{const n=r.commonAncestorContainer;return n.nodeType===1?n:n.parentElement})();
- if(!root)return;
+ const blk=hlBlockOf(r.startContainer);
+ if(!blk){toast("Selecione um trecho de texto para destacar.");return}
+ /* one block only — a highlight never contains a block element */
  const frag=r.cloneContents();
  if(frag.querySelectorAll&&[...frag.querySelectorAll("*")].some(x=>HL_BLOCK.test(x.tagName))){toast("Destaque só dentro de um mesmo bloco.");return}
- let s=hlOffset(root,r.startContainer,r.startOffset),e=hlOffset(root,r.endContainer,r.endOffset);
- if(s<0||e<0||e<=s){toast("Selecione um trecho de texto para destacar.");return}
- /* merge: every HIGHLIGHT that overlaps or touches [s,e] becomes part of the new one.
-    Only mark.hl is looked at — notes and recordings are never merged or extended. */
- const kill=[];let grew=true;
- while(grew){grew=false;
-  root.querySelectorAll("mark.hl").forEach(m=>{
-   if(kill.indexOf(m)>=0)return;
-   const mr=document.createRange();mr.selectNodeContents(m);
-   const ms=hlOffset(root,mr.startContainer,mr.startOffset),me=hlOffset(root,mr.endContainer,mr.endOffset);
-   if(ms<0||me<0)return;
-   if(me>=s&&ms<=e){if(ms<s){s=ms;grew=true}if(me>e){e=me;grew=true}kill.push(m)}});
- }
- kill.forEach(m=>{if(m.dataset.hlid)send({action:"del",id:m.dataset.hlid});hlUnwrap(m)});
- const a=hlPosition(root,s),b=hlPosition(root,e);
- if(!a||!b){toast("Não foi possível destacar este trecho.");return}
- const nr=document.createRange();nr.setStart(a.n,a.off);nr.setEnd(b.n,b.off);
- const text=nr.toString();if(!text.trim())return;
- const m=hlWrap(text,nr);
- if(!m)return;
- hlPaint(m,"yellow");
- m.dataset.hlid=Date.now()+"_"+Math.floor(Math.random()*9999);
+ let s=hlOffset(blk,r.startContainer,r.startOffset),e=hlOffset(blk,r.endContainer,r.endOffset);
+ if(s<0||e<0){toast("Destaque só dentro de um mesmo bloco.");return}
+ if(e<=s){toast("Selecione um trecho de texto para destacar.");return}
+ const b=hlBlocks().indexOf(blk);
+ if(b<0)return;
+ /* merge: highlights of this block that overlap or touch the selection become part of the new
+    one. The note/recording layer is never looked at — a highlight may cross it freely. */
+ const kill=hlList.filter(rec=>rec.b===b&&rec.end>=s&&rec.start<=e);
+ kill.forEach(rec=>{if(rec.start<s)s=rec.start;if(rec.end>e)e=rec.end});
+ kill.forEach(rec=>{hlList=hlList.filter(x=>x!==rec);if(rec.id)send({action:"del",id:rec.id})});
+ const text=blk.textContent.slice(s,e);
+ if(!text.trim()){hlReflow();return}
+ const m=hlMake(text,"yellow",b,s);
+ m.pending=Date.now();
  hlJustRan=Date.now();
- if(typeof pushUndo==="function")pushUndo({type:"hl",kind:"add",id:m.dataset.hlid,el:m});
+ if(typeof pushUndo==="function")pushUndo({type:"hl",kind:"add",id:m.id});
  hlPalette(m);
  /* network last: a failed save must never suppress the undo entry or the palette */
- send({action:"add",type:"hl",anchor:text,data:JSON.stringify({color:"yellow"}),id:m.dataset.hlid});
+ send({action:"add",type:"hl",anchor:m.anchor,data:JSON.stringify({color:"yellow",b:m.b,o:m.start}),id:m.id});
 }
-/* tiny colour swatches, 10px above the last highlighted character */
-function hlPalette(m){
- const w=document.createTreeWalker(m,NodeFilter.SHOW_TEXT);let t=null,n;
- while(n=w.nextNode())t=n;
- const rr=document.createRange();
- try{if(t){rr.setStart(t,t.data.length);rr.collapse(true)}else{rr.selectNodeContents(m);rr.collapse(false)}}catch(e){try{rr.selectNodeContents(m)}catch(e2){}}
- const rect=(rr.getBoundingClientRect?rr.getBoundingClientRect():m.getBoundingClientRect())||{};
- const x=Math.max(8,Math.min(rect.right||rect.left||20,innerWidth-150));
- const y=Math.max(4,(rect.top||24)-10);
- openPop("",x,y,'<span class="hlpal">'+["yellow","red","green"].map(c=>'<button type="button" data-c="'+c+'" title="'+c+'" style="background:'+HL_COLORS[c]+'"></button>').join("")+"</span>");
+/* tiny colour swatches, just above the LAST painted rectangle of the highlight.
+   The colours themselves live in style.css (#hlLayer .hlr-* and .hlpal button[data-c]) */
+function hlPalette(rec){
+ hlReflow();
+ const rs=rec.rects||[];
+ const last=rs.length?rs.reduce((a,b)=>((b.top>a.top||(b.top===a.top&&b.left>a.left))?b:a)):null;
+ const sx=window.scrollX||0,sy=window.scrollY||0,vw=window.innerWidth||800;
+ const x=Math.max(8,Math.min(last?Math.round(last.left+last.width)-sx:24,vw-150));
+ const y=Math.max(4,Math.round(last?last.top-sy:40)-30);
+ openPop("",x,y,'<span class="hlpal">'+HL_COLORNAMES.map(c=>'<button type="button" data-c="'+c+'" title="'+c+'"></button>').join("")+"</span>");
  if(!pop)return;
  pop.classList.add("hlpalpop");
  pop.querySelectorAll("button[data-c]").forEach(b=>{
-  b.onclick=()=>{const c=b.dataset.c,from=hlColorOf(m);
-   hlPaint(m,c);
-   if(typeof pushUndo==="function")pushUndo({type:"hl",kind:"color",id:m.dataset.hlid,anchor:m.dataset.a,el:m,from});
+  b.onclick=()=>{const c=b.dataset.c,from=rec.color;
+   hlSetColor(rec,c);
+   if(typeof pushUndo==="function")pushUndo({type:"hl",kind:"color",id:rec.id,anchor:rec.anchor,from,b:rec.b,start:rec.start});
    closePop();
-   if(m.dataset.hlid)send({action:"set",type:"hl",anchor:m.dataset.a,data:JSON.stringify({color:c}),id:m.dataset.hlid});
+   if(rec.id)send({action:"set",type:"hl",anchor:rec.anchor,data:JSON.stringify({color:c,b:rec.b,o:rec.start}),id:rec.id});
   };
  });
 }
