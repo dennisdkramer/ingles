@@ -7,16 +7,19 @@ Reference this file whenever a task touches lesson functionality. Preserve every
 - localStorage must never be a source of truth (ghost-data bug of Oct 2026); server is sole source.
 
 ## Highlight (text range) — owner spec 2026-10-11
-- Ctrl+hold while selecting text = create a highlight. The highlighted STRING is the anchor, so the mark is pegged to the text: it survives window resize, zoom, font changes and reflow. It may span several lines of the same block (paragraph, list item, cell, heading) but never crosses a block boundary.
-- Ctrl+drag over an existing highlight MERGES: any highlight that overlaps or merely touches the new selection becomes part of one single highlight, extended to cover both. Overlaps never accumulate as separate marks.
-- Ctrl+click inside a highlight = delete it. One action: no confirmation, no popup.
-- While Ctrl is held (and for ~1s after release) the Hear / Record / Note popup is SUPPRESSED — Ctrl gestures only ever highlight. A normal selection (no Ctrl) still opens that popup exactly as before.
+- Gesture: Ctrl must be held at MOUSEDOWN over the selection; if Ctrl is ALSO held at MOUSEUP, that release creates the highlight. Nothing else creates one (no keyboard-only path, no touch gesture, no automatic path).
+- Ctrl at mousedown SUPPRESSES the other selection-based functions for the whole gesture (and ~1.2s after it ends): the Hear / Record / Note popup never opens for a Ctrl gesture, whether or not a highlight ends up being created. A normal selection (no Ctrl at mousedown) still opens that popup exactly as before.
+- Ctrl+click inside a highlight = delete it. One action: no confirmation, no popup. That deletion is the ONLY interaction a highlight has.
+- A highlight never makes the text clickable and never changes mouseover or the cursor: no click behaviour of its own (a plain click on highlighted text does nothing) and no hover state.
+- Ctrl+drag over an existing highlight MERGES HIGHLIGHTS ONLY: any highlight that overlaps or merely touches the new selection becomes one single highlight, extended to cover both. Overlaps never accumulate as separate marks. Notes and recordings are never merged, extended, moved or recoloured by a highlight gesture.
+- Layer separation (owner rule): a highlight is its OWN element (mark.hl), never a note/recording mark (mark.nb). The note's blue is a very light wash on its own paint layer (background-image on the note mark), so a highlight over the same span never hides it and it never hides the highlight. A selection whose start or end boundary sits inside a note/recording mark is REFUSED (toast) — that mark would otherwise be split or cloned. A selection fully inside one mark nests the highlight inside it; a selection that wholly contains a mark nests that mark inside the highlight. In both cases the note/recording element itself is untouched and deleting the highlight puts the text back exactly as it was.
+- The highlighted STRING is the anchor, so the mark is pegged to the text: it survives window resize, zoom, font changes and reflow. It may span several lines of the same block (paragraph, list item, cell, heading) but never crosses a block boundary.
 - Look: semi-transparent yellow fill that keeps the text readable, rounded ends on every line fragment, no border, no icon.
 - After a highlight is created, a tiny colour palette pops 10px above the LAST highlighted character with three swatches: yellow / transparent red / transparent green. Clicking a swatch recolours the highlight and closes the palette; any click elsewhere or any key press closes it too.
-- Coexistence: recording (underlined + 🎙), note (blue + 📝) and highlight can live on the SAME span — none of them replaces another.
+- Coexistence: recording (underlined + 🎙), note (very light blue + 📝) and highlight are three separate layers; all three can cover the same span and none of them replaces or triggers another.
 - PC only: highlights have no touch gesture.
 - Persistence: server row type "hl", anchor = the highlighted string, data = {"color":"yellow|red|green"}; a recolour is a "set" on the same id. No backend change needed (add/set/del already accept any type).
-- DOM contract: mark.nb[data-a=<string>] carrying class has-hl + one of hl-yellow/hl-red/hl-green; dataset.hlid = server row id (used for set/del/undo).
+- DOM contract: mark.hl[data-a=<string>] carrying one of hl-yellow/hl-red/hl-green; dataset.hlid = server row id (used for set/del/undo). Notes/recordings stay on mark.nb (has-note / has-rec): the two element sets are never mixed, stack or replace each other.
 
 ## Undo
 - Ctrl+z reverts sequentially: highlights (create / recolour / delete), deletions, typing, field selections.
@@ -29,8 +32,8 @@ Reference this file whenever a task touches lesson functionality. Preserve every
 - Hotkey legend at top of each lesson; sizing per FORMAT.md.
 
 ## Engines & pages
-- engine1.js = gate (sessionStorage sig check), selection popup (▶ Hear / ⏺ Record / 📝 Note), Ctrl text-range highlight gestures (create / merge / delete / colour palette), recording (stops after 2s silence, 🎙 indicator, spinner), notes, anchors, send() to backend.
-- engine2.js = topbar, layer sync (15s), quiz grading, highlight render/delete (mark.nb.has-hl + colour class + dataset.hlid) and undo, showAnchor (audio cache, "carregando…", 4s → "nao encontrado").
+- engine1.js = gate (sessionStorage sig check), selection popup (▶ Hear / ⏺ Record / 📝 Note), Ctrl text-range highlight gestures on their own layer (mark.hl: create on Ctrl+mouseup / merge / delete / colour palette, popup suppressed for the whole Ctrl gesture), recording (stops after 2s silence, 🎙 indicator, spinner), notes, anchors, send() to backend.
+- engine2.js = topbar, layer sync (15s), quiz grading, highlight render/delete (mark.hl + colour class + dataset.hlid) and undo, showAnchor (audio cache, "carregando…", 4s → "nao encontrado").
 - Lessons are content-only files: config consts (TRACK, LESSON, SECRET, BACKPACK…) + engine includes. Engines/style always ship as full files.
 - Gate hash: h(s){let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x} applied to email+track+SECRET ("abreportas2025"); invalid/missing gate → redirect to portal.html.
 - Backend actions: POST add/set/del; GET ping/layer/file/dbg. ?action=dbg returns server log.
@@ -39,6 +42,6 @@ Reference this file whenever a task touches lesson functionality. Preserve every
 - NO improvised phonetic respellings; pronunciation audio ONLY via ▶ TTS.
 - Portuguese only for translation/explanation. PT words in exercises: italic + colored (.ptw).
 - Popup buttons: English, small, one line. ONE re-writable note per phrase.
-- Recordings = underlined mark; notes = blue mark.
+- Recordings = underlined mark; notes = very light blue mark (mark.nb layer, separate from highlights).
 - L1 teaches "vowels have no fixed sound"; cognate suffix codes; Tense Truth (present simple = facts/habits ONLY); reductions (gonna/wanna/woulda) taught early; get = coringa; quiz honesty note; gabarito inside <details>.
 - Three fully separate tracks/books: kids (casual/slang), business (formal), nsfw (18+, swearing, AAVE-aware). Own folder, own lesson order, own voice. Lessons ~60 min, solo-possible with PT explanations; quizzes comprehensive (10–15 min).

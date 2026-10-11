@@ -80,14 +80,23 @@ async function loadLayer(){
 }
 
 function renderLayer(){
- document.querySelectorAll("mark.nb").forEach(m=>{m.classList.remove("has-rec","has-note","has-hl","hl-yellow","hl-red","hl-green");delete m.dataset.hlid;});
+ document.querySelectorAll("mark.nb").forEach(m=>{m.classList.remove("has-rec","has-note")});
+ /* highlight layer (mark.hl): an element whose server row is gone disappears; the ones still
+    stored are kept exactly as they are, so undo keeps working on the live element */
+ const hlAnchors=new Set();
+ layer.forEach(it=>{if(it.type==="hl"&&it.anchor)hlAnchors.add(it.anchor)});
+ document.querySelectorAll("mark.hl").forEach(m=>{if(!hlAnchors.has(m.dataset.a))hlUnwrap(m)});
  feed.innerHTML="";
  layer.forEach(it=>{
-  if((it.type==="rec"||it.type==="note"||it.type==="hl")&&it.anchor){
+  if(it.type==="hl"&&it.anchor){
+   const m=hlEnsure(it.anchor);
+   if(m){m.dataset.hlid=it.id;hlPaint(m,(JSON.parse(it.data||"{}").color)||"yellow")}
+  }
+  if((it.type==="rec"||it.type==="note")&&it.anchor){
    const q='mark.nb[data-a="'+CSS.escape(it.anchor)+'"]';
    let m=document.querySelector(q);
    if(m)m.classList.add("has-"+it.type);else{ensureMark(it.anchor,it.type);m=document.querySelector(q);}
-   if(m&&it.type==="hl"){m.dataset.hlid=it.id;hlPaint(m,(JSON.parse(it.data||"{}").color)||"yellow");}}
+  }
   if(it.type==="quiz"||it.type==="done"||(it.type==="note"&&!it.anchor)){
    const d=JSON.parse(it.data||"{}");
    feed.innerHTML+="<div>"+(it.type==="done"?"✅ concluída":it.type==="quiz"?"📝 quiz "+d.score+"%":"📝 "+(it.anchor||"traduções"))+" · <i>"+it.author+"</i></div>";}

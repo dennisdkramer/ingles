@@ -7,7 +7,7 @@ Reference this file whenever a task touches site appearance. Preserve everything
 - ink #182136 = text, borders, buttons
 - tan #b9854c = accents, hard shadows
 - rose #d9c1ba · ok #177245 (green) · bad #a33327 (red)
-- ptw #96601f (Portuguese words) · blue #1d4ed8 + bluebg #dbeafe (notes)
+- ptw #96601f (Portuguese words) · blue #1d4ed8 + bluebg rgba(29,78,216,.16) (notes, very light blue)
 
 ## Fonts
 - Playfair Display 700/900 → h1, h2 (letter-spacing .14em)
@@ -27,7 +27,9 @@ Reference this file whenever a task touches site appearance. Preserve everything
 - input.gap = fill-in blank: transparent, 2px tan bottom border, #fff8ea bg; .ok green tint / .bad red tint after grading
 - fieldset = quiz block: dashed tan border, 12px radius; ok/bad tints as above
 - details (gabarito) = #fff8ea, dashed tan border — answers always inside <details>
-- mark.nb: has-rec = underline 2px --ok + 🎙 suffix; has-note = bluebg fill + blue text + 📝 suffix; no other mark styling
+- mark.nb = note/recording layer: has-rec = underline 2px --ok + 🎙 suffix; has-note = very light blue wash + blue text + 📝 suffix (the wash is painted by background-image, i.e. on its own layer, so a highlight over the same span is never hidden)
+- mark.hl = highlight layer (never mark.nb): semi-transparent fill — hl-yellow / hl-red / hl-green — 4px radius, 3px side padding, box-decoration-break clone, no border/icon, no cursor or hover change
+- .hlpal = tiny 3-swatch colour palette (yellow/red/green) inside a .pop, shown after a highlight is created
 - .pop selection popup = fixed, paper, 2px ink border, 14px radius, tan hard shadow, max-width 380px; buttons small (12.5px, one line, English labels)
 - #toast = fixed top-center pill, ink/cream; .recind recording indicator top-center
 - @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow

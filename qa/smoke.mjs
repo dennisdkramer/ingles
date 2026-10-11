@@ -14,8 +14,10 @@
  * - Console errors during page load
  * - Basic engine initialization (__A, __B flags)
  * - Selection popup logic
- * - Highlight logic: Ctrl+select creates a text-range mark, colour palette recolours it,
- *   undo entry is pushed, Ctrl+click deletes it
+ * - Highlight logic: Ctrl held at mousedown AND at mouseup creates a text-range mark on its own
+ *   layer (mark.hl); Ctrl released before mouseup creates nothing; the Hear/Record/Note popup
+ *   stays shut for the whole Ctrl gesture; colour palette recolours it; undo entry is pushed;
+ *   Ctrl+click deletes it; the removed dead controls never come back
  */
 
 import { JSDOM } from 'jsdom';
@@ -296,7 +298,8 @@ async function testPage(serverUrl, pageName, track = 'business') {
             }
         }
 
-        // Test highlight feature: Ctrl+select creates, palette recolours, undo entry, Ctrl+click deletes
+        // Test highlight feature: the Ctrl gesture gate (mousedown+mouseup), its own layer
+        // (mark.hl), colour palette, undo entry, Ctrl+click delete, and the dead controls staying gone
         const hlHost = Array.from(
             window.document.querySelectorAll('.content-area p, .content-area li, .content-area td')
         ).find(el => el.querySelectorAll('*').length === 0 && el.textContent.trim().length > 12);
@@ -308,19 +311,46 @@ async function testPage(serverUrl, pageName, track = 'business') {
             hlRange.setEnd(tn, Math.min(12, tn.data.length));
             const hlSel = window.getSelection();
             hlSel.removeAllRanges();
-            // hold Ctrl FIRST (exactly like a real Ctrl+drag) so only the highlight path runs
+            // (a) Ctrl held at mousedown but RELEASED before mouseup → nothing happens
+            window.document.dispatchEvent(new window.MouseEvent('mousedown', { bubbles: true, cancelable: true, ctrlKey: true }));
             window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Control', bubbles: true }));
             hlSel.addRange(hlRange);
-            // the engine debounces selectionchange by 350ms
             window.document.dispatchEvent(new window.Event('selectionchange', { bubbles: true }));
+            window.document.dispatchEvent(new window.KeyboardEvent('keyup', { key: 'Control', bubbles: true }));
+            window.document.dispatchEvent(new window.MouseEvent('mouseup', { bubbles: true, cancelable: true, ctrlKey: false }));
+            // the engine debounces selectionchange by 350ms
             await new Promise(resolve => setTimeout(resolve, 450));
+            if (window.document.querySelector('mark.hl')) {
+                errors.push('[FAIL] Ctrl released before mouseup still created a highlight (Ctrl must be held at BOTH ends)');
+            } else {
+                console.log('   ✅ Ctrl released before mouseup creates no highlight');
+            }
 
-            const hl = window.document.querySelector('mark.nb.has-hl');
+            // (b) Ctrl held at mousedown AND at mouseup → the highlight runs, on its own layer
+            window.document.dispatchEvent(new window.MouseEvent('mousedown', { bubbles: true, cancelable: true, ctrlKey: true }));
+            window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Control', bubbles: true }));
+            hlSel.removeAllRanges();
+            hlSel.addRange(hlRange);
+            window.document.dispatchEvent(new window.Event('selectionchange', { bubbles: true }));
+            window.document.dispatchEvent(new window.MouseEvent('mouseup', { bubbles: true, cancelable: true, ctrlKey: true }));
+            await new Promise(resolve => setTimeout(resolve, 450));
+            if (window.document.querySelector('.pop #pH, .pop #pR, .pop #pN')) {
+                errors.push('[FAIL] the Ctrl highlight gesture opened the Hear/Record/Note popup');
+            } else {
+                console.log('   ✅ the Ctrl gesture keeps the Hear/Record/Note popup shut');
+            }
+
+            const hl = window.document.querySelector('mark.hl');
             if (!hl) {
                 errors.push('[FAIL] Ctrl+select did not create a highlight (mark.nb.has-hl)');
             } else {
-                console.log('   ✅ Ctrl+select creates a text-range highlight');
+                console.log('   ✅ Ctrl at mousedown+mouseup creates a text-range highlight');
                 console.log(`      anchor="${hl.dataset.a}" color=${hl.classList.contains('hl-yellow') ? 'yellow' : '?'}`);
+                if (hl.classList.contains('nb') || hl.classList.contains('has-hl') || hl.classList.contains('has-note') || hl.classList.contains('has-rec')) {
+                    errors.push('[FAIL] the highlight shares the note/recording layer (mark.nb/has-*) instead of its own mark.hl');
+                } else {
+                    console.log('   ✅ The highlight lives on its own layer (mark.hl, never mark.nb)');
+                }
                 if (!hl.dataset.hlid) {
                     errors.push('[FAIL] highlight mark has no dataset.hlid (cannot be set/deleted server-side)');
                 }
@@ -352,13 +382,33 @@ async function testPage(serverUrl, pageName, track = 'business') {
                     console.log('   ⏭  highlight undo check skipped (undoStack not inspectable)');
                 }
 
-                // Ctrl+click inside the highlight deletes it
-                hl.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true, ctrlKey: true }));
-                if (window.document.querySelector('mark.nb.has-hl')) {
-                    errors.push('[FAIL] Ctrl+click did not delete the highlight');
+                // Ctrl+click inside a highlight deletes it (the only interaction it has). Recreate one
+                // first: the undo check above consumed the original, and a real user clicks seconds later.
+                window.document.dispatchEvent(new window.MouseEvent('mousedown', { bubbles: true, cancelable: true, ctrlKey: true }));
+                hlSel.removeAllRanges();
+                hlSel.addRange(hlRange);
+                window.document.dispatchEvent(new window.MouseEvent('mouseup', { bubbles: true, cancelable: true, ctrlKey: true }));
+                await new Promise(resolve => setTimeout(resolve, 700));
+                const hl2 = window.document.querySelector('mark.hl');
+                if (!hl2) {
+                    errors.push('[FAIL] could not recreate a highlight for the Ctrl+click delete test');
                 } else {
-                    console.log('   ✅ Ctrl+click deletes the highlight');
+                    hl2.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true, ctrlKey: true }));
+                    if (window.document.querySelector('mark.hl')) {
+                        errors.push('[FAIL] Ctrl+click did not delete the highlight');
+                    } else {
+                        console.log('   ✅ Ctrl+click deletes the highlight');
+                    }
                 }
+            }
+
+            // The removed dead controls must stay gone (they were never wired to any engine)
+            const dead = ['bPrac', 'bQuiz', 'sendTr', 'done', 'mNext', 'mIndex', 'modeToggle', 'mute']
+                .filter(id => window.document.getElementById(id));
+            if (dead.length) {
+                errors.push('[FAIL] removed dead controls are back in the page: ' + dead.join(','));
+            } else {
+                console.log('   ✅ no dead controls in the page (bPrac/bQuiz/sendTr/done/mNext/mIndex/modeToggle/mute)');
             }
         } else {
             console.log('   ⏭  highlight test skipped (no plain-text paragraph found)');
