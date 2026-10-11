@@ -342,7 +342,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
 
             const hl = window.document.querySelector('mark.hl');
             if (!hl) {
-                errors.push('[FAIL] Ctrl+select did not create a highlight (mark.nb.has-hl)');
+                errors.push('[FAIL] Ctrl at mousedown+mouseup did not create a highlight (mark.hl)');
             } else {
                 console.log('   ✅ Ctrl at mousedown+mouseup creates a text-range highlight');
                 console.log(`      anchor="${hl.dataset.a}" color=${hl.classList.contains('hl-yellow') ? 'yellow' : '?'}`);
