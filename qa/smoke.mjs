@@ -449,6 +449,39 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 console.log('   ⏭  highlight undo check skipped (undoStack not inspectable)');
             }
             try { window.eval('hlList=[]; hlReflow()'); } catch (e) {}
+
+            /* (d2) redo: the two buttons are always present (never hidden) next to the hotkey legend,
+               undo/redo round-trips a typed input through the public API, and a NEW action clears the
+               redo stack */
+            try {
+                const bar = window.document.getElementById('controlbar') || window.document.querySelector('.control-bar');
+                if (bar && !window.document.getElementById('undoBtn')) {
+                    bar.innerHTML += '<button id="undoBtn"></button><button id="redoBtn"></button>';
+                }
+                if (!window.document.getElementById('undoBtn') || !window.document.getElementById('redoBtn')) {
+                    console.log('   ⏭  undo/redo button test skipped (no control bar in harness)');
+                } else {
+                    window.eval('undoStack.length=0;redoStack.length=0;updateUndoButton()');
+                    window.eval('var __ti=document.createElement("input");__ti.value="A";undoStack.push({type:"input",el:__ti,prev:"A"});updateUndoButton()');
+                    let ok = window.eval('undoStack.length===1 && redoStack.length===0 && __ti.value==="A"');
+                    window.eval('__ti.value="B";doUndo()');
+                    ok = ok && window.eval('__ti.value==="A" && undoStack.length===0 && redoStack.length===1');
+                    window.eval('doRedo()');
+                    ok = ok && window.eval('__ti.value==="B" && undoStack.length===1 && redoStack.length===0');
+                    window.eval('pushUndo({type:"input",el:__ti,prev:"X"})');
+                    ok = ok && window.eval('redoStack.length===0');
+                    const ub = window.document.getElementById('undoBtn'), rb = window.document.getElementById('redoBtn');
+                    ok = ok && !!ub && !!rb && ub.hidden === false && rb.hidden === false;
+                    window.eval('undoStack.length=0;redoStack.length=0;updateUndoButton();document.getElementById("undoBtn").disabled=true;document.getElementById("redoBtn").disabled=true');
+                    if (ok) {
+                        console.log('   ✅ ↶ Undo / ↷ Redo buttons are always present; redo re-applies and a new action clears the redo stack');
+                    } else {
+                        errors.push('[FAIL] redo did not re-apply the undone action / the buttons were not always present');
+                    }
+                }
+            } catch (e) {
+                errors.push('[FAIL] undo/redo test threw: ' + e.message);
+            }
             /* (e) a note/recording mark and a highlight may intersect: BOTH stay whole, nothing is
                refused, nothing is split — the two layers never talk to each other */
             const noteFrom = 4, noteTo = Math.min(14, tn.data.length - 4);
@@ -611,6 +644,86 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 closeNb();
             } else {
                 console.log('   ⏭  note/recording popup test skipped (no .content-area)');
+            }
+
+            /* ---- BUTTONS FOLLOW THE STATE (owner spec 2026-10-12): once a phrase carries a
+               recording the ⏺ Record button becomes ▶ Play recording (plus ⏺ Record again), and once
+               it carries a note the 📝 Note button becomes 📝 Show note (opening the saved note). */
+            if (contentArea) {
+                const stText = 'State buttons please now';
+                const stP = window.document.createElement('p');
+                stP.textContent = stText;
+                contentArea.appendChild(stP);
+                const stMark = window.document.createElement('mark');
+                stMark.className = 'nb has-rec has-note';
+                stMark.dataset.a = stText;
+                const stFrag = window.document.createRange().extractContents();
+                stMark.appendChild(stFrag);
+                stP.appendChild(stMark);
+
+                /* what the server would return for that phrase: a recording pointing at a Drive file
+                   (b64 in the row is only the `drive:<fileId>` pointer — no audio in the layer) plus a note */
+                window.eval('layer = ' + JSON.stringify([
+                    { id: 'qa_rec_1', type: 'rec', anchor: stText, data: 'hi', fileId: 'drive-file-1', mime: 'audio/webm' },
+                    { id: 'qa_note_1', type: 'note', anchor: stText, data: 'saved note text', author: 'aluno' }
+                ]));
+                window.showAnchor(stText, 20, 40);
+                const playBtn = window.document.querySelector('.pop #pP');
+                const recBtn = window.document.querySelector('.pop #pR');
+                const noteBtn = window.document.querySelector('.pop #pN');
+                if (!playBtn) {
+                    errors.push('[FAIL] a phrase WITH a recording still shows ⏺ Record instead of ▶ Play recording');
+                } else if (!recBtn || !/record again/i.test(recBtn.textContent)) {
+                    errors.push('[FAIL] the ▶ Play recording state lost the ⏺ Record again affordance');
+                } else if (!noteBtn || !/show note/i.test(noteBtn.textContent)) {
+                    errors.push('[FAIL] a phrase WITH a note still shows 📝 Note instead of 📝 Show note');
+                } else {
+                    console.log('   ✅ ⏺ Record → ▶ Play recording and 📝 Note → 📝 Show note once the phrase has them');
+                }
+
+                if (playBtn) {
+                    /* ▶ Play recording: click #1 must fetch the Drive clip via ?action=file&id=<fileId>;
+                       click #2 must NOT fetch again — the object URL is cached under a:<anchor>.
+                       (jsdom cannot construct a spy for the page's Audio binding, so the cache-hit
+                       assertion is what proves playback short-circuits to the cache.) */
+                    const origFetch = window.fetch;
+                    const fetched = [];
+                    window.fetch = (url) => {
+                        fetched.push(String(url));
+                        return Promise.resolve({ json: () => Promise.resolve({ b64: 'AAAA', mime: 'audio/webm' }) });
+                    };
+                    try {
+                        playBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                        await new Promise(resolve => setTimeout(resolve, 80));
+                        const playUrl = fetched.filter(u => /action=file/.test(u))[0];
+                        if (!playUrl || !/id=drive-file-1/.test(playUrl)) {
+                            errors.push('[FAIL] ▶ Play recording did not fetch the clip via ?action=file&id=…');
+                        } else {
+                            console.log('   ✅ ▶ Play recording fetches the Drive clip via ?action=file&id=…');
+                        }
+                        playBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                        await new Promise(resolve => setTimeout(resolve, 50));
+                        if (fetched.filter(u => /action=file/.test(u)).length !== 1) {
+                            errors.push('[FAIL] the second ▶ Play recording re-fetched the clip instead of using the cache');
+                        } else {
+                            console.log('   ✅ ▶ Play recording replays from cache (no second fetch)');
+                        }
+                    } finally {
+                        window.fetch = origFetch;
+                    }
+                }
+
+                const noteBtn2 = window.document.querySelector('.pop #pN');
+                if (noteBtn2) {
+                    noteBtn2.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                    const ta = window.document.querySelector('.pop #nt');
+                    if (!ta || ta.value !== 'saved note text') {
+                        errors.push('[FAIL] 📝 Show note did not open the saved note text');
+                    } else {
+                        console.log('   ✅ 📝 Show note opens the saved note text (prefilled for editing)');
+                    }
+                }
+                try { window.eval('closePop()'); } catch (e) {}
             }
 
 

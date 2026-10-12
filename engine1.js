@@ -13,7 +13,9 @@ const localGet=()=>{try{return JSON.parse(localStorage.getItem(LKEY)||"{}")}catc
 const audioCache={};
 let popXY={x:20,y:90};
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(t._x);t._x=setTimeout(()=>t.style.display="none",2600)}
-function b64url(b64,mime){const b=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));return URL.createObjectURL(new Blob([b],{type:mime||"audio/webm"}))}
+function b64url(b64,mime){const m=mime||"audio/webm";
+ try{const b=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));return URL.createObjectURL(new Blob([b],{type:m}))}
+ catch(e){return "data:"+m+";base64,"+b64}}
 /* ---- local-action grace window (owner spec 2026-10-12): the ONLY sync re-check is a plain poll
    (engine2.js: setInterval(loadLayer,3000)) — no per-action immediate reload any more. Every
    send() marks its id+action "pending" for 6s; a poll that lands mid-write must never revert what
@@ -66,22 +68,37 @@ const nbEntries=t=>layer.filter(it=>(it.type==="rec"||it.type==="note")&&it.anch
 /* is a local note/recording action for this anchor still inside its grace window? (engine2's
    renderLayer consults this so a 3s poll cannot blink a mark that was just created or deleted) */
 function nbAnyPending(t){return nbEntries(t).some(it=>pendingFor(it.id))}
-/* every button the popup can carry: Hear / Record / Note and — only when the phrase already has
-   something saved (mark.nb carries has-note or has-rec) — the delete button the owner asked for:
-   it removes the saved recording, any notes AND their visual element in ONE undoable action. */
+/* does this phrase already carry a saved recording / note? The layer (server truth) decides; the
+   mark's own flags (has-rec / has-note) are the fallback for the moment between a just-finished
+   save and the next poll. Either signal flips the popup's buttons below. */
+function nbHasRec(t){return nbEntries(t).some(it=>it.type==="rec")||!!document.querySelector('mark.nb.has-rec[data-a="'+CSS.escape(t)+'"]')}
+function nbHasNote(t){return nbEntries(t).some(it=>it.type==="note")||!!document.querySelector('mark.nb.has-note[data-a="'+CSS.escape(t)+'"]')}
+/* the saved note text of an anchor (for the 📝 Show view) — null when there is none. */
+function nbNoteText(t){const e=nbEntries(t).find(it=>it.type==="note");return e?String(e.data||""):null}
+/* every button the popup can carry. The phrase's own state decides the wording (owner spec
+   2026-10-12): a phrase that already HAS a recording shows ▶ Play recording (+ ⏺ Record again,
+   so re-recording stays reachable) instead of the bare ⏺ Record; a phrase that already HAS a note
+   shows 📝 Show note instead of the bare 📝 Note. A phrase with saved content also carries the
+   delete button the owner asked for: it removes the saved recording, any notes AND their visual
+   element in ONE undoable action. */
 function nbPopHTML(t){
- const has=document.querySelector('mark.nb[data-a="'+CSS.escape(t)+'"]');
- const owned=!!(has&&(has.classList.contains("has-note")||has.classList.contains("has-rec")));
+ const rec=nbHasRec(t),note=nbHasNote(t),owned=rec||note;
  return '<b style="font-size:14px">'+String(t).slice(0,42)+(String(t).length>42?"…":"")+'</b><br>'+
-  '<span style="white-space:nowrap"><button id="pH">▶ Hear</button><button id="pR">⏺ Record</button><button id="pN">📝 Note</button>'+
+  '<span style="white-space:nowrap"><button id="pH">▶ Hear</button>'+
+  (rec?'<button id="pP">▶ Play recording</button><button id="pR" title="regravar por cima">⏺ Record again</button>':'<button id="pR">⏺ Record</button>')+
+  (note?'<button id="pN">📝 Show note</button>':'<button id="pN">📝 Note</button>')+
   (owned?'<button id="pD" title="apagar gravação, notas e a marcação">🗑 Delete</button>':"")+'</span>';
 }
 /* wire a freshly-opened .pop for an anchor: range = the live selection when the popup came from
-   one (null when it came from a click on the mark). Shared by trySelPopup and showAnchor. */
+   one (null when it came from a click on the mark). Shared by trySelPopup and showAnchor. The
+   record action is present under one of two ids (pP when playing back, pR otherwise); the note
+   action opens the saved note when one exists, a blank editor otherwise. */
 function nbWirePopup(t,r,x,y){
  if(!pop)return;
  const H=pop.querySelector("#pH");
  if(H)H.onclick=()=>{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
+ const P=pop.querySelector("#pP");
+ if(P)P.onclick=()=>nbPlayRecording(t);
  const R=pop.querySelector("#pR");
  if(R)R.onclick=()=>{recordMark(t,r);notePending({action:"add",type:"rec",anchor:t});rec(t)};
  const N=pop.querySelector("#pN");
@@ -104,13 +121,48 @@ function recordMark(t,r){
 }
 function nbNoting(t,r,x,y){
  recordMark(t,r);   /* the layer exists at once — the saved/discarded note only decides its flag */
+ /* 📝 Show note (owner spec 2026-10-12): the phrase already HAS a note → show it, edit THAT note
+    (prefilled, so a change never silently wipes the old one) instead of a blank editor. A phrase
+    with no note opens the empty editor exactly as before. The 💾 button keeps its id/behaviour. */
+ const existing=nbNoteText(t);
  openPop(t,x,y,'<textarea id="nt" rows="3" placeholder="write a note…"></textarea><br><button id="ns">💾 Save</button> <button id="px">Cancel</button>');
+ const ta=pop.querySelector("#nt");
+ if(ta&&existing!=null)ta.value=existing;
  pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();
   if(v){const m=ensureMark(t,"note");if(m)m.classList.add("has-note");
    /* network last: a failed save must never undo what the user just saw (FUNCTION.md) */
    send({action:"add",type:"note",anchor:t,data:v});}
   closePop();};
  pop.querySelector("#px").onclick=closePop;
+}
+/* ▶ Play recording (owner spec 2026-10-12): the phrase's saved recording, played back on demand.
+   Audio never sits in the layer — the row carries only the Drive fileId (uploaded clips) or the
+   inline b64 (tiny ones). So the first play fetches the bytes (?action=file&id=…) and turns them
+   into an object URL cached under "a:"+anchor — the very same key the just-finished recording
+   already uses (rec() above), so a clip you just recorded plays back with zero fetch.
+   The chain is resilient by design: a cached URL is tried first, a failed fetch falls through to
+   the inline b64 when there is one, and a stale cached URL (revoked/reloaded) retries once from
+   the server — the button never dead-ends and never throws into the page. */
+function nbPlayAudio(u){
+ try{const a=new Audio(u);a.play().catch(()=>{});return a}catch(e){return null}
+}
+function nbAfterPlay(key,src){const a=nbPlayAudio(src);if(!a)return;clearTimeout(audioCache[key+"_ev"]);a.addEventListener("error",()=>{delete audioCache[key];nbPlayRecording(key.replace(/^a:/,""))},{once:true})}
+function nbPlayRecording(t){
+ const key="a:"+t;
+ if(audioCache[key]){nbAfterPlay(key,audioCache[key]);return}
+ const rec=nbEntries(t).find(it=>it.type==="rec");
+ if(!rec){toast("Sem gravação nesta frase.");return}
+ const fromInline=()=>{if(rec.b64){audioCache[key]=b64url(rec.b64,rec.mime);nbAfterPlay(key,audioCache[key]);return true}return false};
+ if(rec.fileId){
+  fetch(BACKPACK+"?action=file&id="+encodeURIComponent(rec.fileId)+"&t="+Date.now())
+   .then(r=>r.json()).then(j=>{
+    if(j&&j.b64){audioCache[key]=b64url(j.b64,j.mime);nbAfterPlay(key,audioCache[key]);}
+    else if(!fromInline())toast("⚠ não consegui carregar o áudio");
+   })
+   .catch(()=>{if(!fromInline())toast("⚠ não consegui carregar o áudio")});
+  return;
+ }
+ if(!fromInline())toast("Sem gravação nesta frase.");
 }
 /* remove mark.nb from the text (undo the wrap) — leaves a clean DOM, so a later note/recording
    starts from the same pristine text */

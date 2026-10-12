@@ -15,7 +15,7 @@ Reference this file whenever a task touches site appearance. Preserve everything
 - Public Sans 400/600/700 → body, base 17px/1.6
 
 ## Layout
-- header.brand (English text, centered logo 120px, rose drop-shadow) → #controlbar .control-bar (the "control bar": Undo button + account/session info + tools + hotkey legend, English) → main#page → .page-container (PAGE AREA) → .content-area (CONTENT AREA)
+- header.brand (English text, centered logo 120px, rose drop-shadow) → #controlbar .control-bar (the "control bar": ↶ Undo + ↷ Redo button pair — always present, greyed `.disabled` when their stack is empty — + account/session info + tools + hotkey legend, English) → main#page → .page-container (PAGE AREA) → .content-area (CONTENT AREA)
 - .page-container = PAGE AREA: fixed 1400px wide, height GROWS with content (no min-height, no clipping). Paper bg, 2px solid ink border, no radius/shadow, position:relative. ALL page content — including the footer — lives inside it.
 - .content-area = CONTENT AREA: 1200px wide, centered inside the page area → exactly 100px margin on each side. All body content (text, cards, buttons, feed) sits here.
 - .card: paper bg, 2px ink border, 16px radius, 5px 5px 0 tan hard shadow

@@ -33,11 +33,13 @@ Reference this file whenever a task touches lesson functionality. Preserve every
 - DELETE also PURGES THE AUDIO: for a recording the backend's del trashes the Drive file the row points to (b64 column `drive:<fileId>`), so no orphaned audio is left in IAP_uploads; the reply carries `purged:true` and the frontend toast then reads "🗑 áudio + dados apagados ✔" (plain "🗑 apagado ✔" for notes-only). purgeDrive_ never throws and never blocks the row deletion. The backend `wipe` (teacher reset) purges the same way. Frontend needs no extra field: the row already stores its own fileId.
 - Both entry points behave identically: the selection popup (engine1.js `trySelPopup` → `openNbPopup`) and a click on an existing mark (engine2.js `showAnchor`) share the same `nbPopHTML`/`nbWirePopup`/`recordMark`/`nbNoting`/`nbDeleteAnchor` helpers.
 - Look: recording = underlined + 🎙; note = very light blue + 📝. Both live on `mark.nb` (the only text-DOM layer); highlights are painted separately on `#hlLayer` and never interact with them.
+- BUTTONS FOLLOW THE STATE (owner spec 2026-10-12): when the phrase already HAS a recording the ⏺ Record button becomes **▶ Play recording** (playback), and a ⏺ Record again button is offered so re-recording stays reachable; when it already HAS a note the 📝 Note button becomes **📝 Show note**, which opens the saved note prefilled for editing (a change never silently wipes the old one). A phrase with nothing saved keeps the bare ⏺ Record / 📝 Note buttons.
+- ▶ Play recording fetches the clip on demand — audio is never in the layer, only its Drive `fileId` (uploaded) or inline `b64` (tiny). The bytes come from GET `?action=file&id=…`, become an object URL cached under `a:<anchor>` (the key `rec()` already uses, so a just-recorded clip replays with no fetch), and are played through `new Audio(url)`. The chain is resilient: cached URL first, server fetch with inline-b64 fallback, and one retry-from-server if a stale cached URL errors — the button never dead-ends and never throws into the page.
 
-## Undo
-- Ctrl+z reverts sequentially: highlights (create / recolour / delete), deletions, typing, field selections.
-- A back/undo button also exists, usable by teacher AND student, floating top-right of the page.
-- Undo history covers both teacher and student actions sequentially.
+## Undo / Redo
+- Ctrl+z reverts sequentially: highlights (create / recolour / delete), deletions, typing, field selections. Ctrl+y (or Ctrl+Shift+z) redoes.
+- Two buttons — ↶ Undo and ↷ Redo — sit together in the control bar, right next to the "Ctrl+Z=undo" legend. They are ALWAYS present (never hidden/removed); each one only GREYS OUT (`disabled`) when its own stack is empty.
+- A brand-new action clears the redo stack (the history branches). Undo/redo covers both teacher and student actions, and both buttons are usable by teacher AND student.
 
 ## Teacher/student control
 - There is NO per-student permission level and no visibility toggle anywhere in the code (removed 2026-10-11 as dead code: its value was sent to the server but never read, so it never changed behaviour). Teacher and student see the same page functionality.
@@ -45,8 +47,8 @@ Reference this file whenever a task touches lesson functionality. Preserve every
 - Hotkey legend at top of each lesson; sizing per FORMAT.md.
 
 ## Engines & pages
-- engine1.js = gate (sessionStorage sig check), selection popup (▶ Hear / ⏺ Record / 📝 Note / 🗑 Delete, see Note/recording below — opened at mouse release, never mid-drag, and never for a selection that crosses a block element), Ctrl text-range highlight gestures painted on their own layer (#hlLayer: create on Ctrl+mouseup / merge / delete / colour palette, popup suppressed for the whole Ctrl gesture), recording (stops after 2s silence, 🎙 indicator, spinner), notes, anchors, send() to backend, generic local-action pending registry (notePending/pendingFor, see Sync below), and the shared note/recording helpers (nbEntries/nbAnyPending/nbPopHTML/nbWirePopup/openNbPopup/recordMark/nbNoting/nbUnmark/nbDeleteAnchor).
-- engine2.js = topbar, layer poll (3s, see Sync below), quiz grading, highlight render/delete (#hlLayer rectangles rebuilt from the server rows: hlRestore/hlDrop/hlReflow) and undo, note/recording render (mark.nb flags, gated by nbAnyPending), showAnchor (audio cache, "carregando…", 4s → "nao encontrado"; reuses engine1's popup helpers).
+- engine1.js = gate (sessionStorage sig check), selection popup (▶ Hear / ⏺ Record · ▶ Play recording + ⏺ Record again / 📝 Note · 📝 Show note / 🗑 Delete, see Note/recording below — opened at mouse release, never mid-drag, and never for a selection that crosses a block element), Ctrl text-range highlight gestures painted on their own layer (#hlLayer: create on Ctrl+mouseup / merge / delete / colour palette, popup suppressed for the whole Ctrl gesture), recording (stops after 2s silence, 🎙 indicator, spinner), recording playback (nbPlayRecording via ?action=file), notes, anchors, send() to backend, generic local-action pending registry (notePending/pendingFor, see Sync below), and the shared note/recording helpers (nbEntries/nbAnyPending/nbHasRec/nbHasNote/nbNoteText/nbPopHTML/nbWirePopup/openNbPopup/recordMark/nbNoting/nbPlayRecording/nbUnmark/nbDeleteAnchor).
+- engine2.js = topbar, layer poll (3s, see Sync below), quiz grading, highlight render/delete (#hlLayer rectangles rebuilt from the server rows: hlRestore/hlDrop/hlReflow) and undo, note/recording render (mark.nb flags, gated by nbAnyPending), showAnchor (reuses engine1's popup helpers).
 
 ## Sync (cross-session push) — owner spec 2026-10-12
 - The ONLY re-check mechanism is a plain poll: `setInterval(loadLayer,3000)` in engine2.js. There is no per-action immediate reload any more (the old `setTimeout(loadLayer,1800)` after every send() is gone) — every add/set/del on either side (teacher or student) reaches the other session within one poll cycle (~3s), not instantly.
@@ -59,7 +61,7 @@ Reference this file whenever a task touches lesson functionality. Preserve every
 ## Pedagogy rules (do not break)
 - NO improvised phonetic respellings; pronunciation audio ONLY via ▶ TTS.
 - Portuguese only for translation/explanation. PT words in exercises: italic + colored (.ptw).
-- Popup buttons: English, small, one line. ONE re-writable note per phrase. The popup carries 🗑 Delete only when the phrase already has a saved note/recording (deletes both plus the mark in one undoable action).
+- Popup buttons: English, small, one line. ONE re-writable note per phrase. The buttons follow the phrase's state: ⏺ Record → **▶ Play recording** (+ ⏺ Record again) once a recording exists, 📝 Note → **📝 Show note** once a note exists. The popup carries 🗑 Delete only when the phrase already has a saved note/recording (deletes both plus the mark in one undoable action).
 - Recordings = underlined mark; notes = very light blue mark (mark.nb layer, separate from highlights).
 - L1 teaches "vowels have no fixed sound"; cognate suffix codes; Tense Truth (present simple = facts/habits ONLY); reductions (gonna/wanna/woulda) taught early; get = coringa; quiz honesty note; gabarito inside <details>.
 - Three fully separate tracks/books: kids (casual/slang), business (formal), nsfw (18+, swearing, AAVE-aware). Own folder, own lesson order, own voice. Lessons ~60 min, solo-possible with PT explanations; quizzes comprehensive (10–15 min).
