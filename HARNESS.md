@@ -84,6 +84,15 @@ Whenever an owner instruction contains "from now on", "always", or "never": appe
 here (conservatively, in the owner's own wording where possible) in the same turn. This file is the
 persistent memory; conversations are not.
 
+## RULE 11 — REUSE CORE FUNCTIONS; DON'T TOUCH WORKING CODE
+When adding or fixing a feature, REUSE the existing core functions instead of writing a parallel
+path — above all for anything that saves to the layer / Drive. Two features that must behave the
+same (note Save, recording Save, highlight Save/delete) go through ONE shared core function, so they
+can never drift apart again; a fix belongs in that core function, so every caller gets it at once.
+Corollary: NEVER touch, refactor, restyle or "improve" code that already works the way the owner
+wants (the highlight feature is the standing example) — keep every working path byte-identical and
+change only what the request actually needs.
+
 ## STATUS
 Open/closed issues live in `ISSUES.md` (status log, not rules).
 

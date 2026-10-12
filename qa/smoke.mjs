@@ -720,6 +720,28 @@ async function testPage(serverUrl, pageName, track = 'business') {
                     errors.push('[FAIL] 💾 Save must light up (and the editor open) while a note is being edited');
                 } else {
                     console.log('   ✅ 📝 Add/Edit Note opens the editor and 💾 Save lights up');
+                    /* OWNER REPORT 2026-10-12: saving an EDITED note did nothing. The save must REPLACE the
+                       stored note (nbUpsert re-uses its row id), so after Save the popup shows the NEW text,
+                       leaves the edit state, and the layer still holds exactly ONE note row for the anchor
+                       (the bug appended a duplicate and the first-match lookup kept showing the OLD text). */
+                    const editTa = qp('#nt');
+                    if (editTa) {
+                        editTa.value = 'edited note text';
+                        const saveNow = qp('#pS');
+                        if (saveNow) saveNow.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                        const shownNow = window.document.querySelector('.pop #nbNote');
+                        const noteRows = window.eval(`layer.filter(it=>it.type==='note'&&it.anchor===${JSON.stringify(stText)})`);
+                        const saveAfter = window.document.querySelector('.pop #pS');
+                        if (!shownNow || !/edited note text/.test(shownNow.textContent)) {
+                            errors.push('[FAIL] 💾 Save on an edited note did not show the new text (Save looked like a no-op)');
+                        } else if (noteRows.length !== 1 || noteRows[0].id !== 'qa_note_1') {
+                            errors.push('[FAIL] 💾 Save on an edited note must REPLACE the stored note row (got ' + noteRows.length + ' row(s))');
+                        } else if (saveAfter && !saveAfter.disabled) {
+                            errors.push('[FAIL] 💾 Save must grey out again once the note has been saved');
+                        } else {
+                            console.log('   ✅ 💾 Save on an edited note REPLACES the stored note (one row, new text, editor closed)');
+                        }
+                    }
                 }
                 /* re-open from a clean state so the control-flow assertions below start fresh */
                 window.eval('closePop()');
@@ -761,13 +783,25 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 if (noteBtn2) {
                     noteBtn2.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
                     const ta = window.document.querySelector('.pop #nt');
-                    if (!ta || ta.value !== 'saved note text') {
+                    if (!ta || ta.value !== 'edited note text') {   /* the 💾 Save test above replaced the stored note */
                         errors.push('[FAIL] 📝 Show note did not open the saved note text');
                     } else {
                         console.log('   ✅ 📝 Show note opens the saved note text (prefilled for editing)');
                     }
                 }
                 try { window.eval('closePop()'); } catch (e) {}
+                /* re-recording over a phrase must REUSE the stored rec row id (ONE row, replaced clip) —
+                   the same core save (nbUpsert) the 💾 Save uses, so the first-match lookup can never
+                   play a stale earlier clip. */
+                try {
+                    const recFirst = window.eval(`nbUpsert('QA rec anchor','rec',{b64:'AAAA',mime:'audio/webm',data:'{}'}); layer.filter(it=>it.type==='rec'&&it.anchor==='QA rec anchor')`);
+                    const recAgain = window.eval(`nbUpsert('QA rec anchor','rec',{b64:'BBBB',mime:'audio/webm',data:'{}'}); layer.filter(it=>it.type==='rec'&&it.anchor==='QA rec anchor')`);
+                    if (!recFirst || recFirst.length !== 1 || !recAgain || recAgain.length !== 1 || recFirst[0].id !== recAgain[0].id || recAgain[0].b64 !== 'BBBB') {
+                        errors.push('[FAIL] re-recording must reuse the stored rec row id (got ' + (recAgain ? recAgain.length : '?') + ' row(s))');
+                    } else {
+                        console.log('   ✅ re-recording reuses the stored rec row id (one row, replaced clip)');
+                    }
+                } catch (e) { errors.push('[FAIL] nbUpsert recording replacement threw: ' + e.message); }
             }
 
 

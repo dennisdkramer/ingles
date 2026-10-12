@@ -11,6 +11,9 @@
  * "drive:<fileId>" pointer; del and wipe trash that file too (purgeDrive_), so deleting an item
  * removes both its row and its audio. (Inline b64 in the row is only a last-resort fallback when
  * the Drive upload itself fails — the Sheet cell cannot hold more than ~50k characters.)
+ * GET ?action=layer returns EVERY recording as EITHER fileId (Drive) OR b64 (the inline fallback),
+ * so a clip is still playable after a page reload even when it never reached Drive.
+ * REMINDER: this file only runs after a NEW DEPLOYMENT VERSION (Deploy → Manage deployments).
  */
 
 var SS_NAME = "IAP_backpack";
@@ -80,7 +83,16 @@ function doGet(e) {
     for (var i = 0; i < all.length; i++) {
       var r = all[i];
       if (String(r.email) === String(p.email) && String(r.lesson) === String(p.lesson)) {
-        rows.push({ id: r.id, type: r.type, anchor: r.anchor, data: r.data, author: r.author, ts: r.ts, fileId: r.b64 && String(r.b64).indexOf("drive:") === 0 ? String(r.b64).slice(6) : "" });
+        var store = String(r.b64 || "");
+        var onDrive = store.indexOf("drive:") === 0;
+        /* a Drive clip travels as its fileId; an inline-fallback clip travels as its own b64. Without
+           the b64 here, a recording that never reached Drive (failed upload — e.g. an undeployed or
+           over-quota backend — or a legacy row) came back with NO audio at all while the phrase still
+           looked saved: "playable right after recording, then no saved audio" (owner report). */
+        rows.push({ id: r.id, type: r.type, anchor: r.anchor, data: r.data, author: r.author, ts: r.ts,
+          fileId: onDrive ? store.slice(6) : "",
+          b64: (!onDrive && store) ? store : "",
+          mime: "" });
       }
     }
     return json_({ rows: rows, count: rows.length });
@@ -119,7 +131,13 @@ function doPost(e) {
       // set = replace existing row with same id (if any)
       var all = rowsToObjs_(sh);
       for (var i = 0; i < all.length; i++) {
-        if (String(all[i].id) === id) { sh.deleteRow(all[i]._row); break; }
+        if (String(all[i].id) === id) {
+          /* replacing a row (note re-save / clip re-record) must trash the Drive file the OLD row
+             pointed at, or every re-record would leak its previous clip in IAP_uploads */
+          purgeDrive_(all[i].b64);
+          sh.deleteRow(all[i]._row);
+          break;
+        }
       }
       /* a recording's audio ALWAYS goes to Drive (owner spec 2026-10-12): the row keeps only a
          "drive:<fileId>" pointer, never inline audio. The old 150KB gate left every short clip

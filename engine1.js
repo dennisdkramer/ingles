@@ -157,24 +157,47 @@ function nbWirePopup(t,r,x,y){
  const D=pop.querySelector("#pD");
  if(D)D.onclick=()=>{if(D.disabled)return;nbDeleteAnchor(t)};
 }
+/* ONE CORE SAVE for the note/recording layer (owner rule 2026-10-12, "reuse core functions"):
+   💾 Save (note) and rec() (recording) both go through here, so the two save paths can never
+   drift apart again. It re-uses the id of the row ALREADY stored for this anchor+type, so a re-save
+   REPLACES that row on the server (backend add/set deletes the row with the same id first) instead of
+   appending a second one. That duplicate row was exactly why an edited note's Save looked like a
+   no-op: the layer's first-match lookup (nbNoteText/nbPlayRecording) kept returning the OLD row.
+   Equally for a recording: re-recording over a phrase keeps ONE rec row and can never leave a stale
+   earlier clip for that first-match lookup to play. The local `layer` is updated BEFORE the network
+   call (same "immediate" principle as nbDeleteAnchor) because the popup and renderLayer read the
+   layer: without it the change only showed up at the next 3s poll. Network last (FUNCTION.md). */
+function nbUpsert(t,type,fields){
+ const cur=nbEntries(t).find(it=>it.type===type);
+ const id=cur?cur.id:(Date.now()+"_"+Math.floor(Math.random()*9999));
+ const row=Object.assign({id:id,type:type,anchor:t,author:who(),ts:new Date().toISOString()},fields||{});
+ const i=layer.findIndex(it=>it.id===id);
+ if(i>=0)layer[i]=Object.assign({},layer[i],row);else layer.push(row);
+ send(Object.assign({action:cur?"set":"add"},row));
+ return id;
+}
 /* paint the phrase — this is the SAVE side (called by the popup's 💾 Save): mark.nb carries
    has-note only HERE, never at the moment the note button was clicked. An empty note simply
    closes the editor (no blank save). Network last, so a failed save never undoes what was just
    painted (FUNCTION.md). */
 function nbSaveNote(t,x,y){
  if(!pop)return;
- const v=pop.querySelector("#nt").value.trim();
+ const ta=pop.querySelector("#nt");if(!ta)return;   /* 💾 Save is live only while editing — never throw */
+ const v=ta.value.trim();
  if(!v){closePop();return}
  const m=ensureMark(t,"note");if(m)m.classList.add("has-note");
- send({action:"add",type:"note",anchor:t,data:v});
- refreshNbPopup(t,x,y);
+ nbUpsert(t,"note",{data:v});   /* reuses the stored note's id → REPLACES it, never a 2nd row */
+ refreshNbPopup(t,x,y,false);   /* 💾 Save LEAVES the edit state (FUNCTION.md): Save greys again */
 }
 /* rebuild the popup's buttons for the current state (the two arrays change with saved content and
    the textarea is dropped once the note is saved) — the LIVE note text is kept when edition is in
    flight so refreshing the wording never loses what was typed. */
-function refreshNbPopup(t,x,y){
+function refreshNbPopup(t,x,y,editing){
  if(!pop)return;
- const ta=pop.querySelector("#nt"),cur=ta?ta.value:null,editing=!!ta;
+ const ta=pop.querySelector("#nt"),cur=ta?ta.value:null;
+ /* editing is EXPLICIT when passed: 💾 Save must drop the editor even though the popup it is
+    called from still holds #nt. Omitted → keep the current state (any future caller). */
+ if(editing===undefined)editing=!!ta;
  openPop(t,x,y,nbPopHTML(t,editing)+(editing?'<textarea id="nt" rows="3" placeholder="write a note…">'+nbEsc(cur!=null?cur:"")+'</textarea>':''));
  nbWirePopup(t,null,x,y);
 }
@@ -575,7 +598,7 @@ async function rec(t,rb){
    try{audioCache["a:"+t]=URL.createObjectURL(blob)}catch(e){}
    const f=new FileReader();f.onload=()=>{const fb=feedback(t,heard);
    markRecording(t,null);   /* the phrase is underlined only now — on save, never on the Record click */
-   send({action:"add",type:"rec",anchor:t,b64:f.result.split(",")[1],mime:"audio/webm",data:JSON.stringify({score:fb.score,heard,fb:fb.msg})});
+   nbUpsert(t,"rec",{b64:f.result.split(",")[1],mime:"audio/webm",data:JSON.stringify({score:fb.score,heard,fb:fb.msg})});
    ind.remove();press(false);closePop();};
    f.readAsDataURL(blob);};
   mr.onstop=process;
