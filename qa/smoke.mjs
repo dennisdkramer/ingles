@@ -20,6 +20,9 @@
  *   recolours it; there is NO undo stack any more (no ↶/↷ buttons, no Ctrl+Z handler); Ctrl+click on the painted rectangle deletes it; a
  *   highlight may cross a note/recording and BOTH stay whole (the two layers never interact);
  *   the removed dead controls never come back
+ * - Grace window: a just-saved note (and a just-recorded clip) survives a poll whose snapshot
+ *   predates its own backend write — the row, the phrase's flag and the popup's note line stay
+ *   exactly as the click left them (nbLocal/nbEntries, the same pendingFor window as highlights)
  *
  * SCOPE (owner decision 2026-10-11): lesson pages are developed on business/lesson1.html ONLY
  * until the feature set is final. kids/, nsfw/ and the login pages (index.html/portal.html) are
@@ -792,6 +795,67 @@ async function testPage(serverUrl, pageName, track = 'business') {
                         console.log('   ✅ re-recording reuses the stored rec row id (one row, replaced clip)');
                     }
                 } catch (e) { errors.push('[FAIL] nbUpsert recording replacement threw: ' + e.message); }
+
+                /* OWNER REPORT 2026-10-12: a saved NOTE DISAPPEARED from the phrase and from the popup
+                   until the server confirmed the write. ROOT CAUSE — the only sync re-check is the 3s
+                   poll, which REPLACES `layer` with the server snapshot; a snapshot fetched before the
+                   backend write landed does not contain the new row, and the popup's note text, the
+                   ▶ Play lookup and the phrase's own flags (nbAnyPending reads nbEntries) all read
+                   exactly that row — so the note blinked out for a whole poll cycle. The highlight
+                   never did: hlList keeps a freshly painted highlight and renderLayer only drops it
+                   once pendingFor says its window is over. The note/recording layer now keeps the same
+                   local copy (nbLocal, filled by the ONE core save nbUpsert), served by nbEntries.
+                   Assert: a poll whose snapshot predates the save leaves the note's text, the popped
+                   note line AND the phrase's has-note flag exactly as the click left them — for a
+                   recording too, since both go through the same core save. */
+                try {
+                    const gA = 'Grace window phrase';
+                    const gJ = JSON.stringify(gA);
+                    const gP = window.document.createElement('p');
+                    gP.textContent = gA;
+                    contentArea.appendChild(gP);
+                    window.eval('closePop()');
+                    window.showAnchor(gA, 20, 40);
+                    window.document.querySelector('.pop #pN').dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                    window.document.querySelector('.pop #nt').value = 'grace note text';
+                    window.document.querySelector('.pop #pS').dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                    window.eval('closePop()');
+                    /* the snapshot the poll would bring BEFORE the backend write is committed: every
+                       row that exists now, MINUS the note that was just saved */
+                    const gId = window.eval(`(nbEntries(${gJ}).find(it=>it.type==='note')||{}).id`);
+                    const gSnap = window.eval(`layer.filter(it=>it.id!==${JSON.stringify(gId)})`);
+                    const gOrigFetch = window.fetch;
+                    window.fetch = () => Promise.resolve({ json: () => Promise.resolve({ rows: gSnap }) });
+                    await window.eval('loadLayer()');
+                    window.fetch = gOrigFetch;
+                    const gMark = window.document.querySelector('mark.nb[data-a="' + gA + '"]');
+                    const gText = window.eval(`nbNoteText(${gJ})`);
+                    window.showAnchor(gA, 20, 40);
+                    const gShown = window.document.querySelector('.pop #nbNote');
+                    window.eval('closePop()');
+                    if (!gId) {
+                        errors.push('[FAIL] the grace-window check could not save a note to test with');
+                    } else if (gText !== 'grace note text') {
+                        errors.push('[FAIL] a saved note vanished when a poll brought a snapshot that predated its write (got ' + JSON.stringify(gText) + ')');
+                    } else if (!gMark || !gMark.classList.contains('has-note')) {
+                        errors.push('[FAIL] the phrase lost its has-note flag while the note\'s write was still in flight');
+                    } else if (!gShown || !/grace note text/.test(gShown.textContent)) {
+                        errors.push('[FAIL] the popup lost the saved note text while the write was still in flight');
+                    } else {
+                        console.log('   ✅ a saved note (row + text + phrase flag + popup line) survives a poll that predates its write');
+                    }
+                    /* the ONE core save covers the recording too — same local copy, same window */
+                    window.eval(`nbUpsert('QA grace rec','rec',{b64:'AAAA',mime:'audio/webm',data:'{}'})`);
+                    const rSnap = window.eval(`layer.filter(it=>it.anchor!=='QA grace rec')`);
+                    window.fetch = () => Promise.resolve({ json: () => Promise.resolve({ rows: rSnap }) });
+                    await window.eval('loadLayer()');
+                    window.fetch = gOrigFetch;
+                    if (window.eval(`nbEntries('QA grace rec').length`) !== 1) {
+                        errors.push('[FAIL] a just-recorded clip lost its row when a poll brought a snapshot that predated its write');
+                    } else {
+                        console.log('   ✅ the same grace window covers a just-recorded clip (one core save)');
+                    }
+                } catch (e) { errors.push('[FAIL] note grace-window check threw: ' + e.message); }
             }
 
 

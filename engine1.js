@@ -29,7 +29,12 @@ function notePending(o){
 }
 function pendingFor(id){
  pendingOps=pendingOps.filter(p=>Date.now()<p.until);
- return pendingOps.find(p=>p.id===id)||null;
+ /* the LAST action queued for this id = what the user most recently did to that row. Inside one
+    window an "add" can be followed by a "del" (save, then delete): the del is the truth then,
+    which is what nbLocal/nbEntries below need; every other caller only asks "is anything still in
+    flight for this id?", for which the first match was already enough. */
+ let op=null;for(const p of pendingOps)if(p.id===id)op=p;
+ return op;
 }
 function send(o){o.email=STUDENT;o.lesson=L;o.author=who();
  const isDel=(o.action==="del");
@@ -68,7 +73,29 @@ const closePop=()=>{if(pop){pop.remove();pop=null}lastSelText=""};
    string (= the phrase text), exactly as the server rows are. These helpers are shared by the
    selection popup below AND by engine2's showAnchor (a click on an existing mark), so the two
    entry points can never drift apart. */
-const nbEntries=t=>layer.filter(it=>(it.type==="rec"||it.type==="note")&&it.anchor===t);
+/* THE local copy of the rows the ONE core save (nbUpsert) has just written, kept OUTSIDE `layer`
+   (owner report 2026-10-12: a saved note vanished from the phrase AND from the popup until the
+   server confirmed the write). The only sync re-check is the poll, which REPLACES `layer` with the
+   server snapshot — and a snapshot fetched before the backend write landed simply does not contain
+   the new row, while the popup's note text, the ▶ Play lookup and the phrase's own flags
+   (nbAnyPending reads nbEntries) all read exactly that row. So the note blinked out for a whole
+   poll cycle even though nothing was lost. The HIGHLIGHT layer never had this: hlList keeps a
+   freshly painted highlight and renderLayer only drops it once pendingFor says its window is over.
+   Same treatment here, applied to whatever nbUpsert saves (note AND recording): the local copy is
+   served in place of the snapshot's absent/older copy for as long as the row's own window stays
+   open — the very same 6s window notePending opened when send() fired, no second timer. Once the
+   server's row is confirmed the local copy is no longer consulted, an expired window (a write the
+   server rejected) drops it, and a row whose MOST RECENT local action was a delete never comes
+   back through here. */
+let nbLocal=[];
+const nbEntries=t=>{
+ const rows=layer.filter(it=>(it.type==="rec"||it.type==="note")&&it.anchor===t);
+ nbLocal=nbLocal.filter(r=>{const p=pendingFor(r.id);return !!p&&p.action!=="del"});
+ nbLocal.forEach(r=>{if((r.type!=="rec"&&r.type!=="note")||r.anchor!==t)return;
+  const i=rows.findIndex(x=>x.id===r.id);
+  if(i>=0)rows[i]=r;else rows.push(r)});
+ return rows;
+};
 /* is a local note/recording action for this anchor still inside its grace window? (engine2's
    renderLayer consults this so a 3s poll cannot blink a mark that was just created or deleted) */
 function nbAnyPending(t){return nbEntries(t).some(it=>pendingFor(it.id))}
@@ -175,13 +202,19 @@ function nbWirePopup(t,r,x,y){
    Equally for a recording: re-recording over a phrase keeps ONE rec row and can never leave a stale
    earlier clip for that first-match lookup to play. The local `layer` is updated BEFORE the network
    call (same "immediate" principle as nbDeleteAnchor) because the popup and renderLayer read the
-   layer: without it the change only showed up at the next 3s poll. Network last (FUNCTION.md). */
+   layer: without it the change only showed up at the next 3s poll. Network last (FUNCTION.md).
+   The row is ALSO remembered in nbLocal, the local copy nbEntries serves while this write is still
+   inside its grace window (see above) — the same treatment the highlight gives a freshly painted
+   rectangle in hlList, so a poll snapshot that predates the write cannot blink the note out. */
 function nbUpsert(t,type,fields){
  const cur=nbEntries(t).find(it=>it.type===type);
  const id=cur?cur.id:(Date.now()+"_"+Math.floor(Math.random()*9999));
  const row=Object.assign({id:id,type:type,anchor:t,author:who(),ts:new Date().toISOString()},fields||{});
  const i=layer.findIndex(it=>it.id===id);
- if(i>=0)layer[i]=Object.assign({},layer[i],row);else layer.push(row);
+ const merged=i>=0?(layer[i]=Object.assign({},layer[i],row)):(layer.push(row),row);
+ /* keep the local copy of the row too (nbLocal, see nbEntries): the poll that brings a snapshot
+    predating this write must not make the note/recording vanish until the server catches up */
+ nbLocal=nbLocal.filter(r=>r.id!==id);nbLocal.push(merged);
  send(Object.assign({action:cur?"set":"add"},row));
  return id;
 }
