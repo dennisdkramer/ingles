@@ -36,4 +36,4 @@ Reference this file whenever a task touches site appearance. Preserve everything
 
 ## Sizing philosophy
 - Controls/hotkey text/buttons: minimum size an average person comfortably sees, clicks, reads. Never enlarge "for beauty"; never shrink below comfortable.
-- Undo button lives in the control bar (line below the header), hidden until there is something to undo; other controls + hotkey legend also in the control bar. All control-bar text is English. Header text is English on all 5 pages.
+- The Undo (↶) and Redo (↷) buttons live together in the control bar (line below the header), right next to the "Ctrl+Z=undo" legend. They are always present (never hidden); each greys out (`disabled`) when its own stack is empty. Other controls + hotkey legend also live in the control bar. All control-bar text is English. Header text is English on all 5 pages.
