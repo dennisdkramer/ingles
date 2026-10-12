@@ -7,6 +7,9 @@
  * Storage model: one row per item in sheet "IAP_backpack!layer".
  * Columns: id | email | track | lesson | type | anchor | data | author | ts | b64
  * Separation is enforced on read AND write: email + track + lesson.
+ * Recording audio over 150KB lives in Drive (folder IAP_uploads) and the b64 column keeps a
+ * "drive:<fileId>" pointer; del and wipe trash that file too (purgeDrive_), so deleting an item
+ * removes both its row and its audio.
  */
 
 var SS_NAME = "IAP_backpack";
@@ -46,6 +49,20 @@ function rowsToObjs_(sh) {
     out.push(o);
   }
   return out;
+}
+/* trash the Drive file a recording row points to (b64 column = "drive:<fileId>" for uploaded audio).
+   Never throws: a missing/already-trashed file (or a plain inline b64 row) is simply nothing to purge,
+   and a purge failure must never stop the row itself from being deleted. Returns true only when a file
+   was actually moved to the trash. */
+function purgeDrive_(store) {
+  try {
+    var s = String(store || "");
+    if (s.indexOf("drive:") !== 0) return false;
+    var fid = s.slice(6);
+    if (!fid) return false;
+    DriveApp.getFileById(fid).setTrashed(true);
+    return true;
+  } catch (e) { return false; }
 }
 
 /* ---------- GET: ping / layer / file / dbg ---------- */
@@ -125,12 +142,17 @@ function doPost(e) {
     if (action === "del") {
       var target = String(o.id);
       var rows2 = rowsToObjs_(sh);
-      var deleted = 0;
+      var deleted = 0, purged = false;
       // delete bottom-up so row numbers stay valid
       for (var k = rows2.length - 1; k >= 0; k--) {
-        if (String(rows2[k].id) === target) { sh.deleteRow(rows2[k]._row); deleted++; }
+        if (String(rows2[k].id) === target) {
+          // recording audio that was uploaded to Drive keeps a "drive:<fileId>" pointer in the b64
+          // column: trash the file as well, or the delete would only remove the row and leak the audio.
+          if (purgeDrive_(rows2[k].b64)) purged = true;
+          sh.deleteRow(rows2[k]._row); deleted++;
+        }
       }
-      return json_({ result: "deleted", count: deleted });
+      return json_({ result: "deleted", count: deleted, purged: purged });
     }
 
     if (action === "wipe") {
@@ -140,7 +162,7 @@ function doPost(e) {
         var rr = rows3[m];
         var matchAll = !o.email;                       // no filters = wipe everything
         var matchScope = String(rr.email) === String(o.email) && String(rr.lesson) === String(o.lesson);
-        if (matchAll || matchScope) { sh.deleteRow(rr._row); removed++; }
+        if (matchAll || matchScope) { purgeDrive_(rr.b64); sh.deleteRow(rr._row); removed++; }
       }
       return json_({ result: "wiped", removed: removed });
     }

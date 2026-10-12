@@ -521,6 +521,98 @@ async function testPage(serverUrl, pageName, track = 'business') {
                     }
                 }
             }
+            /* ---- NOTE/RECORDING popup: 🗑 Delete removes the saved recording + notes + the visual
+               element in ONE undoable action, and the frontend asks the backend to purge the audio. */
+            const contentArea = window.document.querySelector('.content-area');
+            if (contentArea) {
+                const nbText = 'Delete me please today';
+                const nbP = window.document.createElement('p');
+                nbP.textContent = nbText;
+                contentArea.appendChild(nbP);
+                /* the phrase as the page renders it after a save: a mark.nb carrying the note flag */
+                const nbMark = window.document.createElement('mark');
+                nbMark.className = 'nb has-note';
+                nbMark.dataset.a = nbText;
+                const nbFrag = window.document.createRange().extractContents();
+                nbMark.appendChild(nbFrag);
+                nbP.appendChild(nbMark);
+
+                /* a saved note on that phrase (what the server would return). layer is a let-bound
+                   global, so it must be set through eval (reading hlList via eval is the same pattern). */
+                const nbRow = { id: 'qa_note_1', type: 'note', anchor: nbText, data: 'hi' };
+                window.eval('layer = ' + JSON.stringify([nbRow]));
+                const openNb = () => window.showAnchor(nbText, 20, 40);
+                const closeNb = () => { try { window.eval('closePop()'); } catch (e) {} };
+
+                /* (a) with something saved, the popup offers 🗑 Delete; clicking it deletes at once */
+                openNb();
+                const delBtn = window.document.querySelector('.pop #pD');
+                if (!delBtn) {
+                    errors.push('[FAIL] the note/recording popup does not offer 🗑 Delete when the phrase has saved content');
+                } else {
+                    /* intercept send()'s POST so we can prove the backend is told about the delete */
+                    const origFetch = window.fetch;
+                    const posted = [];
+                    window.fetch = (url, opts) => {
+                        try { posted.push(JSON.parse(opts.body)); } catch (e) {}
+                        return Promise.resolve({ json: () => Promise.resolve({ result: 'deleted', purged: true }) });
+                    };
+                    delBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                    const undoTop = (() => { try { return window.eval('undoStack[undoStack.length-1]'); } catch (e) { return null; } })();
+                    if (window.document.querySelector('mark.nb[data-a="' + nbText + '"]')) {
+                        errors.push('[FAIL] 🗑 Delete left the note/recording mark in the page');
+                    } else if (window.eval('layer.length')) {
+                        errors.push('[FAIL] 🗑 Delete did not clear the item from the layer');
+                    } else if (!undoTop || undoTop.type !== 'delete') {
+                        errors.push('[FAIL] 🗑 Delete did not push an undoable delete action');
+                    } else {
+                        const delMsg = posted.find(p => p.action === 'del');
+                        if (!delMsg || delMsg.id !== nbRow.id) {
+                            errors.push('[FAIL] 🗑 Delete did not send a del for the saved item to the backend');
+                        } else {
+                            console.log('   ✅ 🗑 Delete removes the mark + item in one undoable action and sends del');
+                        }
+                    }
+                    window.fetch = origFetch;
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                    const toastEl = window.document.getElementById('toast');
+                    if (!/apagado/.test(toastEl ? toastEl.textContent : '')) {
+                        errors.push('[FAIL] the del reply did not raise the delete confirmation toast');
+                    } else {
+                        console.log(`   ✅ del reply confirms the purge (toast: "${toastEl.textContent}")`);
+                    }
+                    closeNb();
+                }
+
+                /* (b) a selection that CROSSES a block boundary is refused with a toast and opens nothing.
+                   Reset the Ctrl-gesture state the highlight tests above left behind (their synthetic
+                   gesture never releases on its own in jsdom) — a plain selection must not be seen as
+                   the tail of a Ctrl highlight gesture. */
+                closeNb();   /* start from no popup so the check below sees only a NEW one */
+                window.eval('ctrlHeld=false; hlSuppressUntil=0; lastCtrlUp=0; lastSelText=""');
+                const cb1 = window.document.createElement('p'); cb1.textContent = 'First block line';
+                const cb2 = window.document.createElement('p'); cb2.textContent = 'Second block line';
+                contentArea.appendChild(cb1);
+                contentArea.appendChild(cb2);
+                const cbRange = window.document.createRange();
+                cbRange.setStart(cb1.firstChild, 2);
+                cbRange.setEnd(cb2.firstChild, 6);
+                const cbSel = window.getSelection(); cbSel.removeAllRanges(); cbSel.addRange(cbRange);
+                window.document.dispatchEvent(new window.Event('selectionchange', { bubbles: true }));
+                await new Promise(resolve => setTimeout(resolve, 450));   /* engine debounces by 350ms */
+                const cbToast = window.document.getElementById('toast');
+                if (window.document.querySelector('.pop #pH, .pop #pR, .pop #pN')) {
+                    errors.push('[FAIL] a selection crossing a block boundary still opened the note/recording popup');
+                } else if (!/bloco/i.test(cbToast ? cbToast.textContent : '')) {
+                    errors.push('[FAIL] a cross-block selection was silently ignored (no refusal toast)');
+                } else {
+                    console.log(`   ✅ cross-block selection is refused with a toast ("${cbToast.textContent}")`);
+                }
+                closeNb();
+            } else {
+                console.log('   ⏭  note/recording popup test skipped (no .content-area)');
+            }
+
 
             /* (g) the removed dead controls must stay gone (they were never wired to any engine) */
             const dead = ['bPrac', 'bQuiz', 'sendTr', 'done', 'mNext', 'mIndex', 'modeToggle', 'mute']

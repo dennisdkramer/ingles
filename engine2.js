@@ -61,6 +61,14 @@ function doUndo(){
  }else if(last.type==="delete"){
   /* re-add the item with its original id — server stores it again */
   send({action:"add",type:last.item.type,anchor:last.item.anchor,b64:last.item.b64,mime:last.item.mime,data:JSON.stringify(last.item.data||{}),id:last.item.id});
+ }else if(last.type==="note"){
+  /* the popup's 🗑 Delete removes the whole note/recording set of ONE phrase in a single action
+     (engine1.js nbDeleteAnchor): undo restores every item with its original id and re-marks the
+     phrase, so the DOM (mark.nb) and the server end up exactly as they were */
+  last.items.forEach(it=>{
+   if(it.anchor)ensureMark(it.anchor,it.type);
+   send({action:"add",type:it.type,anchor:it.anchor,b64:it.b64,mime:it.mime,data:JSON.stringify(it.data||{}),id:it.id});
+  });
  }else if(last.type==="hl"){
   if(last.kind==="add"){
    /* undo a new highlight = take it away again */
@@ -90,7 +98,12 @@ async function loadLayer(){
 }
 
 function renderLayer(){
- document.querySelectorAll("mark.nb").forEach(m=>{m.classList.remove("has-rec","has-note")});
+ /* Clear the note/recording flags of every mark.nb — except the ones with a local action still in
+    flight (nbAnyPending, engine1.js). A mark created or deleted a moment ago must keep EXACTLY the
+    state the click gave it: stripping the class here and re-adding it on the next poll is precisely
+    the "appearing and disappearing" the owner reported. Same id+action grace window as everything
+    else — the rule is general, not special-cased. */
+ document.querySelectorAll("mark.nb").forEach(m=>{if(!nbAnyPending(m.dataset.a))m.classList.remove("has-rec","has-note")});
  feed.innerHTML="";
  /* highlight layer (#hlLayer): the records are the only truth here, so a highlight whose server
     row is gone disappears and the ones still stored are rebuilt from their row (anchor + offsets,
@@ -108,9 +121,13 @@ function renderLayer(){
    if(!pendingFor(it.id))hlRestore(it);
   }
   if((it.type==="rec"||it.type==="note")&&it.anchor){
-   const q='mark.nb[data-a="'+CSS.escape(it.anchor)+'"]';
-   let m=document.querySelector(q);
-   if(m)m.classList.add("has-"+it.type);else{ensureMark(it.anchor,it.type);m=document.querySelector(q);}
+   /* a row whose own local action is still pending is skipped (the UI already applied it); rows
+      with nothing in flight still (re)build the mark and its flag as before */
+   if(!pendingFor(it.id)){
+    const q='mark.nb[data-a="'+CSS.escape(it.anchor)+'"]';
+    let m=document.querySelector(q);
+    if(m)m.classList.add("has-"+it.type);else{ensureMark(it.anchor,it.type);m=document.querySelector(q);}
+   }
   }
   if(it.type==="quiz"||it.type==="done"||(it.type==="note"&&!it.anchor)){
    const d=JSON.parse(it.data||"{}");
@@ -127,13 +144,11 @@ function renderLayer(){
 
 /* fallback: nenhum engine define window.showAnchor;
    sem isto, clique simples em uma frase marcada lançaria ReferenceError no handler de click.
-   Reapresenta o popup ▶ Hear / ⏺ Record / 📝 Note para a âncora clicada. */
-if(typeof window.showAnchor!=="function"){window.showAnchor=function(a,x,y){openPop(a,x,y,'<b style="font-size:14px">'+String(a).slice(0,42)+(a.length>42?"…":"")+'</b><br><span style="white-space:nowrap"><button id="pH">▶ Hear</button><button id="pR">⏺ Record</button><button id="pN">📝 Note</button></span>');
- pop.querySelector("#pH").onclick=()=>{const u=new SpeechSynthesisUtterance(a);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
- pop.querySelector("#pR").onclick=()=>{wrapRange(a,null);rec(a)};
- pop.querySelector("#pN").onclick=()=>{wrapRange(a,null);
-  openPop(a,x,y,'<textarea id="nt" rows="3" placeholder="write a note…"></textarea><br><button id="ns">💾 Save</button> <button id="px">Cancel</button>');
-  pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();if(v)send({action:"add",type:"note",anchor:a,data:v});closePop()};
-  pop.querySelector("#px").onclick=closePop};}}
+   Reapresenta o popup ▶ Hear / ⏺ Record / 📝 Note (e 🗑 Delete quando a frase já tem algo
+   salvo) para a âncora clicada. Usa os mesmos helpers do popup de seleção (engine1.js), então
+   os dois pontos de entrada — selecionar ou clicar na marca — se comportam igual: mesma
+   marcação imediata, mesmo delete. Aqui não há seleção (r=null): recordMark/ensureMark operam
+   sobre a marca já existente. */
+if(typeof window.showAnchor!=="function"){window.showAnchor=function(a,x,y){openNbPopup(a,null,x,y);}}
 
 window.__B=true;

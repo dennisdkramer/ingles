@@ -39,7 +39,7 @@ function send(o){o.email=STUDENT;o.lesson=L;o.author=who();
   .then(r=>r.json())
   .then(j=>{
    if(isDel){
-    if(j&&j.result==="deleted"){toast("🗑 apagado ✔");return;}
+    if(j&&j.result==="deleted"){toast(j.purged?"🗑 áudio + dados apagados ✔":"🗑 apagado ✔");return;}
     toast("⚠ falha ao apagar (servidor)");
     return;
    }
@@ -56,6 +56,80 @@ function send(o){o.email=STUDENT;o.lesson=L;o.author=who();
 }
 let pop=null,pendingRange=null,lastSelText="";
 const closePop=()=>{if(pop){pop.remove();pop=null}lastSelText=""};
+/* ---- note / recording layer (mark.nb) — owner spec 2026-10-12 ---------------------------------
+   mark.nb is the ONLY layer that lives inside the text DOM (highlights are painted separately on
+   #hlLayer). One phrase carries at most one note and one recording, both keyed by the anchor
+   string (= the phrase text), exactly as the server rows are. These helpers are shared by the
+   selection popup below AND by engine2's showAnchor (a click on an existing mark), so the two
+   entry points can never drift apart. */
+const nbEntries=t=>layer.filter(it=>(it.type==="rec"||it.type==="note")&&it.anchor===t);
+/* is a local note/recording action for this anchor still inside its grace window? (engine2's
+   renderLayer consults this so a 3s poll cannot blink a mark that was just created or deleted) */
+function nbAnyPending(t){return nbEntries(t).some(it=>pendingFor(it.id))}
+/* every button the popup can carry: Hear / Record / Note and — only when the phrase already has
+   something saved (mark.nb carries has-note or has-rec) — the delete button the owner asked for:
+   it removes the saved recording, any notes AND their visual element in ONE undoable action. */
+function nbPopHTML(t){
+ const has=document.querySelector('mark.nb[data-a="'+CSS.escape(t)+'"]');
+ const owned=!!(has&&(has.classList.contains("has-note")||has.classList.contains("has-rec")));
+ return '<b style="font-size:14px">'+String(t).slice(0,42)+(String(t).length>42?"…":"")+'</b><br>'+
+  '<span style="white-space:nowrap"><button id="pH">▶ Hear</button><button id="pR">⏺ Record</button><button id="pN">📝 Note</button>'+
+  (owned?'<button id="pD" title="apagar gravação, notas e a marcação">🗑 Delete</button>':"")+'</span>';
+}
+/* wire a freshly-opened .pop for an anchor: range = the live selection when the popup came from
+   one (null when it came from a click on the mark). Shared by trySelPopup and showAnchor. */
+function nbWirePopup(t,r,x,y){
+ if(!pop)return;
+ const H=pop.querySelector("#pH");
+ if(H)H.onclick=()=>{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
+ const R=pop.querySelector("#pR");
+ if(R)R.onclick=()=>{recordMark(t,r);notePending({action:"add",type:"rec",anchor:t});rec(t)};
+ const N=pop.querySelector("#pN");
+ if(N)N.onclick=()=>nbNoting(t,r,x,y);
+ const D=pop.querySelector("#pD");
+ if(D)D.onclick=()=>nbDeleteAnchor(t);
+}
+function openNbPopup(t,r,x,y){openPop(t,x,y,nbPopHTML(t));nbWirePopup(t,r,x,y)}
+/* wrap the selection into mark.nb RIGHT NOW (idempotent: the mark is reused when it exists) and
+   paint its state class immediately — this is the "immediately visible, no appearing and
+   disappearing" half of the fix: the phrase gets its underline/🎙 (or blue/📝) at the instant of
+   the click, and engine2's renderLayer leaves it alone while the action is inside its grace
+   window, so no poll can blink it off and on again. */
+function recordMark(t,r){
+ let m=null;
+ if(r)m=wrapRange(t,r);
+ if(!m)m=document.querySelector('mark.nb[data-a="'+CSS.escape(t)+'"]');
+ if(!m)m=ensureMark(t,"rec");else m.classList.add("has-rec");
+ return m;
+}
+function nbNoting(t,r,x,y){
+ recordMark(t,r);   /* the layer exists at once — the saved/discarded note only decides its flag */
+ openPop(t,x,y,'<textarea id="nt" rows="3" placeholder="write a note…"></textarea><br><button id="ns">💾 Save</button> <button id="px">Cancel</button>');
+ pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();
+  if(v){const m=ensureMark(t,"note");if(m)m.classList.add("has-note");
+   /* network last: a failed save must never undo what the user just saw (FUNCTION.md) */
+   send({action:"add",type:"note",anchor:t,data:v});}
+  closePop();};
+ pop.querySelector("#px").onclick=closePop;
+}
+/* remove mark.nb from the text (undo the wrap) — leaves a clean DOM, so a later note/recording
+   starts from the same pristine text */
+function nbUnmark(t){const m=document.querySelector('mark.nb[data-a="'+CSS.escape(t)+'"]');if(!m)return;
+ try{const p=m.parentNode;while(m.firstChild)p.insertBefore(m.firstChild,m);p.removeChild(m)}catch(e){}}
+/* DELETE (owner spec 2026-10-12): the popup's 🗑 button removes the saved recording, any notes
+   AND the visual element — one action, undoable, network last. */
+function nbDeleteAnchor(t){
+ const items=nbEntries(t);
+ if(!items.length){toast("Nada para apagar nesta frase.");closePop();return}
+ const entries=items.map(e=>({id:e.id,type:e.type,anchor:e.anchor,b64:e.b64,mime:e.mime,data:e.data}));
+ if(typeof pushUndo==="function")pushUndo({type:"delete",items:entries}); /* defined in engine2 */
+ /* drop the rows locally at once too — the server is the source of truth but the UI must not keep a
+    deleted item until the next 3s poll (same "immediate" principle as the mark itself) */
+ layer=layer.filter(it=>!(it.type==="rec"||it.type==="note")||it.anchor!==t);
+ nbUnmark(t);
+ closePop();
+ entries.forEach(e=>send({action:"del",id:e.id}));
+}
 function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("div");pop.className="pop";
  pop.style.left=x+"px";pop.style.top=y+"px";pop.style.maxWidth="min(380px, calc(100vw - 16px))";
  pop.innerHTML=html;document.body.appendChild(pop);return pop}
@@ -86,16 +160,24 @@ function trySelPopup(){
   lastSelText=t;
   return;
  }
+ /* ONE BLOCK ONLY (owner spec 2026-10-12, same rule the highlight already uses): a selection
+    that crosses a block element (paragraph → list item, cell → cell, heading → paragraph, …)
+    must NOT trigger this popup. It is refused with a toast — same wording family as the
+    highlight's refusal — and the popup stays shut. The check is the same helper (hlBlockOf,
+    hoisted) so the two features can never drift apart. Wrapped in try/catch exactly like
+    hlApply: in a real browser the getters can throw on a stale/edge range; jsdom may lack
+    layout — either way the popup degrades to staying shut, never to a page error. */
+ try{
+  if(!hlBlockOf(r.startContainer)||hlBlockOf(r.startContainer)!==hlBlockOf(r.endContainer)){
+   toast("Selecione um trecho dentro de um mesmo bloco.");
+   lastSelText=t;
+   return;
+  }
+ }catch(e){lastSelText=t;return;}
  pendingRange=r.cloneRange();
  const rect=r.getBoundingClientRect();
  const x=Math.max(8,Math.min(rect.left||20,innerWidth-380)),y=(rect.bottom||60)+8;
- openPop(t,x,y,'<b style="font-size:14px">'+t.slice(0,42)+(t.length>42?"…":"")+'</b><br><span style="white-space:nowrap"><button id="pH">▶ Hear</button><button id="pR">⏺ Record</button><button id="pN">📝 Note</button></span>');
- pop.querySelector("#pH").onclick=()=>{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
- pop.querySelector("#pR").onclick=()=>{wrapRange(t,pendingRange);rec(t)};
- pop.querySelector("#pN").onclick=()=>{wrapRange(t,pendingRange);
-  openPop(t,x,y,'<textarea id="nt" rows="3" placeholder="write a note…"></textarea><br><button id="ns">💾 Save</button> <button id="px">Cancel</button>');
-  pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();if(v)send({action:"add",type:"note",anchor:t,data:v});closePop();};
-  pop.querySelector("#px").onclick=closePop;};
+ openNbPopup(t,pendingRange,x,y);
  lastSelText=t;
 }
 let selTimer=null;
@@ -362,8 +444,9 @@ async function rec(t){let stream;try{stream=await navigator.mediaDevices.getUser
    const blob=new Blob(ch,{type:"audio/webm"});
    try{audioCache["a:"+t]=URL.createObjectURL(blob)}catch(e){}
    const f=new FileReader();f.onload=()=>{const fb=feedback(t,heard);
-    send({action:"add",type:"rec",anchor:t,b64:f.result.split(",")[1],mime:"audio/webm",data:JSON.stringify({score:fb.score,heard,fb:fb.msg})});
-    ind.remove();};
+   const m=ensureMark(t,"rec");if(m)m.classList.add("has-rec");
+   send({action:"add",type:"rec",anchor:t,b64:f.result.split(",")[1],mime:"audio/webm",data:JSON.stringify({score:fb.score,heard,fb:fb.msg})});
+   ind.remove();};
    f.readAsDataURL(blob);};
   mr.onstop=process;
   try{mr.stop()}catch(e){process()}
