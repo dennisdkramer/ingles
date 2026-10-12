@@ -17,6 +17,14 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
  bar.innerHTML='<button id="undoBtn" title="Undo (Ctrl+Z)">↶ Undo</button> · 🦺 '+gate.email+' · <b>'+TRACK+'</b> · <a href="../portal.html">Index</a> · <span class="dim">Ctrl+Z=undo</span>'+extra;
  if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";loadLayer()};}
  loadLayer();
+ /* ---- cross-session poll (owner spec 2026-10-12) — the ONLY re-check there is: add/set/del on
+    either side (teacher or student) reach the other as fast as a 3s poll allows. Each send()
+    marks its own id+action "pending" for 6s (engine1.js notePending/pendingFor); renderLayer()
+    below skips reverting/resurrecting anything that's still inside its own 6s pending window, so
+    a snapshot that races ahead of the backend write can never undo-then-redo a local action. This
+    generic (by id+action, not by feature) pairing is the whole mechanism — any future action type
+    that goes through send() is covered automatically, no per-action special-casing needed. */
+ setInterval(loadLayer,3000);
  setupUndo();
 }catch(e){let b=document.getElementById("errb");if(b)b.innerHTML+=" · control bar: "+e.message}})();
 
@@ -87,9 +95,18 @@ function renderLayer(){
  /* highlight layer (#hlLayer): the records are the only truth here, so a highlight whose server
     row is gone disappears and the ones still stored are rebuilt from their row (anchor + offsets,
     or the anchor text alone for old rows). The text DOM is never touched: highlights are painted
-    over the text, notes/recordings are elements inside it. */
+    over the text, notes/recordings are elements inside it.
+    GENERIC PENDING GATE (owner spec 2026-10-12): if THIS id still has a local action in flight
+    (pendingFor, engine1.js) — add, set (recolour) OR del — this poll's row is stale by
+    definition: the UI already applied that action directly (hlApply/hlSetColor/hlDrop), so the
+    row is skipped entirely rather than re-applied, which is what caused the old revert-then-
+    reapply flicker. Works for ANY action type that goes through send()+notePending, not just
+    highlights — a future feature needs no special-casing here, just call notePending(o) in its
+    send() path (already automatic, since send() itself calls it). */
  layer.forEach(it=>{
-  if(it.type==="hl"&&it.anchor)hlRestore(it);
+  if(it.type==="hl"&&it.anchor){
+   if(!pendingFor(it.id))hlRestore(it);
+  }
   if((it.type==="rec"||it.type==="note")&&it.anchor){
    const q='mark.nb[data-a="'+CSS.escape(it.anchor)+'"]';
    let m=document.querySelector(q);
@@ -100,9 +117,10 @@ function renderLayer(){
    feed.innerHTML+="<div>"+(it.type==="done"?"✅ concluída":it.type==="quiz"?"📝 quiz "+d.score+"%":"📝 "+(it.anchor||"traduções"))+" · <i>"+it.author+"</i></div>";}
  });
  /* a highlight whose server row no longer exists leaves the layer (the server is the truth);
-    one created seconds ago stays put until the save round-trips */
+    one with a local action still pending (add/set/del) stays exactly as the UI left it until
+    the pending window elapses or a later poll confirms the server agrees */
  const hlIds=new Set(layer.filter(it=>it.type==="hl"&&it.anchor).map(it=>it.id));
- hlList=hlList.filter(rec=>hlIds.has(rec.id)||(rec.pending&&Date.now()-rec.pending<6000));
+ hlList=hlList.filter(rec=>hlIds.has(rec.id)||pendingFor(rec.id));
  hlReflow();
  if(!feed.innerHTML)feed.innerHTML='<div class="dim">Nada ainda — destaque um texto e anote ou grave algo.</div>';
 }

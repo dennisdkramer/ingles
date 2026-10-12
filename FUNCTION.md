@@ -6,9 +6,11 @@ Reference this file whenever a task touches lesson functionality. Preserve every
 - Recordings, notes, highlights, filled-in fields, answered questions: all persistent.
 - localStorage must never be a source of truth (ghost-data bug of Oct 2026); server is sole source.
 
-## Highlight (text range) — owner spec 2026-10-11
+## Highlight (text range) — owner spec 2026-10-11, mouse-release gate updated 2026-10-12
 - Gesture: Ctrl must be held at MOUSEDOWN over the selection; if Ctrl is ALSO held at MOUSEUP, that release creates the highlight. Nothing else creates one (no keyboard-only path, no touch gesture, no automatic path).
 - Ctrl at mousedown SUPPRESSES the other selection-based functions for the whole gesture (and ~1.2s after it ends): the Hear / Record / Note popup never opens for a Ctrl gesture, whether or not a highlight ends up being created. A normal selection (no Ctrl at mousedown) still opens that popup exactly as before.
+- MOUSE-RELEASE GATE (owner spec 2026-10-12): both functions are decided ONLY at the moment the mouse button is released on a text selection, never mid-drag. If Ctrl is held at that release → the highlight function fires (and ONLY the highlight function). If Ctrl is NOT held at that release → the Hear/Record/Note popup fires (and ONLY that popup). A debounced selectionchange still exists as a fallback for non-mouse selection changes (keyboard Shift+Arrow, touch), but while a mouse button is physically down neither function may open.
+- Highlight visuals sit BELOW the text ink (`mix-blend-mode:multiply` on `.hlr`): black glyphs stay pure black, the tint only shows through the paper/background underneath.
 - Ctrl+click ON a painted highlight = delete it. One action: no confirmation, no popup. That deletion is the ONLY interaction a highlight has.
 - A highlight never makes the text clickable and never changes mouseover or the cursor: no click behaviour of its own (a plain click on highlighted text does nothing) and no hover state.
 - Ctrl+drag over an existing highlight MERGES HIGHLIGHTS ONLY: any highlight of the same block that overlaps or merely touches the new selection becomes one single highlight, extended to cover both. Overlaps never accumulate as separate highlights. Notes and recordings are never merged, extended, moved or recoloured by a highlight gesture.
@@ -34,8 +36,13 @@ Reference this file whenever a task touches lesson functionality. Preserve every
 - Hotkey legend at top of each lesson; sizing per FORMAT.md.
 
 ## Engines & pages
-- engine1.js = gate (sessionStorage sig check), selection popup (▶ Hear / ⏺ Record / 📝 Note), Ctrl text-range highlight gestures painted on their own layer (#hlLayer: create on Ctrl+mouseup / merge / delete / colour palette, popup suppressed for the whole Ctrl gesture), recording (stops after 2s silence, 🎙 indicator, spinner), notes, anchors, send() to backend.
-- engine2.js = topbar, layer sync (15s), quiz grading, highlight render/delete (#hlLayer rectangles rebuilt from the server rows: hlRestore/hlDrop/hlReflow) and undo, showAnchor (audio cache, "carregando…", 4s → "nao encontrado").
+- engine1.js = gate (sessionStorage sig check), selection popup (▶ Hear / ⏺ Record / 📝 Note), Ctrl text-range highlight gestures painted on their own layer (#hlLayer: create on Ctrl+mouseup / merge / delete / colour palette, popup suppressed for the whole Ctrl gesture), recording (stops after 2s silence, 🎙 indicator, spinner), notes, anchors, send() to backend, generic local-action pending registry (notePending/pendingFor, see Sync below).
+- engine2.js = topbar, layer poll (3s, see Sync below), quiz grading, highlight render/delete (#hlLayer rectangles rebuilt from the server rows: hlRestore/hlDrop/hlReflow) and undo, showAnchor (audio cache, "carregando…", 4s → "nao encontrado").
+
+## Sync (cross-session push) — owner spec 2026-10-12
+- The ONLY re-check mechanism is a plain poll: `setInterval(loadLayer,3000)` in engine2.js. There is no per-action immediate reload any more (the old `setTimeout(loadLayer,1800)` after every send() is gone) — every add/set/del on either side (teacher or student) reaches the other session within one poll cycle (~3s), not instantly.
+- GENERIC GRACE WINDOW: every call to `send(o)` marks `o.id`+`o.action` as "pending" for 6s (`notePending`/`pendingFor` in engine1.js). `renderLayer()` in engine2.js skips re-applying (reverting or resurrecting) any row whose id still has a pending local action — the UI already applied that action directly when the user acted, so a poll snapshot that races ahead of the backend write is simply ignored for that id until the pending window elapses or a later poll confirms the server agrees.
+- This mechanism is GENERIC by id+action, not hard-coded per feature (highlight add/color/delete today) — any future action type routed through `send()` is automatically protected from the same revert-then-reapply flicker with zero additional code.
 - Lessons are content-only files: config consts (TRACK, LESSON, SECRET, BACKPACK…) + engine includes. Engines/style always ship as full files.
 - Gate hash: h(s){let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x} applied to email+track+SECRET ("abreportas2025"); invalid/missing gate → redirect to portal.html.
 - Backend actions: POST add/set/del; GET ping/layer/file/dbg. ?action=dbg returns server log.

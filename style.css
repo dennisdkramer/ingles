@@ -40,7 +40,11 @@ mark.nb.has-note::after{content:"📝";font-size:.75em}
    creates no stacking context and stays under .pop/#toast) — the only interaction a highlight has
    is Ctrl+click to delete (see FUNCTION.md). */
 #hlLayer{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
-#hlLayer .hlr{position:absolute;border-radius:3px}
+/* mix-blend-mode:multiply (owner spec 2026-10-12, "highlight sits below text"): black ink stays
+   pure black under a multiply blend (black × anything = black), so the tint only shows through
+   the paper/background — visually the highlight sits BELOW the text with zero DOM/z-index change
+   and zero change to the coordinate math above it. */
+#hlLayer .hlr{position:absolute;border-radius:3px;mix-blend-mode:multiply}
 #hlLayer .hlr-yellow{background:rgba(255,233,112,.55)}
 #hlLayer .hlr-red{background:rgba(255,64,64,.34)}
 #hlLayer .hlr-green{background:rgba(64,200,96,.34)}

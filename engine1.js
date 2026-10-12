@@ -14,22 +14,36 @@ const audioCache={};
 let popXY={x:20,y:90};
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(t._x);t._x=setTimeout(()=>t.style.display="none",2600)}
 function b64url(b64,mime){const b=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));return URL.createObjectURL(new Blob([b],{type:mime||"audio/webm"}))}
+/* ---- local-action grace window (owner spec 2026-10-12): the ONLY sync re-check is a plain poll
+   (engine2.js: setInterval(loadLayer,3000)) — no per-action immediate reload any more. Every
+   send() marks its id+action "pending" for 6s; a poll that lands mid-write must never revert what
+   the user just did and then re-apply it a moment later. Generic by id+action: any FUTURE action
+   type that goes through send() gets this protection automatically — see FUNCTION.md "Sync". */
+let pendingOps=[];
+function notePending(o){
+ if(!o||!o.id)return;
+ pendingOps=pendingOps.filter(p=>Date.now()<p.until&&(p.id!==o.id||p.action!==o.action));
+ pendingOps.push({id:o.id,action:o.action,type:o.type,until:Date.now()+6000});
+}
+function pendingFor(id){
+ pendingOps=pendingOps.filter(p=>Date.now()<p.until);
+ return pendingOps.find(p=>p.id===id)||null;
+}
 function send(o){o.email=STUDENT;o.lesson=L;o.author=who();
  const isDel=(o.action==="del");
  if(!isDel&&!o.id)o.id=Date.now()+"_"+Math.floor(Math.random()*9999);
+ /* the UI already applied this change (hlApply/hlSetColor/hlDrop/ensureMark/...) before send()
+    was called: protect it from a stale poll instead of reloading the layer right now. */
+ notePending(o);
  fetch(BACKPACK,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(o)})
   .then(r=>r.json())
   .then(j=>{
    if(isDel){
-    if(j&&j.result==="deleted"){
-     toast("🗑 apagado ✔");
-     loadLayer();
-     return;
-    }
+    if(j&&j.result==="deleted"){toast("🗑 apagado ✔");return;}
     toast("⚠ falha ao apagar (servidor)");
     return;
    }
-   if(j&&j.result==="ok"){loadLayer();return;}
+   if(j&&j.result==="ok")return;
    throw new Error((j&&j.error)||"resposta inválida");
   })
   .catch(err=>{
@@ -39,17 +53,27 @@ function send(o){o.email=STUDENT;o.lesson=L;o.author=who();
    else toast("⚠ servidor indisponível — apagar não confirmou");
   });
  setTimeout(()=>{if(window.currentAnchor&&window.currentAnchor===o.anchor&&pop&&window.showAnchor)window.showAnchor(o.anchor,popXY.x,popXY.y)},900);
- setTimeout(loadLayer,1800);}
+}
 let pop=null,pendingRange=null,lastSelText="";
 const closePop=()=>{if(pop){pop.remove();pop=null}lastSelText=""};
 function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("div");pop.className="pop";
  pop.style.left=x+"px";pop.style.top=y+"px";pop.style.maxWidth="min(380px, calc(100vw - 16px))";
  pop.innerHTML=html;document.body.appendChild(pop);return pop}
 document.addEventListener("mousedown",e=>{if(pop&&!pop.contains(e.target))closePop()});
+/* ---- gesture gate (owner spec 2026-10-12): Hear/Record/Note and Highlight are BOTH decided
+   strictly at mouse-release, never mid-drag. mouseIsDown blocks the debounced selectionchange
+   path for the whole press; the moment the button is released this same function is called
+   directly (see the mouseup listener just below), so the popup opens exactly at release, gated
+   on Ctrl exactly like the highlight gesture is (Ctrl released → Note/Record/Hear; Ctrl held →
+   highlight only, per the HIGHLIGHT section gate further down). */
+let mouseIsDown=false;
+document.addEventListener("mousedown",()=>{mouseIsDown=true});
+document.addEventListener("mouseup",()=>{mouseIsDown=false;clearTimeout(selTimer);trySelPopup()});
 /* seleção: abre só quando a seleção MUDA (funciona em mobile; não dispara ao clicar em botões) */
 function trySelPopup(){
  const sel=getSelection();const t=sel?sel.toString().trim():"";
  if(!t||t.length<3||t.length>200)return;
+ if(mouseIsDown)return; /* never open mid-drag — the mouseup listener fires this at release */
  if(t===lastSelText)return;
  if(!sel.rangeCount)return;
  const r=sel.getRangeAt(0);
@@ -262,11 +286,11 @@ function hlRestore(row){
  const anchor=String((row&&row.anchor)||"");if(!anchor)return null;
  let d={};try{d=JSON.parse(row.data||"{}")}catch(e){}
  let rec=hlById(row.id);
- if(rec){rec.pending=0;rec.color=hlColorOk(d.color);return rec}
+ if(rec){rec.color=hlColorOk(d.color);return rec}
  const spot=hlLocate(anchor,d.b,d.o);
  if(!spot||spot.start<0)return null;       /* that text is not on the page any more */
  rec=hlMake(anchor,d.color,spot.b,spot.start,row.id);
- rec.pending=0;return rec;
+ return rec;
 }
 function hlApply(r){
  if(!r)return;
@@ -288,7 +312,6 @@ function hlApply(r){
  const text=blk.textContent.slice(s,e);
  if(!text.trim()){hlReflow();return}
  const m=hlMake(text,"yellow",b,s);
- m.pending=Date.now();
  hlJustRan=Date.now();
  if(typeof pushUndo==="function")pushUndo({type:"hl",kind:"add",id:m.id});
  hlPalette(m);
