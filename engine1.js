@@ -409,8 +409,11 @@ function ensureMark(t,type){
    Ctrl STILL held at MOUSEUP               → the selected string becomes a highlight
                                               (nothing else ever triggers a highlight)
    Ctrl + click on a painted highlight      → delete that highlight (the ONLY interaction it has)
-   Ctrl + drag over a highlight             → merge/extend HIGHLIGHTS only (overlapping or touching
-                                              highlights of the same block become one)
+   Ctrl + drag over a highlight             → SUBTRACT, never merge (owner spec 2026-10-12, hlSubtract): the new
+                                               highlight keeps its WHOLE selection and the older highlight loses exactly the
+                                               characters it covers — it shrinks, is split into two,
+                                               or is deleted when nothing of it is left
+                                              (a highlight is never merged with another one)
    A highlight is NOT part of the text: it is a translucent rectangle overlay (#hlLayer,
    pointer-events:none) measured from the text range. The text DOM belongs to the note/recording
    layer (mark.nb) alone, so the two layers have ZERO interaction — a highlight may cross a note
@@ -556,6 +559,44 @@ function hlRestore(row){
  rec=hlMake(anchor,d.color,spot.b,spot.start,row.id);
  return rec;
 }
+/* ---- OVERLAP = SUBTRACT, NEVER MERGE (owner spec 2026-10-12) -----------------------------------
+   A new highlight WINS the characters it covers: every character of the selection is removed from
+   the highlight(s) already sitting on it, so a second highlight can carry a DIFFERENT colour over
+   text that was already highlighted. The old rule did the opposite — it unioned the two ranges
+   into ONE row with ONE colour, which is exactly what destroyed the second colour.
+   The new highlight always keeps its WHOLE selection: nothing is ever extended to cover an older
+   highlight (no union). `end` is EXCLUSIVE (hlMake: end = start + anchor.length), so a highlight
+   that merely TOUCHES the new range (old.end === s or old.start === e) shares NO character with it
+   and is left untouched — two same-colour highlights may sit side by side, seam and all.
+   What survives of an older highlight keeps its OWN colour and row model; only its range shrinks:
+     • partly covered                → ONE piece, the SAME row (a "set" with the shorter anchor);
+     • new range strictly inside it  → TWO pieces: the first keeps the row (a "set"), the second is
+                                       a brand-new row (an "add") — the highlight really is split
+                                       in two, one row per piece, each keeping the older colour;
+     • fully covered                 → no character left → its row is DELETED ("del").
+   A piece that would be pure whitespace is not painted (the same rule a fresh selection follows);
+   if that leaves nothing to paint at all, the row is deleted rather than left behind. */
+function hlSubtract(s,e,b){
+ hlList.filter(rec=>rec.b===b&&rec.start<e&&rec.end>s).forEach(rec=>{
+  const bl=hlBlockEl(rec.b);if(!bl)return;
+  const full=bl.textContent,head=rec.start,tail=rec.end;
+  const parts=[];
+  if(head<s)parts.push([head,Math.min(s,tail)]);
+  if(tail>e)parts.push([Math.max(e,head),tail]);
+  hlList=hlList.filter(x=>x!==rec);        /* the old range leaves the layer, whatever survives below */
+  let row=rec.id,kept=0;
+  parts.forEach(([p,q])=>{
+   const t=full.slice(p,q);
+   if(!t.trim())return;                    /* a whitespace-only piece is not a highlight */
+   const keep=row;                         /* the FIRST surviving piece stays on the older row */
+   const piece=hlMake(t,rec.color,rec.b,p,keep);
+   send({action:keep?"set":"add",type:"hl",anchor:piece.anchor,id:piece.id,
+    data:JSON.stringify({color:piece.color,b:piece.b,o:piece.start})});
+   row=null;kept++;
+  });
+  if(!kept&&rec.id)send({action:"del",id:rec.id});
+ });
+}
 function hlApply(r){
  if(!r)return;
  const blk=hlBlockOf(r.startContainer);
@@ -568,13 +609,12 @@ function hlApply(r){
  if(e<=s){toast("Selecione um trecho de texto para destacar.");return}
  const b=hlBlocks().indexOf(blk);
  if(b<0)return;
- /* merge: highlights of this block that overlap or touch the selection become part of the new
-    one. The note/recording layer is never looked at — a highlight may cross it freely. */
- const kill=hlList.filter(rec=>rec.b===b&&rec.end>=s&&rec.start<=e);
- kill.forEach(rec=>{if(rec.start<s)s=rec.start;if(rec.end>e)e=rec.end});
- kill.forEach(rec=>{hlList=hlList.filter(x=>x!==rec);if(rec.id)send({action:"del",id:rec.id})});
  const text=blk.textContent.slice(s,e);
- if(!text.trim()){hlReflow();return}
+ if(!text.trim()){hlReflow();return}     /* nothing worth painting — and nothing to subtract either */
+ /* the selection wins the characters it covers: whatever highlight was already there loses exactly
+    those characters (see hlSubtract) — the ranges are NEVER unioned, so the new colour survives.
+    The note/recording layer is never looked at — a highlight may cross it freely. */
+ hlSubtract(s,e,b);
  const m=hlMake(text,"yellow",b,s);
  hlJustRan=Date.now();
  hlPalette(m);

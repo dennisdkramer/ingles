@@ -18,7 +18,9 @@
  *   layer (#hlLayer — never an element inside the text); Ctrl released before mouseup creates
  *   nothing; the Hear/Record/Note popup stays shut for the whole Ctrl gesture; the colour palette
  *   recolours it; there is NO undo stack any more (no ↶/↷ buttons, no Ctrl+Z handler); Ctrl+click on the painted rectangle deletes it; a
- *   highlight may cross a note/recording and BOTH stay whole (the two layers never interact);
+ *   highlight may cross a note/recording and BOTH stay whole (the two layers never interact); an
+ *   overlapping highlight is SUBTRACTED from the older one (shrunk / split in two / swallowed) and
+ *   never merged;
  *   the removed dead controls never come back
  * - Grace window: a just-saved note (and a just-recorded clip) survives a poll whose snapshot
  *   predates its own backend write — the row, the phrase's flag and the popup's note line stay
@@ -461,7 +463,88 @@ async function testPage(serverUrl, pageName, track = 'business') {
             }
             try { window.eval('hlList=[]; hlReflow()'); } catch (e) {}
 
-            /* (e) a note/recording mark and a highlight may intersect: BOTH stay whole, nothing is
+            /* (e) OVERLAPPING HIGHLIGHTS ARE SUBTRACTED, NEVER MERGED (owner spec 2026-10-12): the new
+               highlight keeps its WHOLE selection and every character it covers is removed from the
+               highlight already sitting on it, so a SECOND COLOUR is never lost. A strictly-inside
+               overlap SPLITS the older highlight in two (each piece keeping the older colour), a
+               full cover swallows every row under it, and a merely TOUCHING range shares no
+               character, so both stay whole. */
+            try { window.eval('hlList=[]; hlReflow()'); } catch (e) {}
+            if (tn.data.length < 16) {
+                console.log('   ⏭  overlap-subtraction test skipped (text node too short)');
+            } else {
+                const hlSpan = (a, b) => { const r = window.document.createRange(); r.setStart(tn, a); r.setEnd(tn, b); return r; };
+                const hlPieces = () => { try { return window.eval('hlList.map(r=>[r.start,r.end,r.color])'); } catch (e) { return []; } };
+                const hlRowAt = (a, b) => hlPieces().find(([p, q]) => p === a && q === b) || null;
+                /* every POST send() makes — the poll's GET carries no body, so it is ignored */
+                const qaPosts = [];
+                const qaFetch = window.fetch;
+                window.fetch = (u, o) => { if (o && o.body) { try { qaPosts.push(JSON.parse(o.body)); } catch (e) {} } return qaFetch(u, o); };
+                try {
+                    /* a RED highlight over [1,11] … */
+                    await gesture(hlSpan(1, 11));
+                    const redSwatch = window.document.querySelector('.hlpal button[data-c="red"]');
+                    if (redSwatch) redSwatch.click();
+                    const base = hlRowAt(1, 11);
+                    if (!base || base[2] !== 'red') {
+                        errors.push('[FAIL] could not build the overlap test (no red highlight over [1,11])');
+                    } else {
+                        /* … then a new one STRICTLY INSIDE it: the old range must be split in two */
+                        qaPosts.length = 0;
+                        await gesture(hlSpan(4, 8));
+                        const cut = hlPieces();
+                        if (cut.length !== 3 || !hlRowAt(1, 4) || !hlRowAt(8, 11) || !hlRowAt(4, 8)) {
+                            errors.push(`[FAIL] the overlap was not subtracted into two pieces + the new highlight (got ${JSON.stringify(cut)})`);
+                        } else if (hlRowAt(1, 4)[2] !== 'red' || hlRowAt(8, 11)[2] !== 'red' || hlRowAt(4, 8)[2] !== 'yellow') {
+                            errors.push(`[FAIL] a surviving piece lost the older highlight's colour (${JSON.stringify(cut)})`);
+                        } else {
+                            console.log('   ✅ A highlight inside another SPLITS it: [1,11] red → [1,4] + [8,11] red, new [4,8] yellow');
+                        }
+                        if (hlRowAt(1, 11)) {
+                            errors.push('[FAIL] the unioned/old highlight is still in the layer (merge survived)');
+                        }
+                        const setRow = qaPosts.find(o => o.action === 'set' && o.type === 'hl');
+                        const addRow = qaPosts.find(o => o.action === 'add' && o.type === 'hl');
+                        if (!setRow || !addRow || qaPosts.some(o => o.action === 'del')) {
+                            errors.push(`[FAIL] the split was not persisted as set+add (posts: ${JSON.stringify(qaPosts)})`);
+                        } else {
+                            console.log('   ✅ The split reaches the server as a "set" (trimmed row) + an "add" (second piece)');
+                        }
+                    }
+                    /* a new highlight covering the whole span swallows every row under it */
+                    qaPosts.length = 0;
+                    await gesture(hlSpan(1, 11));
+                    const full = hlPieces();
+                    const dels = qaPosts.filter(o => o.action === 'del').length;
+                    if (full.length !== 1 || !hlRowAt(1, 11)) {
+                        errors.push(`[FAIL] a highlight covering an older one did not swallow it (got ${JSON.stringify(full)})`);
+                    } else if (full[0][2] !== 'yellow') {
+                        errors.push(`[FAIL] the fully covering highlight did not keep its own colour (${JSON.stringify(full)})`);
+                    } else if (dels !== 3) {
+                        errors.push(`[FAIL] the swallowed rows were not deleted server-side (dels=${dels}, expected 3)`);
+                    } else {
+                        console.log('   ✅ A highlight that covers the others swallows them (3 rows deleted, 1 highlight left)');
+                    }
+                    /* touching ≠ overlapping: no shared character, so both stay whole */
+                    try { window.eval('hlList=[]; hlReflow()'); } catch (e) {}
+                    qaPosts.length = 0;
+                    await gesture(hlSpan(1, 6));
+                    await gesture(hlSpan(6, 11));
+                    const seam = hlPieces();
+                    if (seam.length !== 2 || !hlRowAt(1, 6) || !hlRowAt(6, 11)) {
+                        errors.push(`[FAIL] two highlights that merely touch were merged or trimmed (got ${JSON.stringify(seam)})`);
+                    } else if (qaPosts.filter(o => o.action !== 'add').length) {
+                        errors.push(`[FAIL] a touching highlight rewrote its neighbour (posts: ${JSON.stringify(qaPosts)})`);
+                    } else {
+                        console.log('   ✅ Two highlights that merely TOUCH stay whole (a same-colour seam is allowed)');
+                    }
+                } finally {
+                    window.fetch = qaFetch;
+                    try { window.eval('hlList=[]; hlReflow()'); } catch (e) {}
+                }
+            }
+
+            /* (f) a note/recording mark and a highlight may intersect: BOTH stay whole, nothing is
                refused, nothing is split — the two layers never talk to each other */
             const noteFrom = 4, noteTo = Math.min(14, tn.data.length - 4);
             const nRange = window.document.createRange();
@@ -514,7 +597,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
                     console.log('   ✅ The page text is unchanged (highlights are painted, never inserted)');
                 }
 
-                /* (f) Ctrl+click on the painted rectangle deletes the highlight, not the note */
+                /* (g) Ctrl+click on the painted rectangle deletes the highlight, not the note */
                 await new Promise(resolve => setTimeout(resolve, 700));   /* hlJustRan guard = 600ms */
                 const r0 = rects()[0];
                 if (!r0) {
