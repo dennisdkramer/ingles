@@ -75,65 +75,108 @@ function nbHasRec(t){return nbEntries(t).some(it=>it.type==="rec")||!!document.q
 function nbHasNote(t){return nbEntries(t).some(it=>it.type==="note")||!!document.querySelector('mark.nb.has-note[data-a="'+CSS.escape(t)+'"]')}
 /* the saved note text of an anchor (for the 📝 Show view) — null when there is none. */
 function nbNoteText(t){const e=nbEntries(t).find(it=>it.type==="note");return e?String(e.data||""):null}
-/* every button the popup can carry. The phrase's own state decides the wording (owner spec
-   2026-10-12): a phrase that already HAS a recording shows ▶ Play recording (+ ⏺ Record again,
-   so re-recording stays reachable) instead of the bare ⏺ Record; a phrase that already HAS a note
-   shows 📝 Show note instead of the bare 📝 Note. A phrase with saved content also carries the
-   delete button the owner asked for: it removes the saved recording, any notes AND their visual
-   element in ONE undoable action. */
-function nbPopHTML(t){
+/* escape a user string for safe innerHTML (the popup is built as an HTML string) */
+const nbEsc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+/* the saved note of an anchor shown ABOVE the buttons (owner spec 2026-10-12): the whole note is
+   always visible on the popup; null when the phrase has no note. */
+function nbNoteDisplay(t){
+ const v=nbNoteText(t);
+ if(v==null)return null;
+ const s=String(v).trim();
+ return s?s:null;
+}
+/* the popup carries SIX buttons, and ALL of them always exist (owner spec 2026-10-12). Three are
+   always clickable — ▶ Hear, ⏺ Record, 📝 Add/Edit Note. The other three only light up when they
+   apply, and are otherwise GREYED OUT (disabled, never hidden):
+     ▶ Play    — a saved recording exists on the phrase
+     💾 Save   — a note is currently being added / edited
+     🗑 Delete — the phrase has a saved note or recording
+   The saved note (when any) is shown ABOVE the buttons. The phrases in the two plain arrays carry
+   the button ids: H=Hear P=Play R=Record N=Add/Edit Note S=Save D=Delete — order: row1 H P R, row2
+   N S D. It intentionally carries NO trailing icon: the underline / blue-wash of the phrase itself
+   is the only signal, and it is applied by the SAVE (engine2 renderLayer or the note Save), never
+   by the click. */
+function nbPopHTML(t,editing){
  const rec=nbHasRec(t),note=nbHasNote(t),owned=rec||note;
- return '<b style="font-size:14px">'+String(t).slice(0,42)+(String(t).length>42?"…":"")+'</b><br>'+
-  '<span style="white-space:nowrap"><button id="pH">▶ Hear</button>'+
-  (rec?'<button id="pP">▶ Play recording</button><button id="pR" title="regravar por cima">⏺ Record again</button>':'<button id="pR">⏺ Record</button>')+
-  (note?'<button id="pN">📝 Show note</button>':'<button id="pN">📝 Note</button>')+
-  (owned?'<button id="pD" title="apagar gravação, notas e a marcação">🗑 Delete</button>':"")+'</span>';
+ const nb=nbNoteDisplay(t);
+ const title='<b style="font-size:14px">'+String(t).slice(0,42)+(String(t).length>42?"…":"")+'</b>';
+ const noteHTML=nb!=null?'<div id="nbNote" title="nota salva" style="margin:4px 0 2px;white-space:pre-wrap;font-size:13px;color:var(--blue);background:var(--bluebg);border-left:3px solid var(--blue);border-radius:6px;padding:4px 8px">📝 '+nbEsc(nb)+'</div>':"";
+ return title+noteHTML+
+  '<span style="white-space:nowrap"><button id="pH" title="ouvir em voz alta">▶ Hear</button>'+
+  '<button id="pP" title="ouvir a gravação salva"'+(rec?"":' disabled')+'>▶ Play</button>'+
+  '<button id="pR" title="gravar (regrava por cima)">⏺ Record</button></span><br>'+
+  '<span style="white-space:nowrap"><button id="pN">📝 Add/Edit Note</button>'+
+  '<button id="pS" title="salvar a nota"'+(editing?"":' disabled')+'>💾 Save</button>'+
+  '<button id="pD" title="apagar gravação, notas e a marcação"'+(owned?"":' disabled')+'>🗑 Delete</button></span>';
 }
 /* wire a freshly-opened .pop for an anchor: range = the live selection when the popup came from
-   one (null when it came from a click on the mark). Shared by trySelPopup and showAnchor. The
-   record action is present under one of two ids (pP when playing back, pR otherwise); the note
-   action opens the saved note when one exists, a blank editor otherwise. */
+   one (null when it came from a click on the mark). Shared by trySelPopup and showAnchor. Every
+   button exists, so each handler is wired unconditionally; the disabled ones simply do nothing
+   when clicked. The note editor is open exactly while the popup holds a #nt textarea (re-entering
+   Add/Edit Note keeps whatever was already typed). */
 function nbWirePopup(t,r,x,y){
  if(!pop)return;
  const H=pop.querySelector("#pH");
  if(H)H.onclick=()=>{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
  const P=pop.querySelector("#pP");
- if(P)P.onclick=()=>nbPlayRecording(t);
+ if(P)P.onclick=()=>{if(P.disabled)return;nbPlayRecording(t)};
  const R=pop.querySelector("#pR");
- if(R)R.onclick=()=>{recordMark(t,r);notePending({action:"add",type:"rec",anchor:t});rec(t)};
+ if(R)R.onclick=()=>rec(t);
  const N=pop.querySelector("#pN");
- if(N)N.onclick=()=>nbNoting(t,r,x,y);
+ if(N)N.onclick=()=>{
+  const ta=pop.querySelector("#nt"),cur=ta?ta.value:null;
+  /* a fresh editor is prefilled with the saved note (a change never silently wipes the old one) */
+  openPop(t,x,y,nbPopHTML(t,true)+'<textarea id="nt" rows="3" placeholder="write a note…">'+nbEsc(cur!=null?cur:(nbNoteText(t)||""))+'</textarea>');
+  nbWirePopup(t,r,x,y);
+  pop.querySelector("#nt").focus();
+ };
+ const S=pop.querySelector("#pS");
+ if(S)S.onclick=()=>{if(S.disabled)return;nbSaveNote(t,x,y)};
  const D=pop.querySelector("#pD");
- if(D)D.onclick=()=>nbDeleteAnchor(t);
+ if(D)D.onclick=()=>{if(D.disabled)return;nbDeleteAnchor(t)};
 }
-function openNbPopup(t,r,x,y){openPop(t,x,y,nbPopHTML(t));nbWirePopup(t,r,x,y)}
-/* wrap the selection into mark.nb RIGHT NOW (idempotent: the mark is reused when it exists) and
-   paint its state class immediately — this is the "immediately visible, no appearing and
-   disappearing" half of the fix: the phrase gets its underline/🎙 (or blue/📝) at the instant of
-   the click, and engine2's renderLayer leaves it alone while the action is inside its grace
-   window, so no poll can blink it off and on again. */
-function recordMark(t,r){
- let m=null;
- if(r)m=wrapRange(t,r);
- if(!m)m=document.querySelector('mark.nb[data-a="'+CSS.escape(t)+'"]');
- if(!m)m=ensureMark(t,"rec");else m.classList.add("has-rec");
- return m;
+/* paint the phrase — this is the SAVE side (called by the popup's 💾 Save): mark.nb carries
+   has-note only HERE, never at the moment the note button was clicked. An empty note simply
+   closes the editor (no blank save). Network last, so a failed save never undoes what was just
+   painted (FUNCTION.md). */
+function nbSaveNote(t,x,y){
+ if(!pop)return;
+ const v=pop.querySelector("#nt").value.trim();
+ if(!v){closePop();return}
+ const m=ensureMark(t,"note");if(m)m.classList.add("has-note");
+ send({action:"add",type:"note",anchor:t,data:v});
+ refreshNbPopup(t,x,y);
 }
+/* rebuild the popup's buttons for the current state (the two arrays change with saved content and
+   the textarea is dropped once the note is saved) — the LIVE note text is kept when edition is in
+   flight so refreshing the wording never loses what was typed. */
+function refreshNbPopup(t,x,y){
+ if(!pop)return;
+ const ta=pop.querySelector("#nt"),cur=ta?ta.value:null,editing=!!ta;
+ openPop(t,x,y,nbPopHTML(t,editing)+(editing?'<textarea id="nt" rows="3" placeholder="write a note…">'+nbEsc(cur!=null?cur:"")+'</textarea>':''));
+ nbWirePopup(t,null,x,y);
+}
+function openNbPopup(t,r,x,y){openPop(t,x,y,nbPopHTML(t,!!pop&&!!pop.querySelector("#nt")));nbWirePopup(t,r,x,y)}
+/* wrap the phrase into mark.nb and paint the recording flag — this is the SAVE side for a clip
+   (called from rec() once the bytes are ready, and by engine2's renderLayer when a saved
+   recording is restored). A recording NEVER paints the mark at the instant ⏺ Record is clicked;
+   the underline is the saved clip's proof, per the owner spec. Idempotent: an existing mark.nb is
+   reused. (r = the live selection range when the popup came from one.) */
+function markRecording(t,r){
+ if(r){const m=wrapRange(t,r);if(m)m.classList.add("has-rec");return m}
+ const m=ensureMark(t,"rec");if(m)m.classList.add("has-rec");return m;
+}
+/* 📝 Add/Edit Note (owner spec 2026-10-12): the editor opens over the SAME popup (every button
+   stays; the six buttons simply re-render, and Save lights up). When the phrase already HAS a note
+   the editor is prefilled with it, so a change never silently wipes the old one. Pre-focusing the
+   textarea keeps the popup open while the user types (the outside-click-to-close listener fires on
+   mousedown). Nothing here touches mark.nb — the blue wash is applied only by nbSaveNote/💾 Save,
+   never by clicking the note button. */
 function nbNoting(t,r,x,y){
- recordMark(t,r);   /* the layer exists at once — the saved/discarded note only decides its flag */
- /* 📝 Show note (owner spec 2026-10-12): the phrase already HAS a note → show it, edit THAT note
-    (prefilled, so a change never silently wipes the old one) instead of a blank editor. A phrase
-    with no note opens the empty editor exactly as before. The 💾 button keeps its id/behaviour. */
- const existing=nbNoteText(t);
- openPop(t,x,y,'<textarea id="nt" rows="3" placeholder="write a note…"></textarea><br><button id="ns">💾 Save</button> <button id="px">Cancel</button>');
- const ta=pop.querySelector("#nt");
- if(ta&&existing!=null)ta.value=existing;
- pop.querySelector("#ns").onclick=()=>{const v=pop.querySelector("#nt").value.trim();
-  if(v){const m=ensureMark(t,"note");if(m)m.classList.add("has-note");
-   /* network last: a failed save must never undo what the user just saw (FUNCTION.md) */
-   send({action:"add",type:"note",anchor:t,data:v});}
-  closePop();};
- pop.querySelector("#px").onclick=closePop;
+ const cur=nbNoteText(t)||"";
+ openPop(t,x,y,nbPopHTML(t,true)+'<textarea id="nt" rows="3" placeholder="write a note…">'+nbEsc(cur)+'</textarea>');
+ nbWirePopup(t,r,x,y);
+ try{pop.querySelector("#nt").focus()}catch(e){}
 }
 /* ▶ Play recording (owner spec 2026-10-12): the phrase's saved recording, played back on demand.
    Audio never sits in the layer — the row carries only the Drive fileId (uploaded clips) or the
@@ -496,7 +539,7 @@ async function rec(t){let stream;try{stream=await navigator.mediaDevices.getUser
    const blob=new Blob(ch,{type:"audio/webm"});
    try{audioCache["a:"+t]=URL.createObjectURL(blob)}catch(e){}
    const f=new FileReader();f.onload=()=>{const fb=feedback(t,heard);
-   const m=ensureMark(t,"rec");if(m)m.classList.add("has-rec");
+   markRecording(t,null);   /* the phrase is underlined only now — on save, never on the Record click */
    send({action:"add",type:"rec",anchor:t,b64:f.result.split(",")[1],mime:"audio/webm",data:JSON.stringify({score:fb.score,heard,fb:fb.msg})});
    ind.remove();};
    f.readAsDataURL(blob);};

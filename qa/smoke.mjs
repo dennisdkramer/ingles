@@ -580,8 +580,8 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 /* (a) with something saved, the popup offers 🗑 Delete; clicking it deletes at once */
                 openNb();
                 const delBtn = window.document.querySelector('.pop #pD');
-                if (!delBtn) {
-                    errors.push('[FAIL] the note/recording popup does not offer 🗑 Delete when the phrase has saved content');
+                if (!delBtn || delBtn.disabled) {
+                    errors.push('[FAIL] the note/recording popup does not enable 🗑 Delete when the phrase has saved content');
                 } else {
                     /* intercept send()'s POST so we can prove the backend is told about the delete */
                     const origFetch = window.fetch;
@@ -646,9 +646,11 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 console.log('   ⏭  note/recording popup test skipped (no .content-area)');
             }
 
-            /* ---- BUTTONS FOLLOW THE STATE (owner spec 2026-10-12): once a phrase carries a
-               recording the ⏺ Record button becomes ▶ Play recording (plus ⏺ Record again), and once
-               it carries a note the 📝 Note button becomes 📝 Show note (opening the saved note). */
+            /* ---- BUTTONS ALWAYS PRESENT, GREYED WHEN THEY DON'T APPLY (owner spec 2026-10-12): the
+               popup always carries Hear / Play / Record / Add-Edit Note / Save / Delete. Hear, Record
+               and Add/Edit Note are always clickable; Play lights up only with a saved recording,
+               Save only while editing a note, Delete only when something is saved. The saved note is
+               shown above the popup. */
             if (contentArea) {
                 const stText = 'State buttons please now';
                 const stP = window.document.createElement('p');
@@ -668,18 +670,38 @@ async function testPage(serverUrl, pageName, track = 'business') {
                     { id: 'qa_note_1', type: 'note', anchor: stText, data: 'saved note text', author: 'aluno' }
                 ]));
                 window.showAnchor(stText, 20, 40);
-                const playBtn = window.document.querySelector('.pop #pP');
-                const recBtn = window.document.querySelector('.pop #pR');
-                const noteBtn = window.document.querySelector('.pop #pN');
-                if (!playBtn) {
-                    errors.push('[FAIL] a phrase WITH a recording still shows ⏺ Record instead of ▶ Play recording');
-                } else if (!recBtn || !/record again/i.test(recBtn.textContent)) {
-                    errors.push('[FAIL] the ▶ Play recording state lost the ⏺ Record again affordance');
-                } else if (!noteBtn || !/show note/i.test(noteBtn.textContent)) {
-                    errors.push('[FAIL] a phrase WITH a note still shows 📝 Note instead of 📝 Show note');
+                const qp = sel => window.document.querySelector('.pop ' + sel);
+                const playBtn = qp('#pP'), recBtn = qp('#pR'), noteBtn = qp('#pN'),
+                      saveBtn = qp('#pS'), del2 = qp('#pD'), hearBtn = qp('#pH');
+                if (!playBtn || !recBtn || !noteBtn || !saveBtn || !del2 || !hearBtn) {
+                    errors.push('[FAIL] the popup must always show ALL SIX buttons (Hear/Play/Record/Add-Edit Note/Save/Delete)');
+                } else if (playBtn.disabled) {
+                    errors.push('[FAIL] ▶ Play must be enabled when the phrase has a saved recording');
+                } else if (recBtn.disabled || noteBtn.disabled) {
+                    errors.push('[FAIL] ⏺ Record and 📝 Add/Edit Note must always be clickable');
+                } else if (!saveBtn.disabled) {
+                    errors.push('[FAIL] 💾 Save must be greyed out until a note is being edited');
+                } else if (del2.disabled) {
+                    errors.push('[FAIL] 🗑 Delete must be enabled when the phrase has saved content');
                 } else {
-                    console.log('   ✅ ⏺ Record → ▶ Play recording and 📝 Note → 📝 Show note once the phrase has them');
+                    console.log('   ✅ All six buttons always present; Play/Delete live, Save greyed until editing');
                 }
+                const noteShown = window.document.querySelector('.pop #nbNote');
+                if (!noteShown || !/saved note text/.test(noteShown.textContent)) {
+                    errors.push('[FAIL] the saved note is not shown above the popup buttons');
+                } else {
+                    console.log('   ✅ the saved note is shown above the popup buttons');
+                }
+                noteBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                const saveEdit = qp('#pS');
+                if (!qp('#nt') || !saveEdit || saveEdit.disabled) {
+                    errors.push('[FAIL] 💾 Save must light up (and the editor open) while a note is being edited');
+                } else {
+                    console.log('   ✅ 📝 Add/Edit Note opens the editor and 💾 Save lights up');
+                }
+                /* re-open from a clean state so the control-flow assertions below start fresh */
+                window.eval('closePop()');
+                window.showAnchor(stText, 20, 40);
 
                 if (playBtn) {
                     /* ▶ Play recording: click #1 must fetch the Drive clip via ?action=file&id=<fileId>;

@@ -27,10 +27,10 @@ Reference this file whenever a task touches site appearance. Preserve everything
 - input.gap = fill-in blank: transparent, 2px tan bottom border, #fff8ea bg; .ok green tint / .bad red tint after grading
 - fieldset = quiz block: dashed tan border, 12px radius; ok/bad tints as above
 - details (gabarito) = #fff8ea, dashed tan border — answers always inside <details>
-- mark.nb = note/recording layer — the ONLY layer that lives in the text DOM: has-rec = underline 2px --ok + 🎙 suffix; has-note = very light blue wash + blue text + 📝 suffix (the wash is a painted background, so a highlight over the same span never hides it)
+- mark.nb = note/recording layer — the ONLY layer that lives in the text DOM: has-rec = green 2px underline (no trailing icon); has-note = very light blue wash + blue text (no trailing icon) (the wash is a painted background, so a highlight over the same span never hides it)
 - #hlLayer = highlight PAINT layer (never mark.nb, never an element inside the text): position:absolute, pointer-events:none, no z-index; its children are absolutely-positioned translucent rectangles div.hlr + hlr-yellow/hlr-red/hlr-green (rgba fills, 3px radius, no border/icon, no cursor or hover change) measured from the highlighted text range
 - .hlpal = tiny 3-swatch colour palette (yellow/red/green; the swatch fills are declared in style.css as `.hlpal button[data-c=…]`) inside a .pop, shown after a highlight is created
-- .pop selection popup = fixed, paper, 2px ink border, 14px radius, tan hard shadow, max-width 380px; buttons small (12.5px, one line, English labels)
+- .pop selection popup = fixed, paper, 2px ink border, 14px radius, tan hard shadow, max-width 380px; buttons small (12.5px, one line, English labels). The note/recording popup always shows its six buttons (▶ Hear / ▶ Play / ⏺ Record / 📝 Add/Edit Note / 💾 Save / 🗑 Delete); the ones that don't apply yet are greyed via `button:disabled` (opacity .45, no shadow, default cursor) — never removed. A saved note is shown above the buttons (`#nbNote`, light-blue wash strip)
 - #toast = fixed top-center pill, ink/cream; .recind recording indicator top-center
 - @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow
 

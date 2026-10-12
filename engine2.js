@@ -189,11 +189,11 @@ function renderLayer(){
 
 /* fallback: nenhum engine define window.showAnchor;
    sem isto, clique simples em uma frase marcada lançaria ReferenceError no handler de click.
-   Reapresenta o popup ▶ Hear / ⏺ Record / 📝 Note (e 🗑 Delete quando a frase já tem algo
-   salvo) para a âncora clicada. Usa os mesmos helpers do popup de seleção (engine1.js), então
-   os dois pontos de entrada — selecionar ou clicar na marca — se comportam igual: mesma
-   marcação imediata, mesmo delete. Aqui não há seleção (r=null): recordMark/ensureMark operam
-   sobre a marca já existente. */
+   Reapresenta o popup de seis botões (▶ Hear / ▶ Play / ⏺ Record / 📝 Add/Edit Note / 💾 Save /
+   🗑 Delete; os que não se aplicam ficam desabilitados) para a âncora clicada. Usa os mesmos
+   helpers do popup de seleção (engine1.js), então os dois pontos de entrada — selecionar ou
+   clicar na marca — se comportam igual. Aqui não há seleção (r=null): markRecording/ensureMark
+   operam sobre a marca já existente. */
 if(typeof window.showAnchor!=="function"){window.showAnchor=function(a,x,y){openNbPopup(a,null,x,y);}}
 
 window.__B=true;
