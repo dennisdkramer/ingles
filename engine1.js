@@ -78,11 +78,12 @@ function nbNoteText(t){const e=nbEntries(t).find(it=>it.type==="note");return e?
 /* escape a user string for safe innerHTML (the popup is built as an HTML string) */
 const nbEsc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 /* the saved note of an anchor shown ABOVE the buttons (owner spec 2026-10-12): the whole note is
-   always visible on the popup; null when the phrase has no note. */
+   always visible on the popup, as PLAIN dark text — no blue background and no 📝 icon (that icon,
+   still present in legacy rows, is stripped); null when the phrase has no note. */
 function nbNoteDisplay(t){
  const v=nbNoteText(t);
  if(v==null)return null;
- const s=String(v).trim();
+ const s=String(v).replace(/^\s*(?:📝|📌|🗒)\s*/u,"").trim();
  return s?s:null;
 }
 /* the popup carries SIX buttons, and ALL of them always exist (owner spec 2026-10-12). Three are
@@ -91,20 +92,24 @@ function nbNoteDisplay(t){
      ▶ Play    — a saved recording exists on the phrase
      💾 Save   — a note is currently being added / edited
      🗑 Delete — the phrase has a saved note or recording
-   The saved note (when any) is shown ABOVE the buttons. The phrases in the two plain arrays carry
-   the button ids: H=Hear P=Play R=Record N=Add/Edit Note S=Save D=Delete — order: row1 H P R, row2
-   N S D. It intentionally carries NO trailing icon: the underline / blue-wash of the phrase itself
-   is the only signal, and it is applied by the SAVE (engine2 renderLayer or the note Save), never
-   by the click. */
+   The saved note (when any) is shown ABOVE the buttons; the SELECTED TEXT is NOT repeated in the
+   popup (owner spec 2026-10-12). The phrases carry the button ids: H=Hear P=Play R=Record
+   N=Add/Edit Note S=Save D=Delete — order: row1 H P R, row2 N S D. Record and Play swap their glyph
+   for a processing SPIRAL while recording / while the clip is playing (owner spec 2026-10-12).
+   It intentionally carries NO trailing icon: the underline / blue-wash of the phrase itself is the
+   only signal, and it is applied by the SAVE (engine2 renderLayer or the note Save), never by the
+   click. */
 function nbPopHTML(t,editing){
  const rec=nbHasRec(t),note=nbHasNote(t),owned=rec||note;
  const nb=nbNoteDisplay(t);
- const title='<b style="font-size:14px">'+String(t).slice(0,42)+(String(t).length>42?"…":"")+'</b>';
- const noteHTML=nb!=null?'<div id="nbNote" title="nota salva" style="margin:4px 0 2px;white-space:pre-wrap;font-size:13px;color:var(--blue);background:var(--bluebg);border-left:3px solid var(--blue);border-radius:6px;padding:4px 8px">📝 '+nbEsc(nb)+'</div>':"";
- return title+noteHTML+
+ /* the popup does NOT repeat the selected text any more (owner spec 2026-10-12): the phrase is right
+    there in the page, so a title echoing it is redundant. #pTitle stays as an empty anchor so a
+    refresh can keep targeting a stable node. */
+ const noteHTML=nb!=null?'<div id="nbNote" title="nota salva" style="margin:2px 0 4px;white-space:pre-wrap;font-size:13px">'+nbEsc(nb)+'</div>':"";
+ return '<div id="pTitle"></div>'+noteHTML+
   '<span style="white-space:nowrap"><button id="pH" title="ouvir em voz alta">▶ Hear</button>'+
-  '<button id="pP" title="ouvir a gravação salva"'+(rec?"":' disabled')+'>▶ Play</button>'+
-  '<button id="pR" title="gravar (regrava por cima)">⏺ Record</button></span><br>'+
+  '<button id="pP" title="ouvir a gravação salva"'+(rec?"":' disabled')+'><span class="lbl">▶ Play</span></button>'+
+  '<button id="pR" title="gravar (regrava por cima)"><span class="lbl">⏺ Record</span></button></span><br>'+
   '<span style="white-space:nowrap"><button id="pN">📝 Add/Edit Note</button>'+
   '<button id="pS" title="salvar a nota"'+(editing?"":' disabled')+'>💾 Save</button>'+
   '<button id="pD" title="apagar gravação, notas e a marcação"'+(owned?"":' disabled')+'>🗑 Delete</button></span>';
@@ -114,14 +119,31 @@ function nbPopHTML(t,editing){
    button exists, so each handler is wired unconditionally; the disabled ones simply do nothing
    when clicked. The note editor is open exactly while the popup holds a #nt textarea (re-entering
    Add/Edit Note keeps whatever was already typed). */
+/* swap a popup button's glyph for a processing SPIRAL (owner spec 2026-10-12): on=true replaces the
+   label with `<span class="spin">` (record while a clip is being captured, play while the clip is
+   sounding); on=false restores the untouched label markup. `data-lbl` keeps the original HTML, so the
+   swap is fully reversible and idempotent — never swaps twice. */
+function nbBtnSpinner(btn,on){
+ if(!btn)return;
+ const lbl=btn.querySelector(".lbl");
+ if(!lbl)return;
+ if(on){
+  if(btn.dataset.spin)return;
+  btn.dataset.spin="1";btn.dataset.lbl=lbl.innerHTML;
+  lbl.innerHTML='<span class="spin"></span>';
+ }else{
+  if(!btn.dataset.spin)return;
+  lbl.innerHTML=btn.dataset.lbl;delete btn.dataset.spin;delete btn.dataset.lbl;
+ }
+}
 function nbWirePopup(t,r,x,y){
  if(!pop)return;
  const H=pop.querySelector("#pH");
  if(H)H.onclick=()=>{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
  const P=pop.querySelector("#pP");
- if(P)P.onclick=()=>{if(P.disabled)return;nbPlayRecording(t)};
+ if(P)P.onclick=()=>{if(P.disabled)return;nbPlayRecording(t,function(pr){nbBtnSpinner(P,pr)})};
  const R=pop.querySelector("#pR");
- if(R)R.onclick=()=>rec(t);
+ if(R)R.onclick=()=>rec(t,R);
  const N=pop.querySelector("#pN");
  if(N)N.onclick=()=>{
   const ta=pop.querySelector("#nt"),cur=ta?ta.value:null;
@@ -186,26 +208,32 @@ function nbNoting(t,r,x,y){
    The chain is resilient by design: a cached URL is tried first, a failed fetch falls through to
    the inline b64 when there is one, and a stale cached URL (revoked/reloaded) retries once from
    the server — the button never dead-ends and never throws into the page. */
-function nbPlayAudio(u){
- try{const a=new Audio(u);a.play().catch(()=>{});return a}catch(e){return null}
+function nbPlayAudio(u,done){
+ try{const a=new Audio(u);a.addEventListener("ended",()=>{if(done)done(false)},{once:true});
+  a.addEventListener("error",()=>{if(done)done(true)},{once:true});
+  a.play().catch(()=>{if(done)done(true)});return a}catch(e){return null}
 }
-function nbAfterPlay(key,src){const a=nbPlayAudio(src);if(!a)return;clearTimeout(audioCache[key+"_ev"]);a.addEventListener("error",()=>{delete audioCache[key];nbPlayRecording(key.replace(/^a:/,""))},{once:true})}
-function nbPlayRecording(t){
+/* a play that finished cleanly → retry=false (hide the spiral). A failed play → retry=true: the
+   cached URL is dropped and playback is retried once from the server (inline b64 / ?action=file),
+   which now rejoins nbPlayRecording WITHOUT a done callback — so a retry never re-enters the spiral
+   toggle and can never loop. */
+function nbAfterPlay(key,src,done){const a=nbPlayAudio(src,done);if(!a){if(done)done(true);return}clearTimeout(audioCache[key+"_ev"]);a.addEventListener("error",()=>{delete audioCache[key];nbPlayRecording(key.replace(/^a:/,""))},{once:true})}
+function nbPlayRecording(t,done){
  const key="a:"+t;
- if(audioCache[key]){nbAfterPlay(key,audioCache[key]);return}
+ if(audioCache[key]){nbAfterPlay(key,audioCache[key],done);return}
  const rec=nbEntries(t).find(it=>it.type==="rec");
- if(!rec){toast("Sem gravação nesta frase.");return}
- const fromInline=()=>{if(rec.b64){audioCache[key]=b64url(rec.b64,rec.mime);nbAfterPlay(key,audioCache[key]);return true}return false};
+ if(!rec){toast("Sem gravação nesta frase.");if(done)done();return}
+ const fromInline=()=>{if(rec.b64){audioCache[key]=b64url(rec.b64,rec.mime);nbAfterPlay(key,audioCache[key],done);return true}return false};
  if(rec.fileId){
   fetch(BACKPACK+"?action=file&id="+encodeURIComponent(rec.fileId)+"&t="+Date.now())
    .then(r=>r.json()).then(j=>{
-    if(j&&j.b64){audioCache[key]=b64url(j.b64,j.mime);nbAfterPlay(key,audioCache[key]);}
-    else if(!fromInline())toast("⚠ não consegui carregar o áudio");
+    if(j&&j.b64){audioCache[key]=b64url(j.b64,j.mime);nbAfterPlay(key,audioCache[key],done);}
+    else if(!fromInline()){toast("⚠ não consegui carregar o áudio");if(done)done();}
    })
-   .catch(()=>{if(!fromInline())toast("⚠ não consegui carregar o áudio")});
+   .catch(()=>{if(!fromInline()){toast("⚠ não consegui carregar o áudio");if(done)done()}});
   return;
  }
- if(!fromInline())toast("Sem gravação nesta frase.");
+ if(!fromInline()){toast("Sem gravação nesta frase.");if(done)done();}
 }
 /* remove mark.nb from the text (undo the wrap) — leaves a clean DOM, so a later note/recording
    starts from the same pristine text */
@@ -516,8 +544,15 @@ function hlPalette(rec){
   };
  });
 }
-async function rec(t){let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){alert("Microfone bloqueado — abra a lição em aba própria.");return}
- closePop();
+async function rec(t,rb){
+ if(!pop||pop.dataset.recording)return;      /* one recording per phrase at a time (re-entry guard) */
+ let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){alert("Microfone bloqueado — abra a lição em aba própria.");return}
+ /* the Record button's glyph becomes the processing SPIRAL for the whole capture (owner spec
+    2026-10-12) instead of a toast; the popup is closed only once the clip is saved, so the spiral
+    stays visible while the user speaks. */
+ if(pop)pop.dataset.recording="1";
+ const press=on=>{if(rb&&rb.isConnected)nbBtnSpinner(rb,on)};
+ press(true);
  const ind=document.createElement("div");ind.className="pop recind";
  ind.innerHTML='<span class="pulse">🎙</span> gravando… <b style="font-size:12px">'+t.slice(0,30)+"</b>";
  document.body.appendChild(ind);
@@ -541,7 +576,7 @@ async function rec(t){let stream;try{stream=await navigator.mediaDevices.getUser
    const f=new FileReader();f.onload=()=>{const fb=feedback(t,heard);
    markRecording(t,null);   /* the phrase is underlined only now — on save, never on the Record click */
    send({action:"add",type:"rec",anchor:t,b64:f.result.split(",")[1],mime:"audio/webm",data:JSON.stringify({score:fb.score,heard,fb:fb.msg})});
-   ind.remove();};
+   ind.remove();press(false);closePop();};
    f.readAsDataURL(blob);};
   mr.onstop=process;
   try{mr.stop()}catch(e){process()}

@@ -35,6 +35,11 @@ mark.nb.has-note{color:var(--blue);background-image:linear-gradient(var(--bluebg
 /* every note/recording popup button always EXISTS; the ones that do not apply yet are greyed out
    (owner spec 2026-10-12) instead of being removed from the row */
 .pop button:disabled{opacity:.45;box-shadow:none;cursor:default}
+/* a popup button whose glyph became a processing SPIRAL (Record while capturing a clip, Play while
+   the clip is sounding) — the label text is hidden, leaving only the rotating ring, and the button
+   stays full-strength (never greyed), since the action is running, not unavailable */
+.pop button[data-spin] .lbl{display:inline-flex;align-items:center;justify-content:center;min-width:2em}
+.pop button .spin{border-color:currentColor;border-top-color:transparent;vertical-align:middle}
 .pop textarea{width:100%;margin:6px 0}
 /* HIGHLIGHT = its OWN PAINT LAYER (#hlLayer, never mark.nb). A highlight is a translucent
    rectangle measured from the text range and painted over the text by #hlLayer, so it is NOT part

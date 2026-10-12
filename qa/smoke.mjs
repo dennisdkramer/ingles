@@ -686,12 +686,34 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 } else {
                     console.log('   ✅ All six buttons always present; Play/Delete live, Save greyed until editing');
                 }
+                /* the popup must NOT repeat the selected phrase (owner spec 2026-10-12) */
+                if (new RegExp(stText).test(window.document.querySelector('.pop').textContent)) {
+                    errors.push('[FAIL] the popup must not repeat the selected text');
+                } else {
+                    console.log('   ✅ the popup does not repeat the selected text');
+                }
                 const noteShown = window.document.querySelector('.pop #nbNote');
                 if (!noteShown || !/saved note text/.test(noteShown.textContent)) {
                     errors.push('[FAIL] the saved note is not shown above the popup buttons');
+                } else if (/📝/.test(noteShown.textContent) || /bluebg/.test(noteShown.getAttribute('style') || '')) {
+                    errors.push('[FAIL] the saved note must be plain text — no 📝 icon and no blue background');
                 } else {
-                    console.log('   ✅ the saved note is shown above the popup buttons');
+                    console.log('   ✅ the saved note is shown as plain text above the popup buttons (no icon / no blue bg)');
                 }
+                /* Record ↦ processing spiral, and back (owner spec 2026-10-12) */
+                try {
+                    window.eval('nbBtnSpinner(document.querySelector(".pop #pR"), true)');
+                    const spinningR = window.document.querySelector('.pop #pR .spin');
+                    window.eval('nbBtnSpinner(document.querySelector(".pop #pR"), false)');
+                    const restoredR = window.document.querySelector('.pop #pR .lbl') && !window.document.querySelector('.pop #pR .lbl .spin');
+                    if (!spinningR) errors.push('[FAIL] ⏺ Record did not become the processing spiral');
+                    else if (!restoredR) errors.push('[FAIL] ⏺ Record did not restore its glyph');
+                    else console.log('   ✅ ⏺ Record becomes the processing spiral while recording, then restores');
+                } catch (e) { errors.push('[FAIL] Record spiral swap threw: ' + e.message); }
+                /* ▶ Play carries a .lbl too, so the same swap backs the "spiral while playing" rule */
+                const playLabel = playBtn && playBtn.querySelector('.lbl');
+                if (!playLabel) errors.push('[FAIL] ▶ Play has no .lbl span, so the playback spiral cannot be shown');
+                else console.log('   ✅ ▶ Play carries the .lbl span used for the playback spiral');
                 noteBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
                 const saveEdit = qp('#pS');
                 if (!qp('#nt') || !saveEdit || saveEdit.disabled) {

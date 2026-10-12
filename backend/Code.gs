@@ -7,9 +7,10 @@
  * Storage model: one row per item in sheet "IAP_backpack!layer".
  * Columns: id | email | track | lesson | type | anchor | data | author | ts | b64
  * Separation is enforced on read AND write: email + track + lesson.
- * Recording audio over 150KB lives in Drive (folder IAP_uploads) and the b64 column keeps a
+ * Recording audio ALWAYS lives in Drive (folder IAP_uploads) and the b64 column keeps a
  * "drive:<fileId>" pointer; del and wipe trash that file too (purgeDrive_), so deleting an item
- * removes both its row and its audio.
+ * removes both its row and its audio. (Inline b64 in the row is only a last-resort fallback when
+ * the Drive upload itself fails — the Sheet cell cannot hold more than ~50k characters.)
  */
 
 var SS_NAME = "IAP_backpack";
@@ -120,9 +121,13 @@ function doPost(e) {
       for (var i = 0; i < all.length; i++) {
         if (String(all[i].id) === id) { sh.deleteRow(all[i]._row); break; }
       }
+      /* a recording's audio ALWAYS goes to Drive (owner spec 2026-10-12): the row keeps only a
+         "drive:<fileId>" pointer, never inline audio. The old 150KB gate left every short clip
+         inline in the Sheet (which is only the fallback, not "the drive") AND collided with the
+         50k-character spreadsheet cell limit. If the upload itself fails, fall back to an inline
+         copy only when it fits a cell (<45k chars) so nothing is ever silently lost. */
       var store = o.b64 || "";
-      // large binaries go to Drive, cell keeps a pointer
-      if (o.b64 && String(o.b64).length > 150000) {
+      if (o.b64) {
         try {
           var folder = DriveApp.getFoldersByName(UPLOAD_FOLDER).hasNext()
             ? DriveApp.getFoldersByName(UPLOAD_FOLDER).next()
@@ -131,7 +136,9 @@ function doPost(e) {
           var file = folder.createFile(blob);
           file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
           store = "drive:" + file.getId();
-        } catch (upErr) { /* keep inline if upload fails */ }
+        } catch (upErr) {
+          if (String(o.b64).length > 45000) store = ""; // too big for a cell and the upload failed → drop inline
+        }
       }
       sh.appendRow([id, o.email || "", o.track || "", o.lesson || "", o.type || "", o.anchor || "",
         typeof o.data === "string" ? o.data : JSON.stringify(o.data || ""), o.author || "aluno",
