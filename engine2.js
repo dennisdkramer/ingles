@@ -14,7 +14,7 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
   const st=Object.entries(ac.students||{}).filter(([e,s])=>s.track===TRACK);
   extra=' <select id="sel"><option value="'+gate.email+'">demo (you)</option>'+st.map(([e,s])=>'<option value="'+e+'">'+(s.name||e)+"</option>").join("")+"</select>";}
  const bar=document.getElementById("controlbar")||topbar;
- bar.innerHTML="🦺 "+gate.email+" · <b>"+TRACK+"</b> · <a href=\"../portal.html\">Index</a> · <span class=\"dim\">Ctrl+Z=undo</span> <span class=\"undo-group\"><button id=\"undoBtn\" title=\"Undo (Ctrl+Z)\">↶ Undo</button><button id=\"redoBtn\" title=\"Redo (Ctrl+Y)\">↷ Redo</button></span>"+extra;
+ bar.innerHTML="🦺 "+gate.email+" · <b>"+TRACK+"</b> · <a href=\"../portal.html\">Index</a>"+extra;
  if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";loadLayer()};}
  loadLayer();
  /* ---- cross-session poll (owner spec 2026-10-12) — the ONLY re-check there is: add/set/del on
@@ -25,113 +25,15 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
     generic (by id+action, not by feature) pairing is the whole mechanism — any future action type
     that goes through send() is covered automatically, no per-action special-casing needed. */
  setInterval(loadLayer,3000);
- setupUndo();
 }catch(e){let b=document.getElementById("errb");if(b)b.innerHTML+=" · control bar: "+e.message}})();
 
-let undoStack=[],redoStack=[];
-
-function pushUndo(action){
- undoStack.push(action);
- if(undoStack.length>50)undoStack.shift();
- /* a brand-new action branches the history: anything that was undone can no longer be redone */
- redoStack.length=0;
- updateUndoButton();
-}
-
-/* both buttons are ALWAYS present next to the "Ctrl+Z=undo" legend; they only grey out (disabled)
-   when their own stack is empty — nothing ever hides or removes them from the control bar */
-function updateUndoButton(){
- const ub=document.getElementById("undoBtn"),rb=document.getElementById("redoBtn");
- if(ub)ub.disabled=!undoStack.length;
- if(rb)rb.disabled=!redoStack.length;
-}
-
-function setupUndo(){
- document.addEventListener("keydown",e=>{
-  const m=e.ctrlKey||e.metaKey;if(!m)return;
-  const k=(e.key||"").toLowerCase();
-  if(k==="z"&&!e.shiftKey){e.preventDefault();doUndo();}
-  else if(k==="y"||(k==="z"&&e.shiftKey)){e.preventDefault();doRedo();}
- });
- const ub=document.getElementById("undoBtn"),rb=document.getElementById("redoBtn");
- if(ub)ub.onclick=()=>doUndo();
- if(rb)rb.onclick=()=>doRedo();
- updateUndoButton();
-}
-
-/* apply ONE undo/redo action: DOM first, network last (a failed save must never undo what the
-   user just saw). Returns the action that would perform the OPPOSITE direction, so doUndo/doRedo
-   can push it onto the other stack and the two stay perfectly in sync. */
-function applyAction(a){
- if(!a)return null;
- if(a.type==="input"){
-  const cur=a.el?a.el.value:undefined;
-  if(a.el)a.el.value=a.prev;
-  return {type:"input",el:a.el,prev:cur};
- }else if(a.type==="radio"){
-  const cur=a.el&&a.el.querySelector('input:checked');const from=cur?cur.value:null;
-  const r=a.el&&a.el.querySelector('input[value="'+a.prev+'"]');
-  if(r)r.checked=true;
-  return {type:"radio",el:a.el,prev:from};
- }else if(a.type==="delete"){
-  /* the 🗑 Delete action now carries an items[] (engine1 nbDeleteAnchor); older entries used a
-     single item — accept both so an undo of a delete really re-adds the phrase's whole set */
-  const items=a.items||(a.item?[a.item]:[]);
-  items.forEach(it=>{
-   if(it.anchor)ensureMark(it.anchor,it.type);
-   send({action:"add",type:it.type,anchor:it.anchor,b64:it.b64,mime:it.mime,data:JSON.stringify(it.data||{}),id:it.id});
-  });
-  return {type:"delete",items:items.slice()};
- }else if(a.type==="note"){
-  a.items.forEach(it=>{
-   if(it.anchor)ensureMark(it.anchor,it.type);
-   send({action:"add",type:it.type,anchor:it.anchor,b64:it.b64,mime:it.mime,data:JSON.stringify(it.data||{}),id:it.id});
-  });
-  return {type:"note",items:a.items.slice()};
- }else if(a.type==="hl"){
-  if(a.kind==="add"){
-   /* undo/redo of "create a highlight": take it away, or put it back at its exact place/colour.
-      Capture the live record BEFORE dropping it — its anchor + offsets + colour are what `hlReadd`
-      needs, and a creation entry only carries the id. */
-   const rec0=hlById(a.id);
-   const item=a.item||(rec0?{id:rec0.id,anchor:rec0.anchor,data:{color:rec0.color,b:rec0.b,o:rec0.start}}:null);
-   hlDrop(a.id);closePop();
-   if(a.id)send({action:"del",id:a.id});
-   return {type:"hl",kind:"add",id:a.id,item:item};
-  }else if(a.kind==="del"){
-   /* undo/redo of "delete a highlight": put the record back here and now, then store it again */
-   hlReadd(a.item);
-   send({action:"add",type:"hl",anchor:a.item.anchor,data:JSON.stringify(a.item.data||{}),id:a.item.id});
-   return {type:"hl",kind:"del",item:a.item};
-  }else if(a.kind==="color"){
-   /* undo/redo of "recolour": paint the target colour; the inverse needs the colour we are leaving */
-   const rec=hlById(a.id);
-   const now=rec?rec.color:null;
-   if(rec)hlSetColor(rec,a.to);
-   if(a.id)send({action:"set",type:"hl",anchor:a.anchor,data:JSON.stringify({color:a.to,b:rec?rec.b:a.b,o:rec?rec.start:a.start}),id:a.id});
-   const other=now!=null?now:a.from;
-   return {type:"hl",kind:"color",id:a.id,anchor:a.anchor,from:other,to:a.from,b:rec?rec.b:a.b,start:rec?rec.start:a.start};
-  }
- }
- return null;
-}
-
-function doUndo(){
- if(!undoStack.length)return;
- const last=undoStack.pop();
- const inv=applyAction(last);
- if(inv)redoStack.push(inv);
- updateUndoButton();
-}
-
-function doRedo(){
- if(!redoStack.length)return;
- const last=redoStack.pop();
- const inv=applyAction(last);
- if(inv)undoStack.push(inv);
- updateUndoButton();
-}
-
+/* UNDO/REDO REMOVED (owner spec 2026-10-12): the control bar builds no ↶ Undo / ↷ Redo buttons any
+   more and none of the machinery exists — no undoStack/redoStack, no pushUndo, no
+   applyAction/doUndo/doRedo, no updateUndoButton and no Ctrl+Z/Ctrl+Y keydown handler. A delete or a
+   recolour is FINAL: the page applies the change at once and the network write follows (network
+   last); re-doing an action takes one click. Ctrl+Z inside the note editor is therefore the
+   browser's own text undo, which is what a user expects while typing. The highlight primitives the
+   old applyAction drove (hlDrop/hlDelete in engine1.js) stay — render helpers, not undo machinery. */
 async function loadLayer(){
  let rows=[];
  try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L+"&ver="+LAYER_VER+"&t="+Date.now());rows=(await r.json()).rows||[];}catch(e){rows=[];}

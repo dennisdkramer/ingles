@@ -17,7 +17,7 @@
  * - Highlight logic: Ctrl held at mousedown AND at mouseup creates a highlight on its OWN paint
  *   layer (#hlLayer — never an element inside the text); Ctrl released before mouseup creates
  *   nothing; the Hear/Record/Note popup stays shut for the whole Ctrl gesture; the colour palette
- *   recolours it; it pushes an undo entry; Ctrl+click on the painted rectangle deletes it; a
+ *   recolours it; there is NO undo stack any more (no ↶/↷ buttons, no Ctrl+Z handler); Ctrl+click on the painted rectangle deletes it; a
  *   highlight may cross a note/recording and BOTH stay whole (the two layers never interact);
  *   the removed dead controls never come back
  *
@@ -434,54 +434,30 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 }
             }
 
-            /* (d) undo entry */
-            let undoOk = null;
+            /* (d) NO UNDO / REDO any more (owner spec 2026-10-12). The old undo stack is gone for
+               real: none of its functions exist in the page, the control bar builds neither the ↶/↷
+               buttons nor the "Ctrl+Z=undo" legend, and creating a highlight pushes no undo entry. */
             try {
-                const before = window.eval('undoStack.length');
-                window.eval('doUndo()');
-                undoOk = before > 0 && window.eval('undoStack.length') === before - 1;
-            } catch (e) { undoOk = null; }
-            if (undoOk === true) {
-                console.log('   ✅ Highlight pushes an undo entry (consumed by undo)');
-            } else if (undoOk === false) {
-                errors.push('[FAIL] highlight did not push a usable undo entry');
-            } else {
-                console.log('   ⏭  highlight undo check skipped (undoStack not inspectable)');
+                const deadUndo = ['pushUndo', 'applyAction', 'doUndo', 'doRedo', 'setupUndo', 'updateUndoButton', 'undoStack', 'redoStack']
+                    .filter(n => window.eval('typeof ' + n) !== 'undefined');
+                if (deadUndo.length) {
+                    errors.push('[FAIL] the removed undo stack is back in the page: ' + deadUndo.join(','));
+                } else {
+                    console.log('   ✅ no undo stack in the page (pushUndo/applyAction/doUndo/doRedo/undoStack/redoStack gone)');
+                }
+                const bar2 = window.document.getElementById('controlbar') || window.document.querySelector('.control-bar');
+                if (bar2 && /undo|ctrl\+z/i.test(bar2.innerHTML)) {
+                    errors.push('[FAIL] the control bar still advertises undo/redo');
+                } else if (bar2) {
+                    console.log('   ✅ the control bar advertises no undo/redo (no buttons, no Ctrl+Z legend)');
+                } else {
+                    console.log('   ⏭  control-bar undo/redo check skipped (no control bar in harness)');
+                }
+            } catch (e) {
+                errors.push('[FAIL] no-undo test threw: ' + e.message);
             }
             try { window.eval('hlList=[]; hlReflow()'); } catch (e) {}
 
-            /* (d2) redo: the two buttons are always present (never hidden) next to the hotkey legend,
-               undo/redo round-trips a typed input through the public API, and a NEW action clears the
-               redo stack */
-            try {
-                const bar = window.document.getElementById('controlbar') || window.document.querySelector('.control-bar');
-                if (bar && !window.document.getElementById('undoBtn')) {
-                    bar.innerHTML += '<button id="undoBtn"></button><button id="redoBtn"></button>';
-                }
-                if (!window.document.getElementById('undoBtn') || !window.document.getElementById('redoBtn')) {
-                    console.log('   ⏭  undo/redo button test skipped (no control bar in harness)');
-                } else {
-                    window.eval('undoStack.length=0;redoStack.length=0;updateUndoButton()');
-                    window.eval('var __ti=document.createElement("input");__ti.value="A";undoStack.push({type:"input",el:__ti,prev:"A"});updateUndoButton()');
-                    let ok = window.eval('undoStack.length===1 && redoStack.length===0 && __ti.value==="A"');
-                    window.eval('__ti.value="B";doUndo()');
-                    ok = ok && window.eval('__ti.value==="A" && undoStack.length===0 && redoStack.length===1');
-                    window.eval('doRedo()');
-                    ok = ok && window.eval('__ti.value==="B" && undoStack.length===1 && redoStack.length===0');
-                    window.eval('pushUndo({type:"input",el:__ti,prev:"X"})');
-                    ok = ok && window.eval('redoStack.length===0');
-                    const ub = window.document.getElementById('undoBtn'), rb = window.document.getElementById('redoBtn');
-                    ok = ok && !!ub && !!rb && ub.hidden === false && rb.hidden === false;
-                    window.eval('undoStack.length=0;redoStack.length=0;updateUndoButton();document.getElementById("undoBtn").disabled=true;document.getElementById("redoBtn").disabled=true');
-                    if (ok) {
-                        console.log('   ✅ ↶ Undo / ↷ Redo buttons are always present; redo re-applies and a new action clears the redo stack');
-                    } else {
-                        errors.push('[FAIL] redo did not re-apply the undone action / the buttons were not always present');
-                    }
-                }
-            } catch (e) {
-                errors.push('[FAIL] undo/redo test threw: ' + e.message);
-            }
             /* (e) a note/recording mark and a highlight may intersect: BOTH stay whole, nothing is
                refused, nothing is split — the two layers never talk to each other */
             const noteFrom = 4, noteTo = Math.min(14, tn.data.length - 4);
@@ -591,28 +567,25 @@ async function testPage(serverUrl, pageName, track = 'business') {
                         return Promise.resolve({ json: () => Promise.resolve({ result: 'deleted', purged: true }) });
                     };
                     delBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
-                    const undoTop = (() => { try { return window.eval('undoStack[undoStack.length-1]'); } catch (e) { return null; } })();
                     if (window.document.querySelector('mark.nb[data-a="' + nbText + '"]')) {
                         errors.push('[FAIL] 🗑 Delete left the note/recording mark in the page');
                     } else if (window.eval('layer.length')) {
                         errors.push('[FAIL] 🗑 Delete did not clear the item from the layer');
-                    } else if (!undoTop || undoTop.type !== 'delete') {
-                        errors.push('[FAIL] 🗑 Delete did not push an undoable delete action');
                     } else {
                         const delMsg = posted.find(p => p.action === 'del');
                         if (!delMsg || delMsg.id !== nbRow.id) {
                             errors.push('[FAIL] 🗑 Delete did not send a del for the saved item to the backend');
                         } else {
-                            console.log('   ✅ 🗑 Delete removes the mark + item in one undoable action and sends del');
+                            console.log('   ✅ 🗑 Delete removes the mark + item at once and sends del (no undo entry)');
                         }
                     }
                     window.fetch = origFetch;
                     await new Promise(resolve => setTimeout(resolve, 50));
                     const toastEl = window.document.getElementById('toast');
-                    if (!/apagado/.test(toastEl ? toastEl.textContent : '')) {
-                        errors.push('[FAIL] the del reply did not raise the delete confirmation toast');
+                    if (/apagado/.test(toastEl ? toastEl.textContent : '')) {
+                        errors.push('[FAIL] the removed "apagado" toast came back on a successful delete');
                     } else {
-                        console.log(`   ✅ del reply confirms the purge (toast: "${toastEl.textContent}")`);
+                        console.log('   ✅ a successful delete raises NO toast (the "apagado" pill was removed)');
                     }
                     closeNb();
                 }
@@ -747,7 +720,8 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 window.eval('closePop()');
                 window.showAnchor(stText, 20, 40);
 
-                if (playBtn) {
+                const playNow = window.document.querySelector('.pop #pP');
+                if (playNow) {
                     /* ▶ Play recording: click #1 must fetch the Drive clip via ?action=file&id=<fileId>;
                        click #2 must NOT fetch again — the object URL is cached under a:<anchor>.
                        (jsdom cannot construct a spy for the page's Audio binding, so the cache-hit
@@ -759,7 +733,16 @@ async function testPage(serverUrl, pageName, track = 'business') {
                         return Promise.resolve({ json: () => Promise.resolve({ b64: 'AAAA', mime: 'audio/webm' }) });
                     };
                     try {
-                        playBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                        playNow.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                        /* OWNER SPEC 2026-10-12: ▶ Play shows the processing SPIRAL while the clip is
+                           playing. It goes up AT THE CLICK — synchronously, before the fetch that brings
+                           the bytes back — so a first-ever Drive fetch shows it too. */
+                        const livePlay = window.document.querySelector('.pop #pP');
+                        if (!livePlay || !livePlay.querySelector('.spin')) {
+                            errors.push('[FAIL] ▶ Play did not show the processing spiral while the clip plays');
+                        } else {
+                            console.log('   ✅ ▶ Play shows the processing spiral while the clip plays');
+                        }
                         await new Promise(resolve => setTimeout(resolve, 80));
                         const playUrl = fetched.filter(u => /action=file/.test(u))[0];
                         if (!playUrl || !/id=drive-file-1/.test(playUrl)) {
@@ -767,7 +750,15 @@ async function testPage(serverUrl, pageName, track = 'business') {
                         } else {
                             console.log('   ✅ ▶ Play recording fetches the Drive clip via ?action=file&id=…');
                         }
-                        playBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                        /* …and the spiral is cleared once playback stops (ended / failed play), so it
+                           can never get stuck on. jsdom's Audio cannot really play, so the clip stops at
+                           once — exactly the "stopped" edge this asserts. */
+                        if (window.document.querySelector('.pop #pP .spin')) {
+                            errors.push('[FAIL] the playback spiral stayed on after the clip stopped');
+                        } else {
+                            console.log('   ✅ the playback spiral is cleared once the clip stops');
+                        }
+                        playNow.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
                         await new Promise(resolve => setTimeout(resolve, 50));
                         if (fetched.filter(u => /action=file/.test(u)).length !== 1) {
                             errors.push('[FAIL] the second ▶ Play recording re-fetched the clip instead of using the cache');
@@ -778,7 +769,6 @@ async function testPage(serverUrl, pageName, track = 'business') {
                         window.fetch = origFetch;
                     }
                 }
-
                 const noteBtn2 = window.document.querySelector('.pop #pN');
                 if (noteBtn2) {
                     noteBtn2.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
@@ -806,12 +796,12 @@ async function testPage(serverUrl, pageName, track = 'business') {
 
 
             /* (g) the removed dead controls must stay gone (they were never wired to any engine) */
-            const dead = ['bPrac', 'bQuiz', 'sendTr', 'done', 'mNext', 'mIndex', 'modeToggle', 'mute']
+            const dead = ['bPrac', 'bQuiz', 'sendTr', 'done', 'mNext', 'mIndex', 'modeToggle', 'mute', 'undoBtn', 'redoBtn']
                 .filter(id => window.document.getElementById(id));
             if (dead.length) {
                 errors.push('[FAIL] removed dead controls are back in the page: ' + dead.join(','));
             } else {
-                console.log('   ✅ no dead controls in the page (bPrac/bQuiz/sendTr/done/mNext/mIndex/modeToggle/mute)');
+                console.log('   ✅ no dead controls in the page (bPrac/bQuiz/sendTr/done/mNext/mIndex/modeToggle/mute/undoBtn/redoBtn)');
             }
         } else {
             console.log('   ⏭  highlight test skipped (no plain-text paragraph found)');

@@ -41,7 +41,11 @@ function send(o){o.email=STUDENT;o.lesson=L;o.author=who();
   .then(r=>r.json())
   .then(j=>{
    if(isDel){
-    if(j&&j.result==="deleted"){toast(j.purged?"🗑 áudio + dados apagados ✔":"🗑 apagado ✔");return;}
+    /* a delete is SILENT on success (owner spec 2026-10-12): the item visibly leaves the page, and one
+       del goes out per ROW — so the old "🗑 apagado ✔" pill fired once per row (a phrase with a note
+       + a recording raised TWO, and a late poll could raise one minutes after the click) and read as
+       if it were disconnected from the delete. Only a real failure to delete still speaks up. */
+    if(j&&j.result==="deleted")return;
     toast("⚠ falha ao apagar (servidor)");
     return;
    }
@@ -141,7 +145,12 @@ function nbWirePopup(t,r,x,y){
  const H=pop.querySelector("#pH");
  if(H)H.onclick=()=>{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)};
  const P=pop.querySelector("#pP");
- if(P)P.onclick=()=>{if(P.disabled)return;nbPlayRecording(t,function(pr){nbBtnSpinner(P,pr)})};
+ /* ▶ Play shows the processing SPIRAL for the whole playback (owner spec 2026-10-12). ON at the
+    click, BEFORE the Drive/?action=file fetch, so even a first-ever fetch shows it; OFF when playback
+    really stops — nbPlayAudio fires its done() on BOTH "ended" and a failed play/lookup, so the
+    spiral can never get stuck on. The old wiring handed that callback straight to nbBtnSpinner and
+    done(true) means "play FAILED", so ▶ Play only ever span on an error — never while playing. */
+ if(P)P.onclick=()=>{if(P.disabled)return;nbBtnSpinner(P,true);nbPlayRecording(t,()=>nbBtnSpinner(P,false))};
  const R=pop.querySelector("#pR");
  if(R)R.onclick=()=>rec(t,R);
  const N=pop.querySelector("#pN");
@@ -263,12 +272,11 @@ function nbPlayRecording(t,done){
 function nbUnmark(t){const m=document.querySelector('mark.nb[data-a="'+CSS.escape(t)+'"]');if(!m)return;
  try{const p=m.parentNode;while(m.firstChild)p.insertBefore(m.firstChild,m);p.removeChild(m)}catch(e){}}
 /* DELETE (owner spec 2026-10-12): the popup's 🗑 button removes the saved recording, any notes
-   AND the visual element — one action, undoable, network last. */
+   AND the visual element — one action, network last. */
 function nbDeleteAnchor(t){
  const items=nbEntries(t);
  if(!items.length){toast("Nada para apagar nesta frase.");closePop();return}
  const entries=items.map(e=>({id:e.id,type:e.type,anchor:e.anchor,b64:e.b64,mime:e.mime,data:e.data}));
- if(typeof pushUndo==="function")pushUndo({type:"delete",items:entries}); /* defined in engine2 */
  /* drop the rows locally at once too — the server is the source of truth but the UI must not keep a
     deleted item until the next 3s poll (same "immediate" principle as the mark itself) */
  layer=layer.filter(it=>!(it.type==="rec"||it.type==="note")||it.anchor!==t);
@@ -481,14 +489,9 @@ document.addEventListener("mouseup",()=>{if(hlList.length)hlQueueReflow()},true)
 if(document.fonts&&document.fonts.ready)try{document.fonts.ready.then(hlQueueReflow)}catch(e){}
 function hlSetColor(rec,c){if(!rec)return null;rec.color=hlColorOk(c);hlReflow();return rec}
 function hlDrop(id){hlList=hlList.filter(r=>r.id!==id);hlReflow()}
-/* put a deleted highlight back (undo): same id, same place, same colour */
-function hlReadd(item){if(!item)return null;
- hlList=hlList.filter(r=>r.id!==item.id);
- return hlRestore({id:item.id,anchor:item.anchor,data:JSON.stringify(item.data||{})})}
 function hlDelete(rec){if(!rec)return;
- const id=rec.id,anchor=rec.anchor,data={color:rec.color,b:rec.b,o:rec.start};
+ const id=rec.id;
  hlDrop(id);
- if(typeof pushUndo==="function")pushUndo({type:"hl",kind:"del",item:{type:"hl",anchor,data,id}});
  closePop();
  /* network last: a failed save must never undo what the user just saw */
  if(id)send({action:"del",id})}
@@ -541,9 +544,8 @@ function hlApply(r){
  if(!text.trim()){hlReflow();return}
  const m=hlMake(text,"yellow",b,s);
  hlJustRan=Date.now();
- if(typeof pushUndo==="function")pushUndo({type:"hl",kind:"add",id:m.id});
  hlPalette(m);
- /* network last: a failed save must never suppress the undo entry or the palette */
+ /* network last: a failed save must never suppress the palette */
  send({action:"add",type:"hl",anchor:m.anchor,data:JSON.stringify({color:"yellow",b:m.b,o:m.start}),id:m.id});
 }
 /* tiny colour swatches, just above the LAST painted rectangle of the highlight.
@@ -559,9 +561,8 @@ function hlPalette(rec){
  if(!pop)return;
  pop.classList.add("hlpalpop");
  pop.querySelectorAll("button[data-c]").forEach(b=>{
-  b.onclick=()=>{const c=b.dataset.c,from=rec.color;
+  b.onclick=()=>{const c=b.dataset.c;
    hlSetColor(rec,c);
-   if(typeof pushUndo==="function")pushUndo({type:"hl",kind:"color",id:rec.id,anchor:rec.anchor,from,b:rec.b,start:rec.start});
    closePop();
    if(rec.id)send({action:"set",type:"hl",anchor:rec.anchor,data:JSON.stringify({color:c,b:rec.b,o:rec.start}),id:rec.id});
   };
