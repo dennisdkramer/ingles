@@ -409,6 +409,31 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 }
             }
 
+            /* (c2) the palette belongs to the Ctrl gesture, so the gesture's OWN key must not close
+               it: the palette is created at mouseup with Ctrl still held, and the keyboard keeps
+               auto-repeating that key's keydown while the finger stays there. Any other key still
+               closes it (that is the documented rule) */
+            await gesture(hlRange);
+            const palette = () => window.document.querySelector('.pop.hlpalpop');
+            if (!palette()) {
+                errors.push('[FAIL] the colour palette (.pop.hlpalpop) did not appear for the keydown test');
+            } else {
+                window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Control', bubbles: true }));
+                window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Control', repeat: true, bubbles: true }));
+                window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Meta', repeat: true, bubbles: true }));
+                if (!palette()) {
+                    errors.push('[FAIL] the Ctrl/Meta keydown (auto-repeat while Ctrl stays held) closed the colour palette of its own gesture');
+                } else {
+                    console.log('   ✅ The palette survives the Ctrl/Meta repeat of its own gesture');
+                    window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'a', bubbles: true }));
+                    if (palette()) {
+                        errors.push('[FAIL] any other key press no longer closes the colour palette');
+                    } else {
+                        console.log('   ✅ Any other key press still closes the palette');
+                    }
+                }
+            }
+
             /* (d) undo entry */
             let undoOk = null;
             try {

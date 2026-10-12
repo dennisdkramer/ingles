@@ -128,7 +128,8 @@ function ensureMark(t,type){
    is re-measured (reflow) on resize/zoom and whenever the page re-lays-out.
    It may span lines inside ONE block, never across block elements.
    After creating, a tiny colour palette pops above the LAST painted rectangle
-   (yellow / transparent red / transparent green); any click or key press closes it. */
+   (yellow / transparent red / transparent green); any click or key press closes it — except
+   Ctrl/Meta, the gesture's own key, whose still-held auto-repeat must not kill it. */
 const HL_BLOCK=/^(ADDRESS|ARTICLE|ASIDE|BLOCKQUOTE|DD|DETAILS|DIALOG|DIV|DL|DT|FIELDSET|FIGCAPTION|FIGURE|FOOTER|FORM|H[1-6]|HEADER|HR|LI|MAIN|NAV|OL|P|PRE|SECTION|TABLE|TBODY|TD|TFOOT|TH|THEAD|TR|UL)$/;
 const HL_BLOCKSEL="p,li,fieldset,h1,h2,h3,h4,h5,h6,dd,dt,td,th,blockquote,figcaption,summary,pre,div";
 const HL_COLORNAMES=["yellow","red","green"];
@@ -163,8 +164,13 @@ function hlFromSelection(){
  lastSelText=t;
  hlApply(rc);
 }
-/* any key press closes the colour palette (but never the note textarea popup) */
-document.addEventListener("keydown",()=>{if(pop&&pop.classList.contains("hlpalpop"))closePop()},true);
+/* any key press closes the colour palette — EXCEPT Ctrl/Meta themselves: the palette is born while
+   the gesture key is STILL held down (the highlight runs at mouseup, Ctrl and all), so the keyboard
+   keeps auto-repeating that key's keydown right when the palette appears; the repeat of the key
+   that owns the gesture must never close the popup that gesture just opened (FUNCTION.md) */
+document.addEventListener("keydown",e=>{
+ if(e.key==="Control"||e.key==="Meta")return;
+ if(pop&&pop.classList.contains("hlpalpop"))closePop()},true);
 /* ---- the highlight paint layer: rectangles measured from the text, nothing else -------------- */
 let hlList=[]; /* live highlights — a highlight exists HERE and nowhere else in the DOM */
 function hlLayerEl(){let L=document.getElementById("hlLayer");
