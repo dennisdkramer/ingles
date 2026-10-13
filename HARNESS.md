@@ -78,6 +78,28 @@ the diff surgical, and verifying the affected path (RULES 4 and 6). "It works to
 a reason to refuse a change the owner asked for, and working behaviour never regresses silently.
 
 
+## TOOL / TERMINAL PARAMETERS (measured 2026-10-13)
+The terminal here is PowerShell 7 (`pwsh.exe`) and VS Code's shell integration IS loaded and armed:
+`HAS_PSRL_AT_STARTUP=True`, `PSConsoleHostReadLine` wraps the `633;` protocol, and `$LASTEXITCODE`
+carries the true code (`node -e 'process.exit(4)'` → 4 inside the shell). What is unreliable is Cline's
+own capture of that terminal — it does not correlate the integration's completion/exit markers — so a
+finished command can be reported as "exited with code 1" whatever it really returned (`process.exit(4)`
+→ 1, `cmd /c "exit 5"` → 1, `exit 7` → 1). Nothing on the shell or editor-settings side can fix that
+(the fault is inside the extension), so work WITH it, always:
+- Judge a call by its PRINTED OUTPUT, never by the reported exit code.
+- When a code actually matters, print it in the same command: `& node qa/smoke.mjs; 'EXIT=' + $LASTEXITCODE`.
+- Expect a captured chunk to open with a leaked terminal-title escape (`:\...\pwsh.exe` + `ESC \`), and
+  when integration capture fails outright the tool falls back to raw scrollback: keep commands short and
+  re-run rather than trusting a torn buffer.
+- Non-ASCII can arrive as mojibake (UTF-8 bytes decoded as OEM: checkmark → Γ£à, em dash → ΓÇö): assert
+  with ASCII markers (`Write-Output 'MARKER_OK'`) and read real files with `read_files` /
+  `search_codebase` instead of echoing accented or emoji text through the shell.
+- NEVER run a bare `exit` / `exit <n>`: it closes the terminal mid-command ("Terminal closed while the
+  command was running"). Print the code, `throw`, or just let the command finish.
+- Consequence to expect: a session can be logged `status: failed`, `exit_code 1` after a command that
+  really succeeded — including the final verifying call. That log status is noise.
+
+
 ## STATUS
 No separate status log: an open issue lives in the PENDING section of its category file (RULE 7) and is cleared there once done AND committed. `ISSUES.md` is only the catch-all queue for items that fit no category.
 

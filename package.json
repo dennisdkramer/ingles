@@ -1,0 +1,13 @@
+{
+  "name": "ingles",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Ingles Abre Portas - static English-lessons site (GitHub Pages) plus its QA harnesses.",
+  "scripts": {
+    "qa": "node qa/smoke.mjs",
+    "qa:live": "node qa/live.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "30.1.2"
+  }
+}
