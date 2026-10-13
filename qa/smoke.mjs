@@ -22,6 +22,14 @@
  *   overlapping highlight is SUBTRACTED from the older one (shrunk / split in two / swallowed) and
  *   never merged;
  *   the removed dead controls never come back
+ * - Note/recording OVERLAP RULES (step h): abutting saves are two spans that share no character (the
+ *   anchor is the TRIMMED selection — the 2px paper gap itself is the CSS half, the owner's live
+ *   check); a selection that partially overwrites a recording LOCKS ⏺ Record (greyed via `.locked`,
+ *   still pressable) and its press only toasts the refusal, while covering it exactly stays
+ *   re-recordable; a selection overlapping/containing a note edits THAT note and 💾 Save EXPANDS its
+ *   area to the union (same row id, the union's text as the anchor), a selection inside it keeps the
+ *   note's original string as its reference; a note crossing a recording leaves BOTH displayed (the
+ *   crossed mark kept in flagged pieces, both spans measurable) with both rows intact
  * - Grace window: a just-saved note (and a just-recorded clip) survives a poll whose snapshot
  *   predates its own backend write — the row, the phrase's flag and the popup's note line stay
  *   exactly as the click left them (nbLocal/nbEntries, the same pendingFor window as highlights)
@@ -939,6 +947,237 @@ async function testPage(serverUrl, pageName, track = 'business') {
                         console.log('   ✅ the same grace window covers a just-recorded clip (one core save)');
                     }
                 } catch (e) { errors.push('[FAIL] note grace-window check threw: ' + e.message); }
+
+                /* (h) OVERLAP RULES for notes/recordings (owner spec 2026-10-12). Owner report: note/record
+                   actions overlapping a previous one were neither reliably saved nor shown together.
+                     • ABUTTING (shares no character) is an ordinary new phrase, and the stored anchor is the
+                       TRIMMED selection — a mark therefore covers exactly its own anchor text and two
+                       abutting saves share no character, which is what lets style.css leave a 2px gap;
+                     • a selection that PARTIALLY overwrites a recording (overlaps / contains / sits inside
+                       it) LOCKS ⏺ Record: it greys (.locked) but stays pressable, and pressing it toasts the
+                       owner's refusal. Covering a recording EXACTLY is the documented re-record instead;
+                     • a selection that overlaps or contains a NOTE makes that note the popup's ACTIVE note;
+                       💾 Save then EXPANDS the note's area to the new selection (the union's text becomes
+                       its new anchor, SAME row id). A selection strictly INSIDE the note edits it but keeps
+                       the note's original string as its reference;
+                     • a note painted across a recording's edge keeps BOTH on screen: the crossed mark is
+                       split into pieces that keep its data-a and its flags, both spans stay measurable and
+                       the saved row is untouched.
+                   jsdom has no layout, so the 2px paper gap itself is the owner's live check — what is
+                   asserted here is the DOM invariant that makes it real (the two spans never share a
+                   character) plus every rule above. */
+                {
+                    const nbPos = (blk, at) => {
+                        const w = window.document.createTreeWalker(blk, window.NodeFilter.SHOW_TEXT);
+                        let a = 0, n;
+                        while ((n = w.nextNode())) { const len = n.data.length; if (at <= a + len) return { n, off: at - a }; a += len; }
+                        return null;
+                    };
+                    const nbArea = t => { try { const a = window.eval('nbAreaOf(' + JSON.stringify(t) + ')'); return a ? [a.s, a.e] : null; } catch (e) { return null; } };
+                    const nbReset = () => window.eval('closePop(); ctrlHeld=false; hlSuppressUntil=0; hlDownCtrl=false; lastCtrlUp=0; lastSelText=""; layer=[]; nbLocal=[]');
+                    /* select [from,to) of the block's TEXT and let the popup open at the mouse release */
+                    const nbSelect = async (blk, from, to) => {
+                        window.eval('closePop(); ctrlHeld=false; hlSuppressUntil=0; hlDownCtrl=false; lastCtrlUp=0; lastSelText=""');
+                        const p = nbPos(blk, from), q = nbPos(blk, to);
+                        const r = window.document.createRange(); r.setStart(p.n, p.off); r.setEnd(q.n, q.off);
+                        const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+                        window.document.dispatchEvent(new window.Event('selectionchange', { bubbles: true }));
+                        window.document.dispatchEvent(new window.MouseEvent('mouseup', { bubbles: true, cancelable: true }));
+                        await new Promise(res => setTimeout(res, 420));
+                        return window.document.querySelector('.pop');
+                    };
+                    const nbPress = sel => {
+                        const b = window.document.querySelector('.pop ' + sel);
+                        if (b) b.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                        return b;
+                    };
+                    const nbEdit = async (blk, from, to, text) => {
+                        await nbSelect(blk, from, to);
+                        nbPress('#pN');
+                        const ta = window.document.querySelector('.pop #nt');
+                        if (ta) ta.value = text;
+                        nbPress('#pS');
+                        return window.document.querySelector('.pop');
+                    };
+                    /* (h1) two ABUTTING saves, no shared character */
+                    try {
+                        const abText = 'Alpha beta gamma delta';
+                        const abP = window.document.createElement('p');
+                        abP.textContent = abText;
+                        contentArea.appendChild(abP);
+                        nbReset();
+                        await nbEdit(abP, 0, 10, 'first note');            /* "Alpha beta" */
+                        if (!nbArea('Alpha beta')) {
+                            errors.push('[FAIL] the abutting-save check could not create its first note');
+                        } else {
+                            /* the second selection INCLUDES the boundary space (" gamma"): the anchor is the
+                               TRIMMED text, so the space stays free and the two spans only abut */
+                            await nbEdit(abP, 10, 16, 'second note');
+                            const a1 = nbArea('Alpha beta'), a2 = nbArea('gamma');
+                            const m1 = window.document.querySelector('mark.nb[data-a="Alpha beta"]');
+                            const m2 = window.document.querySelector('mark.nb[data-a="gamma"]');
+                            if (!m1 || !m2) {
+                                errors.push('[FAIL] an abutting save did not get its own mark (m1=' + !!m1 + ' m2=' + !!m2 + ')');
+                            } else if (m1.textContent !== 'Alpha beta' || m2.textContent !== 'gamma') {
+                                errors.push('[FAIL] a mark does not cover exactly its own anchor text ("' + m1.textContent + '" / "' + m2.textContent + '")');
+                            } else if (!a1 || !a2 || a1[1] > a2[0]) {
+                                errors.push('[FAIL] two abutting saves share a character (areas ' + JSON.stringify(a1) + ' / ' + JSON.stringify(a2) + ')');
+                            } else if (abP.textContent !== abText) {
+                                errors.push('[FAIL] saving notes changed the page text (' + JSON.stringify(abP.textContent) + ')');
+                            } else {
+                                console.log('   ✅ Abutting saves keep their own spans (' + a1 + ' | ' + a2 + ') — the boundary space stays free, so style.css leaves the 2px gap');
+                            }
+                        }
+                    } catch (e) { errors.push('[FAIL] abutting-save check threw: ' + e.message); }
+                    /* (h2) ⏺ Record LOCKS on a partial overwrite of a recording */
+                    try {
+                        const rcText = 'Record this phrase well';
+                        const rcP = window.document.createElement('p');
+                        rcP.textContent = rcText;
+                        contentArea.appendChild(rcP);
+                        nbReset();
+                        window.eval('layer = ' + JSON.stringify([{ id: 'qa_rec_lock', type: 'rec', anchor: 'this phrase', data: '{}' }]));
+                        /* the selection CONTAINS the recording ([0,19) covers [7,18)) → locked */
+                        const lockPop = await nbSelect(rcP, 0, 19);
+                        const R1 = lockPop && lockPop.querySelector('#pR');
+                        if (!R1) {
+                            errors.push('[FAIL] the recording-lock check could not open the popup over the recording');
+                        } else if (R1.disabled) {
+                            errors.push('[FAIL] a locked ⏺ Record must keep the disabled LOOK, not the disabled attribute (a press must be heard)');
+                        } else if (!R1.classList.contains('locked')) {
+                            errors.push('[FAIL] a selection CONTAINING a recording did not lock ⏺ Record');
+                        } else {
+                            nbPress('#pR');
+                            const lt = window.document.getElementById('toast');
+                            const msg = lt ? lt.textContent : '';
+                            if (!/cannot partially overwrite an audio recording/.test(msg)) {
+                                errors.push('[FAIL] pressing the locked ⏺ Record did not raise the owner\'s refusal toast (got ' + JSON.stringify(msg) + ')');
+                            } else if (lockPop.dataset.recording) {
+                                errors.push('[FAIL] the locked ⏺ Record started a recording anyway');
+                            } else {
+                                console.log('   ✅ ⏺ Record is locked by a partially covering selection and its press only toasts the refusal');
+                            }
+                        }
+                        /* a selection INSIDE the recording is locked too */
+                        const pop2 = await nbSelect(rcP, 12, 15);      /* "phr" — inside [7,18) */
+                        const R2 = pop2 && pop2.querySelector('#pR');
+                        if (!R2 || !R2.classList.contains('locked')) errors.push('[FAIL] a selection INSIDE a recording did not lock ⏺ Record');
+                        else console.log('   ✅ a selection INSIDE a recording locks ⏺ Record as well');
+                        /* ABUTTING it (no shared character) is an ordinary phrase → Record stays live */
+                        const pop3 = await nbSelect(rcP, 18, 23);      /* " well" → "well" [19,23) */
+                        const R3 = pop3 && pop3.querySelector('#pR');
+                        if (!R3 || R3.classList.contains('locked')) errors.push('[FAIL] a selection that merely ABUTS a recording was locked (' + (R3 ? 'locked' : 'no popup') + ')');
+                        else console.log('   ✅ a selection that only ABUTS a recording keeps ⏺ Record live');
+                        /* covering it EXACTLY is the documented re-record, not a partial overwrite */
+                        const pop4 = await nbSelect(rcP, 7, 18);       /* exactly "this phrase" */
+                        const R4 = pop4 && pop4.querySelector('#pR');
+                        if (!R4 || R4.classList.contains('locked')) errors.push('[FAIL] covering a recording exactly must stay re-recordable ("regrava por cima")');
+                        else console.log('   ✅ covering the recording exactly stays re-recordable (one rec row, replaced)');
+                    } catch (e) { errors.push('[FAIL] recording-lock check threw: ' + e.message); }
+                    /* (h3) the NOTE rules: active note + area expansion + reference retention */
+                    try {
+                        const ntText = 'Note one area grows here';
+                        const ntP = window.document.createElement('p');
+                        ntP.textContent = ntText;
+                        contentArea.appendChild(ntP);
+                        nbReset();
+                        await nbEdit(ntP, 0, 8, 'first');              /* a note on "Note one" */
+                        const id0 = window.eval("(nbRows('note').find(r=>r.anchor==='Note one')||{}).id");
+                        if (!id0 || !nbArea('Note one')) {
+                            errors.push('[FAIL] the note-overlap check could not create its first note');
+                        } else {
+                            /* a selection that OVERLAPS the note is about THAT note: it is the active note,
+                               shown on the popup and prefilled by 📝 Add/Edit Note */
+                            const ov = await nbSelect(ntP, 5, 13);     /* "one area" overlaps [0,8) */
+                            const shown = ov && ov.querySelector('#nbNote');
+                            if (!shown || !/first/.test(shown.textContent)) {
+                                errors.push('[FAIL] a selection overlapping a note did not make that note the ACTIVE note');
+                            } else {
+                                nbPress('#pN');
+                                const pre = window.document.querySelector('.pop #nt');
+                                if (!pre || pre.value !== 'first') {
+                                    errors.push('[FAIL] the active note\'s editor was not prefilled with the saved note (' + JSON.stringify(pre ? pre.value : null) + ')');
+                                } else {
+                                    pre.value = 'second';
+                                    nbPress('#pS');
+                                    /* the note's area is EXPANDED to the new selection: the union's text is
+                                       its new anchor, ONE row with the SAME id, the old area gone */
+                                    const row = window.eval("nbRows('note').filter(r=>r.anchor==='Note one area')");
+                                    const m = window.document.querySelector('mark.nb[data-a="Note one area"]');
+                                    const oldM = window.document.querySelector('mark.nb[data-a="Note one"]');
+                                    const a = nbArea('Note one area');
+                                    const shownNow = window.document.querySelector('.pop #nbNote');
+                                    if (!row || row.length !== 1 || row[0].id !== id0) {
+                                        errors.push('[FAIL] saving an overlapping note must re-anchor the SAME row (got ' + JSON.stringify(row) + ' of ' + JSON.stringify(window.eval('layer.map(r=>[r.type,r.anchor])')) + ')');
+                                    } else if (!m || m.textContent !== 'Note one area' || oldM) {
+                                        errors.push('[FAIL] the note\'s first area was not EXPANDED to the new selection (mark=' + !!m + ' text="' + (m ? m.textContent : '') + '" oldMark=' + !!oldM + ')');
+                                    } else if (!a || a[0] !== 0 || a[1] !== 13) {
+                                        errors.push('[FAIL] the expanded note does not cover the union span (' + JSON.stringify(a) + ')');
+                                    } else if (ntP.textContent !== ntText) {
+                                        errors.push('[FAIL] expanding a note changed the page text');
+                                    } else if (!shownNow || !/second/.test(shownNow.textContent)) {
+                                        errors.push('[FAIL] the expanded note did not keep its saved text on the popup');
+                                    } else {
+                                        console.log('   ✅ A selection overlapping a note edits THAT note: its area expands to the new selection (same row, union text as the anchor)');
+                                    }
+                                    /* a selection strictly INSIDE the note edits it but keeps the note's
+                                       ORIGINAL string as its reference (no re-anchoring) */
+                                    const inSel = await nbSelect(ntP, 5, 10);    /* "one a" inside [0,13) */
+                                    const inShown = inSel && inSel.querySelector('#nbNote');
+                                    if (!inShown || !/second/.test(inShown.textContent)) {
+                                        errors.push('[FAIL] a selection inside a note did not reference the existing note');
+                                    } else {
+                                        nbPress('#pN');
+                                        const ta2 = window.document.querySelector('.pop #nt');
+                                        if (ta2) ta2.value = 'third';
+                                        nbPress('#pS');
+                                        const row2 = window.eval("nbRows('note').filter(r=>r.anchor==='Note one area')");
+                                        const m2n = window.document.querySelector('mark.nb[data-a="Note one area"]');
+                                        if (!row2 || row2.length !== 1 || row2[0].id !== id0) {
+                                            errors.push('[FAIL] saving inside a note must keep the note\'s original string as its reference (got ' + JSON.stringify(row2) + ' of ' + JSON.stringify(window.eval('layer.map(r=>[r.type,r.anchor])')) + ')');
+                                        } else if (!m2n || m2n.textContent !== 'Note one area') {
+                                            errors.push('[FAIL] the note\'s mark changed while saving inside the note');
+                                        } else {
+                                            console.log('   ✅ A selection inside a note edits it but keeps the original string as its reference');
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch (e) { errors.push('[FAIL] note-overlap check threw: ' + e.message); }
+                    /* (h4) a note painted ACROSS a recording's edge keeps BOTH on screen */
+                    try {
+                        const ovText = 'Overlap edge test phrase';
+                        const ovP = window.document.createElement('p');
+                        ovP.textContent = ovText;
+                        contentArea.appendChild(ovP);
+                        nbReset();
+                        window.eval('layer = ' + JSON.stringify([{ id: 'qa_ov_rec', type: 'rec', anchor: 'edge test', data: '{}' }]));
+                        window.eval('ensureMark("edge test","rec")');
+                        if (!window.document.querySelector('mark.nb.has-rec[data-a="edge test"]')) {
+                            errors.push('[FAIL] the crossing check could not paint its recording');
+                        } else {
+                            await nbEdit(ovP, 13, 24, 'crossing note');  /* "test phrase" [13,24) crosses [8,17) */
+                            const pieces = [...window.document.querySelectorAll('mark.nb[data-a="edge test"]')];
+                            const flagged = pieces.every(m => m.classList.contains('has-rec'));
+                            const aRec = nbArea('edge test'), aNote = nbArea('test phrase');
+                            const recRows = window.eval("nbRows('rec').filter(r=>r.anchor==='edge test').length");
+                            if (pieces.length < 2 || !flagged) {
+                                errors.push('[FAIL] a recording crossed by a note was not kept whole in flagged pieces (pieces=' + pieces.length + ' flagged=' + flagged + ')');
+                            } else if (!aRec || aRec[0] !== 8 || aRec[1] !== 17) {
+                                errors.push('[FAIL] the crossed recording\'s span no longer measures as a whole (' + JSON.stringify(aRec) + ')');
+                            } else if (!aNote || aNote[0] !== 13 || aNote[1] !== 24) {
+                                errors.push('[FAIL] the crossing note does not cover exactly its own anchor (' + JSON.stringify(aNote) + ')');
+                            } else if (recRows !== 1) {
+                                errors.push('[FAIL] the crossed recording lost its saved row');
+                            } else if (ovP.textContent !== ovText) {
+                                errors.push('[FAIL] crossing a recording changed the page text');
+                            } else {
+                                console.log('   ✅ A note crossing a recording leaves BOTH on screen and saved (' + pieces.length + ' flagged pieces, both spans intact)');
+                            }
+                        }
+                    } catch (e) { errors.push('[FAIL] crossing check threw: ' + e.message); }
+                }
             }
 
 

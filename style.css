@@ -21,18 +21,31 @@ a{color:var(--ink);font-weight:600}h2{font-family:'Playfair Display',serif;margi
 .listen{background:var(--tan);box-shadow:3px 3px 0 var(--ink)}
 details{background:#fff8ea;border:2px dashed var(--tan);border-radius:12px;padding:8px 12px;margin:10px 0}
 mark.nb{background:transparent;cursor:pointer;padding:0 1px}
-/* recording = green underline (no trailing icon, owner spec 2026-10-12); note = light-blue wash.
+/* recording = 2px BLUE underline (no trailing icon, owner spec 2026-10-12); note = light-blue wash.
    note/recording layer = mark.nb — the ONLY layer that lives in the text DOM. Highlights are
    painted separately over the text (#hlLayer, see below), so a note and a highlight can overlap
    in any way and both stay whole. The note's blue is a very light wash (background-image) so it
-   stays visible underneath a highlight. */
-mark.nb.has-rec{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;text-decoration-color:var(--ok)}
-mark.nb.has-note{color:var(--blue);background-image:linear-gradient(var(--bluebg),var(--bluebg))}
+   stays visible underneath a highlight.
+   START/END INSET (owner spec 2026-10-12): both the underline and the wash are painted as an inset
+   of the mark's box — 1px short of the text on EACH side (the mark carries 1px padding, the
+   background is drawn 2px inside the padding box) — so two ABUTTING saves leave a 2px paper gap
+   between them instead of one continuous smear, and an anchor that had to be split into pieces
+   (another save painted across it) shows that same 2px boundary. */
+mark.nb.has-rec{background-repeat:no-repeat;background-position:2px 100%;
+ background-image:linear-gradient(var(--blue),var(--blue));background-size:calc(100% - 4px) 2px}
+mark.nb.has-note{color:var(--blue);background-repeat:no-repeat;background-position:2px 0;
+ background-image:linear-gradient(var(--bluebg),var(--bluebg));background-size:calc(100% - 4px) 100%}
+/* a phrase that is BOTH recorded and noted carries both images — the 2px underline over the wash */
+mark.nb.has-rec.has-note{background-repeat:no-repeat,no-repeat;background-position:2px 100%,2px 0;
+ background-image:linear-gradient(var(--blue),var(--blue)),linear-gradient(var(--bluebg),var(--bluebg));
+ background-size:calc(100% - 4px) 2px,calc(100% - 4px) 100%}
 .pop{position:fixed;z-index:9;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:12px;max-width:380px;max-height:70vh;overflow:auto}
 .pop button{padding:4px 9px;margin:2px 3px 2px 0;font-size:12.5px;border-radius:8px;box-shadow:2px 2px 0 var(--tan)}
 /* every note/recording popup button always EXISTS; the ones that do not apply yet are greyed out
-   (owner spec 2026-10-12) instead of being removed from the row */
-.pop button:disabled{opacity:.45;box-shadow:none;cursor:default}
+   (owner spec 2026-10-12) instead of being removed from the row. `.locked` carries the same grey
+   look WITHOUT the `disabled` attribute: ⏺ Record is locked while the selection would partially
+   overwrite an audio recording, and it must stay pressable to toast the refusal (owner rule). */
+.pop button:disabled,.pop button.locked{opacity:.45;box-shadow:none;cursor:default}
 /* a popup button whose glyph became a processing SPIRAL (Record while capturing a clip, Play while
    the clip is sounding) — the label text is hidden, leaving only the rotating ring, and the button
    stays full-strength (never greyed), since the action is running, not unavailable */

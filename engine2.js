@@ -71,9 +71,10 @@ function renderLayer(){
    /* a row whose own local action is still pending is skipped (the UI already applied it); rows
       with nothing in flight still (re)build the mark and its flag as before */
    if(!pendingFor(it.id)){
-    const q='mark.nb[data-a="'+CSS.escape(it.anchor)+'"]';
-    let m=document.querySelector(q);
-    if(m)m.classList.add("has-"+it.type);else{ensureMark(it.anchor,it.type);m=document.querySelector(q);}
+    /* nbFlag/nbMarks (engine1.js) handle an anchor painted by MORE THAN ONE mark piece (a note or a
+       recording crossed by another save): the flag goes on EVERY piece, so the underline/wash is
+       never half-missing after a reload. ensureMark wraps the anchor's text when it has no mark yet. */
+    if(nbMarks(it.anchor).length)nbFlag(it.anchor,"has-"+it.type);else ensureMark(it.anchor,it.type);
    }
   }
   if(it.type==="quiz"||it.type==="done"||(it.type==="note"&&!it.anchor)){

@@ -65,7 +65,14 @@ function send(o){o.email=STUDENT;o.lesson=L;o.author=who();
   });
  setTimeout(()=>{if(window.currentAnchor&&window.currentAnchor===o.anchor&&pop&&window.showAnchor)window.showAnchor(o.anchor,popXY.x,popXY.y)},900);
 }
-let pop=null,pendingRange=null,lastSelText="";
+let pop=null,pendingRange=null,lastSelText="",nbSel=null;
+/* nbSel = the SELECTION the open popup came from (openNbPopup): {area, note, expand}. The owner's
+   overlap rules read it — the ⏺ Record lock (nbRecBlocked), the note the selection refers to
+   (nbPickNote) and the 💾 Save expansion (nbExpandPlan). It must OUTLIVE a re-render of the SAME
+   popup (📝 Add/Edit Note and 💾 Save rebuild the popup through openPop, which closes the old one):
+   clearing it here would drop the plan and Save would no longer expand the note. It is cleared by
+   the outside-mousedown listener below instead (the user dismissing the popup, i.e. starting a new
+   gesture) and overwritten by every openNbPopup. */
 const closePop=()=>{if(pop){pop.remove();pop=null}lastSelText=""};
 /* ---- note / recording layer (mark.nb) — owner spec 2026-10-12 ---------------------------------
    mark.nb is the ONLY layer that lives inside the text DOM (highlights are painted separately on
@@ -88,14 +95,96 @@ const closePop=()=>{if(pop){pop.remove();pop=null}lastSelText=""};
    server rejected) drops it, and a row whose MOST RECENT local action was a delete never comes
    back through here. */
 let nbLocal=[];
-const nbEntries=t=>{
- const rows=layer.filter(it=>(it.type==="rec"||it.type==="note")&&it.anchor===t);
+/* THE ONE read point of the note/recording layer: `layer` (server truth) plus the local rows the core
+   save (nbUpsert) has just written and whose own action is still inside its grace window (nbLocal —
+   a poll bringing a snapshot that predates the write must never blink the row off). type = "note" |
+   "rec"; t = an anchor. Omit both for the whole layer. */
+function nbRows(type,t){
+ const keep=r=>(r.type==="rec"||r.type==="note")&&(!type||r.type===type)&&(t==null||r.anchor===t);
+ const rows=layer.filter(keep);
  nbLocal=nbLocal.filter(r=>{const p=pendingFor(r.id);return !!p&&p.action!=="del"});
- nbLocal.forEach(r=>{if((r.type!=="rec"&&r.type!=="note")||r.anchor!==t)return;
-  const i=rows.findIndex(x=>x.id===r.id);
+ nbLocal.forEach(r=>{if(!keep(r))return;const i=rows.findIndex(x=>x.id===r.id);
   if(i>=0)rows[i]=r;else rows.push(r)});
  return rows;
-};
+}
+const nbEntries=t=>nbRows(null,t);
+/* ---- where a note/recording sits on the page: the OVERLAP RULES below need real spans ----------
+   A row is keyed by its anchor text, so its span is measured from the mark that paints it (in pieces
+   or not: from its first piece's first text to its last piece's last text) and falls back to
+   findRange for a row whose mark is not on the page yet. The offsets use the SAME ruler as the
+   highlights (hlBlocks/hlOffset), so the two features can never disagree about where a span is. */
+function nbAreaOfRange(r){
+ if(!r)return null;
+ const blk=hlBlockOf(r.startContainer);
+ if(!blk||blk!==hlBlockOf(r.endContainer))return null;
+ const s=hlOffset(blk,r.startContainer,r.startOffset),e=hlOffset(blk,r.endContainer,r.endOffset);
+ if(s<0||e<=s)return null;
+ const b=hlBlocks().indexOf(blk);if(b<0)return null;
+ return{b:b,s:s,e:e,blk:blk};
+}
+function nbAreaOf(anchor){
+ const a=String(anchor||"");if(!a)return null;
+ const ps=nbMarks(a);
+ let r=null;
+ if(ps.length){const f=nbEdgeText(ps[0],true),l=nbEdgeText(ps[ps.length-1],false);
+  if(f&&l){r=document.createRange();try{r.setStart(f,0);r.setEnd(l,l.data.length)}catch(e){r=null}}}
+ return nbAreaOfRange(r||findRange(a));
+}
+/* the span a live selection means for the note layer, TRIMMED to t — and the trimmed selection IS
+   the anchor: a mark then covers exactly its own anchor text, so two abutting saves share no
+   character. (A shared boundary SPACE used to fall inside both of them, which is precisely the
+   "selecting the characters/space abutting a note/recording" bug the owner reported.) */
+function nbSelArea(r,t){
+ if(!r)return null;
+ const area=nbAreaOfRange(r);if(!area||t==null)return area;
+ const i=area.blk.textContent.slice(area.s,area.e).indexOf(t);
+ if(i<0)return null;
+ return{b:area.b,s:area.s+i,e:area.s+i+t.length,blk:area.blk};
+}
+/* a span → a live Range (the same offsets→range helper the highlight records use) */
+function nbAreaRange(a){if(!a)return null;
+ const p=hlPosition(a.blk,a.s),q=hlPosition(a.blk,a.e);
+ if(!p||!q)return null;
+ const r=document.createRange();try{r.setStart(p.n,p.off);r.setEnd(q.n,q.off)}catch(e){return null}return r}
+/* two spans overlap when they share a character — merely TOUCHING (a.e===c.s) is not an overlap */
+const nbOverlap=(a,c)=>!!a&&!!c&&a.b===c.b&&a.s<c.e&&a.e>c.s;
+const nbSameSpan=(a,c)=>!!a&&!!c&&a.b===c.b&&a.s===c.s&&a.e===c.e;
+/* the note a selection refers to (owner rule, overlaps 2026-10-12): the FIRST note, in text order,
+   whose span overlaps the selection. It becomes the popup's ACTIVE note — and 💾 Save then expands
+   its area to the new selection, or keeps its own string as the reference when the selection sits
+   strictly inside it. */
+function nbPickNote(area){
+ if(!area)return null;
+ let best=null;
+ nbRows("note").forEach(r=>{const a=nbAreaOf(r.anchor);
+  if(!nbOverlap(a,area))return;
+  if(!best||a.s<best.area.s)best={anchor:r.anchor,area:a}});
+ return best;
+}
+/* the 💾 Save plan for a selection that overlaps a note (owner rule): the note's AREA is EXPANDED to
+   the new selection — the union of the two spans — and the union's own text becomes the note's new
+   anchor/reference (the row is re-anchored, never duplicated). A selection strictly INSIDE the note
+   plans nothing: the note keeps its original string as its reference. */
+function nbExpandPlan(note,area){
+ if(!note||!area||!note.area||note.area.b!==area.b)return null;
+ if(note.area.s<=area.s&&note.area.e>=area.e)return null;      /* selection inside the note */
+ const s=Math.min(note.area.s,area.s),e=Math.max(note.area.e,area.e);
+ return{area:{b:area.b,s:s,e:e,blk:area.blk},anchor:area.blk.textContent.slice(s,e)};
+}
+/* the exact owner wording of the ⏺ Record refusal (see nbRecBlocked/nbWirePopup) */
+const NB_REC_LOCKED="cannot partially overwrite an audio recording, delete the previous recording and try again";
+/* ⏺ Record's LOCK (owner rule, overlaps): a selection that would PARTIALLY overwrite an existing
+   audio file — overlapping it, containing it, or sitting inside it — is refused. The button keeps
+   the disabled LOOK (.locked) but stays pressable, because a truly disabled button fires no click
+   event and pressing it MUST raise the refusal toast. Covering a recording EXACTLY is not a partial
+   overwrite: that is the documented re-record ("regrava por cima", one rec row replaced in place).
+   When the popup came from a SELECTION the rule is about that selection; when it came from a click
+   on a mark there is no selection, and the phrase's own span is the target. */
+function nbRecBlocked(t){
+ const tgt=nbAreaOf(t),sel=nbSel&&nbSel.area;
+ return nbRows("rec").some(r=>{const a=nbAreaOf(r.anchor);
+  return (nbOverlap(a,sel)&&!nbSameSpan(a,sel))||(nbOverlap(a,tgt)&&!nbSameSpan(a,tgt))});
+}
 /* is a local note/recording action for this anchor still inside its grace window? (engine2's
    renderLayer consults this so a 3s poll cannot blink a mark that was just created or deleted) */
 function nbAnyPending(t){return nbEntries(t).some(it=>pendingFor(it.id))}
@@ -133,6 +222,10 @@ function nbNoteDisplay(t){
 function nbPopHTML(t,editing){
  const rec=nbHasRec(t),note=nbHasNote(t),owned=rec||note;
  const nb=nbNoteDisplay(t);
+ /* ⏺ Record is LOCKED while this popup's span would PARTIALLY overwrite an existing audio file
+    (owner rule, overlaps): the button greys out like a disabled one but stays pressable, so that
+    pressing it can toast the refusal (nbWirePopup) — a `disabled` button fires no click at all. */
+ const locked=nbRecBlocked(t);
  /* the popup does NOT repeat the selected text any more (owner spec 2026-10-12): the phrase is right
     there in the page, so a title echoing it is redundant. #pTitle stays as an empty anchor so a
     refresh can keep targeting a stable node. */
@@ -140,7 +233,7 @@ function nbPopHTML(t,editing){
  return '<div id="pTitle"></div>'+noteHTML+
   '<span style="white-space:nowrap"><button id="pH" title="ouvir em voz alta">▶ Hear</button>'+
   '<button id="pP" title="ouvir a gravação salva"'+(rec?"":' disabled')+'><span class="lbl">▶ Play</span></button>'+
-  '<button id="pR" title="gravar (regrava por cima)"><span class="lbl">⏺ Record</span></button></span><br>'+
+  '<button id="pR"'+(locked?' class="locked" aria-disabled="true" title="'+NB_REC_LOCKED+'"':' title="gravar (regrava por cima)"')+'><span class="lbl">⏺ Record</span></button></span><br>'+
   '<span style="white-space:nowrap"><button id="pN">📝 Add/Edit Note</button>'+
   '<button id="pS" title="salvar a nota"'+(editing?"":' disabled')+'>💾 Save</button>'+
   '<button id="pD" title="apagar gravação, notas e a marcação"'+(owned?"":' disabled')+'>🗑 Delete</button></span>';
@@ -179,7 +272,10 @@ function nbWirePopup(t,r,x,y){
     done(true) means "play FAILED", so ▶ Play only ever span on an error — never while playing. */
  if(P)P.onclick=()=>{if(P.disabled)return;nbBtnSpinner(P,true);nbPlayRecording(t,()=>nbBtnSpinner(P,false))};
  const R=pop.querySelector("#pR");
- if(R)R.onclick=()=>rec(t,R);
+ /* a LOCKED ⏺ Record (the selection would PARTIALLY overwrite an existing audio file) refuses with
+    the owner's toast instead of recording — the button carries the disabled LOOK but no `disabled`
+    attribute, which is the only way a press can still be heard (nbRecBlocked) */
+ if(R)R.onclick=()=>{if(R.classList.contains("locked")){toast(NB_REC_LOCKED);return}rec(t,R)};
  const N=pop.querySelector("#pN");
  if(N)N.onclick=()=>{
   const ta=pop.querySelector("#nt"),cur=ta?ta.value:null;
@@ -206,8 +302,11 @@ function nbWirePopup(t,r,x,y){
    The row is ALSO remembered in nbLocal, the local copy nbEntries serves while this write is still
    inside its grace window (see above) — the same treatment the highlight gives a freshly painted
    rectangle in hlList, so a poll snapshot that predates the write cannot blink the note out. */
-function nbUpsert(t,type,fields){
- const cur=nbEntries(t).find(it=>it.type===type);
+function nbUpsert(t,type,fields,from){
+ /* `from` = the anchor the row had BEFORE this save: a note whose area EXPANDED keeps its own id and
+    takes the union's text as its new anchor (ONE row, a plain "set" — the backend deletes the row
+    with that id first, so the anchor simply changes and nothing is duplicated). */
+ const cur=nbEntries(from!=null?from:t).find(it=>it.type===type);
  const id=cur?cur.id:(Date.now()+"_"+Math.floor(Math.random()*9999));
  const row=Object.assign({id:id,type:type,anchor:t,author:who(),ts:new Date().toISOString()},fields||{});
  const i=layer.findIndex(it=>it.id===id);
@@ -222,14 +321,32 @@ function nbUpsert(t,type,fields){
    has-note only HERE, never at the moment the note button was clicked. An empty note simply
    closes the editor (no blank save). Network last, so a failed save never undoes what was just
    painted (FUNCTION.md). */
+/* grow a note's painted area to the plan's span (owner rule: "the first note area is expanded to the
+   new selection"): the old mark set leaves the text and the UNION is wrapped under the union's own
+   text as the new anchor. A recording that lived on the same phrase is re-painted first, so the new
+   note mark carries it whole (nested) instead of dropping its underline until the next poll. The ROW
+   itself is re-anchored by nbUpsert(…, from) — same id, ONE row. */
+function nbExpandNote(anchor,plan){
+ const rec=nbHasRec(anchor);
+ nbUnmark(anchor);
+ if(rec)ensureMark(anchor,"rec");
+ return nbWrap(plan.anchor,nbAreaRange(plan.area));
+}
 function nbSaveNote(t,x,y){
  if(!pop)return;
  const ta=pop.querySelector("#nt");if(!ta)return;   /* 💾 Save is live only while editing — never throw */
  const v=ta.value.trim();
  if(!v){closePop();return}
- const m=ensureMark(t,"note");if(m)m.classList.add("has-note");
- nbUpsert(t,"note",{data:v});   /* reuses the stored note's id → REPLACES it, never a 2nd row */
- refreshNbPopup(t,x,y,false);   /* 💾 Save LEAVES the edit state (FUNCTION.md): Save greys again */
+ /* OWNER RULE (overlaps): the popup came from a selection that OVERLAPPED this note (nbSel.expand,
+    planned by openNbPopup) → the note's AREA expands to the new selection and the union's text
+    becomes its anchor; a selection strictly INSIDE the note plans no expansion, so the note keeps its
+    original string as its reference. */
+ const plan=nbSel&&nbSel.expand;
+ let to=t;
+ if(plan){const m=nbExpandNote(t,plan);if(m)m.classList.add("has-note");to=plan.anchor;nbSel.expand=null}
+ else{const m=ensureMark(t,"note");if(m)m.classList.add("has-note")}
+ nbUpsert(to,"note",{data:v},plan?t:null);   /* same id → REPLACES the row (re-anchored when it grew) */
+ refreshNbPopup(to,x,y,false);   /* 💾 Save LEAVES the edit state (FUNCTION.md): Save greys again */
 }
 /* rebuild the popup's buttons for the current state (the two arrays change with saved content and
    the textarea is dropped once the note is saved) — the LIVE note text is kept when edition is in
@@ -243,15 +360,36 @@ function refreshNbPopup(t,x,y,editing){
  openPop(t,x,y,nbPopHTML(t,editing)+(editing?'<textarea id="nt" rows="3" placeholder="write a note…">'+nbEsc(cur!=null?cur:"")+'</textarea>':''));
  nbWirePopup(t,null,x,y);
 }
-function openNbPopup(t,r,x,y){openPop(t,x,y,nbPopHTML(t,!!pop&&!!pop.querySelector("#nt")));nbWirePopup(t,r,x,y)}
+/* open the six-button popup for an anchor — and, when it came from a SELECTION (r), resolve the
+   owner's OVERLAP rules for that selection:
+     • the selection overlaps or contains a NOTE → that note is the ACTIVE note: the popup is about
+       the note's own anchor (prefilled, its row found), and 💾 Save then expands the note's area to
+       the new selection (nbExpandPlan/nbExpandNote);
+     • the selection overlaps, contains or sits inside a RECORDING → ⏺ Record is locked and toasts
+       the refusal (nbRecBlocked, rendered by nbPopHTML);
+     • a selection that merely ABUTS a mark (shares no character) is an ordinary new phrase.
+   A popup opened by a click on a mark (showAnchor, r=null) has no selection: its target is the
+   mark's own anchor, so a full re-record of that phrase stays available. */
+function openNbPopup(t,r,x,y){
+ const selArea=r?nbSelArea(r,t):null;
+ const note=selArea?nbPickNote(selArea):null;
+ const anchor=note?note.anchor:t;
+ const target=note?note.area:selArea;      /* the span the popup's own actions act on */
+ nbSel={area:selArea,note:note?anchor:null,expand:nbExpandPlan(note,selArea)};
+ /* the range the save wraps, TRIMMED to the anchor (nbSelArea): a mark covers exactly its own anchor
+    text, so two abutting saves can never share the boundary space */
+ pendingRange=(target?nbAreaRange(target):null)||(r?r.cloneRange():null);
+ openPop(anchor,x,y,nbPopHTML(anchor,!!pop&&!!pop.querySelector("#nt")));
+ nbWirePopup(anchor,pendingRange,x,y);
+}
 /* wrap the phrase into mark.nb and paint the recording flag — this is the SAVE side for a clip
    (called from rec() once the bytes are ready, and by engine2's renderLayer when a saved
    recording is restored). A recording NEVER paints the mark at the instant ⏺ Record is clicked;
    the underline is the saved clip's proof, per the owner spec. Idempotent: an existing mark.nb is
    reused. (r = the live selection range when the popup came from one.) */
 function markRecording(t,r){
- if(r){const m=wrapRange(t,r);if(m)m.classList.add("has-rec");return m}
- const m=ensureMark(t,"rec");if(m)m.classList.add("has-rec");return m;
+ if(r){const m=wrapRange(t,r);if(m)nbFlag(t,"has-rec");return m}
+ return ensureMark(t,"rec");      /* ensureMark paints the anchor's text AND flags it has-rec */
 }
 /* 📝 Add/Edit Note (owner spec 2026-10-12): the editor opens over the SAME popup (every button
    stays; the six buttons simply re-render, and Save lights up). When the phrase already HAS a note
@@ -300,10 +438,9 @@ function nbPlayRecording(t,done){
  }
  if(!fromInline()){toast("Sem gravação nesta frase.");if(done)done();}
 }
-/* remove mark.nb from the text (undo the wrap) — leaves a clean DOM, so a later note/recording
-   starts from the same pristine text */
-function nbUnmark(t){const m=document.querySelector('mark.nb[data-a="'+CSS.escape(t)+'"]');if(!m)return;
- try{const p=m.parentNode;while(m.firstChild)p.insertBefore(m.firstChild,m);p.removeChild(m)}catch(e){}}
+/* remove mark.nb from the text (undo EVERY piece of the anchor) — leaves a clean DOM, so a later
+   note/recording starts from the same pristine text */
+function nbUnmark(t){nbMarks(t).forEach(m=>{try{const p=m.parentNode;while(m.firstChild)p.insertBefore(m.firstChild,m);p.removeChild(m)}catch(e){}})}
 /* DELETE (owner spec 2026-10-12): the popup's 🗑 button removes the saved recording, any notes
    AND the visual element — one action, network last. */
 function nbDeleteAnchor(t){
@@ -320,7 +457,7 @@ function nbDeleteAnchor(t){
 function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("div");pop.className="pop";
  pop.style.left=x+"px";pop.style.top=y+"px";pop.style.maxWidth="min(380px, calc(100vw - 16px))";
  pop.innerHTML=html;document.body.appendChild(pop);return pop}
-document.addEventListener("mousedown",e=>{if(pop&&!pop.contains(e.target))closePop()});
+document.addEventListener("mousedown",e=>{if(pop&&!pop.contains(e.target)){closePop();nbSel=null}});
 /* ---- gesture gate (owner spec 2026-10-12): Hear/Record/Note and Highlight are BOTH decided
    strictly at mouse-release, never mid-drag. mouseIsDown blocks the debounced selectionchange
    path for the whole press; the moment the button is released this same function is called
@@ -383,25 +520,94 @@ document.addEventListener("click",e=>{const nb=e.target.closest("mark.nb");
  if(!nb)return; /* a bare highlight (painted on its own layer) is not clickable */
  e.stopPropagation();
  if(window.showAnchor)showAnchor(nb.dataset.a,Math.max(8,Math.min(e.clientX,innerWidth-380)),e.clientY+8)});
-function wrapRange(t,r){if(!r)return document.querySelector('mark.nb[data-a="'+CSS.escape(t)+'"]');
- const m=document.createElement("mark");m.className="nb";m.dataset.a=t;
- try{m.appendChild(r.extractContents());r.insertNode(m)}catch(e){return null}
+/* ---- the mark SET of an anchor: mark.nb[data-a=<the anchor text>] -------------------------------
+   An anchor is usually painted by ONE mark element, but a note/recording painted ACROSS an older
+   mark's edge SPLITS that older mark into pieces that BOTH keep its data-a and its flags. The
+   anchor's text is then the concatenation of its pieces, each piece keeps its own 2px inset on its
+   own edges (style.css), and every lookup below (and in engine2's renderLayer) still finds the row.
+   This is what makes abutting and overlapping saves possible at all: extractContents() used to CLONE
+   the crossed mark and split the original, leaving several elements claiming the same anchor and a
+   row whose stored anchor matched none of them ("not reliably saved nor simultaneously displayed"). */
+function nbMarks(t){return [...document.querySelectorAll('mark.nb[data-a="'+CSS.escape(String(t))+'"]')]}
+/* flag EVERY piece of an anchor (has-rec / has-note) and hand back the first one */
+function nbFlag(t,cls){const ms=nbMarks(t);ms.forEach(m=>m.classList.add(cls));return ms[0]||null}
+/* the first/last TEXT node inside a node (a mark piece's own text, however deeply nested) */
+function nbEdgeText(n,first){if(!n)return null;if(n.nodeType===3)return n;
+ const k=[...n.childNodes];
+ for(let i=first?0:k.length-1;first?i<k.length:i>=0;first?i++:i--){const t=nbEdgeText(k[i],first);if(t)return t}
+ return null}
+/* (node,offset) → the TEXT node that range boundary really sits on (an element boundary is pushed to
+   the first/last text inside the child next to it) */
+function nbTextPoint(c,off,first){if(!c)return null;if(c.nodeType===3)return{n:c,off:off};
+ const k=[...c.childNodes];
+ if(first){for(let i=off;i<k.length;i++){const t=nbEdgeText(k[i],true);if(t)return{n:t,off:0}}}
+ else{for(let i=off-1;i>=0;i--){const t=nbEdgeText(k[i],false);if(t)return{n:t,off:t.data.length}}}
+ return null}
+/* split an element at child k: it keeps [0,k) and the REST moves into a same-styled clone placed
+   right after it (an inline handler the split would otherwise lose is copied over) */
+function nbSplitEl(el,k){if(!el||k<=0||k>=el.childNodes.length)return el;
+ const c=el.cloneNode(false);try{if(el.onclick)c.onclick=el.onclick}catch(e){}
+ while(el.childNodes.length>k)c.appendChild(el.childNodes[k]);
+ el.parentNode.insertBefore(c,el.nextSibling);return c}
+/* wrap a range into a NEW mark.nb[data-a=t] and return it (null when the range covers no node).
+   The two boundaries are first pushed out to whole SIBLING nodes (a text node is split, a partially
+   covered element is split with nbSplitEl) and the covered run is MOVED into the new mark — never
+   cloned. So a mark that is fully covered is carried inside the new one (nested and still whole,
+   keeping its own anchor) while a mark that is only crossed by an edge is split into pieces that
+   keep its own data-a and flags. */
+function nbWrap(t,r){
+ if(!r)return null;
+ const s=nbTextPoint(r.startContainer,r.startOffset,true),e=nbTextPoint(r.endContainer,r.endOffset,false);
+ if(!s||!e)return null;
+ const m=document.createElement("mark");m.className="nb";m.dataset.a=String(t);
+ if(s.n===e.n){                              /* inside ONE text node: split it into head/mid/tail */
+  if(e.off<=s.off)return null;
+  const mid=s.n.splitText(s.off);
+  if(e.off-s.off<mid.data.length)mid.splitText(e.off-s.off);
+  mid.parentNode.insertBefore(m,mid);m.appendChild(mid);return m;
+ }
+ let sN=s.n,eN=e.n;
+ if(s.off>0)sN=sN.splitText(s.off);           /* sN keeps only the covered head */
+ if(e.off<eN.data.length)eN.splitText(e.off); /* the uncovered tail leaves eN */
+ const ca=r.commonAncestorContainer;
+ let sTop=sN;
+ for(let p=sN.parentNode;p&&p!==ca;p=p.parentNode){
+  const i=Array.prototype.indexOf.call(p.childNodes,sTop);
+  if(i>0)sTop=nbSplitEl(p,i);else sTop=p}     /* after a split the clone carries the covered side */
+ let eTop=eN;
+ for(let p=eN.parentNode;p&&p!==ca;p=p.parentNode){
+  const i=Array.prototype.indexOf.call(p.childNodes,eTop);
+  if(i+1<p.childNodes.length)nbSplitEl(p,i+1);/* the uncovered tail leaves; eTop keeps the covered end */
+  eTop=p}
+ const run=[];for(let n=sTop;n;n=n.nextSibling){run.push(n);if(n===eTop)break}
+ if(!run.length||run[run.length-1]!==eTop)return null;
+ ca.insertBefore(m,sTop);
+ run.forEach(n=>m.appendChild(n));
  return m}
+/* wrap an anchor's range (a live selection when the popup came from one; the text found by findRange
+   when a stored row is being restored). An anchor that is ALREADY painted is never wrapped twice:
+   a note and a recording on the SAME phrase are ONE mark carrying both flags. */
+function wrapRange(t,r){
+ const ex=nbMarks(t)[0];if(ex)return ex;
+ return r?nbWrap(t,r):null}
+/* an anchor's text → a live Range. Marked text is walked TOO: an anchor may abut, cross or sit
+   inside another mark, and skipping text inside mark.nb used to make exactly those anchors
+   unfindable — the "selecting the characters/space next to a note does nothing" bug. */
 function findRange(t){
  const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
  const nodes=[];let all="";let n;
- while(n=w.nextNode()){if(n.parentElement&&n.parentElement.closest("script,style,.pop,mark.nb"))continue;nodes.push({n,start:all.length});all+=n.data;}
+ while(n=w.nextNode()){if(n.parentElement&&n.parentElement.closest("script,style,.pop,#hlLayer"))continue;nodes.push({n,start:all.length});all+=n.data;}
  const i=all.indexOf(t);if(i<0)return null;const end=i+t.length;let a=null,b=null;
  for(const o of nodes){if(!a&&o.start<=i&&i<o.start+o.n.data.length)a={n:o.n,off:i-o.start};
   if(!b&&o.start<end&&end<=o.start+o.n.data.length)b={n:o.n,off:end-o.start};}
  if(!a||!b)return null;
  const r=document.createRange();r.setStart(a.n,a.off);r.setEnd(b.n,b.off);return r;
 }
+/* (re)paint an anchor's mark and flag it: reuse the existing mark set, otherwise wrap the anchor's
+   text where it lies on the page */
 function ensureMark(t,type){
- let m=document.querySelector('mark.nb[data-a="'+CSS.escape(t)+'"]');
- if(!m){const r=findRange(t);if(!r)return;m=document.createElement("mark");m.className="nb";m.dataset.a=t;
-  try{m.appendChild(r.extractContents());r.insertNode(m)}catch(e){return}}
- m.classList.add("has-"+type);
+ if(!nbMarks(t).length){const r=findRange(t);if(!r||!nbWrap(t,r))return null}
+ return nbFlag(t,"has-"+type);
 }
 /* ---- HIGHLIGHT (owner spec 2026-10-11 #2) — its OWN PAINT LAYER, never inside the text ------
    Ctrl held at MOUSEDOWN over a selection  → the Hear / Record / Note functions are suppressed
