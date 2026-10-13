@@ -19,8 +19,8 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
  loadLayer();
  /* ---- cross-session poll (owner spec 2026-10-12) — the ONLY re-check there is: add/set/del on
     either side (teacher or student) reach the other as fast as a 3s poll allows. Each send()
-    marks its own id+action "pending" for 6s (engine1.js notePending/pendingFor); renderLayer()
-    below skips reverting/resurrecting anything that's still inside its own 6s pending window, so
+    marks its own id+action "pending" for 12s (engine1.js notePending/pendingFor); renderLayer()
+    below skips reverting/resurrecting anything that's still inside its own 12s pending window, so
     a snapshot that races ahead of the backend write can never undo-then-redo a local action. This
     generic (by id+action, not by feature) pairing is the whole mechanism — any future action type
     that goes through send() is covered automatically, no per-action special-casing needed. */

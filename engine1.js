@@ -18,14 +18,14 @@ function b64url(b64,mime){const m=mime||"audio/webm";
  catch(e){return "data:"+m+";base64,"+b64}}
 /* ---- local-action grace window (owner spec 2026-10-12): the ONLY sync re-check is a plain poll
    (engine2.js: setInterval(loadLayer,3000)) — no per-action immediate reload any more. Every
-   send() marks its id+action "pending" for 6s; a poll that lands mid-write must never revert what
+   send() marks its id+action "pending" for 12s; a poll that lands mid-write must never revert what
    the user just did and then re-apply it a moment later. Generic by id+action: any FUTURE action
    type that goes through send() gets this protection automatically — see FUNCTION.md "Sync". */
 let pendingOps=[];
 function notePending(o){
  if(!o||!o.id)return;
  pendingOps=pendingOps.filter(p=>Date.now()<p.until&&(p.id!==o.id||p.action!==o.action));
- pendingOps.push({id:o.id,action:o.action,type:o.type,until:Date.now()+6000});
+ pendingOps.push({id:o.id,action:o.action,type:o.type,until:Date.now()+12000});
 }
 function pendingFor(id){
  pendingOps=pendingOps.filter(p=>Date.now()<p.until);
@@ -90,7 +90,7 @@ const closePop=()=>{if(pop){pop.remove();pop=null}lastSelText=""};
    freshly painted highlight and renderLayer only drops it once pendingFor says its window is over.
    Same treatment here, applied to whatever nbUpsert saves (note AND recording): the local copy is
    served in place of the snapshot's absent/older copy for as long as the row's own window stays
-   open — the very same 6s window notePending opened when send() fired, no second timer. Once the
+   open — the very same 12s window notePending opened when send() fired, no second timer. Once the
    server's row is confirmed the local copy is no longer consulted, an expired window (a write the
    server rejected) drops it, and a row whose MOST RECENT local action was a delete never comes
    back through here. */
@@ -325,7 +325,7 @@ function nbWirePopup(t,r,x,y){
   if(A.classList.contains("locked")){toast(NB_REC_AMBIG);return}
   nbDeleteItem(t,"rec")};
 }
-/* ONE CORE SAVE for the note/recording layer (owner rule 2026-10-12, "reuse core functions"):
+/* ONE CORE SAVE for the note/recording layer:
    💾 Save (note) and rec() (recording) both go through here, so the two save paths can never
    drift apart again. It re-uses the id of the row ALREADY stored for this anchor+type, so a re-save
    REPLACES that row on the server (backend add/set deletes the row with the same id first) instead of

@@ -20,15 +20,20 @@ _(none queued.)_
 
 ## FILESYSTEM
 - root: index.html · portal.html · style.css · engine1.js · engine2.js · logo.png · access.json · .gitignore
-- category files: MASTER_CONTEXT.md (this — general/planning/architecture) · HARNESS.md (execution) · FUNCTION.md (behavior) · BACKEND.md (server) · FORMAT.md (visual) · ISSUES.md (status log, not rules)
+- category files: MASTER_CONTEXT.md (this — general/planning/architecture) · HARNESS.md (execution) · FUNCTION.md (behavior) · BACKEND.md (server) · FORMAT.md (format/layout) · CONTENT.md (site content) · ISSUES.md (catch-all queue for items that fit no category)
 - pages: business/lesson1.html · kids/lesson1.html · nsfw/lesson1.html — backend/Code.gs — qa/smoke.mjs (jsdom suite, run with `node qa/smoke.mjs`) — node_modules/ (untracked, gitignored)
 - A file that the current batch does not reference is assumed fully functional; only a verification step proves otherwise.
 
 ## STATE / PARAMETERS (as of 2026-10-12)
-- Git: HEAD == origin/main; the only uncommitted change is engine1.js `notePending` grace window 6s → 12s.
+- Git: HEAD == origin/main with a clean working tree; the `notePending` grace window is 12s (ARCHITECTURE above).
 - Gate: `sig = h(email+track+SECRET "abreportas2025")` (h = Java-style `x = x*31 + charCode` hash), stored in sessionStorage.gate; engine1.js redirects to portal.html when it is invalid. OAuth origin: https://dennisdkramer.github.io.
 - access.json: teachers [dennisdkramer@gmail.com]; students Maria (kids), João (business), Ale (business).
 - Backend is owner-deployed (I cannot deploy it): a Code.gs change only takes effect after a NEW deployment version, while the /exec URL stays the same. Exec URL: https://script.google.com/macros/s/AKfycbxSR8UmOwosLIgn1-AGKhgXJvdqOVkzMqrTwdlWNF9kOkt-256TqTacOsQlo6JyHplR/exec (set per lesson as const BACKPACK).
 - Development scope: the current/ported build is business/lesson1.html and `qa/smoke.mjs` tests that page only — re-add the other pages when the port starts; kids/, nsfw/ and the login pages still carry their older wording.
 - Shared files (engine1.js, engine2.js, style.css) are edited IN PLACE with surgical, exact-match edits — no whole-file rewrite and no holding a whole file in memory; lesson pages stay content-only (config consts + engine includes).
-- Tool efficiency: `run_commands` has no VS Code shell integration here (it echoes the terminal buffer back plus a bogus exit 1) — judge any call by its printed output, not its exit code, and inspect files with read_files / search_codebase rather than the shell.
+- Tool efficiency: `run_commands` echoes the terminal buffer back and reports a bogus exit 1 (it cannot observe completion) because this VS Code terminal runs Windows PowerShell 5.1 (`powershell.exe`), which gets NO automatic shell integration — VS Code's supported Windows shells are Git Bash and pwsh only, and pwsh 7 is already installed at `%LOCALAPPDATA%\Programs\PowerShell\pwsh.exe`; switching the default terminal profile to it (or sourcing the integration script manually) fixes the capture. Meanwhile: judge every call by its printed output, not its exit code, and inspect files with read_files / search_codebase rather than the shell.
+
+## VERIFICATION ENVIRONMENT
+- Playwright is unavailable here, so `qa/smoke.mjs` runs on jsdom: JS syntax, DOM structure, engine init flags (`__A`/`__B`), the selection popup, the highlight Ctrl gesture gate, `#hlLayer` paint separation, the colour palette, Ctrl+click delete and the layer-independence rule. jsdom has no layout, so the suite installs a deterministic fake layout (8px/char, 40 chars/line, 20px/line) to exercise rectangle geometry and the hit test — it does NOT cover real rendering, media, or actual mouse/keyboard events.
+- Real input/timing bugs (e.g. the 2026-10-12 palette that the held Ctrl's auto-repeat killed) CANNOT be caught by jsdom — QA stayed green while the live page was broken. When a report mentions timing, auto-repeat, real mouse/keyboard or on-screen position, drive a real headless Chrome over the DevTools Protocol (throwaway probe: `--headless=new --remote-debugging-port=0`, `Input.dispatchMouseEvent`/`Input.dispatchKeyEvent`, `Runtime.evaluate` to read `getBoundingClientRect`) instead of trusting the jsdom suite alone.
+- `raw.githubusercontent.com` caches branch-name fetches briefly — verify fetched content by commit SHA when in doubt.

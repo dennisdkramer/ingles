@@ -4,7 +4,8 @@ Reference this file whenever a task touches site appearance. Preserve everything
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-FM<n>.)_
 
-_(none queued.)_
+- [2026-10-11, migrated from ISSUES.md] Residual rendering-oddity watch on business/lesson1.html: the malformed markup that was committed earlier (stray `</div></main>` after the scripts + a duplicate `<footer>`) was cleaned up with the 1400px page-area rework and was a likely contributor to the owner's "text still compresses dynamically" report — watch for any residual oddity on that page.
+- [2026-10-11, migrated from ISSUES.md] Lesson layout should be "significantly prettier and more consistent" — pending owner iteration.
 
 ## Colors (CSS vars in :root)
 - cream #f4eddd = page background

@@ -46,7 +46,7 @@ action (see RULE 1). Don't stop for implementation-detail uncertainty — decide
 
 
 ## RULE 6 — THE LOOP (lightweight)
-edit → verify what I judge necessary (RULE 4) → commit + push. Bundle whatever related changes
+edit → verify what I judge necessary (RULE 4) → commit + push → clear the finished batch from the PENDING section of the file(s) it was queued in (RULE 7), so that no entry ever survives its own commit. Bundle whatever related changes
 belong together into one commit if that's the coherent unit of work (no rule forcing one feature per
 commit, no rule forcing it to be split either — use judgment). Avoid rapid, near-simultaneous
 successive pushes when a single combined push would do. Build markers / live-site curl / fixed sleeps
@@ -62,7 +62,8 @@ add the batch to the PENDING section at the top of that file, in the category it
 - Changes that relate to the execution *or* visual output of a function → FUNCTION.md
 - Changes that relate to the backend → BACKEND.md
 - Site format and content architecture and handling → FORMAT.md
-- Lesson content, trivial changes, cleanup, inquiries and miscellaneous → no file; handle as I see fit.
+- Site content (what a lesson page says and offers: prose, sections, exercises, answer keys, in-page widgets) → CONTENT.md
+- Trivial changes, cleanup, inquiries and miscellaneous (anything that fits no category above) → ISSUES.md
 Then make a quick high-level judgement of which tasks/batches must be handled together and in which
 order they will be addressed. Accordingly, make a quick high-level judgement whether any batches or
 parts of the prompt should be parked until after task completion — park them if necessary — and then
@@ -78,5 +79,5 @@ a reason to refuse a change the owner asked for, and working behaviour never reg
 
 
 ## STATUS
-Open/closed issues live in `ISSUES.md` (status log, not rules).
+No separate status log: an open issue lives in the PENDING section of its category file (RULE 7) and is cleared there once done AND committed. `ISSUES.md` is only the catch-all queue for items that fit no category.
 
