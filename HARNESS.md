@@ -62,7 +62,7 @@ add the batch to the PENDING section at the top of that file, in the category it
 - Changes that relate to the execution *or* visual output of a function → FUNCTION.md
 - Changes that relate to the backend → BACKEND.md
 - Site format and content architecture and handling → FORMAT.md
-- Site content (what a lesson page says and offers: prose, sections, exercises, answer keys, in-page widgets) → CONTENT.md
+- Content handling: how lesson content is stored, structured and generated, plus content tasks/batches (the lesson pages themselves hold the prose, exercises and widgets; how to handle them is what belongs here) → CONTENT.md
 - Trivial changes, cleanup, inquiries and miscellaneous (anything that fits no category above) → ISSUES.md
 Then make a quick high-level judgement of which tasks/batches must be handled together and in which
 order they will be addressed. Accordingly, make a quick high-level judgement whether any batches or

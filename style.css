@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&display=swap');
-:root{--cream:#f4eddd;--paper:#fdfaf2;--ink:#182136;--tan:#b9854c;--rose:#d9c1ba;--ok:#177245;--bad:#a33327;--ptw:#96601f;--blue:#1d4ed8;--bluebg:rgba(29,78,216,.16)}
+:root{--cream:#f4eddd;--paper:#fdfaf2;--ink:#182136;--tan:#b9854c;--rose:#d9c1ba;--ptw:#96601f;--blue:#1d4ed8;--bluebg:rgba(29,78,216,.16)}
 *{box-sizing:border-box}body{margin:0;font:17px/1.6 'Public Sans',system-ui,sans-serif;background:var(--cream);color:var(--ink)}
 header.brand{text-align:center;padding:20px 14px 0}
 .control-bar{max-width:1400px;margin:10px auto 0;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:8px 14px;font-size:13px;text-align:center}
@@ -84,9 +84,7 @@ mark.nb.has-rec.has-note{background-repeat:no-repeat,no-repeat;background-positi
 .pulse{animation:pu 1s infinite;display:inline-block}
 @keyframes pu{50%{opacity:.25}}
 input.gap{border:0;border-bottom:2px solid var(--tan);background:#fff8ea;font:inherit;width:9em}
-input.gap.ok{border-color:var(--ok);background:#e8f5ec}input.gap.bad{border-color:var(--bad);background:#fbeaea}
 fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8px 12px}
-fieldset.ok{border-color:var(--ok);background:#e8f5ec}fieldset.bad{border-color:var(--bad);background:#fbeaea}
 label{margin-right:10px;cursor:pointer}
 #feed{font-size:14px}#feed div{border-left:3px solid var(--tan);padding:2px 8px;margin:4px 0;background:#fff8}
 footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#8a8072}

@@ -919,28 +919,25 @@ async function rec(t,rb){
  const mr=new MediaRecorder(stream),ch=[];
  mr.ondataavailable=e=>{if(e.data&&e.data.size>0)ch.push(e.data)};
  mr.start();
- const R=new(window.SpeechRecognition||window.webkitSpeechRecognition)();R.lang="en-US";let heard="";
- R.onresult=e=>{try{heard=e.results[0][0].transcript}catch(e2){}};try{R.start()}catch(e){}
  let ac=null,an=null,buf=null,lastLoud=0,everLoud=false,done=false;const t0=Date.now();
  try{ac=new(window.AudioContext||window.webkitAudioContext)();
   const srcn=ac.createMediaStreamSource(stream);an=ac.createAnalyser();an.fftSize=512;srcn.connect(an);
   buf=new Uint8Array(an.frequencyBinCount);}catch(e){}
  let sil=null;
  const finish=()=>{if(done)return;done=true;if(sil)clearInterval(sil);
-  try{R.stop()}catch(e){}
   ind.innerHTML='<span class="spin"></span> processando…';
   let sent=false;
   const process=()=>{if(sent)return;sent=true;
    const blob=new Blob(ch,{type:"audio/webm"});
    try{audioCache["a:"+t]=URL.createObjectURL(blob)}catch(e){}
-   const f=new FileReader();f.onload=()=>{const fb=feedback(t,heard);
+   const f=new FileReader();f.onload=()=>{
    /* the phrase is underlined only NOW — on save, never on the Record click. The wrap uses the very
       range the popup was opened for (pendingRange = the trimmed selection, or the active note's area),
       so a repeated phrase can never wrap the wrong occurrence; with no selection (a click on a mark)
       the existing mark is reused, and ensureMark is the safety net that guarantees the underline
       instead of waiting for the next poll. */
    if(!markRecording(t,(nbSel&&nbSel.area)?pendingRange:null))ensureMark(t,"rec");
-   nbUpsert(t,"rec",{b64:f.result.split(",")[1],mime:"audio/webm",data:JSON.stringify({score:fb.score,heard,fb:fb.msg})});
+   nbUpsert(t,"rec",{b64:f.result.split(",")[1],mime:"audio/webm",data:"{}"});
    ind.remove();press(false);closePop();};
    f.readAsDataURL(blob);};
   mr.onstop=process;
@@ -954,11 +951,4 @@ async function rec(t,rb){
    if(everLoud&&Date.now()-lastLoud>2000)return finish();}
   if(Date.now()-t0>10000)return finish();
  },100);}
-function feedback(target,heard){
- const tok=s=>(s||"").toLowerCase().split(/[^a-z']+/).filter(Boolean);
- const T=tok(target),H=tok(heard);
- if(!heard)return{score:0,msg:"Alvo: "+target+"<br>Ouvi: (nada)"};
- let ok=0;T.forEach((w,i)=>{if(H[i]===w)ok++});
- return{score:Math.round(100*ok/Math.max(T.length,1)),msg:"Alvo: "+target+"<br>Ouvi: "+heard};
-}
 window.__A=true;

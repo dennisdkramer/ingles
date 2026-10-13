@@ -1,4 +1,4 @@
-/* MOTOR 2 — control bar, camadas, quiz, áudio com cache, realces persistentes */
+/* MOTOR 2 — control bar, camadas, áudio com cache, realces persistentes */
 const LAYER_VER="v4-server-truth-20261006"; /* Bump to mark a fresh data era */
 
 /* One-time cleanup of ALL legacy local ghosts: shadow lists + device-only layer copies.
@@ -77,9 +77,8 @@ function renderLayer(){
     if(nbMarks(it.anchor).length)nbFlag(it.anchor,"has-"+it.type);else ensureMark(it.anchor,it.type);
    }
   }
-  if(it.type==="quiz"||it.type==="done"||(it.type==="note"&&!it.anchor)){
-   const d=JSON.parse(it.data||"{}");
-   feed.innerHTML+="<div>"+(it.type==="done"?"✅ concluída":it.type==="quiz"?"📝 quiz "+d.score+"%":"📝 "+(it.anchor||"traduções"))+" · <i>"+it.author+"</i></div>";}
+  if(it.type==="note"&&!it.anchor){
+   feed.innerHTML+="<div>📝 traduções · <i>"+it.author+"</i></div>";}
  });
  /* a highlight whose server row no longer exists leaves the layer (the server is the truth);
     one with a local action still pending (add/set/del) stays exactly as the UI left it until

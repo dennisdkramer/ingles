@@ -54,7 +54,7 @@ function render(stu){
  const t=stu.track,p=prog();
  html+='<div class="card"><h3>'+TN[t]+'</h3>';let cont=null;
  for(let i=1;i<=COUNTS[t];i++){const d=p[t+"_"+i];if(!d&&!cont)cont=i;
-  html+='<div class="row">'+(d?'<span class="done">✅ Lição '+i+(d.score!=null?" · quiz "+d.score+"%":"")+"</span>":'<span class="todo">⬜ Lição '+i+"</span>")+' <button onclick="go(\''+t+"\',"+i+')">abrir</button></div>';}
+  html+='<div class="row">'+(d?'<span class="done">✅ Lição '+i+"</span>":'<span class="todo">⬜ Lição '+i+"</span>")+' <button onclick="go(\''+t+"\',"+i+')">abrir</button></div>';}
  if(cont)html+='<button onclick="go(\''+t+"\',"+cont+')">▶ Continuar da lição '+cont+"</button>";
  html+='</div>';$("app").innerHTML=html;log("índice pronto ✔");
 }

@@ -20,7 +20,7 @@ _(none queued.)_
 
 ## FILESYSTEM
 - root: index.html · portal.html · style.css · engine1.js · engine2.js · logo.png · access.json · .gitignore
-- category files: MASTER_CONTEXT.md (this — general/planning/architecture) · HARNESS.md (execution) · FUNCTION.md (behavior) · BACKEND.md (server) · FORMAT.md (format/layout) · CONTENT.md (site content) · ISSUES.md (catch-all queue for items that fit no category)
+- category files: MASTER_CONTEXT.md (this — general/planning/architecture) · HARNESS.md (execution) · FUNCTION.md (behavior) · BACKEND.md (server) · FORMAT.md (format/layout) · CONTENT.md (content handling/architecture + content tasks/batches — the lesson content itself lives in the lesson pages, never here) · ISSUES.md (catch-all queue for items that fit no category)
 - pages: business/lesson1.html · kids/lesson1.html · nsfw/lesson1.html — backend/Code.gs — qa/smoke.mjs (jsdom suite, run with `node qa/smoke.mjs`) — node_modules/ (untracked, gitignored)
 - A file that the current batch does not reference is assumed fully functional; only a verification step proves otherwise.
 
