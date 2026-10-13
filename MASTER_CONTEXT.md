@@ -30,5 +30,5 @@ _(none queued.)_
 - access.json: teachers [dennisdkramer@gmail.com]; students Maria (kids), João (business), Ale (business).
 - Backend is owner-deployed (I cannot deploy it): a Code.gs change only takes effect after a NEW deployment version, while the /exec URL stays the same. Exec URL: https://script.google.com/macros/s/AKfycbxSR8UmOwosLIgn1-AGKhgXJvdqOVkzMqrTwdlWNF9kOkt-256TqTacOsQlo6JyHplR/exec (set per lesson as const BACKPACK).
 - Development scope: the current/ported build is business/lesson1.html and `qa/smoke.mjs` tests that page only — re-add the other pages when the port starts; kids/, nsfw/ and the login pages still carry their older wording.
-- Engines and style.css ship as FULL files; lesson pages are content-only. Never ask the owner to hand-paste fragments I can edit myself.
-- Environment: `run_commands` has no VS Code shell integration here (it echoes the terminal buffer back plus a bogus exit 1) — judge any call by its printed output only, bound every command, and inspect with read_files / search_codebase instead of the shell.
+- Shared files (engine1.js, engine2.js, style.css) are edited IN PLACE with surgical, exact-match edits — no whole-file rewrite and no holding a whole file in memory; lesson pages stay content-only (config consts + engine includes).
+- Tool efficiency: `run_commands` has no VS Code shell integration here (it echoes the terminal buffer back plus a bogus exit 1) — judge any call by its printed output, not its exit code, and inspect files with read_files / search_codebase rather than the shell.

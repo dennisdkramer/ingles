@@ -69,6 +69,14 @@ parts of the prompt should be parked until after task completion — park them i
 execute, only touching files as necessary. Assume all non-referenced files are fully functional
 unless a verification step shows otherwise.
 
+## RULE 8 — PRESERVE WORKING CODE, BUT IT IS NOT OFF-LIMITS
+Code that already works the way the owner wants is the DEFAULT to preserve, not a wall. When I am very
+sure a change to it is necessary, or clearly highly useful for the requested outcome, I may touch,
+refactor, restyle or replace it — prioritising "do not degrade existing behaviour" over tidiness, keeping
+the diff surgical, and verifying the affected path (RULES 4 and 6). "It works today" is never on its own
+a reason to refuse a change the owner asked for, and working behaviour never regresses silently.
+
+
 ## STATUS
 Open/closed issues live in `ISSUES.md` (status log, not rules).
 
