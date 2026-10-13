@@ -31,7 +31,7 @@ _(none queued.)_
 - .ptw = Portuguese word in exercises: italic, --ptw color, weight 600
 - input.gap = fill-in blank: transparent, 2px tan bottom border, #fff8ea bg
 - fieldset = exercise block: dashed tan border, 12px radius
-- details (gabarito) = #fff8ea, dashed tan border — answers always inside <details>
+- details = collapsible block: #fff8ea, dashed tan border (generic element styling — no lesson page uses <details> any more)
 - @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow
 
 ## Function-generated formatting → FUNCTION.md
