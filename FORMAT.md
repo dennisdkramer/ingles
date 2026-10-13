@@ -4,7 +4,7 @@ Reference this file whenever a task touches site appearance. Preserve everything
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-FM<n>.)_
 
-_(none queued.)_
+- B-FM1 [2026-10-13, owner instruction] Page content still has to be made ABSOLUTE (pending — nothing changed yet): the content inside the page area is normal document flow today, while `#hlLayer` is already absolutely positioned. Check the coupling before implementing: `.page-container` height GROWS with content (see "Layout" above), the `@media print` rules, and the deterministic fake layout qa/smoke.mjs installs to exercise rectangle geometry.
 
 ## Colors (CSS vars in :root)
 - cream #f4eddd = page background
