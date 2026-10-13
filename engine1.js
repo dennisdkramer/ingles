@@ -108,6 +108,52 @@ function nbRows(type,t){
  return rows;
 }
 const nbEntries=t=>nbRows(null,t);
+/* ---- WHICH OCCURRENCE an item belongs to (owner spec 2026-10-13: the anchor TEXT identifies the
+   item, POSITION only picks between identical candidates) -----------------------------------------
+   A lesson's prose is fixed, so a phrase that occurs twice on a page (the top box AND the dialogue)
+   is TWO independent items. The tie-breaker is the (block index, character offset) place the item was
+   saved on, measured with the HIGHLIGHT layer's own ruler (hlBlocks/hlOffset) so the two features can
+   never disagree about where a span is, and it travels inside the row's `data` cell — exactly where a
+   highlight row already keeps its {color,b,o} — so the 10-column sheet schema never changes. A row
+   with no tie-breaker (legacy, or a page where the phrase occurs once) falls back to the text. */
+function nbMarkPos(m){if(!m||m.dataset.b==null||m.dataset.o==null)return null;
+ return{b:Number(m.dataset.b),o:Number(m.dataset.o)}}
+function nbSetMarkPos(m,b,o){if(!m||b==null||o==null)return m;
+ m.dataset.b=String(b);m.dataset.o=String(o);return m}
+/* the (block,offset) a live Range / an nbAreaOfRange area / a stored hint stands for (null = unknown,
+   e.g. a range that crosses blocks — those gestures are refused anyway) */
+function nbPosOf(at){
+ if(!at)return null;
+ if(at.blk!=null||(at.s!=null&&at.e!=null))return{b:Number(at.b),o:Number(at.s)};
+ if(at.b!=null&&at.o!=null)return{b:Number(at.b),o:Number(at.o)};
+ if(at.startContainer!=null)return nbPosOf(nbAreaOfRange(at));   /* a live Range */
+ return null}
+/* a row's stored place: the b/o inside its `data` cell (JSON for notes and recordings), null for a
+   legacy row that carries only its anchor text */
+function nbDataPos(data){const s=String(data==null?"":data);if(s.charAt(0)!=="{")return null;
+ let d=null;try{d=JSON.parse(s)}catch(e){return null}
+ return(d&&d.b!=null&&d.o!=null)?{b:Number(d.b),o:Number(d.o)}:null}
+/* the marks of an anchor at ONE occurrence: no position → every piece of that text (the click path),
+   a position → only the marks painted there */
+function nbMarksAt(t,pos){const ms=nbMarks(t);if(!pos)return ms;
+ return ms.filter(m=>{const p=nbMarkPos(m);return!!p&&p.b===pos.b&&p.o===pos.o})}
+function nbFlagAt(t,pos,cls){const ms=nbMarksAt(t,pos);ms.forEach(m=>m.classList.add(cls));return ms[0]||null}
+/* a stored occurrence → a live Range, with the highlight layer's own locate+range helpers (hlLocate:
+   the stored b/o when the anchor still sits there, else the block hint, else the anchor text alone) */
+function nbRangeOf(t,b,o){if(t==null)return null;const s=String(t);
+ const spot=hlLocate(s,b,o);
+ return(spot&&spot.start>=0)?hlRangeOf({b:spot.b,start:spot.start,end:spot.start+s.length}):null}
+/* the range a save should wrap: the LIVE selection, else the stored/known occurrence, else the text */
+function nbRangeFor(t,pos,at){if(at&&at.startContainer!=null)return at;
+ if(pos)return nbRangeOf(t,pos.b,pos.o);
+ return findRange(t)}
+/* the text a live selection covers, straight from the DOM. The browser's own selection string
+   NORMALISES a line break to a space (lesson 1's line 31 → 32 crosses "·\n"), and a row anchored to
+   that normalised string can never be found in the page again (findRange) nor satisfy "a mark covers
+   exactly its own anchor text" — the owner's "anchored to exactly what the mark paints" (QA B-F4
+   step 2). Null when the range crosses a block, i.e. when its text is ambiguous. */
+function nbSpanText(r){const a=nbAreaOfRange(r);if(!a)return null;
+ return a.blk.textContent.slice(a.s,a.e).replace(/\s+$/,"")||null}
 /* ---- where a note/recording sits on the page: the OVERLAP RULES below need real spans ----------
    A row is keyed by its anchor text, so its span is measured from the mark that paints it (in pieces
    or not: from its first piece's first text to its last piece's last text) and falls back to
@@ -130,6 +176,10 @@ function nbAreaOf(anchor){
   if(f&&l){r=document.createRange();try{r.setStart(f,0);r.setEnd(l,l.data.length)}catch(e){r=null}}}
  return nbAreaOfRange(r||findRange(a));
 }
+/* a ROW's span on the page: its stored occurrence wins over the first text match, so a note kept for
+   the dialogue's phrase is not mistaken for the identical phrase in the top box */
+function nbAreaOfRow(r){if(!r)return null;const p=nbDataPos(r.data);
+ return nbAreaOfRange(nbRangeOf(r.anchor,p?p.b:null,p?p.o:null))||nbAreaOf(r.anchor)}
 /* the span a live selection means for the note layer, TRIMMED to t — and the trimmed selection IS
    the anchor: a mark then covers exactly its own anchor text, so two abutting saves share no
    character. (A shared boundary SPACE used to fall inside both of them, which is precisely the
@@ -155,7 +205,7 @@ const nbOverlap=(a,c)=>!!a&&!!c&&a.b===c.b&&a.s<c.e&&a.e>c.s;
 function nbPickNote(area){
  if(!area)return null;
  let best=null;
- nbRows("note").forEach(r=>{const a=nbAreaOf(r.anchor);
+ nbRows("note").forEach(r=>{const a=nbAreaOfRow(r);
   if(!nbOverlap(a,area))return;
   if(!best||a.s<best.area.s)best={anchor:r.anchor,area:a}});
  return best;
@@ -187,7 +237,7 @@ const NB_REC_AMBIG="please select a distinct recording";
    can never disagree about where a span is. */
 function nbRecsAt(t,area){
  if(!area)return nbRows("rec",t);
- return nbRows("rec").filter(r=>nbOverlap(nbAreaOf(r.anchor),area));
+ return nbRows("rec").filter(r=>nbOverlap(nbAreaOfRow(r),area));
 }
 /* THE ONE resolution of what the open popup is about (owner spec 2026-10-12 #2: "clicking or text
    selection needs to check for a recording AND check for a note"): the recording rows the gesture
@@ -206,7 +256,16 @@ function nbPopState(t){
    renderLayer consults this so a 3s poll cannot blink a mark that was just created or deleted) */
 function nbAnyPending(t){return nbEntries(t).some(it=>pendingFor(it.id))}
 /* the saved note text of an anchor (for the 📝 Show view) — null when there is none. */
-function nbNoteText(t){const e=nbEntries(t).find(it=>it.type==="note");return e?String(e.data||""):null}
+function nbNoteText(t){const e=nbEntries(t).find(it=>it.type==="note");return e?nbNoteTextOf(e.data):null}
+/* the note text inside a row's `data` cell. The JSON envelope carries the tie-breaker (b/o) BESIDE the
+   text — the same place a highlight row keeps its {color,b,o} — while a legacy row is the plain string. */
+function nbNoteTextOf(data){const s=String(data==null?"":data);if(s.charAt(0)!=="{")return s;
+ let d=null;try{d=JSON.parse(s)}catch(e){return s}
+ return(d&&typeof d.t==="string")?d.t:s}
+/* the `data` cell a save writes: the note text plus the occurrence it was saved on (owner spec
+   2026-10-13 — the text identifies the item, the place only picks between identical candidates) */
+const nbNoteData=(text,pos)=>JSON.stringify(pos?{t:String(text),b:pos.b,o:pos.o}:{t:String(text)});
+const nbRecData=pos=>JSON.stringify(pos?{b:pos.b,o:pos.o}:{});
 /* escape a user string for safe innerHTML (the popup is built as an HTML string) */
 const nbEsc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 /* the saved note of an anchor shown ABOVE the buttons (owner spec 2026-10-12): the whole note is
@@ -342,7 +401,12 @@ function nbUpsert(t,type,fields,from){
  /* `from` = the anchor the row had BEFORE this save: a note whose area EXPANDED keeps its own id and
     takes the union's text as its new anchor (ONE row, a plain "set" — the backend deletes the row
     with that id first, so the anchor simply changes and nothing is duplicated). */
- const cur=nbEntries(from!=null?from:t).find(it=>it.type===type);
+ /* the row this save REPLACES: same anchor+type — and, when the new fields carry a tie-breaker, the
+    row stored on the SAME occurrence (a phrase repeated on the page is one item per occurrence, so a
+    note in the dialogue must never overwrite the note in the top box) */
+ const want=nbDataPos(fields&&fields.data);
+ const cur=nbEntries(from!=null?from:t).filter(it=>it.type===type)
+  .find(it=>{const p=nbDataPos(it.data);return(want&&p)?(p.b===want.b&&p.o===want.o):true});
  const id=cur?cur.id:(Date.now()+"_"+Math.floor(Math.random()*9999));
  const row=Object.assign({id:id,type:type,anchor:t,author:who(),ts:new Date().toISOString()},fields||{});
  const i=layer.findIndex(it=>it.id===id);
@@ -382,10 +446,16 @@ function nbSaveNote(t,x,y){
     becomes its anchor; a selection strictly INSIDE the note plans no expansion, so the note keeps its
     original string as its reference. */
  const plan=nbSel&&nbSel.expand;
- let to=t;
- if(plan){const m=nbExpandNote(t,plan);if(m)m.classList.add("has-note");to=plan.anchor;nbSel.expand=null}
- else{const m=ensureMark(t,"note");if(m)m.classList.add("has-note")}
- nbUpsert(to,"note",{data:v},plan?t:null);   /* same id → REPLACES the row (re-anchored when it grew) */
+ let to=t,mark=null,pos=null;
+ if(plan){mark=nbExpandNote(t,plan);if(mark)mark.classList.add("has-note");to=plan.anchor;
+  pos=(mark&&nbMarkPos(mark))||nbPosOf(plan.area);nbSel.expand=null}
+ else{mark=ensureMark(t,"note",pendingRange);
+  pos=(mark&&nbMarkPos(mark))||nbPosOf(pendingRange);
+  /* the row is anchored to exactly what its mark PAINTS: nbWrap covers the (trimmed) selection, whose
+     DOM text can differ from the browser's selection string — the row and the mark must hold the same
+     string or the row could never be found again and the mark would not cover its own anchor */
+  if(mark&&mark.textContent&&nbMarksAt(t,pos).length<=1)to=mark.textContent}
+ nbUpsert(to,"note",{data:nbNoteData(v,pos)},plan?t:null);   /* same id → REPLACES the row (re-anchored when it grew) */
  refreshNbPopup(to,x,y,false);   /* 💾 Save LEAVES the edit state (FUNCTION.md): Save greys again */
 }
 /* rebuild the popup's buttons for the current state (the two arrays change with saved content and
@@ -430,7 +500,7 @@ function openNbPopup(t,r,x,y){
    the underline is the saved clip's proof, per the owner spec. Idempotent: an existing mark.nb is
    reused. (r = the live selection range when the popup came from one.) */
 function markRecording(t,r){
- if(r){const m=wrapRange(t,r);if(m)nbFlag(t,"has-rec");return m}
+ if(r){const m=wrapRange(t,r);if(m)nbFlagAt(t,nbMarkPos(m)||nbPosOf(r),"has-rec");return m}
  return ensureMark(t,"rec");      /* ensureMark paints the anchor's text AND flags it has-rec */
 }
 /* 📝 Add/Edit Note (owner spec 2026-10-12): the editor opens over the SAME popup (every button
@@ -484,8 +554,10 @@ function nbPlayRecording(t,done){
    leaves a clean DOM, so a later note/recording starts from the same pristine text. A piece that
    still carries the OTHER item stays on the page: that is what lets a note and a recording saved from
    the same selection be deleted one at a time (owner spec 2026-10-12 #2). */
-function nbUnflag(t,cls){
- nbMarks(t).forEach(m=>{
+function nbUnflag(t,cls,pos){
+ /* pos (optional) limits the sweep to the ONE occurrence the item lives on: the same words may carry
+    an independent item further down the page, and deleting/expanding this one must not touch it */
+ nbMarksAt(t,pos===undefined?null:pos).forEach(m=>{
   m.classList.remove(cls);
   if(m.classList.contains("has-rec")||m.classList.contains("has-note"))return;
   try{const p=m.parentNode;while(m.firstChild)p.insertBefore(m.firstChild,m);p.removeChild(m)}catch(e){}
@@ -507,7 +579,8 @@ function nbDeleteItem(t,type){
  const rows=nbRows(type,anchor);
  layer=layer.filter(it=>it.type!==type||it.anchor!==anchor);
  if(type==="rec")delete audioCache["a:"+anchor];   /* a deleted clip must never replay from the cache */
- nbUnflag(anchor,"has-"+type);
+ /* drop the flag only where the deleted item actually sits (one row = one occurrence) */
+ rows.forEach(r=>nbUnflag(anchor,"has-"+type,nbDataPos(r.data)));
  closePop();
  rows.forEach(r=>send({action:"del",id:r.id}));
 }
@@ -526,7 +599,7 @@ document.addEventListener("mousedown",()=>{mouseIsDown=true});
 document.addEventListener("mouseup",()=>{mouseIsDown=false;clearTimeout(selTimer);trySelPopup()});
 /* seleção: abre só quando a seleção MUDA (funciona em mobile; não dispara ao clicar em botões) */
 function trySelPopup(){
- const sel=getSelection();const t=sel?sel.toString().trim():"";
+ const sel=getSelection();let t=sel?sel.toString().trim():"";
  if(!t||t.length<3||t.length>200)return;
  if(mouseIsDown)return; /* never open mid-drag — the mouseup listener fires this at release */
  if(t===lastSelText)return;
@@ -555,6 +628,13 @@ function trySelPopup(){
    return;
   }
  }catch(e){lastSelText=t;return;}
+ /* the anchor is the DOM's OWN text of the span, never the browser's selection string: that string
+    NORMALISES a line break to a space (lesson 1's line 31 → 32 crosses "·\n"), so a row stored from
+    it could never be found in the page again and its mark would not "cover exactly its own anchor
+    text" — the owner's "anchored to exactly what the mark paints" (QA B-F4 step 2). The span above is
+    inside ONE block, so its text is unambiguous; the wrap is trimmed to it the same way. */
+ const dom=nbSpanText(r);
+ if(dom){const dt=dom.trim();if(dt.length>=3&&dt.length<=200)t=dt}
  pendingRange=r.cloneRange();
  const rect=r.getBoundingClientRect();
  const x=Math.max(8,Math.min(rect.left||20,innerWidth-380)),y=(rect.bottom||60)+8;
@@ -617,6 +697,9 @@ function nbWrap(t,r){
  const s=nbTextPoint(r.startContainer,r.startOffset,true),e=nbTextPoint(r.endContainer,r.endOffset,false);
  if(!s||!e)return null;
  const m=document.createElement("mark");m.className="nb";m.dataset.a=String(t);
+ /* the mark remembers WHICH occurrence it was painted on (same ruler as the highlights), so every
+    later lookup that carries a place can tell two identical phrases apart */
+ const at=nbAreaOfRange(r);if(at)nbSetMarkPos(m,at.b,at.s);
  if(s.n===e.n){                              /* inside ONE text node: split it into head/mid/tail */
   if(e.off<=s.off)return null;
   const mid=s.n.splitText(s.off);
@@ -645,7 +728,11 @@ function nbWrap(t,r){
    when a stored row is being restored). An anchor that is ALREADY painted is never wrapped twice:
    a note and a recording on the SAME phrase are ONE mark carrying both flags. */
 function wrapRange(t,r){
- const ex=nbMarks(t)[0];if(ex)return ex;
+ /* only a mark painted at THE SAME OCCURRENCE counts as "this item already": the phrase may be
+    painted on ANOTHER occurrence of the same words (a note in the top box and a recording in the
+    dialogue), and reusing that mark would flag the wrong place and leave this span unpainted */
+ const pos=nbPosOf(r);
+ const ex=nbMarksAt(t,pos)[0]||(pos?null:nbMarks(t)[0]);if(ex)return ex;
  return r?nbWrap(t,r):null}
 /* an anchor's text → a live Range. Marked text is walked TOO: an anchor may abut, cross or sit
    inside another mark, and skipping text inside mark.nb used to make exactly those anchors
@@ -662,9 +749,20 @@ function findRange(t){
 }
 /* (re)paint an anchor's mark and flag it: reuse the existing mark set, otherwise wrap the anchor's
    text where it lies on the page */
-function ensureMark(t,type){
- if(!nbMarks(t).length){const r=findRange(t);if(!r||!nbWrap(t,r))return null}
- return nbFlag(t,"has-"+type);
+function ensureMark(t,type,at){
+ /* `at` = where to paint: a live Range (a selection just made), a stored {b,o} place (a row being
+    restored) or nothing (a click on a mark → the text itself decides, as before) */
+ const pos=nbPosOf(at);
+ let ms=nbMarksAt(t,pos);
+ if(!ms.length){
+  const r=nbRangeFor(t,pos,at);
+  if(!r)return null;
+  const m=nbWrap(t,r);if(!m)return null;
+  if(pos)nbSetMarkPos(m,pos.b,pos.o);
+  ms=[m];
+ }
+ ms.forEach(m=>m.classList.add("has-"+type));
+ return ms[0];
 }
 /* ---- HIGHLIGHT (owner spec 2026-10-11 #2) — its OWN PAINT LAYER, never inside the text ------
    Ctrl held at MOUSEDOWN over a selection  → the Hear / Record / Note functions are suppressed
@@ -766,7 +864,11 @@ function hlRectList(rec){const r=hlRangeOf(rec);if(!r)return [];
  let list=[];try{list=r.getClientRects?[...r.getClientRects()]:[]}catch(e){list=[]}
  if(!list.length){try{const b=r.getBoundingClientRect();if(b&&(b.width||b.height))list=[b]}catch(e){}}
  const sx=window.scrollX||0,sy=window.scrollY||0;
- return list.filter(b=>b.width>0||b.height>0).map(b=>({left:b.left+sx,top:b.top+sy,width:b.width,height:b.height}))}
+ /* a ZERO-WIDTH rect paints nothing and must not become a rectangle: Chrome hands one back for a
+    range that starts on an inline-box boundary (the bf2b diagnostic showed the same row painted
+    twice — [x,y,0,h] beside [x,y,w,h] — which made "one rectangle per occurrence" fail). `height` is
+    kept in the test only so a degenerately flat rect can never slip through either. */
+ return list.filter(b=>b.width>0&&b.height>0).map(b=>({left:b.left+sx,top:b.top+sy,width:b.width,height:b.height}))}
 /* repaint the layer from the records: it never touches a single text node */
 function hlReflow(){const L=hlLayerEl();L.innerHTML="";
  hlList.forEach(rec=>{rec.rects=hlRectList(rec);
@@ -936,8 +1038,14 @@ async function rec(t,rb){
       so a repeated phrase can never wrap the wrong occurrence; with no selection (a click on a mark)
       the existing mark is reused, and ensureMark is the safety net that guarantees the underline
       instead of waiting for the next poll. */
-   if(!markRecording(t,(nbSel&&nbSel.area)?pendingRange:null))ensureMark(t,"rec");
-   nbUpsert(t,"rec",{b64:f.result.split(",")[1],mime:"audio/webm",data:"{}"});
+   const rr=(nbSel&&nbSel.area)?pendingRange:null;
+   const mk=markRecording(t,rr)||ensureMark(t,"rec",rr);
+   const rp=(mk&&nbMarkPos(mk))||nbPosOf(rr);
+   /* the row is anchored to exactly what the mark PAINTS and keeps the place it paints on as its
+      tie-breaker (owner spec 2026-10-13): a phrase repeated on the page is restored on ITS OWN
+      occurrence after a reload, never on the first match of the same words */
+   const rto=(mk&&mk.textContent&&nbMarksAt(t,rp).length<=1)?mk.textContent:t;
+   nbUpsert(rto,"rec",{b64:f.result.split(",")[1],mime:"audio/webm",data:nbRecData(rp)});
    ind.remove();press(false);closePop();};
    f.readAsDataURL(blob);};
   mr.onstop=process;

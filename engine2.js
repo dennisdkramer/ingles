@@ -74,7 +74,13 @@ function renderLayer(){
     /* nbFlag/nbMarks (engine1.js) handle an anchor painted by MORE THAN ONE mark piece (a note or a
        recording crossed by another save): the flag goes on EVERY piece, so the underline/wash is
        never half-missing after a reload. ensureMark wraps the anchor's text when it has no mark yet. */
-    if(nbMarks(it.anchor).length)nbFlag(it.anchor,"has-"+it.type);else ensureMark(it.anchor,it.type);
+    /* the row's OWN place (the b/o tie-breaker inside `data`, owner spec 2026-10-13) decides which
+       occurrence of the anchor text is painted: a phrase repeated on the page (the top box AND the
+       dialogue) is restored on ITS OWN occurrence, live and after a reload. A legacy row without a
+       tie-breaker falls back to the anchor text alone, exactly as before. */
+    const pos=nbDataPos(it.data);
+    if(nbMarksAt(it.anchor,pos).length)nbFlagAt(it.anchor,pos,"has-"+it.type);
+    else ensureMark(it.anchor,it.type,pos);
    }
   }
   if(it.type==="note"&&!it.anchor){

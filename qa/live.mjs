@@ -765,8 +765,14 @@ async function makeRec(live, x) {
                  covering only PART of the phrase the row is stored for: the "cut" the owner sees). */
 function invariants(ms) {
   const by = {};
-  ms.forEach(m => { (by[m.a] = by[m.a] || []).push(m) });
-  const split = Object.keys(by).filter(a => by[a].length > 1).map(a => a + ' ×' + by[a].length);
+  /* ONE ITEM PER (anchor text, occurrence): the anchor text IDENTIFIES the item and the stored place
+     (mark.nb data-b/data-o, owner spec 2026-10-13) only tells two identical strings apart — so a note
+     in the top box and a recording on the same words in the dialogue are two items, NOT "one anchor
+     split in two". Pieces of a REAL split still share the place of the mark they were cut from
+     (nbSplitEl clones the attributes), and the `cut` half below catches their partial text anyway. */
+  const key = m => m.a + '\u0000' + (m.b == null ? '' : m.b) + ':' + (m.o == null ? '' : m.o);
+  ms.forEach(m => { const k = key(m); (by[k] = by[k] || []).push(m) });
+  const split = Object.keys(by).filter(k => by[k].length > 1).map(k => by[k][0].a + ' ×' + by[k].length);
   const cut = ms.filter(m => m.txt !== m.a).map(m => ({ a: m.a, painted: m.txt }));
   return { n: ms.length, by, split, cut };
 }
