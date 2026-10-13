@@ -67,7 +67,7 @@ function send(o){o.email=STUDENT;o.lesson=L;o.author=who();
 }
 let pop=null,pendingRange=null,lastSelText="",nbSel=null;
 /* nbSel = the SELECTION the open popup came from (openNbPopup): {area, note, expand}. The owner's
-   overlap rules read it — the ⏺ Record lock (nbRecBlocked), the note the selection refers to
+   overlap rules read it — the recording(s)/note the gesture refers to (nbPopState), the note the selection refers to
    (nbPickNote) and the 💾 Save expansion (nbExpandPlan). It must OUTLIVE a re-render of the SAME
    popup (📝 Add/Edit Note and 💾 Save rebuild the popup through openPop, which closes the old one):
    clearing it here would drop the plan and Save would no longer expand the note. It is cleared by
@@ -148,7 +148,6 @@ function nbAreaRange(a){if(!a)return null;
  const r=document.createRange();try{r.setStart(p.n,p.off);r.setEnd(q.n,q.off)}catch(e){return null}return r}
 /* two spans overlap when they share a character — merely TOUCHING (a.e===c.s) is not an overlap */
 const nbOverlap=(a,c)=>!!a&&!!c&&a.b===c.b&&a.s<c.e&&a.e>c.s;
-const nbSameSpan=(a,c)=>!!a&&!!c&&a.b===c.b&&a.s===c.s&&a.e===c.e;
 /* the note a selection refers to (owner rule, overlaps 2026-10-12): the FIRST note, in text order,
    whose span overlaps the selection. It becomes the popup's ACTIVE note — and 💾 Save then expands
    its area to the new selection, or keeps its own string as the reference when the selection sits
@@ -171,28 +170,41 @@ function nbExpandPlan(note,area){
  const s=Math.min(note.area.s,area.s),e=Math.max(note.area.e,area.e);
  return{area:{b:area.b,s:s,e:e,blk:area.blk},anchor:area.blk.textContent.slice(s,e)};
 }
-/* the exact owner wording of the ⏺ Record refusal (see nbRecBlocked/nbWirePopup) */
-const NB_REC_LOCKED="cannot partially overwrite an audio recording, delete the previous recording and try again";
-/* ⏺ Record's LOCK (owner rule, overlaps): a selection that would PARTIALLY overwrite an existing
-   audio file — overlapping it, containing it, or sitting inside it — is refused. The button keeps
-   the disabled LOOK (.locked) but stays pressable, because a truly disabled button fires no click
-   event and pressing it MUST raise the refusal toast. Covering a recording EXACTLY is not a partial
-   overwrite: that is the documented re-record ("regrava por cima", one rec row replaced in place).
-   When the popup came from a SELECTION the rule is about that selection; when it came from a click
-   on a mark there is no selection, and the phrase's own span is the target. */
-function nbRecBlocked(t){
- const tgt=nbAreaOf(t),sel=nbSel&&nbSel.area;
- return nbRows("rec").some(r=>{const a=nbAreaOf(r.anchor);
-  return (nbOverlap(a,sel)&&!nbSameSpan(a,sel))||(nbOverlap(a,tgt)&&!nbSameSpan(a,tgt))});
+/* the exact owner wording of the ⏺ Record refusal and of the ambiguous ▶ Play / 🔊 Delete press (see
+   nbPopState/nbPopHTML/nbWirePopup). RE-RECORDING IS GONE (owner spec 2026-10-12 #2): any selection
+   that touches a recording — sitting inside it, overlapping it or containing it — is refused, so the
+   only way to change a clip is to delete it first. */
+const NB_REC_LOCKED="cannot overwrite recording, delete first";
+const NB_REC_AMBIG="please select a distinct recording";
+/* the RECORDINGS a gesture refers to (owner spec 2026-10-12 #2):
+     • popup opened from a SELECTION → every recording whose span the selection overlaps — the one it
+       sits inside, crosses or contains. This is what enables ▶ Play for the referenced clip ("text
+       selection within or overlapping one existing recording"), locks ⏺ Record, and makes ▶ Play and
+       🔊 Delete ambiguous as soon as MORE THAN ONE recording is involved;
+     • popup opened by a CLICK on a mark (no selection) → the rows stored on that anchor (its own
+       phrase, so a click on a recorded phrase locks ⏺ Record exactly like selecting it does).
+   Measured with the same ruler as everything else (nbAreaOf → hlBlocks/hlOffset), so the two features
+   can never disagree about where a span is. */
+function nbRecsAt(t,area){
+ if(!area)return nbRows("rec",t);
+ return nbRows("rec").filter(r=>nbOverlap(nbAreaOf(r.anchor),area));
+}
+/* THE ONE resolution of what the open popup is about (owner spec 2026-10-12 #2: "clicking or text
+   selection needs to check for a recording AND check for a note"): the recording rows the gesture
+   refers to (recs), the ONE of them ▶ Play and 🔊 Delete act on (rec — null when there is none or the
+   gesture involves several), and the note the gesture refers to (note = the anchor of the ACTIVE note:
+   the note a selection overlaps/contains, or the note stored on a clicked mark). Every button state
+   and every button action is derived from this one call, so the buttons can never disagree about
+   which item they act on. */
+function nbPopState(t){
+ const area=(nbSel&&nbSel.area)||null;
+ const recs=nbRecsAt(t,area);
+ const note=area?(nbPickNote(area)||null):(nbRows("note",t)[0]||null);
+ return{area:area,recs:recs,rec:recs.length===1?recs[0]:null,note:note?note.anchor:null};
 }
 /* is a local note/recording action for this anchor still inside its grace window? (engine2's
    renderLayer consults this so a 3s poll cannot blink a mark that was just created or deleted) */
 function nbAnyPending(t){return nbEntries(t).some(it=>pendingFor(it.id))}
-/* does this phrase already carry a saved recording / note? The layer (server truth) decides; the
-   mark's own flags (has-rec / has-note) are the fallback for the moment between a just-finished
-   save and the next poll. Either signal flips the popup's buttons below. */
-function nbHasRec(t){return nbEntries(t).some(it=>it.type==="rec")||!!document.querySelector('mark.nb.has-rec[data-a="'+CSS.escape(t)+'"]')}
-function nbHasNote(t){return nbEntries(t).some(it=>it.type==="note")||!!document.querySelector('mark.nb.has-note[data-a="'+CSS.escape(t)+'"]')}
 /* the saved note text of an anchor (for the 📝 Show view) — null when there is none. */
 function nbNoteText(t){const e=nbEntries(t).find(it=>it.type==="note");return e?String(e.data||""):null}
 /* escape a user string for safe innerHTML (the popup is built as an HTML string) */
@@ -206,37 +218,46 @@ function nbNoteDisplay(t){
  const s=String(v).replace(/^\s*(?:📝|📌|🗒)\s*/u,"").trim();
  return s?s:null;
 }
-/* the popup carries SIX buttons, and ALL of them always exist (owner spec 2026-10-12). Three are
-   always clickable — ▶ Hear, ⏺ Record, 📝 Add/Edit Note. The other three only light up when they
-   apply, and are otherwise GREYED OUT (disabled, never hidden):
-     ▶ Play    — a saved recording exists on the phrase
+/* the popup carries SEVEN buttons, and ALL of them always exist (owner spec 2026-10-12). ▶ Hear,
+   ⏺ Record and 📝 Add/Edit Note are always clickable; the other four light up only when they apply and
+   are otherwise GREYED OUT (never hidden). What applies comes from nbPopState(t) — the recording(s)
+   and the note the gesture refers to:
+     ▶ Play    — exactly ONE recording is involved: it plays THAT clip (with more than one involved it
+                 carries the disabled LOOK, `.locked`, and its press only toasts NB_REC_AMBIG)
+     🔊 Delete — the same single recording, dropping just the recorded audio (the note stays)
      💾 Save   — a note is currently being added / edited
-     🗑 Delete — the phrase has a saved note or recording
+     📝 Delete — the gesture refers to a saved note; drops just that note (the recording stays)
+   ⏺ Record is the ONE always-present-but-refusing button: it carries the disabled LOOK (`.locked`, NOT
+   the `disabled` attribute — a genuinely disabled button fires no click event) as soon as ANY
+   recording is involved, because re-recording is no longer possible (owner spec 2026-10-12 #2) — the
+   press must still be heard, and it toasts NB_REC_LOCKED.
    The saved note (when any) is shown ABOVE the buttons; the SELECTED TEXT is NOT repeated in the
-   popup (owner spec 2026-10-12). The phrases carry the button ids: H=Hear P=Play R=Record
-   N=Add/Edit Note S=Save D=Delete — order: row1 H P R, row2 N S D. Record and Play swap their glyph
-   for a processing SPIRAL while recording / while the clip is playing (owner spec 2026-10-12).
+   popup (owner spec 2026-10-12). The button ids: H=Hear P=Play R=Record A=Delete-audio N=Add/Edit Note
+   S=Save D=Delete-note — order: row1 H P R A, row2 N S D. Record and Play swap their glyph for a
+   processing SPIRAL while recording / while the clip is playing (owner spec 2026-10-12).
    It intentionally carries NO trailing icon: the underline / blue-wash of the phrase itself is the
    only signal, and it is applied by the SAVE (engine2 renderLayer or the note Save), never by the
    click. */
 function nbPopHTML(t,editing){
- const rec=nbHasRec(t),note=nbHasNote(t),owned=rec||note;
+ const st=nbPopState(t);
+ const play=!!st.rec,ambig=st.recs.length>1;   /* one recording involved vs more than one */
  const nb=nbNoteDisplay(t);
- /* ⏺ Record is LOCKED while this popup's span would PARTIALLY overwrite an existing audio file
-    (owner rule, overlaps): the button greys out like a disabled one but stays pressable, so that
-    pressing it can toast the refusal (nbWirePopup) — a `disabled` button fires no click at all. */
- const locked=nbRecBlocked(t);
+ /* ▶ Play and 🔊 Delete act on the SAME single recording; while more than one is involved both carry
+    the disabled LOOK (.locked) and their press only toasts NB_REC_AMBIG (owner spec 2026-10-12 #2). */
+ const playAttr=play?' title="ouvir a gravação selecionada"':(ambig?' class="locked" aria-disabled="true" title="'+NB_REC_AMBIG+'"':' disabled title="nada para ouvir"');
+ const audioAttr=play?' title="apagar somente a gravação (áudio)"':(ambig?' class="locked" aria-disabled="true" title="'+NB_REC_AMBIG+'"':' disabled title="nada para apagar"');
  /* the popup does NOT repeat the selected text any more (owner spec 2026-10-12): the phrase is right
     there in the page, so a title echoing it is redundant. #pTitle stays as an empty anchor so a
     refresh can keep targeting a stable node. */
  const noteHTML=nb!=null?'<div id="nbNote" title="nota salva" style="margin:2px 0 4px;white-space:pre-wrap;font-size:13px">'+nbEsc(nb)+'</div>':"";
  return '<div id="pTitle"></div>'+noteHTML+
   '<span style="white-space:nowrap"><button id="pH" title="ouvir em voz alta">▶ Hear</button>'+
-  '<button id="pP" title="ouvir a gravação salva"'+(rec?"":' disabled')+'><span class="lbl">▶ Play</span></button>'+
-  '<button id="pR"'+(locked?' class="locked" aria-disabled="true" title="'+NB_REC_LOCKED+'"':' title="gravar (regrava por cima)"')+'><span class="lbl">⏺ Record</span></button></span><br>'+
+  '<button id="pP"'+playAttr+'><span class="lbl">▶ Play</span></button>'+
+  '<button id="pR"'+(st.recs.length?' class="locked" aria-disabled="true" title="'+NB_REC_LOCKED+'"':' title="gravar"')+'><span class="lbl">⏺ Record</span></button>'+
+  '<button id="pA"'+audioAttr+'><span class="lbl">🔊 Delete</span></button></span><br>'+
   '<span style="white-space:nowrap"><button id="pN">📝 Add/Edit Note</button>'+
   '<button id="pS" title="salvar a nota"'+(editing?"":' disabled')+'>💾 Save</button>'+
-  '<button id="pD" title="apagar gravação, notas e a marcação"'+(owned?"":' disabled')+'>🗑 Delete</button></span>';
+  '<button id="pD" title="apagar somente a nota"'+(st.note?"":' disabled')+'>📝 Delete</button></span>';
 }
 /* wire a freshly-opened .pop for an anchor: range = the live selection when the popup came from
    one (null when it came from a click on the mark). Shared by trySelPopup and showAnchor. Every
@@ -269,12 +290,19 @@ function nbWirePopup(t,r,x,y){
     click, BEFORE the Drive/?action=file fetch, so even a first-ever fetch shows it; OFF when playback
     really stops — nbPlayAudio fires its done() on BOTH "ended" and a failed play/lookup, so the
     spiral can never get stuck on. The old wiring handed that callback straight to nbBtnSpinner and
-    done(true) means "play FAILED", so ▶ Play only ever span on an error — never while playing. */
- if(P)P.onclick=()=>{if(P.disabled)return;nbBtnSpinner(P,true);nbPlayRecording(t,()=>nbBtnSpinner(P,false))};
+    done(true) means "play FAILED", so ▶ Play only ever span on an error — never while playing.
+    It plays the ONE recording the gesture refers to (nbPopState), so a selection that merely
+    OVERLAPS a recording plays THAT clip ("the referenced recording"); while more than one recording
+    is involved the button carries the disabled LOOK and its press only toasts NB_REC_AMBIG. */
+ if(P)P.onclick=()=>{if(P.disabled)return;
+  if(P.classList.contains("locked")){toast(NB_REC_AMBIG);return}
+  const st=nbPopState(t);if(!st.rec)return;
+  nbBtnSpinner(P,true);nbPlayRecording(st.rec.anchor,()=>nbBtnSpinner(P,false))};
  const R=pop.querySelector("#pR");
- /* a LOCKED ⏺ Record (the selection would PARTIALLY overwrite an existing audio file) refuses with
-    the owner's toast instead of recording — the button carries the disabled LOOK but no `disabled`
-    attribute, which is the only way a press can still be heard (nbRecBlocked) */
+ /* a LOCKED ⏺ Record refuses with the owner's toast instead of recording — the button carries the
+    disabled LOOK but no `disabled` attribute, which is the only way a press can still be heard. It is
+    locked as soon as ANY recording is involved (nbPopState.recs): RE-RECORDING IS GONE, so the only
+    way to change a clip is to delete it first (NB_REC_LOCKED, owner spec 2026-10-12 #2). */
  if(R)R.onclick=()=>{if(R.classList.contains("locked")){toast(NB_REC_LOCKED);return}rec(t,R)};
  const N=pop.querySelector("#pN");
  if(N)N.onclick=()=>{
@@ -287,7 +315,15 @@ function nbWirePopup(t,r,x,y){
  const S=pop.querySelector("#pS");
  if(S)S.onclick=()=>{if(S.disabled)return;nbSaveNote(t,x,y)};
  const D=pop.querySelector("#pD");
- if(D)D.onclick=()=>{if(D.disabled)return;nbDeleteAnchor(t)};
+ /* 📝 Delete drops ONLY the note the gesture refers to and 🔊 Delete ONLY the recording (nbDeleteItem):
+    the two items are independent, so neither button can take the other one with it (owner spec
+    2026-10-12 #2). 🔊 Delete acts on the same single recording ▶ Play would play; with more than one
+    involved it carries the disabled LOOK and toasts NB_REC_AMBIG instead of guessing. */
+ if(D)D.onclick=()=>{if(D.disabled)return;nbDeleteItem(t,"note")};
+ const A=pop.querySelector("#pA");
+ if(A)A.onclick=()=>{if(A.disabled)return;
+  if(A.classList.contains("locked")){toast(NB_REC_AMBIG);return}
+  nbDeleteItem(t,"rec")};
 }
 /* ONE CORE SAVE for the note/recording layer (owner rule 2026-10-12, "reuse core functions"):
    💾 Save (note) and rec() (recording) both go through here, so the two save paths can never
@@ -295,9 +331,9 @@ function nbWirePopup(t,r,x,y){
    REPLACES that row on the server (backend add/set deletes the row with the same id first) instead of
    appending a second one. That duplicate row was exactly why an edited note's Save looked like a
    no-op: the layer's first-match lookup (nbNoteText/nbPlayRecording) kept returning the OLD row.
-   Equally for a recording: re-recording over a phrase keeps ONE rec row and can never leave a stale
-   earlier clip for that first-match lookup to play. The local `layer` is updated BEFORE the network
-   call (same "immediate" principle as nbDeleteAnchor) because the popup and renderLayer read the
+   Equally for a recording: a rec row is always REPLACED, never duplicated, so the first-match lookup
+   can never play a stale earlier clip. The local `layer` is updated BEFORE the network
+   call (same "immediate" principle as nbDeleteItem) because the popup and renderLayer read the
    layer: without it the change only showed up at the next 3s poll. Network last (FUNCTION.md).
    The row is ALSO remembered in nbLocal, the local copy nbEntries serves while this write is still
    inside its grace window (see above) — the same treatment the highlight gives a freshly painted
@@ -322,15 +358,19 @@ function nbUpsert(t,type,fields,from){
    closes the editor (no blank save). Network last, so a failed save never undoes what was just
    painted (FUNCTION.md). */
 /* grow a note's painted area to the plan's span (owner rule: "the first note area is expanded to the
-   new selection"): the old mark set leaves the text and the UNION is wrapped under the union's own
-   text as the new anchor. A recording that lived on the same phrase is re-painted first, so the new
-   note mark carries it whole (nested) instead of dropping its underline until the next poll. The ROW
-   itself is re-anchored by nbUpsert(…, from) — same id, ONE row. */
+   new selection"). The UNION is wrapped FIRST: nbWrap MOVES what it covers into the new mark (it
+   never clones), so a recording sitting inside the union rides along as a nested piece that keeps its
+   own data-a and has-rec — never the old unmark/re-paint dance, which re-derived the recording's span
+   from its anchor text and could land on another occurrence of the phrase. Only THEN is the note flag
+   dropped from the note's OWN, now-stale pieces: a piece that carries nothing else is unwrapped, a
+   piece that also carries the recording stays — so growing a note can never delete, move or re-flag
+   the recording (owner spec 2026-10-12 #2: the two items are independent). The ROW itself is
+   re-anchored by nbUpsert(…, from) — same id, ONE row. */
 function nbExpandNote(anchor,plan){
- const rec=nbHasRec(anchor);
- nbUnmark(anchor);
- if(rec)ensureMark(anchor,"rec");
- return nbWrap(plan.anchor,nbAreaRange(plan.area));
+ const m=nbWrap(plan.anchor,nbAreaRange(plan.area));
+ if(!m)return null;
+ nbUnflag(anchor,"has-note");
+ return m;
 }
 function nbSaveNote(t,x,y){
  if(!pop)return;
@@ -360,16 +400,18 @@ function refreshNbPopup(t,x,y,editing){
  openPop(t,x,y,nbPopHTML(t,editing)+(editing?'<textarea id="nt" rows="3" placeholder="write a note…">'+nbEsc(cur!=null?cur:"")+'</textarea>':''));
  nbWirePopup(t,null,x,y);
 }
-/* open the six-button popup for an anchor — and, when it came from a SELECTION (r), resolve the
-   owner's OVERLAP rules for that selection:
+/* open the seven-button popup for an anchor — and, when it came from a SELECTION (r), resolve the
+   owner's OVERLAP rules for that selection (every button state and action then comes from nbPopState):
      • the selection overlaps or contains a NOTE → that note is the ACTIVE note: the popup is about
        the note's own anchor (prefilled, its row found), and 💾 Save then expands the note's area to
-       the new selection (nbExpandPlan/nbExpandNote);
-     • the selection overlaps, contains or sits inside a RECORDING → ⏺ Record is locked and toasts
-       the refusal (nbRecBlocked, rendered by nbPopHTML);
+       the new selection (nbExpandPlan/nbExpandNote) without disturbing a recording inside it;
+     • the selection overlaps, contains or sits inside a RECORDING → that recording is what ▶ Play
+       plays and 🔊 Delete deletes, and ⏺ Record is locked and toasts the refusal (NB_REC_LOCKED).
+       MORE than one recording involved → ▶ Play and 🔊 Delete are locked too and toast NB_REC_AMBIG;
      • a selection that merely ABUTS a mark (shares no character) is an ordinary new phrase.
    A popup opened by a click on a mark (showAnchor, r=null) has no selection: its target is the
-   mark's own anchor, so a full re-record of that phrase stays available. */
+   mark's own anchor, so the phrase's own note and recording are what its buttons act on — and ⏺
+   Record is locked there too, because re-recording is gone (delete the clip first). */
 function openNbPopup(t,r,x,y){
  const selArea=r?nbSelArea(r,t):null;
  const note=selArea?nbPickNote(selArea):null;
@@ -392,7 +434,7 @@ function markRecording(t,r){
  return ensureMark(t,"rec");      /* ensureMark paints the anchor's text AND flags it has-rec */
 }
 /* 📝 Add/Edit Note (owner spec 2026-10-12): the editor opens over the SAME popup (every button
-   stays; the six buttons simply re-render, and Save lights up). When the phrase already HAS a note
+   stays; the seven buttons simply re-render, and Save lights up). When the phrase already HAS a note
    the editor is prefilled with it, so a change never silently wipes the old one. Pre-focusing the
    textarea keeps the popup open while the user types (the outside-click-to-close listener fires on
    mousedown). Nothing here touches mark.nb — the blue wash is applied only by nbSaveNote/💾 Save,
@@ -438,21 +480,36 @@ function nbPlayRecording(t,done){
  }
  if(!fromInline()){toast("Sem gravação nesta frase.");if(done)done();}
 }
-/* remove mark.nb from the text (undo EVERY piece of the anchor) — leaves a clean DOM, so a later
-   note/recording starts from the same pristine text */
-function nbUnmark(t){nbMarks(t).forEach(m=>{try{const p=m.parentNode;while(m.firstChild)p.insertBefore(m.firstChild,m);p.removeChild(m)}catch(e){}})}
-/* DELETE (owner spec 2026-10-12): the popup's 🗑 button removes the saved recording, any notes
-   AND the visual element — one action, network last. */
-function nbDeleteAnchor(t){
- const items=nbEntries(t);
- if(!items.length){toast("Nada para apagar nesta frase.");closePop();return}
- const entries=items.map(e=>({id:e.id,type:e.type,anchor:e.anchor,b64:e.b64,mime:e.mime,data:e.data}));
- /* drop the rows locally at once too — the server is the source of truth but the UI must not keep a
-    deleted item until the next 3s poll (same "immediate" principle as the mark itself) */
- layer=layer.filter(it=>!(it.type==="rec"||it.type==="note")||it.anchor!==t);
- nbUnmark(t);
+/* drop ONE flag from EVERY piece of an anchor's mark and unwrap the pieces that carry nothing else —
+   leaves a clean DOM, so a later note/recording starts from the same pristine text. A piece that
+   still carries the OTHER item stays on the page: that is what lets a note and a recording saved from
+   the same selection be deleted one at a time (owner spec 2026-10-12 #2). */
+function nbUnflag(t,cls){
+ nbMarks(t).forEach(m=>{
+  m.classList.remove(cls);
+  if(m.classList.contains("has-rec")||m.classList.contains("has-note"))return;
+  try{const p=m.parentNode;while(m.firstChild)p.insertBefore(m.firstChild,m);p.removeChild(m)}catch(e){}
+ });
+}
+/* DELETE ONE ITEM (owner spec 2026-10-12 #2 — "notes and recordings need to be saved as separate
+   items … we need delete to work separately too"): the popup's 📝 Delete drops ONLY the note the
+   gesture refers to and 🔊 Delete ONLY the recording, each resolved by the same nbPopState the buttons
+   were rendered from. Nothing else is touched: the other row, its mark pieces, its flags and the other
+   button's state all survive, so a new note within/overlapping/containing a recording (or the
+   reverse) can never take the other item with it. Unwraps the mark only once its own flag was the
+   last one (nbUnflag). Drops the rows from the local `layer` at once (the server is the source of
+   truth, but the UI must not keep a deleted item until the next 3s poll), then sends one del per row —
+   network last, no undo entry, silent on success (the item visibly leaves the page). */
+function nbDeleteItem(t,type){
+ const st=nbPopState(t);
+ const anchor=type==="note"?st.note:(st.rec?st.rec.anchor:null);
+ if(!anchor){toast(type==="note"?"Nada para apagar nesta nota.":"Nada para apagar nesta gravação.");return}
+ const rows=nbRows(type,anchor);
+ layer=layer.filter(it=>it.type!==type||it.anchor!==anchor);
+ if(type==="rec")delete audioCache["a:"+anchor];   /* a deleted clip must never replay from the cache */
+ nbUnflag(anchor,"has-"+type);
  closePop();
- entries.forEach(e=>send({action:"del",id:e.id}));
+ rows.forEach(r=>send({action:"del",id:r.id}));
 }
 function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("div");pop.className="pop";
  pop.style.left=x+"px";pop.style.top=y+"px";pop.style.maxWidth="min(380px, calc(100vw - 16px))";
@@ -877,7 +934,12 @@ async function rec(t,rb){
    const blob=new Blob(ch,{type:"audio/webm"});
    try{audioCache["a:"+t]=URL.createObjectURL(blob)}catch(e){}
    const f=new FileReader();f.onload=()=>{const fb=feedback(t,heard);
-   markRecording(t,null);   /* the phrase is underlined only now — on save, never on the Record click */
+   /* the phrase is underlined only NOW — on save, never on the Record click. The wrap uses the very
+      range the popup was opened for (pendingRange = the trimmed selection, or the active note's area),
+      so a repeated phrase can never wrap the wrong occurrence; with no selection (a click on a mark)
+      the existing mark is reused, and ensureMark is the safety net that guarantees the underline
+      instead of waiting for the next poll. */
+   if(!markRecording(t,(nbSel&&nbSel.area)?pendingRange:null))ensureMark(t,"rec");
    nbUpsert(t,"rec",{b64:f.result.split(",")[1],mime:"audio/webm",data:JSON.stringify({score:fb.score,heard,fb:fb.msg})});
    ind.remove();press(false);closePop();};
    f.readAsDataURL(blob);};

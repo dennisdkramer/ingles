@@ -624,53 +624,89 @@ async function testPage(serverUrl, pageName, track = 'business') {
                     }
                 }
             }
-            /* ---- NOTE/RECORDING popup: 🗑 Delete removes the saved recording + notes + the visual
-               element in ONE undoable action, and the frontend asks the backend to purge the audio. */
+            /* ---- NOTE/RECORDING popup: the TWO deletes are INDEPENDENT (owner spec 2026-10-12 #2).
+               🔊 Delete drops ONLY the recorded audio and 📝 Delete ONLY the note: the other item's row,
+               its mark pieces and its flags all survive, and mark.nb is unwrapped only once its LAST
+               flag is gone. Each click sends one del, network last (no undo, no success toast). */
             const contentArea = window.document.querySelector('.content-area');
             if (contentArea) {
                 const nbText = 'Delete me please today';
                 const nbP = window.document.createElement('p');
                 nbP.textContent = nbText;
                 contentArea.appendChild(nbP);
-                /* the phrase as the page renders it after a save: a mark.nb carrying the note flag */
+                /* the phrase as the page renders it after both saves: ONE mark.nb carrying both flags */
                 const nbMark = window.document.createElement('mark');
-                nbMark.className = 'nb has-note';
+                nbMark.className = 'nb has-rec has-note';
                 nbMark.dataset.a = nbText;
                 const nbFrag = window.document.createRange().extractContents();
                 nbMark.appendChild(nbFrag);
                 nbP.appendChild(nbMark);
 
-                /* a saved note on that phrase (what the server would return). layer is a let-bound
-                   global, so it must be set through eval (reading hlList via eval is the same pattern). */
+                /* a saved note AND a saved recording on that phrase, from the same selection (what the
+                   server would return). layer is a let-bound global, so it must be set through eval
+                   (reading hlList via eval is the same pattern). */
                 const nbRow = { id: 'qa_note_1', type: 'note', anchor: nbText, data: 'hi' };
-                window.eval('layer = ' + JSON.stringify([nbRow]));
+                const nbRecRow = { id: 'qa_rec_1', type: 'rec', anchor: nbText, data: '{}', fileId: 'drive-file-1', mime: 'audio/webm' };
+                window.eval('layer = ' + JSON.stringify([nbRecRow, nbRow]));
                 const openNb = () => window.showAnchor(nbText, 20, 40);
                 const closeNb = () => { try { window.eval('closePop()'); } catch (e) {} };
 
-                /* (a) with something saved, the popup offers 🗑 Delete; clicking it deletes at once */
+                /* (a1) 🔊 Delete drops ONLY the recorded audio — the note, its mark and its flag stay */
                 openNb();
-                const delBtn = window.document.querySelector('.pop #pD');
-                if (!delBtn || delBtn.disabled) {
-                    errors.push('[FAIL] the note/recording popup does not enable 🗑 Delete when the phrase has saved content');
+                const delNoteBtn = window.document.querySelector('.pop #pD');
+                const delRecBtn = window.document.querySelector('.pop #pA');
+                const lockRecBtn = window.document.querySelector('.pop #pR');
+                const playRecBtn = window.document.querySelector('.pop #pP');
+                if (!delNoteBtn || delNoteBtn.disabled) {
+                    errors.push('[FAIL] 📝 Delete must be enabled when the phrase has a saved note');
+                } else if (!delRecBtn || delRecBtn.disabled) {
+                    errors.push('[FAIL] 🔊 Delete must be enabled when the phrase has a saved recording');
+                } else if (!lockRecBtn || lockRecBtn.disabled || !lockRecBtn.classList.contains('locked')) {
+                    errors.push('[FAIL] ⏺ Record must stay pressable but LOCKED on a phrase that already has a recording (no re-record)');
+                } else if (!playRecBtn || playRecBtn.disabled) {
+                    errors.push('[FAIL] ▶ Play must be live for a phrase that has its own saved recording');
                 } else {
-                    /* intercept send()'s POST so we can prove the backend is told about the delete */
+                    /* intercept send()'s POST so we can prove the backend is told about each delete */
                     const origFetch = window.fetch;
                     const posted = [];
                     window.fetch = (url, opts) => {
                         try { posted.push(JSON.parse(opts.body)); } catch (e) {}
                         return Promise.resolve({ json: () => Promise.resolve({ result: 'deleted', purged: true }) });
                     };
-                    delBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
-                    if (window.document.querySelector('mark.nb[data-a="' + nbText + '"]')) {
-                        errors.push('[FAIL] 🗑 Delete left the note/recording mark in the page');
-                    } else if (window.eval('layer.length')) {
-                        errors.push('[FAIL] 🗑 Delete did not clear the item from the layer');
+                    delRecBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                    const leftRows = window.eval('layer.map(it=>it.type+":"+it.id).sort()');
+                    const leftMark = window.document.querySelector('mark.nb[data-a="' + nbText + '"]');
+                    const delMsgs = posted.filter(p => p.action === 'del');
+                    if (leftRows.join(',') !== 'note:' + nbRow.id) {
+                        errors.push('[FAIL] 🔊 Delete must remove ONLY the recording row (left: ' + JSON.stringify(leftRows) + ')');
+                    } else if (delMsgs.length !== 1 || delMsgs[0].id !== nbRecRow.id) {
+                        errors.push('[FAIL] 🔊 Delete must send exactly one del, for the recording row (got ' + JSON.stringify(delMsgs.map(m => m.id)) + ')');
+                    } else if (!leftMark || !leftMark.classList.contains('has-note') || leftMark.classList.contains('has-rec')) {
+                        errors.push('[FAIL] deleting the recording must leave the note whole (mark=' + !!leftMark + ')');
                     } else {
-                        const delMsg = posted.find(p => p.action === 'del');
-                        if (!delMsg || delMsg.id !== nbRow.id) {
-                            errors.push('[FAIL] 🗑 Delete did not send a del for the saved item to the backend');
+                        console.log('   ✅ 🔊 Delete drops only the recorded audio — the note, its mark and its flag stay (independent items)');
+                    }
+                    /* (a2) 📝 Delete then drops ONLY the note: with no item left, mark.nb is unwrapped */
+                    closeNb();
+                    posted.length = 0;
+                    openNb();
+                    const delNoteOnly = window.document.querySelector('.pop #pD');
+                    if (!delNoteOnly || delNoteOnly.disabled) {
+                        errors.push('[FAIL] 📝 Delete must still be enabled for the note after the recording was deleted');
+                    } else {
+                        delNoteOnly.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                        const nowRows = window.eval('layer.length');
+                        const noteDel = posted.filter(p => p.action === 'del');
+                        if (nowRows !== 0) {
+                            errors.push('[FAIL] 📝 Delete did not clear the note row from the layer (' + nowRows + ' left)');
+                        } else if (noteDel.length !== 1 || noteDel[0].id !== nbRow.id) {
+                            errors.push('[FAIL] 📝 Delete must send exactly one del, for the note row (got ' + JSON.stringify(noteDel.map(m => m.id)) + ')');
+                        } else if (window.document.querySelector('mark.nb[data-a="' + nbText + '"]')) {
+                            errors.push('[FAIL] mark.nb must be unwrapped once its LAST flag is gone');
+                        } else if (nbP.textContent !== nbText) {
+                            errors.push('[FAIL] deleting a note/recording changed the page text');
                         } else {
-                            console.log('   ✅ 🗑 Delete removes the mark + item at once and sends del (no undo entry)');
+                            console.log('   ✅ 📝 Delete drops only the note (one del) and unwraps mark.nb once no flag is left');
                         }
                     }
                     window.fetch = origFetch;
@@ -714,10 +750,11 @@ async function testPage(serverUrl, pageName, track = 'business') {
             }
 
             /* ---- BUTTONS ALWAYS PRESENT, GREYED WHEN THEY DON'T APPLY (owner spec 2026-10-12): the
-               popup always carries Hear / Play / Record / Add-Edit Note / Save / Delete. Hear, Record
-               and Add/Edit Note are always clickable; Play lights up only with a saved recording,
-               Save only while editing a note, Delete only when something is saved. The saved note is
-               shown above the popup. */
+               popup always carries Hear / Play / Record / Delete-audio / Add-Edit Note / Save /
+               Delete-note. Hear, Record and Add/Edit Note are always clickable; Play and the audio
+               delete light up only for the ONE recording the gesture refers to, Save only while
+               editing a note, the note delete only when a note is saved. ⏺ Record stays pressable
+               but LOCKED on a phrase that already has a recording. The saved note is shown above. */
             if (contentArea) {
                 const stText = 'State buttons please now';
                 const stP = window.document.createElement('p');
@@ -739,19 +776,21 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 window.showAnchor(stText, 20, 40);
                 const qp = sel => window.document.querySelector('.pop ' + sel);
                 const playBtn = qp('#pP'), recBtn = qp('#pR'), noteBtn = qp('#pN'),
-                      saveBtn = qp('#pS'), del2 = qp('#pD'), hearBtn = qp('#pH');
-                if (!playBtn || !recBtn || !noteBtn || !saveBtn || !del2 || !hearBtn) {
-                    errors.push('[FAIL] the popup must always show ALL SIX buttons (Hear/Play/Record/Add-Edit Note/Save/Delete)');
-                } else if (playBtn.disabled) {
-                    errors.push('[FAIL] ▶ Play must be enabled when the phrase has a saved recording');
+                      saveBtn = qp('#pS'), del2 = qp('#pD'), hearBtn = qp('#pH'), delRec2 = qp('#pA');
+                if (!playBtn || !recBtn || !noteBtn || !saveBtn || !del2 || !hearBtn || !delRec2) {
+                    errors.push('[FAIL] the popup must always show ALL SEVEN buttons (Hear/Play/Record/Delete-audio/Add-Edit Note/Save/Delete-note)');
+                } else if (playBtn.disabled || delRec2.disabled) {
+                    errors.push('[FAIL] ▶ Play and 🔊 Delete must be enabled when the phrase has its own saved recording');
                 } else if (recBtn.disabled || noteBtn.disabled) {
                     errors.push('[FAIL] ⏺ Record and 📝 Add/Edit Note must always be clickable');
+                } else if (!recBtn.classList.contains('locked')) {
+                    errors.push('[FAIL] ⏺ Record must be locked (still pressable) on a phrase that already has a recording');
                 } else if (!saveBtn.disabled) {
                     errors.push('[FAIL] 💾 Save must be greyed out until a note is being edited');
                 } else if (del2.disabled) {
-                    errors.push('[FAIL] 🗑 Delete must be enabled when the phrase has saved content');
+                    errors.push('[FAIL] 📝 Delete must be enabled when the phrase has a saved note');
                 } else {
-                    console.log('   ✅ All six buttons always present; Play/Delete live, Save greyed until editing');
+                    console.log('   ✅ All seven buttons always present; Play/audio-Delete/note-Delete live, Record locked, Save greyed until editing');
                 }
                 /* the popup must NOT repeat the selected phrase (owner spec 2026-10-12) */
                 if (new RegExp(stText).test(window.document.querySelector('.pop').textContent)) {
@@ -874,9 +913,9 @@ async function testPage(serverUrl, pageName, track = 'business') {
                     }
                 }
                 try { window.eval('closePop()'); } catch (e) {}
-                /* re-recording over a phrase must REUSE the stored rec row id (ONE row, replaced clip) —
-                   the same core save (nbUpsert) the 💾 Save uses, so the first-match lookup can never
-                   play a stale earlier clip. */
+                /* a re-save of the same anchor+type must REUSE the stored rec row id (ONE row, replaced
+                   clip) — the same core save (nbUpsert) the 💾 Save uses, so a rec row is never duplicated
+                   and the first-match lookup can never play a stale earlier clip. */
                 try {
                     const recFirst = window.eval(`nbUpsert('QA rec anchor','rec',{b64:'AAAA',mime:'audio/webm',data:'{}'}); layer.filter(it=>it.type==='rec'&&it.anchor==='QA rec anchor')`);
                     const recAgain = window.eval(`nbUpsert('QA rec anchor','rec',{b64:'BBBB',mime:'audio/webm',data:'{}'}); layer.filter(it=>it.type==='rec'&&it.anchor==='QA rec anchor')`);
@@ -953,9 +992,15 @@ async function testPage(serverUrl, pageName, track = 'business') {
                      • ABUTTING (shares no character) is an ordinary new phrase, and the stored anchor is the
                        TRIMMED selection — a mark therefore covers exactly its own anchor text and two
                        abutting saves share no character, which is what lets style.css leave a 2px gap;
-                     • a selection that PARTIALLY overwrites a recording (overlaps / contains / sits inside
-                       it) LOCKS ⏺ Record: it greys (.locked) but stays pressable, and pressing it toasts the
-                       owner's refusal. Covering a recording EXACTLY is the documented re-record instead;
+                     • a selection INSIDE / OVERLAPPING / CONTAINING a recording LOCKS ⏺ Record — re-recording
+                       was removed, so covering it exactly is locked too: it greys (.locked) but stays
+                       pressable, and pressing it toasts "cannot overwrite recording, delete first";
+                     • the SAME resolution enables ▶ Play for the referenced recording (exactly ONE
+                       involved); with MORE THAN ONE recording involved ▶ Play and 🔊 Delete are locked and
+                       their press toasts "please select a distinct recording";
+                     • the two deletes are INDEPENDENT: 🔊 Delete takes only the recording (the note, its row
+                       and its blue wash stay) and 📝 Delete only the note (the recording survives), each
+                       unwrapping mark.nb only once its own flag was the last one;
                      • a selection that overlaps or contains a NOTE makes that note the popup's ACTIVE note;
                        💾 Save then EXPANDS the note's area to the new selection (the union's text becomes
                        its new anchor, SAME row id). A selection strictly INSIDE the note edits it but keeps
@@ -1029,7 +1074,8 @@ async function testPage(serverUrl, pageName, track = 'business') {
                             }
                         }
                     } catch (e) { errors.push('[FAIL] abutting-save check threw: ' + e.message); }
-                    /* (h2) ⏺ Record LOCKS on a partial overwrite of a recording */
+                    /* (h2) ⏺ Record LOCKS on ANY involvement of a recording — re-recording is gone —
+                       and the SAME resolution enables ▶ Play for the referenced clip. */
                     try {
                         const rcText = 'Record this phrase well';
                         const rcP = window.document.createElement('p');
@@ -1050,13 +1096,32 @@ async function testPage(serverUrl, pageName, track = 'business') {
                             nbPress('#pR');
                             const lt = window.document.getElementById('toast');
                             const msg = lt ? lt.textContent : '';
-                            if (!/cannot partially overwrite an audio recording/.test(msg)) {
+                            if (!/cannot overwrite recording, delete first/.test(msg)) {
                                 errors.push('[FAIL] pressing the locked ⏺ Record did not raise the owner\'s refusal toast (got ' + JSON.stringify(msg) + ')');
                             } else if (lockPop.dataset.recording) {
                                 errors.push('[FAIL] the locked ⏺ Record started a recording anyway');
                             } else {
-                                console.log('   ✅ ⏺ Record is locked by a partially covering selection and its press only toasts the refusal');
+                                console.log('   ✅ ⏺ Record is locked by a selection covering a recording and its press only toasts "cannot overwrite recording, delete first"');
                             }
+                        }
+                        /* the SAME selection enables ▶ Play for the REFERENCED recording: prove it plays
+                           exactly that clip by watching the URL the page hands to Audio(). */
+                        const P1 = lockPop && lockPop.querySelector('#pP');
+                        if (!P1) {
+                            errors.push('[FAIL] the recording popup lost its ▶ Play button');
+                        } else if (P1.disabled || P1.classList.contains('locked')) {
+                            errors.push('[FAIL] a selection overlapping ONE recording must enable ▶ Play for it');
+                        } else {
+                            const played = [], OrigAudio = window.Audio;
+                            window.Audio = function (u) { played.push(u); return { addEventListener() {}, play() { return Promise.resolve(); }, pause() {} }; };
+                            window.eval('audioCache["a:this phrase"]="blob:QA-REC"');
+                            try { nbPress('#pP'); } finally { window.Audio = OrigAudio; }
+                            if (played[0] !== 'blob:QA-REC') {
+                                errors.push('[FAIL] ▶ Play did not play the recording the selection refers to (got ' + JSON.stringify(played) + ')');
+                            } else {
+                                console.log('   ✅ ▶ Play on a selection overlapping ONE recording plays the REFERENCED clip');
+                            }
+                            window.eval('delete audioCache["a:this phrase"]');
                         }
                         /* a selection INSIDE the recording is locked too */
                         const pop2 = await nbSelect(rcP, 12, 15);      /* "phr" — inside [7,18) */
@@ -1068,12 +1133,62 @@ async function testPage(serverUrl, pageName, track = 'business') {
                         const R3 = pop3 && pop3.querySelector('#pR');
                         if (!R3 || R3.classList.contains('locked')) errors.push('[FAIL] a selection that merely ABUTS a recording was locked (' + (R3 ? 'locked' : 'no popup') + ')');
                         else console.log('   ✅ a selection that only ABUTS a recording keeps ⏺ Record live');
-                        /* covering it EXACTLY is the documented re-record, not a partial overwrite */
+                        /* covering it EXACTLY is no longer a re-record: locked, and it toasts too */
                         const pop4 = await nbSelect(rcP, 7, 18);       /* exactly "this phrase" */
                         const R4 = pop4 && pop4.querySelector('#pR');
-                        if (!R4 || R4.classList.contains('locked')) errors.push('[FAIL] covering a recording exactly must stay re-recordable ("regrava por cima")');
-                        else console.log('   ✅ covering the recording exactly stays re-recordable (one rec row, replaced)');
+                        if (!R4 || !R4.classList.contains('locked')) {
+                            errors.push('[FAIL] covering a recording exactly must LOCK ⏺ Record (re-recording was removed)');
+                        } else {
+                            nbPress('#pR');
+                            const t4 = window.document.getElementById('toast');
+                            if (!/cannot overwrite recording, delete first/.test(t4 ? t4.textContent : '')) {
+                                errors.push('[FAIL] covering the recording exactly did not toast the refusal (got ' + JSON.stringify(t4 ? t4.textContent : '') + ')');
+                            } else {
+                                console.log('   ✅ covering the recording exactly is locked too ("regrava por cima" is gone)');
+                            }
+                        }
                     } catch (e) { errors.push('[FAIL] recording-lock check threw: ' + e.message); }
+                    /* (h2b) MORE THAN ONE recording involved → ▶ Play and 🔊 Delete are ambiguous */
+                    try {
+                        const twText = 'First clip and second clip here';
+                        const twP = window.document.createElement('p');
+                        twP.textContent = twText;
+                        contentArea.appendChild(twP);
+                        nbReset();
+                        window.eval('layer = ' + JSON.stringify([
+                            { id: 'qa_tw_a', type: 'rec', anchor: 'First clip', data: '{}' },
+                            { id: 'qa_tw_b', type: 'rec', anchor: 'second clip', data: '{}' }
+                        ]));
+                        const twPop = await nbSelect(twP, 0, 26);      /* "First clip and second clip" (both) */
+                        const P2 = twPop && twPop.querySelector('#pP');
+                        const A2 = twPop && twPop.querySelector('#pA');
+                        if (!P2 || !A2) {
+                            errors.push('[FAIL] the ambiguity check could not open the popup over both recordings');
+                        } else if (P2.disabled || A2.disabled) {
+                            errors.push('[FAIL] an ambiguous ▶ Play / 🔊 Delete must keep the disabled LOOK, not the disabled attribute (a press must be heard)');
+                        } else if (!P2.classList.contains('locked') || !A2.classList.contains('locked')) {
+                            errors.push('[FAIL] a selection touching more than one recording must disable ▶ Play and 🔊 Delete');
+                        } else {
+                            nbPress('#pP');
+                            const amb = window.document.getElementById('toast');
+                            if (!/please select a distinct recording/.test(amb ? amb.textContent : '')) {
+                                errors.push('[FAIL] pressing the ambiguous ▶ Play did not toast "please select a distinct recording" (got ' + JSON.stringify(amb ? amb.textContent : '') + ')');
+                            } else {
+                                console.log('   ✅ a selection involving more than one recording locks ▶ Play, and its press toasts "please select a distinct recording"');
+                            }
+                        }
+                        /* narrowing the selection to ONE of them is unambiguous again */
+                        const onePop = await nbSelect(twP, 15, 26);    /* exactly "second clip" */
+                        const P3 = onePop && onePop.querySelector('#pP');
+                        const R5 = onePop && onePop.querySelector('#pR');
+                        if (!P3 || P3.disabled || P3.classList.contains('locked')) {
+                            errors.push('[FAIL] narrowing the selection to a distinct recording must enable ▶ Play again');
+                        } else if (!R5 || !R5.classList.contains('locked')) {
+                            errors.push('[FAIL] a selection over one existing recording must still lock ⏺ Record');
+                        } else {
+                            console.log('   ✅ narrowing the selection to a distinct recording enables ▶ Play again (⏺ Record still locked)');
+                        }
+                    } catch (e) { errors.push('[FAIL] recording-ambiguity check threw: ' + e.message); }
                     /* (h3) the NOTE rules: active note + area expansion + reference retention */
                     try {
                         const ntText = 'Note one area grows here';
@@ -1174,6 +1289,28 @@ async function testPage(serverUrl, pageName, track = 'business') {
                                 errors.push('[FAIL] crossing a recording changed the page text');
                             } else {
                                 console.log('   ✅ A note crossing a recording leaves BOTH on screen and saved (' + pieces.length + ' flagged pieces, both spans intact)');
+                                /* the two items are INDEPENDENT: 📝 Delete takes the note and leaves the
+                                   recording (row + flagged pieces) exactly as it was … */
+                                nbPress('#pD');
+                                const recPieces = [...window.document.querySelectorAll('mark.nb[data-a="edge test"]')];
+                                const notesLeft = window.eval("nbRows('note').length");
+                                const recsLeft = window.eval("nbRows('rec').filter(r=>r.anchor==='edge test').length");
+                                if (notesLeft !== 0 || recsLeft !== 1 || !recPieces.length || !recPieces.every(m => m.classList.contains('has-rec'))) {
+                                    errors.push('[FAIL] deleting a note that crossed a recording must leave the recording whole (notes=' + notesLeft + ' recs=' + recsLeft + ' pieces=' + recPieces.length + ')');
+                                } else {
+                                    console.log('   ✅ 📝 Delete takes only the note — the crossed recording keeps its row and its flagged pieces');
+                                    /* …and 🔊 Delete then takes the recording alone, unwrapping the mark */
+                                    window.showAnchor('edge test', 20, 40);
+                                    nbPress('#pA');
+                                    const recMarksLeft = window.document.querySelectorAll('mark.nb[data-a="edge test"]').length;
+                                    if (recMarksLeft || window.eval("nbRows('rec').length") || window.eval("nbRows('note').length")) {
+                                        errors.push('[FAIL] 🔊 Delete did not remove the recording and its mark once it was the last item (marks=' + recMarksLeft + ')');
+                                    } else if (ovP.textContent !== ovText) {
+                                        errors.push('[FAIL] deleting the recording changed the page text');
+                                    } else {
+                                        console.log('   ✅ 🔊 Delete then takes the recording alone and unwraps the mark (page text intact)');
+                                    }
+                                }
                             }
                         }
                     } catch (e) { errors.push('[FAIL] crossing check threw: ' + e.message); }

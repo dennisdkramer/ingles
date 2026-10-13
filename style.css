@@ -43,8 +43,10 @@ mark.nb.has-rec.has-note{background-repeat:no-repeat,no-repeat;background-positi
 .pop button{padding:4px 9px;margin:2px 3px 2px 0;font-size:12.5px;border-radius:8px;box-shadow:2px 2px 0 var(--tan)}
 /* every note/recording popup button always EXISTS; the ones that do not apply yet are greyed out
    (owner spec 2026-10-12) instead of being removed from the row. `.locked` carries the same grey
-   look WITHOUT the `disabled` attribute: ⏺ Record is locked while the selection would partially
-   overwrite an audio recording, and it must stay pressable to toast the refusal (owner rule). */
+   look WITHOUT the `disabled` attribute, for the presses that must still be heard: ⏺ Record as soon
+   as ANY recording is involved ("cannot overwrite recording, delete first" — re-recording is gone)
+   and ▶ Play / 🔊 Delete while MORE THAN ONE recording is involved ("please select a distinct
+   recording"). */
 .pop button:disabled,.pop button.locked{opacity:.45;box-shadow:none;cursor:default}
 /* a popup button whose glyph became a processing SPIRAL (Record while capturing a clip, Play while
    the clip is sounding) — the label text is hidden, leaving only the rotating ring, and the button
