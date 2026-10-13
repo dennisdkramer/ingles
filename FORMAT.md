@@ -1,5 +1,10 @@
 # FORMAT — frozen site formatting contract (source of truth: style.css)
 Reference this file whenever a task touches site appearance. Preserve everything here unless the owner explicitly asks to change it.
+## PENDING
+
+_(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-FM<n>.)_
+
+_(none queued.)_
 
 ## Colors (CSS vars in :root)
 - cream #f4eddd = page background

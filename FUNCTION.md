@@ -1,5 +1,10 @@
 # FUNCTION — frozen site behavior contract
 Reference this file whenever a task touches lesson functionality. Preserve everything here unless the owner explicitly asks to change it.
+## PENDING
+
+_(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-F<n>.)_
+
+_(none queued.)_
 
 ## Persistence & identity
 - ALL user data persists server-side (Apps Script Sheet "IAP_backpack!layer" + Drive "IAP_uploads"), and is separate PER STUDENT AND PER BOOK (track). No cross-contamination between students or between tracks.

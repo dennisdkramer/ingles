@@ -1,4 +1,9 @@
 # HARNESS — binding contract. Read at the start of EVERY session, before any other action.
+## PENDING
+
+_(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-H<n>.)_
+
+_(none queued.)_
 
 ## RULE 1 — EXPLICIT GOALS, JUDGMENT ON EXECUTION
 Anchor to what the owner explicitly asked for as the GOAL. How to get there — implementation
@@ -19,8 +24,8 @@ my call, not a fixed checklist.
 Default language is English. Use Portuguese only when specifically requested.
 
 ## RULE 3 — LONG/COMPLICATED PROMPTS
-If a prompt is too long or complicated and risks confusion: save it verbatim to a file (e.g.
-`requests/<date>-<topic>.md`), tell the owner, and proceed in agreed steps/parts.
+If a prompt is too long or complicated and risks confusion: tell the owner, split it into the batches
+defined in RULE 7, and proceed in agreed steps/parts.
 
 ## RULE 4 — VERIFY WHAT NEEDS VERIFYING
 Verification (QA run, curl, node --check, reading back a diff) is done when I judge it adds real
@@ -48,66 +53,21 @@ successive pushes when a single combined push would do. Build markers / live-sit
 are tools I reach for when I judge the risk of an undetected deploy problem is real, not a mandatory
 step after every push. Never commit something I believe is broken.
 
-## RULE 7 — FILES & CONVENTIONS
-- DEVELOPMENT SCOPE (owner decision 2026-10-11): lesson work happens on `business/lesson1.html`
-  ONLY — read, edit, QA-test and reason about that page plus the shared files it loads (engine1.js,
-  engine2.js, style.css). kids/lesson1.html, nsfw/lesson1.html and the login pages (index.html,
-  portal.html) are PARKED: do not open, edit, test or spend context on them until the owner says the
-  business build is final and the feature set is ported there. `qa/smoke.mjs` runs business only for
-  the same reason; re-add the other pages to its page list when the port starts.
-- Engines (engine1.js, engine2.js) and style.css ship as FULL files. Lessons are content-only (config
-  consts + engine includes). Never ask the owner to hand-paste fragments I can edit myself.
-- Backend: Google Apps Script "ingles-backpack" (owner's account; I cannot deploy it). Canonical copy
-  in repo `backend/Code.gs`; owner paste-deploys. BACKPACK exec URL:
-  https://script.google.com/macros/s/AKfycbxSR8UmOwosLIgn1-AGKhgXJvdqOVkzMqrTwdlWNF9kOkt-256TqTacOsQlo6JyHplR/exec
-  (set per-lesson as const BACKPACK).
-- Gate hash: h(s){let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x} applied to
-  email+track+SECRET ("abreportas2025"); stored in sessionStorage.gate.
-- OAuth origin: https://dennisdkramer.github.io (add new origin if host changes).
-
-## RULE 8 — FUNCTION / FORMAT CONTRACTS (READ ONLY WHAT'S RELEVANT)
-Site functionality is defined in `FUNCTION.md`; site formatting/visual layout is defined in
-`FORMAT.md`. Only read/reason about the contract that's actually relevant to the task: a
-functionality-only task (behavior, gestures, sync, data) doesn't need FORMAT.md, and a pure
-visual/layout task doesn't need FUNCTION.md. Read both only when a change plausibly touches both. If
-a change would alter a contract whose section I did read, flag it and preserve everything not being
-explicitly changed; don't re-read a contract file "just in case" once I've already confirmed scope.
-
-## RULE 9 — TOOL EFFICIENCY
-Prefer direct, batched reads: use `read_files` with explicit line ranges across multiple files in one
-call instead of shell `Get-Content`/temp-file dumping workarounds. Don't re-read the same region of a
-file more than once in a session unless it changed. Parallelize independent reads/searches/edits in a
-single turn rather than serializing them one tool-call at a time.
-
-**Context discipline (owner request 2026-10-12 — in this environment `run_commands` has NO VS Code
-shell integration, so every call is answered by echoing the terminal buffer back plus a boilerplate
-warning and a bogus exit code 1; each call therefore costs context twice: the command's own output
-and that echo. Minimize calls, and bound the output of every call at the source.):**
-- Never redirect output to a temp file and read it back (RULE 9 already forbade this — it is the
-  single worst offender). Never dump a whole `git diff`: use `--stat` / `--name-status` / `-U0`,
-  `git status --short`, or read the changed file itself with a line range.
-- Bound every command (`Select-Object -First/Last`, `-q`, `--short`, `Select-String`, `--no-pager`);
-  keep commands one line; no `2>&1` (it adds PowerShell NativeCommandError noise on top).
-- Inspect via `read_files` / `search_codebase`, not the shell (`git show`, `Get-Content`, listings).
-- Run the QA suite once per coherent change, not after every micro-edit; re-read an edited region at
-  most once; skip follow-up calls that a single `git status --short --branch` already answers.
-- Judge `run_commands` only by the printed output, never by its exit code (always 1 here because of
-  the missing integration). Enabling VS Code `terminal.integrated.shellIntegration.enabled` (and
-  reopening the terminal) removes the boilerplate entirely.
-
-## RULE 10 — UPDATING THIS FILE
-Whenever an owner instruction contains "from now on", "always", or "never": append/update the rule
-here (conservatively, in the owner's own wording where possible) in the same turn. This file is the
-persistent memory; conversations are not.
-
-## RULE 11 — REUSE CORE FUNCTIONS; DON'T TOUCH WORKING CODE
-When adding or fixing a feature, REUSE the existing core functions instead of writing a parallel
-path — above all for anything that saves to the layer / Drive. Two features that must behave the
-same (note Save, recording Save, highlight Save/delete) go through ONE shared core function, so they
-can never drift apart again; a fix belongs in that core function, so every caller gets it at once.
-Corollary: NEVER touch, refactor, restyle or "improve" code that already works the way the owner
-wants (the highlight feature is the standing example) — keep every working path byte-identical and
-change only what the request actually needs.
+## RULE 7 — STEP 1 OF EVERY TASK: SUBTASK BATCHES BY CATEGORY
+Step 1 of task execution is to analyse the intent of the user prompt and define "subtask batches"
+according to the project architecture in the Master Context file. Open the relevant category file and
+add the batch to the PENDING section at the top of that file, in the category it falls into:
+- General project architecture, planning, understanding, intent and parameters, handoffs → MASTER_CONTEXT.md
+- Primary harness and project execution parameters → HARNESS.md (this file)
+- Changes that relate to the execution *or* visual output of a function → FUNCTION.md
+- Changes that relate to the backend → BACKEND.md
+- Site format and content architecture and handling → FORMAT.md
+- Lesson content, trivial changes, cleanup, inquiries and miscellaneous → no file; handle as I see fit.
+Then make a quick high-level judgement of which tasks/batches must be handled together and in which
+order they will be addressed. Accordingly, make a quick high-level judgement whether any batches or
+parts of the prompt should be parked until after task completion — park them if necessary — and then
+execute, only touching files as necessary. Assume all non-referenced files are fully functional
+unless a verification step shows otherwise.
 
 ## STATUS
 Open/closed issues live in `ISSUES.md` (status log, not rules).
