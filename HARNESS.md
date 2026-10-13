@@ -67,16 +67,21 @@ add the batch to the PENDING section at the top of that file, in the category it
 Then make a quick high-level judgement of which tasks/batches must be handled together and in which
 order they will be addressed. Accordingly, make a quick high-level judgement whether any batches or
 parts of the prompt should be parked until after task completion — park them if necessary — and then
-execute, only touching files as necessary. Assume all non-referenced files are fully functional
+execute, modifying only the files the change requires (reading and context-gathering is unrestricted — read whatever files the task needs, in full). Assume all non-referenced files are fully functional
 unless a verification step shows otherwise.
+
+**Effort sanity-check (while executing):** when a batch is defined, also keep a rough estimate of how many attempts/passes it should take. If, mid-execution, a batch runs **2× or more** past that estimate — or I make **two consecutive failed/blocked attempts without narrowing the problem** — pause before a third blind retry and confer with the owner in a single message that (1) states plainly what I've tried and what the actual holdup is, (2) asks for the specific missing clarity or decision, and (3) proposes at least one concrete alternative (a different approach, splitting the task, parking it, or relaxing a conflicting constraint). This is a guardrail against an unbounded retry loop only: do NOT use it to stall when the result is already in hand or the next step is obvious (RULE 1).
 
 ## RULE 8 — PRESERVE WORKING CODE, BUT IT IS NOT OFF-LIMITS
 Code that already works the way the owner wants is the DEFAULT to preserve, not a wall. When I am very
 sure a change to it is necessary, or clearly highly useful for the requested outcome, I may touch,
 refactor, restyle or replace it — prioritising "do not degrade existing behaviour" over tidiness, keeping
-the diff surgical, and verifying the affected path (RULES 4 and 6). "It works today" is never on its own
+the change minimal in behaviour (not minimal in tokens or edit size), and verifying the affected path (RULES 4 and 6). "It works today" is never on its own
 a reason to refuse a change the owner asked for, and working behaviour never regresses silently.
 
+
+## RULE 9 — CONTEXT & TOKEN ECONOMY: CORRECTNESS OVER THRIFT
+The context window is now large, and a correct result is worth far more than a cheap one. Read the files the task needs in full and hold whatever context in memory keeps the work clear and correct; reason and write at full length. Never trim context, skip a needed read, shorten reasoning, or shrink an edit to save tokens if doing so risks an imperfect result. A single thorough pass that lands the right answer beats many short passes that each risk a wrong one (one run of 1M tokens is better than ten runs of 100K that still come out wrong). Token thrift is only a tie-breaker between two approaches that are equally correct and equally clear — never a goal in itself.
 
 ## TOOL / TERMINAL PARAMETERS (measured 2026-10-13)
 The terminal here is PowerShell 7 (`pwsh.exe`) and VS Code's shell integration IS loaded and armed:
@@ -89,7 +94,7 @@ finished command can be reported as "exited with code 1" whatever it really retu
 - Judge a call by its PRINTED OUTPUT, never by the reported exit code.
 - When a code actually matters, print it in the same command: `& node qa/smoke.mjs; 'EXIT=' + $LASTEXITCODE`.
 - Expect a captured chunk to open with a leaked terminal-title escape (`:\...\pwsh.exe` + `ESC \`), and
-  when integration capture fails outright the tool falls back to raw scrollback: keep commands short and
+  when integration capture fails outright the tool falls back to raw scrollback: keep commands short (a shell-capture-reliability measure only, not a token-saving rule) and
   re-run rather than trusting a torn buffer.
 - Non-ASCII can arrive as mojibake (UTF-8 bytes decoded as OEM: checkmark → Γ£à, em dash → ΓÇö): assert
   with ASCII markers (`Write-Output 'MARKER_OK'`) and read real files with `read_files` /
