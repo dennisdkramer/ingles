@@ -1036,19 +1036,19 @@ async function rec(t,rb){
    const blob=new Blob(ch,{type:"audio/webm"});
    try{audioCache["a:"+t]=URL.createObjectURL(blob)}catch(e){}
    const f=new FileReader();f.onload=()=>{
-   /* the phrase is underlined only NOW — on save, never on the Record click. The wrap uses the very
-      range the popup was opened for (pendingRange = the trimmed selection, or the active note's area),
-      so a repeated phrase can never wrap the wrong occurrence; with no selection (a click on a mark)
+   /* the phrase is underlined only NOW — on save, never on the Record click. The wrap uses the USER'S
+      SELECTION (nbSel.area → its own Range), never a note's area/anchor, so the recording is an
+      INDEPENDENT item on exactly the text the user selected; with no selection (a click on a mark)
       the existing mark is reused, and ensureMark is the safety net that guarantees the underline
       instead of waiting for the next poll. */
-   const rr=(nbSel&&nbSel.area)?pendingRange:null;
-   const mk=markRecording(t,rr)||ensureMark(t,"rec",rr);
+   const rr=(nbSel&&nbSel.area)?nbAreaRange(nbSel.area):null;
+   const rt=rr?nbSpanText(rr):t;
+   const mk=markRecording(rt,rr)||ensureMark(rt,"rec",rr);
    const rp=(mk&&nbMarkPos(mk))||nbPosOf(rr);
    /* the row is anchored to exactly what the mark PAINTS and keeps the place it paints on as its
       tie-breaker (owner spec 2026-10-13): a phrase repeated on the page is restored on ITS OWN
       occurrence after a reload, never on the first match of the same words */
-   const rto=nbSpanText(rr)||t;
-   nbUpsert(rto,"rec",{b64:f.result.split(",")[1],mime:"audio/webm",data:nbRecData(rp)});
+   nbUpsert(rt,"rec",{b64:f.result.split(",")[1],mime:"audio/webm",data:nbRecData(rp)});
    ind.remove();press(false);closePop();};
    f.readAsDataURL(blob);};
   mr.onstop=process;

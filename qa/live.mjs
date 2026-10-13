@@ -899,6 +899,16 @@ async function scenBF4(live, site) {
     rowsNow.length === 1 && ms.some(m => m.a === rowsNow[0] && m.txt === m.a && m.txt.indexOf(MA) === 0),
     { now: rowsNow, marks: ms.map(m => ({ a: m.a, txt: m.txt })) });
   checkInvariants(ms, 'note expansion');
+
+  log('\n step 7 — a RECORDING containing a NOTE anchors to the SELECTION, never the note');
+  await api(site, 'reset=1');
+  await live.nav();
+  await makeNote(live, Pos(P1a, 0), 'nota da frase');
+  await recSpan(live, Pos(P1a, 0), Pos(P1b, 0));   /* the selection (the whole pair) CONTAINS the note on P1a */
+  const recAnchor = rowsOf('rec')[0] && rowsOf('rec')[0].anchor;
+  check('the recording is anchored to the SELECTION (the whole pair), not the note',
+    !!recAnchor && recAnchor.indexOf(P1a) >= 0 && recAnchor.indexOf(P1b) >= 0 && recAnchor !== P1a,
+    { anchor: recAnchor, note: P1a });
 }
 /* ---------------------------------------------------------------------------------------------
    10. SCENARIO B-F3 — the OCCURRENCE a note/recording belongs to, and its presentation
