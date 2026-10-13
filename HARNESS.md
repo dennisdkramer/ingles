@@ -79,6 +79,22 @@ call instead of shell `Get-Content`/temp-file dumping workarounds. Don't re-read
 file more than once in a session unless it changed. Parallelize independent reads/searches/edits in a
 single turn rather than serializing them one tool-call at a time.
 
+**Context discipline (owner request 2026-10-12 — in this environment `run_commands` has NO VS Code
+shell integration, so every call is answered by echoing the terminal buffer back plus a boilerplate
+warning and a bogus exit code 1; each call therefore costs context twice: the command's own output
+and that echo. Minimize calls, and bound the output of every call at the source.):**
+- Never redirect output to a temp file and read it back (RULE 9 already forbade this — it is the
+  single worst offender). Never dump a whole `git diff`: use `--stat` / `--name-status` / `-U0`,
+  `git status --short`, or read the changed file itself with a line range.
+- Bound every command (`Select-Object -First/Last`, `-q`, `--short`, `Select-String`, `--no-pager`);
+  keep commands one line; no `2>&1` (it adds PowerShell NativeCommandError noise on top).
+- Inspect via `read_files` / `search_codebase`, not the shell (`git show`, `Get-Content`, listings).
+- Run the QA suite once per coherent change, not after every micro-edit; re-read an edited region at
+  most once; skip follow-up calls that a single `git status --short --branch` already answers.
+- Judge `run_commands` only by the printed output, never by its exit code (always 1 here because of
+  the missing integration). Enabling VS Code `terminal.integrated.shellIntegration.enabled` (and
+  reopening the terminal) removes the boilerplate entirely.
+
 ## RULE 10 — UPDATING THIS FILE
 Whenever an owner instruction contains "from now on", "always", or "never": append/update the rule
 here (conservatively, in the owner's own wording where possible) in the same turn. This file is the
