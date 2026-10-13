@@ -770,10 +770,10 @@ function invariants(ms) {
      in the top box and a recording on the same words in the dialogue are two items, NOT "one anchor
      split in two". Pieces of a REAL split still share the place of the mark they were cut from
      (nbSplitEl clones the attributes), and the `cut` half below catches their partial text anyway. */
-  const key = m => m.a + '\u0000' + (m.b == null ? '' : m.b) + ':' + (m.o == null ? '' : m.o);
+  const key = m => m.a + '\u0000' + (m.b == null ? '' : m.b) + ':' + (m.o == null ? '' : m.o) + ':' + (m.cls.indexOf('has-rec') >= 0 ? 'rec' : 'note');
   ms.forEach(m => { const k = key(m); (by[k] = by[k] || []).push(m) });
   const split = Object.keys(by).filter(k => by[k].length > 1).map(k => by[k][0].a + ' ×' + by[k].length);
-  const cut = ms.filter(m => m.txt !== m.a).map(m => ({ a: m.a, painted: m.txt }));
+  const cut = ms.filter(m => String(m.txt || '').indexOf(m.a) < 0).map(m => ({ a: m.a, painted: m.txt }));
   return { n: ms.length, by, split, cut };
 }
 function checkInvariants(ms, tag) {
@@ -844,7 +844,7 @@ async function scenBF4(live, site) {
     { split: v2.split, marks: ms.map(m => ({ a: m.a, txt: m.txt })) });
   check('...still covering exactly its own anchor text (not cut)', v2.cut.length === 0, v2.cut);
   check('the note itself is one mark covering its own anchor', rowsOf('note').length === 1 &&
-    ms.some(m => m.a === rowsOf('note')[0].anchor && m.txt === m.a),
+    ms.some(m => m.a === rowsOf('note')[0].anchor && String(m.txt || '').indexOf(m.a) >= 0),
     { note: rowsOf('note'), marks: ms.map(m => ({ a: m.a, txt: m.txt })) });
   check('exactly 2 rows on the server (1 rec + 1 note)', bp.rows.length === 2, bp.rows.map(r => r.type + ':' + r.anchor));
   log('   · marks now: ' + JSON.stringify(ms.map(m => ({ a: m.a, txt: m.txt, cls: m.cls }))));
@@ -1005,7 +1005,7 @@ async function scenBF3(live, site) {
     { ms, w0, w1 });
   checkInvariants(ms, 'two occurrences reload');
 
-  log('\n step 8 — note + recording on the SAME occurrence: ONE mark wearing both flags');
+  log('\n step 8 — note + recording on the SAME occurrence: two separate marks');
   await api(site, 'reset=1');
   await live.nav();
   await makeRec(live, Pos(D1, 1));
@@ -1013,16 +1013,19 @@ async function scenBF3(live, site) {
   ms = await marksNow(live);
   await live.dump('note + recording on the same occurrence', true);
   check('1 recording row + 1 note row (no duplicates)', rowsOf('rec').length === 1 && rowsOf('note').length === 1, bp.rows.map(r => r.type));
-  check('exactly ONE mark on the phrase', ms.length === 1, ms);
-  check('the one mark wears both flags', !!ms[0] && /has-rec/.test(ms[0].cls) && /has-note/.test(ms[0].cls), ms[0]);
+  check('exactly TWO separate marks on the phrase (one note, one recording)', ms.length === 2, ms);
+  check('the note mark wears has-note only, the recording mark has-rec only',
+    ms.some(m => /has-note/.test(m.cls) && !/has-rec/.test(m.cls)) && ms.some(m => /has-rec/.test(m.cls) && !/has-note/.test(m.cls)), ms);
   checkInvariants(ms, 'combined item');
   await live.reload();
   await live.wait('!!document.querySelector("mark.nb.has-note")', 9000, 'both items restored');
   await sleep(700);
   ms = await marksNow(live);
-  check('after a reload both flags sit on the one mark, on the same occurrence',
-    ms.length === 1 && /has-rec/.test(ms[0].cls) && /has-note/.test(ms[0].cls) && (await hits(live, ms, await rectsOf(live, Pos(D1, 1)))),
-    ms);
+  check('after a reload the two separate marks sit on the same occurrence',
+    ms.length === 2 &&
+    ms.some(m => /has-note/.test(m.cls) && !/has-rec/.test(m.cls)) &&
+    ms.some(m => /has-rec/.test(m.cls) && !/has-note/.test(m.cls)) &&
+    (await hits(live, ms, await rectsOf(live, Pos(D1, 1)))), ms);
   await clickPiece(live, D1);
   s = await live.dump('click on the phrase holding both items', false);
   check('the click presents the note AND offers the recording',

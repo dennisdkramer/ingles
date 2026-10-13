@@ -137,7 +137,7 @@ function nbDataPos(data){const s=String(data==null?"":data);if(s.charAt(0)!=="{"
    a position → only the marks painted there */
 function nbMarksAt(t,pos){const ms=nbMarks(t);if(!pos)return ms;
  return ms.filter(m=>{const p=nbMarkPos(m);return!!p&&p.b===pos.b&&p.o===pos.o})}
-function nbFlagAt(t,pos,cls){const ms=nbMarksAt(t,pos);ms.forEach(m=>m.classList.add(cls));return ms[0]||null}
+function nbFlagAt(t,pos,cls){const other=cls==="has-note"?"has-rec":"has-note";const ms=nbMarksAt(t,pos).filter(m=>!m.classList.contains(other));ms.forEach(m=>m.classList.add(cls));return ms[0]||null}
 /* a stored occurrence → a live Range, with the highlight layer's own locate+range helpers (hlLocate:
    the stored b/o when the anchor still sits there, else the block hint, else the anchor text alone) */
 function nbRangeOf(t,b,o){if(t==null)return null;const s=String(t);
@@ -667,7 +667,7 @@ document.addEventListener("click",e=>{const nb=e.target.closest("mark.nb");
    row whose stored anchor matched none of them ("not reliably saved nor simultaneously displayed"). */
 function nbMarks(t){return [...document.querySelectorAll('mark.nb[data-a="'+CSS.escape(String(t))+'"]')]}
 /* flag EVERY piece of an anchor (has-rec / has-note) and hand back the first one */
-function nbFlag(t,cls){const ms=nbMarks(t);ms.forEach(m=>m.classList.add(cls));return ms[0]||null}
+function nbFlag(t,cls){const other=cls==="has-note"?"has-rec":"has-note";const ms=nbMarks(t).filter(m=>!m.classList.contains(other));ms.forEach(m=>m.classList.add(cls));return ms[0]||null}
 /* the first/last TEXT node inside a node (a mark piece's own text, however deeply nested) */
 function nbEdgeText(n,first){if(!n)return null;if(n.nodeType===3)return n;
  const k=[...n.childNodes];
@@ -728,14 +728,14 @@ function nbWrap(t,r,type){
  run.forEach(n=>m.appendChild(n));
  return m}
 /* wrap an anchor's range (a live selection when the popup came from one; the text found by findRange
-   when a stored row is being restored). An anchor that is ALREADY painted is never wrapped twice:
-   a note and a recording on the SAME phrase are ONE mark carrying both flags. */
+   when a stored row is being restored). An anchor that is ALREADY painted (SAME type) is never wrapped
+   twice: a note and a recording on the SAME phrase are TWO SEPARATE marks, each carrying its own flag. */
 function wrapRange(t,r,type){
  /* only a mark painted at THE SAME OCCURRENCE counts as "this item already": the phrase may be
     painted on ANOTHER occurrence of the same words (a note in the top box and a recording in the
     dialogue), and reusing that mark would flag the wrong place and leave this span unpainted */
  const pos=nbPosOf(r);
- const ex=nbMarksAt(t,pos)[0]||(pos?null:nbMarks(t)[0]);if(ex)return ex;
+ const ex=nbMarksAt(t,pos).filter(m=>m.classList.contains("has-"+type))[0]||(pos?null:nbMarks(t).filter(m=>m.classList.contains("has-"+type))[0]);if(ex)return ex;
  return r?nbWrap(t,r,type):null}
 /* an anchor's text → a live Range. Marked text is walked TOO: an anchor may abut, cross or sit
    inside another mark, and skipping text inside mark.nb used to make exactly those anchors
@@ -756,7 +756,7 @@ function ensureMark(t,type,at){
  /* `at` = where to paint: a live Range (a selection just made), a stored {b,o} place (a row being
     restored) or nothing (a click on a mark → the text itself decides, as before) */
  const pos=nbPosOf(at);
- let ms=nbMarksAt(t,pos);
+ let ms=nbMarksAt(t,pos).filter(m=>m.classList.contains("has-"+type));
  if(!ms.length){
   const r=nbRangeFor(t,pos,at);
   if(!r)return null;
