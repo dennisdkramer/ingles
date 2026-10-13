@@ -406,7 +406,7 @@ function nbUpsert(t,type,fields,from){
     note in the dialogue must never overwrite the note in the top box) */
  const want=nbDataPos(fields&&fields.data);
  const cur=nbEntries(from!=null?from:t).filter(it=>it.type===type)
-  .find(it=>{const p=nbDataPos(it.data);return(want&&p)?(p.b===want.b&&p.o===want.o):true});
+  .find(it=>{if(from!=null)return true;const p=nbDataPos(it.data);return(want&&p)?(p.b===want.b&&p.o===want.o):true});
  const id=cur?cur.id:(Date.now()+"_"+Math.floor(Math.random()*9999));
  const row=Object.assign({id:id,type:type,anchor:t,author:who(),ts:new Date().toISOString()},fields||{});
  const i=layer.findIndex(it=>it.id===id);
