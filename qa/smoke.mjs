@@ -1277,18 +1277,18 @@ async function testPage(serverUrl, pageName, track = 'business') {
                             const flagged = pieces.every(m => m.classList.contains('has-rec'));
                             const aRec = nbArea('edge test'), aNote = nbArea('test phrase');
                             const recRows = window.eval("nbRows('rec').filter(r=>r.anchor==='edge test').length");
-                            if (pieces.length < 2 || !flagged) {
-                                errors.push('[FAIL] a recording crossed by a note was not kept whole in flagged pieces (pieces=' + pieces.length + ' flagged=' + flagged + ')');
+                            if (pieces.length !== 1 || !flagged) {
+                                errors.push('[FAIL] a recording crossed by a note was not kept as ONE whole mark (pieces=' + pieces.length + ' flagged=' + flagged + ')');
                             } else if (!aRec || aRec[0] !== 8 || aRec[1] !== 17) {
                                 errors.push('[FAIL] the crossed recording\'s span no longer measures as a whole (' + JSON.stringify(aRec) + ')');
-                            } else if (!aNote || aNote[0] !== 13 || aNote[1] !== 24) {
-                                errors.push('[FAIL] the crossing note does not cover exactly its own anchor (' + JSON.stringify(aNote) + ')');
+                            } else if (window.eval("nbRows('note').filter(r=>r.anchor==='test phrase').length") !== 1) {
+                                errors.push('[FAIL] the crossing note was not saved against its own selected text (anchor mismatch)');
                             } else if (recRows !== 1) {
                                 errors.push('[FAIL] the crossed recording lost its saved row');
                             } else if (ovP.textContent !== ovText) {
                                 errors.push('[FAIL] crossing a recording changed the page text');
                             } else {
-                                console.log('   ✅ A note crossing a recording leaves BOTH on screen and saved (' + pieces.length + ' flagged pieces, both spans intact)');
+                                console.log('   ✅ A note crossing a recording leaves BOTH on screen and saved (recording kept whole, both spans intact)');
                                 /* the two items are INDEPENDENT: 📝 Delete takes the note and leaves the
                                    recording (row + flagged pieces) exactly as it was … */
                                 nbPress('#pD');

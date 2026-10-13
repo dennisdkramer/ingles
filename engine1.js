@@ -431,7 +431,7 @@ function nbUpsert(t,type,fields,from){
    the recording (owner spec 2026-10-12 #2: the two items are independent). The ROW itself is
    re-anchored by nbUpsert(…, from) — same id, ONE row. */
 function nbExpandNote(anchor,plan){
- const m=nbWrap(plan.anchor,nbAreaRange(plan.area));
+ const m=nbWrap(plan.anchor,nbAreaRange(plan.area),"note");
  if(!m)return null;
  nbUnflag(anchor,"has-note");
  return m;
@@ -454,7 +454,7 @@ function nbSaveNote(t,x,y){
   /* the row is anchored to exactly what its mark PAINTS: nbWrap covers the (trimmed) selection, whose
      DOM text can differ from the browser's selection string — the row and the mark must hold the same
      string or the row could never be found again and the mark would not cover its own anchor */
-  if(mark&&mark.textContent&&nbMarksAt(t,pos).length<=1)to=mark.textContent}
+  to=nbSpanText(pendingRange)||t}
  nbUpsert(to,"note",{data:nbNoteData(v,pos)},plan?t:null);   /* same id → REPLACES the row (re-anchored when it grew) */
  refreshNbPopup(to,x,y,false);   /* 💾 Save LEAVES the edit state (FUNCTION.md): Save greys again */
 }
@@ -500,7 +500,7 @@ function openNbPopup(t,r,x,y){
    the underline is the saved clip's proof, per the owner spec. Idempotent: an existing mark.nb is
    reused. (r = the live selection range when the popup came from one.) */
 function markRecording(t,r){
- if(r){const m=wrapRange(t,r);if(m)nbFlagAt(t,nbMarkPos(m)||nbPosOf(r),"has-rec");return m}
+ if(r){const m=wrapRange(t,r,"rec");if(m)nbFlagAt(t,nbMarkPos(m)||nbPosOf(r),"has-rec");return m}
  return ensureMark(t,"rec");      /* ensureMark paints the anchor's text AND flags it has-rec */
 }
 /* 📝 Add/Edit Note (owner spec 2026-10-12): the editor opens over the SAME popup (every button
@@ -689,10 +689,11 @@ function nbSplitEl(el,k){if(!el||k<=0||k>=el.childNodes.length)return el;
 /* wrap a range into a NEW mark.nb[data-a=t] and return it (null when the range covers no node).
    The two boundaries are first pushed out to whole SIBLING nodes (a text node is split, a partially
    covered element is split with nbSplitEl) and the covered run is MOVED into the new mark — never
-   cloned. So a mark that is fully covered is carried inside the new one (nested and still whole,
-   keeping its own anchor) while a mark that is only crossed by an edge is split into pieces that
-   keep its own data-a and flags. */
-function nbWrap(t,r){
+   cloned. A mark of the SAME type that is crossed by the edge is split into pieces that keep its own
+   data-a and flags; a mark of the OTHER type (note vs recording) is NEVER split — it is carried whole
+   (nested) into the new mark, so creating a note never splits a recording and vice versa. */
+function nbOtherMark(el,type){return !!(el&&el.nodeType===1&&el.tagName==="MARK"&&el.classList.contains(type==="note"?"has-rec":"has-note")&&!el.classList.contains("has-"+type))}
+function nbWrap(t,r,type){
  if(!r)return null;
  const s=nbTextPoint(r.startContainer,r.startOffset,true),e=nbTextPoint(r.endContainer,r.endOffset,false);
  if(!s||!e)return null;
@@ -712,10 +713,12 @@ function nbWrap(t,r){
  const ca=r.commonAncestorContainer;
  let sTop=sN;
  for(let p=sN.parentNode;p&&p!==ca;p=p.parentNode){
+  if(nbOtherMark(p,type)){sTop=p;continue;}
   const i=Array.prototype.indexOf.call(p.childNodes,sTop);
   if(i>0)sTop=nbSplitEl(p,i);else sTop=p}     /* after a split the clone carries the covered side */
  let eTop=eN;
  for(let p=eN.parentNode;p&&p!==ca;p=p.parentNode){
+  if(nbOtherMark(p,type)){eTop=p;continue;}
   const i=Array.prototype.indexOf.call(p.childNodes,eTop);
   if(i+1<p.childNodes.length)nbSplitEl(p,i+1);/* the uncovered tail leaves; eTop keeps the covered end */
   eTop=p}
@@ -727,13 +730,13 @@ function nbWrap(t,r){
 /* wrap an anchor's range (a live selection when the popup came from one; the text found by findRange
    when a stored row is being restored). An anchor that is ALREADY painted is never wrapped twice:
    a note and a recording on the SAME phrase are ONE mark carrying both flags. */
-function wrapRange(t,r){
+function wrapRange(t,r,type){
  /* only a mark painted at THE SAME OCCURRENCE counts as "this item already": the phrase may be
     painted on ANOTHER occurrence of the same words (a note in the top box and a recording in the
     dialogue), and reusing that mark would flag the wrong place and leave this span unpainted */
  const pos=nbPosOf(r);
  const ex=nbMarksAt(t,pos)[0]||(pos?null:nbMarks(t)[0]);if(ex)return ex;
- return r?nbWrap(t,r):null}
+ return r?nbWrap(t,r,type):null}
 /* an anchor's text → a live Range. Marked text is walked TOO: an anchor may abut, cross or sit
    inside another mark, and skipping text inside mark.nb used to make exactly those anchors
    unfindable — the "selecting the characters/space next to a note does nothing" bug. */
@@ -757,7 +760,7 @@ function ensureMark(t,type,at){
  if(!ms.length){
   const r=nbRangeFor(t,pos,at);
   if(!r)return null;
-  const m=nbWrap(t,r);if(!m)return null;
+  const m=nbWrap(t,r,type);if(!m)return null;
   if(pos)nbSetMarkPos(m,pos.b,pos.o);
   ms=[m];
  }
@@ -1044,7 +1047,7 @@ async function rec(t,rb){
    /* the row is anchored to exactly what the mark PAINTS and keeps the place it paints on as its
       tie-breaker (owner spec 2026-10-13): a phrase repeated on the page is restored on ITS OWN
       occurrence after a reload, never on the first match of the same words */
-   const rto=(mk&&mk.textContent&&nbMarksAt(t,rp).length<=1)?mk.textContent:t;
+   const rto=nbSpanText(rr)||t;
    nbUpsert(rto,"rec",{b64:f.result.split(",")[1],mime:"audio/webm",data:nbRecData(rp)});
    ind.remove();press(false);closePop();};
    f.readAsDataURL(blob);};
