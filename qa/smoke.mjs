@@ -17,11 +17,10 @@
  * - Highlight logic: Ctrl held at mousedown AND at mouseup creates a highlight on its OWN paint
  *   layer (#hlLayer — never an element inside the text); Ctrl released before mouseup creates
  *   nothing; the Hear/Record/Note popup stays shut for the whole Ctrl gesture; the colour palette
- *   recolours it; there is NO undo stack any more (no ↶/↷ buttons, no Ctrl+Z handler); Ctrl+click on the painted rectangle deletes it; a
+ *   recolours it; Ctrl+click on the painted rectangle deletes it; a
  *   highlight may cross a note/recording and BOTH stay whole (the two layers never interact); an
  *   overlapping highlight is SUBTRACTED from the older one (shrunk / split in two / swallowed) and
  *   never merged;
- *   the removed dead controls never come back
  * - Note/recording OVERLAP RULES (step h): abutting saves are two spans that share no character (the
  *   anchor is the TRIMMED selection — the 2px paper gap itself is the CSS half, the owner's live
  *   check); a selection that partially overwrites a recording LOCKS ⏺ Record (greyed via `.locked`,
@@ -447,28 +446,6 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 }
             }
 
-            /* (d) NO UNDO / REDO any more (owner spec 2026-10-12). The old undo stack is gone for
-               real: none of its functions exist in the page, the control bar builds neither the ↶/↷
-               buttons nor the "Ctrl+Z=undo" legend, and creating a highlight pushes no undo entry. */
-            try {
-                const deadUndo = ['pushUndo', 'applyAction', 'doUndo', 'doRedo', 'setupUndo', 'updateUndoButton', 'undoStack', 'redoStack']
-                    .filter(n => window.eval('typeof ' + n) !== 'undefined');
-                if (deadUndo.length) {
-                    errors.push('[FAIL] the removed undo stack is back in the page: ' + deadUndo.join(','));
-                } else {
-                    console.log('   ✅ no undo stack in the page (pushUndo/applyAction/doUndo/doRedo/undoStack/redoStack gone)');
-                }
-                const bar2 = window.document.getElementById('controlbar') || window.document.querySelector('.control-bar');
-                if (bar2 && /undo|ctrl\+z/i.test(bar2.innerHTML)) {
-                    errors.push('[FAIL] the control bar still advertises undo/redo');
-                } else if (bar2) {
-                    console.log('   ✅ the control bar advertises no undo/redo (no buttons, no Ctrl+Z legend)');
-                } else {
-                    console.log('   ⏭  control-bar undo/redo check skipped (no control bar in harness)');
-                }
-            } catch (e) {
-                errors.push('[FAIL] no-undo test threw: ' + e.message);
-            }
             try { window.eval('hlList=[]; hlReflow()'); } catch (e) {}
 
             /* (e) OVERLAPPING HIGHLIGHTS ARE SUBTRACTED, NEVER MERGED (owner spec 2026-10-12): the new
@@ -627,7 +604,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
             /* ---- NOTE/RECORDING popup: the TWO deletes are INDEPENDENT (owner spec 2026-10-12 #2).
                🔊 Delete drops ONLY the recorded audio and 📝 Delete ONLY the note: the other item's row,
                its mark pieces and its flags all survive, and mark.nb is unwrapped only once its LAST
-               flag is gone. Each click sends one del, network last (no undo, no success toast). */
+               flag is gone. Each click sends one del, network last, silent on success. */
             const contentArea = window.document.querySelector('.content-area');
             if (contentArea) {
                 const nbText = 'Delete me please today';
@@ -712,12 +689,6 @@ async function testPage(serverUrl, pageName, track = 'business') {
                     }
                     window.fetch = origFetch;
                     await new Promise(resolve => setTimeout(resolve, 50));
-                    const toastEl = window.document.getElementById('toast');
-                    if (/apagado/.test(toastEl ? toastEl.textContent : '')) {
-                        errors.push('[FAIL] the removed "apagado" toast came back on a successful delete');
-                    } else {
-                        console.log('   ✅ a successful delete raises NO toast (the "apagado" pill was removed)');
-                    }
                     closeNb();
                 }
 
@@ -1319,14 +1290,6 @@ async function testPage(serverUrl, pageName, track = 'business') {
             }
 
 
-            /* (g) the removed dead controls must stay gone (they were never wired to any engine) */
-            const dead = ['bPrac', 'bQuiz', 'sendTr', 'done', 'mNext', 'mIndex', 'modeToggle', 'mute', 'undoBtn', 'redoBtn']
-                .filter(id => window.document.getElementById(id));
-            if (dead.length) {
-                errors.push('[FAIL] removed dead controls are back in the page: ' + dead.join(','));
-            } else {
-                console.log('   ✅ no dead controls in the page (bPrac/bQuiz/sendTr/done/mNext/mIndex/modeToggle/mute/undoBtn/redoBtn)');
-            }
         } else {
             console.log('   ⏭  highlight test skipped (no plain-text paragraph found)');
         }

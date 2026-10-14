@@ -2,11 +2,6 @@
 const LAYER_VER="v4-server-truth-20261006"; /* Bump to mark a fresh data era */
 let wipeGuard=0; /* a Clear-page wipe in flight: the poll must not resurrect the rows it is deleting */
 
-/* One-time cleanup of ALL legacy local ghosts: shadow lists + device-only layer copies.
-   Server is now the single source of truth; any nb_* localStorage entry is a ghost
-   from the old "salvo apenas nesse dispositivo" system and must go. */
-try{for(const k of Object.keys(localStorage))if(k.startsWith("deletedIds_")||k.startsWith("nb_"))localStorage.removeItem(k)}catch(e){}
-
 document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="en-US";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)});
 (async()=>{try{
  let extra="";
@@ -37,18 +32,10 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
  setInterval(loadLayer,3000);
 }catch(e){let b=document.getElementById("errb");if(b)b.innerHTML+=" · control bar: "+e.message}})();
 
-/* UNDO/REDO REMOVED (owner spec 2026-10-12): the control bar builds no ↶ Undo / ↷ Redo buttons any
-   more and none of the machinery exists — no undoStack/redoStack, no pushUndo, no
-   applyAction/doUndo/doRedo, no updateUndoButton and no Ctrl+Z/Ctrl+Y keydown handler. A delete or a
-   recolour is FINAL: the page applies the change at once and the network write follows (network
-   last); re-doing an action takes one click. Ctrl+Z inside the note editor is therefore the
-   browser's own text undo, which is what a user expects while typing. The highlight primitives the
-   old applyAction drove (hlDrop/hlDelete in engine1.js) stay — render helpers, not undo machinery. */
 async function loadLayer(){
  let rows=[];
  try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L+"&ver="+LAYER_VER+"&t="+Date.now());rows=(await r.json()).rows||[];}catch(e){rows=[];}
- /* Server is the source of truth: rebuild layer from scratch every sync.
-    No localStorage merge, no deletedIds shadow list — deletions are real on the server now. */
+ /* Server is the source of truth: rebuild layer from scratch every sync. */
  layer=rows;
  const s=layer.map(x=>x.id).join(",");if(s===sig)return;sig=s;
  if(Date.now()<wipeGuard)return;   /* a Clear-page wipe is still in flight — never resurrect its rows */

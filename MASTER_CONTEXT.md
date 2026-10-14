@@ -26,7 +26,7 @@ _(none queued.)_
 - A file that the current batch does not reference is assumed fully functional; only a verification step proves otherwise.
 
 ## STATE / PARAMETERS (as of 2026-10-12)
-- Git: HEAD == origin/main with a clean tracked tree (untracked scratch files remain — see ISSUES.md B-I2); the `notePending` grace window is 12s (ARCHITECTURE above).
+- Git: HEAD == origin/main with a clean tracked tree; the `notePending` grace window is 12s (ARCHITECTURE above).
 - Gate: `sig = h(email+track+SECRET "abreportas2025")` (h = Java-style `x = x*31 + charCode` hash), stored in sessionStorage.gate; engine1.js redirects to portal.html when it is invalid. OAuth origin: https://dennisdkramer.github.io.
 - access.json: teachers [dennisdkramer@gmail.com]; students Maria (kids), João (business), Ale (business).
 - Backend is owner-deployed (I cannot deploy it): a Code.gs change only takes effect after a NEW deployment version, while the /exec URL stays the same. Exec URL: https://script.google.com/macros/s/AKfycbxSR8UmOwosLIgn1-AGKhgXJvdqOVkzMqrTwdlWNF9kOkt-256TqTacOsQlo6JyHplR/exec (set per lesson as const BACKPACK).

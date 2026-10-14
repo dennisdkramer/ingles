@@ -8,8 +8,6 @@ let gate=null;try{gate=JSON.parse(sessionStorage.gate)}catch(e){}
 if(!gate||h(gate.email+gate.track+SECRET)!==gate.sig||(!gate.teacher&&gate.track!==TRACK))location.replace("../portal.html");
 const who=()=>gate.teacher?"prof":"aluno";
 let STUDENT=gate.email, layer=[], sig="";
-const LKEY="nb_"+STUDENT+"_"+TRACK+"_"+L;
-const localGet=()=>{try{return JSON.parse(localStorage.getItem(LKEY)||"{}")}catch(e){return{}}};
 const audioCache={};
 let popXY={x:20,y:90};
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(t._x);t._x=setTimeout(()=>t.style.display="none",2600)}
@@ -46,10 +44,8 @@ function send(o){o.email=STUDENT;o.lesson=L;o.author=who();
   .then(r=>r.json())
   .then(j=>{
    if(isDel){
-    /* a delete is SILENT on success (owner spec 2026-10-12): the item visibly leaves the page, and one
-       del goes out per ROW — so the old "🗑 apagado ✔" pill fired once per row (a phrase with a note
-       + a recording raised TWO, and a late poll could raise one minutes after the click) and read as
-       if it were disconnected from the delete. Only a real failure to delete still speaks up. */
+    /* a delete is SILENT on success (owner spec 2026-10-12): the item visibly leaves the page,
+       and one del goes out per row. Only a real failure to delete still speaks up. */
     if(j&&j.result==="deleted")return;
     toast("⚠ falha ao apagar (servidor)");
     return;
@@ -58,9 +54,7 @@ function send(o){o.email=STUDENT;o.lesson=L;o.author=who();
    throw new Error((j&&j.error)||"resposta inválida");
   })
   .catch(err=>{
-   /* server unavailable or errored → keep a local copy so nothing is lost this session */
-   if(!isDel){try{const s=localGet();s[o.id]=o;localStorage.setItem(LKEY,JSON.stringify(s))}catch(e){}
-    toast("⚠ salvo apenas neste dispositivo");}
+    if(!isDel)toast("⚠ servidor indisponível — não salvou");
    else toast("⚠ servidor indisponível — apagar não confirmou");
   });
  setTimeout(()=>{if(window.currentAnchor&&window.currentAnchor===o.anchor&&pop&&window.showAnchor)window.showAnchor(o.anchor,popXY.x,popXY.y)},900);
@@ -567,7 +561,7 @@ function nbUnflag(t,cls,pos){
    reverse) can never take the other item with it. Unwraps the mark only once its own flag was the
    last one (nbUnflag). Drops the rows from the local `layer` at once (the server is the source of
    truth, but the UI must not keep a deleted item until the next 3s poll), then sends one del per row —
-   network last, no undo entry, silent on success (the item visibly leaves the page). */
+   network last, silent on success (the item visibly leaves the page). */
 function nbDeleteItem(t,type){
  const st=nbPopState(t);
  const anchor=type==="note"?st.note:(st.rec?st.rec.anchor:null);
