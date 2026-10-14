@@ -1,6 +1,8 @@
 /* MOTOR 2 — control bar, camadas, áudio com cache, realces persistentes */
 const LAYER_VER="v4-server-truth-20261006"; /* Bump to mark a fresh data era */
 let wipeGuard=0; /* a Clear-page wipe in flight: the poll must not resurrect the rows it is deleting */
+let lastPollChange=Date.now(); /* last time the poll saw a change — keeps the poll fast while the student watches */
+let lastFull=""; /* the layer content signature used to detect that change */
 
 document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="en-US";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)});
 (async()=>{try{
@@ -29,16 +31,16 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
     a snapshot that races ahead of the backend write can never revert-then-reapply a local action. This
     generic (by id+action, not by feature) pairing is the whole mechanism — any future action type
     that goes through send() is covered automatically, no per-action special-casing needed. */
- /* adaptive poll (owner 2026-10-14): 1s while active, 5s after ~10s idle, paused while hidden */
- let lastActive=Date.now(),pollTimer=null;
- const pollDelay=()=>(Date.now()-lastActive>10000)?5000:1000;
+  /* adaptive poll (owner 2026-10-14): 1s while visible and recently active (a user input or a poll change); 5s after 1 minute of neither; paused while hidden */
+  let lastUserActivity=Date.now(),pollTimer=null;
+  const pollDelay=()=>(Date.now()-Math.max(lastUserActivity,lastPollChange)>60000)?5000:1000;
  const schedulePoll=()=>{
   clearTimeout(pollTimer);pollTimer=null;
   if(document.hidden)return;
   pollTimer=setTimeout(async()=>{pollTimer=null;await loadLayer();schedulePoll();},pollDelay());
  };
- ["pointerdown","keydown","touchstart"].forEach(ev=>document.addEventListener(ev,()=>{lastActive=Date.now()},{passive:true}));
- document.addEventListener("visibilitychange",()=>{if(document.hidden){clearTimeout(pollTimer);pollTimer=null;}else{lastActive=Date.now();schedulePoll();}});
+  ["pointerdown","pointermove","keydown"].forEach(ev=>document.addEventListener(ev,()=>{lastUserActivity=Date.now()},{passive:true}));
+  document.addEventListener("visibilitychange",()=>{if(document.hidden){clearTimeout(pollTimer);pollTimer=null;}else{lastUserActivity=Date.now();schedulePoll();}});
  schedulePoll();
 }catch(e){let b=document.getElementById("errb");if(b)b.innerHTML+=" · control bar: "+e.message}})();
 
@@ -47,7 +49,11 @@ async function loadLayer(){
  try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L+"&ver="+LAYER_VER+"&t="+Date.now());rows=(await r.json()).rows||[];}catch(e){rows=[];}
  /* Server is the source of truth: rebuild layer from scratch every sync. */
  layer=rows;
- const s=layer.map(x=>x.id).join(",");if(s===sig)return;sig=s;
+  const s=layer.map(x=>x.id).join(",");
+  /* a change (add/del/edit/recolour) keeps the adaptive poll fast while the student watches */
+  const full=layer.map(r=>r.id+"|"+r.type+"|"+r.anchor+"|"+r.data+"|"+r.ts).join("\n");
+  if(full!==lastFull){lastFull=full;lastPollChange=Date.now();}
+  if(s===sig)return;sig=s;
  if(Date.now()<wipeGuard)return;   /* a Clear-page wipe is still in flight — never resurrect its rows */
  renderLayer();
 }
