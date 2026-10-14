@@ -14,9 +14,9 @@ _(none queued.)_
 ## ARCHITECTURE
 - Pages: login (index.html; portal.html is the same app on a named path) reads access.json and hands a signed `sessionStorage.gate` to `<track>/lessonN.html`.
 - Lesson pages are content-only: config consts (BACKPACK exec URL, SECRET, TRACK, L, COUNT) + `<script src="../engine1.js">` + `<script src="../engine2.js">` + style.css.
-- engine1.js = gate, gestures/selection popup, notes/recordings/audio, highlights, `send()` (network last). engine2.js = control bar, 3-second layer poll (`loadLayer`/`renderLayer`), feed, restoring marks and rectangles.
-- One server (backend/Code.gs — see BACKEND.md): Sheet `IAP_backpack!layer` + Drive folder `IAP_uploads`. It is the ONLY source of truth; a local action is shielded from a racing poll by a generic id+action grace window (`notePending`/`pendingFor` in engine1.js; 12s since 2026-10-12).
-- Two mark layers that must never interact: notes/recordings are text-DOM `mark.nb` (inset underline / wash); highlights are rectangles painted on `#hlLayer`.
+- engine1.js = gate, gestures/selection popup, notes/recordings/audio, highlights, network-last writes. engine2.js = control bar, 3-second layer poll, feed, restoring saved marks.
+- One server (backend/Code.gs — see BACKEND.md): Sheet `IAP_backpack!layer` + Drive folder `IAP_uploads`. It is the ONLY source of truth; a local action is shielded from a racing poll by a generic id+action grace window (12s).
+- Three mark families that must never interact: notes (a light blue wash), recordings (a blue underline) and highlights (translucent coloured rectangles) — each painted on its own visual layer, so overlapping marks never conflict.
 - ANCHORING (owner spec 2026-10-13, binding): the lesson content is ABSOLUTE, FIXED CONTENT — a published lesson page's prose never changes and never moves. Every persisted item consequently references a TEXT STRING as its anchor: highlights, notes and recordings are stored, matched, painted and restored by their anchor text (plus the note text / colour / clip they carry). Position is NOT the reference — it is only allowed as a TIE-BREAKER to discriminate when the same anchor string occurs more than once on a page (which occurrence / place the item belongs to). So a repeat of the same phrase is resolved by the position stored with the row, and the rule is: text identifies the item, position only picks between identical candidates — never the other way round.
 
 ## FILESYSTEM

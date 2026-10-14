@@ -446,16 +446,11 @@ function nbSaveNote(t,x,y){
     becomes its anchor; a selection strictly INSIDE the note plans no expansion, so the note keeps its
     original string as its reference. */
  const plan=nbSel&&nbSel.expand;
- let to=t,mark=null,pos=null;
- if(plan){mark=nbExpandNote(t,plan);if(mark)mark.classList.add("has-note");to=plan.anchor;
-  pos=(mark&&nbMarkPos(mark))||nbPosOf(plan.area);nbSel.expand=null}
- else{mark=ensureMark(t,"note",pendingRange);
-  pos=(mark&&nbMarkPos(mark))||nbPosOf(pendingRange);
-  /* the row is anchored to exactly what its mark PAINTS: nbWrap covers the (trimmed) selection, whose
-     DOM text can differ from the browser's selection string — the row and the mark must hold the same
-     string or the row could never be found again and the mark would not cover its own anchor */
-  to=nbSpanText(pendingRange)||t}
- nbUpsert(to,"note",{data:nbNoteData(v,pos)},plan?t:null);   /* same id → REPLACES the row (re-anchored when it grew) */
+ let to=t,pos=null;
+ if(plan){to=plan.anchor;pos=nbPosOf(plan.area);nbSel.expand=null}
+ else{pos=nbPosOf(pendingRange);to=nbSpanText(pendingRange)||t}
+ const id=nbUpsert(to,"note",{data:nbNoteData(v,pos)},plan?t:null);   /* same id → REPLACES the row (re-anchored when it grew) */
+ ntMake(to,pos?pos.b:null,pos?pos.o:null,id);   /* paint the note's wash on its own layer */
  refreshNbPopup(to,x,y,false);   /* 💾 Save LEAVES the edit state (FUNCTION.md): Save greys again */
 }
 /* rebuild the popup's buttons for the current state (the two arrays change with saved content and
@@ -474,7 +469,7 @@ function refreshNbPopup(t,x,y,editing){
    owner's OVERLAP rules for that selection (every button state and action then comes from nbPopState):
      • the selection overlaps or contains a NOTE → that note is the ACTIVE note: the popup is about
        the note's own anchor (prefilled, its row found), and 💾 Save then expands the note's area to
-       the new selection (nbExpandPlan/nbExpandNote) without disturbing a recording inside it;
+       the new selection (nbExpandPlan) without disturbing a recording inside it;
      • the selection overlaps, contains or sits inside a RECORDING → that recording is what ▶ Play
        plays and 🔊 Delete deletes, and ⏺ Record is locked and toasts the refusal (NB_REC_LOCKED).
        MORE than one recording involved → ▶ Play and 🔊 Delete are locked too and toast NB_REC_AMBIG;
@@ -579,8 +574,9 @@ function nbDeleteItem(t,type){
  const rows=nbRows(type,anchor);
  layer=layer.filter(it=>it.type!==type||it.anchor!==anchor);
  if(type==="rec")delete audioCache["a:"+anchor];   /* a deleted clip must never replay from the cache */
- /* drop the flag only where the deleted item actually sits (one row = one occurrence) */
- rows.forEach(r=>nbUnflag(anchor,"has-"+type,nbDataPos(r.data)));
+ /* a note is dropped from its own layer; a recording drops its underline flag where it sits */
+ if(type==="note")rows.forEach(r=>ntDrop(r.id));
+ else rows.forEach(r=>nbUnflag(anchor,"has-rec",nbDataPos(r.data)));
  closePop();
  rows.forEach(r=>send({action:"del",id:r.id}));
 }
@@ -654,9 +650,14 @@ document.addEventListener("click",e=>{const nb=e.target.closest("mark.nb");
    if(rec){e.preventDefault();e.stopPropagation();hlDelete(rec)}}
   return;
  }
- if(!nb)return; /* a bare highlight (painted on its own layer) is not clickable */
- e.stopPropagation();
- if(window.showAnchor)showAnchor(nb.dataset.a,Math.max(8,Math.min(e.clientX,innerWidth-380)),e.clientY+8)});
+ if(lastSelText)return; /* the click at the tail of a selection drag must not re-open the popup for a mark/note */
+ if(nb){e.stopPropagation();
+  if(window.showAnchor)showAnchor(nb.dataset.a,Math.max(8,Math.min(e.clientX,innerWidth-380)),e.clientY+8);return}
+ /* a note is painted on its own pointer-events:none layer, so a click on its text lands below it:
+    hit-test the note layer (like a highlight) and open the same popup for the note's anchor */
+ const nr=ntAtPoint(e.clientX,e.clientY);
+ if(nr){e.stopPropagation();
+  if(window.showAnchor)showAnchor(nr.anchor,Math.max(8,Math.min(e.clientX,innerWidth-380)),e.clientY+8)}});
 /* ---- the mark SET of an anchor: mark.nb[data-a=<the anchor text>] -------------------------------
    An anchor is usually painted by ONE mark element, but a note/recording painted ACROSS an older
    mark's edge SPLITS that older mark into pieces that BOTH keep its data-a and its flags. The
@@ -927,6 +928,49 @@ function hlRestore(row){
  rec=hlMake(anchor,d.color,spot.b,spot.start,row.id);
  return rec;
 }
+/* ---- NOTE = its own paint layer (owner option 1, 2026-10-13) ----------------------------------
+   A note is a light-blue wash painted on #noteLayer, exactly like a highlight on #hlLayer: a note is
+   NOT an element of the text, so a note and a recording (mark.nb) can overlap in any way and never
+   interact. Recordings stay mark.nb.has-rec (the underline). */
+let ntList=[];
+function ntLayerEl(){let L=document.getElementById("noteLayer");
+ if(!L){L=document.createElement("div");L.id="noteLayer";L.setAttribute("aria-hidden","true");document.body.appendChild(L)}
+ return L}
+function ntRectList(rec){const r=nbRangeOf(rec.anchor,rec.b,rec.o);if(!r)return [];
+ let list=[];try{list=r.getClientRects?[...r.getClientRects()]:[]}catch(e){list=[]}
+ if(!list.length){try{const b=r.getBoundingClientRect();if(b&&(b.width||b.height))list=[b]}catch(e){}}
+ const sx=window.scrollX||0,sy=window.scrollY||0;
+ return list.filter(b=>b.width>0&&b.height>0).map(b=>({left:b.left+sx,top:b.top+sy,width:b.width,height:b.height}))}
+function ntReflow(){const L=ntLayerEl();L.innerHTML="";
+ ntList.forEach(rec=>{rec.rects=ntRectList(rec);
+  rec.rects.forEach(r=>{const d=document.createElement("div");d.className="ntr";d.dataset.ntid=rec.id;
+   d.style.left=Math.round(r.left)+"px";d.style.top=Math.round(r.top)+"px";
+   d.style.width=Math.round(r.width)+"px";d.style.height=Math.round(r.height)+"px";L.appendChild(d)})})}
+function ntMake(anchor,b,o,id){
+ const t=String(anchor);
+ const spot=(b==null||o==null)?hlLocate(t,null,null):{b:Number(b),start:Number(o)};
+ if(!spot||spot.start<0)return null;
+ const nid=id||Date.now()+"_"+Math.floor(Math.random()*9999);
+ ntList=ntList.filter(r=>r.id!==nid);   /* replace, never duplicate (a re-anchored note keeps its id) */
+ const rec={id:nid,anchor:t,b:spot.b,o:spot.start};
+ rec.rects=ntRectList(rec);ntList.push(rec);ntReflow();return rec}
+function ntById(id){return ntList.find(r=>r.id===id)||null}
+function ntRestore(row){const anchor=String((row&&row.anchor)||"");if(!anchor)return null;
+ let rec=ntById(row.id);
+ if(rec){const p=nbDataPos(row.data);if(p){rec.b=p.b;rec.o=p.o}return rec}
+ const p=nbDataPos(row.data);
+ return ntMake(anchor,p?p.b:null,p?p.o:null,row.id)}
+function ntDrop(id){ntList=ntList.filter(r=>r.id!==id);ntReflow()}
+function ntAtPoint(x,y){const sx=window.scrollX||0,sy=window.scrollY||0;
+ return ntList.find(rec=>(rec.rects||[]).some(r=>x+sx>=r.left&&x+sx<=r.left+r.width&&y+sy>=r.top&&y+sy<=r.top+r.height))||null}
+let ntReflowTimer=0;
+function ntQueueReflow(){clearTimeout(ntReflowTimer);ntReflowTimer=setTimeout(ntReflow,80)}
+addEventListener("resize",ntQueueReflow);
+addEventListener("load",ntQueueReflow);
+document.addEventListener("toggle",ntQueueReflow,true);
+document.addEventListener("mouseup",()=>{if(ntList.length)ntQueueReflow()},true);
+if(document.fonts&&document.fonts.ready)try{document.fonts.ready.then(ntQueueReflow)}catch(e){}
+
 /* ---- OVERLAP = SUBTRACT, NEVER MERGE (owner spec 2026-10-12) -----------------------------------
    A new highlight WINS the characters it covers: every character of the selection is removed from
    the highlight(s) already sitting on it, so a second highlight can carry a DIFFERENT colour over

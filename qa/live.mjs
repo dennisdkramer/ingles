@@ -368,13 +368,32 @@ function probeFn(gate) {
      carries b/o (the stored occurrence, once the engine records it), kids (how many nodes the mark
      covers: only a MULTI-node mark can be split) and the mark's own document rectangle. */
   Q.marks = function () {
-    return [].slice.call(document.querySelectorAll('mark.nb')).map(function (m) {
+    var out = [].slice.call(document.querySelectorAll('mark.nb')).map(function (m) {
       return {
         a: m.getAttribute('data-a'), cls: m.className, txt: m.textContent,
         b: m.dataset.b == null ? null : Number(m.dataset.b),
         o: m.dataset.o == null ? null : Number(m.dataset.o),
         kids: m.childNodes.length, doc: Q.docRect(m)
       };
+    });
+    /* notes are painted on their own layer: surface each note (ONE per ntList entry — a multi-line note
+       paints several rectangles, but it is still ONE note) with a synthetic mark-like shape (cls
+       'nb has-note', txt = anchor) so the note assertions and the split/cut invariants still see them
+       exactly as if they were text marks */
+    if (typeof ntList !== 'undefined') ntList.forEach(function (r) {
+      var rs = (r.rects || []).filter(function (b) { return b.width > 0 && b.height > 0 });
+      out.push({ a: r.anchor, cls: 'nb has-note', txt: r.anchor, b: r.b, o: r.o, kids: 0,
+        doc: rs.length ? [Math.round(rs[0].left), Math.round(rs[0].top), Math.round(rs[0].width), Math.round(rs[0].height)] : null });
+    });
+    return out;
+  };
+  Q.notes = function () {                   /* every note on its own layer (#noteLayer .ntr) */
+    var byId = {};
+    if (typeof ntList !== 'undefined') ntList.forEach(function (r) { byId[r.id] = r; });
+    return [].slice.call(document.querySelectorAll('#noteLayer .ntr')).map(function (d) {
+      var r = byId[d.getAttribute('data-ntid')] || {};
+      var b = d.getBoundingClientRect();
+      return { a: r.anchor, id: r.id, b: r.b, o: r.o, doc: [Math.round(b.left + scrollX), Math.round(b.top + scrollY), Math.round(b.width), Math.round(b.height)] };
     });
   };
   Q.pieces = function (a) { return Q.marks().filter(function (m) { return m.a === a }) };
@@ -388,7 +407,16 @@ function probeFn(gate) {
   Q.markRect = function (a, i) {           /* a mark piece's viewport rect, scrolled into view */
     var list = [], all = document.querySelectorAll('mark.nb');
     for (var k = 0; k < all.length; k++) if (all[k].getAttribute('data-a') === a) list.push(all[k]);
-    var el = list[i || 0]; if (!el) return null;
+    var el = list[i || 0];
+    if (!el) {                             /* a note lives on its own layer: find its rect there */
+      var nIds = [];
+      if (typeof ntList !== 'undefined') ntList.forEach(function (r) { if (r.anchor === a) nIds.push(r.id); });
+      var nd = nIds[i || 0] ? document.querySelector('#noteLayer .ntr[data-ntid="' + nIds[i || 0] + '"]') : null;
+      if (!nd) return null;
+      try { nd.scrollIntoView({ block: 'center' }) } catch (e) { }
+      var br = nd.getBoundingClientRect();
+      return [Math.round(br.left), Math.round(br.top), Math.round(br.width), Math.round(br.height)];
+    }
     try { el.scrollIntoView({ block: 'center' }) } catch (e) { }
     var rs = [].slice.call(el.getClientRects());
     var r = (rs.length ? rs[0] : el.getBoundingClientRect());
@@ -446,6 +474,7 @@ function probeFn(gate) {
     out.hlList = hl.map(function (r) { return { id: r.id, color: r.color, anchor: r.anchor, b: r.b, start: r.start, end: r.end, nrects: (r.rects || []).length } });
     out.hlr = Q.rects();
     out.marks = Q.marks();
+    out.notes = Q.notes();
     out.popup = Q.popup();
     return out;
   };
@@ -703,6 +732,7 @@ const Pos = (t, o) => ({ t: t, o: o || 0 });        /* a phrase + which occurren
 const spanOf = (live, x) => live.ev('window.__q.spanOf(' + JSON.stringify(x.t) + ',' + x.o + ')');
 const rectsOf = (live, x) => live.ev('window.__q.rectsOf(' + JSON.stringify(x.t) + ',' + x.o + ')');
 const marksNow = live => live.ev('window.__q.marks()');
+const notesNow = live => live.ev('window.__q.notes()');
 const piecesOf = (live, a) => live.ev('window.__q.pieces(' + JSON.stringify(a) + ')');
 const flagged = (ms, f) => ms.filter(m => String(m.cls || '').indexOf(f) >= 0);
 const selNow = live => live.ev('(function(){var s=getSelection();return s?s.toString():""})()');
@@ -952,7 +982,7 @@ async function scenBF3(live, site) {
 
   log('\n step 4 — RELOAD (note on the FIRST occurrence): control — it must come back where it was');
   await live.reload();
-  await live.wait('!!document.querySelector("mark.nb.has-note")', 9000, 'the note restored after a reload');
+  await live.wait('!!document.querySelector("#noteLayer .ntr")', 9000, 'the note restored after a reload');
   await sleep(700);
   ms = await marksNow(live);
   let w0 = await rectsOf(live, Pos(D1, 0)), w1 = await rectsOf(live, Pos(D1, 1));
@@ -971,7 +1001,7 @@ async function scenBF3(live, site) {
     (await hits(live, flagged(ms, 'has-note'), w1)) && !(await hits(live, flagged(ms, 'has-note'), w0)), { ms, w0, w1 });
   log('   · stored note row: ' + JSON.stringify(rowsOf('note').map(r => ({ id: r.id, anchor: r.anchor, data: r.data }))));
   await live.reload();
-  await live.wait('!!document.querySelector("mark.nb.has-note")', 9000, 'the note restored after a reload');
+  await live.wait('!!document.querySelector("#noteLayer .ntr")', 9000, 'the note restored after a reload');
   await sleep(700);
   ms = await marksNow(live);
   check('after a reload it is STILL on occurrence 1 (the one that was annotated)',
@@ -1028,7 +1058,7 @@ async function scenBF3(live, site) {
     ms.some(m => /has-note/.test(m.cls) && !/has-rec/.test(m.cls)) && ms.some(m => /has-rec/.test(m.cls) && !/has-note/.test(m.cls)), ms);
   checkInvariants(ms, 'combined item');
   await live.reload();
-  await live.wait('!!document.querySelector("mark.nb.has-note")', 9000, 'both items restored');
+  await live.wait('!!document.querySelector("#noteLayer .ntr")', 9000, 'both items restored');
   await sleep(700);
   ms = await marksNow(live);
   check('after a reload the two separate marks sit on the same occurrence',

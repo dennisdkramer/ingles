@@ -35,7 +35,7 @@ _(Batches queued for this category, newest first. Cleared once done AND committe
 - @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow
 
 ## Function-generated formatting → FUNCTION.md
-- `.pop` (selection popup), `mark.nb` (note/recording mark), `#hlLayer` + `.hlr-*` (highlight rectangles), `.hlpal` (colour palette), `#toast`, `.recind` and `.spin`/`.pulse` exist only because a FUNCTION creates them at run time (engine1.js `hlLayerEl`/`openPop`/`openNbPopup`/`nbPopHTML`/`markRecording`/`ensureMark`/`hlPalette`/`toast`/`rec`/`nbBtnSpinner`, plus engine2.js `renderLayer`), so their formatting is specified as PART of that function — in FUNCTION.md, which is authoritative for those elements. style.css remains the single styling source for the whole site; this file defers to FUNCTION.md for them and no longer restates them.
+- The selection popup, the note/recording marks, the highlight rectangles, the colour palette, the toast and the recording indicator/spinner exist only because a FUNCTION creates them at run time, so their formatting is specified as PART of that function — in FUNCTION.md, which is authoritative for those elements. style.css remains the single styling source for the whole site; this file defers to FUNCTION.md for them and no longer restates them.
 
 ## Sizing philosophy
 - Controls/hotkey text/buttons: minimum size an average person comfortably sees, clicks, reads. Never enlarge "for beauty"; never shrink below comfortable.

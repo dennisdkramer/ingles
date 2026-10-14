@@ -50,7 +50,7 @@ function renderLayer(){
     state the click gave it: stripping the class here and re-adding it on the next poll is precisely
     the "appearing and disappearing" the owner reported. Same id+action grace window as everything
     else — the rule is general, not special-cased. */
- document.querySelectorAll("mark.nb").forEach(m=>{if(!nbAnyPending(m.dataset.a))m.classList.remove("has-rec","has-note")});
+ document.querySelectorAll("mark.nb").forEach(m=>{if(!nbAnyPending(m.dataset.a))m.classList.remove("has-rec")});
  feed.innerHTML="";
  /* highlight layer (#hlLayer): the records are the only truth here, so a highlight whose server
     row is gone disappears and the ones still stored are rebuilt from their row (anchor + offsets,
@@ -67,21 +67,15 @@ function renderLayer(){
   if(it.type==="hl"&&it.anchor){
    if(!pendingFor(it.id))hlRestore(it);
   }
-  if((it.type==="rec"||it.type==="note")&&it.anchor){
-   /* a row whose own local action is still pending is skipped (the UI already applied it); rows
-      with nothing in flight still (re)build the mark and its flag as before */
+  if(it.type==="rec"&&it.anchor){
    if(!pendingFor(it.id)){
-    /* nbFlag/nbMarks (engine1.js) handle an anchor painted by MORE THAN ONE mark piece (a note or a
-       recording crossed by another save): the flag goes on EVERY piece, so the underline/wash is
-       never half-missing after a reload. ensureMark wraps the anchor's text when it has no mark yet. */
-    /* the row's OWN place (the b/o tie-breaker inside `data`, owner spec 2026-10-13) decides which
-       occurrence of the anchor text is painted: a phrase repeated on the page (the top box AND the
-       dialogue) is restored on ITS OWN occurrence, live and after a reload. A legacy row without a
-       tie-breaker falls back to the anchor text alone, exactly as before. */
     const pos=nbDataPos(it.data);
-    if(nbMarksAt(it.anchor,pos).length)nbFlagAt(it.anchor,pos,"has-"+it.type);
-    else ensureMark(it.anchor,it.type,pos);
+    if(nbMarksAt(it.anchor,pos).filter(m=>m.classList.contains("has-rec")).length)nbFlagAt(it.anchor,pos,"has-rec");
+    else ensureMark(it.anchor,"rec",pos);
    }
+  }
+  if(it.type==="note"&&it.anchor){
+   if(!pendingFor(it.id))ntRestore(it);
   }
   if(it.type==="note"&&!it.anchor){
    feed.innerHTML+="<div>📝 traduções · <i>"+it.author+"</i></div>";}
@@ -92,6 +86,9 @@ function renderLayer(){
  const hlIds=new Set(layer.filter(it=>it.type==="hl"&&it.anchor).map(it=>it.id));
  hlList=hlList.filter(rec=>hlIds.has(rec.id)||pendingFor(rec.id));
  hlReflow();
+ const ntIds=new Set(layer.filter(it=>it.type==="note"&&it.anchor).map(it=>it.id));
+ ntList=ntList.filter(rec=>ntIds.has(rec.id)||pendingFor(rec.id));
+ ntReflow();
  if(!feed.innerHTML)feed.innerHTML='<div class="dim">Nada ainda — destaque um texto e anote ou grave algo.</div>';
 }
 
