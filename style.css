@@ -20,14 +20,15 @@ a{color:var(--ink);font-weight:600}h2{font-family:'Playfair Display',serif;margi
 .pt{color:#5c5347}.ptw{font-style:italic;color:var(--ptw);font-weight:600}
 .listen{background:var(--tan);box-shadow:3px 3px 0 var(--ink)}
 details{background:#fff8ea;border:2px dashed var(--tan);border-radius:12px;padding:8px 12px;margin:10px 0}
-mark.nb{background:transparent;cursor:pointer;padding:0 1px}
+mark.nb{background:transparent;cursor:pointer}
 /* recording = 2px BLUE underline (no trailing icon, owner spec 2026-10-12). Notes are painted on
    their OWN layer (#noteLayer, see below) — a light-blue wash, exactly like a highlight — so a note
    and a recording can overlap in any way and never interact. The recording underline is the ONLY
    thing that lives in the text DOM now.
-   START/END INSET (owner spec 2026-10-12): the underline is painted 1px short of the text on each
-   side (the mark carries 1px padding, the underline is drawn 2px inside the padding box) so two
-   ABUTTING saves leave a paper gap between them. */
+   START/END INSET (owner spec 2026-10-12): the underline is painted 2px short of the text on each
+   side via the BACKGROUND (background-size + background-position), never box padding — padding would
+   SHIFT the prose, and the lesson content must never move (MASTER_CONTEXT ANCHORING). Two ABUTTING
+   saves therefore leave a paper gap between them without moving the text. */
 mark.nb.has-rec{background-repeat:no-repeat;background-position:2px 100%;
  background-image:linear-gradient(var(--blue),var(--blue));background-size:calc(100% - 4px) 2px}
 .pop{position:fixed;z-index:9;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:12px;max-width:380px;max-height:70vh;overflow:auto}

@@ -218,7 +218,8 @@ function nbExpandPlan(note,area){
  if(!note||!area||!note.area||note.area.b!==area.b)return null;
  if(note.area.s<=area.s&&note.area.e>=area.e)return null;      /* selection inside the note */
  const s=Math.min(note.area.s,area.s),e=Math.max(note.area.e,area.e);
- return{area:{b:area.b,s:s,e:e,blk:area.blk},anchor:area.blk.textContent.slice(s,e)};
+ const raw=area.blk.textContent;let ss=s,ee=e;while(ss<ee&&/\s/.test(raw[ss]))ss++;while(ee>ss&&/\s/.test(raw[ee-1]))ee--;
+ return{area:{b:area.b,s:ss,e:ee,blk:area.blk},anchor:raw.slice(ss,ee)};
 }
 /* the exact owner wording of the ⏺ Record refusal and of the ambiguous ▶ Play / 🔊 Delete press (see
    nbPopState/nbPopHTML/nbWirePopup). RE-RECORDING IS GONE (owner spec 2026-10-12 #2): any selection
@@ -440,7 +441,7 @@ function nbSaveNote(t,x,y){
  if(!pop)return;
  const ta=pop.querySelector("#nt");if(!ta)return;   /* 💾 Save is live only while editing — never throw */
  const v=ta.value.trim();
- if(!v){closePop();return}
+ if(!v){refreshNbPopup(t,x,y,false);return}   /* an empty note just closes the editor, never the popup */
  /* OWNER RULE (overlaps): the popup came from a selection that OVERLAPPED this note (nbSel.expand,
     planned by openNbPopup) → the note's AREA expands to the new selection and the union's text
     becomes its anchor; a selection strictly INSIDE the note plans no expansion, so the note keeps its
@@ -577,13 +578,14 @@ function nbDeleteItem(t,type){
  /* a note is dropped from its own layer; a recording drops its underline flag where it sits */
  if(type==="note")rows.forEach(r=>ntDrop(r.id));
  else rows.forEach(r=>nbUnflag(anchor,"has-rec",nbDataPos(r.data)));
- closePop();
+ refreshNbPopup(t,popXY.x,popXY.y,false);   /* the popup stays; only a later click/touch/gesture dismisses it */
  rows.forEach(r=>send({action:"del",id:r.id}));
 }
 function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("div");pop.className="pop";
  pop.style.left=x+"px";pop.style.top=y+"px";pop.style.maxWidth="min(380px, calc(100vw - 16px))";
  pop.innerHTML=html;document.body.appendChild(pop);return pop}
-document.addEventListener("mousedown",e=>{if(pop&&!pop.contains(e.target)){closePop();nbSel=null}});
+document.addEventListener("mousedown",e=>{if(pop&&!pop.contains(e.target)){closePop();nbSel=null;try{getSelection().removeAllRanges()}catch(e){}}});
+document.addEventListener("touchstart",e=>{if(pop&&!pop.contains(e.target)){closePop();nbSel=null;try{getSelection().removeAllRanges()}catch(e){}}},{passive:true});
 /* ---- gesture gate (owner spec 2026-10-12): Hear/Record/Note and Highlight are BOTH decided
    strictly at mouse-release, never mid-drag. mouseIsDown blocks the debounced selectionchange
    path for the whole press; the moment the button is released this same function is called
@@ -821,7 +823,6 @@ function hlFromSelection(){
  const sel=getSelection();if(!sel||!sel.rangeCount)return;
  const t=sel.toString().trim();if(!t)return;
  const rc=sel.getRangeAt(0).cloneRange();
- try{sel.removeAllRanges()}catch(e){}
  lastSelText=t;
  hlApply(rc);
 }
@@ -831,7 +832,7 @@ function hlFromSelection(){
    that owns the gesture must never close the popup that gesture just opened (FUNCTION.md) */
 document.addEventListener("keydown",e=>{
  if(e.key==="Control"||e.key==="Meta")return;
- if(pop&&pop.classList.contains("hlpalpop"))closePop()},true);
+ if(pop&&pop.classList.contains("hlpalpop")){closePop();try{getSelection().removeAllRanges()}catch(e){}}},true);
 /* ---- the highlight paint layer: rectangles measured from the text, nothing else -------------- */
 let hlList=[]; /* live highlights — a highlight exists HERE and nowhere else in the DOM */
 function hlLayerEl(){let L=document.getElementById("hlLayer");
@@ -1049,6 +1050,7 @@ function hlPalette(rec){
   b.onclick=()=>{const c=b.dataset.c;
    hlSetColor(rec,c);
    closePop();
+   try{getSelection().removeAllRanges()}catch(e){}   /* choosing a colour deselects the text */
    if(rec.id)send({action:"set",type:"hl",anchor:rec.anchor,data:JSON.stringify({color:c,b:rec.b,o:rec.start}),id:rec.id});
   };
  });
@@ -1057,8 +1059,7 @@ async function rec(t,rb){
  if(!pop||pop.dataset.recording)return;      /* one recording per phrase at a time (re-entry guard) */
  let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){alert("Microfone bloqueado — abra a lição em aba própria.");return}
  /* the Record button's glyph becomes the processing SPIRAL for the whole capture (owner spec
-    2026-10-12) instead of a toast; the popup is closed only once the clip is saved, so the spiral
-    stays visible while the user speaks. */
+    2026-10-12) instead of a toast, so the spiral stays visible while the user speaks. */
  if(pop)pop.dataset.recording="1";
  const press=on=>{if(rb&&rb.isConnected)nbBtnSpinner(rb,on)};
  press(true);
@@ -1093,7 +1094,7 @@ async function rec(t,rb){
       tie-breaker (owner spec 2026-10-13): a phrase repeated on the page is restored on ITS OWN
       occurrence after a reload, never on the first match of the same words */
    nbUpsert(rt,"rec",{b64:f.result.split(",")[1],mime:"audio/webm",data:nbRecData(rp)});
-   ind.remove();press(false);closePop();};
+   ind.remove();press(false);refreshNbPopup(rt,popXY.x,popXY.y,false);};   /* popup stays after the clip saves */
    f.readAsDataURL(blob);};
   mr.onstop=process;
   try{mr.stop()}catch(e){process()}

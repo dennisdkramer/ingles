@@ -1,5 +1,6 @@
 /* MOTOR 2 — control bar, camadas, áudio com cache, realces persistentes */
 const LAYER_VER="v4-server-truth-20261006"; /* Bump to mark a fresh data era */
+let wipeGuard=0; /* a Clear-page wipe in flight: the poll must not resurrect the rows it is deleting */
 
 /* One-time cleanup of ALL legacy local ghosts: shadow lists + device-only layer copies.
    Server is now the single source of truth; any nb_* localStorage entry is a ghost
@@ -14,7 +15,16 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
   const st=Object.entries(ac.students||{}).filter(([e,s])=>s.track===TRACK);
   extra=' <select id="sel"><option value="'+gate.email+'">demo (you)</option>'+st.map(([e,s])=>'<option value="'+e+'">'+(s.name||e)+"</option>").join("")+"</select>";}
  const bar=document.getElementById("controlbar")||topbar;
- bar.innerHTML="🦺 "+gate.email+" · <b>"+TRACK+"</b> · <a href=\"../portal.html\">Index</a>"+extra;
+ bar.innerHTML="🦺 "+gate.email+" · <b>"+TRACK+"</b> · <a href=\"../portal.html\">Index</a>"+extra+' · <button type="button" id="clearpage">🧹 Clear page</button>';
+ const cp=document.getElementById("clearpage");
+ if(cp)cp.onclick=()=>{
+  if(!confirm("Delete ALL highlights, notes and recordings on this page?"))return;
+  send({action:"wipe"});                      /* network-last, like every other write */
+  layer=[];hlList=[];ntList=[];sig="";wipeGuard=Date.now()+12000;
+  document.querySelectorAll("mark.nb").forEach(m=>m.remove());
+  hlReflow();ntReflow();
+  const f=document.getElementById("feed");if(f)f.innerHTML='<div class="dim">Nada ainda — destaque um texto e anote ou grave algo.</div>';
+ };
  if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";loadLayer()};}
  loadLayer();
  /* ---- cross-session poll (owner spec 2026-10-12) — the ONLY re-check there is: add/set/del on
@@ -41,6 +51,7 @@ async function loadLayer(){
     No localStorage merge, no deletedIds shadow list — deletions are real on the server now. */
  layer=rows;
  const s=layer.map(x=>x.id).join(",");if(s===sig)return;sig=s;
+ if(Date.now()<wipeGuard)return;   /* a Clear-page wipe is still in flight — never resurrect its rows */
  renderLayer();
 }
 
@@ -97,9 +108,9 @@ function renderLayer(){
    Reapresenta o popup de sete botões (▶ Hear / ▶ Play / ⏺ Record / 🔊 Delete / 📝 Add/Edit Note /
    💾 Save / 📝 Delete; os que não se aplicam ficam desabilitados) para a âncora clicada. Usa os
    mesmos helpers do popup de seleção (engine1.js), então os dois pontos de entrada — selecionar ou
-   clicar na marca — se comportam igual. Aqui não há seleção (r=null): a nota e a gravação da PRÓPRIA
-   frase são o que os botões usam (nbPopState, engine1.js), e ⏺ Record fica travado quando a marca já
-   tem gravação (regravar não existe mais: apague a gravação primeiro). */
-if(typeof window.showAnchor!=="function"){window.showAnchor=function(a,x,y){openNbPopup(a,null,x,y);}}
+   clicar na marca — se comportam igual. Passa a ÁREA da marca (um Range real), não r=null, para que
+   openNbPopup resolva por SOBREPOSIÇÃO (nbPopState): clicar numa gravação que cruza uma nota apresenta
+   OS DOIS, e ⏺ Record fica travado quando a marca já tem gravação (regravar não existe mais). */
+if(typeof window.showAnchor!=="function"){window.showAnchor=function(a,x,y){const area=nbAreaOf(a);openNbPopup(a,area?nbAreaRange(area):null,x,y);};}
 
 window.__B=true;
