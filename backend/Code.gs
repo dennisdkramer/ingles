@@ -140,9 +140,8 @@ function doPost(e) {
         }
       }
       /* a recording's audio ALWAYS goes to Drive (owner spec 2026-10-12): the row keeps only a
-         "drive:<fileId>" pointer, never inline audio. The old 150KB gate left every short clip
-         inline in the Sheet (which is only the fallback, not "the drive") AND collided with the
-         50k-character spreadsheet cell limit. If the upload itself fails, fall back to an inline
+         "drive:<fileId>" pointer, never inline audio.
+         If the upload itself fails, fall back to an inline
          copy only when it fits a cell (<45k chars) so nothing is ever silently lost. */
       var store = o.b64 || "";
       if (o.b64) {

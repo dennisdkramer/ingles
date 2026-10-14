@@ -15,7 +15,7 @@ function b64url(b64,mime){const m=mime||"audio/webm";
  try{const b=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));return URL.createObjectURL(new Blob([b],{type:m}))}
  catch(e){return "data:"+m+";base64,"+b64}}
 /* ---- local-action grace window (owner spec 2026-10-12): the ONLY sync re-check is a plain poll
-   (engine2.js: setInterval(loadLayer,3000)) — no per-action immediate reload any more. Every
+   (engine2.js: setInterval(loadLayer,3000)). Every
    send() marks its id+action "pending" for 12s; a poll that lands mid-write must never revert what
    the user just did and then re-apply it a moment later. Generic by id+action: any FUTURE action
    type that goes through send() gets this protection automatically — see FUNCTION.md "Sync". */
@@ -176,8 +176,7 @@ function nbAreaOfRow(r){if(!r)return null;const p=nbDataPos(r.data);
  return nbAreaOfRange(nbRangeOf(r.anchor,p?p.b:null,p?p.o:null))||nbAreaOf(r.anchor)}
 /* the span a live selection means for the note layer, TRIMMED to t — and the trimmed selection IS
    the anchor: a mark then covers exactly its own anchor text, so two abutting saves share no
-   character. (A shared boundary SPACE used to fall inside both of them, which is precisely the
-   "selecting the characters/space abutting a note/recording" bug the owner reported.) */
+   character. */
 function nbSelArea(r,t){
  if(!r)return null;
  const area=nbAreaOfRange(r);if(!area||t==null)return area;
@@ -216,7 +215,7 @@ function nbExpandPlan(note,area){
  return{area:{b:area.b,s:ss,e:ee,blk:area.blk},anchor:raw.slice(ss,ee)};
 }
 /* the exact owner wording of the ⏺ Record refusal and of the ambiguous ▶ Play / 🔊 Delete press (see
-   nbPopState/nbPopHTML/nbWirePopup). RE-RECORDING IS GONE (owner spec 2026-10-12 #2): any selection
+   nbPopState/nbPopHTML/nbWirePopup). Any selection
    that touches a recording — sitting inside it, overlapping it or containing it — is refused, so the
    only way to change a clip is to delete it first. */
 const NB_REC_LOCKED="cannot overwrite recording, delete first";
@@ -283,7 +282,7 @@ function nbNoteDisplay(t){
      📝 Delete — the gesture refers to a saved note; drops just that note (the recording stays)
    ⏺ Record is the ONE always-present-but-refusing button: it carries the disabled LOOK (`.locked`, NOT
    the `disabled` attribute — a genuinely disabled button fires no click event) as soon as ANY
-   recording is involved, because re-recording is no longer possible (owner spec 2026-10-12 #2) — the
+   recording is involved — the
    press must still be heard, and it toasts NB_REC_LOCKED.
    The saved note (when any) is shown ABOVE the buttons; the SELECTED TEXT is NOT repeated in the
    popup (owner spec 2026-10-12). The button ids: H=Hear P=Play R=Record A=Delete-audio N=Add/Edit Note
@@ -300,7 +299,7 @@ function nbPopHTML(t,editing){
     the disabled LOOK (.locked) and their press only toasts NB_REC_AMBIG (owner spec 2026-10-12 #2). */
  const playAttr=play?' title="ouvir a gravação selecionada"':(ambig?' class="locked" aria-disabled="true" title="'+NB_REC_AMBIG+'"':' disabled title="nada para ouvir"');
  const audioAttr=play?' title="apagar somente a gravação (áudio)"':(ambig?' class="locked" aria-disabled="true" title="'+NB_REC_AMBIG+'"':' disabled title="nada para apagar"');
- /* the popup does NOT repeat the selected text any more (owner spec 2026-10-12): the phrase is right
+ /* the popup does NOT repeat the selected text: the phrase is right
     there in the page, so a title echoing it is redundant. #pTitle stays as an empty anchor so a
     refresh can keep targeting a stable node. */
  const noteHTML=nb!=null?'<div id="nbNote" title="nota salva" style="margin:2px 0 4px;white-space:pre-wrap;font-size:13px">'+nbEsc(nb)+'</div>':"";
@@ -343,8 +342,7 @@ function nbWirePopup(t,r,x,y){
  /* ▶ Play shows the processing SPIRAL for the whole playback (owner spec 2026-10-12). ON at the
     click, BEFORE the Drive/?action=file fetch, so even a first-ever fetch shows it; OFF when playback
     really stops — nbPlayAudio fires its done() on BOTH "ended" and a failed play/lookup, so the
-    spiral can never get stuck on. The old wiring handed that callback straight to nbBtnSpinner and
-    done(true) means "play FAILED", so ▶ Play only ever span on an error — never while playing.
+    spiral can never get stuck on.
     It plays the ONE recording the gesture refers to (nbPopState), so a selection that merely
     OVERLAPS a recording plays THAT clip ("the referenced recording"); while more than one recording
     is involved the button carries the disabled LOOK and its press only toasts NB_REC_AMBIG. */
@@ -355,7 +353,7 @@ function nbWirePopup(t,r,x,y){
  const R=pop.querySelector("#pR");
  /* a LOCKED ⏺ Record refuses with the owner's toast instead of recording — the button carries the
     disabled LOOK but no `disabled` attribute, which is the only way a press can still be heard. It is
-    locked as soon as ANY recording is involved (nbPopState.recs): RE-RECORDING IS GONE, so the only
+    locked as soon as ANY recording is involved (nbPopState.recs), so the only
     way to change a clip is to delete it first (NB_REC_LOCKED, owner spec 2026-10-12 #2). */
  if(R)R.onclick=()=>{if(R.classList.contains("locked")){toast(NB_REC_LOCKED);return}rec(t,R)};
  const N=pop.querySelector("#pN");
@@ -471,7 +469,7 @@ function refreshNbPopup(t,x,y,editing){
      • a selection that merely ABUTS a mark (shares no character) is an ordinary new phrase.
    A popup opened by a click on a mark (showAnchor, r=null) has no selection: its target is the
    mark's own anchor, so the phrase's own note and recording are what its buttons act on — and ⏺
-   Record is locked there too, because re-recording is gone (delete the clip first). */
+   Record is locked there too (delete the clip first). */
 function openNbPopup(t,r,x,y){
  const selArea=r?nbSelArea(r,t):null;
  const note=selArea?nbPickNote(selArea):null;
@@ -659,9 +657,7 @@ document.addEventListener("click",e=>{const nb=e.target.closest("mark.nb");
    mark's edge SPLITS that older mark into pieces that BOTH keep its data-a and its flags. The
    anchor's text is then the concatenation of its pieces, each piece keeps its own 2px inset on its
    own edges (style.css), and every lookup below (and in engine2's renderLayer) still finds the row.
-   This is what makes abutting and overlapping saves possible at all: extractContents() used to CLONE
-   the crossed mark and split the original, leaving several elements claiming the same anchor and a
-   row whose stored anchor matched none of them ("not reliably saved nor simultaneously displayed"). */
+   This is what makes abutting and overlapping saves possible at all */
 function nbMarks(t){return [...document.querySelectorAll('mark.nb[data-a="'+CSS.escape(String(t))+'"]')]}
 /* flag EVERY piece of an anchor (has-rec / has-note) and hand back the first one */
 function nbFlag(t,cls){const other=cls==="has-note"?"has-rec":"has-note";const ms=nbMarks(t).filter(m=>!m.classList.contains(other));ms.forEach(m=>m.classList.add(cls));return ms[0]||null}
@@ -735,8 +731,7 @@ function wrapRange(t,r,type){
  const ex=nbMarksAt(t,pos).filter(m=>m.classList.contains("has-"+type))[0]||(pos?null:nbMarks(t).filter(m=>m.classList.contains("has-"+type))[0]);if(ex)return ex;
  return r?nbWrap(t,r,type):null}
 /* an anchor's text → a live Range. Marked text is walked TOO: an anchor may abut, cross or sit
-   inside another mark, and skipping text inside mark.nb used to make exactly those anchors
-   unfindable — the "selecting the characters/space next to a note does nothing" bug. */
+   inside another mark and stays findable. */
 function findRange(t){
  const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
  const nodes=[];let all="";let n;
@@ -969,8 +964,7 @@ if(document.fonts&&document.fonts.ready)try{document.fonts.ready.then(ntQueueRef
 /* ---- OVERLAP = SUBTRACT, NEVER MERGE (owner spec 2026-10-12) -----------------------------------
    A new highlight WINS the characters it covers: every character of the selection is removed from
    the highlight(s) already sitting on it, so a second highlight can carry a DIFFERENT colour over
-   text that was already highlighted. The old rule did the opposite — it unioned the two ranges
-   into ONE row with ONE colour, which is exactly what destroyed the second colour.
+   text that was already highlighted.
    The new highlight always keeps its WHOLE selection: nothing is ever extended to cover an older
    highlight (no union). `end` is EXCLUSIVE (hlMake: end = start + anchor.length), so a highlight
    that merely TOUCHES the new range (old.end === s or old.start === e) shares NO character with it

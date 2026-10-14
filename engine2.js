@@ -26,7 +26,7 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
     either side (teacher or student) reach the other as fast as a 3s poll allows. Each send()
     marks its own id+action "pending" for 12s (engine1.js notePending/pendingFor); renderLayer()
     below skips reverting/resurrecting anything that's still inside its own 12s pending window, so
-    a snapshot that races ahead of the backend write can never undo-then-redo a local action. This
+    a snapshot that races ahead of the backend write can never revert-then-reapply a local action. This
     generic (by id+action, not by feature) pairing is the whole mechanism — any future action type
     that goes through send() is covered automatically, no per-action special-casing needed. */
  setInterval(loadLayer,3000);
@@ -97,7 +97,7 @@ function renderLayer(){
    mesmos helpers do popup de seleção (engine1.js), então os dois pontos de entrada — selecionar ou
    clicar na marca — se comportam igual. Passa a ÁREA da marca (um Range real), não r=null, para que
    openNbPopup resolva por SOBREPOSIÇÃO (nbPopState): clicar numa gravação que cruza uma nota apresenta
-   OS DOIS, e ⏺ Record fica travado quando a marca já tem gravação (regravar não existe mais). */
+   OS DOIS, e ⏺ Record fica travado quando a marca já tem gravação. */
 if(typeof window.showAnchor!=="function"){window.showAnchor=function(a,x,y){const area=nbAreaOf(a);openNbPopup(a,area?nbAreaRange(area):null,x,y);};}
 
 window.__B=true;

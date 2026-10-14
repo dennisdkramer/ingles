@@ -800,8 +800,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
                     console.log('   ✅ 📝 Add/Edit Note opens the editor and 💾 Save lights up');
                     /* OWNER REPORT 2026-10-12: saving an EDITED note did nothing. The save must REPLACE the
                        stored note (nbUpsert re-uses its row id), so after Save the popup shows the NEW text,
-                       leaves the edit state, and the layer still holds exactly ONE note row for the anchor
-                       (the bug appended a duplicate and the first-match lookup kept showing the OLD text). */
+                       leaves the edit state, and the layer still holds exactly ONE note row for the anchor */
                     const editTa = qp('#nt');
                     if (editTa) {
                         editTa.value = 'edited note text';
@@ -892,9 +891,9 @@ async function testPage(serverUrl, pageName, track = 'business') {
                     const recFirst = window.eval(`nbUpsert('QA rec anchor','rec',{b64:'AAAA',mime:'audio/webm',data:'{}'}); layer.filter(it=>it.type==='rec'&&it.anchor==='QA rec anchor')`);
                     const recAgain = window.eval(`nbUpsert('QA rec anchor','rec',{b64:'BBBB',mime:'audio/webm',data:'{}'}); layer.filter(it=>it.type==='rec'&&it.anchor==='QA rec anchor')`);
                     if (!recFirst || recFirst.length !== 1 || !recAgain || recAgain.length !== 1 || recFirst[0].id !== recAgain[0].id || recAgain[0].b64 !== 'BBBB') {
-                        errors.push('[FAIL] re-recording must reuse the stored rec row id (got ' + (recAgain ? recAgain.length : '?') + ' row(s))');
+                        errors.push('[FAIL] nbUpsert must reuse the stored rec row id (got ' + (recAgain ? recAgain.length : '?') + ' row(s))');
                     } else {
-                        console.log('   ✅ re-recording reuses the stored rec row id (one row, replaced clip)');
+                        console.log('   ✅ nbUpsert reuses the stored rec row id (one row, replaced)');
                     }
                 } catch (e) { errors.push('[FAIL] nbUpsert recording replacement threw: ' + e.message); }
 
@@ -964,8 +963,8 @@ async function testPage(serverUrl, pageName, track = 'business') {
                      • ABUTTING (shares no character) is an ordinary new phrase, and the stored anchor is the
                        TRIMMED selection — a mark therefore covers exactly its own anchor text and two
                        abutting saves share no character, which is what lets style.css leave a 2px gap;
-                     • a selection INSIDE / OVERLAPPING / CONTAINING a recording LOCKS ⏺ Record — re-recording
-                       was removed, so covering it exactly is locked too: it greys (.locked) but stays
+                     • a selection INSIDE / OVERLAPPING / CONTAINING a recording LOCKS ⏺ Record
+                       covering it exactly is locked too: it greys (.locked) but stays
                        pressable, and pressing it toasts "cannot overwrite recording, delete first";
                      • the SAME resolution enables ▶ Play for the referenced recording (exactly ONE
                        involved); with MORE THAN ONE recording involved ▶ Play and 🔊 Delete are locked and
@@ -1046,7 +1045,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
                             }
                         }
                     } catch (e) { errors.push('[FAIL] abutting-save check threw: ' + e.message); }
-                    /* (h2) ⏺ Record LOCKS on ANY involvement of a recording — re-recording is gone —
+                    /* (h2) ⏺ Record LOCKS on ANY involvement of a recording —
                        and the SAME resolution enables ▶ Play for the referenced clip. */
                     try {
                         const rcText = 'Record this phrase well';
@@ -1105,18 +1104,18 @@ async function testPage(serverUrl, pageName, track = 'business') {
                         const R3 = pop3 && pop3.querySelector('#pR');
                         if (!R3 || R3.classList.contains('locked')) errors.push('[FAIL] a selection that merely ABUTS a recording was locked (' + (R3 ? 'locked' : 'no popup') + ')');
                         else console.log('   ✅ a selection that only ABUTS a recording keeps ⏺ Record live');
-                        /* covering it EXACTLY is no longer a re-record: locked, and it toasts too */
+                        /* covering it EXACTLY is locked too, and it toasts */
                         const pop4 = await nbSelect(rcP, 7, 18);       /* exactly "this phrase" */
                         const R4 = pop4 && pop4.querySelector('#pR');
                         if (!R4 || !R4.classList.contains('locked')) {
-                            errors.push('[FAIL] covering a recording exactly must LOCK ⏺ Record (re-recording was removed)');
+                            errors.push('[FAIL] covering a recording exactly must LOCK ⏺ Record');
                         } else {
                             nbPress('#pR');
                             const t4 = window.document.getElementById('toast');
                             if (!/cannot overwrite recording, delete first/.test(t4 ? t4.textContent : '')) {
                                 errors.push('[FAIL] covering the recording exactly did not toast the refusal (got ' + JSON.stringify(t4 ? t4.textContent : '') + ')');
                             } else {
-                                console.log('   ✅ covering the recording exactly is locked too ("regrava por cima" is gone)');
+                                console.log('   ✅ covering the recording exactly is locked too');
                             }
                         }
                     } catch (e) { errors.push('[FAIL] recording-lock check threw: ' + e.message); }
@@ -1188,7 +1187,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
                                     pre.value = 'second';
                                     nbPress('#pS');
                                     /* the note's area is EXPANDED to the new selection: the union's text is
-                                       its new anchor, ONE row with the SAME id, the old area gone */
+                                       its new anchor, ONE row with the SAME id. */
                                     const row = window.eval("nbRows('note').filter(r=>r.anchor==='Note one area')");
                                     const m = window.eval('ntList.some(r=>r.anchor==="Note one area")');
                                     const oldM = window.eval('ntList.some(r=>r.anchor==="Note one")');
