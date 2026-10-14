@@ -13,7 +13,7 @@ _(none queued.)_
 - Separation is enforced on READ *and* on WRITE by `email + track + lesson` — no cross-student and no cross-book visibility, teacher tools included.
 
 ## API
-- GET `?action=ping` → health check · `?action=layer&email=…&lesson=…` → every row for that student+lesson (what engine2.js polls every 3s) · `?action=file&id=<fileId>` → the recording bytes from Drive · `?action=dbg` → server info.
+- GET `?action=ping` → health check · `?action=layer&email=…&lesson=…` → every row for that student+lesson (what engine2.js polls every 1s) · `?action=file&id=<fileId>` → the recording bytes from Drive · `?action=dbg` → server info.
 - POST (JSON body): `add` (new row, id minted if absent) · `set` (replaces the row that has the same id — this is what the ONE core save uses for note re-save / clip re-record) · `del` (removes every row with that id) · `wipe` (teacher reset for one email+lesson, or everything when no email is given).
 - Writes are network-last: the popup/layer updates immediately, the POST follows. Only the layer rows are read back, so a backend edit never needs a frontend change.
 

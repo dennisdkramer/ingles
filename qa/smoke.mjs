@@ -106,6 +106,10 @@ function createServer() {
 function mockFetch() {
     global.fetch = async (url, options) => {
         const urlStr = url.toString();
+    // POST to the backend succeeds (so the outbox flush can drain)
+    if (options && options.body && urlStr.includes('script.google.com')) {
+        return { ok: true, status: 200, text: async () => '{}', json: async () => ({ result: 'ok' }), headers: new Map() };
+    }
         // Ignore external hosts
         if (urlStr.includes('googleapis.com') || 
             urlStr.includes('fonts.') || 
@@ -235,6 +239,9 @@ async function testPage(serverUrl, pageName, track = 'business') {
         url: serverUrl + '/' + pageName,
         pretendToBeVisual: true,
         beforeParse(window) {
+            // Neutralize the engine's live poll so the harness drives loadLayer() explicitly
+            window.setInterval = () => 0;
+            window.clearInterval = () => {};
             // Mock additional browser APIs
             window.matchMedia = () => ({ matches: false, addListener: () => {}, removeListener: () => {} });
             window.requestAnimationFrame = (cb) => setTimeout(cb, 0);
@@ -645,6 +652,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
                     errors.push('[FAIL] ▶ Play must be live for a phrase that has its own saved recording');
                 } else {
                     /* intercept send()'s POST so we can prove the backend is told about each delete */
+                    await new Promise(resolve => setTimeout(resolve, 500));   /* drain any earlier outbox write */
                     const origFetch = window.fetch;
                     const posted = [];
                     window.fetch = (url, opts) => {
@@ -652,6 +660,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
                         return Promise.resolve({ json: () => Promise.resolve({ result: 'deleted', purged: true }) });
                     };
                     delRecBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                    await new Promise(resolve => setTimeout(resolve, 450));
                     const leftRows = window.eval('layer.map(it=>it.type+":"+it.id).sort()');
                     const leftMark = window.document.querySelector('mark.nb[data-a="' + nbText + '"]');
                     const delMsgs = posted.filter(p => p.action === 'del');
@@ -673,6 +682,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
                         errors.push('[FAIL] 📝 Delete must still be enabled for the note after the recording was deleted');
                     } else {
                         delNoteOnly.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                        await new Promise(resolve => setTimeout(resolve, 450));
                         const nowRows = window.eval('layer.length');
                         const noteDel = posted.filter(p => p.action === 'del');
                         if (nowRows !== 0) {
@@ -898,7 +908,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 } catch (e) { errors.push('[FAIL] nbUpsert recording replacement threw: ' + e.message); }
 
                 /* OWNER REPORT 2026-10-12: a saved NOTE DISAPPEARED from the phrase and from the popup
-                   until the server confirmed the write. ROOT CAUSE — the only sync re-check is the 3s
+                   until the server confirmed the write. ROOT CAUSE — the only sync re-check is the 1s
                    poll, which REPLACES `layer` with the server snapshot; a snapshot fetched before the
                    backend write landed does not contain the new row, and the popup's note text, the
                    ▶ Play lookup and the phrase's own flags (nbAnyPending reads nbEntries) all read

@@ -14,51 +14,73 @@ function toast(m){const t=document.getElementById("toast");t.textContent=m;t.sty
 function b64url(b64,mime){const m=mime||"audio/webm";
  try{const b=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));return URL.createObjectURL(new Blob([b],{type:m}))}
  catch(e){return "data:"+m+";base64,"+b64}}
-/* ---- local-action grace window (owner spec 2026-10-12): the ONLY sync re-check is a plain poll
-   (engine2.js: setInterval(loadLayer,3000)). Every
-   send() marks its id+action "pending" for 12s; a poll that lands mid-write must never revert what
-   the user just did and then re-apply it a moment later. Generic by id+action: any FUTURE action
-   type that goes through send() gets this protection automatically — see FUNCTION.md "Sync". */
+/* ---- local-action outbox (owner plan 2026-10-14): the UI applies a write immediately, then the op
+   is queued in a PERSISTENT outbox (localStorage) and flushed ONE fetch at a time, so rapid actions
+   can never burst the backend with concurrent POSTs. A failed write survives a reload and is retried
+   with backoff; the server stays the sole source of truth and the outbox only remembers the
+   unconfirmed deltas. Each op keeps a STABLE id and the backend add/set/del are idempotent by id, so
+   a retry lands exactly once; the latest op per id replaces the earlier one (an add then a del
+   coalesces to a del). */
+let outbox=[];
+const OUTBOX_KEY=()=>"ob_"+STUDENT+"_"+TRACK+"_"+L;
+function outboxLoad(){try{outbox=JSON.parse(localStorage.getItem(OUTBOX_KEY())||"[]")||[]}catch(e){outbox=[]}}
+function outboxSave(){try{localStorage.setItem(OUTBOX_KEY(),JSON.stringify(outbox))}catch(e){}}
+function outboxPush(o){outbox=outbox.filter(x=>x.id!==o.id);outbox.push(o);outboxSave();}
+function outboxDrop(id){outbox=outbox.filter(x=>x.id!==id);outboxSave();}
+
 let pendingOps=[];
 function notePending(o){
- if(!o||!o.id)return;
- pendingOps=pendingOps.filter(p=>Date.now()<p.until&&(p.id!==o.id||p.action!==o.action));
- pendingOps.push({id:o.id,action:o.action,type:o.type,until:Date.now()+12000});
+  if(!o||!o.id)return;
+  pendingOps=pendingOps.filter(p=>Date.now()<p.until&&(p.id!==o.id||p.action!==o.action));
+  pendingOps.push({id:o.id,action:o.action,type:o.type,until:Date.now()+12000});
 }
+/* a row is "in flight" while its write sits in the durable outbox (unconfirmed) OR inside the 12s
+   notePending window (just confirmed — the poll needs that window to catch up to the server). */
 function pendingFor(id){
- pendingOps=pendingOps.filter(p=>Date.now()<p.until);
- /* the LAST action queued for this id = what the user most recently did to that row. Inside one
-    window an "add" can be followed by a "del" (save, then delete): the del is the truth then,
-    which is what nbLocal/nbEntries below need; every other caller only asks "is anything still in
-    flight for this id?", for which the first match was already enough. */
- let op=null;for(const p of pendingOps)if(p.id===id)op=p;
- return op;
+  pendingOps=pendingOps.filter(p=>Date.now()<p.until);
+  let op=null;for(const p of pendingOps)if(p.id===id)op=p;
+  if(op)return op;
+  return outbox.find(x=>x.id===id)||null;
 }
-function send(o){o.email=STUDENT;o.lesson=L;o.author=who();
- const isDel=(o.action==="del");
- if(!isDel&&!o.id)o.id=Date.now()+"_"+Math.floor(Math.random()*9999);
- /* the UI already applied this change (hlApply/hlSetColor/hlDrop/ensureMark/...) before send()
-    was called: protect it from a stale poll instead of reloading the layer right now. */
- notePending(o);
- fetch(BACKPACK,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(o)})
-  .then(r=>r.json())
-  .then(j=>{
-   if(isDel){
-    /* a delete is SILENT on success (owner spec 2026-10-12): the item visibly leaves the page,
-       and one del goes out per row. Only a real failure to delete still speaks up. */
-    if(j&&j.result==="deleted")return;
-    toast("⚠ falha ao apagar (servidor)");
-    return;
-   }
-   if(j&&j.result==="ok")return;
-   throw new Error((j&&j.error)||"resposta inválida");
-  })
-  .catch(err=>{
-    if(!isDel)toast("⚠ servidor indisponível — não salvou");
-   else toast("⚠ servidor indisponível — apagar não confirmou");
-  });
- setTimeout(()=>{if(window.currentAnchor&&window.currentAnchor===o.anchor&&pop&&window.showAnchor)window.showAnchor(o.anchor,popXY.x,popXY.y)},900);
+let flushTimer=null,flushing=false,backoff=1000,offlineWarned=false;
+function scheduleFlush(){clearTimeout(flushTimer);flushTimer=setTimeout(flush,300);}
+async function sendOne(op){
+  try{
+    const r=await fetch(BACKPACK,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(op)});
+    const j=await r.json();
+    return !!(j&&(j.result==="ok"||j.result==="deleted"||j.result==="wiped"));
+  }catch(e){return false;}
 }
+async function flush(){
+  if(flushing||!outbox.length)return;
+  flushing=true;
+  while(outbox.length){
+    const op=outbox[0];
+    if(await sendOne(op)){
+      outboxDrop(op.id);
+      backoff=1000;offlineWarned=false;
+    }else{
+      if(!offlineWarned){toast("⚠ servidor indisponível — tentando de novo");offlineWarned=true;}
+      flushing=false;
+      flushTimer=setTimeout(flush,backoff);
+      backoff=Math.min(backoff*2,30000);
+      return;
+    }
+  }
+  flushing=false;
+}
+function send(o){
+  o.email=STUDENT;o.lesson=L;o.author=who();
+  if(o.action!=="del"&&!o.id)o.id=Date.now()+"_"+Math.floor(Math.random()*9999);
+  /* the UI already applied this change before send(); queue it in the outbox and flush (network last) */
+  notePending(o);
+  outboxPush(o);
+  scheduleFlush();
+  setTimeout(()=>{if(window.currentAnchor&&window.currentAnchor===o.anchor&&pop&&window.showAnchor)window.showAnchor(o.anchor,popXY.x,popXY.y)},900);
+}
+/* on load: retry anything a previous session left unconfirmed */
+outboxLoad();
+if(outbox.length)scheduleFlush();
 let pop=null,pendingRange=null,lastSelText="",nbSel=null;
 /* nbSel = the SELECTION the open popup came from (openNbPopup): {area, note, expand}. The owner's
    overlap rules read it — the recording(s)/note the gesture refers to (nbPopState), the note the selection refers to
@@ -247,7 +269,7 @@ function nbPopState(t){
  return{area:area,recs:recs,rec:recs.length===1?recs[0]:null,note:note?note.anchor:null};
 }
 /* is a local note/recording action for this anchor still inside its grace window? (engine2's
-   renderLayer consults this so a 3s poll cannot blink a mark that was just created or deleted) */
+   renderLayer consults this so a 1s poll cannot blink a mark that was just created or deleted) */
 function nbAnyPending(t){return nbEntries(t).some(it=>pendingFor(it.id))}
 /* the saved note text of an anchor (for the 📝 Show view) — null when there is none. */
 function nbNoteText(t){const e=nbEntries(t).find(it=>it.type==="note");return e?nbNoteTextOf(e.data):null}
@@ -386,7 +408,7 @@ function nbWirePopup(t,r,x,y){
    Equally for a recording: a rec row is always REPLACED, never duplicated, so the first-match lookup
    can never play a stale earlier clip. The local `layer` is updated BEFORE the network
    call (same "immediate" principle as nbDeleteItem) because the popup and renderLayer read the
-   layer: without it the change only showed up at the next 3s poll. Network last (FUNCTION.md).
+   layer: without it the change only showed up at the next 1s poll. Network last (FUNCTION.md).
    The row is ALSO remembered in nbLocal, the local copy nbEntries serves while this write is still
    inside its grace window (see above) — the same treatment the highlight gives a freshly painted
    rectangle in hlList, so a poll snapshot that predates the write cannot blink the note out. */
@@ -558,7 +580,7 @@ function nbUnflag(t,cls,pos){
    button's state all survive, so a new note within/overlapping/containing a recording (or the
    reverse) can never take the other item with it. Unwraps the mark only once its own flag was the
    last one (nbUnflag). Drops the rows from the local `layer` at once (the server is the source of
-   truth, but the UI must not keep a deleted item until the next 3s poll), then sends one del per row —
+   truth, but the UI must not keep a deleted item until the next 1s poll), then sends one del per row —
    network last, silent on success (the item visibly leaves the page). */
 function nbDeleteItem(t,type){
  const st=nbPopState(t);

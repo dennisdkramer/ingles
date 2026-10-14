@@ -20,16 +20,16 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
   hlReflow();ntReflow();
   const f=document.getElementById("feed");if(f)f.innerHTML='<div class="dim">Nada ainda — destaque um texto e anote ou grave algo.</div>';
  };
- if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";loadLayer()};}
+ if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";outboxLoad();scheduleFlush();loadLayer()};}
  loadLayer();
  /* ---- cross-session poll (owner spec 2026-10-12) — the ONLY re-check there is: add/set/del on
-    either side (teacher or student) reach the other as fast as a 3s poll allows. Each send()
+    either side (teacher or student) reach the other as fast as a 1s poll allows. Each send()
     marks its own id+action "pending" for 12s (engine1.js notePending/pendingFor); renderLayer()
     below skips reverting/resurrecting anything that's still inside its own 12s pending window, so
     a snapshot that races ahead of the backend write can never revert-then-reapply a local action. This
     generic (by id+action, not by feature) pairing is the whole mechanism — any future action type
     that goes through send() is covered automatically, no per-action special-casing needed. */
- setInterval(loadLayer,3000);
+ setInterval(loadLayer,1000);
 }catch(e){let b=document.getElementById("errb");if(b)b.innerHTML+=" · control bar: "+e.message}})();
 
 async function loadLayer(){

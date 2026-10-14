@@ -656,8 +656,8 @@ async function scenBF2(live, site) {
   await live.key('Escape', 'Escape');
   await live.shot('bf2-1-created', box(s.hlr[0] ? s.hlr[0].doc : [0, 0, 400, 200]));
 
-  log('\n step 2 — two 3s polls later the highlight must still be exactly where it was');
-  await sleep(6500);
+  log('\n step 2 — two 1s polls later the highlight must still be exactly where it was');
+  await sleep(2500);
   s = await live.dump('after ~2 polls', true);
   check('still painted after the polls', s.hlr.length >= 1, s.hlr);
   check('geometry unchanged across the polls', sameRects(s.hlr.map(r => r.doc), want, 6), { now: s.hlr.map(r => r.doc), was: want });
