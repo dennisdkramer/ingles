@@ -4,6 +4,7 @@ window.addEventListener("error",e=>{let b=document.getElementById("errb");
  b.innerHTML="⚠ ERRO: "+e.message;});
 const h=s=>{let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x};
 const norm=s=>(s||"").toLowerCase().replace(/[^a-z']/g,"");
+const lineNorm=s=>String(s==null?"":s).replace(/[\r\n]/g," "); /* newline -> space (length-preserving), so the anchor always matches the rendered text */
 let gate=null;try{gate=JSON.parse(sessionStorage.gate)}catch(e){}
 if(!gate||h(gate.email+gate.track+SECRET)!==gate.sig||(!gate.teacher&&gate.track!==TRACK))location.replace("../portal.html");
 const who=()=>gate.teacher?"prof":"aluno";
@@ -169,7 +170,7 @@ function nbRangeFor(t,pos,at){if(at&&at.startContainer!=null)return at;
    exactly its own anchor text" — the owner's "anchored to exactly what the mark paints" (QA B-F4
    step 2). Null when the range crosses a block, i.e. when its text is ambiguous. */
 function nbSpanText(r){const a=nbAreaOfRange(r);if(!a)return null;
- return a.blk.textContent.slice(a.s,a.e).replace(/\s+$/,"")||null}
+ return lineNorm(a.blk.textContent.slice(a.s,a.e)).replace(/\s+$/,"")||null}
 /* ---- where a note/recording sits on the page: the OVERLAP RULES below need real spans ----------
    A row is keyed by its anchor text, so its span is measured from the mark that paints it (in pieces
    or not: from its first piece's first text to its last piece's last text) and falls back to
@@ -202,7 +203,7 @@ function nbAreaOfRow(r){if(!r)return null;const p=nbDataPos(r.data);
 function nbSelArea(r,t){
  if(!r)return null;
  const area=nbAreaOfRange(r);if(!area||t==null)return area;
- const i=area.blk.textContent.slice(area.s,area.e).indexOf(t);
+ const i=lineNorm(area.blk.textContent.slice(area.s,area.e)).indexOf(lineNorm(t));
  if(i<0)return null;
  return{b:area.b,s:area.s+i,e:area.s+i+t.length,blk:area.blk};
 }
@@ -611,10 +612,11 @@ document.addEventListener("mousedown",()=>{mouseIsDown=true});
 document.addEventListener("mouseup",()=>{mouseIsDown=false;clearTimeout(selTimer);trySelPopup()});
 /* seleção: abre só quando a seleção MUDA (funciona em mobile; não dispara ao clicar em botões) */
 function trySelPopup(){
- const sel=getSelection();let t=sel?sel.toString().trim():"";
- if(!t||t.length<3||t.length>200)return;
- if(mouseIsDown)return; /* never open mid-drag — the mouseup listener fires this at release */
- if(t===lastSelText)return;
+  const sel=getSelection();let t=sel?sel.toString().trim():"";
+  if(mouseIsDown)return; /* never open mid-drag — the mouseup listener fires this at release */
+  if(t===lastSelText)return;
+  if(!t)return;
+  if(t.length<3||t.length>200){lastSelText=t;toast("please select between 3 and 200 characters of text to enable notes and recordings");return;}
  if(!sel.rangeCount)return;
  const r=sel.getRangeAt(0);
  const n=r.commonAncestorContainer;const el=n.nodeType===1?n:n.parentElement;
@@ -662,7 +664,8 @@ document.addEventListener("click",e=>{const nb=e.target.closest("mark.nb");
     is why the click is hit-tested against the painted rectangles here. It adds no popup, no
     hover state and no cursor change to the text. */
  if(e.ctrlKey||e.metaKey){
-  if(Date.now()-hlJustRan>600){const rec=hlAtPoint(e.clientX,e.clientY);
+   const moved=!hlDownXY||Math.abs(e.clientX-hlDownXY.x)>4||Math.abs(e.clientY-hlDownXY.y)>4;
+   if(!moved&&Date.now()-hlJustRan>600){const rec=hlAtPoint(e.clientX,e.clientY);
    if(rec){e.preventDefault();e.stopPropagation();hlDelete(rec)}}
   return;
  }
@@ -758,7 +761,7 @@ function findRange(t){
  const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
  const nodes=[];let all="";let n;
  while(n=w.nextNode()){if(n.parentElement&&n.parentElement.closest("script,style,.pop,#hlLayer"))continue;nodes.push({n,start:all.length});all+=n.data;}
- const i=all.indexOf(t);if(i<0)return null;const end=i+t.length;let a=null,b=null;
+ const i=lineNorm(all).indexOf(lineNorm(t));if(i<0)return null;const end=i+t.length;let a=null,b=null;
  for(const o of nodes){if(!a&&o.start<=i&&i<o.start+o.n.data.length)a={n:o.n,off:i-o.start};
   if(!b&&o.start<end&&end<=o.start+o.n.data.length)b={n:o.n,off:end-o.start};}
  if(!a||!b)return null;
@@ -918,9 +921,9 @@ function hlDelete(rec){if(!rec)return;
 function hlLocate(anchor,bHint,oHint){
  const t=String(anchor||"");if(!t)return null;
  const bl=hlBlocks();
- if(bHint!=null&&oHint!=null&&bl[bHint]){try{if(bl[bHint].textContent.substr(oHint,t.length)===t)return{b:bHint,start:oHint}}catch(e){}}
- if(bHint!=null&&bl[bHint]){const i=bl[bHint].textContent.indexOf(t);if(i>=0)return{b:bHint,start:i}}
- for(let i=0;i<bl.length;i++){const j=bl[i].textContent.indexOf(t);if(j>=0)return{b:i,start:j}}
+ if(bHint!=null&&oHint!=null&&bl[bHint]){try{if(lineNorm(bl[bHint].textContent).substr(oHint,t.length)===lineNorm(t))return{b:bHint,start:oHint}}catch(e){}}
+ if(bHint!=null&&bl[bHint]){const i=lineNorm(bl[bHint].textContent).indexOf(lineNorm(t));if(i>=0)return{b:bHint,start:i}}
+ for(let i=0;i<bl.length;i++){const j=lineNorm(bl[i].textContent).indexOf(lineNorm(t));if(j>=0)return{b:i,start:j}}
  return null;
 }
 function hlMake(anchor,color,b,start,id){

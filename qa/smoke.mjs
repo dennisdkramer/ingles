@@ -597,6 +597,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 } else {
                     const cx = parseFloat(r0.style.left) + parseFloat(r0.style.width) / 2;
                     const cy = parseFloat(r0.style.top) + parseFloat(r0.style.height) / 2;
+                    window.eval('hlDownXY={x:' + cx + ',y:' + cy + '}');   /* mark this click as "no movement" so the delete fires */
                     window.document.body.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true, ctrlKey: true, clientX: cx, clientY: cy }));
                     const nbAfter = window.document.querySelector('mark.nb');
                     if (rects().length || recCount() !== 0) {
