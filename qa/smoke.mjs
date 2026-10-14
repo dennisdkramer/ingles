@@ -239,9 +239,9 @@ async function testPage(serverUrl, pageName, track = 'business') {
         url: serverUrl + '/' + pageName,
         pretendToBeVisual: true,
         beforeParse(window) {
-            // Neutralize the engine's live poll so the harness drives loadLayer() explicitly
-            window.setInterval = () => 0;
-            window.clearInterval = () => {};
+            // the adaptive poll pauses while the page is hidden — mark the harness page hidden
+            // so the poll never fires and the harness drives loadLayer() explicitly
+            try { Object.defineProperty(window.document, 'hidden', { value: true, configurable: true }); } catch (e) {}
             // Mock additional browser APIs
             window.matchMedia = () => ({ matches: false, addListener: () => {}, removeListener: () => {} });
             window.requestAnimationFrame = (cb) => setTimeout(cb, 0);

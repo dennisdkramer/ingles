@@ -22,7 +22,7 @@ function b64url(b64,mime){const m=mime||"audio/webm";
    a retry lands exactly once; the latest op per id replaces the earlier one (an add then a del
    coalesces to a del). */
 let outbox=[];
-const OUTBOX_KEY=()=>"ob_"+STUDENT+"_"+TRACK+"_"+L;
+const OUTBOX_KEY=()=>"ob_"+gate.email+"_"+TRACK+"_"+L;
 function outboxLoad(){try{outbox=JSON.parse(localStorage.getItem(OUTBOX_KEY())||"[]")||[]}catch(e){outbox=[]}}
 function outboxSave(){try{localStorage.setItem(OUTBOX_KEY(),JSON.stringify(outbox))}catch(e){}}
 function outboxPush(o){outbox=outbox.filter(x=>x.id!==o.id);outbox.push(o);outboxSave();}

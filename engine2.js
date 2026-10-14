@@ -20,16 +20,26 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
   hlReflow();ntReflow();
   const f=document.getElementById("feed");if(f)f.innerHTML='<div class="dim">Nada ainda — destaque um texto e anote ou grave algo.</div>';
  };
- if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";outboxLoad();scheduleFlush();loadLayer()};}
+ if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";loadLayer()};}
  loadLayer();
  /* ---- cross-session poll (owner spec 2026-10-12) — the ONLY re-check there is: add/set/del on
-    either side (teacher or student) reach the other as fast as a 1s poll allows. Each send()
+    either side (teacher or student) reach the other as fast as the adaptive poll allows. Each send()
     marks its own id+action "pending" for 12s (engine1.js notePending/pendingFor); renderLayer()
     below skips reverting/resurrecting anything that's still inside its own 12s pending window, so
     a snapshot that races ahead of the backend write can never revert-then-reapply a local action. This
     generic (by id+action, not by feature) pairing is the whole mechanism — any future action type
     that goes through send() is covered automatically, no per-action special-casing needed. */
- setInterval(loadLayer,1000);
+ /* adaptive poll (owner 2026-10-14): 1s while active, 5s after ~10s idle, paused while hidden */
+ let lastActive=Date.now(),pollTimer=null;
+ const pollDelay=()=>(Date.now()-lastActive>10000)?5000:1000;
+ const schedulePoll=()=>{
+  clearTimeout(pollTimer);pollTimer=null;
+  if(document.hidden)return;
+  pollTimer=setTimeout(async()=>{pollTimer=null;await loadLayer();schedulePoll();},pollDelay());
+ };
+ ["pointerdown","keydown","touchstart"].forEach(ev=>document.addEventListener(ev,()=>{lastActive=Date.now()},{passive:true}));
+ document.addEventListener("visibilitychange",()=>{if(document.hidden){clearTimeout(pollTimer);pollTimer=null;}else{lastActive=Date.now();schedulePoll();}});
+ schedulePoll();
 }catch(e){let b=document.getElementById("errb");if(b)b.innerHTML+=" · control bar: "+e.message}})();
 
 async function loadLayer(){
