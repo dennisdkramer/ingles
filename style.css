@@ -10,9 +10,9 @@ h1 span{display:block;font-size:.42em;letter-spacing:.5em}
 main{width:1400px;max-width:100%;margin:0 auto;padding:8px 14px 30px}
 /* .page-container = PAGE AREA: FIXED 1400px wide (no max-width — it never shrinks with the viewport),
    height grows with content (no min-height, no clipping). ABSOLUTE (FORMAT.md B-FM1): taken out of the
-   document flow and centred on the page (left/right 0 + auto margins), so its geometry is immutable —
-   painting a mark, resizing the viewport or growing the shared notebook below never reflows the prose. */
-.page-container{margin:0 auto;background:var(--paper);border:2px solid var(--ink);border-radius:0;box-shadow:none;padding:0;position:absolute;left:0;right:0;width:1400px}
+   document flow and pinned at a fixed left offset (15px), so its geometry is immutable — painting a
+   mark, resizing the viewport or growing the shared notebook below never reflows the prose. */
+.page-container{margin:0;background:var(--paper);border:2px solid var(--ink);border-radius:0;box-shadow:none;padding:0;position:absolute;left:15px;width:1400px}
 /* .content-area = CONTENT AREA: FIXED 1200px wide (never shrinks with the viewport) → exactly 100px
    margin on each side inside the 1400px page area; ALL page content lives here and re-flows within it. */
 .content-area{width:1200px;margin:0 auto;padding:16px 0}
