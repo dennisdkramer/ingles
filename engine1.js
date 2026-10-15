@@ -982,23 +982,6 @@ document.addEventListener("toggle",ntQueueReflow,true);
 document.addEventListener("mouseup",()=>{if(ntList.length)ntQueueReflow()},true);
 if(document.fonts&&document.fonts.ready)try{document.fonts.ready.then(ntQueueReflow)}catch(e){}
 
-/* ---- page fit (FORMAT.md B-FM1): the lesson content area is ABSOLUTE, so the page area no longer
-   grows with it automatically. Reserve the content's height as the page area's padding-top so the
-   in-flow notebook (#feed) and the footer below it sit exactly under the content and the paper page
-   never clips it. Re-synced on the same events that re-measure the mark rectangles
-   (resize/load/<details>/fonts), so the page height and the painted rectangles always agree. */
-function pageFit(){
- const pc=document.querySelector(".page-container"),ca=document.querySelector(".content-area");
- if(pc&&ca)pc.style.paddingTop=Math.max(0,Math.ceil(ca.getBoundingClientRect().height))+"px";
-}
-let pageFitTimer=0;
-function pageFitQueue(){clearTimeout(pageFitTimer);pageFitTimer=setTimeout(pageFit,80)}
-addEventListener("resize",pageFitQueue);
-addEventListener("load",pageFitQueue);
-document.addEventListener("toggle",pageFitQueue,true);
-if(document.fonts&&document.fonts.ready)try{document.fonts.ready.then(pageFitQueue)}catch(e){}
-pageFitQueue();
-
 /* ---- OVERLAP = SUBTRACT, NEVER MERGE (owner spec 2026-10-12) -----------------------------------
    A new highlight WINS the characters it covers: every character of the selection is removed from
    the highlight(s) already sitting on it, so a second highlight can carry a DIFFERENT colour over
