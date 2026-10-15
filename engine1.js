@@ -647,7 +647,7 @@ function trySelPopup(){
  if(dom){const dt=dom.trim();if(dt.length>=3&&dt.length<=200)t=dt}
  pendingRange=r.cloneRange();
  const rect=r.getBoundingClientRect();
- const x=Math.max(8,Math.min(rect.left||20,innerWidth-380)),y=(rect.bottom||60)+8;
+ const sx=window.scrollX||0,sy=window.scrollY||0;const x=Math.max(8,Math.min(rect.left||20,innerWidth-380))+sx,y=(rect.bottom||60)+sy+8;
  openNbPopup(t,pendingRange,x,y);
  lastSelText=t;
 }
@@ -672,7 +672,7 @@ document.addEventListener("click",e=>{const nb=e.target.closest("mark.nb");
     hit-test the note layer (like a highlight) and open the same popup for the note's anchor */
  const nr=ntAtPoint(e.clientX,e.clientY);
  if(nr){e.stopPropagation();
-  if(window.showAnchor)showAnchor(nr.anchor,Math.max(8,Math.min(e.clientX,innerWidth-380)),e.clientY+8)}});
+  if(window.showAnchor)showAnchor(nr.anchor,Math.max(8,Math.min(e.clientX,innerWidth-380))+(window.scrollX||0),e.clientY+(window.scrollY||0)+8)}});
 /* ---- the mark SET of an anchor: mark.nb[data-a=<the anchor text>] -------------------------------
    An anchor is usually painted by ONE mark element, but a note/recording painted ACROSS an older
    mark's edge SPLITS that older mark into pieces that BOTH keep its data-a and its flags. The
@@ -1050,8 +1050,8 @@ function hlPalette(rec){
  const rs=rec.rects||[];
  const last=rs.length?rs.reduce((a,b)=>((b.top>a.top||(b.top===a.top&&b.left>a.left))?b:a)):null;
  const sx=window.scrollX||0,sy=window.scrollY||0,vw=window.innerWidth||800;
- const x=Math.max(8,Math.min(last?Math.round(last.left+last.width)-sx:24,vw-150));
- const y=Math.max(4,Math.round(last?last.top-sy:40)-30);
+ const x=Math.max(8,Math.min(last?Math.round(last.left+last.width):24,vw-150+sx));
+ const y=Math.max(4,Math.round(last?last.top:40)-30);
  openPop("",x,y,'<span class="hlpal">'+HL_COLORNAMES.map(c=>'<button type="button" data-c="'+c+'" title="'+c+'"></button>').join("")+"</span>");
  if(!pop)return;
  pop.classList.add("hlpalpop");
