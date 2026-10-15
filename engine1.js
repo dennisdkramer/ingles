@@ -309,8 +309,8 @@ function nbNoteDisplay(t){
    press must still be heard, and it toasts NB_REC_LOCKED.
    The saved note (when any) is shown ABOVE the buttons; the SELECTED TEXT is NOT repeated in the
    popup (owner spec 2026-10-12). The button ids: H=Hear P=Play R=Record A=Delete-audio N=Add/Edit Note
-   S=Save D=Delete-note — order: row1 H P R A, row2 N S D. Record and Play swap their glyph for a
-   processing SPIRAL while recording / while the clip is playing (owner spec 2026-10-12).
+   Play swaps its glyph for a processing spiral while the clip is playing; ⏺ Record shows a
+   countdown of the remaining capture time (owner spec 2026-10-12).
    It intentionally carries NO trailing icon: the underline / blue-wash of the phrase itself is the
    only signal, and it is applied by the SAVE (engine2 renderLayer or the note Save), never by the
    click. */
@@ -616,18 +616,14 @@ function trySelPopup(){
   if(mouseIsDown)return; /* never open mid-drag — the mouseup listener fires this at release */
   if(t===lastSelText)return;
   if(!t)return;
+  /* Ctrl gesture (Ctrl at mousedown) — or the tail of one — = HIGHLIGHT territory: the highlight
+     has no size limit, so neither the note/record popup NOR its size message fires for it. */
+  if(hlDownCtrl||Date.now()<hlSuppressUntil||ctrlHeld||Date.now()-lastCtrlUp<900){lastSelText=t;return;}
   if(t.length<3||t.length>200){lastSelText=t;toast("please select between 3 and 200 characters of text to enable notes and recordings");return;}
  if(!sel.rangeCount)return;
  const r=sel.getRangeAt(0);
  const n=r.commonAncestorContainer;const el=n.nodeType===1?n:n.parentElement;
  if(el&&el.closest(".pop,script,style,button,textarea,input,select,a,label"))return;
- /* Ctrl gesture (Ctrl at mousedown) — or the tail of one — = HIGHLIGHT territory:
-    the Hear/Record/Note popup stays shut for the whole gesture. The highlight itself is
-    executed on mouseup, never here (see the gesture gate in the HIGHLIGHT section). */
- if(hlDownCtrl||Date.now()<hlSuppressUntil||ctrlHeld||Date.now()-lastCtrlUp<900){
-  lastSelText=t;
-  return;
- }
  /* ONE BLOCK ONLY (owner spec 2026-10-12, same rule the highlight already uses): a selection
     that crosses a block element (paragraph → list item, cell → cell, heading → paragraph, …)
     must NOT trigger this popup. It is refused with a toast — same wording family as the
@@ -1071,11 +1067,12 @@ function hlPalette(rec){
 async function rec(t,rb){
  if(!pop||pop.dataset.recording)return;      /* one recording per phrase at a time (re-entry guard) */
  let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){alert("Microfone bloqueado — abra a lição em aba própria.");return}
- /* the Record button's glyph becomes the processing SPIRAL for the whole capture (owner spec
-    2026-10-12) instead of a toast, so the spiral stays visible while the user speaks. */
+  /* the Record button's glyph becomes a COUNTDOWN of the remaining capture time (10s max) instead of a toast. */
  if(pop)pop.dataset.recording="1";
  const press=on=>{if(rb&&rb.isConnected)nbBtnSpinner(rb,on)};
- press(true);
+  const REC_MAX=10000;
+  const tick=sec=>{if(rb&&rb.isConnected){const lbl=rb.querySelector(".lbl");if(lbl){if(!rb.dataset.lbl)rb.dataset.lbl=lbl.innerHTML;rb.dataset.spin="1";lbl.textContent=sec+"s";}}};
+  tick(10);
  const ind=document.createElement("div");ind.className="pop recind";
  ind.innerHTML='<span class="pulse">🎙</span> gravando… <b style="font-size:12px">'+t.slice(0,30)+"</b>";
  document.body.appendChild(ind);
@@ -1118,6 +1115,7 @@ async function rec(t,rb){
    for(let i=0;i<buf.length;i++){if(Math.abs(buf[i]-128)>14){loud=true;break}}
    if(loud){lastLoud=Date.now();everLoud=true}
    if(everLoud&&Date.now()-lastLoud>2000)return finish();}
-  if(Date.now()-t0>10000)return finish();
+   tick(Math.max(0,Math.ceil((REC_MAX-(Date.now()-t0))/1000)));
+   if(Date.now()-t0>REC_MAX)return finish();
  },100);}
 window.__A=true;
