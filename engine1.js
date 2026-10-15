@@ -982,6 +982,43 @@ document.addEventListener("toggle",ntQueueReflow,true);
 document.addEventListener("mouseup",()=>{if(ntList.length)ntQueueReflow()},true);
 if(document.fonts&&document.fonts.ready)try{document.fonts.ready.then(ntQueueReflow)}catch(e){}
 
+/* ---- PRINT (owner 2026-10-15): a custom Print button renders a clean, print-safe snapshot of the
+   lesson instead of the broken @media print + mix-blend-mode + background-graphics path. Marks are
+   re-painted as flat translucent fills (no blend), recording underlines become a real text-decoration,
+   typed inputs/radios/textarea are baked into the text, and print-color-adjust:exact forces the washes
+   to print. The snapshot is removed as soon as print() returns, so the hlBlocks() ruler never sees it. */
+function printLesson(){
+ const src=document.querySelector(".content-area");
+ if(!src){toast("Nada para imprimir.");return}
+ let pv=document.getElementById("printRoot");if(pv)pv.remove();
+ hlReflow();ntReflow();                       /* re-measure marks at the current layout/scroll */
+ const clone=src.cloneNode(true);
+ const sr=src.getBoundingClientRect(),sx=window.scrollX||0,sy=window.scrollY||0;
+ const ox=sr.left+sx,oy=sr.top+sy;            /* content-area origin in DOCUMENT coords */
+ const layer=document.createElement("div");layer.className="pr-layer";
+ hlList.forEach(rec=>{(rec.rects||[]).forEach(r=>{
+  const d=document.createElement("div");d.className="pr-hl pr-hl-"+rec.color;
+  d.style.left=(r.left-ox)+"px";d.style.top=(r.top-oy)+"px";d.style.width=r.width+"px";d.style.height=r.height+"px";
+  layer.appendChild(d)})});
+ ntList.forEach(rec=>{(rec.rects||[]).forEach(r=>{
+  const d=document.createElement("div");d.className="pr-nt";
+  d.style.left=(r.left-ox)+"px";d.style.top=(r.top-oy)+"px";d.style.width=r.width+"px";d.style.height=r.height+"px";
+  layer.appendChild(d)})});
+ clone.appendChild(layer);
+ /* bake the student's typed answers + selections into the snapshot so they always print */
+ clone.querySelectorAll("input.gap, input[type=text]").forEach(inp=>{
+  const sp=document.createElement("span");sp.className="pr-gap";sp.textContent=inp.value||"\u00A0";inp.replaceWith(sp)});
+ clone.querySelectorAll("textarea").forEach(tx=>{
+  const d=document.createElement("div");d.className="pr-trw";d.textContent=tx.value||"";tx.replaceWith(d)});
+ clone.querySelectorAll("input[type=radio], input[type=checkbox]").forEach(inp=>{
+  const sp=document.createElement("span");sp.className="pr-radio "+(inp.checked?"pr-on":"pr-off");
+  sp.textContent=inp.checked?"●":"○";inp.replaceWith(sp)});
+ const root=document.createElement("div");root.id="printRoot";root.appendChild(clone);
+ document.body.appendChild(root);
+ window.print();
+ root.remove();                               /* never leave the clone in the DOM (ruler safety) */
+}
+
 /* ---- OVERLAP = SUBTRACT, NEVER MERGE (owner spec 2026-10-12) -----------------------------------
    A new highlight WINS the characters it covers: every character of the selection is removed from
    the highlight(s) already sitting on it, so a second highlight can carry a DIFFERENT colour over

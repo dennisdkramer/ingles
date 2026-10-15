@@ -90,5 +90,26 @@ fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8
 label{margin-right:10px;cursor:pointer}
 #feed{font-size:14px}#feed div{border-left:3px solid var(--tan);padding:2px 8px;margin:4px 0;background:#fff8}
 footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#8a8072}
-@media print{body{background:white}header,.dim,#topbar,#controlbar,#feed,footer{display:none!important}.page-container{position:static!important;box-shadow:none;border:0;margin:0;padding:0}.content-area{width:auto;max-width:none}}
+#printRoot{display:none}
+/* custom print button (2026-10-15): only the snapshot prints; marks are flat translucent fills + a
+   real underline (no mix-blend-mode), and print-color-adjust:exact forces the washes to print even when
+   the browser's "background graphics" checkbox is off. */
+@media print{
+ body{background:white}
+ body>*:not(#printRoot){display:none!important}
+ #printRoot{display:block!important;background:white}
+ #printRoot .content-area{position:relative}
+ #printRoot .pr-layer{position:absolute;left:0;top:0;width:0;height:0}
+ #printRoot .pr-hl{position:absolute;border-radius:3px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ #printRoot .pr-hl-yellow{background:rgba(255,233,112,.55)}
+ #printRoot .pr-hl-red{background:rgba(255,64,64,.34)}
+ #printRoot .pr-hl-green{background:rgba(64,200,96,.34)}
+ #printRoot .pr-nt{position:absolute;border-radius:3px;background:var(--bluebg);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ #printRoot mark.nb.has-rec{background:none!important;text-decoration:underline;text-decoration-color:var(--blue);text-decoration-thickness:2px;text-underline-offset:2px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ #printRoot .pr-gap{border-bottom:2px solid var(--tan);min-width:9em;display:inline-block}
+ #printRoot .pr-trw{white-space:pre-wrap;border:1px solid var(--tan);padding:6px;min-height:2em}
+ #printRoot .pr-radio{display:inline-block;margin:0 3px}
+ #printRoot .pr-radio.pr-on{color:var(--ink);font-weight:600}
+ #printRoot .pr-radio.pr-off{color:#8a8072}
+}
 

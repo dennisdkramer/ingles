@@ -22,6 +22,10 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
   hlReflow();ntReflow();
   const f=document.getElementById("feed");if(f)f.innerHTML='<div class="dim">Nada ainda — destaque um texto e anote ou grave algo.</div>';
  };
+  const ppb=document.createElement("button");ppb.type="button";ppb.id="printpage";ppb.textContent="🖨 Print";
+  ppb.onclick=()=>{if(typeof printLesson==="function")printLesson();else toast("Print unavailable.")};
+  bar.appendChild(ppb);
+
  if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";loadLayer()};}
  loadLayer();
  /* ---- cross-session poll (owner spec 2026-10-12) — the ONLY re-check there is: add/set/del on
