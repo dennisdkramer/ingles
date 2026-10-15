@@ -100,11 +100,11 @@ footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#
  body.printing #printRoot{display:block!important;background:white}
  #printRoot .content-area{position:relative}
  #printRoot .pr-layer{position:absolute;left:0;top:0;width:0;height:0}
- #printRoot .pr-hl{position:absolute;border-radius:3px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ #printRoot .pr-hl{position:absolute;border-radius:3px;mix-blend-mode:multiply;-webkit-print-color-adjust:exact;print-color-adjust:exact}
  #printRoot .pr-hl-yellow{background:rgba(255,233,112,.55)}
  #printRoot .pr-hl-red{background:rgba(255,64,64,.34)}
  #printRoot .pr-hl-green{background:rgba(64,200,96,.34)}
- #printRoot .pr-nt{position:absolute;border-radius:3px;background:var(--bluebg);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ #printRoot .pr-nt{position:absolute;border-radius:3px;mix-blend-mode:multiply;background:var(--bluebg);-webkit-print-color-adjust:exact;print-color-adjust:exact}
  #printRoot mark.nb.has-rec{background:none!important;text-decoration:underline;text-decoration-color:var(--blue);text-decoration-thickness:2px;text-underline-offset:2px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
  #printRoot .pr-gap{border-bottom:2px solid var(--tan);min-width:9em;display:inline-block}
  #printRoot .pr-trw{white-space:pre-wrap;border:1px solid var(--tan);padding:6px;min-height:2em}
