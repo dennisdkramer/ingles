@@ -981,6 +981,10 @@ addEventListener("load",ntQueueReflow);
 document.addEventListener("toggle",ntQueueReflow,true);
 document.addEventListener("mouseup",()=>{if(ntList.length)ntQueueReflow()},true);
 if(document.fonts&&document.fonts.ready)try{document.fonts.ready.then(ntQueueReflow)}catch(e){}
+/* hover cursor for notes: the note wash lives on a pointer-events:none layer, so it can't carry a CSS
+   cursor the way the recording underline does (mark.nb{cursor:pointer}). Hit-test the note rects on
+   mousemove (the same ntAtPoint the click handler uses) and show the hand pointer over a note. */
+document.addEventListener("mousemove",e=>{document.body.style.cursor=ntAtPoint(e.clientX,e.clientY)?"pointer":""},{passive:true});
 
 /* ---- PRINT (owner 2026-10-15): a custom Print button renders a clean, print-safe snapshot of the
    lesson instead of the broken @media print + mix-blend-mode + background-graphics path. Marks are
