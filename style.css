@@ -2,12 +2,12 @@
 :root{--cream:#f4eddd;--paper:#fdfaf2;--ink:#182136;--tan:#b9854c;--rose:#d9c1ba;--ptw:#96601f;--blue:#1d4ed8;--bluebg:rgba(29,78,216,.16)}
 *{box-sizing:border-box}body{margin:0;font:17px/1.6 'Public Sans',system-ui,sans-serif;background:var(--cream);color:var(--ink)}
 header.brand{width:1400px;margin-left:15px;text-align:center;padding:20px 14px 0}
-.control-bar{max-width:1400px;margin:10px auto 0;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:8px 14px;font-size:13px;text-align:center}
+.control-bar{width:1400px;margin:10px 0 0 15px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:8px 14px;font-size:13px;text-align:center}
 header.brand img{width:120px;filter:drop-shadow(3px 4px 0 var(--rose))}
 .logoFallback{font-size:52px}h1{font-family:'Playfair Display',serif;letter-spacing:.14em;font-size:38px;margin:8px 0 0}
 h1 span{display:block;font-size:.42em;letter-spacing:.5em}
 .script{font-family:Caveat,cursive;font-size:38px;margin:2px 0 0;transform:rotate(-2deg)}
-main{width:1400px;max-width:100%;margin:0 auto;padding:8px 14px 30px}
+main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
 /* .page-container = PAGE AREA: FIXED 1400px wide (no max-width — it never shrinks with the viewport),
    height grows with content (no min-height, no clipping). ABSOLUTE (FORMAT.md B-FM1): taken out of the
    document flow and pinned at a fixed left offset (15px), so its geometry is immutable — painting a
