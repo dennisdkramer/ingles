@@ -1015,7 +1015,9 @@ function printLesson(){
   sp.textContent=inp.checked?"●":"○";inp.replaceWith(sp)});
  const root=document.createElement("div");root.id="printRoot";root.appendChild(clone);
  document.body.appendChild(root);
+ document.body.classList.add("printing");     /* scope the @media print hide/show to this button press */
  window.print();
+ document.body.classList.remove("printing");
  root.remove();                               /* never leave the clone in the DOM (ruler safety) */
 }
 
