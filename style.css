@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&display=swap');
 :root{--cream:#f4eddd;--paper:#fdfaf2;--ink:#182136;--tan:#b9854c;--rose:#d9c1ba;--ptw:#96601f;--blue:#1d4ed8;--bluebg:rgba(29,78,216,.16)}
 *{box-sizing:border-box}body{margin:0;font:17px/1.6 'Public Sans',system-ui,sans-serif;background:var(--cream);color:var(--ink)}
-header.brand{text-align:center;padding:20px 14px 0}
+header.brand{width:1400px;margin-left:15px;text-align:center;padding:20px 14px 0}
 .control-bar{max-width:1400px;margin:10px auto 0;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:8px 14px;font-size:13px;text-align:center}
 header.brand img{width:120px;filter:drop-shadow(3px 4px 0 var(--rose))}
 .logoFallback{font-size:52px}h1{font-family:'Playfair Display',serif;letter-spacing:.14em;font-size:38px;margin:8px 0 0}
