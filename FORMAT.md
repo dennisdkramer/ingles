@@ -18,11 +18,12 @@ _(none queued.)_
 - Playfair Display 700/900 → h1, h2 (letter-spacing .14em)
 - Caveat 700 → .script (handwritten accents, rotated -2deg)
 - Public Sans 400/600/700 → body, base 17px/1.6
+- All font sizes are fixed constants (no viewport-relative sizing): h1 38px, .script 38px, body 17px — so resizing the viewport never changes text size and print output is identical on any device.
 
 ## Layout
 - header.brand (English text, centered logo 120px, rose drop-shadow) → #controlbar .control-bar (the "control bar": account/session info + tools, English) → main#page → .page-container (PAGE AREA) → .content-area (CONTENT AREA)
-- .page-container = PAGE AREA: fixed 1400px wide, height GROWS with content (no min-height, no clipping). Paper bg, 2px solid ink border, no radius/shadow, position:absolute — taken out of the document flow and centred on the page, so the page and its content never reflow when a mark is painted or the shared notebook grows below it. ALL page content — including the footer — lives inside it.
-- .content-area = CONTENT AREA: 1200px wide, centered inside the page area → exactly 100px margin on each side. All body content (text, cards, buttons, feed) sits here.
+- .page-container = PAGE AREA: fixed 1400px wide (never shrinks with the viewport), height GROWS with content (no min-height, no clipping). Paper bg, 2px solid ink border, no radius/shadow, position:absolute — taken out of the document flow and centred on the page, so the page and its content never reflow when the viewport is resized, a mark is painted or the shared notebook grows below it. ALL page content — including the footer — lives inside it.
+- .content-area = CONTENT AREA: fixed 1200px wide (never shrinks with the viewport), centered inside the page area → exactly 100px margin on each side. All body content (text, cards, buttons, feed) sits here and re-flows within this fixed box.
 - .card: paper bg, 2px ink border, 16px radius, 5px 5px 0 tan hard shadow
 - Buttons: ink bg, cream text, 10px radius, 3px 3px 0 tan shadow, weight 600, 14px Public Sans
 - Links: ink, weight 600. Dim text: #8a8072, 13px
