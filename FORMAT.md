@@ -4,7 +4,7 @@ Reference this file whenever a task touches site appearance. Preserve everything
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-FM<n>.)_
 
-- B-FM1 [2026-10-13, owner instruction] Page content still has to be made ABSOLUTE (pending — nothing changed yet): the content inside the page area is normal document flow today, while `#hlLayer` is already absolutely positioned. Check the coupling before implementing: `.page-container` height GROWS with content (see "Layout" above), the `@media print` rules, and the deterministic fake layout qa/smoke.mjs installs to exercise rectangle geometry.
+_(none queued.)_
 
 ## Colors (CSS vars in :root)
 - cream #f4eddd = page background
@@ -23,6 +23,7 @@ _(Batches queued for this category, newest first. Cleared once done AND committe
 - header.brand (English text, centered logo 120px, rose drop-shadow) → #controlbar .control-bar (the "control bar": account/session info + tools, English) → main#page → .page-container (PAGE AREA) → .content-area (CONTENT AREA)
 - .page-container = PAGE AREA: fixed 1400px wide, height GROWS with content (no min-height, no clipping). Paper bg, 2px solid ink border, no radius/shadow, position:relative. ALL page content — including the footer — lives inside it.
 - .content-area = CONTENT AREA: 1200px wide, centered inside the page area → exactly 100px margin on each side. All body content (text, cards, buttons, feed) sits here.
+- On LESSON pages (the fixed, published content) the content area is ABSOLUTE: it is pinned inside the page area so its geometry never reflows when a mark is painted or the shared notebook grows below it. The page area still reserves the content's height — so it keeps "growing with content" and never clips — and print reverts the content area to normal flow so it paginates normally. (The login pages stay in normal flow: their content is dynamic and carries no marks.)
 - .card: paper bg, 2px ink border, 16px radius, 5px 5px 0 tan hard shadow
 - Buttons: ink bg, cream text, 10px radius, 3px 3px 0 tan shadow, weight 600, 14px Public Sans
 - Links: ink, weight 600. Dim text: #8a8072, 13px
