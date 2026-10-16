@@ -503,19 +503,21 @@ function openNbPopup(t,r,x,y){
     text, so two abutting saves can never share the boundary space */
  pendingRange=(target?nbAreaRange(target):null)||(r?r.cloneRange():null);
  openPop(anchor,x,y,nbPopHTML(anchor,!!pop&&!!pop.querySelector("#nt")));
- if(pop){const b=pop.getBoundingClientRect(),w=b.width,h=b.height;
-  const vv=window.visualViewport||null,sx=window.scrollX||0,sy=window.scrollY||0;
-  const vw=vv?vv.width:innerWidth,vh=vv?vv.height:innerHeight;
-  const vL=sx+(vv?vv.offsetLeft:0),vT=sy+(vv?vv.offsetTop:0);
+ if(pop){const ow=pop.offsetWidth,oh=pop.offsetHeight,sx=window.scrollX||0,sy=window.scrollY||0;
   let rl=0,rt=0,rw=1,rb=0;
   if(r){const rr=r.getBoundingClientRect();rl=rr.left;rt=rr.top;rw=rr.width;rb=rr.bottom;}
   else{rl=x-sx;rt=y-sy;rb=y-sy;}
-  let left=(rw<w)?(rl+rw/2-w/2+sx):(rl+rw-w+sx);
-  let top=rb+sy+10;
-  if(top+h>=vT+vh)top=rt+sy-10-h;
-  if(left<=vL)left=vL+5;
-  if(left+w>=vL+vw)left=vL+vw-w-5;
-  pop.style.left=left+"px";pop.style.top=top+"px";popXY={x:left,y:top};}
+  const isCenter=(rw<ow),anchorX=isCenter?ow/2:ow;
+  pop.style.transformOrigin=anchorX+"px 0px";
+  let left=(isCenter)?(rl+rw/2-anchorX):(rl+rw-anchorX);
+  let top=rb+10;
+  pop.style.left=(left+sx)+"px";pop.style.top=(top+sy)+"px";
+  const vv=window.visualViewport||null,vl=vv?vv.offsetLeft:0,vt=vv?vv.offsetTop:0,vw=vv?vv.width:innerWidth,vh=vv?vv.height:innerHeight;
+  let tb=pop.getBoundingClientRect();
+  if(tb.bottom>=vt+vh){top=rt-10-tb.height;pop.style.top=(top+sy)+"px";tb=pop.getBoundingClientRect();}
+  if(tb.left<=vl){left+=(vl-tb.left)+5;pop.style.left=(left+sx)+"px";}
+  else if(tb.right>=vl+vw){left-=(tb.right-(vl+vw))+5;pop.style.left=(left+sx)+"px";}
+  popXY={x:left+sx,y:top+sy};}
  nbWirePopup(anchor,pendingRange,popXY.x,popXY.y);
 }
 /* wrap the phrase into mark.nb and paint the recording flag — this is the SAVE side for a clip
@@ -611,7 +613,13 @@ function nbDeleteItem(t,type){
 }
 function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("div");pop.className="pop";
  pop.style.left=x+"px";pop.style.top=y+"px";
+ pop.style.transformOrigin="0 0";pop.style.transform="scale("+(1/popScale())+")";
  pop.innerHTML=html;document.body.appendChild(pop);return pop}
+/* page zoom (visual viewport scale): the popup counter-scales so its on-screen size stays constant
+   while it still follows its anchor (a fixed document point). */
+function popScale(){return (window.visualViewport&&visualViewport.scale)?visualViewport.scale:1}
+function popFitZoom(){if(pop)pop.style.transform="scale("+(1/popScale())+")"}
+if(window.visualViewport){visualViewport.addEventListener("resize",popFitZoom);visualViewport.addEventListener("scroll",popFitZoom)}
 /* popup placement: below the END (bottom-right) of the span, kept inside the viewport (10px from the
    right edge). The caller passes the selection's bounding rect, or the click point as a zero-area rect. */
 function nbPopupXY(r){
