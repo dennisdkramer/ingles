@@ -508,7 +508,7 @@ function openNbPopup(t,r,x,y){
   if(r){const rr=r.getBoundingClientRect();rl=rr.left;rt=rr.top;rw=rr.width;rb=rr.bottom;}
   else{rl=x-sx;rt=y-sy;rb=y-sy;}
   const isCenter=(rw<ow),anchorX=isCenter?ow/2:ow;
-  pop.style.transformOrigin=anchorX+"px 0px";
+  pop.style.transformOrigin=anchorX+"px 0px";pop.style.transform="scale("+(1/popScale())+")";
   let left=(isCenter)?(rl+rw/2-anchorX):(rl+rw-anchorX);
   let top=rb+10;
   pop.style.left=(left+sx)+"px";pop.style.top=(top+sy)+"px";
@@ -613,14 +613,13 @@ function nbDeleteItem(t,type){
 }
 function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("div");pop.className="pop";
  pop.style.left=x+"px";pop.style.top=y+"px";
- pop.style.transformOrigin="0 0";pop.style.transform="scale("+(1/popScale())+")";
  pop.innerHTML=html;document.body.appendChild(pop);return pop}
 /* page zoom: the popup counter-scales so its on-screen size stays constant while it still follows
    its anchor (a fixed document point). Handles both mobile pinch-zoom (visualViewport.scale) and
    desktop page zoom (Ctrl+/- changes devicePixelRatio). */
 let dprBase=1;try{dprBase=window.devicePixelRatio||1}catch(e){}
 function popScale(){return ((window.visualViewport&&visualViewport.scale)||1)*((window.devicePixelRatio||1)/(dprBase||1))}
-function popFitZoom(){if(pop)pop.style.transform="scale("+(1/popScale())+")"}
+function popFitZoom(){if(pop&&!pop.classList.contains("hlpalpop"))pop.style.transform="scale("+(1/popScale())+")"}
 if(window.visualViewport){visualViewport.addEventListener("resize",popFitZoom);visualViewport.addEventListener("scroll",popFitZoom)}
 addEventListener("resize",popFitZoom);
 /* popup placement: below the END (bottom-right) of the span, kept inside the viewport (10px from the

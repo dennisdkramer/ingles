@@ -35,9 +35,9 @@ mark.nb{background:transparent;cursor:pointer}
    saves therefore leave a paper gap between them without moving the text. */
 mark.nb.has-rec{background-repeat:no-repeat;background-position:2px 100%;
  background-image:linear-gradient(var(--blue),var(--blue));background-size:calc(100% - 4px) 2px}
-.pop{position:absolute;z-index:9;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:5px;width:300px;max-height:70vh;overflow:auto}
+.pop{position:absolute;z-index:9;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:5px;width:auto;max-height:70vh;overflow:auto}
 .pop button{padding:4px 7px;margin:0;font-size:12.5px;border-radius:8px;box-shadow:2px 2px 0 var(--tan);height:24px;white-space:nowrap;display:inline-flex;align-items:center;flex:0 0 auto}
-.poprow{display:flex;justify-content:flex-start;align-items:center;gap:2px;margin:1px 0}
+.poprow{display:flex;justify-content:flex-start;align-items:center;gap:4px;margin:2px 0}
 /* every note/recording popup button always EXISTS; the ones that do not apply yet are greyed out
    (owner spec 2026-10-12) instead of being removed from the row. `.locked` carries the same grey
    look WITHOUT the `disabled` attribute, for the presses that must still be heard: ⏺ Record as soon
