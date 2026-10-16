@@ -503,15 +503,18 @@ function openNbPopup(t,r,x,y){
     text, so two abutting saves can never share the boundary space */
  pendingRange=(target?nbAreaRange(target):null)||(r?r.cloneRange():null);
  openPop(anchor,x,y,nbPopHTML(anchor,!!pop&&!!pop.querySelector("#nt")));
- if(pop){const b=pop.getBoundingClientRect(),w=b.width,h=b.height,sx=window.scrollX||0,sy=window.scrollY||0;
+ if(pop){const b=pop.getBoundingClientRect(),w=b.width,h=b.height;
+  const vv=window.visualViewport||null,sx=window.scrollX||0,sy=window.scrollY||0;
+  const vw=vv?vv.width:innerWidth,vh=vv?vv.height:innerHeight;
+  const vL=sx+(vv?vv.offsetLeft:0),vT=sy+(vv?vv.offsetTop:0);
   let rl=0,rt=0,rw=1,rb=0;
   if(r){const rr=r.getBoundingClientRect();rl=rr.left;rt=rr.top;rw=rr.width;rb=rr.bottom;}
   else{rl=x-sx;rt=y-sy;rb=y-sy;}
   let left=(rw<w)?(rl+rw/2-w/2+sx):(rl+rw-w+sx);
   let top=rb+sy+10;
-  if(top+h>=sy+innerHeight)top=rt+sy-10-h;
-  if(left<=sx)left=sx+5;
-  if(left+w>=sx+innerWidth)left=sx+innerWidth-w-5;
+  if(top+h>=vT+vh)top=rt+sy-10-h;
+  if(left<=vL)left=vL+5;
+  if(left+w>=vL+vw)left=vL+vw-w-5;
   pop.style.left=left+"px";pop.style.top=top+"px";popXY={x:left,y:top};}
  nbWirePopup(anchor,pendingRange,popXY.x,popXY.y);
 }
@@ -616,7 +619,13 @@ function nbPopupXY(r){
  return {x:(r.right||(r.left||20)+1)+sx, y:(r.bottom||60)+sy};
 }
 document.addEventListener("mousedown",e=>{if(pop&&!pop.contains(e.target)){closePop();nbSel=null;try{getSelection().removeAllRanges()}catch(e){}}});
-document.addEventListener("touchstart",e=>{if(pop&&!pop.contains(e.target)){closePop();nbSel=null;try{getSelection().removeAllRanges()}catch(e){}}},{passive:true});
+/* mobile: a TAP outside the popup dismisses it, but a pan/pinch-zoom (which also starts with a
+   touchstart) must NOT dismiss the popup or clear the selection — only a touch that ends without
+   moving counts as a tap. */
+let tsEl=null,tsX=0,tsY=0,tsMoved=false;
+document.addEventListener("touchstart",e=>{const t=e.touches&&e.touches[0];tsX=t?t.clientX:0;tsY=t?t.clientY:0;tsEl=e.target;tsMoved=false;},{passive:true});
+document.addEventListener("touchmove",e=>{const t=e.touches&&e.touches[0];if(t){const dx=t.clientX-tsX,dy=t.clientY-tsY;if(dx*dx+dy*dy>64)tsMoved=true;}},{passive:true});
+document.addEventListener("touchend",e=>{if(!tsMoved&&pop&&tsEl&&!pop.contains(tsEl)){closePop();nbSel=null;try{getSelection().removeAllRanges()}catch(err){}}});
 /* ---- gesture gate (owner spec 2026-10-12): Hear/Record/Note and Highlight are BOTH decided
    strictly at mouse-release, never mid-drag. mouseIsDown blocks the debounced selectionchange
    path for the whole press; the moment the button is released this same function is called
