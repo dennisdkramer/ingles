@@ -327,11 +327,11 @@ function nbPopHTML(t,editing){
     refresh can keep targeting a stable node. */
  const noteHTML=nb!=null?'<div id="nbNote" title="nota salva" style="margin:2px 0 4px;white-space:pre-wrap;font-size:13px">'+nbEsc(nb)+'</div>':"";
  return '<div id="pTitle"></div>'+noteHTML+
-  '<span style="white-space:nowrap"><button id="pH" title="ouvir em voz alta">▶ Hear</button>'+
+  '<span class="poprow"><button id="pH" title="ouvir em voz alta">▶ Hear</button>'+
   '<button id="pP"'+playAttr+'><span class="lbl">▶ Play</span></button>'+
   '<button id="pR"'+(st.recs.length?' class="locked" aria-disabled="true" title="'+NB_REC_LOCKED+'"':' title="gravar"')+'><span class="lbl">⏺ Record</span></button>'+
-  '<button id="pA"'+audioAttr+'><span class="lbl">🔊 Delete</span></button></span><br>'+
-  '<span style="white-space:nowrap"><button id="pN">📝 Add/Edit Note</button>'+
+  '<button id="pA"'+audioAttr+'><span class="lbl">🔊 Delete</span></button></span>'+
+  '<span class="poprow"><button id="pN">📝 Add/Edit Note</button>'+
   '<button id="pS" title="salvar a nota"'+(editing?"":' disabled')+'>💾 Save</button>'+
   '<button id="pD" title="apagar somente a nota"'+(st.note?"":' disabled')+'>📝 Delete</button></span>';
 }
@@ -503,11 +503,15 @@ function openNbPopup(t,r,x,y){
     text, so two abutting saves can never share the boundary space */
  pendingRange=(target?nbAreaRange(target):null)||(r?r.cloneRange():null);
  openPop(anchor,x,y,nbPopHTML(anchor,!!pop&&!!pop.querySelector("#nt")));
- if(pop){const b=pop.getBoundingClientRect(),w=b.width,h=b.height;
-  let ax=x,at=y,ab=y;
-  if(r){const rr=r.getBoundingClientRect(),sx=window.scrollX||0,sy=window.scrollY||0;ax=rr.right+sx;at=rr.top+sy;ab=rr.bottom+sy;}
-  let left=ax-w;left=Math.max(8,Math.min(left,innerWidth-10-w));
-  let top=ab+8;if(top+h>(window.scrollY||0)+innerHeight)top=at-8-h;top=Math.max(8,top);
+ if(pop){const b=pop.getBoundingClientRect(),w=b.width,h=b.height,sx=window.scrollX||0,sy=window.scrollY||0;
+  let rl=0,rt=0,rw=1,rb=0;
+  if(r){const rr=r.getBoundingClientRect();rl=rr.left;rt=rr.top;rw=rr.width;rb=rr.bottom;}
+  else{rl=x-sx;rt=y-sy;rb=y-sy;}
+  let left=(rw<w)?(rl+rw/2-w/2+sx):(rl+rw-w+sx);
+  let top=rb+sy+10;
+  if(top+h>=sy+innerHeight)top=rt+sy-10-h;
+  if(left<=sx)left=sx+5;
+  if(left+w>=sx+innerWidth)left=sx+innerWidth-w-5;
   pop.style.left=left+"px";pop.style.top=top+"px";popXY={x:left,y:top};}
  nbWirePopup(anchor,pendingRange,popXY.x,popXY.y);
 }
@@ -603,7 +607,7 @@ function nbDeleteItem(t,type){
  rows.forEach(r=>send({action:"del",id:r.id}));
 }
 function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("div");pop.className="pop";
- pop.style.left=x+"px";pop.style.top=y+"px";pop.style.maxWidth="min(380px, calc(100vw - 16px))";
+ pop.style.left=x+"px";pop.style.top=y+"px";
  pop.innerHTML=html;document.body.appendChild(pop);return pop}
 /* popup placement: below the END (bottom-right) of the span, kept inside the viewport (10px from the
    right edge). The caller passes the selection's bounding rect, or the click point as a zero-area rect. */
