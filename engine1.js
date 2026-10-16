@@ -503,8 +503,13 @@ function openNbPopup(t,r,x,y){
     text, so two abutting saves can never share the boundary space */
  pendingRange=(target?nbAreaRange(target):null)||(r?r.cloneRange():null);
  openPop(anchor,x,y,nbPopHTML(anchor,!!pop&&!!pop.querySelector("#nt")));
- if(pop&&r){const b=pop.getBoundingClientRect();if(b.bottom>window.innerHeight){const rr=r.getBoundingClientRect();const ny=Math.max(8,rr.top+(window.scrollY||0)-8-b.height);pop.style.top=ny+"px";popXY.y=ny;}}
- nbWirePopup(anchor,pendingRange,x,y);
+ if(pop){const b=pop.getBoundingClientRect(),w=b.width,h=b.height;
+  let ax=x,at=y,ab=y;
+  if(r){const rr=r.getBoundingClientRect(),sx=window.scrollX||0,sy=window.scrollY||0;ax=rr.right+sx;at=rr.top+sy;ab=rr.bottom+sy;}
+  let left=ax-w;left=Math.max(8,Math.min(left,innerWidth-10-w));
+  let top=ab+8;if(top+h>(window.scrollY||0)+innerHeight)top=at-8-h;top=Math.max(8,top);
+  pop.style.left=left+"px";pop.style.top=top+"px";popXY={x:left,y:top};}
+ nbWirePopup(anchor,pendingRange,popXY.x,popXY.y);
 }
 /* wrap the phrase into mark.nb and paint the recording flag — this is the SAVE side for a clip
    (called from rec() once the bytes are ready, and by engine2's renderLayer when a saved
@@ -604,9 +609,7 @@ function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("
    right edge). The caller passes the selection's bounding rect, or the click point as a zero-area rect. */
 function nbPopupXY(r){
  const sx=window.scrollX||0,sy=window.scrollY||0;
- const x=Math.max(8,Math.min(r.right||(r.left||20)+1,innerWidth-390))+sx;
- const y=(r.bottom||60)+sy+8;
- return {x,y};
+ return {x:(r.right||(r.left||20)+1)+sx, y:(r.bottom||60)+sy};
 }
 document.addEventListener("mousedown",e=>{if(pop&&!pop.contains(e.target)){closePop();nbSel=null;try{getSelection().removeAllRanges()}catch(e){}}});
 document.addEventListener("touchstart",e=>{if(pop&&!pop.contains(e.target)){closePop();nbSel=null;try{getSelection().removeAllRanges()}catch(e){}}},{passive:true});
