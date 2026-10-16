@@ -479,6 +479,7 @@ function refreshNbPopup(t,x,y,editing){
     called from still holds #nt. Omitted → keep the current state (any future caller). */
  if(editing===undefined)editing=!!ta;
  openPop(t,x,y,nbPopHTML(t,editing)+(editing?'<textarea id="nt" rows="3" placeholder="write a note…">'+nbEsc(cur!=null?cur:"")+'</textarea>':''));
+ applyPopupZoom();
  nbWirePopup(t,null,x,y);
 }
 /* open the seven-button popup for an anchor — and, when it came from a SELECTION (r), resolve the
@@ -503,21 +504,7 @@ function openNbPopup(t,r,x,y){
     text, so two abutting saves can never share the boundary space */
  pendingRange=(target?nbAreaRange(target):null)||(r?r.cloneRange():null);
  openPop(anchor,x,y,nbPopHTML(anchor,!!pop&&!!pop.querySelector("#nt")));
- if(pop){const ow=pop.offsetWidth,oh=pop.offsetHeight,sx=window.scrollX||0,sy=window.scrollY||0;
-  let rl=0,rt=0,rw=1,rb=0;
-  if(r){const rr=r.getBoundingClientRect();rl=rr.left;rt=rr.top;rw=rr.width;rb=rr.bottom;}
-  else{rl=x-sx;rt=y-sy;rb=y-sy;}
-  const isCenter=(rw<ow),anchorX=isCenter?ow/2:ow;
-  pop.style.transformOrigin=anchorX+"px 0px";pop.style.transform="scale("+(1/popScale())+")";
-  let left=(isCenter)?(rl+rw/2-anchorX):(rl+rw-anchorX);
-  let top=rb+10;
-  pop.style.left=(left+sx)+"px";pop.style.top=(top+sy)+"px";
-  const vv=window.visualViewport||null,vl=vv?vv.offsetLeft:0,vt=vv?vv.offsetTop:0,vw=vv?vv.width:innerWidth,vh=vv?vv.height:innerHeight;
-  let tb=pop.getBoundingClientRect();
-  if(tb.bottom>=vt+vh){top=rt-10-tb.height;pop.style.top=(top+sy)+"px";tb=pop.getBoundingClientRect();}
-  if(tb.left<=vl){left+=(vl-tb.left)+5;pop.style.left=(left+sx)+"px";}
-  else if(tb.right>=vl+vw){left-=(tb.right-(vl+vw))+5;pop.style.left=(left+sx)+"px";}
-  popXY={x:left+sx,y:top+sy};}
+ nbPlacePopup(r,x,y);
  nbWirePopup(anchor,pendingRange,popXY.x,popXY.y);
 }
 /* wrap the phrase into mark.nb and paint the recording flag — this is the SAVE side for a clip
@@ -614,12 +601,38 @@ function nbDeleteItem(t,type){
 function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("div");pop.className="pop";
  pop.style.left=x+"px";pop.style.top=y+"px";
  pop.innerHTML=html;document.body.appendChild(pop);return pop}
-/* page zoom: the popup counter-scales so its on-screen size stays constant while it still follows
-   its anchor (a fixed document point). Handles both mobile pinch-zoom (visualViewport.scale) and
-   desktop page zoom (Ctrl+/- changes devicePixelRatio). */
+/* page zoom: keep the note/record popup a constant on-screen size (CSS zoom) while it keeps following
+   its anchor (re-placed on every zoom change). CSS zoom re-flows (no sub-pixel blur); the highlight
+   palette is never touched. */
+let nbPlaceR=null,nbPlaceX=0,nbPlaceY=0;
 let dprBase=1;try{dprBase=window.devicePixelRatio||1}catch(e){}
 function popScale(){return ((window.visualViewport&&visualViewport.scale)||1)*((window.devicePixelRatio||1)/(dprBase||1))}
-function popFitZoom(){if(pop&&!pop.classList.contains("hlpalpop"))pop.style.transform="scale("+(1/popScale())+")"}
+function nbPlacePopup(r,x,y){
+ if(r)nbPlaceR=r;
+ if(x!==undefined){nbPlaceX=x;nbPlaceY=y;}
+ if(!pop)return;
+ const S=popScale(),sx=window.scrollX||0,sy=window.scrollY||0;
+ const prev=pop.style.zoom||"";pop.style.zoom="";
+ const ow=pop.offsetWidth,oh=pop.offsetHeight;
+ pop.style.zoom=prev;
+ let rl=0,rt=0,rw=1,rb=0,endX=0;
+ if(nbPlaceR){const rr=nbPlaceR.getBoundingClientRect();rl=rr.left;rt=rr.top;rw=rr.width;rb=rr.bottom;
+  try{const er=nbPlaceR.cloneRange();er.collapse(false);endX=er.getBoundingClientRect().left;}catch(e){endX=rr.right;}}
+ else{rl=nbPlaceX-sx;rt=nbPlaceY-sy;rb=nbPlaceY-sy;endX=nbPlaceX-sx;}
+ const isCenter=(rw<ow);
+ const leftV=(isCenter)?(rl+rw/2-ow/(2*S)):(endX-ow/S);
+ const topV=rb+10/S;
+ pop.style.left=(leftV+sx)+"px";pop.style.top=(topV+sy)+"px";
+ pop.style.zoom=String(1/S);
+ const vv=window.visualViewport||null,vl=vv?vv.offsetLeft:0,vt=vv?vv.offsetTop:0,vw=vv?vv.width:innerWidth,vh=vv?vv.height:innerHeight;
+ let tb=pop.getBoundingClientRect();
+ if(tb.bottom>=vt+vh){pop.style.top=(rt-10/S-tb.height+sy)+"px";tb=pop.getBoundingClientRect();}
+ if(tb.left<=vl){pop.style.left=(parseFloat(pop.style.left)+(vl-tb.left)+5)+"px";}
+ else if(tb.right>=vl+vw){pop.style.left=(parseFloat(pop.style.left)-(tb.right-(vl+vw))-5)+"px";}
+ popXY={x:parseFloat(pop.style.left),y:parseFloat(pop.style.top)};
+}
+function applyPopupZoom(){if(pop&&!pop.classList.contains("hlpalpop"))pop.style.zoom=String(1/popScale())}
+function popFitZoom(){if(pop&&!pop.classList.contains("hlpalpop"))nbPlacePopup()}
 if(window.visualViewport){visualViewport.addEventListener("resize",popFitZoom);visualViewport.addEventListener("scroll",popFitZoom)}
 addEventListener("resize",popFitZoom);
 /* popup placement: below the END (bottom-right) of the span, kept inside the viewport (10px from the
