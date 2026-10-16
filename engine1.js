@@ -615,11 +615,14 @@ function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("
  pop.style.left=x+"px";pop.style.top=y+"px";
  pop.style.transformOrigin="0 0";pop.style.transform="scale("+(1/popScale())+")";
  pop.innerHTML=html;document.body.appendChild(pop);return pop}
-/* page zoom (visual viewport scale): the popup counter-scales so its on-screen size stays constant
-   while it still follows its anchor (a fixed document point). */
-function popScale(){return (window.visualViewport&&visualViewport.scale)?visualViewport.scale:1}
+/* page zoom: the popup counter-scales so its on-screen size stays constant while it still follows
+   its anchor (a fixed document point). Handles both mobile pinch-zoom (visualViewport.scale) and
+   desktop page zoom (Ctrl+/- changes devicePixelRatio). */
+let dprBase=1;try{dprBase=window.devicePixelRatio||1}catch(e){}
+function popScale(){return ((window.visualViewport&&visualViewport.scale)||1)*((window.devicePixelRatio||1)/(dprBase||1))}
 function popFitZoom(){if(pop)pop.style.transform="scale("+(1/popScale())+")"}
 if(window.visualViewport){visualViewport.addEventListener("resize",popFitZoom);visualViewport.addEventListener("scroll",popFitZoom)}
+addEventListener("resize",popFitZoom);
 /* popup placement: below the END (bottom-right) of the span, kept inside the viewport (10px from the
    right edge). The caller passes the selection's bounding rect, or the click point as a zero-area rect. */
 function nbPopupXY(r){
