@@ -503,6 +503,7 @@ function openNbPopup(t,r,x,y){
     text, so two abutting saves can never share the boundary space */
  pendingRange=(target?nbAreaRange(target):null)||(r?r.cloneRange():null);
  openPop(anchor,x,y,nbPopHTML(anchor,!!pop&&!!pop.querySelector("#nt")));
+ if(pop&&r){const b=pop.getBoundingClientRect();if(b.bottom>window.innerHeight){const rr=r.getBoundingClientRect();const ny=Math.max(8,rr.top+(window.scrollY||0)-8-b.height);pop.style.top=ny+"px";popXY.y=ny;}}
  nbWirePopup(anchor,pendingRange,x,y);
 }
 /* wrap the phrase into mark.nb and paint the recording flag — this is the SAVE side for a clip
@@ -599,6 +600,14 @@ function nbDeleteItem(t,type){
 function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("div");pop.className="pop";
  pop.style.left=x+"px";pop.style.top=y+"px";pop.style.maxWidth="min(380px, calc(100vw - 16px))";
  pop.innerHTML=html;document.body.appendChild(pop);return pop}
+/* popup placement: below the END (bottom-right) of the span, kept inside the viewport (10px from the
+   right edge). The caller passes the selection's bounding rect, or the click point as a zero-area rect. */
+function nbPopupXY(r){
+ const sx=window.scrollX||0,sy=window.scrollY||0;
+ const x=Math.max(8,Math.min(r.right||(r.left||20)+1,innerWidth-390))+sx;
+ const y=(r.bottom||60)+sy+8;
+ return {x,y};
+}
 document.addEventListener("mousedown",e=>{if(pop&&!pop.contains(e.target)){closePop();nbSel=null;try{getSelection().removeAllRanges()}catch(e){}}});
 document.addEventListener("touchstart",e=>{if(pop&&!pop.contains(e.target)){closePop();nbSel=null;try{getSelection().removeAllRanges()}catch(e){}}},{passive:true});
 /* ---- gesture gate (owner spec 2026-10-12): Hear/Record/Note and Highlight are BOTH decided
@@ -646,9 +655,8 @@ function trySelPopup(){
  const dom=nbSpanText(r);
  if(dom){const dt=dom.trim();if(dt.length>=3&&dt.length<=200)t=dt}
  pendingRange=r.cloneRange();
- const rect=r.getBoundingClientRect();
- const sx=window.scrollX||0,sy=window.scrollY||0;const x=Math.max(8,Math.min(rect.left||20,innerWidth-380))+sx,y=(rect.bottom||60)+sy+8;
- openNbPopup(t,pendingRange,x,y);
+ const p=nbPopupXY(r.getBoundingClientRect());
+ openNbPopup(t,pendingRange,p.x,p.y);
  lastSelText=t;
 }
 let selTimer=null;
@@ -667,12 +675,12 @@ document.addEventListener("click",e=>{const nb=e.target.closest("mark.nb");
  }
  if(lastSelText)return; /* the click at the tail of a selection drag must not re-open the popup for a mark/note */
  if(nb){e.stopPropagation();
-  if(window.showAnchor)showAnchor(nb.dataset.a,Math.max(8,Math.min(e.clientX,innerWidth-380)),e.clientY+8);return}
+  if(window.showAnchor){const p=nbPopupXY({left:e.clientX,right:e.clientX,top:e.clientY,bottom:e.clientY});showAnchor(nb.dataset.a,p.x,p.y)}return}
  /* a note is painted on its own pointer-events:none layer, so a click on its text lands below it:
     hit-test the note layer (like a highlight) and open the same popup for the note's anchor */
  const nr=ntAtPoint(e.clientX,e.clientY);
  if(nr){e.stopPropagation();
-  if(window.showAnchor)showAnchor(nr.anchor,Math.max(8,Math.min(e.clientX,innerWidth-380))+(window.scrollX||0),e.clientY+(window.scrollY||0)+8)}});
+  if(window.showAnchor){const p=nbPopupXY({left:e.clientX,right:e.clientX,top:e.clientY,bottom:e.clientY});showAnchor(nr.anchor,p.x,p.y)}}});
 /* ---- the mark SET of an anchor: mark.nb[data-a=<the anchor text>] -------------------------------
    An anchor is usually painted by ONE mark element, but a note/recording painted ACROSS an older
    mark's edge SPLITS that older mark into pieces that BOTH keep its data-a and its flags. The
@@ -898,11 +906,14 @@ function hlAtPoint(x,y){const sx=window.scrollX||0,sy=window.scrollY||0;
 /* re-measure when the page re-lays-out: resize/zoom, web fonts, <details>, any mouseup */
 let hlReflowTimer=0;
 function hlQueueReflow(){clearTimeout(hlReflowTimer);hlReflowTimer=setTimeout(hlReflow,80)}
+/* re-measure AFTER the layout settles (double rAF): the <details> toggle event and fonts.ready both
+   fire before the browser re-lays-out / re-paints, so a plain timer could read the old geometry. */
+function hlReflowAfterLayout(){requestAnimationFrame(()=>requestAnimationFrame(hlReflow))}
 addEventListener("resize",hlQueueReflow);
 addEventListener("load",hlQueueReflow);
-document.addEventListener("toggle",hlQueueReflow,true);
+document.addEventListener("toggle",hlReflowAfterLayout,true);
 document.addEventListener("mouseup",()=>{if(hlList.length)hlQueueReflow()},true);
-if(document.fonts&&document.fonts.ready)try{document.fonts.ready.then(hlQueueReflow)}catch(e){}
+if(document.fonts&&document.fonts.ready)try{document.fonts.ready.then(hlReflowAfterLayout)}catch(e){}
 function hlSetColor(rec,c){if(!rec)return null;rec.color=hlColorOk(c);hlReflow();return rec}
 function hlDrop(id){hlList=hlList.filter(r=>r.id!==id);hlReflow()}
 function hlDelete(rec){if(!rec)return;
@@ -976,11 +987,12 @@ function ntAtPoint(x,y){const sx=window.scrollX||0,sy=window.scrollY||0;
  return ntList.find(rec=>(rec.rects||[]).some(r=>x+sx>=r.left&&x+sx<=r.left+r.width&&y+sy>=r.top&&y+sy<=r.top+r.height))||null}
 let ntReflowTimer=0;
 function ntQueueReflow(){clearTimeout(ntReflowTimer);ntReflowTimer=setTimeout(ntReflow,80)}
+function ntReflowAfterLayout(){requestAnimationFrame(()=>requestAnimationFrame(ntReflow))}
 addEventListener("resize",ntQueueReflow);
 addEventListener("load",ntQueueReflow);
-document.addEventListener("toggle",ntQueueReflow,true);
+document.addEventListener("toggle",ntReflowAfterLayout,true);
 document.addEventListener("mouseup",()=>{if(ntList.length)ntQueueReflow()},true);
-if(document.fonts&&document.fonts.ready)try{document.fonts.ready.then(ntQueueReflow)}catch(e){}
+if(document.fonts&&document.fonts.ready)try{document.fonts.ready.then(ntReflowAfterLayout)}catch(e){}
 /* hover cursor for notes: the note wash lives on a pointer-events:none layer, so it can't carry a CSS
    cursor the way the recording underline does (mark.nb{cursor:pointer}). Hit-test the note rects on
    mousemove (the same ntAtPoint the click handler uses) and show the hand pointer over a note. */
