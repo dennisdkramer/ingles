@@ -1143,8 +1143,11 @@ function hlPalette(rec){
  const rs=rec.rects||[];
  const last=rs.length?rs.reduce((a,b)=>((b.top>a.top||(b.top===a.top&&b.left>a.left))?b:a)):null;
  const sx=window.scrollX||0,sy=window.scrollY||0,vw=window.innerWidth||800;
- const PAL_W=88;const x=Math.max(8,Math.min(last?Math.round(last.left+last.width-PAL_W):24,vw-PAL_W-8+sx));
- const y=Math.max(4,Math.round(last?last.top:40)-30);
+ const PAL_W=62,hlW=last?last.width:0;
+ const cx=hlW<PAL_W;
+ const rawX=last?(cx?(last.left+hlW/2-PAL_W/2):(last.left+hlW-PAL_W)):24;
+ const x=Math.max(8,Math.min(Math.round(rawX),vw-PAL_W-8+sx));
+ const y=Math.max(4,Math.round(last?last.top:40)-35);
  openPop("",x,y,'<span class="hlpal">'+HL_COLORNAMES.map(c=>'<button type="button" data-c="'+c+'" title="'+c+'"></button>').join("")+"</span>");
  if(!pop)return;
  pop.classList.add("hlpalpop");
