@@ -611,27 +611,26 @@ function nbPlacePopup(r,x,y){
  if(r)nbPlaceR=r;
  if(x!==undefined){nbPlaceX=x;nbPlaceY=y;}
  if(!pop)return;
- const S=popScale(),sx=window.scrollX||0,sy=window.scrollY||0;
- const prev=pop.style.zoom||"";pop.style.zoom="";
+ const sx=window.scrollX||0,sy=window.scrollY||0;
  const ow=pop.offsetWidth,oh=pop.offsetHeight;
- pop.style.zoom=prev;
  let rl=0,rt=0,rw=1,rb=0,endX=0;
  if(nbPlaceR){const rr=nbPlaceR.getBoundingClientRect();rl=rr.left;rt=rr.top;rw=rr.width;rb=rr.bottom;
   try{const er=nbPlaceR.cloneRange();er.collapse(false);endX=er.getBoundingClientRect().left;}catch(e){endX=rr.right;}}
  else{rl=nbPlaceX-sx;rt=nbPlaceY-sy;rb=nbPlaceY-sy;endX=nbPlaceX-sx;}
- const isCenter=(rw<ow);
- const leftV=(isCenter)?(rl+rw/2-ow/(2*S)):(endX-ow/S);
- const topV=rb+10/S;
+ const isCenter=(rw<ow),anchorX=isCenter?ow/2:ow;
+ const leftV=(isCenter)?(rl+rw/2-anchorX):(endX-anchorX);
+ const topV=rb+10;
+ pop.style.transformOrigin=anchorX+"px 0px";
+ pop.style.transform="scale("+(1/popScale())+")";
  pop.style.left=(leftV+sx)+"px";pop.style.top=(topV+sy)+"px";
- pop.style.zoom=String(1/S);
  const vv=window.visualViewport||null,vl=vv?vv.offsetLeft:0,vt=vv?vv.offsetTop:0,vw=vv?vv.width:innerWidth,vh=vv?vv.height:innerHeight;
  let tb=pop.getBoundingClientRect();
- if(tb.bottom>=vt+vh){pop.style.top=(rt-10/S-tb.height+sy)+"px";tb=pop.getBoundingClientRect();}
+ if(tb.bottom>=vt+vh){pop.style.top=(rt-10-tb.height+sy)+"px";tb=pop.getBoundingClientRect();}
  if(tb.left<=vl){pop.style.left=(parseFloat(pop.style.left)+(vl-tb.left)+5)+"px";}
  else if(tb.right>=vl+vw){pop.style.left=(parseFloat(pop.style.left)-(tb.right-(vl+vw))-5)+"px";}
  popXY={x:parseFloat(pop.style.left),y:parseFloat(pop.style.top)};
 }
-function applyPopupZoom(){if(pop&&!pop.classList.contains("hlpalpop"))pop.style.zoom=String(1/popScale())}
+function applyPopupZoom(){if(pop&&!pop.classList.contains("hlpalpop"))pop.style.transform="scale("+(1/popScale())+")"}
 function popFitZoom(){if(pop&&!pop.classList.contains("hlpalpop"))nbPlacePopup()}
 if(window.visualViewport){visualViewport.addEventListener("resize",popFitZoom);visualViewport.addEventListener("scroll",popFitZoom)}
 addEventListener("resize",popFitZoom);
@@ -1144,7 +1143,7 @@ function hlPalette(rec){
  const rs=rec.rects||[];
  const last=rs.length?rs.reduce((a,b)=>((b.top>a.top||(b.top===a.top&&b.left>a.left))?b:a)):null;
  const sx=window.scrollX||0,sy=window.scrollY||0,vw=window.innerWidth||800;
- const x=Math.max(8,Math.min(last?Math.round(last.left+last.width):24,vw-150+sx));
+ const PAL_W=88;const x=Math.max(8,Math.min(last?Math.round(last.left+last.width-PAL_W):24,vw-PAL_W-8+sx));
  const y=Math.max(4,Math.round(last?last.top:40)-30);
  openPop("",x,y,'<span class="hlpal">'+HL_COLORNAMES.map(c=>'<button type="button" data-c="'+c+'" title="'+c+'"></button>').join("")+"</span>");
  if(!pop)return;
