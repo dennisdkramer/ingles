@@ -91,7 +91,7 @@ mark.nb.has-rec{background-repeat:no-repeat;background-position:2px 100%;
 input.gap{border:0;border-bottom:2px solid var(--tan);background:#fff8ea;font:inherit;width:9em}
 fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8px 12px}
 label{margin-right:10px;cursor:pointer}
-#feed{font-size:14px}#feed div{border-left:3px solid var(--tan);padding:2px 8px;margin:4px 0;background:#fff8}
+#feed{display:block;width:100%;min-height:9em;font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:12px 14px;box-shadow:5px 5px 0 var(--tan);resize:vertical}
 footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#8a8072}
 #printRoot{display:none}
 /* ===== lesson content template (2026-10 rework): charts, exercise blocks, compact audio chips ===== */

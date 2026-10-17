@@ -8,7 +8,7 @@ function wireListen(){document.querySelectorAll(".listen").forEach(b=>{b.onclick
 wireListen();
 /* ---- content edit mode (teacher): a separate editable copy; live page + marks stay untouched ---- */
 const contentId=()=>"content_"+TRACK+"_"+L;
-let savedLive="",editTimer=null;
+let savedLive="",editTimer=null,nbkVal="";
 function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|px/.test(st))s.removeAttribute("style")});return "<!doctype html>"+cl.outerHTML;}
 function saveContent(){if(!document.querySelector(".content-area"))return;const o={action:"set",id:contentId(),type:"content",anchor:"",data:fullPageHTML(),email:gate.email,lesson:L,author:"prof",track:TRACK};notePending(o);outboxPush(o);scheduleFlush();}
 function toggleEditMode(){
@@ -18,6 +18,7 @@ function toggleEditMode(){
  const ca=document.querySelector(".content-area"),eb=document.getElementById("editpage");
  if(editing){
   savedLive=ca.innerHTML;
+  nbkVal=(document.getElementById("feed")||{}).value||"";
   const cov=layer.find(r=>r.type==="content"&&r.data);
   if(cov)ca.innerHTML=cov.data;
   else document.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});
@@ -31,10 +32,16 @@ function toggleEditMode(){
   if(eb)eb.textContent="✏️ Edit";
   saveContent();
   ca.innerHTML=savedLive;
+  const fdn=document.getElementById("feed");if(fdn)fdn.value=nbkVal;
   toast("Saved");
  }
 }
 document.addEventListener("input",e=>{if(!editing)return;if(e.target&&e.target.closest&&e.target.closest(".content-area")){clearTimeout(editTimer);editTimer=setTimeout(saveContent,2000)}});
+/* shared notebook: a plain textarea, one per student+lesson, auto-saved (debounced) */
+const nbId=()=>"notebook_"+STUDENT+"_"+L;
+let nbTimer=null;
+function nbSave(){const fd=document.getElementById("feed");if(!fd)return;send({action:"set",id:nbId(),type:"notebook",anchor:"",data:fd.value,track:TRACK});}
+document.addEventListener("input",e=>{if(e.target&&e.target.id==="feed"){clearTimeout(nbTimer);nbTimer=setTimeout(nbSave,1500);}});
 (async()=>{try{
  let extra="";
  if(gate.teacher){
@@ -50,7 +57,6 @@ document.addEventListener("input",e=>{if(!editing)return;if(e.target&&e.target.c
   layer=[];hlList=[];ntList=[];sig="";wipeGuard=Date.now()+12000;
   document.querySelectorAll("mark.nb").forEach(m=>m.remove());
   hlReflow();ntReflow();
-  const f=document.getElementById("feed");if(f)f.innerHTML='<div class="dim">Nada ainda — destaque um texto e anote ou grave algo.</div>';
  };
   const ppb=document.createElement("button");ppb.type="button";ppb.id="printpage";ppb.textContent="🖨 Print";
   ppb.onclick=()=>{if(typeof printLesson==="function")printLesson();else toast("Print unavailable.")};
@@ -103,7 +109,6 @@ function renderLayer(){
     the "appearing and disappearing" the owner reported. Same id+action grace window as everything
     else — the rule is general, not special-cased. */
  document.querySelectorAll("mark.nb").forEach(m=>{if(!nbAnyPending(m.dataset.a))m.classList.remove("has-rec")});
- feed.innerHTML="";
  /* highlight layer (#hlLayer): the records are the only truth here, so a highlight whose server
     row is gone disappears and the ones still stored are rebuilt from their row (anchor + offsets,
     or the anchor text alone for old rows). The text DOM is never touched: highlights are painted
@@ -129,8 +134,6 @@ function renderLayer(){
   if(it.type==="note"&&it.anchor){
    if(!pendingFor(it.id))ntRestore(it);
   }
-  if(it.type==="note"&&!it.anchor){
-   feed.innerHTML+="<div>📝 traduções · <i>"+it.author+"</i></div>";}
  });
  /* a highlight whose server row no longer exists leaves the layer (the server is the truth);
     one with a local action still pending (add/set/del) stays exactly as the UI left it until
@@ -141,7 +144,11 @@ function renderLayer(){
  const ntIds=new Set(layer.filter(it=>it.type==="note"&&it.anchor).map(it=>it.id));
  ntList=ntList.filter(rec=>ntIds.has(rec.id)||pendingFor(rec.id));
  ntReflow();
- if(!feed.innerHTML)feed.innerHTML='<div class="dim">Nada ainda — destaque um texto e anote ou grave algo.</div>';
+ const fdx=document.getElementById("feed");
+ if(fdx&&document.activeElement!==fdx&&!pendingFor(nbId())){
+   const nbk=layer.find(r=>r.type==="notebook");
+   fdx.value=nbk?(nbk.data||""):"";
+ }
 }
 
 /* fallback: nenhum engine define window.showAnchor;
