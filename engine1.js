@@ -504,7 +504,7 @@ function openNbPopup(t,r,x,y){
     text, so two abutting saves can never share the boundary space */
  pendingRange=(target?nbAreaRange(target):null)||(r?r.cloneRange():null);
  openPop(anchor,x,y,nbPopHTML(anchor,!!pop&&!!pop.querySelector("#nt")));
- nbPlacePopup(r,x,y);
+ nbPlacePopup(r,x,y,true);
  nbWirePopup(anchor,pendingRange,popXY.x,popXY.y);
 }
 /* wrap the phrase into mark.nb and paint the recording flag — this is the SAVE side for a clip
@@ -607,7 +607,7 @@ function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("
 let nbPlaceR=null,nbPlaceX=0,nbPlaceY=0;
 let dprBase=1;try{dprBase=window.devicePixelRatio||1}catch(e){}
 function popScale(){return ((window.visualViewport&&visualViewport.scale)||1)*((window.devicePixelRatio||1)/(dprBase||1))}
-function nbPlacePopup(r,x,y){
+function nbPlacePopup(r,x,y,fit){
  if(r)nbPlaceR=r;
  if(x!==undefined){nbPlaceX=x;nbPlaceY=y;}
  if(!pop)return;
@@ -623,11 +623,11 @@ function nbPlacePopup(r,x,y){
  pop.style.transformOrigin=anchorX+"px 0px";
  pop.style.transform="scale("+(1/popScale())+")";
  pop.style.left=(leftV+sx)+"px";pop.style.top=(topV+sy)+"px";
- const vv=window.visualViewport||null,vl=vv?vv.offsetLeft:0,vt=vv?vv.offsetTop:0,vw=vv?vv.width:innerWidth,vh=vv?vv.height:innerHeight;
- let tb=pop.getBoundingClientRect();
- if(tb.bottom>=vt+vh){pop.style.top=(rt-10-tb.height+sy)+"px";tb=pop.getBoundingClientRect();}
- if(tb.left<=vl){pop.style.left=(parseFloat(pop.style.left)+(vl-tb.left)+5)+"px";}
- else if(tb.right>=vl+vw){pop.style.left=(parseFloat(pop.style.left)-(tb.right-(vl+vw))-5)+"px";}
+ if(fit){const vv=window.visualViewport||null,vl=vv?vv.offsetLeft:0,vt=vv?vv.offsetTop:0,vw=vv?vv.width:innerWidth,vh=vv?vv.height:innerHeight;
+  let tb=pop.getBoundingClientRect();
+  if(tb.bottom>=vt+vh){pop.style.top=(rt-10-tb.height+sy)+"px";tb=pop.getBoundingClientRect();}
+  if(tb.left<=vl){pop.style.left=(parseFloat(pop.style.left)+(vl-tb.left)+5)+"px";}
+  else if(tb.right>=vl+vw){pop.style.left=(parseFloat(pop.style.left)-(tb.right-(vl+vw))-5)+"px";}}
  popXY={x:parseFloat(pop.style.left),y:parseFloat(pop.style.top)};
 }
 function applyPopupZoom(){if(pop&&!pop.classList.contains("hlpalpop"))pop.style.transform="scale("+(1/popScale())+")"}
