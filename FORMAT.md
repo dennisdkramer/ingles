@@ -19,6 +19,7 @@ _(none queued.)_
 - Caveat 700 → .script (handwritten accents, rotated -2deg)
 - Public Sans 400/600/700 → body, base 17px/1.6
 - All font sizes are fixed constants (no viewport-relative sizing): h1 38px, .script 38px, body 17px — so resizing the viewport never changes text size and print output is identical on any device.
+- The lesson title (h1) is centered, and is written short enough to sit on ONE line at the fixed 38px size inside the 1200px content area — title-length guidance lives in CONTENT.md. Sizes stay fixed constants (never dynamic/variable to force a fit).
 
 ## Layout
 - header.brand (English text, centered logo 120px, rose drop-shadow) → #controlbar .control-bar (the "control bar": account/session info + tools, English) → main#page → .page-container (PAGE AREA) → .content-area (CONTENT AREA)

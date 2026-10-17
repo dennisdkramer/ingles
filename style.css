@@ -6,6 +6,7 @@ header.brand{width:1400px;margin-left:15px;text-align:center;padding:20px 14px 0
 header.brand img{width:120px;filter:drop-shadow(3px 4px 0 var(--rose))}
 .logoFallback{font-size:52px}h1{font-family:'Playfair Display',serif;letter-spacing:.14em;font-size:38px;margin:8px 0 0}
 h1 span{display:block;font-size:.42em;letter-spacing:.5em}
+.content-area h1{text-align:center}
 .script{font-family:Caveat,cursive;font-size:38px;margin:2px 0 0;transform:rotate(-2deg)}
 main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
 /* .page-container = PAGE AREA: FIXED 1400px wide (no max-width — it never shrinks with the viewport),

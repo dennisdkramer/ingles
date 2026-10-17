@@ -18,4 +18,6 @@ _(Batches queued for this category, newest first. Cleared once done AND committe
 - **Explanatory content (everything before the quiz)** is included **as appropriate** — only as much as is necessary to confirm the student understands the primary idea of the lesson. No fixed section count and no fixed length per section.
 - **Exercise shapes** (fill-in blanks, multiple-choice, translation boxes, recording prompts, dialogues, charts…) are each used **as many times as appropriate** — never exactly one per page unless the lesson genuinely needs only one. There is no one-translation-box or one-recording-prompt rule.
 - **The quiz** is sized so it **ideally takes about 20 minutes** to complete, but the priority for quantity is **"as appropriate"** — enough to fully test the student's understanding of the explanatory content, no more and no less.
+- **The lesson title (h1)** is centered and kept to roughly one short line — ≈ 50 characters or fewer at the fixed 38px heading size inside the 1200px content area (shorter when uppercase-heavy).
+
 
