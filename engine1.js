@@ -82,7 +82,7 @@ function send(o){
 /* on load: retry anything a previous session left unconfirmed */
 outboxLoad();
 if(outbox.length)scheduleFlush();
-let pop=null,pendingRange=null,lastSelText="",nbSel=null;
+let pop=null,pendingRange=null,lastSelText="",nbSel=null,recStop=null;
 /* nbSel = the SELECTION the open popup came from (openNbPopup): {area, note, expand}. The owner's
    overlap rules read it — the recording(s)/note the gesture refers to (nbPopState), the note the selection refers to
    (nbPickNote) and the 💾 Save expansion (nbExpandPlan). It must OUTLIVE a re-render of the SAME
@@ -380,7 +380,7 @@ function nbWirePopup(t,r,x,y){
     disabled LOOK but no `disabled` attribute, which is the only way a press can still be heard. It is
     locked as soon as ANY recording is involved (nbPopState.recs), so the only
     way to change a clip is to delete it first (NB_REC_LOCKED, owner spec 2026-10-12 #2). */
- if(R)R.onclick=()=>{if(R.classList.contains("locked")){toast(NB_REC_LOCKED);return}rec(t,R)};
+ if(R)R.onclick=()=>{if(R.classList.contains("locked")){toast(NB_REC_LOCKED);return}if(pop&&pop.dataset.recording){if(recStop){recStop();recStop=null}return}rec(t,R)};
  const N=pop.querySelector("#pN");
  if(N)N.onclick=()=>{
   const ta=pop.querySelector("#nt"),cur=ta?ta.value:null;
@@ -642,7 +642,7 @@ function nbPopupXY(r){
  const sx=window.scrollX||0,sy=window.scrollY||0;
  return {x:(r.right||(r.left||20)+1)+sx, y:(r.bottom||60)+sy};
 }
-document.addEventListener("mousedown",e=>{if(pop&&!pop.contains(e.target)){closePop();nbSel=null;try{getSelection().removeAllRanges()}catch(e){}}});
+document.addEventListener("mousedown",e=>{if(pop&&pop.contains(e.target)){if(!(e.target.closest&&e.target.closest("textarea,input,select")))e.preventDefault();return}closePop();nbSel=null;try{getSelection().removeAllRanges()}catch(e){}});
 /* mobile: a TAP outside the popup dismisses it, but a pan/pinch-zoom (which also starts with a
    touchstart) must NOT dismiss the popup or clear the selection — only a touch that ends without
    moving counts as a tap. */
@@ -1215,5 +1215,17 @@ async function rec(t,rb){
    if(everLoud&&Date.now()-lastLoud>2000)return finish();}
    tick(Math.max(0,Math.ceil((REC_MAX-(Date.now()-t0))/1000)));
    if(Date.now()-t0>REC_MAX)return finish();
- },100);}
+ },100);
+ recStop=()=>{
+  if(done)return;
+  done=true;
+  if(sil)clearInterval(sil);
+  try{mr.ondataavailable=null;mr.onstop=null;mr.stop()}catch(e){}
+  ch.length=0;
+  try{stream.getTracks().forEach(x=>x.stop())}catch(e){}
+  try{if(ac)ac.close()}catch(e){}
+  try{ind.remove()}catch(e){}
+  press(false);
+  if(pop)delete pop.dataset.recording;
+ };}
 window.__A=true;

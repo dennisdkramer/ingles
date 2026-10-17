@@ -41,7 +41,85 @@ document.addEventListener("input",e=>{if(!editing)return;if(e.target&&e.target.c
 const nbId=()=>"notebook_"+STUDENT+"_"+L;
 let nbTimer=null;
 function nbSave(){const fd=document.getElementById("feed");if(!fd)return;send({action:"set",id:nbId(),type:"notebook",anchor:"",data:fd.value,track:TRACK});}
-document.addEventListener("input",e=>{if(e.target&&e.target.id==="feed"){clearTimeout(nbTimer);nbTimer=setTimeout(nbSave,1500);}});
+document.addEventListener("input",e=>{if(e.target&&e.target.id==="feed"){clearTimeout(nbTimer);nbTimer=setTimeout(nbSave,800);}});
+/* ---- exercise answers (input.gap / radio / translation textareas) — type "answer" ------------
+   Keyed like notes/highlights: anchor = the text the field answers (a gap's prompt, a question's
+   stem, a translation box's prompt), with {b,o} (the highlight ruler) as the tie-breaker for
+   duplicate text. Server stays the source of truth; writes go through send() (outbox + grace
+   window); an empty answer DELETES its row (no empty-row bloat); restore skips a control the
+   student is currently typing in plus any row whose local write is still in flight. */
+const ansNorm=s=>lineNorm(String(s==null?"":s)).replace(/\s+/g," ").trim();
+function ansQstem(radio){let el=radio&&radio.closest?radio.closest("label"):null;if(!el)return null;
+ let p=el.previousElementSibling;while(p){if(p.classList.contains("qstem"))return p;if(p.classList.contains("qnum"))return null;p=p.previousElementSibling;}
+ return null}
+function ansOf(el){
+ if(el.matches&&el.matches("input.gap")){const w=el.parentElement;if(!w)return null;return{anchor:ansNorm(w.textContent),posEl:w}}
+ if(el.matches&&el.matches('input[type="radio"]')){const st=ansQstem(el);if(!st)return null;return{anchor:ansNorm(st.textContent),posEl:st}}
+ if(el.tagName==="TEXTAREA"&&el.id!=="feed"){const w=el.parentElement;if(!w)return null;return{anchor:ansNorm(w.textContent),posEl:w}}
+ return null}
+function ansPos(posEl){const blk=hlBlockOf(posEl);if(!blk)return null;
+ const b=hlBlocks().indexOf(blk);if(b<0)return null;
+ const w=document.createTreeWalker(posEl,NodeFilter.SHOW_TEXT);const n=w.nextNode();
+ const o=n?hlOffset(blk,n,0):-1;return o<0?null:{b,o}}
+let ansLocal=[];
+function ansRows(){
+ const rows=layer.filter(r=>r.type==="answer");
+ ansLocal=ansLocal.filter(r=>{const p=pendingFor(r.id);return !!p&&p.action!=="del"});
+ ansLocal.forEach(r=>{const i=rows.findIndex(x=>x.id===r.id);if(i>=0)rows[i]=r;else rows.push(r)});
+ return rows;
+}
+function ansValueOf(r){if(!r)return"";let j=null;try{j=JSON.parse(String(r.data||"{}"))}catch(e){return String(r.data||"")}
+ return(j&&typeof j.v==="string")?j.v:""}
+function ansRowFor(t,pos){const rows=ansRows().filter(r=>r.anchor===t);
+ if(!rows.length)return null;
+ if(!pos)return rows[0];
+ return rows.find(r=>{const p=nbDataPos(r.data);return p&&p.b===pos.b&&p.o===pos.o})||null}
+function ansSet(t,v,pos){
+ const cur=ansRowFor(t,pos);
+ if(v===""){
+  if(cur){layer=layer.filter(x=>x.id!==cur.id);ansLocal=ansLocal.filter(r=>r.id!==cur.id);send({action:"del",id:cur.id});}
+  return;
+ }
+ if(cur&&ansValueOf(cur)===v)return;
+ const id=cur?cur.id:(Date.now()+"_"+Math.floor(Math.random()*9999));
+ const data=JSON.stringify(pos?{v:v,b:pos.b,o:pos.o}:{v:v});
+ const row={id:id,type:"answer",anchor:t,author:who(),ts:new Date().toISOString(),data:data};
+ const i=layer.findIndex(x=>x.id===id);
+ const merged=i>=0?(layer[i]=Object.assign({},layer[i],row)):(layer.push(row),row);
+ ansLocal=ansLocal.filter(r=>r.id!==id);ansLocal.push(merged);
+ send({action:cur?"set":"add",id:id,type:"answer",anchor:t,data:data});
+}
+function ansSaveEl(el){const o=ansOf(el);if(!o||!o.anchor)return;ansSet(o.anchor,el.value,ansPos(o.posEl));}
+let ansTimer=null;
+document.addEventListener("change",e=>{const t=e.target;
+ if(t&&t.matches&&(t.matches("input.gap")||t.matches('input[type="radio"]')||(t.tagName==="TEXTAREA"&&t.id!=="feed")))ansSaveEl(t);
+ else if(t&&t.id==="feed")nbSave();});
+document.addEventListener("input",e=>{const t=e.target;
+ if(t&&t.matches&&(t.matches("input.gap")||(t.tagName==="TEXTAREA"&&t.id!=="feed"))){clearTimeout(ansTimer);ansTimer=setTimeout(()=>ansSaveEl(t),800)}});
+function ansSaveAll(){document.querySelectorAll("input.gap, textarea").forEach(el=>{if(el.tagName==="TEXTAREA"&&el.id==="feed")return;ansSaveEl(el)});}
+function flushNow(){ansSaveAll();nbSave();scheduleFlush()}
+window.addEventListener("pagehide",flushNow);
+document.addEventListener("visibilitychange",()=>{if(document.hidden)flushNow()});
+function renderAnswers(){
+ const pending=new Set(ansRows().filter(r=>pendingFor(r.id)).map(r=>r.id));
+ document.querySelectorAll("input.gap, textarea").forEach(el=>{
+  if(el.tagName==="TEXTAREA"&&el.id==="feed")return;
+  const o=ansOf(el);if(!o||!o.anchor)return;
+  const row=ansRowFor(o.anchor,ansPos(o.posEl));
+  if(row&&pending.has(row.id))return;
+  if(document.activeElement===el)return;
+  const want=row?ansValueOf(row):"";
+  if(el.value!==want)el.value=want;
+ });
+ document.querySelectorAll('input[type="radio"]').forEach(el=>{
+  const o=ansOf(el);if(!o||!o.anchor)return;
+  const row=ansRowFor(o.anchor,ansPos(o.posEl));
+  if(row&&pending.has(row.id))return;
+  const want=row?ansValueOf(row):null;
+  const should=(want!=null&&el.value===want);
+  if(el.checked!==should)el.checked=should;
+ });
+}
 (async()=>{try{
  let extra="";
  if(gate.teacher){
@@ -151,6 +229,7 @@ function renderLayer(){
    const nbk=layer.find(r=>r.type==="notebook");
    fdx.value=nbk?(nbk.data||""):"";
  }
+  renderAnswers();
 }
 
 /* fallback: nenhum engine define window.showAnchor;

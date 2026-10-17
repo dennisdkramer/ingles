@@ -180,12 +180,12 @@ function doPost(e) {
     }
 
     if (action === "wipe") {
-      // teacher-only reset: removes every row whose email+lesson match params (no email = wipe all)
+      // teacher-only reset: removes EVERY row whose email+lesson match params (no email = wipe all),
+      // regardless of type — marks, answers, the shared notebook, edit-mode staging — so "Clear page"
+      // empties everything a student+lesson has, not just what is currently displayed.
       var rows3 = rowsToObjs_(sh), removed = 0;
       for (var m = rows3.length - 1; m >= 0; m--) {
         var rr = rows3[m];
-        var isMark = (String(rr.type) === "hl" || String(rr.type) === "note" || String(rr.type) === "rec");
-        if (!isMark) continue;
         var matchAll = !o.email;                       // no filters = wipe everything
         var matchScope = String(rr.email) === String(o.email) && String(rr.lesson) === String(o.lesson);
         if (matchAll || matchScope) { purgeDrive_(rr.b64); sh.deleteRow(rr._row); removed++; }

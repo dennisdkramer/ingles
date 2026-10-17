@@ -1306,6 +1306,65 @@ async function testPage(serverUrl, pageName, track = 'business') {
 
     }
 
+
+    /* ---- exercise-answer persistence (input.gap / radio / translation textarea) ----
+       ansSet→send saves type:"answer" keyed by prompt/stem text; renderAnswers restores it; an
+       emptied field deletes its row (no empty-row bloat). */
+    try {
+        const ansVal = r => JSON.parse(String(r.data || '{}')).v;
+        // (1) gap: fill → save → empty → delete
+        const gapEl = window.document.querySelector('input.gap');
+        if (gapEl) {
+            gapEl.value = 'do';
+            window.eval('ansSaveEl(document.querySelector("input.gap"))');
+            const saved = window.eval('ansRows().filter(r=>r.anchor===ansOf(document.querySelector("input.gap")).anchor)');
+            if (!saved || !saved.length || ansVal(saved[0]) !== 'do') {
+                errors.push('[FAIL] a filled gap did not save an answer row (v="do")');
+            } else {
+                console.log('   ✅ a filled gap saves an answer row keyed by its prompt');
+            }
+            gapEl.value = '';
+            window.eval('ansSaveEl(document.querySelector("input.gap"))');
+            if (window.eval('ansRows().filter(r=>r.anchor===ansOf(document.querySelector("input.gap")).anchor).length')) {
+                errors.push('[FAIL] an emptied gap did not delete its answer row');
+            } else {
+                console.log('   ✅ an emptied gap deletes its answer row (no empty-row bloat)');
+            }
+        } else {
+            errors.push('[FAIL] no input.gap found for the answer test');
+        }
+        // (2) radio: pick the first option → save keyed by its stem
+        const radioEl = window.document.querySelector('input[type="radio"]');
+        if (radioEl) {
+            const stem = window.eval('ansOf(document.querySelector(\'input[type="radio"]\')).anchor');
+            radioEl.checked = true;
+            window.eval('ansSaveEl(document.querySelector(\'input[type="radio"]\'))');
+            const rows = window.eval('ansRows().filter(r=>r.anchor===' + JSON.stringify(stem) + ')');
+            if (!rows.length || ansVal(rows[0]) !== radioEl.value) {
+                errors.push('[FAIL] a picked radio did not save its selection');
+            } else {
+                console.log('   ✅ a picked radio saves its selection keyed by its question stem');
+            }
+        }
+        // (3) restore: seed one answer row (with its {b,o} tie-breaker) and confirm renderAnswers fills it
+        const trw = window.document.querySelector('textarea:not(#feed)');
+        if (trw) {
+            const info = JSON.parse(window.eval('JSON.stringify((function(){var o=ansOf(document.querySelector("textarea:not(#feed)"));var p=ansPos(o.posEl);return{anchor:o.anchor,b:p?p.b:null,o:p?p.o:null}})())'));
+            const row = { id: 'qa_ans_1', type: 'answer', anchor: info.anchor, data: JSON.stringify({ v: 'persisted', b: info.b, o: info.o }) };
+            window.eval('layer.push(' + JSON.stringify(row) + ')');
+            window.eval('renderAnswers()');
+            if (trw.value !== 'persisted') {
+                errors.push('[FAIL] renderAnswers did not restore a stored answer into its control');
+            } else {
+                console.log('   ✅ renderAnswers restores a stored answer into its control');
+            }
+            window.eval('layer = layer.filter(x=>x.id!=="qa_ans_1")');
+            window.eval('renderAnswers()');
+        }
+    } catch (e) {
+        errors.push('[FAIL] answer persistence check threw: ' + e.message);
+    }
+
     window.close();
     
     return errors;
