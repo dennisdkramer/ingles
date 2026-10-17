@@ -15,14 +15,32 @@ This file is the single source of truth for the pedagogical shape of the materia
 
 Each lesson builds on the previous one — it reuses vocabulary and structures the student already knows and introduces one new thing at a time. Do not skip or reorder.
 
-1. **Introductions & to be** (done) — cognates, am/is/are, a/an, vowels.
-2. **Question words** (done) — who/what/when/where/why/how, with "be".
-3. **"do" & the simple present** (next) — question words with "do" ("What do you…?"), do/does, and the simple present.
-4. **Simple present** — third-person -s, don't/doesn't, adverbs of frequency (always/usually/sometimes/never).
+### Book 1 — foundations (built)
+
+1. **Introductions & to be** — cognates, am/is/are, a/an, vowels.
+2. **Question words** — who/what/when/where/why/how, with "be".
+3. **"do" & the simple present** — question words with "do" ("What do you…?"), do/does, and the simple-present meaning (facts/in-general only; the two PT traps are flagged here).
+4. **Simple present** — third-person -s, don't/doesn't, adverbs of frequency (always/usually/sometimes/never), work-routine vocabulary.
 5. **Present continuous vs simple present** — "now" (I am studying) vs "in general" (I study).
 6. **Plurals & this/that/these/those** — regular/irregular plurals, demonstratives.
-7. **There is / there are & place prepositions** — in/on/under/next to.
+7. **There is / there are & place prepositions** — in/on/under/next to/between…
 8. **Past simple** — was/were + regular -ed; the first past tense, contrasted against the "never past" rule.
+
+### Book 1 — toward intermediate (built)
+
+9. **The future: will / going to / "gonna"** — plans vs on-the-spot decisions; "gonna" is taught as the spoken future marker (a MODE, not a verb) so it never gets confused with the verb "go".
+10. **Past continuous vs past simple** — a long action in progress interrupted by a short one ("I was working when you called").
+
+### Book 1 — remaining roadmap to intermediate (planned)
+
+11. **Present perfect (1)** — have/has + past participle for life experience ("I have visited") and, crucially, duration from the past ("I have worked here for 5 years" — the flagship PT trap).
+12. **Present perfect (2) vs past simple** — finished vs unfinished time; ever/never/already/yet/just.
+13. **Comparatives & superlatives** — better/worse, cheaper/most reliable.
+14. **Modals of obligation & ability** — can/can't, must/have to, should (advice).
+15. **Countable/uncountable + quantifiers** — some/any/much/many/a lot of (business: information, advice, money).
+16. **Prepositions of time & movement** — at/on/in, to/from (consolidation).
+17. **Phrasal verbs & "get"** — the coringa; business: get back to, set up, call off.
+18. **Conditionals (1st & 2nd) + would** — if I have time… / if I were you…
 
 ## Pedagogy principles
 
@@ -33,3 +51,5 @@ Each lesson builds on the previous one — it reuses vocabulary and structures t
 - **Reuse, then extend.** Start each lesson from the last one's phrases; add the new structure on top.
 - **Audio everywhere, Portuguese only to explain.** Every new phrase carries ▶ TTS; PT text is for translation/explanation, not the target.
 - **One idea per section.** A section teaches one thing; a chart, a dialogue or an exercise reinforces it.
+- **"gonna" is a future MODE, not a verb.** Teach `[be] + gonna + verb` as the spoken future ("I'm gonna call" = *vou ligar*), and keep it separate from the verb "go" with a PLACE after it ("I'm going to the office" = *estou indo ao escritório*). "I'm gonna go to the office" is therefore not a contradiction — "gonna" marks future and "go" is the verb. The student must use "gonna" (not avoid it); it is the natural spoken form, while "going to" is the written/formal twin.
+- **Track voice — business.** The business book aims at correct speech and grammar and leans on business vocabulary (meeting, deadline, invoice, client, report, schedule…), but it never avoids common expressions or contractions (don't/doesn't, I'm, gonna, 'll). Contractions are the default in speech; the "full forms" are for formal writing.

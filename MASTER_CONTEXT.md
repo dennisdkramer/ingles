@@ -30,7 +30,7 @@ _(none queued.)_
 - Gate: `sig = h(email+track+SECRET "abreportas2025")` (h = Java-style `x = x*31 + charCode` hash), stored in sessionStorage.gate; engine1.js redirects to portal.html when it is invalid. OAuth origin: https://dennisdkramer.github.io.
 - access.json: teachers [dennisdkramer@gmail.com]; students Maria (kids), João (business), Ale (business).
 - Backend is owner-deployed (I cannot deploy it): a Code.gs change only takes effect after a NEW deployment version, while the /exec URL stays the same. Exec URL: https://script.google.com/macros/s/AKfycbxSR8UmOwosLIgn1-AGKhgXJvdqOVkzMqrTwdlWNF9kOkt-256TqTacOsQlo6JyHplR/exec (set per lesson as const BACKPACK).
-- Development scope: the current/ported build is business/lesson1.html and `qa/smoke.mjs` tests that page only — re-add the other pages when the port starts; kids/, nsfw/ and the login pages still carry their older wording.
+- Development scope: the current build is business/lesson1.html–lesson10.html (Book 1). `qa/smoke.mjs` exercises business/lesson1.html's interactive features only; `qa/content.mjs` structure-checks all ten business lessons. kids/, nsfw/ and the login pages still carry their older wording.
 - Shared files (engine1.js, engine2.js, style.css): prefer in-place, exact-match edits when that is the cleanest change, but reading a whole file into context and rewriting it whole is allowed and preferred whenever it improves correctness or clarity — never trade correctness or clarity for a smaller edit, and hold whatever files and context the task needs in memory. Lesson pages stay content-only (config consts + engine includes).
 
 ## VERIFICATION ENVIRONMENT
