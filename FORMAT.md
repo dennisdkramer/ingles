@@ -4,7 +4,7 @@ Reference this file whenever a task touches site appearance. Preserve everything
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-FM<n>.)_
 
-- [2026-10-17] Implement the "Layout at generation" styles below (serif section-explainer sub-heading, merged chart row, stacked multiple-choice option variant, contiguous inline blank, .pt italic) — then run the CONTENT.md cleanup that depends on them.
+_(none queued.)_
 
 ## Colors (CSS vars in :root)
 - cream #f4eddd = page background
