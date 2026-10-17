@@ -33,6 +33,14 @@ _(none queued.)_
 - input.gap = fill-in blank: transparent, 2px tan bottom border, #fff8ea bg
 - fieldset = exercise block: dashed tan border, 12px radius
 - details = collapsible block: #fff8ea, dashed tan border (generic element styling)
+- .chart = structured data table (cognate rules, phrase translations, to-be chunks, false friends): paper, 2px ink frame + tan shadow, ink header row, tan grid
+- .chips = wrapping keyword pills ("quase iguais" list)
+- .grid3 = 3-up row of cards (the 3 discoveries, the a/an rules)
+- .ex-head = exercise-group sub-heading inside Treino/Quiz: tan left bar
+- .blanks = wrapping row of fill-in pairs (word + input.gap)
+- .dialog = dialogue block: #fff8ea fill, rose frame, bold speaker labels
+- .listen = compact ▶ audio chip placed inline beside what it speaks
+- section headings (h2) carry a rose underline; exercise items are numbered 1..n under their group heading (no repeated section letter)
 - @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow
 
 ## Function-generated formatting → FUNCTION.md
