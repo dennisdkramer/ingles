@@ -127,6 +127,9 @@ fieldset label{margin-right:14px}
 .blanks>div{display:grid;grid-template-columns:var(--prompt-w,8em) 1fr;align-items:center;gap:8px}
 .blanks>div input.gap{width:100%;min-width:0}
 .blanks--long{--prompt-w:15em;grid-template-columns:repeat(auto-fill,minmax(420px,1fr))}
+body.editing #hlLayer,body.editing #noteLayer{display:none}
+body.editing mark.nb.has-rec{background-image:none}
+body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 /* custom print button (2026-10-15): only the snapshot prints; marks are flat translucent fills + a
    real underline (no mix-blend-mode), and print-color-adjust:exact forces the washes to print even when
    the browser's "background graphics" checkbox is off. */

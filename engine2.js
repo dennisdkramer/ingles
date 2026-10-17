@@ -4,7 +4,32 @@ let wipeGuard=0; /* a Clear-page wipe in flight: the poll must not resurrect the
 let lastPollChange=Date.now(); /* last time the poll saw a change — keeps the poll fast while the student watches */
 let lastFull=""; /* the layer content signature used to detect that change */
 
-document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="en-US";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)});
+function wireListen(){document.querySelectorAll(".listen").forEach(b=>{b.onclick=()=>{if(editing)return;const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="en-US";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}})}
+wireListen();
+/* ---- content edit mode (teacher): toggle, auto-save to backend, apply override ---- */
+const contentId=()=>"content_"+TRACK+"_"+L;
+let appliedContent="",editTimer=null;
+function applyContentOverride(html){if(html===appliedContent)return;const ca=document.querySelector(".content-area");if(!ca)return;ca.innerHTML=html;appliedContent=html;wireListen();}
+function saveContent(){const ca=document.querySelector(".content-area");if(!ca)return;const html=ca.innerHTML;appliedContent=html;const o={action:"set",id:contentId(),type:"content",anchor:"",data:html,email:gate.email,lesson:L,author:"prof",track:TRACK};notePending(o);outboxPush(o);scheduleFlush();}
+function toggleEditMode(){
+ if(STUDENT!==gate.email){toast("Switch to 'demo (you)' to edit content.");return;}
+ editing=!editing;
+ document.body.classList.toggle("editing",editing);
+ const ca=document.querySelector(".content-area"),eb=document.getElementById("editpage");
+ if(editing){
+  document.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});
+  if(ca)ca.setAttribute("contenteditable","true");
+  hlReflow();ntReflow();
+  if(eb)eb.textContent="✔️ Done";
+  toast("Edit mode — changes auto-save");
+ }else{
+  if(ca)ca.removeAttribute("contenteditable");
+  if(eb)eb.textContent="✏️ Edit";
+  saveContent();renderLayer();
+  toast("Saved");
+ }
+}
+document.addEventListener("input",e=>{if(!editing)return;if(e.target&&e.target.closest&&e.target.closest(".content-area")){clearTimeout(editTimer);editTimer=setTimeout(saveContent,2000)}});
 (async()=>{try{
  let extra="";
  if(gate.teacher){
@@ -25,6 +50,11 @@ document.querySelectorAll(".listen").forEach(b=>b.onclick=()=>{const u=new Speec
   const ppb=document.createElement("button");ppb.type="button";ppb.id="printpage";ppb.textContent="🖨 Print";
   ppb.onclick=()=>{if(typeof printLesson==="function")printLesson();else toast("Print unavailable.")};
   bar.appendChild(ppb);
+  if(gate.teacher){
+   const eb=document.createElement("button");eb.type="button";eb.id="editpage";eb.textContent="✏️ Edit";eb.onclick=()=>toggleEditMode();bar.appendChild(eb);
+   const rb=document.createElement("button");rb.type="button";rb.id="revertpage";rb.textContent="↩️ Revert";rb.onclick=()=>{if(!confirm("Revert this page's content to the original? Your edits will be discarded."))return;send({action:"del",id:contentId()});toast("Reverting…");setTimeout(()=>location.reload(),900)};bar.appendChild(rb);
+   const cb=document.createElement("button");cb.type="button";cb.id="copypage";cb.textContent="📋 Copy";cb.onclick=()=>{const ca=document.querySelector(".content-area");const html=ca?ca.innerHTML:"";const done=()=>toast("Content copied — paste it to the editor");if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(html).then(done,()=>window.prompt("Copy:",html));else window.prompt("Copy:",html)};bar.appendChild(cb);
+  }
 
  if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";loadLayer()};}
  loadLayer();
@@ -53,6 +83,7 @@ async function loadLayer(){
  try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L+"&ver="+LAYER_VER+"&t="+Date.now());rows=(await r.json()).rows||[];}catch(e){rows=[];}
  /* Server is the source of truth: rebuild layer from scratch every sync. */
  layer=rows;
+ if(!editing){const cov=rows.find(r=>r.type==="content"&&r.data);if(cov)applyContentOverride(cov.data);}
   const s=layer.map(x=>x.id).join(",");
   /* a change (add/del/edit/recolour) keeps the adaptive poll fast while the student watches */
   const full=layer.map(r=>r.id+"|"+r.type+"|"+r.anchor+"|"+r.data+"|"+r.ts).join("\n");

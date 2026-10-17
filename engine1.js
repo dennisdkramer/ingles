@@ -8,7 +8,7 @@ const lineNorm=s=>String(s==null?"":s).replace(/[\r\n]/g," "); /* newline -> spa
 let gate=null;try{gate=JSON.parse(sessionStorage.gate)}catch(e){}
 if(!gate||h(gate.email+gate.track+SECRET)!==gate.sig||(!gate.teacher&&gate.track!==TRACK))location.replace("../portal.html");
 const who=()=>gate.teacher?"prof":"aluno";
-let STUDENT=gate.email, layer=[], sig="";
+let STUDENT=gate.email, layer=[], sig="", editing=false;
 const audioCache={};
 let popXY={x:20,y:90};
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(t._x);t._x=setTimeout(()=>t.style.display="none",2600)}
@@ -660,7 +660,7 @@ let mouseIsDown=false;
 document.addEventListener("mousedown",()=>{mouseIsDown=true});
 document.addEventListener("mouseup",()=>{mouseIsDown=false;clearTimeout(selTimer);trySelPopup()});
 /* seleção: abre só quando a seleção MUDA (funciona em mobile; não dispara ao clicar em botões) */
-function trySelPopup(){
+function trySelPopup(){ if(editing)return;
   const sel=getSelection();let t=sel?sel.toString().trim():"";
   if(mouseIsDown)return; /* never open mid-drag — the mouseup listener fires this at release */
   if(t===lastSelText)return;
@@ -702,7 +702,7 @@ function trySelPopup(){
 let selTimer=null;
 document.addEventListener("selectionchange",()=>{clearTimeout(selTimer);selTimer=setTimeout(trySelPopup,350)});
 document.addEventListener("touchend",()=>{clearTimeout(selTimer);selTimer=setTimeout(trySelPopup,450)});
-document.addEventListener("click",e=>{const nb=e.target.closest("mark.nb");
+document.addEventListener("click",e=>{if(editing)return;const nb=e.target.closest("mark.nb");
  /* Ctrl+click on a painted highlight = delete it. That is the ONLY interaction a highlight has:
     the layer is pointer-events:none (so it never blocks a click, a drag or a selection), which
     is why the click is hit-tested against the painted rectangles here. It adds no popup, no
@@ -868,10 +868,10 @@ addEventListener("blur",()=>{ctrlHeld=false;hlDownCtrl=false;hlSuppressUntil=0})
    hlDownXY     = where the gesture started: a Ctrl+click (no movement) is a DELETE, a Ctrl+drag
                   (movement) is a new/extended highlight — even when it starts on a highlight */
 let hlDownCtrl=false,hlSuppressUntil=0,hlJustRan=0,hlDownXY=null;
-document.addEventListener("mousedown",e=>{const c=!!(e.ctrlKey||e.metaKey);hlDownCtrl=c;
+document.addEventListener("mousedown",e=>{if(editing)return;const c=!!(e.ctrlKey||e.metaKey);hlDownCtrl=c;
  hlDownXY={x:e.clientX,y:e.clientY};
  hlSuppressUntil=c?Number.MAX_SAFE_INTEGER:0},true);
-document.addEventListener("mouseup",e=>{const was=hlDownCtrl;hlDownCtrl=false;
+document.addEventListener("mouseup",e=>{if(editing)return;const was=hlDownCtrl;hlDownCtrl=false;
  if(!was)return;
  hlSuppressUntil=Date.now()+1200;
  const moved=!hlDownXY||Math.abs(e.clientX-hlDownXY.x)>4||Math.abs(e.clientY-hlDownXY.y)>4;
