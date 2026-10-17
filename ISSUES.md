@@ -9,3 +9,10 @@ _(Batches queued for this category, newest first. Cleared once done AND committe
 - B-I3 [2026-10-13] LIVE vs DISK LINE ENDINGS: GitHub Pages serves the very same files with LF while the working tree is CRLF, so a live-vs-disk comparison always looks different — index.html 4441 live / 4505 on disk (that 64-byte gap is exactly the line count), business/lesson1.html 14239 / 14356, access.json 274 / 282. No functional effect. PARKED; only worth normalising (`core.autocrlf` / a `.gitattributes`) if a live-vs-disk diff ever needs to be readable.
 
 - B-I1 [2026-10-13] `index.html` + `portal.html` still read `localStorage.prog_` for the lesson list, but nothing writes it any more (the lesson-complete flow was removed): every lesson always renders in the "⭜ Lição N" todo state. Dead progress display — owner to decide delete or rebuild.
+
+## Parked bugs
+
+_(One-off, currently-unreproducible reports. Parked until they can be reproduced.)_
+
+- [2026-10-15] NOTE POPUP JUMPED AFTER CLICKING ⏺ RECORD: opened the popup from a note click, then clicked Record and the popup repositioned itself to a different location. Suspect the write/refresh path re-opening the popup (showAnchor) against a stale anchor range. Not reproduced.
+- [2026-10-15] RECORDING UNDERLINE WITH NO RECORDING: a long string shows the recording underline (mark.nb.has-rec) but has no recording row attached, and the owner doesn't recall recording it. Suspect a stale has-rec flag (underline painted while the row was never saved / already deleted). Not reproduced.
