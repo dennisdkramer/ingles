@@ -138,6 +138,7 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
  body.printing>*:not(#printRoot){display:none!important}
  body.printing #printRoot{display:block!important;background:white}
  #printRoot .content-area{position:relative;zoom:0.9}
+ #printRoot #feed{display:none}
  #printRoot .pr-layer{position:absolute;left:0;top:0;width:0;height:0}
  #printRoot .pr-hl{position:absolute;border-radius:3px;mix-blend-mode:multiply;-webkit-print-color-adjust:exact;print-color-adjust:exact}
  #printRoot .pr-hl-yellow{background:rgba(255,233,112,.55)}
