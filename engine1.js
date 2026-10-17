@@ -325,7 +325,7 @@ function nbPopHTML(t,editing){
  /* the popup does NOT repeat the selected text: the phrase is right
     there in the page, so a title echoing it is redundant. #pTitle stays as an empty anchor so a
     refresh can keep targeting a stable node. */
- const noteHTML=nb!=null?'<div id="nbNote" title="nota salva" style="margin:2px 0 4px;white-space:pre-wrap;font-size:13px">'+nbEsc(nb)+'</div>':"";
+ const noteHTML=nb!=null?'<div id="nbNote" title="nota salva">'+nbEsc(nb)+'</div>':"";
  return '<div id="pTitle"></div>'+noteHTML+
   '<span class="poprow"><button id="pH" title="ouvir em voz alta">▶ Hear</button>'+
   '<button id="pP"'+playAttr+'><span class="lbl">▶ Play</span></button>'+
