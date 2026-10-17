@@ -27,6 +27,7 @@ _(none queued.)_
 - .card: paper bg, 2px ink border, 16px radius, 5px 5px 0 tan hard shadow
 - Buttons: ink bg, cream text, 10px radius, 3px 3px 0 tan shadow, weight 600, 14px Public Sans
 - Links: ink, weight 600. Dim text: #8a8072, 13px
+- Lesson navigation: every lesson page carries a `.lesson-nav` bar right after the page title, with "← Lição N−1" / "Lição N+1 →" links to the previous/next lesson in the same track (rendered by engine2.js from `L` and `COUNT`; the boundary button is hidden).
 
 ## Component semantics (authored in the lesson HTML — content, see CONTENT.md)
 - .ptw = Portuguese word in exercises: italic, --ptw color, weight 600

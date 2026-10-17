@@ -114,6 +114,10 @@ h2 .h2sub{font-family:'Public Sans',sans-serif;font-size:.55em;font-weight:400;l
 .listen{display:inline-flex;align-items:center;justify-content:center;padding:5px 10px;margin:2px 6px 2px 0;font-size:14px;white-space:nowrap}
 fieldset .qnum{margin-right:6px}
 fieldset label{margin-right:14px}
+.lesson-nav{display:flex;gap:12px;margin:12px 0}
+.lesson-nav a{display:inline-block;background:var(--ink);color:var(--cream);border-radius:10px;padding:8px 14px;font:600 14px 'Public Sans';text-decoration:none;box-shadow:3px 3px 0 var(--tan)}
+.lesson-nav a.lesson-prev{margin-right:auto}
+.lesson-nav a.lesson-next{margin-left:auto}
 @media print{#printRoot .listen{display:none}}
 /* exercise panels + aligned grids */
 .panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}
