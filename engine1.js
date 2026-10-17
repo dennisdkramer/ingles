@@ -670,7 +670,7 @@ function trySelPopup(){
  if(!sel.rangeCount)return;
  const r=sel.getRangeAt(0);
  const n=r.commonAncestorContainer;const el=n.nodeType===1?n:n.parentElement;
- if(el&&el.closest(".pop,script,style,button,textarea,input,select,a,label"))return;
+ if(el&&el.closest(".pop,script,style,button,textarea,input,select,a"))return;
  /* ONE BLOCK ONLY (owner spec 2026-10-12, same rule the highlight already uses): a selection
     that crosses a block element (paragraph → list item, cell → cell, heading → paragraph, …)
     must NOT trigger this popup. It is refused with a toast — same wording family as the
