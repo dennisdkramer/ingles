@@ -22,7 +22,7 @@ main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
 button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;margin:4px 4px 4px 0;font:600 14px 'Public Sans';cursor:pointer;box-shadow:3px 3px 0 var(--tan)}
 a{color:var(--ink);font-weight:600}h2{font-family:'Playfair Display',serif;margin:.9em 0 .3em}
 .dim{color:#8a8072;font-size:13px}
-.pt{color:#5c5347}.ptw{font-style:italic;color:var(--ptw);font-weight:600}
+.pt{color:#5c5347;font-style:italic}.ptw{font-style:italic;color:var(--ptw);font-weight:600}
 .listen{background:var(--tan);box-shadow:3px 3px 0 var(--ink)}
 details{background:#fff8ea;border:2px dashed var(--tan);border-radius:12px;padding:8px 12px;margin:10px 0}
 mark.nb{background:transparent;cursor:pointer}
@@ -129,6 +129,22 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .blanks>div{display:grid;grid-template-columns:var(--prompt-w,8em) 1fr;align-items:center;gap:8px}
 .blanks>div input.gap{width:100%;min-width:0}
 .blanks--long{--prompt-w:15em;grid-template-columns:repeat(auto-fill,minmax(420px,1fr))}
+
+/* ---- content-shape styles (2026-10-17): explainer sub-heading, merged chart note, stacked MCQ,
+   sentence fill-ins with inline gaps, contiguous blank line, non-italic English inside italic PT ---- */
+.lead{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#5c5347;margin:.2em 0 .7em;line-height:1.5}
+.pt b{font-style:normal}
+.blank{display:inline-block;width:3.2em;border-bottom:2px solid var(--tan);vertical-align:baseline}
+.chart tr.note td{background:#fff8ea;font-style:italic;color:#5c5347;border-top:0;padding:10px 14px}
+.qgrid.stack{display:block}
+.qgrid.stack .qitem{margin:0 0 12px}
+.qgrid.stack .qline{display:flex;align-items:baseline;gap:8px}
+.qgrid.stack .qline .qnum{flex:0 0 auto;font-weight:700}
+.qgrid.stack .qopts{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:4px;padding-left:2em}
+.blanks.sent{display:block}
+.blanks.sent>div{display:block;margin:8px 0}
+.blanks.sent>div input.gap{display:inline-block;width:9em;margin:0 .2em;vertical-align:baseline}
+
 body.editing #hlLayer,body.editing #noteLayer{display:none}
 body.editing mark.nb.has-rec{background-image:none}
 body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}

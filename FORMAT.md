@@ -4,7 +4,7 @@ Reference this file whenever a task touches site appearance. Preserve everything
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-FM<n>.)_
 
-_(none queued.)_
+- [2026-10-17] Implement the "Layout at generation" styles below (serif section-explainer sub-heading, merged chart row, stacked multiple-choice option variant, contiguous inline blank, .pt italic) — then run the CONTENT.md cleanup that depends on them.
 
 ## Colors (CSS vars in :root)
 - cream #f4eddd = page background
@@ -31,8 +31,8 @@ _(none queued.)_
 - Lesson navigation: the control bar carries "← Last lesson" / "Next lesson →" buttons (always present, rendered by engine2.js from `L` and `COUNT`; the boundary button is greyed/disabled).
 
 ## Component semantics (authored in the lesson HTML — content, see CONTENT.md)
-- .ptw = Portuguese word in exercises: italic, --ptw color, weight 600
-- input.gap = fill-in blank: transparent, 2px tan bottom border, #fff8ea bg
+- .pt = Portuguese explanation text: italic (ALL authored Portuguese text is italic). .ptw = Portuguese word in exercises: italic, --ptw color, weight 600
+- input.gap = fill-in blank: transparent, 2px tan bottom border, #fff8ea bg — a CONTIGUOUS line, never literal "___" underscores in the prompt
 - fieldset = exercise block: dashed tan border, 12px radius
 - details = collapsible block: #fff8ea, dashed tan border (generic element styling)
 - .chart = structured data table (cognate rules, phrase translations, to-be chunks, false friends): paper, 2px ink frame + tan shadow, ink header row, tan grid
@@ -44,6 +44,16 @@ _(none queued.)_
 - .listen = compact ▶ audio chip placed inline beside what it speaks
 - section headings (h2) carry a rose underline; exercise items are numbered 1..n under their group heading (no repeated section letter)
 - @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow
+
+## Layout at generation (blocks vary at authoring time; CSS stays fixed)
+- CSS uses fixed constants (no dynamic/viewport sizing), but at AUTHORING time the layout is chosen per content so no block overflows.
+- .panel is half-width only when it pairs with another half-width .panel on the same row; otherwise it spans full width (.panel.full).
+- Multiple-choice overflow: a small overflow stacks the options BELOW the stem (keep half-width); an overflow of roughly ~100px or more keeps options inline and makes the block full-width. Column spacing stretches so the content fills the block.
+- A section explainer (a standalone PT sentence that introduces a section) is a sub-heading under the h2: serif (Playfair), ~1pt larger than body, italic — written only when it adds what the chart below does not already say.
+- A note that applies to one chart row is a merged (colspan) row directly under that row — not a floating paragraph.
+- Paired content (e.g. a phrase chart and a dialogue) is placed side-by-side half-width, with the Portuguese below the English (a line break in the same cell, not a separate column).
+- Contrasting versions/concepts (two columns, two uses, two conjugations) are always visually distinct — columns or clear spacing.
+
 
 ## Function-generated formatting → FUNCTION.md
 - The selection popup, the note/recording marks, the highlight rectangles, the colour palette, the toast and the recording indicator/spinner exist only because a FUNCTION creates them at run time, so their formatting is specified as PART of that function — in FUNCTION.md, which is authoritative for those elements. style.css remains the single styling source for the whole site; this file defers to FUNCTION.md for them and no longer restates them.
