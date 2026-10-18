@@ -5,7 +5,7 @@ This file does NOT hold lesson content — the prose, sections, exercises and wi
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-C<n>.)_
 
-- [2026-10-17] CONTENT CLEANUP — REMAINING (done: blanks→contiguous lines, 6.2 note merged, 7.1 explainer dropped, 7.3/7.4 side-by-side, 7.5 stacked, 4A/6A grid padded to 8): convert remaining section explainers to `.lead` sub-headings across lessons 1–5 & 8–10, audit the other half-width MCQ panels for overflow (stack small / full-width large), and normalize non-italic EN (`<i>`/quoted) inside PT text.
+
 
 - [2026-10-13] NO exercise has an in-page self-check: a student can fill blanks, pick radios and write translations, and nothing ever tells them whether it is right. Owner to decide the MECHANISM (teacher review at the next class, or a real feature) — it would be a NEW decision, and it starts in this file (then FUNCTION.md, then engine wiring + qa/smoke.mjs).
 
