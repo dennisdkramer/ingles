@@ -28,7 +28,7 @@ _(Batches queued for this category, newest first. Cleared once done AND committe
 - **Contrast is visible.** Two versions/conjugations/uses of a concept, or two concepts, are always separated — columns or clear spacing.
 - **Choose the natural input.** "word → answer" facts (e.g. person → people) are fill-in text fields; recognition / "pick the right one" is multiple choice.
 - **Blanks are contiguous lines** (the input.gap), never literal "___" underscores in the prompt.
-- **Group sizes.** Prefer 4 or 8 items per group; avoid leaving one lone question on its own line.
+- **Group sizes (strong preference, not a hard rule).** When generating a lesson's HTML, generate a number of questions / amount of content that FILLS the rows — prefer 4 or 8 items per grid so no row is left with a single lone question; pad or trim to fill, since the items are quick to produce.
 
 
 
