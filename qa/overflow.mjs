@@ -118,10 +118,13 @@ async function main() {
     await sleep(1300);
     const r = await ses.send('Runtime.evaluate', { expression: MEASURE, returnByValue: true });
     const panels = (r.result && r.result.value) || [];
-    const bad = panels.filter(p => !p.full && (p.over > 8 || p.w > p.half + 8));
+    // Overflow is checked on EVERY panel — including .panel.full, which is exactly where the
+    // long translation/listening option rows used to spill. Only the "balloon" check (a half-width
+    // panel that has grown wider than half the container) is restricted to non-full panels.
+    const bad = panels.filter(p => p.over > 8 || (!p.full && p.w > p.half + 8));
     if (bad.length) {
       console.log('lesson ' + L + ':');
-      bad.forEach(p => { fails++; console.log('    ' + (p.over > 8 ? 'OVERFLOW' : 'BALLOON') + '  w=' + p.w + ' half=' + p.half + ' over=' + p.over + '  «' + p.ex + '»'); });
+      bad.forEach(p => { fails++; console.log('    ' + (p.over > 8 ? 'OVERFLOW' : 'BALLOON') + '  full=' + p.full + ' w=' + p.w + ' half=' + p.half + ' over=' + p.over + '  «' + p.ex + '»'); });
     }
   }
 
