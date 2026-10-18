@@ -156,6 +156,36 @@ async function checkLesson(serverUrl, n) {
   listens.forEach(l => { if (!l.getAttribute('data-say')) noSay++; });
   if (noSay > 0) errors.push(noSay + ' .listen chip(s) missing data-say');
 
+
+  // radio anchor resolution (flat AND stacked MCQ layouts): every radio must resolve a stem/anchor
+  const radioRes = JSON.parse(w.eval(`JSON.stringify((function(){
+    var nulls = 0, total = 0;
+    document.querySelectorAll('input[type="radio"]').forEach(function(r){
+      total++;
+      var o = ansOf(r);
+      if (!o || !o.anchor) nulls++;
+    });
+    return { nulls: nulls, total: total };
+  })())`));
+  if (radioRes && radioRes.nulls > 0) errors.push(radioRes.nulls + ' of ' + radioRes.total + ' radios resolve no anchor');
+
+  // stacked-radio save/restore round-trip: seed a row, renderAnswers must re-check the radio
+  const stackedRt = JSON.parse(w.eval(`JSON.stringify((function(){
+    var r = document.querySelector('.qgrid.stack input[type="radio"]');
+    if (!r) return null;
+    var o = ansOf(r);
+    if (!o || !o.anchor) return { ok: false };
+    var p = ansPos(o.posEl);
+    if (!p) return { ok: false };
+    layer.push({ id: 'qa_stack_rt', type: 'answer', anchor: o.anchor, data: JSON.stringify({ v: r.value, b: p.b, o: p.o }) });
+    renderAnswers();
+    var restored = r.checked;
+    layer = layer.filter(function(x){ return x.id !== 'qa_stack_rt'; });
+    renderAnswers();
+    return { ok: restored };
+  })())`));
+  if (stackedRt && stackedRt.ok === false) errors.push('stacked radio save/restore round-trip failed');
+
   errors.push(...consoleErrors.filter(e => !errors.includes(e)));
   return { lesson: n, errors, counts };
 }

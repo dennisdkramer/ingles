@@ -50,6 +50,7 @@ document.addEventListener("input",e=>{if(e.target&&e.target.id==="feed"){clearTi
    student is currently typing in plus any row whose local write is still in flight. */
 const ansNorm=s=>lineNorm(String(s==null?"":s)).replace(/\s+/g," ").trim();
 function ansQstem(radio){let el=radio&&radio.closest?radio.closest("label"):null;if(!el)return null;
+ const opts=el.closest(".qopts");if(opts){const line=opts.previousElementSibling;const st=line?line.querySelector(".qstem"):null;if(st)return st;}
  let p=el.previousElementSibling;while(p){if(p.classList.contains("qstem"))return p;if(p.classList.contains("qnum"))return null;p=p.previousElementSibling;}
  return null}
 function ansOf(el){
