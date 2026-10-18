@@ -25,6 +25,7 @@ _(Batches queued for this category, newest first. Cleared once done AND committe
 ## Content shape (authoring rules)
 - **Explainers vs notes.** A one-liner that explains a whole section is a sub-heading (serif, slightly larger), written only when it adds what the chart/dialog does not already state. A note about a single item (one vocab row) is a merged row inside that block, directly under the item.
 - **No redundancy.** Never restate in prose what the very next chart already shows.
+- **No redundant block headers.** A block's name appears once: if a section (h2) or panel (`.ex-head`) already names the content — e.g. "Diálogo", "Frases úteis" — the content's own internal header (a chart's "Frase" column, a dialogue's "Diálogo" title line) is dropped, keeping only the non-redundant part (e.g. an instruction like "Leia em voz alta e grave ⏺:").
 - **Contrast is visible.** Two versions/conjugations/uses of a concept, or two concepts, are always separated — columns or clear spacing.
 - **Choose the natural input.** "word → answer" facts (e.g. person → people) are fill-in text fields; recognition / "pick the right one" is multiple choice.
 - **Blanks are contiguous lines** (the input.gap), never literal "___" underscores in the prompt.

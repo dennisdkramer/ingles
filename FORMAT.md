@@ -38,7 +38,7 @@ _(none queued.)_
 - .chart = structured data table (cognate rules, phrase translations, to-be chunks, false friends): paper, 2px ink frame + tan shadow, ink header row, tan grid
 - .chips = wrapping keyword pills ("quase iguais" list)
 - .grid3 = 3-up row of cards (the 3 discoveries, the a/an rules)
-- .ex-head = exercise-group sub-heading inside Treino/Quiz: tan left bar
+- .ex-head = exercise-group sub-heading inside Treino/Quiz (also reused for side-by-side content panels): serif (Playfair), 17px, tan text + 5px tan left bar
 - .blanks = wrapping row of fill-in pairs (word + input.gap)
 - .dialog = dialogue block: #fff8ea fill, rose frame, bold speaker labels
 - .listen = compact ▶ audio chip placed inline beside what it speaks
