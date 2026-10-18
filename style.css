@@ -119,10 +119,10 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 @media print{#printRoot .listen{display:none}}
 /* exercise panels + aligned grids */
 .panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}
-.panel{border:2px dashed var(--tan);border-radius:12px;padding:12px 16px;background:var(--paper)}
+.panel{border:2px dashed var(--tan);border-radius:12px;padding:12px 16px;background:var(--paper);min-width:0}
 .panel.full{grid-column:1/-1}
 .panel .ex-head{margin-top:0}
-.qgrid{display:grid;grid-template-columns:max-content max-content repeat(3,max-content);align-items:center;column-gap:14px;row-gap:8px}
+.qgrid{display:grid;grid-template-columns:max-content max-content repeat(3,max-content);align-items:center;column-gap:14px;row-gap:8px;min-width:0}
 .qgrid.qgrid-4{grid-template-columns:max-content max-content repeat(4,max-content)}
 .qgrid .qnum{font-weight:700}
 .blanks{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px 24px}
