@@ -178,12 +178,22 @@ function nbSpanText(r){const a=nbAreaOfRange(r);if(!a)return null;
    highlights (hlBlocks/hlOffset), so the two features can never disagree about where a span is. */
 function nbAreaOfRange(r){
  if(!r)return null;
- const blk=hlBlockOf(r.startContainer);
- if(!blk||blk!==hlBlockOf(r.endContainer))return null;
- const s=hlOffset(blk,r.startContainer,r.startOffset),e=hlOffset(blk,r.endContainer,r.endOffset);
+ const nrm=hlRangeNorm(r);if(!nrm)return null;
+ const blk=hlBlockOf(nrm.s.n);
+ if(!blk||hlBlockOf(nrm.e.n)!==blk)return null;
+ const s=hlOffset(blk,nrm.s.n,nrm.s.off),e=hlOffset(blk,nrm.e.n,nrm.e.off);
  if(s<0||e<=s)return null;
  const b=hlBlocks().indexOf(blk);if(b<0)return null;
  return{b:b,s:s,e:e,blk:blk};
+}
+/* a Range's boundary containers, normalized to TEXT nodes — a selection whose end lands at a block
+   boundary has the block ELEMENT itself as its container, which hlOffset cannot measure (the
+   "destaque só dentro de um mesmo bloco" false positive). */
+function hlRangeNorm(r){
+ if(!r)return null;
+ const s=nbTextPoint(r.startContainer,r.startOffset,true);
+ const e=nbTextPoint(r.endContainer,r.endOffset,false);
+ return (s&&e)?{s,e}:null;
 }
 function nbAreaOf(anchor){
  const a=String(anchor||"");if(!a)return null;
@@ -1116,12 +1126,13 @@ function hlSubtract(s,e,b){
 }
 function hlApply(r){
  if(!r)return;
- const blk=hlBlockOf(r.startContainer);
+ const nrm=hlRangeNorm(r);
+ if(!nrm){toast("Selecione um trecho de texto para destacar.");return}
+ const blk=hlBlockOf(nrm.s.n);
  if(!blk){toast("Selecione um trecho de texto para destacar.");return}
- /* one block only — a highlight never contains a block element */
- const frag=r.cloneContents();
- if(frag.querySelectorAll&&[...frag.querySelectorAll("*")].some(x=>HL_BLOCK.test(x.tagName))){toast("Destaque só dentro de um mesmo bloco.");return}
- let s=hlOffset(blk,r.startContainer,r.startOffset),e=hlOffset(blk,r.endContainer,r.endOffset);
+ /* one block only — a highlight never crosses a block boundary (boundaries normalized to text) */
+ if(hlBlockOf(nrm.e.n)!==blk){toast("Destaque só dentro de um mesmo bloco.");return}
+ const s=hlOffset(blk,nrm.s.n,nrm.s.off),e=hlOffset(blk,nrm.e.n,nrm.e.off);
  if(s<0||e<0){toast("Destaque só dentro de um mesmo bloco.");return}
  if(e<=s){toast("Selecione um trecho de texto para destacar.");return}
  const b=hlBlocks().indexOf(blk);

@@ -1365,6 +1365,32 @@ async function testPage(serverUrl, pageName, track = 'business') {
         errors.push('[FAIL] answer persistence check threw: ' + e.message);
     }
 
+
+    /* ---- element-boundary range (drag ending exactly at a block boundary) ----
+       The browser sets endContainer to the block ELEMENT; hlRangeNorm must normalize it to a text
+       node so the highlight/popup don't falsely read it as a cross-block selection. */
+    try {
+        const bRes = JSON.parse(window.eval(`JSON.stringify((function(){
+            var host = document.querySelector('.content-area p.lead, .content-area p.pt, .content-area td');
+            if (!host) return null;
+            var w = document.createTreeWalker(host, NodeFilter.SHOW_TEXT);
+            var tn = w.nextNode();
+            if (!tn) return null;
+            var r = document.createRange();
+            r.setStart(tn, 0);
+            r.setEnd(host, host.childNodes.length);   /* end ON the element boundary */
+            var a = nbAreaOfRange(r);
+            return { area: !!a };
+        })())`));
+        if (bRes && bRes.area !== true) {
+            errors.push('[FAIL] nbAreaOfRange fails on an element-boundary range (hlRangeNorm regression)');
+        } else if (bRes) {
+            console.log('   ✅ an element-boundary range resolves to its block (no false block-crossing)');
+        }
+    } catch (e) {
+        errors.push('[FAIL] element-boundary range check threw: ' + e.message);
+    }
+
     window.close();
     
     return errors;
