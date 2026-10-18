@@ -186,14 +186,24 @@ function nbAreaOfRange(r){
  const b=hlBlocks().indexOf(blk);if(b<0)return null;
  return{b:b,s:s,e:e,blk:blk};
 }
-/* a Range's boundary containers, normalized to TEXT nodes — a selection whose end lands at a block
-   boundary has the block ELEMENT itself as its container, which hlOffset cannot measure (the
-   "destaque só dentro de um mesmo bloco" false positive). */
+/* a Range's boundary containers, normalized to TEXT nodes, with empty boundaries clamped to the
+   adjacent text node. Two false positives are fixed: (1) a selection whose end lands at a block
+   boundary has the block ELEMENT itself as its container; (2) dragging the pointer just past a
+   block edge lands the end on the NEXT block's first text node at offset 0 (or the start on a
+   node's very end) — selecting NOTHING there, yet hlBlockOf would read it as a block crossing. */
 function hlRangeNorm(r){
  if(!r)return null;
- const s=nbTextPoint(r.startContainer,r.startOffset,true);
- const e=nbTextPoint(r.endContainer,r.endOffset,false);
- return (s&&e)?{s,e}:null;
+ let s=nbTextPoint(r.startContainer,r.startOffset,true);
+ let e=nbTextPoint(r.endContainer,r.endOffset,false);
+ if(!s||!e)return null;
+ const clampS=(s.n.nodeType===3&&s.off>=s.n.data.length);
+ const clampE=(e.n.nodeType===3&&e.off<=0);
+ if(!clampS&&!clampE)return{s,e};
+ const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+ const arr=[];let n;while(n=w.nextNode())arr.push(n);
+ if(clampS){const i=arr.indexOf(s.n);if(i>=0&&i<arr.length-1)s={n:arr[i+1],off:0};}
+ if(clampE){const i=arr.indexOf(e.n);if(i>0)e={n:arr[i-1],off:arr[i-1].data.length};}
+ return{s,e};
 }
 function nbAreaOf(anchor){
  const a=String(anchor||"");if(!a)return null;
@@ -691,7 +701,8 @@ function trySelPopup(){ if(editing)return;
     hlApply: in a real browser the getters can throw on a stale/edge range; jsdom may lack
     layout — either way the popup degrades to staying shut, never to a page error. */
  try{
-  if(!hlBlockOf(r.startContainer)||hlBlockOf(r.startContainer)!==hlBlockOf(r.endContainer)){
+  const nrm=hlRangeNorm(r);
+  if(!nrm||!hlBlockOf(nrm.s.n)||hlBlockOf(nrm.s.n)!==hlBlockOf(nrm.e.n)){
    toast("Selecione um trecho dentro de um mesmo bloco.");
    lastSelText=t;
    return;

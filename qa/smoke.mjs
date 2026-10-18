@@ -1391,6 +1391,34 @@ async function testPage(serverUrl, pageName, track = 'business') {
         errors.push('[FAIL] element-boundary range check threw: ' + e.message);
     }
 
+    /* ---- drag-past-boundary range: end lands on the NEXT block's first text node at offset 0 ----
+       Chrome sets endContainer to the next block's first text at offset 0 (nothing selected there);
+       hlRangeNorm must clamp it back to the previous text node. */
+    try {
+        const cRes = JSON.parse(window.eval(`JSON.stringify((function(){
+            var ca = document.querySelector('.content-area');
+            var a = document.createElement('p'); a.textContent = 'AAA block one';
+            var b = document.createElement('p'); b.textContent = 'BBB block two';
+            ca.appendChild(a); ca.appendChild(b);
+            var r = document.createRange();
+            r.setStart(a.firstChild, 0);
+            r.setEnd(b.firstChild, 0);   /* end at the next block's first text, offset 0 */
+            var nrm = hlRangeNorm(r);
+            var same = nrm ? (hlBlockOf(nrm.s.n) === hlBlockOf(nrm.e.n)) : false;
+            var area = !!nbAreaOfRange(r);
+            ca.removeChild(a); ca.removeChild(b);
+            return { same: same, area: area };
+        })())`));
+        if (cRes && (cRes.same !== true || cRes.area !== true)) {
+            errors.push('[FAIL] drag-past-boundary range (end at offset 0) not clamped to one block');
+        } else if (cRes) {
+            console.log('   ✅ a drag-past-boundary range (end at offset 0) clamps to one block');
+        }
+    } catch (e) {
+        errors.push('[FAIL] drag-past-boundary range check threw: ' + e.message);
+    }
+
+
     window.close();
     
     return errors;
