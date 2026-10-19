@@ -24,9 +24,9 @@ Content is produced by a loop; layout is never pre-assigned and never forced by 
 3. **Visual/structural analysis.** Look at the block in its surroundings and decide its layout and whether more content is needed, specifically:
    - a lone item leaves a lot of blank space on its horizontal line → add items or columns;
    - a block has no adjacent block of the same width to sit beside → generate more content (more items, more columns, longer phrases, more dialogue lines) so it genuinely earns its width — or, only if pedagogy insists it stay small, keep it small and center it;
-   - a block's content fills well under its width → generate more content in the block's natural shape: more items, more columns (item grids), or more dialogue/example lines (prose such as dialogues);
+   - a block's content fills well under ~30% of its width → generate more content in the block's natural shape: more items, more columns (item grids), or more dialogue/example lines (prose such as dialogues);
    - two adjacent blocks are visibly different heights → extend the shorter one (more questions, examples, vocabulary, or dialogue lines, inserted wherever they read most naturally) so the pair balances;
-   - a prose line ends with a single stranded word → reword the phrase (a lone label or sub-heading word is fine).
+   - a prose line ends in a dangling fragment (a stray word, punctuation, or a split pair) → reword so the line ends complete (a lone label or sub-heading is fine).
 4. **Alter / extend.** Generate the extra content step 3 called for, chosen for teaching value — never filler.
 5. **Re-check.** Verify the step-3 goals are met; if not, repeat steps 4–5. Five consecutive failures on one block: log it as an open problem, move to the next block or page, and report all logged problems at the end for the owner.
 
@@ -40,13 +40,13 @@ Pedagogical fit outranks space-filling at every step: if the right presentation 
 
 ## Content shape (authoring rules)
 - **Explainers vs notes.** A one-liner that explains a whole section is a sub-heading (serif, slightly larger), written only when it adds what the chart/dialog does not already state. A note about a single item (one vocab row) is a merged row inside that block, directly under the item.
-- **No redundancy.** Never restate in prose what the very next chart already shows.
+- **No redundancy.** Never restate in prose what the very next chart already shows; never repeat a block's title twice (a section heading plus the block's own sub-title) — state it once.
 - **Contrast is visible.** Two versions/conjugations/uses of a concept, or two concepts, are always separated — columns or clear spacing.
 - **Choose the natural input.** "word → answer" facts (e.g. person → people) are fill-in text fields; recognition / "pick the right one" is multiple choice.
 - **Blanks are contiguous lines** (the input.gap), never literal "___" underscores in the prompt.
 - **Group sizes (strong preference, not a hard rule).** When generating a lesson's HTML, generate a number of questions / amount of content that FILLS the rows — prefer 4 or 8 items per grid so no row is left with a single lone question. Add or trim items by pedagogical value (see PEDAGOGY), never by padding with filler.
 - **Options are authored to fit their line — never wrapped by CSS.** Short options sit on one line; long options (whole sentences, as in translation or listening) are laid out stacked under the stem. The page never relies on CSS text wrapping to squeeze over-long options into a row.
-- **No hanging words.** A wrapped paragraph must not leave a single word stranded on its own line — reword the phrase to avoid it. A lone word is fine when it is a deliberate label or sub-heading (e.g. "Consequências:") that introduces what follows; the distinction is intent, not length.
+- **Nothing looks accidental or broken.** If a rendered line ends in a dangling fragment — a stray punctuation mark, a lone trailing word, or a split pair like "word · word" — reword so the line ends complete. A fragment is fine only when it is a deliberate label or sub-heading (e.g. "Consequências:") that introduces what follows. The test is visual: does it look deliberate, or does it look like the text broke?
 
 
 
