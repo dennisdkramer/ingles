@@ -145,6 +145,8 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .blanks.sent{display:block}
 .blanks.sent>div{display:block;margin:8px 0}
 .blanks.sent>div input.gap{display:inline-block;width:9em;margin:0 .2em;vertical-align:baseline}
+.blanks.sent.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
+.blanks.sent.cols>div{margin:6px 0}
 
 body.editing #hlLayer,body.editing #noteLayer{display:none}
 body.editing mark.nb.has-rec{background-image:none}
