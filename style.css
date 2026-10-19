@@ -121,9 +121,10 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}
 .panel{border:2px dashed var(--tan);border-radius:12px;padding:12px 16px;background:var(--paper);min-width:0}
 .panel.full{grid-column:1/-1}
+.panel.centered{grid-column:1/-1;justify-self:center;width:calc(50% - 7px)}
 .panel .ex-head{margin-top:0}
-.qgrid{display:grid;grid-template-columns:max-content minmax(0,max-content) repeat(3,minmax(0,max-content));align-items:center;column-gap:14px;row-gap:8px;min-width:0}
-.qgrid.qgrid-4{grid-template-columns:max-content minmax(0,max-content) repeat(4,minmax(0,max-content))}
+.qgrid{display:grid;grid-template-columns:max-content max-content repeat(3,max-content);align-items:center;column-gap:14px;row-gap:8px;min-width:0}
+.qgrid.qgrid-4{grid-template-columns:max-content max-content repeat(4,max-content)}
 .qgrid .qnum{font-weight:700}
 .blanks{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px 24px}
 .blanks>div{display:grid;grid-template-columns:var(--prompt-w,8em) 1fr;align-items:center;gap:8px}
@@ -140,7 +141,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .qgrid.stack .qitem{margin:0 0 12px}
 .qgrid.stack .qline{display:flex;align-items:baseline;gap:8px}
 .qgrid.stack .qline .qnum{flex:0 0 auto;font-weight:700}
-.qgrid.stack .qopts{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:4px;padding-left:2em}
+.qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:space-around;gap:6px 18px;margin-top:4px;margin-left:10px}
 .blanks.sent{display:block}
 .blanks.sent>div{display:block;margin:8px 0}
 .blanks.sent>div input.gap{display:inline-block;width:9em;margin:0 .2em;vertical-align:baseline}

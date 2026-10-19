@@ -46,9 +46,9 @@ _(none queued.)_
 - @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow
 
 ## Layout at generation (blocks vary at authoring time; CSS stays fixed)
-- CSS uses fixed constants (no dynamic/viewport sizing), but at AUTHORING time the layout is chosen per content so no block overflows.
-- .panel is half-width only when it pairs with another half-width .panel on the same row; otherwise it spans full width (.panel.full).
-- Multiple-choice overflow: a small overflow stacks the options BELOW the stem (keep half-width); an overflow of roughly ~100px or more keeps options inline and makes the block full-width. Column spacing stretches so the content fills the block.
+- CSS uses fixed constants (no dynamic/viewport sizing and no text wrapping); at AUTHORING time the layout and content are chosen so no block overflows and no option wraps mid-phrase.
+- .panel is half-width only when it pairs with another half-width .panel on the same row. A block that must stay half-width without a partner is centered (.panel.centered) — it is never stretched to full width just to fill a row.
+- Multiple-choice options never wrap mid-option (no CSS text wrapping). Short options sit on one horizontal line, distributed with even spacing (space-around) and indented ~10px from the question; long options (whole sentences) are stacked under the stem. The author chooses short-line vs stacked at generation time so nothing overflows.
 - A section explainer (a standalone PT sentence that introduces a section) is a sub-heading under the h2: serif (Playfair), ~1pt larger than body, italic — written only when it adds what the chart below does not already say.
 - A note that applies to one chart row is a merged (colspan) row directly under that row — not a floating paragraph.
 - Paired content (e.g. a phrase chart and a dialogue) is placed side-by-side half-width, with the Portuguese below the English (a line break in the same cell, not a separate column).

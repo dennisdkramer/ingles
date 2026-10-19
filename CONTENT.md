@@ -28,7 +28,10 @@ _(Batches queued for this category, newest first. Cleared once done AND committe
 - **Contrast is visible.** Two versions/conjugations/uses of a concept, or two concepts, are always separated — columns or clear spacing.
 - **Choose the natural input.** "word → answer" facts (e.g. person → people) are fill-in text fields; recognition / "pick the right one" is multiple choice.
 - **Blanks are contiguous lines** (the input.gap), never literal "___" underscores in the prompt.
-- **Group sizes (strong preference, not a hard rule).** When generating a lesson's HTML, generate a number of questions / amount of content that FILLS the rows — prefer 4 or 8 items per grid so no row is left with a single lone question; pad or trim to fill, since the items are quick to produce.
+- **Group sizes (strong preference, not a hard rule).** When generating a lesson's HTML, generate a number of questions / amount of content that FILLS the rows — prefer 4 or 8 items per grid so no row is left with a single lone question. Add or trim items by pedagogical value (see PEDAGOGY), never by padding with filler.
+- **Fill or shrink — never leave a block lopsided.** A block is authored to genuinely use the width it is given. If it would come out half-empty, add items or lengthen phrases chosen for their teaching value (see PEDAGOGY), or make the block half-width — not full-width with a dead half.
+- **Half-width blocks pair up.** A block is authored half-width only when another half-width block sits beside it on the same row. A block that pedagogically must stay small and has no partner is authored half-width and centered — it is never stretched to full width just to fill a row.
+- **Options are authored to fit their line — never wrapped by CSS.** Short options sit on one line; long options (whole sentences, as in translation or listening) are laid out stacked under the stem. The page never relies on CSS text wrapping to squeeze over-long options into a row.
 
 
 
