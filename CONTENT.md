@@ -16,6 +16,21 @@ _(Batches queued for this category, newest first. Cleared once done AND committe
 - Exercise layout (the reusable template — mechanism in style.css): every exercise group is a bordered panel inside a two-per-row flow, and a group that needs full width (long options / a textarea / many items) spans the whole row. Inside a panel there are exactly two shapes: (1) multiple-choice → an aligned grid of [number][stem][one column per option], so the options line up vertically; (2) fill-in → an auto-flowing grid where the prompt sits in a fixed-width column so every gap lines up, and the number of pairs per row is whatever fits the group's item width. A page only declares a group's type and width — it never hand-tunes columns.
 - Edit mode (teacher-only, in the "demo (you)" view): a ✏️ Edit toggle loads a separate unmarked, editable copy — the live page and its marks are never touched. Changes auto-save to the backend as a `type:"content"` row holding the FULL page HTML, keyed to the teacher's email (staging only; students never see it), and ↩️ Revert discards them. Every lesson file is created with a sibling `<lesson>.edit.html` sidecar that is a full copy of the lesson. "Baking in" is a pure rename: the editor fetches the saved HTML from the backend, writes it over the sidecar, deletes the original lesson file, and renames the sidecar to the lesson name — no copy/paste and no content editing.
 
+## Content generation process (every block)
+Content is produced by a loop; layout is never pre-assigned and never forced by CSS — a block BECOMES full-width, half-width, one column or several columns as a RESULT of this loop.
+
+1. **Pedagogical assessment.** Decide what the block teaches, how central it is, and where it sits in the course (the earlier, the shorter and simpler the phrases must stay). → PEDAGOGY.md.
+2. **Initial generation.** Write the items — questions, phrases, vocabulary, dialogue lines. Their length and count are only the starting point.
+3. **Visual/structural analysis.** Look at the block in its surroundings and decide its layout and whether more content is needed, specifically:
+   - a lone item leaves a lot of blank space on its horizontal line → add items or columns;
+   - a block has no adjacent block of the same width to sit beside → generate more content (more items, more columns, longer phrases) so it genuinely earns its width — or, only if pedagogy insists it stay small, keep it small and center it;
+   - a column fills well under the block's width (roughly a quarter or less) → use more columns (two, or four when the items are very short);
+   - two adjacent blocks are visibly different heights → extend the shorter one (more questions, examples, vocabulary, or dialogue lines, inserted wherever they read most naturally) so the pair balances.
+4. **Alter / extend.** Generate the extra content step 3 called for, chosen for teaching value — never filler.
+5. **Re-check.** Verify the step-3 goals are met; if not, repeat steps 4–5. Five consecutive failures on one block: log it as an open problem, move to the next block or page, and report all logged problems at the end for the owner.
+
+Pedagogical fit outranks space-filling at every step: if the right presentation is a single short column, keep it that way and make the spacing work around it.
+
 ## Content quantity
 - **Explanatory content (everything before the quiz)** is included **as appropriate** — only as much as is necessary to confirm the student understands the primary idea of the lesson. No fixed section count and no fixed length per section.
 - **Exercise shapes** (fill-in blanks, multiple-choice, translation boxes, recording prompts, dialogues, charts…) are each used **as many times as appropriate** — never exactly one per page unless the lesson genuinely needs only one. There is no one-translation-box or one-recording-prompt rule.
@@ -29,8 +44,6 @@ _(Batches queued for this category, newest first. Cleared once done AND committe
 - **Choose the natural input.** "word → answer" facts (e.g. person → people) are fill-in text fields; recognition / "pick the right one" is multiple choice.
 - **Blanks are contiguous lines** (the input.gap), never literal "___" underscores in the prompt.
 - **Group sizes (strong preference, not a hard rule).** When generating a lesson's HTML, generate a number of questions / amount of content that FILLS the rows — prefer 4 or 8 items per grid so no row is left with a single lone question. Add or trim items by pedagogical value (see PEDAGOGY), never by padding with filler.
-- **Fill or shrink — never leave a block lopsided.** A block is authored to genuinely use the width it is given. If it would come out half-empty, add items or lengthen phrases chosen for their teaching value (see PEDAGOGY), or make the block half-width — not full-width with a dead half.
-- **Half-width blocks pair up.** A block is authored half-width only when another half-width block sits beside it on the same row. A block that pedagogically must stay small and has no partner is authored half-width and centered — it is never stretched to full width just to fill a row.
 - **Options are authored to fit their line — never wrapped by CSS.** Short options sit on one line; long options (whole sentences, as in translation or listening) are laid out stacked under the stem. The page never relies on CSS text wrapping to squeeze over-long options into a row.
 
 

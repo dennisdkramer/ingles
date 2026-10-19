@@ -46,9 +46,11 @@ _(none queued.)_
 - @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow
 
 ## Layout at generation (blocks vary at authoring time; CSS stays fixed)
-- CSS uses fixed constants (no dynamic/viewport sizing and no text wrapping); at AUTHORING time the layout and content are chosen so no block overflows and no option wraps mid-phrase.
-- .panel is half-width only when it pairs with another half-width .panel on the same row. A block that must stay half-width without a partner is centered (.panel.centered) — it is never stretched to full width just to fill a row.
-- Multiple-choice options never wrap mid-option (no CSS text wrapping). Short options sit on one horizontal line, distributed with even spacing (space-around) and indented ~10px from the question; long options (whole sentences) are stacked under the stem. The author chooses short-line vs stacked at generation time so nothing overflows.
+- CSS uses fixed constants (no dynamic/viewport sizing and no text wrapping). Layout is not pre-assigned: a block's width and column count are the OUTCOME of the generation loop in CONTENT.md, and CSS only implements that outcome — it never rescales or wraps content to force a fit.
+- Width: a block is half-width when it sits beside another half-width block on the same row. A block left on its own earns full width by generating more content (more items, more columns, longer phrases); only when pedagogy insists it stay small is it kept half-width and centered (.panel.centered).
+- Columns: when a block's items fill only a sliver of its width (roughly a quarter or less), they flow into more columns — two normally, four when the items are very short.
+- Height: two adjacent half-width blocks are balanced by extending the shorter one (more questions, examples, vocabulary, or dialogue lines).
+- Multiple-choice options never wrap mid-option (no CSS text wrapping). Short options sit on one horizontal line, distributed with even spacing (space-around) and indented ~10px from the question; long options (whole sentences) are stacked under the stem.
 - A section explainer (a standalone PT sentence that introduces a section) is a sub-heading under the h2: serif (Playfair), ~1pt larger than body, italic — written only when it adds what the chart below does not already say.
 - A note that applies to one chart row is a merged (colspan) row directly under that row — not a floating paragraph.
 - Paired content (e.g. a phrase chart and a dialogue) is placed side-by-side half-width, with the Portuguese below the English (a line break in the same cell, not a separate column).
