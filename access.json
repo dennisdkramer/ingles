@@ -1,8 +1,3 @@
 {
-  "teachers": ["dennisdkramer@gmail.com"],
-  "students": {
-    "maria@gmail.com":  { "name": "Maria",  "track": "kids" },
-    "joao@gmail.com":   { "name": "João",   "track": "business" },
-    "alebioosantos@gmail.com":    { "name": "Ale",    "track": "business" }
-  }
+  "teachers": ["dennisdkramer@gmail.com"]
 }

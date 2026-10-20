@@ -124,9 +124,12 @@ function renderAnswers(){
 (async()=>{try{
  let extra="";
  if(gate.teacher){
-  const ac=await(await fetch("../access.json?"+Date.now())).json();
-  const st=Object.entries(ac.students||{}).filter(([e,s])=>s.track===TRACK);
-  extra=' <select id="sel"><option value="'+gate.email+'">demo (you)</option>'+st.map(([e,s])=>'<option value="'+e+'">'+(s.name||e)+"</option>").join("")+"</select>";}
+  let st=[];
+  try{
+   const j=await(await fetch(BACKPACK+"?action=students&track="+encodeURIComponent(TRACK)+"&t="+Date.now())).json();
+   st=(j&&j.students)||[];
+  }catch(e){st=[];}
+  extra=' <select id="sel"><option value="'+gate.email+'">demo (you)</option>'+st.map(s=>'<option value="'+s.email+'">'+(s.name||s.email)+"</option>").join("")+"</select>";}
  const bar=document.getElementById("controlbar")||topbar;
  bar.innerHTML="🦺 "+gate.email+" · <b>"+TRACK+"</b> · <a href=\"../portal.html\">Index</a>"+extra+' · <button type="button" id="clearpage">🧹 Clear page</button>' + ' <button type="button" id="prevlesson"'+(L>1?'':' disabled')+' title="Lição '+(L-1)+'">← Last lesson</button>' + ' <button type="button" id="nextlesson"'+(L<COUNT?'':' disabled')+' title="Lição '+(L+1)+'">Next lesson →</button>';
  const pv=document.getElementById("prevlesson");if(pv&&L>1)pv.onclick=()=>location.href="lesson"+(L-1)+".html";

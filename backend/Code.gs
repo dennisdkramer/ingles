@@ -13,6 +13,9 @@
  * the Drive upload itself fails — the Sheet cell cannot hold more than ~50k characters.)
  * GET ?action=layer returns EVERY recording as EITHER fileId (Drive) OR b64 (the inline fallback),
  * so a clip is still playable after a page reload even when it never reached Drive.
+ * Access control: approved students + pending signup requests live in sheet IAP_backpack!access
+ * (email|name|track|status|ts). Approve/reject/queue verify the caller is a TEACHER; every access
+ * action verifies the Google ID token server-side (tokeninfo) before trusting an email.
  * REMINDER: this file only runs after a NEW DEPLOYMENT VERSION (Deploy → Manage deployments).
  */
 
@@ -20,6 +23,15 @@ var SS_NAME = "IAP_backpack";
 var TAB = "layer";
 var HEADERS = ["id", "email", "track", "lesson", "type", "anchor", "data", "author", "ts", "b64"];
 var UPLOAD_FOLDER = "IAP_uploads";
+var ACCESS_TAB = "access";
+var ACCESS_HEADERS = ["email", "name", "track", "status", "ts"];
+var TEACHERS = ["dennisdkramer@gmail.com"];
+var CLIENT_ID = "872457390510-jsk9pooj688ogvp6hs9ca4js3iqk5n69.apps.googleusercontent.com";
+var SEED_STUDENTS = [
+  { email: "maria@gmail.com", name: "Maria", track: "kids" },
+  { email: "joao@gmail.com", name: "João", track: "business" },
+  { email: "alebioosantos@gmail.com", name: "Ale", track: "business" }
+];
 
 /* ---------- helpers ---------- */
 function getSS_() {
@@ -54,6 +66,78 @@ function rowsToObjs_(sh) {
   }
   return out;
 }
+
+/* ---------- access-control storage (approved students + pending requests) ----------
+   The allowed-student list and the request queue live in their own tab so they never mix
+   with lesson-content rows in `layer`. Teachers stay in access.json on the client and are
+   mirrored in TEACHERS here for server-side authorization of approve/reject/queue. */
+function getAccessSheet_() {
+  var ss = getSS_();
+  var sh = ss.getSheetByName(ACCESS_TAB);
+  if (!sh) sh = ss.insertSheet(ACCESS_TAB);
+  var header = sh.getLastRow() >= 1
+    ? sh.getRange(1, 1, 1, ACCESS_HEADERS.length).getValues()[0]
+    : [];
+  if (header.join("|") !== ACCESS_HEADERS.join("|")) {
+    sh.clear();
+    sh.appendRow(ACCESS_HEADERS);
+    /* one-time migration: keep the students that were allow-listed in access.json so an
+       existing student is not locked out when the list moves server-side. */
+    for (var i = 0; i < SEED_STUDENTS.length; i++) {
+      var s = SEED_STUDENTS[i];
+      sh.appendRow([s.email, s.name, s.track, "approved", new Date().toISOString()]);
+    }
+  }
+  return sh;
+}
+function accessRows_() {
+  var sh = getAccessSheet_();
+  var v = sh.getDataRange().getValues();
+  var out = [];
+  for (var i = 1; i < v.length; i++) {
+    out.push({
+      email: String(v[i][0] || ""),
+      name: String(v[i][1] || ""),
+      track: String(v[i][2] || ""),
+      status: String(v[i][3] || ""),
+      ts: String(v[i][4] || ""),
+      _row: i + 1
+    });
+  }
+  return out;
+}
+function accessRow_(email) {
+  var rows = accessRows_();
+  for (var i = 0; i < rows.length; i++) if (rows[i].email.toLowerCase() === String(email).toLowerCase()) return rows[i];
+  return null;
+}
+function accessUpsert_(email, name, track, status) {
+  var sh = getAccessSheet_();
+  var rows = accessRows_();
+  for (var i = 0; i < rows.length; i++) {
+    if (rows[i].email.toLowerCase() === String(email).toLowerCase()) {
+      sh.getRange(rows[i]._row, 1, 1, ACCESS_HEADERS.length).setValues([[String(email), String(name || ""), String(track || ""), String(status || "pending"), new Date().toISOString()]]);
+      return;
+    }
+  }
+  sh.appendRow([String(email), String(name || ""), String(track || ""), String(status || "pending"), new Date().toISOString()]);
+}
+/* verify a Google ID token server-side (tokeninfo) so an email is never trusted from the client. */
+function verifyToken_(token) {
+  if (!token) throw new Error("missing token");
+  var resp = UrlFetchApp.fetch("https://oauth2.googleapis.com/tokeninfo?id_token=" + encodeURIComponent(token), { muteHttpExceptions: true });
+  if (resp.getResponseCode() !== 200) throw new Error("invalid token");
+  var info = JSON.parse(resp.getContentText());
+  if (String(info.aud) !== CLIENT_ID) throw new Error("token audience mismatch");
+  if (!info.email) throw new Error("no email in token");
+  if (!info.email_verified) throw new Error("unverified email");
+  return info;
+}
+function isTeacher_(email) {
+  for (var i = 0; i < TEACHERS.length; i++) if (TEACHERS[i].toLowerCase() === String(email).toLowerCase()) return true;
+  return false;
+}
+
 /* trash the Drive file a recording row points to (b64 column = "drive:<fileId>" for uploaded audio).
    Never throws: a missing/already-trashed file (or a plain inline b64 row) is simply nothing to purge,
    and a purge failure must never stop the row itself from being deleted. Returns true only when a file
@@ -114,6 +198,17 @@ function doGet(e) {
     return json_({ total: sh2.getLastRow() - 1, sample: dump });
   }
 
+  if (action === "students") {
+    var allAcc = accessRows_();
+    var list = [];
+    for (var i = 0; i < allAcc.length; i++) {
+      if (allAcc[i].status !== "approved") continue;
+      if (p.track && allAcc[i].track !== p.track) continue;
+      list.push({ email: allAcc[i].email, name: allAcc[i].name, track: allAcc[i].track });
+    }
+    return json_({ students: list });
+  }
+
   return json_({ error: "unknown action" });
 }
 
@@ -125,6 +220,56 @@ function doPost(e) {
     var o = JSON.parse(e.postData.contents);
     var sh = getSheet_();
     var action = (o.action || "add").toLowerCase();
+
+    /* ---- access-control actions (Google sign-in approval flow) ---- */
+    if (action === "status") {
+      var info = verifyToken_(o.token);
+      var row = accessRow_(info.email);
+      if (row && row.status === "approved") return json_({ status: "approved", email: info.email, name: row.name || info.name, track: row.track });
+      if (row && row.status === "pending") return json_({ status: "pending", email: info.email, name: row.name || info.name });
+      return json_({ status: "unknown", email: info.email });
+    }
+
+    if (action === "request") {
+      var info2 = verifyToken_(o.token);
+      var row2 = accessRow_(info2.email);
+      if (row2 && row2.status === "approved") return json_({ status: "approved", email: info2.email, name: row2.name || info2.name, track: row2.track });
+      if (row2 && row2.status === "pending") return json_({ status: "pending", email: info2.email, name: row2.name || info2.name });
+      accessUpsert_(info2.email, info2.name || o.name || "", "", "pending");
+      return json_({ status: "pending", email: info2.email, name: info2.name || o.name || "" });
+    }
+
+    if (action === "approve" || action === "reject") {
+      var info3 = verifyToken_(o.token);
+      if (!isTeacher_(info3.email)) return json_({ error: "not a teacher" });
+      if (!o.email) return json_({ error: "missing email" });
+      if (action === "approve") {
+        var row3 = accessRow_(o.email);
+        var track = o.track || "business";
+        accessUpsert_(o.email, (row3 && row3.name) || o.name || o.email, track, "approved");
+        return json_({ result: "ok", status: "approved", email: o.email, track: track });
+      }
+      var shAcc = getAccessSheet_();
+      var rowsAcc = accessRows_();
+      for (var r = rowsAcc.length - 1; r >= 0; r--) {
+        if (rowsAcc[r].email.toLowerCase() === String(o.email).toLowerCase() && rowsAcc[r].status === "pending") {
+          shAcc.deleteRow(rowsAcc[r]._row);
+        }
+      }
+      return json_({ result: "ok", status: "rejected", email: o.email });
+    }
+
+    if (action === "queue") {
+      var info4 = verifyToken_(o.token);
+      if (!isTeacher_(info4.email)) return json_({ error: "not a teacher" });
+      var rows4 = accessRows_();
+      var pending = [], approved = [];
+      for (var q = 0; q < rows4.length; q++) {
+        if (rows4[q].status === "pending") pending.push({ email: rows4[q].email, name: rows4[q].name, ts: rows4[q].ts });
+        else if (rows4[q].status === "approved") approved.push({ email: rows4[q].email, name: rows4[q].name, track: rows4[q].track });
+      }
+      return json_({ pending: pending, approved: approved });
+    }
 
     if (action === "add" || action === "set") {
       var id = String(o.id || (Date.now() + "_" + Math.floor(Math.random() * 99999)));

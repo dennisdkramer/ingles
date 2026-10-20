@@ -4,15 +4,15 @@
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-MC<n>.)_
 
-- B-MC1: Google-login approval flow. The portal already signs in with Google but rejects any account not listed in access.json. Change: an unrecognized Google account instead submits a pending access request, and only the owner can approve each one (so nobody gets access unattended). Confirm with the owner before building: (a) whether the requester chooses their book (kids/business/adultos) at signup or the owner assigns it at approval; (b) whether approval happens in the teacher portal (recommended) rather than hand-editing a list. Teachers stay in access.json; the approved-student list and the request queue move server-side.
+_(none queued.)_
 
 ## GOALS
 - "Inglês Abre Portas": a static English-teaching site — one teacher plus a few allow-listed students, three books (kids, business, adults/nsfw); every lesson is a standalone page.
 - A student reads/listens to a lesson and marks it up (highlight, note, record); every mark persists server-side per student and per book, and the teacher sees the same layer (student selector in the control bar).
-- Non-goals: no accounts/permissions beyond access.json, no client-side source of truth.
+- Non-goals: no client-side source of truth (the server is the sole source); the only client-side access list is the teachers in access.json.
 
 ## ARCHITECTURE
-- Pages: login (index.html; portal.html is the same app on a named path) reads access.json and hands a signed `sessionStorage.gate` to `<track>/lessonN.html`.
+- Pages: login (index.html; portal.html is the same app on a named path) signs in with Google, checks the server-side access status, and hands a signed `sessionStorage.gate` to `<track>/lessonN.html`. An unrecognized account submits a pending request; the teacher portal (shown to a teacher after login) approves or rejects each request and assigns the student's book at approval.
 - Lesson pages are content-only: config consts (BACKPACK exec URL, SECRET, TRACK, L, COUNT) + `<script src="../engine1.js">` + `<script src="../engine2.js">` + style.css.
 - engine1.js = gate, gestures/selection popup, notes/recordings/audio, highlights, network-last writes. engine2.js = control bar, adaptive layer poll (1s active / 5s idle / paused when hidden), feed, restoring saved marks.
 - One server (backend/Code.gs — see BACKEND.md): Sheet `IAP_backpack!layer` + Drive folder `IAP_uploads`. It is the ONLY source of truth; a local action is shielded from a racing poll by a generic id+action grace window (12s).
@@ -28,8 +28,8 @@ _(Batches queued for this category, newest first. Cleared once done AND committe
 ## STATE / PARAMETERS (as of 2026-10-12)
 - Git: HEAD == origin/main with a clean tracked tree; the `notePending` grace window is 12s (ARCHITECTURE above).
 - Gate: `sig = h(email+track+SECRET "abreportas2025")` (h = Java-style `x = x*31 + charCode` hash), stored in sessionStorage.gate; engine1.js redirects to portal.html when it is invalid. OAuth origin: https://dennisdkramer.github.io.
-- access.json: teachers [dennisdkramer@gmail.com]; students Maria (kids), João (business), Ale (business).
-- Backend is owner-deployed (I cannot deploy it): a Code.gs change only takes effect after a NEW deployment version, while the /exec URL stays the same. Exec URL: https://script.google.com/macros/s/AKfycbxSR8UmOwosLIgn1-AGKhgXJvdqOVkzMqrTwdlWNF9kOkt-256TqTacOsQlo6JyHplR/exec (set per lesson as const BACKPACK).
+- access.json: teachers [dennisdkramer@gmail.com] only. The approved-student list and the pending-request queue live server-side (sheet `IAP_backpack!access`, columns email|name|track|status|ts), seeded on first run with the three previously allow-listed students (Maria kids, João business, Ale business). Teachers are mirrored as a constant in Code.gs for server-side approval authorization — keep the two in sync.
+- Backend is owner-deployed (I cannot deploy it): a Code.gs change only takes effect after a NEW deployment version, while the /exec URL stays the same. Exec URL: https://script.google.com/macros/s/AKfycbxSR8UmOwosLIgn1-AGKhgXJvdqOVkzMqrTwdlWNF9kOkt-256TqTacOsQlo6JyHplR/exec (set per lesson as const BACKPACK). REDEPLOY PENDING (2026-10-20): the access-control actions (status/request/approve/reject/queue/students) and the new `access` tab only exist after a NEW deployment — see ISSUES.md B-I6.
 - Development scope: the current build is business/lesson1.html–lesson10.html (Book 1). `qa/smoke.mjs` exercises business/lesson1.html's interactive features only; `qa/content.mjs` structure-checks all ten business lessons. kids/, nsfw/ and the login pages still carry their older wording.
 - Shared files (engine1.js, engine2.js, style.css): prefer in-place, exact-match edits when that is the cleanest change, but reading a whole file into context and rewriting it whole is allowed and preferred whenever it improves correctness or clarity — never trade correctness or clarity for a smaller edit, and hold whatever files and context the task needs in memory. Lesson pages stay content-only (config consts + engine includes).
 
