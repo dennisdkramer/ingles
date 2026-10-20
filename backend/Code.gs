@@ -27,11 +27,6 @@ var ACCESS_TAB = "access";
 var ACCESS_HEADERS = ["email", "name", "track", "status", "ts"];
 var TEACHERS = ["dennisdkramer@gmail.com"];
 var CLIENT_ID = "872457390510-jsk9pooj688ogvp6hs9ca4js3iqk5n69.apps.googleusercontent.com";
-var SEED_STUDENTS = [
-  { email: "maria@gmail.com", name: "Maria", track: "kids" },
-  { email: "joao@gmail.com", name: "João", track: "business" },
-  { email: "alebioosantos@gmail.com", name: "Ale", track: "business" }
-];
 
 /* ---------- helpers ---------- */
 function getSS_() {
@@ -81,12 +76,6 @@ function getAccessSheet_() {
   if (header.join("|") !== ACCESS_HEADERS.join("|")) {
     sh.clear();
     sh.appendRow(ACCESS_HEADERS);
-    /* one-time migration: keep the students that were allow-listed in access.json so an
-       existing student is not locked out when the list moves server-side. */
-    for (var i = 0; i < SEED_STUDENTS.length; i++) {
-      var s = SEED_STUDENTS[i];
-      sh.appendRow([s.email, s.name, s.track, "approved", new Date().toISOString()]);
-    }
   }
   return sh;
 }
@@ -257,6 +246,20 @@ function doPost(e) {
         }
       }
       return json_({ result: "ok", status: "rejected", email: o.email });
+    }
+
+    if (action === "remove") {
+      var info5 = verifyToken_(o.token);
+      if (!isTeacher_(info5.email)) return json_({ error: "not a teacher" });
+      if (!o.email) return json_({ error: "missing email" });
+      var shRem = getAccessSheet_();
+      var rowsRem = accessRows_();
+      for (var idx = rowsRem.length - 1; idx >= 0; idx--) {
+        if (rowsRem[idx].email.toLowerCase() === String(o.email).toLowerCase()) {
+          shRem.deleteRow(rowsRem[idx]._row);
+        }
+      }
+      return json_({ result: "ok", status: "removed", email: o.email });
     }
 
     if (action === "queue") {

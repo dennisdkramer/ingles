@@ -92,8 +92,8 @@ async function renderTeacher(){
  });
  html+="<h4>Alunos aprovados</h4>";
  if(!QUEUE.approved.length)html+='<p class="dim">Nenhum aluno aprovado ainda.</p>';
- QUEUE.approved.forEach(s=>{
-  html+='<div class="row"><span class="done">✅ '+esc(s.name||s.email)+'</span> <span class="dim">'+esc(s.email)+' · '+TN[s.track]+'</span></div>';
+ QUEUE.approved.forEach((s,i)=>{
+  html+='<div class="row"><span class="done">✅ '+esc(s.name||s.email)+'</span> <span class="dim">'+esc(s.email)+' · '+TN[s.track]+'</span> <button onclick="removeStudent('+i+')">Remover</button></div>';
  });
  html+="<h4>Livros</h4>";
  for(const t of["kids","business","nsfw"])
@@ -105,6 +105,13 @@ window.decide=async function(i,action){
  const track=action==="approve"?$("book_"+i).value:undefined;
  const j=await api(action,{token:cred,email:q.email,track:track});
  if(j.result==="ok"){log((action==="approve"?"Aprovado":"Recusado")+" ✔");renderTeacher();}
+ else log("ERRO: "+(j.error||"desconhecido"));
+};
+window.removeStudent=async function(i){
+ const s=QUEUE.approved[i];if(!s)return;
+ if(!confirm("Remover aluno "+(s.name||s.email)+"?"))return;
+ const j=await api("remove",{token:cred,email:s.email});
+ if(j.result==="ok"){log("Removido ✔");renderTeacher();}
  else log("ERRO: "+(j.error||"desconhecido"));
 };
 const prog=()=>JSON.parse(localStorage.getItem("prog_"+profile.email)||"{}");
