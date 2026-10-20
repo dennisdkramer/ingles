@@ -122,15 +122,9 @@ function renderAnswers(){
  });
 }
 (async()=>{try{
- let extra="";
- if(gate.teacher){
-  let st=[];
-  try{
-   const j=await(await fetch(BACKPACK+"?action=students&track="+encodeURIComponent(TRACK)+"&t="+Date.now())).json();
-   st=(j&&j.students)||[];
-  }catch(e){st=[];}
-  extra=' <select id="sel"><option value="'+gate.email+'">demo (you)</option>'+st.map(s=>'<option value="'+s.email+'">'+(s.name||s.email)+"</option>").join("")+"</select>";}
  const bar=document.getElementById("controlbar")||topbar;
+ let extra="";
+ if(gate.teacher){extra=' <select id="sel"><option value="'+gate.email+'">demo (you)</option></select>';}
  bar.innerHTML="🦺 "+gate.email+" · <b>"+TRACK+"</b> · <a href=\"../portal.html\">Index</a>"+extra+' · <button type="button" id="clearpage">🧹 Clear page</button>' + ' <button type="button" id="prevlesson"'+(L>1?'':' disabled')+' title="Lição '+(L-1)+'">← Last lesson</button>' + ' <button type="button" id="nextlesson"'+(L<COUNT?'':' disabled')+' title="Lição '+(L+1)+'">Next lesson →</button>';
  const pv=document.getElementById("prevlesson");if(pv&&L>1)pv.onclick=()=>location.href="lesson"+(L-1)+".html";
  const nx=document.getElementById("nextlesson");if(nx&&L<COUNT)nx.onclick=()=>location.href="lesson"+(L+1)+".html";
@@ -142,15 +136,26 @@ function renderAnswers(){
   document.querySelectorAll("mark.nb").forEach(m=>m.remove());
   hlReflow();ntReflow();
  };
-  const ppb=document.createElement("button");ppb.type="button";ppb.id="printpage";ppb.textContent="🖨 Print";
-  ppb.onclick=()=>{if(typeof printLesson==="function")printLesson();else toast("Print unavailable.")};
-  bar.appendChild(ppb);
-  if(gate.teacher){
-   const eb=document.createElement("button");eb.type="button";eb.id="editpage";eb.textContent="✏️ Edit";eb.onclick=()=>toggleEditMode();bar.appendChild(eb);
-   const rb=document.createElement("button");rb.type="button";rb.id="revertpage";rb.textContent="↩️ Revert";rb.onclick=()=>{if(!confirm("Discard your saved edits and restore the original content?"))return;send({action:"del",id:contentId()});toast("Reverting…");setTimeout(()=>location.reload(),900)};bar.appendChild(rb);
-  }
-
- if(gate.teacher){sel.onchange=()=>{STUDENT=sel.value;sig="";loadLayer()};}
+ const ppb=document.createElement("button");ppb.type="button";ppb.id="printpage";ppb.textContent="🖨 Print";
+ ppb.onclick=()=>{if(typeof printLesson==="function")printLesson();else toast("Print unavailable.")};
+ bar.appendChild(ppb);
+ if(gate.teacher){
+  const eb=document.createElement("button");eb.type="button";eb.id="editpage";eb.textContent="✏️ Edit";eb.onclick=()=>toggleEditMode();bar.appendChild(eb);
+  const rb=document.createElement("button");rb.type="button";rb.id="revertpage";rb.textContent="↩️ Revert";rb.onclick=()=>{if(!confirm("Discard your saved edits and restore the original content?"))return;send({action:"del",id:contentId()});toast("Reverting…");setTimeout(()=>location.reload(),900)};bar.appendChild(rb);
+ }
+ const selEl=document.getElementById("sel");
+ if(gate.teacher&&selEl){selEl.onchange=()=>{STUDENT=selEl.value;sig="";loadLayer()};}
+ if(gate.teacher){
+  (async()=>{
+   let st=[];
+   try{
+    const j=await(await fetch(BACKPACK+"?action=students&track="+encodeURIComponent(TRACK)+"&t="+Date.now())).json();
+    st=(j&&j.students)||[];
+   }catch(e){st=[];}
+   const el=document.getElementById("sel");
+   if(el)el.innerHTML='<option value="'+gate.email+'">demo (you)</option>'+st.map(s=>'<option value="'+s.email+'">'+(s.name||s.email)+"</option>").join("");
+  })();
+ }
  loadLayer();
  /* ---- cross-session poll (owner spec 2026-10-12) — the ONLY re-check there is: add/set/del on
     either side (teacher or student) reach the other as fast as the adaptive poll allows. Each send()
