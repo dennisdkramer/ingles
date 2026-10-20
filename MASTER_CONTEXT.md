@@ -4,7 +4,7 @@
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-MC<n>.)_
 
-_(none queued.)_
+- B-MC1: Google-login approval flow. The portal already signs in with Google but rejects any account not listed in access.json. Change: an unrecognized Google account instead submits a pending access request, and only the owner can approve each one (so nobody gets access unattended). Confirm with the owner before building: (a) whether the requester chooses their book (kids/business/adultos) at signup or the owner assigns it at approval; (b) whether approval happens in the teacher portal (recommended) rather than hand-editing a list. Teachers stay in access.json; the approved-student list and the request queue move server-side.
 
 ## GOALS
 - "Inglês Abre Portas": a static English-teaching site — one teacher plus a few allow-listed students, three books (kids, business, adults/nsfw); every lesson is a standalone page.

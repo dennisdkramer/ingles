@@ -4,7 +4,7 @@
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-BE<n>.)_
 
-_(none queued.)_
+- B-BE1: Access-request queue (supports MASTER_CONTEXT B-MC1). The backend gains: report a given email's access status (approved / pending / unknown), record a new signup request, and a teacher-only approve/reject that adds the email to the allowed list. Verify the Google ID token server-side before trusting an email. The approved-student list becomes server-side; teachers stay in access.json.
 
 ## WHAT IT IS
 - ONE Google Apps Script web app (`backend/Code.gs`), deployed on the owner's account (I cannot deploy). Every lesson page points at the same deployment through `const BACKPACK` (exec URL in MASTER_CONTEXT.md).
