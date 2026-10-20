@@ -177,3 +177,12 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
  #printRoot .pr-radio.pr-off{color:#8a8072}
 }
 
+/* ---- teacher portal (2026-10-20): books row + pending/approved half columns ---- */
+.tportal-books{display:flex;gap:10px;margin-top:2px}
+.tportal-books button{flex:1 1 0;margin:0;white-space:nowrap}
+.tportal-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}
+.tportal-col{margin:0}
+.tportal-col h4{margin:0 0 6px}
+.tportal-item{padding:8px 0;border-bottom:2px dashed var(--tan)}
+.tportal-item:last-child{border-bottom:0;padding-bottom:0}
+

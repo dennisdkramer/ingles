@@ -77,28 +77,34 @@ function renderStudent(track){
  html+='</div>';$("app").innerHTML=html;log("índice pronto ✔");
 }
 let QUEUE={pending:[],approved:[]};
-async function renderTeacher(){
- $("app").innerHTML='<div class="card"><h3>Portal do professor</h3><p class="dim">Aprove os pedidos e atribua o livro de cada aluno.</p><div id="queue">Carregando…</div></div>';
- const j=await api("queue",{token:cred});
- if(j.error){$("queue").innerHTML='<p class="todo">Não foi possível carregar os pedidos: '+esc(j.error)+"</p>";return}
- QUEUE={pending:j.pending||[],approved:j.approved||[]};
- let html="<h4>Pedidos pendentes</h4>";
- if(!QUEUE.pending.length)html+='<p class="dim">Nenhum pedido pendente.</p>';
+function bookButton(t){return '<button onclick="go(\''+t+'\',1)">'+TN[t]+'</button>';}
+function pendingHTML(){
+ let h='<div class="card tportal-col"><h4>Pedidos pendentes</h4>';
+ if(!QUEUE.pending.length)h+='<p class="dim">Nenhum pedido pendente.</p>';
  QUEUE.pending.forEach((q,i)=>{
-  html+='<div class="row"><b>'+esc(q.name||q.email)+'</b> <span class="dim">'+esc(q.email)+'</span> · '
-   +'<select id="book_'+i+'"><option value="kids">Kids 🛹</option><option value="business" selected>Business 💼</option><option value="nsfw">Adultos 🔞</option></select> '
-   +'<button onclick="decide('+i+',\'approve\')">Aprovar</button> '
-   +'<button onclick="decide('+i+',\'reject\')">Recusar</button></div>';
+  h+='<div class="tportal-item"><div><b>'+esc(q.name||q.email)+'</b> <span class="dim">'+esc(q.email)+'</span></div>'
+   +'<div><select id="book_'+i+'"><option value="kids">Kids 🛹</option><option value="business" selected>Business 💼</option><option value="nsfw">Adultos 🔞</option></select></div>'
+   +'<div><button onclick="decide('+i+',\'approve\')">Aprovar</button> <button onclick="decide('+i+',\'reject\')">Recusar</button></div></div>';
  });
- html+="<h4>Alunos aprovados</h4>";
- if(!QUEUE.approved.length)html+='<p class="dim">Nenhum aluno aprovado ainda.</p>';
+ return h+'</div>';
+}
+function approvedHTML(){
+ let h='<div class="card tportal-col"><h4>Alunos aprovados</h4>';
+ if(!QUEUE.approved.length)h+='<p class="dim">Nenhum aluno aprovado ainda.</p>';
  QUEUE.approved.forEach((s,i)=>{
-  html+='<div class="row"><span class="done">✅ '+esc(s.name||s.email)+'</span> <span class="dim">'+esc(s.email)+' · '+TN[s.track]+'</span> <button onclick="removeStudent('+i+')">Remover</button></div>';
+  h+='<div class="tportal-item"><div>✅ <b>'+esc(s.name||s.email)+'</b> <span class="dim">'+esc(s.email)+' · '+TN[s.track]+'</span></div>'
+   +'<div><button onclick="removeStudent('+i+')">Remover</button></div></div>';
  });
- html+="<h4>Livros</h4>";
- for(const t of["kids","business","nsfw"])
-  html+='<div class="row"><b>'+TN[t]+'</b> '+(COUNTS[t]?'<button onclick="go(\''+t+'\',1)">entrar</button>':'<span class="todo">🚧 em construção</span>')+'</div>';
- $("queue").innerHTML=html;
+ return h+'</div>';
+}
+async function renderTeacher(){
+ $("app").innerHTML='<div class="card tportal"><div class="tportal-books">'
+  +bookButton("kids")+bookButton("business")+bookButton("nsfw")
+  +'</div></div><div class="tportal-cols" id="tcols"><p class="dim">Carregando…</p></div>';
+ const j=await api("queue",{token:cred});
+ if(j.error){$("tcols").innerHTML='<div class="card tportal-col"><p class="todo">Não foi possível carregar os pedidos: '+esc(j.error)+'</p></div>';return}
+ QUEUE={pending:j.pending||[],approved:j.approved||[]};
+ $("tcols").innerHTML=pendingHTML()+approvedHTML();
 }
 window.decide=async function(i,action){
  const q=QUEUE.pending[i];if(!q)return;
@@ -116,7 +122,7 @@ window.removeStudent=async function(i){
 };
 const prog=()=>JSON.parse(localStorage.getItem("prog_"+profile.email)||"{}");
 function go(t,i){sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
-function showAcct(){const c=$("controlbar").querySelector("#acct"),lo=$("controlbar").querySelector("#logout");c.hidden=false;c.innerHTML="Signed in: <b>"+profile.email+"</b>";lo.hidden=false;lo.onclick=logout;}
+function showAcct(){const c=$("controlbar").querySelector("#acct"),lo=$("controlbar").querySelector("#logout");c.hidden=false;c.innerHTML="Signed in: <b>"+profile.email+"</b>";lo.hidden=false;lo.onclick=logout;const g=$("gcard");if(g)g.hidden=true;}
 function logout(){if(window.google&&google.accounts&&google.accounts.id)try{google.accounts.id.disableAutoSelect()}catch(e){}location.reload();}
 </script></body></html>
 
