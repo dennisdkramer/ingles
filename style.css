@@ -185,4 +185,8 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 .tportal-col h4{margin:0 0 6px}
 .tportal-item{padding:8px 0;border-bottom:2px dashed var(--tan)}
 .tportal-item:last-child{border-bottom:0;padding-bottom:0}
+/* small half-full blocks: center their text (ugliness rule) */
+.card.center{text-align:center}
+/* a standalone dialogue that isn't paired beside another block */
+.dialog.half{max-width:calc(50% - 7px);margin-left:auto;margin-right:auto}
 

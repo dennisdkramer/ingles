@@ -47,7 +47,7 @@ _(none queued.)_
 
 ## Layout at generation (blocks vary at authoring time; CSS stays fixed)
 - CSS uses fixed constants (no dynamic/viewport sizing and no text wrapping). Layout is not pre-assigned: a block's width and column count are the OUTCOME of the generation loop in CONTENT.md, and CSS only implements that outcome — it never rescales or wraps content to force a fit.
-- Width: a block is half-width when it sits beside another half-width block on the same row. A block left on its own earns full width by generating more content (more items, more columns, longer phrases); only when pedagogy insists it stay small is it kept half-width and centered (.panel.centered).
+- Width: a block is half-width when it sits beside another half-width block on the same row. A block left on its own earns full width by generating more content (more items, more columns, longer phrases); only when pedagogy insists it stay small is it kept half-width and centered (.panel.centered). A standalone dialogue (not paired beside another block) is likewise half-width and centered — never full-width-and-half-empty.
 - Columns: when a block's items fill only a sliver of its width (roughly a quarter or less), they flow into more columns — two normally, four when the items are very short.
 - Height: two adjacent half-width blocks are balanced by extending the shorter one (more questions, examples, vocabulary, or dialogue lines).
 - Multiple-choice options never wrap mid-option (no CSS text wrapping). Short options sit on one horizontal line, distributed with even spacing (space-around) and indented ~10px from the question; long options (whole sentences) are stacked under the stem.
