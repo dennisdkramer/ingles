@@ -32,6 +32,7 @@ Verification (QA run, curl, node --check, reading back a diff) is done when I ju
 confidence — not as a mandated step after every micro-edit. Trivial/doc-only/comment changes don't
 need proof-pasting. Logic changes to engine1.js/engine2.js/backend should get at least one real
 check (QA and/or a reasoned read-through) before I call them done, at my discretion on depth.
+Content/layout changes (lesson HTML, style.css) MUST run `node qa/overflow.mjs` — the real-browser overflow/balloon check; jsdom (qa/smoke.mjs) cannot see layout.
 Never state something is verified if it wasn't; if I skipped verification, say so plainly instead of
 implying it was checked.
 
