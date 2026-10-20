@@ -25,10 +25,11 @@ Content is produced by a loop; layout is never pre-assigned and never forced by 
    - a lone item leaves a lot of blank space on its horizontal line → add items or columns;
    - a block has no adjacent block of the same width to sit beside → generate more content (more items, more columns, longer phrases, more dialogue lines) so it genuinely earns its width — or, only if pedagogy insists it stay small, keep it small and center it;
    - a block's content fills well under ~30% of its width → generate more content in the block's natural shape: more items, more columns (item grids), or more dialogue/example lines (prose such as dialogues);
+   - a full-width block that is only half-filled (a big stretch of empty space) → fill the empty half (more content, or split the block's lines into a second column) or reduce it to half-width — a full-width block must never sit half-empty for no reason;
    - two adjacent blocks are visibly different heights → extend the shorter one (more questions, examples, vocabulary, or dialogue lines, inserted wherever they read most naturally) so the pair balances;
    - a prose line ends in a dangling fragment (a stray word, punctuation, or a split pair) → reword so the line ends complete (a lone label or sub-heading is fine).
 4. **Alter / extend.** Generate the extra content step 3 called for, chosen for teaching value — never filler.
-5. **Re-check.** Verify the step-3 goals are met; if not, repeat steps 4–5. Five consecutive failures on one block: log it as an open problem, move to the next block or page, and report all logged problems at the end for the owner.
+5. **Re-check (visual pass).** Re-render the block and confirm the step-3 goals are met — explicitly including: no block is left with massive empty space or an ugly, broken-looking line (a stranded lone ▶, a half-empty full-width block, a dangling fragment). If not, repeat steps 4–5. Five consecutive failures on one block: log it as an open problem, move to the next block or page, and report all logged problems at the end for the owner.
 
 Pedagogical fit outranks space-filling at every step: if the right presentation is a single short column, keep it that way and make the spacing work around it.
 
@@ -46,6 +47,8 @@ Pedagogical fit outranks space-filling at every step: if the right presentation 
 - **Blanks are contiguous lines** (the input.gap), never literal "___" underscores in the prompt.
 - **Group sizes (strong preference, not a hard rule).** When generating a lesson's HTML, generate a number of questions / amount of content that FILLS the rows — prefer 4 or 8 items per grid so no row is left with a single lone question. Add or trim items by pedagogical value (see PEDAGOGY), never by padding with filler.
 - **Options are authored to fit their line — never wrapped by CSS.** Short options sit on one line; long options (whole sentences, as in translation or listening) are laid out stacked under the stem. The page never relies on CSS text wrapping to squeeze over-long options into a row.
+- **Listening items stay inline.** In a listen-and-choose item the ▶ button and the answer options sit on the same line — an audio-only stem is never stacked, because a lone ▶ above the options looks broken.
+- **Recording prompts carry their text.** A ⏺ recording block states the exact sentence(s) to record inline; it never says "record line N of the dialogue" (a reference to another block).
 - **Nothing looks accidental or broken.** If a rendered line ends in a dangling fragment — a stray punctuation mark, a lone trailing word, or a split pair like "word · word" — reword so the line ends complete. A fragment is fine only when it is a deliberate label or sub-heading (e.g. "Consequências:") that introduces what follows. The test is visual: does it look deliberate, or does it look like the text broke?
 
 
