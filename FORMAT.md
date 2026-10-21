@@ -53,6 +53,7 @@ _(none queued.)_
 - Height: two adjacent half-width blocks are balanced by extending the shorter one (more questions, examples, vocabulary, or dialogue lines).
 - Multiple-choice options never wrap mid-option (no CSS text wrapping). Short options sit on one horizontal line, distributed with even spacing (space-around) and indented ~10px from the question; long options (whole sentences) are stacked under the stem.
 - Listen-and-choose items keep the ▶ audio chip inline with their answer options (never on its own line above them). A recording prompt states the exact text to record inline — never a reference to another block.
+- Consecutive questions are separated by a small, consistent vertical gap (breathing room between questions).
 - A section explainer (a standalone PT sentence that introduces a section) is a sub-heading under the h2: serif (Playfair), ~1pt larger than body, italic — written only when it adds what the chart below does not already say.
 - A note that applies to one chart row is a merged (colspan) row directly under that row — not a floating paragraph.
 - Paired content (e.g. a phrase chart and a dialogue) is placed side-by-side half-width, with the Portuguese below the English (a line break in the same cell, not a separate column).
