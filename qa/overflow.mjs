@@ -86,6 +86,7 @@ const MEASURE = `(function(){
       out.push({
         full: p.classList.contains('full'),
         w: Math.round(r.width),
+        h: Math.round(r.height),
         half: Math.round(pw / 2),
         over: p.scrollWidth - p.clientWidth,
         ex: ex.replace(/\\s+/g, ' ').slice(0, 60)
@@ -124,7 +125,7 @@ async function main() {
     const bad = panels.filter(p => p.over > 8 || (!p.full && p.w > p.half + 8));
     if (bad.length) {
       console.log('lesson ' + L + ':');
-      bad.forEach(p => { fails++; console.log('    ' + (p.over > 8 ? 'OVERFLOW' : 'BALLOON') + '  full=' + p.full + ' w=' + p.w + ' half=' + p.half + ' over=' + p.over + '  «' + p.ex + '»'); });
+      bad.forEach(p => { fails++; console.log('    ' + (p.over > 8 ? 'OVERFLOW' : 'BALLOON') + '  full=' + p.full + ' w=' + p.w + ' h=' + p.h + ' half=' + p.half + ' over=' + p.over + '  «' + p.ex + '»'); });
     }
   }
 

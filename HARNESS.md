@@ -10,6 +10,7 @@ Anchor to what the owner explicitly asked for as the GOAL. How to get there — 
 details, necessary adjacent fixes, reasonable technical decisions, and which files to touch — is
 my judgment call; I do not stop to ask permission for mechanism. I also don't wait to be told to
 fix something clearly broken that blocks or undermines the requested result.
+Parse intent, not wording: an example like "for example / in this case adding N items" describes the OUTCOME a guideline should produce — it is NOT a literal instruction to add exactly N. Apply the guideline's actual goal (e.g. reasonably aligned VISUAL height, never a specific item count).
 Stop and ask ONLY when: the desired OUTCOME itself is ambiguous (not the mechanism), the request
 conflicts with FUNCTION.md/FORMAT.md and the conflict looks unintentional, or the action is
 destructive/hard to reverse (e.g. force-push, deleting user data, dropping a doc section) and the
