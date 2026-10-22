@@ -5,13 +5,16 @@ This file does NOT hold lesson content — the prose, sections, exercises and wi
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-C<n>.)_
 
+- B-C1 [2026-10-21] Generate business Book 1 lessons 11–18 (intermediate): 8 lesson pages + sidecars, COUNT=18, portal/QA loop updates. (in progress)
+- B-C2 [2026-10-21] Generate business Book 2 lessons 19–36 (intermediate→advanced) per the PEDAGOGY.md curriculum map. (queued)
+
 
 
 - [2026-10-13] NO exercise has an in-page self-check: a student can fill blanks, pick radios and write translations, and nothing ever tells them whether it is right. Owner to decide the MECHANISM (teacher review at the next class, or a real feature) — it would be a NEW decision, and it starts in this file (then FUNCTION.md, then engine wiring + qa/smoke.mjs).
 
 ## CONTENT MAP
 - Lesson pages are content-only: config consts (TRACK, LESSON, SECRET, BACKPACK…) + the engine includes; every lesson's prose, sections, exercises and widgets live in the page file itself.
-- Tracks: kids/ · business/ · nsfw/ — each lesson is a standalone page; business/lesson1.html–lesson10.html are the current build (Book 1), each with a `<lesson>.edit.html` sidecar.
+- Tracks: kids/ · business/ · nsfw/ — each lesson is a standalone page; business/lesson1.html–lesson18.html are the current build (Book 1), each with a `<lesson>.edit.html` sidecar. business/lesson19.html–lesson36.html (Book 2) are planned.
 - A translation textarea (the `#trw`-style box) is the student's own written work and is persisted like every other exercise input. It is a REUSABLE exercise shape, not a fixed one-per-page slot: a lesson includes as many as appropriate, in Treino and/or Quiz.
 - Exercise layout (the reusable template — mechanism in style.css): every exercise group is a bordered panel inside a two-per-row flow, and a group that needs full width (long options / a textarea / many items) spans the whole row. Inside a panel there are exactly two shapes: (1) multiple-choice → an aligned grid of [number][stem][one column per option], so the options line up vertically; (2) fill-in → an auto-flowing grid where the prompt sits in a fixed-width column so every gap lines up, and the number of pairs per row is whatever fits the group's item width. A page only declares a group's type and width — it never hand-tunes columns.
 - Edit mode (teacher-only, in the "demo (you)" view): a ✏️ Edit toggle loads a separate unmarked, editable copy — the live page and its marks are never touched. Changes auto-save to the backend as a `type:"content"` row holding the FULL page HTML, keyed to the teacher's email (staging only; students never see it), and ↩️ Revert discards them. Every lesson file is created with a sibling `<lesson>.edit.html` sidecar that is a full copy of the lesson. "Baking in" is a pure rename: the editor fetches the saved HTML from the backend, writes it over the sidecar, deletes the original lesson file, and renames the sidecar to the lesson name — no copy/paste and no content editing.

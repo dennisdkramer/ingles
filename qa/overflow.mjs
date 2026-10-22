@@ -124,7 +124,7 @@ async function main() {
   await ses.send('Page.addScriptToEvaluateOnNewDocument', { source: 'try{sessionStorage.setItem("gate",JSON.stringify(' + JSON.stringify(gate) + '))}catch(e){}' });
 
   let fails = 0;
-  for (let L = 1; L <= 10; L++) {
+  for (let L = 1; L <= 18; L++) {
     await ses.send('Page.navigate', { url: base + '/business/lesson' + L + '.html' });
     await sleep(1300);
     const r = await ses.send('Runtime.evaluate', { expression: MEASURE, returnByValue: true });
@@ -145,7 +145,7 @@ async function main() {
   try { chrome.proc.kill(); } catch (e) { }
   await site.close();
   try { fs.rmSync(profile, { recursive: true, force: true }); } catch (e) { }
-  console.log(fails === 0 ? '✅ no overflow across lessons 1-10' : '❌ ' + fails + ' overflowing panel(s)');
+  console.log(fails === 0 ? '✅ no overflow across lessons 1-18' : '❌ ' + fails + ' overflowing panel(s)');
   process.exit(fails ? 1 : 0);
 }
 

@@ -5,7 +5,7 @@ This file holds the teaching-side shape of the lessons: what exercise types exis
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-P<n>.)_
 
-_(none queued.)_
+- B-P1 [2026-10-21] Expand the curriculum plan from lesson 10 through advanced English and add the new lesson/block types (research + synthesis below). Cleared once this batch is committed.
 
 ## What this file is
 
@@ -13,7 +13,7 @@ This file is the single source of truth for the pedagogical shape of the materia
 
 ## Curriculum
 
-Each lesson builds on the previous one — it reuses vocabulary and structures the student already knows and introduces one new thing at a time. Do not skip or reorder.
+Each lesson builds on the previous one — it reuses vocabulary and structures the student already knows and introduces one new thing at a time. Do not skip or reorder. The track is **business-casual**: the grammar and vocabulary of a native speaker's normal working day — phrasal verbs and common expressions first, formal/"term of the art" equivalents only when the everyday register genuinely needs them.
 
 ### Book 1 — foundations (built)
 
@@ -31,16 +31,37 @@ Each lesson builds on the previous one — it reuses vocabulary and structures t
 9. **The future: will / going to / "gonna"** — plans vs on-the-spot decisions; "gonna" is taught as the spoken future marker (a MODE, not a verb) so it never gets confused with the verb "go".
 10. **Past continuous vs past simple** — a long action in progress interrupted by a short one ("I was working when you called").
 
-### Book 1 — remaining roadmap to intermediate (planned)
+### Book 1 — intermediate (built)
 
-11. **Present perfect (1)** — have/has + past participle for life experience ("I have visited") and, crucially, duration from the past ("I have worked here for 5 years" — the flagship PT trap).
+11. **Present perfect (1)** — have/has + past participle for life experience ("I have visited") and, crucially, duration from the past ("I have worked here for 5 years" — the flagship PT trap); for/since.
 12. **Present perfect (2) vs past simple** — finished vs unfinished time; ever/never/already/yet/just.
-13. **Comparatives & superlatives** — better/worse, cheaper/most reliable.
-14. **Modals of obligation & ability** — can/can't, must/have to, should (advice).
-15. **Countable/uncountable + quantifiers** — some/any/much/many/a lot of (business: information, advice, money).
-16. **Prepositions of time & movement** — at/on/in, to/from (consolidation).
-17. **Phrasal verbs & "get"** — the coringa; business: get back to, set up, call off.
-18. **Conditionals (1st & 2nd) + would** — if I have time… / if I were you…
+13. **Comparatives & superlatives** — better/worse, cheaper/most reliable; (not) as … as.
+14. **Modals of obligation & ability** — can/can't, must/have to/have got to, should (advice).
+15. **Countable/uncountable + quantifiers** — some/any/much/many/a lot of/a few/a little (business: information, advice, money, time).
+16. **Prepositions of time & movement** — at/on/in, to/from (consolidation); common time expressions.
+17. **Phrasal verbs & "get"** — the coringa; get back to, set up, call off, get along with.
+18. **Conditionals (1st & 2nd) + would** — if I have time… / if I were you…; would for polite offers.
+
+### Book 2 — intermediate → advanced (planned)
+
+19. **Present perfect continuous** — "I've been working here for two years"; how long vs how many.
+20. **Past perfect & narrative order** — "I'd already sent it when…"; before/after/by the time; telling a work story in order.
+21. **Future (full system)** — will / gonna / present continuous for arrangements / present simple for schedules; "I'm seeing the client tomorrow."
+22. **Modals of deduction & possibility** — must / might / could / can't ("He must be in a meeting").
+23. **Everyday passive & get-passive** — "The email was sent," "It got lost," "It's done" — natural workplace statements, not formal writing.
+24. **Reported speech & reporting verbs** — "He said he'd call," "She asked me to send it"; say/tell/ask in day-to-day use.
+25. **Conditionals review + wish/if only** — zero/first/second/third; "I wish I had more time," "If only I'd known."
+26. **Question formation & indirect questions** — subject vs object questions; "Do you know when…?"; tag questions for conversation.
+27. **Relative clauses (everyday)** — who/that/which/where; defining clauses; omitting the pronoun ("the guy I told you about").
+28. **Gerunds & infinitives** — "I enjoy working," "I need to finish," "I stopped smoking" vs "I stopped to smoke"; high-frequency verb patterns.
+29. **Phrasal verbs (2): work & communication** — get back to, follow up, go over, wrap up, reach out, fill in, point out, bring up; separable vs inseparable.
+30. **Phrasal verbs (3): plans, problems & changes** — put off, call off, set up, figure out, come up with, run into, deal with, work out, end up.
+31. **Connected speech & reductions (deep)** — gonna/wanna/gotta/hafta/kinda/sorta/dunno/lemme/gimme; linking; "whaddaya," "couldja"; listening for the reduced forms.
+32. **Discourse markers & fillers for flow** — actually/basically/honestly/I mean/you know/so/anyway/by the way; keeping a conversation going.
+33. **Small talk & polite social English** — "How's it going?", compliments, agreeing/disagreeing politely, softening requests ("I was wondering if…", "Would you mind…").
+34. **Clarifying, repairing & confirming** — "Sorry, could you say that again?", "What do you mean by…?", "Just to confirm…", "Let me make sure I got that right."
+35. **Opinions, agreeing & disagreeing** — "In my opinion," "I see your point, but," "I'm not so sure about that."
+36. **Speaking flow: summarizing, negotiating & next steps** — "To sum up," "Let's circle back," "What's the plan?", "I'll get back to you."
 
 ## Pedagogy principles
 
@@ -55,6 +76,24 @@ Each lesson builds on the previous one — it reuses vocabulary and structures t
 - **Track voice — business.** The business book aims at correct speech and grammar and leans on business vocabulary (meeting, deadline, invoice, client, report, schedule…), but it never avoids common expressions or contractions (don't/doesn't, I'm, gonna, 'll). Contractions are the default in speech; the "full forms" are for formal writing.
 - **Practice quantity follows pedagogical weight.** When a concept is central to the lesson — or the student simply hasn't had enough exposure to it yet — generate more practice (more questions, longer phrases, an extra column) rather than fewer. A high-value, under-practised concept is never under-served just to keep a block small; add the extra practice it deserves.
 - **Phrase length follows the student's place in the course.** The closer to the start, the shorter and simpler the phrases must stay; later content may lengthen them. That length in turn decides how a block reaches its width: short phrases get there with more phrases or more columns, longer phrases get there with length. There is no fixed beginner/advanced split — judge each block as you go.
+- **Phrasal verbs first, formal only to map meaning.** Where a native speaker would say the phrasal verb (put off, call off, set up, get back to, go over, wrap up), that is what the student learns and produces. The formal single-word twin (postpone, cancel, arrange, return, review, conclude) appears only as a gloss so the student can connect meaning — never as the default answer or the preferred form.
+- **Business-casual register is the target voice.** The book teaches the English of a normal working day — contractions, phrasal verbs, discourse markers and friendly-but-professional politeness — not jargon and not stiff written English. "Term of the art" business vocabulary is excluded; when a formal term is shown at all it is only to contrast with the natural spoken form.
+- **Listening and speaking are trained, not just tested.** Every new item has audio; listening blocks teach connected speech and reductions; speaking blocks teach flow, linking and the chunks a native speaker produces automatically. Grammar is taught so the student can *generate* correct structure, not merely recognise it.
+
+## Lesson & block types (synthesized from the 2026-10-21 research pass)
+
+The business track keeps the established components (chart, dialogue, listen-and-choose, fill-in, translation, recording) and adds these patterns for intermediate→advanced — all built from the existing CSS components, so no new styling is required:
+
+- **Phrasal-verb swap (natural-first).** A chart teaches the everyday phrasal verb alongside its formal twin, and the exercise asks the student to *replace the formal word with the phrasal verb* (postpone → put off; cancel → call off; arrange → set up; return a call → call back; review → go over; submit → hand in). The phrasal verb is always the answer the student produces; the formal twin is only there to map meaning.
+- **Chunk bank (lexical approach).** Teach a set of whole, prefabricated expressions a native speaker says as one unit ("I'll get back to you," "Let me check," "Sounds good," "No worries," "Just a heads-up") with audio, then a matching/translation exercise. These chunks are the 55–80% of native speech that is formulaic (Lewis/Schmitt), and they build fluency faster than rules alone.
+- **Connected-speech lab (listening).** Show full form vs reduced form side by side (want to → wanna; going to → gonna; have to → hafta; kind of → kinda; don't know → dunno; let me → lemme; give me → gimme) with ▶ audio, then a listen-and-choose that asks "what did you hear?" — training the ear for modern US English.
+- **Micro-listening / dictation.** A short natural-speed sentence plays; the student types or picks exactly what they heard. The gap is a contiguous line, never literal underscores.
+- **Register swap (formal ↔ natural).** Two columns or a chart contrast a stiff written phrase with its business-casual spoken twin ("I regret to inform you" ↔ "Sorry to say"; "We are unable to" ↔ "We can't"), and the exercise picks the natural one for speech.
+- **Question-building.** Given an answer, form the question; given a context, ask the follow-up question. This is the single highest-leverage speaking/flow skill for keeping a conversation alive.
+- **Repair & clarification.** Fixed phrases for when communication breaks ("Could you say that again?", "I didn't catch that", "What do you mean by…?"), practised as listen-and-repeat and a fill-in.
+- **Speaking flow / shadowing.** A short, linked paragraph (or dialogue) read aloud and recorded, targeting linking, rhythm and the reduced forms from the connected-speech lab. The ⏺ recording prompt stays complete and read-aloud-able.
+
+Sequencing rule for these new blocks: a new structure is always introduced in a chart/dialogue with ▶ audio first, then practised in Treino, then tested in the Quiz — the same one-idea-per-section discipline as the rest of the book.
 
 ## Language by student level
 The mix of English and Portuguese shifts with the student's level. Portuguese text is ALWAYS italic — tag it with `<i>` (or the `.ptw`/`.pt` class), even inside a header or a chart column header.

@@ -191,7 +191,7 @@ async function checkLesson(serverUrl, n) {
 }
 
 async function main() {
-  console.log('🧪 Content structure harness — business lessons 1..10\n');
+  console.log('🧪 Content structure harness — business lessons 1..18\n');
   const server = createServer();
   const PORT = 8766;
   await new Promise(r => server.listen(PORT, r));
@@ -199,7 +199,7 @@ async function main() {
   mockFetch();
 
   const results = [];
-  for (let n = 1; n <= 10; n++) {
+  for (let n = 1; n <= 18; n++) {
     try {
       const r = await checkLesson(serverUrl, n);
       results.push(r);
