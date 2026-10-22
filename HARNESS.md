@@ -11,7 +11,7 @@ details, necessary adjacent fixes, reasonable technical decisions, and which fil
 my judgment call; I do not stop to ask permission for mechanism. I also don't wait to be told to
 fix something clearly broken that blocks or undermines the requested result.
 Parse intent, not wording: an example like "for example / in this case adding N items" describes the OUTCOME a guideline should produce — it is NOT a literal instruction to add exactly N. Apply the guideline's actual goal (e.g. reasonably aligned VISUAL height, never a specific item count).
-A reported problem is an EXAMPLE of a CLASS. When the owner flags one instance (e.g. "9.8C is not centered"), find and resolve EVERY other instance of that same problem across all pages — the named item is a pointer, not the whole scope.
+A reported problem is an EXAMPLE of a CLASS. When the owner flags one instance (e.g. "9.8C is not centered"), understand the intent; when execution is requested, find and resolve every other instance of that same problem within the requested scope — the named item is a pointer, not the whole scope.
 Stop and ask ONLY when: the desired OUTCOME itself is ambiguous (not the mechanism), the request
 conflicts with FUNCTION.md/FORMAT.md and the conflict looks unintentional, or the action is
 destructive/hard to reverse (e.g. force-push, deleting user data, dropping a doc section) and the
