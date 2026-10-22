@@ -5,7 +5,7 @@ This file holds the teaching-side shape of the lessons: what exercise types exis
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-P<n>.)_
 
-- B-P2 [2026-10-21] Generate business Book 2 lessons 19–36 (intermediate→advanced). Cleared once committed.
+_(none queued.)_
 
 ## What this file is
 
