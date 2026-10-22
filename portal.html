@@ -23,7 +23,7 @@ const $=id=>document.getElementById(id);
 const log=m=>{debug.innerHTML+="› "+m+"<br>"};
 const h=s=>{let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x};
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let cred=null,profile=null,teacher=false;
+let cred=null,profile=null,teacher=false,studentName="";
 async function api(action,obj){
  const body=Object.assign({action:action},obj||{});
  try{const r=await fetch(BACKPACK,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(body)});return await r.json();}
@@ -51,7 +51,7 @@ async function start(){
  showAcct();
  if(teacher){renderTeacher();return}
  const st=await api("status",{token:cred});
- if(st.status==="approved"){renderStudent(st.track);return}
+ if(st.status==="approved"){renderStudent(st.track, st.name);return}
  if(st.status==="pending"){$("app").innerHTML=pendingCard(profile.email,"Seu pedido de acesso já foi enviado e está aguardando o professor aprovar.");return}
  renderRequest();
 }
@@ -67,7 +67,8 @@ function renderRequest(){
   else{b.disabled=false;b.textContent="Enviar pedido de acesso";log("ERRO: "+(j.error||"desconhecido"))}
  };
 }
-function renderStudent(track){
+function renderStudent(track,name){
+ studentName=name||"";
  const p=prog();
  let html='<div class="card">Olá, <b>'+esc(profile.name||profile.email)+'</b> · <button onclick="logout()">trocar conta</button></div>';
  html+='<div class="card"><h3>'+TN[track]+'</h3>';let cont=null;
@@ -121,7 +122,7 @@ window.removeStudent=async function(i){
  else log("ERRO: "+(j.error||"desconhecido"));
 };
 const prog=()=>JSON.parse(localStorage.getItem("prog_"+profile.email)||"{}");
-function go(t,i){sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
+function go(t,i){sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,name:studentName,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
 function showAcct(){const c=$("controlbar").querySelector("#acct"),lo=$("controlbar").querySelector("#logout");c.hidden=false;c.innerHTML="Signed in: <b>"+profile.email+"</b>";lo.hidden=false;lo.onclick=logout;const g=$("gcard");if(g)g.hidden=true;}
 function logout(){if(window.google&&google.accounts&&google.accounts.id)try{google.accounts.id.disableAutoSelect()}catch(e){}location.reload();}
 </script></body></html>

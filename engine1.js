@@ -7,6 +7,10 @@ const norm=s=>(s||"").toLowerCase().replace(/[^a-z']/g,"");
 const lineNorm=s=>String(s==null?"":s).replace(/[\r\n]/g," "); /* newline -> space (length-preserving), so the anchor always matches the rendered text */
 let gate=null;try{gate=JSON.parse(sessionStorage.gate)}catch(e){}
 if(!gate||h(gate.email+gate.track+SECRET)!==gate.sig||(!gate.teacher&&gate.track!==TRACK))location.replace("../portal.html");
+/* student-name recording prompts (B-I7): the portal stores the logged-in student's name in the gate.
+   Replace any .stuname placeholder with it; a missing/empty name (incl. teachers) keeps the authored
+   static text (e.g. "Ana", or "___" in kids/nsfw). */
+if(gate.name)document.querySelectorAll(".stuname").forEach(el=>el.textContent=gate.name);
 const who=()=>gate.teacher?"prof":"aluno";
 let STUDENT=gate.email, layer=[], sig="", editing=false;
 const audioCache={};
