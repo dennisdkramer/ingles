@@ -5,7 +5,7 @@ This file holds the teaching-side shape of the lessons: what exercise types exis
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-P<n>.)_
 
-_(none queued.)_
+- B-P2 [2026-10-21] Generate business Book 2 lessons 19–36 (intermediate→advanced). Cleared once committed.
 
 ## What this file is
 
@@ -42,7 +42,7 @@ Each lesson builds on the previous one — it reuses vocabulary and structures t
 17. **Phrasal verbs & "get"** — the coringa; get back to, set up, call off, get along with.
 18. **Conditionals (1st & 2nd) + would** — if I have time… / if I were you…; would for polite offers.
 
-### Book 2 — intermediate → advanced (planned)
+### Book 2 — intermediate → advanced (built)
 
 19. **Present perfect continuous** — "I've been working here for two years"; how long vs how many.
 20. **Past perfect & narrative order** — "I'd already sent it when…"; before/after/by the time; telling a work story in order.
