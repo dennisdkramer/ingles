@@ -55,3 +55,10 @@ Each lesson builds on the previous one — it reuses vocabulary and structures t
 - **Track voice — business.** The business book aims at correct speech and grammar and leans on business vocabulary (meeting, deadline, invoice, client, report, schedule…), but it never avoids common expressions or contractions (don't/doesn't, I'm, gonna, 'll). Contractions are the default in speech; the "full forms" are for formal writing.
 - **Practice quantity follows pedagogical weight.** When a concept is central to the lesson — or the student simply hasn't had enough exposure to it yet — generate more practice (more questions, longer phrases, an extra column) rather than fewer. A high-value, under-practised concept is never under-served just to keep a block small; add the extra practice it deserves.
 - **Phrase length follows the student's place in the course.** The closer to the start, the shorter and simpler the phrases must stay; later content may lengthen them. That length in turn decides how a block reaches its width: short phrases get there with more phrases or more columns, longer phrases get there with length. There is no fixed beginner/advanced split — judge each block as you go.
+
+## Language by student level
+The mix of English and Portuguese shifts with the student's level. Portuguese text is ALWAYS italic — tag it with `<i>` (or the `.ptw`/`.pt` class), even inside a header or a chart column header.
+
+- **Beginner (Book 1, lessons 1–10):** headers — section titles, exercise-group titles, chart column headers — are written in ENGLISH with the PORTUGUESE alongside, wherever both fit in the line/block/column header (Portuguese italic). When there is not room for both, keep only the Portuguese. Explanatory prose stays Portuguese.
+- **Intermediate:** conceptual explanations stay Portuguese; simple explanations and reminders switch to English where the vocabulary is already known. Headers are English, but NEW vocabulary in those sections carries its Portuguese alongside where space allows.
+- **Advanced:** almost entirely English; Portuguese appears only where there is a clear pedagogical motive or a complex explanation that needs it.
