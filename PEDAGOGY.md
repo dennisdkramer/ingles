@@ -5,7 +5,7 @@ This file holds the teaching-side shape of the lessons: what exercise types exis
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-P<n>.)_
 
-- B-P1 [2026-10-21] Expand the curriculum plan from lesson 10 through advanced English and add the new lesson/block types (research + synthesis below). Cleared once this batch is committed.
+_(none queued.)_
 
 ## What this file is
 

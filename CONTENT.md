@@ -5,7 +5,6 @@ This file does NOT hold lesson content — the prose, sections, exercises and wi
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-C<n>.)_
 
-- B-C1 [2026-10-21] Generate business Book 1 lessons 11–18 (intermediate): 8 lesson pages + sidecars, COUNT=18, portal/QA loop updates. (in progress)
 - B-C2 [2026-10-21] Generate business Book 2 lessons 19–36 (intermediate→advanced) per the PEDAGOGY.md curriculum map. (queued)
 
 
