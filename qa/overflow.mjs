@@ -80,11 +80,21 @@ const MEASURE = `(function(){
   var out = [];
   document.querySelectorAll('.panels').forEach(function(panels){
     var pw = panels.getBoundingClientRect().width;
-    [].slice.call(panels.querySelectorAll(':scope > .panel')).forEach(function(p){
+    var kids = [].slice.call(panels.querySelectorAll(':scope > .panel'));
+    var pending = null, lone = [];
+    kids.forEach(function(p){
+      var half = !p.classList.contains('full') && !p.classList.contains('centered');
+      if (half) { if (pending === null) pending = p; else pending = null; }
+      else { if (pending !== null) lone.push(pending); pending = null; }
+    });
+    if (pending !== null) lone.push(pending);
+    kids.forEach(function(p){
       var r = p.getBoundingClientRect();
       var ex = (p.querySelector('.ex-head') || {}).textContent || '';
       out.push({
         full: p.classList.contains('full'),
+        centered: p.classList.contains('centered'),
+        lone: lone.indexOf(p) !== -1,
         w: Math.round(r.width),
         h: Math.round(r.height),
         half: Math.round(pw / 2),
@@ -122,10 +132,12 @@ async function main() {
     // Overflow is checked on EVERY panel — including .panel.full, which is exactly where the
     // long translation/listening option rows used to spill. Only the "balloon" check (a half-width
     // panel that has grown wider than half the container) is restricted to non-full panels.
-    const bad = panels.filter(p => p.over > 8 || (!p.full && p.w > p.half + 8));
+    const bad = panels.filter(p => p.over > 8 || (!p.full && p.w > p.half + 8) || p.lone);
     if (bad.length) {
       console.log('lesson ' + L + ':');
-      bad.forEach(p => { fails++; console.log('    ' + (p.over > 8 ? 'OVERFLOW' : 'BALLOON') + '  full=' + p.full + ' w=' + p.w + ' h=' + p.h + ' half=' + p.half + ' over=' + p.over + '  «' + p.ex + '»'); });
+      bad.forEach(p => { fails++;
+        var kind = p.over > 8 ? 'OVERFLOW' : (!p.full && p.w > p.half + 8) ? 'BALLOON' : 'LONE';
+        console.log('    ' + kind + '  full=' + p.full + ' w=' + p.w + ' h=' + p.h + ' half=' + p.half + ' over=' + p.over + '  «' + p.ex + '»'); });
     }
   }
 

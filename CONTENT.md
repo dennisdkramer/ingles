@@ -32,6 +32,8 @@ Content is produced by a loop; layout is never pre-assigned and never forced by 
 4. **Alter / extend.** Generate the extra content step 3 called for, chosen for teaching value — never filler.
 5. **Re-check (visual pass).** Re-render the block and confirm the step-3 goals are met — explicitly including: no line overflows its block, no block is left with massive empty space or a big dead space on the right of a row (short options clustered left), consecutive questions have breathing room, and no ugly, broken-looking line (a stranded lone ▶, a half-empty full-width block, a dangling fragment, a single orphan word left alone at the end of a wrapped line). If not, repeat steps 4–5. Five consecutive failures on one block: log it as an open problem, move to the next block or page, and report all logged problems at the end for the owner.
 
+A reported issue is a CLASS, not a single case: when the owner flags one block (e.g. "not centered"), the step 4–5 pass sweeps and resolves that SAME issue in every block on every page — never just the named one.
+
 Pedagogical fit outranks space-filling at every step: if the right presentation is a single short column, keep it that way and make the spacing work around it.
 
 ## Content quantity
