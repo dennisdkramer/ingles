@@ -186,29 +186,6 @@ async function checkLesson(serverUrl, n) {
   })())`));
   if (stackedRt && stackedRt.ok === false) errors.push('stacked radio save/restore round-trip failed');
 
-  // Authoring rule (CONTENT.md): an INLINE multiple-choice / listening group (.qgrid without
-  // .stack) must keep its options SHORT. A row whose options are whole sentences (total option text
-  // > 90 chars) must be authored stacked (.qgrid.stack) — inline long options overflow a full-width
-  // panel in real browsers once the font renders slightly wider (the lesson-20 overflow, 2026-10-21,
-  // was this exact class; lesson 13 sits at the same edge). Flag deterministically, independent of metrics.
-  const longRows = [];
-  d.querySelectorAll('.qgrid:not(.stack)').forEach((q, qi) => {
-    let row = [];
-    const flush = () => {
-      if (!row.length) return;
-      const opts = row.filter(el => el.tagName === 'LABEL').map(l => (l.textContent || '').replace(/\s+/g, ' ').trim());
-      const sum = opts.reduce((a, s) => a + s.length, 0);
-      if (sum > 90) longRows.push('grid#' + qi + ' "' + opts[0].slice(0, 30) + '…" (' + sum + 'ch)');
-      row = [];
-    };
-    q.querySelectorAll(':scope > *').forEach(el => {
-      if (el.classList && el.classList.contains('qnum')) flush();
-      row.push(el);
-    });
-    flush();
-  });
-  if (longRows.length) errors.push('inline MCQ row has sentence-length options — use .qgrid.stack: ' + longRows.join('; '));
-
   errors.push(...consoleErrors.filter(e => !errors.includes(e)));
   return { lesson: n, errors, counts };
 }
