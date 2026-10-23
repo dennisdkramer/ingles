@@ -43,7 +43,7 @@ _(none queued.)_
 - .dialog = dialogue block: #fff8ea fill, rose frame, bold speaker labels
 - .listen = compact ▶ audio chip placed inline beside what it speaks
 - Required prepositions (look AT, go TO, give TO) are visually marked — a distinct accent color (tan) and bold — so the verb+preposition pair reads as one unit
-- A fill-in hint (Portuguese, italic) sits on its own line BELOW the input when inline placement would overflow the block or look cramped
+- A fill-in hint (Portuguese, italic) sits on its own line BELOW the input when inline placement would overflow the block or look cramped. Author it with the block fill-in layout (`.blanks.sent` / `.blanks.sent.cols`) so the line break actually renders — a `<br>` inside the default flex `.blanks` row is ignored.
 - section headings (h2) carry a rose underline; exercise items are numbered 1..n under their group heading (no repeated section letter)
 - @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow
 
