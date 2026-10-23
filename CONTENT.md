@@ -5,6 +5,8 @@ This file does NOT hold lesson content — the prose, sections, exercises and wi
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-C<n>.)_
 
+- B-C3 [2026-10-22] HANDOFF (content side): enforce lesson length (~60 min + ~20 min quiz) on every lesson — merge or expand thin ones; introduce and recycle high-frequency verbs / everyday vocabulary early; author vocabulary explanations with meaning/use/register/context and multiple senses, not a single translation. See PEDAGOGY.md B-P3 for the full handoff.
+
 
 
 - [2026-10-13] NO exercise has an in-page self-check: a student can fill blanks, pick radios and write translations, and nothing ever tells them whether it is right. Owner to decide the MECHANISM (teacher review at the next class, or a real feature) — it would be a NEW decision, and it starts in this file (then FUNCTION.md, then engine wiring + qa/smoke.mjs).

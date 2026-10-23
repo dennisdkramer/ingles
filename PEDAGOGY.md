@@ -5,7 +5,7 @@ This file holds the teaching-side shape of the lessons: what exercise types exis
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-P<n>.)_
 
-_(none queued.)_
+- B-P3 [2026-10-22] HANDOFF — pedagogy re-level, lesson-size and explanation-depth pass (owner feedback, patterns not one-offs). Root failures: (1) functional/communicative content (connected speech/reductions, discourse markers, small talk, clarification/repair, opinions) was treated as "advanced" and parked in Book 2 lessons 31-36, when it is foundational and must be introduced early and recycled throughout; (2) several lessons are far below the ~60 min + ~20 min quiz length guideline (e.g. lesson 32, a 3-chart stub); (3) high-frequency verbs and everyday vocabulary are under-taught early and under-recycled; (4) explanations are single-translation glosses instead of robust usage/context explanations (e.g. "what's up?" = hi / what do you want? / what's wrong?). Next task: re-plan the order (integrate reductions/discourse markers/small talk from Book 1, drop the "advanced" framing for them), merge or expand thin lessons to meet the length guideline, build a common-verb + everyday-vocabulary thread that is introduced early and recycled, and rewrite vocabulary-based lessons (phrasal verbs) with multi-sense, register-aware, usage-rich explanations.
 
 ## What this file is
 
