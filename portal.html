@@ -24,6 +24,7 @@ const log=m=>{debug.innerHTML+="› "+m+"<br>"};
 const h=s=>{let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x};
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let cred=null,profile=null,teacher=false,studentName="";
+const SESSION_KEY="eod_session";
 async function api(action,obj){
  const body=Object.assign({action:action},obj||{});
  try{const r=await fetch(BACKPACK,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(body)});return await r.json();}
@@ -36,21 +37,25 @@ function decodeJwt(t){
 window.addEventListener("load",()=>{let tries=0;
  (function ready(){
   if(!window.google){if(++tries<5){setTimeout(ready,1200);return}log("ERRO: script Google não carregou.");return}
-  google.accounts.id.initialize({client_id:CLIENT_ID,callback:onLogin});
+  google.accounts.id.initialize({client_id:CLIENT_ID,callback:onLogin,auto_select:true});
   google.accounts.id.renderButton($("gbtn"),{theme:"outline",size:"large",shape:"pill"});
-  try{google.accounts.id.prompt()}catch(e){}
+  if(restoreSession()){start();}else{try{google.accounts.id.prompt()}catch(e){}}
  })();
 });
 function onLogin(resp){
- cred=resp.credential;profile=decodeJwt(cred);
+ cred=resp.credential;profile=decodeJwt(cred);persistSession();
  log("login OK: "+profile.email);start();
 }
+function persistSession(){try{localStorage.setItem(SESSION_KEY,JSON.stringify({cred:cred,profile:profile,name:studentName}))}catch(e){}}
+function clearSession(){try{localStorage.removeItem(SESSION_KEY)}catch(e){}}
+function restoreSession(){try{const s=JSON.parse(localStorage.getItem(SESSION_KEY)||"null");if(s&&s.cred&&s.profile&&s.profile.email){cred=s.cred;profile=s.profile;studentName=s.name||"";return true}}catch(e){}return false}
 async function start(){
  try{const r=await fetch("access.json?"+Date.now());if(!r.ok)throw new Error("access.json não encontrado (HTTP "+r.status+")");teacher=(await r.json()).teachers.includes(profile.email);}
  catch(e){$("app").innerHTML='<div class="card">⚠️ '+e.message+"</div>";return}
  showAcct();
  if(teacher){renderTeacher();return}
  const st=await api("status",{token:cred});
+ if(st.error && /token/i.test(String(st.error))){clearSession();location.reload();return}
  if(st.status==="approved"){renderStudent(st.track, st.name);return}
  if(st.status==="pending"){$("app").innerHTML=pendingCard(profile.email,"Seu pedido de acesso já foi enviado e está aguardando o professor aprovar.");return}
  renderRequest();
@@ -69,6 +74,7 @@ function renderRequest(){
 }
 function renderStudent(track,name){
  studentName=name||"";
+ persistSession();
  const p=prog();
  let html='<div class="card">Olá, <b>'+esc(profile.name||profile.email)+'</b> · <button onclick="logout()">trocar conta</button></div>';
  html+='<div class="card"><h3>'+TN[track]+'</h3>';let cont=null;
@@ -78,7 +84,13 @@ function renderStudent(track,name){
  html+='</div>';$("app").innerHTML=html;log("índice pronto ✔");
 }
 let QUEUE={pending:[],approved:[]};
-function bookButton(t){return '<button onclick="go(\''+t+'\',1)">'+TN[t]+'</button>';}
+function bookButton(t){
+ let opts='<option value="">Escolher lição…</option>';
+ for(let i=1;i<=COUNTS[t];i++)opts+='<option value="'+i+'">Lição '+i+'</option>';
+ return '<div class="bookdrop"><button type="button" onclick="toggleBookSel(\''+t+'\')">'+TN[t]+' ▾</button>'
+  +'<select id="sel_'+t+'" hidden onchange="if(this.value)go(\''+t+'\',this.value)">'+opts+'</select></div>';
+}
+window.toggleBookSel=function(t){const s=$("sel_"+t);if(s)s.hidden=!s.hidden;};
 function pendingHTML(){
  let h='<div class="card tportal-col"><h4>Pedidos pendentes</h4>';
  if(!QUEUE.pending.length)h+='<p class="dim">Nenhum pedido pendente.</p>';
@@ -103,7 +115,7 @@ async function renderTeacher(){
   +bookButton("kids")+bookButton("business")+bookButton("nsfw")
   +'</div></div><div class="tportal-cols" id="tcols"><p class="dim">Carregando…</p></div>';
  const j=await api("queue",{token:cred});
- if(j.error){$("tcols").innerHTML='<div class="card tportal-col"><p class="todo">Não foi possível carregar os pedidos: '+esc(j.error)+'</p></div>';return}
+ if(j.error){ if(/token/i.test(String(j.error))){clearSession();location.reload();return} $("tcols").innerHTML='<div class="card tportal-col"><p class="todo">Não foi possível carregar os pedidos: '+esc(j.error)+'</p></div>';return }
  QUEUE={pending:j.pending||[],approved:j.approved||[]};
  $("tcols").innerHTML=pendingHTML()+approvedHTML();
 }
@@ -124,7 +136,7 @@ window.removeStudent=async function(i){
 const prog=()=>JSON.parse(localStorage.getItem("prog_"+profile.email)||"{}");
 function go(t,i){sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,name:studentName,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
 function showAcct(){const c=$("controlbar").querySelector("#acct"),lo=$("controlbar").querySelector("#logout");c.hidden=false;c.innerHTML="Signed in: <b>"+profile.email+"</b>";lo.hidden=false;lo.onclick=logout;const g=$("gcard");if(g)g.hidden=true;}
-function logout(){if(window.google&&google.accounts&&google.accounts.id)try{google.accounts.id.disableAutoSelect()}catch(e){}location.reload();}
+function logout(){clearSession();if(window.google&&google.accounts&&google.accounts.id)try{google.accounts.id.disableAutoSelect()}catch(e){}location.reload();}
 </script></body></html>
 
 
