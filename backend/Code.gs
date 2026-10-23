@@ -126,17 +126,25 @@ function isTeacher_(email) {
   for (var i = 0; i < TEACHERS.length; i++) if (TEACHERS[i].toLowerCase() === String(email).toLowerCase()) return true;
   return false;
 }
-/* last lesson a student tagged "complete" (type:"complete" rows in layer), for the teacher's jump button */
+/* last lesson a student tagged "complete" (type:"complete" rows in layer), for the teacher's jump button.
+   Matching mirrors the layer GET that drives the lesson page's "Completed" tag: keyed by the student
+   email (case-insensitive) + type "complete". The track is used only to disambiguate when BOTH the
+   student's track and the row's track are present; a row whose track is empty still counts (the tag
+   button itself keys on email+lesson+type and never requires a track match). */
 function lastCompleted_(email, track) {
   var sh = getSheet_();
   var all = rowsToObjs_(sh);
   var max = 0;
+  var em = String(email || "").toLowerCase();
+  var tr = String(track || "").toLowerCase();
   for (var i = 0; i < all.length; i++) {
     var r = all[i];
-    if (String(r.email) === String(email) && String(r.track) === String(track) && String(r.type) === "complete") {
-      var n = parseInt(String(r.lesson), 10);
-      if (!isNaN(n) && n > max) max = n;
-    }
+    if (String(r.email || "").toLowerCase() !== em) continue;
+    if (String(r.type) !== "complete") continue;
+    var rt = String(r.track || "").toLowerCase();
+    if (tr && rt && rt !== tr) continue;
+    var n = parseInt(String(r.lesson), 10);
+    if (!isNaN(n) && n > max) max = n;
   }
   return max;
 }
