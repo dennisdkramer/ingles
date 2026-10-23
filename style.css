@@ -190,9 +190,14 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 .bookmenu{position:absolute;top:100%;left:0;right:0;z-index:30;margin-top:4px;max-height:320px;overflow-y:auto;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:5px 5px 0 var(--tan);padding:4px}
 .bookmenu button{display:block;width:100%;margin:0;text-align:left;background:var(--paper);color:var(--ink);border:0;border-radius:6px;box-shadow:none;padding:6px 10px;font-size:14px}
 .bookmenu button:hover{background:var(--bluebg)}
-.complete-btn{margin:8px 0;font-weight:700}
+.complete-btn{display:block;margin:14px auto;width:fit-content;font-weight:700}
 .complete-btn:not(.is-done){background:#5b6b84;box-shadow:3px 3px 0 var(--tan)}
 .complete-btn.is-done{background:#0f766e;box-shadow:3px 3px 0 var(--tan)}
+.jumpbtn{padding:6px 12px;flex:0 0 auto}
+.remlink{background:transparent;color:#7f1d1d;border:0;box-shadow:none;padding:0;font-weight:600;text-decoration:underline;cursor:pointer;flex:0 0 auto}
+.trow{display:flex;align-items:center;gap:8px;min-width:0}
+.trow .tname{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;min-width:0}
+.trow .temail{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1 1 auto;min-width:0}
 /* small half-full blocks: center their text (ugliness rule) */
 .card.center{text-align:center}
 /* a standalone dialogue that isn't paired beside another block */

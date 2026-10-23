@@ -95,23 +95,25 @@ document.addEventListener("click",e=>{if(!e.target.closest(".bookdrop"))document
 function pendingHTML(){
  let h='<div class="card tportal-col"><h4>Pedidos pendentes</h4>';
  if(!QUEUE.pending.length)h+='<p class="dim">Nenhum pedido pendente.</p>';
- QUEUE.pending.forEach((q,i)=>{
+ [...QUEUE.pending].sort((a,b)=>(a.name||a.email).localeCompare(b.name||b.email)).forEach(q=>{
   h+='<div class="tportal-item"><div><b>'+esc(q.name||q.email)+'</b> <span class="dim">'+esc(q.email)+'</span></div>'
-   +'<div><select id="book_'+i+'"><option value="kids">Kids 🛹</option><option value="business" selected>Business 💼</option><option value="nsfw">Adultos 🔞</option></select></div>'
-   +'<div><button onclick="decide('+i+',\'approve\')">Aprovar</button> <button onclick="decide('+i+',\'reject\')">Recusar</button></div></div>';
+   +'<div><select id="book_'+esc(q.email)+'"><option value="kids">Kids 🛹</option><option value="business" selected>Business 💼</option><option value="nsfw">Adultos 🔞</option></select></div>'
+   +'<div><button onclick="decide(\''+esc(q.email)+'\',\'approve\')">Aprovar</button> <button onclick="decide(\''+esc(q.email)+'\',\'reject\')">Recusar</button></div></div>';
  });
  return h+'</div>';
 }
 function approvedHTML(){
  let h='<div class="card tportal-col"><h4>Alunos aprovados</h4>';
  if(!QUEUE.approved.length)h+='<p class="dim">Nenhum aluno aprovado ainda.</p>';
- QUEUE.approved.forEach((s,i)=>{
+ [...QUEUE.approved].sort((a,b)=>(a.name||a.email).localeCompare(b.name||b.email)).forEach(s=>{
   const next=(s.lastCompleted||0)+1;
   const atEnd=next>COUNTS[s.track];
-  h+='<div class="tportal-item"><div>'
-   +'<button'+(atEnd?' disabled':'')+' onclick="goStudent(\''+s.track+'\','+(atEnd?COUNTS[s.track]:next)+',\''+s.email+'\')">⏭ '+TN[s.track]+' '+(atEnd?COUNTS[s.track]:next)+'</button>'
-   +' <b>'+esc(s.name||s.email)+'</b> <span class="dim">'+esc(s.email)+'</span></div>'
-   +'<div><button onclick="removeStudent('+i+')">Remover</button></div></div>';
+  h+='<div class="tportal-item trow">'
+   +'<b class="tname">'+esc(s.name||s.email)+'</b>'
+   +'<button class="jumpbtn"'+(atEnd?' disabled':'')+' onclick="goStudent(\''+s.track+'\','+(atEnd?COUNTS[s.track]:next)+',\''+s.email+'\')">⏭ '+TN[s.track]+' '+(atEnd?COUNTS[s.track]:next)+'</button>'
+   +'<button class="remlink" onclick="removeStudent(\''+s.email+'\')">Remover</button>'
+   +'<span class="dim temail">'+esc(s.email)+'</span>'
+   +'</div>';
  });
  return h+'</div>';
 }
@@ -124,23 +126,23 @@ async function renderTeacher(){
  QUEUE={pending:j.pending||[],approved:j.approved||[]};
  $("tcols").innerHTML=pendingHTML()+approvedHTML();
 }
-window.decide=async function(i,action){
- const q=QUEUE.pending[i];if(!q)return;
- const track=action==="approve"?$("book_"+i).value:undefined;
+window.decide=async function(email,action){
+ const q=QUEUE.pending.find(x=>x.email===email);if(!q)return;
+ const track=action==="approve"?$("book_"+email).value:undefined;
  const j=await api(action,{token:cred,email:q.email,track:track});
  if(j.result==="ok"){log((action==="approve"?"Aprovado":"Recusado")+" ✔");renderTeacher();}
  else log("ERRO: "+(j.error||"desconhecido"));
 };
-window.removeStudent=async function(i){
- const s=QUEUE.approved[i];if(!s)return;
+window.removeStudent=async function(email){
+ const s=QUEUE.approved.find(x=>x.email===email);if(!s)return;
  if(!confirm("Remover aluno "+(s.name||s.email)+"?"))return;
  const j=await api("remove",{token:cred,email:s.email});
  if(j.result==="ok"){log("Removido ✔");renderTeacher();}
  else log("ERRO: "+(j.error||"desconhecido"));
 };
 const prog=()=>JSON.parse(localStorage.getItem("prog_"+profile.email)||"{}");
-function go(t,i){sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,name:studentName,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
-function goStudent(t,i,email){const s=QUEUE.approved.find(x=>x.email===email);sessionStorage.gate=JSON.stringify({email:email,track:t,teacher:true,name:s?(s.name||""):"",sig:h(email+t+SECRET)});location=t+"/lesson"+i+".html";}
+function go(t,i){sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,teacherName:teacher?(profile.name||""):"",name:teacher?(profile.name||""):studentName,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
+function goStudent(t,i,email){const s=QUEUE.approved.find(x=>x.email===email);sessionStorage.gate=JSON.stringify({email:email,track:t,teacher:true,teacherName:profile.name||"",name:s?(s.name||""):"",sig:h(email+t+SECRET)});location=t+"/lesson"+i+".html";}
 function showAcct(){const c=$("controlbar").querySelector("#acct"),lo=$("controlbar").querySelector("#logout");c.hidden=false;c.innerHTML="Signed in: <b>"+profile.email+"</b>";lo.hidden=false;lo.onclick=logout;const g=$("gcard");if(g)g.hidden=true;}
 function logout(){clearSession();if(window.google&&google.accounts&&google.accounts.id)try{google.accounts.id.disableAutoSelect()}catch(e){}location.reload();}
 </script></body></html>

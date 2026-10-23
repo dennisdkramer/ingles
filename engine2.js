@@ -13,7 +13,7 @@ let savedLive="",editTimer=null,nbkVal="";
 function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop,#completebtn").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|px/.test(st))s.removeAttribute("style")});return "<!doctype html>"+cl.outerHTML;}
 function saveContent(){if(!document.querySelector(".content-area"))return;const o={action:"set",id:contentId(),type:"content",anchor:"",data:fullPageHTML(),email:gate.email,lesson:L,author:"prof",track:TRACK};notePending(o);outboxPush(o);scheduleFlush();}
 function toggleEditMode(){
- if(STUDENT!==gate.email){toast("Switch to 'demo (you)' to edit content.");return;}
+ if(STUDENT!==gate.email){toast("Switch to your own account to edit content.");return;}
  editing=!editing;
  document.body.classList.toggle("editing",editing);
  const ca=document.querySelector(".content-area"),eb=document.getElementById("editpage");
@@ -33,6 +33,7 @@ function toggleEditMode(){
   if(eb)eb.textContent="✏️ Edit";
   saveContent();
   ca.innerHTML=savedLive;
+  renderCompleteBtn();
   const fdn=document.getElementById("feed");if(fdn)fdn.value=nbkVal;
   toast("Saved");
  }
@@ -127,23 +128,21 @@ function renderAnswers(){
 function completeId(){return "complete_"+STUDENT+"_"+TRACK+"_"+L;}
 function ensureCompleteBtn(){
  let btn=document.getElementById("completebtn");
- if(btn)return btn;
- btn=document.createElement("button");
- btn.type="button";btn.id="completebtn";btn.className="complete-btn";
- const ft=document.querySelector("footer");
- if(ft){ft.parentNode.insertBefore(btn,ft);}
- else{const ca=document.querySelector(".content-area");if(ca)ca.appendChild(btn);}
+ if(!btn){
+  btn=document.createElement("button");
+  btn.type="button";btn.id="completebtn";btn.className="complete-btn";
+  const fd=document.getElementById("feed");
+  let anchor=fd;
+  const prev=fd?fd.previousElementSibling:null;
+  if(prev&&prev.tagName==="H2")anchor=prev;
+  if(anchor)anchor.parentNode.insertBefore(btn,anchor);
+  else{const ca=document.querySelector(".content-area");if(ca)ca.appendChild(btn);}
+ }
  btn.onclick=()=>{
   const pid=completeId();
-  if(completeNow){
-   send({action:"del",id:pid});
-   layer=layer.filter(r=>r.type!=="complete");
-  }else{
-   send({action:"add",id:pid,type:"complete",anchor:"",data:"1",track:TRACK});
-   layer.push({id:pid,type:"complete",anchor:"",data:"1"});
-  }
-  completeNow=!completeNow;
-  renderCompleteBtn();
+  if(completeNow){send({action:"del",id:pid});layer=layer.filter(r=>r.type!=="complete");}
+  else{send({action:"add",id:pid,type:"complete",anchor:"",data:"1",track:TRACK});layer.push({id:pid,type:"complete",anchor:"",data:"1"});}
+  completeNow=!completeNow;renderCompleteBtn();
  };
  return btn;
 }
@@ -158,7 +157,7 @@ function renderCompleteBtn(){
 (async()=>{try{
  const bar=document.getElementById("controlbar")||topbar;
  let extra="";
- if(gate.teacher){extra=' <select id="sel"><option value="'+gate.email+'">demo (you)</option></select>';}
+ if(gate.teacher){extra=' <select id="sel"><option value="'+gate.email+'">'+(gate.teacherName||gate.email)+'</option></select>';}
  bar.innerHTML="🦺 "+gate.email+" · <b>"+TRACK+"</b> · <a href=\"../portal.html\">Index</a>"+extra+' · <button type="button" id="clearpage">🧹 Clear page</button>' + ' <button type="button" id="prevlesson"'+(L>1?'':' disabled')+' title="Lição '+(L-1)+'">← Last lesson</button>' + ' <button type="button" id="nextlesson"'+(L<COUNT?'':' disabled')+' title="Lição '+(L+1)+'">Next lesson →</button>';
  const pv=document.getElementById("prevlesson");if(pv&&L>1)pv.onclick=()=>location.href="lesson"+(L-1)+".html";
  const nx=document.getElementById("nextlesson");if(nx&&L<COUNT)nx.onclick=()=>location.href="lesson"+(L+1)+".html";
@@ -187,7 +186,7 @@ function renderCompleteBtn(){
     st=(j&&j.students)||[];
    }catch(e){st=[];}
    const el=document.getElementById("sel");
-   if(el)el.innerHTML='<option value="'+gate.email+'">demo (you)</option>'+st.map(s=>'<option value="'+s.email+'">'+(s.name||s.email)+"</option>").join("");
+   if(el)el.innerHTML='<option value="'+gate.email+'">'+(gate.teacherName||gate.email)+'</option>'+st.map(s=>'<option value="'+s.email+'">'+(s.name||s.email)+"</option>").join("");
   })();
  }
  loadLayer();renderCompleteBtn();
