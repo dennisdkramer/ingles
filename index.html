@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <!-- build: 2026-10-20T00:00:00Z -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>English Opens Doors — Portal</title>
+<title>English Opens Doors</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head><body>
@@ -93,22 +93,22 @@ function bookButton(t){
 window.toggleBookMenu=function(t){const m=$("menu_"+t);if(!m)return;const open=!m.hidden;document.querySelectorAll(".bookmenu").forEach(x=>x.hidden=true);if(!open)m.hidden=false;};
 document.addEventListener("click",e=>{if(!e.target.closest(".bookdrop"))document.querySelectorAll(".bookmenu").forEach(x=>x.hidden=true);});
 function pendingHTML(){
- let h='<div class="card tportal-col"><h4>Pedidos pendentes</h4>';
+ let h='<div class="card tadmin-col"><h4>Pedidos pendentes</h4>';
  if(!QUEUE.pending.length)h+='<p class="dim">Nenhum pedido pendente.</p>';
  [...QUEUE.pending].sort((a,b)=>(a.name||a.email).localeCompare(b.name||b.email)).forEach(q=>{
-  h+='<div class="tportal-item"><div><b>'+esc(q.name||q.email)+'</b> <span class="dim">'+esc(q.email)+'</span></div>'
+  h+='<div class="tadmin-item"><div><b>'+esc(q.name||q.email)+'</b> <span class="dim">'+esc(q.email)+'</span></div>'
    +'<div><select id="book_'+esc(q.email)+'"><option value="kids">Kids 🛹</option><option value="business" selected>Business 💼</option><option value="nsfw">Adultos 🔞</option></select></div>'
    +'<div><button onclick="decide(\''+esc(q.email)+'\',\'approve\')">Aprovar</button> <button onclick="decide(\''+esc(q.email)+'\',\'reject\')">Recusar</button></div></div>';
  });
  return h+'</div>';
 }
 function approvedHTML(){
- let h='<div class="card tportal-col"><h4>Alunos aprovados</h4>';
+ let h='<div class="card tadmin-col"><h4>Alunos aprovados</h4>';
  if(!QUEUE.approved.length)h+='<p class="dim">Nenhum aluno aprovado ainda.</p>';
  [...QUEUE.approved].sort((a,b)=>(a.name||a.email).localeCompare(b.name||b.email)).forEach(s=>{
   const next=(s.lastCompleted||0)+1;
   const atEnd=next>COUNTS[s.track];
-  h+='<div class="tportal-item trow">'
+  h+='<div class="tadmin-item trow">'
    +'<b class="tname">'+esc(s.name||s.email)+'</b>'
    +'<button class="jumpbtn"'+(atEnd?' disabled':'')+' onclick="goStudent(\''+s.track+'\','+(atEnd?COUNTS[s.track]:next)+',\''+s.email+'\')">⏭ '+TN[s.track]+' '+(atEnd?COUNTS[s.track]:next)+'</button>'
    +'<button class="remlink" onclick="removeStudent(\''+s.email+'\')">Remover</button>'
@@ -118,11 +118,11 @@ function approvedHTML(){
  return h+'</div>';
 }
 async function renderTeacher(){
- $("app").innerHTML='<div class="card tportal"><div class="tportal-books">'
+ $("app").innerHTML='<div class="card tadmin"><div class="tadmin-books">'
   +bookButton("kids")+bookButton("business")+bookButton("nsfw")
-  +'</div></div><div class="tportal-cols" id="tcols"><p class="dim">Carregando…</p></div>';
+  +'</div></div><div class="tadmin-cols" id="tcols"><p class="dim">Carregando…</p></div>';
  const j=await api("queue",{token:cred});
- if(j.error){ if(/token/i.test(String(j.error))){clearSession();location.reload();return} $("tcols").innerHTML='<div class="card tportal-col"><p class="todo">Não foi possível carregar os pedidos: '+esc(j.error)+'</p></div>';return }
+ if(j.error){ if(/token/i.test(String(j.error))){clearSession();location.reload();return} $("tcols").innerHTML='<div class="card tadmin-col"><p class="todo">Não foi possível carregar os pedidos: '+esc(j.error)+'</p></div>';return }
  QUEUE={pending:j.pending||[],approved:j.approved||[]};
  $("tcols").innerHTML=pendingHTML()+approvedHTML();
 }

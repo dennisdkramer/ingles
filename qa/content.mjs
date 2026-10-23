@@ -27,7 +27,7 @@ function h(s) { let x = 0; for (const c of s) x = (x * 31 + c.charCodeAt(0)) | 0
 function createServer() {
   return http.createServer((req, res) => {
     const urlPath = req.url.split('?')[0];
-    let filePath = path.join(ROOT, urlPath === '/' ? 'portal.html' : urlPath);
+    let filePath = path.join(ROOT, urlPath === '/' ? 'index.html' : urlPath);
     if (!filePath.startsWith(ROOT)) { res.writeHead(403); res.end('Forbidden'); return; }
     fs.readFile(filePath, (err, data) => {
       if (err) { res.writeHead(404); res.end('Not found'); return; }

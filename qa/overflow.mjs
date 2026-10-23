@@ -18,7 +18,7 @@ function server() {
   return new Promise(resolve => {
     const srv = http.createServer((req, res) => {
       const urlPath = decodeURIComponent(req.url.split('?')[0]);
-      let fp = path.join(ROOT, urlPath === '/' ? 'portal.html' : urlPath);
+      let fp = path.join(ROOT, urlPath === '/' ? 'index.html' : urlPath);
       if (!fp.startsWith(ROOT)) { res.writeHead(403); res.end(); return; }
       fs.readFile(fp, (e, d) => {
         if (e) { res.writeHead(404); res.end(); return; }

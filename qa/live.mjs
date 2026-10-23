@@ -14,7 +14,7 @@
  *   $env:CHROME="C:\path\to\chrome.exe"   override the browser
  *
  * HOW IT WORKS (zero dependencies — Node 22+ has global fetch + WebSocket):
- *   1. a tiny static server serves the repo (portal.html, lesson pages, engines, css);
+ *   1. a tiny static server serves the repo (index.html, lesson pages, engines, css);
  *   2. the same server answers the harness control API under /__bp (reset / foreign row / write delay)
  *      and plays the role of the Apps Script deployment: a real in-memory "sheet" of rows with the
  *      same shape (id|email|track|lesson|type|anchor|data|author|ts|b64) and the same actions
@@ -109,7 +109,7 @@ function startSite() {
         res.end(JSON.stringify({ ok: true, n: bp.rows.length }));
         return;
       }
-      const fp = path.join(ROOT, decodeURIComponent(u.pathname === '/' ? '/portal.html' : u.pathname));
+      const fp = path.join(ROOT, decodeURIComponent(u.pathname === '/' ? '/index.html' : u.pathname));
       if (!fp.startsWith(ROOT)) { res.writeHead(403); res.end('no'); return }
       fs.readFile(fp, (err, data) => {
         if (err) { res.writeHead(404, { 'Content-Type': 'text/plain' }); res.end('404'); return }

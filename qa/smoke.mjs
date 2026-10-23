@@ -34,7 +34,7 @@
  *   exactly as the click left them (nbLocal/nbEntries, the same pendingFor window as highlights)
  *
  * SCOPE (owner decision 2026-10-11): lesson pages are developed on business/lesson1.html ONLY
- * until the feature set is final. kids/, nsfw/ and the login pages (index.html/portal.html) are
+ * until the feature set is final. kids/, nsfw/ and the login page (index.html) are
  * parked here on purpose — add their testPage() calls back in main() once business is done.
  */
 
@@ -66,7 +66,7 @@ function genSig(email, track) {
 function createServer() {
     return http.createServer((req, res) => {
         const urlPath = req.url.split('?')[0];
-        let filePath = path.join(ROOT, urlPath === '/' ? 'portal.html' : urlPath);
+        let filePath = path.join(ROOT, urlPath === '/' ? 'index.html' : urlPath);
         
         // Security: prevent directory traversal
         if (!filePath.startsWith(ROOT)) {
@@ -296,7 +296,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
 
     const { window } = dom;
 
-    // Check __A and __B flags only on lesson pages (portal doesn't load engines)
+    // Check __A and __B flags only on lesson pages (index doesn't load engines)
     if (pageName.includes('lesson')) {
         // Check __A flag (engine1 loaded)
         if (!window.__A) {
@@ -1446,7 +1446,7 @@ async function main() {
     const allErrors = [];
 
     /* SCOPE: business only (owner decision 2026-10-11) — one page, one track, one run.
-       Parked until the business build is final: portal.html (login pages), kids/lesson1.html,
+       Parked until the business build is final: index.html (login page), kids/lesson1.html,
        nsfw/lesson1.html. Re-enable by adding their testPage() entry back to this list. */
     for (const [page, track] of [['business/lesson1.html', 'business']]) {
         try {
