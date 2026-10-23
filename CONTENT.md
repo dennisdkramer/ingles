@@ -49,6 +49,10 @@ Pedagogical fit outranks space-filling at every step: if the right presentation 
 
 ## Content shape (authoring rules)
 - **Required prepositions are marked.** A verb that takes a fixed preposition (look AT, go TO, give TO, depend ON, wait FOR) is introduced with that preposition attached and visually marked (accent color + bold) so the verb+preposition reads as one unit. Never present a bare verb when it requires a preposition.
+- **Never show the answer in a prompt.** A fill-in prompt may carry a hint ONLY in the language the student is not producing; the answer itself is never written into the prompt. If a parenthetical would reveal the answer (e.g. a Portuguese meaning that is exactly what the student writes), restructure the exercise so the prompt is one language and the student produces the other.
+- **Portuguese is always italicised** — every Portuguese word, including a parenthetical hint inside an exercise, carries `.pt`/`.ptw`.
+- **Multiple-choice answers are randomized.** Across a group, the correct option is spread over positions a/b/c/d — never all the first option.
+- **Treino and Quiz stay distinct (soft rule).** Minimize exact repetition between a Treino block and its Quiz counterpart; if both reuse a block type (fill-in, listen-and-choose, translate), use different items/phrases in each.
 - **Explainers vs notes.** A one-liner that explains a whole section is a sub-heading (serif, slightly larger), written only when it adds what the chart/dialog does not already state. A note about a single item (one vocab row) is a merged row inside that block, directly under the item.
 - **No redundancy.** Never restate in prose what the very next chart already shows; never repeat a block's title twice (a section heading plus the block's own sub-title) — state it once.
 - **Contrast is visible.** Two versions/conjugations/uses of a concept, or two concepts, are always separated — columns or clear spacing.
