@@ -15,53 +15,51 @@ This file is the single source of truth for the pedagogical shape of the materia
 
 Each lesson builds on the previous one — it reuses vocabulary and structures the student already knows and introduces one new thing at a time. Do not skip or reorder. The track is **business-casual**: the grammar and vocabulary of a native speaker's normal working day — phrasal verbs and common expressions first, formal/"term of the art" equivalents only when the everyday register genuinely needs them.
 
-### Book 1 — foundations (built)
+### Stage 1 — sentence skeleton + first real talk + the phrasal-verb system
 
-1. **Introductions & to be** — cognates, am/is/are, a/an, vowels.
-2. **Question words** — who/what/when/where/why/how, with "be".
-3. **"do" & the simple present** — question words with "do" ("What do you…?"), do/does, and the simple-present meaning (facts/in-general only; the two PT traps are flagged here).
-4. **Simple present** — third-person -s, don't/doesn't, adverbs of frequency (always/usually/sometimes/never), work-routine vocabulary.
-5. **Present continuous vs simple present** — "now" (I am studying) vs "in general" (I study).
-6. **Plurals & this/that/these/those** — regular/irregular plurals, demonstratives.
-7. **There is / there are & place prepositions** — in/on/under/next to/between…
-8. **Past simple** — was/were + regular -ed; the first past tense, contrasted against the "never past" rule.
+1. **Introductions, to be & the sentence subject** — cognates, am/is/are, a/an, vowels; the subject is required (no pro-drop); the dummy "it" ("It's 8pm", "It's raining").
+2. **Question words** — who/what/when/where/why/how with "be"; small-talk launch ("How's it going?", "What's up?" with its 3 senses, "How are things?"); first repair chunk ("Sorry, could you say that again?").
+3. **"do" & the simple present (questions)** — do/does; job small talk ("What do you do?"); "do" as a main verb.
+4. **Simple present & the sentence skeleton** — third-person -s, don't/doesn't, frequency; the fixed word order [subject] [mode] [verb] [object] [place/who-with] [time]; routine verb thread (get up, go to work, have breakfast, take the bus, do, make).
+5. **Phrasal verbs & particles — the core system** — verb + particle = new meaning; particles up/over/back (get up, look up, hit up, send over, look over, get back, go back); real contact phrases with register (hit me up / give me a call / let me know).
+6. **Present continuous vs simple present** — "now" (I am studying) vs "in general" (I study); "What are you working on?".
 
-### Book 1 — toward intermediate (built)
+### Stage 2 — past & future + the communication toolkit
 
-9. **The future: will / going to / "gonna"** — plans vs on-the-spot decisions; "gonna" is taught as the spoken future marker (a MODE, not a verb) so it never gets confused with the verb "go".
-10. **Past continuous vs past simple** — a long action in progress interrupted by a short one ("I was working when you called").
+7. **Plurals & this/that/these/those** — regular/irregular plurals, demonstratives.
+8. **There is / there are & place prepositions** — in/on/under/next to/between…; particle recycle (over there).
+9. **Past simple** — was/were + -ed; past small talk ("How was your weekend?"); past of thread verbs and phrasal verbs.
+10. **The future: will / going to / "gonna"** — plans vs on-the-spot decisions; reduction launch "gonna" (a MODE, not a verb) + "wanna"; "Any plans for the weekend?".
+11. **Past continuous vs past simple** — a long action in progress interrupted by a short one ("I was working when you called").
+12. **Present perfect (1)** — experience + duration ("I have worked here for 5 years" — the flagship PT trap); for/since; "Have you ever…?".
+13. **Present perfect (2) vs past simple** — finished vs unfinished time; ever/never/already/yet/just; discourse markers actually/basically.
+14. **Comparatives & superlatives** — opinions launch ("I think … is better", "In my opinion"); hedges kinda/sorta.
+15. **Modals: can / must / have to / should** — reductions gotta/hafta/dunno; repair launch ("Could you speak slower?", "I didn't catch that", "What do you mean by…?"); polite requests (Could you…? / Would you mind…?).
+16. **Countable/uncountable + quantifiers** — some/any/much/many/a lot of/a few/a little (business: information, advice, money, time).
+17. **Prepositions of time & movement** — at/on/in, to/from; recycle the particle thread.
+18. **"Get" deep-dive & make/do** — get as the coringa (receive/become/arrive/understand + get back to, get up, get along with, get over); make vs do.
+19. **Conditionals (1st & 2nd) + would** — if I have time… / if I were you…; would for polite offers.
 
-### Book 1 — intermediate (built)
+### Stage 3 — intermediate grammar + the communication toolkit
 
-11. **Present perfect (1)** — have/has + past participle for life experience ("I have visited") and, crucially, duration from the past ("I have worked here for 5 years" — the flagship PT trap); for/since.
-12. **Present perfect (2) vs past simple** — finished vs unfinished time; ever/never/already/yet/just.
-13. **Comparatives & superlatives** — better/worse, cheaper/most reliable; (not) as … as.
-14. **Modals of obligation & ability** — can/can't, must/have to/have got to, should (advice).
-15. **Countable/uncountable + quantifiers** — some/any/much/many/a lot of/a few/a little (business: information, advice, money, time).
-16. **Prepositions of time & movement** — at/on/in, to/from (consolidation); common time expressions.
-17. **Phrasal verbs & "get"** — the coringa; get back to, set up, call off, get along with.
-18. **Conditionals (1st & 2nd) + would** — if I have time… / if I were you…; would for polite offers.
+20. **Present perfect continuous** — "I've been working here for two years"; "How long have you been…?"; discourse marker "So…".
+21. **Past perfect & narrative order** — "I'd already sent it when…"; discourse-marker home: first/then/after that/finally/anyway; telling a work story in order.
+22. **Future (full system)** — will / gonna / present continuous for arrangements / present simple for schedules; recycle gonna/wanna; linking "whaddaya"/"couldja"; fillers honestly/I mean/you know.
+23. **Modals of deduction & possibility** — must / might / could / can't ("He must be in a meeting"); recycle repair.
+24. **Everyday passive & get-passive** — "The email was sent," "It got lost," "It's done" — recycles "get".
+25. **Reported speech & reporting verbs** — "He said he'd call," "She asked me to send it"; say/tell/ask.
+26. **Conditionals review + wish/if only** — zero/first/second/third; "I wish I had more time," "If only I'd known"; opinion recycle.
+27. **Question formation & indirect questions** — subject vs object questions; "Do you know when…?"; repair/softening home: "Could you tell me…?", "Just to confirm…".
+28. **Relative clauses (everyday)** — who/that/which/where; defining clauses; omitting the pronoun.
+29. **Gerunds & infinitives** — "I enjoy working," "I need to finish," "I stopped smoking" vs "I stopped to smoke"; high-frequency verb patterns.
+30. **Phrasal verbs (2): work & communication** — get back to, follow up, go over, wrap up, reach out, fill in, point out, bring up; separable vs inseparable (multi-sense, register-aware).
+31. **Phrasal verbs (3): plans, problems & changes** — put off, call off, set up, figure out, come up with, run into, deal with, work out, end up (multi-sense, register-aware).
 
-### Book 2 — intermediate → advanced (built)
+### Stage 4 — consolidation & application (fluency at IELTS General ≈ 6.0)
 
-19. **Present perfect continuous** — "I've been working here for two years"; how long vs how many.
-20. **Past perfect & narrative order** — "I'd already sent it when…"; before/after/by the time; telling a work story in order.
-21. **Future (full system)** — will / gonna / present continuous for arrangements / present simple for schedules; "I'm seeing the client tomorrow."
-22. **Modals of deduction & possibility** — must / might / could / can't ("He must be in a meeting").
-23. **Everyday passive & get-passive** — "The email was sent," "It got lost," "It's done" — natural workplace statements, not formal writing.
-24. **Reported speech & reporting verbs** — "He said he'd call," "She asked me to send it"; say/tell/ask in day-to-day use.
-25. **Conditionals review + wish/if only** — zero/first/second/third; "I wish I had more time," "If only I'd known."
-26. **Question formation & indirect questions** — subject vs object questions; "Do you know when…?"; tag questions for conversation.
-27. **Relative clauses (everyday)** — who/that/which/where; defining clauses; omitting the pronoun ("the guy I told you about").
-28. **Gerunds & infinitives** — "I enjoy working," "I need to finish," "I stopped smoking" vs "I stopped to smoke"; high-frequency verb patterns.
-29. **Phrasal verbs (2): work & communication** — get back to, follow up, go over, wrap up, reach out, fill in, point out, bring up; separable vs inseparable.
-30. **Phrasal verbs (3): plans, problems & changes** — put off, call off, set up, figure out, come up with, run into, deal with, work out, end up.
-31. **Connected speech & reductions (deep)** — gonna/wanna/gotta/hafta/kinda/sorta/dunno/lemme/gimme; linking; "whaddaya," "couldja"; listening for the reduced forms.
-32. **Discourse markers & fillers for flow** — actually/basically/honestly/I mean/you know/so/anyway/by the way; keeping a conversation going.
-33. **Small talk & polite social English** — "How's it going?", compliments, agreeing/disagreeing politely, softening requests ("I was wondering if…", "Would you mind…").
-34. **Clarifying, repairing & confirming** — "Sorry, could you say that again?", "What do you mean by…?", "Just to confirm…", "Let me make sure I got that right."
-35. **Opinions, agreeing & disagreeing** — "In my opinion," "I see your point, but," "I'm not so sure about that."
-36. **Speaking flow: summarizing, negotiating & next steps** — "To sum up," "Let's circle back," "What's the plan?", "I'll get back to you."
+32. **Listening: connected speech & reductions** — all reductions (gonna/wanna/gotta/hafta/kinda/sorta/dunno/lemme/gimme) + linking at natural speed; dictation + shadowing (consolidation, not first introduction).
+33. **Meetings: small talk → opinions → decisions** — application lesson: open with small talk, give opinions, agree/disagree politely, clarify/confirm, summarize a decision.
+34. **Negotiating & next steps (capstone)** — "To sum up," "Let's meet halfway," "What's the plan?", "Let's circle back," "I'll get back to you"; a full negotiation dialogue recycling reductions/phrasal verbs/conditionals/reported speech/opinions.
 
 ## Pedagogy principles
 
