@@ -45,6 +45,7 @@ Pedagogical fit outranks space-filling at every step: if the right presentation 
 - **The lesson title (h1)** is centered and kept to roughly one short line — ≈ 50 characters or fewer at the fixed 38px heading size inside the 1200px content area (shorter when uppercase-heavy).
 
 ## Content shape (authoring rules)
+- **Required prepositions are marked.** A verb that takes a fixed preposition (look AT, go TO, give TO, depend ON, wait FOR) is introduced with that preposition attached and visually marked (accent color + bold) so the verb+preposition reads as one unit. Never present a bare verb when it requires a preposition.
 - **Explainers vs notes.** A one-liner that explains a whole section is a sub-heading (serif, slightly larger), written only when it adds what the chart/dialog does not already state. A note about a single item (one vocab row) is a merged row inside that block, directly under the item.
 - **No redundancy.** Never restate in prose what the very next chart already shows; never repeat a block's title twice (a section heading plus the block's own sub-title) — state it once.
 - **Contrast is visible.** Two versions/conjugations/uses of a concept, or two concepts, are always separated — columns or clear spacing.

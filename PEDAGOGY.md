@@ -20,14 +20,14 @@ Each lesson builds on the previous one — it reuses vocabulary and structures t
 1. **Introductions, to be & the sentence subject** — cognates, am/is/are, a/an, vowels; the subject is required (no pro-drop); the dummy "it" ("It's 8pm", "It's raining").
 2. **Question words** — who/what/when/where/why/how with "be"; small-talk launch ("How's it going?", "What's up?" with its 3 senses, "How are things?"); first repair chunk ("Sorry, could you say that again?").
 3. **"do" & the simple present (questions)** — do/does; job small talk ("What do you do?"); "do" as a main verb.
-4. **Simple present & the sentence skeleton** — third-person -s, don't/doesn't, frequency; the fixed word order [subject] [mode] [verb] [object] [place/who-with] [time]; routine verb thread (get up, go to work, have breakfast, take the bus, do, make).
+4. **Simple present & the sentence skeleton** — third-person -s, don't/doesn't, frequency; the fixed word order [subject] [mode] [verb] [object] [place/who-with] [time]; routine verb thread (get up, go to work, have breakfast, take the bus, do, make); first TO vs FOR contrast (go TO work / FOR work).
 5. **Phrasal verbs & particles — the core system** — verb + particle = new meaning; particles up/over/back (get up, look up, hit up, send over, look over, get back, go back); real contact phrases with register (hit me up / give me a call / let me know).
 6. **Present continuous vs simple present** — "now" (I am studying) vs "in general" (I study); "What are you working on?".
 
 ### Stage 2 — past & future + the communication toolkit
 
 7. **Plurals & this/that/these/those** — regular/irregular plurals, demonstratives.
-8. **There is / there are & place prepositions** — in/on/under/next to/between…; particle recycle (over there).
+8. **There is / there are & place prepositions** — in/on/under/next to/between…; the ON (connection) / IN (inside) / AT (point) distinction; particle recycle (over there).
 9. **Past simple** — was/were + -ed; past small talk ("How was your weekend?"); past of thread verbs and phrasal verbs.
 10. **The future: will / going to / "gonna"** — plans vs on-the-spot decisions; reduction launch "gonna" (a MODE, not a verb) + "wanna"; "Any plans for the weekend?".
 11. **Past continuous vs past simple** — a long action in progress interrupted by a short one ("I was working when you called").
@@ -36,7 +36,7 @@ Each lesson builds on the previous one — it reuses vocabulary and structures t
 14. **Comparatives & superlatives** — opinions launch ("I think … is better", "In my opinion"); hedges kinda/sorta.
 15. **Modals: can / must / have to / should** — reductions gotta/hafta/dunno; repair launch ("Could you speak slower?", "I didn't catch that", "What do you mean by…?"); polite requests (Could you…? / Would you mind…?).
 16. **Countable/uncountable + quantifiers** — some/any/much/many/a lot of/a few/a little (business: information, advice, money, time).
-17. **Prepositions of time & movement** — at/on/in, to/from; recycle the particle thread.
+17. **Prepositions of time & movement** — at/on/in (time), to/from; consolidate TO vs FOR and ON/IN/AT; recycle the particle thread.
 18. **"Get" deep-dive & make/do** — get as the coringa (receive/become/arrive/understand + get back to, get up, get along with, get over); make vs do.
 19. **Conditionals (1st & 2nd) + would** — if I have time… / if I were you…; would for polite offers.
 
@@ -77,6 +77,8 @@ Each lesson builds on the previous one — it reuses vocabulary and structures t
 - **Phrasal verbs first, formal only to map meaning.** Where a native speaker would say the phrasal verb (put off, call off, set up, get back to, go over, wrap up), that is what the student learns and produces. The formal single-word twin (postpone, cancel, arrange, return, review, conclude) appears only as a gloss so the student can connect meaning — never as the default answer or the preferred form.
 - **Business-casual register is the target voice.** The book teaches the English of a normal working day — contractions, phrasal verbs, discourse markers and friendly-but-professional politeness — not jargon and not stiff written English. "Term of the art" business vocabulary is excluded; when a formal term is shown at all it is only to contrast with the natural spoken form.
 - **Listening and speaking are trained, not just tested.** Every new item has audio; listening blocks teach connected speech and reductions; speaking blocks teach flow, linking and the chunks a native speaker produces automatically. Grammar is taught so the student can *generate* correct structure, not merely recognise it.
+- **Verbs are learned as "verb + preposition" units.** A verb that requires a preposition (look AT, go TO, give TO, talk TO, depend ON, wait FOR) is always introduced — and recycled — with that preposition attached and visually marked, so the student never memorizes a bare verb and then wonders which preposition goes with it.
+- **High-frequency prepositions are taught by MEANING, early.** TO = direction/movement/change + the infinitive marker; FOR = purpose or duration; ON = connection/surface contact; IN = inside a larger thing; AT = a point in space or time / a target. The PT single word "para" splits into TO and FOR — flagged and drilled because it is a persistent PT→EN error. These meanings are integrated into the early routine/place/time lessons and recycled, never parked in one grammar lesson.
 
 ## Lesson & block types (synthesized from the 2026-10-21 research pass)
 

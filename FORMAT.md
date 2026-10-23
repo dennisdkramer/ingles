@@ -42,6 +42,7 @@ _(none queued.)_
 - .blanks = wrapping row of fill-in pairs (word + input.gap)
 - .dialog = dialogue block: #fff8ea fill, rose frame, bold speaker labels
 - .listen = compact ▶ audio chip placed inline beside what it speaks
+- Required prepositions (look AT, go TO, give TO) are visually marked — a distinct accent color (tan) and bold — so the verb+preposition pair reads as one unit
 - section headings (h2) carry a rose underline; exercise items are numbered 1..n under their group heading (no repeated section letter)
 - @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow
 
