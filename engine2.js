@@ -3,13 +3,14 @@ const LAYER_VER="v4-server-truth-20261006"; /* Bump to mark a fresh data era */
 let wipeGuard=0; /* a Clear-page wipe in flight: the poll must not resurrect the rows it is deleting */
 let lastPollChange=Date.now(); /* last time the poll saw a change — keeps the poll fast while the student watches */
 let lastFull=""; /* the layer content signature used to detect that change */
+let completeNow=false; /* optimistic state of the "Complete?" tag button */
 
 function wireListen(){document.querySelectorAll(".listen").forEach(b=>{b.onclick=()=>{if(editing)return;const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="en-US";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}})}
 wireListen();
 /* ---- content edit mode (teacher): a separate editable copy; live page + marks stay untouched ---- */
 const contentId=()=>"content_"+TRACK+"_"+L;
 let savedLive="",editTimer=null,nbkVal="";
-function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|px/.test(st))s.removeAttribute("style")});return "<!doctype html>"+cl.outerHTML;}
+function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop,#completebtn").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|px/.test(st))s.removeAttribute("style")});return "<!doctype html>"+cl.outerHTML;}
 function saveContent(){if(!document.querySelector(".content-area"))return;const o={action:"set",id:contentId(),type:"content",anchor:"",data:fullPageHTML(),email:gate.email,lesson:L,author:"prof",track:TRACK};notePending(o);outboxPush(o);scheduleFlush();}
 function toggleEditMode(){
  if(STUDENT!==gate.email){toast("Switch to 'demo (you)' to edit content.");return;}
@@ -121,6 +122,39 @@ function renderAnswers(){
   if(el.checked!==should)el.checked=should;
  });
 }
+/* "Complete?" tag button (2026-10-22): a per-student+track+lesson tag with no other effect.
+   Rendered for BOTH students and teachers; for a teacher it tags the currently selected student. */
+function completeId(){return "complete_"+STUDENT+"_"+TRACK+"_"+L;}
+function ensureCompleteBtn(){
+ let btn=document.getElementById("completebtn");
+ if(btn)return btn;
+ btn=document.createElement("button");
+ btn.type="button";btn.id="completebtn";btn.className="complete-btn";
+ const ft=document.querySelector("footer");
+ if(ft){ft.parentNode.insertBefore(btn,ft);}
+ else{const ca=document.querySelector(".content-area");if(ca)ca.appendChild(btn);}
+ btn.onclick=()=>{
+  const pid=completeId();
+  if(completeNow){
+   send({action:"del",id:pid});
+   layer=layer.filter(r=>r.type!=="complete");
+  }else{
+   send({action:"add",id:pid,type:"complete",anchor:"",data:"1",track:TRACK});
+   layer.push({id:pid,type:"complete",anchor:"",data:"1"});
+  }
+  completeNow=!completeNow;
+  renderCompleteBtn();
+ };
+ return btn;
+}
+function renderCompleteBtn(){
+ const pid=completeId();
+ const row=layer.find(r=>r.type==="complete");
+ if(!pendingFor(pid))completeNow=!!row;
+ const btn=ensureCompleteBtn();
+ btn.textContent=completeNow?"Completed":"Complete?";
+ btn.classList.toggle("is-done",completeNow);
+}
 (async()=>{try{
  const bar=document.getElementById("controlbar")||topbar;
  let extra="";
@@ -156,7 +190,7 @@ function renderAnswers(){
    if(el)el.innerHTML='<option value="'+gate.email+'">demo (you)</option>'+st.map(s=>'<option value="'+s.email+'">'+(s.name||s.email)+"</option>").join("");
   })();
  }
- loadLayer();
+ loadLayer();renderCompleteBtn();
  /* ---- cross-session poll (owner spec 2026-10-12) — the ONLY re-check there is: add/set/del on
     either side (teacher or student) reach the other as fast as the adaptive poll allows. Each send()
     marks its own id+action "pending" for 12s (engine1.js notePending/pendingFor); renderLayer()
@@ -239,6 +273,7 @@ function renderLayer(){
    fdx.value=nbk?(nbk.data||""):"";
  }
   renderAnswers();
+  renderCompleteBtn();
 }
 
 /* fallback: nenhum engine define window.showAnchor;

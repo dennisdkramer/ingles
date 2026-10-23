@@ -85,12 +85,13 @@ function renderStudent(track,name){
 }
 let QUEUE={pending:[],approved:[]};
 function bookButton(t){
- let opts='<option value="">Escolher lição…</option>';
- for(let i=1;i<=COUNTS[t];i++)opts+='<option value="'+i+'">Lição '+i+'</option>';
- return '<div class="bookdrop"><button type="button" onclick="toggleBookSel(\''+t+'\')">'+TN[t]+' ▾</button>'
-  +'<select id="sel_'+t+'" hidden onchange="if(this.value)go(\''+t+'\',this.value)">'+opts+'</select></div>';
+ let items='';
+ for(let i=1;i<=COUNTS[t];i++)items+='<button type="button" onclick="go(\''+t+'\','+i+')">Lição '+i+'</button>';
+ return '<div class="bookdrop"><button type="button" class="bookbtn" onclick="toggleBookMenu(\''+t+'\')">'+TN[t]+' ▾</button>'
+  +'<div class="bookmenu" id="menu_'+t+'" hidden>'+items+'</div></div>';
 }
-window.toggleBookSel=function(t){const s=$("sel_"+t);if(s)s.hidden=!s.hidden;};
+window.toggleBookMenu=function(t){const m=$("menu_"+t);if(!m)return;const open=!m.hidden;document.querySelectorAll(".bookmenu").forEach(x=>x.hidden=true);if(!open)m.hidden=false;};
+document.addEventListener("click",e=>{if(!e.target.closest(".bookdrop"))document.querySelectorAll(".bookmenu").forEach(x=>x.hidden=true);});
 function pendingHTML(){
  let h='<div class="card tportal-col"><h4>Pedidos pendentes</h4>';
  if(!QUEUE.pending.length)h+='<p class="dim">Nenhum pedido pendente.</p>';
@@ -105,7 +106,11 @@ function approvedHTML(){
  let h='<div class="card tportal-col"><h4>Alunos aprovados</h4>';
  if(!QUEUE.approved.length)h+='<p class="dim">Nenhum aluno aprovado ainda.</p>';
  QUEUE.approved.forEach((s,i)=>{
-  h+='<div class="tportal-item"><div>✅ <b>'+esc(s.name||s.email)+'</b> <span class="dim">'+esc(s.email)+' · '+TN[s.track]+'</span></div>'
+  const next=(s.lastCompleted||0)+1;
+  const atEnd=next>COUNTS[s.track];
+  h+='<div class="tportal-item"><div>'
+   +'<button'+(atEnd?' disabled':'')+' onclick="goStudent(\''+s.track+'\','+(atEnd?COUNTS[s.track]:next)+',\''+s.email+'\')">⏭ '+TN[s.track]+' '+(atEnd?COUNTS[s.track]:next)+'</button>'
+   +' <b>'+esc(s.name||s.email)+'</b> <span class="dim">'+esc(s.email)+'</span></div>'
    +'<div><button onclick="removeStudent('+i+')">Remover</button></div></div>';
  });
  return h+'</div>';
@@ -135,6 +140,7 @@ window.removeStudent=async function(i){
 };
 const prog=()=>JSON.parse(localStorage.getItem("prog_"+profile.email)||"{}");
 function go(t,i){sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,name:studentName,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
+function goStudent(t,i,email){const s=QUEUE.approved.find(x=>x.email===email);sessionStorage.gate=JSON.stringify({email:email,track:t,teacher:true,name:s?(s.name||""):"",sig:h(email+t+SECRET)});location=t+"/lesson"+i+".html";}
 function showAcct(){const c=$("controlbar").querySelector("#acct"),lo=$("controlbar").querySelector("#logout");c.hidden=false;c.innerHTML="Signed in: <b>"+profile.email+"</b>";lo.hidden=false;lo.onclick=logout;const g=$("gcard");if(g)g.hidden=true;}
 function logout(){clearSession();if(window.google&&google.accounts&&google.accounts.id)try{google.accounts.id.disableAutoSelect()}catch(e){}location.reload();}
 </script></body></html>

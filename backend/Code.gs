@@ -126,6 +126,20 @@ function isTeacher_(email) {
   for (var i = 0; i < TEACHERS.length; i++) if (TEACHERS[i].toLowerCase() === String(email).toLowerCase()) return true;
   return false;
 }
+/* last lesson a student tagged "complete" (type:"complete" rows in layer), for the teacher's jump button */
+function lastCompleted_(email, track) {
+  var sh = getSheet_();
+  var all = rowsToObjs_(sh);
+  var max = 0;
+  for (var i = 0; i < all.length; i++) {
+    var r = all[i];
+    if (String(r.email) === String(email) && String(r.track) === String(track) && String(r.type) === "complete") {
+      var n = parseInt(String(r.lesson), 10);
+      if (!isNaN(n) && n > max) max = n;
+    }
+  }
+  return max;
+}
 
 /* trash the Drive file a recording row points to (b64 column = "drive:<fileId>" for uploaded audio).
    Never throws: a missing/already-trashed file (or a plain inline b64 row) is simply nothing to purge,
@@ -269,7 +283,7 @@ function doPost(e) {
       var pending = [], approved = [];
       for (var q = 0; q < rows4.length; q++) {
         if (rows4[q].status === "pending") pending.push({ email: rows4[q].email, name: rows4[q].name, ts: rows4[q].ts });
-        else if (rows4[q].status === "approved") approved.push({ email: rows4[q].email, name: rows4[q].name, track: rows4[q].track });
+        else if (rows4[q].status === "approved") approved.push({ email: rows4[q].email, name: rows4[q].name, track: rows4[q].track, lastCompleted: lastCompleted_(rows4[q].email, rows4[q].track) });
       }
       return json_({ pending: pending, approved: approved });
     }

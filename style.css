@@ -185,9 +185,14 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 .tportal-col h4{margin:0 0 6px}
 .tportal-item{padding:8px 0;border-bottom:2px dashed var(--tan)}
 .tportal-item:last-child{border-bottom:0;padding-bottom:0}
-.bookdrop{flex:1 1 0;display:flex;flex-direction:column;gap:6px;min-width:0}
-.bookdrop>button{margin:0;white-space:nowrap;flex:0 0 auto}
-.bookdrop>select{margin:0}
+.bookdrop{position:relative;flex:1 1 0;min-width:0}
+.bookdrop>.bookbtn{width:100%;margin:0;white-space:nowrap}
+.bookmenu{position:absolute;top:100%;left:0;right:0;z-index:30;margin-top:4px;max-height:320px;overflow-y:auto;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:5px 5px 0 var(--tan);padding:4px}
+.bookmenu button{display:block;width:100%;margin:0;text-align:left;background:var(--paper);color:var(--ink);border:0;border-radius:6px;box-shadow:none;padding:6px 10px;font-size:14px}
+.bookmenu button:hover{background:var(--bluebg)}
+.complete-btn{margin:8px 0;font-weight:700}
+.complete-btn:not(.is-done){background:#5b6b84;box-shadow:3px 3px 0 var(--tan)}
+.complete-btn.is-done{background:#0f766e;box-shadow:3px 3px 0 var(--tan)}
 /* small half-full blocks: center their text (ugliness rule) */
 .card.center{text-align:center}
 /* a standalone dialogue that isn't paired beside another block */
