@@ -142,7 +142,7 @@ window.removeStudent=async function(email){
 };
 const prog=()=>JSON.parse(localStorage.getItem("prog_"+profile.email)||"{}");
 function go(t,i){sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,teacherName:teacher?(profile.name||""):"",name:teacher?(profile.name||""):studentName,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
-function goStudent(t,i,email){const s=QUEUE.approved.find(x=>x.email===email);sessionStorage.gate=JSON.stringify({email:email,track:t,teacher:true,teacherName:profile.name||"",name:s?(s.name||""):"",sig:h(email+t+SECRET)});location=t+"/lesson"+i+".html";}
+function goStudent(t,i,email){const s=QUEUE.approved.find(x=>x.email===email);sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher:true,teacherName:profile.name||"",name:s?(s.name||""):"",student:email,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
 function showAcct(){const c=$("controlbar").querySelector("#acct"),lo=$("controlbar").querySelector("#logout");c.hidden=false;c.innerHTML="Signed in: <b>"+profile.email+"</b>";lo.hidden=false;lo.onclick=logout;const g=$("gcard");if(g)g.hidden=true;}
 function logout(){clearSession();if(window.google&&google.accounts&&google.accounts.id)try{google.accounts.id.disableAutoSelect()}catch(e){}location.reload();}
 </script></body></html>

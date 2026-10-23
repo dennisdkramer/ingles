@@ -12,7 +12,7 @@ if(!gate||h(gate.email+gate.track+SECRET)!==gate.sig||(!gate.teacher&&gate.track
    static text (e.g. "Ana", or "___" in kids/nsfw). */
 if(gate.name)document.querySelectorAll(".stuname").forEach(el=>el.textContent=gate.name);
 const who=()=>gate.teacher?"prof":"aluno";
-let STUDENT=gate.email, layer=[], sig="", editing=false;
+let STUDENT=gate.student||gate.email, layer=[], sig="", editing=false;
 const audioCache={};
 let popXY={x:20,y:90};
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(t._x);t._x=setTimeout(()=>t.style.display="none",2600)}

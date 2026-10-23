@@ -177,7 +177,16 @@ function renderCompleteBtn(){
   const rb=document.createElement("button");rb.type="button";rb.id="revertpage";rb.textContent="↩️ Revert";rb.onclick=()=>{if(!confirm("Discard your saved edits and restore the original content?"))return;send({action:"del",id:contentId()});toast("Reverting…");setTimeout(()=>location.reload(),900)};bar.appendChild(rb);
  }
  const selEl=document.getElementById("sel");
- if(gate.teacher&&selEl){selEl.onchange=()=>{STUDENT=selEl.value;sig="";loadLayer()};}
+ if(gate.teacher&&selEl){selEl.onchange=()=>{
+  STUDENT=selEl.value;sig="";
+  const opt=selEl.selectedOptions&&selEl.selectedOptions[0];
+  if(STUDENT===gate.email){delete gate.student;gate.name=gate.teacherName||"";}
+  else{gate.student=STUDENT;gate.name=opt?(opt.textContent||""):"";}
+  gate.sig=h(gate.email+gate.track+SECRET);
+  try{sessionStorage.gate=JSON.stringify(gate);}catch(e){}
+  if(gate.name)document.querySelectorAll(".stuname").forEach(el=>el.textContent=gate.name);
+  loadLayer();
+};}
  if(gate.teacher){
   (async()=>{
    let st=[];
@@ -186,7 +195,7 @@ function renderCompleteBtn(){
     st=(j&&j.students)||[];
    }catch(e){st=[];}
    const el=document.getElementById("sel");
-   if(el)el.innerHTML='<option value="'+gate.email+'">'+(gate.teacherName||gate.email)+'</option>'+st.map(s=>'<option value="'+s.email+'">'+(s.name||s.email)+"</option>").join("");
+   if(el){el.innerHTML='<option value="'+gate.email+'">'+(gate.teacherName||gate.email)+'</option>'+st.map(s=>'<option value="'+s.email+'">'+(s.name||s.email)+"</option>").join("");el.value=STUDENT;}
   })();
  }
  loadLayer();renderCompleteBtn();
