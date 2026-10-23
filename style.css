@@ -139,6 +139,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
    sentence fill-ins with inline gaps, contiguous blank line, non-italic English inside italic PT ---- */
 .lead{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#5c5347;margin:.2em 0 .7em;line-height:1.5}
 .pt b,.lead b{font-style:normal}
+.prep{color:var(--tan);font-weight:700}
 .blank{display:inline-block;width:3.2em;border-bottom:2px solid var(--tan);vertical-align:baseline}
 .chart tr.note td{background:#fff8ea;font-style:italic;color:#5c5347;border-top:0;padding:10px 14px}
 .qgrid.stack{display:block}
