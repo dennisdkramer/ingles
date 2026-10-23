@@ -24,6 +24,10 @@ Each lesson is a deep, thorough pedagogical synthesis — never a template fill-
 ## Content generation process (every block)
 Content is produced by a loop; layout is never pre-assigned and never forced by CSS — a block BECOMES full-width, half-width, one column or several columns as a RESULT of this loop.
 
+**Default:** a content-generation request implicitly includes the whole loop — steps 4 and 5 (alter/extend + visual re-check) are ALWAYS run afterward, unless the owner explicitly directs otherwise. Running only the generation pass (and skipping the 4–5 pass) is not "done".
+
+**Malleability.** There are no fixed shapes for activities or blocks, and no fixed exercise types per lesson. Every layout — a chart, a panel, a dialogue, a fill-in grid, the three-column fill-in (prompt right-justified | field | after left-justified), a multi-column item grid, a wide sentence-length field — is an OPTION, chosen during the step-3/4/5 pass to fit the content and the visual result. Flexibility and optionality apply to ALL page content; a block's shape is always an outcome of the loop, never a pre-assigned template.
+
 1. **Pedagogical assessment.** Decide what the block teaches, how central it is, and where it sits in the course (the earlier, the shorter and simpler the phrases must stay). → PEDAGOGY.md.
 2. **Initial generation.** Write the items — questions, phrases, vocabulary, dialogue lines. Their length and count are only the starting point.
 3. **Visual/structural analysis.** Look at the block in its surroundings and decide its layout and whether more content is needed, specifically:
@@ -50,6 +54,7 @@ Pedagogical fit outranks space-filling at every step: if the right presentation 
 ## Content shape (authoring rules)
 - **Required prepositions are marked.** A verb that takes a fixed preposition (look AT, go TO, give TO, depend ON, wait FOR) is introduced with that preposition attached and visually marked (accent color + bold) so the verb+preposition reads as one unit. Never present a bare verb when it requires a preposition.
 - **Never show the answer in a prompt.** A fill-in prompt may carry a hint ONLY in the language the student is not producing; the answer itself is never written into the prompt. If a parenthetical would reveal the answer (e.g. a Portuguese meaning that is exactly what the student writes), restructure the exercise so the prompt is one language and the student produces the other.
+- **No copy-exercises.** A fill-in whose answer is already visible or derivable by simply copying the prompt (e.g. "get + up = ___" → "get up") is not a real exercise — the student must produce from memory or meaning. Restructure it into production (context sentence + meaning hint → the answer).
 - **Portuguese is always italicised** — every Portuguese word, including a parenthetical hint inside an exercise, carries `.pt`/`.ptw`.
 - **Multiple-choice answers are randomized.** Across a group, the correct option is spread over positions a/b/c/d — never all the first option.
 - **Treino and Quiz stay distinct (soft rule).** Minimize exact repetition between a Treino block and its Quiz counterpart; if both reuse a block type (fill-in, listen-and-choose, translate), use different items/phrases in each.
