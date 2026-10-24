@@ -17,6 +17,8 @@ Stop and ask ONLY when: the desired OUTCOME itself is ambiguous (not the mechani
 conflicts with FUNCTION.md/FORMAT.md and the conflict looks unintentional, or the action is
 destructive/hard to reverse (e.g. force-push, deleting user data, dropping a doc section) and the
 owner hasn't clearly signed off on that scope.
+**Ambiguous references — stop and ask, never guess.** When a prompt names a target by a short label (e.g. "6A", "5.6A", "block A", "that exercise") and the label does not pin a single lesson/section/block from context, STOP and ask which one is meant before acting. The threshold for asking is deliberately LOW: if there is any real chance the label points at two different things, ask — never pick the likelier reading and proceed. A wrong guess on a content target costs far more than one clarifying question.
+**"Look / see / take a look" = investigate, never inspect visually.** The agent has no vision. "Take a look at X", "look into Y", "can you see why…" are requests to READ the code/content and REASON about it — never to render, screenshot, or "view" a page. Treat every "look" verb as "investigate the code/content"; do not attempt image capture.
 When the owner requests a change, go straight to execution — no stalling, no deliberation replies,
 no "here's my plan" unless the request is genuinely ambiguous or risky per above. "Go straight to
 execution" means don't stall with plan-replies — it does NOT mean skip the deep thinking / research /
