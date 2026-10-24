@@ -106,6 +106,18 @@ const MEASURE = `(function(){
       var ex = (p.querySelector('.ex-head') || {}).textContent || '';
       var pct = 0;
       if (r.width > 0) { var cw0 = cw(p); pct = Math.round(100 * cw0 / r.width); }
+      var cellMin = -1, cellOver = 0;
+      p.querySelectorAll('.blanks > div').forEach(function(c){
+        var cr = c.getBoundingClientRect();
+        if (cr.width > 0) {
+          var ov = c.scrollWidth - c.clientWidth;
+          if (ov > cellOver) cellOver = ov;
+          if (!c.parentNode.classList.contains('sent') && !c.parentNode.classList.contains('line')) {
+            var f = Math.round(100 * cw(c) / cr.width);
+            if (cellMin < 0 || f < cellMin) cellMin = f;
+          }
+        }
+      });
       out.push({
         full: p.classList.contains('full'),
         centered: p.classList.contains('centered'),
@@ -115,6 +127,7 @@ const MEASURE = `(function(){
         half: Math.round(pw / 2),
         over: p.scrollWidth - p.clientWidth,
         pct: pct,
+        cellMin: cellMin, cellOver: cellOver,
         ex: ex.replace(/\\s+/g, ' ').slice(0, 60)
       });
     });
@@ -169,6 +182,17 @@ async function main() {
     if (halfSparse.length) {
       console.log('lesson ' + L + ' (hint):');
       halfSparse.forEach(p => console.log('    HALF DEADSPACE ' + p.pct + '%  w=' + p.w + '  «' + p.ex + '»'));
+    }
+    // CELL HINTS (non-failing): right-justified fill-in cells that are mostly empty, or that overflow.
+    const cellSparse = panels.filter(p => p.cellMin > 0 && p.cellMin < 55);
+    if (cellSparse.length) {
+      console.log('lesson ' + L + ' (hint):');
+      cellSparse.forEach(p => console.log('    CELL SPARSE ' + p.cellMin + '%  w=' + p.w + '  «' + p.ex + '»'));
+    }
+    const cellOv = panels.filter(p => p.cellOver > 4);
+    if (cellOv.length) {
+      console.log('lesson ' + L + ' (hint):');
+      cellOv.forEach(p => console.log('    CELL OVERFLOW ' + p.cellOver + 'px  «' + p.ex + '»'));
     }
     // Height-balance HINT (non-failing): adjacent half-width panels of visibly different heights.
     const hbal = [];
