@@ -100,6 +100,9 @@ The category files (MASTER_CONTEXT, FUNCTION, BACKEND, FORMAT, CONTENT, HARNESS)
 ## RULE 11 — A PROMPT OVERRIDES A SPEC/RULE FILE ON CONFLICT
 When a user PROMPT (the instruction in the current message) contradicts a category file (MASTER_CONTEXT/FUNCTION/BACKEND/FORMAT/CONTENT/HARNESS) or an earlier owner rule, the PROMPT has authority — follow the prompt, not the file. When a prompt changes earlier guidance, also check whether it makes sense to RELAX or REWRITE the rule in the category file so it aligns with the new guidance (otherwise the files keep contradicting the code and the next task inherits the stale rule). The files are a record of the owner's intent, and the latest prompt is the latest intent: a prompt is never silently overridden by a spec file.
 
+## RULE 12 — PEDAGOGICAL vs CONTENT HARNESS
+Two harnesses govern content work. PEDAGOGY.md (the pedagogical harness) = WHAT content to teach and how it is ordered within and between lessons. CONTENT.md (the content harness) = HOW that content is generated, structured, and formatted. When deciding what to include, what to drop, and how to sequence topics (including grouping related items), reference the pedagogical harness. When authoring blocks, exercises, and layout, reference the content harness.
+
 ## TOOL / TERMINAL PARAMETERS (measured 2026-10-13)
 The terminal here is PowerShell 7 (`pwsh.exe`) and VS Code's shell integration IS loaded and armed:
 `HAS_PSRL_AT_STARTUP=True`, `PSConsoleHostReadLine` wraps the `633;` protocol, and `$LASTEXITCODE`

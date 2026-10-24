@@ -18,10 +18,14 @@ _(Batches queued for this category, newest first. Cleared once done AND committe
 - Exercise layout (the reusable template — mechanism in style.css): every exercise group is a bordered panel inside a two-per-row flow, and a group that needs full width (long options / a textarea / many items) spans the whole row. Inside a panel there are exactly two shapes: (1) multiple-choice → an aligned grid of [number][stem][one column per option], so the options line up vertically; (2) fill-in → an auto-flowing grid where the prompt sits in a fixed-width column so every gap lines up, and the number of pairs per row is whatever fits the group's item width. A page only declares a group's type and width — it never hand-tunes columns.
 - Edit mode (teacher-only, in the "demo (you)" view): a ✏️ Edit toggle loads a separate unmarked, editable copy — the live page and its marks are never touched. Changes auto-save to the backend as a `type:"content"` row holding the FULL page HTML, keyed to the teacher's email (staging only; students never see it), and ↩️ Revert discards them. Every lesson file is created with a sibling `<lesson>.edit.html` sidecar that is a full copy of the lesson. "Baking in" is a pure rename: the editor fetches the saved HTML from the backend, writes it over the sidecar, deletes the original lesson file, and renames the sidecar to the lesson name — no copy/paste and no content editing.
 
-## Lesson synthesis (before generating any block)
+## Pedagogical guidance — WHAT to teach and its order
+
+### Lesson synthesis (before generating any block)
 Each lesson is a deep, thorough pedagogical synthesis — never a template fill-in. Before authoring a single block: (1) decide what the student must already understand (prerequisites) and teach it first; (2) choose the cleanest concept order (concrete/transparent → abstract/idiomatic); (3) decide the appropriate SET and QUANTITY of items — enough to build the system and fill ~60 min of pre-quiz content, never a fixed count; (4) plan how each item is presented (meaning/use, register, context, required prepositions attached and marked); (5) plan enough varied practice to build comfort and intuition, then the ~20-min quiz. Research and reason about the topic; owner-named items are pointers, not deliverables (HARNESS RULE 1). Make structural changes — add, remove or reorder columns, blocks and sections — whenever the pedagogy warrants it; the block template is a starting point, not a constraint.
 
-## Content generation process (every block)
+## Generative guidance — HOW to generate, structure, format
+
+### Content generation process (every block)
 Content is produced by a loop; layout is never pre-assigned and never forced by CSS — a block BECOMES full-width, half-width, one column or several columns as a RESULT of this loop.
 
 **Default:** a content-generation request implicitly includes the whole loop — steps 4 and 5 (alter/extend + visual re-check) are ALWAYS run afterward, unless the owner explicitly directs otherwise. Running only the generation pass (and skipping the 4–5 pass) is not "done".
@@ -45,13 +49,13 @@ A reported issue is a CLASS, not a single case: when the owner flags one block (
 
 Pedagogical fit outranks space-filling at every step: if the right presentation is a single short column, keep it that way and make the spacing work around it.
 
-## Content quantity
+### Content quantity
 - **Explanatory content (everything before the quiz)** targets **~60 minutes of pre-quiz content** (explanatory sections + Treino combined) — a strong preference, better to exceed than undershoot. This comes from deep synthesis, never padding: conceptually hard topics get more explanation; conceptually simple topics get more practice. No fixed section count and no fixed length per section.
 - **Exercise shapes** (fill-in blanks, multiple-choice, translation boxes, recording prompts, dialogues, charts…) are each used **as many times as appropriate** — never exactly one per page unless the lesson genuinely needs only one. There is no one-translation-box or one-recording-prompt rule.
 - **The quiz** is sized so it **ideally takes about 20 minutes** to complete, but the priority for quantity is **"as appropriate"** — enough to fully test the student's understanding of the explanatory content, no more and no less.
 - **The lesson title (h1)** is centered and kept to roughly one short line — ≈ 50 characters or fewer at the fixed 38px heading size inside the 1200px content area (shorter when uppercase-heavy).
 
-## Content shape (authoring rules)
+### Content shape (authoring rules)
 - **Required prepositions are marked.** A verb that takes a fixed preposition (look AT, go TO, give TO, depend ON, wait FOR) is introduced with that preposition attached and visually marked (accent color + bold) so the verb+preposition reads as one unit. Never present a bare verb when it requires a preposition.
 - **Never show the answer in a prompt.** A fill-in prompt may carry a hint ONLY in the language the student is not producing; the answer itself is never written into the prompt. If a parenthetical would reveal the answer (e.g. a Portuguese meaning that is exactly what the student writes), restructure the exercise so the prompt is one language and the student produces the other.
 - **No copy-exercises.** A fill-in whose answer is already visible or derivable by simply copying the prompt (e.g. "get + up = ___" → "get up") is not a real exercise — the student must produce from memory or meaning. Restructure it into production (context sentence + meaning hint → the answer).
