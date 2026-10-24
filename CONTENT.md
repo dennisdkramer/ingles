@@ -37,7 +37,7 @@ Content is produced by a loop; layout is never pre-assigned and never forced by 
 
 0. **Derive, don't copy.** The lesson's section set and structure come from the pedagogical principle and its place in the course — never from an existing lesson file (HARNESS RULE 1); existing pages are outputs, not templates.
 1. **Pedagogical assessment.** Decide what the block teaches, how central it is, and where it sits in the course (the earlier, the shorter and simpler the phrases must stay). → PEDAGOGY.md.
-2. **Initial generation.** Write the items — questions, phrases, vocabulary, dialogue lines. Their length and count are only the starting point.
+2. **Initial generation.** Write the items — questions, phrases, vocabulary, dialogue lines — driven by PEDAGOGY alone: the concept's weight and type decide what and how much is taught. No items-per-block or quantity-per-section target applies here, and no fill-the-width — that is a step-4/5 concern, applied only after the content is generated and inspected.
 3. **Visual/structural analysis.** Look at the block in its surroundings and decide its layout and whether more content is needed, specifically:
    - a lone item leaves a lot of blank space on its horizontal line → add items or columns;
    - a block has no adjacent block of the same width to sit beside → generate more content (more items, more columns, longer phrases, more dialogue lines) so it genuinely earns its width — or, only if pedagogy insists it stay small, keep it small and center it;
@@ -56,6 +56,7 @@ Pedagogical fit outranks space-filling at every step: if the right presentation 
 ### Content quantity
 - **Explanatory content (everything before the quiz)** targets **~60 minutes of pre-quiz content** (explanatory sections + Treino combined) — a strong preference, better to exceed than undershoot. This comes from deep synthesis, never padding: conceptually hard topics get more explanation; conceptually simple topics get more practice. No fixed section count and no fixed length per section.
 - **Exercise shapes** (fill-in blanks, multiple-choice, translation boxes, recording prompts, dialogues, charts…) are each used **as many times as appropriate** — never exactly one per page unless the lesson genuinely needs only one. There is no one-translation-box or one-recording-prompt rule.
+- **Content type decides how a lesson grows.** A grammar rule is expanded with more production reps (not more explanation); vocabulary is expanded with more items; formulaic chunks with a larger bank; discourse with longer texts. A lesson may also contract, combine, or expand — by item quantity or by concept quantity — as its objectives require.
 - **The quiz** is sized so it **ideally takes about 20 minutes** to complete, but the priority for quantity is **"as appropriate"** — enough to fully test the student's understanding of the explanatory content, no more and no less.
 - **The lesson title (h1)** is centered and kept to roughly one short line — ≈ 50 characters or fewer at the fixed 38px heading size inside the 1200px content area (shorter when uppercase-heavy).
 

@@ -1,8 +1,8 @@
 # VOCABULARY — the concept inventory (concept → context → mapping)
 
-This is the living table the lessons consume (PEDAGOGY.md references it). One Portuguese concept at a time, the table maps the idea onto the English word(s) a native actually uses in each business-casual context, ranks them by frequency/register, and records the production target. A cognate and its more-used cousin are taught together at introduction (with a frequency note); after that, teaching uses whichever is most common in that context.
+This is the living table the lessons consume (PEDAGOGY.md references it). One Portuguese concept at a time, the table maps the idea onto the English word(s) a native actually uses in each business-casual context, ranks them by frequency/register **in spoken English** (the register the student is learning — not written-corpus frequency), and records the production target(s). A concept is listed with **all or most of its regularly-used equivalents**, ordered by spoken frequency — never reduced to a single "most accurate" word. A cognate and its more-used cousin are taught together at introduction (with a frequency note); after that, teaching uses whichever is most common in that context.
 
-Columns: PT concept · EN realization per context · cognate? · frequency/register · production target · lesson.
+Columns: PT concept · EN realization per context (all/most, spoken-frequency order) · cognate? · spoken frequency/register · production target · lesson.
 
 ## Seeded rows (Stage 1 workhorse verbs — the table grows as lessons are authored)
 
