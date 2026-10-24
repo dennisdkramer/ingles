@@ -5,7 +5,7 @@ This file does NOT hold lesson content — the prose, sections, exercises and wi
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-C<n>.)_
 
-- B-C3 [2026-10-22] HANDOFF (content side): enforce lesson length (~60 min + ~20 min quiz) on every lesson — merge or expand thin ones; introduce and recycle high-frequency verbs / everyday vocabulary early; author vocabulary explanations with meaning/use/register/context and multiple senses, not a single translation. See PEDAGOGY.md B-P3 for the full handoff.
+- B-C4 [2026-10-24] CONTENT RE-GENERATION (authoring side, start at lesson 5). Author per the generative rules and run the step-4/5 visual+pedagogical pass on every lesson: fill the width (no dead space), align fill-in fields (use the aligned layout when prompts vary in length), half-width pair or center small blocks, answer-width fields (--gap-w), randomized MCQ, distinct Treino vs Quiz, Portuguese italic. Lesson 5 first. See PEDAGOGY.md B-P4.
 
 
 
