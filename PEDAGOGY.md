@@ -37,16 +37,16 @@ _(Ordering is derived from this book's own difficulty model — not from any ext
 
 ### Stage 2 — time & the meaning traps (lessons 10–19)
 
-10. **Simple past** — regular -ed + the irregular workhorses; past time words.
-11. **Past: questions & negatives** — did/didn't; short answers.
+10. **Simple past** — regular -ed + the irregular workhorses; past time words (affirmative: the verb carries -ed).
+11. **Past: questions & negatives** — did/didn't (the -ed moves from the verb to the [mode]); short answers.
 12. **Present continuous** — now vs. in general (the trap: PT uses the -ndo form more broadly).
-13. **Future: plan vs. on-the-spot decision** — going to vs. will.
-14. **Future: the spoken "gonna"** — a mode, not a verb.
+13. **Future: plan vs. on-the-spot decision** — going to vs. will (the [mode]).
+14. **Future: the spoken "gonna"** — the reduced [mode], a mode not a verb.
 15. **Present perfect: experience & duration** — the big trap (its meaning maps onto PT's simple past, not onto the PT verb form that looks like it).
 16. **Present perfect: finished vs. unfinished time** — for/since, ever/never, already/yet/just.
 17. **Comparisons & opinions** — comparative/superlative + opinion chunks.
-18. **Modals: ability, permission, requests** — can/could.
-19. **Modals: obligation, advice, possibility** — must/have to/should/might.
+18. **Modals: ability, permission, requests** — can/could (occupy the [mode]).
+19. **Modals: obligation, advice, possibility** — must/have to/should/might (occupy the [mode]).
 
 ### Stage 3 — the opaque-but-useful toolkit (lessons 20–31)
 
@@ -56,8 +56,8 @@ _(Ordering is derived from this book's own difficulty model — not from any ext
 23. **Phrasal verbs: movement & routine**.
 24. **Phrasal verbs: work & communication**.
 25. **Phrasal verbs: plans, problems & changes**.
-26. **Conditionals (1st & 2nd) + "would"** — real vs. hypothetical; polite offers.
-27. **Modals of deduction** — must/might/could/can't for guessing.
+26. **Conditionals (1st & 2nd) + "would"** — would occupies the [mode]; real vs. hypothetical; polite offers.
+27. **Modals of deduction** — must/might/could/can't (occupy the [mode]) for guessing.
 28. **Relative clauses** — who/that/which/where; omitting the pronoun.
 29. **Gerunds & infinitives** — high-frequency verb patterns.
 30. **The everyday passive & "get" passive** — "it was sent", "it got lost", "it's done".
@@ -102,6 +102,7 @@ _(Ordering is derived from this book's own difficulty model — not from any ext
 - **Business-casual register is the target voice.** The book teaches the English of a normal working day — contractions, phrasal verbs, discourse markers and friendly-but-professional politeness — not jargon and not stiff written English. "Term of the art" business vocabulary is excluded; when a formal term is shown at all it is only to contrast with the natural spoken form.
 - **Listening and speaking are trained, not just tested.** Every new item has audio; listening blocks teach connected speech and reductions; speaking blocks teach flow, linking and the chunks a native speaker produces automatically. Grammar is taught so the student can *generate* correct structure, not merely recognise it.
 - **Verbs are learned as "verb + preposition" units.** A verb that requires a preposition (look AT, go TO, give TO, talk TO, depend ON, wait FOR) is always introduced — and recycled — with that preposition attached and visually marked, so the student never memorizes a bare verb and then wonders which preposition goes with it.
+- **The [mode] carries the grammar — the verb returns to base.** The sentence skeleton is [subject][mode][verb][object][place][time], where [mode] is the auxiliary slot. When [mode] is empty (affirmative simple present/past), the verb itself carries the marker (-s / -ed). When [mode] is filled — do/does/don't/doesn't (present), did/didn't (past), will/would/could/should/might/can/must (future & modals) — the marker moves to the [mode] and the verb returns to its base form. Teach this as ONE rule reused at every tense — not as separate "do-support", "negation", "past", "future" and "modal" rules.
 - **High-frequency prepositions are taught by MEANING, early.** TO = direction/movement/change + the infinitive marker; FOR = purpose or duration; ON = connection/surface contact; IN = inside a larger thing; AT = a point in space or time / a target. The PT single word "para" splits into TO and FOR — flagged and drilled because it is a persistent PT→EN error. These meanings are integrated into the early routine/place/time lessons and recycled, never parked in one grammar lesson.
 - **Group related items into families.** When vocabulary, phrases or structures can be taught at a similar grammatical level, teach them together as a set rather than scattered — e.g. a family of phrasal verbs built on ONE root verb (get back / get on / get up; look at / look for / look up / look over). Grouping by root or theme reveals the system and improves retention; a random assortment hides the pattern.
 - **Factuality.** Every factual or statistical claim in the materials must be true and defensible. Never pad a section with an unverified assertion (e.g. a made-up claim about how common something is); say only what is true and useful.
