@@ -295,3 +295,35 @@ function renderLayer(){
 if(typeof window.showAnchor!=="function"){window.showAnchor=function(a,x,y){const area=nbAreaOf(a);openNbPopup(a,area?nbAreaRange(area):null,x,y);};}
 
 window.__B=true;
+
+/* ---- pronunciation key (underline = strong, grey = schwa/silent) ----
+   PRON holds the chunked, stress-resolved key for a word: an array of syllables,
+   each syllable an array of [letters, keep] segments. keep=1 → underline, keep=0 → grey.
+   Grey with parentheses "(x)" marks a silent/elided letter. The dictionary grows as lessons
+   are authored; only words listed here get a key. */
+const PRON={
+ "different":[[["DI",1]],[["FF",1],["E",0]],[["R",1],["E",0],["N",1],["(T)",0]]],
+ "probably":[[["PR",1],["O",1]],[["B",1],["A",0]],[["BL",1],["Y",1]]],
+ "kitchen":[[["KI",1]],[["TCH",1],["E",0],["N",1]]],
+ "photograph":[[["PH",1],["O",1]],[["T",1],["O",0]],[["GR",1],["A",1],["PH",1]]],
+ "family":[[["FA",1]],[["M",1],["I",0]],[["LY",1]]],
+ "office":[[["O",1],["FF",1]],[["I",1],["CE",1]]]
+};
+function pronHTML(w){
+ const syl=PRON[w]; if(!syl) return null;
+ return syl.map(function(s){return s.map(function(seg){return seg[1]?'<u>'+seg[0]+'</u>':'<span class="pr-g">'+seg[0]+'</span>';}).join('');}).join(' ');
+}
+function wirePron(){
+ const on=document.body.classList.contains('pron-on');
+ document.querySelectorAll('[data-pron]').forEach(function(el){
+  const w=el.getAttribute('data-pron');
+  const h=pronHTML(w);
+  el.innerHTML=(on&&h)?h:w;
+ });
+}
+function togglePron(){
+ document.body.classList.toggle('pron-on');
+ try{localStorage.setItem('pron',document.body.classList.contains('pron-on')?'1':'0');}catch(e){}
+ wirePron();
+}
+(function(){try{if(localStorage.getItem('pron')==='1')document.body.classList.add('pron-on');}catch(e){} wirePron();})();
