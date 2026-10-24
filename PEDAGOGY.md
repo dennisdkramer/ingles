@@ -87,6 +87,7 @@ Each lesson builds on the previous one — it reuses vocabulary and structures t
 - **Teach the pattern — or state plainly there is none.** For each concept, decide by research and analysis whether it has a teachable pattern, regularity or logic. Teach the pattern when one exists. When none exists — e.g. WHICH phrasal verbs are separable vs inseparable is a per-verb property, not predictable from the particle or the verb — say so explicitly, so the student knows it is memorized/absorbed through use rather than derived.
 - **A rule and its direct consequence are one idea.** Do not split one concept into separate sections when one section is simply the consequence of the other (e.g. separability and the pronoun's position). Keep them in a single section with an explicit bridge ("Consequência: …"), or cross-reference them — never leave two adjacent sections teaching the same concept as if they were unrelated.
 - **A context vehicle that leans on new items comes after they are taught.** A story, dialogue or scenario that leans heavily on items the student has not met yet comes AFTER those items are taught, so it is comprehensible and consolidates what was just learned. If it must come first, the new items must be presented within the vehicle/section in some way (primarily core notes, once built; other presentation methods remain available) — or the vehicle uses only already-known items.
+- **No section without a pedagogical motive.** Every section — including any opening ("abertura") — is included only because it earns its place: it teaches something, frames the lesson's goal, connects to prior material, or motivates. An abertura is optional and appears only when pedagogy dictates it is useful; boilerplate sections added "because every lesson has one" are never included.
 
 ## Lesson & block types (synthesized from the 2026-10-21 research pass)
 
@@ -103,9 +104,11 @@ The business track keeps the established components (chart, dialogue, listen-and
 
 Sequencing rule for these new blocks: a new structure is always introduced in a chart/dialogue with ▶ audio first, then practised in Treino, then tested in the Quiz — the same one-idea-per-section discipline as the rest of the book.
 
-## Language by student level
-The mix of English and Portuguese shifts with the student's level. Portuguese text is ALWAYS italic — tag it with `<i>` (or the `.ptw`/`.pt` class), even inside a header or a chart column header.
+## Language by student level (English-first, comprehensibility-driven)
+Portuguese text is ALWAYS italic — tag it with `<i>` (or the `.ptw`/`.pt` class), even inside a header or a chart column header.
 
-- **Beginner (early stage):** headers — section titles, exercise-group titles, chart column headers — are written in ENGLISH with the PORTUGUESE alongside, wherever both fit in the line/block/column header (Portuguese italic). When there is not room for both, keep only the Portuguese. Explanatory prose stays Portuguese.
-- **Intermediate:** conceptual explanations stay Portuguese; simple explanations and reminders switch to English where the vocabulary is already known. Headers are English, but NEW vocabulary in those sections carries its Portuguese alongside where space allows.
-- **Advanced:** almost entirely English; Portuguese appears only where there is a clear pedagogical motive or a complex explanation that needs it.
+Use ENGLISH wherever the student can actually follow it — i.e. wherever the text can be generated primarily with language the student has ALREADY been taught, or sits at a linguistic level generally below the level of the text that contains it. This applies to section headlines, explanatory text, warnings, tips, block headers and column headers alike. Portuguese is used only when that logic — or the pedagogy/content generation — dictates it, never "at will":
+
+- **Beginner (early stage):** little has been taught yet, so most English would be above the student's level → headers and explanatory prose are Portuguese. English appears where it is the item being taught (e.g. the phrasal verb itself) and where an already-taught word fits.
+- **Intermediate:** the parts the student already controls switch to English (section/block/column headers first, then simple explanations and reminders); conceptual explanations — and anything whose English would be above level — stay Portuguese.
+- **Advanced:** almost entirely English. Portuguese is reserved for exactly two cases: (1) an activity that needs a Portuguese phrase for the student to translate into English, and (2) limited explanation where your analysis/reasoning/research explicitly predicts the equivalent English is beyond the student's level or ability to understand.
