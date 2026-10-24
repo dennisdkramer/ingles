@@ -128,6 +128,8 @@ The business track keeps the established components (chart, dialogue, listen-and
 
 Sequencing rule for these new blocks: a new structure is always introduced in a chart/dialogue with ▶ audio first, then practised in Treino, then tested in the Quiz — the same one-idea-per-section discipline as the rest of the book.
 
+**Exercise-type progression.** Listen-and-choose (recognition) phases out after lesson 7 — from lesson 8 on the ear is trained by dictation (type what you hear) and production, not by more recognition grids. Vary the Treino and Quiz content types within and across lessons (fill-in, choose, reorder, dictation, transformation, translation, record…), and sanity-check every block's difficulty and type against the lesson's level — a recognition task too easy at a later lesson, or a production task too hard at an early one, is a failed block.
+
 ## Language by student level (English-first, comprehensibility-driven)
 Portuguese text is ALWAYS italic — tag it with `<i>` (or the `.ptw`/`.pt` class), even inside a header or a chart column header.
 
