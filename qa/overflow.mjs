@@ -81,6 +81,15 @@ function session(cdp, id) {
   };
 }
 const MEASURE = `(function(){
+  function cw(el){
+    var r = document.createRange();
+    r.selectNodeContents(el);
+    var min = Infinity, max = -Infinity;
+    var rects = r.getClientRects();
+    for (var i = 0; i < rects.length; i++){ if (rects[i].width > 0){ min = Math.min(min, rects[i].left); max = Math.max(max, rects[i].right); } }
+    el.querySelectorAll('input,textarea,button,select,label').forEach(function(c){ var b = c.getBoundingClientRect(); if (b.width > 0){ min = Math.min(min, b.left); max = Math.max(max, b.right); } });
+    return min === Infinity ? 0 : (max - min);
+  }
   var out = [];
   document.querySelectorAll('.panels').forEach(function(panels){
     var pw = panels.getBoundingClientRect().width;
@@ -95,6 +104,8 @@ const MEASURE = `(function(){
     kids.forEach(function(p){
       var r = p.getBoundingClientRect();
       var ex = (p.querySelector('.ex-head') || {}).textContent || '';
+      var pct = 0;
+      if (p.classList.contains('full')) { var cw0 = cw(p); if (r.width > 0) pct = Math.round(100 * cw0 / r.width); }
       out.push({
         full: p.classList.contains('full'),
         centered: p.classList.contains('centered'),
@@ -103,6 +114,7 @@ const MEASURE = `(function(){
         h: Math.round(r.height),
         half: Math.round(pw / 2),
         over: p.scrollWidth - p.clientWidth,
+        pct: pct,
         ex: ex.replace(/\\s+/g, ' ').slice(0, 60)
       });
     });
@@ -144,6 +156,13 @@ async function main() {
       bad.forEach(p => { fails++;
         var kind = p.over > 8 ? 'OVERFLOW' : (!p.full && p.w > p.half + 8) ? 'BALLOON' : 'LONE';
         console.log('    ' + kind + '  full=' + p.full + ' w=' + p.w + ' h=' + p.h + ' half=' + p.half + ' over=' + p.over + '  «' + p.ex + '»'); });
+    }
+    // Dead-space HINT (non-failing): a full-width panel whose visible content is far narrower
+    // than the panel. Review-only — pedagogy decides whether the block is fine as authored.
+    const sparse = panels.filter(p => p.full && p.pct > 0 && p.pct < 75);
+    if (sparse.length) {
+      console.log('lesson ' + L + ' (hint):');
+      sparse.forEach(p => console.log('    DEADSPACE ' + p.pct + '%  w=' + p.w + '  «' + p.ex + '»'));
     }
   }
 

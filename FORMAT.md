@@ -52,7 +52,6 @@ _(none queued.)_
 - Width: a block is half-width when it sits beside another half-width block on the same row. A block left on its own earns full width by generating more content (more items, more columns, longer phrases); only when pedagogy insists it stay small is it kept half-width and centered (.panel.centered).
 - A multiple-choice / listening group is full-width whenever its stem+options row is too wide for half a panel; half-width is only for a group whose row is short (short stem + one-word options).
 - A half-width block must PAIR with the half-width block beside it. If its row-mate was made full-width, re-pair them (make the mate half-width when its content is small) or center the lone half-width block (.panel.centered).
-- The aligned fill-in block (`.blanks.line`: prompt | field | after) is narrow by construction — author it as a half-width PAIR (two such blocks side by side), never a lone full-width column with its right half empty.
 - Columns: when a block's items fill only a sliver of its width (roughly a quarter or less), they flow into more columns — two normally, four when the items are very short.
 - Height: two adjacent half-width blocks are balanced by extending the shorter one (more questions, examples, vocabulary, or dialogue lines).
 - Multiple-choice options never wrap mid-option (no CSS text wrapping). Short options sit on one horizontal line, distributed with even spacing (space-around) and indented ~10px from the question; long options (whole sentences) are stacked under the stem.
