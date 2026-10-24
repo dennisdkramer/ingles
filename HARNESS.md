@@ -18,7 +18,9 @@ conflicts with FUNCTION.md/FORMAT.md and the conflict looks unintentional, or th
 destructive/hard to reverse (e.g. force-push, deleting user data, dropping a doc section) and the
 owner hasn't clearly signed off on that scope.
 When the owner requests a change, go straight to execution — no stalling, no deliberation replies,
-no "here's my plan" unless the request is genuinely ambiguous or risky per above.
+no "here's my plan" unless the request is genuinely ambiguous or risky per above. "Go straight to
+execution" means don't stall with plan-replies — it does NOT mean skip the deep thinking / research /
+reasoning RULE 13 requires; that thinking happens internally, and the output is execution.
 "Done" means committed and pushed, with whatever verification I judged necessary per RULE 6 actually
 run. Don't claim something works if I haven't checked it by any means; but the depth/kind of check is
 my call, not a fixed checklist.

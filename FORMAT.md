@@ -1,5 +1,5 @@
-# FORMAT — frozen site formatting contract (source of truth: style.css)
-Reference this file whenever a task touches site appearance. Preserve everything here unless the owner explicitly asks to change it.
+# FORMAT — site formatting contract (source of truth: style.css)
+Reference this file whenever a task touches site appearance. The EXISTING components and their styling are stable — changing them needs owner sign-off — but NEW components and media may be ADDED when pedagogy calls for them, and are recorded here when introduced.
 ## PENDING
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-FM<n>.)_
