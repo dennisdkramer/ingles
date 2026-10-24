@@ -1,3 +1,7 @@
+/**
+ * qa/overflow.mjs — real-browser overflow/balloon check for the business lessons.
+ * Run with: node qa/overflow.mjs [lessonNumber ...]   (no numbers = all 34 lessons)
+ */
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
@@ -124,7 +128,9 @@ async function main() {
   await ses.send('Page.addScriptToEvaluateOnNewDocument', { source: 'try{sessionStorage.setItem("gate",JSON.stringify(' + JSON.stringify(gate) + '))}catch(e){}' });
 
   let fails = 0;
-  for (let L = 1; L <= 34; L++) {
+  const targets = process.argv.slice(2).map(Number).filter(n => Number.isInteger(n) && n >= 1 && n <= 34);
+  const lessons = targets.length ? targets : Array.from({ length: 34 }, (_, i) => i + 1);
+  for (const L of lessons) {
     await ses.send('Page.navigate', { url: base + '/business/lesson' + L + '.html' });
     await sleep(1300);
     const r = await ses.send('Runtime.evaluate', { expression: MEASURE, returnByValue: true });
@@ -145,7 +151,8 @@ async function main() {
   try { chrome.proc.kill(); } catch (e) { }
   await site.close();
   try { fs.rmSync(profile, { recursive: true, force: true }); } catch (e) { }
-  console.log(fails === 0 ? '✅ no overflow across lessons 1-34' : '❌ ' + fails + ' overflowing panel(s)');
+  const label = targets.length ? ('lesson' + (lessons.length > 1 ? 's ' : ' ') + lessons.join(', ')) : 'lessons 1-34';
+  console.log(fails === 0 ? ('✅ no overflow (' + label + ')') : '❌ ' + fails + ' overflowing panel(s)');
   process.exit(fails ? 1 : 0);
 }
 
