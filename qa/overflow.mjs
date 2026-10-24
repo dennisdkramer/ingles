@@ -105,7 +105,7 @@ const MEASURE = `(function(){
       var r = p.getBoundingClientRect();
       var ex = (p.querySelector('.ex-head') || {}).textContent || '';
       var pct = 0;
-      if (p.classList.contains('full')) { var cw0 = cw(p); if (r.width > 0) pct = Math.round(100 * cw0 / r.width); }
+      if (r.width > 0) { var cw0 = cw(p); pct = Math.round(100 * cw0 / r.width); }
       out.push({
         full: p.classList.contains('full'),
         centered: p.classList.contains('centered'),
@@ -163,6 +163,12 @@ async function main() {
     if (sparse.length) {
       console.log('lesson ' + L + ' (hint):');
       sparse.forEach(p => console.log('    DEADSPACE ' + p.pct + '%  w=' + p.w + '  «' + p.ex + '»'));
+    }
+    // HALF DEADSPACE HINT (non-failing): a half-width panel whose content is far narrower than itself.
+    const halfSparse = panels.filter(p => !p.full && !p.centered && p.pct > 0 && p.pct < 60);
+    if (halfSparse.length) {
+      console.log('lesson ' + L + ' (hint):');
+      halfSparse.forEach(p => console.log('    HALF DEADSPACE ' + p.pct + '%  w=' + p.w + '  «' + p.ex + '»'));
     }
     // Height-balance HINT (non-failing): adjacent half-width panels of visibly different heights.
     const hbal = [];

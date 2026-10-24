@@ -90,12 +90,15 @@ async function main() {
   const targets = process.argv.slice(2).map(Number).filter(n => Number.isInteger(n) && n >= 1 && n <= 45);
   const lessons = targets.length ? targets : Array.from({ length: 45 }, (_, i) => i + 1);
 
+  const jpeg = process.argv.includes('--jpeg');
+  const viewport = process.argv.includes('--viewport');
+  const ext = jpeg ? 'jpg' : 'png';
   for (const L of lessons) {
     await ses.send('Page.navigate', { url: base + '/business/lesson' + L + '.html' });
     await sleep(1500);
-    const shot = await ses.send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
-    fs.writeFileSync(path.join(OUT, 'lesson' + L + '.png'), Buffer.from(shot.data, 'base64'));
-    console.log('rendered lesson' + L + ' -> _renders/lesson' + L + '.png');
+    const shot = await ses.send('Page.captureScreenshot', { format: jpeg ? 'jpeg' : 'png', quality: jpeg ? 60 : undefined, captureBeyondViewport: !viewport });
+    fs.writeFileSync(path.join(OUT, 'lesson' + L + '.' + ext), Buffer.from(shot.data, 'base64'));
+    console.log('rendered lesson' + L + ' -> _renders/lesson' + L + '.' + ext);
   }
 
   try { cdp.ws.close(); } catch (e) {}

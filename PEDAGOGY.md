@@ -29,7 +29,7 @@ _(Ordering is derived from this book's own difficulty model — not from any ext
 2. **The cognate fast lane** — recognition plus the frequency override: the cognate is the recognition bridge, the everyday word is the production target.
 3. **Question words & polite embedded questions** — who/what/when/where/why/how with "be"; polite forms that map straight onto PT; the first repair chunk.
 4. **Simple present — usage & the third-person -s** — customs, facts and routines; it cannot touch the past and does not work for "right now"; he/she/it adds -s/-es/-ies.
-5. **"do" support in questions & negatives — and the fixed word order** — do/does, don't/doesn't, short answers; the skeleton [subject][mode: do][verb][object][place][time].
+5. **"do" support in questions & negatives — and the fixed word order** — trains BOTH do and does; don't/doesn't; short answers; the skeleton [subject][mode][verb][object][place][time]; makes explicit that the third-person -s (and, later, the past-tense -ed) migrates from the verb to the [mode].
 6. **Workhorse verbs, mapped by context (1)** — the high-frequency movement/transfer verbs, one PT concept → several EN verbs.
 7. **Workhorse verbs, mapped by context (2)** — the high-frequency action/communication verbs, context-mapped.
 8. **Routine, frequency, time & schedules** — always/usually/never; telling the time, days, dates.
