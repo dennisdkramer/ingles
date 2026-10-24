@@ -13,53 +13,75 @@ This file is the single source of truth for the pedagogical shape of the materia
 
 ## Curriculum
 
-Each lesson builds on the previous one — it reuses vocabulary and structures the student already knows and introduces one new thing at a time. Do not skip or reorder. The track is **business-casual**: the grammar and vocabulary of a native speaker's normal working day — phrasal verbs and common expressions first, formal/"term of the art" equivalents only when the everyday register genuinely needs them.
+_(Ordering is derived from this book's own difficulty model — not from any external grammar syllabus. Every item is placed by how far it sits from Portuguese (transparent / partial / opaque) times how useful it is in business-casual speech (core / common / marginal). Lesson quantity follows the needs of the domain, not a target number.)_
 
-### Stage 1 — sentence skeleton + first real talk + the phrasal-verb system
+### The difficulty model
 
-1. **Introductions, to be & the sentence subject** — cognates, am/is/are, a/an, vowels; the subject is required (no pro-drop); the dummy "it" ("It's 8pm", "It's raining").
-2. **Question words** — who/what/when/where/why/how with "be"; small-talk launch ("How's it going?", "What's up?" with its 3 senses, "How are things?"); first repair chunk ("Sorry, could you say that again?").
-3. **"do" & the simple present (questions)** — do/does; job small talk ("What do you do?"); "do" as a main verb.
-4. **Simple present & the sentence skeleton** — third-person -s, don't/doesn't, frequency; the fixed word order [subject] [mode] [verb] [object] [place/who-with] [time]; routine verb thread (get up, go to work, have breakfast, take the bus, do, make); first TO vs FOR contrast (go TO work / FOR work).
-5. **Phrasal verbs & particles — the core system** — a phrasal verb is a verb + particle with its own meaning (often non-compositional); taught in grouped families and in context; the separable/inseparable distinction, with the pronoun position as its consequence; real contact phrases with register.
-6. **Present continuous vs simple present** — "now" (I am studying) vs "in general" (I study); "What are you working on?".
+- **Distance from Portuguese (transfer).** Transparent = a direct anchor exists (a cognate, or a structure whose meaning maps cleanly). Partial = an anchor exists but misleads (the form maps, the meaning does not — or vice-versa). Opaque = no anchor; it must be built from nothing.
+- **Utility in business-casual speech.** Core = the sentence cannot be formed without it (word order, do-support, the dummy subject, the top workhorse verbs). Common = frequent and useful but not sentence-blocking. Marginal = rare, formal, or replaceable.
+- **Placement = the two axes combined by judgment.** Transparent + Core → earliest (fast wins). Opaque + Core → early, taught as a structural rule. Partial + Core → middle, taught as a meaning trap. Transparent + Marginal → a deliberate choice (early-with-its-kin OR late as "formal only"), recorded with a reason. Opaque + Common → mid-to-late, sized to importance. Opaque + Marginal → late or optional.
+- **Vocabulary is concept → context → mapping.** Each Portuguese concept is enumerated across the contexts of a working day, mapped to the English word(s) a native actually uses in each context, and ranked by frequency/register. A cognate and its more-used cousin are taught together at introduction (with a frequency note); after that, teaching uses whichever is most common in that context. The concept inventory lives in VOCABULARY.md.
+- **Carrier content escalates with the course.** Example phrases grow in length, clause complexity and register as the course advances.
 
-### Stage 2 — past & future + the communication toolkit
+### Stage 1 — the skeleton & the fast wins (lessons 1–9)
 
-7. **Plurals & this/that/these/those** — regular/irregular plurals, demonstratives.
-8. **There is / there are & place prepositions** — in/on/under/next to/between…; the ON (connection) / IN (inside) / AT (point) distinction; particle recycle (over there).
-9. **Past simple** — was/were + -ed; past small talk ("How was your weekend?"); past of thread verbs and phrasal verbs.
-10. **The future: will / going to / "gonna"** — plans vs on-the-spot decisions; reduction launch "gonna" (a MODE, not a verb) + "wanna"; "Any plans for the weekend?".
-11. **Past continuous vs past simple** — a long action in progress interrupted by a short one ("I was working when you called").
-12. **Present perfect (1)** — experience + duration ("I have worked here for 5 years" — the flagship PT trap); for/since; "Have you ever…?".
-13. **Present perfect (2) vs past simple** — finished vs unfinished time; ever/never/already/yet/just; discourse markers actually/basically.
-14. **Comparatives & superlatives** — opinions launch ("I think … is better", "In my opinion"); hedges kinda/sorta.
-15. **Modals: can / must / have to / should** — reductions gotta/hafta/dunno; repair launch ("Could you speak slower?", "I didn't catch that", "What do you mean by…?"); polite requests (Could you…? / Would you mind…?).
-16. **Countable/uncountable + quantifiers** — some/any/much/many/a lot of/a few/a little (business: information, advice, money, time).
-17. **Prepositions of time & movement** — at/on/in (time), to/from; consolidate TO vs FOR and ON/IN/AT; recycle the particle thread.
-18. **"Get" deep-dive & make/do** — get as the coringa (receive/become/arrive/understand + get back to, get up, get along with, get over); make vs do.
-19. **Conditionals (1st & 2nd) + would** — if I have time… / if I were you…; would for polite offers.
+1. **First talk & the sentence skeleton** — the subject is required (no pro-drop); "to be"; "I'm / It's"; the dummy "it".
+2. **The cognate fast lane** — recognition plus the frequency override: the cognate is the recognition bridge, the everyday word is the production target.
+3. **Question words & polite embedded questions** — who/what/when/where/why/how with "be"; polite forms that map straight onto PT; the first repair chunk.
+4. **"do" support in questions & negatives** — the structural rule for asking and negating with ordinary verbs.
+5. **Simple present & the fixed word order** — third-person -s; [subject] [verb] [object] [place] [time]; don't/doesn't.
+6. **Workhorse verbs, mapped by context (1)** — the high-frequency movement/transfer verbs, one PT concept → several EN verbs.
+7. **Workhorse verbs, mapped by context (2)** — the high-frequency action/communication verbs, context-mapped.
+8. **Routine, frequency, time & schedules** — always/usually/never; telling the time, days, dates.
+9. **"There is / there are" & place** — in/on/at (place); the first connectors (and/but/because/so).
 
-### Stage 3 — intermediate grammar + the communication toolkit
+### Stage 2 — time & the meaning traps (lessons 10–19)
 
-20. **Present perfect continuous** — "I've been working here for two years"; "How long have you been…?"; discourse marker "So…".
-21. **Past perfect & narrative order** — "I'd already sent it when…"; discourse-marker home: first/then/after that/finally/anyway; telling a work story in order.
-22. **Future (full system)** — will / gonna / present continuous for arrangements / present simple for schedules; recycle gonna/wanna; linking "whaddaya"/"couldja"; fillers honestly/I mean/you know.
-23. **Modals of deduction & possibility** — must / might / could / can't ("He must be in a meeting"); recycle repair.
-24. **Everyday passive & get-passive** — "The email was sent," "It got lost," "It's done" — recycles "get".
-25. **Reported speech & reporting verbs** — "He said he'd call," "She asked me to send it"; say/tell/ask.
-26. **Conditionals review + wish/if only** — zero/first/second/third; "I wish I had more time," "If only I'd known"; opinion recycle.
-27. **Question formation & indirect questions** — subject vs object questions; "Do you know when…?"; repair/softening home: "Could you tell me…?", "Just to confirm…".
-28. **Relative clauses (everyday)** — who/that/which/where; defining clauses; omitting the pronoun.
-29. **Gerunds & infinitives** — "I enjoy working," "I need to finish," "I stopped smoking" vs "I stopped to smoke"; high-frequency verb patterns.
-30. **Phrasal verbs (2): work & communication** — get back to, follow up, go over, wrap up, reach out, fill in, point out, bring up; separable vs inseparable (multi-sense, register-aware).
-31. **Phrasal verbs (3): plans, problems & changes** — put off, call off, set up, figure out, come up with, run into, deal with, work out, end up (multi-sense, register-aware).
+10. **Simple past** — regular -ed + the irregular workhorses; past time words.
+11. **Past: questions & negatives** — did/didn't; short answers.
+12. **Present continuous** — now vs. in general (the trap: PT uses the -ndo form more broadly).
+13. **Future: plan vs. on-the-spot decision** — going to vs. will.
+14. **Future: the spoken "gonna"** — a mode, not a verb.
+15. **Present perfect: experience & duration** — the big trap (its meaning maps onto PT's simple past, not onto the PT verb form that looks like it).
+16. **Present perfect: finished vs. unfinished time** — for/since, ever/never, already/yet/just.
+17. **Comparisons & opinions** — comparative/superlative + opinion chunks.
+18. **Modals: ability, permission, requests** — can/could.
+19. **Modals: obligation, advice, possibility** — must/have to/should/might.
 
-### Stage 4 — consolidation & application (fluency at IELTS General ≈ 6.0)
+### Stage 3 — the opaque-but-useful toolkit (lessons 20–31)
 
-32. **Listening: connected speech & reductions** — all reductions (gonna/wanna/gotta/hafta/kinda/sorta/dunno/lemme/gimme) + linking at natural speed; dictation + shadowing (consolidation, not first introduction).
-33. **Meetings: small talk → opinions → decisions** — application lesson: open with small talk, give opinions, agree/disagree politely, clarify/confirm, summarize a decision.
-34. **Negotiating & next steps (capstone)** — "To sum up," "Let's meet halfway," "What's the plan?", "Let's circle back," "I'll get back to you"; a full negotiation dialogue recycling reductions/phrasal verbs/conditionals/reported speech/opinions.
+20. **Countability & quantity** — countable/uncountable; some/any/much/many/a lot of.
+21. **Prepositions & verb+preposition units** — time/movement at/on/in/to/from; verbs learned with their preposition attached.
+22. **Phrasal verbs: the system** — whole meaning (non-compositional), grouped by particle, separable vs. inseparable.
+23. **Phrasal verbs: movement & routine**.
+24. **Phrasal verbs: work & communication**.
+25. **Phrasal verbs: plans, problems & changes**.
+26. **Conditionals (1st & 2nd) + "would"** — real vs. hypothetical; polite offers.
+27. **Modals of deduction** — must/might/could/can't for guessing.
+28. **Relative clauses** — who/that/which/where; omitting the pronoun.
+29. **Gerunds & infinitives** — high-frequency verb patterns.
+30. **The everyday passive & "get" passive** — "it was sent", "it got lost", "it's done".
+31. **Reported speech** — say/tell/ask + backshift.
+
+### Stage 4 — fluency & discourse (lessons 32–40)
+
+32. **Connected speech & reductions** — the reduced forms + linking at natural speed (consolidation, not first introduction).
+33. **Discourse markers & fillers** — the glue that keeps speech natural.
+34. **Meetings** — open, give opinion, agree/disagree, confirm, decide (question tags as a thin confirmation device).
+35. **Softening, hedging & polite requests** — "Could you…?", "Would you mind…?", vagueness.
+36. **Email & the written↔casual register swap** — the same message in both registers.
+37. **Phone & customer-service** — the phone script, clarifying, handling a problem.
+38. **Storytelling** — telling a work story in order; the past perfect as a thin "already-before-then" add-on (optional; natives often just use the simple past).
+39. **Small talk → deeper conversation** — early greetings recycled inside fuller exchanges.
+40. **Nuanced opinion & disagreement** — agreeing/disagreeing with tact and depth.
+
+### Stage 5 — consolidation & polish (lessons 41–45)
+
+41. **Review loop: tenses & question forms** — under time pressure (third conditional as a thin, formal/optional note).
+42. **Review loop: phrasal verbs & modals** — under time pressure.
+43. **The capstone working day** — one full role-play that uses everything.
+44. **Self-correction, repair & asking for clarification** — what to say when communication breaks.
+45. **Idiomatic chunk bank & register refresh** — high-frequency formulaic speech, consolidated.
 
 ## Pedagogy principles
 
