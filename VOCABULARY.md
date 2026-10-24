@@ -8,11 +8,12 @@ Columns: PT concept · EN realization per context (all/most, spoken-frequency or
 
 | PT concept | EN realization per context | Cognate | Frequency/register | Production target | Lesson |
 |---|---|---|---|---|---|
-| "pagar" | pay (default) · settle (a bill, formal) · cover (pay for someone) · charge (what a vendor asks) | no | pay = neutral/high; settle/cover = context-specific | pay | 6 |
-| "esperar" | wait (stay until) · expect (anticipate) · hope (wish) | no | all common; context decides | wait / expect / hope | 6 |
-| "achar" | think (hold an opinion) · find (locate) · figure out (solve) | no | think = very common; find = common | think / find | 6 |
-| "faltar" | miss (a session) · be missing (a part) · be short of (money/time) | no | miss = common; be short of = common | miss / be short of | 6 |
+| "pagar" | pay (default) · cover (pay for someone) · charge (what a vendor asks) | no | pay = neutral/high; cover/charge = context-specific | pay / cover / charge | 7 |
+| "esperar" | wait (stay until) · expect (anticipate) · hope (wish) | no | all common; context decides | wait / expect / hope | 7 |
+| "achar" | think (hold an opinion) · find (locate) | no | think = very common; find = common | think / find | 7 |
+| "faltar" | miss (a session) · be missing (a part) · be short of (money/time) | no | miss = common; be short of = common | miss / be short of | 7 |
 | "pegar" | take (grab) · pick up (collect) · catch (a bus/illness) · get (fetch) | no | take = very common; pick up/catch = context-specific | take / pick up / catch | 6 |
-| "gastar" | spend (money) · waste (squander) · take (time) | no | spend = common; waste = common | spend / waste | 6 |
+| "gastar" | spend (money) · waste (squander) · take (time) | no | spend = common; waste = common | spend / waste | 7 |
+| "falar / dizer" | say (report words) · tell (someone) · talk (conversation) · speak (a language / formally) | no | all very common; context decides | say / tell / talk / speak | 7 |
 
 _(Every new concept is added here with the same analysis before it is taught; no word enters a lesson un-analysed.)_
