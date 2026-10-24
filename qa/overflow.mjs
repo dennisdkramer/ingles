@@ -164,6 +164,18 @@ async function main() {
       console.log('lesson ' + L + ' (hint):');
       sparse.forEach(p => console.log('    DEADSPACE ' + p.pct + '%  w=' + p.w + '  «' + p.ex + '»'));
     }
+    // Height-balance HINT (non-failing): adjacent half-width panels of visibly different heights.
+    const hbal = [];
+    for (let i = 0; i + 1 < panels.length; i++) {
+      const a = panels[i], b = panels[i + 1];
+      if (!a.full && !a.centered && !b.full && !b.centered && !a.lone && !b.lone && Math.abs(a.h - b.h) > 50) {
+        hbal.push('    HEIGHT ' + a.h + ' vs ' + b.h + '  «' + a.ex + '» / «' + b.ex + '»');
+      }
+    }
+    if (hbal.length) {
+      console.log('lesson ' + L + ' (hint):');
+      hbal.forEach(m => console.log(m));
+    }
   }
 
   try { cdp.ws.close(); } catch (e) { }
