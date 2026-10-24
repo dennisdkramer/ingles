@@ -89,7 +89,7 @@ mark.nb.has-rec{background-repeat:no-repeat;background-position:2px 100%;
 @keyframes sp{to{transform:rotate(360deg)}}
 .pulse{animation:pu 1s infinite;display:inline-block}
 @keyframes pu{50%{opacity:.25}}
-input.gap{border:0;border-bottom:2px solid var(--tan);background:#fff8ea;font:inherit;width:9em}
+input.gap{border:0;border-bottom:2px solid var(--tan);background:#fff8ea;font:inherit;width:var(--gap-w,9em)}
 fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8px 12px}
 label{margin-right:10px;cursor:pointer}
 #feed{display:block;width:100%;min-height:9em;font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:12px 14px;box-shadow:5px 5px 0 var(--tan);resize:vertical}
@@ -132,7 +132,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .qgrid .qstem{font-weight:700}
 .blanks{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px 24px}
 .blanks>div{display:flex;justify-content:flex-end;align-items:center;gap:6px}
-.blanks>div input.gap{width:9em;flex:0 0 auto}
+.blanks>div input.gap{width:var(--gap-w,9em);flex:0 0 auto}
 .blanks--long{--prompt-w:15em;grid-template-columns:repeat(auto-fill,minmax(420px,1fr))}
 
 /* ---- content-shape styles (2026-10-17): explainer sub-heading, merged chart note, stacked MCQ,
@@ -149,9 +149,14 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:space-around;gap:6px 18px;margin-top:4px}
 .blanks.sent{display:block}
 .blanks.sent>div{display:block;margin:8px 0}
-.blanks.sent>div input.gap{display:inline-block;width:9em;margin:0 .2em;vertical-align:baseline}
+.blanks.sent>div input.gap{display:inline-block;width:var(--gap-w,9em);margin:0 .2em;vertical-align:baseline}
 .blanks.sent.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
 .blanks.sent.cols>div{margin:6px 0}
+.blanks.line{display:block;margin:10px 0}
+.blanks.line>div{display:grid;grid-template-columns:var(--prompt-w,8ch) var(--gap-w,9em) 1fr;column-gap:10px;align-items:center;margin:8px 0}
+.blanks.line .p{text-align:right}
+.blanks.line .a{text-align:left}
+.blanks.line input.gap{width:100%}
 
 body.editing #hlLayer,body.editing #noteLayer{display:none}
 body.editing mark.nb.has-rec{background-image:none}
