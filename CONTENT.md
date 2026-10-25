@@ -5,6 +5,8 @@ This file does NOT hold lesson content — the prose, sections, exercises and wi
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-C<n>.)_
 
+- B-C5 [2026-10-25] LESSON 12 RESTRUCTURE + CONSONANT SECTIONS RELOCATED: lesson 12 is now the VOWEL lesson (vowel names/big/small/schwa → letter combinations → sound↔spelling map). Its old consonant sections (TH, American R, T/D flap, ING nasal, of→v + silent letters) are MOVED OUT to a dedicated "consonant sounds Portuguese doesn't have" lesson (new lesson, number TBD); the content is preserved in git (commits c4a555c / dd86cb8) and will be re-homed there. Lesson 12 is intentionally incomplete for now — only sections 1–3 are authored; Treino/Quiz/#trw come next.
+
 - B-C4 [2026-10-24] CONTENT RE-GENERATION (authoring side, start at lesson 5). Author per the generative rules and run the step-4/5 structural+pedagogical pass on every lesson: fill the width (no dead space), align fill-in fields (use the aligned layout when prompts vary in length), half-width pair or center small blocks, answer-width fields (--gap-w), randomized MCQ, distinct Treino vs Quiz, Portuguese italic. Lesson 5 first. See PEDAGOGY.md B-P4.
 
 - [PARKED 2026-10-24 — address after lesson 5 cleanup] NEW-VOCAB TRANSLATION + CORE NOTES: new words not yet introduced in a prior lesson should show a translation where appropriate (unless a clear cognate or meant to be inferred). Implement via lesson-wide "core" notes/recordings/highlights that are (a) visible to ALL users, (b) authored during generation, (c) editable only in teacher edit mode. Guideline lives here; the mechanism lives in FUNCTION.md/engine/backend.
