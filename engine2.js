@@ -296,34 +296,69 @@ if(typeof window.showAnchor!=="function"){window.showAnchor=function(a,x,y){cons
 
 window.__B=true;
 
-/* ---- pronunciation key (underline = strong, grey = schwa/silent) ----
-   PRON holds the chunked, stress-resolved key for a word: an array of syllables,
-   each syllable an array of [letters, keep] segments. keep=1 → underline, keep=0 → grey.
-   Grey with parentheses "(x)" marks a silent/elided letter. The dictionary grows as lessons
-   are authored; only words listed here get a key. */
+/* ---- pronunciation key ----
+   PRON: word → { L1, L2?, alts? }. Each is an array of syllables; each syllable is an
+   array of [letters, bold] segments (bold=1 → <b>, bold=0 → grey .pr-g). Segments are
+   pre-resolved by the authoring rules: multi-letter unit / double / digraph = 1 slot,
+   r-colored vowel = 2 slots, single letter = 1 slot; bold = first two slots of a syllable,
+   grey = the rest; "ə" = schwa; L2 = a genuine fewer-syllable reduction; alts = same-syllable
+   variants (shown when a word stands alone, picked by context in phrases). Rendered wherever
+   the author marks data-pron="word" (L1) or data-pron="word:2" (L2). No toggle. */
 const PRON={
- "different":[[["DI",1]],[["FF",1],["E",0]],[["R",1],["E",0],["N",1],["(T)",0]]],
- "probably":[[["PR",1],["O",1]],[["B",1],["A",0]],[["BL",1],["Y",1]]],
- "kitchen":[[["KI",1]],[["TCH",1],["E",0],["N",1]]],
- "photograph":[[["PH",1],["O",1]],[["T",1],["O",0]],[["GR",1],["A",1],["PH",1]]],
- "family":[[["FA",1]],[["M",1],["I",0]],[["LY",1]]],
- "office":[[["O",1],["FF",1]],[["I",1],["CE",1]]]
+ "different":{L1:[[["di",1]],[["ffə",1]],[["rə",1],["nt",0]]],L2:[[["di",1]],[["ffrə",1],["nt",0]]]},
+ "probably":{L1:[[["prə",1]],[["bə",1]],[["bly",1]]],L2:[[["prb",1]],[["bly",1]]]},
+ "kitchen":{L1:[[["ki",1]],[["tchə",1],["n",0]]]},
+ "photograph":{L1:[[["pho",1]],[["tə",1]],[["gra",1],["ph",0]]]},
+ "family":{L1:[[["fa",1]],[["mə",1]],[["ly",1]]],L2:[[["fm",1]],[["ly",1]]]},
+ "office":{L1:[[["o",1]],[["ffi",1],["ce",0]]]},
+ "business":{L1:[[["bi",1],["z",0]],[["nə",1],["s",0]]],L2:[[["bz",1]],[["ns",1]]]},
+ "think":{L1:[[["thi",1],["nk",0]]]},
+ "graph":{L1:[[["gra",1],["ph",0]]]},
+ "beautiful":{L1:[[["be",1],["au",0]],[["tə",1]],[["fə",1],["l",0]]]},
+ "mine":{L1:[[["mi",1],["ne",0]]]},
+ "his":{L1:[[["h",0],["əs",1]]],alts:[[["əs",1]]]},
+ "with":{L1:[[["wi",1],["th",0]]],alts:[[["wi",1]]]},
+ "them":{L1:[[["thə",1],["m",0]]],alts:[[["thm",1]],[["əm",1]]]},
+ "police":{L1:[[["pə",1]],[["li",1],["ce",0]]],L2:[[["pls",1]]]},
+ "arthropod":{L1:[[["ar",1],["th",0]],[["rə",1]],[["po",1],["d",0]]]},
+ "the":{L1:[[["thə",1]]],alts:[[["thi",1]]]},
+ "of":{L1:[[["əv",1]]]},
+ "and":{L1:[[["ən",1]]],alts:[[["n",1]]]},
+ "to":{L1:[[["tə",1]]]},
+ "a":{L1:[[["ə",1]]]},
+ "at":{L1:[[["ət",1]]]},
+ "is":{L1:[[["iz",1]]],alts:[[["z",1]]]},
+ "are":{L1:[[["ər",1]]]},
+ "was":{L1:[[["wə",1],["z",0]]]},
+ "were":{L1:[[["wə",1],["r",0]]]},
+ "have":{L1:[[["hə",1],["v",0]]],alts:[[["əv",1]]]},
+ "has":{L1:[[["hə",1],["z",0]]]},
+ "do":{L1:[[["də",1]]]},
+ "does":{L1:[[["də",1],["z",0]]]},
+ "not":{L1:[[["nə",1],["t",0]]],alts:[[["nt",1]]]},
+ "for":{L1:[[["fə",1],["r",0]]]},
+ "from":{L1:[[["frə",1],["m",0]]]},
+ "that":{L1:[[["thə",1],["t",0]]]},
+ "you":{L1:[[["yə",1]]]},
+ "we":{L1:[[["wi",1]]]},
+ "they":{L1:[[["thə",1]]]},
+ "my":{L1:[[["mə",1]]]},
+ "your":{L1:[[["yə",1],["r",0]]]},
+ "him":{L1:[[["im",1]]]},
+ "her":{L1:[[["ər",1]]]},
+ "us":{L1:[[["əs",1]]]}
 };
-function pronHTML(w){
- const syl=PRON[w]; if(!syl) return null;
- return syl.map(function(s){return s.map(function(seg){return seg[1]?'<u>'+seg[0]+'</u>':'<span class="pr-g">'+seg[0]+'</span>';}).join('');}).join(' ');
+function pronHTML(entry,level){
+ const key=(level==="2")?(entry.L2||entry.alts):(entry.L1||entry.alts);
+ if(!key) return null;
+ return key.map(function(syl){return syl.map(function(seg){return seg[1]?'<b>'+seg[0]+'</b>':'<span class="pr-g">'+seg[0]+'</span>';}).join('');}).join('·');
 }
 function wirePron(){
- const on=document.body.classList.contains('pron-on');
  document.querySelectorAll('[data-pron]').forEach(function(el){
-  const w=el.getAttribute('data-pron');
-  const h=pronHTML(w);
-  el.innerHTML=(on&&h)?h:w;
+  const spec=(el.getAttribute('data-pron')||'').split(':');
+  const entry=PRON[spec[0]]; if(!entry) return;
+  const h=pronHTML(entry,spec[1]);
+  if(h) el.innerHTML=h;
  });
 }
-function togglePron(){
- document.body.classList.toggle('pron-on');
- try{localStorage.setItem('pron',document.body.classList.contains('pron-on')?'1':'0');}catch(e){}
- wirePron();
-}
-(function(){try{if(localStorage.getItem('pron')==='1')document.body.classList.add('pron-on');}catch(e){} wirePron();})();
+(function(){if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',wirePron);}else{wirePron();}})();
