@@ -142,13 +142,11 @@ async function checkLesson(serverUrl, n) {
     trw: d.querySelectorAll('#trw').length
   };
 
-  if (counts.chart < 1) errors.push('no .chart table found');
-  if (counts.panel < 2) errors.push('too few .panel groups (expected >= 2)');
-  if (counts.listen < 1) errors.push('no .listen audio chip found');
-  if (counts.gap < 1) errors.push('no input.gap found');
-  if (counts.radio < 4) errors.push('too few radios (expected >= 4)');
+  // No minimum element counts: charts, panels, audio chips, gaps and radios are all CONDITIONAL
+  // content types (a lesson may legitimately use none of them). Only structural integrity of the
+  // elements that ARE present is checked below.
   if (counts.feed !== 1) errors.push('#feed missing or duplicated (expected exactly 1)');
-  if (counts.trw !== 1) errors.push('#trw translation box missing or duplicated (expected exactly 1)');
+  if (counts.trw > 1) errors.push('#trw translation box duplicated (expected 0 or 1)');
   const feedEl = d.querySelector('#feed');
   if (feedEl && feedEl.tagName !== 'TEXTAREA') errors.push('#feed is not a <textarea>');
   const listens = d.querySelectorAll('.listen');

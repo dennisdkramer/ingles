@@ -32,7 +32,7 @@ _(none queued.)_
 
 ## Component semantics (authored in the lesson HTML — content, see CONTENT.md)
 - .pt = Portuguese explanation text: italic (ALL authored Portuguese text is italic). .ptw = Portuguese word in exercises: italic, --ptw color, weight 600
-- .sound = pronunciation sound label written in Portuguese characters (ei, i, ai, á, é, ô, ə, iu, uai, u): bold, --ptw color, NOT italic (lesson 12 vowel framework)
+- .sound = pronunciation sound label written in Portuguese characters (ei, i, ai, á, é, ô, ə, iu, uai, u): bold, --ptw color, italic — like ALL Portuguese text, italic is mandatory (lesson 12 vowel framework)
 - input.gap = fill-in blank: transparent, 2px tan bottom border, #fff8ea bg — a CONTIGUOUS line, never literal "___" underscores in the prompt
 - fieldset = exercise block: dashed tan border, 12px radius
 - details = collapsible block: #fff8ea, dashed tan border (generic element styling)
