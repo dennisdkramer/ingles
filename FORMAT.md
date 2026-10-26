@@ -27,9 +27,10 @@ Reference this file whenever a task touches site appearance or structure. The EX
 - All font sizes are fixed constants (no viewport-relative sizing): h1 38px, .script 38px, body 17px — so resizing the viewport never changes text size and print output is identical on any device.
 
 ### Component semantics (authored in the lesson HTML — content, see CONTENT.md)
-- .pt = Portuguese explanation text: italic (ALL authored Portuguese text is italic). .ptw = Portuguese word in exercises: italic, --ptw color, weight 600
-- .sound = pronunciation sound label written in Portuguese characters (ei, i, ai, á, é, ô, ə, iu, uai, u): bold, --ptw color. Carries NO font-style — Portuguese sound labels are marked `lang="pt"`, which CSS `:lang(pt){font-style:italic}` italicizes (lesson 12 vowel framework).
-- .thsub = a chart-column-header subtitle (the second line under the main label): block, weight 400, smaller, reduced opacity. Carries NO font-style — italic comes from `lang="pt"` on the Portuguese text.
+- **Portuguese text is ALWAYS italic.** Mark it with `lang="pt"` (CSS `:lang(pt){font-style:italic}` italicizes it in any element), or use the legacy `<i>` / `.pt` / `.ptw` markers. A helper class that is not Portuguese-specific (`.thsub`, …) must NEVER carry `font-style` — italic comes only from a Portuguese marker.
+- .pt = Portuguese explanation text: italic. .ptw = Portuguese word in exercises: italic, --ptw color, weight 600
+- .ptpronounce (optional) = a tag available to mark Portuguese pronunciation text: tan (--ptw), italic, NOT bold. May carry `lang="pt"`. An option, never a required rule.
+- .thsub = a chart-column-header subtitle (the second line under the main label): block, weight 400, smaller, reduced opacity.
 - input.gap = fill-in blank: transparent, 2px tan bottom border, #fff8ea bg — a CONTIGUOUS line, never literal "___" underscores in the prompt
 - fieldset = exercise block: dashed tan border, 12px radius
 - details = collapsible block: #fff8ea, dashed tan border (generic element styling)
@@ -59,6 +60,9 @@ Reference this file whenever a task touches site appearance or structure. The EX
 ### Layout at generation (blocks vary at authoring time; CSS stays fixed)
 - CSS uses fixed constants (no dynamic/viewport sizing and no text wrapping). Layout is not pre-assigned: a block's width and column count are the OUTCOME of the generation loop in CONTENT.md, and CSS only implements that outcome — it never rescales or wraps content to force a fit.
 - Width: a block is half-width when it sits beside another half-width block on the same row. A block left on its own earns full width by generating more content (more items, more columns, longer phrases); only when pedagogy insists it stay small is it kept half-width and centered (.panel.centered).
+- Fill the width (judgment, not a count): generate enough content that each block fills its width with no dead space; the number of items follows from what fills the layout, not from a fixed count (4 and 8 are only illustrations of a full grid). Add or trim by pedagogical value, not by padding with filler.
+- Small half-full blocks are centered: when a small block's text leaves its right half empty, center it — judged case-by-case in the structural pass, not as a blanket rule.
+- Any indefensible redundancy is merged or deleted.
 - A multiple-choice / listening group is full-width whenever its stem+options row is too wide for half a panel; half-width is only for a group whose row is short (short stem + one-word options).
 - A half-width block must PAIR with the half-width block beside it. If its row-mate was made full-width, re-pair them (make the mate half-width when its content is small) or center the lone half-width block (.panel.centered).
 - Columns: when a block's items fill only a sliver of its width (roughly a quarter or less), they flow into more columns — two normally, four when the items are very short.
@@ -73,4 +77,3 @@ Reference this file whenever a task touches site appearance or structure. The EX
 
 ## Function-generated formatting → FUNCTION.md
 - The selection popup, the note/recording marks, the highlight rectangles, the colour palette, the toast and the recording indicator/spinner exist only because a FUNCTION creates them at run time, so their formatting is specified as PART of that function — in FUNCTION.md, which is authoritative for those elements. style.css remains the single styling source for the whole site; this file defers to FUNCTION.md for them and no longer restates them.
-

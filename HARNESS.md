@@ -134,4 +134,3 @@ finished command can be reported as "exited with code 1" whatever it really retu
 
 ## STATUS
 Status lives in dedicated files: the ACTIVE plan in PENDING.md, the backlog in PARKED.md, bugs/problems in ISSUES.md, handoffs in HANDOFF.md, and current state + shared parameter values in STATUS.md. Nothing is cleared anywhere until it is done AND committed.
-
