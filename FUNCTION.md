@@ -10,6 +10,7 @@ Reference this file whenever a task touches lesson functionality, engines, edit 
 ## Persistence & identity
 - ALL user data persists server-side (Apps Script Sheet "IAP_backpack!layer" + Drive "IAP_uploads"), and is separate PER STUDENT AND PER BOOK (track). No cross-contamination between students or between tracks.
 - Recordings, notes, highlights AND exercise input are all persistent. Exercise answers — filled `input.gap` blanks, picked `fieldset` radios and typed translation textareas — save as `type:"answer"` rows keyed by the field's prompt/stem text with the same {block,offset} tie-breaker as notes/highlights (so a reworded prompt or reordered question behaves exactly like a reworded phrase: the saved answer stays in the sheet but stops re-attaching; nothing is deleted on a content change). The `#feed` shared notebook stays `type:"notebook"`. All of it routes through `send()` (outbox + 12s grace window), saves on change + a short debounce + a flush when the tab hides, and an emptied field deletes its row.
+- New exercise shapes persist only when authored onto `input.gap`, `input[type=radio]` or a non-feed `textarea` (see CONTENT.md's exercise-type catalog); checkbox / `<select>` / drag-drop answers are not saved by the current engine.
 - localStorage must never be a source of truth (the server is the sole source); it holds only the transient outbox of unsent writes for retry — never the data itself.
 
 ## Cross-feature principles (owner prompt 2026-10-13 — OVERRIDES any conflicting wording below)
