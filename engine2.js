@@ -387,7 +387,7 @@ const PRON={
  "little":{L1:[[["li",1],["ttle",0]]]},
  "party":{L1:[[["par",1],["ty",0]]]},
  "working":{L1:[[["wor",1],["king",0]]]},
- "meeting":{L1:[[["mee",1],["ting",0]]]},
+ "meeting":{L1:[[["mee",1]],[["ti",1],["ng",0]]]},
  "going":{L1:[[["go",1],["ing",0]]]},
  "doing":{L1:[[["do",1],["ing",0]]]},
  "making":{L1:[[["ma",1],["king",0]]]},
