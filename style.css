@@ -22,7 +22,7 @@ main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
 button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;margin:4px 4px 4px 0;font:600 14px 'Public Sans';cursor:pointer;box-shadow:3px 3px 0 var(--tan)}
 a{color:var(--ink);font-weight:600}h2{font-family:'Playfair Display',serif;margin:.9em 0 .3em}
 .dim{color:#8a8072;font-size:13px}
-.pt{color:#5c5347;font-style:italic}.ptw{font-style:italic;color:var(--ptw);font-weight:600}.sound{font-weight:700;color:var(--ptw);font-style:italic}
+.pt{color:#5c5347;font-style:italic}.ptw{font-style:italic;color:var(--ptw);font-weight:600}.sound{font-weight:700;color:var(--ptw)}
 .listen{background:var(--tan);box-shadow:3px 3px 0 var(--ink)}
 details{background:#fff8ea;border:2px dashed var(--tan);border-radius:12px;padding:8px 12px;margin:10px 0}
 mark.nb{background:transparent;cursor:pointer}
@@ -102,7 +102,7 @@ h2 .h2sub{font-family:'Public Sans',sans-serif;font-size:.55em;font-weight:400;l
 .chart th,.chart td{border:1px solid var(--tan);padding:8px 12px;text-align:left;vertical-align:middle}
 .chart thead th{background:var(--ink);color:var(--cream);font-weight:700;letter-spacing:.02em}
 .chart.center th,.chart.center td{text-align:center}
-.thsub{display:block;font-weight:400;font-style:italic;font-size:.78em;letter-spacing:0;opacity:.82}
+.thsub{display:block;font-weight:400;font-size:.78em;letter-spacing:0;opacity:.82}:lang(pt){font-style:italic}
 .chart tbody tr:nth-child(even) td{background:#fff8ea}
 .chips b{display:inline-block;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:2px 12px;margin:2px 6px 2px 0;font-weight:600}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0}

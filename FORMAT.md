@@ -32,7 +32,8 @@ _(none queued.)_
 
 ## Component semantics (authored in the lesson HTML — content, see CONTENT.md)
 - .pt = Portuguese explanation text: italic (ALL authored Portuguese text is italic). .ptw = Portuguese word in exercises: italic, --ptw color, weight 600
-- .sound = pronunciation sound label written in Portuguese characters (ei, i, ai, á, é, ô, ə, iu, uai, u): bold, --ptw color, italic — like ALL Portuguese text, italic is mandatory (lesson 12 vowel framework)
+- .sound = pronunciation sound label written in Portuguese characters (ei, i, ai, á, é, ô, ə, iu, uai, u): bold, --ptw color. Carries NO font-style — Portuguese sound labels are marked `lang="pt"`, which CSS `:lang(pt){font-style:italic}` italicizes (lesson 12 vowel framework).
+- .thsub = a chart-column-header subtitle (the second line under the main label): block, weight 400, smaller, reduced opacity. Carries NO font-style — italic comes from `lang="pt"` on the Portuguese text.
 - input.gap = fill-in blank: transparent, 2px tan bottom border, #fff8ea bg — a CONTIGUOUS line, never literal "___" underscores in the prompt
 - fieldset = exercise block: dashed tan border, 12px radius
 - details = collapsible block: #fff8ea, dashed tan border (generic element styling)
