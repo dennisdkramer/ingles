@@ -1,11 +1,5 @@
 # HARNESS — binding contract. RE-READ ON EVERY PROMPT, before any other action.
-This file is always in force. The category files (CONTENT / PEDAGOGY / FORMAT / FUNCTION / VOCABULARY) are loaded only when the prompt's intent makes them relevant — re-reading them on demand is what keeps each prompt from pulling in irrelevant rules.
-## PENDING
-
-_(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-H<n>.)_
-
-_(none queued.)_
-
+This file is always in force and is the single read-first hub. The category files (PENDING / PARKED / HANDOFF / ISSUES / FORMAT / FUNCTION / CONTENT / PEDAGOGY / VOCABULARY / STATUS / VERIFICATION / FILESYSTEM) are loaded only when the prompt's intent makes them relevant — re-reading them on demand is what keeps each prompt from pulling in irrelevant rules.
 ## RULE 1 — EXPLICIT GOALS, JUDGMENT ON EXECUTION
 Anchor to what the owner explicitly asked for as the GOAL. How to get there — implementation
 details, necessary adjacent fixes, reasonable technical decisions, and which files to touch — is
@@ -56,29 +50,29 @@ action (see RULE 1). Don't stop for implementation-detail uncertainty — decide
 
 
 ## RULE 6 — THE LOOP (lightweight)
-edit → verify what I judge necessary (RULE 4) → commit + push → clear the finished batch from the PENDING section of the file(s) it was queued in (RULE 7), so that no entry ever survives its own commit. Bundle whatever related changes
+edit → verify what I judge necessary (RULE 4) → commit + push → clear the finished batch from PENDING.md (and from PARKED.md if it came from the backlog) (RULE 7), so that no entry ever survives its own commit. Bundle whatever related changes
 belong together into one commit if that's the coherent unit of work (no rule forcing one feature per
 commit, no rule forcing it to be split either — use judgment). Avoid rapid, near-simultaneous
 successive pushes when a single combined push would do. Build markers / live-site curl / fixed sleeps
 are tools I reach for when I judge the risk of an undetected deploy problem is real, not a mandatory
 step after every push. Never commit something I believe is broken.
 
-## RULE 7 — STEP 1 OF EVERY TASK: SUBTASK BATCHES BY CATEGORY
-Step 1 of task execution is to analyse the intent of the user prompt and define "subtask batches"
-according to the project architecture in the Master Context file. Open the relevant category file and
-add the batch to the PENDING section at the top of that file, in the category it falls into:
-- General project architecture, planning, understanding, intent and parameters, handoffs → MASTER_CONTEXT.md
-- Primary harness and project execution parameters → HARNESS.md (this file)
-- Changes that relate to the execution *or* visual output of a function → FUNCTION.md
-- Changes that relate to the backend → BACKEND.md
-- Site format and content architecture and handling → FORMAT.md
-- Content handling: how lesson content is stored, structured and generated, plus content tasks/batches (the lesson pages themselves hold the prose, exercises and widgets; how to handle them is what belongs here) → CONTENT.md
-- Trivial changes, cleanup, inquiries and miscellaneous (anything that fits no category above) → ISSUES.md
-Then make a quick high-level judgement of which tasks/batches must be handled together and in which
-order they will be addressed. Accordingly, make a quick high-level judgement whether any batches or
-parts of the prompt should be parked until after task completion — park them if necessary — and then
-execute, modifying only the files the change requires (reading and context-gathering is unrestricted — read whatever files the task needs, in full). Assume all non-referenced files are fully functional
-unless a verification step shows otherwise.
+## RULE 7 — STEP 1 OF EVERY TASK: SUBTASK BATCHES, PLANNED IN PENDING.md
+Step 1 of task execution is to analyse the intent of the user prompt and define "subtask batches" — the ordered pieces of work, each owned by the spec file for its category. Write the ACTIVE plan to PENDING.md and park deferred / not-yet-started work in PARKED.md, then route each batch to the file that owns it:
+- Active subtask batches / the live plan → PENDING.md
+- Deferred / queued / parked to-do items (the backlog) → PARKED.md
+- Context handoffs between sessions → HANDOFF.md
+- Bugs / problems → ISSUES.md
+- Behaviour / functionality / engines / backend / edit mode → FUNCTION.md
+- Site structure & formatting (structure, layout, HTML/CSS, section/block formatting) → FORMAT.md
+- Content handling (how lesson content is stored, structured and generated; the lesson pages themselves hold the prose) → CONTENT.md
+- Teaching-side structure and rationale → PEDAGOGY.md
+- Concept inventory (concept → context → mapping) → VOCABULARY.md
+- Current state & shared parameter values → STATUS.md
+- How to verify / QA → VERIFICATION.md
+- Repository layout / file map → FILESYSTEM.md
+When RULE 7 writes to any of these files, CHECK FOR CONFLICT, OVERLAP OR REDUNDANCY against the existing content first — if an apparent overlap/conflict turns up, STOP and ask the owner to resolve it (never silently duplicate). When RESUMING work from PENDING.md / PARKED.md, first sanity-check that the item is still relevant and still conflicts with nothing, before acting.
+Then make a quick high-level judgement of which tasks/batches must be handled together and in which order they will be addressed, and whether any batches or parts of the prompt should be parked until after task completion — park them if necessary — and then execute, modifying only the files the change requires (reading and context-gathering is unrestricted — read whatever files the task needs, in full; for large files see RULE 9). Assume all non-referenced files are fully functional unless a verification step shows otherwise.
 
 **Effort sanity-check (while executing):** when a batch is defined, also keep a rough estimate of how many attempts/passes it should take, and treat ANY of the following as a signal to STOP and confer with the owner in a single short message instead of pressing on silently:
 
@@ -99,12 +93,13 @@ a reason to refuse a change the owner asked for, and working behaviour never reg
 
 ## RULE 9 — CONTEXT & TOKEN ECONOMY: CORRECTNESS OVER THRIFT
 The context window is now large, and a correct result is worth far more than a cheap one. Read the files the task needs in full and hold whatever context in memory keeps the work clear and correct; reason and write at full length. Never trim context, skip a needed read, shorten reasoning, or shrink an edit to save tokens if doing so risks an imperfect result. A single thorough pass that lands the right answer beats many short passes that each risk a wrong one (one run of 1M tokens is better than ten runs of 100K that still come out wrong). Token thrift is only a tie-breaker between two approaches that are equally correct and equally clear — never a goal in itself.
+**Reading large files (truncation).** A single read of a large file can come back MIDDLE-TRUNCATED (an elided span marked `[truncated N chars]`). Never trust a truncated read: page through the file in bounded chunks with `start_line`/`end_line` (keep each chunk well under ~6000 characters — dense files like FUNCTION.md need ~15–20 line chunks), and re-read any span that came back with a `[truncated …]` marker before relying on it.
 
-## RULE 10 — SPEC/RULE FILES HOLD GENERAL PARAMETERS, NOT IMPLEMENTATION DETAILS
-The category files (MASTER_CONTEXT, FUNCTION, BACKEND, FORMAT, CONTENT, HARNESS) hold two things and two things only: (1) queued/in-progress tasks, and (2) the GENERAL parameters of elements and functionality — what something IS and what it DOES at a user-visible level (e.g. "a note is indicated by a light blue wash", "a recording is indicated by a blue underline", "a highlight is a translucent coloured rectangle"). They must NOT pin down implementation specifics — DOM structure, element/class/function names, CSS values, or the exact mechanism (e.g. "a note is a `mark.nb` wash", "painted on `#hlLayer`", "via `nbUpsert`"). Those fine details, techniques and execution choices live ONLY in the code files. When writing or updating a category file, state the parameter and leave the mechanism to the code, so an implementation can change without contradicting the spec. (Test: if a sentence names an internal identifier or a CSS property, it is too specific — restate it as what the user sees or what the feature does.)
+## RULE 10 — SPEC/RULE FILES HOLD THE RULES AND THE QUEUES
+The category files (HARNESS, PENDING, PARKED, HANDOFF, ISSUES, FUNCTION, FORMAT, CONTENT, PEDAGOGY, VOCABULARY, STATUS, VERIFICATION, FILESYSTEM) hold two things and two things only: (1) queued / parked tasks, and (2) the parameters of elements and functionality — what something IS and what it DOES at a user-visible level (e.g. "a note is indicated by a light blue wash", "a recording is indicated by a blue underline", "a highlight is a translucent coloured rectangle").
 
 ## RULE 11 — A PROMPT OVERRIDES A SPEC/RULE FILE ON CONFLICT
-When a user PROMPT (the instruction in the current message) contradicts a category file (MASTER_CONTEXT/FUNCTION/BACKEND/FORMAT/CONTENT/HARNESS) or an earlier owner rule, the PROMPT has authority — follow the prompt, not the file. When a prompt changes earlier guidance, also check whether it makes sense to RELAX or REWRITE the rule in the category file so it aligns with the new guidance (otherwise the files keep contradicting the code and the next task inherits the stale rule). The files are a record of the owner's intent, and the latest prompt is the latest intent: a prompt is never silently overridden by a spec file.
+When a user PROMPT (the instruction in the current message) contradicts a category file (HARNESS/PENDING/PARKED/HANDOFF/ISSUES/FUNCTION/FORMAT/CONTENT/PEDAGOGY/VOCABULARY/STATUS/VERIFICATION/FILESYSTEM) or an earlier owner rule, the PROMPT has authority — follow the prompt, not the file. When a prompt changes earlier guidance, also check whether it makes sense to RELAX or REWRITE the rule in the category file so it aligns with the new guidance (otherwise the files keep contradicting the code and the next task inherits the stale rule). The files are a record of the owner's intent, and the latest prompt is the latest intent: a prompt is never silently overridden by a spec file.
 
 ## RULE 12 — PEDAGOGICAL vs CONTENT HARNESS
 Two harnesses govern content work. PEDAGOGY.md (the pedagogical harness) = WHAT content to teach and how it is ordered within and between lessons. CONTENT.md (the content harness) = HOW that content is generated, structured, and formatted. When deciding what to include, what to drop, and how to sequence topics (including grouping related items), reference the pedagogical harness. When authoring blocks, exercises, and layout, reference the content harness.
@@ -138,5 +133,5 @@ finished command can be reported as "exited with code 1" whatever it really retu
 
 
 ## STATUS
-No separate status log: an open issue lives in the PENDING section of its category file (RULE 7) and is cleared there once done AND committed. `ISSUES.md` is only the catch-all queue for items that fit no category.
+Status lives in dedicated files: the ACTIVE plan in PENDING.md, the backlog in PARKED.md, bugs/problems in ISSUES.md, handoffs in HANDOFF.md, and current state + shared parameter values in STATUS.md. Nothing is cleared anywhere until it is done AND committed.
 

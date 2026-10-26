@@ -1,12 +1,6 @@
 # PEDAGOGY — teaching-side contract: the structure and rationale of the materials, from the teacher's perspective
 This file holds the teaching-side shape of the lessons: what exercise types exist, what each one is FOR (which skill it trains), and the order and structure they should follow so a lesson teaches rather than merely tests. It does NOT hold lesson content (the page files), content-handling rules (CONTENT.md), or visual layout (FORMAT.md).
 
-## PENDING
-
-_(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-P<n>.)_
-
-- B-P4 [2026-10-24] CONTENT RE-GENERATION (pedagogy side, start at lesson 5). Apply the corrected method to every business lesson: derive each lesson's content SET from the pedagogical principle (group related items into families; choose by frequency and usefulness) — never from owner-named examples, which carry no privileged status (HARNESS RULE 1). Teach in context and in phrases; make the instructional content engaging and dynamic; match depth to the concept's weight; use any medium/activity freely; state only true, defensible facts. Lesson 5 FIRST: re-derive the phrasal-verb lesson (grouped families chosen by frequency — particles up/out/off/on; meaning taught as a whole since it is non-compositional; the separable-vs-inseparable distinction as the structural rule, with the pronoun position as its consequence; presented in a scenario/story) — then proceed 6→34.
-
 ## What this file is
 
 This file is the single source of truth for the pedagogical shape of the materials, written from the teacher's point of view. It answers, for anyone generating a new lesson: which exercise types the course uses, what each type trains, and how they should be sequenced and structured. It is deliberately about intent and rationale — the concrete layout rules it implies are implemented in `style.css` and the handling rules live in CONTENT.md, so a change here can be carried out without contradicting either.
@@ -150,3 +144,11 @@ Use ENGLISH wherever the student can actually follow it — i.e. wherever the te
 - **Beginner (early stage):** little has been taught yet, so most English would be above the student's level → headers and explanatory prose are Portuguese. English appears where it is the item being taught (e.g. the phrasal verb itself) and where an already-taught word fits.
 - **Intermediate:** the parts the student already controls switch to English (section/block/column headers first, then simple explanations and reminders); conceptual explanations — and anything whose English would be above level — stay Portuguese.
 - **Advanced:** almost entirely English. Portuguese is reserved for exactly two cases: (1) when the content type or pedagogy demands it, and (2) limited explanation where your analysis/reasoning/research explicitly predicts the equivalent English is beyond the student's level or ability to understand.
+
+## Hard rules (do not break)
+- NO improvised phonetic respellings; pronunciation audio ONLY via ▶ TTS. The one allowed visual aid is the pronunciation KEY (bold = the syllable's first two phoneme-slots, grey = the rest; schwas shown as ə; special spellings respelled only through the systematic set ai/ei/shn/jn/jr/ô/ó/â).
+- Portuguese only for translation/explanation. PT words in exercises: italic + colored (.ptw).
+- Popup buttons: English, small, fixed-size, in two rows. ONE note and ONE recording per phrase, as two INDEPENDENT items. The popup always carries the same seven buttons (▶ Hear / ▶ Play / ⏺ Record / 🔊 Delete / 📝 Add/Edit Note / 💾 Save / 📝 Delete) and never repeats the selected text; Hear/Record/Add-Edit-Note are always clickable, the rest are greyed out until they apply — ▶ Play and 🔊 Delete for the ONE recording the selection refers to (both locked, toasting "please select a distinct recording", while more than one is involved), 💾 Save while editing a note, 📝 Delete when a note exists. The TWO deletes each drop only their own item (📝 the note, 🔊 the recording — never both; silent on success). A selection inside/overlapping/containing a recording locks ⏺ Record ("cannot overwrite recording, delete first"). While a clip plays, the Play glyph becomes a processing spiral; ⏺ Record shows the remaining-time countdown while recording.
+- Recordings are indicated by an underline; notes are indicated by a very light blue wash (visually separate from highlights); neither carries a trailing icon.
+- L1 teaches "vowels have no fixed sound"; cognate suffix codes; Tense Truth (present simple = facts/habits ONLY); reductions (gonna/wanna/woulda) taught early; get = coringa; quiz honesty note.
+- Three fully separate tracks/books: kids (casual/slang), business (formal), nsfw (18+, swearing, AAVE-aware). Own folder, own lesson order, own voice. Lessons ~60 min, solo-possible with PT explanations; quizzes comprehensive (~20 min).

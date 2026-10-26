@@ -1,7 +1,7 @@
 /**
  * qa/live.mjs — LIVE English-lessons harness: a REAL headless Chrome driven over CDP.
  *
- * WHY THIS EXISTS (MASTER_CONTEXT "VERIFICATION ENVIRONMENT"): qa/smoke.mjs runs on jsdom, which has
+ * WHY THIS EXISTS (VERIFICATION.md): qa/smoke.mjs runs on jsdom, which has
  * no layout, no painting, no real selection/mouse and no real MediaRecorder — so it cannot see the
  * highlight layer being painted (#hlLayer), it cannot make a real text selection with a real drag and
  * it cannot see a rectangle land on the wrong characters. A previous bug (the Ctrl auto-repeat
