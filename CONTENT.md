@@ -32,7 +32,7 @@ Each lesson is a deep, thorough pedagogical synthesis — never a template fill-
 
 ## Generative guidance — HOW to generate, structure, format
 
-**Conditional formatting.** Every component and layout rule below (charts, panels, MCQ grids, dictation, recording blocks, …) is CONDITIONAL: it describes how to format an element IF AND ONLY IF that element happens to appear in the lesson. Whether an element appears is decided entirely by the pedagogy (content conceived in a vacuum) — never by this list. A lesson may use none of these, or invent a new one.
+**Two kinds of guidance below.** (1) GENERAL principles — these apply to ALL content, whatever is generated: fill the width / no dead space, centre small half-full blocks, nothing reads as accidental or broken, no repeated labels, exactly one defensible answer, the answer never shown in the prompt, Portuguese text always italic. (2) COMPONENT rules — these describe how to format a specific element (a chart, a multiple-choice group, a dictation, a recording, …), and apply ONLY IF that element happens to appear, which is decided entirely by the pedagogy (content conceived in a vacuum) — never by this list. A lesson may use none of these, or invent a new one.
 
 ### Content generation process (every block)
 Content is produced by a loop; layout is never pre-assigned and never forced by CSS — a block BECOMES full-width, half-width, one column or several columns as a RESULT of this loop.
