@@ -11,6 +11,7 @@ wireListen();
 const contentId=()=>"content_"+TRACK+"_"+L;
 let savedLive="",editTimer=null,nbkVal="";
 function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop,#completebtn").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|px/.test(st))s.removeAttribute("style")});return "<!doctype html>"+cl.outerHTML;}
+function contentAreaHTML(saved){const d=new DOMParser().parseFromString(saved,"text/html");const ca=d.querySelector(".content-area");return ca?ca.innerHTML:saved;}
 function saveContent(){if(!document.querySelector(".content-area"))return;const o={action:"set",id:contentId(),type:"content",anchor:"",data:fullPageHTML(),email:gate.email,lesson:L,author:"prof",track:TRACK};notePending(o);outboxPush(o);scheduleFlush();}
 function toggleEditMode(){
  if(STUDENT!==gate.email){toast("Switch to your own account to edit content.");return;}
@@ -21,7 +22,7 @@ function toggleEditMode(){
   savedLive=ca.innerHTML;
   nbkVal=(document.getElementById("feed")||{}).value||"";
   const cov=layer.find(r=>r.type==="content"&&r.data);
-  if(cov)ca.innerHTML=cov.data;
+  if(cov)ca.innerHTML=contentAreaHTML(cov.data);
   else document.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});
   wireListen();
   if(ca)ca.setAttribute("contenteditable","true");
