@@ -299,12 +299,15 @@ window.__B=true;
 
 /* ---- pronunciation key ----
    PRON: word → { L1, L2?, alts? }. Each is an array of syllables; each syllable is an
-   array of [letters, bold] segments (bold=1 → <b>, bold=0 → grey .pr-g). Segments are
-   pre-resolved by the authoring rules: multi-letter unit / double / digraph = 1 slot,
-   r-colored vowel = 2 slots, single letter = 1 slot; bold = first two slots of a syllable,
-   grey = the rest; "ə" = schwa; L2 = a genuine fewer-syllable reduction; alts = same-syllable
-   variants (shown when a word stands alone, picked by context in phrases). Rendered wherever
-   the author marks data-pron="word" (L1) or data-pron="word:2" (L2). No toggle. */
+   array of [phonemes, bold] segments (bold=1 → <b>, bold=0 → grey .pr-g).
+   Syllable boundaries (Rule R): a new syllable begins before each phoneme that precedes
+   a vowel phoneme, EXCEPT a word-final silent "e". A multi-letter phoneme is ONE unit and is
+   never split: digraphs ch/sh/th/ph/ng/ck/wh/kn/wr/gh, doubles ff/ll/ss/tt/dd/gg/nn/mm/pp/rr/bb,
+   r-colored ar/er/ir/or/ur, and consonant clusters that act as one phoneme (e.g. mf in
+   comfortable, nt, nd, st, mp). Within a syllable: bold = the nucleus (first two phoneme slots),
+   grey = the rest; "ə" = schwa; L2 = a genuine fewer-syllable reduction whose nuclei may be
+   consonant-only (bn, pls, fm); alts = same-syllable variants. Rendered wherever the author
+   marks data-pron="word" (L1) or data-pron="word:2" (L2). No toggle. */
 const PRON={
  "different":{L1:[[["di",1]],[["ffə",1]],[["rə",1],["nt",0]]],L2:[[["di",1]],[["ffrə",1],["nt",0]]]},
  "probably":{L1:[[["prə",1]],[["bə",1]],[["bly",1]]],L2:[[["prb",1]],[["bly",1]]]},
