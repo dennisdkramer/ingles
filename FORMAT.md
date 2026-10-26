@@ -26,7 +26,7 @@ Reference this file whenever a task touches site appearance or structure. The EX
 - Public Sans 400/600/700 → body, base 17px/1.6
 - All font sizes are fixed constants (no viewport-relative sizing): h1 38px, .script 38px, body 17px — so resizing the viewport never changes text size and print output is identical on any device.
 
-### Component semantics (authored in the lesson HTML — content, see CONTENT.md)
+### Available components — CATALOG (none is required; use only what the pedagogy needs; authored in the lesson HTML — content, see CONTENT.md)
 - **Portuguese text is ALWAYS italic.** Mark it with `lang="pt"` (CSS `:lang(pt){font-style:italic}` italicizes it in any element), or use the legacy `<i>` / `.pt` / `.ptw` markers. A helper class that is not Portuguese-specific (`.thsub`, …) must NEVER carry `font-style` — italic comes only from a Portuguese marker.
 - .pt = Portuguese explanation text: italic. .ptw = Portuguese word in exercises: italic, --ptw color, weight 600
 - .ptpronounce (optional) = a tag available to mark Portuguese pronunciation text: tan (--ptw), italic, NOT bold. May carry `lang="pt"`. An option, never a required rule.
@@ -36,7 +36,7 @@ Reference this file whenever a task touches site appearance or structure. The EX
 - details = collapsible block: #fff8ea, dashed tan border (generic element styling)
 - .chart = structured data table (cognate rules, phrase translations, to-be chunks, false friends): paper, 2px ink frame + tan shadow, ink header row, tan grid
 - .chips = wrapping keyword pills ("quase iguais" list)
-- .grid3 = 3-up row of cards (the 3 discoveries, the a/an rules)
+- .grid3 = an available 3-column row of cards
 - .ex-head = exercise-group sub-heading inside Treino/Quiz: serif (Playfair), dark blue, tan left bar
 - .blanks = wrapping row of fill-in pairs (word + input.gap)
 - .dialog = dialogue block: #fff8ea fill, rose frame, bold speaker labels
@@ -57,23 +57,22 @@ Reference this file whenever a task touches site appearance or structure. The EX
 - Links: ink, weight 600. Dim text: #8a8072, 13px
 - Lesson navigation: the control bar carries "← Last lesson" / "Next lesson →" buttons (always present, rendered by engine2.js from `L` and `COUNT`; the boundary button is greyed/disabled).
 
-### Layout at generation (blocks vary at authoring time; CSS stays fixed)
-- CSS uses fixed constants (no dynamic/viewport sizing and no text wrapping). Layout is not pre-assigned: a block's width and column count are the OUTCOME of the generation loop in CONTENT.md, and CSS only implements that outcome — it never rescales or wraps content to force a fit.
-- Width: a block is half-width when it sits beside another half-width block on the same row. A block left on its own earns full width by generating more content (more items, more columns, longer phrases); only when pedagogy insists it stay small is it kept half-width and centered (.panel.centered).
-- Fill the width (judgment, not a count): generate enough content that each block fills its width with no dead space; the number of items follows from what fills the layout, not from a fixed count (4 and 8 are only illustrations of a full grid). Add or trim by pedagogical value, not by padding with filler.
-- Small half-full blocks are centered: when a small block's text leaves its right half empty, center it — judged case-by-case in the structural pass, not as a blanket rule.
-- Any indefensible redundancy is merged or deleted.
-- A multiple-choice / listening group is full-width whenever its stem+options row is too wide for half a panel; half-width is only for a group whose row is short (short stem + one-word options).
-- A half-width block must PAIR with the half-width block beside it. If its row-mate was made full-width, re-pair them (make the mate half-width when its content is small) or center the lone half-width block (.panel.centered).
-- Columns: when a block's items fill only a sliver of its width (roughly a quarter or less), they flow into more columns — two normally, four when the items are very short.
-- Height: two adjacent half-width blocks are balanced by extending the shorter one (more questions, examples, vocabulary, or dialogue lines).
-- Multiple-choice options never wrap mid-option (no CSS text wrapping). Short options sit on one horizontal line, distributed with even spacing (space-around) and indented ~10px from the question; long options (whole sentences) are stacked under the stem.
-- Listen-and-choose items keep the ▶ audio chip inline with their answer options (never on its own line above them). A recording prompt states the exact text to record inline — never a reference to another block.
-- Consecutive questions are separated by a small, consistent vertical gap (breathing room between questions).
-- A section explainer (a standalone PT sentence that introduces a section) is a sub-heading under the h2: serif (Playfair), ~1pt larger than body, italic — written only when it adds what the chart below does not already say.
-- A note that applies to one chart row is a merged (colspan) row directly under that row — not a floating paragraph.
-- Paired content (e.g. a phrase chart and a dialogue) is placed side-by-side half-width, with the Portuguese below the English (a line break in the same cell, not a separate column).
-- Contrasting versions/concepts (two columns, two uses, two conjugations) are always visually distinct — columns or clear spacing.
+### Layout OPTIONS at generation (NON-BINDING — available techniques; CSS stays fixed)
+CSS uses fixed constants (no dynamic/viewport sizing and no text wrapping). Layout is NOT pre-assigned and none of the following is required: a block's width and column count are chosen to fit its content, and CSS only implements that choice — it never rescales or wraps content to force a fit. The techniques below are available and applied only when they help:
+- Width: a block MAY sit half-width beside another block of the same width; a block left on its own CAN be widened with more content, or — only if pedagogy insists it stay small — kept narrow and centered (.panel.centered).
+- Fill the width by judgment, not by a fixed count: you CAN generate enough content that a block fills its width with no dead space; never pad with filler.
+- Small narrow blocks CAN be centered when their text leaves one side empty.
+- A multiple-choice / listening group whose stem+options row is too wide for a narrow block CAN be widened so its row fits.
+- A narrow block CAN pair with the block beside it; a narrow block left on its own can be centered.
+- Columns are free: short items CAN flow into more columns when that reads better.
+- Adjacent blocks of different heights CAN be balanced by extending the shorter with real content — only when alignment matters there.
+- Multiple-choice options never wrap mid-option (no CSS text wrapping). Short options CAN sit on one line; long options (whole sentences) CAN be stacked under the stem.
+- Listen-and-choose items CAN keep the ▶ audio chip inline with their options. A recording prompt states the exact text to record inline.
+- Consecutive questions are separated by a small, consistent vertical gap.
+- A section explainer (a standalone PT sentence that introduces a section) CAN be a sub-heading under the h2: serif (Playfair), ~1pt larger than body, italic — written only when it adds what the block below does not already say.
+- A note that applies to one chart row CAN be a merged (colspan) row directly under that row.
+- Paired content CAN be placed side-by-side, with the Portuguese below the English.
+- Contrasting versions/concepts are made visually distinct — columns or clear spacing — so the contrast reads.
 
 ## Function-generated formatting → FUNCTION.md
 - The selection popup, the note/recording marks, the highlight rectangles, the colour palette, the toast and the recording indicator/spinner exist only because a FUNCTION creates them at run time, so their formatting is specified as PART of that function — in FUNCTION.md, which is authoritative for those elements. style.css remains the single styling source for the whole site; this file defers to FUNCTION.md for them and no longer restates them.
