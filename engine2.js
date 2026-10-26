@@ -7,6 +7,7 @@ let completeNow=false; /* optimistic state of the "Complete?" tag button */
 
 function wireListen(){document.querySelectorAll(".listen").forEach(b=>{b.onclick=()=>{if(editing)return;const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="en-US";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}})}
 wireListen();
+document.querySelectorAll("[contenteditable]").forEach(function(n){n.removeAttribute("contenteditable");});
 /* ---- content edit mode (teacher): a separate editable copy; live page + marks stay untouched ---- */
 const contentId=()=>"content_"+TRACK+"_"+L;
 let savedLive="",nbkVal="";
