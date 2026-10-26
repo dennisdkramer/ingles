@@ -50,6 +50,7 @@ action (see RULE 1). Don't stop for implementation-detail uncertainty — decide
 
 
 ## RULE 6 — THE LOOP (lightweight)
+Requested changes are committed and pushed by DEFAULT. Overrides that justify NOT committing/pushing: (a) prompt intent, (b) a defensible reason not to, or (c) an unresolved question/conflict.
 edit → verify what I judge necessary (RULE 4) → commit + push → clear the finished batch from PENDING.md (and from PARKED.md if it came from the backlog) (RULE 7), so that no entry ever survives its own commit. Bundle whatever related changes
 belong together into one commit if that's the coherent unit of work (no rule forcing one feature per
 commit, no rule forcing it to be split either — use judgment). Avoid rapid, near-simultaneous
