@@ -71,7 +71,7 @@ Shared by Highlight, Note and Recording; the per-feature within/overlap/contain 
 - The only teacher-only control is the student selector in the control bar ("demo (you)" + students of the current track); changing it switches which student's layer is loaded and shown.
 
 ## Edit mode (teacher-only)
-- ✏️ Edit (teacher-only, in the "demo (you)" view): a ✏️ Edit toggle loads a separate unmarked, editable copy — the live page and its marks are never touched. Changes auto-save to the backend as a `type:"content"` row holding the FULL page HTML, keyed to the teacher's email (staging only; students never see it), and ↩️ Revert discards them.
+- ✏️ Edit (teacher-only, in the "demo (you)" view): a ✏️ Edit toggle loads a separate unmarked, editable copy — the live page and its marks are never touched. Changes save to the backend when you click ✔️ Done, as a `type:"content"` row holding the FULL page HTML, keyed to the teacher's email (staging only; students never see it), and ↩️ Revert discards them.
 - Every lesson file is created with a sibling `<lesson>.edit.html` sidecar that is a full copy of the lesson.
 - Committing an edit is a FULL OVERWRITE by default (when the owner says "I edited lesson X"): fetch the `type:"content"` row, write its full-page `data` over the lesson file, and re-copy the sidecar; a narrower scope happens only if the owner asks. The edit content is a server-side `type:"content"` sheet row, NOT a local file — retrieve it via GET `<BACKPACK>?action=layer&email=<teacher email>&lesson=<n>` → JSON `{rows:[…]}`; take the `type:"content"` row's `data` (the BACKPACK exec URL is in STATUS.md).
 

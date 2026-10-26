@@ -9,7 +9,7 @@ function wireListen(){document.querySelectorAll(".listen").forEach(b=>{b.onclick
 wireListen();
 /* ---- content edit mode (teacher): a separate editable copy; live page + marks stay untouched ---- */
 const contentId=()=>"content_"+TRACK+"_"+L;
-let savedLive="",editTimer=null,nbkVal="";
+let savedLive="",nbkVal="";
 function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop,#completebtn").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style],b[style],i[style],u[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|px|font-style|background/.test(st))s.removeAttribute("style")});return "<!doctype html>"+cl.outerHTML;}
 function contentAreaHTML(saved){const d=new DOMParser().parseFromString(saved,"text/html");const ca=d.querySelector(".content-area");return ca?ca.innerHTML:saved;}
 function saveContent(){if(!document.querySelector(".content-area"))return;const o={action:"set",id:contentId(),type:"content",anchor:"",data:fullPageHTML(),email:gate.email,lesson:L,author:"prof",track:TRACK};notePending(o);outboxPush(o);scheduleFlush();}
@@ -28,7 +28,7 @@ function toggleEditMode(){
   if(ca)ca.setAttribute("contenteditable","true");
   hlReflow();ntReflow();
   if(eb)eb.textContent="✔️ Done";
-  toast("Edit mode — changes auto-save");
+  toast("Edit mode — click ✔️ Done to save");
  }else{
   if(ca)ca.removeAttribute("contenteditable");
   if(eb)eb.textContent="✏️ Edit";
@@ -39,7 +39,6 @@ function toggleEditMode(){
   toast("Saved");
  }
 }
-document.addEventListener("input",e=>{if(!editing)return;if(e.target&&e.target.closest&&e.target.closest(".content-area")){clearTimeout(editTimer);editTimer=setTimeout(saveContent,2000)}});
 /* shared notebook: a plain textarea, one per student+lesson, auto-saved (debounced) */
 const nbId=()=>"notebook_"+STUDENT+"_"+L;
 let nbTimer=null;
