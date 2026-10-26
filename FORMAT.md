@@ -26,7 +26,7 @@ Reference this file whenever a task touches site appearance or structure. The EX
 - Public Sans 400/600/700 → body, base 17px/1.6
 - All font sizes are fixed constants (no viewport-relative sizing): h1 38px, .script 38px, body 17px — so resizing the viewport never changes text size and print output is identical on any device.
 
-### Available components — CATALOG (none is required; use only what the pedagogy needs; authored in the lesson HTML — content, see CONTENT.md)
+### Standard components — CATALOG (established shapes; used as fallbacks in standard/compliance mode; authored in the lesson HTML — content, see CONTENT.md)
 - **Portuguese text is ALWAYS italic.** Mark it with `lang="pt"` (CSS `:lang(pt){font-style:italic}` italicizes it in any element), or use the legacy `<i>` / `.pt` / `.ptw` markers. A helper class that is not Portuguese-specific (`.thsub`, …) must NEVER carry `font-style` — italic comes only from a Portuguese marker.
 - .pt = Portuguese explanation text: italic. .ptw = Portuguese word in exercises: italic, --ptw color, weight 600
 - .ptpronounce (optional) = a tag available to mark Portuguese pronunciation text: tan (--ptw), italic, NOT bold. May carry `lang="pt"`. An option, never a required rule.
@@ -42,7 +42,6 @@ Reference this file whenever a task touches site appearance or structure. The EX
 - .dialog = dialogue block: #fff8ea fill, rose frame, bold speaker labels
 - .listen = compact ▶ audio chip placed inline beside what it speaks
 - Pronunciation content types (business/lesson12–14) need NO new CSS: they reuse .chart, .grid3, .qgrid.stack, .blanks.sent and the ⏺ recording block as-is. The pronunciation key itself (bold/grey/schwa, two levels L1/L2) is rendered by `wirePron()` from `data-pron="word"` (L1) / `data-pron="word:2"` (L2) in engine2.js, not by any lesson-specific styling.
-- Required prepositions (look AT, go TO, give TO) are visually marked — a distinct accent color (tan) and bold — so the verb+preposition pair reads as one unit
 - A fill-in hint (Portuguese, italic) sits on its own line BELOW the input when inline placement would overflow the block or look cramped. Author it with the block fill-in layout (`.blanks.sent` / `.blanks.sent.cols`) so the line break actually renders — a `<br>` inside the default flex `.blanks` row is ignored.
 - section headings (h2) carry a rose underline; exercise items are numbered 1..n under their group heading (no repeated section letter)
 - @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow
@@ -57,8 +56,8 @@ Reference this file whenever a task touches site appearance or structure. The EX
 - Links: ink, weight 600. Dim text: #8a8072, 13px
 - Lesson navigation: the control bar carries "← Last lesson" / "Next lesson →" buttons (always present, rendered by engine2.js from `L` and `COUNT`; the boundary button is greyed/disabled).
 
-### Layout OPTIONS at generation (NON-BINDING — available techniques; CSS stays fixed)
-CSS uses fixed constants (no dynamic/viewport sizing and no text wrapping). Layout is NOT pre-assigned and none of the following is required: a block's width and column count are chosen to fit its content, and CSS only implements that choice — it never rescales or wraps content to force a fit. The techniques below are available and applied only when they help:
+### Layout STANDARDS at generation (width & fill techniques; CSS stays fixed)
+CSS uses fixed constants (no dynamic/viewport sizing and no text wrapping). Layout is not pre-assigned: a block's width and column count are chosen to fit its content, and CSS only implements that choice — it never rescales or wraps content to force a fit. The width/fill/alignment techniques below are STANDARDS (fallbacks) serving the "no dead space" and "professional-looking results" priorities — followed in standard/compliance mode, and in a creative pass only as far as they help:
 - Width: a block MAY sit half-width beside another block of the same width; a block left on its own CAN be widened with more content, or — only if pedagogy insists it stay small — kept narrow and centered (.panel.centered).
 - Fill the width by judgment, not by a fixed count: you CAN generate enough content that a block fills its width with no dead space; never pad with filler.
 - Small narrow blocks CAN be centered when their text leaves one side empty.
