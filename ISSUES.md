@@ -5,7 +5,6 @@ Not a status log and not rules: an open issue that belongs to a category lives i
 
 _(Batches queued for this category, newest first. Cleared once done AND committed. Batch ids: B-I<n>.)_
 
-- B-I12 [2026-10-25, owner report] EDIT MODE INSERTS PAGE HEADER INTO CONTENT (bug): teacher edit mode intermittently inserts the page header (header.brand) into the content body. Needs reproduction and a fix in the edit-mode save/load path (`fullPageHTML` / `saveContent` / `toggleEditMode`).
 - B-I11 [2026-10-25, owner report] SELECTION GESTURE FIRES ON NON-CONTENT (bug + rule): selecting text in some page fields triggers the note/record popup, while others throw an error. Rule: text fields (inputs), buttons (with ONE exception — radio button label text stays selectable), the page header and the control bar must be COMPLETELY excluded from highlight/note/record — no interaction, no popup, no error toast.
 - B-I10 [2026-10-25, owner request] TEACHER LESSON DROPDOWN SHOWS [NUMBER] [NAME] (feature): the teacher index-page book dropdown (`bookButton`/`bookmenu`) currently lists only "Lição N". Each entry must show "[lesson number] [lesson name]", which needs a lesson-title source (a titles map, or reading titles from the lesson files) wired into index.html.
 
