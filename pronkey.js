@@ -56,6 +56,58 @@ window.PronKey = (function () {
     }).join('·');
   }
 
+  /* ---- lexicon annotation derivation ------------------------------------------------
+     derive(word, breaks, stress) -> { count, marked }
+       breaks : spelling char indices where the LEXICON marks a syllable break (the FULL set).
+       stress : 0-based index of the stressed syllable.
+       Keeps only the breaks that FOLLOW A VOWEL (the only boundaries we trust), and places
+       "*" at the start of the stressed syllable — remapped onto the FULL breaks so a dropped
+       break never moves the stress. */
+  function derive(word, breaks, stress) {
+    const W = String(word || '');
+    const V = 'aeiouyAEIOUY';
+    const full = (breaks || []).slice();
+    const kept = full.filter(b => b > 0 && b < W.length && V.indexOf(W[b - 1]) >= 0);
+    const start = stress > 0 && full[stress - 1] != null ? full[stress - 1] : 0;
+    const marks = new Set(kept);
+    let out = '';
+    for (let i = 0; i < W.length; i++) {
+      if (marks.has(i)) out += '-';
+      if (i === start) out += '*';
+      out += W[i];
+    }
+    return { count: full.length + 1, marked: out };
+  }
+
+  /* parse a lexicon source into derive()'s {breaks, stress} contract.
+     hyph : spelling syllabification, e.g. "busi|ness" (separators | · -) — EXACT when present.
+     ipa  : IPA with primary stress ˈ and (usually) syllable dots ".".
+     Without hyph, breaks are inferred from the IPA dot count mapped onto the spelling's vowels
+     (best-effort; a word with no hyph AND no dots cannot be placed and returns breaks=[]). */
+  function parseLexicon(word, hyph, ipa) {
+    const W = String(word || '');
+    const V = 'aeiouyAEIOUY';
+    let breaks = [];
+    if (hyph) {
+      const p = String(hyph).split(/[|·\-]/).filter(Boolean);
+      let pos = 0;
+      for (let i = 0; i < p.length - 1; i++) { pos += p[i].length; breaks.push(pos); }
+    } else {
+      const bare = String(ipa || '').replace(/^\/|\/$/g, '');
+      const dots = bare.split('.').length - 1;
+      const vp = [];
+      for (let i = 0; i < W.length; i++) if (V.indexOf(W[i]) >= 0) vp.push(i);
+      for (let k = 0; k < Math.min(dots, vp.length - 1); k++) breaks.push(vp[k] + 1);
+    }
+    const bare = String(ipa || '').replace(/^\/|\/$/g, '');
+    let stress = 0;
+    for (let i = 0, seen = false; i < bare.length; i++) {
+      if (bare[i] === 'ˈ') seen = true;
+      else if (bare[i] === '.' && !seen) stress++;
+    }
+    return { breaks, stress };
+  }
+
   // one word through the whole pipeline
   function process(word) {
     let row = lookup(word);
@@ -77,6 +129,8 @@ window.PronKey = (function () {
     key: key,
     key2: key2,
     render: render,
+    derive: derive,
+    parseLexicon: parseLexicon,
     process: process,
     addToDictionary: addToDictionary,
     keyGen: keyGen,
