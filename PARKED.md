@@ -14,7 +14,7 @@ _(Newest first.)_
 - B-F9 [2026-10-25, owner request] LAST/NEXT BUTTONS — DROP "lesson" + BOTTOM DUPLICATES: (1) the control-bar "← Last lesson" / "Next lesson →" buttons drop the word "lesson" (become "← Last" / "Next →"); (2) duplicate the same prev/next pair at the bottom of the page, one on each side of the "Complete?" button (prev on the left, next on the right), rendered by engine2.js next to the complete button. Update FORMAT.md's lesson-nav line to match when done.
 
 ## Docs / maintenance
-- B-M4 [2026-10-26, owner request] PRONUNCIATION KEY SPEC — REWRITE: update terms + definitions (define "hanging letters" = the letters after the first 2 phonemes of a syllable); update syllable-splitting logic, display, level interactions and the key's use-cases/guidance; dump everything non-conforming or extraneous; cleanup the function. Level 1 = normal spelling + elided letters + schwas in unstressed syllables + hanging letters greyed. Level 2 = elided letters and unstressed schwas dropped + all vowels potentially schwa + hanging letters greyed + syllable merging applied.
+- B-M4 [2026-10-26, owner request] PRONUNCIATION KEY SPEC — REWRITE → in progress: moved to PENDING.md (step 1 — delete old renderer + reformat dictionary — done 2026-10-27).
 - B-M3 [2026-10-26, owner request] BUG SWEEP: confirm relevance/existence of open items, run analysis, and fix low-hanging-fruit bugs.
 - B-M2 [2026-10-26, owner request] CLEANUP: root out inconsistency / redundancy / bloat / unnecessary comments across spec files and code.
 - B-M1 [2026-10-26, owner request] SPLIT SPEC FILES: consider splitting FUNCTION / FORMAT / CONTENT (spec) files. Decision pending.
