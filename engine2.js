@@ -287,7 +287,7 @@ function renderLayer(){
 
 /* fallback: nenhum engine define window.showAnchor;
    sem isto, clique simples em uma frase marcada lançaria ReferenceError no handler de click.
-   Reapresenta o popup de sete botões (▶ Hear / ▶ Play / ⏺ Record / 🔊 Delete / 📝 Add/Edit Note /
+   Reapresenta o popup de oito botões (▶ Hear / ▶ Play / ⏺ Record / 🔊 Delete / 📝 note / 🔤 key /
    💾 Save / 📝 Delete; os que não se aplicam ficam desabilitados) para a âncora clicada. Usa os
    mesmos helpers do popup de seleção (engine1.js), então os dois pontos de entrada — selecionar ou
    clicar na marca — se comportam igual. Passa a ÁREA da marca (um Range real), não r=null, para que

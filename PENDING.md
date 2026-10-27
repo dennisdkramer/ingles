@@ -5,7 +5,8 @@ _(Active batches, newest first. Cleared once done AND committed.)_
 
 - B-M4 [2026-10-26, owner request] PRONUNCIATION KEY SPEC — REWRITE (in progress):
   1. ✅ DONE (2026-10-27) Remove old renderer + migrate & restructure the dictionary: removed pronHTML() / wirePron() and the auto-wiring IIFE from engine2.js; migrated the custom dictionary out of engine2.js into root pron.js (window.PRON) with the new 6-column schema — Word / Stress syllable,"vowel-hiatus" / Syllables # / L1 output / L2 output / L2 Syllables # — plus a header row and a description row below it (146 words); merged the old alts into the L2 output column. pron.js is included only by the pronunciation lessons (business/lesson13 & lesson14 + their .edit copies). data-pron spans keep their static fallback markup.
-  2. ⏳ Create the phoneme library — the source for column 2 (stress syllable, "vowel - hiatus") and column 3 (syllables #). No library exists yet: column 2 is empty and column 3 is derived from the old data.
-  3. ⏳ Update terms + definitions ("hanging letters" = the letters after the first 2 phonemes of a syllable).
-  4. ⏳ Update syllable-splitting logic, display, level interactions, use-cases/guidance; re-add the renderer against pron.js.
-  5. ⏳ Dump non-conforming/extraneous content; cleanup.
+  2. ✅ DONE (2026-10-27) Rebuild the function + wire the 🔤 key button: new root pronkey.js (window.PronKey — parses a word/text string into whole words with partial words thrown out; dictionary lookup; add+keygen / general-library / annotate STUBS wired for later). The note popup's "📝 Add/Edit Note" became "📝 note", and a new "🔤 key" button beside it looks up the selected word, shows the key one line above the note (2px larger, brown #nbKey) and persists it as a type "key" row — same anchor, same lifecycle as a note. 📝 Delete now deletes the note and its key together. pronkey.js loads on every lesson; pron.js stays scoped to the pronunciation lessons. Render + key-generation remain dead.
+  3. ⏳ Create the phoneme library — the source for column 2 (stress syllable, "vowel - hiatus") and column 3 (syllables #). No library exists yet: column 2 is empty and column 3 is derived from the old data.
+  4. ⏳ Update terms + definitions ("hanging letters" = the letters after the first 2 phonemes of a syllable).
+  5. ⏳ Update syllable-splitting logic, display, level interactions, use-cases/guidance; re-add the renderer against pron.js.
+  6. ⏳ Dump non-conforming/extraneous content; cleanup.

@@ -45,6 +45,8 @@ mark.nb.has-rec{background-repeat:no-repeat;background-position:2px 100%;
 .poprow{display:flex;justify-content:space-between;align-items:center;gap:4px;margin:3px 0}
 .poprow + .poprow{margin-top:5px}
 #nbNote{margin:2px 0 4px;white-space:pre-wrap;font-size:16px;text-align:center;font-style:italic;font-family:Georgia,'Times New Roman',serif}
+#nbKey{margin:2px 0 4px;white-space:pre-wrap;font-size:18px;text-align:center;font-family:Georgia,'Times New Roman',serif;color:var(--ptw)}
+#nbKey .pr-g{color:grey}
 /* every note/recording popup button always EXISTS; the ones that do not apply yet are greyed out
    (owner spec 2026-10-12) instead of being removed from the row. `.locked` carries the same grey
    look WITHOUT the `disabled` attribute, for the presses that must still be heard: ⏺ Record as soon

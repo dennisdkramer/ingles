@@ -119,9 +119,9 @@ let nbLocal=[];
 /* THE ONE read point of the note/recording layer: `layer` (server truth) plus the local rows the core
    save (nbUpsert) has just written and whose own action is still inside its grace window (nbLocal —
    a poll bringing a snapshot that predates the write must never blink the row off). type = "note" |
-   "rec"; t = an anchor. Omit both for the whole layer. */
+   "rec" | "key"; t = an anchor. Omit both for the whole layer. */
 function nbRows(type,t){
- const keep=r=>(r.type==="rec"||r.type==="note")&&(!type||r.type===type)&&(t==null||r.anchor===t);
+ const keep=r=>(r.type==="rec"||r.type==="note"||r.type==="key")&&(!type||r.type===type)&&(t==null||r.anchor===t);
  const rows=layer.filter(keep);
  nbLocal=nbLocal.filter(r=>{const p=pendingFor(r.id);return !!p&&p.action!=="del"});
  nbLocal.forEach(r=>{if(!keep(r))return;const i=rows.findIndex(x=>x.id===r.id);
@@ -318,7 +318,39 @@ function nbNoteDisplay(t){
  const s=String(v).replace(/^\s*(?:📝|📌|🗒)\s*/u,"").trim();
  return s?s:null;
 }
-/* the popup carries SEVEN buttons, and ALL of them always exist (owner spec 2026-10-12). ▶ Hear,
+/* ---- pronunciation key (🔤 key) — dictionary lookup + persistence --------------------------
+   The key for the selected word is stored as its OWN row (type 'key', same anchor as a note) so it
+   persists exactly like a note and re-renders whenever the popup opens for that anchor. It carries
+   NO mark in the text — the only place it appears is the popup line above the note. */
+function nbKeyText(t){const e=nbEntries(t).find(it=>it.type==='key');return e?nbNoteTextOf(e.data):null}
+function nbKeyDisplay(t){const v=nbKeyText(t);return v?v:null}
+const nbKeyData=(html,pos)=>JSON.stringify(pos?{t:String(html),b:pos.b,o:pos.o}:{t:String(html)});
+/* the 🔤 key button: parse the anchor into words (partial words thrown out), take the FIRST word
+   found in the custom dictionary, and persist its key one line above the note. A word outside the
+   dictionary triggers addToDictionary()/keyGen() (stubs in pronkey.js — dead for now). */
+function nbKeyLookup(t,r,x,y){
+ if(typeof window.PronKey!=='object'||!window.PronKey){toast('Chave de pronúncia indisponível.');return}
+ if(!Array.isArray(window.PRON)||window.PRON.length<3){toast('Dicionário de pronúncia não carregado nesta lição.');return}
+ const ws=window.PronKey.words(t);
+ if(!ws.length){toast('Nenhuma palavra completa para analisar.');return}
+ let found=null;
+ for(const w of ws){const row=window.PronKey.lookup(w);if(row){found={w:w,row:row};break}}
+ if(!found){for(const w of ws)window.PronKey.process(w);toast('Palavra fora do dicionário — em construção.');return}
+ const html=window.PronKey.key(found.row);
+ if(!html){toast('Chave vazia para ' + found.w + '.');return}
+ const pos=nbPosOf(pendingRange);
+ nbUpsert(t,'key',{data:nbKeyData(html,pos)});
+ refreshNbPopup(t,x,y,false);
+}
+/* 📝 Delete (note) now also deletes the saved key on the same anchor; the recording stays. */
+function nbDeleteNoteKey(t){
+ const st=nbPopState(t);
+ const keys=nbRows('key',t);
+ if(keys.length){layer=layer.filter(r=>!(r.type==='key'&&r.anchor===t));keys.forEach(r=>send({action:'del',id:r.id}));}
+ if(st.note){nbDeleteItem(t,'note');}
+ else{refreshNbPopup(t,popXY.x,popXY.y,false);}
+}
+/* the popup carries EIGHT buttons, and ALL of them always exist (owner spec 2026-10-12). ▶ Hear,
    ⏺ Record and 📝 Add/Edit Note are always clickable; the other four light up only when they apply and
    are otherwise GREYED OUT (never hidden). What applies comes from nbPopState(t) — the recording(s)
    and the note the gesture refers to:
@@ -342,22 +374,26 @@ function nbPopHTML(t,editing){
  const st=nbPopState(t);
  const play=!!st.rec,ambig=st.recs.length>1;   /* one recording involved vs more than one */
  const nb=nbNoteDisplay(t);
+ const key=nbKeyDisplay(t);
  /* ▶ Play and 🔊 Delete act on the SAME single recording; while more than one is involved both carry
     the disabled LOOK (.locked) and their press only toasts NB_REC_AMBIG (owner spec 2026-10-12 #2). */
  const playAttr=play?' title="ouvir a gravação selecionada"':(ambig?' class="locked" aria-disabled="true" title="'+NB_REC_AMBIG+'"':' disabled title="nada para ouvir"');
  const audioAttr=play?' title="apagar somente a gravação (áudio)"':(ambig?' class="locked" aria-disabled="true" title="'+NB_REC_AMBIG+'"':' disabled title="nada para apagar"');
  /* the popup does NOT repeat the selected text: the phrase is right
     there in the page, so a title echoing it is redundant. #pTitle stays as an empty anchor so a
-    refresh can keep targeting a stable node. */
+    refresh can keep targeting a stable node. The pronunciation key (🔤 key) sits ONE LINE ABOVE the
+    saved note and is rendered RAW (trusted dictionary markup), never escaped. */
+ const keyHTML=key!=null?'<div id="nbKey" title="chave de pronúncia">'+key+'</div>':"";
  const noteHTML=nb!=null?'<div id="nbNote" title="nota salva">'+nbEsc(nb)+'</div>':"";
- return '<div id="pTitle"></div>'+noteHTML+
+ return '<div id="pTitle"></div>'+keyHTML+noteHTML+
   '<span class="poprow"><button id="pH" title="ouvir em voz alta">▶ Hear</button>'+
   '<button id="pP"'+playAttr+'><span class="lbl">▶ Play</span></button>'+
   '<button id="pR"'+(st.recs.length?' class="locked" aria-disabled="true" title="'+NB_REC_LOCKED+'"':' title="gravar"')+'><span class="lbl">⏺ Record</span></button>'+
   '<button id="pA"'+audioAttr+'><span class="lbl">🔊 Delete</span></button></span>'+
-  '<span class="poprow"><button id="pN">📝 Add/Edit Note</button>'+
+  '<span class="poprow"><button id="pN">📝 note</button>'+
+  '<button id="pK" title="chave de pronúncia da palavra selecionada">🔤 key</button>'+
   '<button id="pS" title="salvar a nota"'+(editing?"":' disabled')+'>💾 Save</button>'+
-  '<button id="pD" title="apagar somente a nota"'+(st.note?"":' disabled')+'>📝 Delete</button></span>';
+  '<button id="pD" title="apagar a nota e a chave"'+(st.note||key!=null?"":' disabled')+'>📝 Delete</button></span>';
 }
 /* wire a freshly-opened .pop for an anchor: range = the live selection when the popup came from
    one (null when it came from a click on the mark). Shared by trySelPopup and showAnchor. Every
@@ -413,14 +449,16 @@ function nbWirePopup(t,r,x,y){
   nbWirePopup(t,r,x,y);
   pop.querySelector("#nt").focus();
  };
+ const K=pop.querySelector("#pK");
+ if(K)K.onclick=()=>{nbKeyLookup(t,r,x,y)};
  const S=pop.querySelector("#pS");
  if(S)S.onclick=()=>{if(S.disabled)return;nbSaveNote(t,x,y)};
  const D=pop.querySelector("#pD");
- /* 📝 Delete drops ONLY the note the gesture refers to and 🔊 Delete ONLY the recording (nbDeleteItem):
-    the two items are independent, so neither button can take the other one with it (owner spec
-    2026-10-12 #2). 🔊 Delete acts on the same single recording ▶ Play would play; with more than one
-    involved it carries the disabled LOOK and toasts NB_REC_AMBIG instead of guessing. */
- if(D)D.onclick=()=>{if(D.disabled)return;nbDeleteItem(t,"note")};
+ /* 📝 Delete drops the note AND the saved key on the same anchor (🔤 key); 🔊 Delete drops ONLY the
+    recording (nbDeleteItem). The recording stays independent either way (owner spec 2026-10-12 #2).
+    🔊 Delete acts on the same single recording ▶ Play would play; with more than one involved it
+    carries the disabled LOOK and toasts NB_REC_AMBIG instead of guessing. */
+ if(D)D.onclick=()=>{if(D.disabled)return;nbDeleteNoteKey(t)};
  const A=pop.querySelector("#pA");
  if(A)A.onclick=()=>{if(A.disabled)return;
   if(A.classList.contains("locked")){toast(NB_REC_AMBIG);return}
