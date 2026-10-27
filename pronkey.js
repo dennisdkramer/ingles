@@ -37,6 +37,25 @@ window.PronKey = (function () {
   // the reduced key for a dictionary row - column 5 = L2 output (index 4)
   function key2(row) { return row ? String(row[4] || '') : ''; }
 
+  // minimal display render: expand a compact L1/L2 string (e.g. "di-ffə-rə[nt]") to HTML —
+  // bold core, grey [hanging letters], "·" between syllables. This is DISPLAY only, not generation.
+  function render(compact) {
+    return String(compact == null ? '' : compact).split('-').map(function (syl) {
+      let html = '', buf = '';
+      const flush = () => { if (buf) { html += '<b>' + buf + '</b>'; buf = ''; } };
+      for (let i = 0; i < syl.length; i++) {
+        const ch = syl[i];
+        if (ch === '[') {
+          const j = syl.indexOf(']', i);
+          if (j < 0) { buf += ch; }
+          else { flush(); html += '<span class="pr-g">' + syl.slice(i + 1, j) + '</span>'; i = j; }
+        } else { buf += ch; }
+      }
+      flush();
+      return html;
+    }).join('·');
+  }
+
   // one word through the whole pipeline
   function process(word) {
     let row = lookup(word);
@@ -57,6 +76,7 @@ window.PronKey = (function () {
     lookup: lookup,
     key: key,
     key2: key2,
+    render: render,
     process: process,
     addToDictionary: addToDictionary,
     keyGen: keyGen,

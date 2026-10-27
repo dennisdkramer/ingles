@@ -395,7 +395,7 @@ function nbPopHTML(t,editing){
  /* the popup does NOT repeat the selected text. The key line and the note line sit BELOW the buttons
     (key first, then note); the note is hidden while its editor is open, and the key is rendered RAW
     (trusted dictionary markup), never escaped. */
- const keyHTML=key!=null?'<div id="nbKey" title="chave de pronúncia">'+key+'</div>':"";
+ const keyHTML=key!=null?'<div id="nbKey" title="chave de pronúncia">'+(window.PronKey&&window.PronKey.render?window.PronKey.render(key):key)+'</div>':"";
  const noteHTML=nb!=null?'<div id="nbNote" title="nota salva"'+(editing?' style="display:none"':'')+'>'+nbEsc(nb)+'</div>':"";
  const ntWrap='<div id="ntWrap"'+(editing?'':' style="display:none"')+'><textarea id="nt" rows="3" placeholder="write a note…">'+nbEsc(nbNoteText(t)||"")+'</textarea></div>';
  return '<div id="pTitle"></div>'+
