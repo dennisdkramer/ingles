@@ -10,19 +10,20 @@ Token thrift is only a tie-breaker between two approaches that are equally corre
 
 ## RULE 2 — PROMPT PARSING AND TASK BATCHING
 Full initiative applies to ANALYSIS, PLANNING, and CONTENT GENERATION. Initiative in inference/bypassing uncertainty is low and must not conflict with any rules, specs, or guidelines.
-Step 1 of task execution is to analyse the goals and elements of the user prompt: Carefully parse language considering task context. If scope touches on a category file during parsing, pause parsing, load the file (or its appropriately scoped section), integrate into parse context, and continue or restart prompt parsing as appropriate.
-If prompt parsing is uncertain or generates conflict, execute only extremely limited attempts at resolution. If unsuccessful, pause processing and check in.
-Once parsed, identify and react to the following elements:
+Step 1 of task execution is to analyse the goals and elements of the user prompt.  Carefully parse language considering task context. If prompt instructs or requires a condition, makes a specific request, or sequences steps, these elements must be strictly followed. If scope of prompt relates to a file during parsing, pause parsing and load that file, then continue as appropriate.
+If uncertainty or conflict arise during parsing, if parsed intent us unclear, or if parsed intent conflicts in any way with any guidance, spec, or existing content, execute extremely limited attempts to reconcile. If reconciliation fails or is incomplete, pause processing and check in.
+After successful prompt parse and intent synthesis, identify any cases of the following:
 - Explicit Requests and their connected details
 - High-Confidence Implicit or Question-formatted Instructions - linguistic and contextual certainty required, else re-classify below
 - Questions to be answered (assess and answer, never consider as an instruction)
 - Examples, facts, issues, behavior, or rhetorical questions which point to principles or intent 
 - Planning dialog, discussion, and clarifications
 
-When appropriate for long or complicated prompts, make a quick high-level judgement of which instructions must be handled together, in which order they will be addressed, and whether any parts of the prompt should be parked until after step completion
-If you choose to do so, batch prompt parts as appropriate and park in PENDING.md After prior step completion, load subsequent batch into memory, remove from PENDING.md, and begin next step.
+ Next, make a high-level judgement call: In which order or  batches must, will, or should the prompt  be addressed? Elements or batches be parked in PENDING.md to simpify active step as necessary.
 
-Assess the intent of the given step and interact with necessary files in accordance with their purposes as follows:
+After that, define scope of current step and interact with/read files as necessary.
+
+File purpose and content as follows:
 - Deferred / parked / plans and tasks → PARKED.md
 - Context handoffs between sessions → HANDOFF.md
 - Parked Bugs/Issues/problems → ISSUES.md
@@ -36,8 +37,8 @@ Assess the intent of the given step and interact with necessary files in accorda
 - Repository layout / file map → FILESYSTEM.md
 - Lesson Pages (HTML) hold prose
 
-When RESUMING work from these files, first sanity-check for no conflicts and relevance to current project state before acting
-When uncertainty or conflict is exists during step execution, apply only extremely limited attempts at resolution. Then, if still unresolved, pause processing and check in.
+When RESUMING (prior-task) work from these files, begin by sanity-checking relevance to current project state and lack of conflict before acting.
+When uncertainty or conflict arises during step execution, try quantitatively limited but thoughtful attempts to reconcile. If reconciliation fails or is incomplete, pause processing and check in.
 
 
 ## RULE 3 — VERIFY WHAT NEEDS VERIFYING
