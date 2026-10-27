@@ -108,6 +108,26 @@ window.PronKey = (function () {
     return { breaks, stress };
   }
 
+  /* Rechunk rule #1 (first syllable): when column 2 starts with a vowel and that vowel is
+     immediately followed by a consonant with NO break between them, the first syllable runs up to
+     and including that consonant — recovering the consonant-cluster boundary the vowel-following
+     filter dropped. Unchanged when there is no such consonant, or it is the whole word. */
+  function rechunk(marked) {
+    const s = String(marked || '');
+    const starIdx = s.indexOf('*');
+    const body = starIdx >= 0 ? s.slice(0, starIdx) + s.slice(starIdx + 1) : s;
+    const V = 'aeiouyAEIOUY';
+    if (!body.length || V.indexOf(body[0]) < 0) return s;
+    const end = body.indexOf('-') < 0 ? body.length : body.indexOf('-');
+    let c = -1;
+    for (let i = 1; i < end; i++) if (V.indexOf(body[i]) < 0) { c = i; break; }
+    if (c < 0 || c >= body.length - 1) return s;
+    const out = body.slice(0, c + 1) + '-' + body.slice(c + 1);
+    if (starIdx < 0) return out;
+    const starOut = starIdx > c ? starIdx + 1 : starIdx;
+    return out.slice(0, starOut) + '*' + out.slice(starOut);
+  }
+
   // one word through the whole pipeline
   function process(word) {
     let row = lookup(word);
@@ -131,6 +151,7 @@ window.PronKey = (function () {
     render: render,
     derive: derive,
     parseLexicon: parseLexicon,
+    rechunk: rechunk,
     process: process,
     addToDictionary: addToDictionary,
     keyGen: keyGen,

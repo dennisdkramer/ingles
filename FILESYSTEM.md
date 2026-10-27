@@ -1,5 +1,5 @@
 # FILESYSTEM — repository map
-- root: index.html · style.css · engine1.js · engine2.js · pron.js · pronkey.js · logo.png · access.json · .gitignore · package.json
+- root: index.html · style.css · engine1.js · engine2.js · pron.js · pronkey.js · logo.png · access.json · .gitignore · package.json · EXCEPTIONS.md
 - spec/rule files: HARNESS.md (read-first hub + rules) · PENDING.md (active subtask plan) · PARKED.md (backlog of queued/parked work) · HANDOFF.md (session handoffs) · ISSUES.md (bugs/problems) · FUNCTION.md (behaviour + backend + edit mode) · FORMAT.md (site structure & formatting) · CONTENT.md (content handling) · PEDAGOGY.md (teaching side) · VOCABULARY.md (concept inventory) · STATUS.md (state & shared parameters) · VERIFICATION.md (how to QA) · FILESYSTEM.md (this map)
 - pages: business/lesson1.html … business/lesson34.html · kids/lesson1.html · nsfw/lesson1.html — backend/Code.gs — qa/smoke.mjs (jsdom suite, run with `node qa/smoke.mjs`) — qa/content.mjs (structure) — qa/overflow.mjs (layout) — qa/live.mjs (real-Chrome CDP harness, run with `node qa/live.mjs`) — node_modules/ (untracked, gitignored)
 - A file that the current batch does not reference is assumed fully functional; only a verification step proves otherwise.
