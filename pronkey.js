@@ -57,29 +57,29 @@ window.PronKey = (function () {
   }
 
   /* ---- lexicon annotation derivation ------------------------------------------------
-     derive(word, breaks, stress) -> { count, marked }
-       breaks : spelling char indices where the LEXICON marks a syllable break (the FULL set).
-       stress : 0-based index of the stressed syllable.
+     derive(word, breaks, stressChar) -> { count, marked }
+       breaks     : spelling char indices of the AUTHORED syllable breaks (the FULL set).
+       stressChar : char index of the stressed syllable's first letter.
        Keeps only the breaks that FOLLOW A VOWEL (the only boundaries we trust), and places
-       "*" at the start of the stressed syllable — remapped onto the FULL breaks so a dropped
-       break never moves the stress. */
-  function derive(word, breaks, stress) {
+       "*" at stressChar — anchored to the spelling, so it is immune to rechunking. */
+  function derive(word, breaks, stressChar) {
     const W = String(word || '');
     const V = 'aeiouyAEIOUY';
     const full = (breaks || []).slice();
     const kept = full.filter(b => b > 0 && b < W.length && V.indexOf(W[b - 1]) >= 0);
-    const start = stress > 0 && full[stress - 1] != null ? full[stress - 1] : 0;
     const marks = new Set(kept);
     let out = '';
     for (let i = 0; i < W.length; i++) {
       if (marks.has(i)) out += '-';
-      if (i === start) out += '*';
+      if (i === stressChar) out += '*';
       out += W[i];
     }
     return { count: full.length + 1, marked: out };
   }
 
-  /* parse a lexicon source into derive()'s {breaks, stress} contract.
+  /* SEED helper: parse a lexicon source into derive()'s {breaks, stressChar} contract.
+     This is only a starting point — count/stress/breaks are ultimately AUTHORED from our own
+     knowledge of English (the external source is a cross-check, not the authority).
      hyph : spelling syllabification, e.g. "busi|ness" (separators | · -) — EXACT when present.
      ipa  : IPA with primary stress ˈ and (usually) syllable dots ".".
      Without hyph, breaks are inferred from the IPA dot count mapped onto the spelling's vowels
@@ -100,12 +100,13 @@ window.PronKey = (function () {
       for (let k = 0; k < Math.min(dots, vp.length - 1); k++) breaks.push(vp[k] + 1);
     }
     const bare = String(ipa || '').replace(/^\/|\/$/g, '');
-    let stress = 0;
+    let stressIdx = 0;
     for (let i = 0, seen = false; i < bare.length; i++) {
       if (bare[i] === 'ˈ') seen = true;
-      else if (bare[i] === '.' && !seen) stress++;
+      else if (bare[i] === '.' && !seen) stressIdx++;
     }
-    return { breaks, stress };
+    const stressChar = stressIdx > 0 && breaks[stressIdx - 1] != null ? breaks[stressIdx - 1] : 0;
+    return { breaks, stressChar };
   }
 
   /* Rechunk rule #1 (first syllable): when column 2 starts with a vowel and that vowel is
