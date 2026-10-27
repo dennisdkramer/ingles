@@ -266,6 +266,9 @@ function renderLayer(){
   if(it.type==="note"&&it.anchor){
    if(!pendingFor(it.id))ntRestore(it);
   }
+  if((it.type==="key1"||it.type==="key2")&&it.anchor){
+   if(!pendingFor(it.id))ntRestore(it);
+  }
  });
  /* a highlight whose server row no longer exists leaves the layer (the server is the truth);
     one with a local action still pending (add/set/del) stays exactly as the UI left it until
@@ -273,7 +276,7 @@ function renderLayer(){
  const hlIds=new Set(layer.filter(it=>it.type==="hl"&&it.anchor).map(it=>it.id));
  hlList=hlList.filter(rec=>hlIds.has(rec.id)||pendingFor(rec.id));
  hlReflow();
- const ntIds=new Set(layer.filter(it=>it.type==="note"&&it.anchor).map(it=>it.id));
+ const ntIds=new Set(layer.filter(it=>(it.type==="note"||it.type==="key1"||it.type==="key2")&&it.anchor).map(it=>it.id));
  ntList=ntList.filter(rec=>ntIds.has(rec.id)||pendingFor(rec.id));
  ntReflow();
  const fdx=document.getElementById("feed");
@@ -287,8 +290,8 @@ function renderLayer(){
 
 /* fallback: nenhum engine define window.showAnchor;
    sem isto, clique simples em uma frase marcada lançaria ReferenceError no handler de click.
-   Reapresenta o popup de oito botões (▶ Hear / ▶ Play / ⏺ Record / 🔊 Delete / 📝 note / 🔤 key /
-   💾 Save / 📝 Delete; os que não se aplicam ficam desabilitados) para a âncora clicada. Usa os
+   Reapresenta o popup de oito botões (▶ Hear / ▶ Play / ⏺ Record / 🔊 Delete / 📝 Note·Save / 🔤 Key 1 /
+   🔤 Key 2 / 📝 Delete; os que não se aplicam ficam desabilitados) para a âncora clicada. Usa os
    mesmos helpers do popup de seleção (engine1.js), então os dois pontos de entrada — selecionar ou
    clicar na marca — se comportam igual. Passa a ÁREA da marca (um Range real), não r=null, para que
    openNbPopup resolva por SOBREPOSIÇÃO (nbPopState): clicar numa gravação que cruza uma nota apresenta

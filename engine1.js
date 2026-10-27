@@ -119,9 +119,9 @@ let nbLocal=[];
 /* THE ONE read point of the note/recording layer: `layer` (server truth) plus the local rows the core
    save (nbUpsert) has just written and whose own action is still inside its grace window (nbLocal —
    a poll bringing a snapshot that predates the write must never blink the row off). type = "note" |
-   "rec" | "key"; t = an anchor. Omit both for the whole layer. */
+   "rec" | "key1" | "key2"; t = an anchor. Omit both for the whole layer. */
 function nbRows(type,t){
- const keep=r=>(r.type==="rec"||r.type==="note"||r.type==="key")&&(!type||r.type===type)&&(t==null||r.anchor===t);
+ const keep=r=>(r.type==="rec"||r.type==="note"||r.type==="key1"||r.type==="key2")&&(!type||r.type===type)&&(t==null||r.anchor===t);
  const rows=layer.filter(keep);
  nbLocal=nbLocal.filter(r=>{const p=pendingFor(r.id);return !!p&&p.action!=="del"});
  nbLocal.forEach(r=>{if(!keep(r))return;const i=rows.findIndex(x=>x.id===r.id);
@@ -318,17 +318,26 @@ function nbNoteDisplay(t){
  const s=String(v).replace(/^\s*(?:📝|📌|🗒)\s*/u,"").trim();
  return s?s:null;
 }
-/* ---- pronunciation key (🔤 key) — dictionary lookup + persistence --------------------------
-   The key for the selected word is stored as its OWN row (type 'key', same anchor as a note) so it
-   persists exactly like a note and re-renders whenever the popup opens for that anchor. It carries
-   NO mark in the text — the only place it appears is the popup line above the note. */
-function nbKeyText(t){const e=nbEntries(t).find(it=>it.type==='key');return e?nbNoteTextOf(e.data):null}
-function nbKeyDisplay(t){const v=nbKeyText(t);return v?v:null}
+/* ---- pronunciation key (🔤 Key 1 / 🔤 Key 2) — dictionary lookup + persistence -----------------
+   Key 1 = L1 output (careful), Key 2 = L2 output (reduced). Each is stored as its OWN row type
+   ("key1"/"key2") on the same anchor as a note and painted with the note's blue wash; the two are
+   mutually exclusive (saving one deletes the other). The key line sits BELOW the popup buttons. */
+function nbKeyText(t,type){const e=nbEntries(t).find(it=>it.type===type);return e?nbNoteTextOf(e.data):null}
+function nbKey1Text(t){return nbKeyText(t,'key1')}
+function nbKey2Text(t){return nbKeyText(t,'key2')}
+function nbKeyDisplay(t){return nbKey1Text(t)||nbKey2Text(t)||null}
 const nbKeyData=(html,pos)=>JSON.stringify(pos?{t:String(html),b:pos.b,o:pos.o}:{t:String(html)});
-/* the 🔤 key button: parse the anchor into words (partial words thrown out), take the FIRST word
-   found in the custom dictionary, and persist its key one line above the note. A word outside the
-   dictionary triggers addToDictionary()/keyGen() (stubs in pronkey.js — dead for now). */
-function nbKeyLookup(t,r,x,y){
+/* drop every row of one key type on the anchor and its blue wash (the OTHER key type survives) */
+function nbDeleteKeyRows(t,type){
+ const rows=nbRows(type,t);
+ if(!rows.length)return;
+ layer=layer.filter(r=>!(r.type===type&&r.anchor===t));
+ rows.forEach(r=>{send({action:'del',id:r.id});ntDrop(r.id);});
+}
+/* 🔤 Key 1 / 🔤 Key 2: parse the anchor into words (partial words thrown out), take the FIRST word
+   found in the custom dictionary, and persist its key (level 1 or 2) below the buttons, painted with
+   the note's blue wash. A word outside the dictionary triggers addToDictionary()/keyGen() (stubs). */
+function nbKeyLookup(t,r,x,y,level){
  if(typeof window.PronKey!=='object'||!window.PronKey){toast('Chave de pronúncia indisponível.');return}
  if(!Array.isArray(window.PRON)||window.PRON.length<3){toast('Dicionário de pronúncia não carregado nesta lição.');return}
  const ws=window.PronKey.words(t);
@@ -336,17 +345,20 @@ function nbKeyLookup(t,r,x,y){
  let found=null;
  for(const w of ws){const row=window.PronKey.lookup(w);if(row){found={w:w,row:row};break}}
  if(!found){for(const w of ws)window.PronKey.process(w);toast('Palavra fora do dicionário — em construção.');return}
- const html=window.PronKey.key(found.row);
+ const type=level===2?'key2':'key1';
+ const html=level===2?window.PronKey.key2(found.row):window.PronKey.key(found.row);
  if(!html){toast('Chave vazia para ' + found.w + '.');return}
  const pos=nbPosOf(pendingRange);
- nbUpsert(t,'key',{data:nbKeyData(html,pos)});
- refreshNbPopup(t,x,y,false);
+ nbDeleteKeyRows(t,type==='key2'?'key1':'key2');   /* the two levels are mutually exclusive */
+ const id=nbUpsert(t,type,{data:nbKeyData(html,pos)});
+ ntMake(t,pos?pos.b:null,pos?pos.o:null,id);        /* the blue wash marks a key too */
+ refreshNbPopup(t,x,y);
 }
-/* 📝 Delete (note) now also deletes the saved key on the same anchor; the recording stays. */
+/* 📝 Delete (note) also deletes any saved key on the same anchor; the recording stays. */
 function nbDeleteNoteKey(t){
  const st=nbPopState(t);
- const keys=nbRows('key',t);
- if(keys.length){layer=layer.filter(r=>!(r.type==='key'&&r.anchor===t));keys.forEach(r=>send({action:'del',id:r.id}));}
+ nbDeleteKeyRows(t,'key1');
+ nbDeleteKeyRows(t,'key2');
  if(st.note){nbDeleteItem(t,'note');}
  else{refreshNbPopup(t,popXY.x,popXY.y,false);}
 }
@@ -375,25 +387,27 @@ function nbPopHTML(t,editing){
  const play=!!st.rec,ambig=st.recs.length>1;   /* one recording involved vs more than one */
  const nb=nbNoteDisplay(t);
  const key=nbKeyDisplay(t);
+ const k1=!!nbKey1Text(t), k2=!!nbKey2Text(t);
  /* ▶ Play and 🔊 Delete act on the SAME single recording; while more than one is involved both carry
     the disabled LOOK (.locked) and their press only toasts NB_REC_AMBIG (owner spec 2026-10-12 #2). */
  const playAttr=play?' title="ouvir a gravação selecionada"':(ambig?' class="locked" aria-disabled="true" title="'+NB_REC_AMBIG+'"':' disabled title="nada para ouvir"');
  const audioAttr=play?' title="apagar somente a gravação (áudio)"':(ambig?' class="locked" aria-disabled="true" title="'+NB_REC_AMBIG+'"':' disabled title="nada para apagar"');
- /* the popup does NOT repeat the selected text: the phrase is right
-    there in the page, so a title echoing it is redundant. #pTitle stays as an empty anchor so a
-    refresh can keep targeting a stable node. The pronunciation key (🔤 key) sits ONE LINE ABOVE the
-    saved note and is rendered RAW (trusted dictionary markup), never escaped. */
+ /* the popup does NOT repeat the selected text. The key line and the note line sit BELOW the buttons
+    (key first, then note); the note is hidden while its editor is open, and the key is rendered RAW
+    (trusted dictionary markup), never escaped. */
  const keyHTML=key!=null?'<div id="nbKey" title="chave de pronúncia">'+key+'</div>':"";
- const noteHTML=nb!=null?'<div id="nbNote" title="nota salva">'+nbEsc(nb)+'</div>':"";
- return '<div id="pTitle"></div>'+keyHTML+noteHTML+
+ const noteHTML=nb!=null?'<div id="nbNote" title="nota salva"'+(editing?' style="display:none"':'')+'>'+nbEsc(nb)+'</div>':"";
+ const ntWrap='<div id="ntWrap"'+(editing?'':' style="display:none"')+'><textarea id="nt" rows="3" placeholder="write a note…">'+nbEsc(nbNoteText(t)||"")+'</textarea></div>';
+ return '<div id="pTitle"></div>'+
   '<span class="poprow"><button id="pH" title="ouvir em voz alta">▶ Hear</button>'+
   '<button id="pP"'+playAttr+'><span class="lbl">▶ Play</span></button>'+
   '<button id="pR"'+(st.recs.length?' class="locked" aria-disabled="true" title="'+NB_REC_LOCKED+'"':' title="gravar"')+'><span class="lbl">⏺ Record</span></button>'+
   '<button id="pA"'+audioAttr+'><span class="lbl">🔊 Delete</span></button></span>'+
-  '<span class="poprow"><button id="pN">📝 note</button>'+
-  '<button id="pK" title="chave de pronúncia da palavra selecionada">🔤 key</button>'+
-  '<button id="pS" title="salvar a nota"'+(editing?"":' disabled')+'>💾 Save</button>'+
-  '<button id="pD" title="apagar a nota e a chave"'+(st.note||key!=null?"":' disabled')+'>📝 Delete</button></span>';
+  '<span class="poprow"><button id="pN" title="nota">'+(editing?'💾 Save':'📝 Note')+'</button>'+
+  '<button id="pK" title="chave de pronúncia (nível 1)"'+(k1?' disabled':'')+'>🔤 Key 1</button>'+
+  '<button id="pS" title="chave de pronúncia (nível 2)"'+(k2?' disabled':'')+'>🔤 Key 2</button>'+
+  '<button id="pD" title="apagar a nota e as chaves"'+(st.note||k1||k2?"":' disabled')+'>📝 Delete</button></span>'+
+  keyHTML+noteHTML+ntWrap;
 }
 /* wire a freshly-opened .pop for an anchor: range = the live selection when the popup came from
    one (null when it came from a click on the mark). Shared by trySelPopup and showAnchor. Every
@@ -443,21 +457,17 @@ function nbWirePopup(t,r,x,y){
  if(R)R.onclick=()=>{if(R.classList.contains("locked")){toast(NB_REC_LOCKED);return}if(pop&&pop.dataset.recording){if(recStop){recStop();recStop=null}return}rec(t,R)};
  const N=pop.querySelector("#pN");
  if(N)N.onclick=()=>{
-  const ta=pop.querySelector("#nt"),cur=ta?ta.value:null;
-  /* a fresh editor is prefilled with the saved note (a change never silently wipes the old one) */
-  openPop(t,x,y,nbPopHTML(t,true)+'<textarea id="nt" rows="3" placeholder="write a note…">'+nbEsc(cur!=null?cur:(nbNoteText(t)||""))+'</textarea>');
-  nbWirePopup(t,r,x,y);
-  pop.querySelector("#nt").focus();
+  const w=pop.querySelector("#ntWrap");
+  if(w&&w.style.display!=="none"){nbSaveNote(t,x,y)}   /* editing → the note button acts as Save */
+  else{nbNoting(t,r,x,y)}                              /* note mode → open the editor */
  };
  const K=pop.querySelector("#pK");
- if(K)K.onclick=()=>{nbKeyLookup(t,r,x,y)};
+ if(K)K.onclick=()=>{if(K.disabled)return;nbKeyLookup(t,r,x,y,1)};
  const S=pop.querySelector("#pS");
- if(S)S.onclick=()=>{if(S.disabled)return;nbSaveNote(t,x,y)};
+ if(S)S.onclick=()=>{if(S.disabled)return;nbKeyLookup(t,r,x,y,2)};
  const D=pop.querySelector("#pD");
- /* 📝 Delete drops the note AND the saved key on the same anchor (🔤 key); 🔊 Delete drops ONLY the
-    recording (nbDeleteItem). The recording stays independent either way (owner spec 2026-10-12 #2).
-    🔊 Delete acts on the same single recording ▶ Play would play; with more than one involved it
-    carries the disabled LOOK and toasts NB_REC_AMBIG instead of guessing. */
+ /* 📝 Delete drops the note AND any saved key on the same anchor (🔤 Key 1 / 🔤 Key 2); 🔊 Delete
+    drops ONLY the recording (nbDeleteItem). The recording stays independent either way. */
  if(D)D.onclick=()=>{if(D.disabled)return;nbDeleteNoteKey(t)};
  const A=pop.querySelector("#pA");
  if(A)A.onclick=()=>{if(A.disabled)return;
@@ -516,11 +526,25 @@ function nbExpandNote(anchor,plan){
  nbUnflag(anchor,"has-note");
  return m;
 }
+/* close the note editor IN PLACE (no popup re-render): the note button reverts to 📝 Note, the
+   textarea hides, the saved note (if any) is revealed and 📝 Delete lights up. */
+function nbNoteEditorClose(t){
+ if(!pop)return;
+ const w=pop.querySelector("#ntWrap"),b=pop.querySelector("#pN");
+ if(w)w.style.display="none";
+ const disp=t!=null?nbNoteDisplay(t):null;
+ let d=pop.querySelector("#nbNote");
+ if(disp!=null){
+  if(!d){d=document.createElement("div");d.id="nbNote";d.title="nota salva";pop.insertBefore(d,w||null);}
+  d.innerHTML=nbEsc(disp);d.style.display="";
+ }else if(d){d.remove();}
+ if(b)b.textContent="📝 Note";
+ const pD=pop.querySelector("#pD");if(pD)pD.disabled=!(disp!=null||!!nbKey1Text(t)||!!nbKey2Text(t));
+}
 function nbSaveNote(t,x,y){
  if(!pop)return;
- const ta=pop.querySelector("#nt");if(!ta)return;   /* 💾 Save is live only while editing — never throw */
+ const ta=pop.querySelector("#nt");if(!ta)return;   /* Save is live only while editing — never throw */
  const v=ta.value.trim();
- if(!v){refreshNbPopup(t,x,y,false);return}   /* an empty note just closes the editor, never the popup */
  /* OWNER RULE (overlaps): the popup came from a selection that OVERLAPPED this note (nbSel.expand,
     planned by openNbPopup) → the note's AREA expands to the new selection and the union's text
     becomes its anchor; a selection strictly INSIDE the note plans no expansion, so the note keeps its
@@ -529,20 +553,24 @@ function nbSaveNote(t,x,y){
  let to=t,pos=null;
  if(plan){to=plan.anchor;pos=nbPosOf(plan.area);nbSel.expand=null}
  else{pos=nbPosOf(pendingRange);to=nbSpanText(pendingRange)||t}
+ if(!v){if(to!==t){refreshNbPopup(to,x,y,false);return}nbNoteEditorClose(t);return}   /* empty → close, no blank save */
  const id=nbUpsert(to,"note",{data:nbNoteData(v,pos)},plan?t:null);   /* same id → REPLACES the row (re-anchored when it grew) */
  ntMake(to,pos?pos.b:null,pos?pos.o:null,id);   /* paint the note's wash on its own layer */
- refreshNbPopup(to,x,y,false);   /* 💾 Save LEAVES the edit state (FUNCTION.md): Save greys again */
+ if(to!==t){refreshNbPopup(to,x,y,false);return}   /* re-anchored → full refresh */
+ nbNoteEditorClose(to);   /* reveal the just-saved note; the note button reverts to 📝 Note */
 }
 /* rebuild the popup's buttons for the current state (the two arrays change with saved content and
-   the textarea is dropped once the note is saved) — the LIVE note text is kept when edition is in
+   the textarea is hidden once the note is saved) — the LIVE note text is kept when edition is in
    flight so refreshing the wording never loses what was typed. */
 function refreshNbPopup(t,x,y,editing){
  if(!pop)return;
  const ta=pop.querySelector("#nt"),cur=ta?ta.value:null;
- /* editing is EXPLICIT when passed: 💾 Save must drop the editor even though the popup it is
+ const w=pop.querySelector("#ntWrap");
+ /* editing is EXPLICIT when passed: Save must drop the editor even though the popup it is
     called from still holds #nt. Omitted → keep the current state (any future caller). */
- if(editing===undefined)editing=!!ta;
- openPop(t,x,y,nbPopHTML(t,editing)+(editing?'<textarea id="nt" rows="3" placeholder="write a note…">'+nbEsc(cur!=null?cur:"")+'</textarea>':''));
+ if(editing===undefined)editing=!!(w&&w.style.display!=="none");
+ openPop(t,x,y,nbPopHTML(t,editing));
+ if(editing&&cur!=null){const nt=pop.querySelector("#nt");if(nt)nt.value=cur;}
  applyPopupZoom();
  nbWirePopup(t,null,x,y);
 }
@@ -567,7 +595,8 @@ function openNbPopup(t,r,x,y){
  /* the range the save wraps, TRIMMED to the anchor (nbSelArea): a mark covers exactly its own anchor
     text, so two abutting saves can never share the boundary space */
  pendingRange=(target?nbAreaRange(target):null)||(r?r.cloneRange():null);
- openPop(anchor,x,y,nbPopHTML(anchor,!!pop&&!!pop.querySelector("#nt")));
+ const wasEditing=!!(pop&&pop.querySelector("#ntWrap")&&pop.querySelector("#ntWrap").style.display!=="none");
+ openPop(anchor,x,y,nbPopHTML(anchor,wasEditing));
  nbPlacePopup(r,x,y,true);
  nbWirePopup(anchor,pendingRange,popXY.x,popXY.y);
 }
@@ -580,17 +609,19 @@ function markRecording(t,r){
  if(r){const m=wrapRange(t,r,"rec");if(m)nbFlagAt(t,nbMarkPos(m)||nbPosOf(r),"has-rec");return m}
  return ensureMark(t,"rec");      /* ensureMark paints the anchor's text AND flags it has-rec */
 }
-/* 📝 Add/Edit Note (owner spec 2026-10-12): the editor opens over the SAME popup (every button
-   stays; the seven buttons simply re-render, and Save lights up). When the phrase already HAS a note
-   the editor is prefilled with it, so a change never silently wipes the old one. Pre-focusing the
-   textarea keeps the popup open while the user types (the outside-click-to-close listener fires on
-   mousedown). Nothing here touches mark.nb — the blue wash is applied only by nbSaveNote/💾 Save,
-   never by clicking the note button. */
+/* 📝 Note (owner spec): clicking the note button opens the editor IN PLACE — the saved note hides,
+   the textarea shows and the button itself becomes 💾 Save WITHOUT being re-drawn (its label swaps
+   in place, so its size never changes). The editor is prefilled with the saved note, so a change
+   never silently wipes the old one. Nothing here touches the blue wash — it is applied only by
+   nbSaveNote (the same button acting as Save), never by merely opening the editor. */
 function nbNoting(t,r,x,y){
- const cur=nbNoteText(t)||"";
- openPop(t,x,y,nbPopHTML(t,true)+'<textarea id="nt" rows="3" placeholder="write a note…">'+nbEsc(cur)+'</textarea>');
- nbWirePopup(t,r,x,y);
- try{pop.querySelector("#nt").focus()}catch(e){}
+ if(!pop)return;
+ const w=pop.querySelector("#ntWrap"),ta=pop.querySelector("#nt"),nb=pop.querySelector("#nbNote"),b=pop.querySelector("#pN");
+ if(ta)ta.value=nbNoteText(t)||"";
+ if(w)w.style.display="";
+ if(nb)nb.style.display="none";
+ if(b)b.textContent="💾 Save";
+ try{if(ta)ta.focus()}catch(e){}
 }
 /* ▶ Play recording (owner spec 2026-10-12): the phrase's saved recording, played back on demand.
    Audio never sits in the layer — the row carries only the Drive fileId (uploaded clips) or the

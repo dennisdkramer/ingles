@@ -759,21 +759,21 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 window.showAnchor(stText, 20, 40);
                 const qp = sel => window.document.querySelector('.pop ' + sel);
                 const playBtn = qp('#pP'), recBtn = qp('#pR'), noteBtn = qp('#pN'),
-                      saveBtn = qp('#pS'), del2 = qp('#pD'), hearBtn = qp('#pH'), delRec2 = qp('#pA');
-                if (!playBtn || !recBtn || !noteBtn || !saveBtn || !del2 || !hearBtn || !delRec2) {
-                    errors.push('[FAIL] the popup must always show ALL SEVEN buttons (Hear/Play/Record/Delete-audio/Add-Edit Note/Save/Delete-note)');
+                      key1Btn = qp('#pK'), key2Btn = qp('#pS'), del2 = qp('#pD'), hearBtn = qp('#pH'), delRec2 = qp('#pA');
+                if (!playBtn || !recBtn || !noteBtn || !key1Btn || !key2Btn || !del2 || !hearBtn || !delRec2) {
+                    errors.push('[FAIL] the popup must always show ALL EIGHT buttons (Hear/Play/Record/Delete-audio/Note/Key1/Key2/Delete-note)');
                 } else if (playBtn.disabled || delRec2.disabled) {
                     errors.push('[FAIL] ▶ Play and 🔊 Delete must be enabled when the phrase has its own saved recording');
-                } else if (recBtn.disabled || noteBtn.disabled) {
-                    errors.push('[FAIL] ⏺ Record and 📝 Add/Edit Note must always be clickable');
+                } else if (recBtn.disabled || noteBtn.disabled || key1Btn.disabled || key2Btn.disabled) {
+                    errors.push('[FAIL] ⏺ Record, 📝 Note, 🔤 Key 1 and 🔤 Key 2 must always be clickable');
                 } else if (!recBtn.classList.contains('locked')) {
                     errors.push('[FAIL] ⏺ Record must be locked (still pressable) on a phrase that already has a recording');
-                } else if (!saveBtn.disabled) {
-                    errors.push('[FAIL] 💾 Save must be greyed out until a note is being edited');
+                } else if (!/Note/.test(noteBtn.textContent)) {
+                    errors.push('[FAIL] 📝 Note must read "Note" while the editor is closed');
                 } else if (del2.disabled) {
                     errors.push('[FAIL] 📝 Delete must be enabled when the phrase has a saved note');
                 } else {
-                    console.log('   ✅ All seven buttons always present; Play/audio-Delete/note-Delete live, Record locked, Save greyed until editing');
+                    console.log('   ✅ All eight buttons always present; Play/audio-Delete/note-Delete live, Record locked, Note/Key1/Key2 clickable');
                 }
                 /* the popup must NOT repeat the selected phrase (owner spec 2026-10-12) */
                 if (new RegExp(stText).test(window.document.querySelector('.pop').textContent)) {
@@ -804,30 +804,30 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 if (!playLabel) errors.push('[FAIL] ▶ Play has no .lbl span, so the playback spiral cannot be shown');
                 else console.log('   ✅ ▶ Play carries the .lbl span used for the playback spiral');
                 noteBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
-                const saveEdit = qp('#pS');
-                if (!qp('#nt') || !saveEdit || saveEdit.disabled) {
-                    errors.push('[FAIL] 💾 Save must light up (and the editor open) while a note is being edited');
+                const noteSaveBtn = qp('#pN');
+                if (!qp('#nt') || !noteSaveBtn || !/Save/.test(noteSaveBtn.textContent)) {
+                    errors.push('[FAIL] the note button must become 💾 Save (and the editor open) while a note is being edited');
                 } else {
-                    console.log('   ✅ 📝 Add/Edit Note opens the editor and 💾 Save lights up');
+                    console.log('   ✅ 📝 Note opens the editor and becomes 💾 Save');
                     /* OWNER REPORT 2026-10-12: saving an EDITED note did nothing. The save must REPLACE the
                        stored note (nbUpsert re-uses its row id), so after Save the popup shows the NEW text,
                        leaves the edit state, and the layer still holds exactly ONE note row for the anchor */
                     const editTa = qp('#nt');
                     if (editTa) {
                         editTa.value = 'edited note text';
-                        const saveNow = qp('#pS');
+                        const saveNow = qp('#pN');
                         if (saveNow) saveNow.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
                         const shownNow = window.document.querySelector('.pop #nbNote');
                         const noteRows = window.eval(`layer.filter(it=>it.type==='note'&&it.anchor===${JSON.stringify(stText)})`);
-                        const saveAfter = window.document.querySelector('.pop #pS');
+                        const saveAfter = window.document.querySelector('.pop #pN');
                         if (!shownNow || !/edited note text/.test(shownNow.textContent)) {
-                            errors.push('[FAIL] 💾 Save on an edited note did not show the new text (Save looked like a no-op)');
+                            errors.push('[FAIL] saving an edited note did not show the new text (Save looked like a no-op)');
                         } else if (noteRows.length !== 1 || noteRows[0].id !== 'qa_note_1') {
-                            errors.push('[FAIL] 💾 Save on an edited note must REPLACE the stored note row (got ' + noteRows.length + ' row(s))');
-                        } else if (saveAfter && !saveAfter.disabled) {
-                            errors.push('[FAIL] 💾 Save must grey out again once the note has been saved');
+                            errors.push('[FAIL] saving an edited note must REPLACE the stored note row (got ' + noteRows.length + ' row(s))');
+                        } else if (saveAfter && !/Note/.test(saveAfter.textContent)) {
+                            errors.push('[FAIL] the note button must revert to 📝 Note once the note has been saved');
                         } else {
-                            console.log('   ✅ 💾 Save on an edited note REPLACES the stored note (one row, new text, editor closed)');
+                            console.log('   ✅ saving an edited note REPLACES the stored note (one row, new text, editor closed)');
                         }
                     }
                 }
@@ -930,7 +930,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
                     window.showAnchor(gA, 20, 40);
                     window.document.querySelector('.pop #pN').dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
                     window.document.querySelector('.pop #nt').value = 'grace note text';
-                    window.document.querySelector('.pop #pS').dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+                    window.document.querySelector('.pop #pN').dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
                     window.eval('closePop()');
                     /* the snapshot the poll would bring BEFORE the backend write is committed: every
                        row that exists now, MINUS the note that was just saved */
@@ -1023,7 +1023,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
                         nbPress('#pN');
                         const ta = window.document.querySelector('.pop #nt');
                         if (ta) ta.value = text;
-                        nbPress('#pS');
+                        nbPress('#pN');
                         return window.document.querySelector('.pop');
                     };
                     /* (h1) two ABUTTING saves, no shared character */
@@ -1196,7 +1196,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
                                     errors.push('[FAIL] the active note\'s editor was not prefilled with the saved note (' + JSON.stringify(pre ? pre.value : null) + ')');
                                 } else {
                                     pre.value = 'second';
-                                    nbPress('#pS');
+                                    nbPress('#pN');
                                     /* the note's area is EXPANDED to the new selection: the union's text is
                                        its new anchor, ONE row with the SAME id. */
                                     const row = window.eval("nbRows('note').filter(r=>r.anchor==='Note one area')");
@@ -1227,7 +1227,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
                                         nbPress('#pN');
                                         const ta2 = window.document.querySelector('.pop #nt');
                                         if (ta2) ta2.value = 'third';
-                                        nbPress('#pS');
+                                        nbPress('#pN');
                                         const row2 = window.eval("nbRows('note').filter(r=>r.anchor==='Note one area')");
                                         const m2n = window.eval('ntList.some(r=>r.anchor==="Note one area")');
                                         if (!row2 || row2.length !== 1 || row2[0].id !== id0) {

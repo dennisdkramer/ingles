@@ -34,6 +34,8 @@ window.PronKey = (function () {
 
   // the rendered key for a dictionary row - column 4 = L1 output (index 3)
   function key(row) { return row ? String(row[3] || '') : ''; }
+  // the reduced key for a dictionary row - column 5 = L2 output (index 4)
+  function key2(row) { return row ? String(row[4] || '') : ''; }
 
   // one word through the whole pipeline
   function process(word) {
@@ -54,6 +56,7 @@ window.PronKey = (function () {
     words: words,
     lookup: lookup,
     key: key,
+    key2: key2,
     process: process,
     addToDictionary: addToDictionary,
     keyGen: keyGen,
