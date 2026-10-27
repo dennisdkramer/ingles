@@ -3,6 +3,12 @@ A running note for handing context from one session/task to the next: where the 
 
 # PRONUNCIATION DICTIONARY — author columns 1–3 (handoff)
 
+## Purpose (context — HARNESS.md RULE 6)
+A visual aid so beginner Brazilian students SEE why pronunciations/rhythms/reductions happen.
+Every break/stress/cluster decision is judged by: does it teach the correct RHYTHM to a Brazilian
+beginner? Keep clusters whole as onsets (mash); split at true word/compound boundaries; "both-ways"
+→ pick the rhythm-teaching break. See PHONEMES.md for the full unit lists + worked examples.
+
 ## Goal
 Author columns 1–3 of `pron.js` for every dictionary word, from knowledge of English (NO scraping, no derivation code).
 
