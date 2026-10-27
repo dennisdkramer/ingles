@@ -34,7 +34,7 @@ Examples:
 
 ## Lists
 PHONEMES (keep whole):
-- st sp sk str spr spl scr squ
+- st sp sk sl sm sn sw sc str spr spl scr squ
 - doubles: bb cc dd ff gg ll mm nn pp rr ss tt zz
 
 DIGRAPHS/TRIGRAPHS (may split):
