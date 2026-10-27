@@ -41,7 +41,7 @@ Reference this file whenever a task touches site appearance or structure. The EX
 - .blanks = wrapping row of fill-in pairs (word + input.gap)
 - .dialog = dialogue block: #fff8ea fill, rose frame, bold speaker labels
 - .listen = compact ▶ audio chip placed inline beside what it speaks
-- Pronunciation content types (business/lesson12–14) need NO new CSS: they reuse .chart, .grid3, .qgrid.stack, .blanks.sent and the ⏺ recording block as-is. The pronunciation key itself (bold/grey/schwa, two levels L1/L2) is rendered by `wirePron()` from `data-pron="word"` (L1) / `data-pron="word:2"` (L2) in engine2.js, not by any lesson-specific styling.
+- Pronunciation content types (business/lesson12–14) need NO new CSS: they reuse .chart, .grid3, .qgrid.stack, .blanks.sent and the ⏺ recording block as-is. The pronunciation key itself (bold/grey/schwa, two levels L1/L2) is currently the static fallback markup authored inside each `data-pron="word"` (L1) / `data-pron="word:2"` (L2) span; the custom dictionary lives in root `pron.js` (`window.PRON`, included only by the pronunciation lessons), and the old `wirePron()` renderer was removed pending the B-M4 rebuild — not by any lesson-specific styling.
 - A fill-in hint (Portuguese, italic) sits on its own line BELOW the input when inline placement would overflow the block or look cramped. Author it with the block fill-in layout (`.blanks.sent` / `.blanks.sent.cols`) so the line break actually renders — a `<br>` inside the default flex `.blanks` row is ignored.
 - section headings (h2) carry a rose underline; exercise items are numbered 1..n under their group heading (no repeated section letter)
 - @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow

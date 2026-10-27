@@ -4,7 +4,8 @@ The live working plan for the CURRENT task. When a prompt is decomposed into sub
 _(Active batches, newest first. Cleared once done AND committed.)_
 
 - B-M4 [2026-10-26, owner request] PRONUNCIATION KEY SPEC — REWRITE (in progress):
-  1. ✅ DONE (2026-10-27) Delete old renderer + reformat dictionary: removed pronHTML() / wirePron() and the auto-wiring IIFE from engine2.js; kept the custom dictionary `PRON` and reformatted it to one word per row — original word / original word with markup / syllable count / level 1 output / level 2 output / level 2 syllable count (146 words). The data-pron spans in lessons 13–14 keep their static fallback markup, so pages still render.
-  2. ⏳ Update terms + definitions ("hanging letters" = the letters after the first 2 phonemes of a syllable).
-  3. ⏳ Update syllable-splitting logic, display, level interactions, use-cases/guidance.
-  4. ⏳ Dump non-conforming/extraneous content; cleanup.
+  1. ✅ DONE (2026-10-27) Remove old renderer + migrate & restructure the dictionary: removed pronHTML() / wirePron() and the auto-wiring IIFE from engine2.js; migrated the custom dictionary out of engine2.js into root pron.js (window.PRON) with the new 6-column schema — Word / Stress syllable,"vowel-hiatus" / Syllables # / L1 output / L2 output / L2 Syllables # — plus a header row and a description row below it (146 words); merged the old alts into the L2 output column. pron.js is included only by the pronunciation lessons (business/lesson13 & lesson14 + their .edit copies). data-pron spans keep their static fallback markup.
+  2. ⏳ Create the phoneme library — the source for column 2 (stress syllable, "vowel - hiatus") and column 3 (syllables #). No library exists yet: column 2 is empty and column 3 is derived from the old data.
+  3. ⏳ Update terms + definitions ("hanging letters" = the letters after the first 2 phonemes of a syllable).
+  4. ⏳ Update syllable-splitting logic, display, level interactions, use-cases/guidance; re-add the renderer against pron.js.
+  5. ⏳ Dump non-conforming/extraneous content; cleanup.
