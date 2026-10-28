@@ -64,7 +64,7 @@ Avoid touching code within or connected to existing functions unless defensibly 
 
 
 ## RULE 6 — PRONUNCIATION KEY PURPOSE (why this exists)
-Every pronunciation-key decision serves ONE goal: a visual accompaniment to text-based lessons that lets beginner Brazilian students SEE why pronunciations, rhythms, and reductions happen — and build intuition for English that feels opaque or random. Judge every parsing choice (syllable breaks, stress, consonant clusters) by one test: does it teach the correct RHYTHM to a Brazilian beginner? Keep consonant clusters whole as onsets so students learn to "mash" them; split at true word/compound boundaries; in "both-ways" cases pick the break that teaches rhythm. The lists in PHONEMES.md are the durable guardrails — intuition is the engine.
+Every pronunciation-key decision serves ONE goal: a visual accompaniment to text-based lessons that lets beginner Brazilian students SEE why pronunciations, rhythms, and reductions happen — and build intuition for English that feels opaque or random. Judge every parsing choice (syllable breaks, stress, consonant clusters) by one test: does it teach the correct RHYTHM to a Brazilian beginner? Keep consonant clusters whole as onsets so students learn to "mash" them; split at true word/compound boundaries; in "both-ways" cases pick the break that teaches rhythm. The conventions in PEDAGOGY.md "next steps" are the durable guardrails — intuition is the engine.
 
 ## TOOL / TERMINAL PARAMETERS
 The shell reports the true exit code (`$LASTEXITCODE`); Cline's capture of it does not — it often misreports a succeeded command as code 1, so work WITH that:
