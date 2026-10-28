@@ -38,14 +38,8 @@ Examples:
 3. If a break falls inside a DIGRAPH/TRIGRAPH → leave the break (the unit deactivates).
 4. `*` before the stressed syllable (primary stress only; ignore secondary). If unsure, OMIT the `*`.
 
-## Lists
-PHONEMES (keep whole):
-- st sp sk sl sm sn sw sc str spr spl scr squ
-- doubles: bb cc dd ff gg ll mm nn pp rr ss tt zz
-
-DIGRAPHS/TRIGRAPHS (may split):
-- ch sh th ph wh ng ck tch dge qu kn wr gh
-- silent-letter: gn mb lk lf lm mn rh ps pt bt
+## Parsing principle (no lists)
+Judge every break by: does it teach the correct RHYTHM to a Brazilian beginner? Keep consonant clusters whole as onsets ("mash"); split at word/compound boundaries; "both-ways" → rhythm-teaching break. Intuition drives it — see PEDAGOGY.md "next steps" for the principle + worked examples.
 
 ## EXCEPTIONS
 Any word whose break is ambiguous or un-inferable → write to `EXCEPTIONS.md`, do NOT force into the dictionary.
