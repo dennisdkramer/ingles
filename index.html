@@ -8,7 +8,7 @@
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>ENGLISH <span>OPENS DOORS</span></h1><p class="script">Let's go</p></header>
 <div id="controlbar" class="control-bar"><span id="acct" class="dim" hidden></span> <button id="logout" hidden>Logout</button></div>
 <main><div class="page-container"><div class="content-area">
- <div class="card center" id="gcard"><p class="dim">Entre com sua conta Google.</p><div id="gbtn"></div></div>
+ <div class="card center" id="gcard"><p class="dim" id="gtext">Entre com sua conta Google.</p><div id="gbtn"></div><div id="needg" hidden><p>Please navigate to accounts.google.com manually or click the button below — always double-check the exact URL in your browser for security. A logged-in Google account is strictly required to enter this site.</p><button type="button" onclick="window.open('https://accounts.google.com/','_blank')">Open accounts.google.com</button><p class="dim">After you sign in to Google there, come back here and reload this page.</p></div></div>
  <div id="app"></div><p id="debug" class="dim"></p>
 </div>
 <footer>MATERIAIS SIMPLES E INOVADORES · INGLES CERTO EUA</footer>
@@ -23,7 +23,7 @@ const $=id=>document.getElementById(id);
 const log=m=>{debug.innerHTML+="› "+m+"<br>"};
 const h=s=>{let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x};
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let cred=null,profile=null,teacher=false,studentName="";
+let cred=null,profile=null,teacher=false,studentName="",LESSONS=null;
 const SESSION_KEY="eod_session";
 async function api(action,obj){
  const body=Object.assign({action:action},obj||{});
@@ -38,10 +38,29 @@ window.addEventListener("load",()=>{let tries=0;
  (function ready(){
   if(!window.google){if(++tries<5){setTimeout(ready,1200);return}log("ERRO: script Google não carregou.");return}
   google.accounts.id.initialize({client_id:CLIENT_ID,callback:onLogin,auto_select:true});
-  google.accounts.id.renderButton($("gbtn"),{theme:"outline",size:"large",shape:"pill"});
-  if(restoreSession()){start();}else{try{google.accounts.id.prompt()}catch(e){}}
+  if(restoreSession()){enableGoogleUI();start();return}
+  probeSession();
  })();
 });
+let gbtnReady=false;
+function enableGoogleUI(){
+ if(!gbtnReady){google.accounts.id.renderButton($("gbtn"),{theme:"outline",size:"large",shape:"pill"});gbtnReady=true;}
+ $("gbtn").hidden=false;$("gtext").hidden=false;$("needg").hidden=true;
+}
+function showNeedGoogle(){$("gbtn").hidden=true;$("gtext").hidden=true;$("needg").hidden=false;}
+function probeSession(){
+ try{
+  google.accounts.id.prompt(m=>{
+   if(m.isDisplayed()||m.isSkippedMoment()||m.isDismissedMoment()){enableGoogleUI();}
+   else if(m.isNotDisplayed()){
+    const r=m.getNotDisplayedReason();
+    if(r!=="opt_out_or_no_session"&&r!=="suppressed_by_user")log("Google indisponível ("+r+")");
+    showNeedGoogle();
+   }
+  });
+ }catch(e){log("Google: "+e.message);showNeedGoogle();}
+}
+
 function onLogin(resp){
  cred=resp.credential;profile=decodeJwt(cred);persistSession();
  log("login OK: "+profile.email);start();
@@ -52,6 +71,7 @@ function restoreSession(){try{const s=JSON.parse(localStorage.getItem(SESSION_KE
 async function start(){
  try{const r=await fetch("access.json?"+Date.now());if(!r.ok)throw new Error("access.json não encontrado (HTTP "+r.status+")");teacher=(await r.json()).teachers.includes(profile.email);}
  catch(e){$("app").innerHTML='<div class="card">⚠️ '+e.message+"</div>";return}
+ try{const lr=await fetch("lessons.json?"+Date.now());if(lr.ok)LESSONS=await lr.json();}catch(e){}
  showAcct();
  if(teacher){renderTeacher();return}
  const st=await api("status",{token:cred});
@@ -72,21 +92,22 @@ function renderRequest(){
   else{b.disabled=false;b.textContent="Enviar pedido de acesso";log("ERRO: "+(j.error||"desconhecido"))}
  };
 }
+function lessonTitle(track,n){const a=LESSONS&&LESSONS[track];if(!a)return "";const it=a.find(x=>x.n===n);return it?it.title:"";}
 function renderStudent(track,name){
  studentName=name||"";
  persistSession();
  const p=prog();
  let html='<div class="card">Olá, <b>'+esc(profile.name||profile.email)+'</b> · <button onclick="logout()">trocar conta</button></div>';
  html+='<div class="card"><h3>'+TN[track]+'</h3>';let cont=null;
- for(let i=1;i<=COUNTS[track];i++){const d=p[track+"_"+i];if(!d&&!cont)cont=i;
-  html+='<div class="row">'+(d?'<span class="done">✅ Lição '+i+"</span>":'<span class="todo">⬜ Lição '+i+"</span>")+' <button onclick="go(\''+track+"\',"+i+')">abrir</button></div>';}
+ for(let i=1;i<=(LESSONS&&LESSONS[track]?LESSONS[track].length:COUNTS[track]);i++){const d=p[track+"_"+i];if(!d&&!cont)cont=i;
+  html+='<div class="row">'+(d?'<span class="done">✅ Lição '+i+"</span>":'<span class="todo">⬜ Lição '+i+"</span>")+(lessonTitle(track,i)?' <span class="dim">'+esc(lessonTitle(track,i))+'</span>':'')+' <button onclick="go(\''+track+"\',"+i+')">abrir</button></div>';}
  if(cont)html+='<button onclick="go(\''+track+"\',"+cont+')">▶ Continuar da lição '+cont+"</button>";
  html+='</div>';$("app").innerHTML=html;log("índice pronto ✔");
 }
 let QUEUE={pending:[],approved:[]};
 function bookButton(t){
  let items='';
- for(let i=1;i<=COUNTS[t];i++)items+='<button type="button" onclick="go(\''+t+'\','+i+')">Lição '+i+'</button>';
+ for(let i=1;i<=(LESSONS&&LESSONS[t]?LESSONS[t].length:COUNTS[t]);i++)items+='<button type="button" onclick="go(\''+t+'\','+i+')">Lição '+i+(lessonTitle(t,i)?' · '+esc(lessonTitle(t,i)):'')+'</button>';
  return '<div class="bookdrop"><button type="button" class="bookbtn" onclick="toggleBookMenu(\''+t+'\')">'+TN[t]+' ▾</button>'
   +'<div class="bookmenu" id="menu_'+t+'" hidden>'+items+'</div></div>';
 }
