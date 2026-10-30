@@ -4,14 +4,14 @@
 <title>English Opens Doors</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-</head><body>
-<header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>ENGLISH <span>OPENS DOORS</span></h1><p class="script">Let's go</p></header>
+</head><body class="landing">
+<header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>ENGLISH <span>OPENS DOORS</span></h1><p class="script">Let's go <span lang="pt">· Vamos lá</span></p></header>
 <div id="controlbar" class="control-bar"><span id="acct" class="dim" hidden></span> <button id="logout" hidden>Logout</button></div>
 <main><div class="page-container"><div class="content-area">
- <div class="card center" id="gcard"><p class="dim" id="gtext">Entre com sua conta Google.</p><div id="gbtn"></div><div id="needg" hidden><p>Please navigate to accounts.google.com manually or click the button below — always double-check the exact URL in your browser for security. A logged-in Google account is strictly required to enter this site.</p><button type="button" onclick="window.open('https://accounts.google.com/','_blank')">Open accounts.google.com</button><p class="dim">After you sign in to Google there, come back here and reload this page.</p></div></div>
+ <div class="card center landing-card" id="gcard"><h2 class="landing-title">Welcome · <span lang="pt">Bem-vindo</span></h2><p class="dim" id="gtext">Sign in with your Google account · <span lang="pt">Entre com a sua conta Google</span></p><div id="gbtn"></div><div id="needg" hidden><p>Please navigate to <a href="https://accounts.google.com/" target="_blank" rel="noopener">accounts.google.com</a> manually, or click the button below — always double-check the exact URL in your browser for security. A logged-in Google account is strictly required to enter this site.</p><p lang="pt" class="pt">Navegue manualmente até <a href="https://accounts.google.com/" target="_blank" rel="noopener">accounts.google.com</a> ou clique no botão abaixo — confira sempre o endereço exato no seu navegador por segurança. É preciso estar conectado a uma conta Google para entrar neste site.</p><button type="button" onclick="window.open('https://accounts.google.com/','_blank')">Open accounts.google.com <span lang="pt">· Abrir</span></button><p class="dim">After you sign in to Google there, come back here and reload this page. · <span lang="pt">Depois de entrar no Google, volte aqui e recarregue a página.</span></p></div></div>
  <div id="app"></div><p id="debug" class="dim"></p>
 </div>
-<footer>MATERIAIS SIMPLES E INOVADORES · INGLES CERTO EUA</footer>
+<footer class="landing-footer"><span lang="pt">Materiais simples e inovadores · Inglês certo EUA</span> · Simple, innovative materials · American English, done right</footer>
 </div></main>
 <script>
 const CLIENT_ID="872457390510-jsk9pooj688ogvp6hs9ca4js3iqk5n69.apps.googleusercontent.com";
