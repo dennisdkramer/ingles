@@ -16,11 +16,6 @@ let STUDENT=gate.student||gate.email, layer=[], sig="", editing=false;
 const audioCache={};
 let popXY={x:20,y:90};
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(t._x);t._x=setTimeout(()=>t.style.display="none",2600)}
-const isTouch=()=>('ontouchstart' in window)||(navigator.maxTouchPoints||0)>0;
-function copyText(s){const ok=()=>toast("Copiado");
- if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(String(s)).then(ok).catch(()=>{copyTextLegacy(s);ok()});}
- else{copyTextLegacy(s);ok()}}
-function copyTextLegacy(s){const ta=document.createElement("textarea");ta.value=String(s);ta.setAttribute("readonly","");ta.style.cssText="position:fixed;top:-999px;left:-999px;opacity:0";document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,99999);try{document.execCommand("copy")}catch(e){}ta.remove();}
 function b64url(b64,mime){const m=mime||"audio/webm";
  try{const b=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));return URL.createObjectURL(new Blob([b],{type:m}))}
  catch(e){return "data:"+m+";base64,"+b64}}
@@ -405,7 +400,6 @@ function nbPopHTML(t,editing){
   '<span class="poprow"><button id="pN" title="nota">'+(editing?'💾 Save':'📝 Note')+'</button>'+
   '<button id="pK" title="chave de pronúncia"'+(k?' disabled':'')+'>📖 Pronunciation 🔑</button>'+
   '<button id="pD" title="apagar a nota e a chave"'+(st.note||k?"":' disabled')+'>📝 Delete</button></span>'+
-  (isTouch()?'<span class="poprow"><button id="pC" title="copiar o trecho">📋 Copy</button></span>':'')+
   keyHTML+noteHTML+ntWrap;
 }
 /* wire a freshly-opened .pop for an anchor: range = the live selection when the popup came from
@@ -470,8 +464,6 @@ function nbWirePopup(t,r,x,y){
  if(A)A.onclick=()=>{if(A.disabled)return;
   if(A.classList.contains("locked")){toast(NB_REC_AMBIG);return}
   nbDeleteItem(t,"rec")};
-  const C=pop.querySelector("#pC");
-  if(C)C.onclick=()=>copyText(t);
 }
 /* ONE CORE SAVE for the note/recording layer:
    💾 Save (note) and rec() (recording) both go through here, so the two save paths can never
@@ -783,7 +775,6 @@ function trySelPopup(){ if(editing)return;
  const p=nbPopupXY(r.getBoundingClientRect());
  openNbPopup(t,pendingRange,p.x,p.y);
  lastSelText=t;
-  if(isTouch()){try{getSelection().removeAllRanges()}catch(e){}}   /* dismiss the native copy/paste callout that draws OVER the popup on iOS/Android */
 }
 let selTimer=null;
 document.addEventListener("selectionchange",()=>{clearTimeout(selTimer);selTimer=setTimeout(trySelPopup,350)});
