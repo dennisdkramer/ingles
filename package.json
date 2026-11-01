@@ -8,7 +8,7 @@
     "build:lessons": "node build-lessons.mjs",
     "qa": "node build-lessons.mjs && node qa/smoke.mjs",
     "qa:live": "node qa/live.mjs",
-    "build:dict": "node build-dictionary.js"
+    "build:dict": "node build-dictionary.mjs"
   },
   "devDependencies": {
     "jsdom": "30.1.2",
