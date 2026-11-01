@@ -7,6 +7,14 @@ Reference this file whenever a task touches site appearance or structure. The EX
 - .page-container = PAGE AREA: fixed 1400px wide (never shrinks with the viewport), height GROWS with content (no min-height, no clipping). Paper bg, 2px solid ink border, no radius/shadow, position:absolute — taken out of the document flow and pinned at a fixed left offset (15px), so the page and its content never reflow when the viewport is resized, a mark is painted or the shared notebook grows below it. ALL page content — including the footer — lives inside it.
 - .content-area = CONTENT AREA: fixed 1200px wide (never shrinks with the viewport), centered inside the page area → exactly 100px margin on each side. All body content (text, cards, buttons, feed) sits here and re-flows within this fixed box.
 
+## RULES
+    Rule 1 - 
+    Rule 2 - 
+    Rule 3 - 
+    Rule 4 - 
+
+
+
 ## Lesson page structure
 - The mechanical skeleton (structural): doctype/head/title/stylesheet → #toast → header.brand → #controlbar → main#page → .page-container → .content-area → centered h1 → lesson sections → footer → closing script block (BACKPACK/SECRET/TRACK/L/COUNT + engine1.js/engine2.js + the engine-load guard) → #feed (shared notebook). The content-side list of mandatory page parts is in CONTENT.md.
 - The lesson title (h1) is centered, and is written short enough to sit on ONE line at the fixed 38px size inside the 1200px content area — title-length guidance lives in CONTENT.md. Sizes stay fixed constants (never dynamic/variable to force a fit).
@@ -29,7 +37,7 @@ Reference this file whenever a task touches site appearance or structure. The EX
 ### Standard components — CATALOG (established shapes; used as fallbacks in standard/compliance mode; authored in the lesson HTML — content, see CONTENT.md)
 - **Portuguese text is ALWAYS italic.** Mark it with `lang="pt"` (CSS `:lang(pt){font-style:italic}` italicizes it in any element), or use the legacy `<i>` / `.pt` / `.ptw` markers. A helper class that is not Portuguese-specific (`.thsub`, …) must NEVER carry `font-style` — italic comes only from a Portuguese marker.
 - .pt = Portuguese explanation text: italic. .ptw = Portuguese word in exercises: italic, --ptw color, weight 600
-- .ptpronounce (optional) = a tag available to mark Portuguese pronunciation text: tan (--ptw), italic, NOT bold. May carry `lang="pt"`. An option, never a required rule.
+- .ptsound (optional) = a tag available to mark the LESSON-12 vowel sound-map labels (English sounds rendered in PT characters, e.g. ei/ai/ə): tan (--ptw), italic, NOT bold. Scope: ONLY those chart labels until further notice — NOT part of the pronunciation key (data-pron / dictionary.json / PronKey) and NOT a general-purpose pronunciation tag. May carry `lang="pt"`. (Renamed from .ptpronounce 2026-10-27.)
 - .thsub = a chart-column-header subtitle (the second line under the main label): block, weight 400, smaller, reduced opacity.
 - input.gap = fill-in blank: transparent, 2px tan bottom border, #fff8ea bg — a CONTIGUOUS line, never literal "___" underscores in the prompt
 - fieldset = exercise block: dashed tan border, 12px radius
@@ -41,7 +49,7 @@ Reference this file whenever a task touches site appearance or structure. The EX
 - .blanks = wrapping row of fill-in pairs (word + input.gap)
 - .dialog = dialogue block: #fff8ea fill, rose frame, bold speaker labels
 - .listen = compact ▶ audio chip placed inline beside what it speaks
-- Pronunciation content types (business/lesson12–14) need NO new CSS: they reuse .chart, .grid3, .qgrid.stack, .blanks.sent and the ⏺ recording block as-is. The pronunciation key itself (bold/grey/schwa, two levels L1/L2) is currently the static fallback markup authored inside each `data-pron="word"` (L1) / `data-pron="word:2"` (L2) span; the custom dictionary lives in root `pron.js` (`window.PRON`, included only by the pronunciation lessons), and the old `wirePron()` renderer was removed pending the B-M4 rebuild — not by any lesson-specific styling.
+- Pronunciation content types (business/lesson12–14) need NO new CSS: they reuse .chart, .grid3, .qgrid.stack, .blanks.sent and the ⏺ recording block as-is. The pronunciation key itself (bold/grey/schwa, two levels L1/L2) is currently the static fallback markup authored inside each `data-pron="word"` (L1) / `data-pron="word:2"` (L2) span — not by any lesson-specific styling.
 - A fill-in hint (Portuguese, italic) sits on its own line BELOW the input when inline placement would overflow the block or look cramped. Author it with the block fill-in layout (`.blanks.sent` / `.blanks.sent.cols`) so the line break actually renders — a `<br>` inside the default flex `.blanks` row is ignored.
 - section headings (h2) carry a rose underline; exercise items are numbered 1..n under their group heading (no repeated section letter)
 - @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow

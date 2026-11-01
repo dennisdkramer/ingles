@@ -1,16 +1,14 @@
 /* ---- pronunciation key engine (pronkey.js) --------------------------------------
-   The rebuilt pronunciation-key function. Entry points:
+   Thin display + lookup layer for the pronunciation key. The dictionary data lives in
+   dictionary.json (fetched on load) — the single source of truth: one key per word.
+   Notation rules live in FUNCTION.md.
+   Entry points:
      PronKey.words(text)    parse a word / text string into whole words (partial words thrown out)
-     PronKey.lookup(word)   custom-dictionary lookup (window.PRON rows 2+)
-     PronKey.key(row)       the rendered key for a row (column 4 = L1 output)
-     PronKey.process(word)  one word through the whole pipeline:
-        dictionary lookup -> (absent: addToDictionary + keyGen) -> general library lookup ->
-        annotate (mark * at stressed syllables, - at vowel hiatus, syllable count -> column 3)
-   Render and key-generation are STUBS for now (dead until the logic is ironed out) but are wired
-   here so the engine calls one entry point and the logic drops in without touching call sites. */
+     PronKey.lookup(word)   dictionary lookup (returns the word's key string, or null)
+     PronKey.ready()        true once the dictionary has been fetched and has entries
+     PronKey.render(s)      expand compact notation to display HTML (notation rules → FUNCTION.md) */
 window.PronKey = (function () {
-  function PRON() { return Array.isArray(window.PRON) ? window.PRON : []; }
-  function rows() { return PRON().slice(2); }   // rows 0/1 = column headers + descriptions
+  let DICT = null;   // fast case-insensitive map: lowercase word -> key string
 
   // parse into whole words; fragments and single-letter partials are thrown out
   function words(text) {
@@ -25,30 +23,24 @@ window.PronKey = (function () {
     return out;
   }
 
-  // custom-dictionary lookup (case-insensitive)
+  // custom-dictionary lookup (case-insensitive) -> the word's single key string, or null
   function lookup(word) {
-    const w = String(word == null ? '' : word).toLowerCase();
-    for (const r of rows()) { if (String(r[0]).toLowerCase() === w) return r; }
-    return null;
+    if (!DICT) return null;
+    return DICT.get(String(word == null ? '' : word).toLowerCase()) || null;
   }
 
-  // the rendered key for a dictionary row - column 4 = L1 output (index 3)
-  function key(row) { return row ? String(row[3] || '') : ''; }
-  // the reduced key for a dictionary row - column 5 = L2 output (index 4)
-  function key2(row) { return row ? String(row[4] || '') : ''; }
-
-  // minimal display render: expand a compact L1/L2 string (e.g. "di-ffə-rə[nt]") to HTML —
-  // bold core, grey [hanging letters], "·" between syllables. This is DISPLAY only, not generation.
+  // minimal display render: expand a compact key string (e.g. "di-ffə-rə[nt]") to HTML —
+  // (notation rules live in FUNCTION.md) — display only, no generation.
   function render(compact) {
-    return String(compact == null ? '' : compact).split('-').map(function (syl) {
+    return String(compact == null ? '' : compact).split('-').map(function (seg) {
       let html = '', buf = '';
       const flush = () => { if (buf) { html += '<b>' + buf + '</b>'; buf = ''; } };
-      for (let i = 0; i < syl.length; i++) {
-        const ch = syl[i];
+      for (let i = 0; i < seg.length; i++) {
+        const ch = seg[i];
         if (ch === '[') {
-          const j = syl.indexOf(']', i);
+          const j = seg.indexOf(']', i);
           if (j < 0) { buf += ch; }
-          else { flush(); html += '<span class="pr-g">' + syl.slice(i + 1, j) + '</span>'; i = j; }
+          else { flush(); html += '<span class="pr-g">' + seg.slice(i + 1, j) + '</span>'; i = j; }
         } else { buf += ch; }
       }
       flush();
@@ -56,107 +48,39 @@ window.PronKey = (function () {
     }).join('·');
   }
 
-  /* ---- lexicon annotation derivation ------------------------------------------------
-     derive(word, breaks, stressChar) -> { count, marked }
-       breaks     : spelling char indices of the AUTHORED syllable breaks (the FULL set).
-       stressChar : char index of the stressed syllable's first letter.
-       Keeps only the breaks that FOLLOW A VOWEL (the only boundaries we trust), and places
-       "*" at stressChar — anchored to the spelling, so it is immune to rechunking. */
-  function derive(word, breaks, stressChar) {
-    const W = String(word || '');
-    const V = 'aeiouyAEIOUY';
-    const full = (breaks || []).slice();
-    const kept = full.filter(b => b > 0 && b < W.length && V.indexOf(W[b - 1]) >= 0);
-    const marks = new Set(kept);
-    let out = '';
-    for (let i = 0; i < W.length; i++) {
-      if (marks.has(i)) out += '-';
-      if (i === stressChar) out += '*';
-      out += W[i];
+  // Parse dictionary.json ({ "word": "key", ... }) into a single fast case-insensitive map:
+  // lowercase word -> key string. No duplicate array copy is held.
+  function load(obj) {
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return;
+    const map = new Map();
+    Object.keys(obj).forEach(function (w) {
+      map.set(String(w).toLowerCase(), String(obj[w] == null ? '' : obj[w]));
+    });
+    DICT = map;
+  }
+
+  // Fetch the dictionary. dictionary.json sits next to pronkey.js (repo root),
+  // so the URL is derived from THIS script's src (not the document URL, which would
+  // break on pages nested one level down: business/, kids/, nsfw/).
+  (function boot() {
+    try {
+      const cs = document.currentScript;
+      const base = (cs && cs.src) ? cs.src.slice(0, cs.src.lastIndexOf('/') + 1) : '../';
+      fetch(base + 'dictionary.json', { cache: 'no-cache' })
+        .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
+        .then(load)
+        .catch(function (err) { if (window.console) console.warn('pronkey: could not load dictionary.json —', err); });
+    } catch (e) {
+      if (window.console) console.warn('pronkey: boot failed —', e);
     }
-    return { count: full.length + 1, marked: out };
-  }
+  })();
 
-  /* SEED helper: parse a lexicon source into derive()'s {breaks, stressChar} contract.
-     This is only a starting point — count/stress/breaks are ultimately AUTHORED from our own
-     knowledge of English (the external source is a cross-check, not the authority).
-     hyph : spelling syllabification, e.g. "busi|ness" (separators | · -) — EXACT when present.
-     ipa  : IPA with primary stress ˈ and (usually) syllable dots ".".
-     Without hyph, breaks are inferred from the IPA dot count mapped onto the spelling's vowels
-     (best-effort; a word with no hyph AND no dots cannot be placed and returns breaks=[]). */
-  function parseLexicon(word, hyph, ipa) {
-    const W = String(word || '');
-    const V = 'aeiouyAEIOUY';
-    let breaks = [];
-    if (hyph) {
-      const p = String(hyph).split(/[|·\-]/).filter(Boolean);
-      let pos = 0;
-      for (let i = 0; i < p.length - 1; i++) { pos += p[i].length; breaks.push(pos); }
-    } else {
-      const bare = String(ipa || '').replace(/^\/|\/$/g, '');
-      const dots = bare.split('.').length - 1;
-      const vp = [];
-      for (let i = 0; i < W.length; i++) if (V.indexOf(W[i]) >= 0) vp.push(i);
-      for (let k = 0; k < Math.min(dots, vp.length - 1); k++) breaks.push(vp[k] + 1);
-    }
-    const bare = String(ipa || '').replace(/^\/|\/$/g, '');
-    let stressIdx = 0;
-    for (let i = 0, seen = false; i < bare.length; i++) {
-      if (bare[i] === 'ˈ') seen = true;
-      else if (bare[i] === '.' && !seen) stressIdx++;
-    }
-    const stressChar = stressIdx > 0 && breaks[stressIdx - 1] != null ? breaks[stressIdx - 1] : 0;
-    return { breaks, stressChar };
-  }
-
-  /* Rechunk rule #1 (first syllable): when column 2 starts with a vowel and that vowel is
-     immediately followed by a consonant with NO break between them, the first syllable runs up to
-     and including that consonant — recovering the consonant-cluster boundary the vowel-following
-     filter dropped. Unchanged when there is no such consonant, or it is the whole word. */
-  function rechunk(marked) {
-    const s = String(marked || '');
-    const starIdx = s.indexOf('*');
-    const body = starIdx >= 0 ? s.slice(0, starIdx) + s.slice(starIdx + 1) : s;
-    const V = 'aeiouyAEIOUY';
-    if (!body.length || V.indexOf(body[0]) < 0) return s;
-    const end = body.indexOf('-') < 0 ? body.length : body.indexOf('-');
-    let c = -1;
-    for (let i = 1; i < end; i++) if (V.indexOf(body[i]) < 0) { c = i; break; }
-    if (c < 0 || c >= body.length - 1) return s;
-    const out = body.slice(0, c + 1) + '-' + body.slice(c + 1);
-    if (starIdx < 0) return out;
-    const starOut = starIdx > c ? starIdx + 1 : starIdx;
-    return out.slice(0, starOut) + '*' + out.slice(starOut);
-  }
-
-  // one word through the whole pipeline
-  function process(word) {
-    let row = lookup(word);
-    if (!row) row = addToDictionary(word);   // absence -> add to dictionary + key-generation
-    libraryLookup(word);
-    annotate(row, word);
-    return row;
-  }
-
-  // ---- STUBS (dead for now; wired so the logic drops in later) ----
-  function addToDictionary(word) { /* TODO: append a new row to window.PRON, then keyGen(word) */ return null; }
-  function keyGen(word) { /* TODO: derive L1/L2 outputs for a word */ return null; }
-  function libraryLookup(word) { /* TODO: general phoneme library lookup */ return null; }
-  function annotate(row, word) { /* TODO: * stressed syllables, - vowel hiatus, syllable count -> column 3 */ return row; }
+  function ready() { return !!(DICT && DICT.size); }
 
   return {
     words: words,
     lookup: lookup,
-    key: key,
-    key2: key2,
     render: render,
-    derive: derive,
-    parseLexicon: parseLexicon,
-    rechunk: rechunk,
-    process: process,
-    addToDictionary: addToDictionary,
-    keyGen: keyGen,
-    libraryLookup: libraryLookup,
-    annotate: annotate
+    ready: ready
   };
 })();

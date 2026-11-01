@@ -767,7 +767,7 @@ async function saveNote(live, text) {
   await live.clickSel('#pN');
   await live.wait('!!document.querySelector("#nt")', 3000, 'the note editor');
   await live.typeInto('#nt', text);
-  await live.clickSel('#pS');
+  await live.clickSel('#pN');
   /* 💾 Save LEAVES the popup open ON PURPOSE (FUNCTION.md: Save drops the editor state, the seven
      buttons stay, the saved note shows above them) — so the proof a save went through is the editor
      DISAPPEARING, never the popup closing. The gesture then dismisses the popup like a user would. */

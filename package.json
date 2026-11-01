@@ -2,12 +2,16 @@
   "name": "ingles",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "description": "Ingles Abre Portas - static English-lessons site (GitHub Pages) plus its QA harnesses.",
   "scripts": {
-    "qa": "node qa/smoke.mjs",
-    "qa:live": "node qa/live.mjs"
+    "build:lessons": "node build-lessons.mjs",
+    "qa": "node build-lessons.mjs && node qa/smoke.mjs",
+    "qa:live": "node qa/live.mjs",
+    "build:dict": "node build-dictionary.js"
   },
   "devDependencies": {
-    "jsdom": "30.1.2"
+    "jsdom": "30.1.2",
+    "openai": "^7.45.1"
   }
 }

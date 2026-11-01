@@ -1,2 +1,4 @@
 node_modules/
 probe_dom.txt
+.env
+progress.log

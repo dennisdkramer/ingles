@@ -1,47 +1,27 @@
 # HARNESS — binding contract. RE-READ ON EVERY PROMPT, before any other action.
-This file is the single read-first hub. It is always in force and adherence is mandatory unless user prompt explicitly overrides
+This file is the single read-first hub after RULE 0 is read from the global rules.
+It is always in force and adherence is non-negotiable
 The category files (PENDING / PARKED / HANDOFF / ISSUES / FORMAT / FUNCTION / CONTENT / PEDAGOGY / VOCABULARY / STATUS / VERIFICATION / FILESYSTEM) hold the parameters of elements and functionality and are loaded only when they are in scope for the current task.
 
 ## RULE 1 — CONTEXT & TOKEN ECONOMY
-Never trim context, skip a needed read, shorten reasoning, or shrink an edit to save tokens if doing so will degrade results.
-Token thrift is only a tie-breaker between two approaches that are equally correct and equally clear — never a goal in itself.
+
+    - Trim all context which you are certain is (stale, inaccurate, conflicting, and irrelevant) as you find it
+    - Any and all other context trim and task compaction must not degrade current task objectives or relevant (non-stale) context
+    - Never skip a needed read, shorten reasoning, or attempt to save tokens if it risks degrading task performance
+
+        Priorities are (ordered by importance):
+    - Detection and reporting of conflicts, rule failures, misunderstanding, or context drift which threaten subsequent priorities
+    - Task sanity, context clarity
+    - Guideline and Rule adherence,
+    - Holistic Understanding
+    - Logic and Objective Correctness
+    - Systemic (Files,Project,Platform) Efficiency - Avoid bloat, load times, latency. Maximise utility.  
+    - Token thrift is only a tie-breaker between two approaches that are equally correct and equally clear — never a goal in itself.
+
 **Reading large files (truncation).** A single read of a large file can come back MIDDLE-TRUNCATED (an elided span marked `[truncated N chars]`). Never trust a truncated read: page through the file in bounded chunks with `start_line`/`end_line` (keep each chunk well under ~6000 characters — dense files like FUNCTION.md need ~15–20 line chunks), and re-read any span that came back with a `[truncated …]` marker before relying on it.
 
 
-## RULE 2 — PROMPT PARSING AND TASK BATCHING
-Full initiative applies to ANALYSIS, PLANNING, and CONTENT GENERATION. Initiative in inference/bypassing uncertainty is low and must not conflict with any rules, specs, or guidelines.
-Step 1 of task execution is to analyse the goals and elements of the user prompt.  Carefully parse language considering task context. If prompt instructs or requires a condition, makes a specific request, or sequences steps, these elements must be strictly followed. If scope of prompt relates to a file during parsing, pause parsing and load that file, then continue as appropriate.
-If uncertainty or conflict arise during parsing, if parsed intent us unclear, or if parsed intent conflicts in any way with any guidance, spec, or existing content, execute extremely limited attempts to reconcile. If reconciliation fails or is incomplete, pause processing and check in.
-After successful prompt parse and intent synthesis, identify any cases of the following:
-- Explicit Requests and their connected details
-- High-Confidence Implicit or Question-formatted Instructions - linguistic and contextual certainty required, else re-classify below
-- Questions to be answered (assess and answer, never consider as an instruction)
-- Examples, facts, issues, behavior, or rhetorical questions which point to principles or intent 
-- Planning dialog, discussion, and clarifications
-
- Next, make a high-level judgement call: In which order or  batches must, will, or should the prompt  be addressed? Elements or batches be parked in PENDING.md to simpify active step as necessary.
-
-After that, define scope of current step and interact with/read files as necessary.
-
-File purpose and content as follows:
-- Deferred / parked / plans and tasks → PARKED.md
-- Context handoffs between sessions → HANDOFF.md
-- Parked Bugs/Issues/problems → ISSUES.md
-- Behaviour / functionality / engines / backend / edit mode → FUNCTION.md
-- Site structure & formatting (structure, layout, HTML/CSS, section/block formatting) → FORMAT.md
-- Instructions for content storage, structure and generation → CONTENT.md
-- Teaching-side structure and rationale → PEDAGOGY.md (WHAT content to teach and how it is ordered within and between lessons)
-- Dictionary and linguistic mapping → VOCABULARY.md
-- Current state & shared parameter values → STATUS.md
-- How to verify / QA → VERIFICATION.md
-- Repository layout / file map → FILESYSTEM.md
-- Lesson Pages (HTML) hold prose
-
-When RESUMING (prior-task) work from these files, begin by sanity-checking relevance to current project state and lack of conflict before acting.
-When uncertainty or conflict arises during step execution, try quantitatively limited but thoughtful attempts to reconcile. If reconciliation fails or is incomplete, pause processing and check in.
-
-
-## RULE 3 — VERIFY WHAT NEEDS VERIFYING
+## RULE 2 — VERIFY WHAT NEEDS VERIFYING
 Verification (QA run, curl, node --check, reading back a diff) is done when I judge it adds real
 confidence — not as a mandated step after every micro-edit. Trivial/doc-only/comment changes don't
 need proof-pasting. Logic changes to engine1.js/engine2.js/backend should get at least one real
@@ -53,18 +33,18 @@ Never state something is verified if it wasn't; if I skipped verification, say s
 "Done" means committed and pushed, with whatever verification I judged necessary per this rule
 
 
-## RULE 4 — COMMIT & PUSH
-Requested changes are committed and pushed when done by DEFAULT. Overrides that justify NOT committing/pushing: (a) prompt intent, (b) a defensible reason not to, or (c) an unresolved question/conflict in the step
-Avoid rapid successive pushes when a single combined push would do. Build markers / live-site curl / fixed sleeps
-are tools I reach for when I judge the risk of an undetected deploy problem is real, not a mandatory step after every push.
+## RULE 3 — COMMIT & PUSH
+Requested changes are committed and pushed when done by DEFAULT. Overrides that justify NOT committing/pushing: (a) prompt intent, (b) a strong defensible reason (confer with user), or (c) an unresolved question/conflict in the step
+
+Avoid rapid successive pushes when a single combined push would do. Build markers / live-site curl / fixed sleeps are tools I reach for when I judge that the risk of an undetected deploy problem is real, not mandatory steps after every push.
 
 
-## RULE 5 — PRESERVE WORKING CODE, BUT IT IS NOT OFF-LIMITS
-Avoid touching code within or connected to existing functions unless defensibly necessary - prioritise "do not degrade existing behaviour", and update or verify affected paths/routing. 
+## RULE 4 — PRESERVE WORKING CODE
+Do not modify rules/guidance/spec documents in any way without explicit instructions or consent. 
+Prioritise "do not degrade existing behaviour"
+Always update or verify affected paths/routing when making changes that may effect them
+Always perform cleanup, minimize verbosity and bloat, and remove conflicts when you encounter opportunities to do so (that you are sure will not degrade any function, break any path, cause any conflict, or change any needed logic) during any task processing step. Opportunities which are encountered but not acted upon must be reported to the user on step completion and recorded as appropriate in the issues file.
 
-
-## RULE 6 — PRONUNCIATION KEY PURPOSE (why this exists)
-Every pronunciation-key decision serves ONE goal: a visual accompaniment to text-based lessons that lets beginner Brazilian students SEE why pronunciations, rhythms, and reductions happen — and build intuition for English that feels opaque or random. Judge every parsing choice (syllable breaks, stress, consonant clusters) by one test: does it teach the correct RHYTHM to a Brazilian beginner? Keep consonant clusters whole as onsets so students learn to "mash" them; split at true word/compound boundaries; in "both-ways" cases pick the break that teaches rhythm. The conventions in PEDAGOGY.md "next steps" are the durable guardrails — intuition is the engine.
 
 ## TOOL / TERMINAL PARAMETERS
 The shell reports the true exit code (`$LASTEXITCODE`); Cline's capture of it does not — it often misreports a succeeded command as code 1, so work WITH that:

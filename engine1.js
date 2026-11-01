@@ -119,9 +119,9 @@ let nbLocal=[];
 /* THE ONE read point of the note/recording layer: `layer` (server truth) plus the local rows the core
    save (nbUpsert) has just written and whose own action is still inside its grace window (nbLocal —
    a poll bringing a snapshot that predates the write must never blink the row off). type = "note" |
-   "rec" | "key1" | "key2"; t = an anchor. Omit both for the whole layer. */
+   "rec" | "key"; t = an anchor. Omit both for the whole layer. */
 function nbRows(type,t){
- const keep=r=>(r.type==="rec"||r.type==="note"||r.type==="key1"||r.type==="key2")&&(!type||r.type===type)&&(t==null||r.anchor===t);
+ const keep=r=>(r.type==="rec"||r.type==="note"||r.type==="key")&&(!type||r.type===type)&&(t==null||r.anchor===t);
  const rows=layer.filter(keep);
  nbLocal=nbLocal.filter(r=>{const p=pendingFor(r.id);return !!p&&p.action!=="del"});
  nbLocal.forEach(r=>{if(!keep(r))return;const i=rows.findIndex(x=>x.id===r.id);
@@ -318,52 +318,46 @@ function nbNoteDisplay(t){
  const s=String(v).replace(/^\s*(?:📝|📌|🗒)\s*/u,"").trim();
  return s?s:null;
 }
-/* ---- pronunciation key (🔤 Key 1 / 🔤 Key 2) — dictionary lookup + persistence -----------------
-   Key 1 = L1 output (careful), Key 2 = L2 output (reduced). Each is stored as its OWN row type
-   ("key1"/"key2") on the same anchor as a note and painted with the note's blue wash; the two are
-   mutually exclusive (saving one deletes the other). The key line sits BELOW the popup buttons. */
-function nbKeyText(t,type){const e=nbEntries(t).find(it=>it.type===type);return e?nbNoteTextOf(e.data):null}
-function nbKey1Text(t){return nbKeyText(t,'key1')}
-function nbKey2Text(t){return nbKeyText(t,'key2')}
-function nbKeyDisplay(t){return nbKey1Text(t)||nbKey2Text(t)||null}
+/* ---- pronunciation key (📖 Pronunciation 🔑) — dictionary lookup + persistence ---------------
+   One key per word (the reduced pronunciation). Stored as its OWN row type ("key") on the same
+   anchor as a note and painted with the note's blue wash. The key line sits BELOW the popup buttons. */
+function nbKeyText(t){const e=nbEntries(t).find(it=>it.type==="key");return e?nbNoteTextOf(e.data):null}
 const nbKeyData=(html,pos)=>JSON.stringify(pos?{t:String(html),b:pos.b,o:pos.o}:{t:String(html)});
-/* drop every row of one key type on the anchor and its blue wash (the OTHER key type survives) */
-function nbDeleteKeyRows(t,type){
- const rows=nbRows(type,t);
+/* drop every key row on the anchor and its blue wash */
+function nbDeleteKeyRows(t){
+ const rows=nbRows("key",t);
  if(!rows.length)return;
- layer=layer.filter(r=>!(r.type===type&&r.anchor===t));
+ layer=layer.filter(r=>!(r.type==="key"&&r.anchor===t));
  rows.forEach(r=>{send({action:'del',id:r.id});ntDrop(r.id);});
 }
-/* 🔤 Key 1 / 🔤 Key 2: parse the anchor into words (partial words thrown out), take the FIRST word
-   found in the custom dictionary, and persist its key (level 1 or 2) below the buttons, painted with
-   the note's blue wash. A word outside the dictionary triggers addToDictionary()/keyGen() (stubs). */
-function nbKeyLookup(t,r,x,y,level){
+/* 📖 Pronunciation 🔑: parse the anchor into words (partial words thrown out), take the FIRST word
+   found in the custom dictionary, and persist its key below the buttons, painted with the note's
+   blue wash. A word outside the dictionary reports as not-yet-authored (no auto-generation). */
+function nbKeyLookup(t,r,x,y){
  if(typeof window.PronKey!=='object'||!window.PronKey){toast('Chave de pronúncia indisponível.');return}
- if(!Array.isArray(window.PRON)||window.PRON.length<3){toast('Dicionário de pronúncia não carregado nesta lição.');return}
+ if(typeof window.PronKey.ready!=='function'||!window.PronKey.ready()){toast('Dicionário de pronúncia não carregado nesta lição.');return}
  const ws=window.PronKey.words(t);
  if(!ws.length){toast('Nenhuma palavra completa para analisar.');return}
  let found=null;
- for(const w of ws){const row=window.PronKey.lookup(w);if(row){found={w:w,row:row};break}}
- if(!found){for(const w of ws)window.PronKey.process(w);toast('Palavra fora do dicionário — em construção.');return}
- const type=level===2?'key2':'key1';
- const html=level===2?window.PronKey.key2(found.row):window.PronKey.key(found.row);
+ for(const w of ws){const key=window.PronKey.lookup(w);if(key){found={w:w,key:key};break}}
+ if(!found){toast('Palavra fora do dicionário.');return}
+ const html=found.key;
  if(!html){toast('Chave vazia para ' + found.w + '.');return}
  const pos=nbPosOf(pendingRange);
- nbDeleteKeyRows(t,type==='key2'?'key1':'key2');   /* the two levels are mutually exclusive */
- const id=nbUpsert(t,type,{data:nbKeyData(html,pos)});
- ntMake(t,pos?pos.b:null,pos?pos.o:null,id);        /* the blue wash marks a key too */
+ nbDeleteKeyRows(t);                              /* one key per word */
+ const id=nbUpsert(t,"key",{data:nbKeyData(html,pos)});
+ ntMake(t,pos?pos.b:null,pos?pos.o:null,id);      /* the blue wash marks a key too */
  refreshNbPopup(t,x,y);
 }
 /* 📝 Delete (note) also deletes any saved key on the same anchor; the recording stays. */
 function nbDeleteNoteKey(t){
  const st=nbPopState(t);
- nbDeleteKeyRows(t,'key1');
- nbDeleteKeyRows(t,'key2');
+ nbDeleteKeyRows(t);
  if(st.note){nbDeleteItem(t,'note');}
  else{refreshNbPopup(t,popXY.x,popXY.y,false);}
 }
-/* the popup carries EIGHT buttons, and ALL of them always exist (owner spec 2026-10-12). ▶ Hear,
-   ⏺ Record and 📝 Add/Edit Note are always clickable; the other four light up only when they apply and
+/* the popup carries SEVEN buttons, and ALL of them always exist (owner spec 2026-10-12). ▶ Hear,
+   ⏺ Record and 📝 Add/Edit Note are always clickable; the other three light up only when they apply and
    are otherwise GREYED OUT (never hidden). What applies comes from nbPopState(t) — the recording(s)
    and the note the gesture refers to:
      ▶ Play    — exactly ONE recording is involved: it plays THAT clip (with more than one involved it
@@ -386,8 +380,8 @@ function nbPopHTML(t,editing){
  const st=nbPopState(t);
  const play=!!st.rec,ambig=st.recs.length>1;   /* one recording involved vs more than one */
  const nb=nbNoteDisplay(t);
- const key=nbKeyDisplay(t);
- const k1=!!nbKey1Text(t), k2=!!nbKey2Text(t);
+ const key=nbKeyText(t);
+ const k=!!key;
  /* ▶ Play and 🔊 Delete act on the SAME single recording; while more than one is involved both carry
     the disabled LOOK (.locked) and their press only toasts NB_REC_AMBIG (owner spec 2026-10-12 #2). */
  const playAttr=play?' title="ouvir a gravação selecionada"':(ambig?' class="locked" aria-disabled="true" title="'+NB_REC_AMBIG+'"':' disabled title="nada para ouvir"');
@@ -404,9 +398,8 @@ function nbPopHTML(t,editing){
   '<button id="pR"'+(st.recs.length?' class="locked" aria-disabled="true" title="'+NB_REC_LOCKED+'"':' title="gravar"')+'><span class="lbl">⏺ Record</span></button>'+
   '<button id="pA"'+audioAttr+'><span class="lbl">🔊 Delete</span></button></span>'+
   '<span class="poprow"><button id="pN" title="nota">'+(editing?'💾 Save':'📝 Note')+'</button>'+
-  '<button id="pK" title="chave de pronúncia (nível 1)"'+(k1?' disabled':'')+'>🔤 Key 1</button>'+
-  '<button id="pS" title="chave de pronúncia (nível 2)"'+(k2?' disabled':'')+'>🔤 Key 2</button>'+
-  '<button id="pD" title="apagar a nota e as chaves"'+(st.note||k1||k2?"":' disabled')+'>📝 Delete</button></span>'+
+  '<button id="pK" title="chave de pronúncia"'+(k?' disabled':'')+'>📖 Pronunciation 🔑</button>'+
+  '<button id="pD" title="apagar a nota e a chave"'+(st.note||k?"":' disabled')+'>📝 Delete</button></span>'+
   keyHTML+noteHTML+ntWrap;
 }
 /* wire a freshly-opened .pop for an anchor: range = the live selection when the popup came from
@@ -462,11 +455,9 @@ function nbWirePopup(t,r,x,y){
   else{nbNoting(t,r,x,y)}                              /* note mode → open the editor */
  };
  const K=pop.querySelector("#pK");
- if(K)K.onclick=()=>{if(K.disabled)return;nbKeyLookup(t,r,x,y,1)};
- const S=pop.querySelector("#pS");
- if(S)S.onclick=()=>{if(S.disabled)return;nbKeyLookup(t,r,x,y,2)};
+ if(K)K.onclick=()=>{if(K.disabled)return;nbKeyLookup(t,r,x,y)};
  const D=pop.querySelector("#pD");
- /* 📝 Delete drops the note AND any saved key on the same anchor (🔤 Key 1 / 🔤 Key 2); 🔊 Delete
+ /* 📝 Delete drops the note AND the saved key on the same anchor; 🔊 Delete
     drops ONLY the recording (nbDeleteItem). The recording stays independent either way. */
  if(D)D.onclick=()=>{if(D.disabled)return;nbDeleteNoteKey(t)};
  const A=pop.querySelector("#pA");
@@ -539,7 +530,7 @@ function nbNoteEditorClose(t){
   d.innerHTML=nbEsc(disp);d.style.display="";
  }else if(d){d.remove();}
  if(b)b.textContent="📝 Note";
- const pD=pop.querySelector("#pD");if(pD)pD.disabled=!(disp!=null||!!nbKey1Text(t)||!!nbKey2Text(t));
+ const pD=pop.querySelector("#pD");if(pD)pD.disabled=!(disp!=null||!!nbKeyText(t));
 }
 function nbSaveNote(t,x,y){
  if(!pop)return;

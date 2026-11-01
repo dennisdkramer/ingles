@@ -1,3 +1,5 @@
+> ⚠️ NOT GUIDANCE — this file is a backlog only. Nothing here is a rule, instruction, or reference for any active task unless a task explicitly cites it.
+
 > STOP-AND-ASK: if any overlap or conflict appears within this file or between it and existing guidelines, STOP and prompt the owner to make a decision about resolving it (keeps planning clean — no silent deduplication).
 
 # PARKED — the backlog of queued / parked work
@@ -14,7 +16,6 @@ _(Newest first.)_
 - B-F9 [2026-10-25, owner request] LAST/NEXT BUTTONS — DROP "lesson" + BOTTOM DUPLICATES: (1) the control-bar "← Last lesson" / "Next lesson →" buttons drop the word "lesson" (become "← Last" / "Next →"); (2) duplicate the same prev/next pair at the bottom of the page, one on each side of the "Complete?" button (prev on the left, next on the right), rendered by engine2.js next to the complete button. Update FORMAT.md's lesson-nav line to match when done.
 
 ## Docs / maintenance
-- B-M4 [2026-10-26, owner request] PRONUNCIATION KEY SPEC — REWRITE → in progress: moved to PENDING.md (step 1 — delete old renderer + reformat dictionary — done 2026-10-27).
 - B-M3 [2026-10-26, owner request] BUG SWEEP: confirm relevance/existence of open items, run analysis, and fix low-hanging-fruit bugs.
 - B-M2 [2026-10-26, owner request] CLEANUP: root out inconsistency / redundancy / bloat / unnecessary comments across spec files and code.
 - B-M1 [2026-10-26, owner request] SPLIT SPEC FILES: consider splitting FUNCTION / FORMAT / CONTENT (spec) files. Decision pending.
@@ -39,7 +40,6 @@ _(Newest first.)_
 - B-C4 [2026-10-24] CONTENT RE-GENERATION (authoring side, start at lesson 5). Author per the generative rules and run the step-4/5 structural+pedagogical pass on every lesson: fill the width (no dead space), align fill-in fields (use the aligned layout when prompts vary in length), half-width pair or center small blocks, answer-width fields (--gap-w), randomized MCQ, distinct Treino vs Quiz, Portuguese italic. Lesson 5 first. See B-P4 below.
 - [PARKED 2026-10-24 — address after lesson 5 cleanup] NEW-VOCAB TRANSLATION + CORE NOTES: new words not yet introduced in a prior lesson should show a translation where appropriate (unless a clear cognate or meant to be inferred). Implement via lesson-wide "core" notes/recordings/highlights that are (a) visible to ALL users, (b) authored during generation, (c) editable only in teacher edit mode. Guideline lives here; the mechanism lives in FUNCTION.md (Backend section).
 - [2026-10-13] NO exercise has an in-page self-check: a student can fill blanks, pick radios and write translations, and nothing ever tells them whether it is right. Owner to decide the MECHANISM (teacher review at the next class, or a real feature) — it would be a NEW decision, and it starts here (then FUNCTION.md, then engine wiring + qa/smoke.mjs).
-- [2026-10-25, displaced by the `.sound` → `.ptpronounce` rename] PRONUNCIATION NOTATION LIST — from FORMAT.md's old `.sound` bullet ("pronunciation sound label written in Portuguese characters"): `ei, i, ai, á, é, ô, ə, iu, uai, u`. When `.sound` became `.ptpronounce` (a styling-only tag), this notation list was dropped from FORMAT. It OVERLAPS but does NOT exactly match PEDAGOGY.md's "systematic set `ai/ei/shn/jn/jr/ô/ó/â`" — the consonant respellings `shn/jn/jr` are only in PEDAGOGY, while `i, uai, u, á, é` are only in this list. Parked until the owner names the single canonical notation list.
 
 ## Pedagogy
 - B-P5 [2026-10-26, owner request] LESSON 12 LETTER-PRONUNCIATION PEDAGOGY: double-check and improve the letter-pronunciation pedagogy in lesson 12.

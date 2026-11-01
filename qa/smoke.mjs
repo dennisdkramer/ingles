@@ -759,13 +759,13 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 window.showAnchor(stText, 20, 40);
                 const qp = sel => window.document.querySelector('.pop ' + sel);
                 const playBtn = qp('#pP'), recBtn = qp('#pR'), noteBtn = qp('#pN'),
-                      key1Btn = qp('#pK'), key2Btn = qp('#pS'), del2 = qp('#pD'), hearBtn = qp('#pH'), delRec2 = qp('#pA');
-                if (!playBtn || !recBtn || !noteBtn || !key1Btn || !key2Btn || !del2 || !hearBtn || !delRec2) {
-                    errors.push('[FAIL] the popup must always show ALL EIGHT buttons (Hear/Play/Record/Delete-audio/Note/Key1/Key2/Delete-note)');
+                      keyBtn = qp('#pK'), del2 = qp('#pD'), hearBtn = qp('#pH'), delRec2 = qp('#pA');
+                if (!playBtn || !recBtn || !noteBtn || !keyBtn || !del2 || !hearBtn || !delRec2) {
+                    errors.push('[FAIL] the popup must always show ALL SEVEN buttons (Hear/Play/Record/Delete-audio/Note/Pronunciation/Delete-note)');
                 } else if (playBtn.disabled || delRec2.disabled) {
                     errors.push('[FAIL] ▶ Play and 🔊 Delete must be enabled when the phrase has its own saved recording');
-                } else if (recBtn.disabled || noteBtn.disabled || key1Btn.disabled || key2Btn.disabled) {
-                    errors.push('[FAIL] ⏺ Record, 📝 Note, 🔤 Key 1 and 🔤 Key 2 must always be clickable');
+                } else if (recBtn.disabled || noteBtn.disabled || keyBtn.disabled) {
+                    errors.push('[FAIL] ⏺ Record, 📝 Note and 📖 Pronunciation must always be clickable');
                 } else if (!recBtn.classList.contains('locked')) {
                     errors.push('[FAIL] ⏺ Record must be locked (still pressable) on a phrase that already has a recording');
                 } else if (!/Note/.test(noteBtn.textContent)) {
@@ -773,7 +773,7 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 } else if (del2.disabled) {
                     errors.push('[FAIL] 📝 Delete must be enabled when the phrase has a saved note');
                 } else {
-                    console.log('   ✅ All eight buttons always present; Play/audio-Delete/note-Delete live, Record locked, Note/Key1/Key2 clickable');
+                    console.log('   ✅ All seven buttons always present; Play/audio-Delete/note-Delete live, Record locked, Note/Pronunciation clickable');
                 }
                 /* the popup must NOT repeat the selected phrase (owner spec 2026-10-12) */
                 if (new RegExp(stText).test(window.document.querySelector('.pop').textContent)) {
