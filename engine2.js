@@ -98,6 +98,14 @@ let ansTimer=null;
 document.addEventListener("change",e=>{const t=e.target;
  if(t&&t.matches&&(t.matches("input.gap")||t.matches('input[type="radio"]')||(t.tagName==="TEXTAREA"&&t.id!=="feed")))ansSaveEl(t);
  else if(t&&t.id==="feed")nbSave();});
+/* re-clicking an already-checked radio DE-SELECTS it (and clears its saved answer). At click time the
+   default check action has not run yet, so t.checked still holds the PRE-click state: true only when
+   the user re-clicked a selected option. preventDefault stops the browser from re-checking it. */
+document.addEventListener("click",e=>{const t=e.target;
+ if(t&&t.matches&&t.matches('input[type="radio"]')&&t.checked){
+  e.preventDefault();t.checked=false;
+  const o=ansOf(t);if(o&&o.anchor)ansSet(o.anchor,"",ansPos(o.posEl));
+ }});
 document.addEventListener("input",e=>{const t=e.target;
  if(t&&t.matches&&(t.matches("input.gap")||(t.tagName==="TEXTAREA"&&t.id!=="feed"))){clearTimeout(ansTimer);ansTimer=setTimeout(()=>ansSaveEl(t),800)}});
 function ansSaveAll(){document.querySelectorAll("input.gap, textarea").forEach(el=>{if(el.tagName==="TEXTAREA"&&el.id==="feed")return;ansSaveEl(el)});}
