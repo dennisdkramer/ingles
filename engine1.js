@@ -16,6 +16,11 @@ let STUDENT=gate.student||gate.email, layer=[], sig="", editing=false;
 const audioCache={};
 let popXY={x:20,y:90};
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(t._x);t._x=setTimeout(()=>t.style.display="none",2600)}
+const isTouch=()=>('ontouchstart' in window)||(navigator.maxTouchPoints||0)>0;
+function copyText(s){const ok=()=>toast("Copiado");
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(String(s)).then(ok).catch(()=>{copyTextLegacy(s);ok()});}
+ else{copyTextLegacy(s);ok()}}
+function copyTextLegacy(s){const ta=document.createElement("textarea");ta.value=String(s);ta.setAttribute("readonly","");ta.style.cssText="position:fixed;top:-999px;left:-999px;opacity:0";document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,99999);try{document.execCommand("copy")}catch(e){}ta.remove();}
 function b64url(b64,mime){const m=mime||"audio/webm";
  try{const b=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));return URL.createObjectURL(new Blob([b],{type:m}))}
  catch(e){return "data:"+m+";base64,"+b64}}
@@ -400,6 +405,7 @@ function nbPopHTML(t,editing){
   '<span class="poprow"><button id="pN" title="nota">'+(editing?'💾 Save':'📝 Note')+'</button>'+
   '<button id="pK" title="chave de pronúncia"'+(k?' disabled':'')+'>📖 Pronunciation 🔑</button>'+
   '<button id="pD" title="apagar a nota e a chave"'+(st.note||k?"":' disabled')+'>📝 Delete</button></span>'+
+  (isTouch()?'<span class="poprow"><button id="pC" title="copiar o trecho">📋 Copy</button></span>':'')+
   keyHTML+noteHTML+ntWrap;
 }
 /* wire a freshly-opened .pop for an anchor: range = the live selection when the popup came from
@@ -464,6 +470,8 @@ function nbWirePopup(t,r,x,y){
  if(A)A.onclick=()=>{if(A.disabled)return;
   if(A.classList.contains("locked")){toast(NB_REC_AMBIG);return}
   nbDeleteItem(t,"rec")};
+  const C=pop.querySelector("#pC");
+  if(C)C.onclick=()=>copyText(t);
 }
 /* ONE CORE SAVE for the note/recording layer:
    💾 Save (note) and rec() (recording) both go through here, so the two save paths can never
@@ -562,7 +570,6 @@ function refreshNbPopup(t,x,y,editing){
  if(editing===undefined)editing=!!(w&&w.style.display!=="none");
  openPop(t,x,y,nbPopHTML(t,editing));
  if(editing&&cur!=null){const nt=pop.querySelector("#nt");if(nt)nt.value=cur;}
- applyPopupZoom();
  nbWirePopup(t,null,x,y);
 }
 /* open the seven-button popup for an anchor — and, when it came from a SELECTION (r), resolve the
@@ -687,18 +694,17 @@ function nbDeleteItem(t,type){
 function openPop(t,x,y,html){closePop();popXY={x,y};pop=document.createElement("div");pop.className="pop";
  pop.style.left=x+"px";pop.style.top=y+"px";
  pop.innerHTML=html;document.body.appendChild(pop);return pop}
-/* page zoom: keep the note/record popup a constant on-screen size (CSS zoom) while it keeps following
-   its anchor (re-placed on every zoom change). CSS zoom re-flows (no sub-pixel blur); the highlight
-   palette is never touched. */
+/* popup placement: computed ONCE at open (openNbPopup) and never re-anchored while the popup stays
+   open (owner rule: the anchor position must not change while it remains open). The popup is a plain
+   absolutely-positioned element in DOCUMENT coords, so it scrolls and zooms with the page by itself —
+   no transform/zoom compensation (which was what made it render too small / too big and shift around). */
 let nbPlaceR=null,nbPlaceX=0,nbPlaceY=0;
-let dprBase=1;try{dprBase=window.devicePixelRatio||1}catch(e){}
-function popScale(){return ((window.visualViewport&&visualViewport.scale)||1)*((window.devicePixelRatio||1)/(dprBase||1))}
 function nbPlacePopup(r,x,y,fit){
  if(r)nbPlaceR=r;
  if(x!==undefined){nbPlaceX=x;nbPlaceY=y;}
  if(!pop)return;
  const sx=window.scrollX||0,sy=window.scrollY||0;
- const ow=pop.offsetWidth,oh=pop.offsetHeight;
+ const ow=pop.offsetWidth;
  let rl=0,rt=0,rw=1,rb=0,endX=0;
  if(nbPlaceR){const rr=nbPlaceR.getBoundingClientRect();rl=rr.left;rt=rr.top;rw=rr.width;rb=rr.bottom;
   try{const er=nbPlaceR.cloneRange();er.collapse(false);endX=er.getBoundingClientRect().left;}catch(e){endX=rr.right;}}
@@ -706,8 +712,6 @@ function nbPlacePopup(r,x,y,fit){
  const isCenter=(rw<ow),anchorX=isCenter?ow/2:ow;
  const leftV=(isCenter)?(rl+rw/2-anchorX):(endX-anchorX);
  const topV=rb+10;
- pop.style.transformOrigin=anchorX+"px 0px";
- pop.style.transform="scale("+(1/popScale())+")";
  pop.style.left=(leftV+sx)+"px";pop.style.top=(topV+sy)+"px";
  if(fit){const vv=window.visualViewport||null,vl=vv?vv.offsetLeft:0,vt=vv?vv.offsetTop:0,vw=vv?vv.width:innerWidth,vh=vv?vv.height:innerHeight;
   let tb=pop.getBoundingClientRect();
@@ -716,10 +720,6 @@ function nbPlacePopup(r,x,y,fit){
   else if(tb.right>=vl+vw){pop.style.left=(parseFloat(pop.style.left)-(tb.right-(vl+vw))-5)+"px";}}
  popXY={x:parseFloat(pop.style.left),y:parseFloat(pop.style.top)};
 }
-function applyPopupZoom(){if(pop&&!pop.classList.contains("hlpalpop"))pop.style.transform="scale("+(1/popScale())+")"}
-function popFitZoom(){if(pop&&!pop.classList.contains("hlpalpop"))nbPlacePopup()}
-if(window.visualViewport){visualViewport.addEventListener("resize",popFitZoom);visualViewport.addEventListener("scroll",popFitZoom)}
-addEventListener("resize",popFitZoom);
 /* popup placement: below the END (bottom-right) of the span, kept inside the viewport (10px from the
    right edge). The caller passes the selection's bounding rect, or the click point as a zero-area rect. */
 function nbPopupXY(r){
@@ -783,6 +783,7 @@ function trySelPopup(){ if(editing)return;
  const p=nbPopupXY(r.getBoundingClientRect());
  openNbPopup(t,pendingRange,p.x,p.y);
  lastSelText=t;
+  if(isTouch()){try{getSelection().removeAllRanges()}catch(e){}}   /* dismiss the native copy/paste callout that draws OVER the popup on iOS/Android */
 }
 let selTimer=null;
 document.addEventListener("selectionchange",()=>{clearTimeout(selTimer);selTimer=setTimeout(trySelPopup,350)});

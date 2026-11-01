@@ -225,11 +225,6 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 /* a standalone dialogue that isn't paired beside another block */
 .dialog.half{max-width:calc(50% - 7px);margin-left:auto;margin-right:auto}
 /* ===== entrance / landing page (index.html) ===== */
-body.landing main{width:auto;max-width:1400px;margin:0 auto;padding:12px 0 30px}
-body.landing header.brand{width:auto;max-width:1400px;margin:0 auto}
-body.landing .control-bar{width:auto;max-width:1400px;margin:10px auto 0}
-body.landing .page-container{position:static;left:auto;width:auto;max-width:1400px;margin:0 auto}
-body.landing .content-area{width:auto;max-width:1200px}
 body.landing .landing-card{max-width:600px;margin:44px auto 12px;padding:32px 38px}
 body.landing .landing-title{font-size:26px;letter-spacing:.05em;margin:0 0 10px}
 body.landing #gtext{font-size:16px;margin:0 0 4px}
