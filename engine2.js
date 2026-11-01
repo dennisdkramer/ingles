@@ -11,7 +11,7 @@ document.querySelectorAll("[contenteditable]").forEach(function(n){n.removeAttri
 /* ---- content edit mode (teacher): a separate editable copy; live page + marks stay untouched ---- */
 const contentId=()=>"content_"+TRACK+"_"+L;
 let savedLive="",nbkVal="";
-function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop,#completebtn").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style],b[style],i[style],u[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|px|font-style|background/.test(st))s.removeAttribute("style")});return "<!doctype html>"+cl.outerHTML;}
+function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop,#completebtn,#completerow").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style],b[style],i[style],u[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|px|font-style|background/.test(st))s.removeAttribute("style")});return "<!doctype html>"+cl.outerHTML;}
 function contentAreaHTML(saved){const d=new DOMParser().parseFromString(saved,"text/html");const ca=d.querySelector(".content-area");return ca?ca.innerHTML:saved;}
 function saveContent(){if(!document.querySelector(".content-area"))return;const o={action:"set",id:contentId(),type:"content",anchor:"",data:fullPageHTML(),email:gate.email,lesson:L,author:"prof",track:TRACK};notePending(o);outboxPush(o);scheduleFlush();}
 function toggleEditMode(){
@@ -136,17 +136,27 @@ function renderAnswers(){
    Rendered for BOTH students and teachers; for a teacher it tags the currently selected student. */
 function completeId(){return "complete_"+STUDENT+"_"+TRACK+"_"+L;}
 function ensureCompleteBtn(){
- let btn=document.getElementById("completebtn");
- if(!btn){
-  btn=document.createElement("button");
-  btn.type="button";btn.id="completebtn";btn.className="complete-btn";
+ let row=document.getElementById("completerow");
+ if(!row){
+  row=document.createElement("div");
+  row.id="completerow";row.className="complete-row";
   const fd=document.getElementById("feed");
   let anchor=fd;
-  const prev=fd?fd.previousElementSibling:null;
-  if(prev&&prev.tagName==="H2")anchor=prev;
-  if(anchor)anchor.parentNode.insertBefore(btn,anchor);
-  else{const ca=document.querySelector(".content-area");if(ca)ca.appendChild(btn);}
+  const prevEl=fd?fd.previousElementSibling:null;
+  if(prevEl&&prevEl.tagName==="H2")anchor=prevEl;
+  const pb=document.createElement("button");
+  pb.type="button";pb.textContent="← Last";pb.disabled=L<=1;
+  pb.onclick=()=>{if(L>1)location.href="lesson"+(L-1)+".html"};
+  const btn=document.createElement("button");
+  btn.type="button";btn.id="completebtn";btn.className="complete-btn";
+  const nb=document.createElement("button");
+  nb.type="button";nb.textContent="Next →";nb.disabled=L>=COUNT;
+  nb.onclick=()=>{if(L<COUNT)location.href="lesson"+(L+1)+".html"};
+  row.appendChild(pb);row.appendChild(btn);row.appendChild(nb);
+  if(anchor)anchor.parentNode.insertBefore(row,anchor);
+  else{const ca=document.querySelector(".content-area");if(ca)ca.appendChild(row);}
  }
+ const btn=document.getElementById("completebtn");
  btn.onclick=()=>{
   const pid=completeId();
   if(completeNow){send({action:"del",id:pid});layer=layer.filter(r=>r.type!=="complete");}
@@ -164,10 +174,10 @@ function renderCompleteBtn(){
  btn.classList.toggle("is-done",completeNow);
 }
 (async()=>{try{
- const bar=document.getElementById("controlbar")||topbar;
+ const bar=document.getElementById("controlbar");
  let extra="";
  if(gate.teacher){extra=' <select id="sel"><option value="'+gate.email+'">'+(gate.teacherName||gate.email)+'</option></select>';}
- bar.innerHTML="🦺 "+gate.email+" · <b>"+TRACK+"</b> · <a href=\"../index.html\">Index</a>"+extra+' · <button type="button" id="clearpage">🧹 Clear page</button>' + ' <button type="button" id="prevlesson"'+(L>1?'':' disabled')+' title="Lição '+(L-1)+'">← Last lesson</button>' + ' <button type="button" id="nextlesson"'+(L<COUNT?'':' disabled')+' title="Lição '+(L+1)+'">Next lesson →</button>';
+ bar.innerHTML="🦺 "+gate.email+" · <b>"+TRACK+"</b> · <a href=\"../index.html\">Index</a>"+extra+' · <button type="button" id="clearpage">🧹 Clear page</button>' + ' <button type="button" id="prevlesson"'+(L>1?'':' disabled')+' title="Lição '+(L-1)+'">← Last</button>' + ' <button type="button" id="nextlesson"'+(L<COUNT?'':' disabled')+' title="Lição '+(L+1)+'">Next →</button>';
  const pv=document.getElementById("prevlesson");if(pv&&L>1)pv.onclick=()=>location.href="lesson"+(L-1)+".html";
  const nx=document.getElementById("nextlesson");if(nx&&L<COUNT)nx.onclick=()=>location.href="lesson"+(L+1)+".html";
  const cp=document.getElementById("clearpage");

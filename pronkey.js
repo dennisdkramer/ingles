@@ -61,7 +61,7 @@ window.PronKey = (function () {
 
   // Fetch the dictionary. dictionary.json sits next to pronkey.js (repo root),
   // so the URL is derived from THIS script's src (not the document URL, which would
-  // break on pages nested one level down: business/, kids/, nsfw/).
+  // break on pages nested one level down: business/, kids/, adult/).
   (function boot() {
     try {
       const cs = document.currentScript;

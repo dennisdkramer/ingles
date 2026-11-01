@@ -9,7 +9,7 @@ let gate=null;try{gate=JSON.parse(sessionStorage.gate)}catch(e){}
 if(!gate||h(gate.email+gate.track+SECRET)!==gate.sig||(!gate.teacher&&gate.track!==TRACK))location.replace("../index.html");
 /* student-name recording prompts (B-I7): the index page stores the logged-in student's name in the gate.
    Replace any .stuname placeholder with it; a missing/empty name (incl. teachers) keeps the authored
-   static text (e.g. "Ana", or "___" in kids/nsfw). */
+   static text (e.g. "Ana", or "___" in kids/adult). */
 if(gate.name)document.querySelectorAll(".stuname").forEach(el=>el.textContent=gate.name);
 const who=()=>gate.teacher?"prof":"aluno";
 let STUDENT=gate.student||gate.email, layer=[], sig="", editing=false;
@@ -1126,6 +1126,7 @@ function printLesson(){
  let pv=document.getElementById("printRoot");if(pv)pv.remove();
  hlReflow();ntReflow();                       /* re-measure marks at the current layout/scroll */
  const clone=src.cloneNode(true);
+ clone.querySelectorAll("#completerow").forEach(n=>n.remove());
  const sr=src.getBoundingClientRect(),sx=window.scrollX||0,sy=window.scrollY||0;
  const ox=sr.left+sx,oy=sr.top+sy;            /* content-area origin in DOCUMENT coords */
  const layer=document.createElement("div");layer.className="pr-layer";

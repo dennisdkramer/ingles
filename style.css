@@ -215,6 +215,8 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 .complete-btn{display:block;margin:14px auto;width:fit-content;font-weight:700}
 .complete-btn:not(.is-done){background:#5b6b84;box-shadow:3px 3px 0 var(--tan)}
 .complete-btn.is-done{background:#0f766e;box-shadow:3px 3px 0 var(--tan)}
+.complete-row{display:flex;justify-content:center;align-items:center;gap:8px;margin:14px 0}
+.complete-row button{margin:0}
 .jumpbtn{padding:6px 12px;flex:0 0 auto}
 .remlink{background:transparent;color:#7f1d1d;border:0;box-shadow:none;padding:0;font-weight:600;text-decoration:underline;cursor:pointer;flex:0 0 auto}
 .trow{display:flex;align-items:center;gap:8px;min-width:0}

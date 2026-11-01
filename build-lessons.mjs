@@ -1,6 +1,6 @@
 // build-lessons.mjs — derive lessons.json from each lesson page's content <h1>.
 // Run: node build-lessons.mjs  (or `npm run build:lessons` / `npm run qa`)
-// Reads kids/ business/ nsfw/ lesson*.html (the PUBLISHED copies, not the .edit.html
+// Reads kids/ business/ adult/ lesson*.html (the PUBLISHED copies, not the .edit.html
 // sidecars), takes the lesson number from the filename and the title from the
 // content-area <h1>, and writes root lessons.json.
 import fs from 'fs';
@@ -8,7 +8,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
-const TRACKS = ['kids', 'business', 'nsfw'];
+const TRACKS = ['kids', 'business', 'adult'];
 
 function decodeEntities(s) {
   return String(s)

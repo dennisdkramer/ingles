@@ -34,7 +34,7 @@
  *   exactly as the click left them (nbLocal/nbEntries, the same pendingFor window as highlights)
  *
  * SCOPE (owner decision 2026-10-11): lesson pages are developed on business/lesson1.html ONLY
- * until the feature set is final. kids/, nsfw/ and the login page (index.html) are
+ * until the feature set is final. kids/, adult/ and the login page (index.html) are
  * parked here on purpose — add their testPage() calls back in main() once business is done.
  */
 
@@ -1447,7 +1447,7 @@ async function main() {
 
     /* SCOPE: business only (owner decision 2026-10-11) — one page, one track, one run.
        Parked until the business build is final: index.html (login page), kids/lesson1.html,
-       nsfw/lesson1.html. Re-enable by adding their testPage() entry back to this list. */
+       adult/lesson1.html. Re-enable by adding their testPage() entry back to this list. */
     for (const [page, track] of [['business/lesson1.html', 'business']]) {
         try {
             const errs = await testPage(serverUrl, page, track);

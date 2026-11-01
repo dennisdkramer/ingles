@@ -2,21 +2,13 @@
 Reference this file whenever a task touches site appearance or structure. The EXISTING components and their styling are stable — changing them needs owner sign-off — but NEW components and media may be ADDED when pedagogy calls for them, and are recorded here when introduced. Behaviour lives in FUNCTION.md; content handling in CONTENT.md.
 
 ## Site structure
-- "Inglês Abre Portas" is a static English-teaching site — one teacher plus allow-listed students, three books (kids, business, adults/nsfw); every lesson is a standalone page. (Project GOALS are distributed: behaviour in FUNCTION.md, state/parameters in STATUS.md.)
+- "Inglês Abre Portas" is a static English-teaching site — one teacher plus allow-listed students, three books (kids, business, adult); every lesson is a standalone page. (Project GOALS are distributed: behaviour in FUNCTION.md, state/parameters in STATUS.md.)
 - Page shell order: header.brand (English text, centered logo 120px, rose drop-shadow) → #controlbar .control-bar (the "control bar": account/session info + tools, English) → main#page → .page-container (PAGE AREA) → .content-area (CONTENT AREA).
 - .page-container = PAGE AREA: fixed 1400px wide (never shrinks with the viewport), height GROWS with content (no min-height, no clipping). Paper bg, 2px solid ink border, no radius/shadow, position:absolute — taken out of the document flow and pinned at a fixed left offset (15px), so the page and its content never reflow when the viewport is resized, a mark is painted or the shared notebook grows below it. ALL page content — including the footer — lives inside it.
 - .content-area = CONTENT AREA: fixed 1200px wide (never shrinks with the viewport), centered inside the page area → exactly 100px margin on each side. All body content (text, cards, buttons, feed) sits here and re-flows within this fixed box.
 
-## RULES
-    Rule 1 - 
-    Rule 2 - 
-    Rule 3 - 
-    Rule 4 - 
-
-
-
 ## Lesson page structure
-- The mechanical skeleton (structural): doctype/head/title/stylesheet → #toast → header.brand → #controlbar → main#page → .page-container → .content-area → centered h1 → lesson sections → footer → closing script block (BACKPACK/SECRET/TRACK/L/COUNT + engine1.js/engine2.js + the engine-load guard) → #feed (shared notebook). The content-side list of mandatory page parts is in CONTENT.md.
+- The mechanical skeleton (structural): doctype/head/title/stylesheet → #toast → header.brand → #controlbar → main#page → .page-container → .content-area → centered h1 → lesson sections → #feed (shared notebook) → footer → closing script block (BACKPACK/SECRET/TRACK/L/COUNT + engine1.js/engine2.js + the engine-load guard). The content-side list of mandatory page parts is in CONTENT.md.
 - The lesson title (h1) is centered, and is written short enough to sit on ONE line at the fixed 38px size inside the 1200px content area — title-length guidance lives in CONTENT.md. Sizes stay fixed constants (never dynamic/variable to force a fit).
 
 ## HTML/CSS formatting
@@ -52,17 +44,16 @@ Reference this file whenever a task touches site appearance or structure. The EX
 - Pronunciation content types (business/lesson12–14) need NO new CSS: they reuse .chart, .grid3, .qgrid.stack, .blanks.sent and the ⏺ recording block as-is. The pronunciation key itself (bold/grey/schwa, two levels L1/L2) is currently the static fallback markup authored inside each `data-pron="word"` (L1) / `data-pron="word:2"` (L2) span — not by any lesson-specific styling.
 - A fill-in hint (Portuguese, italic) sits on its own line BELOW the input when inline placement would overflow the block or look cramped. Author it with the block fill-in layout (`.blanks.sent` / `.blanks.sent.cols`) so the line break actually renders — a `<br>` inside the default flex `.blanks` row is ignored.
 - section headings (h2) carry a rose underline; exercise items are numbered 1..n under their group heading (no repeated section letter)
-- @media print: hides header/#controlbar/#topbar/#feed/footer, strips container border/shadow
+- @media print: hides header/#controlbar/#feed/footer, strips container border/shadow
 
 ### Sizing philosophy
-- Controls/hotkey text/buttons: minimum size an average person comfortably sees, clicks, reads. Never enlarge "for beauty"; never shrink below comfortable.
-- Control-bar text and header text are English on all 5 pages.
+- Minimum size an average person comfortably sees, clicks, reads.
 
 ## Lesson section/block formatting
 - .card: paper bg, 2px ink border, 16px radius, 5px 5px 0 tan hard shadow
 - Buttons: ink bg, cream text, 10px radius, 3px 3px 0 tan shadow, weight 600, 14px Public Sans
 - Links: ink, weight 600. Dim text: #8a8072, 13px
-- Lesson navigation: the control bar carries "← Last lesson" / "Next lesson →" buttons (always present, rendered by engine2.js from `L` and `COUNT`; the boundary button is greyed/disabled).
+- Lesson navigation: the control bar carries "← Last" / "Next →" buttons (always present, rendered by engine2.js from `L` and `COUNT`; the boundary button is greyed/disabled).
 
 ### Layout STANDARDS at generation (width & fill techniques; CSS stays fixed)
 CSS uses fixed constants (no dynamic/viewport sizing and no text wrapping). Layout is not pre-assigned: a block's width and column count are chosen to fit its content, and CSS only implements that choice — it never rescales or wraps content to force a fit. The width/fill/alignment techniques below are STANDARDS (fallbacks) serving the "no dead space" and "professional-looking results" priorities — followed in standard/compliance mode, and in a creative pass only as far as they help:
