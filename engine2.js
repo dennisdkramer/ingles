@@ -5,7 +5,55 @@ let lastPollChange=Date.now(); /* last time the poll saw a change — keeps the 
 let lastFull=""; /* the layer content signature used to detect that change */
 let completeNow=false; /* optimistic state of the "Complete?" tag button */
 
-function wireListen(){document.querySelectorAll(".listen").forEach(b=>{b.onclick=()=>{if(editing)return;const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="en-US";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}})}
+/* ---- audio: pre-rendered clips (build-audio.mjs) + natural-voice TTS fallback ---- */
+let sayClips=null,sayLoad=null,sayEl=null;
+function loadSayClips(){
+  if(sayLoad)return sayLoad;
+  sayLoad=fetch("../audio/manifest.json",{cache:"force-cache"})
+    .then(r=>r.ok?r.json():null)
+    .then(m=>{sayClips=(m&&m.clips)||{};return sayClips})
+    .catch(()=>{sayClips={};return sayClips});
+  return sayLoad;
+}
+try{loadSayClips();}catch(e){sayClips={};}
+const SAY_VOICE_WANT=[/aria.*online/i,/jenny.*online/i,/michelle.*online/i,/samantha/i,/allison/i,/ava/i,/susan/i,/google us english/i,/zira/i];
+function sayVoice(){
+  let vs=[];try{vs=speechSynthesis.getVoices()||[];}catch(e){}
+  const en=vs.filter(v=>/^en[-_]us/i.test(v.lang||"")||/^en$/i.test(v.lang||""));
+  for(const re of SAY_VOICE_WANT){const v=en.find(x=>re.test(x.name));if(v)return v;}
+  return en.find(v=>!v.localService)||en[0]||null;
+}
+function saySpeak(t,rate){
+  try{
+    const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=rate||0.95;
+    const v=sayVoice();if(v)u.voice=v;
+    speechSynthesis.cancel();speechSynthesis.speak(u);
+  }catch(e){}
+}
+function sayStop(){
+  try{if(sayEl){sayEl.pause();sayEl.currentTime=0;sayEl=null;}}catch(e){}
+  try{speechSynthesis.cancel();}catch(e){}
+}
+/* playSay(text[,rate]) — plays audio/<hash>.mp3 when the clip exists, else speaks it */
+async function playSay(t,rate){
+  if(!t)return;
+  sayStop();
+  let clips=sayClips;
+  if(!clips)clips=await loadSayClips();
+  const f=clips&&clips[t];
+  if(f){
+    try{
+      sayEl=new Audio("../audio/"+f);
+      if(rate&&rate!==1)sayEl.playbackRate=rate;
+      await sayEl.play();
+      return;
+    }catch(e){sayEl=null;}
+  }
+  saySpeak(t,rate||0.95);
+}
+window.playSay=playSay;window.saySpeak=saySpeak;
+try{speechSynthesis.onvoiceschanged=()=>{};}catch(e){}
+function wireListen(){document.querySelectorAll(".listen").forEach(b=>{b.onclick=()=>{if(editing)return;const r=Number(b.dataset.rate)||0;playSay(b.dataset.say,r)}})}
 wireListen();
 document.querySelectorAll("[contenteditable]").forEach(function(n){n.removeAttribute("contenteditable");});
 /* ---- content edit mode (teacher): a separate editable copy; live page + marks stay untouched ---- */

@@ -6,12 +6,16 @@
   "description": "Ingles Abre Portas - static English-lessons site (GitHub Pages) plus its QA harnesses.",
   "scripts": {
     "build:lessons": "node build-lessons.mjs",
+    "build:audio": "node build-audio.mjs",
+    "audio:check": "node build-audio.mjs --check",
     "qa": "node build-lessons.mjs && node qa/smoke.mjs",
     "qa:live": "node qa/live.mjs",
     "build:dict": "node build-dictionary.mjs"
   },
   "devDependencies": {
+    "@breezystack/lamejs": "^1.2.7",
     "jsdom": "30.1.2",
+    "kokoro-js": "^1.2.1",
     "openai": "^7.45.1"
   }
 }

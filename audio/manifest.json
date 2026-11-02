@@ -1,0 +1,14 @@
+{
+  "voice": "af_heart",
+  "model": "onnx-community/Kokoro-82M-v1.0-ONNX",
+  "sampleRate": 24000,
+  "format": "mp3",
+  "clips": {
+    "A cup of tea and a toast.": "c864853828cf0ce6.mp3",
+    "Actually, it's Monday.": "c513b547e0f52c63.mp3",
+    "Are you from São Paulo?": "b2750b73b0223268.mp3",
+    "Bring the contract.": "acae04c561b75968.mp3",
+    "Bring the report to me.": "def4a5f889222905.mp3",
+    "Can you assist me?": "ba27d3b04ed761db.mp3"
+  }
+}
