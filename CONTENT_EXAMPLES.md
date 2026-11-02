@@ -36,7 +36,7 @@
 
 \- \*\*Connected-speech dissection + accent contrast.\*\* One natural sentence dissected sound-by-sound across lessons 12–14, plus a prose/grid3 contrast of regional accents (US neutral / Boston / Southern / UK / Australian) described in terms of already-taught concepts (rhotic vs non-rhotic R, vowel shifts) — no fabricated audio; authentic clips are a separate follow-up.
 
-
+**PARKED - **Pronunciation content types (first introduced in business/lesson12).** Sound-teaching blocks that all reuse existing components (`.chart` tables, `.grid3` cards, `.qgrid.stack` MCQ, `.blanks.sent` dictation/fill-in, `.listen` chips, ⏺ recording): (1) *pronunciation lab* — a mouth-position guide (articulation, in PT) paired with a *PT-vs-EN contrast table* ("you say X → say Y"); (2) *minimal-pairs grid/table* — the target word beside its near-neighbours with audio (think/sink/fink; three/tree/free), plus homophone pairs from the flap T (ladder/latter) and silent letters (know/no); (3) *listen-and-identify* — "which TH? / which T?"; (4) *error-correction* — "which is correct?" (at whatever granularity fits the lesson — single words or whole sentences); (5) *progressive multi-step drill* — one block in three labelled steps (identify → discriminate → produce); (6) *tongue twisters + echo/shadowing* — production of connected speech. No new CSS was required; future reuse needs none.
 
 A common sequence for these new blocks (an option, not a rule): introduce a new structure with ▶ audio first, then practise it, then test it — the same one-idea-per-section discipline as the rest of the book.
 
