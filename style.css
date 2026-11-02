@@ -9,13 +9,7 @@ h1 span{display:block;font-size:.42em;letter-spacing:.5em}
 .content-area h1{text-align:center}
 .script{font-family:Caveat,cursive;font-size:38px;margin:2px 0 0;transform:rotate(-2deg)}
 main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
-/* .page-container = PAGE AREA: FIXED 1400px wide (no max-width — it never shrinks with the viewport),
-   height grows with content (no min-height, no clipping). ABSOLUTE (FORMAT.md B-FM1): taken out of the
-   document flow and pinned at a fixed left offset (15px), so its geometry is immutable — painting a
-   mark, resizing the viewport or growing the shared notebook below never reflows the prose. */
 .page-container{margin:0;background:var(--paper);border:2px solid var(--ink);border-radius:0;box-shadow:none;padding:0;position:absolute;left:15px;width:1400px}
-/* .content-area = CONTENT AREA: FIXED 1200px wide (never shrinks with the viewport) → exactly 100px
-   margin on each side inside the 1400px page area; ALL page content lives here and re-flows within it. */
 .content-area{width:1200px;margin:0 auto;padding:16px 0}
 /* live (non-edit) lesson prose reads as static, not as an editable text field */
 .content-area{cursor:default}
