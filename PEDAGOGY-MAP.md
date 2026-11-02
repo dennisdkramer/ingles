@@ -6,8 +6,15 @@
    · `Focus:` high-level taught-concept/purpose of lesson
    · `Advanced element:` / `Professional relevance:` / `Natural register:`  details
    · `Add:` draft-plan material (to be folded in)
+   · `Generation:` build instruction or hold note for that page
 
-## Difficulty ramps up smoothly. Lesson 1: A0 → Lesson 10: A1 → Lesson 20: A2 → Lesson 30: B1 → Lesson 40: B2 → Lesson 50: C1.
+## Generation rules (hard)
+
+1. **Depth follows the lesson.** The ramp is smooth: Lesson 1 A0 → Lesson 10 A1 → Lesson 20 A2 → Lesson 30 B1 → Lesson 40 B2 → Lesson 50 C1. Any concept or vocabulary item a lesson includes must be taught at the depth and difficulty of that lesson, and must not be redundant with prior lessons: a topic returns only by going deeper, wider or more natural/register-appropriate — never by repeating an earlier explanation or its drills.
+2. **No length or quantity budget.** There is no cap on sections, tables, examples, exercises, ditado lines, recordings or quiz items, and no page-length limit. Everything this roadmap entry references must be robustly included, thoroughly explained and fully trained inside its lesson — explanation → examples → recognition practice → production practice → no-consultation quiz. Never compress, summarise or omit a roadmap item to fit a page.
+3. **Vocabulary is a word bag.** `Vocabulary:` / `Key vocabulary:` lists are raw material, not copy: group them by function, teach them inside phrases, then drill and recycle them. A lesson whose entry lists no vocabulary must still introduce new, topic-relevant vocabulary of its own — every lesson leaves the learner with new words.
+4. **Language of instruction.** Default to English for headings, instructions and explanations; use Portuguese (pt-BR) where it genuinely helps the learner (glosses, contrastive notes, error warnings), scaled to the level — heavy PT support at A0-A1, mostly English from B1.
+5. **Site contract.** `<lesson>.edit.html` is an identical copy of the published `<lesson>.html`, never a different version; navigation is purely sequential (`← Last` / `Next →`) with no lesson count anywhere.
 
 1. **Lesson 1: Introduction to Sounds & the Sentence Skeleton**
    * Content: the subject is always named (I am from Brazil, never "Sou do Brasil"); be am/is/are; a/an decided by sound (a university, an hour); Sound Lab — vowels have no fixed sound (A: cat/cake/car/about · O: go/good/who); the joker it for time, weather, day and distance (It's 8pm / raining / Monday / far); Treino A-G with listening and recording; Quiz.
@@ -252,10 +259,12 @@
 39. **Lesson 39: Checkpoint — Consolidation & Mock Exam**
    * Content: a review carousel of lessons 21-38 (each student re-teaches one item in three minutes); then a full mock exam under real conditions — real-speed dictation, a 25-item grammar/lexis section, a business reading, a 120-word email, a two-minute recorded monologue and a short role-play; error analysis and a personal repair list at the end.
    * Focus: consolidating the whole block before the graded exam, with the format already known.
+   * Generation: SKIP — do not build this page yet; the exam format, item mix and scoring must be planned with the user first.
 
 40. **Lesson 40: Exam 1 — Assessment of Lessons 1-38**
    * Content: graded assessment across the four skills — listening (real-speed dictation and comprehension), reading (e-mail and short report), writing (e-mail + short report), speaking (monologue + role-play); scored on a can-do grid built from lessons 1-38, with register (formal vs informal) as part of the speaking rubric.
    * Focus: measuring the 1-38 block and fixing the entry level for the second half.
+   * Generation: SKIP — do not build this page yet; the can-do grid, weighting and pass criteria must be planned with the user first.
 
 41. **Lesson 41: Review — Advanced Tenses & Modals**
    * Examples: Complex scenario analysis where students use advanced grammar in realistic situations ("By the time we completed the project, they had been working on it for six months" - past perfect continuous; "She should have submitted the report by Friday" - third conditional)

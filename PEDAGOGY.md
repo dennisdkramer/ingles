@@ -26,18 +26,8 @@
       - References to or review of content in other lessons
       - Other idea or content not listed here
 
----
 
-### The following items are pending curriculum planning to be scoped into lessons which have already been created
-- Final consonants ("cut off") → Lesson 1 · onset s-clusters ("mash") → Lesson 1
-- p/t/k aspiration → fold into "relaxed pronunciation" note (no dedicated lesson)
-- Short vowels: /ɪ/ prime L1, /æ/ prime L1–2; full vowel map L12
-- H (not mute, but very weak) → early · TH → early · R → early (rhotic R = "open/nasal growl" vs flap T)
-- NG → present continuous lesson · dark L → future "will" lesson ('ll = the dark-L stop)
-- /w/ → note "uai" in question words (L3) · flap T + -ed → simple past (L10)
-- Create a consonant review lesson at Lesson 14 (TH / R / H / NG / dark L / /w/-vs-/v/).
-- Move contractions/reductions forward to Lesson 15.
-- T/D taught with simple past -ed (L10), not its own lesson.
+
 
 --------------
 --------------
@@ -46,13 +36,11 @@
 
 1. Order is derived from this book's own difficulty model — not from any external grammar syllabus. 
 
-2. Every item is placed by how far it sits from Portuguese (transparent / partial / opaque) times how useful it is in business-casual speech (core / common / marginal). 
+2. Every is assessed by how far it sits from Portuguese (transparent / partial / opaque) times how important it is for understanding and producing spoken english  (core / common / marginal). 
 
-3. Lesson quantity follows the needs of the domain, not a target number.
+3. Curriculum planning should distribute teaching of concepts and/or vocabulary between lessons based on the desired completion time of (about but not less than) 60 minutes. 
 
-4. Curriculum planning should distribute teaching of concepts and/or vocabulary between lessons based on the desired completion time of (about but not less than) 60 minutes. 
-
-6. PEDAGOGICAL DIRECTIVES which direct the generation of a full lesson must include a brief and non-quantitative recommendation for balancing content quantity between concept(s) and training time
+4. PEDAGOGICAL DIRECTIVES which direct the generation of a full lesson must include a brief and non-quantitative recommendation for balancing content quantity between concept(s) and training time
 
 
 ### The difficulty model
@@ -63,68 +51,6 @@
 - **Vocabulary is concept → context → mapping.** Each Portuguese concept is enumerated across the contexts of a working day, mapped to the English word(s) a native actually uses in each context, and ranked by frequency/register. A cognate and its more-used cousin are taught together at introduction (with a frequency note); after that, teaching uses whichever is most common in that context. The concept inventory lives in VOCABULARY.md.
 - **Carrier content escalates with the course.** Example phrases grow in length, clause complexity and register as the course advances.
 - When appropriate, research several outside sources on the lesson's topic to brainstorm ideas, not to copy. 
-
-
-### Stage 1 — the skeleton & the fast wins (lessons 1–9)
-
-
-1. **First talk & the sentence skeleton** — the subject is required (no pro-drop); "to be"; "I'm / It's"; the dummy "it".
-2. **The cognate fast lane** — recognition plus the frequency override: the cognate is the recognition bridge, the everyday word is the production target.
-3. **Question words & polite embedded questions** — who/what/when/where/why/how with "be"; polite forms that map straight onto PT; the first repair chunk.
-4. **Simple present — usage & the third-person -s** — customs, facts and routines; it cannot touch the past and does not work for "right now"; he/she/it adds -s/-es/-ies.
-5. **"do" support in questions & negatives — and the fixed word order** — trains BOTH do and does; don't/doesn't; short answers; the skeleton [subject][mode][verb][object][place][time]; makes explicit that the third-person -s (and, later, the past-tense -ed) migrates from the verb to the [mode].
-6. **Workhorse verbs, mapped by context (1)** — the high-frequency movement/transfer verbs, one PT concept → several EN verbs.
-7. **Workhorse verbs, mapped by context (2)** — the high-frequency action/communication verbs, context-mapped.
-8. **Routine, frequency, time & schedules** — always/usually/never; telling the time, days, dates.
-9. **"There is / there are" & place** — in/on/at (place); the first connectors (and/but/because/so).
-
-### Stage 2 — time & the meaning traps (lessons 10–19)
-
-10. **Simple past** — regular -ed + the irregular workhorses; past time words (affirmative: the verb carries -ed).
-11. **Past: questions & negatives** — did/didn't (the -ed moves from the verb to the [mode]); short answers.
-12. **Present continuous** — now vs. in general (the trap: PT uses the -ndo form more broadly).
-13. **Future: plan vs. on-the-spot decision** — going to vs. will (the [mode]).
-14. **Future: the spoken "gonna"** — the reduced [mode], a mode not a verb.
-15. **Present perfect: experience & duration** — the big trap (its meaning maps onto PT's simple past, not onto the PT verb form that looks like it).
-16. **Present perfect: finished vs. unfinished time** — for/since, ever/never, already/yet/just.
-17. **Comparisons & opinions** — comparative/superlative + opinion chunks.
-18. **Modals: ability, permission, requests** — can/could (occupy the [mode]).
-19. **Modals: obligation, advice, possibility** — must/have to/should/might (occupy the [mode]).
-
-### Stage 3 — the opaque-but-useful toolkit (lessons 20–31)
-
-20. **Countability & quantity** — countable/uncountable; some/any/much/many/a lot of.
-21. **Prepositions & verb+preposition units** — time/movement at/on/in/to/from; verbs learned with their preposition attached.
-22. **Phrasal verbs: the system** — whole meaning (non-compositional), grouped by particle, separable vs. inseparable.
-23. **Phrasal verbs: movement & routine**.
-24. **Phrasal verbs: work & communication**.
-25. **Phrasal verbs: plans, problems & changes**.
-26. **Conditionals (1st & 2nd) + "would"** — would occupies the [mode]; real vs. hypothetical; polite offers.
-27. **Modals of deduction** — must/might/could/can't (occupy the [mode]) for guessing.
-28. **Relative clauses** — who/that/which/where; omitting the pronoun.
-29. **Gerunds & infinitives** — high-frequency verb patterns.
-30. **The everyday passive & "get" passive** — "it was sent", "it got lost", "it's done".
-31. **Reported speech** — say/tell/ask + backshift.
-
-### Stage 4 — fluency & discourse (lessons 32–40)
-
-32. **Connected speech & reductions** — the reduced forms + linking at natural speed (consolidation, not first introduction).
-33. **Discourse markers & fillers** — the glue that keeps speech natural.
-34. **Meetings** — open, give opinion, agree/disagree, confirm, decide (question tags as a thin confirmation device).
-35. **Softening, hedging & polite requests** — "Could you…?", "Would you mind…?", vagueness.
-36. **Email & the written↔casual register swap** — the same message in both registers.
-37. **Phone & customer-service** — the phone script, clarifying, handling a problem.
-38. **Storytelling** — telling a work story in order; the past perfect as a thin "already-before-then" add-on (optional; natives often just use the simple past).
-39. **Small talk → deeper conversation** — early greetings recycled inside fuller exchanges.
-40. **Nuanced opinion & disagreement** — agreeing/disagreeing with tact and depth.
-
-### Stage 5 — consolidation & polish (lessons 41–45)
-
-41. **Review loop: tenses & question forms** — under time pressure (third conditional as a thin, formal/optional note).
-42. **Review loop: phrasal verbs & modals** — under time pressure.
-43. **The capstone working day** — one full role-play that uses everything.
-44. **Self-correction, repair & asking for clarification** — what to say when communication breaks.
-45. **Idiomatic chunk bank & register refresh** — high-frequency formulaic speech, consolidated.
 
 ## Pedagogy principles
 
@@ -150,8 +76,4 @@
 
 
 ## Language by student level (English-first, comprehensibility-driven)
-Use ENGLISH wherever the student can actually follow it — i.e. wherever the text can be generated primarily with language the student has ALREADY been taught, or sits at a linguistic level generally below the level of the text that contains it. This applies to section headlines, explanatory text, warnings, tips, block headers and column headers alike. Portuguese is used only when that logic — or the pedagogy/content generation — dictates it, never "at will":
-
-- **Beginner (early stage):** little has been taught yet, so most English would be above the student's level → headers and explanatory prose are Portuguese. English appears where it is the item being taught (e.g. the phrasal verb itself) and where an already-taught word fits.
-- **Intermediate:** the parts the student already controls switch to English (section/block/column headers first, then simple explanations and reminders); conceptual explanations — and anything whose English would be above level — stay Portuguese.
-- **Advanced:** almost entirely English. Portuguese is reserved for exactly two cases: (1) when the content type or pedagogy demands it, and (2) limited explanation where your analysis/reasoning/research explicitly predicts the equivalent English is beyond the student's level or ability to understand.
+Use ENGLISH wherever the student can actually follow it — i.e. wherever the text can be generated primarily with language the student has ALREADY been taught, or sits at a linguistic level generally below the level of the  lesson that contains it. This applies to section headlines, explanatory text, warnings, tips, block headers and column headers alike. Portuguese is used only when that logic — or the pedagogy/content generation — dictates it, never "at will":

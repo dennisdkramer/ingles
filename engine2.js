@@ -150,8 +150,8 @@ function ensureCompleteBtn(){
   const btn=document.createElement("button");
   btn.type="button";btn.id="completebtn";btn.className="complete-btn";
   const nb=document.createElement("button");
-  nb.type="button";nb.textContent="Next →";nb.disabled=L>=COUNT;
-  nb.onclick=()=>{if(L<COUNT)location.href="lesson"+(L+1)+".html"};
+  nb.type="button";nb.textContent="Next →";
+  nb.onclick=()=>{location.href="lesson"+(L+1)+".html"};
   row.appendChild(pb);row.appendChild(btn);row.appendChild(nb);
   if(anchor)anchor.parentNode.insertBefore(row,anchor);
   else{const ca=document.querySelector(".content-area");if(ca)ca.appendChild(row);}
@@ -177,9 +177,9 @@ function renderCompleteBtn(){
  const bar=document.getElementById("controlbar");
  let extra="";
  if(gate.teacher){extra=' <select id="sel"><option value="'+gate.email+'">'+(gate.teacherName||gate.email)+'</option></select>';}
- bar.innerHTML="🦺 "+gate.email+" · <b>"+TRACK+"</b> · <a href=\"../index.html\">Index</a>"+extra+' · <button type="button" id="clearpage">🧹 Clear page</button>' + ' <button type="button" id="prevlesson"'+(L>1?'':' disabled')+' title="Lição '+(L-1)+'">← Last</button>' + ' <button type="button" id="nextlesson"'+(L<COUNT?'':' disabled')+' title="Lição '+(L+1)+'">Next →</button>';
+ bar.innerHTML="🦺 "+gate.email+" · <b>"+TRACK+"</b> · <a href=\"../index.html\">Index</a>"+extra+' · <button type="button" id="clearpage">🧹 Clear page</button>' + ' <button type="button" id="prevlesson"'+(L>1?'':' disabled')+' title="Lição '+(L-1)+'">← Last</button>' + ' <button type="button" id="nextlesson" title="Lição '+(L+1)+'">Next →</button>';
  const pv=document.getElementById("prevlesson");if(pv&&L>1)pv.onclick=()=>location.href="lesson"+(L-1)+".html";
- const nx=document.getElementById("nextlesson");if(nx&&L<COUNT)nx.onclick=()=>location.href="lesson"+(L+1)+".html";
+ const nx=document.getElementById("nextlesson");if(nx)nx.onclick=()=>location.href="lesson"+(L+1)+".html";
  const cp=document.getElementById("clearpage");
  if(cp)cp.onclick=()=>{
   if(!confirm("Delete ALL highlights, notes and recordings on this page?"))return;
