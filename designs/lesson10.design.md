@@ -27,5 +27,37 @@ The shooter's choices (persisted like any exercise), a diagnosis line per clinic
 - **A double lesson with a full-width game block stretches the single-block layout rules.** Resolution: the game occupies its own full-width panel, and the rest of the lesson is normal blocks; flagged because FORMAT.md owns that decision.
 - **The entry bundles vowels + consonants + the key.** Not a conflict, but it is why this lesson is double length: three skills that share one artefact (the key).
 
+
+## Escalation recorded in Pass B (unresolved, owner's call)
+
+**`shootPair` does not exist as an engine.** The design's chosen entrance is the "shooter" — a Tier-1 generic
+engine (two targets, one spoken word, a skin), approved in the design but never built: there is no
+`engine3.js` in the repo and no CSS skin for a game block. Per PEDAGOGY-MAP §2(b) this affects one lesson's
+content, so the page was generated with the **rounds realised on an existing primitive**: two radio targets,
+one ▶ per round, eight rounds — the behaviour the student performs (listen → commit → check) is the same, and
+it persists through `input[type=radio]` exactly as a game would have had to. What is missing is the *skin* and
+the timed feel. **Owner decision needed:** build `engine3.js` + the skin and swap §1's markup, or keep the
+radio realisation permanently. Nothing else in the lesson depends on the engine.
+
+## Pass B — build notes (2026-11-03, page generated)
+
+Page: `business/lesson10.html` (+ identical `.edit.html` sidecar). Double lesson: 8 sections.
+Sections: 1 Round 1 — the shooter (listen-and-tick pairs) · 2 The vowel map (+ C/G) · 3 The consonant map · 4 The key (syllables, beat, sleeping vowel, noun/verb pairs, function-word reductions) · 5 The clinic (6 words, diagnosis) · 6 The puzzle (decode with the key, then check) · 7 Treino · 8 Quiz.
+
+### Decisions taken inside the design (Pass B, recorded per §4)
+- **The key is described exactly as the site renders it** (`·` syllable, grey letters = letters the mouth skips, `ə` = the sleeping vowel) and **stress is shown in CAPITALS on the page**, because the site's `PronKey.render()` does not mark stress. Claiming the key marks the beat would have been a false statement about the platform.
+- **The puzzle's words are all "letters that vanish" cases** (*island, debt, subtle, business, vegetable, comfortable*) — the section teaches decoding, so every item must be decodable from the marks.
+- **The clinic's six words are business words** (*focus, schedule, receipt, colleague, queue, analysis*), not sound-lab abstractions: the design's promise is "your own working life".
+- **§6's `tr.note` was emitted outside a table by mistake and fixed during the build** (a note row is only valid inside a `.chart`); recorded here as the kind of mechanical slip the QA harness catches only indirectly.
+
+### Width decisions
+- §2 vowel map, §3 consonant map, §4 key tables, §5 clinic, §6 puzzle — full `.chart` / `.panel` (one teaching object each).
+- §2 C and G — `itemrow[data-cols="2"]`: *compare* two letters whose rule is identical.
+- §7 B+C and Quiz B+C — `itemrow[data-cols="2"]`: adjacent compressible groups.
+
+### QA
+`node qa/content.mjs 10` ✅ (chart 7 · panel 16 · listen 65 · gap 22 · radio 96) · `node qa/width.mjs 10` ✅ ·
+`node qa/overflow.mjs 10` ✅ clean (26 blocks). Audio: all 371 `data-say` strings across lessons 1-10 render (`npm run audio:check` → "all clips present").
+
 ## Notes for the build pass
 English instructions here (A1 student, lesson 10), Portuguese only for the mouth-position explanations and the "you say X → say Y" contrast. Audio for every single item — this lesson is worthless without it.
