@@ -33,9 +33,11 @@
  *   predates its own backend write — the row, the phrase's flag and the popup's note line stay
  *   exactly as the click left them (nbLocal/nbEntries, the same pendingFor window as highlights)
  *
- * SCOPE (owner decision 2026-10-11): lesson pages are developed on business/lesson1.html ONLY
- * until the feature set is final. kids/, adult/ and the login page (index.html) are
- * parked here on purpose — add their testPage() calls back in main() once business is done.
+ * SCOPE (owner decision 2026-10-11): business lesson pages only, until the feature set is final.
+ * The page list is DISCOVERED — every business/lesson*.html that exists is tested, and an empty
+ * business/ is a passing state (pages are regenerated after a layout change). kids/, adult/
+ * and the login page (index.html) are parked here on purpose — add their testPage() calls back in
+ * main() once business is done.
  */
 
 import { JSDOM } from 'jsdom';
@@ -1445,10 +1447,18 @@ async function main() {
 
     const allErrors = [];
 
-    /* SCOPE: business only (owner decision 2026-10-11) — one page, one track, one run.
+    /* SCOPE: business track (owner decision 2026-10-11) — and the page list is DISCOVERED, not
+       hard-coded: every business/lesson*.html that exists gets the full run, while "no pages yet"
+       is a valid, passing state (the pages are regenerated after a layout rewrite).
        Parked until the business build is final: index.html (login page), kids/lesson1.html,
        adult/lesson1.html. Re-enable by adding their testPage() entry back to this list. */
-    for (const [page, track] of [['business/lesson1.html', 'business']]) {
+    const businessDir = path.join(ROOT, 'business');
+    const pages = (fs.existsSync(businessDir) ? fs.readdirSync(businessDir) : [])
+        .filter(f => /^lesson\d+\.html$/.test(f))
+        .sort((a, b) => Number(a.match(/\d+/)[0]) - Number(b.match(/\d+/)[0]))
+        .map(f => ['business/' + f, 'business']);
+    console.log('📄 pages under test: ' + (pages.length ? pages.map(p => p[0]).join(', ') : '(none — business/ is empty)') + '\n');
+    for (const [page, track] of pages) {
         try {
             const errs = await testPage(serverUrl, page, track);
             allErrors.push(...errs);

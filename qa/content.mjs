@@ -9,7 +9,7 @@
  *   - #feed is a <textarea>
  *   - no leftover <!-- MORE --> build sentinel
  *
- * Run with: node qa/content.mjs [lessonNumber ...]   (no numbers = all 34 lessons)
+ * Run with: node qa/content.mjs [lessonNumber ...]   (no numbers = every business/lesson*.html that exists)
  */
 
 import { JSDOM } from 'jsdom';
@@ -188,10 +188,20 @@ async function checkLesson(serverUrl, n) {
   return { lesson: n, errors, counts };
 }
 
+function discoverLessons() {
+  const dir = path.join(ROOT, 'business');
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir)
+    .map(f => (f.match(/^lesson(\d+)\.html$/) || [])[1])
+    .filter(Boolean).map(Number).sort((a, b) => a - b);
+}
+
 async function main() {
-  const targets = process.argv.slice(2).map(Number).filter(n => Number.isInteger(n) && n >= 1 && n <= 34);
-  const lessons = targets.length ? targets : Array.from({ length: 34 }, (_, i) => i + 1);
-  console.log('🧪 Content structure harness — business lesson' + (lessons.length > 1 ? 's' : '') + ' ' + (targets.length ? lessons.join(', ') : '1..34'));
+  const targets = process.argv.slice(2).map(Number).filter(n => Number.isInteger(n) && n >= 1);
+  // no numbers = whatever pages exist; named numbers are honoured, and a named page that is missing is a failure
+  const lessons = targets.length ? targets : discoverLessons();
+  console.log('🧪 Content structure harness — business lesson' + (lessons.length === 1 ? '' : 's') + ' ' + (lessons.length ? lessons.join(', ') : '(none)'));
+  if (!lessons.length) { console.log('✅ no business lesson pages to check'); process.exit(0); }
   const server = createServer();
   const PORT = 8766;
   await new Promise(r => server.listen(PORT, r));
@@ -200,6 +210,11 @@ async function main() {
 
   const results = [];
   for (const n of lessons) {
+    if (!fs.existsSync(path.join(ROOT, 'business', 'lesson' + n + '.html'))) {
+      results.push({ lesson: n, errors: ['page not found: business/lesson' + n + '.html'] });
+      console.log('❌ lesson' + n + '  page not found');
+      continue;
+    }
     try {
       const r = await checkLesson(serverUrl, n);
       results.push(r);

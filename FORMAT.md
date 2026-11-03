@@ -50,7 +50,7 @@
 - fieldset = exercise block: dashed tan border, 12px radius
 - .chart = structured data table (cognate rules, phrase translations, to-be chunks, false friends): paper, 2px ink frame + tan shadow, ink header row, tan grid
 - .chips = wrapping keyword pills ("quase iguais" list)
-- .grid3 = an available 3-column row of cards
+- .itemrow = a row of 2 (`data-cols="2"`) or 3 (`data-cols="3"`) equally-sized blocks; each block inside it is tagged `.itemsize-half` / `.itemsize-third` (`.itemsize` = full, the default, and takes no row). A half or third is never generated outside a row.
 - .ex-head = exercise-group sub-heading inside Treino/Quiz: serif (Playfair), dark blue, tan left bar
 - .blanks = wrapping row of fill-in pairs (word + input.gap)
 - .dialog = dialogue block: #fff8ea fill, rose frame, bold speaker labels
@@ -69,15 +69,46 @@
 - Lesson navigation: the control bar carries "← Last" / "Next →" buttons (always present, rendered by engine2.js from `L` alone — there is no lesson count: "Next →" is always enabled and goes to `lesson{L+1}`, "← Last" is disabled on lesson 1).
 
 ### Layout STANDARDS at generation (width & fill techniques; CSS stays fixed)
-CSS uses fixed constants (no dynamic/viewport sizing and no CSS wrapping to force a fit). Layout is not pre-assigned: a block's width and column count are chosen to fit its content, and CSS only implements that choice — rarely rescales and never wraps content to force a fit. The width/fill/alignment techniques below are STANDARDS serving goals of "no dead space" and "professional-looking results":
-a) Width: a block MAY sit half-width beside another block of the same width; a block left on its own CAN be widened with more content.
-b) Priority is minimizing dead space.
-c) Block width decisions are content-aware of what they contain AND context aware of adjacent blocks - If any block must be made half-width and an adjacent block COULD be made half width, do so and pair the two blocks horizontally per (a).
-d) Columns are free - prioritize filling block width.
-e) Adjacent blocks of different heights should be analysed to determine the quantity (and type) of (real, relevant) content that could be added to extend the shorter of the two and trigger a 'cleanup' generation step to do so.
-f) Block contents and their child elements (eg. multiple choice options) should be generated (or shortened/lengthened in cleanup) so that the total length of [each item/option] OR [all items/options] fills >50% of its parent block's width. If <50% is filled, block should be made half-width.
+CSS uses fixed constants (no dynamic/viewport sizing and no CSS wrapping to force a fit). A block's width is a *result* of the pedagogical grouping decision — never a dial — and the block is then tagged so CSS can display it.
+
+1. **Canvas.** Every block sits inside `.content-area` — the fixed 1200px column inside the 1400px `.page-container` (§2b). The layout is fixed at generation, nothing reflows at display time, and content within a block may never overflow the block.
+2. **Three block widths only.** Blocks tile a row evenly: 2 × half or 3 × third — no mixing, no single half/third. Width is never a dial; once the grouping decision is made the block is **tagged** with its `.itemsize*` class (`.itemsize` = full, the default; `.itemsize-half`; `.itemsize-third`) inside a `.itemrow[data-cols="2"|"3"]`, and the CSS displays that size.
+3. **Fill target — content inside the block.** Items generated in a block **saturate** their slot — the combined width gets as close as possible to, and never past, 95% (full) / 45% (half) / 30% (third) of `.content-area`, with no loss of quality or utility; the only way of closing the gap that is not allowed is redundancy. Fill by increasing or reducing the verbosity and/or quantity of strings/items, and by the width of items *within* the row (gaps, column widths, option counts) — with real teaching content only.
+4. **Halves/thirds need a stated reason** (divide, contrast, compare, or any other articulated reason), are generated only as complete aligned rows, and the row's members are height-equalised by **adding** content to the shorter ones, never by trimming the taller.
+5. **Fixed vs elastic.** `h1`, `h2`, `.ex-head`, `.qstem`, `.lead` and hints are fixed strings and are exempt: they are neither stretched nor padded. Elastic: options, items, cells, chips, gaps. The same measurement decides both how much content to generate and whether a fixed string fits its slot.
+6. **Charts and grids carry no prescribed column count.** A `.chart` is a table whose columns are whatever the content needs, always 100% of its block. No suggested option counts; question options wrap.
+7. **Short single blocks:** no rule for now (owner decision) — leave as-is.
+8. **Reasons are recorded in the design pass** (`designs/lessonNN.design.md`), not in the page.
+
+#### Width math
+Baseline = body 17px Public Sans = ratio 1.0. One unit for everything: **baseline characters (ce)**.
+
+| elementsize | usable content width | `C_slot` (ce) |
+|---|---|---|
+| full | 1180px (1200 − 10px × 2 margins) | 144 |
+| half | 541px (593 − 16×2 padding − 10×2 margins) | 66 |
+| third | 355px (390.7 − 18×2 card padding) | 43 |
+
+`C_slot` = usable width ÷ 8.16px (baseline advance). Calibrate once with `qa/live.mjs` (real Chrome) rather than trusting the estimate.
+
+| font | ratio `r` |
+|---|---|
+| body 17px | 1.00 |
+| bold 17px (`.qstem`) | 1.08 |
+| `.lead` 18px italic | 1.12 |
+| `.ex-head` 19px Playfair | 1.28 |
+| h1 / h2 38px + `.14em` spacing | 3.21 |
+
+Control equivalents (add to the row sum): radio + label gap = 2.6 ce · `input.gap` at 9em = 19 ce · chip padding = 3.4 ce.
+
+```
+charsCap(slot, font) = C_slot / r(font)
+fits(row)            = Σ(item chars × r) + Σ(control ce) ≤ C_slot
+target(row)          = aim for C_slot, never exceed
+```
+
+Fixed-string exemption (same equation): a heading/stem fits its slot only if `chars × r ≤ C_slot`; if it does not, shorten the string or promote the block to the next itemsize — never pad the elastic row to cover it.
 g) Consecutive questions are separated by a small, consistent vertical gap.
 h) A concise section explainer (a standalone introduction to the section) CAN be a sub-heading under the h2: serif (Playfair), ~1pt larger than body, italic — written (in portugues or english as appropriate for lesson level) only when it adds important context and does not restate anything that the lesson already says.
 i) A note that applies to one chart row CAN be a merged (colspan) row directly under that row.
 j) Contrasting [linguistic, phonetic, or grammatical] [classes, categories, or concepts] are made visually distinct (using columns, spacing, block separation, or colors as appropriate) so the contrast reads - **This does not supersede 'professional-looking results' goal of 'layout STANDARDS' or other formatting rules**. 
-k) Only if strong, defensible, pedagogy-based reason for block to stay small it is kept narrow and centered (.panel.centered).

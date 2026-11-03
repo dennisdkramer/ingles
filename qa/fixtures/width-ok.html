@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>width fixture — ok</title>
+</head>
+<body>
+<main id="page"><div class="page-container"><div class="content-area">
+  <h1>Width fixture — ok</h1>
+
+  <!-- one complete 2-row -->
+  <div class="itemrow" data-cols="2">
+    <section class="card itemsize-half"><h2>Half A</h2><p>Two blocks tiled across one row.</p></section>
+    <section class="card itemsize-half"><h2>Half B</h2><p>Two blocks tiled across one row.</p></section>
+  </div>
+
+  <!-- one complete 3-row -->
+  <div class="itemrow" data-cols="3">
+    <section class="card itemsize-third"><h2>Third A</h2><p>Three blocks.</p></section>
+    <section class="card itemsize-third"><h2>Third B</h2><p>Three blocks.</p></section>
+    <section class="card itemsize-third"><h2>Third C</h2><p>Three blocks.</p></section>
+  </div>
+
+  <!-- a full block: no row, full width -->
+  <section class="card itemsize"><h2>Full</h2><p>A full-width block standing on its own.</p></section>
+
+  <!-- a chart that lets its content decide the columns -->
+  <table class="chart">
+    <thead><tr><th>Form</th><th>Use</th></tr></thead>
+    <tbody><tr><td>I work</td><td>a habit</td></tr></tbody>
+  </table>
+</div></div></main>
+</body>
+</html>

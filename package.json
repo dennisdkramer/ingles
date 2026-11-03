@@ -8,7 +8,7 @@
     "build:lessons": "node build-lessons.mjs",
     "build:audio": "node build-audio.mjs",
     "audio:check": "node build-audio.mjs --check",
-    "qa": "node build-lessons.mjs && node qa/smoke.mjs",
+    "qa": "node build-lessons.mjs && node qa/width.mjs && node qa/smoke.mjs",
     "qa:live": "node qa/live.mjs",
     "build:dict": "node build-dictionary.mjs"
   },

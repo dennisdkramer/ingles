@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>width fixture — bad</title>
+</head>
+<body>
+<main id="page"><div class="page-container"><div class="content-area">
+  <h1>Width fixture — bad</h1>
+
+  <!-- a 2-row that mixes a half with a third -->
+  <div class="itemrow" data-cols="2">
+    <section class="card itemsize-half"><h2>Half A</h2><p>Mixed row.</p></section>
+    <section class="card itemsize-third"><h2>Third in a 2-row</h2><p>Mixed row.</p></section>
+  </div>
+
+  <!-- a lone third, outside any row -->
+  <section class="card itemsize-third"><h2>Lone third</h2><p>No row around it.</p></section>
+
+  <!-- a retired class that must not be generated any more -->
+  <div class="grid3">
+    <section class="card"><h2>Retired</h2><p>The .grid3 grid is gone.</p></section>
+  </div>
+</div></div></main>
+</body>
+</html>
