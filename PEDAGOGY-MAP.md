@@ -48,6 +48,7 @@
 ### 2. ESCALATE / CONFER
 	- Existing plans, content types, and examples are **defaults that a better idea is expected to beat**. A plan that suggests substantive changes to the lesson contents or new designs/functions is presented to the owner for approval, feedback, or veto before it is executed.
 	- Conflicts and uncertainty always trigger escalation: **stop, present the idea, name the conflict, propose the resolution.** Never squash the idea to fit a rule, and never silently comply with the rule either.
+   - Limit [attempt quantity / time spent] on reconciliation and/or problem resolution. maximum of 3 attempts to solve the same/similar/connected problem(s) without significant progress. After third attempt, log in ISSUES.md and skip to next section/lesson/subtask batch as appropriate.
 	- If a rule would have blocked something better, that's an escalation, not a workaround (the mirror image of §2).
 	- Handling depends on scope of elements involved in any escalation/conflict: 
 		a) Planning/Content/Vehicle for a single section which does not interfere with successful generation of other sections -> (concise explanation of escalation and next-step recommendation appended to lessonNN.design.md - Affected content skipped, task processing continues)
