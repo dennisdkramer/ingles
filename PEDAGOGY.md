@@ -2,7 +2,7 @@
 1.  This file guides the underlying pedagogy which serves the purpose of this project, which is to create a platform for teaching English to Brazilian Portuguese speakers, which has: 
           a) unique tools and features for:
               - collaborative teacher-student markup (highlighing, notes, voice recording).
-              - presenting a framework to understand real-world pronunciation (Dictionary, L2 reductions).
+              - presenting a framework to understand real-world pronunciation (the dictionary, the pronunciation key, and the reductions of connected speech).
           b) Lesson content which:
               - Provides logic for concepts that other methods teach by rote.
               - Is distilled to provide the most progress and the least extraniety.
@@ -15,7 +15,7 @@
 2.  This file guides High-level course structure and provides intent and reasoning for tasks that:
       a) create, brainstorm, choose, or elaborate teaching plans and needs.
       b) generate lesson content  .
-3.  This file independently guides synthesis of PEDAGOGICAL DIRECTIVES in a step prior to lesson content HTML generation - A subsequent step references CONTENT.md and follows those DIRECTIVES, including but not limited to:
+3.  This file independently guides synthesis of PEDAGOGICAL DIRECTIVES in a step prior to lesson content HTML generation - A subsequent step references PEDAGOGY-MAP.md (generation process and defaults) and follows those DIRECTIVES, including but not limited to:
   a) Concepts to be included based on the requested content's location and role in the broader plan 
   b) How the concepts of (a) can be best presented, taught, and trained in the lesson.
   c) Should any of the following be recommended as necessary or optimal for meeting the needs of (b)?:
@@ -59,7 +59,7 @@
   - PT simple present → EN present perfect for duration from the past: "trabalho aqui há 5 anos" = "I HAVE worked here for 5 years" (never "I work here for 5 years").
   - PT simple present → EN present continuous for "right now": "estou estudando" = "I AM studying" (not "I study").
 - **Keep training past lesson concepts and vocabulary** Incorporate skills and vocabulary learned in prior lessons to keep knowledge fresh ONLY IF it does not distract or take time from the current lesson
-- **Early foundations .** L1 teaches "vowels have no fixed sound"; cognates are taught with their suffix codes; reductions (gonna/wanna/woulda) are introduced early; `get` is taught as the wildcard ("coringa"); the quiz carries a short honesty note.
+- **Early foundations.** Lesson 1 teaches "vowels have no fixed sound"; cognates are taught with their suffix codes; reductions (gonna/wanna/woulda) are introduced early; `get` is taught as the wildcard ("coringa"); the quiz carries a short honesty note.
 - **"gonna" is a future MODE, not a verb.** Teach `[be] + gonna + verb` as the spoken future ("I'm gonna call" = *vou ligar*), and keep it separate from the verb "go" with a PLACE after it ("I'm going to the office" = *estou indo ao escritório*). "I'm gonna go to the office" is therefore not a contradiction — "gonna" marks future and "go" is the verb. The student should use "gonna" (not avoid it); it is the natural spoken form, while "going to" is the written/formal twin.
 
 - **Phrase length and complexity follow the student's place in the course.** The closer to the start, the shorter and simpler the phrases must stay; later content must lengthen AND grow in clause complexity and register — you must do your best to match phrasing, grammar, and vocabulary levels of content to the overall lesson level. That length in turn decides how a block reaches its width: short phrases get there with more phrases or more columns, longer phrases get there with length. There is no fixed beginner/advanced split — judge each block against the lesson's expected level.

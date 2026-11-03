@@ -3,119 +3,130 @@ A running note for handing context from one session/task to the next: where the 
 
 ---
 
-# Pronunciation transcription model (L2) — source of truth
+## [2026-11-02] FORMAT layout rewrite — width slots, `.itemsize`, width math
 
-Appended 2026-10-31. This is the **final, iterated** model for producing L2 (reduced-speech) respellings. `build-dictionary.js` (the `PHONETIC_WORKSPACE_RULES` prompt + `postProcess` function) currently holds an **earlier iteration** — it must be rewritten to match this document before the next dictionary regeneration. Read this first; treat the canonical examples (§9) as ground truth above any rule wording.
+One task. Scope: FORMAT.md layout section, the CSS that implements it, parking the two current pages into the archive (no migration), one new QA check. No lesson-content work.
 
-## 1. The voice
+### Decisions (settled 2026-11-02, owner)
 
-Neutral, unplaceable American accent. Boston-born, educated, white; lived TX/CA/GA; fluent AAVE. Speaks **rapidly but clearly enunciates** ("allegro"). **Non-rhotic** in the Boston way: an `r` after a full vowel is not heard (`door` → "doah").
+1. The class is **`.itemsize`**; the smaller sizes are the mutually exclusive `.itemsize-half` / `.itemsize-third`; full is the default (no size class). Rows are `.itemrow[data-cols="2"|"3"]`.
+2. **Flow:** FORMAT drives content generation → the generator sizes the content and **tags the block** → CSS defines and displays that size. The class is the output of the sizing decision, never a styling afterthought.
+3. **`.panel` survives for now:** keep `.panel`, `.panel.full`, `.panel.centered` in the CSS untouched (they simply stop being generated; `.itemsize*` owns width). Retire only `.grid3`, `.panels`, `.dialog.half`, `.qgrid-4` and the fixed 5-column `.qgrid`.
+4. Capacity constants and font ratios live in **FORMAT.md** as the single source.
+5. `lessons-archive/` may break (reference only) — no compatibility shim.
+6. Tolerance word = **saturate** (verb). Canonical wording for FORMAT: *"items generated in a block **saturate** their slot — the combined width gets as close as possible to, and never past, 95% / 45% / 30% of `.content-area`, with no loss of quality or utility; the only way of closing the gap that is not allowed is redundancy."*
 
-AAVE is a desired future target but currently out of scope — except the notation shape is understood, e.g. `ain't` → `ai[n't]` (the `ai` diphthong is one sound, `n't` is the greyed sandhi).
+### A. Delete from FORMAT.md "### Layout STANDARDS at generation"
 
-## 2. Purpose — what grey means
+(a) half-beside-half, (b) minimise dead space, (c) content-aware adjacency, (d) columns are free, (e) neighbour height analysis, (f) >50%-fill-or-half-width, and guidance entry **(k)** (the "centred narrow panel" rule). Also delete the *guidance* that a full block "shrinks to its content".
+Note: this is the guidance only — the `.panel`, `.panel.full` and `.panel.centered` CSS rules stay in `style.css` (decision 3); they simply stop being generated.
 
-- Grey (`[x]`) is a **negative** marker: "this letter is **not pronounced**, or **not pronounced as written**."
-- It is **not** a pronunciation guide. Never respell to *show* a sound; grey what doesn't belong.
-- The only respelling is `ə` (schwa), used **only** for a genuine "uh" sound.
-- Teaching goal: the student learns **what NOT to pronounce** and how to reduce for natural flowing rhythm — not a phonetic transcription.
+### B. Keep in FORMAT.md (do not reword, do not move)
 
-## 3. Notation
+- The fixed canvas facts already in §2b: `.page-container` 1400px, `.content-area` 1200px, absolute, never reflows, all authored content inside `.content-area`.
+- "Content within a block may never overflow the block."
+- The layout gotchas now in the element guidance: a `<br>` is ignored inside the flex `.blanks`; a fill-in hint sits on its own line BELOW the input; `.panel > :not(.ex-head)` carries 10px side margins; `.panel .chart{width:calc(100% - 20px)}`; `.chart{width:100%}`; `.chart tr.note td` is the styled note row.
+- (g) consecutive questions separated by a small consistent vertical gap.
+- (i) a note applying to one chart row is a merged (colspan) `tr.note` row directly under it.
+- (j) contrasting linguistic/phonetic/grammatical classes are made visually distinct.
 
-- `-` syllable break · `[x]` greyed letters · `ə` schwa (genuine "uh").
-- Only the word's own letters + `ə`, `[ ]`, `-`. No IPA. **Never drop a letter — grey it instead** (silent `e` → `[e]`).
+### C. Write into FORMAT.md (structure; prose authored in the task)
 
-## 4. Core model — 2-phoneme syllable core
+1. **Canvas** — the 1400/1200 frame and the never-overflow rule (one short block, referencing §2b).
+2. **Three block widths only.** Blocks tile a row evenly: 2 × half or 3 × third, no mixing, no single half/third. Block width is a *result* of the pedagogical grouping decision, never a dial; the block is then **tagged** with its `.itemsize*` class so the CSS can display it.
+3. **Fill target — content inside the block.** Items generated in a block **saturate** their slot: the combined width gets as close as possible to, and never past, 95% (full) / 45% (half) / 30% (third) of `.content-area`, with no loss of quality or utility; the only way of closing the gap that is not allowed is redundancy. Fill by increasing or reducing the verbosity and/or quantity of strings/items, and by the width of items *within* the row (gaps, column widths, option counts) — with real teaching content only.
+4. **Halves/thirds need a stated reason** (divide, contrast, compare, or any other articulated reason), are generated only as complete aligned rows, and the row's members are height-equalised by **adding** content to the shorter ones, never by trimming the taller.
+5. **Fixed vs elastic.** `h1`, `h2`, `.ex-head`, `.qstem`, `.lead` and hints are fixed strings and are exempt: they are neither stretched nor padded. Elastic: options, items, cells, chips, gaps. The same measurement decides both how much content to generate and whether a fixed string fits its slot.
+6. **Charts and grids carry no prescribed column count.** A `.chart` is a table whose columns are whatever the content needs, always 100% of its block. No suggested option counts; question options wrap.
+7. **Short single blocks:** no rule for now (owner decision) — leave as-is.
+8. **Reasons are recorded in the design pass** (`designs/lessonNN.design.md`), not in the page.
 
-- Each syllable's **core = at most 2 distinct phonemes ("sounds")**.
-- A "sound" may span several letters: digraphs (`th`, `sh`, `ch`, `ng`), diphthongs (`ai`, `ou`, `oi`, `ei`), vowel teams (`ea`, `ee`, `oo`, `au`), and tight clusters (`st`, `nd`, `ml`, `mr`, `bl`).
-- **CVC is always 3 phonemes, never 2** → one phoneme is always greyed (the weakest / most reduced).
+### D. Width math (write into FORMAT as a table + 3 formulas)
 
-## 5. The algorithm (order of operations) — the key
+Baseline = body 17px Public Sans = ratio 1.0. One unit for everything: **baseline characters (ce)**.
 
-Per syllable, in order:
-
-1. **Reduce vowels first.**
-   - Genuine schwa ("uh") → write `ə` if audible; **grey it** if droppable/weakest ("as if no vowel").
-   - Vowel not pronounced as-written, and not a schwa → **grey it** (never respell; *weakness is not sufficient to respell*).
-   - **Coloured vowel** (before `r`/`n`/`v`/`l`) → resists reduction, **stays plain**.
-2. **Count the surviving audible phonemes.**
-   - **≤2** → fits the core → **STOP**. Retained consonants are **not** sandhi-greyed, even if word-final. ("Save the coda from sandhi" is decided by **audibility**, not position.)
-   - **>2** → grey the excess, **word-final sandhi consonant first**.
-3. Never grey an audible sound. Never drop a letter (grey it).
-
-Consequence: **reduce → then sandhi.** Sandhi only fires on the *excess* that reduction didn't already eliminate.
-
-## 6. Settled rules
-
-1. **Schwa = genuine "uh" only.** Weakness ≠ schwa; not-as-written (and not schwa) → grey. `door` → `do[or]`, never `dər`.
-2. **CVC → grey the weakest.** `some` → `s[ə]m[e]` (schwa greyed; `s`+`m` core; silent `e` greyed).
-3. **Reduce first, then sandhi.** `even` → `e-v[e]n`: "ven"→"vn" (2 = core) → `n` saved. If the schwa were audible ("vən" = 3), the `n` would be sandhi-greyed.
-4. **Coloured vowels** resist reduction. `family` → `fa-m[i]ly`, `camera` → `ca-m[e]ra`.
-5. **`r` sandhi depends on the preceding vowel.**
-   - Full vowel + `r` → `r` dropped (non-rhotic, "we never hear 'dr'") → grey it. `door` → `do[or]`.
-   - Schwa + `r` → schwa droppable ("as if no vowel") → **grey the schwa, keep the `r`**. `understand` → `ən-d[ə]r-sta[nd]`.
-6. **`-ing` never sounds like just "i"** — the nasal always survives. Three forms: `ing` (original /ŋ/) · `in[g]` (nasal→`n`, `g` drops) · `[i]n[g]` (`i` drops, `n` stays).
-7. **`-thing`** in a compound (unstressed) → `th[i]n[g]` (`th` is **plain/audible**; `i` drops; `n` stays; `g` drops). Standalone `thing` (stressed) → **no grey**.
-8. **Never drop a letter.** Silent `e` → `[e]` (`s[ə]m[e]`).
-9. **No grey-only syllable.** If a syllable is all-greyed it must **collapse** (lose the hyphen). `going` → `go[i]n[g]`.
-10. **Word-final `t` after a vowel is usually inaudible** → grey it. `about` → `…[t]` **always**.
-11. **Some words always syllable-reduce** — transcribe the reduced form, not the "correct parse." `different` → `di-ff[e]r[e]n[t]` ("di-frn", 2 syllables), never `di-ffə-rə[nt]`.
-12. **`str` is not one sound** — it splits and greys the weak middle: `s[t]r`. `street` → `s[t]ree[t]`.
-13. **No respelling beyond the table.** In particular never `s`→`z`, `c`→`k` (except `cc`→`ks`), `x`→`z`/`ks`, `y`→`i`. (`anything` → `ə-ny-…`, `everything` → `ev-ry-…`.)
-14. **Respelling table** (exact match only): vowel(s) reduced to "uh" → `ə` · `ough`→`o`/`əf`/`o[ff]`/`u` · `ought`→`ot` · `augh`→`o` (or `af`) · `tion`/`sion`→`xn` · `cient`→`xn[t]` · `sure`→`xr` · `eigh`→`ei` · `igh`→`ai` · `cc`→`ks` · `cious`→`x[ə]s` · `alm`→`[o]m`.
-
-## 7. "Sound"/phoneme definition — STILL OPEN (the unresolved crux)
-
-Not settled. Working hypothesis:
-- Diphthong / digraph / vowel team = 1 sound (`ai`, `ou`, `th`, `sh`, `ng`, `ea`, `oo`…).
-- Tight 2-consonant cluster = 1 sound (`st`, `nd`, `ml`, `mr`, `bl`).
-- 3-consonant cluster with a weak middle = **split** (`str` → `s[t]r`).
-
-Open: the exact boundary between "tight cluster (1 sound)" and "split cluster (multiple sounds)". Hypothesis: *audibility of the middle consonant* decides — unconfirmed.
-
-## 8. Deterministic post-process (code — `postProcess` in build-dictionary.js)
-
-After the model returns L2, apply these (word-shaped and reliable — don't leave them to the model):
-
-1. **`-thing` compounds** (`something`/`nothing`/`anything`/`everything`, word length > 5): force the `thing` suffix to `[thi]n[g]`.
-2. **Reverse "spell-the-sound" respellings** (only when the word spells that sound with the original letter): `k`→`c` (word has `c`, no `k`) · `z`→`s` (word has `s`, no `z`) · `gz`/`ks`→`x` (word has `x`).
-3. **Warn** (keep, don't reject) about any letter still foreign to the word.
-
-## 9. Canonical examples (ground truth)
-
-| word | L2 | why |
+| elementsize | usable content width | `C_slot` (ce) |
 |---|---|---|
-| because | `b[ə]-cə[se]` | `be`→weak schwa; `au`→`ə` (genuine "uh" of "cuz"); `se` sandhi |
-| something | `s[ə]m[e]-th[i]n[g]` | schwa greyed (CVC excess); silent `e` greyed; `th` plain; `i`/`g` greyed; `n` kept |
-| thing | `thing` | standalone, stressed → no grey |
-| nothing | `nə-th[i]n[g]` | `no`→`nə` (2-core, schwa plain) |
-| anything | `ə-ny-th[i]n[g]` | `y` kept (no `y`→`i`) |
-| everything | `ev-ry-th[i]n[g]` | `y` kept |
-| going | `go-in[g]` / `go[i]n[g]` | `-ing` nasal survives; collapsed form drops the hyphen |
-| meeting | `mee-tin[g]` / `mee-t[i]n[g]` | `-ing` nasal survives |
-| doing | `do-in[g]` / `do[i]n[g]` | `-ing` nasal survives |
-| understand | `ən-d[ə]r-sta[nd]` | schwa greyed (droppable), `r` kept (audible "dr"); `nd` sandhi |
-| about | `ə-bo[u][t]` / `ə-b[ou][t]` / `ə-b[ə][t]` | `t` **always** greyed; vowel grey depends on actual sound |
-| different | `di-ff[e]r[e]n[t]` | always "di-frn" (2 syllables) |
-| even | `e-v[e]n` | reduce "ven"→"vn" → `n` saved from sandhi |
-| government | `gə-v[e]r[n]-m[e]n[t]` | follow the sounds |
-| probably | `prə-b[ab]ly` | prefer this; non-natives can't do `bly` as one phoneme |
-| actually | `ac-t[u]a-lly` | `t`→ch still "corresponds"; `u` greyed (unconnected) |
-| exactly | `e[x]-a[ct]-ly` | current acceptable; target `e-[x]a-c[t]ly` (see §10 — do **not** risk changing logic) |
-| door | `do[or]` | `oo`→`o`; `r` non-rhotic greyed ("doah") |
-| street | `s[t]ree[t]` | `str`→`s[t]r`; final `t` sandhi |
-| to (+consonant) | `t[ə]` | schwa drops in "t'go" |
-| ain't | `ai[n't]` | AAVE sample: `ai` diphthong = 1 sound; `n't` sandhi |
-| comfortable | `co[mf]-tə-bl` | `-for-` collapses → `mf` greyed |
-| every | `ev-ry` | `e` of `-er-` drops; `y` kept |
-| family | `fa-m[i]ly` | `ml` = one sound |
-| camera | `ca-m[e]ra` | `mr` = one sound; final `ra` as-written (no `ə`) |
-| police | `pə-li[ce]` | `o`→schwa; `ce` sandhi |
+| full | 1180px (1200 − 10px × 2 margins) | 144 |
+| half | 541px (593 − 16×2 padding − 10×2 margins) | 66 |
+| third | 355px (390.7 − 18×2 card padding) | 43 |
 
-## 10. Open questions / low-priority
+`C_slot` = usable width ÷ 8.16px (baseline advance). Calibrate once with `qa/live.mjs` (real Chrome) rather than trusting the estimate.
 
-- **`exactly`**: precise target is `e-[x]a-c[t]ly` (the /gz/→"z" derives from `x`, which is greyed; `a`/`c` clearly heard; `t` drops). Current logic yields `e[x]-a[ct]-ly`, which is acceptable. **Do not alter the logic for this one word if it risks regressing any good output.**
-- **"Sound" definition** (§7).
-- **AAVE** integration (future; §1).
+| font | ratio `r` |
+|---|---|
+| body 17px | 1.00 |
+| bold 17px (`.qstem`) | 1.08 |
+| `.lead` 18px italic | 1.12 |
+| `.ex-head` 19px Playfair | 1.28 |
+| h1 / h2 38px + `.14em` spacing | 3.21 |
 
+Control equivalents (add to the row sum): radio + label gap = 2.6 ce · `input.gap` at 9em = 19 ce · chip padding = 3.4 ce.
+
+```
+charsCap(slot, font) = C_slot / r(font)
+fits(row)            = Σ(item chars × r) + Σ(control ce) ≤ C_slot
+target(row)          = aim for C_slot, never exceed
+```
+
+Fixed-string exemption (same equation): a heading/stem fits its slot only if `chars × r ≤ C_slot`; if it does not, shorten the string or promote the block to the next itemsize — never pad the elastic row to cover it.
+
+### E. CSS to add
+
+```css
+/* the sizing decision is displayed by CSS: the tag carries the size */
+.itemsize{width:100%}                                   /* default: full */
+.itemsize-half{width:calc(50% - 7px)}                    /* 14px row gap → 7px each side */
+.itemsize-third{width:calc(33.3333% - 9.3333px)}
+.itemrow{display:flex;gap:14px;margin:14px 0;align-items:stretch;flex-wrap:nowrap}
+.itemrow>*{min-width:0;margin:0}
+.itemrow[data-cols="2"]>*{width:calc(50% - 7px)}         /* row and tag agree */
+.itemrow[data-cols="3"]>*{width:calc(33.3333% - 9.3333px)}
+.qgrid{grid-template-columns:max-content minmax(0,1fr)}  /* number + stem only; options wrap on their own line */
+.qgrid .qopts{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 18px}
+```
+
+A standalone half/third is illegal (rule 2), so `.itemsize-half` / `.itemsize-third` only ever appear inside `.itemrow`; the duplicated width declaration exists so a misplaced block is visibly the wrong size instead of silently full width.
+
+### F. CSS to remove / keep
+
+Remove: `.grid3`, `.grid3 .card`, `.panels`, `.dialog.half`, `.qgrid.qgrid-4`, and `.qgrid`'s `repeat(3,max-content)` + `justify-content:space-around`.
+
+Keep untouched: `.card`, `.chart`, `.panel`, `.panel.full`, `.panel.centered` (survive for now, no longer generated), `.chips`, `.blanks` (all variants), `.dialog`, `.listen`, `.ex-head`.
+
+### G. Page state for this task (no migration)
+
+**Step 0 — park the two generated pages** (they are regenerated after the next task, not migrated here):
+
+```
+git mv business/lesson1.html        lessons-archive/lesson1-new.html
+git mv business/lesson1.edit.html   lessons-archive/lesson1-new.edit.html
+git mv business/lesson10.html       lessons-archive/lesson10-new.html
+git mv business/lesson10.edit.html  lessons-archive/lesson10-new.edit.html
+node build-lessons.mjs      # business now reports 0 lessons — expected
+```
+
+Leave `lessons-archive/` otherwise untouched (those pages keep the old classes; reference only). `designs/lesson01.design.md` and `designs/lesson10.design.md` remain the design source for regeneration, and any "cannot saturate the slot" reason gets recorded there.
+
+### H. New QA: `qa/width.mjs`
+
+`node qa/width.mjs [lessonNumbers…]` — static markup audit, exit 1 on any finding:
+
+1. every half/third block sits inside `.itemrow`;
+2. every `.itemrow` is complete (2 children with `data-cols="2"`, 3 with `data-cols="3"`) and holds no mixed sizes;
+3. no retired class remains (`.grid3`, `.panels`, `.dialog.half`, `.qgrid-4`);
+4. no element carries both `itemsize-half` and `itemsize-third`;
+5. no `.chart` declares a column count.
+
+`business/` is empty in this task, so the audit needs fixtures: add `qa/fixtures/width-ok.html` (one complete 2-row, one complete 3-row, correct tags) and `qa/fixtures/width-bad.html` (mixed row, lone third, retired class), and support `node qa/width.mjs --selftest` → exit 0 on the good fixture, exit 1 on the bad one.
+
+Hook `width.mjs` (no args) after `build:lessons` in `npm run qa`.
+
+### Done when
+
+`npm run qa` green · `node qa/width.mjs --selftest` green · `node qa/content.mjs` and `node qa/overflow.mjs` run clean on whatever pages exist · `business/` empty with the two `-new` pages parked in `lessons-archive/` · FORMAT.md holds the model, the `saturate` wording, the constants table and the three formulas · CSS in place and `.panel*` untouched.
+
+### Status 2026-11-03 — EXECUTED
+A–H are in the tree and committed: FORMAT.md holds the three-width model, the `saturate` wording, the `C_slot`/ratio constants and the three formulas; style.css carries `.itemsize*`/`.itemrow` and no longer carries `.grid3`, `.panels`, `.dialog.half` or `.qgrid-4`; lessons 1 and 10 are parked as `lessons-archive/lesson1-new.*` / `lesson10-new.*` and `business/` is empty; `qa/width.mjs` (+ `qa/fixtures/`) is green under `--selftest` and hooked into `npm run qa`.
+`qa/smoke.mjs` and `qa/content.mjs` now discover whatever pages exist — an empty `business/` passes, a named-but-missing lesson fails. The old two-level pronunciation-model material, and the items that still described the 1–34 numbering, were swept out of PARKED and ISSUES.
+Next task: regenerate lesson 1 (then 10) from `designs/lesson01.design.md` / `designs/lesson10.design.md`. The parked `-new` pages are reference only — never a migration source.
