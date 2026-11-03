@@ -111,6 +111,53 @@ function accessUpsert_(email, name, track, status) {
   }
   sh.appendRow([String(email), String(name || ""), String(track || ""), String(status || "pending"), new Date().toISOString()]);
 }
+/* ---- concurrent multi-track access (owner instruction 2026-11-03) --------------------------------
+   A student may hold SEVERAL books at once, so the access sheet is one row per EMAIL+TRACK: granting a
+   second track ADDS a row instead of replacing the first, and the frontend renders all of them. */
+function accessRowsFor_(email) {
+  var rows = accessRows_(), out = [], e = String(email).toLowerCase();
+  for (var i = 0; i < rows.length; i++) if (rows[i].email.toLowerCase() === e) out.push(rows[i]);
+  return out;
+}
+function accessTracks_(email) {
+  var rows = accessRowsFor_(email), out = [];
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+    if (r.status === "approved" && r.track && out.indexOf(r.track) < 0) out.push(r.track);
+  }
+  return out;
+}
+/* grant (or keep) ONE track: an existing email+track row is updated, a different track is appended, and a
+   track-less pending request is upgraded to the approved track instead of leaving a duplicate behind. */
+function accessGrant_(email, name, track, status) {
+  var sh = getAccessSheet_(), rows = accessRows_(), e = String(email).toLowerCase();
+  var tr = String(track || "business"), st = String(status || "approved"), pendingRow = 0;
+  for (var i = 0; i < rows.length; i++) {
+    if (rows[i].email.toLowerCase() !== e) continue;
+    if (rows[i].track === tr) {
+      sh.getRange(rows[i]._row, 1, 1, ACCESS_HEADERS.length)
+        .setValues([[String(email), String(name || rows[i].name || ""), tr, st, new Date().toISOString()]]);
+      return;
+    }
+    if (!rows[i].track && !pendingRow) pendingRow = rows[i]._row;
+  }
+  if (pendingRow) {
+    sh.getRange(pendingRow, 1, 1, ACCESS_HEADERS.length)
+      .setValues([[String(email), String(name || ""), tr, st, new Date().toISOString()]]);
+    return;
+  }
+  sh.appendRow([String(email), String(name || ""), tr, st, new Date().toISOString()]);
+}
+/* remove one track (o.track) or the whole student (no track) */
+function accessRemove_(email, track) {
+  var sh = getAccessSheet_(), rows = accessRows_(), e = String(email).toLowerCase();
+  var tr = track ? String(track) : "";
+  for (var i = rows.length - 1; i >= 0; i--) {
+    if (rows[i].email.toLowerCase() !== e) continue;
+    if (tr && rows[i].track !== tr) continue;
+    sh.deleteRow(rows[i]._row);
+  }
+}
 /* verify a Google ID token server-side (tokeninfo) so an email is never trusted from the client. */
 function verifyToken_(token) {
   if (!token) throw new Error("missing token");
@@ -235,17 +282,23 @@ function doPost(e) {
     /* ---- access-control actions (Google sign-in approval flow) ---- */
     if (action === "status") {
       var info = verifyToken_(o.token);
-      var row = accessRow_(info.email);
-      if (row && row.status === "approved") return json_({ status: "approved", email: info.email, name: row.name || info.name, track: row.track });
-      if (row && row.status === "pending") return json_({ status: "pending", email: info.email, name: row.name || info.name });
+      var mine = accessRowsFor_(info.email);
+      var tracks = accessTracks_(info.email);
+      var nm = "";
+      for (var mi = 0; mi < mine.length; mi++) if (mine[mi].name) { nm = mine[mi].name; break; }
+      if (tracks.length) return json_({ status: "approved", email: info.email, name: nm || info.name, track: tracks[0], tracks: tracks });
+      if (mine.length && mine[0].status === "pending") return json_({ status: "pending", email: info.email, name: nm || info.name });
       return json_({ status: "unknown", email: info.email });
     }
 
     if (action === "request") {
       var info2 = verifyToken_(o.token);
-      var row2 = accessRow_(info2.email);
-      if (row2 && row2.status === "approved") return json_({ status: "approved", email: info2.email, name: row2.name || info2.name, track: row2.track });
-      if (row2 && row2.status === "pending") return json_({ status: "pending", email: info2.email, name: row2.name || info2.name });
+      var mine2 = accessRowsFor_(info2.email);
+      var tracks2 = accessTracks_(info2.email);
+      var nm2 = "";
+      for (var m2 = 0; m2 < mine2.length; m2++) if (mine2[m2].name) { nm2 = mine2[m2].name; break; }
+      if (tracks2.length) return json_({ status: "approved", email: info2.email, name: nm2 || info2.name, track: tracks2[0], tracks: tracks2 });
+      if (mine2.length && mine2[0].status === "pending") return json_({ status: "pending", email: info2.email, name: nm2 || info2.name });
       accessUpsert_(info2.email, info2.name || o.name || "", "", "pending");
       return json_({ status: "pending", email: info2.email, name: info2.name || o.name || "" });
     }
@@ -257,8 +310,9 @@ function doPost(e) {
       if (action === "approve") {
         var row3 = accessRow_(o.email);
         var track = o.track || "business";
-        accessUpsert_(o.email, (row3 && row3.name) || o.name || o.email, track, "approved");
-        return json_({ result: "ok", status: "approved", email: o.email, track: track });
+        /* ADDS a track to a student who already has another one (multi-track access) */
+        accessGrant_(o.email, (row3 && row3.name) || o.name || o.email, track, "approved");
+        return json_({ result: "ok", status: "approved", email: o.email, track: track, tracks: accessTracks_(o.email) });
       }
       var shAcc = getAccessSheet_();
       var rowsAcc = accessRows_();
@@ -274,25 +328,25 @@ function doPost(e) {
       var info5 = verifyToken_(o.token);
       if (!isTeacher_(info5.email)) return json_({ error: "not a teacher" });
       if (!o.email) return json_({ error: "missing email" });
-      var shRem = getAccessSheet_();
-      var rowsRem = accessRows_();
-      for (var idx = rowsRem.length - 1; idx >= 0; idx--) {
-        if (rowsRem[idx].email.toLowerCase() === String(o.email).toLowerCase()) {
-          shRem.deleteRow(rowsRem[idx]._row);
-        }
-      }
-      return json_({ result: "ok", status: "removed", email: o.email });
+      accessRemove_(o.email, o.track);
+      return json_({ result: "ok", status: "removed", email: o.email, track: o.track || "", tracks: accessTracks_(o.email) });
     }
 
     if (action === "queue") {
       var info4 = verifyToken_(o.token);
       if (!isTeacher_(info4.email)) return json_({ error: "not a teacher" });
       var rows4 = accessRows_();
-      var pending = [], approved = [];
+      var pending = [], byEmail = {}, order = [];
       for (var q = 0; q < rows4.length; q++) {
-        if (rows4[q].status === "pending") pending.push({ email: rows4[q].email, name: rows4[q].name, ts: rows4[q].ts });
-        else if (rows4[q].status === "approved") approved.push({ email: rows4[q].email, name: rows4[q].name, track: rows4[q].track, lastCompleted: lastCompleted_(rows4[q].email, rows4[q].track) });
+        var row4 = rows4[q];
+        if (row4.status === "pending") { pending.push({ email: row4.email, name: row4.name, ts: row4.ts }); continue; }
+        if (row4.status !== "approved") continue;
+        var key = row4.email.toLowerCase();
+        if (!byEmail[key]) { byEmail[key] = { email: row4.email, name: row4.name, tracks: [] }; order.push(key); }
+        if (row4.track) byEmail[key].tracks.push({ track: row4.track, lastCompleted: lastCompleted_(row4.email, row4.track) });
       }
+      var approved = [];
+      for (var oi = 0; oi < order.length; oi++) approved.push(byEmail[order[oi]]);
       return json_({ pending: pending, approved: approved });
     }
 

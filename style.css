@@ -316,4 +316,19 @@ body.landing #needg{margin-top:10px;text-align:left}
 body.landing #needg p{font-size:15px;line-height:1.55;margin:10px 0}
 body.landing #needg button{margin:4px 0 8px}
 body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
+/* student landing page (owner instruction 2026-11-03): THREE track columns; the lesson TITLE is the link
+   (no per-lesson button); the "continue" button sits at the TOP of a granted track's list; a track the
+   student was not granted is greyed out and inert. Multi-track access is granted per student in the teacher
+   area (one access row per email+track, FUNCTION.md). */
+.landing-hello{margin:14px 0;border-color:var(--ink);background:linear-gradient(100deg,rgba(217,193,186,.60),rgba(185,133,76,.30) 55%,rgba(29,78,216,.16))}
+.hello-en{font-weight:600;font-size:18px;line-height:1.35}
+.hello-pt{margin-top:4px;font-style:italic;color:#5c5347}
+.tracks3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start;margin:14px 0}
+.track-card{margin:0}
+.track-card h3{margin:0 0 8px}
+.track-card .contbtn{display:block;width:100%;margin:0 0 10px;background:#0f766e}
+.track-card .row a.lesson-link{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.track-card .row a.lesson-link:hover{text-decoration-thickness:2px}
+.track-card.locked{opacity:.45;filter:grayscale(1)}
+.track-card.locked .row,.track-card.locked h3{pointer-events:none}
 

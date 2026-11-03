@@ -300,7 +300,7 @@ async function main() {
   const selftest = argv.includes('--selftest');
   /* values that belong to an option are not lesson numbers */
   const optVals = new Set();
-  ['--shot', '--shot-h', '--shot-y'].forEach(f => { const j = argv.indexOf(f); if (j >= 0 && argv[j + 1]) optVals.add(argv[j + 1]); });
+  ['--shot', '--shot-h', '--shot-y', '--shot-url'].forEach(f => { const j = argv.indexOf(f); if (j >= 0 && argv[j + 1]) optVals.add(argv[j + 1]); });
   const targets = argv.filter(a => !a.startsWith('--') && !optVals.has(a))
     .map(Number).filter(n => Number.isInteger(n) && n >= 1);
   const shotAt = argv.indexOf('--shot');
@@ -345,6 +345,19 @@ async function main() {
     }
     return (r.result && r.result.value) || null;
   };
+
+  /* --shot-url <rel>: render ONE page (any page, e.g. index.html or a preview fixture), report it, capture
+     it if --shot was given, and exit — a review aid that does not belong to the lesson sweep */
+  const shotUrlAt = argv.indexOf('--shot-url');
+  const shotUrl = shotUrlAt >= 0 ? argv[shotUrlAt + 1] : null;
+  if (shotUrl) {
+    report(shotUrl, await measure(shotUrl));
+    try { cdp.ws.close(); } catch (e) { }
+    try { chrome.proc.kill(); } catch (e) { }
+    await site.close();
+    try { fs.rmSync(profile, { recursive: true, force: true }); } catch (e) { }
+    process.exit(0);
+  }
 
   let fails = 0;
 

@@ -23,7 +23,8 @@ const $=id=>document.getElementById(id);
 const log=m=>{debug.innerHTML+="› "+m+"<br>"};
 const h=s=>{let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x};
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let cred=null,profile=null,teacher=false,studentName="",LESSONS=null;
+let cred=null,profile=null,teacher=false,studentName="",LESSONS=null,MYTRACKS=[];
+const TRACKSALL=["kids","business","adult"];
 const SESSION_KEY="eod_session";
 async function api(action,obj){
  const body=Object.assign({action:action},obj||{});
@@ -76,7 +77,7 @@ async function start(){
  if(teacher){renderTeacher();return}
  const st=await api("status",{token:cred});
  if(st.error && /token/i.test(String(st.error))){clearSession();location.reload();return}
- if(st.status==="approved"){renderStudent(st.track, st.name);return}
+ if(st.status==="approved"){MYTRACKS=(st.tracks&&st.tracks.length)?st.tracks.slice():(st.track?[st.track]:[]);renderStudent(MYTRACKS, st.name);return}
  if(st.status==="pending"){$("app").innerHTML=pendingCard(profile.email,"Seu pedido de acesso já foi enviado e está aguardando o professor aprovar.");return}
  renderRequest();
 }
@@ -92,17 +93,38 @@ function renderRequest(){
   else{b.disabled=false;b.textContent="Enviar pedido de acesso";log("ERRO: "+(j.error||"desconhecido"))}
  };
 }
-function renderStudent(track,name){
+function trackLessons(t){
+ const ls=LESSONS&&LESSONS[t]&&LESSONS[t].length?LESSONS[t]:Array.from({length:COUNTS[t]},(_,k)=>({n:k+1,title:""}));
+ return ls;
+}
+/* the student index (owner instruction 2026-11-03): three track columns; the lesson TITLE is the link
+   (no per-lesson button); the "continue" button sits at the TOP of each granted track's list; a track the
+   student was not granted is greyed out and inert. */
+function renderStudent(tracks,name){
  studentName=name||"";
  persistSession();
+ MYTRACKS=(Array.isArray(tracks)?tracks:(tracks?[tracks]:[])).slice();
  const p=prog();
- let html='<div class="card">Olá, <b>'+esc(profile.name||profile.email)+'</b> · <button onclick="logout()">trocar conta</button></div>';
- html+='<div class="card"><h3>'+TN[track]+'</h3>';let cont=null;
- const ls=LESSONS&&LESSONS[track]&&LESSONS[track].length?LESSONS[track]:Array.from({length:COUNTS[track]},(_,k)=>({n:k+1,title:""}));
- ls.forEach(le=>{const n=le.n;const d=p[track+"_"+n];if(!d&&!cont)cont=n;
-  html+='<div class="row">'+(d?'<span class="done">✅ Lição '+n+"</span>":'<span class="todo">⬜ Lição '+n+"</span>")+(le.title?' <span class="dim">'+esc(le.title)+'</span>':'')+' <button onclick="go(\''+track+"\',"+n+')">abrir</button></div>';});
- if(cont)html+='<button onclick="go(\''+track+"\',"+cont+')">▶ Continuar da lição '+cont+"</button>";
- html+='</div>';$("app").innerHTML=html;log("índice pronto ✔");
+ let html='<div class="card landing-hello"><div class="hello-en">You already know more English than you think — the job is to make it come out.</div>'
+  +'<div class="hello-pt">Você já sabe mais inglês do que imagina — o trabalho é fazer isso sair.</div></div>';
+ html+='<div class="tracks3">';
+ TRACKSALL.forEach(t=>{
+  const has=MYTRACKS.indexOf(t)>=0;
+  let cont=null,rows="";
+  trackLessons(t).forEach(le=>{const n=le.n;const d=p[t+"_"+n];if(!d&&!cont)cont=n;
+   const lab=d?'<span class="done">✅ Lição '+n+'</span>':'<span class="todo">⬜ Lição '+n+'</span>';
+   const txt=le.title?esc(le.title):'Lição '+n;
+   rows+=has
+    ? '<div class="row">'+lab+' <a class="lesson-link" href="'+t+'/lesson'+n+'.html" onclick="go(\''+t+'\','+n+');return false">'+txt+'</a></div>'
+    : '<div class="row">'+lab+' <span class="dim">'+txt+'</span></div>';
+  });
+  html+='<div class="card track-card'+(has?'':' locked')+'"><h3>'+TN[t]+'</h3>';
+  if(!has)html+='<p class="dim">Sem acesso a esta trilha · no access to this book</p>';
+  else if(cont)html+='<button class="contbtn" onclick="go(\''+t+'\','+cont+')">▶ Continuar da lição '+cont+'</button>';
+  html+=rows+'</div>';
+ });
+ html+='</div>';
+ $("app").innerHTML=html;log("índice pronto ✔");
 }
 let QUEUE={pending:[],approved:[]};
 function bookButton(t){
@@ -128,14 +150,22 @@ function approvedHTML(){
  let h='<div class="card tadmin-col"><h4>Alunos aprovados</h4>';
  if(!QUEUE.approved.length)h+='<p class="dim">Nenhum aluno aprovado ainda.</p>';
  [...QUEUE.approved].sort((a,b)=>(a.name||a.email).localeCompare(b.name||b.email)).forEach(s=>{
-  const next=(s.lastCompleted||0)+1;
-  const atEnd=next>COUNTS[s.track];
-  h+='<div class="tadmin-item trow">'
-   +'<b class="tname">'+esc(s.name||s.email)+'</b>'
-   +'<button class="jumpbtn"'+(atEnd?' disabled':'')+' onclick="goStudent(\''+s.track+'\','+(atEnd?COUNTS[s.track]:next)+',\''+s.email+'\')">⏭ '+TN[s.track]+' '+(atEnd?COUNTS[s.track]:next)+'</button>'
-   +'<button class="remlink" onclick="removeStudent(\''+s.email+'\')">Remover</button>'
-   +'<span class="dim temail">'+esc(s.email)+'</span>'
-   +'</div>';
+  /* a student may hold SEVERAL tracks (multi-track access): one jump + one "×" per book, plus a control to
+     grant another book without touching the ones they already have (owner instruction 2026-11-03) */
+  const trs=(s.tracks&&s.tracks.length)?s.tracks:(s.track?[{track:s.track,lastCompleted:s.lastCompleted||0}]:[]);
+  h+='<div class="tadmin-item"><div class="trow"><b class="tname">'+esc(s.name||s.email)+'</b>'
+   +'<span class="dim temail">'+esc(s.email)+'</span></div><div class="trow">';
+  trs.forEach(x=>{
+   const next=(x.lastCompleted||0)+1, atEnd=next>COUNTS[x.track];
+   h+='<button class="jumpbtn" '+(atEnd?'disabled':'')+' onclick="goStudent(\''+x.track+'\','+(atEnd?COUNTS[x.track]:next)+',\''+s.email+'\')">⏭ '+TN[x.track]+' '+(atEnd?COUNTS[x.track]:next)+'</button>'
+    +'<button class="remlink" onclick="removeTrack(\''+esc(s.email)+'\',\''+x.track+'\')">× '+TN[x.track]+'</button>';
+  });
+  const free=TRACKSALL.filter(t=>!trs.some(x=>x.track===t));
+  if(free.length){
+   h+='<select id="add_'+esc(s.email)+'">'+free.map(t=>'<option value="'+t+'">'+TN[t]+'</option>').join('')+'</select>'
+    +'<button onclick="addTrack(\''+esc(s.email)+'\')">＋ dar acesso</button>';
+  }
+  h+='<button class="remlink" onclick="removeStudent(\''+esc(s.email)+'\')">remover aluno</button></div></div>';
  });
  return h+'</div>';
 }
@@ -162,8 +192,21 @@ window.removeStudent=async function(email){
  if(j.result==="ok"){log("Removido ✔");renderTeacher();}
  else log("ERRO: "+(j.error||"desconhecido"));
 };
+/* multi-track access (owner instruction 2026-11-03): approve ADDS a book, remove takes one book away */
+window.addTrack=async function(email){
+ const sel=$("add_"+email);if(!sel)return;
+ const j=await api("approve",{token:cred,email:email,track:sel.value});
+ if(j.result==="ok"){log("Acesso a "+TN[sel.value]+" concedido ✔");renderTeacher();}
+ else log("ERRO: "+(j.error||"desconhecido"));
+};
+window.removeTrack=async function(email,track){
+ if(!confirm("Tirar o acesso de "+email+" a "+TN[track]+"?"))return;
+ const j=await api("remove",{token:cred,email:email,track:track});
+ if(j.result==="ok"){log("Acesso a "+TN[track]+" removido ✔");renderTeacher();}
+ else log("ERRO: "+(j.error||"desconhecido"));
+};
 const prog=()=>JSON.parse(localStorage.getItem("prog_"+profile.email)||"{}");
-function go(t,i){sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,teacherName:teacher?(profile.name||""):"",name:teacher?(profile.name||""):studentName,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
+function go(t,i){if(!teacher&&MYTRACKS.indexOf(t)<0){log("sem acesso a esta trilha");return}sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,teacherName:teacher?(profile.name||""):"",name:teacher?(profile.name||""):studentName,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
 function goStudent(t,i,email){const s=QUEUE.approved.find(x=>x.email===email);sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher:true,teacherName:profile.name||"",name:s?(s.name||""):"",student:email,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
 function showAcct(){const c=$("controlbar").querySelector("#acct"),lo=$("controlbar").querySelector("#logout");c.hidden=false;c.innerHTML="Signed in: <b>"+profile.email+"</b>";lo.hidden=false;lo.onclick=logout;const g=$("gcard");if(g)g.hidden=true;}
 function logout(){clearSession();if(window.google&&google.accounts&&google.accounts.id)try{google.accounts.id.disableAutoSelect()}catch(e){}location.reload();}
