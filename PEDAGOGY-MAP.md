@@ -40,6 +40,7 @@
    - **three candidate (lesson) experiences, from three different channels** (heard / seen / done / read / said);
    - the chosen one, why it beats the others *for this student*, and what the first 30 seconds feel like;
    - what the student produces, what evidence it leaves, and any conflict with the defaults below.
+**The shape is IMAGINED, not inherited.** Which sections the lesson has, how many, in what order, and how each one divides its content into blocks / rows / columns is invented fresh in Pass A for THAT lesson — from its design, not from a template and not from any other lesson. "The previous lesson did it this way" is not an input. The archived / parked pages are **untracked and gitignored**: they must never be opened, read or used as a reference (owner instruction 2026-11-03), and `style.css` is implementation only — it must not be read to infer content or shape.
 **Pass B — build.** Inputs: the design + FORMAT.md + FUNCTION.md and realizes the vehicles. If you think a vehicle or is bad or if realisation forces a change, escalate (§2) instead of substituting a cheaper shape. 
 	
 ### 2. ESCALATE / CONFER

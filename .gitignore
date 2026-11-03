@@ -5,3 +5,7 @@ progress.log
 .clinerules/
 .continue/
 qa/_live/
+# archived / parked lesson pages: deliberately withheld from lesson generation (owner instruction
+# 2026-11-03). They are untracked and must NEVER be read, opened or used as a reference for content,
+# structure or layout — a lesson's shape is imagined from designs/lessonNN.design.md + PEDAGOGY-MAP.md.
+lessons-archive/

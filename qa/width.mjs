@@ -1,15 +1,18 @@
 /**
- * qa/width.mjs — static width-slot audit for the business lessons.
+ * qa/width.mjs — static width/division audit for the business lessons.
  * Run with: node qa/width.mjs [lessonNumber ...]   (no numbers = every business/lesson*.html that exists)
  *           node qa/width.mjs --selftest           (qa/fixtures/width-ok.html must pass, width-bad.html must fail)
  *
- * Markup-only audit (no browser, no layout): width is decided at generation and tagged onto the
- * block, so the markup alone can be checked. FORMAT.md is the model. Checks:
- *   1. every .itemsize-half / .itemsize-third sits inside an .itemrow;
- *   2. every .itemrow is complete (2 children for data-cols="2", 3 for data-cols="3") and holds no mixed sizes;
+ * Markup-only audit (no browser, no layout). The model is CONTENT & LAYOUT AWARE (owner instruction
+ * 2026-11-03, FORMAT.md): a row divides into as many columns as its content needs — any N — and the CSS
+ * derives the number from the row alone, so the markup can be checked for everything except the pixels.
+ *   1. a `.itemrow` holds at least 2 members (a row of one is just a full block), and when it declares
+ *      `data-cols` that number equals its column total (members + their extra `data-span` shares);
+ *   2. no member declares its own width — `.itemsize-half` / `.itemsize-third` are RETIRED and an inline
+ *      width/​min-width/​max-width on a row member is a hard-coded dial (the row decides the share);
  *   3. no retired class remains (.grid3, .panels, .dialog.half, .qgrid-4);
- *   4. no element carries both itemsize-half and itemsize-third;
- *   5. no .chart declares a column count.
+ *   4. `.chart` never prescribes its own columns (the table's content decides them);
+ *   5. `data-span` is an integer 2..4 (what the CSS implements) and never exceeds the row's columns.
  */
 import fs from 'fs';
 import path from 'path';
@@ -18,10 +21,11 @@ import { JSDOM } from 'jsdom';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
-const RETIRED = ['.grid3', '.panels', '.dialog.half', '.qgrid-4'];
+const RETIRED = ['.grid3', '.panels', '.dialog.half', '.qgrid-4', '.itemsize-half', '.itemsize-third'];
 const CHART_COLS = '.chart colgroup, .chart col, .chart[data-cols], .chart [data-cols],'
   + ' .chart[style*="column"], .chart [style*="column"],'
   + ' .chart[style*="grid-template-columns"], .chart [style*="grid-template-columns"]';
+const WIDTH_STYLE = /(^|;)\s*(width|min-width|max-width)\s*:/i;
 
 const clip = el => {
   const s = el.outerHTML.replace(/\s+/g, ' ').trim();
@@ -32,34 +36,39 @@ function audit(html) {
   const findings = [];
   const doc = new JSDOM(html).window.document;
   const add = (rule, msg, el) => findings.push({ rule, msg, el: el ? clip(el) : '' });
+  const spanOf = el => Number(el.getAttribute('data-span') || 1);
 
-  // 1 + 4 — a half/third appears only inside a row, and only ever with one size
-  for (const el of doc.querySelectorAll('.itemsize-half, .itemsize-third')) {
-    const c = el.classList;
-    if (c.contains('itemsize-half') && c.contains('itemsize-third')) add(4, 'element carries both itemsize-half and itemsize-third', el);
-    if (!el.closest('.itemrow')) add(1, 'half/third block generated outside .itemrow', el);
-  }
-
-  // 2 — every row is complete and size-consistent
+  // 1 + 5 — a row's division: at least 2 members, a truthful data-cols, a supported span
   for (const row of doc.querySelectorAll('.itemrow')) {
-    const cols = row.getAttribute('data-cols');
     const kids = Array.from(row.children);
-    if (cols !== '2' && cols !== '3') { add(2, '.itemrow without data-cols="2"|"3"', row); continue; }
-    const want = cols === '2' ? 2 : 3;
-    const wantCls = cols === '2' ? 'itemsize-half' : 'itemsize-third';
-    const otherCls = cols === '2' ? 'itemsize-third' : 'itemsize-half';
-    if (kids.length !== want) add(2, '.itemrow[data-cols="' + cols + '"] holds ' + kids.length + ' child(ren), expected ' + want, row);
+    const cols = kids.reduce((n, k) => n + (spanOf(k) || 1), 0);
+    if (kids.length < 2) add(1, '.itemrow with ' + kids.length + ' member(s) — a row divides content, use a full block instead', row);
+    const declared = row.getAttribute('data-cols');
+    if (declared != null && Number(declared) !== cols)
+      add(1, '.itemrow declares data-cols="' + declared + '" but divides into ' + cols + ' column(s)', row);
     for (const k of kids) {
-      if (!k.classList.contains(wantCls)) add(2, '.itemrow[data-cols="' + cols + '"] child is not .' + wantCls, k);
-      if (k.classList.contains(otherCls)) add(2, '.itemrow[data-cols="' + cols + '"] mixes .' + otherCls + ' into a ' + cols + '-row', k);
+      const sp = spanOf(k);
+      if (k.hasAttribute('data-span') && (sp < 2 || sp > 4 || !Number.isInteger(sp)))
+        add(5, 'data-span="' + k.getAttribute('data-span') + '" is not 2..4', k);
+      else if (sp > cols)
+        add(5, 'data-span="' + sp + '" exceeds the row\'s ' + cols + ' column(s)', k);
     }
   }
 
-  // 3 — nothing retired survives in the markup
-  for (const sel of RETIRED) for (const el of doc.querySelectorAll(sel)) add(3, 'retired class still generated: ' + sel, el);
+  // 2 — nobody sets a member's width by hand: the row decides the share
+  for (const el of doc.querySelectorAll('.itemsize-half, .itemsize-third'))
+    add(2, 'retired width class — a row divides its content; drop the size class', el);
+  for (const row of doc.querySelectorAll('.itemrow'))
+    for (const k of row.children)
+      if (WIDTH_STYLE.test(k.getAttribute('style') || ''))
+        add(2, 'row member carries an inline width — the row decides the share, not the member', k);
 
-  // 5 — a chart never prescribes its own columns
-  for (const el of doc.querySelectorAll(CHART_COLS)) add(5, '.chart declares a column count', el);
+  // 3 — nothing retired survives in the markup (the two width classes are reported by rule 2)
+  for (const sel of RETIRED.filter(s => s !== '.itemsize-half' && s !== '.itemsize-third'))
+    for (const el of doc.querySelectorAll(sel)) add(3, 'retired class still generated: ' + sel, el);
+
+  // 4 — a chart never prescribes its own columns
+  for (const el of doc.querySelectorAll(CHART_COLS)) add(4, '.chart declares a column count', el);
 
   return findings;
 }

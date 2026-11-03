@@ -202,6 +202,22 @@ Owner report: "the radio buttons are not accepting inputs". Root cause found, fi
 
 ---
 
+## [2026-11-03] Archived pages withheld + CSS declared off-limits + content-aware divisions (any N)
+
+Owner instruction: (1) the archived/parked lesson files go into `.gitignore` and must never be used as a reference again; (2) a very strong rule at the top of `style.css` saying its contents must not be looked at or used to [infer, reference or guide] lesson content creation; (3) a lesson's shape is FREELY IMAGINED from PEDAGOGY-MAP §LESSON GENERATION 1 (Pass A); (4) any column-based layout or content division must be content- and layout-aware, using any number of columns or rows as appropriate.
+
+- **Archive withheld**: `lessons-archive/` is now in `.gitignore` and was **untracked** (`git rm -r --cached`; the 44 files stay on the owner's disk, recoverable from git history). FILESYSTEM.md, STATUS.md, FORMAT.md and PEDAGOGY-MAP.md all now say it is withheld and must never be read; HANDOFF's old "reference only" lines are superseded by this entry.
+- **`style.css` declared off-limits for content**: a loud banner at the head of the file (before `@import`) — do not read, infer, reference or use it for lesson content creation; shape comes from PEDAGOGY-MAP Pass A, authoring vocabulary from FORMAT.md, behaviour from FUNCTION.md.
+- **FORMAT.md**: new out-of-scope rules — lesson SHAPE is freely imagined per Pass A (no template anywhere; reusing another lesson's section list is a generation error), archives withheld, `style.css` is implementation only. PEDAGOGY-MAP §1 gained **"The shape is IMAGINED, not inherited."**
+- **Column model rewritten to be content-aware (any N)**: `.itemrow` is now a grid (`grid-auto-flow:column; grid-auto-columns:minmax(0,1fr)`), so it divides into exactly as many columns as it has members — no 2/3 grid, no mixing rules. A member whose content is genuinely wider takes more than one share with `data-span="K"` (2..4). `.itemsize-half` / `.itemsize-third` are **retired** (a member never sets its own width); `.itemsize` (full block, no row) stays. `data-cols="N"` documents the row's column total.
+- **FORMAT's width rules + width math generalized**: the "three block widths only" rule became "a row divides; the division follows the content (any N)"; the slot constants became one formula `share_px(N, span) = (1180 − 14 × (N−1)) × span / N` with a table for N=2..4 and span weighting; the fill target is now "95% of the slot the block owns".
+- **QA follows the model**: `qa/width.mjs` now checks ≥2 members per row, `data-cols` equal to the real column total, `data-span` in 2..4 and within the row, no self-declared member width (retired size classes + inline width), plus the old retired-class and chart-column rules; fixtures rewritten (a 4-column row and a weighted `data-span="2"` row are in the OK fixture). `qa/overflow.mjs` computes a member's slot from the row itself (`(canvas − 14×(N−1)) × span/N`), so BALLOON works for any N.
+- **Lesson 1 updated mechanically**: 13 row members dropped `.itemsize-half`/`.itemsize-third`; nothing else changed (screenshot reviewed — the 2- and 3-column rows render identically to before).
+- Verified: `npm run qa` green · `qa/content.mjs 1` green · `qa/width.mjs 1` + `--selftest` green · `qa/overflow.mjs` green (`blocks 32 · full 19 / dividing a row 13`, spacing minimums unchanged) + `--selftest` green · `build-audio --check` clean · `business/lesson1.edit.html` re-copied.
+- Next task: lesson 10 from `designs/lesson10.design.md`.
+
+---
+
 ## [2026-11-03] Free-text blocks are fixed size (no drag handle)
 
 Owner instruction: the free-text input blocks (e.g. lesson 1 §7D) must not be drag-resizable.

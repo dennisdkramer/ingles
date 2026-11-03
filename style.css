@@ -1,3 +1,16 @@
+/* ==================================================================================================
+   ⛔ STOP — DO NOT READ, INFER, REFERENCE OR USE THIS FILE FOR LESSON CONTENT CREATION ⛔
+   This stylesheet is IMPLEMENTATION ONLY. It must not be looked at, mined or used to [infer, reference
+   or guide] ANY part of lesson content creation: not which sections a lesson has, not their order, not
+   how a block is divided into columns or rows, not what a lesson's shape should be.
+   A LESSON'S SHAPE IS FREELY IMAGINED per PEDAGOGY-MAP.md -> LESSON GENERATION -> 1. Pass A (design),
+   from that lesson's design file and roadmap entry. There is no lesson template, and the archived /
+   parked pages (lessons-archive/) are deliberately withheld: untracked and gitignored.
+   The authority for WHAT a page contains, and the vocabulary of blocks/classes an author may use, is
+   FORMAT.md (mechanical contract) + FUNCTION.md (behaviour). This file only paints what those produce.
+   If you are here to decide what a lesson should look like, stop — you are in the wrong file.
+   (Owner instruction 2026-11-03.)
+   ================================================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&display=swap');
 :root{--cream:#f4eddd;--paper:#fdfaf2;--ink:#182136;--tan:#b9854c;--rose:#d9c1ba;--ptw:#96601f;--blue:#1d4ed8;--dkblue:#1e3a8a;--bluebg:rgba(29,78,216,.16)}
 *{box-sizing:border-box}body{margin:0;font:17px/1.6 'Public Sans',system-ui,sans-serif;background:var(--cream);color:var(--ink)}
@@ -148,14 +161,17 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .panel .ex-head{margin-top:0}
 .panel > :not(.ex-head){margin-left:10px;margin-right:10px}
 .panel .chart{width:calc(100% - 20px)}
-/* block width slots: the sizing decision is tagged on the block — CSS only displays it */
-.itemsize{width:100%}                                   /* default: full */
-.itemsize-half{width:calc(50% - 7px)}                    /* 14px row gap → 7px each side */
-.itemsize-third{width:calc(33.3333% - 9.3333px)}
-.itemrow{display:flex;gap:14px;margin:14px 0;align-items:stretch;flex-wrap:nowrap}
+/* block width slots — CONTENT & LAYOUT AWARE (owner instruction 2026-11-03): a row divides into as many
+   columns as its content needs (any N), each taking an equal share of the row. A member whose content is
+   the wider one asks for more than one share with data-span="K" (2..4). N is decided at generation by the
+   grouping decision (FORMAT.md), never by a fixed 2/3 grid, and the CSS only displays it.
+   `.itemsize` = a full-width block standing on its own (the default; no row around it). */
+.itemsize{width:100%}
+.itemrow{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:14px;margin:14px 0;align-items:stretch}
 .itemrow>*{min-width:0;margin:0}
-.itemrow[data-cols="2"]>*{width:calc(50% - 7px)}         /* row and tag agree */
-.itemrow[data-cols="3"]>*{width:calc(33.3333% - 9.3333px)}
+.itemrow>*[data-span="2"]{grid-column:span 2}
+.itemrow>*[data-span="3"]{grid-column:span 3}
+.itemrow>*[data-span="4"]{grid-column:span 4}
 .content-area > h2, .content-area > p{margin-left:10px;margin-right:10px}
 .qgrid{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;column-gap:14px;row-gap:12px;min-width:0}
 .qgrid .qopts{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 18px}

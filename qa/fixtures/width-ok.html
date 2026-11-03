@@ -8,27 +8,42 @@
 <main id="page"><div class="page-container"><div class="content-area">
   <h1>Width fixture — ok</h1>
 
-  <!-- one complete 2-row -->
+  <!-- 2 columns -->
   <div class="itemrow" data-cols="2">
-    <section class="card itemsize-half"><h2>Half A</h2><p>Two blocks tiled across one row.</p></section>
-    <section class="card itemsize-half"><h2>Half B</h2><p>Two blocks tiled across one row.</p></section>
+    <section class="card"><h2>Column A</h2><p>Two blocks dividing one row.</p></section>
+    <section class="card"><h2>Column B</h2><p>Two blocks dividing one row.</p></section>
   </div>
 
-  <!-- one complete 3-row -->
+  <!-- 3 columns -->
   <div class="itemrow" data-cols="3">
-    <section class="card itemsize-third"><h2>Third A</h2><p>Three blocks.</p></section>
-    <section class="card itemsize-third"><h2>Third B</h2><p>Three blocks.</p></section>
-    <section class="card itemsize-third"><h2>Third C</h2><p>Three blocks.</p></section>
+    <section class="card"><h2>Column A</h2><p>Three.</p></section>
+    <section class="card"><h2>Column B</h2><p>Three.</p></section>
+    <section class="card"><h2>Column C</h2><p>Three.</p></section>
   </div>
 
-  <!-- a full block: no row, full width -->
+  <!-- 4 columns: the division follows the content, not a fixed grid -->
+  <div class="itemrow" data-cols="4">
+    <section class="card"><h2>A</h2><p>Four.</p></section>
+    <section class="card"><h2>B</h2><p>Four.</p></section>
+    <section class="card"><h2>C</h2><p>Four.</p></section>
+    <section class="card"><h2>D</h2><p>Four.</p></section>
+  </div>
+
+  <!-- weighted row: the wider content asks for two shares (3 columns, 2 members à 1 + 2) -->
+  <div class="itemrow" data-cols="3">
+    <section class="card" data-span="2"><h2>Wider</h2><p>Takes two shares of the row.</p></section>
+    <section class="card"><h2>Narrow</h2><p>Takes one.</p></section>
+  </div>
+
+  <!-- a full block: no row -->
   <section class="card itemsize"><h2>Full</h2><p>A full-width block standing on its own.</p></section>
 
   <!-- a chart that lets its content decide the columns -->
   <table class="chart">
-    <thead><tr><th>Form</th><th>Use</th></tr></thead>
-    <tbody><tr><td>I work</td><td>a habit</td></tr></tbody>
+    <thead><tr><th>Form</th><th>Use</th><th>Note</th></tr></thead>
+    <tbody><tr><td>I work</td><td>a habit</td><td>present</td></tr></tbody>
   </table>
 </div></div></main>
 </body>
 </html>
+
