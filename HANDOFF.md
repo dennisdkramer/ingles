@@ -87,11 +87,16 @@ Context is not a stop reason: **agentic compaction preserves intent and position
 re-derivable from files. After any compaction, run the reload order in `PAGE-CHECKLIST.md` and continue.
 
 **Standing order (goes into PENDING.md; survives compaction):** work the queue top-down without asking. Per
-lesson: reload (`HANDOFF` → `PENDING` `WHERE WE ARE` → roadmap entry + design → `PAGE-CHECKLIST.md`), build,
-run the two free structural checks, copy the sidecar, rewrite `WHERE WE ARE` **after every lesson**, push every 3.
-Hand back **only** when: (a) the slice assigned to this task is done, (b) a PEDAGOGY-MAP §2 conflict appears,
-or (c) two consecutive structural-check failures share a cause you cannot explain. Style doubts go into
-PENDING.md as notes — they never stop the run.
+lesson: **update `BLUEPRINT.md` before any heavy edit or long command** (progress · the decision taken · next
+immediate step), then reload (`BLUEPRINT` → `PAGE-CHECKLIST` → roadmap entry + design), build, run the two free
+structural checks, copy the sidecar, push every 3. Hand back **only** when: (a) the slice assigned to this task is
+done, (b) a PEDAGOGY-MAP §2 conflict appears, or (c) two consecutive structural-check failures share a cause you
+cannot explain. Style doubts go into `BLUEPRINT.md` → NOTES — they never stop the run.
+
+**Per-lesson delta line (redundancy tripwire):** in `BLUEPRINT.md`, write one sentence naming what is *new* in this
+lesson versus the previous one. If that sentence is hard to write, the lesson is probably repeating the last one —
+stop and re-read the design before continuing.
+
 
 | Break | Slice | Why |
 |---|---|---|
