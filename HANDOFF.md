@@ -100,9 +100,9 @@ PENDING.md as notes — they never stop the run.
 | 3 | builds **27-38** | A2→B1 ramp checkpoint at 30 |
 | 4 | builds **39-50** | B1→B2 checkpoint at 40 |
 | 5 | **end-of-business QA/bug-fix** + audio render | fresh eyes, no authoring context |
-| 6 | kids (1-50, from the design files) | new register |
-| 7 | adult (1-50) | new register |
-| 8 | final cross-track QA + publish gate | — |
+| 6 | kids — **4 slices** (1-12, 13-24, 25-36, 37-50), from the design files | new register; 50 pages is too much for one task even with compaction |
+| 7 | adult — **4 slices** (same) | new register |
+| 8 | final cross-track QA + publish gate (audio render + `audio:check`) | — |
 
 **Where we are:** business lessons 1-14 pushed; next action = Pass A for lesson 15.
 
