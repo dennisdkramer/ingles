@@ -145,7 +145,9 @@ input.gap{border:0;border-bottom:2px solid var(--tan);background:#fff8ea;font:in
    authored textarea may be dragged — a resize handle lets the student widen it past its block and past the
    canvas. Scoped to authored content: the note editor in the selection popup is not affected. */
 .content-area textarea{resize:none}
-fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8px 12px}
+/* fieldset is a BLOCK type too (FORMAT.md rule 2): a browser's default `min-inline-size: min-content`
+   would stop it shrinking into a half/third slot, so it gets the same min-width:0 escape as .panel. */
+fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8px 12px;min-width:0}
 label{margin-right:10px;cursor:pointer}
 #feed{display:block;width:100%;min-height:9em;font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:12px 14px;box-shadow:5px 5px 0 var(--tan);resize:none;field-sizing:content}
 footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#8a8072}

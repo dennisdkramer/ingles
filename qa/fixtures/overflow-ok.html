@@ -7,6 +7,7 @@
 </head>
 <body>
 <header class="brand">BUSINESS</header>
+<div id="barhelp" class="barhelp">Selecione para <b class="hb-rec">Ouvir a Pronúncia do Professor</b> ou Gravar a Sua, Ver a Chave de Pronúncia, ou <b class="hb-note">Anexar uma Nota</b> — (no PC) <b>Ctrl</b> + Selecionar destaca em Amarelo, Verde ou Vermelho</div>
 <main id="page"><div class="page-container"><div class="content-area">
   <h1>Overflow fixture — ok</h1>
 
@@ -21,6 +22,12 @@
     <section class="card itemsize-third"><b>Third A</b><p>Fits.</p></section>
     <section class="card itemsize-third"><b>Third B</b><p>Fits.</p></section>
     <section class="card itemsize-third"><b>Third C</b><p>Fits.</p></section>
+  </div>
+
+  <!-- a fieldset is a BLOCK type too (FORMAT rule 2): it must shrink into its half slot, not balloon -->
+  <div class="itemrow" data-cols="2">
+    <section class="card itemsize-half"><b>Card half</b><p>Fits.</p></section>
+    <fieldset class="itemsize-half"><label>Fieldset half</label><input class="gap"></fieldset>
   </div>
 
   <!-- a full block with fill-in cells whose content fits the cell (both shapes: block cells and

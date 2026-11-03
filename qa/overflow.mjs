@@ -24,6 +24,8 @@
  *                 a free-text block is fixed-size, and a drag handle can widen it past its block;
  *   6. SELECT   — the shell (header.brand / .control-bar / #barhelp / footer) is still selectable: the
  *                 notebook lives inside `.content-area` only, so the shell must not start a selection;
+ *   7. LEGEND   — the #barhelp site-functions legend wraps past one line (it should read as one line of
+ *                 chrome, and FORMAT.md fixes its wording);
  *   (hint) DEADSPACE  — a full block whose content fills < 75% of it (review-only; pedagogy decides);
  *   (hint) HEIGHT     — adjacent half/third blocks whose heights differ by > 50px (review-only).
  *
@@ -252,6 +254,16 @@ const MEASURE = `(function(){
       extra: 'selectable shell element (' + (us || 'auto') + ')',
       ex: (el.id || el.className || el.tagName).toString().slice(0, 30) });
   });
+  /* 7. the site-functions legend is ONE line: if it wraps it reads as body copy instead of chrome */
+  var legend = document.getElementById('barhelp');
+  if (legend) {
+    var ls = getComputedStyle(legend);
+    var lh = parseFloat(ls.lineHeight) || (parseFloat(ls.fontSize) * 1.55);
+    var lhBox = legend.getBoundingClientRect().height;
+    if (lh > 0 && lhBox > lh * 1.5) findings.push({ kind: 'LEGEND',
+      extra: 'legend wraps to ' + Math.round(lhBox / lh) + ' lines (' + Math.round(lhBox) + 'px in a ' + Math.round(lh) + 'px line)',
+      ex: (legend.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) });
+  }
   return { empty: false, canvas: Math.round(cr.left) + '..' + Math.round(cr.right), w: Math.round(cr.width),
     blocks: blocks.length, tally: tally, findings: findings, escape: escape, cells: cells, gaps: gaps,
     spacing: { block: minBlock, row: minRow, opt: minOpt, chart: minChart }, hints: hints };
