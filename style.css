@@ -72,8 +72,13 @@ mark.nb{background:transparent;cursor:pointer}
    side via the BACKGROUND (background-size + background-position), never box padding — padding would
    SHIFT the prose, and the lesson content must never move (FORMAT.md fixed-content rule). Two ABUTTING
    saves therefore leave a paper gap between them without moving the text. */
-mark.nb.has-rec{background-repeat:no-repeat;background-position:2px 100%;
+mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-position:2px 100%;
  background-image:linear-gradient(var(--blue),var(--blue));background-size:calc(100% - 4px) 2px}
+/* the #barhelp legend DEMONSTRATES the two mark styles instead of describing them (owner instruction
+   2026-11-03): the recording underline and the note wash are the exact same declarations the real marks
+   use — .hb-rec is part of the mark.nb.has-rec rule above, and the note wash is #noteLayer .ntr's
+   --bluebg. Never restyle these two separately, or the legend starts lying about the site. */
+.barhelp .hb-note{background:var(--bluebg);border-radius:3px}
 .pop{position:absolute;z-index:9;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:5px;width:auto;max-height:70vh;overflow:auto}
 .pop button{padding:4px 7px;margin:0;font-size:12.5px;border-radius:8px;box-shadow:2px 2px 0 var(--tan);height:24px;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
 .poprow{display:flex;justify-content:space-between;align-items:center;gap:4px;margin:3px 0}

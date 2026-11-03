@@ -16,6 +16,17 @@ let STUDENT=gate.student||gate.email, layer=[], sig="", editing=false;
 const audioCache={};
 let popXY={x:20,y:90};
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(t._x);t._x=setTimeout(()=>t.style.display="none",2600)}
+/* ---- LESSON-CONTENT GATE (owner instruction 2026-11-03): Hear / Record / Note / Pronunciation Key and
+   Highlight belong to the lesson, i.e. to `.content-area` ONLY. A selection that starts in the shell —
+   the brand header, the #barhelp site-functions legend, the control bar, the footer — opens no popup,
+   creates no mark and raises NO toast at all (the size/one-block refusal messages included: they fire
+   after this gate, never before it). The gate lives at the two gesture entry points, trySelPopup() and
+   hlFromSelection(); it is deliberately NOT applied to hlBlocks(), whose block list is the offset ruler
+   every stored highlight is keyed against — filtering it would re-index existing rows. */
+function inContentArea(node){
+ const el=node&&(node.nodeType===1?node:node.parentElement);
+ return !!(el&&el.closest&&el.closest(".content-area"));
+}
 function b64url(b64,mime){const m=mime||"audio/webm";
  try{const b=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));return URL.createObjectURL(new Blob([b],{type:m}))}
  catch(e){return "data:"+m+";base64,"+b64}}
@@ -739,15 +750,17 @@ document.addEventListener("mouseup",()=>{mouseIsDown=false;clearTimeout(selTimer
 function trySelPopup(){ if(editing)return;
   const sel=getSelection();let t=sel?sel.toString().trim():"";
   if(mouseIsDown)return; /* never open mid-drag — the mouseup listener fires this at release */
-  if(t===lastSelText)return;
   if(!t)return;
+  if(!sel.rangeCount)return;
+  const r=sel.getRangeAt(0);
+  /* content gate (see inContentArea): the shell is not a lesson — no popup, no toast */
+  if(!inContentArea(r.commonAncestorContainer)){lastSelText=t;return;}
+  if(t===lastSelText)return;
   /* Ctrl gesture (Ctrl at mousedown) — or the tail of one — = HIGHLIGHT territory: the highlight
      has no size limit, so neither the note/record popup NOR its size message fires for it. */
   if(hlDownCtrl||Date.now()<hlSuppressUntil||ctrlHeld||Date.now()-lastCtrlUp<900){lastSelText=t;return;}
   if(t.length<3||t.length>200){lastSelText=t;toast("please select between 3 and 200 characters of text to enable notes and recordings");return;}
- if(!sel.rangeCount)return;
- const r=sel.getRangeAt(0);
- const n=r.commonAncestorContainer;const el=n.nodeType===1?n:n.parentElement;
+  const n=r.commonAncestorContainer;const el=n.nodeType===1?n:n.parentElement;
  if(el&&el.closest(".pop,script,style,button,textarea,input,select,a"))return;
  /* ONE BLOCK ONLY (owner spec 2026-10-12, same rule the highlight already uses): a selection
     that crosses a block element (paragraph → list item, cell → cell, heading → paragraph, …)
@@ -958,6 +971,9 @@ function hlFromSelection(){
  const sel=getSelection();if(!sel||!sel.rangeCount)return;
  const t=sel.toString().trim();if(!t)return;
  const rc=sel.getRangeAt(0).cloneRange();
+ /* content gate (see inContentArea): Ctrl+drag in the shell (header, #barhelp legend, control bar,
+    footer) creates nothing and says nothing */
+ if(!inContentArea(rc.commonAncestorContainer))return;
  lastSelText=t;
  hlApply(rc);
 }

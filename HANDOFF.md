@@ -232,11 +232,20 @@ Owner instruction: all site buttons get a standard mouseover highlight and a cli
 
 ---
 
+## [2026-11-03] Legend text rewritten with live mark demos + notebook gated to .content-area
+
+Owner instruction: (1) the `#barhelp` line takes new wording, with "Hear Teacher Pronunciation" underlined in the **recording** style and "Attach a Note" washed in the **note** style (colour names unchanged); (2) the popup, its functions and its toasts are disabled outside `.content-area`.
+
+- **Legend rewritten** (`business/lesson1.html`): `Select text to Hear Teacher Pronunciation or Record Your Own, See the Pronunciation Key, or Attach a Note to the Text — (on PC) Hold Ctrl and Select Text to Highlight it in Yellow, Green, or Red`. `.hb-rec` was **added to the existing `mark.nb.has-rec` selector** (so the underline is literally the recording's declaration, not a copy) and `.hb-note` uses the note's `var(--bluebg)` wash; the Yellow/Green/Red chips are untouched. It now fits on one line.
+- **Notebook scoped to the lesson content** (`engine1.js`): new `inContentArea(node)` gate at the two gesture entry points — `trySelPopup()` (which bails before the size and one-block toasts, so the shell can no longer produce *any* toast) and `hlFromSelection()` (Ctrl+drag outside content creates nothing). Root cause of the leak: `HL_BLOCKSEL` includes `h1`/`div`, so the header's `<h1>` and the `#barhelp` div both resolved a "block" and opened the popup. The gate is deliberately **not** applied to `hlBlocks()`, which is the offset ruler saved highlight rows are keyed against.
+- **`FORMAT.md` §2c** now quotes the exact legend text, states that it demonstrates the marks (and why they must stay the same declarations), and says the legend is inert. **`FUNCTION.md`** gained the "Scope: `.content-area` only" rule with the two entry points and the `hlBlocks()` caveat.
+- **Why a test was needed**: the suite's generic "popup appears on text selection" test selected the FIRST `p`/`span` in the document — which is the header's `<span>LESSON 1</span>` — so it had been passing *because* the shell was leaky. It now selects inside `.content-area` within the real 3..200-char limit, and a new block asserts (a) `inContentArea()` is false for the shell and true for content, (b) a selection in the header/legend opens no popup and raises no toast.
+- Verified: `npm run qa` green (incl. the two new assertions) · `qa/content.mjs 1`, `qa/width.mjs 1`, `qa/overflow.mjs` (+ both selftests) green · top-of-page screenshot reviewed (one line: blue-underlined "Hear Teacher Pronunciation", blue-washed "Attach a Note", colour chips unchanged) · `.edit.html` re-copied.
+- Next task: lesson 10 from `designs/lesson10.design.md`.
+
+---
+
 ## [2026-11-03] Free-text blocks are fixed size (no drag handle)
-
-Owner instruction: the free-text input blocks (e.g. lesson 1 §7D) must not be drag-resizable.
-
-Owner instruction: the free-text input blocks (e.g. lesson 1 §7D) must not be drag-resizable.
 
 Owner instruction: the free-text input blocks (e.g. lesson 1 §7D) must not be drag-resizable.
 

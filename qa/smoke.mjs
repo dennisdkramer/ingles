@@ -323,11 +323,16 @@ async function testPage(serverUrl, pageName, track = 'business') {
 
     // Test selection popup on lesson pages
     if (pageName.includes('lesson')) {
-        // Find a phrase element to select
-        const phrases = window.document.querySelectorAll('.phrase, p, span');
-        if (phrases.length > 0) {
+        // Find a phrase INSIDE the lesson content to select. The popup is scoped to .content-area
+        // (owner instruction 2026-11-03) and refuses strings outside 3..200 characters, so the candidate
+        // must be a content element of a valid length — never the page header or the #barhelp legend.
+        const cands = [...window.document.querySelectorAll('.content-area p, .content-area td, .content-area b, .content-area span')];
+        const target = cands.find(el => {
+            const n = (el.textContent || '').trim().length;
+            return n >= 3 && n <= 200;
+        });
+        if (target) {
             // Simulate selection
-            const target = phrases[0];
             const range = window.document.createRange();
             range.selectNodeContents(target);
             
@@ -730,6 +735,44 @@ async function testPage(serverUrl, pageName, track = 'business') {
                     console.log(`   ✅ cross-block selection is refused with a toast ("${cbToast.textContent}")`);
                 }
                 closeNb();
+
+                /* (c) the SHELL is not a lesson (owner instruction 2026-11-03): a selection in the brand
+                   header or in the #barhelp legend opens no popup, creates no mark and raises NO toast —
+                   the size/one-block refusals fire after the content gate, so they stay silent too. */
+                closeNb();
+                window.eval('ctrlHeld=false; hlSuppressUntil=0; lastCtrlUp=0; lastSelText=""');
+                const shellEl = window.document.querySelector('header.brand h1') || window.document.querySelector('#barhelp');
+                const t0 = window.document.getElementById('toast');
+                if (t0) { t0.textContent = ''; t0.style.display = 'none'; }
+                if (shellEl) {
+                    const gateHeader = window.eval('inContentArea(document.querySelector("header.brand h1") || document.querySelector("#barhelp"))');
+                    const gateBody = window.eval('inContentArea(document.querySelector(".content-area p, .content-area h2"))');
+                    if (gateHeader !== false || gateBody !== true) {
+                        errors.push('[FAIL] the content gate does not separate the shell from .content-area (header=' + gateHeader + ', body=' + gateBody + ')');
+                    } else {
+                        console.log('   ✅ the content gate separates the shell from .content-area');
+                    }
+                    const st = shellEl.firstChild && shellEl.firstChild.nodeType === 3 ? shellEl.firstChild : shellEl;
+                    const sr = window.document.createRange();
+                    try {
+                        sr.setStart(st, 0);
+                        sr.setEnd(st, Math.min(6, (st.textContent || '').length));
+                        const ss = window.getSelection(); ss.removeAllRanges(); ss.addRange(sr);
+                        window.document.dispatchEvent(new window.Event('selectionchange', { bubbles: true }));
+                        await new Promise(resolve => setTimeout(resolve, 450));   /* engine debounces by 350ms */
+                        const sToast = window.document.getElementById('toast');
+                        if (window.document.querySelector('.pop #pH, .pop #pR, .pop #pN')) {
+                            errors.push('[FAIL] a selection in the page header/legend opened the note/recording popup');
+                        } else if (sToast && (sToast.textContent || '').trim()) {
+                            errors.push('[FAIL] a selection in the page header/legend raised a toast: ' + sToast.textContent);
+                        } else {
+                            console.log('   ✅ a selection in the shell (header / #barhelp) opens no popup and raises no toast');
+                        }
+                    } catch (e) {
+                        errors.push('[FAIL] the shell-selection test could not build a range: ' + e.message);
+                    }
+                    closeNb();
+                }
             } else {
                 console.log('   ⏭  note/recording popup test skipped (no .content-area)');
             }
