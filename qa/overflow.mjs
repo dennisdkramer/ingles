@@ -295,18 +295,23 @@ const MEASURE = `(function(){
       wraps.push({ kind: 'ROWWRAP', extra: 'options beside the stem wrap onto ' + uniq.length + ' rows',
         ex: (o.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 44) });
   });
-  [].slice.call(document.querySelectorAll('.content-area .blanks > div')).forEach(function(d){
-    var f = [].slice.call(d.querySelectorAll('input,textarea'));
-    if (!f.length) return;
-    var rg = document.createRange(); rg.selectNodeContents(d);
-    var rects = rg.getClientRects(), first = null;
-    for (var i = 0; i < rects.length; i++) if (rects[i].width > 0) { first = rects[i]; break; }
-    if (!first) return;
-    var off = Math.round(f[0].getBoundingClientRect().top - first.top);
-    var uniq = topsOf(f);
-    if (uniq.length > 1 || off > 8)
-      wraps.push({ kind: 'ROWWRAP', extra: 'input ' + (uniq.length > 1 ? 'split over ' + uniq.length + ' rows' : off + 'px below its prompt line'),
-        ex: (d.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 44) });
+  /* a .blanks block is consistent too: every item keeps its input on the prompt's line, or every item
+     puts it on the line below the prompt (rule 9) — a mix is the defect, not the stacking */
+  [].slice.call(document.querySelectorAll('.content-area .blanks')).forEach(function(bl){
+    var inline = 0, stacked = 0, sample = null;
+    [].slice.call(bl.children).forEach(function(d){
+      var f = [].slice.call(d.querySelectorAll('input,textarea'));
+      if (!f.length) return;
+      var rg = document.createRange(); rg.selectNodeContents(d);
+      var rects = rg.getClientRects(), first = null;
+      for (var i = 0; i < rects.length; i++) if (rects[i].width > 0) { first = rects[i]; break; }
+      if (!first) return;
+      var off = Math.round(f[0].getBoundingClientRect().top - first.top);
+      if (off > 8) { stacked++; if (!sample) sample = d; } else inline++;
+    });
+    if (inline && stacked)
+      wraps.push({ kind: 'ROWWRAP', extra: 'block mixes ' + inline + ' inline field(s) with ' + stacked + ' stacked field(s)',
+        ex: (sample.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 44) });
   });
   /* one layout per block: inline-fields items and stacked items never share a block */
   [].slice.call(document.querySelectorAll('.content-area .panel, .content-area > fieldset, .content-area > .qgrid')).forEach(function(bl){
