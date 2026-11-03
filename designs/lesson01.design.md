@@ -28,3 +28,24 @@ Typed badge lines (name/job/city), *a/an* choices, four listen-and-tick items, a
 
 ## Notes for the build pass
 Everything in Portuguese except the target sentences and their audio; one small *be* block, no larger tables; audio on every target line; the badge is the page's spine, not a decoration.
+
+## Pass B — build notes (2026-11-03, page generated)
+
+Page: `business/lesson1.html` (+ identical `.edit.html` sidecar). Sections: 1 Quatro portas (the Heard entrance) · 2 O seu crachá (the badge wall, the spine) · 3 O sujeito nunca se esconde (be) · 4 a/an by sound · 5 O coringa it · 6 Sound Lab · 7 Treino · 8 Quiz.
+
+### Decisions taken inside the design (Pass B may merge/split/reorder for the teaching beats)
+
+- **A compact "a letra não manda no som" beat opens the Sound Lab** (A: cat · cake · car · about; O: go · good · who). It is the mental model that makes §4 (a/an decided by sound) true, and it is in this lesson's roadmap `Content:`. The conflict note above only resolved the *three* extra sound topics, and those are honoured exactly as resolved.
+- **The six stops stay folded into (c)** — one explanatory line (p/t/k as the voiceless twins of b/d/g, aspiration at the start of a syllable), no separate consonant section.
+- **The pair test uses eight clean /ɪ/ vs /æ/ pairs**: sit/sat, hit/hat, big/bag, fit/fat, did/dad, pin/pan, list/last, patch/pitch. `man/men` and `ship/sheep` were dropped — they are /æ/ vs /e/ and /ɪ/ vs /iː/, so they would drill the wrong contrast in this lesson.
+- **Recording stays one sentence, two options, model played first** (conflict note): §2A and §8D.
+- **The badge's cargo card asks for the article** (`I'm a/an ____`) instead of hard-coding `I'm a`, which would have taught *I'm a engineer*; its hint names both models (a designer / an analyst) and §4 explains the rule.
+- **The quiz never reuses a training item**: be-practice tests am/is/are in one set of sentences and the quiz in another; the translation works the same behaviour through different sentences (Ela é engenheira / Nós somos analistas / Está quente hoje).
+
+### Width decisions (FORMAT requires the reason here, not in the page)
+
+- §1 doorways — two `itemrow[data-cols="2"]` rows: *compare* four introductions that differ only in name, city and job.
+- §2 badge — one `itemrow[data-cols="3"]`: *divide* the badge into its three fixed slots (nome / cidade / cargo).
+- §3 be and §4 a/an — `itemrow[data-cols="3"]`: *contrast* the three be forms (I am / he·she·it is / you·we·they are) and the three article cases (a / an / the traps).
+- Everything else is full width (`.panel itemsize`, `.chart`, `.card`): one teaching object per block, no row.
+- **Slot saturation, not width**: the long fill-in lists (be, a/an, it's, quiz) are `.blanks.sent.cols` (two columns) rather than four, because a four-column 268px cell could not hold prompt + blank (measured in real Chrome: up to 356px of content). The /ɪ/ vs /æ/ items keep both options in the `.qline` beside the stem because `.qopts{justify-content:space-between}` spread a two-option pair across the full 1200px and destroyed the pair.

@@ -130,3 +130,17 @@ Hook `width.mjs` (no args) after `build:lessons` in `npm run qa`.
 A–H are in the tree and committed: FORMAT.md holds the three-width model, the `saturate` wording, the `C_slot`/ratio constants and the three formulas; style.css carries `.itemsize*`/`.itemrow` and no longer carries `.grid3`, `.panels`, `.dialog.half` or `.qgrid-4`; lessons 1 and 10 are parked as `lessons-archive/lesson1-new.*` / `lesson10-new.*` and `business/` is empty; `qa/width.mjs` (+ `qa/fixtures/`) is green under `--selftest` and hooked into `npm run qa`.
 `qa/smoke.mjs` and `qa/content.mjs` now discover whatever pages exist — an empty `business/` passes, a named-but-missing lesson fails. The old two-level pronunciation-model material, and the items that still described the 1–34 numbering, were swept out of PARKED and ISSUES.
 Next task: regenerate lesson 1 (then 10) from `designs/lesson01.design.md` / `designs/lesson10.design.md`. The parked `-new` pages are reference only — never a migration source.
+
+---
+
+## [2026-11-03] Business lesson 1 generated (first page in the new block model)
+
+One task: Pass B for lesson 1 from `designs/lesson01.design.md`. No rule, CSS or harness change.
+
+- `business/lesson1.html` + the identical `business/lesson1.edit.html` sidecar are in the tree; `node build-lessons.mjs` re-derived `lessons.json` (business: 1, "First Talk & the Sentence Skeleton").
+- Structure (all PT for explanation — the A0 checkpoint — targets in EN, `data-say` on every target line): **1** Quatro portas (the design's Heard entrance, transcript hidden in `<details>`) · **2** O seu crachá (the badge wall, the spine) · **3** O sujeito nunca se esconde (be am/is/are) · **4** a/an by sound · **5** O coringa it · **6** Sound Lab (letter≠sound · final consonant · p/t/k aspiration · 8 × /ɪ/ vs /æ/) · **7** Treino · **8** Quiz. 12 desk-object vocabulary items carry §4.
+- **Width model exercised for the first time**: 2×half rows (§1 doorways, *compare*), 3×third rows (§2 badge *divide*, §3 be + §4 a/an *contrast*), everything else full `.panel itemsize`. The reasons, and the two saturation deviations (two-column `.blanks.sent.cols` for the long fill-in lists; the /ɪ/-/æ/ pair options moved into the `.qline` because `.qopts` spread a two-option pair over the full 1200px), are written into the design file.
+- **Audio**: 7 new clips rendered with `npm run build:audio` (cat, cake, car, about / go, good, who / hit / did / pin / list / pitch); the other 30 strings reuse existing clips. `node build-audio.mjs --check` → "all clips present" (37 unique strings for business).
+- **Verified**: `npm run qa` green (build:lessons + width + smoke), `qa/content.mjs 1` green (`chart=4 panel=14 listen=41 gap=43 radio=61 feed=1`, every radio resolves an anchor), `qa/width.mjs 1` green, `qa/overflow.mjs 1` green **but vacuous**, plus a real-Chrome probe (temporary `qa/_probe.mjs`, deleted after use) measuring every block: no internal overflow, no width-vs-slot violation, no `.blanks` cell overflow, nothing crossing `.content-area`; the four screenshots taken during authoring were used to fix the two-option spread and the blank widths.
+- `qa/overflow.mjs` still measures only the retired `.panels > .panel` → recorded as **B-QA1** in ISSUES.md (owner decision whether to extend it).
+- Next task: lesson 10 from `designs/lesson10.design.md`.

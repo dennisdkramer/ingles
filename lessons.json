@@ -5,7 +5,12 @@
       "title": "Welcome! Eu já sei inglês!"
     }
   ],
-  "business": [],
+  "business": [
+    {
+      "n": 1,
+      "title": "First Talk & the Sentence Skeleton"
+    }
+  ],
   "adult": [
     {
       "n": 1,
