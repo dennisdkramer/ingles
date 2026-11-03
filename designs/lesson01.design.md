@@ -29,6 +29,9 @@ Typed badge lines (name/job/city), *a/an* choices, four listen-and-tick items, a
 ## Notes for the build pass
 Everything in Portuguese except the target sentences and their audio; one small *be* block, no larger tables; audio on every target line; the badge is the page's spine, not a decoration.
 
+### Owner revision (2026-11-03) — the opener states the teaching intent
+The opener was first written as an activity preview (`Abertura: … ouça ▶, repita, grave ⏺` + the site's notebook legend, copied from the kids page). Owner correction: it must say WHAT the lesson installs, and the `be` = *ser* + *estar* mapping is the point a Brazilian A0 student needs first. Now: "O que esta aula instala:" → the three target strings (the fixed facts = *ser*), the subject law, the state use (`I am hungry` = *estou com fome* — one verb where Portuguese has two), the sound law. The new `#barhelp` shell line carries the tool explanation, so no lesson prose describes the site. The ser/estar contrast is trained too: a chart row + merged note in §3, two gap items, and a Quiz C item. The generalized rule now lives in FORMAT.md ("Lesson opener (abertura) — contract").
+
 ## Pass B — build notes (2026-11-03, page generated)
 
 Page: `business/lesson1.html` (+ identical `.edit.html` sidecar). Sections: 1 Quatro portas (the Heard entrance) · 2 O seu crachá (the badge wall, the spine) · 3 O sujeito nunca se esconde (be) · 4 a/an by sound · 5 O coringa it · 6 Sound Lab · 7 Treino · 8 Quiz.

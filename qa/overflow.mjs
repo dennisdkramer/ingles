@@ -3,6 +3,7 @@
  * Run with: node qa/overflow.mjs [lessonNumber ...]   (no numbers = every business/lesson*.html that exists)
  *           node qa/overflow.mjs --selftest           (qa/fixtures/overflow-ok.html must be clean,
  *                                                      qa/fixtures/overflow-bad.html must report findings)
+ *           node qa/overflow.mjs 1 --shot <file.png>   (review aid: also captures the top of the page)
  *
  * jsdom cannot see layout, so this is the ONLY harness that measures it, in real Chrome over CDP.
  * FORMAT.md is the model: the canvas is fixed (.page-container 1400px, .content-area 1200px, never
@@ -260,7 +261,16 @@ function report(head, v) {
 async function main() {
   const argv = process.argv.slice(2);
   const selftest = argv.includes('--selftest');
-  const targets = argv.map(Number).filter(n => Number.isInteger(n) && n >= 1);
+  /* values that belong to an option are not lesson numbers */
+  const optVals = new Set();
+  ['--shot', '--shot-h'].forEach(f => { const j = argv.indexOf(f); if (j >= 0 && argv[j + 1]) optVals.add(argv[j + 1]); });
+  const targets = argv.filter(a => !a.startsWith('--') && !optVals.has(a))
+    .map(Number).filter(n => Number.isInteger(n) && n >= 1);
+  const shotAt = argv.indexOf('--shot');
+  const shotFile = shotAt >= 0 ? argv[shotAt + 1] : null;
+  const shotHAt = argv.indexOf('--shot-h');
+  const shotH = shotHAt >= 0 ? (Number(argv[shotHAt + 1]) || 1800) : 1800;
+  let shotDone = false;
 
   const site = await server();
   const base = 'http://127.0.0.1:' + site.port;
@@ -282,6 +292,18 @@ async function main() {
     await ses.send('Page.navigate', { url: base + '/' + rel });
     await sleep(selftest ? 900 : 1300);
     const r = await ses.send('Runtime.evaluate', { expression: MEASURE, returnByValue: true });
+    if (shotFile && !shotDone) {
+      shotDone = true;
+      try {
+        const dim = await ses.send('Runtime.evaluate', { expression: 'document.documentElement.scrollWidth', returnByValue: true });
+        const shot = await ses.send('Page.captureScreenshot', {
+          format: 'png', captureBeyondViewport: true,
+          clip: { x: 0, y: 0, width: Math.min(dim.result.value || 1400, 1500), height: shotH, scale: 0.8 }
+        });
+        fs.writeFileSync(shotFile, Buffer.from(shot.data, 'base64'));
+        console.log('  screenshot of the top of ' + rel + ' → ' + shotFile);
+      } catch (e) { console.log('  (screenshot failed: ' + e.message + ')'); }
+    }
     return (r.result && r.result.value) || null;
   };
 

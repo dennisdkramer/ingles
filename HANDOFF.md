@@ -160,6 +160,21 @@ Follow-up to the lesson-1 run, whose layout verification needed a throwaway prob
 
 ---
 
+## [2026-11-03] Lesson opener reframed (teaching intent + `be` = ser/estar) and site functions moved to the shell
+
+Owner instruction: the opener must say WHAT the lesson teaches (here: `be` for the fixed facts that answer to *ser*, and the same verb for the states that answer to *estar*), the concept must be generalised into FORMAT, and site functions must be explained in the page header instead of the lesson opener.
+
+- **Opener rewritten** (`business/lesson1.html`): it now opens with "O que esta aula instala:" — the three target strings, the law *the subject is never hidden*, the surprise *the same verb covers what is passing* (`I'm hungry` = *estou com fome*, one English verb where Portuguese has *ser* + *estar*), and the sound law. No activity menu, no tool explanation (the old `Abertura:`/`Caderno:` paragraph is gone).
+- **The `be` = *ser*/*estar* contrast is now taught, not just mentioned**: §3's chart gained the row *Estou com fome. → I am hungry.* plus a merged `tr.note` row ("I am = sou e estou … o contexto decide: I am a designer / I am hungry"), the §3 gap list gained *We ___ hungry* and *It ___ cold today*, and Quiz C gained the item *Estou com fome.* (so the state use is trained and tested, not only read). New clip rendered: "I am hungry.".
+- **Site functions moved to the shell**: new `#barhelp .barhelp` line directly under the control bar, above `main#page`, baked into the HTML (not engine-generated, per the owner), using the owner's wording with each feature in parentheses and the three highlight names shown as colour chips (`.hlk-y/.hlk-g/.hlk-r`). Hidden in print. CSS added; the rest of the page is unchanged.
+- **FORMAT.md generalised** (the part that stops the next page inventing an opener): §2b shell order now names the opener block and `#barhelp`; new §2c defines the legend (the ONLY place the site's tools are explained); new subsection **"Lesson opener (abertura) — contract"** with three required contents — (1) what the student can DO, shown in the lesson's target strings, (2) the law/mental model named, (3) **where the lesson corrects a Portuguese→English mapping, that mapping stated explicitly with one example of each side** (`be` = ser + estar, `have` = ter + haver, to/for = para, live = morar/viver) — capped at 3–5 sentences, no activity list, no tool description.
+- **QA**: `qa/overflow.mjs` gained `--shot <file> [--shot-h <px>]` (review aid — the new legend line needed an eyeball) and its option values are no longer parsed as lesson numbers.
+- **PARKED**: B-I9 (the old "move the how-to-use into the control bar" item) is satisfied — closed, replaced by **B-I9b**: kids/ and adult/ still carry the old "Caderno:" opener and no `#barhelp`.
+- Verified: `npm run qa` green · `qa/content.mjs 1` green (`chart=4 panel=14 listen=42 gap=45 radio=64 feed=1`) · `qa/width.mjs 1` green · `qa/overflow.mjs` green (spacing minimums unchanged) · `qa/overflow.mjs --selftest` green · `build-audio --check` clean (38 strings) · top-of-page screenshot reviewed (legend renders under the control bar, chips visible, page border clear of it).
+- Next task: lesson 10 from `designs/lesson10.design.md`.
+
+---
+
 ## [2026-11-03] Spacing between blocks: rule + check + CSS fix
 
 Owner instruction: blocks must get a few pixels of space between them (vertically for full blocks), and the margins between row members and across the options must be confirmed.
