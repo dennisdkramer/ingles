@@ -8,7 +8,7 @@
     "build:lessons": "node build-lessons.mjs",
     "build:audio": "node build-audio.mjs",
     "audio:check": "node build-audio.mjs --check",
-    "qa": "node build-lessons.mjs && node qa/width.mjs && node qa/landing.mjs && node qa/smoke.mjs",
+    "qa": "node build-lessons.mjs && node qa/width.mjs && node qa/landing.mjs && node qa/games.mjs && node qa/smoke.mjs",
     "qa:layout": "node qa/overflow.mjs --selftest && node qa/overflow.mjs",
     "qa:live": "node qa/live.mjs",
     "build:dict": "node build-dictionary.mjs"

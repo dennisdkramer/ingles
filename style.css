@@ -338,3 +338,33 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .track-card.locked{opacity:.45;filter:grayscale(1)}
 .track-card.locked .row,.track-card.locked h3{pointer-events:none}
 
+
+/* ---- Tier-1 game block (engine3.js). A game is a BLOCK like any other (FORMAT.md rule 2): it may sit at
+   full width or carry .itemsize-half/.itemsize-third inside an .itemrow. The authored answers stay in
+   .game-list as ordinary radios — that is what persists, what prints, and what shows if the engine never
+   runs. Everything below only dresses the animated layer the engine builds on top of them. */
+.game{margin:14px 0;padding:12px 16px;background:var(--paper);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--tan);min-width:0}
+.game-stage{position:relative;height:240px;overflow:hidden;background:#eef4f7;border:2px dashed var(--tan);border-radius:12px;touch-action:manipulation}
+.game:not(.is-on) .game-stage{display:none}
+.game.is-on .game-list{display:none}
+.game-prompt{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:3;background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:4px 14px;font-weight:700;font-size:15px;white-space:nowrap;opacity:0;transition:opacity .45s ease}
+.game-prompt.in{opacity:1}
+.game-hud{position:absolute;right:10px;top:8px;z-index:3;display:flex;gap:12px;font-weight:700;font-size:14px;color:var(--ink)}
+.game-hud .clock{min-width:3.4em;text-align:right}
+.game-fade{position:absolute;inset:0;z-index:4;background:var(--paper);opacity:0;pointer-events:none;transition:opacity .5s ease}
+.game-fade.on{opacity:1}
+.target{position:absolute;left:0;top:0;width:118px;height:104px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;cursor:crosshair;will-change:transform;z-index:2}
+.target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;border-radius:8px}
+.target svg{display:block;width:118px;height:74px;color:#f3b23c}
+.target .plaque{display:block;margin:-4px auto 0;width:fit-content;max-width:118px;padding:2px 8px;background:#fff3d6;border:2px solid #8a5a1b;border-radius:6px;box-shadow:2px 2px 0 #8a5a1b;font:700 14px 'Public Sans',sans-serif;color:#4a2f0c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.target.ufo svg{color:#8fb7c9}
+.target.ufo .plaque{background:#e8f1ff;border-color:#2f5d86;box-shadow:2px 2px 0 #2f5d86;color:#153247}
+.target.hit svg{color:#2f9e44}
+.target.miss svg{color:#c92a2a}
+.game-start{display:block;margin:10px auto 0}
+.game-how{margin:8px 0 0;font-size:15px;line-height:1.5;text-align:center}
+.game-list{margin-top:6px}
+.game-score-line{margin:10px 0 0;text-align:center;font-weight:700}
+@media (prefers-reduced-motion:reduce){.game-prompt{transition:none}.game-fade{transition:none}}
+@media print{.game-stage{display:none}.game.is-on .game-list{display:block}}
+

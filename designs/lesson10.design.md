@@ -28,16 +28,18 @@ The shooter's choices (persisted like any exercise), a diagnosis line per clinic
 - **The entry bundles vowels + consonants + the key.** Not a conflict, but it is why this lesson is double length: three skills that share one artefact (the key).
 
 
-## Escalation recorded in Pass B (unresolved, owner's call)
+## Escalation recorded in Pass B — now RESOLVED (2026-11-03)
 
-**`shootPair` does not exist as an engine.** The design's chosen entrance is the "shooter" — a Tier-1 generic
-engine (two targets, one spoken word, a skin), approved in the design but never built: there is no
-`engine3.js` in the repo and no CSS skin for a game block. Per PEDAGOGY-MAP §2(b) this affects one lesson's
-content, so the page was generated with the **rounds realised on an existing primitive**: two radio targets,
-one ▶ per round, eight rounds — the behaviour the student performs (listen → commit → check) is the same, and
-it persists through `input[type=radio]` exactly as a game would have had to. What is missing is the *skin* and
-the timed feel. **Owner decision needed:** build `engine3.js` + the skin and swap §1's markup, or keep the
-radio realisation permanently. Nothing else in the lesson depends on the engine.
+**`shootPair` did not exist when this page was first built.** The design's chosen entrance is the "shooter" — a
+Tier-1 generic engine (two targets, one spoken word, a skin). It was not in the repo at first, so the eight
+rounds shipped as ordinary listen-and-tick radios (same behaviour, same persistence, no skin, no timing) and
+the gap was recorded here and in PARKED.md (B-C7). **It has since been built** (`engine3.js`, `qa/games.mjs`),
+and §1 of `business/lesson10.html` now runs on it: `.game[data-game="shootPair"]` with `data-skin="duck"`,
+`data-speed="95"`, `data-limit="0"` (off-screen is the limit for a first encounter), `data-replay="1"`, and the
+eight authored `.qitem`s kept verbatim inside `.game-list` — which is what still persists, prints and shows if
+the engine never loads. The right answer is inferred from each round's `data-say`, so the page carries no
+answer key. Leave unchanged unless the owner wants a countdown as well.
+
 
 ## Pass B — build notes (2026-11-03, page generated)
 

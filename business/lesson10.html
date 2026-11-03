@@ -16,8 +16,10 @@
 
 <h2>1. Round 1 — the shooter</h2>
 <p class="lead">Two targets, one spoken word. Click ▶ once and hit the one you heard — no text to study, no rule to apply. Eight rounds, and the pairs come back at the end. Fast is correct here: the ear learns before the rule does.</p>
-<div class="panel itemsize">
-<h3 class="ex-head">A. Which one did you hear?</h3>
+<div class="game itemsize" data-game="shootPair" data-skin="duck" data-speed="95" data-limit="0" data-replay="1">
+<button class="game-start" type="button">▶ Start</button>
+<p class="game-how"><b>How it works:</b> press <b>Start</b>, and a duck takes off for each option — the word is on the plaque tied to its tail. Listen, then <b>shoot the duck that carries the word you heard</b> (click it, or press 1 / 2). A hit is one point, a wrong shot or a miss is zero, and a pair you miss comes back at the end. Everything you shoot is saved as your answer.</p>
+<div class="game-list">
 <div class="qgrid stack cols">
 <div class="qitem"><div class="qline"><span class="qnum">1.</span><span class="qstem"><button class="listen" data-say="ship.">▶</button> Round 1</span></div><div class="qopts"><label><input type="radio" name="r1" value="a">ship</label><label><input type="radio" name="r1" value="b">sheep</label></div></div>
 <div class="qitem"><div class="qline"><span class="qnum">2.</span><span class="qstem"><button class="listen" data-say="three.">▶</button> Round 2</span></div><div class="qopts"><label><input type="radio" name="r2" value="a">tree</label><label><input type="radio" name="r2" value="b">three</label></div></div>
@@ -27,6 +29,7 @@
 <div class="qitem"><div class="qline"><span class="qnum">6.</span><span class="qstem"><button class="listen" data-say="tree.">▶</button> Round 6</span></div><div class="qopts"><label><input type="radio" name="r6" value="a">tree</label><label><input type="radio" name="r6" value="b">three</label></div></div>
 <div class="qitem"><div class="qline"><span class="qnum">7.</span><span class="qstem"><button class="listen" data-say="hot.">▶</button> Round 7</span></div><div class="qopts"><label><input type="radio" name="r7" value="a">hat</label><label><input type="radio" name="r7" value="b">hot</label></div></div>
 <div class="qitem"><div class="qline"><span class="qnum">8.</span><span class="qstem"><button class="listen" data-say="west.">▶</button> Round 8</span></div><div class="qopts"><label><input type="radio" name="r8" value="a">west</label><label><input type="radio" name="r8" value="b">vest</label></div></div>
+</div>
 </div>
 </div>
 
@@ -297,6 +300,8 @@ const SECRET="abreportas2025", TRACK="business", L=10;
 <script src="../pronkey.js"></script>
 <script src="../engine1.js"></script>
 <script src="../engine2.js"></script>
+<script src="../engine3.js"></script>
+
 <script>
 if(!window.__A)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine1.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');
 else if(!window.__B)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine2.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');
