@@ -10,9 +10,8 @@
  * reflows), a block is full / half (50% - 7px) / third (33.3% - 9.3px) and is TAGGED with its size
  * (`.itemsize*`, or `data-cols` on the `.itemrow` that holds it). Checks, all fatal except where noted:
  *   1. OVERFLOW — a block's content is wider than the block (scrollWidth > clientWidth + 8);
- *   2. BALLOON  — a block is wider than its slot (a row member past its share of the row, a full block past
- *                 the canvas, ...). A row's columns are counted from its members and their `data-span`, so
- *                 any number of columns is measured correctly;
+ *   2. BALLOON  — a block is wider than its slot (a half past half, a third past a third, a full block past
+ *                 the canvas, ...). The slot comes from the row's `data-cols` and the member's size class;
  *   3. ESCAPE   — ANY element crosses the .content-area frame. This is the one that catches content
  *                 that is geometrically inside its block but pushed out of the canvas (a right-aligned
  *                 `.blanks` cell spilling to the LEFT of its panel, for example);
@@ -127,14 +126,12 @@ const MEASURE = `(function(){
     var pa = el.parentElement;
     var row = pa && pa.classList && pa.classList.contains('itemrow') ? pa : null;
     if (!row) return cr.width;
-    /* content & layout aware: the row divides into as many columns as it has shares (members +
-       their data-span), and each member owns its share of the width minus the 14px gaps */
-    var kids = [].slice.call(row.children);
-    var span = Number(el.getAttribute('data-span') || 1) || 1;
-    var cols = 0;
-    for (var ki = 0; ki < kids.length; ki++) cols += Number(kids[ki].getAttribute('data-span') || 1) || 1;
-    if (cols < 1) return cr.width;
-    return (cr.width - 14 * (cols - 1)) * (span / cols);
+    /* the block model is fixed (FORMAT.md): a row is 2 halves or 3 thirds, and the member's own size
+       class says which — data-cols on the row is the second witness */
+    var cols = row.getAttribute('data-cols');
+    if (cols === '2' || el.classList.contains('itemsize-half')) return cr.width / 2 - 7;
+    if (cols === '3' || el.classList.contains('itemsize-third')) return cr.width / 3 - 9.3333;
+    return cr.width;
   }
   function label(el){
     var hd = el.querySelector('.ex-head') || el.querySelector('h1,h2,h3,h4,summary,b');
@@ -144,14 +141,14 @@ const MEASURE = `(function(){
   var sel = '.content-area .panel, .content-area .itemrow > *, .content-area > .card, .content-area > p.card,'
     + ' .content-area > .chart, .panels > .panel';
   var blocks = [].slice.call(document.querySelectorAll(sel));
-  var findings = [], hints = [], tally = { full: 0, inRow: 0 };
+  var findings = [], hints = [], tally = { full: 0, half: 0, third: 0 };
   var lastRow = null, lastRowTop = -9999;
   blocks.forEach(function(el){
     var r = el.getBoundingClientRect();
     if (!r.width) return;
     var slot = slotOf(el);
     var ex = label(el);
-    if (slot >= cr.width - 1) tally.full++; else tally.inRow++;
+    if (slot >= cr.width - 1) tally.full++; else if (slot > cr.width / 2 - 30) tally.half++; else tally.third++;
     var over = el.scrollWidth - el.clientWidth;
     if (over > 8) findings.push({ kind: 'OVERFLOW', w: Math.round(r.width), slot: Math.round(slot), extra: 'over=' + over + 'px', ex: ex });
     else if (r.width - slot > 8) findings.push({ kind: 'BALLOON', w: Math.round(r.width), slot: Math.round(slot), extra: 'wider than its slot by ' + Math.round(r.width - slot) + 'px', ex: ex });
@@ -273,7 +270,7 @@ function report(head, v) {
   if (!v || v.empty) { console.log(head + ': ❌ no .content-area (page missing or not a lesson)'); return 1; }
   const bad = [].concat(v.findings, v.escape, v.cells, v.gaps || []);
   console.log(head + '  canvas ' + v.canvas + ' · blocks ' + v.blocks +
-    ' (full ' + v.tally.full + ' / dividing a row ' + v.tally.inRow + ')');
+    ' (full ' + v.tally.full + ' / half ' + v.tally.half + ' / third ' + v.tally.third + ')');
   const sp = v.spacing || {};
   const px = n => (n == null || n < 0) ? '—' : n + 'px';
   console.log('  spacing (min): between blocks ' + px(sp.block) + ' · between row members ' + px(sp.row) +

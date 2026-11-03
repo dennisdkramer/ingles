@@ -88,33 +88,24 @@ Then the opener stops: **3–5 sentences, no activity list, no table of contents
 CSS uses fixed constants (no dynamic/viewport sizing and no CSS wrapping to force a fit). A block's width is a *result* of the pedagogical grouping decision — never a dial — and the CSS displays whatever division the content needed.
 
 1. **Canvas.** Every block sits inside `.content-area` — the fixed 1200px column inside the 1400px `.page-container` (§2b). The layout is fixed at generation, nothing reflows at display time, and content within a block may never overflow the block.
-2. **A row divides; the division follows the content (any N).** Content that is better read side by side goes in a `.itemrow`, which divides the full band into **as many columns as that content needs — no fixed 2/3 grid, no "allowed" column counts**. Each member takes an equal share of the row minus the 14px gaps; a member whose content is genuinely the wider one asks for more than one share with `data-span="K"` (K = 2..4, i.e. K of the row's columns). `data-cols="N"` on the row documents the column total and must be truthful (members + their extra spans). A block that stands on its own is full width (`.itemsize`, the default) and gets **no** row. Width is never a dial and never set on the member: no size class and no inline width, ever — the row decides, and `qa/width.mjs` fails a page that tries.
-3. **Fill target — content inside the block.** Items generated in a block **saturate** their slot — the combined width gets as close as possible to, and never past, 95% of the slot a block owns (the full canvas, or that member's share of its row), with no loss of quality or utility; the only way of closing the gap that is not allowed is redundancy. Fill by increasing or reducing the verbosity and/or quantity of strings/items, and by the width of items *within* the row (gaps, column widths, option counts) — with real teaching content only.
-4. **A division needs a stated reason** (divide, contrast, compare, sequence, or any other articulated reason). A row's members are height-equalised by **adding** content to the shorter ones, never by trimming the taller.
+2. **Three block widths only.** Blocks tile a row evenly: 2 × half or 3 × third — no mixing, no single half/third. Width is never a dial; once the grouping decision is made the block is **tagged** with its `.itemsize*` class (`.itemsize` = full, the default; `.itemsize-half`; `.itemsize-third`) inside a `.itemrow[data-cols="2"|"3"]`, and the CSS displays that size. (The block sizes are the page's fixed vocabulary — the content-aware freedom below belongs *inside* a block, never to the blocks themselves.)
+3. **Fill target — content inside the block.** Items generated in a block **saturate** their slot — the combined width gets as close as possible to, and never past, 95% (full) / 45% (half) / 30% (third) of `.content-area`, with no loss of quality or utility; the only way of closing the gap that is not allowed is redundancy. Fill by increasing or reducing the verbosity and/or quantity of strings/items, and by the width of items *within* the row (gaps, column widths, option counts) — with real teaching content only.
+4. **Halves/thirds need a stated reason** (divide, contrast, compare, or any other articulated reason), are generated only as complete aligned rows, and the row's members are height-equalised by **adding** content to the shorter ones, never by trimming the taller.
 5. **Fixed vs elastic.** `h1`, `h2`, `.ex-head`, `.qstem`, `.lead` and hints are fixed strings and are exempt: they are neither stretched nor padded. Elastic: options, items, cells, chips, gaps. The same measurement decides both how much content to generate and whether a fixed string fits its slot.
-6. **Charts and grids carry no prescribed column count.** A `.chart` is a table whose columns are whatever the content needs, always 100% of its block. No suggested option counts; question options wrap.
+6. **CONTENT is content-aware: no prescribed column or row count.** A `.chart` is a table whose columns are whatever the content needs, always 100% of its block. The same holds for everything *inside* a block: a comparison table may want 2, 3, 4 or more columns; a `.blanks` list or an option row takes as many cells/options per line as its items need (options wrap); a list may be as long or as short as the teaching needs. Nothing in this file caps or dictates those numbers — the block's fixed width is the only constraint, and the content decides how it divides itself.
 7. **Short single blocks:** no rule for now (owner decision) — leave as-is.
 8. **Reasons are recorded in the design pass** (`designs/lessonNN.design.md`), not in the page.
 
 #### Width math
 Baseline = body 17px Public Sans = ratio 1.0. One unit for everything: **baseline characters (ce)**.
 
-A row divides the 1180px of usable canvas into `N` columns separated by 14px gaps, so a member owning `span` of them has:
-
-```
-share_px(N, span) = (1180 − 14 × (N − 1)) × span / N          # equal shares, span = 1 by default
-C_slot(N, span)   = share_px(N, span) ÷ 8.16                  # baseline chars the slot holds
-```
-
-| slot | share_px | `C_slot` (ce) |
+| elementsize | usable content width | `C_slot` (ce) |
 |---|---|---|
-| full block (no row) | 1180 | 144 |
-| N=2, span 1 | 583 | 71 |
-| N=3, span 1 | 384 | 47 |
-| N=4, span 1 | 284 | 34 |
-| N=3, span 2 | 777 | 95 |
+| full | 1180px (1200 − 10px × 2 margins) | 144 |
+| half | 541px (593 − 16×2 padding − 10×2 margins) | 66 |
+| third | 355px (390.7 − 18×2 card padding) | 43 |
 
-`C_slot` = usable width ÷ 8.16px (baseline advance). Card and panel padding are already inside `share_px`'s budget by these constants (`.card` 18px side padding, `.panel` 16px + its 10px child margins) — subtract them from `share_px` when a block uses a class with different padding. Calibrate once with `qa/live.mjs` (real Chrome) rather than trusting the estimate.
+`C_slot` = usable width ÷ 8.16px (baseline advance). Calibrate once with `qa/live.mjs` (real Chrome) rather than trusting the estimate. Content *inside* a block subdivides itself freely (rule 6): what matters is that its combined width saturates the `C_slot` of the block it lives in.
 
 | font | ratio `r` |
 |---|---|

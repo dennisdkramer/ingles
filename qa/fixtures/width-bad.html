@@ -7,42 +7,34 @@
 <body>
 <main id="page"><div class="page-container"><div class="content-area">
   <h1>Width fixture — bad</h1>
-  <!-- 1: data-cols says 3 but the row divides into 2 columns -->
-  <div class="itemrow" data-cols="3">
-    <section class="card"><h2>A</h2><p>Two members.</p></section>
-    <section class="card"><h2>B</h2><p>Two members.</p></section>
-  </div>
 
-  <!-- 1: a row of one (that is just a full block) -->
-  <div class="itemrow" data-cols="1">
-    <section class="card"><h2>Alone</h2><p>A row needs at least two divisions.</p></section>
-  </div>
-
-  <!-- 2: a retired size class on a member -->
+  <!-- a 2-row that mixes a half with a third -->
   <div class="itemrow" data-cols="2">
-    <section class="card itemsize-half"><h2>Half</h2><p>The size class is retired.</p></section>
-    <section class="card"><h2>B</h2><p>Fine.</p></section>
+    <section class="card itemsize-half"><h2>Half A</h2><p>Mixed row.</p></section>
+    <section class="card itemsize-third"><h2>Third in a 2-row</h2><p>Mixed row.</p></section>
   </div>
 
-  <!-- 2: a member that sets its own width -->
+  <!-- a lone third, outside any row -->
+  <section class="card itemsize-third"><h2>Lone third</h2><p>No row around it.</p></section>
+
+  <!-- an incomplete row, and a member that dials its own width -->
   <div class="itemrow" data-cols="3">
-    <section class="card" style="width:40%"><h2>Dialled</h2><p>The row decides the share.</p></section>
-    <section class="card"><h2>B</h2><p>Fine.</p></section>
-    <section class="card"><h2>C</h2><p>Fine.</p></section>
+    <section class="card itemsize-third"><h2>Only one</h2><p>A 3-row needs three members.</p></section>
+    <section class="card itemsize-third" style="width:40%"><h2>Dialled</h2><p>The size class owns the width.</p></section>
   </div>
 
-  <!-- 5: an unsupported span -->
-  <div class="itemrow" data-cols="3">
-    <section class="card" data-span="9"><h2>Span</h2><p>Not 2..4.</p></section>
-    <section class="card"><h2>B</h2><p>Fine.</p></section>
+  <!-- a row with no data-cols at all -->
+  <div class="itemrow">
+    <section class="card itemsize-half"><h2>A</h2><p>No data-cols.</p></section>
+    <section class="card itemsize-half"><h2>B</h2><p>No data-cols.</p></section>
   </div>
 
-  <!-- 3: a retired grid class -->
+  <!-- a retired class that must not be generated any more -->
   <div class="grid3">
     <section class="card"><h2>Retired</h2><p>The .grid3 grid is gone.</p></section>
   </div>
 
-  <!-- 4: a chart that prescribes its own columns -->
+  <!-- a chart that prescribes its own columns (its CONTENT should decide) -->
   <table class="chart" data-cols="2">
     <thead><tr><th>Form</th><th>Use</th></tr></thead>
     <tbody><tr><td>I work</td><td>a habit</td></tr></tbody>

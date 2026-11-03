@@ -277,3 +277,18 @@ Owner review of the exclusion list in PEDAGOGY-MAP §1. Resolutions applied, plu
 - Verified: `npm run qa` green · `qa/content.mjs 1` green · `qa/width.mjs 1` + `--selftest` green · `qa/overflow.mjs` green on lesson 1 (SELECT clean) + `--selftest` green (bad fixture 15 findings incl. SELECT) · screenshot reviewed (legend one line, 14px, ink, two words unbolded, underline/wash/chips intact) · `.edit.html` re-copied.
 - Next task: lesson 10 from `designs/lesson10.design.md`.
 
+
+---
+
+## [2026-11-03] REVERTED: `.itemsize-half` / `.itemsize-third` are back — block layout is fixed 2/3, content inside a block is what becomes content-aware
+
+Owner correction: "undo the removal of .itemsize-half/third, and any related elements, we DO need those. Content-aware division and column count applies to the content IN the blocks/charts."
+
+- **`style.css`**: restored `.itemsize{width:100%}`, `.itemsize-half{width:calc(50% - 7px)}`, `.itemsize-third{width:calc(33.3333% - 9.3333px)}`, `.itemrow{display:flex;gap:14px}` and `.itemrow[data-cols="2"|"3"]>*{width:…}`. The grid auto-columns model and the `data-span="2..4"` weighting rules are **gone**. A comment in the file now states the split: the block layout is the fixed 2/3 slot model; the content-aware rule (any number of columns/rows the content needs) applies inside a block — `.chart`, table, option row, `.blanks` list — never to the blocks.
+- **`business/lesson1.html`**: the 13 row members got their size classes back (4 × `itemsize-half` in §1's two doorway rows, 9 × `itemsize-third` in the badge / be / a-an rows); `.edit.html` re-copied.
+- **`qa/width.mjs`**: back to the 2/3 audit — every half/third inside a row and never both classes; `data-cols="2"` = exactly 2 halves, `"3"` = exactly 3 thirds, no mixing, `data-cols` required; a row member carrying an inline width is still a finding (that part of the content-aware change was kept: the size class owns the width); retired classes and chart column counts unchanged. The `data-span` rule is gone. Fixtures rewritten to the 2/3 model (the OK fixture now also carries a 3-column and a 2-column chart, proving the inside-a-block freedom is what varies).
+- **`qa/overflow.mjs`**: slot computation and the full/half/third tally restored (slot from the row's `data-cols` + the member's size class); `BALLOON` header comment updated.
+- **`FORMAT.md`**: rule 2 back to **"Three block widths only"** (with a parenthetical that the content-aware freedom belongs inside a block), the fill target back to 95 % / 45 % / 30 %, rule 4 back to "halves/thirds need a stated reason", the width-math table back to full/half/third, and rule 6 strengthened into **"CONTENT is content-aware: no prescribed column or row count"** — a chart may take 2, 3, 4+ columns, a `.blanks` list or option row takes as many cells/options per line as its items need, lists as long as the teaching needs; nothing in the file caps those numbers.
+- **`VERIFICATION.md`** updated to describe the restored audit and to say that the inside-a-block freedom is deliberately not column-count-checked.
+- Verified: `npm run qa` green · `qa/content.mjs 1` green · `qa/width.mjs 1` + `--selftest` green (bad fixture: 8 findings, mixed row / lone third / inline width / incomplete row / missing data-cols / .grid3 / chart count) · `qa/overflow.mjs` green (`blocks 32 · full 19 / half 4 / third 9`, spacing minima unchanged) · screenshot reviewed — the 2- and 3-column rows render exactly as before.
+- Next task: lesson 10 from `designs/lesson10.design.md`.
