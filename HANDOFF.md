@@ -218,7 +218,23 @@ Owner instruction: (1) the archived/parked lesson files go into `.gitignore` and
 
 ---
 
+## [2026-11-03] Default button interaction (hover highlight + press animation) for the whole site
+
+Owner instruction: all site buttons get a standard mouseover highlight and a click animation by default.
+
+- **`style.css`** (after the base `button` rule, so every per-element rule still wins): `button{transition:transform .09s,filter .12s}` · `:hover:not(:disabled):not(.locked){filter:brightness(1.14);transform:translateY(-1px)}` · `:active:not(:disabled):not(.locked){filter:brightness(1.04);transform:translate(2px,2px)}` · `:focus-visible{outline:3px solid var(--tan)}` · a `prefers-reduced-motion` block that drops the movement.
+- **Why modulate instead of recolour**: the rules never set `background` or `box-shadow`, so buttons that carry their own colour/shadow keep them — `.listen` (tan), the highlight palette swatches (`.hlpal button[data-c]`, no shadow), `.complete-btn` (teal/slate), `.remlink` (transparent), `.bookmenu button` (paper) and its existing `:hover` tint. The press moves the button 2px into its own hard shadow, which is the site's offset-shadow idiom.
+- **`FORMAT.md`** buttons bullet now documents the shared interaction (and that no page writes its own hover/press CSS).
+- **Verified in real Chrome** (temporary `qa/_hover.mjs`, deleted after use; backend not involved): at rest no filter/transform · hover `brightness(1.14)` + `matrix(1,0,0,1,0,-1)` · the tan background and the ink shadow are unchanged · press `matrix(1,0,0,1,2,2)` with the shadow unchanged · an engine-rendered control-bar button highlights too · a disabled button (`← Last` on lesson 1) does not react · `prefers-reduced-motion: reduce` leaves `transform: none`. A 2× crop of the pressed `.listen` button was eyeballed: the button sits 2px into its shadow.
+- Also fixed a self-inflicted slip during the edit: the first pass replaced the base `button` rule instead of adding after it; the base declarations were restored before any verification.
+- Verified: `npm run qa` green · `qa/content.mjs 1`, `qa/width.mjs 1`, `qa/overflow.mjs` (+ both selftests) green · lesson rendering unchanged elsewhere.
+- Next task: lesson 10 from `designs/lesson10.design.md`.
+
+---
+
 ## [2026-11-03] Free-text blocks are fixed size (no drag handle)
+
+Owner instruction: the free-text input blocks (e.g. lesson 1 §7D) must not be drag-resizable.
 
 Owner instruction: the free-text input blocks (e.g. lesson 1 §7D) must not be drag-resizable.
 

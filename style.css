@@ -39,6 +39,20 @@ main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
 .card{background:var(--paper);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--tan);padding:14px 18px;margin:14px 0}
 .row{margin:6px 0}
 button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;margin:4px 4px 4px 0;font:600 14px 'Public Sans';cursor:pointer;box-shadow:3px 3px 0 var(--tan)}
+/* default interaction for EVERY button (owner instruction 2026-11-03): one shared highlight on hover and
+   one shared press animation, so no page has to style its own. Both only MODULATE the button — brightness,
+   a 1px lift, and a press that moves it 2px into its own hard shadow — so a button that carries its own
+   colour or its own shadow (.listen = tan, .hlpal swatches with no shadow, .complete-btn, .remlink,
+   .bookmenu buttons) keeps them: the rules never set `background` or `box-shadow`. Disabled and locked
+   (greyed, not applicable) buttons do not react. */
+button{transition:transform .09s ease,filter .12s ease}
+button:hover:not(:disabled):not(.locked){filter:brightness(1.14);transform:translateY(-1px)}
+button:active:not(:disabled):not(.locked){filter:brightness(1.04);transform:translate(2px,2px);transition-duration:.04s}
+button:focus-visible{outline:3px solid var(--tan);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){
+ button{transition:none}
+ button:hover:not(:disabled):not(.locked),button:active:not(:disabled):not(.locked){transform:none}
+}
 a{color:var(--ink);font-weight:600}h2{font-family:'Playfair Display',serif;margin:.9em 0 .3em}
 .dim{color:#8a8072;font-size:13px}
 .pt{color:#5c5347;font-style:italic}.ptw{font-style:italic;color:var(--ptw);font-weight:600}

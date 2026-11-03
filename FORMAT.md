@@ -80,7 +80,7 @@ Then the opener stops: **3–5 sentences, no activity list, no table of contents
 
 ### Blocks
 - .card: paper bg, 2px ink border, 16px radius, 5px 5px 0 tan hard shadow
-- Buttons: ink bg, cream text, 10px radius, 3px 3px 0 tan shadow, weight 600, 14px Public Sans
+- Buttons: ink bg, cream text, 10px radius, 3px 3px 0 tan shadow, weight 600, 14px Public Sans. **Every button shares one default interaction** (owner instruction 2026-11-03) — lesson buttons and the engine's control-bar / popup / swatch buttons alike: on hover it brightens (`filter:brightness(1.14)`) and lifts 1px; on press it moves 2px into its own hard shadow; `:focus-visible` gets a 3px tan outline; `prefers-reduced-motion` removes the movement. The rules only modulate brightness and position — they never set `background` or `box-shadow` — so a button that carries its own colour (`.listen` tan, the highlight swatches, `.complete-btn`, `.remlink`) keeps it. Disabled and `.locked` buttons do not react. No page or section ever writes its own hover/press styling.
 - Links: ink, weight 600. Dim text: #8a8072, 13px
 - Lesson navigation: the control bar carries "← Last" / "Next →" buttons (always present, rendered by engine2.js from `L` alone — there is no lesson count: "Next →" is always enabled and goes to `lesson{L+1}`, "← Last" is disabled on lesson 1).
 
