@@ -80,3 +80,22 @@ them is acceptable. `grep TO-DO` collects them for the final pass.
 the design files** (same shapes, new situations/registers/examples) — never by find-replacing business pages;
 swap the business-specific slots (e-mail/meeting/invoice lessons) for track-native ones.
 
+
+## Break points — when the current task must STOP and ask the owner for a new task
+
+A break is only valid if, before stopping: everything is committed & pushed, the "where we are" line below is
+updated, and the next opener is written out for the owner to paste. Target: each task stays in the 30-60k context
+range instead of 150k+.
+
+| # | Break | Why |
+|---|---|---|
+| 1 | **Now** | start Pass A for 15-20 in a clean context (no lessons 1-14 wording biasing the shapes) |
+| 2 | **After designs 15-20 exist** | the build needs FORMAT/FUNCTION precision; carrying six designs into it dilutes that |
+| 3 | **After every pushed batch (3 lessons)** — routine | one batch ≈ 3 pages × 5 chunks; that is the natural unit of work and of review |
+| 4 | **At lesson 20, 30, 40** — phase boundaries | A2/B1/B2 ramp checkpoints in PEDAGOGY-MAP; re-read the Portuguese→English policy there |
+| 5 | **After business 50** | the QA/bug-fix pass must run with *no* generation context (fresh eyes, machine focus) |
+| 6 | **Before kids, before adult** | a new track is a new register; never warmed over from the previous track's context |
+| 7 | **Before any new engine work** (raceClock/sortOut/…) | engine work is FUNCTION.md discipline, not lesson authoring — separate task, separate scope |
+
+**Where we are:** business lessons 1-14 pushed; next action = Pass A for lesson 15.
+
