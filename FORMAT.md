@@ -49,6 +49,7 @@
 - .ptsound (optional) = a tag available to mark the LESSON-12 vowel sound-map labels (English sounds rendered in PT characters, e.g. ei/ai/ə): tan (--ptw), italic, NOT bold. Scope: ONLY those chart labels until further notice — NOT part of the pronunciation key (data-pron / dictionary.json / PronKey) and NOT a general-purpose pronunciation tag. May carry `lang="pt"`. (Renamed from .ptpronounce 2026-10-27.)
 - .thsub = a chart-column-header subtitle (the second line under the main label): block, weight 400, smaller, reduced opacity.
 - input.gap = fill-in blank: transparent, 2px tan bottom border, #fff8ea bg — a CONTIGUOUS line, never literal "___" underscores in the prompt
+- `textarea` = a free-text block (a translation box, an authored answer box). **Fixed size, never drag-resizable** (owner instruction 2026-11-03): every authored textarea carries `resize:none`, because the layout is fixed at generation and a drag handle lets the student widen the block past its own slot and past the canvas. `qa/overflow.mjs` fails a page whose textarea can be dragged (RESIZE). `#feed` and `#trw` keep their ids — that is what persists.
 - fieldset = exercise block: dashed tan border, 12px radius
 - .chart = structured data table (cognate rules, phrase translations, to-be chunks, false friends): paper, 2px ink frame + tan shadow, ink header row, tan grid
 - .chips = wrapping keyword pills ("quase iguais" list)

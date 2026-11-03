@@ -103,6 +103,10 @@ mark.nb.has-rec{background-repeat:no-repeat;background-position:2px 100%;
 .pulse{animation:pu 1s infinite;display:inline-block}
 @keyframes pu{50%{opacity:.25}}
 input.gap{border:0;border-bottom:2px solid var(--tan);background:#fff8ea;font:inherit;width:var(--gap-w,9em)}
+/* free-text blocks are FIXED SIZE (owner instruction 2026-11-03): the layout is fixed at generation, so no
+   authored textarea may be dragged — a resize handle lets the student widen it past its block and past the
+   canvas. Scoped to authored content: the note editor in the selection popup is not affected. */
+.content-area textarea{resize:none}
 fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8px 12px}
 label{margin-right:10px;cursor:pointer}
 #feed{display:block;width:100%;min-height:9em;font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:12px 14px;box-shadow:5px 5px 0 var(--tan);resize:none;field-sizing:content}

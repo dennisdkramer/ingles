@@ -20,6 +20,8 @@
  *                 (less than 8px between the members of an `.itemrow`), OPTGAP (less than 4px between
  *                 the options of one question, which are laid across the block width) and CHARTPAD
  *                 (a chart cell with less than 8px of horizontal padding);
+ *   5. RESIZE   — a `textarea` inside `.content-area` that the student can still drag (`resize` ≠ none):
+ *                 a free-text block is fixed-size, and a drag handle can widen it past its block;
  *   (hint) DEADSPACE  — a full block whose content fills < 75% of it (review-only; pedagogy decides);
  *   (hint) HEIGHT     — adjacent half/third blocks whose heights differ by > 50px (review-only).
  *
@@ -229,6 +231,13 @@ const MEASURE = `(function(){
     if (minChart < 0 || pad < minChart) minChart = pad;
     if (pad < 8) gaps.push({ kind: 'CHARTPAD', extra: pad + 'px horizontal padding on a chart cell', ex: (cell.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 30) });
   });
+  /* 5. free-text blocks are fixed size: a textarea the student can drag can also widen past its block */
+  [].slice.call(document.querySelectorAll('.content-area textarea')).forEach(function(ta){
+    var rz = getComputedStyle(ta).resize;
+    if (rz && rz !== 'none') findings.push({ kind: 'RESIZE',
+      extra: 'drag-resizable textarea (resize:' + rz + ')',
+      ex: (ta.id || ta.className || 'textarea').toString().slice(0, 30) });
+  });
   return { empty: false, canvas: Math.round(cr.left) + '..' + Math.round(cr.right), w: Math.round(cr.width),
     blocks: blocks.length, tally: tally, findings: findings, escape: escape, cells: cells, gaps: gaps,
     spacing: { block: minBlock, row: minRow, opt: minOpt, chart: minChart }, hints: hints };
@@ -340,7 +349,7 @@ async function main() {
     const label = targets.length ? ('lesson' + (lessons.length > 1 ? 's ' : ' ') + lessons.join(', '))
       : (lessons.length ? 'lessons ' + lessons.join(', ') : 'no pages');
     console.log(fails === 0
-      ? '✅ layout clean — no overflow, no balloon, no spacing gap, nothing escapes the canvas (' + label + ')'
+      ? '✅ layout clean — no overflow, no balloon, no spacing gap, no drag-resizable text box, nothing escapes the canvas (' + label + ')'
       : '❌ ' + fails + ' layout finding(s)');
   }
 

@@ -186,3 +186,16 @@ Owner instruction: blocks must get a few pixels of space between them (verticall
 - **Fixtures extended** so the selftest covers the new family: `overflow-bad.html` now has glued panels, a zero-gap row, touching options and a padding-free chart cell (9 findings, every check kind firing), and `overflow-ok.html` has two stacked panels proving the 14px rhythm (clean).
 - Verified after the CSS change: `npm run qa` green · `node qa/content.mjs 1` green · `node qa/width.mjs 1` green · `node qa/overflow.mjs` green (spacing minimums above) · `node qa/overflow.mjs --selftest` green. No screenshot was taken for this step: the check measures the exact property (px between the boxes), which is what the instruction asks for.
 - Next task: lesson 10 from `designs/lesson10.design.md`.
+
+---
+
+## [2026-11-03] Free-text blocks are fixed size (no drag handle)
+
+Owner instruction: the free-text input blocks (e.g. lesson 1 §7D) must not be drag-resizable.
+
+- **Defect confirmed by measurement** before touching anything: `qa/overflow.mjs` (with the new RESIZE check) reported `❌ RESIZE drag-resizable textarea (resize:both) «trw»` — `#feed` was already `resize:none`, the authored `#trw` was not, so the browser gave the student a drag handle that could widen the box past its block and past the fixed canvas.
+- **CSS**: `.content-area textarea{resize:none}` (scoped to authored content — the note editor inside the selection popup is untouched, it is not lesson content).
+- **FORMAT.md**: the `textarea` bullet now states the rule — a free-text block is fixed size, never drag-resizable, because the layout is fixed at generation; `#feed` / `#trw` keep their ids (that is what persists).
+- **QA**: new fatal check **RESIZE** in `qa/overflow.mjs` (any textarea inside `.content-area` whose computed `resize` is not `none`), documented in the header and in VERIFICATION.md, plus fixture coverage — `overflow-bad.html` hangs an inline `resize:both` on a textarea (fires), `overflow-ok.html` carries a normal authored textarea (clean under the rule).
+- Verified: `npm run qa` green · `qa/content.mjs 1` green · `qa/overflow.mjs` green on lesson 1 · `qa/overflow.mjs --selftest` green (ok clean / bad 10 findings). No page content changed, so `lesson1.html` and its `.edit.html` sidecar remain identical.
+- Next task: lesson 10 from `designs/lesson10.design.md`.
