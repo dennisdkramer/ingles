@@ -1348,6 +1348,35 @@ async function testPage(serverUrl, pageName, track = 'business') {
                 console.log('   ✅ a picked radio saves its selection keyed by its question stem');
             }
         }
+        // (2b) a REAL click on a radio (not a programmatic .checked): the browser applies the PRE-click
+        // activation before dispatching click, so a handler that cancels the click whenever `checked` is
+        // true cancels EVERY first click and the group falls back to its previous option — that is how all
+        // radios stopped accepting input (fixed 2026-11-03: the pre-click state is captured on mousedown /
+        // pointerdown / keydown, and the re-click de-select runs AFTER the click).
+        {
+            const group = window.document.querySelector('input[type="radio"]');
+            const name = group && group.getAttribute('name');
+            const opts = name ? [...window.document.querySelectorAll('input[type="radio"][name="' + name + '"]')] : [];
+            const clickRadio = (el) => {
+                el.dispatchEvent(new window.MouseEvent('mousedown', { bubbles: true, cancelable: true, button: 0 }));
+                el.click();
+            };
+            if (opts.length >= 2) {
+                opts.forEach(o => { o.checked = false; }); // independent of what earlier tests left checked
+                clickRadio(opts[0]);
+                if (!opts[0].checked) errors.push('[FAIL] a real click on a radio did not keep the choice (the click is being cancelled)');
+                else console.log('   ✅ a real click on a radio keeps the choice');
+                clickRadio(opts[1]);
+                if (!opts[1].checked || opts[0].checked) errors.push('[FAIL] clicking another option of the same group did not move the choice');
+                else console.log('   ✅ clicking another option of the group moves the choice');
+                clickRadio(opts[1]);
+                await new Promise(r => setTimeout(r, 30));
+                if (opts[1].checked) errors.push('[FAIL] re-clicking the picked option did not de-select it');
+                else console.log('   ✅ re-clicking the picked option de-selects it');
+            } else {
+                errors.push('[FAIL] no radio group with two options found for the click test');
+            }
+        }
         // (3) restore: seed one answer row (with its {b,o} tie-breaker) and confirm renderAnswers fills it
         const trw = window.document.querySelector('textarea:not(#feed)');
         if (trw) {

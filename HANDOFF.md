@@ -189,7 +189,22 @@ Owner instruction: blocks must get a few pixels of space between them (verticall
 
 ---
 
+## [2026-11-03] BUG: radios did not accept input (engine2.js cancelled every click)
+
+Owner report: "the radio buttons are not accepting inputs". Root cause found, fixed, and now guarded.
+
+- **Cause**: engine2.js cancelled the click whenever the radio was `checked`, believing `checked` still held the pre-click state. It does not: the browser runs the radio's **pre-click activation** (checks it, unchecks its group) *before* dispatching `click`, so `checked` is always true inside the handler → **every first click was cancelled**, and the browser's canceled-activation revert put the group back on its previous option (which is exactly the older "the picked radio reverts to another option" report). Not a timing/poll issue, and not `renderAnswers`.
+- **Fix** (`engine2.js`): the pre-click state is captured on `pointerdown` / `mousedown` / `keydown` (`ansRadioPre`, `ansRadioTarget`) — all of which run before the activation — and the "re-click to clear" unchecks **after** the click (`setTimeout(…,0)`), because cancelling the click would only make the browser restore the option being removed. First click stands, group switch works, re-click clears the value and deletes the answer row. Documented in FUNCTION.md ("A radio click is never cancelled") so it is not "simplified" back.
+- **Why it survived QA**: `qa/smoke.mjs` set `radioEl.checked = true` programmatically and called `ansSaveEl`, so no click was ever dispatched. Added a real-click block: first click keeps the choice, another option moves it, re-click de-selects — verified to FAIL against the old handler (mutation-checked) and pass now.
+- **Real-browser wiring sweep** (temporary `qa/_wire.mjs`, deleted afterwards; backend stubbed so nothing was written to the sheet) — 18 checks, all green: engines booted · control bar · `#barhelp` · radio first click · radio survives a 4s poll · answer row saved · group switch · re-click de-selects + clears the row · `.qline` pair anchor resolves · pair click · pair survives a poll · gap input saves typed text · `#trw` saves · `#trw` not drag-resizable · notebook saves its own row type · notebook text survives a poll · audio chip click raises no console error.
+- Verified: `npm run qa` green (with the new radio regression test) · `qa/content.mjs 1`, `qa/width.mjs 1`, `qa/overflow.mjs` green · `qa/overflow.mjs --selftest` green.
+- Next task: lesson 10 from `designs/lesson10.design.md`.
+
+---
+
 ## [2026-11-03] Free-text blocks are fixed size (no drag handle)
+
+Owner instruction: the free-text input blocks (e.g. lesson 1 §7D) must not be drag-resizable.
 
 Owner instruction: the free-text input blocks (e.g. lesson 1 §7D) must not be drag-resizable.
 

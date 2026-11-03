@@ -146,14 +146,30 @@ let ansTimer=null;
 document.addEventListener("change",e=>{const t=e.target;
  if(t&&t.matches&&(t.matches("input.gap")||t.matches('input[type="radio"]')||(t.tagName==="TEXTAREA"&&t.id!=="feed")))ansSaveEl(t);
  else if(t&&t.id==="feed")nbSave();});
-/* re-clicking an already-checked radio DE-SELECTS it (and clears its saved answer). At click time the
-   default check action has not run yet, so t.checked still holds the PRE-click state: true only when
-   the user re-clicked a selected option. preventDefault stops the browser from re-checking it. */
-document.addEventListener("click",e=>{const t=e.target;
- if(t&&t.matches&&t.matches('input[type="radio"]')&&t.checked){
-  e.preventDefault();t.checked=false;
-  const o=ansOf(t);if(o&&o.anchor)ansSet(o.anchor,"",ansPos(o.posEl));
- }});
+/* re-clicking an already-checked radio DE-SELECTS it (and clears its saved answer). The browser runs the
+   PRE-CLICK activation first — it CHECKS the radio (unchecking its group) and only then dispatches the
+   click — and reverts that if the click is cancelled. So `checked` inside a click handler is ALWAYS true
+   and can never tell a first click from a re-click: testing it (the code before 2026-11-03) cancelled
+   EVERY radio click, and the browser's revert put the group back on its previous option — reported as
+   "the radios do not accept input" / "the picked choice reverts". The pre-click state is captured on
+   pointerdown / mousedown / keydown (all run BEFORE the activation), and the de-select happens AFTER the
+   click, because cancelling the click would only make the browser restore the very option being removed. */
+let ansRadioPre=null;
+function ansRadioTarget(el){
+ if(!el||!el.closest)return null;
+ if(el.matches&&el.matches('input[type="radio"]'))return el;
+ const lab=el.closest("label");return lab&&lab.querySelector?lab.querySelector('input[type="radio"]'):null;
+}
+function ansArmRadio(el){const r=ansRadioTarget(el);ansRadioPre=r?{el:r,checked:r.checked}:null;}
+document.addEventListener("pointerdown",e=>ansArmRadio(e.target),true);
+document.addEventListener("mousedown",e=>ansArmRadio(e.target),true);
+document.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Spacebar"||e.key==="Enter")ansArmRadio(e.target)},true);
+document.addEventListener("click",e=>{const t=ansRadioTarget(e.target);if(!t)return;
+ const pre=ansRadioPre&&ansRadioPre.el===t?ansRadioPre.checked:false;ansRadioPre=null;
+ if(!pre)return;                              /* a first click on this option: the browser's check stands */
+ setTimeout(()=>{if(!t.checked)return;t.checked=false;
+  const o=ansOf(t);if(o&&o.anchor)ansSet(o.anchor,"",ansPos(o.posEl));},0);
+});
 document.addEventListener("input",e=>{const t=e.target;
  if(t&&t.matches&&(t.matches("input.gap")||(t.tagName==="TEXTAREA"&&t.id!=="feed"))){clearTimeout(ansTimer);ansTimer=setTimeout(()=>ansSaveEl(t),800)}});
 function ansSaveAll(){document.querySelectorAll("input.gap, textarea").forEach(el=>{if(el.tagName==="TEXTAREA"&&el.id==="feed")return;ansSaveEl(el)});}
