@@ -9,11 +9,13 @@ and `NEXT STEP` lines.
 Lessons **1-14** built, pushed, audio rendered (541 clips). `lessons.json` business: 14 · COUNTS `0/14/0`.
 
 ## CURRENT SLICE
-- [ ] Pass A for **15-20** (designs only; `designs/lesson15..20.design.md`)
+- [ ] **Everything remaining, all tracks:** business **15-50** → kids **1-50** → adult **1-50** (owner: one task).
+      Run policy (failure/skip rule, re-read rhythm, push cadence, context budget) lives in `HANDOFF.md` →
+      "Run policy for the unattended run". No owner decisions needed except a PEDAGOGY-MAP §2 conflict.
 
 ## NEXT IMMEDIATE STEP
 Write `designs/lesson15.design.md` from PEDAGOGY-MAP's lesson-15 entry (Modal operators + the future), with
-`recycles:` / `must not re-teach:` lines. Then 16, then 17-20.
+`recycles:` / `must not re-teach:` lines. Then 16, then 17-20; build every third lesson as it completes.
 
 ## DECISIONS TAKEN (newest first — append here, don't rewrite)
 - **2026-11-03** — QA suspended by owner: per page only the two free structural checks; `content`+`width` per

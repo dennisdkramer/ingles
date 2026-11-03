@@ -111,4 +111,28 @@ stop and re-read the design before continuing.
 
 **Where we are:** business lessons 1-14 pushed; next action = Pass A for lesson 15.
 
+---
+
+## Run policy for the unattended run (owner, 2026-11-03) — supersedes any earlier cadence above
+
+**Scope:** one task, all tracks, all remaining lessons — business 15-50 → kids 1-50 → adult 1-50. Nothing waits
+for an owner decision except a PEDAGOGY-MAP §2 conflict.
+
+**Failure policy (hang / timeout / error):** treat it as a **skip signal, not a blocker**. Retry once at most;
+record it under `BLUEPRINT.md` → NOTES; then move on in this order — next step → next lesson → next track. **Only
+3 consecutive systemic failures that prevent page generation justify stopping.** Never leave a long command in the
+loop that can hang: no audio render, no Chrome/`overflow.mjs`, no local servers, no `npm run qa`. The build loop
+is: writes, the two free structural checks, `git`.
+
+**Re-read rhythm:** after **every lesson** re-read `PAGE-CHECKLIST.md` + the next lesson's roadmap entry and
+design (~1.5k tokens, the anti-drift measure). After **every 3rd lesson** do the full reload —
+`BLUEPRINT.md` → `PAGE-CHECKLIST.md` → `HANDOFF.md` (~4k).
+
+**Push cadence:** every 3 lessons **and** at every track switch; commit messages state what was not verified.
+
+**Context discipline (the owner sets the window; the agent defends it):** one lesson costs ~9-11k tokens of live
+work (≈1.6k of reads, ~6-7k of page text, ~1k of checks/log). Keep the *retained* window under ~150k; if the
+client is about to compact, write `BLUEPRINT.md` first — the update trigger matters more than the summary.
+
+
 
