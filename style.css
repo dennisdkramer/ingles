@@ -154,6 +154,13 @@ footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#
 h2{border-bottom:2px solid var(--rose);padding-bottom:6px;margin-top:1.6em}
 h2 .h2sub{font-family:'Public Sans',sans-serif;font-size:.55em;font-weight:400;letter-spacing:.03em;color:#8a8072}
 .chart{border-collapse:collapse;width:100%;margin:14px 0;background:var(--paper);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--tan)}
+/* A CHART IS A BLOCK (FORMAT.md rule 2 "a block is any content type", owner instruction 2026-11-03): the
+   generic .itemsize* rules further down give it its block width, exactly like a .card or .panel — and the
+   two companions below make that explicit and order-proof, because a table's own `width:100%` above is only
+   the default of an untagged full block. Its COLUMNS/ROWS are content-aware and never set here. The same
+   pattern applies to any future content type that ships a default width of its own. */
+.chart.itemsize-half{width:calc(50% - 7px)}
+.chart.itemsize-third{width:calc(33.3333% - 9.3333px)}
 .chart th,.chart td{border:1px solid var(--tan);padding:8px 12px;text-align:left;vertical-align:middle}
 .chart thead th{background:var(--ink);color:var(--cream);font-weight:700;letter-spacing:.02em}
 .chart.center th,.chart.center td{text-align:center}
@@ -174,6 +181,14 @@ fieldset .qnum{margin-right:6px}
 fieldset label{margin-right:14px}
 button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 @media print{#printRoot .listen{display:none}#barhelp{display:none}}
+/* a PLAIN print (browser Ctrl+P, no JS path) — FORMAT.md "@media print": the shell and the notebook are
+   hidden and the page frame is stripped so the lesson prints as prose. The app's own Print button takes the
+   `body.printing` path below, which hides everything except #printRoot instead. */
+@media print{
+ header.brand,#controlbar,#barhelp,#feed,footer{display:none!important}
+ .page-container{border:0!important;box-shadow:none!important}
+ .panel,.chart,.card{break-inside:avoid}
+}
 /* exercise panels + aligned grids */
 .panel{border:2px dashed var(--tan);border-radius:12px;padding:12px 16px;background:var(--paper);min-width:0}
 /* vertical rhythm (owner instruction 2026-11-03): a block never touches the block above or below it.
@@ -187,8 +202,10 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .panel > :not(.ex-head){margin-left:10px;margin-right:10px}
 .panel .chart{width:calc(100% - 20px)}
 /* block width slots: the sizing decision is tagged on the block — CSS only displays it.
-   The BLOCK layout is the fixed 2/3 slot model (owner instruction 2026-11-03: keep it). The content-aware
-   rule — any number of columns/rows the content needs — applies INSIDE a block (a .chart, a table, an
+   A BLOCK IS ANY CONTENT TYPE THAT FILLS A SLOT (FORMAT.md rule 2): .card, .panel, .chart/table, .dialog,
+   fieldset, or a future type — all of them take these classes, and the class is what makes the element a
+   block. The BLOCK layout is the fixed 2/3 slot model (owner instruction 2026-11-03). The content-aware
+   rule — any number of columns/rows the content needs — applies INSIDE a block (a chart's columns, an
    option row, a .blanks list), never to the blocks themselves. */
 .itemsize{width:100%}                                   /* default: full */
 .itemsize-half{width:calc(50% - 7px)}                    /* 14px row gap → 7px each side */
