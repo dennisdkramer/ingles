@@ -23,6 +23,8 @@
  *                 (a chart cell with less than 8px of horizontal padding);
  *   5. RESIZE   — a `textarea` inside `.content-area` that the student can still drag (`resize` ≠ none):
  *                 a free-text block is fixed-size, and a drag handle can widen it past its block;
+ *   6. SELECT   — the shell (header.brand / .control-bar / #barhelp / footer) is still selectable: the
+ *                 notebook lives inside `.content-area` only, so the shell must not start a selection;
  *   (hint) DEADSPACE  — a full block whose content fills < 75% of it (review-only; pedagogy decides);
  *   (hint) HEIGHT     — adjacent half/third blocks whose heights differ by > 50px (review-only).
  *
@@ -243,6 +245,15 @@ const MEASURE = `(function(){
     if (rz && rz !== 'none') findings.push({ kind: 'RESIZE',
       extra: 'drag-resizable textarea (resize:' + rz + ')',
       ex: (ta.id || ta.className || 'textarea').toString().slice(0, 30) });
+  });
+  /* 6. the shell is NOT text to work with: the brand header, the control bar, the legend and the footer
+     cannot be selected (the notebook only exists inside .content-area) */
+  [].slice.call(document.querySelectorAll('header.brand, .control-bar, #barhelp, footer')).forEach(function(el){
+    var cs = getComputedStyle(el);
+    var us = cs.userSelect || cs.webkitUserSelect || '';
+    if (us !== 'none') findings.push({ kind: 'SELECT',
+      extra: 'selectable shell element (' + (us || 'auto') + ')',
+      ex: (el.id || el.className || el.tagName).toString().slice(0, 30) });
   });
   return { empty: false, canvas: Math.round(cr.left) + '..' + Math.round(cr.right), w: Math.round(cr.width),
     blocks: blocks.length, tally: tally, findings: findings, escape: escape, cells: cells, gaps: gaps,

@@ -8,6 +8,8 @@
    parked pages (lessons-archive/) are deliberately withheld: untracked and gitignored.
    The authority for WHAT a page contains, and the vocabulary of blocks/classes an author may use, is
    FORMAT.md (mechanical contract) + FUNCTION.md (behaviour). This file only paints what those produce.
+   Reading it during the BUILD, to answer an implementation question (which class or knob does what), is
+   legitimate; deciding content or shape from it is not.
    If you are here to decide what a lesson should look like, stop — you are in the wrong file.
    (Owner instruction 2026-11-03.)
    ================================================================================================== */
@@ -18,8 +20,12 @@ header.brand{width:1400px;margin-left:15px;text-align:center;padding:20px 14px 0
 .control-bar{width:1400px;margin:10px 0 0 15px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:8px 14px;font-size:13px;text-align:center}
 /* site-functions legend (owner instruction 2026-11-03): ONE baked-in line under the control bar, so no
    lesson opener ever has to explain the site's tools. Static HTML — never engine-generated. */
-.barhelp{width:1400px;margin:2px 0 8px 15px;padding:0 14px;text-align:center;font-size:13px;line-height:1.55;color:#8a8072}
+.barhelp{width:1400px;margin:2px 0 8px 15px;padding:0 14px;text-align:center;font-size:14px;line-height:1.55;color:var(--ink)}
 .barhelp b{color:var(--ink);font-weight:600}
+/* the shell is not text to work with: the brand header, the control bar, the legend and the footer cannot be
+   selected (owner instruction 2026-11-03) — the notebook only exists inside .content-area, so selecting the
+   shell did nothing anyway; this stops the selection from ever starting. */
+header.brand,.control-bar,.barhelp,footer{user-select:none;-webkit-user-select:none}
 .barhelp .hlk{padding:0 4px;border-radius:4px}
 .barhelp .hlk-y{background:rgba(255,233,112,.85)}
 .barhelp .hlk-g{background:rgba(64,200,96,.7)}

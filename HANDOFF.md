@@ -255,3 +255,25 @@ Owner instruction: the free-text input blocks (e.g. lesson 1 §7D) must not be d
 - **QA**: new fatal check **RESIZE** in `qa/overflow.mjs` (any textarea inside `.content-area` whose computed `resize` is not `none`), documented in the header and in VERIFICATION.md, plus fixture coverage — `overflow-bad.html` hangs an inline `resize:both` on a textarea (fires), `overflow-ok.html` carries a normal authored textarea (clean under the rule).
 - Verified: `npm run qa` green · `qa/content.mjs 1` green · `qa/overflow.mjs` green on lesson 1 · `qa/overflow.mjs --selftest` green (ok clean / bad 10 findings). No page content changed, so `lesson1.html` and its `.edit.html` sidecar remain identical.
 - Next task: lesson 10 from `designs/lesson10.design.md`.
+
+---
+
+## [2026-11-03] Pass A/B exclusions re-thought (D1–D5) + legend styling + inert shell
+
+Owner review of the exclusion list in PEDAGOGY-MAP §1. Resolutions applied, plus the two shell/legend items.
+
+**Spec changes (PEDAGOGY-MAP §1 + FORMAT §1d + the style.css banner)**
+- **D1 — the shape now has an owner.** Pass A's output list gained **"the shape of the session"**: what the student meets first/second/third, how many sections, their order, where content sits side by side, and which content type each section wants. Guardrail (owner): the shape must still be *recognisably a lesson page of this site* (one column of sections under one title, an opener that states what the lesson installs, practice, a no-consultation quiz) and is free inside that — a shape that cannot be built on the shell is a defect of the design pass, not the build. Pass A **may recommend content types** (a comparison table, a dialogue, a listen-and-tick, a recording) — the old framing line "You have no tables, no charts…" was replaced with "no page, no classes and no build mechanics".
+- **D2 — PEDAGOGY-MAP is now a Pass B input.** §3–§7 (non-negotiables, content-authoring rules, level checkpoints, vehicles, site contract) are build inputs, not background; this lesson's roadmap entry too.
+- **D3 — the build is a synthesis, not obedience** (the resolution I proposed and applied): three-tier feedback — (i) a purely mechanical realisation is Pass B's call, no escalation; (ii) a change that alters the shape or a teaching beat is made and **written back into the design file** (§4); (iii) what cannot be resolved that way is escalated (§2).
+- **D4 — no other lesson's PAGE is read.** Redundancy/flow is checked against structured extracts only: neighbouring roadmap entries (`Content:` / `Key vocabulary:` / `Focus:`) and the concept inventory (`VOCABULARY.md`, which carries a Lesson column). A page read is a shape absorbed and cannot be un-read.
+- **D5 — style.css readings clarified**: legitimate for an *implementation* question during the build (which class/knob does what); forbidden as a source of content or shape. FORMAT §1d and the CSS banner updated.
+- **Change 4 weakened** as instructed: Pass B "may not replace the design's shape on its own authority — only when the user instructs it, or after repeated failure to generate or implement that shape (it then proceeds, records the change in the design file, and does not escalate)". Copying a shape is explicitly allowed **when the owner asks for it**.
+
+**Legend + shell (owner instruction)**
+- `#barhelp` text: "Record Your Own" and "Pronunciation Key" unbolded; `.barhelp` colour `#8a8072` → `var(--ink)` (ungreyed) and `13px → 14px`. The recording underline (`Hear Teacher Pronunciation`), the note wash (`Attach a Note`) and the three colour chips are unchanged.
+- **The shell is inert**: `header.brand, .control-bar, .barhelp, footer { user-select:none }` — the notebook only exists inside `.content-area`, so no selection can start there.
+- New fatal check **SELECT** in `qa/overflow.mjs` (any of those shell elements computing a `user-select` other than `none`), documented in the header + VERIFICATION, with fixture coverage (`overflow-bad.html` forces `user-select:auto`/`text` on header, legend and footer; `overflow-ok.html` carries a header + footer that must compute none).
+- Verified: `npm run qa` green · `qa/content.mjs 1` green · `qa/width.mjs 1` + `--selftest` green · `qa/overflow.mjs` green on lesson 1 (SELECT clean) + `--selftest` green (bad fixture 15 findings incl. SELECT) · screenshot reviewed (legend one line, 14px, ink, two words unbolded, underline/wash/chips intact) · `.edit.html` re-copied.
+- Next task: lesson 10 from `designs/lesson10.design.md`.
+
