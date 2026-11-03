@@ -3,12 +3,25 @@
 // Reads kids/ business/ adult/ lesson*.html (the PUBLISHED copies, not the .edit.html
 // sidecars), takes the lesson number from the filename and the title from the
 // content-area <h1>, and writes root lessons.json.
+// A track whose folder is GITIGNORED is skipped: kids/ and adult/ hold the old pre-rewrite wording and are
+// untracked/ignored on purpose (owner instruction 2026-11-03), so they must not be advertised in the
+// committed manifest. Regenerating a track and committing it brings it back automatically (git check-ignore
+// then says it is not ignored). Without git, every existing folder is included.
 import fs from 'fs';
 import path from 'path';
+import { execFileSync } from 'child_process';
 import { fileURLToPath } from 'url';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
-const TRACKS = ['kids', 'business', 'adult'];
+function ignored(rel) {
+  try {
+    execFileSync('git', ['check-ignore', '-q', rel], { cwd: ROOT, stdio: 'ignore' });
+    return true;                     // exit 0 = the path IS ignored
+  } catch (e) {
+    return false;                    // exit 1 = not ignored; any other failure = assume published
+  }
+}
+const TRACKS = ['kids', 'business', 'adult'].filter(t => !ignored(t));
 
 function decodeEntities(s) {
   return String(s)

@@ -9,3 +9,8 @@ qa/_live/
 # 2026-11-03). They are untracked and must NEVER be read, opened or used as a reference for content,
 # structure or layout — a lesson's shape is imagined from designs/lessonNN.design.md + PEDAGOGY-MAP.md.
 lessons-archive/
+# kids/ and adult/ lesson pages: the OLD pre-rewrite wording (owner instruction 2026-11-03). Untracked and
+# withheld from generation for the same reason — the three tracks are regenerated from designs/ + the
+# roadmap, never by copying an existing page. They stay on the owner's disk; no harness reads them.
+kids/
+adult/

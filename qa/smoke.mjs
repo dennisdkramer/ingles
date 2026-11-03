@@ -1523,7 +1523,9 @@ async function main() {
        hard-coded: every business/lesson*.html that exists gets the full run, while "no pages yet"
        is a valid, passing state (the pages are regenerated after a layout rewrite).
        Parked until the business build is final: index.html (login page), kids/lesson1.html,
-       adult/lesson1.html. Re-enable by adding their testPage() entry back to this list. */
+       adult/lesson1.html. kids/ and adult/ are UNTRACKED and GITIGNORED (old pre-rewrite wording, owner
+       instruction 2026-11-03), so their testPage() entries must NOT be re-enabled until those tracks are
+       regenerated AND committed. */
     const businessDir = path.join(ROOT, 'business');
     const pages = (fs.existsSync(businessDir) ? fs.readdirSync(businessDir) : [])
         .filter(f => /^lesson\d+\.html$/.test(f))
