@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>overflow fixture — ok</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<main id="page"><div class="page-container"><div class="content-area">
+  <h1>Overflow fixture — ok</h1>
+
+  <!-- one complete 2-row: both blocks are their slot and their content fits -->
+  <div class="itemrow" data-cols="2">
+    <section class="card itemsize-half"><b>Half A</b><p>A short line that fits its slot.</p><button class="listen" data-say="one.">▶</button></section>
+    <section class="card itemsize-half"><b>Half B</b><p>A short line that fits its slot.</p><button class="listen" data-say="two.">▶</button></section>
+  </div>
+
+  <!-- one complete 3-row -->
+  <div class="itemrow" data-cols="3">
+    <section class="card itemsize-third"><b>Third A</b><p>Fits.</p></section>
+    <section class="card itemsize-third"><b>Third B</b><p>Fits.</p></section>
+    <section class="card itemsize-third"><b>Third C</b><p>Fits.</p></section>
+  </div>
+
+  <!-- a full block with fill-in cells whose content fits the cell (both shapes: block cells and
+       the default 4-column grid) -->
+  <div class="panel itemsize"><h3 class="ex-head">Cells that fit</h3>
+    <div class="blanks sent cols" style="--gap-w:5.5em">
+      <div>I <input class="gap"> an analyst.</div>
+      <div>He <input class="gap"> from Curitiba.</div>
+    </div>
+    <div class="blanks">
+      <div><input class="gap"> desk <i class="ptw">(mesa)</i></div>
+      <div><input class="gap"> key <i class="ptw">(chave)</i></div>
+    </div>
+  </div>
+
+  <!-- a chart that lets its content decide the columns -->
+  <table class="chart">
+    <thead><tr><th>Form</th><th>Use</th></tr></thead>
+    <tbody><tr><td>I work</td><td>a habit</td></tr></tbody>
+  </table>
+</div></div></main>
+</body>
+</html>

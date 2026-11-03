@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>overflow fixture — bad</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<main id="page"><div class="page-container"><div class="content-area">
+  <h1>Overflow fixture — bad</h1>
+
+  <!-- BALLOON: a half block inflated past its slot (and past the canvas) -->
+  <div class="itemrow" data-cols="2">
+    <section class="card itemsize-half"><b>Half A</b><p>Its slot.</p></section>
+    <section class="card itemsize-half" style="width:700px"><b>Half B</b><p>Ballooned past its slot.</p></section>
+  </div>
+
+  <!-- OVERFLOW: a child wider than the block that holds it -->
+  <div class="panel itemsize">
+    <div style="width:1300px">A child wider than the panel it lives in.</div>
+  </div>
+
+  <!-- CELL: a right-aligned .blanks cell whose item cannot fit the cell. The .ptw gloss is
+       flex:0 0 auto in style.css, so the item cannot shrink back inside the 240px cell and the
+       whole line spills LEFT out of the panel — the failure this check exists for. -->
+  <div class="panel itemsize">
+    <div class="blanks">
+      <div><input class="gap"> university <i class="ptw">(universidade)</i></div>
+    </div>
+  </div>
+</div></div></main>
+</body>
+</html>

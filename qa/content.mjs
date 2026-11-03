@@ -184,8 +184,31 @@ async function checkLesson(serverUrl, n) {
   })())`));
   if (stackedRt && stackedRt.ok === false) errors.push('stacked radio save/restore round-trip failed');
 
+  // duplicate answer anchors (HINT, non-failing): two controls that normalise to the same anchor text are
+  // only told apart by the {block,offset} tie-breaker, so re-ordering the page can make their saved answers
+  // swap. A generation should still give every control its own prompt text.
+  let dupAnchors = [];
+  try {
+    dupAnchors = JSON.parse(w.eval(`JSON.stringify((function(){
+      var map = {}, i = 0;
+      document.querySelectorAll('input.gap, input[type="radio"], textarea').forEach(function(el){
+        if (el.id === 'feed') return;
+        var o = ansOf(el);
+        if (!o || !o.anchor) return;
+        /* a radio GROUP is one control (its options legitimately share the stem) */
+        var id = el.type === 'radio' ? ('radio:' + el.name) : ('field#' + (i++));
+        (map[o.anchor] = map[o.anchor] || {})[id] = 1;
+      });
+      return Object.keys(map).filter(function(k){ return Object.keys(map[k]).length > 1; });
+    })())`));
+  } catch (e) { }
+  const hints = [];
+  if (dupAnchors.length) hints.push(dupAnchors.length + ' anchor(s) shared by more than one control: '
+    + dupAnchors.slice(0, 4).map(a => '«' + String(a).slice(0, 34) + '»').join(', ')
+    + (dupAnchors.length > 4 ? ', …' : ''));
+
   errors.push(...consoleErrors.filter(e => !errors.includes(e)));
-  return { lesson: n, errors, counts };
+  return { lesson: n, errors, counts, hints };
 }
 
 function discoverLessons() {
@@ -203,9 +226,9 @@ async function main() {
   console.log('🧪 Content structure harness — business lesson' + (lessons.length === 1 ? '' : 's') + ' ' + (lessons.length ? lessons.join(', ') : '(none)'));
   if (!lessons.length) { console.log('✅ no business lesson pages to check'); process.exit(0); }
   const server = createServer();
-  const PORT = 8766;
+  const PORT = 0; // ephemeral: a leftover or parallel run can never collide on a fixed port
   await new Promise(r => server.listen(PORT, r));
-  const serverUrl = 'http://localhost:' + PORT;
+  const serverUrl = 'http://localhost:' + server.address().port;
   mockFetch();
 
   const results = [];
@@ -224,6 +247,7 @@ async function main() {
         ' listen=' + (r.counts.listen ?? '-') + ' gap=' + (r.counts.gap ?? '-') +
         ' radio=' + (r.counts.radio ?? '-') + ' feed=' + (r.counts.feed ?? '-'));
       if (!ok) r.errors.forEach(e => console.log('     - ' + e));
+      if (r.hints && r.hints.length) r.hints.forEach(hy => console.log('     (hint) ' + hy));
     } catch (e) {
       results.push({ lesson: n, errors: [e.message] });
       console.log('❌ lesson' + n + ' threw: ' + e.message);

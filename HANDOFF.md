@@ -144,3 +144,16 @@ One task: Pass B for lesson 1 from `designs/lesson01.design.md`. No rule, CSS or
 - **Verified**: `npm run qa` green (build:lessons + width + smoke), `qa/content.mjs 1` green (`chart=4 panel=14 listen=41 gap=43 radio=61 feed=1`, every radio resolves an anchor), `qa/width.mjs 1` green, `qa/overflow.mjs 1` green **but vacuous**, plus a real-Chrome probe (temporary `qa/_probe.mjs`, deleted after use) measuring every block: no internal overflow, no width-vs-slot violation, no `.blanks` cell overflow, nothing crossing `.content-area`; the four screenshots taken during authoring were used to fix the two-option spread and the blank widths.
 - `qa/overflow.mjs` still measures only the retired `.panels > .panel` → recorded as **B-QA1** in ISSUES.md (owner decision whether to extend it).
 - Next task: lesson 10 from `designs/lesson10.design.md`.
+
+---
+
+## [2026-11-03] QA: `qa/overflow.mjs` rewritten for the block model (+ two smaller QA fixes)
+
+Follow-up to the lesson-1 run, whose layout verification needed a throwaway probe because the harness could not see the new markup. No engine, CSS or rule change.
+
+- **`qa/overflow.mjs` rewritten** (B-QA1, now "believed fixed"). It measures every block of the current model — `.panel`, `.itemrow > *`, `.content-area > .card` / `p.card` / `.chart`, plus the legacy `.panels > .panel` — and fails on **OVERFLOW** (content wider than its block), **BALLOON** (block wider than its slot, honouring `data-cols` / `.itemsize*`), **ESCAPE** (any element crossing the fixed `.content-area` frame — this is the check that catches a right-aligned `.blanks` item spilling LEFT out of its panel) and **CELL** (a `.blanks` cell whose item cannot fit). DEADSPACE and HEIGHT stay as review-only hints. It also now DISCOVERS the pages that exist instead of sweeping a hard-coded 1–34, fails a named-but-missing page (same rule as `content.mjs` / `width.mjs`), and prints how much it measured (`canvas … · blocks N (full / half / third)`).
+- **Fixture selftest added**: `node qa/overflow.mjs --selftest` passes only if `qa/fixtures/overflow-ok.html` is clean AND `qa/fixtures/overflow-bad.html` reports findings (balloon + overflow + escape + cell). The bad fixture deliberately reproduces the real failure mode (a `.ptw` gloss is `flex:0 0 auto`, so the item cannot shrink back into its 240px cell). This is the guard against the vacuous pass that bit lesson 1.
+- **`qa/content.mjs`**: (a) non-failing `(hint)` for two distinct controls resolving the same answer anchor (a radio group counts as one control) — it immediately caught a real copy in lesson 1 ("She ___ the project manager." in both §3 practice and the quiz), now fixed; (b) the test server binds an ephemeral port instead of a fixed 8766, so a leftover or parallel run can no longer die with `EADDRINUSE`.
+- `package.json` gains `npm run qa:layout` = overflow selftest + overflow sweep (a browser is required, so it is not part of `npm run qa`, which stays jsdom-only).
+- Verified: `node qa/overflow.mjs --selftest` green · `node qa/overflow.mjs` green on lesson 1 (32 blocks: 19 full / 4 half / 9 third) · `node qa/overflow.mjs 2` fails "page not found" as intended · `node qa/content.mjs 1` green with no hint · `node qa/width.mjs 1` green · `npm run qa` green · `node build-audio.mjs --check` clean.
+- Next task: lesson 10 from `designs/lesson10.design.md`.

@@ -1,6 +1,25 @@
 /**
- * qa/overflow.mjs — real-browser overflow/balloon check for the business lessons.
- * Run with: node qa/overflow.mjs [lessonNumber ...]   (no numbers = all 34 lessons)
+ * qa/overflow.mjs — real-browser overflow / balloon / canvas check for the business lessons.
+ * Run with: node qa/overflow.mjs [lessonNumber ...]   (no numbers = every business/lesson*.html that exists)
+ *           node qa/overflow.mjs --selftest           (qa/fixtures/overflow-ok.html must be clean,
+ *                                                      qa/fixtures/overflow-bad.html must report findings)
+ *
+ * jsdom cannot see layout, so this is the ONLY harness that measures it, in real Chrome over CDP.
+ * FORMAT.md is the model: the canvas is fixed (.page-container 1400px, .content-area 1200px, never
+ * reflows), a block is full / half (50% - 7px) / third (33.3% - 9.3px) and is TAGGED with its size
+ * (`.itemsize*`, or `data-cols` on the `.itemrow` that holds it). Checks, all fatal except where noted:
+ *   1. OVERFLOW — a block's content is wider than the block (scrollWidth > clientWidth + 8);
+ *   2. BALLOON  — a block is wider than its slot (a half that has grown past half, a full block past
+ *                 the canvas, ...);
+ *   3. ESCAPE   — ANY element crosses the .content-area frame. This is the one that catches content
+ *                 that is geometrically inside its block but pushed out of the canvas (a right-aligned
+ *                 `.blanks` cell spilling to the LEFT of its panel, for example);
+ *   4. CELL     — a `.blanks` cell whose content is wider than the cell (item does not fit its cell);
+ *   (hint) DEADSPACE  — a full block whose content fills < 75% of it (review-only; pedagogy decides);
+ *   (hint) HEIGHT     — adjacent half/third blocks whose heights differ by > 50px (review-only).
+ *
+ * `.panels > .panel` (the retired structure) is measured too when present, so an old page copied back
+ * into business/ is still checked. COMPLETENESS of `.itemrow` rows is qa/width.mjs's job, not this file's.
  */
 import http from 'http';
 import fs from 'fs';
@@ -26,7 +45,7 @@ function server() {
       if (!fp.startsWith(ROOT)) { res.writeHead(403); res.end(); return; }
       fs.readFile(fp, (e, d) => {
         if (e) { res.writeHead(404); res.end(); return; }
-        const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png' };
+        const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.mp3': 'audio/mpeg' };
         res.writeHead(200, { 'Content-Type': types[path.extname(fp)] || 'application/octet-stream' });
         res.end(d);
       });
@@ -80,6 +99,7 @@ function session(cdp, id) {
     on: (n, f) => cdp.on(n, (p, sid) => { if (!sid || sid === id) f(p, sid) })
   };
 }
+
 const MEASURE = `(function(){
   function cw(el){
     var r = document.createRange();
@@ -90,52 +110,98 @@ const MEASURE = `(function(){
     el.querySelectorAll('input,textarea,button,select,label').forEach(function(c){ var b = c.getBoundingClientRect(); if (b.width > 0){ min = Math.min(min, b.left); max = Math.max(max, b.right); } });
     return min === Infinity ? 0 : (max - min);
   }
-  var out = [];
-  document.querySelectorAll('.panels').forEach(function(panels){
-    var pw = panels.getBoundingClientRect().width;
-    var kids = [].slice.call(panels.querySelectorAll(':scope > .panel'));
-    var pending = null, lone = [];
-    kids.forEach(function(p){
-      var half = !p.classList.contains('full') && !p.classList.contains('centered');
-      if (half) { if (pending === null) pending = p; else pending = null; }
-      else { if (pending !== null) lone.push(pending); pending = null; }
-    });
-    if (pending !== null) lone.push(pending);
-    kids.forEach(function(p){
-      var r = p.getBoundingClientRect();
-      var ex = (p.querySelector('.ex-head') || {}).textContent || '';
-      var pct = 0;
-      if (r.width > 0) { var cw0 = cw(p); pct = Math.round(100 * cw0 / r.width); }
-      var cellMin = -1, cellOver = 0;
-      p.querySelectorAll('.blanks > div').forEach(function(c){
-        var cr = c.getBoundingClientRect();
-        if (cr.width > 0) {
-          var ov = c.scrollWidth - c.clientWidth;
-          if (ov > cellOver) cellOver = ov;
-          if (!c.parentNode.classList.contains('sent') && !c.parentNode.classList.contains('line')) {
-            var f = Math.round(100 * cw(c) / cr.width);
-            if (cellMin < 0 || f < cellMin) cellMin = f;
-          }
-        }
-      });
-      out.push({
-        full: p.classList.contains('full'),
-        centered: p.classList.contains('centered'),
-        lone: lone.indexOf(p) !== -1,
-        w: Math.round(r.width),
-        h: Math.round(r.height),
-        half: Math.round(pw / 2),
-        over: p.scrollWidth - p.clientWidth,
-        pct: pct,
-        cellMin: cellMin, cellOver: cellOver,
-        ex: ex.replace(/\\s+/g, ' ').slice(0, 60)
-      });
-    });
+  var ca = document.querySelector('.content-area');
+  if (!ca) return { empty: true };
+  var cr = ca.getBoundingClientRect();
+  function slotOf(el){
+    var pa = el.parentElement;
+    var row = pa && pa.classList && pa.classList.contains('itemrow') ? pa : null;
+    var cols = row ? row.getAttribute('data-cols') : null;
+    if (cols === '2' || el.classList.contains('itemsize-half')) return cr.width / 2 - 7;
+    if (cols === '3' || el.classList.contains('itemsize-third')) return cr.width / 3 - 9.3333;
+    return cr.width;
+  }
+  function label(el){
+    var hd = el.querySelector('.ex-head') || el.querySelector('h1,h2,h3,h4,summary,b');
+    var t = hd ? hd.textContent : (el.textContent || '');
+    return t.replace(/\\s+/g, ' ').trim().slice(0, 54);
+  }
+  var sel = '.content-area .panel, .content-area .itemrow > *, .content-area > .card, .content-area > p.card,'
+    + ' .content-area > .chart, .panels > .panel';
+  var blocks = [].slice.call(document.querySelectorAll(sel));
+  var findings = [], hints = [], tally = { full: 0, half: 0, third: 0 };
+  var lastRow = null, lastRowTop = -9999;
+  blocks.forEach(function(el){
+    var r = el.getBoundingClientRect();
+    if (!r.width) return;
+    var slot = slotOf(el);
+    var ex = label(el);
+    if (slot >= cr.width - 1) tally.full++; else if (slot > cr.width / 2 - 30) tally.half++; else tally.third++;
+    var over = el.scrollWidth - el.clientWidth;
+    if (over > 8) findings.push({ kind: 'OVERFLOW', w: Math.round(r.width), slot: Math.round(slot), extra: 'over=' + over + 'px', ex: ex });
+    else if (r.width - slot > 8) findings.push({ kind: 'BALLOON', w: Math.round(r.width), slot: Math.round(slot), extra: 'wider than its slot by ' + Math.round(r.width - slot) + 'px', ex: ex });
+    var pct = Math.round(100 * cw(el) / r.width);
+    if (slot >= cr.width - 1 && pct > 0 && pct < 75) hints.push({ kind: 'DEADSPACE', extra: 'fill=' + pct + '%  w=' + Math.round(r.width), ex: ex });
+    /* HEIGHT hint: two blocks of the same row (or two consecutive half/third blocks) of unequal height */
+    if (slot < cr.width - 1) {
+      var sameRow = Math.abs(r.top - lastRowTop) < 4;
+      if (sameRow && Math.abs(r.height - lastRow.h) > 50)
+        hints.push({ kind: 'HEIGHT', extra: 'row pair ' + Math.round(lastRow.h) + 'px vs ' + Math.round(r.height) + 'px', ex: ex });
+      lastRowTop = r.top; lastRow = { h: r.height };
+    }
   });
-  return out;
+  var escape = [];
+  [].slice.call(document.querySelectorAll('.content-area *')).forEach(function(el){
+    var r = el.getBoundingClientRect();
+    if (r.width > 0 && (r.right > cr.right + 1 || r.left < cr.left - 1) && escape.length < 12) {
+      escape.push({ kind: 'ESCAPE', w: Math.round(r.width),
+        extra: (el.className || el.tagName).toString().slice(0, 34) + ' at ' + Math.round(r.left) + '..' + Math.round(r.right),
+        ex: 'canvas ' + Math.round(cr.left) + '..' + Math.round(cr.right) });
+    }
+  });
+  var cells = [];
+  [].slice.call(document.querySelectorAll('.blanks > div')).forEach(function(c){
+    var r = c.getBoundingClientRect();
+    if (!r.width) return;
+    var min = Infinity, max = -Infinity;
+    c.querySelectorAll('input,textarea,button,label').forEach(function(k){ var kr = k.getBoundingClientRect(); if (kr.width > 0){ min = Math.min(min, kr.left); max = Math.max(max, kr.right); } });
+    var rg = document.createRange();
+    rg.selectNodeContents(c);
+    var rects = rg.getClientRects();
+    for (var i = 0; i < rects.length; i++){ if (rects[i].width > 0){ min = Math.min(min, rects[i].left); max = Math.max(max, rects[i].right); } }
+    var inner = min === Infinity ? 0 : max - min;
+    if (inner > r.width + 8) cells.push({ kind: 'CELL', w: Math.round(inner), slot: Math.round(r.width),
+      extra: 'needs ' + Math.round(inner) + 'px in a ' + Math.round(r.width) + 'px cell', ex: (c.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 44) });
+  });
+  return { empty: false, canvas: Math.round(cr.left) + '..' + Math.round(cr.right), w: Math.round(cr.width),
+    blocks: blocks.length, tally: tally, findings: findings, escape: escape, cells: cells, hints: hints };
 })()`;
 
+function discover() {
+  const dir = path.join(ROOT, 'business');
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir)
+    .map(f => (f.match(/^lesson(\d+)\.html$/) || [])[1])
+    .filter(Boolean).map(Number).sort((a, b) => a - b);
+}
+
+/* print one page's result; returns the number of FAILING findings (hints never fail) */
+function report(head, v) {
+  if (!v || v.empty) { console.log(head + ': ❌ no .content-area (page missing or not a lesson)'); return 1; }
+  const bad = [].concat(v.findings, v.escape, v.cells);
+  console.log(head + '  canvas ' + v.canvas + ' · blocks ' + v.blocks +
+    ' (full ' + v.tally.full + ' / half ' + v.tally.half + ' / third ' + v.tally.third + ')');
+  bad.forEach(f => console.log('    ❌ ' + f.kind + '  ' + f.extra +
+    (f.w ? '  w=' + f.w : '') + (f.slot ? '  slot=' + f.slot : '') + '  «' + f.ex + '»'));
+  v.hints.forEach(f => console.log('    (hint) ' + f.kind + '  ' + f.extra + '  «' + f.ex + '»'));
+  return bad.length;
+}
+
 async function main() {
+  const argv = process.argv.slice(2);
+  const selftest = argv.includes('--selftest');
+  const targets = argv.map(Number).filter(n => Number.isInteger(n) && n >= 1);
+
   const site = await server();
   const base = 'http://127.0.0.1:' + site.port;
   const gate = { email: EMAIL, track: TRACK, teacher: false, sig: h(EMAIL + TRACK + SECRET) };
@@ -152,70 +218,57 @@ async function main() {
   await ses.send('Runtime.enable');
   await ses.send('Page.addScriptToEvaluateOnNewDocument', { source: 'try{sessionStorage.setItem("gate",JSON.stringify(' + JSON.stringify(gate) + '))}catch(e){}' });
 
-  let fails = 0;
-  const targets = process.argv.slice(2).map(Number).filter(n => Number.isInteger(n) && n >= 1 && n <= 34);
-  const lessons = targets.length ? targets : Array.from({ length: 34 }, (_, i) => i + 1);
-  for (const L of lessons) {
-    await ses.send('Page.navigate', { url: base + '/business/lesson' + L + '.html' });
-    await sleep(1300);
+  const measure = async (rel) => {
+    await ses.send('Page.navigate', { url: base + '/' + rel });
+    await sleep(selftest ? 900 : 1300);
     const r = await ses.send('Runtime.evaluate', { expression: MEASURE, returnByValue: true });
-    const panels = (r.result && r.result.value) || [];
-    // Overflow is checked on EVERY panel — including .panel.full, which is exactly where the
-    // long translation/listening option rows used to spill. Only the "balloon" check (a half-width
-    // panel that has grown wider than half the container) is restricted to non-full panels.
-    const bad = panels.filter(p => p.over > 8 || (!p.full && p.w > p.half + 8) || p.lone);
-    if (bad.length) {
-      console.log('lesson ' + L + ':');
-      bad.forEach(p => { fails++;
-        var kind = p.over > 8 ? 'OVERFLOW' : (!p.full && p.w > p.half + 8) ? 'BALLOON' : 'LONE';
-        console.log('    ' + kind + '  full=' + p.full + ' w=' + p.w + ' h=' + p.h + ' half=' + p.half + ' over=' + p.over + '  «' + p.ex + '»'); });
+    return (r.result && r.result.value) || null;
+  };
+
+  let fails = 0;
+
+  if (selftest) {
+    /* the audit must PASS the good fixture and FAIL the bad one — this is what keeps a
+       vacuous pass (measuring nothing) from ever looking green again */
+    const cases = [{ name: 'overflow-ok.html', expect: 0 }, { name: 'overflow-bad.html', expect: 1 }];
+    let broken = 0;
+    for (const c of cases) {
+      const rel = 'qa/fixtures/' + c.name;
+      if (!fs.existsSync(path.join(ROOT, rel))) { console.log('❌ fixture missing: ' + rel); broken++; continue; }
+      const n = report(rel, await measure(rel));
+      const ok = (n ? 1 : 0) === c.expect;
+      if (!ok) broken++;
+      console.log((ok ? '✅ ' : '❌ ') + rel + ' → ' + (n ? n + ' finding(s)' : 'clean') +
+        ' (expected ' + (c.expect ? 'findings' : 'clean') + ')');
     }
-    // Dead-space HINT (non-failing): a full-width panel whose visible content is far narrower
-    // than the panel. Review-only — pedagogy decides whether the block is fine as authored.
-    const sparse = panels.filter(p => p.full && p.pct > 0 && p.pct < 75);
-    if (sparse.length) {
-      console.log('lesson ' + L + ' (hint):');
-      sparse.forEach(p => console.log('    DEADSPACE ' + p.pct + '%  w=' + p.w + '  «' + p.ex + '»'));
-    }
-    // HALF DEADSPACE HINT (non-failing): a half-width panel whose content is far narrower than itself.
-    const halfSparse = panels.filter(p => !p.full && !p.centered && p.pct > 0 && p.pct < 60);
-    if (halfSparse.length) {
-      console.log('lesson ' + L + ' (hint):');
-      halfSparse.forEach(p => console.log('    HALF DEADSPACE ' + p.pct + '%  w=' + p.w + '  «' + p.ex + '»'));
-    }
-    // CELL HINTS (non-failing): right-justified fill-in cells that are mostly empty, or that overflow.
-    const cellSparse = panels.filter(p => p.cellMin > 0 && p.cellMin < 55);
-    if (cellSparse.length) {
-      console.log('lesson ' + L + ' (hint):');
-      cellSparse.forEach(p => console.log('    CELL SPARSE ' + p.cellMin + '%  w=' + p.w + '  «' + p.ex + '»'));
-    }
-    const cellOv = panels.filter(p => p.cellOver > 4);
-    if (cellOv.length) {
-      console.log('lesson ' + L + ' (hint):');
-      cellOv.forEach(p => console.log('    CELL OVERFLOW ' + p.cellOver + 'px  «' + p.ex + '»'));
-    }
-    // Height-balance HINT (non-failing): adjacent half-width panels of visibly different heights.
-    const hbal = [];
-    for (let i = 0; i + 1 < panels.length; i++) {
-      const a = panels[i], b = panels[i + 1];
-      if (!a.full && !a.centered && !b.full && !b.centered && !a.lone && !b.lone && Math.abs(a.h - b.h) > 50) {
-        hbal.push('    HEIGHT ' + a.h + ' vs ' + b.h + '  «' + a.ex + '» / «' + b.ex + '»');
+    console.log(broken === 0 ? '✅ overflow audit selftest green' : '❌ overflow audit selftest FAILED');
+    fails = broken;
+  } else {
+    const lessons = targets.length ? targets : discover();
+    if (!lessons.length) console.log('✅ overflow audit: no business lesson pages to check');
+    for (const L of lessons) {
+      const rel = 'business/lesson' + L + '.html';
+      if (!fs.existsSync(path.join(ROOT, rel))) {
+        if (targets.length) { console.log('lesson ' + L + ': ❌ page not found'); fails++; }
+        else console.log('lesson ' + L + ': (page missing, skipped)');
+        continue;
       }
+      fails += report('lesson ' + L, await measure(rel));
     }
-    if (hbal.length) {
-      console.log('lesson ' + L + ' (hint):');
-      hbal.forEach(m => console.log(m));
-    }
+    const label = targets.length ? ('lesson' + (lessons.length > 1 ? 's ' : ' ') + lessons.join(', '))
+      : (lessons.length ? 'lessons ' + lessons.join(', ') : 'no pages');
+    console.log(fails === 0
+      ? '✅ no overflow, no balloon, nothing escapes the canvas (' + label + ')'
+      : '❌ ' + fails + ' layout finding(s)');
   }
 
   try { cdp.ws.close(); } catch (e) { }
   try { chrome.proc.kill(); } catch (e) { }
   await site.close();
   try { fs.rmSync(profile, { recursive: true, force: true }); } catch (e) { }
-  const label = targets.length ? ('lesson' + (lessons.length > 1 ? 's ' : ' ') + lessons.join(', ')) : 'lessons 1-34';
-  console.log(fails === 0 ? ('✅ no overflow (' + label + ')') : '❌ ' + fails + ' overflowing panel(s)');
   process.exit(fails ? 1 : 0);
 }
 
 main().catch(e => { console.error('crashed:', e.message); process.exit(1); });
+
 
