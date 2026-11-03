@@ -34,7 +34,7 @@ _(Newest first.)_
 - [2026-10-23] (FEATURE) STORE CORRECT ANSWERS + EDITABILITY: store which answers are correct for each exercise and let the owner edit them via the edit function. TBD with owner.
 
 ## Content
-- [2026-11-01] CONTENT.md "Malleability — Layout is flexible" wording: revisit later to clarify authoring-time flexibility vs the fixed-at-generation runtime layout (parked pending owner decision).
+- [RESOLVED 2026-11-02] CONTENT.md "Malleability — Layout is flexible" wording: CONTENT.md was deleted. Decision: authoring-time freedom lives in PEDAGOGY-MAP.md (process/defaults); runtime layout is fixed at generation and owned by FORMAT.md.
 - B-C7 [2026-10-26, owner request] ACCENT VIDEO LESSON(S): future lesson(s) with real video of various accents and how they fit the key framework.
 - B-C6 [2026-10-26, owner request] PRONUNCIATION BUILD-UP IN EARLIER LESSONS: add pronunciation notes/references in earlier lessons to introduce the idea and build up to lessons 12–14.
 - B-C5 [2026-10-25, updated 2026-10-25] LESSON 12 RESTRUCTURE + CONSONANT SECTIONS RELOCATED: lesson 12 is now the VOWEL lesson (vowel names/big/small/schwa → letter combinations → sound↔spelling map). Its old consonant sections (TH, American R, T/D flap, ING nasal, of→v + silent letters) are MOVED OUT to a dedicated "consonant sounds Portuguese doesn't have" lesson (new lesson, number TBD); the content is preserved in git (commits c4a555c / dd86cb8). DECISION (owner): these consonant sounds should also be presented MINIMALLY as appropriate in earlier lessons — as a small sidenote with a link to the relevant section of that full consonant lesson. Parked; exact placement decided later. Lesson 12 is intentionally incomplete for now — only sections 1–3 are authored.

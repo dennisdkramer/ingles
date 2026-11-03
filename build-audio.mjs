@@ -114,6 +114,7 @@ for (const text of todo) {
   fs.writeFileSync(path.join(OUT, file), mp3);
   manifest.clips[text] = file;
   done++;
+  if (done % 10 === 0) fs.writeFileSync(MAN, JSON.stringify(manifest, null, 2) + '\n', 'utf8'); // save as we go: a killed run keeps what it rendered
   if (done % 10 === 0 || done === todo.length) console.log(`  ${done}/${todo.length}`);
 }
 fs.writeFileSync(MAN, JSON.stringify(manifest, null, 2) + '\n', 'utf8');

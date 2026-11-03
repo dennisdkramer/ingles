@@ -8,13 +8,93 @@
    · `Add:` draft-plan material (to be folded in)
    · `Generation:` build instruction or hold note for that page
 
-## Generation rules (hard)
+## TRACK DEFAULT REGISTER AND SWAPPING - Use these as levers in place of modulating 'softness', 'distance', or 'formality. Language which is 'more formal' than the track's registers is taught only if it's use is very frequent.
+## Each track utilizes 3 registers. For any content section/block, the register of any content item is determined by [lesson plans] or [appropriate context (defined below each register option)].
+## EXAMPLE: A dialog with a close friend in a block (which has no register guidance in its lesson plan) in a BUSINESS TRACK lesson utilizes register 1.b.
+## (A) is default register for each track and prioritized throughout. Use of (B) and (C) in context and where appropriate is a GOAL, not a directive.
 
-1. **Depth follows the lesson.** The ramp is smooth: Lesson 1 A0 → Lesson 10 A1 → Lesson 20 A2 → Lesson 30 B1 → Lesson 40 B2 → Lesson 50 C1. Any concept or vocabulary item a lesson includes must be taught at the depth and difficulty of that lesson, and must not be redundant with prior lessons: a topic returns only by going deeper, wider or more natural/register-appropriate — never by repeating an earlier explanation or its drills.
-2. **No length or quantity budget.** There is no cap on sections, tables, examples, exercises, ditado lines, recordings or quiz items, and no page-length limit. Everything this roadmap entry references must be robustly included, thoroughly explained and fully trained inside its lesson — explanation → examples → recognition practice → production practice → no-consultation quiz. Never compress, summarise or omit a roadmap item to fit a page.
-3. **Vocabulary is a word bag.** `Vocabulary:` / `Key vocabulary:` lists are raw material, not copy: group them by function, teach them inside phrases, then drill and recycle them. A lesson whose entry lists no vocabulary must still introduce new, topic-relevant vocabulary of its own — every lesson leaves the learner with new words.
-4. **Language of instruction — match each text to the student's level.** Explanatory text goes in English when the student at that lesson's level can understand it, and in **concise Portuguese** when they cannot: compare the student's level with the level *that particular text* requires, sentence by sentence. Lesson 1: every explanation is in Portuguese (an A0 learner understands nothing yet in English). Lesson 20: the student reads many explanations in English, with concise Portuguese kept for the harder ones. Lesson 40: Portuguese explanations are almost never needed — only for a genuinely new or awkward concept. When Portuguese is used it is always tight: the shortest phrasing that unblocks the learner, never a full parallel translation of the page.
-5. **Site contract.** `<lesson>.edit.html` is an identical copy of the published `<lesson>.html`, never a different version; navigation is purely sequential (`← Last` / `Next →`) with no lesson count anywhere.
+1. BUSINESS TRACK: 
+   a) [Confident and direct business-casual with context-aware formality]
+      -*Normal* interactions with family, coworkers, managers, clients, and service interactions. 
+   b) [Colloquial adult peer-to-peer speech]
+      - Communication with close family/friends/partners
+   c) [Candid and uninhibited adult informal] - (When lesson content relevance presents an opportunity, meaning, cultural context, linguistic context, and appropriate response):
+      - Expressing anger/contempt, sarcasm, humor
+      - Slang, swears, and street language 
+      - Youth slang (eg. "That's cooked")
+      - Colloquial text-speak (eg. wtf, lol)
+      - Overly blunt/relaxed phrasing ("Yeah, whatever..")
+         
+- KIDS
+   a) PARKED PENDING DEFINITION AND CONTEXT
+- ADULT
+   a) PARKED PENDING DEFINITION AND CONTEXT
+
+Inappropriate language can be censored according to model judgement ('f---', 'shi-', 'c---', etc..)
+
+## How to generate a lesson (binding process)
+
+### 1. Two passes, with a barrier between them
+**Pass A — design.** Inputs: this lesson's entry, the track persona, the student's level. Deliberately **withheld**: FORMAT.md, FUNCTION.md, the archived lessons, the primitive inventory, and every other lesson. Framing for the pass: *"You have no tables, no charts, no gap-fills and no page. You have a concept, a student, one session, and the world outside."* Output — `designs/lessonNN.design.md`:
+   - the **core**: 2-4 things the student must leave able to *do*, phrased as behaviour, not as a topic;
+   - the real situation in which that core is worth having;
+   - **three candidate experiences, from three different channels** (heard / seen / done / read / said);
+   - the chosen one, why it beats the others *for this student*, and what the first 30 seconds feel like;
+   - what the student produces, what evidence it leaves, and any conflict with the defaults below.
+
+**Pass B — build.** Inputs: the design + FORMAT.md + FUNCTION.md. It may not change the vehicle, only realise it. If realisation forces a change, escalate (§2) instead of substituting a cheaper shape. Deliver `<lesson>.html` **and an identical `<lesson>.edit.html`**.
+The owner may veto any design before it is built.
+
+### 2. Defaults, not gates
+Everything in §4-§10 is a **default that a better idea is expected to beat**. When a chosen activity's interaction with a default is unclear or conflicting: **stop, present the idea, name the conflict, propose the resolution.** Never squash the idea to fit a rule, and never silently comply with the rule either.
+
+### 3. The three non-negotiables
+These are not pedagogy — they decide whether the page is a lesson at all, and a conflict with one of them is escalated like any other (§2):
+   - the page runs on the site: mechanical skeleton + deliverable state the engines can read (FORMAT.md, FUNCTION.md);
+   - the student produces the target at least once with the answer not visible;
+   - every factual claim is true and defensible — never pad a section with an unverified assertion.
+### 4. Depth and redundancy
+Lesson 1 A0 → Lesson 10 A1 → Lesson 20 A2 → Lesson 30 B1 → Lesson 40 B2 → Lesson 50 C1. Any concept or vocabulary item must be taught at the depth and difficulty of *this* lesson, and must not be redundant with a prior lesson: a topic returns deeper, wider, more natural or more register-appropriate — never as the same explanation and the same drills.
+
+### 5. No length or quantity budget
+There is no cap on sections, tables, examples, exercises, dictation lines, recordings or quiz items, and no page-length limit. Everything the entry references must be robustly included, thoroughly explained and fully trained *in its own lesson* — explain → show → recognise → produce → test without consultation. Never compress, summarise or omit an item to fit a page.
+### 6. Vocabulary
+`Vocabulary:` / `Key vocabulary:` lists are a word bag, not copy: group by function, teach inside phrases, drill and recycle. A lesson whose entry lists no vocabulary must still introduce new, topic-relevant words of its own — every lesson leaves new words behind.
+
+### 7. Language and register
+- Explanations go in English when the student at that level can read them, and in **concise** Portuguese when they cannot — compare the student's level with the level *that particular text* demands, sentence by sentence. Lesson 1: everything in Portuguese. Lesson 20: many explanations in English, concise Portuguese kept for the harder ones. Lesson 40: Portuguese almost never needed. Portuguese is always tight: the shortest phrasing that unblocks, never a parallel translation of the page.
+- The business track's register is **confident, respectful business-casual** — enough for family, coworkers, managers and clients. Teach only the most frequent/important items of a super-formal register ("I'm pleased to make your acquaintance" is too rare to earn a slot) and never build a formality ladder for its own sake; recognition may run ahead of production.
+
+### 8. Who this is for
+**Business (live).** Working adults who need English on the job this quarter. They value analysis, problem-solving, structure, professional stakes and being given something worth thinking about; they forgive difficulty, not busywork. Judge engagement abstractly, with two questions: *would this student choose to do this again?* and *can the activity be completed without producing or recognising the target?* (if it can, it is a warm-up, not the training). Feasibility is a Pass-B concern and never kills an idea.
+**Kids (parked).** Play is the medium: reward, novelty, movement, silly stakes, visible progress. Short attention span, immediate feedback, competition with themselves rather than with each other.
+**Adult (parked).** Culture, music, film, travel and real life are the hooks; self-expression matters more than accuracy drills; they dislike being talked down to and enjoy noticing how language works.
+### 9. Vehicles
+Any vehicle is allowed: authored text, dialogue or chart; real material (song, clip, article, document, photo); interactive (game, timed drill, role-play); a project; something nobody has tried yet. Two tiers decide how it gets built:
+   - **Tier 0** — existing primitives (FORMAT.md): tables, cards, dialogues, audio chips, gap-fills, multiple choice, recording, text boxes.
+   - **Tier 1** — one *generic* engine, then free with per-lesson data: `shootPair` (two targets, one right), `sortOut` (buckets), `raceClock` (timed drill), `revealGrid` (memory), `orderLine` (sequence). Novelty should be parameterised, not bespoke: a new game is usually item data + a skin on an existing engine. New Tier-1 engines are proposed to the owner and built once, then reused.
+   - **Tier 2** — bespoke simulation or multi-step project: propose it, don't build it unbidden.
+Referencing material instead of embedding it is fine (a song named by lyric, "go and listen to it"); a *link* that ships must resolve, and the section must still teach if it dies.
+### 10. Authoring defaults
+   - No boilerplate, no filler, no heading that adds nothing, no sentence that restates the one before.
+   - Teach in context, in phrases, inside a scenario, dialogue or story — not isolated glosses.
+   - Teach the reason (the mental model), not just the rule; say plainly when there is no rule.
+   - A rule and its direct consequence are one idea: one section, never two.
+   - A context vehicle that leans on new items comes *after* those items are taught.
+   - Never show the answer in a prompt; a hint may only be in the language the student is not producing.
+   - No copy-exercises: the student produces from memory or meaning, never transcribes the prompt.
+   - Each item carries the condition that decides it (a gloss that could go either way is not an item).
+   - A false friend is taught as a trio: the English word, what it really means, and the English for what the student meant.
+   - Practice trains the lesson's concepts in conceptually distinct blocks, inline with what they train and/or in a penultimate section. The last section is a quiz that tests all of it — it may echo the training, never copy it.
+   - Multiple-choice options are shuffled so the right one is not always in the same slot.
+
+### 11. Site contract (mechanical)
+   - Publish `<lesson>.html` **and an identical `<lesson>.edit.html`**.
+   - Authored content sits in `.content-area` under one `<h1>` — that heading is the title `build-lessons.mjs` reads.
+   - Navigation is purely sequential (`← Last` / `Next →`); there is no lesson count anywhere.
+   - Exercise state must land on `input.gap`, `input[type=radio]` or a non-feed `textarea` — that is what persists (FUNCTION.md).
+   - `data-say` carries how a line is **said**, not how it is written; `npm run build:audio` renders the clips.
+   - Shell, classes and sizing: FORMAT.md. Behaviour, engines and edit mode: FUNCTION.md.
 
 1. **Lesson 1: Introduction to Sounds & the Sentence Skeleton**
    * Content: the subject is always named (I am from Brazil, never "Sou do Brasil"); be am/is/are; a/an decided by sound (a university, an hour); Sound Lab — vowels have no fixed sound (A: cat/cake/car/about · O: go/good/who); the joker it for time, weather, day and distance (It's 8pm / raining / Monday / far); Treino A-G with listening and recording; Quiz.

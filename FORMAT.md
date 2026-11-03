@@ -13,12 +13,12 @@
         - EXCEPTIONS (eg. Exam Page, user-specific feedback/review pages).
     d) OUT OF SCOPE for this file:
         - [linguistics and/or pedagogy and/or teaching] analysis/decisions (PEDAGOGY.md) - This file must not influence.
-        - Lesson content is generated and organized without regard to formatting - following PEDAGOGICAL DIRECTIVES (PEDAGOGY.md) and Generation guidelines (CONTENT.md)- and formatted/cleaned up afterward.
+        - Lesson content is generated and organized according to PEDAGOGY-MAP.md (its process, defaults and per-lesson entries). This file is the mechanical contract — shell, classes, sizing.
         - Elements which exist because a FUNCTION creates them - their formatting is specified as PART of that function in FUNCTION.md, which is authoritative for those elements; this file defers to FUNCTION.md for them and does not restate them (Selection popup, note/recording marks, highlight rectangles, colour palette, toast, indicators/spinners, etc.). Style.css remains the single styling source for the whole site.
 
 2. SITE CORE CHARACTERISTICS -
     a) The SITE/PLATFORM/PROJECT "Inglês Abre Portas" is a static English-teaching site — one teacher plus allow-listed students, three 'TRACKS' (kids, business, adult); every lesson is a standalone page. (Project GOALS are distributed: behaviour in FUNCTION.md, state/parameters in STATUS.md.)
-    b) PAGE SHELL ORDER: doctype/head/title/stylesheet → #toast → header.brand (English text, centered logo 120px, rose drop-shadow) → #controlbar .control-bar (the "control bar": account/session info + tools, English) → main#page → [.page-container (PAGE AREA: fixed 1400px wide (never shrinks with the viewport). Paper bg, 2px solid ink border, no radius/shadow, position:absolute — taken out of the document flow and pinned at a fixed left offset (15px), so the page and its content never reflow when the viewport is resized or a mark is painted. ALL page content — including the footer — lives inside it.) → [.content-area (CONTENT AREA: fixed 1200px wide (never shrinks with the viewport), centered inside the page area → exactly 100px margin on each side. All **authored lesson content** — text, cards, exercise controls, and the shared notebook — sits here; the layout is **fixed at generation** (text wraps deterministically within the fixed width, never re-flowing at display time) → centered h1 → lesson sections → #feed (shared notebook))] → footer]→ closing script block (BACKPACK/SECRET/TRACK/L/COUNT + engine1.js/engine2.js + the engine-load guard).
+    b) PAGE SHELL ORDER: doctype/head/title/stylesheet → #toast → header.brand (English text, centered logo 120px, rose drop-shadow) → #controlbar .control-bar (the "control bar": account/session info + tools, English) → main#page → [.page-container (PAGE AREA: fixed 1400px wide (never shrinks with the viewport). Paper bg, 2px solid ink border, no radius/shadow, position:absolute — taken out of the document flow and pinned at a fixed left offset (15px), so the page and its content never reflow when the viewport is resized or a mark is painted. ALL page content — including the footer — lives inside it.) → [.content-area (CONTENT AREA: fixed 1200px wide (never shrinks with the viewport), centered inside the page area → exactly 100px margin on each side. All **authored lesson content** — text, cards, exercise controls, and the shared notebook — sits here; the layout is **fixed at generation** (text wraps deterministically within the fixed width, never re-flowing at display time) → centered h1 → lesson sections → #feed (shared notebook))] → footer]→ closing script block (BACKPACK/SECRET/TRACK/L + engine1.js/engine2.js (+ engine3.js only when the page uses a Tier-1 game) + the engine-load guard).
 
 ## HTML/CSS formatting
 ### Colors (CSS vars in :root)
@@ -40,6 +40,8 @@
 - The lesson title (h1) must be written short enough to sit on ONE line at the fixed 38px size inside the 1200px content area 
 - **Portuguese text is ALWAYS italic.** Mark it with `lang="pt"` (CSS `:lang(pt){font-style:italic}` italicizes it in any element), or use the legacy `<i>` / `.pt` / `.ptw` markers. A helper class that is not Portuguese-specific (`.thsub`, …) must NEVER carry `font-style` — italic comes only from a Portuguese marker.
 - .pt = Portuguese explanation text: italic. .ptw = Portuguese word in exercises: italic, --ptw color, weight 600
+- Content within a block may never overflow the block.
+- Content within a block should not look cramped or contain unnecessary space 
 
 #### Following are guidance **IF** relevant content used, not mandatory, not templates
 - .ptsound (optional) = a tag available to mark the LESSON-12 vowel sound-map labels (English sounds rendered in PT characters, e.g. ei/ai/ə): tan (--ptw), italic, NOT bold. Scope: ONLY those chart labels until further notice — NOT part of the pronunciation key (data-pron / dictionary.json / PronKey) and NOT a general-purpose pronunciation tag. May carry `lang="pt"`. (Renamed from .ptpronounce 2026-10-27.)
@@ -53,18 +55,18 @@
 - .blanks = wrapping row of fill-in pairs (word + input.gap)
 - .dialog = dialogue block: #fff8ea fill, rose frame, bold speaker labels
 - .listen = compact ▶ audio chip placed inline beside what it speaks
-- A fill-in hint (Portuguese, italic) sits on its own line BELOW the input when inline placement would overflow the block or look cramped. Author it with the block fill-in layout (`.blanks.sent` / `.blanks.sent.cols`) so the line break actually renders — a `<br>` inside the default flex `.blanks` row is ignored.
+- A fill-in hint (Portuguese, italic) sits on its own line BELOW the input. Author it with the block fill-in layout (`.blanks.sent` / `.blanks.sent.cols`) so the line break actually renders — a `<br>` inside the default flex `.blanks` row is ignored.
 - section headings (h2) carry a rose underline; exercise items are numbered 1..n under their group heading (no repeated section letter)
 - @media print: hides header/#controlbar/#feed/footer, strips container border/shadow
 
-### Sizing philosophy
+### Text and visual sizing philosophy
 - Minimum size an average person comfortably sees, clicks, reads.
 
 ## Lesson section/block formatting
 - .card: paper bg, 2px ink border, 16px radius, 5px 5px 0 tan hard shadow
 - Buttons: ink bg, cream text, 10px radius, 3px 3px 0 tan shadow, weight 600, 14px Public Sans
 - Links: ink, weight 600. Dim text: #8a8072, 13px
-- Lesson navigation: the control bar carries "← Last" / "Next →" buttons (always present, rendered by engine2.js from `L` and `COUNT`; the boundary button is greyed/disabled).
+- Lesson navigation: the control bar carries "← Last" / "Next →" buttons (always present, rendered by engine2.js from `L` alone — there is no lesson count: "Next →" is always enabled and goes to `lesson{L+1}`, "← Last" is disabled on lesson 1).
 
 ### Layout STANDARDS at generation (width & fill techniques; CSS stays fixed)
 CSS uses fixed constants (no dynamic/viewport sizing and no CSS wrapping to force a fit). Layout is not pre-assigned: a block's width and column count are chosen to fit its content, and CSS only implements that choice — rarely rescales and never wraps content to force a fit. The width/fill/alignment techniques below are STANDARDS serving goals of "no dead space" and "professional-looking results":

@@ -1,5 +1,5 @@
 # FUNCTION — site behaviour contract (engines + backend)
-Reference this file whenever a task touches lesson functionality, engines, edit mode or the backend. Preserve everything here unless the owner explicitly asks to change it. Structure/formatting → FORMAT.md · content handling → CONTENT.md · teaching side → PEDAGOGY.md · state/parameters → STATUS.md.
+Reference this file whenever a task touches lesson functionality, engines, edit mode or the backend. Preserve everything here unless the owner explicitly asks to change it. Structure/formatting → FORMAT.md · what to teach + how to design a lesson → PEDAGOGY-MAP.md · teaching side → PEDAGOGY.md · state/parameters → STATUS.md.
 
 ## What the site does (behaviour architecture)
 - "Inglês Abre Portas": a static English-teaching site — one teacher plus allow-listed students, three books (kids, business, adult); every lesson is a standalone page. (Site structure/identity lives in FORMAT.md.)
@@ -10,7 +10,7 @@ Reference this file whenever a task touches lesson functionality, engines, edit 
 ## Persistence & identity
 - ALL user data persists server-side (Apps Script Sheet "IAP_backpack!layer" + Drive "IAP_uploads"), and is separate PER STUDENT AND PER BOOK (track). No cross-contamination between students or between tracks.
 - Recordings, notes, highlights AND exercise input are all persistent. Exercise answers — filled `input.gap` blanks, picked `fieldset` radios and typed translation textareas — save as `type:"answer"` rows keyed by the field's prompt/stem text with the same {block,offset} tie-breaker as notes/highlights (so a reworded prompt or reordered question behaves exactly like a reworded phrase: the saved answer stays in the sheet but stops re-attaching; nothing is deleted on a content change). The `#feed` shared notebook stays `type:"notebook"`. All of it routes through `send()` (outbox + 12s grace window), saves on change + a short debounce + a flush when the tab hides, and an emptied field deletes its row.
-- New exercise shapes persist only when authored onto `input.gap`, `input[type=radio]` or a non-feed `textarea` (see CONTENT.md's exercise-type catalog); checkbox / `<select>` / drag-drop answers are not saved by the current engine.
+- New exercise shapes persist only when authored onto `input.gap`, `input[type=radio]` or a non-feed `textarea`; checkbox / `<select>` / drag-drop answers are not saved by the current engine. Any new activity (a Tier-1 game, a timed drill) must therefore drive one of those three or it leaves no record for the teacher.
 - localStorage must never be a source of truth (the server is the sole source); it holds only the transient outbox of unsent writes for retry — never the data itself.
 
 ## Cross-feature principles (owner prompt 2026-10-13 — OVERRIDES any conflicting wording below)

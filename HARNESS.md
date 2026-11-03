@@ -1,7 +1,7 @@
 # HARNESS — binding contract. RE-READ ON EVERY PROMPT, before any other action.
 This file is the single read-first hub after RULE 0 is read from the global rules.
 It is always in force and adherence is non-negotiable
-The category files (PENDING / PARKED / HANDOFF / ISSUES / FORMAT / FUNCTION / CONTENT / PEDAGOGY / VOCABULARY / STATUS / VERIFICATION / FILESYSTEM) hold the parameters of elements and functionality and are loaded only when they are in scope for the current task.
+The category files (PENDING / PARKED / HANDOFF / ISSUES / FORMAT / FUNCTION / PEDAGOGY / VOCABULARY / STATUS / VERIFICATION / FILESYSTEM) hold the parameters of elements and functionality and are loaded only when they are in scope for the current task.
 
 ## RULE 1 — CONTEXT & TOKEN ECONOMY
 
