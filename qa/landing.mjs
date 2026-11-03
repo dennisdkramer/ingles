@@ -47,6 +47,8 @@ ok('locked cards say "sem acesso"', /sem acesso/i.test(kids.textContent));
 
 const link = biz.querySelector('a.lesson-link');
 ok('lesson title is the link', !!link && /First Talk/.test(link.textContent), link ? link.getAttribute('href') : 'none');
+ok('row reads "NN. Lesson Name"', !!link && /^01\. /.test(link.textContent.trim()), link ? link.textContent.trim().slice(0, 24) : 'none');
+ok('full text kept as a tooltip', !!link && (link.getAttribute('title') || '').indexOf('First Talk') >= 0);
 ok('link href points at the page', !!link && link.getAttribute('href') === 'business/lesson1.html');
 ok('no per-lesson button remains', biz.querySelectorAll('button:not(.contbtn)').length === 0);
 const kidsOfCard = [...biz.children];

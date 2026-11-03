@@ -112,11 +112,12 @@ function renderStudent(tracks,name){
   const has=MYTRACKS.indexOf(t)>=0;
   let cont=null,rows="";
   trackLessons(t).forEach(le=>{const n=le.n;const d=p[t+"_"+n];if(!d&&!cont)cont=n;
-   const lab=d?'<span class="done">✅ Lição '+n+'</span>':'<span class="todo">⬜ Lição '+n+'</span>';
+   const num=(n<10?"0":"")+n;                      /* the row reads "NN. Lesson Name" */
    const txt=le.title?esc(le.title):'Lição '+n;
+   const entry=num+". "+txt;
    rows+=has
-    ? '<div class="row">'+lab+' <a class="lesson-link" href="'+t+'/lesson'+n+'.html" onclick="go(\''+t+'\','+n+');return false">'+txt+'</a></div>'
-    : '<div class="row">'+lab+' <span class="dim">'+txt+'</span></div>';
+    ? '<div class="row'+(d?' done':'')+'"><a class="lesson-link" href="'+t+'/lesson'+n+'.html" title="'+entry+'" onclick="go(\''+t+'\','+n+');return false">'+entry+'</a></div>'
+    : '<div class="row'+(d?' done':'')+'"><span class="dim" title="'+entry+'">'+entry+'</span></div>';
   });
   html+='<div class="card track-card'+(has?'':' locked')+'"><h3>'+TN[t]+'</h3>';
   if(!has)html+='<p class="dim">Sem acesso a esta trilha · no access to this book</p>';

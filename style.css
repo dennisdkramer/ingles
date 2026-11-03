@@ -329,6 +329,12 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .track-card .contbtn{display:block;width:100%;margin:0 0 10px;background:#0f766e}
 .track-card .row a.lesson-link{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 .track-card .row a.lesson-link:hover{text-decoration-thickness:2px}
+/* each entry reads "NN. Lesson Name" on ONE line (owner instruction 2026-11-03): the title truncates with
+   an ellipsis instead of wrapping past the column, and the full text stays available as a tooltip.
+   Progress is a colour now (the ✅/⬜ emoji prefix is gone), so a finished lesson turns teal. */
+.track-card .row{display:flex;align-items:baseline;gap:6px;white-space:nowrap;overflow:hidden}
+.track-card .row a.lesson-link,.track-card .row .dim{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track-card .row.done a.lesson-link,.track-card .row.done .dim{color:#0f766e}
 .track-card.locked{opacity:.45;filter:grayscale(1)}
 .track-card.locked .row,.track-card.locked h3{pointer-events:none}
 
