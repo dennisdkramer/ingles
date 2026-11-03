@@ -1,4 +1,82 @@
 # HANDOFF — context handoffs between sessions
 A running note for handing context from one session/task to the next: where the work stands, what is in flight, and what to pick up next. Write here when a session ends mid-work, or when the next session needs context that is not obvious from the files themselves. (Not a task queue — see PENDING.md for the active plan and PARKED.md for the backlog.)
 
-_(Cleared 2026-11-03 at the owner request — a clean lesson-10 task follows. The lesson-1 work, its QA and every decision above it live in git history; current state is in STATUS.md.)_
+_(Cleared 2026-11-03 at the owner request — the next task starts from the block below.)_
+
+---
+
+## 2026-11-03 — handoff for the lessons 15-50 run (READ THIS FIRST, then PENDING.md → STATUS.md → HARNESS.md)
+
+**State.** `business/` holds lessons **1-14** (each with `designs/lessonNN.design.md` and an identical `.edit.html`
+sidecar). `lessons.json` business: 14, `index.html` COUNTS `0/14/0`. Engines: `engine1` (gate, selection popup,
+notes/recordings), `engine2` (control bar, poll, `playSay`), `engine3` (Tier-1 games — `shootPair`; lesson 10 §1
+is the only page using it: duck skin, `data-speed=95`, no countdown, misses replay). Audio: 541 clips rendered for
+1-14 (`npm run audio:check` green). Harnesses: `qa/content.mjs` (structure + answer anchors), `qa/width.mjs`
+(block model), `qa/overflow.mjs` (real-Chrome layout, incl. `ROWWRAP`), `qa/games.mjs` (engine3),
+`qa/smoke.mjs` (engines), `qa/landing.mjs` (index).
+
+**The owner's QA policy for this run — QA IS SUSPENDED BY INSTRUCTION.** Do not run the full suites per lesson and
+do not report them as done. What runs, and when:
+- **per page (free, <2 s):** tag-balance + jsdom child dump (commands below).
+- **per batch of 3:** `node qa/content.mjs n n n` and `node qa/width.mjs n n n` (jsdom/markup, ~10 s).
+- **every 3rd batch, or the first page of a new shape:** `node qa/overflow.mjs n n n` (real Chrome).
+- **after any engine edit:** `qa/games.mjs` / scoped `qa/smoke.mjs`.
+- **end of track:** full `overflow` sweep + `smoke` + audio render/`audio:check`, then the bug-fix pass
+  (low-hanging first, pattern-by-pattern across pages).
+Commit messages must say what was **not** verified (overflow/smoke/audio deferred) — the owner reads the pushes.
+
+**Write protocol — this cost a whole session, do not improvise.**
+1. Append with `insert_line = <current line count> + 1`. Re-read the count before **every** chunk; never reuse a
+   remembered number (a split chunk shifts everything and splices a block into a `<tbody>`).
+2. After every page run the two free checks (below). A chunk spliced into a table is *silently repaired by the
+   browser*, so the page looks fine — only these catch it.
+3. Note rows are always `<tr class="note"><td colspan="N">…</td></tr>`. A bare `<tr class="note">text` hoists its
+   content out of the table.
+4. A `.qitem` needs `.qline > .qstem` (a radio with no stem resolves **no anchor** and never persists) and
+   `.qopts` **below** the prompt. One layout per block (FORMAT rule 9).
+5. Every stem unique **across the page** — two controls with the same stem share one saved answer.
+6. Keep `.blanks` prompts short in `.cols`: hint below the input (`<br>`), `--gap-w` ≤ 11em. Prevents `ROWWRAP`
+   by construction instead of by check.
+7. Every group is a block (`.panel` / `.chart` / `.card` / `.dialog` / `fieldset` / `.game`); halves/thirds only
+   inside `.itemrow[data-cols="2"|"3"]`, with the width reason written into the design file.
+8. Copy the page to `business/lessonNN.edit.html` **after** the last edit.
+
+
+**Free per-page checks.**
+```
+$t=Get-Content -Raw -Encoding utf8 business\lessonNN.html
+'table ' + ([regex]::Matches($t,'<table')).Count + '/' + ([regex]::Matches($t,'</table>')).Count +
+' tbody ' + ([regex]::Matches($t,'<tbody')).Count + '/' + ([regex]::Matches($t,'</tbody>')).Count +
+' div '   + ([regex]::Matches($t,'<div')).Count   + '/' + ([regex]::Matches($t,'</div>')).Count
+node -e "const {JSDOM}=require('jsdom');const d=new JSDOM(require('fs').readFileSync('business/lessonNN.html','utf8')).window.document;console.log([...d.querySelector('.content-area').children].map(e=>e.tagName).join(' '))"
+```
+Expect only `H1 H2 P DIV TABLE` — any `B`/`TR`/`TD` child is a hoisted element from a broken table.
+
+**Known-failure signatures → cause.**
+- hoisted `B/TR/TD` children **+** `… -20px BLOCKGAP between «…»` ⇒ unclosed `<table>`, a bare note row, or a
+  chunk spliced into `<tbody>`. Confirm with the child dump, repair by script, never by guesswork.
+- `N of M radios resolve no anchor` ⇒ radio outside `.qline > .qstem`.
+- `(hint) N anchor(s) shared` ⇒ same stem twice in the page; rename one (keep the section name in the stem:
+  `Entrevista 1`, `Som 2`, `Treino 3`).
+
+**Non-negotiables per lesson** (PEDAGOGY-MAP §3-§5, unchanged): the opener states what the lesson installs (3-5
+sentences, in target strings, never an activity list); explain → show → recognise → produce → test; the last
+section is a **no-consultation quiz that never copies the training items**; ≥10 new vocabulary items, each
+glossed inline before use; Portuguese ramps toward English (≈lesson 20: mostly English); never teach a
+neighbour's items (read that lesson's `Note:`/`Sequence:` lines) — recycle, don't re-teach; only
+`input.gap` / `input[type=radio]` / a non-feed `textarea` persist, so a new vehicle must drive one of them;
+`data-say` carries how a line is **said**. `business/` only — `kids/`, `adult/`, `lessons-archive/` are
+gitignored and must never be read; `style.css` is implementation-only for content decisions.
+
+**TO-DO sections (owner-approved).** When the best vehicle for a section does not exist, ship the section as
+`<div class="panel itemsize"><h3 class="ex-head">TO-DO — not built: <name></h3><p>what it is, why it is the best
+vehicle here, and what the student does <b>today</b> with a real primitive.</p></div>`
+TO-DO replaces a **vehicle**, never the **teaching** (the five beats and the ≥10 vocab still stand); any number of
+them is acceptable. `grep TO-DO` collects them for the final pass.
+
+**Sequence for the new task.** Pass A for 15-20 (sequential, one design per turn, compact after each) → build
+**15-17** → Pass A for 21-23 → build **18-20** → … one batch of 3 at a time, push per batch. Each design carries a
+`recycles:` / `must not re-teach:` line so later batches cannot drift. After 50: kids, then adult, built **from
+the design files** (same shapes, new situations/registers/examples) — never by find-replacing business pages;
+swap the business-specific slots (e-mail/meeting/invoice lessons) for track-native ones.
+
