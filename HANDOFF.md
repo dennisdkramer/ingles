@@ -202,7 +202,7 @@ Owner report: "the radio buttons are not accepting inputs". Root cause found, fi
 
 ---
 
-## [2026-11-03] Archived pages withheld + CSS declared off-limits + content-aware divisions (any N)
+## [2026-11-03] Archived pages withheld + CSS declared off-limits + content-aware divisions (any N) — ⚠️ the "any N" / `data-span` part is SUPERSEDED, see the REVERTED entry at the end
 
 Owner instruction: (1) the archived/parked lesson files go into `.gitignore` and must never be used as a reference again; (2) a very strong rule at the top of `style.css` saying its contents must not be looked at or used to [infer, reference or guide] lesson content creation; (3) a lesson's shape is FREELY IMAGINED from PEDAGOGY-MAP §LESSON GENERATION 1 (Pass A); (4) any column-based layout or content division must be content- and layout-aware, using any number of columns or rows as appropriate.
 
