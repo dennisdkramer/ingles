@@ -221,7 +221,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 /* .qgrid / .panel / .qopts never cap ANYTHING: a question may carry 2, 3, 5… answer options and they wrap
    (FORMAT rule 6 — the content decides); the 2-column template here is only the qnum|stem layout of the
    flat pattern, not an option count, and .panel sets no limit on how many children or options it holds. */
-.qgrid .qopts{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 18px}
+.qgrid .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 30px}
 .qgrid .qnum{font-weight:700}
 .qgrid .qstem{font-weight:700}
 .blanks{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px 24px}
@@ -245,7 +245,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .qgrid.stack .qitem{margin:0 0 16px}
 .qgrid.stack .qline{display:flex;align-items:baseline;gap:8px}
 .qgrid.stack .qline .qnum{flex:0 0 auto;font-weight:700}
-.qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 18px;margin-top:4px}
+.qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 30px;margin-top:4px}
 .blanks.sent{display:block}
 .blanks.sent>div{display:block;margin:8px 0}
 .blanks.sent>div input.gap{display:inline-block;width:var(--gap-w,9em);margin:0 .2em;vertical-align:baseline}

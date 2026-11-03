@@ -266,6 +266,60 @@ const MEASURE = `(function(){
       extra: 'legend wraps to ' + Math.round(lhBox / lh) + ' lines (' + Math.round(lhBox) + 'px in a ' + Math.round(lh) + 'px line)',
       ex: (legend.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) });
   }
+  /* 8. FORMAT rule 9 — a row never splits its fields from its prompt: fields stay on the prompt's line,
+     and when they do not fit, the whole block puts them on the line below the prompt (one layout per
+     block, never a ragged mix). */
+  var wraps = [];
+  function topsOf(nodes){
+    var ts = [];
+    nodes.forEach(function(n){ var r = n.getBoundingClientRect(); if (r.width > 0 || r.height > 0) ts.push(Math.round(r.top)); });
+    ts.sort(function(a, b){ return a - b; });
+    var rows = [];
+    ts.forEach(function(t){ if (!rows.length || t - rows[rows.length - 1] > 10) rows.push(t); });
+    return rows.length;
+  }
+  [].slice.call(document.querySelectorAll('.content-area .qline')).forEach(function(q){
+    var f = [].slice.call(q.querySelectorAll('input,label,textarea'));
+    if (!f.length) return;
+    var fr = f[0].getBoundingClientRect(), qr = q.getBoundingClientRect();
+    var uniq = topsOf(f);
+    if (uniq.length > 1 || fr.top - qr.top > 8)
+      wraps.push({ kind: 'ROWWRAP', extra: 'inline fields sit on ' + uniq.length + ' row(s), ' + Math.round(fr.top - qr.top) + 'px below the prompt line',
+        ex: (q.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 44) });
+  });
+  [].slice.call(document.querySelectorAll('.content-area .qgrid:not(.stack) .qopts')).forEach(function(o){
+    var ls = [].slice.call(o.querySelectorAll('label'));
+    if (ls.length < 2) return;
+    var uniq = topsOf(ls);
+    if (uniq.length > 1)
+      wraps.push({ kind: 'ROWWRAP', extra: 'options beside the stem wrap onto ' + uniq.length + ' rows',
+        ex: (o.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 44) });
+  });
+  [].slice.call(document.querySelectorAll('.content-area .blanks > div')).forEach(function(d){
+    var f = [].slice.call(d.querySelectorAll('input,textarea'));
+    if (!f.length) return;
+    var rg = document.createRange(); rg.selectNodeContents(d);
+    var rects = rg.getClientRects(), first = null;
+    for (var i = 0; i < rects.length; i++) if (rects[i].width > 0) { first = rects[i]; break; }
+    if (!first) return;
+    var off = Math.round(f[0].getBoundingClientRect().top - first.top);
+    var uniq = topsOf(f);
+    if (uniq.length > 1 || off > 8)
+      wraps.push({ kind: 'ROWWRAP', extra: 'input ' + (uniq.length > 1 ? 'split over ' + uniq.length + ' rows' : off + 'px below its prompt line'),
+        ex: (d.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 44) });
+  });
+  /* one layout per block: inline-fields items and stacked items never share a block */
+  [].slice.call(document.querySelectorAll('.content-area .panel, .content-area > fieldset, .content-area > .qgrid')).forEach(function(bl){
+    var inline = 0, stacked = 0;
+    [].slice.call(bl.querySelectorAll('.qitem')).forEach(function(it){
+      var q = it.querySelector('.qline');
+      if (q && q.querySelector('input')) inline++; else if (it.querySelector('.qopts')) stacked++;
+    });
+    if (inline && stacked)
+      wraps.push({ kind: 'ROWWRAP', extra: 'block mixes ' + inline + ' inline item(s) with ' + stacked + ' stacked item(s)',
+        ex: label(bl) });
+  });
+  wraps.forEach(function(f){ findings.push(f); });
   return { empty: false, canvas: Math.round(cr.left) + '..' + Math.round(cr.right), w: Math.round(cr.width),
     blocks: blocks.length, tally: tally, findings: findings, escape: escape, cells: cells, gaps: gaps,
     spacing: { block: minBlock, row: minRow, opt: minOpt, chart: minChart }, hints: hints };

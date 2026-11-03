@@ -98,6 +98,8 @@ CSS uses fixed constants (no dynamic/viewport sizing and no CSS wrapping to forc
     - **No cap on options or items.** A question may carry 2, 3, 5… answer options and a list may be as long as the teaching needs: `.qopts` wraps them, and `.qgrid` / `.panel` impose no count (their templates are layout, never limits).
 7. **Short single blocks:** no rule for now (owner decision) — leave as-is.
 8. **Reasons are recorded in the design pass** (`designs/lessonNN.design.md`), not in the page.
+9. **A row never splits its fields from its prompt.** When one or more [text input fields] and/or [radio options] in a block [overflow their line/row], the other [[text input fields] and/or [radio options]] of that item — **and of every other item in the same block** — are repositioned to the line/row **below** their own question or translation prompt. So a block is internally **consistent**: either every item keeps its fields on the prompt's line (they fit), or every item puts its fields on the line below the prompt. A ragged mix, a field that lands on a second row while its prompt stays on the first, or one item stacked while its neighbours are inline, is a generation defect. Fixing it is a generation-time decision (how much content the line carries, or a stacked layout for the whole block) — never a CSS change. `qa/overflow.mjs` enforces this (ROWWRAP).
+
 
 #### Width math
 Baseline = body 17px Public Sans = ratio 1.0. One unit for everything: **baseline characters (ce)**.
