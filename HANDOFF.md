@@ -81,21 +81,29 @@ the design files** (same shapes, new situations/registers/examples) — never by
 swap the business-specific slots (e-mail/meeting/invoice lessons) for track-native ones.
 
 
-## Break points — when the current task must STOP and ask the owner for a new task
+## Break points — when a task hands back (NOT context-based)
 
-A break is only valid if, before stopping: everything is committed & pushed, the "where we are" line below is
-updated, and the next opener is written out for the owner to paste. Target: each task stays in the 30-60k context
-range instead of 150k+.
+Context is not a stop reason: **agentic compaction preserves intent and position**, and everything mechanical is
+re-derivable from files. After any compaction, run the reload order in `PAGE-CHECKLIST.md` and continue.
 
-| # | Break | Why |
+**Standing order (goes into PENDING.md; survives compaction):** work the queue top-down without asking. Per
+lesson: reload (`HANDOFF` → `PENDING` `WHERE WE ARE` → roadmap entry + design → `PAGE-CHECKLIST.md`), build,
+run the two free structural checks, copy the sidecar, rewrite `WHERE WE ARE` **after every lesson**, push every 3.
+Hand back **only** when: (a) the slice assigned to this task is done, (b) a PEDAGOGY-MAP §2 conflict appears,
+or (c) two consecutive structural-check failures share a cause you cannot explain. Style doubts go into
+PENDING.md as notes — they never stop the run.
+
+| Break | Slice | Why |
 |---|---|---|
-| 1 | **Now** | start Pass A for 15-20 in a clean context (no lessons 1-14 wording biasing the shapes) |
-| 2 | **After designs 15-20 exist** | the build needs FORMAT/FUNCTION precision; carrying six designs into it dilutes that |
-| 3 | **After every pushed batch (3 lessons)** — routine | one batch ≈ 3 pages × 5 chunks; that is the natural unit of work and of review |
-| 4 | **At lesson 20, 30, 40** — phase boundaries | A2/B1/B2 ramp checkpoints in PEDAGOGY-MAP; re-read the Portuguese→English policy there |
-| 5 | **After business 50** | the QA/bug-fix pass must run with *no* generation context (fresh eyes, machine focus) |
-| 6 | **Before kids, before adult** | a new track is a new register; never warmed over from the previous track's context |
-| 7 | **Before any new engine work** (raceClock/sortOut/…) | engine work is FUNCTION.md discipline, not lesson authoring — separate task, separate scope |
+| 1 | **now** → Pass A 15-20 | clean context for shape invention (no built pages in view) |
+| 2 | builds **15-26** (12 lessons, 4 pushes) | one phase; atomic per lesson so a compaction can't strand a page |
+| 3 | builds **27-38** | A2→B1 ramp checkpoint at 30 |
+| 4 | builds **39-50** | B1→B2 checkpoint at 40 |
+| 5 | **end-of-business QA/bug-fix** + audio render | fresh eyes, no authoring context |
+| 6 | kids (1-50, from the design files) | new register |
+| 7 | adult (1-50) | new register |
+| 8 | final cross-track QA + publish gate | — |
 
 **Where we are:** business lessons 1-14 pushed; next action = Pass A for lesson 15.
+
 
