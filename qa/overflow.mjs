@@ -3,7 +3,8 @@
  * Run with: node qa/overflow.mjs [lessonNumber ...]   (no numbers = every business/lesson*.html that exists)
  *           node qa/overflow.mjs --selftest           (qa/fixtures/overflow-ok.html must be clean,
  *                                                      qa/fixtures/overflow-bad.html must report findings)
- *           node qa/overflow.mjs 1 --shot <file.png>   (review aid: also captures the top of the page)
+ *           node qa/overflow.mjs 1 --shot <file.png> [--shot-h <px>] [--shot-y <px>]   (review aid: a picture of
+ *                                                      the page, by default the top 1800px)
  *
  * jsdom cannot see layout, so this is the ONLY harness that measures it, in real Chrome over CDP.
  * FORMAT.md is the model: the canvas is fixed (.page-container 1400px, .content-area 1200px, never
@@ -141,7 +142,8 @@ const MEASURE = `(function(){
     return t.replace(/\\s+/g, ' ').trim().slice(0, 54);
   }
   var sel = '.content-area .panel, .content-area .itemrow > *, .content-area > .card, .content-area > p.card,'
-    + ' .content-area > .chart, .panels > .panel';
+    + ' .content-area > .chart, .content-area > fieldset, .content-area > .dialog,'
+    + ' .content-area > .qgrid, .content-area > .blanks, .panels > .panel';
   var blocks = [].slice.call(document.querySelectorAll(sel));
   var findings = [], hints = [], tally = { full: 0, half: 0, third: 0 };
   var lastRow = null, lastRowTop = -9999;
@@ -298,13 +300,15 @@ async function main() {
   const selftest = argv.includes('--selftest');
   /* values that belong to an option are not lesson numbers */
   const optVals = new Set();
-  ['--shot', '--shot-h'].forEach(f => { const j = argv.indexOf(f); if (j >= 0 && argv[j + 1]) optVals.add(argv[j + 1]); });
+  ['--shot', '--shot-h', '--shot-y'].forEach(f => { const j = argv.indexOf(f); if (j >= 0 && argv[j + 1]) optVals.add(argv[j + 1]); });
   const targets = argv.filter(a => !a.startsWith('--') && !optVals.has(a))
     .map(Number).filter(n => Number.isInteger(n) && n >= 1);
   const shotAt = argv.indexOf('--shot');
   const shotFile = shotAt >= 0 ? argv[shotAt + 1] : null;
   const shotHAt = argv.indexOf('--shot-h');
   const shotH = shotHAt >= 0 ? (Number(argv[shotHAt + 1]) || 1800) : 1800;
+  const shotYAt = argv.indexOf('--shot-y');
+  const shotY = shotYAt >= 0 ? (Number(argv[shotYAt + 1]) || 0) : 0;
   let shotDone = false;
 
   const site = await server();
@@ -333,7 +337,7 @@ async function main() {
         const dim = await ses.send('Runtime.evaluate', { expression: 'document.documentElement.scrollWidth', returnByValue: true });
         const shot = await ses.send('Page.captureScreenshot', {
           format: 'png', captureBeyondViewport: true,
-          clip: { x: 0, y: 0, width: Math.min(dim.result.value || 1400, 1500), height: shotH, scale: 0.8 }
+          clip: { x: 0, y: shotY, width: Math.min(dim.result.value || 1400, 1500), height: shotH, scale: 0.8 }
         });
         fs.writeFileSync(shotFile, Buffer.from(shot.data, 'base64'));
         console.log('  screenshot of the top of ' + rel + ' → ' + shotFile);

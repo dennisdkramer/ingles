@@ -11,7 +11,9 @@
  *   2. every .itemrow is complete and size-consistent: data-cols="2" = exactly 2 .itemsize-half,
  *      data-cols="3" = exactly 3 .itemsize-third, no mixing, and no member sets its own width by hand;
  *   3. no retired class remains (.grid3, .panels, .dialog.half, .qgrid-4);
- *   4. `.chart` never prescribes its own columns (the table's content decides them).
+ *   4. `.chart` never prescribes its own columns (the table's content decides them);
+ *   5. every exercise / list / answer group is a BLOCK (FORMAT rule 4): a `.qgrid` or `.blanks` emitted
+ *      directly into `.content-area` is a group with no block around it — it must sit in a `.panel`.
  */
 import fs from 'fs';
 import path from 'path';
@@ -66,6 +68,10 @@ function audit(html) {
 
   // 4 — a chart never prescribes its own columns: the CONTENT decides how many there are
   for (const el of doc.querySelectorAll(CHART_COLS)) add(4, '.chart declares a column count', el);
+
+  // 5 — every exercise/list/answer group is a block: no group is emitted bare into the page flow
+  for (const el of doc.querySelectorAll('.content-area > .qgrid, .content-area > .blanks'))
+    add(5, 'exercise/list group emitted outside a block — wrap it in a .panel (FORMAT rule 4)', el);
 
   return findings;
 }

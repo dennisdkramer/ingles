@@ -218,6 +218,9 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .itemrow[data-cols="3"]>*{width:calc(33.3333% - 9.3333px)}
 .content-area > h2, .content-area > p{margin-left:10px;margin-right:10px}
 .qgrid{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;column-gap:14px;row-gap:12px;min-width:0}
+/* .qgrid / .panel / .qopts never cap ANYTHING: a question may carry 2, 3, 5… answer options and they wrap
+   (FORMAT rule 6 — the content decides); the 2-column template here is only the qnum|stem layout of the
+   flat pattern, not an option count, and .panel sets no limit on how many children or options it holds. */
 .qgrid .qopts{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 18px}
 .qgrid .qnum{font-weight:700}
 .qgrid .qstem{font-weight:700}
@@ -235,6 +238,10 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .blank{display:inline-block;width:3.2em;border-bottom:2px solid var(--tan);vertical-align:baseline}
 .chart tr.note td{background:#fff8ea;font-style:italic;color:#5c5347;border-top:0;padding:10px 14px}
 .qgrid.stack{display:block}
+/* a list of SHORT exercise items fills its block by running in as many columns as the items need
+   (FORMAT rule 4): `.cols` = two columns of .qitem — the same `.cols` suffix `.blanks.sent` uses.
+   Nothing here caps the item count; it only decides how many abreast they sit. */
+.qgrid.stack.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px;align-items:start}
 .qgrid.stack .qitem{margin:0 0 16px}
 .qgrid.stack .qline{display:flex;align-items:baseline;gap:8px}
 .qgrid.stack .qline .qnum{flex:0 0 auto;font-weight:700}
