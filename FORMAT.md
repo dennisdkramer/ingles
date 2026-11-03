@@ -41,7 +41,8 @@
 - **Portuguese text is ALWAYS italic.** Mark it with `lang="pt"` (CSS `:lang(pt){font-style:italic}` italicizes it in any element), or use the legacy `<i>` / `.pt` / `.ptw` markers. A helper class that is not Portuguese-specific (`.thsub`, …) must NEVER carry `font-style` — italic comes only from a Portuguese marker.
 - .pt = Portuguese explanation text: italic. .ptw = Portuguese word in exercises: italic, --ptw color, weight 600
 - Content within a block may never overflow the block.
-- Content within a block should not look cramped or contain unnecessary space 
+- Content within a block should not look cramped or contain unnecessary space
+- **Vertical rhythm** (owner instruction 2026-11-03): a block never touches the block above or below it — `.card`, `.chart`, `.itemrow` and `.content-area > .panel` all carry a 14px vertical margin, so two stacked full blocks (a Treino/Quiz group, a panel and a chart, a row and a panel) keep the same breathing space. Members of an `.itemrow` are separated by the row's own 14px gap (a half/third never needs its own margin), the options of one question keep the `.qopts` gap or the `.qline` gap when they sit compact beside the stem, and a chart cell keeps its 12px horizontal padding. `qa/overflow.mjs` enforces this (BLOCKGAP / ROWGAP / OPTGAP / CHARTPAD) and prints the measured minimums. 
 
 #### Following are guidance **IF** relevant content used, not mandatory, not templates
 - .ptsound (optional) = a tag available to mark the LESSON-12 vowel sound-map labels (English sounds rendered in PT characters, e.g. ei/ai/ə): tan (--ptw), italic, NOT bold. Scope: ONLY those chart labels until further notice — NOT part of the pronunciation key (data-pron / dictionary.json / PronKey) and NOT a general-purpose pronunciation tag. May carry `lang="pt"`. (Renamed from .ptpronounce 2026-10-27.)

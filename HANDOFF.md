@@ -157,3 +157,17 @@ Follow-up to the lesson-1 run, whose layout verification needed a throwaway prob
 - `package.json` gains `npm run qa:layout` = overflow selftest + overflow sweep (a browser is required, so it is not part of `npm run qa`, which stays jsdom-only).
 - Verified: `node qa/overflow.mjs --selftest` green · `node qa/overflow.mjs` green on lesson 1 (32 blocks: 19 full / 4 half / 9 third) · `node qa/overflow.mjs 2` fails "page not found" as intended · `node qa/content.mjs 1` green with no hint · `node qa/width.mjs 1` green · `npm run qa` green · `node build-audio.mjs --check` clean.
 - Next task: lesson 10 from `designs/lesson10.design.md`.
+
+---
+
+## [2026-11-03] Spacing between blocks: rule + check + CSS fix
+
+Owner instruction: blocks must get a few pixels of space between them (vertically for full blocks), and the margins between row members and across the options must be confirmed.
+
+- **The defect was real and measurable**: consecutive full panels were **glued** (0px) — the seven Treino/Quiz group panels — and a `p.lead` under a panel sat at 4px. `.panel` was the only block class with no vertical margin (`.card`, `.chart`, `.itemrow` all carry `margin:14px 0`).
+- **CSS**: added `.content-area > .panel{margin:14px 0}` in `style.css` (scoped to top-level panels, so row members keep `.itemrow>*{margin:0}` + the row's 14px gap, and legacy `.panels` grids / kids / adult pages are untouched).
+- **FORMAT.md**: the rule is now written into the contract ("Vertical rhythm", owner instruction 2026-11-03) — a block never touches the block above or below it; row members use the row's 14px gap; option pairs keep the `.qopts` / `.qline` gap; a chart cell keeps its 12px horizontal padding.
+- **Checked, not just fixed**: `qa/overflow.mjs` gained the spacing family — **BLOCKGAP** (<8px between two stacked direct children of `.content-area`), **ROWGAP** (<8px between `.itemrow` members), **OPTGAP** (<4px between two option labels sharing a parent, so it covers both `.qopts` spread rows and the compact `.qline` pairs) and **CHARTPAD** (<8px horizontal padding on a chart cell). The run prints the measured minimums: lesson 1 now reads `between blocks 8px · between row members 14px · between options 18px · chart cell padding 24px` (the 8px is the intended `h3.ex-head` → its own explainer pair).
+- **Fixtures extended** so the selftest covers the new family: `overflow-bad.html` now has glued panels, a zero-gap row, touching options and a padding-free chart cell (9 findings, every check kind firing), and `overflow-ok.html` has two stacked panels proving the 14px rhythm (clean).
+- Verified after the CSS change: `npm run qa` green · `node qa/content.mjs 1` green · `node qa/width.mjs 1` green · `node qa/overflow.mjs` green (spacing minimums above) · `node qa/overflow.mjs --selftest` green. No screenshot was taken for this step: the check measures the exact property (px between the boxes), which is what the instruction asks for.
+- Next task: lesson 10 from `designs/lesson10.design.md`.

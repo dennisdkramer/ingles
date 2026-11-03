@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <title>overflow fixture — bad</title>
 <link rel="stylesheet" href="../../style.css">
+<style>
+  /* deliberately remove the spacing the ok fixture has, so every spacing check has a failing case */
+  .glued { margin: 0 !important; }
+  .glued-row { gap: 0 !important; }
+  .tight-opts { gap: 0 !important; justify-content: flex-start !important; }
+  .tight-opts label { margin-right: 0 !important; }
+</style>
 </head>
 <body>
 <main id="page"><div class="page-container"><div class="content-area">
@@ -28,6 +35,35 @@
       <div><input class="gap"> university <i class="ptw">(universidade)</i></div>
     </div>
   </div>
+
+  <!-- BLOCKGAP: two stacked panels with their vertical margin removed -->
+  <div class="panel itemsize glued"><b>Glued A</b><p>No space below it.</p></div>
+  <div class="panel itemsize glued"><b>Glued B</b><p>No space above it.</p></div>
+
+  <!-- ROWGAP: a row whose members touch -->
+  <div class="itemrow glued-row" data-cols="2">
+    <section class="card itemsize-half"><b>Touch A</b><p>Members touch.</p></section>
+    <section class="card itemsize-half"><b>Touch B</b><p>Members touch.</p></section>
+  </div>
+
+  <!-- OPTGAP: two options with no space between them -->
+  <div class="panel itemsize">
+    <div class="qgrid stack">
+      <div class="qitem"><div class="qline"><span class="qnum">1.</span><span class="qstem">Which one?</span><label><input type="radio" name="z" value="a">sit</label><label><input type="radio" name="z" value="b">sat</label></div></div>
+    </div>
+    <div class="qgrid stack">
+      <div class="qitem"><div class="qline"><span class="qnum">2.</span><span class="qstem">And here?</span></div>
+        <div class="qopts tight-opts"><label><input type="radio" name="y" value="a">big</label><label><input type="radio" name="y" value="b">bag</label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARTPAD: a chart cell with its padding removed -->
+  <table class="chart">
+    <thead><tr><th style="padding:0">Form</th><th>Use</th></tr></thead>
+    <tbody><tr><td>I work</td><td>a habit</td></tr></tbody>
+  </table>
 </div></div></main>
 </body>
 </html>
+

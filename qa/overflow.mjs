@@ -15,6 +15,10 @@
  *                 that is geometrically inside its block but pushed out of the canvas (a right-aligned
  *                 `.blanks` cell spilling to the LEFT of its panel, for example);
  *   4. CELL     — a `.blanks` cell whose content is wider than the cell (item does not fit its cell);
+ *   5. SPACING  — BLOCKGAP (less than 8px of vertical space between two stacked blocks), ROWGAP
+ *                 (less than 8px between the members of an `.itemrow`), OPTGAP (less than 4px between
+ *                 the options of one question, which are laid across the block width) and CHARTPAD
+ *                 (a chart cell with less than 8px of horizontal padding);
  *   (hint) DEADSPACE  — a full block whose content fills < 75% of it (review-only; pedagogy decides);
  *   (hint) HEIGHT     — adjacent half/third blocks whose heights differ by > 50px (review-only).
  *
@@ -173,8 +177,60 @@ const MEASURE = `(function(){
     if (inner > r.width + 8) cells.push({ kind: 'CELL', w: Math.round(inner), slot: Math.round(r.width),
       extra: 'needs ' + Math.round(inner) + 'px in a ' + Math.round(r.width) + 'px cell', ex: (c.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 44) });
   });
+  /* ---- spacing: blocks must read as separate blocks, and row members / options must not touch ---- */
+  function brief(el){
+    var t = label(el);
+    return t.slice(0, 28);
+  }
+  var gaps = [], minBlock = -1, minRow = -1, minOpt = -1, minChart = -1;
+  /* 1. vertical space between stacked blocks (every direct child of the fixed canvas) */
+  var flow = [].slice.call(document.querySelectorAll('.content-area > *')).filter(function(el){
+    if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE' || el.id === 'feed') return false;
+    return el.getBoundingClientRect().height > 0;
+  });
+  for (var gi = 0; gi + 1 < flow.length; gi++) {
+    var ra = flow[gi].getBoundingClientRect(), rb = flow[gi + 1].getBoundingClientRect();
+    var vy = Math.round(rb.top - ra.bottom);
+    if (minBlock < 0 || vy < minBlock) minBlock = vy;
+    if (vy < 8) gaps.push({ kind: 'BLOCKGAP', extra: vy + 'px between «' + brief(flow[gi]) + '» and «' + brief(flow[gi + 1]) + '»', ex: '' });
+  }
+  /* 2. horizontal space between the members of a row (halves / thirds) */
+  [].slice.call(document.querySelectorAll('.itemrow')).forEach(function(row){
+    var ch = [].slice.call(row.children);
+    for (var ci = 0; ci + 1 < ch.length; ci++) {
+      var c1 = ch[ci].getBoundingClientRect(), c2 = ch[ci + 1].getBoundingClientRect();
+      var hg = Math.round(c2.left - c1.right);
+      if (minRow < 0 || hg < minRow) minRow = hg;
+      if (hg < 8) gaps.push({ kind: 'ROWGAP', extra: hg + 'px between «' + brief(ch[ci]) + '» and «' + brief(ch[ci + 1]) + '»', ex: '' });
+    }
+  });
+  /* 3. space between the options of one question — wherever they sit: spread across the block width
+        (.qopts) or kept compact beside the stem (.qline) */
+  var labelGroups = [];
+  [].slice.call(document.querySelectorAll('label')).forEach(function(l){
+    var p = l.parentElement;
+    if (p && labelGroups.indexOf(p) < 0) labelGroups.push(p);
+  });
+  labelGroups.forEach(function(p){
+    var ls = [].slice.call(p.children).filter(function(el){ return el.tagName === 'LABEL'; });
+    for (var li = 0; li + 1 < ls.length; li++) {
+      var a = ls[li].getBoundingClientRect(), b = ls[li + 1].getBoundingClientRect();
+      var sameLine = Math.abs(a.top - b.top) < 6;
+      var d = sameLine ? Math.round(b.left - a.right) : Math.round(b.top - a.bottom);
+      if (minOpt < 0 || d < minOpt) minOpt = d;
+      if (d < 4) gaps.push({ kind: 'OPTGAP', extra: d + 'px between «' + (ls[li].textContent || '').trim().slice(0, 18) + '» and «' + (ls[li + 1].textContent || '').trim().slice(0, 18) + '»', ex: '' });
+    }
+  });
+  /* 4. chart cells keep their content off the neighbour's content (padding + border) */
+  [].slice.call(document.querySelectorAll('.chart th, .chart td')).forEach(function(cell){
+    var cs = getComputedStyle(cell);
+    var pad = Math.round(parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight));
+    if (minChart < 0 || pad < minChart) minChart = pad;
+    if (pad < 8) gaps.push({ kind: 'CHARTPAD', extra: pad + 'px horizontal padding on a chart cell', ex: (cell.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 30) });
+  });
   return { empty: false, canvas: Math.round(cr.left) + '..' + Math.round(cr.right), w: Math.round(cr.width),
-    blocks: blocks.length, tally: tally, findings: findings, escape: escape, cells: cells, hints: hints };
+    blocks: blocks.length, tally: tally, findings: findings, escape: escape, cells: cells, gaps: gaps,
+    spacing: { block: minBlock, row: minRow, opt: minOpt, chart: minChart }, hints: hints };
 })()`;
 
 function discover() {
@@ -188,9 +244,13 @@ function discover() {
 /* print one page's result; returns the number of FAILING findings (hints never fail) */
 function report(head, v) {
   if (!v || v.empty) { console.log(head + ': ❌ no .content-area (page missing or not a lesson)'); return 1; }
-  const bad = [].concat(v.findings, v.escape, v.cells);
+  const bad = [].concat(v.findings, v.escape, v.cells, v.gaps || []);
   console.log(head + '  canvas ' + v.canvas + ' · blocks ' + v.blocks +
     ' (full ' + v.tally.full + ' / half ' + v.tally.half + ' / third ' + v.tally.third + ')');
+  const sp = v.spacing || {};
+  const px = n => (n == null || n < 0) ? '—' : n + 'px';
+  console.log('  spacing (min): between blocks ' + px(sp.block) + ' · between row members ' + px(sp.row) +
+    ' · between options ' + px(sp.opt) + ' · chart cell padding ' + px(sp.chart));
   bad.forEach(f => console.log('    ❌ ' + f.kind + '  ' + f.extra +
     (f.w ? '  w=' + f.w : '') + (f.slot ? '  slot=' + f.slot : '') + '  «' + f.ex + '»'));
   v.hints.forEach(f => console.log('    (hint) ' + f.kind + '  ' + f.extra + '  «' + f.ex + '»'));
@@ -258,7 +318,7 @@ async function main() {
     const label = targets.length ? ('lesson' + (lessons.length > 1 ? 's ' : ' ') + lessons.join(', '))
       : (lessons.length ? 'lessons ' + lessons.join(', ') : 'no pages');
     console.log(fails === 0
-      ? '✅ no overflow, no balloon, nothing escapes the canvas (' + label + ')'
+      ? '✅ layout clean — no overflow, no balloon, no spacing gap, nothing escapes the canvas (' + label + ')'
       : '❌ ' + fails + ' layout finding(s)');
   }
 
