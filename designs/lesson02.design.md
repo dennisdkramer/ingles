@@ -72,3 +72,7 @@ Sections: 1 A bancada (entrance, Done) · 2 O código (7 endings, reference tabl
 ### QA
 `node qa/content.mjs 2` ✅ (chart 6 · panel 15 · listen 52 · gap 34 · radio 68) · `node qa/width.mjs 2` ✅ ·
 `node qa/overflow.mjs 2` ✅ clean (28 blocks, no OVERFLOW/BALLOON/ESCAPE/LEGEND; spacing 8/14/6/24px).
+
+
+### Two-option items (fixed across lessons 2-10 after the first visual pass)
+A `.qopts` row spreads its options with `justify-content:space-between`, which is right for three or four options and wrong for a **pair that must be read as a pair** (a minimal pair, a singular/plural choice): the two options land at opposite edges of the slot. Lesson 1's design took the same decision for its /ɪ/–/æ/ items. Every short two-option item in lessons 2, 3, 4, 7, 8, 9 and 10 therefore carries its two labels **inside the `.qline`**, beside the stem (`1. ▶ Round 1 ○ship ○sheep`); items whose options are long sentences keep `.qopts`, because inline labels would overflow the block. Markup-only change — no CSS was touched.
