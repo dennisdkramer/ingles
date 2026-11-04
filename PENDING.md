@@ -4,9 +4,9 @@ The live working plan for the CURRENT task. When a prompt is decomposed into sub
 _(Active batches, newest first. Cleared once done AND committed.)_
 
 `WHERE WE ARE` — **step 4 (Pass A kids) is in progress and step 5 (Pass B kids) has started**: `designs/kids/lesson01.design.md`, `lesson02.design.md`, `lesson03.design.md` exist, and `kids/lesson1.html`, `kids/lesson2.html` (The Words You Already Know), `kids/lesson3.html` (Six Words & the Polite Question) are written **with byte-identical `.edit.html` sidecars**. Commit `2ea35cf` (kids 1-3, pushed). Kids 1-3 keep the same-numbered business page's fundamental idea (profile skeleton / cognate fast lane / six wh- words + polite embed + repair) rebuilt for the kids persona.
-`WHERE WE ARE` — **kids 1-22 built and sidecarred**; next is **kids lesson 23**. Commits: `2ea35cf` (1-3), `2f83543` (4-6), `c5368e2` (7-9), `99b5f24` (10-12), `b0ed1e7` (13-15), `f24fa3c` (16-18), **kids 19-21 in this commit** (lesson 22 already written + sidecarred, ships with the next batch). `designs/kids/lessonNN.design.md` and `kids/lessonN.html` + `.edit.html` exist for 01-22.
+`WHERE WE ARE` — **kids 1-24 built and sidecarred**; next is **kids lesson 25**. Commits: `2ea35cf` (1-3), `2f83543` (4-6), `c5368e2` (7-9), `99b5f24` (10-12), `b0ed1e7` (13-15), `f24fa3c` (16-18), kids 19-24 (see git log; lesson 22 was written a batch early, 23-24 add project phrasal verbs and articles). `designs/kids/lessonNN.design.md` and `kids/lessonN.html` + `.edit.html` exist for 01-24.
 **Step 4 + step 5 run together, in numeric order** (Pass A design → Pass B page → sidecar → `node tmp-check.cjs` → build → commit → push every 3). No QA in this run (owner).
-`lessons.json`: kids 12 / business 48 (39/40 skipped) / adult 0; `index.html` COUNTS still `0/50/0` until the kids track ends.
+`lessons.json`: kids 24 / business 48 (39/40 skipped) / adult 0; `index.html` COUNTS still `0/50/0` until the kids track ends.
 39/40 are SKIP-TO-DO in every track, so each track is 48 lessons. Steps 1-3 are done (step 2 is PARKED by the owner); do not rebuild or re-open a business page.
 Audio is **not rendered** in this run: every target line carries `data-say`; rendering happens at the very end.
 
