@@ -8,6 +8,9 @@ and `NEXT IMMEDIATE STEP` lines.
 ## WHERE WE ARE
 Business **1-35** built and pushed (`a23f924`); `designs/lesson01-35` exist. **Nothing above 35 exists.** `kids/` and
 `adult/` are tracked and empty (old pages moved to `lessons-archive/`). `lessons.json` 35/0/0 · COUNTS `0/35/0`.
+**Step 1 (Pass A business 36-50) in flight** — designs 36, 37, 38 written this session (batch 8).
+**39 and 40 are SKIP per `PEDAGOGY-MAP` roadmap (`Generation: SKIP — do not build this page yet`)** — exam format,
+item mix and scoring must be planned with the owner first. Recorded as escalation, not generated.
 **Spec:** `PEDAGOGY-MAP.md` + `PAGE-CHECKLIST.md` are king (owner edit 2026-11-03) — Portuguese §4 t), register §4 u),
 level §5 v)-y) judged at generation. **QA is OFF for this run.** `qa/lang.mjs` was deleted with it.
 

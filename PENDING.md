@@ -5,8 +5,10 @@ _(Active batches, newest first. Cleared once done AND committed.)_
 
 `WHERE WE ARE` — business **1-35** built and pushed (`a23f924`); `designs/lesson01-35.design.md` exist. `kids/` and
 `adult/` are tracked and empty (their old pre-rewrite pages moved to `lessons-archive/`, never to be read).
-**Nothing above lesson 35 exists yet.** `lessons.json`: business 35 / kids 0 / adult 0; `index.html` COUNTS `0/35/0`.
-Next action = **Pass A for lesson 36**.
+**Step 1 in flight: Pass A business.** Designs **36, 37, 38** written (batch 8). **39 and 40 are SKIP** — the roadmap
+says *Generation: SKIP — do not build this page yet* for both (exam/checkpoint format must be planned with the owner
+first); recorded in `BLUEPRINT.md` NOTES, not generated. Next action = **Pass A for lesson 41**.
+`lessons.json`: business 35 / kids 0 / adult 0; `index.html` COUNTS `0/35/0`.
 
 ## The run order (owner, 2026-11-03 — the ORDER is fixed; batch sizes inside a step are free)
 
