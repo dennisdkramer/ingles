@@ -3,7 +3,7 @@ The live working plan for the CURRENT task. When a prompt is decomposed into sub
 
 _(Active batches, newest first. Cleared once done AND committed.)_
 
-`WHERE WE ARE` — business **1-50** built, i.e. **the business track is complete** (39 and 40 deliberately not generated). Commits: `800259c` (36-38), `d7837f4` (41-43), `6d2d29f` (44-46), `85c8181` (47-48); 49 and 50 in this run. `designs/lesson01-50.design.md` exist. `kids/` and `adult/` are tracked and empty (their old pre-rewrite pages moved to `lessons-archive/`, never to be read).
+`WHERE WE ARE` — business **1-50** built, i.e. **the business track is complete** (39 and 40 deliberately not generated). Commits: `800259c` (36-38), `d7837f4` (41-43), `6d2d29f` (44-46), `85c8181` (47-48), `c1233f3` (49-50). `designs/lesson01-50.design.md` exist. `kids/` and `adult/` are tracked and empty (their old pre-rewrite pages moved to `lessons-archive/`, never to be read).
 **Step 1-2 are done/parked. Step 3 (Pass B business 36-50) is COMPLETE** — 36, 37, 38, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50 all written + sidecar.
 **39 and 40 are SKIP** — the roadmap says *Generation: SKIP — do not build this page yet* for both (exam/checkpoint
 format must be planned with the owner first); recorded in `BLUEPRINT.md` NOTES, not generated. So step 3 was 13 pages.
