@@ -4,10 +4,11 @@ The live working plan for the CURRENT task. When a prompt is decomposed into sub
 _(Active batches, newest first. Cleared once done AND committed.)_
 
 `WHERE WE ARE` — **step 4 (Pass A kids) is in progress and step 5 (Pass B kids) has started**: `designs/kids/lesson01.design.md`, `lesson02.design.md`, `lesson03.design.md` exist, and `kids/lesson1.html`, `kids/lesson2.html` (The Words You Already Know), `kids/lesson3.html` (Six Words & the Polite Question) are written **with byte-identical `.edit.html` sidecars**. Commit `2ea35cf` (kids 1-3, pushed). Kids 1-3 keep the same-numbered business page's fundamental idea (profile skeleton / cognate fast lane / six wh- words + polite embed + repair) rebuilt for the kids persona.
-`WHERE WE ARE` — **kids 1-6 built and sidecarred** (4, 5, 6 finished in this run; 3 fixed with Portuguese stems on the quiz). Commits: `2ea35cf` (1-3), **kids 4-6 in this commit**. `designs/kids/lesson04-06.design.md` exist. Business remains untouched and complete (1-50, 39/40 skipped).
-**Step 4 + step 5 are running together, in numeric order** (Pass A then Pass B, one lesson at a time) — 4, 5 and 6 are done; next is **kids lesson 07** (design → page → sidecar → checks → build → commit → push every 3).
-`lessons.json`: kids 6 / business 48 (39/40 skipped) / adult 0; `index.html` COUNTS still `0/50/0` until the kids track ends.
+`WHERE WE ARE` — **kids 1-9 built and sidecarred**; next is **kids lesson 10**. Commits: `2ea35cf` (1-3), `2f83543` (4-6), **kids 7-9 in this commit**. `designs/kids/lessonNN.design.md` exist for 01-09; `kids/lessonN.html` + byte-identical `.edit.html` exist for 1-9.
+**Step 4 + step 5 run together, in numeric order** (Pass A design → Pass B page → sidecar → `node tmp-check.cjs` → build → commit → push every 3). No QA in this run (owner).
+`lessons.json`: kids 9 / business 48 (39/40 skipped) / adult 0; `index.html` COUNTS still `0/50/0` until the kids track ends.
 39/40 are SKIP-TO-DO in every track, so each track is 48 lessons. Steps 1-3 are done (step 2 is PARKED by the owner); do not rebuild or re-open a business page.
+Audio is **not rendered** in this run: every target line carries `data-say`; rendering happens at the very end.
 
 ## The run order (owner, 2026-11-03 — the ORDER is fixed; batch sizes inside a step are free)
 
