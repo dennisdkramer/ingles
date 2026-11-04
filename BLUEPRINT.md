@@ -6,8 +6,8 @@ lesson's design — before touching anything.** Keep it under ~60 lines; trim ol
 and `NEXT STEP` lines.
 
 ## WHERE WE ARE
-Lessons **1-14** built, pushed, audio rendered (541 clips). `lessons.json` business: **17** · COUNTS `0/17/0`.
-Batch 1 (**15-17**) built: pages + sidecars, two free checks per page, `content` + `width` green; push pending.
+Lessons **1-14** built, pushed, audio rendered (541 clips). `lessons.json` business: **20** · COUNTS `0/20/0`.
+Batches 1 (**15-17**) and 2 (**18-20**) built; `content` + `width` green for both. Batch 2 push pending.
 Audio deferred to end-of-track (`audio:check` red is expected).
 
 ## CURRENT SLICE
@@ -16,11 +16,12 @@ Audio deferred to end-of-track (`audio:check` red is expected).
       "Run policy for the unattended run". No owner decisions needed except a PEDAGOGY-MAP §2 conflict.
 
 ## NEXT IMMEDIATE STEP
-Push batch 1, then Pass A for lesson 18 (phrasal verbs — system + *get* family), build 18 → Pass A/build 19, 20.
+Push batch 2, then Pass A 21 (prepositions & verb+preposition) → build 21 → 22 → 23 → push batch 3 (run
+`overflow` on the first page of batch 3, per the every-3rd-batch rule).
 
 ## DELTA
-**L17 vs L16:** 16 was noun quantity; 17 is time and space geometry (at/on/in, by/until, for/during, ago, movement
-to/from/into/out of) — new axis: when and for how long, not how much.
+**L20 vs L19:** 19 was the four conditional forms (hypothesis); 20 closes the tense system with the present
+perfect and its continuous — new axis: where an action sits relative to now (bridge, not past).
 
 ## DECISIONS TAKEN (newest first — append here, don't rewrite)
 - **2026-11-03** — lesson 15 shape: travel-planning carrier, `.dialog` for the permission/request beat, future
