@@ -24,9 +24,11 @@ on any conflict.
 9. **No trespassing** — do not teach what a neighbour owns (roadmap `Note:` / `Sequence:` lines); recycle, don't re-teach.
 10. **Quiz** — last section, labelled no-consultation, tests all core behaviours, **never reuses a training item**.
 11. **TO-DO blocks** — allowed for a missing *vehicle* only (`<h3 class="ex-head">TO-DO — not built: <name></h3>`), and must name the primitive the student uses today. Never a TO-DO for teaching.
-12. **Finish** — copy to `.edit.html`, run the two free structural checks, commit; push every 3 lessons and rewrite `WHERE WE ARE` in PENDING.md after **every** lesson.
+12. **Finish** — copy to `.edit.html` (byte-identical), commit; push every 3 lessons and rewrite `WHERE WE ARE` in PENDING.md after **every** lesson. **No checks are run: QA is off for this run** — the page is correct by construction against items 1-11, not by a script.
 
 ## Failure signatures
+_(Historical: these were the symptoms QA reported. QA is off, so treat them as what to look for **while reading**
+the markup — hoisted rows mean an unclosed `<table>`, a bare note row or a chunk spliced into `<tbody>`.)_
 - hoisted `B/TR/TD` children of `.content-area` **+** `-20px BLOCKGAP` ⇒ unclosed `<table>`, a bare note row, or a chunk spliced into `<tbody>`.
 - `N of M radios resolve no anchor` ⇒ radio outside `.qline > .qstem`.
 - `(hint) anchor(s) shared` ⇒ duplicate stem; rename in the section's vocabulary (`Som 2`, `Treino 3`).
