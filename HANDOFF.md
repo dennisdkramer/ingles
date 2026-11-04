@@ -19,9 +19,10 @@ runs: the two free per-page structural checks (below, <2 s, they catch a broken 
 after each batch or track (it is the manifest/landing feed, not QA), and `git`. Commit messages say "QA disabled by
 owner instruction for this run" instead of listing deferred checks.
 
-**State.** `business/` lessons **1-35** built and pushed (batch 7 = `a23f924`), designs 1-35 exist. `kids/` and
-`adult/` are tracked and **empty** — the old pre-rewrite pages were moved into `lessons-archive/`, which stays
-gitignored and must never be opened. `lessons.json`: business 35, kids 0, adult 0. `index.html` COUNTS `0/35/0` —
+**State.** `business/` lessons **1-50** built and pushed — the track is complete (batch hashes: `800259c` 36-38,
+`d7837f4` 41-43, `6d2d29f` 44-46, `85c8181` 47-48, `c1233f3` 49-50); designs 1-50 exist. 39/40 are SKIP-TO-DO.
+`kids/` and `adult/` are tracked and **empty** — the old pre-rewrite pages were moved into `lessons-archive/`, which
+stays gitignored and must never be opened. `lessons.json`: business 48, kids 0, adult 0. `index.html` COUNTS `0/50/0` —
 set COUNTS to the real total when a track completes. Audio: clips exist for 1-14 only; the rest carry `data-say`
 and are rendered at the end of the whole run (never inside the loop).
 
@@ -74,6 +75,13 @@ them is acceptable. `grep TO-DO` collects them for the final pass.
 
 ## Run order for this run (fixed — batches inside a step may be sized freely, the ORDER may not change)
 
+**Steps 1-3 are done** (business 1-50 built, sidecars, pushed; the 1-35 sweep is PARKED by the owner). **The next run is
+steps 4 → 9 below, in ONE run, with no stopping at a step or track boundary.** (Numbering: close is 9 here, 8 in
+`PENDING.md`, which folds the bookkeeping item into each track step — same work, don't be confused by it.) **39 and 40
+are SKIP-TO-DO in every track** (exam/checkpoint: format, item mix and scoring need an owner decision first) ⇒ **each
+track is 48 lessons**, not 50: create no design and no page for them, and record them once as SKIP-TO-DO, never as
+missing.
+
 1. **Pass A, business 36-50.** One design per turn in `designs/lessonNN.design.md`, sequential, each with its
    `recycles:` / `must not re-teach:` line. No pages yet — clean context for shape invention.
 2. **Language/level sweep of the built business pages 1-35.** Rapid, per lesson, no deep re-authoring: where an
@@ -99,8 +107,9 @@ them is acceptable. `grep TO-DO` collects them for the final pass.
    TO-DO vehicles, audio not rendered) → then either stop and await instruction, or run the full QA + bug-fix pass
    if the owner says so. Never start the full suite unasked.
 
-**Where we are:** business **1-35** built and pushed; designs 1-35 exist; lessons 36-50 have **no design yet**.
-Next action = **Pass A for lesson 36**, then work the run order above top-down.
+**Where we are:** business **1-50** built and pushed (track complete); designs 1-50 exist; `kids/` and `adult/` are
+empty and no kids/adult design exists yet. Next action = **step 4, Pass A kids lesson 01**, then work steps 4 → 9
+top-down without stopping: `designs/kids/lesson01.design.md` from `designs/lesson01.design.md`'s fundamental idea.
 
 ---
 

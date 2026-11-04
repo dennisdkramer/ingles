@@ -11,8 +11,9 @@ format must be planned with the owner first); recorded in `BLUEPRINT.md` NOTES, 
 (`d5347ac`, `f11d78c`) before the park; **1-33 stay exactly as they are**. Do not resume the sweep, do not open a
 built page to "fix its language", and do not build or run any checker/QA script.
 `lessons.json`: business 48 entries (39/40 skipped) / kids 0 / adult 0; `index.html` COUNTS `0/50/0`.
-Next action = **none in this batch**: report completion to the owner. The only remaining roadmap items are 39/40
-(exam/checkpoint, needs an owner decision), the parked sweep, and the kids/adult tracks (still empty).
+Next action = **step 4, Pass A kids lesson 01** (`designs/kids/lesson01.design.md`), then steps 4 → 8 in the SAME run
+without stopping: kids A → kids B → adult A → adult B → close report. 39/40 are SKIP-TO-DO in every track, so each
+track is 48 lessons. Steps 1-3 are done (step 2 is PARKED by the owner); do not rebuild or re-open a business page.
 
 ## The run order (owner, 2026-11-03 — the ORDER is fixed; batch sizes inside a step are free)
 

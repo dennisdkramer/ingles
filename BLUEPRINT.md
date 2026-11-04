@@ -6,24 +6,24 @@ lesson's design — before touching anything.** Keep it under ~60 lines; trim ol
 and `NEXT IMMEDIATE STEP` lines.
 
 ## WHERE WE ARE
-Business **1-35** built and pushed (`a23f924`); `designs/lesson01-35` exist. **Nothing above 35 exists.** `kids/` and
-`adult/` are tracked and empty (old pages moved to `lessons-archive/`). `lessons.json` 35/0/0 · COUNTS `0/35/0`.
-**Step 1 (Pass A business 36-50) in flight** — designs 36, 37, 38 written this session (batch 8).
-**39 and 40 are SKIP per `PEDAGOGY-MAP` roadmap (`Generation: SKIP — do not build this page yet`)** — exam format,
-item mix and scoring must be planned with the owner first. Recorded as escalation, not generated.
-**Spec:** `PEDAGOGY-MAP.md` + `PAGE-CHECKLIST.md` are king (owner edit 2026-11-03) — Portuguese §4 t), register §4 u),
-level §5 v)-y) judged at generation. **QA is OFF for this run.** `qa/lang.mjs` was deleted with it.
+Business **1-50** built and pushed — the track is COMPLETE (`800259c` 36-38, `d7837f4` 41-43, `6d2d29f` 44-46,
+`85c8181` 47-48, `c1233f3` 49-50); `designs/lesson01-50` exist. `kids/` and `adult/` are tracked and empty (old pages
+moved to `lessons-archive/`, never read). `lessons.json` business 48 / kids 0 / adult 0 · COUNTS `0/50/0`.
+**39 and 40 are SKIP-TO-DO in EVERY track per `PEDAGOGY-MAP` (exam format, item mix, scoring need an owner decision):
+create nothing, say nothing, move on. Each track is 48 lessons, not 50.** No designs for kids/adult exist yet.
+**Spec:** `PEDAGOGY-MAP.md` + `PAGE-CHECKLIST.md` are king — Portuguese §4 t), register §4 u), level §5 v)-y) judged
+at generation. **QA is OFF for this run.** `qa/lang.mjs` was deleted with it.
 
 ## CURRENT SLICE
-Fixed order (owner 2026-11-03; batches free, order not): **① Pass A business 36-50 → ② sweep business 1-35
-(language + level, rapid) → ③ Pass B 36-50 → ④ Pass A kids 1-50 (from the business idea) → ⑤ Pass B kids →
-⑥ Pass A adult 1-50 (from the kids idea) → ⑦ Pass B adult → ⑧ close with a QA report, then await instruction.**
-Detail and push cadence: `PENDING.md` + `HANDOFF.md`.
+Fixed order (owner 2026-11-03; batches free, order not): ~~① Pass A business 36-50~~ DONE → ~~② sweep business 1-35~~
+PARKED BY OWNER → ~~③ Pass B business 36-50~~ DONE → **④ Pass A kids 1-50 → ⑤ Pass B kids → ⑥ Pass A adult
+1-50 → ⑦ Pass B adult → ⑧ close with a QA report, then await instruction.** ④-⑧ are ONE run (`TASK-PROMPT.md`).
 
 ## NEXT IMMEDIATE STEP
-- [ ] **Step 2 — rapid language + level sweep of business 1-35.** Find PT in intro / explanation / tip / headline /
-      column-header positions where the content is not above the lesson number; put it back into English; fix the
-      worst level outliers; mark every PT span touched. No restructuring, no quiz rewrites.
+- [ ] **Step 4 — Pass A kids, lesson 01.** Inputs: `designs/lesson01.design.md`'s fundamental idea (only the idea and
+      its teaching beats), `PEDAGOGY-MAP` §1 TRACK 2 persona + §5 level. Withheld: every page, FORMAT/FUNCTION,
+      style.css, the primitive inventory. Output `designs/kids/lesson01.design.md` with `recycles:` /
+      `must not re-teach:` against kids designs only. Then 02, 03 → push → keep going to 50 (skip 39/40).
 
 ## DELTA
 **L35 vs L34:** 34 was written tone (the e-mail ladder); 35 is spoken service under pressure — the call script,
