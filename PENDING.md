@@ -3,15 +3,15 @@ The live working plan for the CURRENT task. When a prompt is decomposed into sub
 
 _(Active batches, newest first. Cleared once done AND committed.)_
 
-`WHERE WE ARE` — business **1-46** built. 36, 37 and 38 were committed + pushed as `800259c`; 41, 42 and 43 as `d7837f4`; 44, 45 and 46 in this run. `designs/lesson01-50.design.md` exist. `kids/` and `adult/` are tracked and empty (their old pre-rewrite pages moved to `lessons-archive/`, never to be read).
-**Steps 1-2 are done/parked. Step 3 (Pass B business 36-50) is IN FLIGHT.** 36, 37, 38, 41, 42, 43, 44, 45, 46 are written + sidecar.
+`WHERE WE ARE` — business **1-48** built. 36, 37 and 38 were committed + pushed as `800259c`; 41, 42 and 43 as `d7837f4`; 44, 45 and 46 as `6d2d29f`; 47 and 48 in this run. `designs/lesson01-50.design.md` exist. `kids/` and `adult/` are tracked and empty (their old pre-rewrite pages moved to `lessons-archive/`, never to be read).
+**Steps 1-2 are done/parked. Step 3 (Pass B business 36-50) is IN FLIGHT.** 36, 37, 38, 41, 42, 43, 44, 45, 46, 47, 48 are written + sidecar.
 **39 and 40 are SKIP** — the roadmap says *Generation: SKIP — do not build this page yet* for both (exam/checkpoint
 format must be planned with the owner first); recorded in `BLUEPRINT.md` NOTES, not generated. So step 3 = 13 pages.
 **Step 2 (sweep of business 1-35) is PARKED BY OWNER** — see `PARKED.md`. L35 and L34 were swept and pushed
 (`d5347ac`, `f11d78c`) before the park; **1-33 stay exactly as they are**. Do not resume the sweep, do not open a
 built page to "fix its language", and do not build or run any checker/QA script.
-`lessons.json`: business 44 entries (39/40 skipped) / kids 0 / adult 0; `index.html` COUNTS `0/46/0`.
-Next action = **lesson 47**, then 48 — batch commit/push (47-48), then 49-50.
+`lessons.json`: business 46 entries (39/40 skipped) / kids 0 / adult 0; `index.html` COUNTS `0/48/0`.
+Next action = **lesson 49**, then 50 — the last batch, then a final commit/push (49-50).
 
 ## The run order (owner, 2026-11-03 — the ORDER is fixed; batch sizes inside a step are free)
 
