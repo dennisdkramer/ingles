@@ -6,8 +6,8 @@ lesson's design — before touching anything.** Keep it under ~60 lines; trim ol
 and `NEXT STEP` lines.
 
 ## WHERE WE ARE
-Lessons **1-14** built, pushed, audio rendered (541 clips). `lessons.json` business: **29** · COUNTS `0/29/0`.
-Batches 1-4 (**15-26**) pushed. Batch 5 (**27-29**) built, `content`/`width` green; push pending.
+Lessons **1-14** built, pushed, audio rendered (541 clips). `lessons.json` business: **32** · COUNTS `0/32/0`.
+Batches 1-5 (**15-29**) pushed. Batch 6 (**30-32**) built, `content`/`width` green; push pending.
 Audio + `overflow` (real Chrome) deferred to end-of-track per the run policy — `audio:check` red is expected.
 
 ## CURRENT SLICE
@@ -16,11 +16,11 @@ Audio + `overflow` (real Chrome) deferred to end-of-track per the run policy —
       "Run policy for the unattended run". No owner decisions needed except a PEDAGOGY-MAP §2 conflict.
 
 ## NEXT IMMEDIATE STEP
-Push batch 5, then Pass A 30 (reported speech, full system) → build 30 → 31 → 32 → push batch 6.
+Push batch 6, then read roadmap 33 and continue: Pass A 33 (meetings) → build 33 → 34 → 35 → push batch 7.
 
 ## DELTA
-**L29 vs L28:** 28 was the verb's demand (-ing vs to) in the actor's own sentence; 29 is the passive — the same event
-with the actor removed, across five tenses, plus get-passive and reporting passives. New axis: agency.
+**L32 vs L31:** 31 was time and familiarity (*used to / be used to*); 32 is the links between ideas — written and
+spoken markers plus cohesion by reference. New axis: how two sentences relate, not what one sentence means.
 
 ## DECISIONS TAKEN (newest first — append here, don't rewrite)
 - **2026-11-03** — lesson 15 shape: travel-planning carrier, `.dialog` for the permission/request beat, future
