@@ -6,9 +6,9 @@ lesson's design — before touching anything.** Keep it under ~60 lines; trim ol
 and `NEXT STEP` lines.
 
 ## WHERE WE ARE
-Lessons **1-14** built, pushed, audio rendered (541 clips). `lessons.json` business: **20** · COUNTS `0/20/0`.
-Batches 1 (**15-17**) and 2 (**18-20**) built; `content` + `width` green for both. Batch 2 push pending.
-Audio deferred to end-of-track (`audio:check` red is expected).
+Lessons **1-14** built, pushed, audio rendered (541 clips). `lessons.json` business: **23** · COUNTS `0/23/0`.
+Batches 1 (**15-17**) and 2 (**18-20**) pushed. Batch 3 (**21-23**) built, `content`/`width` green; push pending.
+Audio + `overflow` (real Chrome) deferred to end-of-track per the run policy — `audio:check` red is expected.
 
 ## CURRENT SLICE
 - [ ] **Everything remaining, all tracks:** business **15-50** → kids **1-50** → adult **1-50** (owner: one task).
@@ -16,12 +16,11 @@ Audio deferred to end-of-track (`audio:check` red is expected).
       "Run policy for the unattended run". No owner decisions needed except a PEDAGOGY-MAP §2 conflict.
 
 ## NEXT IMMEDIATE STEP
-Push batch 2, then Pass A 21 (prepositions & verb+preposition) → build 21 → 22 → 23 → push batch 3 (run
-`overflow` on the first page of batch 3, per the every-3rd-batch rule).
+Push batch 3, then Pass A 24 (articles & determiners) → build 24 → 25 → 26 → push batch 4.
 
 ## DELTA
-**L20 vs L19:** 19 was the four conditional forms (hypothesis); 20 closes the tense system with the present
-perfect and its continuous — new axis: where an action sits relative to now (bridge, not past).
+**L23 vs L22:** 22 was people and talk (the meeting); 23 is work and problems (the project life cycle + bad news) —
+new axis: process stages, and separability tested on new verbs.
 
 ## DECISIONS TAKEN (newest first — append here, don't rewrite)
 - **2026-11-03** — lesson 15 shape: travel-planning carrier, `.dialog` for the permission/request beat, future
