@@ -50,8 +50,9 @@ Do exactly the step you are told. **Nothing else.** Explicitly forbidden, becaus
 - **No new tooling.** No checker scripts, no diff helpers, no linters, no "free structural checks", no jsdom dumps,
   no ad-hoc `*.mjs` in the repo or in temp. If a page is wrong, the fix is reading the file.
 - **No QA of any kind.** Owner instruction, still in force: no `npm run qa`, no `content`/`width`/`overflow`/
-  `smoke`/`games`/`landing`/`audio:check`, no Chrome, no local server, no screenshots. The **only** commands this run
-  may execute are `node build-lessons.mjs` and `git`. That is the complete allowed command list.
+  `smoke`/`games`/`landing`/`audio:check`, no Chrome, no local server, no screenshots. **The only commands this run
+  may execute are `node build-lessons.mjs` and `git`.** Find things by reading files (file reads and searches are
+  not commands); never by running a script.
 - **No refactors** of `engine*.js`, `style.css`, `index.html`, `build-lessons.mjs`, or the spec files, beyond the
   couple of lines a step explicitly requires (e.g. the final `COUNTS` in `index.html`).
 - **No re-planning.** Do not rewrite `PEDAGOGY-MAP.md`, do not re-derive the roadmap, do not re-open parked items.
@@ -73,6 +74,8 @@ Do exactly the step you are told. **Nothing else.** Explicitly forbidden, becaus
 ---
 
 ## THE WORK, IN THIS ORDER — finish a step before touching the next
+
+**Begin at step 3, lesson 36.** Do not begin anywhere else.
 
 | # | Step | Output | Count |
 |---|---|---|---|
