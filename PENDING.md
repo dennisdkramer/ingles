@@ -31,6 +31,6 @@ and examples per track persona; swap business-specific slots for track-native on
 find-replacing another track's pages.
 
 Audio today: 541 clips for lessons 1-14. Lessons 15+ author `data-say` now; render at end of track (`audio:check`
-red until then is expected). Built: **15-26** (pages + sidecars, two free checks green; `content`/`width` green for
-15-17, 18-20, 21-23 and 24-26; overflow/smoke/audio deferred to end-of-track).
+red until then is expected). Built: **15-29** (pages + sidecars, two free checks green; `content`/`width` green for
+15-17, 18-20, 21-23, 24-26 and 27-29; overflow/smoke/audio deferred to end-of-track).
 
