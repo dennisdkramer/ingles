@@ -75,5 +75,11 @@
 
 
 
-## Language by student level (English-first, comprehensibility-driven)
-Use ENGLISH wherever the student can actually follow it — i.e. wherever the text can be generated primarily with language the student has ALREADY been taught, or sits at a linguistic level generally below the level of the  lesson that contains it. This applies to section headlines, explanatory text, warnings, tips, block headers and column headers alike. Portuguese is used only when that logic — or the pedagogy/content generation — dictates it, never "at will":
+## Language by student level
+
+For any generated [**lesson introduction, explanatory text, tip, headline, or column header**], it may be in portuguese
+if its parent [LESSON NUMBER] < [CONTENT LEVEL]. Portuguese within other content types is included ONLY when
+*defensibly optimal for teaching purposes* to do so.
+
+[CONTENT LEVEL] and the operational form of this rule: PEDAGOGY-MAP.md §4 (with §5 x). Register is a separate single
+rule: the socio-linguistic context of any content fixes it as one of the TRACK's three options (PEDAGOGY-MAP.md §1).

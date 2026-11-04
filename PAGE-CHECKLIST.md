@@ -7,9 +7,14 @@ on any conflict.
 ## Reload order (do this first, every time)
 `HANDOFF.md` → `PENDING.md` (the `WHERE WE ARE` line) → this lesson's PEDAGOGY-MAP entry + `designs/lessonNN.design.md` → this file.
 
-## Per lesson
+## Per lesson - (1, 8, 9, 10, 12 are MANDATORY) - (3, 11 are OPTIONAL and used only with defensible motivation) - (4, 5, 6, 7 are COMMON ELEMENTS that are used according to LESSON and CONTENT needs)
+**BAND — MANDATORY, before writing any prose.**
+*Language:* “For any generated [**lesson introduction, explanatory text, tip, headline, or column header**], it may be in portuguese if its parent [LESSON NUMBER] < [CONTENT LEVEL]. Portuguese within other content types is included ONLY when *defensibly optimal for teaching purposes* to do so.” — (PEDAGOGY-MAP.md §4)
+*Register:* “For any generated content: its socio-linguistic context defines its register as one of its TRACK's three context-dependent register options” — (PEDAGOGY-MAP.md §1)
+*Format:* Portuguese is always italic and always marked (`lang="pt"` / `.pt` / `.ptw`); an unmarked PT span is a defect.
+
 1. **Shell** — copy the head/shell/scripts from `business/lesson1.html`. `<title>Business · Lesson NN — English Opens Doors</title>`, `L=NN`, identical `.edit.html` sidecar.
-2. **Opener** — `<p class="card pt">`, 3-5 sentences: what the lesson installs (in target strings), the law / mental model, the PT→EN mapping where relevant. Never an activity list, never prose about the site's tools.
+2. **Opener** — Presents the main purpose or taught skill of the lesson and relevant laws / mental models. Never an activity list, never prose about the site's tools. Language follows the **BAND** rule above: the opener is an *introduction*, so it may be Portuguese only while `L < C` — not because the template puts PT there.
 3. **Sections** — numbered `<h2>`, one idea each; every group sits in a block (`.panel` / `.chart` / `.card` / `.dialog` / `fieldset` / `.game`); halves/thirds only inside `.itemrow[data-cols="2"|"3"]`, with the width reason in the design file.
 4. **MCQ** — `.qitem > .qline > (.qnum + .qstem)`, then `.qopts` **below** the prompt. One layout per block. Stems unique **across the page** (a duplicate stem = one saved answer for two controls).
 5. **Note rows** — always `<tr class="note"><td colspan="N">…</td></tr>`.

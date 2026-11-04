@@ -11,6 +11,7 @@
     "qa": "node build-lessons.mjs && node qa/width.mjs && node qa/landing.mjs && node qa/games.mjs && node qa/smoke.mjs",
     "qa:layout": "node qa/overflow.mjs --selftest && node qa/overflow.mjs",
     "qa:live": "node qa/live.mjs",
+    "qa:lang": "node qa/lang.mjs",
     "build:dict": "node build-dictionary.mjs"
   },
   "devDependencies": {

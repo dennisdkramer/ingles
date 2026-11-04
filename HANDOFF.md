@@ -62,7 +62,8 @@ Expect only `H1 H2 P DIV TABLE` — any `B`/`TR`/`TD` child is a hoisted element
 **Non-negotiables per lesson** (PEDAGOGY-MAP §3-§5, unchanged): the opener states what the lesson installs (3-5
 sentences, in target strings, never an activity list); explain → show → recognise → produce → test; the last
 section is a **no-consultation quiz that never copies the training items**; ≥10 new vocabulary items, each
-glossed inline before use; Portuguese ramps toward English (≈lesson 20: mostly English); never teach a
+glossed inline before use; language and register follow ONE rule each (§4: PT in the explanation layer only while
+`L < C`; §1: the context fixes the register); never teach a
 neighbour's items (read that lesson's `Note:`/`Sequence:` lines) — recycle, don't re-teach; only
 `input.gap` / `input[type=radio]` / a non-feed `textarea` persist, so a new vehicle must drive one of them;
 `data-say` carries how a line is **said**. `business/` only — `kids/`, `adult/`, `lessons-archive/` are
@@ -109,7 +110,9 @@ stop and re-read the design before continuing.
 | 7 | adult — **4 slices** (same) | new register |
 | 8 | final cross-track QA + publish gate (audio render + `audio:check`) | — |
 
-**Where we are:** business lessons 1-14 pushed; next action = Pass A for lesson 15.
+**Where we are:** business lessons **1-35** built and pushed (batch 7 = `a23f924`); next action = **Pass A for lesson 36**.
+Language and register are now one rule each (`PEDAGOGY-MAP.md` §4, §1) and `qa/lang.mjs` is the only language gate;
+pages 1-35 predate the rule, and the retrofit is queued in `PENDING.md`.
 
 ---
 

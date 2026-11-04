@@ -7,8 +7,11 @@ and `NEXT STEP` lines.
 
 ## WHERE WE ARE
 Lessons **1-35** built (pages + sidecars, two free checks per page). `lessons.json` business: **35** · COUNTS `0/35/0`.
-Batches 1-6 (**15-32**) pushed. Batch 7 (**33-35**) built, `content`/`width` green with duplicate-stem hints; push pending.
-Audio + `overflow` (real Chrome) deferred to end-of-track per the run policy — `audio:check` red is expected.
+Batches 1-7 (**15-35**) pushed (`a23f924`). Audio + `overflow` (real Chrome) deferred to end-of-track per the run
+policy - `audio:check` red is expected.
+**2026-11-03 (later):** language + register are now **one rule each** (§4, §1 - no counts, no quotas) and `qa/lang.mjs`
+is the gate. Pages **1-35 predate the rule** and carry unmarked Portuguese (L1: 176w marked / 509w unmarked); the
+retrofit is queued in `PENDING.md`.
 
 ## CURRENT SLICE
 - [ ] **Everything remaining, all tracks:** business **15-50** → kids **1-50** → adult **1-50** (owner: one task).
@@ -16,14 +19,19 @@ Audio + `overflow` (real Chrome) deferred to end-of-track per the run policy —
       "Run policy for the unattended run". No owner decisions needed except a PEDAGOGY-MAP §2 conflict.
 
 ## NEXT IMMEDIATE STEP
-Push batch 7, then Pass A 36 (storytelling / narrative) → 37 → 38 → push batch 8.
-Run paused by the owner on 2026-11-03 for a Cline context-window config fix (see NOTES).
+- [ ] **Pass A 36** (storytelling / narrative) -> 37 -> 38 -> push batch 8 - under the new `band:` line and the
+      §4 language rule. Ready to resume; the run was paused only for the context-window fix (resolved: models.json valid,
+      cw 200k -> compaction ~162k).
 
 ## DELTA
 **L35 vs L34:** 34 was written tone (the e-mail ladder); 35 is spoken service under pressure — the call script,
 de-escalation, the partial yes and escalation with a date. New axis: live conflict, not register.
 
 ## DECISIONS TAKEN (newest first — append here, don't rewrite)
+- **2026-11-03** — **language = one rule, register = one rule** (§4, §1): PT in the explanation layer only while
+  `L < C`; PT in any other content type only when defensibly optimal for teaching; register fixed by socio-linguistic
+  context as one of the TRACK three options. No counts, quotas or ceilings. `qa/lang.mjs` reports PT amount, and gates
+  only unmarked PT + off-track terms.
 - **2026-11-03** — lesson 15 shape: travel-planning carrier, `.dialog` for the permission/request beat, future
   contrast as one chart (will / going to / present continuous) — one idea per section, 9 sections.
 - **2026-11-03** — QA suspended by owner: per page only the two free structural checks; `content`+`width` per
@@ -50,3 +58,8 @@ de-escalation, the partial yes and escalation with a date. New axis: live confli
   two controls.
 - `overflow.mjs` (real Chrome) has NOT run since lesson 14 — the run policy forbids Chrome in the loop. All pages
   15-35 use the shapes of 15-17 (`.panel`/`.chart`/`.dialog`/`.itemrow`), no new shape. End-of-track sweep 15-50.
+
+
+- **Unmarked Portuguese is the systemic defect (measured 2026-11-03, `qa/lang.mjs`):** every page 1-35 renders most of its
+  PT as non-italic English - L1 176w marked vs 509w unmarked, L20 127/338, L35 113/296. Mechanical fix (wrap the span),
+  queued in the 1-35 retrofit.

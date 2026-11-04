@@ -1,7 +1,7 @@
 # PEDAGOGY-MAP — COURSE ROADMAP
 
 ## TRACK - Student Persona & Goals - The 3 utilized [Registers] for each track - The Contexts that they should be used in. 
-### For any section/block in a lesson, the register of its content is the most appropriate of its parent TRACK's 3 options based on [Intent of its parent lesson plans] and/or [its linguistic context (eg. 1. BUSINESS TRACK dialog between close friends uses register 1.b)].
+### For any generated content: its socio-linguistic context defines its register as one of its TRACK's three context-dependent register options.
 
 1. BUSINESS TRACK - A Working adult who needs to communicate in meetings or a university setting. They may be a Researcher, an IT professional, an Engineer, or they may want to learn a more professional-sounding version of english for personal reasons. They value analysis and problem-solving. They have busy lives and value tangible progress.
    a) [Confident and direct business-casual with context-aware formality]
@@ -37,6 +37,9 @@
 		a)*teaching beats* (per core item: what the student must be told, 1–2 sentences) and 
 		b)*dependencies* (every form and word used → taught where, or marked as intentional inference)
    - the real situation in which that core is worth having;
+   - a **`band:` line the build reads** — `band: <track> · L<NN> · C<CC> (content level) · registers: <1a/2b/3c …> ·
+     contexts: <the fields the examples may use>`. It is the design's record of the §1 register choice and of the level
+     pair the §4 language rule runs on; it is not an extra rule.
    - **three candidate (lesson) experiences, from three different channels** (heard / seen / done / read / said);
    - the chosen one, why it beats the others *for this student*, and what the first 30 seconds feel like;
    - what the student produces, what evidence it leaves, and any conflict with the defaults below;
@@ -58,64 +61,77 @@
 ### 3. Non-Negotiables
 	- the page runs on the site: mechanical skeleton + deliverable state the engines can read (FORMAT.md, FUNCTION.md);
     - every factual claim is true and defensible — never pad a section with an unverified assertion.
+    - **language and register** are each decided by one rule (§4, §1): an [introduction · explanatory text · tip ·
+      headline · column header] may be in Portuguese only if its parent [LESSON NUMBER] < [CONTENT LEVEL]; Portuguese
+      in any other content type only when *defensibly optimal for teaching purposes* to do so; and the socio-linguistic
+      context of any content fixes its register as one of its TRACK's three options. Nothing else governs either.
 
 ### 4. CONTENT AUTHORING
-	- Restructuring Pass A is allowed: Pass B may merge/split/reorder to serve the teaching beats, writing changes back into the design file; escalation is for unresolved *conflicts* only.
-	- Explanatory layer may live anywhere__: lead, chart cell, an extra explanation column, a `tr.note` row. A chart is a teaching device, not a display device.
-	- Every (word/new form) the student must understand is [taught or glossed inline in PT] before it is used, else removed; if a block wants the student to *infer*, the page says so.
-	- Coverage ≠ section plan__: a roadmap item doesn't get its own h2 unless it earns one.
-	- No budget ≠ no depth__: length is not a proxy, and enumeration is not depth.
+	a) Restructuring Pass A is allowed: Pass B may merge/split/reorder to serve the teaching beats, writing changes back into the design file; escalation is for unresolved *conflicts* only.
+	b) Explanatory layer may live anywhere__: lead, chart cell, an extra explanation column, a `tr.note` row. A chart is a teaching device, not a display device.
+	c) Every (word/new form) the student must understand is [taught or glossed inline in PT] before it is used, else removed; if a block wants the student to *infer*, the page says so.
+	d) Coverage ≠ section plan__: a roadmap item doesn't get its own h2 unless it earns one.
+	e) No budget ≠ no depth__: length is not a proxy, and enumeration is not depth.
     - Never show the answer in a prompt; a hint may only be in the language the student is not producing.
     - No copy-exercises: the student produces from memory or meaning, never transcribes the prompt.
-	- Coverage of a concept or vocabulary class must not be redundant with a prior lesson: a topic returns deeper, wider, more natural or more register-appropriate — never as the same explanation and the same drills.
-	- Teach in context, in phrases, inside a scenario, dialogue or story — not isolated glosses.
-	- Whenever feasible(sanity check the existance, relevance, appropriateness, and accessability of each), teach the rule, the reasoning(the mental model), and its direct consequences (integrated with the lesson content or in its own section as apppropriate); say plainly when [there is no clear or consistent] [rule and/or reasoning]. 
-	- Each item carries the condition that decides it (a gloss that could go either way is not an item).
-	- False cognates (eg. 'pretend' -X- 'pretender' -> 'intend') and words which [in one language cleanly map onto] [more than one word in the other] (eg. 'live' -> 'morar' / 'viver') are presented together with these characteriscs [shown/explained/demonstrated as appropriate].
-	- Practice trains the lesson's concepts in conceptually distinct blocks, inline with what they train and/or in a penultimate section. The last section is a quiz that tests all of it — it may echo the training, never copy it.
-	- Multiple-choice options are shuffled so the right one is not always in the same slot.
-	- Boilerplate & filler are last resorts.
+	f) Coverage of a concept or vocabulary class must not be redundant with a prior lesson: a topic returns deeper, wider, more natural or more register-appropriate — never as the same explanation and the same drills.
+	g) Teach in context, in phrases, inside a scenario, dialogue or story — not isolated glosses.
+	h) Whenever feasible(sanity check the existance, relevance, appropriateness, and accessability of each), teach the rule, the reasoning(the mental model), and its direct consequences (integrated with the lesson content or in its own section as apppropriate); say plainly when [there is no clear or consistent] [rule and/or reasoning]. 
+	i) Each item carries the condition that decides it (a gloss that could go either way is not an item).
+	j) False cognates (eg. 'pretend' -X- 'pretender' -> 'intend') and words which [in one language cleanly map onto] [more than one word in the other] (eg. 'live' -> 'morar' / 'viver') are presented together with these characteriscs [shown/explained/demonstrated as appropriate].
+	l) Practice trains the lesson's concepts in conceptually distinct blocks, inline with what they train and/or in a penultimate section. The last section is a quiz that tests all of it — it may echo the training, never copy it.
+	m) Multiple-choice options are shuffled so the right one is not always in the same slot.
+	n) Boilerplate & filler are last resorts.
 		
 		#### Lesson Length / Content Quantity
-	- Never compress, summarise or omit an item to fit a page.
-	- There is no cap on sections, tables, examples, exercises, dictation lines, recordings or quiz items, and no page-length limit. 
-	- All primary concepts and specific items suggested by the entry must be appropriately explained and trained *in its own lesson* — explain → show → recognise → produce → test.
+	o) Never compress, summarise or omit an item to fit a page.
+	p) There is no cap on sections, tables, examples, exercises, dictation lines, recordings or quiz items, and no page-length limit. 
+	q) All primary concepts and specific items suggested by the entry must be appropriately explained and trained *in its own lesson* — explain → show → recognise → produce → test.
 
 		####  Vocabulary - (`Key vocabulary:`)
-	- Each lesson must present at least 10 new vocabulary items which are relevant to and may overlap with the other teaching needs of the lesson (eg. a lesson teaching modes counts "would" as a vocabulary item).
-	- Vocabulary lists are SUGGESTIONS, which must be analysed and grouped by function, teach inside phrases, drill and recycle as appropriate
+	r) Each lesson must present at least 10 new vocabulary items which are relevant to and may overlap with the other teaching needs of the lesson (eg. a lesson teaching modes counts "would" as a vocabulary item).
+	s) Vocabulary lists are SUGGESTIONS, which must be analysed and grouped by function, teach inside phrases, drill and recycle as appropriate
 
 		####  WHEN TO USE PORTUGUESE
-	- Explanations go in English when the student at that level can read them, and in **concise** Portuguese when they cannot — compare the student's level with the level *that particular text* demands, sentence by sentence. 
-	- Portugues use Phases out smoothly as english proficiency increases. the following are checkpoints, not partitions: the student is somewhere on a continuous ramp, the lesson number only names roughly where the ramp has reached.
-      - Lesson 1: All headers and instructional/explanatory content in Portuguese. -
-      - Lesson 20: many explanations in English, concise Portuguese used only when the student can't be expected to understand a given explanation in english. 
-      - Lesson 40: Portuguese almost never needed - model judgement determines its use when needed or appropriate, default is english-only.
+	t) Explanations go in English when the student at that level can read them, and in **concise** Portuguese when they cannot — compare the student's level with the level *that particular text* demands, sentence by sentence. 
+	u) Portugues use Phases out smoothly as english proficiency increases. the following are checkpoints, not partitions: the student is somewhere on a continuous ramp, the lesson number only names roughly where the ramp has reached.
+      - **Language rule — the only one.** For any generated [**lesson introduction, explanatory text, tip, headline, or
+        column header**]: it may be in Portuguese if its parent [LESSON NUMBER] < [CONTENT LEVEL] (§5 x). Portuguese
+        within other content types — a vocabulary list with its Portuguese translations, an English phrase with its
+        Portuguese phrase below it, a law box, a note row, an answer hint — is included ONLY when *defensibly optimal
+        for teaching purposes* to do so.
+      - **The lesson number is the lever, not a quota.** N rises and C does not follow it: at lesson 5 almost every
+        explanation has C > N and Portuguese is everywhere; at lesson 40 only genuinely hard content still clears
+        C > N, so PT explanations become rare — while a word list with its translations, or an English phrase with the
+        full Portuguese phrase under it, may still appear, because those are other content types judged by
+        defensibility, not by level.
+      - **Nothing counts.** No word counts, sentence counts, percentages, per-section quotas or length ceilings.
+      - **Marking is formatting, not budget.** Portuguese is always italic and always marked `lang="pt"` / `.pt` /
+        `.ptw` (FORMAT), so it reads as Portuguese to the student and to the author.
 
 
-### 5. LEVEL -  Alignment of content with STUDENT LEVEL is a goal in service of the priorities of efficiency and accessability of the lesson materials
- 	- "STUDENT LEVEL" and capabilities are described by the CEFR LEVEL that corresponds to the student's current Lesson #. 
-	- "LESSON DIFFICULTY", "GRAMMAR LEVEL", "VOCABULARY LEVEL" and "LEVEL APPROPRIATE" are subjective, used to compare the depth, conceptual complexity, or accessability of items within their respective class and/or how they relate to STUDENT LEVEL.
-	- These are checkpoints, not partitions: the student is somewhere on a continuous ramp, the lesson number only names roughly where the ramp has reached.
-
+### 5. LEVEL -
+ 	v) "STUDENT LEVEL" = [Current Lesson #] = "LESSON DIFFICULTY"
+   w) "LEVEL APPROPRIATE" = [STUDENT LEVEL ± 5] - ("appropriate"/"appropriateness" [must be clearly understandable as a specific characteristic defined by its parent phrase/context] ELSE = [LEVEL APPROPRIATE])
+   x) "GRAMMAR LEVEL"/"CONTENT LEVEL" = two scores, never one:
+      G = grammar level — structure only, ignore meaning: 1-10 one clause in a base tense; 11-20 two clauses joined, or
+          one clause out of base order (question, negative, there is); 21-30 one subordination or one non-base form
+          (relative, perfect, going to, modal); 31-40 two of those at once (passive, reported, conditional); 41-50 three
+          or more, or embedding past one level (nominalisation, fronted inversion, mixed conditional).
+      C = content level — the ideas only, ignore the grammar: how much the sentence asks the student to hold, relate or
+          infer. 1 extremely simple, 50 complex and/or opaque to the learner.
+      Cross-check both with [1 + 49 * ln(P) / ln(100)], P = [ASSESS PERPLEXITY SCORE OF PHRASE] clamped to 1..100, so
+          P=1 gives 1 and P=100 gives 50 (ln(1)=0, so the divisor is plain ln(100)). Score the whole phrase, not its words.
+   y) "VOCABULARY LEVEL" = intuition, 1 (extremely simple word/phrase/idea) to 50 (extremely complex, unusual or opaque
+          to the learner), CHECKED against the frequency band of its content words (function words don't count):
+          rank   1-250 | 251-750 | 751-2,000 | 2,001-4,000 | 4,001-7,000 | 7,001-12,000 | unlisted, jargon, idiom
+          V      1-8   |   9-15  |   16-24   |    25-32    |    33-40    |    41-46     |    47-50
+          Intuition and band disagree by more than 5? Say why in the design file (idiom, false friend, transparent
+          technical term), otherwise use the band's midpoint. The band is the check; intuition does not override it silently.
+   z) Page check: median G, median C and median V each inside N ± 5 (w), with at least two items at N+1..N+3 — a page
+          that passes only because ±5 is wide is flat, not appropriate.
     
-  ### LEVEL KEY - uses the CEFR (Common European Framework of Reference for Languages) scale:
-• STUDENT LEVEL (Level Name - Reached by student ~ Lesson #[X] ): Requisite/expected capabilities 
-	-  Notes
-
-• A0 (Starter - [1]): Absolutely no knowledge of the target language. No knowledge of its sounds, structure, vocabulary.
-	- The most basic accessable grammar & translatable words and only the most minor nuance (eg. 'Where' = 'Onde/Cadê', 'is' = 'está/é')
-• A1 (Beginner - [10]): You can use and understand basic everyday expressions and very basic phrases. You can introduce yourself and ask or answer simple personal questions.
-	- The most common/important/useful nuances, verb tenses, and vocabulary are considered "LEVEL APPROPRIATE" even when 'difficult' for the student to learn
-• A2 (Elementary - [20]): You can communicate in simple, routine tasks. You can handle short social chats and understand frequently used expressions related to shopping, work, or family.
-	
-• B1 (Intermediate  - [30]): You can deal with most situations while traveling or living abroad. You can describe experiences, events, dreams, and give brief reasons for your opinions.
-
-• B2 (Upper Intermediate - [40]): You can interact with a degree of fluency and spontaneity with native speakers. You can understand the main ideas of complex text on concrete and abstract topics.
-	
-• C1 (Advanced - [50]): You can use the language flexibly and fluently for social, academic, and professional purposes. You can understand long, demanding texts and grasp implicit meanings.
-	- VOCABULARY LEVEL of a given word is a secondary consideration - vocabulary placement for lesson generation prioritizes real-world use frequency within the lesson's context or phrases.
-
+  
 
 ### 6. Vehicles
 Any vehicle is allowed: authored text, dialogue or chart; real material (song, clip, article, document, photo); interactive (game, timed drill, role-play); a project; something nobody has tried yet. Two tiers decide how it gets built:

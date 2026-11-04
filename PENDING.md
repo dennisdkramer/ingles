@@ -3,6 +3,10 @@ The live working plan for the CURRENT task. When a prompt is decomposed into sub
 
 _(Active batches, newest first. Cleared once done AND committed.)_
 
+`WHERE WE ARE` — business **1-35** built and pushed (batch 7 = `a23f924`); **nothing after 35 has started**. On
+2026-11-03 the language + register framework was rewritten to one rule each (§4, §1) and `qa/lang.mjs` was added;
+pages 1-35 predate both (they carry unmarked Portuguese), and the retrofit below is queued. Next: lesson **36**.
+
 ## Queue: business 15-50 (owner-approved 2026-11-03; handoff detail in HANDOFF.md)
 
 Batch size **3** (same-family lessons may use 4). Order: Pass A for lessons 15-20 **sequentially** (one design per
@@ -21,10 +25,38 @@ smoke + audio render only at the end of the track.
 | 6 | 30 · 31 · 32 | reported speech (full) · (see map) · (see map) |
 | … | 33-50 | read each roadmap entry at Pass A time — the map is authoritative, not this table |
 
-**Per lesson:** Pass A → `designs/lessonNN.design.md` (with `recycles:` / `must not re-teach:`); Pass B →
-`business/lessonNN.html` + identical `.edit.html`. TO-DO sections are allowed wherever a vehicle is defensively
+**Per lesson:** Pass A → `designs/lessonNN.design.md` (with `recycles:` / `must not re-teach:` / the `band:` line);
+Pass B → `business/lessonNN.html` + identical `.edit.html`. Then `node qa/lang.mjs NN` (the one language gate: marked
+PT + on-track register), the two free structural checks, the sidecar copy, and a push every 3 lessons.
+TO-DO sections are allowed wherever a vehicle is defensively
 optimal but not built (see HANDOFF.md for the exact shape). Audio: author `data-say` now, render at the end —
 `npm run audio:check` will fail until then, which is expected.
+
+### Retrofit subtask — business 15-35 language & level pass (BLOCKS kids/adult)
+
+Queued 2026-11-03 (owner), to run **after business 50 + its QA** and **before kids 1-50**. The 21 pages 15-35 were
+built to the old, unmeasured Portuguese rule: PT share of explanatory text is 100% of the leads, the opener is PT on
+every page, and mean target-sentence length only moves 3.1 → 7.0 words across those 21 lessons. PEDAGOGY-MAP §4 is now
+a measured band, and these pages are the design source for kids/adult — so they get the same treatment before the
+track switch rather than after 100 pages inherit the flat register.
+
+**Scope.** `business/lesson15`-`lesson35` + their `.edit.html` sidecars + the matching `designs/lessonNN.design.md`
+(designs gain one line: `band: business · L__ · C__ · registers: __ · contexts: __`). **Marking applies to 1-14 too** —
+`qa/lang.mjs 1 10 20` shows the same defect there (L1: 250 words of unmarked Portuguese); it is the same mechanical
+fix and belongs in this pass.
+
+**Changes.** The explanation layer (introductions, explanatory text, tips, headlines, column headers) loses its
+Portuguese wherever the element's `C` does not exceed the lesson number; PT stays wherever it is defensibly optimal —
+word lists with translations, a paired PT phrase, a note, a hint. Every PT span gets marked; register is checked
+against the track.
+
+**Does not change.** Teaching items, answers, grammar sequence, `data-say` strings (audio re-renders at end of track).
+
+**Acceptance per page.** `node qa/lang.mjs NN` clean (no unmarked PT, no off-track term); the explanation layer reads as
+English at L31+ except where `C > L`; `qa/content` + `qa/width` green; sidecar re-copied; push every 3 pages.
+
+**Owner.** The same unattended task. Status: queued, not started.
+
 
 **After business 50:** kids, then adult, generated **from the design files** (same shapes; new register, contexts
 and examples per track persona; swap business-specific slots for track-native ones). Never build a track by
