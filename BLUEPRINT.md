@@ -6,8 +6,8 @@ lesson's design — before touching anything.** Keep it under ~60 lines; trim ol
 and `NEXT STEP` lines.
 
 ## WHERE WE ARE
-Lessons **1-14** built, pushed, audio rendered (541 clips). `lessons.json` business: **23** · COUNTS `0/23/0`.
-Batches 1 (**15-17**) and 2 (**18-20**) pushed. Batch 3 (**21-23**) built, `content`/`width` green; push pending.
+Lessons **1-14** built, pushed, audio rendered (541 clips). `lessons.json` business: **26** · COUNTS `0/26/0`.
+Batches 1-3 (**15-23**) pushed. Batch 4 (**24-26**) built, `content`/`width` green; push pending.
 Audio + `overflow` (real Chrome) deferred to end-of-track per the run policy — `audio:check` red is expected.
 
 ## CURRENT SLICE
@@ -16,11 +16,11 @@ Audio + `overflow` (real Chrome) deferred to end-of-track per the run policy —
       "Run policy for the unattended run". No owner decisions needed except a PEDAGOGY-MAP §2 conflict.
 
 ## NEXT IMMEDIATE STEP
-Push batch 3, then Pass A 24 (articles & determiners) → build 24 → 25 → 26 → push batch 4.
+Push batch 4, then Pass A 27 (relative clauses) → build 27 → 28 → 29 → push batch 5.
 
 ## DELTA
-**L23 vs L22:** 22 was people and talk (the meeting); 23 is work and problems (the project life cycle + bad news) —
-new axis: process stages, and separability tested on new verbs.
+**L26 vs L25:** 25 graded hypotheticals (mixed forms, alternatives, inversion); 26 grades **certainty** about facts
+(must be / might be / can't be, the past forms, should have's two lives, hedges) — new axis: evidence and confidence.
 
 ## DECISIONS TAKEN (newest first — append here, don't rewrite)
 - **2026-11-03** — lesson 15 shape: travel-planning carrier, `.dialog` for the permission/request beat, future
