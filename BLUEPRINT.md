@@ -6,8 +6,8 @@ lesson's design — before touching anything.** Keep it under ~60 lines; trim ol
 and `NEXT STEP` lines.
 
 ## WHERE WE ARE
-Lessons **1-14** built, pushed, audio rendered (541 clips). `lessons.json` business: **32** · COUNTS `0/32/0`.
-Batches 1-5 (**15-29**) pushed. Batch 6 (**30-32**) built, `content`/`width` green; push pending.
+Lessons **1-35** built (pages + sidecars, two free checks per page). `lessons.json` business: **35** · COUNTS `0/35/0`.
+Batches 1-6 (**15-32**) pushed. Batch 7 (**33-35**) built, `content`/`width` green with duplicate-stem hints; push pending.
 Audio + `overflow` (real Chrome) deferred to end-of-track per the run policy — `audio:check` red is expected.
 
 ## CURRENT SLICE
@@ -16,11 +16,12 @@ Audio + `overflow` (real Chrome) deferred to end-of-track per the run policy —
       "Run policy for the unattended run". No owner decisions needed except a PEDAGOGY-MAP §2 conflict.
 
 ## NEXT IMMEDIATE STEP
-Push batch 6, then read roadmap 33 and continue: Pass A 33 (meetings) → build 33 → 34 → 35 → push batch 7.
+Push batch 7, then Pass A 36 (storytelling / narrative) → 37 → 38 → push batch 8.
+Run paused by the owner on 2026-11-03 for a Cline context-window config fix (see NOTES).
 
 ## DELTA
-**L32 vs L31:** 31 was time and familiarity (*used to / be used to*); 32 is the links between ideas — written and
-spoken markers plus cohesion by reference. New axis: how two sentences relate, not what one sentence means.
+**L35 vs L34:** 34 was written tone (the e-mail ladder); 35 is spoken service under pressure — the call script,
+de-escalation, the partial yes and escalation with a date. New axis: live conflict, not register.
 
 ## DECISIONS TAKEN (newest first — append here, don't rewrite)
 - **2026-11-03** — lesson 15 shape: travel-planning carrier, `.dialog` for the permission/request beat, future
@@ -41,4 +42,11 @@ spoken markers plus cohesion by reference. New axis: how two sentences relate, n
 > QA is suspended per HANDOFF. Update BLUEPRINT.md as you go; do not stop for style doubts — record them below.
 
 ## NOTES / DOUBTS (parked, never a reason to stop)
-- (empty)
+- **Duplicate-stem hints outstanding (fix in end-of-track bug pass):** 33 has 3 (`"Sorry to interrupt — just on
+  that point…"`, `abrir: ____, let's get started.`, `votar: who's in ____?`), 34 has 2 (`"Hey guys, quick one —"`,
+  `"I would appreciate it if you coul…"`), 35 has 5 (`"You're speaking to Ana."`, `"Can you tell me what
+  happened?"`, `"I'll take care of it."`, `assumir: I'm ____ this happened.`, plus one `fechar/escalar` blank).
+  Rename in the quiz instance (e.g. append `· quiz`) — content.mjs still passes, but one saved answer would serve
+  two controls.
+- `overflow.mjs` (real Chrome) has NOT run since lesson 14 — the run policy forbids Chrome in the loop. All pages
+  15-35 use the shapes of 15-17 (`.panel`/`.chart`/`.dialog`/`.itemrow`), no new shape. End-of-track sweep 15-50.
