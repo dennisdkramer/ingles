@@ -3,16 +3,16 @@ The live working plan for the CURRENT task. When a prompt is decomposed into sub
 
 _(Active batches, newest first. Cleared once done AND committed.)_
 
-`WHERE WE ARE` — business **1-35** built and pushed (`a23f924`); `designs/lesson01-35.design.md` exist. `kids/` and
+`WHERE WE ARE` — business **1-36** built (36 in this run); `designs/lesson01-36.design.md` exist. `kids/` and
 `adult/` are tracked and empty (their old pre-rewrite pages moved to `lessons-archive/`, never to be read).
-**Step 1 DONE: Pass A business.** Designs written: **36-38** (b8), **41-43** (b9), **44-46** (b10), **47-50** (b11).
+**Steps 1-2 are done/parked. Step 3 (Pass B business 36-50) is IN FLIGHT, started 36.** 36 is written + sidecar.
 **39 and 40 are SKIP** — the roadmap says *Generation: SKIP — do not build this page yet* for both (exam/checkpoint
-format must be planned with the owner first); recorded in `BLUEPRINT.md` NOTES, not generated.
-Next action = **step 3, Pass B for business 36-50** (build the pages from the finished designs).
+format must be planned with the owner first); recorded in `BLUEPRINT.md` NOTES, not generated. So step 3 = 13 pages.
 **Step 2 (sweep of business 1-35) is PARKED BY OWNER** — see `PARKED.md`. L35 and L34 were swept and pushed
 (`d5347ac`, `f11d78c`) before the park; **1-33 stay exactly as they are**. Do not resume the sweep, do not open a
 built page to "fix its language", and do not build or run any checker/QA script.
-`lessons.json`: business 35 / kids 0 / adult 0; `index.html` COUNTS `0/35/0`.
+`lessons.json`: business 35 / kids 0 / adult 0 until the next `build-lessons.mjs` run; `index.html` COUNTS `0/35/0`.
+Next action = **lesson 37, then 38, then the batch commit/push** (36-38).
 
 ## The run order (owner, 2026-11-03 — the ORDER is fixed; batch sizes inside a step are free)
 
