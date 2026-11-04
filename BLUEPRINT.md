@@ -27,7 +27,8 @@ de-escalation, the partial yes and escalation with a date. New axis: live confli
 ## DECISIONS TAKEN (newest first — append here, don't rewrite)
 - **2026-11-03 (owner edit)** — **language and register are single statements, decided at the point of generation**
   (`PEDAGOGY-MAP` §4 t) / §4 u); level §5 v)-y), CONTENT LEVEL judged, nothing scored). No counts, quotas, bands or
-  checkers. `qa/lang.mjs`, the `band:` design line and every scoring table were removed; the two spec files are king.
+  checkers. `qa/lang.mjs`, the G/C/V scoring tables and every derived requirement were removed; the two spec files are
+  king.
 - **2026-11-03 (owner)** — the run is **one task, three tracks**, in the fixed order above; kids derives from the
   business design's fundamental idea, adult from the kids design's — re-imagined, never find-replaced.
 - **2026-11-03** — lesson 15 shape: travel-planning carrier, `.dialog` for the permission/request beat, future
