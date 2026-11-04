@@ -387,5 +387,14 @@
       "title": "Your English, in the room"
     }
   ],
-  "adult": []
+  "adult": [
+    {
+      "n": 1,
+      "title": "Hi, I'm from Recife — the introduction that survives"
+    },
+    {
+      "n": 2,
+      "title": "You already know a thousand words"
+    }
+  ]
 }

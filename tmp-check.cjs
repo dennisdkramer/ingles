@@ -1,8 +1,11 @@
 const fs = require('fs');
 const { JSDOM } = require('jsdom');
-const nums = process.argv.slice(2).map(Number);
+let args = process.argv.slice(2);
+let track = 'kids';
+if (args.length && !/^\d+$/.test(args[0])) track = args.shift();
+const nums = args.map(Number);
 for (const n of nums) {
-  const f = 'kids/lesson' + n + '.html';
+  const f = track + '/lesson' + n + '.html';
   const t = fs.readFileSync(f, 'utf8');
   const d = new JSDOM(t).window.document;
   const stems = [...d.querySelectorAll('.qstem')].map(s => s.textContent.replace(/\s+/g, ' ').trim());
