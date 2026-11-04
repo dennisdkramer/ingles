@@ -8,11 +8,10 @@ _(Active batches, newest first. Cleared once done AND committed.)_
 **Step 1 DONE: Pass A business.** Designs written: **36-38** (b8), **41-43** (b9), **44-46** (b10), **47-50** (b11).
 **39 and 40 are SKIP** — the roadmap says *Generation: SKIP — do not build this page yet* for both (exam/checkpoint
 format must be planned with the owner first); recorded in `BLUEPRINT.md` NOTES, not generated.
-Next action = **step 2, the rapid language + level sweep of business 1-35**, working **down from 35**.
-**Step 2 progress: L35 and L34 swept** (b12, b13) — every heading, lead, table header, note, stem and answer option now English;
-PT only inside the "In Portuguese" column and inside `<span class="pt">` glosses (plus the shared `barhelp` chrome and the engine
-fallback warnings, which live on every page and are out of scope for this sweep).
-Next swept page = **33**.
+Next action = **step 3, Pass B for business 36-50** (build the pages from the finished designs).
+**Step 2 (sweep of business 1-35) is PARKED BY OWNER** — see `PARKED.md`. L35 and L34 were swept and pushed
+(`d5347ac`, `f11d78c`) before the park; **1-33 stay exactly as they are**. Do not resume the sweep, do not open a
+built page to "fix its language", and do not build or run any checker/QA script.
 `lessons.json`: business 35 / kids 0 / adult 0; `index.html` COUNTS `0/35/0`.
 
 ## The run order (owner, 2026-11-03 — the ORDER is fixed; batch sizes inside a step are free)
