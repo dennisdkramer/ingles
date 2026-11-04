@@ -21,7 +21,9 @@ Fixed order (owner 2026-11-03; batches free, order not): **① Pass A business 3
 Detail and push cadence: `PENDING.md` + `HANDOFF.md`.
 
 ## NEXT IMMEDIATE STEP
-- [ ] **Pass A lesson 36** (storytelling / narrative) → `designs/lesson36.design.md`, then 37, 38 → push batch 8.
+- [ ] **Step 2 — rapid language + level sweep of business 1-35.** Find PT in intro / explanation / tip / headline /
+      column-header positions where the content is not above the lesson number; put it back into English; fix the
+      worst level outliers; mark every PT span touched. No restructuring, no quiz rewrites.
 
 ## DELTA
 **L35 vs L34:** 34 was written tone (the e-mail ladder); 35 is spoken service under pressure — the call script,
