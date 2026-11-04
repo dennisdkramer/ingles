@@ -12,12 +12,12 @@
 	  - Expressing anger, contempt, sarcasm, humor, dismissiveness/blunt phrasing ("Yeah, whatever..").
 	  - Included as sidenotes accompanying equivalent [business-casual] or [peer-to-peer] phrases.
 	  
-2. KIDS - A 14 year old boy. Preference for novelty, silly stakes, visible progress. Short attention span.
+2. KIDS - A 14 year old boy. Preference for novelty, silly stakes, visible progress. Short attention span. internet culture, video games, and adolescent life become preferred contexts
    a) [Colloquial adolescent casual but respectful]
       - Default (with strangers, parents, teachers)
-   b) [Colloquial adolescent peer-to-peer speech]
-      - With friends or peers in school environment
-   c) [Informal - Memelord/Rizzlord]
+   b) [Colloquial adolescent peer-to-peer speech] - prefers real day-to-day speech in this register but includes text-speak (eg. wtf, lol) and 'youth' slang (eg. "That's cooked").
+      - With friends or peers in school environment, 
+   c) [Informal - Memelord/Rizzlord] - very silly
       - With close friends, casual environments, online chat
 
 3. ADULT - Culture and real life are the hooks; self-expression matters more than accuracy drills- goal of understanding AAVE and music. Swears and dirty language must be taught as a core element of the course, but may be censored according to model judgement ('f---', 'shi-', 'c---', etc..)
@@ -61,10 +61,7 @@
 ### 3. Non-Negotiables
 	- the page runs on the site: mechanical skeleton + deliverable state the engines can read (FORMAT.md, FUNCTION.md);
     - every factual claim is true and defensible — never pad a section with an unverified assertion.
-    - **language and register** are each decided by one rule (§4, §1): an [introduction · explanatory text · tip ·
-      headline · column header] may be in Portuguese only if its parent [LESSON NUMBER] < [CONTENT LEVEL]; Portuguese
-      in any other content type only when *defensibly optimal for teaching purposes* to do so; and the socio-linguistic
-      context of any content fixes its register as one of its TRACK's three options. Nothing else governs either.
+    
 
 ### 4. CONTENT AUTHORING
 	a) Restructuring Pass A is allowed: Pass B may merge/split/reorder to serve the teaching beats, writing changes back into the design file; escalation is for unresolved *conflicts* only.
@@ -89,47 +86,21 @@
 	q) All primary concepts and specific items suggested by the entry must be appropriately explained and trained *in its own lesson* — explain → show → recognise → produce → test.
 
 		####  Vocabulary - (`Key vocabulary:`)
-	r) Each lesson must present at least 10 new vocabulary items which are relevant to and may overlap with the other teaching needs of the lesson (eg. a lesson teaching modes counts "would" as a vocabulary item).
+	r) Each lesson must present at least 10 new vocabulary items which are relevant to and may overlap with the other teaching needs of the lesson (eg. a lesson teaching modes counts "would" as a vocabulary item). 
 	s) Vocabulary lists are SUGGESTIONS, which must be analysed and grouped by function, teach inside phrases, drill and recycle as appropriate
 
 		####  WHEN TO USE PORTUGUESE
-	t) Explanations go in English when the student at that level can read them, and in **concise** Portuguese when they cannot — compare the student's level with the level *that particular text* demands, sentence by sentence. 
-	u) Portugues use Phases out smoothly as english proficiency increases. the following are checkpoints, not partitions: the student is somewhere on a continuous ramp, the lesson number only names roughly where the ramp has reached.
-      - **Language rule — the only one.** For any generated [**lesson introduction, explanatory text, tip, headline, or
-        column header**]: it may be in Portuguese if its parent [LESSON NUMBER] < [CONTENT LEVEL] (§5 x). Portuguese
-        within other content types — a vocabulary list with its Portuguese translations, an English phrase with its
-        Portuguese phrase below it, a law box, a note row, an answer hint — is included ONLY when *defensibly optimal
-        for teaching purposes* to do so.
-      - **The lesson number is the lever, not a quota.** N rises and C does not follow it: at lesson 5 almost every
-        explanation has C > N and Portuguese is everywhere; at lesson 40 only genuinely hard content still clears
-        C > N, so PT explanations become rare — while a word list with its translations, or an English phrase with the
-        full Portuguese phrase under it, may still appear, because those are other content types judged by
-        defensibility, not by level.
-      - **Nothing counts.** No word counts, sentence counts, percentages, per-section quotas or length ceilings.
-      - **Marking is formatting, not budget.** Portuguese is always italic and always marked `lang="pt"` / `.pt` /
-        `.ptw` (FORMAT), so it reads as Portuguese to the student and to the author.
+	t) For any generated [**lesson introduction, explanatory text, tip, headline, or column header**], it may be in portugues if its parent  [LESSON NUMBER] < [CONTENT LEVEL]. Portuguese within other content types is included ONLY when *defensibly optimal for teaching purposes* to do so. 
 
+      #### REGISTER
+   u) For any generated content: its socio-linguistic context defines its register as one of its TRACK's three context-dependent register options - (PEDAGOGY-MAP.md)
 
 ### 5. LEVEL -
- 	v) "STUDENT LEVEL" = [Current Lesson #] = "LESSON DIFFICULTY"
-   w) "LEVEL APPROPRIATE" = [STUDENT LEVEL ± 5] - ("appropriate"/"appropriateness" [must be clearly understandable as a specific characteristic defined by its parent phrase/context] ELSE = [LEVEL APPROPRIATE])
-   x) "GRAMMAR LEVEL"/"CONTENT LEVEL" = two scores, never one:
-      G = grammar level — structure only, ignore meaning: 1-10 one clause in a base tense; 11-20 two clauses joined, or
-          one clause out of base order (question, negative, there is); 21-30 one subordination or one non-base form
-          (relative, perfect, going to, modal); 31-40 two of those at once (passive, reported, conditional); 41-50 three
-          or more, or embedding past one level (nominalisation, fronted inversion, mixed conditional).
-      C = content level — the ideas only, ignore the grammar: how much the sentence asks the student to hold, relate or
-          infer. 1 extremely simple, 50 complex and/or opaque to the learner.
-      Cross-check both with [1 + 49 * ln(P) / ln(100)], P = [ASSESS PERPLEXITY SCORE OF PHRASE] clamped to 1..100, so
-          P=1 gives 1 and P=100 gives 50 (ln(1)=0, so the divisor is plain ln(100)). Score the whole phrase, not its words.
-   y) "VOCABULARY LEVEL" = intuition, 1 (extremely simple word/phrase/idea) to 50 (extremely complex, unusual or opaque
-          to the learner), CHECKED against the frequency band of its content words (function words don't count):
-          rank   1-250 | 251-750 | 751-2,000 | 2,001-4,000 | 4,001-7,000 | 7,001-12,000 | unlisted, jargon, idiom
-          V      1-8   |   9-15  |   16-24   |    25-32    |    33-40    |    41-46     |    47-50
-          Intuition and band disagree by more than 5? Say why in the design file (idiom, false friend, transparent
-          technical term), otherwise use the band's midpoint. The band is the check; intuition does not override it silently.
-   z) Page check: median G, median C and median V each inside N ± 5 (w), with at least two items at N+1..N+3 — a page
-          that passes only because ±5 is wide is flat, not appropriate.
+ 	v) "STUDENT LEVEL" = [Current Lesson #] = "LESSON DIFFICULTY".
+   w) "LEVEL APPROPRIATE" = [STUDENT LEVEL ± 5] - ("appropriate"/"appropriateness" [must be clearly understandable as a specific characteristic defined by its parent phrase/context] ELSE = [LEVEL APPROPRIATE]).
+   x) "CONTENT LEVEL" is judged at the point of generation: how much this piece of content asks of this student, on the same 1-50 scale as the lesson number. Difficulty follows the lesson number; nothing is scored.
+   y) "VOCABULARY LEVEL" - Judged by intuition from 1 (extremely simple word/phrase/idea) to 50 (extremely complex, unusual or opaque to the learner).
+  
     
   
 
