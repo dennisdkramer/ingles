@@ -108,6 +108,10 @@ function audit(track, n) {
 
   if (n >= 31 && pt >= 40) notes.push(`${pt}w of marked PT at L${n} — each span must clear C > L, or be a defensible other-type use`);
 
+  const dfile = path.join(ROOT, 'designs', `lesson${String(n).padStart(2, '0')}.design.md`);
+  if (fs.existsSync(dfile) && !/^band:/m.test(fs.readFileSync(dfile, 'utf8')))
+    notes.push('design file has no `band:` line (track · L · C · registers · contexts) — Pass A owns it (§1)');
+
   return { track, n, sections, pt, unmarked, hard: totN ? Math.round((100 * hardN) / totN) : null, violations, notes };
 }
 const argv = process.argv.slice(2);
