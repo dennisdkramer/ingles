@@ -30,5 +30,6 @@ optimal but not built (see HANDOFF.md for the exact shape). Audio: author `data-
 and examples per track persona; swap business-specific slots for track-native ones). Never build a track by
 find-replacing another track's pages.
 
-Audio today: 541 clips, `npm run audio:check` → "all clips present" (lessons 1-14).
+Audio today: 541 clips for lessons 1-14. Lessons 15+ author `data-say` now; render at end of track (`audio:check`
+red until then is expected). Built: **15-17** (pages + sidecars, two free checks green, `content`/`width` green).
 

@@ -6,7 +6,9 @@ lesson's design — before touching anything.** Keep it under ~60 lines; trim ol
 and `NEXT STEP` lines.
 
 ## WHERE WE ARE
-Lessons **1-14** built, pushed, audio rendered (541 clips). `lessons.json` business: 14 · COUNTS `0/14/0`.
+Lessons **1-14** built, pushed, audio rendered (541 clips). `lessons.json` business: **17** · COUNTS `0/17/0`.
+Batch 1 (**15-17**) built: pages + sidecars, two free checks per page, `content` + `width` green; push pending.
+Audio deferred to end-of-track (`audio:check` red is expected).
 
 ## CURRENT SLICE
 - [ ] **Everything remaining, all tracks:** business **15-50** → kids **1-50** → adult **1-50** (owner: one task).
@@ -14,10 +16,15 @@ Lessons **1-14** built, pushed, audio rendered (541 clips). `lessons.json` busin
       "Run policy for the unattended run". No owner decisions needed except a PEDAGOGY-MAP §2 conflict.
 
 ## NEXT IMMEDIATE STEP
-Write `designs/lesson15.design.md` from PEDAGOGY-MAP's lesson-15 entry (Modal operators + the future), with
-`recycles:` / `must not re-teach:` lines. Then 16, then 17-20; build every third lesson as it completes.
+Push batch 1, then Pass A for lesson 18 (phrasal verbs — system + *get* family), build 18 → Pass A/build 19, 20.
+
+## DELTA
+**L17 vs L16:** 16 was noun quantity; 17 is time and space geometry (at/on/in, by/until, for/during, ago, movement
+to/from/into/out of) — new axis: when and for how long, not how much.
 
 ## DECISIONS TAKEN (newest first — append here, don't rewrite)
+- **2026-11-03** — lesson 15 shape: travel-planning carrier, `.dialog` for the permission/request beat, future
+  contrast as one chart (will / going to / present continuous) — one idea per section, 9 sections.
 - **2026-11-03** — QA suspended by owner: per page only the two free structural checks; `content`+`width` per
   batch of 3; `overflow` every 3rd batch or on a new shape; full sweep + `smoke` + audio only at end-of-track.
 - **2026-11-03** — audio deferred: author `data-say` on every target line now, render at the end (`audio:check`
