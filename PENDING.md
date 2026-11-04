@@ -3,17 +3,16 @@ The live working plan for the CURRENT task. When a prompt is decomposed into sub
 
 _(Active batches, newest first. Cleared once done AND committed.)_
 
-`WHERE WE ARE` — business **1-50** built, i.e. **the business track is complete** (39 and 40 deliberately not generated). Commits: `800259c` (36-38), `d7837f4` (41-43), `6d2d29f` (44-46), `85c8181` (47-48), `c1233f3` (49-50). `designs/lesson01-50.design.md` exist. `kids/` and `adult/` are tracked and empty (their old pre-rewrite pages moved to `lessons-archive/`, never to be read).
+`WHERE WE ARE` — **step 4 (Pass A kids) is in progress and step 5 (Pass B kids) has started**: `designs/kids/lesson01.design.md`, `lesson02.design.md`, `lesson03.design.md` exist, and `kids/lesson1.html`, `kids/lesson2.html` (The Words You Already Know), `kids/lesson3.html` (Six Words & the Polite Question) are written **with byte-identical `.edit.html` sidecars**. Commit `2ea35cf` (kids 1-3, pushed). Kids 1-3 keep the same-numbered business page's fundamental idea (profile skeleton / cognate fast lane / six wh- words + polite embed + repair) rebuilt for the kids persona.
+`WHERE WE ARE` (business, unchanged) — business **1-50** built, i.e. **the business track is complete** (39 and 40 deliberately not generated). Commits: `800259c` (36-38), `d7837f4` (41-43), `6d2d29f` (44-46), `85c8181` (47-48), `c1233f3` (49-50). `designs/lesson01-50.design.md` exist.
 **Step 1-2 are done/parked. Step 3 (Pass B business 36-50) is COMPLETE** — 36, 37, 38, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50 all written + sidecar.
 **39 and 40 are SKIP** — the roadmap says *Generation: SKIP — do not build this page yet* for both (exam/checkpoint
 format must be planned with the owner first); recorded in `BLUEPRINT.md` NOTES, not generated. So step 3 was 13 pages.
 **Step 2 (sweep of business 1-35) is PARKED BY OWNER** — see `PARKED.md`. L35 and L34 were swept and pushed
 (`d5347ac`, `f11d78c`) before the park; **1-33 stay exactly as they are**. Do not resume the sweep, do not open a
 built page to "fix its language", and do not build or run any checker/QA script.
-`lessons.json`: business 48 entries (39/40 skipped) / kids 0 / adult 0; `index.html` COUNTS `0/50/0`.
-Next action = **step 4, Pass A kids lesson 01** (`designs/kids/lesson01.design.md`), then steps 4 → 8 in the SAME run
-without stopping: kids A → kids B → adult A → adult B → close report. 39/40 are SKIP-TO-DO in every track, so each
-track is 48 lessons. Steps 1-3 are done (step 2 is PARKED by the owner); do not rebuild or re-open a business page.
+`lessons.json`: kids 3 / business 48 (39/40 skipped) / adult 0; `index.html` COUNTS still `0/50/0` until the kids track ends.
+Next action = **kids lesson 04**: Pass A (`designs/kids/lesson04.design.md`, from the fundamental idea of `designs/lesson04.design.md`) → Pass B (`kids/lesson4.html` + sidecar) → build → commit → push. Then keep going kids 5-50 in batches of 3, then the kids track-end `index.html` COUNTS + manifest, then adult Pass A 1-50 → adult Pass B 1-50 → close report ⑧. 39/40 are SKIP-TO-DO in every track, so each track is 48 lessons. Steps 1-3 are done (step 2 is PARKED by the owner); do not rebuild or re-open a business page.
 
 ## The run order (owner, 2026-11-03 — the ORDER is fixed; batch sizes inside a step are free)
 
