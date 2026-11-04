@@ -3,71 +3,50 @@ The live working plan for the CURRENT task. When a prompt is decomposed into sub
 
 _(Active batches, newest first. Cleared once done AND committed.)_
 
-`WHERE WE ARE` — business **1-35** built and pushed (batch 7 = `a23f924`); **nothing after 35 has started**. On
-2026-11-03 the language + register framework was rewritten to one rule each (§4, §1) and `qa/lang.mjs` was added;
-pages 1-35 predate both (they carry unmarked Portuguese), and the retrofit below is queued. Next: lesson **36**.
+`WHERE WE ARE` — business **1-35** built and pushed (`a23f924`); `designs/lesson01-35.design.md` exist. `kids/` and
+`adult/` are tracked and empty (their old pre-rewrite pages moved to `lessons-archive/`, never to be read).
+**Nothing above lesson 35 exists yet.** `lessons.json`: business 35 / kids 0 / adult 0; `index.html` COUNTS `0/35/0`.
+Next action = **Pass A for lesson 36**.
 
-## Queue: business 15-50 (owner-approved 2026-11-03; handoff detail in HANDOFF.md)
+## The run order (owner, 2026-11-03 — the ORDER is fixed; batch sizes inside a step are free)
 
-Batch size **3** (same-family lessons may use 4). Order: Pass A for lessons 15-20 **sequentially** (one design per
-turn, high creativity, compaction after each) → build **15-17** → Pass A for 21-23 → build **18-20** → … push per
-batch. QA is **suspended by owner instruction**: per page the two free structural checks, per batch
-`content.mjs` + `width.mjs` scoped, `overflow.mjs` every 3rd batch / first page of a new shape, full sweep +
-smoke + audio render only at the end of the track.
+| # | Step | Output | Push |
+|---|---|---|---|
+| 1 | **Pass A — business 36-50** (15 designs, one per turn, sequential) | `designs/lessonNN.design.md` | per batch |
+| 2 | **Sweep business 1-35** — language + level adherence, rapid, no re-authoring | edits + re-copied sidecars | per batch |
+| 3 | **Pass B — business 36-50** | `business/lessonNN.html` + `.edit.html` | per batch |
+| 4 | **Pass A — kids 1-50**, each from the *fundamental idea* of `designs/lessonNN.design.md` | `designs/kids/lessonNN.design.md` | per batch |
+| 5 | **Pass B — kids 1-50** | `kids/lessonNN.html` + `.edit.html` | per batch |
+| 6 | **Pass A — adult 1-50**, each from the *fundamental idea* of the **kids** design | `designs/adult/lessonNN.design.md` | per batch |
+| 7 | **Pass B — adult 1-50** | `adult/lessonNN.html` + `.edit.html` | per batch |
+| 8 | **Close** — high-level QA report, then await instruction (or full QA + bug-fix if the owner says go) | report | — |
 
-| Batch | Lessons | Roadmap |
-|---|---|---|
-| 1 | 15 · 16 · 17 | Can/Have to/Should + future · countable/uncountable & quantifiers · time & movement prepositions |
-| 2 | 18 · 19 · 20 | phrasal verbs (system + *get* family) · conditionals 1&2 + would (0 and 3) · present perfect continuous |
-| 3 | 21 · 22 · 23 | prepositions & verb+preposition · phrasal verbs: people & talk · phrasal verbs: work, planning, problems |
-| 4 | 24 · 25 · 26 | articles · conditionals: mixed & alternatives · modals of deduction |
-| 5 | 27 · 28 · 29 | relative clauses · (see map) · passive |
-| 6 | 30 · 31 · 32 | reported speech (full) · (see map) · (see map) |
-| … | 33-50 | read each roadmap entry at Pass A time — the map is authoritative, not this table |
+A batch is **3 lessons** (4 allowed at a track boundary). Never reorder the steps, never interleave a track.
 
-**Per lesson:** Pass A → `designs/lessonNN.design.md` (with `recycles:` / `must not re-teach:` / the `band:` line);
-Pass B → `business/lessonNN.html` + identical `.edit.html`. Then `node qa/lang.mjs NN` (the one language gate: marked
-PT + on-track register), the two free structural checks, the sidecar copy, and a push every 3 lessons.
-TO-DO sections are allowed wherever a vehicle is defensively
-optimal but not built (see HANDOFF.md for the exact shape). Audio: author `data-say` now, render at the end —
-`npm run audio:check` will fail until then, which is expected.
+**Per lesson:** Pass A → the design file with `recycles:` / `must not re-teach:`; Pass B → the page + identical
+`.edit.html`. Then the two free structural checks (tag balance + child dump, `HANDOFF.md`), `node build-lessons.mjs`
+per batch, `git` per batch, `WHERE WE ARE` rewritten here after **every** lesson.
 
-### Retrofit subtask — business 15-35 language & level pass (BLOCKS kids/adult)
+**QA is OFF for this run** (owner): no `npm run qa`, no `content` / `width` / `overflow` / `smoke` / `games` /
+`landing` / `audio:check`, no Chrome, no local server — do not run them and do not report them. Commit messages say
+"QA disabled by owner instruction for this run".
 
-Queued 2026-11-03 (owner), to run **after business 50 + its QA** and **before kids 1-50**. The 21 pages 15-35 were
-built to the old, unmeasured Portuguese rule: PT share of explanatory text is 100% of the leads, the opener is PT on
-every page, and mean target-sentence length only moves 3.1 → 7.0 words across those 21 lessons. PEDAGOGY-MAP §4 is now
-a measured band, and these pages are the design source for kids/adult — so they get the same treatment before the
-track switch rather than after 100 pages inherit the flat register.
+**Kids/adult derivation rule.** Take the same-numbered parent design's *fundamental pedagogical idea* — what is being
+taught, and the teaching beats that install it — and rebuild everything else for the track persona: contexts,
+situations, vocabulary, examples, vehicles, stakes, humour, and register (`PEDAGOGY-MAP` §1). Not a translation and
+not a re-skin; never a find-replace of another track's page.
 
-**Scope.** `business/lesson15`-`lesson35` + their `.edit.html` sidecars + the matching `designs/lessonNN.design.md`
-(designs gain one line: `band: business · L__ · C__ · registers: __ · contexts: __`). **Marking applies to 1-14 too** —
-`qa/lang.mjs 1 10 20` shows the same defect there (L1: 250 words of unmarked Portuguese); it is the same mechanical
-fix and belongs in this pass.
+**Language and register:** decided at the point of generation by `PEDAGOGY-MAP` §4 t) and §4 u) alone. No counts, no
+quotas, no target share, no band. Mark every PT span you write (`lang="pt"` / `.pt` / `.ptw`) — unmarked PT renders as
+plain English.
 
-**Changes.** The explanation layer (introductions, explanatory text, tips, headlines, column headers) loses its
-Portuguese wherever the element's `C` does not exceed the lesson number; PT stays wherever it is defensibly optimal —
-word lists with translations, a paired PT phrase, a note, a hint. Every PT span gets marked; register is checked
-against the track.
-
-**Does not change.** Teaching items, answers, grammar sequence, `data-say` strings (audio re-renders at end of track).
-
-**Acceptance per page.** `node qa/lang.mjs NN` clean (no unmarked PT, no off-track term); the explanation layer reads as
-English at L31+ except where `C > L`; `qa/content` + `qa/width` green; sidecar re-copied; push every 3 pages.
-
-**Owner.** The same unattended task. Status: queued, not started.
-
-
-**After business 50:** kids, then adult, generated **from the design files** (same shapes; new register, contexts
-and examples per track persona; swap business-specific slots for track-native ones). Never build a track by
-find-replacing another track's pages.
-
-Audio today: 541 clips for lessons 1-14. Lessons 15+ author `data-say` now; render at end of track (`audio:check`
-red until then is expected). Built: **15-32** (pages + sidecars, two free checks green; `content`/`width` green for
-all six batches; overflow/smoke/audio deferred to end-of-track).
-
-## NOTES
-- `overflow.mjs` (real Chrome) has NOT run since lesson 14 — the run policy forbids Chrome in the loop. Every page
-  uses the same block shapes as 15-17 (`.panel`/`.chart`/`.dialog`/`.itemrow`), no new shape. End-of-track sweep must
-  run 15-50 in one go.
-
+## NOTES / parked (never a reason to stop)
+- **Duplicate stems** in business 33 (3), 34 (2), 35 (5) — rename in the quiz instance (`· quiz`); fix in the
+  close-of-run bug pass, not during generation.
+- **Unmarked Portuguese** in the 1-35 pages is widespread (measured with a throwaway script on 2026-11-03: L1 ~509
+  words of PT rendered as English). The step-2 sweep marks what it touches; a full marking pass is a bug-pass item.
+- **Audio:** clips exist for 1-14 only; every target line carries `data-say`; render + `audio:check` at the very end,
+  outside the loop.
+- **Pronunciation dictionary**: `dictionary.json` lacks some business keys (`stakeholder`, `onboarding`); inline
+  pronunciation is not in the spec — deferred, not blocking.
+- **`lessons-archive/`** is gitignored and withheld: never open it for content, shape or inspiration.

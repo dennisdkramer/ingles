@@ -81,5 +81,5 @@ For any generated [**lesson introduction, explanatory text, tip, headline, or co
 if its parent [LESSON NUMBER] < [CONTENT LEVEL]. Portuguese within other content types is included ONLY when
 *defensibly optimal for teaching purposes* to do so.
 
-[CONTENT LEVEL] and the operational form of this rule: PEDAGOGY-MAP.md §4 (with §5 x). Register is a separate single
-rule: the socio-linguistic context of any content fixes it as one of the TRACK's three options (PEDAGOGY-MAP.md §1).
+[CONTENT LEVEL] and the operational form of this rule: PEDAGOGY-MAP.md §4 t) (with §5 x). Register is a separate single
+rule: the socio-linguistic context of any content fixes it as one of the TRACK's three options (PEDAGOGY-MAP.md §1; stated as §4 u)).
