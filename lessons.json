@@ -1,5 +1,18 @@
 {
-  "kids": [],
+  "kids": [
+    {
+      "n": 1,
+      "title": "Day One: the Profile Card & the Sentence Skeleton"
+    },
+    {
+      "n": 2,
+      "title": "The Words You Already Know"
+    },
+    {
+      "n": 3,
+      "title": "Six Words & the Polite Question"
+    }
+  ],
   "business": [
     {
       "n": 1,
