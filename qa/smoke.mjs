@@ -33,11 +33,10 @@
  *   predates its own backend write — the row, the phrase's flag and the popup's note line stay
  *   exactly as the click left them (nbLocal/nbEntries, the same pendingFor window as highlights)
  *
- * SCOPE (owner decision 2026-10-11): business lesson pages only, until the feature set is final.
- * The page list is DISCOVERED — every business/lesson*.html that exists is tested, and an empty
- * business/ is a passing state (pages are regenerated after a layout change). kids/, adult/
- * and the login page (index.html) are parked here on purpose — add their testPage() calls back in
- * main() once business is done.
+ * SCOPE: `--track=kids|business|adult` narrows the run to one track; with no flag EVERY track that has
+ * pages is tested in the same run (so `npm run qa` needs no argument). The page list is DISCOVERED: every
+ * <track>/lesson*.html that exists is tested, and a track with no pages is a passing state (pages are
+ * regenerated after a layout change). The login page (index.html) belongs to qa/landing.mjs.
  */
 
 import { JSDOM } from 'jsdom';
@@ -45,6 +44,7 @@ import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { pickTracks, pickNumbers, missingTargets, scopeLabel } from './track.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -1508,34 +1508,41 @@ async function main() {
                 '   • External network requests ignored\n');
 
     const server = createServer();
-    const PORT = 8765;
+    const PORT = 0; // ephemeral: a leftover run, or two suites at once, can never collide on a fixed port
 
     await new Promise(resolve => server.listen(PORT, resolve));
-    const serverUrl = `http://localhost:${PORT}`;
+    const serverUrl = `http://localhost:${server.address().port}`;
     console.log(`🌐 Local server running at ${serverUrl}\n`);
 
     // Mock fetch for external requests
     mockFetch();
 
     const allErrors = [];
+    const only = pickNumbers();
 
-    /* SCOPE: business track (owner decision 2026-10-11) — and the page list is DISCOVERED, not
-       hard-coded: every business/lesson*.html that exists gets the full run, while "no pages yet"
-       is a valid, passing state (the pages are regenerated after a layout rewrite).
-       Parked until the business build is final: index.html (login page), kids/lesson1.html,
-       adult/lesson1.html. kids/ and adult/ are UNTRACKED and GITIGNORED (old pre-rewrite wording, owner
-       instruction 2026-11-03), so their testPage() entries must NOT be re-enabled until those tracks are
-       regenerated AND committed. */
-    const businessDir = path.join(ROOT, 'business');
-    const pages = (fs.existsSync(businessDir) ? fs.readdirSync(businessDir) : [])
-        .filter(f => /^lesson\d+\.html$/.test(f))
-        .sort((a, b) => Number(a.match(/\d+/)[0]) - Number(b.match(/\d+/)[0]))
-        .map(f => ['business/' + f, 'business']);
-    console.log('📄 pages under test: ' + (pages.length ? pages.map(p => p[0]).join(', ') : '(none — business/ is empty)') + '\n');
+    /* The page list is DISCOVERED across the run's scope, never hard-coded: every <track>/lesson*.html that
+       exists gets the full run, and a track with no pages is a valid, passing state (a track is rebuilt one
+       lesson at a time). No `--track` = every track with pages; `--track=kids|business|adult` narrows it
+       (qa/track.mjs). index.html (the login page) belongs to qa/landing.mjs, not to this suite. */
+    const tracks = pickTracks();
+    if (!tracks.length) console.log('No lesson pages in any track — nothing to test\n');
+    const ghosts = missingTargets(tracks, only);
+    if (ghosts.length) { console.log('❌ lesson ' + ghosts.join(', ') + ' does not exist in ' + scopeLabel(tracks) + '\n'); process.exit(1); }
+    const pages = [];
+    for (const track of tracks) {
+        const dir = path.join(ROOT, track);
+        (fs.existsSync(dir) ? fs.readdirSync(dir) : [])
+            .filter(f => /^lesson\d+\.html$/.test(f))
+            .filter(f => !only.length || only.includes(Number(f.match(/\d+/)[0])))
+            .sort((x, y) => Number(x.match(/\d+/)[0]) - Number(y.match(/\d+/)[0]))
+            .forEach(f => pages.push([track + '/' + f, track]));
+    }
+    console.log('📄 ' + scopeLabel(tracks) + ' pages under test: ' + pages.length +
+        (only.length ? ' (lesson ' + only.join(', ') + ')' : '') + '\n');
     for (const [page, track] of pages) {
         try {
             const errs = await testPage(serverUrl, page, track);
-            allErrors.push(...errs);
+            allErrors.push(...errs.map(e => '[' + page + '] ' + e));
         } catch (e) {
             allErrors.push(`[${page}] ${e.message}`);
         }

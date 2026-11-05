@@ -1,7 +1,5 @@
 # Lesson 7 (kids) — design (Pass A)
 
-`band: kids · L07 · C07 · registers: 2b (friends and classmates) · 2a (a teacher, the coach, a shop assistant) · contexts: the group chat the day after, the corner shop with pocket money, the kitchen at home`
-
 ## Fundamental idea taken from `designs/kids/lesson06.design.md` and its parent `designs/lesson07.design.md`
 The parent design's idea: **the word is chosen by the slot that follows it, not by the translation.** *tell* pede pessoa antes da coisa (*tell me*); *say* leva a coisa sem a pessoa (*say something*); *talk* pede *to* + pessoa e *about* + assunto; *speak* leva idioma. E cinco verbos portugueses **se dividem**: *esperar* → *wait / expect / hope*; *achar* → *think / find*; *pagar* → *pay / cover / charge*; *gastar* → *spend / waste*; *faltar* → *miss / be missing / be short of*. Cada item carrega **a moldura** que o decide, nunca um sinônimo solto. O passado chega com os verbos (*said, told, spoke, thought, found, paid, spent, waited, hoped*) e o imperativo é a **receita**. Kids keep the idea and move it to: the group chat (*who said what to whom*), the corner shop with **pocket money** (*pay / charge / spend / waste*), and **the kitchen at home** (a sandwich recipe with the imperative).
 
@@ -20,6 +18,7 @@ The parent design's idea: **the word is chosen by the slot that follows it, not 
 - **O campo do dinheiro de bolso** carrega *pay / charge / spend / waste*: *price, change, receipt, cheap, expensive, pocket money*.
 
 ## Situation
+Friends and classmates, a teacher, the coach, a shop assistant — the group chat the day after, the corner shop with pocket money, the kitchen at home.
 Um dia comum de criança: no grupo da turma alguém **conta o que outra pessoa disse**, na volta da escola você compra um lanche com o dinheiro da semana (e vê quanto **custou**, quanto você **pagou** e o **troco**), e em casa você faz o seu próprio lanche seguindo uma receita.
 
 ## Candidates (three channels)
@@ -50,7 +49,7 @@ Um dia comum de criança: no grupo da turma alguém **conta o que outra pessoa d
 The past table comes **before** the shop section: the past belongs to §2's verbs and must land while they are fresh; the shop then re-uses it (*they charged / I paid / I spent*).
 
 ## Notes for the build pass
-Portuguese for explanations, tips and headers (C07); English inside every exercise, every target frame and all audio. Every split-verb item shows the **frame** (the word that follows), never only a translation. All food/money words are glossed before use. The imperative section is written as a **recipe**, not as a rule list. The past is shown in the three-column table (present · past · participle) with the third column labelled *reconhecer*.
+Every split-verb item shows the **frame** (the word that follows), never only a translation. All food/money words are glossed before use. The imperative section is written as a **recipe**, not as a rule list. The past is shown in the three-column table (present · past · participle) with the third column labelled *reconhecer*.
 
 `recycles:` lesson 6's past and its three *-ed* sounds (revised, not re-taught); lesson 5's *do/does* (used once inside *What did she say?* as a fixed chunk — heard, glossed, **not drilled**); lesson 4's present simple; lesson 3's wh- questions; lesson 1's *be* and the school words.
 `must not re-teach:` lesson 5 owns *do/does*; lesson 6 owns the past forms and the *-ed* sounds (this page only **reuses** them on new verbs); lesson 15 owns modals and obligation; a later lesson owns the present perfect; lesson 4 owns the *-s*.

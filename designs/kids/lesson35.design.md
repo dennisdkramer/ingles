@@ -1,7 +1,5 @@
 # Lesson 35 (kids) — design (Pass A)
 
-`band: kids · L35 · C35 · registers: 3a (the shop assistant, service) · 2a (the teacher, a note) · contexts: the broken bike, the lost jacket, the order that never came, apologising and fixing`
-
 ## Fundamental idea taken from the parent `designs/lesson35.design.md`
 A ideia do pai: o roteiro de atendimento é **uma sequência**: cumprimentar → identificar o problema → assumir → resolver → fechar, **nessa ordem, sempre**. **Empatia é uma frase, não um sentimento**: o primeiro movimento é sempre **nomear a experiência do outro**, antes de qualquer fato; pular isso é o que faz uma resposta correta soar fria. **Assumir sem confessar**: *I'm sorry this happened* — responsabilidade pela **experiência**, não necessariamente pela culpa. **O "sim parcial" é o não profissional**: nunca *no* sozinho, sempre *no, but here is what I can do today*. E **escalar é prometer com data** — promessa sem data é a segunda reclamação. Kids trocam o pedido atrasado por **o balcão da loja e a secretaria da escola**: a bicicleta que quebrou, a jaqueta perdida, o pedido que não chegou.
 
@@ -21,6 +19,7 @@ A ideia do pai: o roteiro de atendimento é **uma sequência**: cumprimentar →
 - **Dependências**: as ofertas com modal (15); o hipotético como amaciante (19); a forma da má notícia (34).
 
 ## Situation
+The shop assistant, service, the teacher, a note — the broken bike, the lost jacket, the order that never came, apologising and fixing.
 **O balcão**: chega alguém com um problema real — a bicicleta que quebrou na primeira semana, a jaqueta que sumiu da mochila, o pedido que não chegou. O aluno **atende**: cumprimenta, baixa a temperatura, oferece o sim parcial, escala o que não dá para resolver e escreve **o retorno**.
 
 ## Candidates (three channels)

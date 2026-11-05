@@ -1,7 +1,5 @@
 # Lesson 42 (kids) — design (Pass A)
 
-`band: kids · L42 · C42 · registers: 1b (classmates on the bus) · 1a (friends, the party) · 2a (a teacher, the written report) · contexts: the school trip, the football pitch, the class party, the report for the teacher`
-
 ## Fundamental idea taken from the parent `designs/lesson42.design.md`
 A ideia do pai: depois de três fatias de phrasal verbs, o único teste que importa é **recuperar o verbete numa situação em que ele não foi ensinado** — *o mesmo verbo, uma sala nova*. Depois: **a partícula é o sentido**, então um verbo nunca visto ainda é meio legível (*up* completa ou aproxima, *out* sai ou resolve, *off* separa ou adia, *on* continua, *through* atravessa contra resistência, *into* investiga). **O pronome decide a separação**: com pronome vai dentro (*turn it off*, nunca *turn off it*), e na dúvida dentro é quase sempre seguro — os poucos que recusam (*look into it*, *get over it*) merecem nome. **A colocação é a diferença entre traduzido e falado**: você *put up* a barraca, *hand out* os panfletos, *tidy up* a sala — o substantivo errado é o que faz a fala soar montada. **A palavra única não é "inglês melhor" — é outra sala**: phrasal é falado, a palavra latina é escrita e formal, e **as duas direções se ensinam**. E **gíria tem prazo de validade**: *lit, sick, extra* significam pouco fora da escola e menos em dois anos — é **julgamento de estilo, não regra**. É **consolidação, sem verbo novo**.
 
@@ -23,6 +21,7 @@ A ideia do pai: depois de três fatias de phrasal verbs, o único teste que impo
 - **Dependências**: a máquina da 18 (partícula, separável, família do *get*), os conjuntos da 22 e da 23, o registro da 34, o estilo escrito da 29.
 
 ## Situation
+Classmates on the bus, friends, the party, a teacher, the written report — the school trip, the football pitch, the class party, the report for the teacher.
 
 ## Candidates (three channels)
 - **Heard — os 30 segundos do ônibus.** Nove phrasal verbs em velocidade natural, com uma pergunta factual embaixo para o aluno não caçar a lista — e uma contagem para ele se conferir.

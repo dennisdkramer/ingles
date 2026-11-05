@@ -1,7 +1,5 @@
 # Lesson 41 (kids) — design (Pass A)
 
-`band: kids · L41 · C41 · registers: 1b (a classmate, the oral test) · 1a (a friend, retelling) · 2a (a teacher, answering fast) · contexts: the English oral test, the class quiz, the school radio interview, retelling a match at break`
-
 ## Fundamental idea taken from the parent `designs/lesson41.design.md`
 A ideia do pai: **fluência é gramática com a atenção em outro lugar.** O aluno não erra na prova escrita; erra **quando o relógio corre** — e não porque não sabe, mas porque **a forma chega tarde ou pela metade**. É **consolidação, não gramática nova**: tudo aqui já foi visto (tempos das 4–7 e 11, modais das 15 e 26, condicionais das 19 e 25, present perfect da 20). A aula entrega **três decisões em vez de doze tempos**: **quando** (passado / agora / futuro), **a forma** (simples / contínua / perfeito), **a atitude** (fato / expectativa / hipótese). Dois relógios numa frase (*by the time I got there, they had been waiting for an hour*). Os **modal perfects são atitude, não tempo**: *should have* = a expectativa que falhou, *must have* = a dedução de que tenho certeza, *would have* = o caminho não tomado, *might have* = o que não posso descartar. E o **condicional sem "if"** (*Had I known, I'd have told you*) é **uma troca**, formal e dramática. **Uma resposta certa em oito segundos é resposta errada numa prova oral** — então o treino é **recuperação cronometrada**, e o aluno sai com **três erros dele**, que são o programa a partir de agora.
 
@@ -23,6 +21,7 @@ A ideia do pai: **fluência é gramática com a atenção em outro lugar.** O al
 - **Dependências**: tempos das 4–7 e 11, modais das 15 e 26, condicionais das 19 e 25, present perfect da 20 — nada novo entra.
 
 ## Situation
+A classmate, the oral test, a friend, retelling, a teacher, answering fast — the English oral test, the class quiz, the school radio interview, retelling a match at break.
 **A prova oral de inglês.** O aluno tem **quarenta segundos** por pergunta, um cartão com três tópicos e um professor que **não repete**. Depois: o **quiz da turma** com cronômetro, a **entrevista da rádio da escola** (rápida, gravada) e o **relato do jogo do recreio** para quem não viu. Fatos fixos, fala rápida, sem tempo de pensar em gramática — que é exatamente o ponto.
 
 

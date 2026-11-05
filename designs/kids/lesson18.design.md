@@ -1,7 +1,5 @@
 # Lesson 18 (kids) — design (Pass A)
 
-`band: kids · L18 · C18 · registers: 2b (a friend on the phone, family at home) · 2a (a teacher) · contexts: a messy morning before school, a pet, games and devices, chores`
-
 ## Fundamental idea taken from the parent `designs/lesson18.design.md`
 A ideia do pai: **verbo + partícula = uma palavra nova**, com um sentido que não sai das partes (*find out* não tem nada a ver com *find*). Por isso toda expressão vem com o **sinônimo formal** ao lado (*find out / discover*, *turn down / refuse*). A **partícula é a metade semântica**: *up* = completar (*wake up, finish up*), *out* = sair ou excluir (*get out, find out*), *on* = continuar (*go on, carry on*), *off* = separar (*turn off, take off*). **A separabilidade é decidida pelo objeto**: objeto substantivo pode ficar no meio ou no fim; **pronome fica sempre no meio** — *turn it off*, nunca *turn off it*. A **família do *get*** traz sete verbos diferentes, separados por situação, não por tradução. Kids mantêm o mecanismo e trocam o escritório por **a manhã corrida antes da escola**.
 
@@ -21,6 +19,7 @@ A ideia do pai: **verbo + partícula = uma palavra nova**, com um sentido que n�
 - **Dependências:** a manhã usa os modais da aula 15 (*you have to get through*) e o prazo da aula 17 (*by Friday*).
 
 ## Situation
+A friend on the phone, family at home, a teacher — a messy morning before school, a pet, games and devices, chores.
 Uma manhã caótica: o despertador toca, o cachorro precisa de comida, o uniforme está no chão, o ônibus passa às sete, a lição não está pronta. Tudo o que dá errado nessa manhã se descreve com um phrasal verb — é exatamente por isso que o aluno não consegue evitá-los.
 
 ## Candidates (three channels)

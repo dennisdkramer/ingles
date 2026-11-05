@@ -1,7 +1,5 @@
 # Lesson 38 (kids) — design (Pass A)
 
-`band: kids · L38 · C38 · registers: 1b (a classmate, group work) · 1a (a friend, after an argument) · 2a (a teacher, politely) · contexts: group work in class, the football pitch at break, the class group chat, a friend who is angry with you`
-
 ## Fundamental idea taken from the parent `designs/lesson38.design.md`
 A ideia do pai: **discordar é um botão de volume, não um interruptor.** O aluno costuma ter **duas posições** — concordo com tudo, ou guerra aberta — e a aula é a **escala**: *I completely agree · I agree with most of that · I see your point, but · I'm not sure that's the whole picture · I'm not convinced · I don't think that holds.* Cada degrau diz **quanto da fala do outro sobrevive**, e escolher o degrau é a habilidade. **O degrau é escolhido pelo que está em jogo**, não pelo humor. E **o "but" apaga a concessão**: *I take your point about cost, but the timeline is impossible* — o outro ouve só a segunda metade; **conceder e contrapor em duas frases, sem "but"**. **Amacie a certeza, não o fato**: *I'm not sure that's the whole picture* é mole com a pessoa e firme com a ideia; *maybe possibly a bit of an issue* é mole com o fato e soa despreparado. **Evidência é terreno neutro**: *What's that based on?* tira a briga das pessoas e põe nos dados. **O teste de terceira pessoa** decide pessoa × ideia. E **credibilidade é dizer o que mudaria a sua opinião**. Para crianças: **a discussão do trabalho em grupo** — e o teste vira *eu diria isto na frente da professora?*
 
@@ -24,6 +22,7 @@ A ideia do pai: **discordar é um botão de volume, não um interruptor.** O alu
 - **Dependências**: os amaciadores (26), as perguntas (3), o conditional como contraproposta (19/25), a conversa da 37.
 
 ## Situation
+A classmate, group work, a friend, after an argument, a teacher, politely — group work in class, the football pitch at break, the class group chat, a friend who is angry with you.
 **A feira de ciências do 7º ano.** Quatro alunos, um cartaz, uma proposta — e uma menina que diz a mesma coisa verdadeira duas vezes: uma como ataque ("isso nunca vai dar certo") e uma como contribuição ("eu gostaria de saber se o público vai ler"). A sala reage **à pessoa**, não ao argumento. O aluno primeiro assiste, depois entra.
 
 

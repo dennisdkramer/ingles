@@ -1,7 +1,5 @@
 # Lesson 26 (kids) — design (Pass A)
 
-`band: kids · L26 · C26 · registers: 2b (a friend, in the corridor) · 2a (the teacher, a note home) · contexts: a lost backpack, the classroom at break, a school bag search, a note explaining what happened`
-
 ## Fundamental idea taken from the parent `designs/lesson26.design.md`
 A ideia do pai: **dedução é aritmética sobre evidência, não opinião**. *Must be* quer dizer "a evidência não deixa outra opção"; *can't be* quer dizer "a evidência exclui". A aula **sempre mostra a evidência primeiro e o modal depois**. E há **uma escala só**, com quatro paradas: **must** (quase certo) — **should** (esperado) — **may/might/could** (talvez) — **can't** (impossível). As formas do passado são **as do presente + have + particípio**; o operador não muda de sentido ao mudar de tempo. Kids trocam o pacote do cliente por **a mochila que sumiu**, e *should have* entra com as suas **duas vidas**: a expectativa que falhou (*the bell should have rung*) e o arrependimento (*I should have told the teacher*).
 
@@ -21,6 +19,7 @@ A ideia do pai: **dedução é aritmética sobre evidência, não opinião**. *M
 - **Dependências**: a grade de operadores da 15; *have +* particípio da 20; a hipótese educada da 25.
 
 ## Situation
+A friend, in the corridor, the teacher, a note home — a lost backpack, the classroom at break, a school bag search, a note explaining what happened.
 A mochila do aluno sumiu do corredor entre o recreio e a última aula, e ninguém sabe onde está. A evidência se acumula: o zíper aberto, a garrafa na sala, o colega que viu a mochila no banco, o sino que ainda não tocou. O aluno diz **o que deve ter acontecido, o que talvez tenha acontecido e o que não pode ter acontecido** — e depois escreve a nota para casa sem exagerar.
 
 ## Candidates (three channels)

@@ -5,10 +5,3 @@ progress.log
 .clinerules/
 .continue/
 qa/_live/
-# archived / parked lesson pages: deliberately withheld from lesson generation (owner instruction
-# 2026-11-03). They are untracked and must NEVER be read, opened or used as a reference for content,
-# structure or layout — a lesson's shape is imagined from designs/lessonNN.design.md + PEDAGOGY-MAP.md.
-lessons-archive/
-# NOTE: kids/ and adult/ are TRACKED from 2026-11-03 — the three-track run writes and pushes them, so the manifest
-# can advertise them (build-lessons.mjs skips a gitignored track). The old pre-rewrite kids/adult pages were moved
-# into lessons-archive/ so that no track is ever built by copying a page.

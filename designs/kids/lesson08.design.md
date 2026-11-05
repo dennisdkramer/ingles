@@ -1,7 +1,5 @@
 # Lesson 8 (kids) — design (Pass A)
 
-`band: kids · L08 · C08 · registers: 2b (friends and classmates) · 2a (a teacher, the coach) · contexts: a normal school day, the group chat at night, the weekend routine`
-
 ## Fundamental idea taken from `designs/kids/lesson07.design.md` and its parent `designs/lesson08.design.md`
 The parent design's idea: **frequência tem lugar fixo e o verbo decide qual** — **antes** do verbo normal (*I always work*), **depois** do **be** (*I'm always tired*); os advérbios são uma **escala**, não sinônimos (*always · usually · often · sometimes · never*); o relógio tem **roteiro fixo** (*o'clock · half past · quarter past · quarter to · noon · midnight*); e **o dia é a moldura** que faz tudo isso valer — contado em ordem e **no passado**, que as aulas 6-7 construíram. Kids keep the idea and swap the office day for **the school day**: alarm clock, breakfast, backpack, classroom, homework, recess, and the group chat at night telling how the day went.
 
@@ -20,6 +18,7 @@ The parent design's idea: **frequência tem lugar fixo e o verbo decide qual** �
 - **O vocabulário do dia escolar é o portador**, não o assunto: ele fornece os substantivos de que uma rotina é feita.
 
 ## Situation
+Friends and classmates, a teacher, the coach — a normal school day, the group chat at night, the weekend routine.
 Uma terça comum: o despertador, o café, a mochila, a aula, o recreio, a lição de casa — e no fim do dia o grupo da turma pergunta **"What time do you usually get up?"** e depois **"What did you do yesterday?"**. A criança responde as duas coisas na mesma mensagem: frequência e hora.
 
 ## Candidates (three channels)
@@ -48,7 +47,7 @@ Uma terça comum: o despertador, o café, a mochila, a aula, o recreio, a liçã
 A tira do dia vem **depois** da escala: primeiro a criança precisa saber *com que frequência*, para só então preencher os blocos do dia com hora **e** hábito.
 
 ## Notes for the build pass
-Portuguese for explanations, tips and headers (C08); English inside every exercise, every clock reading and all audio. O dia é contado como **história**, não como lista de palavras. Toda leitura de relógio tem áudio. O passado vem das aulas 6-7 e **não** é reensinado.
+O dia é contado como **história**, não como lista de palavras. Toda leitura de relógio tem áudio. O passado vem das aulas 6-7 e **não** é reensinado.
 
 `recycles:` lesson 6's past forms and time words; lesson 7's *think / spend* (used once each, not drilled); lesson 5's *do/does* (inside *What time do you…?* — heard, glossed, **not drilled**); lesson 4's present simple and the *-s*; lesson 1's *be*.
 `must not re-teach:` lesson 4 owns the simple present and *-s*; lesson 5 owns *do/does*; lessons 6-7 own the past forms; lesson 17 (later) owns the time prepositions; lesson 12 owns big numbers, prices and dates; lesson 10 owns the consonant map.

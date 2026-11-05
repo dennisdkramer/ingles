@@ -1,7 +1,5 @@
 # Lesson 4 (kids) — design (Pass A)
 
-`band: kids · L04 · C04 · registers: 2b (friends and classmates in the school break) · 2a (the person behind the snack-bar counter) · contexts: the school snack bar at break, the class group chat, Saturday football practice, the phone at home`
-
 ## Fundamental idea taken from `designs/kids/lesson03.design.md` and its parent `designs/lesson04.design.md`
 The parent design's idea: **the simple present is not "the present"** — it is what is *always* true (habit, routine, fact), and "right now" needs a **second machine** (`am/is/are + -ing`); the **-s** on the verb belongs to the *owner* (he/she/it), not to the tense; and `-ing` has **no hard g**. Kids keep the idea and drop the office, the coffee shop, the colleague and the onboarding page; they keep the pair (*I play …* / *I'm playing …*) and the "who owns the -s" rule, and move the field to the school snack bar at break.
 
@@ -21,12 +19,13 @@ The parent design's idea: **the simple present is not "the present"** — it is 
 - **Silly stakes.** The break is twelve minutes long and the queue is the whole school. The student who orders in one sentence eats; the student who starts "I want… a… how do you say…" hears the bell.
 
 ## Situation
+Friends and classmates in the school break, the person behind the snack-bar counter — the school snack bar at break, the class group chat, Saturday football practice, the phone at home.
 Break at school. The student is at the snack bar with the class, phone in one hand, and has to (a) order without holding up the queue, (b) understand *for here or to go?*, and (c) answer two questions from a classmate in the group chat: *what do you usually do on Saturdays?* and *what are you doing right now?* — the two machines in one conversation.
 
 ## Candidates (three channels)
 - **Heard — the counter.** Three lines are heard before anything is read (the order, the counter's question, the price), and the student picks what was said. Good, but alone it does not install the *always / now* contrast.
 - **Done — two columns of truth.** The student sorts **their own** Saturday and **their own** right-now into two columns, then converts a classmate's routine into the third person. The contrast only exists if the student's own week is on one side and their own minute on the other.
-- **Read — the class group chat.** A thread where two people describe a normal week and one describes what is happening at that moment. The best reading material of the three, but at C04 it turns into translation instead of speech.
+- **Read — the class group chat.** A thread where two people describe a normal week and one describes what is happening at that moment. The best reading material of the three, but it turns into translation instead of speech.
 
 ## Chosen
 **Done (two columns of truth), entered through Heard.** Sorting their own sentences is the shortest path to *hearing* the pair, and the break-at-the-snack-bar audio gives the entrance a place. The chat thread is used later, only as the situation the recordings are addressed to.
@@ -56,7 +55,7 @@ Six verbs written for he/she/it, six sentences sorted or converted (always vs no
 The two columns come first and the rule second: this persona needs a win in the first minute, and "you already know both sentences — which one is now?" is that win. The -s arrives only after the two machines have been *heard*, so the student never meets three new things at once.
 
 ## Notes for the build pass
-Portuguese for explanations, tips and headers (C04); English for every target sentence, the counter lines and all audio. The pair (*I play / I'm playing*) is always shown as a pair, never alone. Every snack-bar word is glossed inline (PT) before it is used. `data-say` on every target verb form, including the he/she/it row.
+The pair (*I play / I'm playing*) is always shown as a pair, never alone. Every snack-bar word is glossed inline (PT) before it is used. `data-say` on every target verb form, including the he/she/it row.
 
 `recycles:` lesson 1's `be` and *it* (*It's on the second floor*), lesson 1's three-sentence self-introduction, lesson 2's cognates and short spoken forms (*I'm = I am*), lesson 3's wh- questions used as the two questions the recordings answer (*What do you do on Saturdays? / What are you doing now?*).
 `must not re-teach:` lesson 1 owns `be` + identity and *a/an*; lesson 2 owns the cognate endings and the false friends; lesson 3 owns wh- + `be`, the polite embed and repair; lesson 5 owns **do/does** as the question machine (this page asks only with `be` + `-ing` and uses the fixed chunks *What do you…? / What are you…?*, glossed, not analysed); lesson 8 owns the frequency adverbs and their position; lesson 10 owns the consonant map; lesson 15 owns modals.

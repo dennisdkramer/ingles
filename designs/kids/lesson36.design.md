@@ -1,7 +1,5 @@
 # Lesson 36 (kids) — design (Pass A)
 
-`band: kids · L36 · C36 · registers: 1b (a friend, in the corridor) · 2a (the teacher, "tell the class") · contexts: the day the trip went wrong, the match, the lost bag, the first day somewhere new`
-
 ## Fundamental idea taken from the parent `designs/lesson36.design.md`
 A ideia do pai: **uma história é uma forma, não uma cronologia**. Lista de fatos em ordem **não é história**; a forma é a **tensão e a sua soltura**. Cinco batidas, cada uma com **um trabalho e uma pergunta** que ela responde: gancho (*como começou?*) → preparação (*com quem estamos?*) → complicação (*o que deu errado?*) → clímax (*o que você fez?*) → resolução (*o que mudou?*). E **o tempo verbal é a sinalização, e quem lê é o ouvinte**: o contínuo pinta o ambiente, o passado simples caminha dentro dele, o past perfect **busca atrás do ombro**, e o present perfect **vira para quem escuta** e diz "é por isso que estou contando". O erro de tempo é o que faz um relato soar **relatório** em vez de história. O **detalhe ganha lugar fazendo trabalho**: um número, um nome, um custo — *we were late* não é nada; *we were nine hours late* é história. E **comprimento é escolha, e a escolha é o que se corta**: nunca o gancho, nunca a resolução.
 
@@ -22,6 +20,7 @@ A ideia do pai: **uma história é uma forma, não uma cronologia**. Lista de fa
 - **Dependências**: o passado simples (6-7), a interrupção (11), o past perfect (19), o present perfect (20).
 
 ## Situation
+A friend, in the corridor, the teacher, "tell the class" — the day the trip went wrong, the match, the lost bag, the first day somewhere new.
 **O dia em que a excursão deu errado** — e a mesma história contada **quatro vezes**: a linha para o boletim, a versão de 30 segundos para um amigo no corredor, a resposta completa para a professora, e a versão que um colega conta sobre o aluno. Depois o aluno **escuta** e decide o que perguntar em seguida.
 
 

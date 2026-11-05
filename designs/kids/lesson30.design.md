@@ -1,7 +1,5 @@
 # Lesson 30 (kids) — design (Pass A)
 
-`band: kids · L30 · C30 · registers: 2b (a friend, passing a message) · 2a (the teacher, a note home) · contexts: a message from a friend, the teacher's instructions, a phone call at break, passing news home`
-
 ## Fundamental idea taken from the parent `designs/lesson30.design.md`
 A ideia do pai: **relatar é um movimento de câmera no tempo**, gêmeo do movimento de câmera em quem faz (aula 29): **as mesmas palavras, vistas de depois e de fora**. A tabela é mecânica — uma coluna entra, outra sai: presente → passado, passado → past perfect, *will* → *would*, *can* → *could*, *must* → *had to*. O único julgamento é a **exceção**: se o fato **continua verdadeiro**, o deslocamento é opcional (*she said she **is** working on it*). E as palavras de **tempo e lugar viajam com o relato**, porque *tomorrow* dito na segunda é *the next day* dito na terça — é o detalhe que faz o recado soar de gente grande. Kids trocam as minutas de reunião por **o recado que se leva para casa**.
 
@@ -22,6 +20,7 @@ A ideia do pai: **relatar é um movimento de câmera no tempo**, gêmeo do movim
 - **Dependências**: o deslocamento narrativo da aula 11; o perfeito da 20; os operadores da 15.
 
 ## Situation
+A friend, passing a message, the teacher, a note home — a message from a friend, the teacher's instructions, a phone call at break, passing news home.
 Um **recado tem que chegar em casa**: a professora deu quatro instruções, um amigo contou o que a mãe disse, e o aluno ouviu metade. No caminho, **tempo e lugar mudam de nome** e um fato continua verdadeiro — e é aí que o recado se desmonta se for repetido ao pé da letra. O aluno leva o recado falando e depois escreve o bilhete.
 
 ## Candidates (three channels)

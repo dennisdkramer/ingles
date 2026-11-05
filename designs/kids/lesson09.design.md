@@ -1,7 +1,5 @@
 # Lesson 9 (kids) — design (Pass A)
 
-`band: kids · L09 · C09 · registers: 2b (friends and classmates) · 2a (a teacher, a visitor) · contexts: my bedroom, the classroom, showing a friend around the house`
-
 ## Fundamental idea taken from `designs/kids/lesson08.design.md` and its parent `designs/lesson09.design.md`
 The parent design's idea: **there is / there are anuncia que uma coisa existe** — não diz de quem é nem como é. *There's a fridge* ≠ *It's a fridge* ≠ *We have a fridge*: três frases para o mesmo fato, e três trabalhos diferentes. A concordância é com a **coisa**, não com quem fala (*there is* + uma · *there are* + muitas) — o mesmo teste da aula 4. A pergunta e a negativa reusam o esqueleto da aula 5: *Is there…? · There isn't. · Are there…? · There aren't.*, e a resposta curta **para no there** (*Yes, there is.*). O lugar é **uma lei com três caras** — *in* dentro, *on* em cima, *at* num ponto — mais a geometria (*under, above, behind, in front of, next to, between*). E os conectores dão à frase uma segunda metade: *and · but · because · so*. Kids keep the idea and swap the office kitchen for **my bedroom** and **the classroom**.
 
@@ -20,6 +18,7 @@ The parent design's idea: **there is / there are anuncia que uma coisa existe** 
 - **O campo do quarto é o portador:** *bed, desk, lamp, wardrobe, shelf, drawer, poster, bin, rug, toys* — toda palavra usada dentro de *there is/are + lugar*.
 
 ## Situation
+Friends and classmates, a teacher, a visitor — my bedroom, the classroom, showing a friend around the house.
 Um amigo entra no seu quarto pela primeira vez. Você mostra o que **existe**, diz **onde** está, responde *"Is there a computer?"* — e liga as ideias como uma pessoa de verdade: *there's a desk, but there isn't a computer.* Na escola, a mesma conversa acontece na sala de aula nova.
 
 ## Candidates (three channels)
@@ -47,7 +46,7 @@ Um amigo entra no seu quarto pela primeira vez. Você mostra o que **existe**, d
 8. **Quiz — sem consulta.**
 
 ## Notes for the build pass
-Portuguese for explanations, tips and headers (C09); English inside every exercise, every existence sentence and all audio. Toda palavra do quarto é glosada **antes** de ser usada. Frases de existência **sempre** carregam um lugar (as duas metades da aula nunca se separam nos exemplos). Os conectores são treinados só com frases das aulas 1-8.
+Toda palavra do quarto é glosada **antes** de ser usada. Frases de existência **sempre** carregam um lugar (as duas metades da aula nunca se separam nos exemplos). Os conectores são treinados só com frases das aulas 1-8.
 
 `recycles:` lesson 4's singular/plural test and the *-s*; lesson 5's skeleton for the question and the negative; lesson 8's day words and clock; lesson 3's *Where…?* (used once as the question shape); lesson 1's *be*.
 `must not re-teach:` lesson 4 owns the *-s* and the one/many test (this page **uses** it); lesson 5 owns the helper and the short answer (this page moves the same answer onto *there*); lesson 8 owns frequency and the clock; a later lesson owns *some/any* and another owns the time/movement prepositions; the past of *there* is not opened here.

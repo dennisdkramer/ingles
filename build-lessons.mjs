@@ -3,10 +3,8 @@
 // Reads kids/ business/ adult/ lesson*.html (the PUBLISHED copies, not the .edit.html
 // sidecars), takes the lesson number from the filename and the title from the
 // content-area <h1>, and writes root lessons.json.
-// A track whose folder is GITIGNORED is skipped: kids/ and adult/ hold the old pre-rewrite wording and are
-// untracked/ignored on purpose (owner instruction 2026-11-03), so they must not be advertised in the
-// committed manifest. Regenerating a track and committing it brings it back automatically (git check-ignore
-// then says it is not ignored). Without git, every existing folder is included.
+// A track whose folder is GITIGNORED is skipped (nothing is gitignored today); without git, every existing
+// folder is included. Generating into a deleted track's folder brings it back automatically.
 import fs from 'fs';
 import path from 'path';
 import { execFileSync } from 'child_process';

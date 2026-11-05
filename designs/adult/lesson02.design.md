@@ -1,41 +1,97 @@
 # Lesson 2 (adult) — design (Pass A)
 
-`band: adult · L2 · registers: 1a (a friend, a message) · 1b (a colleague, the corridor) · 2a (a report you have to read) · contexts: the e-mail nobody taught you to read, the form at the clinic, the news, the pub`
+## Fundamental idea taken from `designs/lesson02.design.md`
+The cognate code is the fastest vocabulary a Portuguese speaker will ever get: a suffix maps onto an English
+suffix and a word they already own becomes an English word. Lesson 1 gave the skeleton; lesson 2 gives the
+first thousand words and the two traps that come with them — the cognate that is not the word people use, and
+the false friend that means something else entirely. It also brings the first stress rule, because a cognate
+with the stress in the wrong place is not recognised.
 
-## Fundamental idea taken from the parent `designs/lesson02.design.md`
-A ideia do pai: **o aluno já sabe mil palavras e não sabe que sabe.** Sete terminações carregam a maior parte do vocabulário abstrato (*-ção → -tion*, *-dade → -ty*, *-mente → -ly*, *-ado → -ed*, *-ico → -ic*, *-ista → -ist*, *-ivo → -ive*), e **a sílaba forte muda de lugar**: *-tion / -sion / -ity / -ic* puxam o acento para a sílaba **antes** da terminação (*informação → inforMAtion*). Mas três coisas quebram a festa: **a forma longa não é o que as pessoas dizem** (*photograph* é o que se pendura na parede; na conversa é *photo*), **seis palavras mentem** (*actually, pretend, push, assist, lunch, college*), e **a sílaba forte do português não transfere** (fo-to-gra-FI-a vs pho-TO-gra-phy).
+Re-contexted for this track: the carrier is **a playlist and a late-night conversation about music, films and
+people**, not a report. The vocabulary is the vocabulary of an adult social life (*application, opportunity,
+relationship, generation, musician, concert, documentary*) plus the false friends that cause real embarrassment
+(*actually, push, pretend, assist, lunch, college, parents, eventually*).
 
 ## Core (what the student can do afterwards)
-1. **Transformar uma palavra portuguesa na inglesa pela terminação** — e saber que o sentido sobrevive mesmo quando a palavra não é idêntica.
-2. **Saber quando o cognato não é a palavra que se usa**: *photograph → photo, telephone → phone, automobile → car, profession → job*.
-3. **Desconfiar de seis palavras**: *actually, pretend, push, assist, lunch, college*.
-4. **Pôr a sílaba forte no lugar** — as quatro terminações que movem o acento.
-5. **Ler um parágrafo cheio de palavras longas em voz alta sem soar a dicionário.**
+1. Turn a Portuguese word into its English cognate by its **suffix**, and know when the cognate is NOT the word
+   people say (*photograph → photo, telephone → phone, television → TV, automobile → car, profession → job*).
+2. Recognise and use the five **false friends** that actually trip Brazilians in adult conversation: *actually*
+   (= na verdade, not "atualmente"), *push* (= empurrar, not "puxar"), *pretend* (= fingir, not "pretender"),
+   *lunch* (= almoço, not "lanche"), *parents* (= pais, not "parentes").
+3. Stress a cognate so it is recognised: **-TION / -SION / -ITY / -IC** put the stress on the syllable *before*
+   the suffix (*infor-MA-tion, de-CI-sion, possi-BI-lity, ro-MAN-tic*), and the stress often lands elsewhere
+   than in the Portuguese word.
+4. Hear the short vowels that decide half these words: /ɪ/ vs /iː/ (*shit/sheet, bitch/beach, live/leave*) and
+   /ʌ/ vs /æ/ (*cut/cat, but/bat*) — because mishearing them is how a compliment becomes an insult.
 
-## Teaching beats (per core item) and dependencies
-- **A terminação é uma chave, não uma regra** — o sentido sobrevive.
-- **O som sobrevive, a grafia não** — *-dade → -ty*, *-mente → -ly*, e *-ado* só em adjetivos.
-- **As exceções são palavras, não regras**: *razão → reason, saúde → health, mercado → market*.
-- **Registro: o cognato é para ler, a palavra curta é para falar.**
-- **Os falsos amigos são um mapa de mão dupla** — cada um com o que significa e com a palavra que ele precisa.
-- **A sílaba forte é o motor**; *-tion* se diz *shən*.
+## Teaching beats and dependencies
+- **The suffix is a key, not magic.** -ção → -tion · -dade → -ty · -mente → -ly · -ado/-ido → -ed · -ivo →
+  -ive · -mento → -ment · -ista → -ist. Said plainly: it works *most* of the time, and the exceptions are the
+  ones people actually say.
+- **The cognate is often the formal word, and nobody says the formal word.** *I have an opportunity* is real;
+  *I have an occasion* is not. Pairs side by side, with which one belongs at a bar.
+- **False friends are taught as a swap, not a list.** Each gets its Portuguese meaning, its English meaning and
+  the word the student actually wanted. *I'm actually tired* ≠ *atualmente*; *push the door* ≠ *puxe a porta*
+  (that is *pull*, which is the door that says PUSH).
+- **The stress rule is the same rule four times.** -tion, -sion, -ity, -ic: stress the syllable before the
+  suffix. One model per suffix, hand-clapped, then six to place.
+- **The vowel pairs are the adult register.** *shit/sheet, bitch/beach, live/leave* and *cut/cat, but/bat* —
+  taught because the words are in the student's night.
+- **Register beat:** the same opinion said three ways (*That's nonsense. / That's bullshit. / That's fucking
+  bullshit.*) — lesson 1's ladder applied to a cognate (*ridiculous → ridículo*), so the ladder is visibly a
+  tool and not a list.
 
 ## Situation
+A late-night kitchen table after a concert: someone's phone on the counter, a song playing, two people arguing
+about a film, a cousin visiting from Portugal who says *"puxe"* and pushes the door. The student has the
+vocabulary of the room but not the words for it.
 
-## Candidates (three channels)
-- **Heard — a reunião que roda em palavras longas.** Quatro falas curtas (só áudio), cada uma com dois cognatos; o aluno marca o sentido e devolve a fala.
-- **Done — a bancada de decodificação.** Uma lista de palavras portuguesas da vida do aluno; ele produz o inglês, e a página confirma, dá **a forma usada** e o áudio.
-- **Read — o parágrafo abstrato.** Prosa com cara de relatório em que quase toda palavra de conteúdo é cognata; o aluno reescreve com as palavras que ele realmente diria.
+## Three candidate experiences
+- **Heard — a song chorus and a conversation over it**: tick which cognates were heard and which one was a
+  false friend. Music is this track's stated hook, and cognates are dense in lyrics.
+- **Done — the suffix factory**: twenty Portuguese words, produce the English cognate, then mark the four that
+  nobody says that way.
+- **Read — a film review in English** with six cognates and two false friends underlined; decide which
+  underlined word is wrong.
 
 ## Chosen
-**Done (a bancada), com Heard como entrada.** No início, a vitória honesta mais rápida é *"você já sabe mil palavras"*, e a bancada prova isso em vinte segundos, palavra por palavra — cada acerto seguido da **forma falada**, o que transforma o acerto em uso. O parágrafo abstrato entra no fim, quando o aluno já pode rir dele.
+**The suffix factory, entered through the song.** The heard entrance is the track's hook but it cannot carry the
+*production* of twenty words; the factory does, in one screen, and gives the visible progress this persona
+wants. The song opens the section (two lines, one cognate, one false friend) and hands straight into the rule.
 
-**First 30 seconds:** a página toca quatro falas e pergunta **uma coisa só**: quantas palavras você reconheceu? A chave é o número, não a gramática.
+**First 30 seconds:** two lines of a chorus on the page, one word highlighted — *generation* — with the
+question *"you already know this word; why?"* The answer is the suffix key, and the student gets it in one line
+before any table appears.
 
 ## What the student produces (evidence)
-Doze conversões na bancada, a escolha da forma usada em oito pares, seis falsos amigos corrigidos com a palavra que faltava, oito palavras com a sílaba forte marcada, quatro itens de áudio, um parágrafo reescrito em palavras curtas, e um quiz que não repete item do treino.
+Sixteen suffix transformations (typed), six false-friend swaps (chosen), six stress placements, four listening
+pairs, three register versions of one opinion, one recording of a two-line opinion using two cognates, and a
+quiz that tests the rule on words the training never used.
 
-## Width note (for Pass B)
-A tabela das sete terminações e a dos falsos amigos são de largura total (três a quatro campos, e as linhas são a chave). A bancada é um bloco de largura total (uma linha de produção). A família *photograph* fica em três colunas — **dividir** uma palavra nas suas três formas. A sílaba forte é uma lista de duas colunas, porque o par tem de ser lido como par.
+## Conflicts, and how I resolved them
+- **The roadmap wants the whole suffix code plus false friends plus stress plus vowels in one lesson.**
+  Resolution: seven suffixes, five false friends, one stress rule (four suffixes, one behaviour) and two vowel
+  pairs. The rest of the code is left to later recycling, and the page says so.
+- **A song would need a real clip we cannot ship.** Resolution: the lyric is *named*, quoted two lines, and the
+  page says where to hear it; the audio chips read the words, not the record.
+- **False friends invite a long list.** Resolution: five, each with a sentence the student would really say.
 
-**O e-mail que ninguém te ensinou a ler.** Chega uma mensagem cheia de *information, department, priority, deadline*; o aluno precisa (a) adivinhar uma palavra que nunca viu, (b) dizer em voz alta sem parecer dicionário, e (c) **não responder com a palavra errada** — *"Actually…"* quando queria dizer *"currently"*. À noite, a mesma pessoa conta no bar o que leu.
+## Shape of the session
+1. **Duas linhas de uma música** — the heard entrance, one cognate, one false friend.
+2. **A fábrica de sufixos** — the seven keys, the table, sixteen words.
+3. **O cognato que ninguém fala** — the formal/real pair (*photograph/photo, profession/job…*).
+4. **Falsos amigos** — the five swaps, with the sentence each one ruins.
+5. **Onde bate a sílaba** — -tion/-sion/-ity/-ic, six placements.
+6. **Vogais curtas** — /ɪ/ vs /iː/, /ʌ/ vs /æ/, four listening pairs.
+7. **A escada aplicada** — one opinion in three strengths.
+8. **Treino** — mixed, plus one recording.
+9. **Quiz — sem consulta.**
+
+## Notes for the build pass
+`.wide` on the transformation block: each item is a Portuguese word plus its English in one line, wider than a
+tile (reason stated here). `data-say` on every cognate pair and on the three register versions.
+
+`recycles:` lesson 1's `be`, `a/an` by sound, `it`, and the strength ladder (reused, not re-taught).
+`must not re-teach:` lesson 1's subject law and sound laws; lesson 3 owns wh- questions, embedded questions and
+repair chunks; lesson 4 owns the simple present and -s.
+

@@ -104,8 +104,34 @@ function ansQstem(radio){let el=radio&&radio.closest?radio.closest("label"):null
  const opts=el.closest(".qopts");if(opts){const line=opts.previousElementSibling;const st=line?line.querySelector(".qstem"):null;if(st)return st;}
  let p=el.previousElementSibling;while(p){if(p.classList.contains("qstem"))return p;if(p.classList.contains("qnum"))return null;p=p.previousElementSibling;}
  return null}
+/* THE TEXT A GAP ANSWERS = the nearest ancestor that carries text: its own parent for a normal prompt
+   ("a ___ locker"), the ROW for a gap alone in a table cell (<td><input class="gap"></td>), the BLOCK for a
+   lone .blanks line whose only text is the sibling .pt gloss. (hlBlockOf is no help: a <div> IS a text
+   block, so the empty wrapper would be the block.)
+
+   ITS PLACE = the ordinal among the gaps sharing that anchor (-1, -2, …) whenever the parent holds more than
+   one gap or carries no text, because such gaps share an anchor AND a text offset (an empty cell has no text
+   node at all, so ansPos gives null and ansRowFor(anchor,null) returns the FIRST row) — the second answer
+   used to overwrite the first (B-I12). A text offset is never negative, so an ordinal can never collide with
+   one. A normal single-gap prompt keeps its exact old anchor and offset: nothing already saved is re-keyed. */
+function ansAnchorOf(el){let p=el.parentElement;
+ while(p){const t=ansNorm(p.textContent);if(t)return t;p=p.parentElement}
+ return""}
+function ansCellPos(el,a){const blk=hlBlockOf(el);if(!blk)return null;
+ const b=hlBlocks().indexOf(blk);if(b<0)return null;
+ let k=0;const gs=blk.querySelectorAll("input.gap");
+ for(let i=0;i<gs.length;i++){const g=gs[i];
+  if(g===el)break;
+  if(ansAnchorOf(g)===a)k++;}
+ return{b:b,o:-1-k}}
+function ansGap(el,w){
+ const a=ansAnchorOf(el);if(!a)return null;
+ const many=w.querySelectorAll&&w.querySelectorAll("input.gap").length>1;
+ if(!many&&ansNorm(w.textContent))return{anchor:a,posEl:w};
+ return{anchor:a,posEl:w,pos:ansCellPos(el,a)}}
+function ansPosOf(o){return(o&&o.pos)?o.pos:ansPos(o&&o.posEl)}
 function ansOf(el){
- if(el.matches&&el.matches("input.gap")){const w=el.parentElement;if(!w)return null;return{anchor:ansNorm(w.textContent),posEl:w}}
+ if(el.matches&&el.matches("input.gap")){const w=el.parentElement;if(!w)return null;return ansGap(el,w)}
  if(el.matches&&el.matches('input[type="radio"]')){const st=ansQstem(el);if(!st)return null;return{anchor:ansNorm(st.textContent),posEl:st}}
  if(el.tagName==="TEXTAREA"&&el.id!=="feed"){const w=el.parentElement;if(!w)return null;return{anchor:ansNorm(w.textContent),posEl:w}}
  return null}
@@ -141,7 +167,7 @@ function ansSet(t,v,pos){
  ansLocal=ansLocal.filter(r=>r.id!==id);ansLocal.push(merged);
  send({action:cur?"set":"add",id:id,type:"answer",anchor:t,data:data});
 }
-function ansSaveEl(el){const o=ansOf(el);if(!o||!o.anchor)return;ansSet(o.anchor,el.value,ansPos(o.posEl));}
+function ansSaveEl(el){const o=ansOf(el);if(!o||!o.anchor)return;ansSet(o.anchor,el.value,ansPosOf(o));}
 let ansTimer=null;
 document.addEventListener("change",e=>{const t=e.target;
  if(t&&t.matches&&(t.matches("input.gap")||t.matches('input[type="radio"]')||(t.tagName==="TEXTAREA"&&t.id!=="feed")))ansSaveEl(t);
@@ -168,7 +194,7 @@ document.addEventListener("click",e=>{const t=ansRadioTarget(e.target);if(!t)ret
  const pre=ansRadioPre&&ansRadioPre.el===t?ansRadioPre.checked:false;ansRadioPre=null;
  if(!pre)return;                              /* a first click on this option: the browser's check stands */
  setTimeout(()=>{if(!t.checked)return;t.checked=false;
-  const o=ansOf(t);if(o&&o.anchor)ansSet(o.anchor,"",ansPos(o.posEl));},0);
+  const o=ansOf(t);if(o&&o.anchor)ansSet(o.anchor,"",ansPosOf(o));},0);
 });
 document.addEventListener("input",e=>{const t=e.target;
  if(t&&t.matches&&(t.matches("input.gap")||(t.tagName==="TEXTAREA"&&t.id!=="feed"))){clearTimeout(ansTimer);ansTimer=setTimeout(()=>ansSaveEl(t),800)}});
@@ -181,7 +207,7 @@ function renderAnswers(){
  document.querySelectorAll("input.gap, textarea").forEach(el=>{
   if(el.tagName==="TEXTAREA"&&el.id==="feed")return;
   const o=ansOf(el);if(!o||!o.anchor)return;
-  const row=ansRowFor(o.anchor,ansPos(o.posEl));
+  const row=ansRowFor(o.anchor,ansPosOf(o));
   if(row&&pending.has(row.id))return;
   if(document.activeElement===el)return;
   const want=row?ansValueOf(row):"";
@@ -189,7 +215,7 @@ function renderAnswers(){
  });
  document.querySelectorAll('input[type="radio"]').forEach(el=>{
   const o=ansOf(el);if(!o||!o.anchor)return;
-  const row=ansRowFor(o.anchor,ansPos(o.posEl));
+  const row=ansRowFor(o.anchor,ansPosOf(o));
   if(row&&pending.has(row.id))return;
   const want=row?ansValueOf(row):null;
   const should=(want!=null&&el.value===want);

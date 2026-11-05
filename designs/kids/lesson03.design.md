@@ -1,7 +1,5 @@
 # Lesson 3 (kids) — design (Pass A)
 
-`band: kids · L03 · C03 · registers: 2a (asking a teacher or a stranger) · 2b (asking friends in the class chat) · contexts: a new school building, the class group chat, a game lobby, the school wi-fi`
-
 ## Fundamental idea taken from `designs/kids/lesson02.design.md` and its parent `designs/lesson03.design.md`
 The parent design's idea: **a question is the missing piece of an answer** — six words stand for the six kinds of gap (thing, place, time, person, manner, reason); with `be` the order is *wh- + be + subject*; the **polite** version folds the clause back into statement order (*Can you tell me where the gym **is**?*); and when you do not understand, four fixed chunks keep you in the conversation. Kids keep the idea and drop the induction call, the client, the office and "scope".
 
@@ -20,6 +18,7 @@ The parent design's idea: **a question is the missing piece of an answer** — s
 - **Silly stakes.** A new school is a building full of doors you cannot find, and a group chat where asking the wrong way gets you screenshotted. Asking well is the difference between "he's new" and "he's the guy who asked the teacher *where is the bathroom?* in the middle of class".
 
 ## Situation
+Asking a teacher or a stranger, asking friends in the class chat — a new school building, the class group chat, a game lobby, the school wi-fi.
 Day three. The class has a group project and the student is the one who has to find out the practical things: which room, what time, who is in the group, what the wi-fi password is, why the school app will not open, and how you spell the teacher's name. Half the questions go in the class chat (friends), half go to a teacher (politely), and at least one answer arrives too fast to understand.
 
 ## Candidates (three channels)
@@ -28,7 +27,7 @@ Day three. The class has a group project and the student is the one who has to f
 - **Read — the group chat.** A message thread where a classmate asks and the class rep answers; the student finds the polite requests and rewrites the blunt ones, then adds the two repair lines the thread is missing.
 
 ## Chosen
-**Done (the answer wall), entered through Heard.** Producing the question from an answer forces the wh- word **and** the order at once, and it is the exact move the student needs in the corridor: the answer already exists, they must retrieve the question. The chat thread is the best reading material of the three, but at C03 it turns into translation instead of speech.
+**Done (the answer wall), entered through Heard.** Producing the question from an answer forces the wh- word **and** the order at once, and it is the exact move the student needs in the corridor: the answer already exists, they must retrieve the question. The chat thread is the best reading material of the three, but it turns into translation instead of speech.
 
 **First 30 seconds:** one voice note plays — *"Room 12, second floor"* — and two questions stand on the wall: *Where's the room?* / *When's the room?* Pick one. The six words are named only after three answers have been matched correctly.
 
@@ -53,7 +52,7 @@ Eight questions written from answers, four direct → polite conversions for a t
 The answer wall comes first and the rule second: this persona needs a win in the first minute, and "you already know the answer, now ask for it" is that win. The polite transformation arrives once the question is already solid, so only one thing is new at a time.
 
 ## Notes for the build pass
-Portuguese for explanations, tips and headers (C03); English for every target question, the answers and all audio. The six words are a reference the whole page reuses, not a section of their own. The polite version is always shown as a pair (direct | polite) — never as a rule alone. `data-say` on every target line.
+The six words are a reference the whole page reuses, not a section of their own. The polite version is always shown as a pair (direct | polite) — never as a rule alone. `data-say` on every target line.
 
 `recycles:` lesson 1's `be` and `it` (*Where's the gym? — It's on the second floor*), lesson 2's cognates inside the answers (*information, password* is not a cognate — glossed) — used, never re-taught.
 `must not re-teach:` lesson 4 owns the simple present and the -s; lesson 5 owns do-support and the question skeleton with *do/does* (this page only asks with `be` and the fixed openers); lesson 15 owns modals; lesson 44 owns the full repair-and-clarification strategy.

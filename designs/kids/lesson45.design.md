@@ -1,7 +1,5 @@
 # Lesson 45 (kids) — design (Pass A)
 
-`band: kids · L45 · C45 · registers: 2a (a teacher, e-mail and report) · 1b (the class, a notice) · 1a (a friend, a message) · contexts: the e-mail to the teacher, the one-page report for the science fair, the notice on the school board, the same notice to parents`
-
 ## Fundamental idea taken from the parent `designs/lesson45.design.md`
 A ideia do pai: **um documento é lido duas vezes, e a primeira leitura não é leitura.** Alguém passa os olhos pelo **assunto, a primeira linha, a última linha e o nome do anexo** — e decide a partir dessas quatro se vai abrir de verdade. Então essas quatro **não são enfeite: são o documento**. **Formato é uma promessa sobre esforço**: uma parede de texto diz que quem escreveu não pensou em quem lê. **A frase-tópico é um contrato**: a primeira frase nomeia o parágrafo, e o parágrafo cumpre a promessa — e o teste é brutal e fácil de ensinar (**apague todas as frases depois da primeira de cada parágrafo: o texto tem de continuar fazendo sentido como lista**). **O relatório é um argumento, não um diário**: propósito, achados, recomendação — um diário para nos achados, e é por isso que volta. **O passivo ganha lugar de três maneiras** (quem fez é desconhecido, irrelevante, ou é o próprio leitor) e **esconde** quando quem fez é você: *the poster was damaged* quer dizer *eu derrubei água e não quero dizer*. **Comprimento é disciplina com alvo**: cerca de um quinto das palavras vai sem que nenhum fato saia, e o que sai é **o aquecimento de garganta** (*Olá, tudo bem, espero que você esteja bem…*). E **saudação e despedida são uma máquina, não um humor**: *Dear Ms Lima / Kind regards*, *Hi Ana / See you*, *Hello everyone / Thanks* — misturar é a maneira mais rápida de parecer que você não conhece a sala. **Voz da casa é repetição de propósito**: o mesmo aviso da escola, do clube e para os pais difere em três decisões — comprimento da frase, se diz *we*, e como nomeia o leitor.
 
@@ -25,6 +23,7 @@ A ideia do pai: **um documento é lido duas vezes, e a primeira leitura não é 
 - **Dependências**: a escada de tom e o leitor (34), o passivo (29), as decisões/donos/datas (33), o e-mail de acompanhamento (43), a concessão antes do contra-argumento (38) agora como ordem de parágrafo.
 
 ## Situation
+A teacher, e-mail and report, the class, a notice, a friend, a message — the e-mail to the teacher, the one-page report for the science fair, the notice on the school board, the same notice to parents.
 **A feira de ciências mudou de data.** O aluno tem de (a) mandar uma mensagem para a professora, (b) escrever o **relatório de uma página** do projeto, e (c) transformar o mesmo aviso em **três textos** — para a turma, para o clube e para os pais. Três documentos, uma tarde, um conjunto de fatos — e uma leitora que **lê só a primeira linha**.
 
 

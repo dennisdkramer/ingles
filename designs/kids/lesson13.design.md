@@ -1,7 +1,5 @@
 # Lesson 13 (kids) — design (Pass A)
 
-`band: kids · L13 · C13 · registers: 2b (friends and classmates) · 2a (a shop assistant, a teacher) · contexts: choosing between two things, the best of three, a recommendation to a friend`
-
 ## Fundamental idea taken from the parent `designs/lesson13.design.md`
 A ideia do pai: comparar **não é decorar tabela, é decidir**. Palavras **curtas recebem terminação** (*cheap → cheaper → the cheapest*), palavras **longas recebem palavra** (*more expensive*), e a escolha é **comprimento e escrita**, não significado. Cinco irregulares são aprendidos **como palavras** (*good → better → best · bad → worse → worst · far → further → furthest*). A comparação **precisa da outra metade**: *than* no comparativo, *the* no superlativo, *as…as* na igualdade. Os intensificadores carregam o julgamento (*much / a lot / slightly / a little / twice*) — e a lição **termina numa recomendação**, não numa tabela de adjetivos. Kids mantêm a ideia e trocam a reunião de fornecedores por **escolher entre duas mochilas, dois celulares, três lanches**.
 
@@ -20,6 +18,7 @@ A ideia do pai: comparar **não é decorar tabela, é decidir**. Palavras **curt
 - **Campo:** *mochila, tênis, celular, lanche* — *cheap, expensive, light, heavy, fast, slow, big, small, good, bad*.
 
 ## Situation
+Friends and classmates, a shop assistant, a teacher — choosing between two things, the best of three, a recommendation to a friend.
 Duas mochilas na frente dele, ou três lanches no balcão: o aluno compara **com números** (preço da aula 12), diz qual é melhor e **por quê**, e recomenda ao amigo com uma frase inteira — não com um adjetivo solto.
 
 ## Candidates (three channels)

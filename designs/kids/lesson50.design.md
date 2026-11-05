@@ -1,7 +1,5 @@
 # Lesson 50 (kids) — design (Pass A)
 
-`band: kids · L50 · C50 · registers: 1b (classmates) · 1a (friends) · 2a (a teacher, and the written page) · contexts: the end-of-year presentation, the group chat, the corridor, the one page that gets forwarded`
-
 ## Fundamental idea taken from the parent `designs/lesson50.design.md`
 A ideia do pai: **esta é a última página e ela é uma apresentação, não uma revisão.** **Fluência não é velocidade: é não parar** — a habilidade final é o **turno longo**: noventa segundos, uma estrutura, e os consertos da 44 correndo **dentro** dele em vez de encerrá-lo. Uma resposta com estrutura e uma hesitação vale mais que uma lista fluente. **Registro é um conjunto de interruptores visíveis, não um sentimento**: contrações e phrasal verbs ligados, primeiro nome, frases curtas, *hey* em vez de *dear* — e **o interruptor de volta** quando a professora entra na sala, que é o movimento que quase ninguém faz. **Clareza vence gíria** quando a sala é internacional (os três movimentos da 46, agora como padrão de chegada). **A recomendação de uma página é a última forma escrita**: propósito, achados, recomendação, com a recomendação onde um leitor ocupado olha. E **o plano é o resultado de verdade**: aos cinquenta, os erros que sobram são **pessoais e permanentes se não forem nomeados** — três padrões, três treinos, um hábito, trinta dias. Nada novo entra; o material novo é **a apresentação do aluno**.
 
@@ -40,4 +38,5 @@ Três colocações de registro a partir da primeira linha, uma mensagem produzid
 O quadro dos três registros é a espinha de largura total (registro / os marcadores que o mostram / uma linha da mesma mensagem / a sala a que pertence) — quatro campos, três linhas, e todo o resto da página aponta de volta para ele. O quadro da gíria é de largura total (item / força / a quem você pode dizer / o que custa), porque **a coluna do custo é o ensino**. As reescritas de clareza e os itens de ponto de troca ficam como metades — seis itens cada, uma linha por item. O turno de noventa segundos é um painel de largura total com **só** o convite, o relógio e a estrutura, porque qualquer outra coisa nesse bloco seria lida em vez de falada.
 
 ## Situation
+Classmates, friends, a teacher, and the written page — the end-of-year presentation, the group chat, the corridor, the one page that gets forwarded.
 **A apresentação de fim de ano do projeto.** Uma banca de três: a professora, que quer **a resposta longa**; um colega de outra turma, que quer saber se você é **suportável no recreio**; e a coordenadora, que **só lê a primeira linha** da página que você entregar. Depois da apresentação, **a conversa sobre a nota** — que é uma negociação (47) e vai acontecer em dois registros em dez minutos.

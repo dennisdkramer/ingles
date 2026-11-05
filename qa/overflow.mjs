@@ -1,6 +1,7 @@
 /**
- * qa/overflow.mjs — real-browser overflow / balloon / canvas check for the business lessons.
- * Run with: node qa/overflow.mjs [lessonNumber ...]   (no numbers = every business/lesson*.html that exists)
+ * qa/overflow.mjs — real-browser overflow / balloon / canvas check for the lesson pages.
+ * Run with: node qa/overflow.mjs [--track=kids|business|adult] [lessonNumber ...]
+ *           (no numbers = every lesson page that exists; no --track = EVERY track with pages)
  *           node qa/overflow.mjs --selftest           (qa/fixtures/overflow-ok.html must be clean,
  *                                                      qa/fixtures/overflow-bad.html must report findings)
  *           node qa/overflow.mjs 1 --shot <file.png> [--shot-h <px>] [--shot-y <px>]   (review aid: a picture of
@@ -28,6 +29,8 @@
  *   7. LEGEND   — the #barhelp site-functions legend wraps past one line (it should read as one line of
  *                 chrome, and FORMAT.md fixes its wording);
  *   (hint) DEADSPACE  — a full block whose content fills < 75% of it (review-only; pedagogy decides);
+ *   (hint) TILEHOLE   — a tiled list whose last row leaves a tile empty (3 items in 2 columns, 1 item with
+ *                       room for 2): the block is full width, the CONTENT leaves the hole (review-only);
  *   (hint) HEIGHT     — adjacent half/third blocks whose heights differ by > 50px (review-only).
  *
  * `.panels > .panel` (the retired structure) is measured too when present, so an old page copied back
@@ -39,13 +42,13 @@ import path from 'path';
 import os from 'os';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
+import { pickTracks, hasTrackFlag, missingTargets, scopeLabel } from './track.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const CHROME = process.env.CHROME || 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const SECRET = 'abreportas2025';
 const EMAIL = 'overflow.qa@test.com';
-const TRACK = 'business';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 function h(s) { let x = 0; for (const c of s) x = (x * 31 + c.charCodeAt(0)) | 0; return x; }
 
@@ -165,6 +168,32 @@ const MEASURE = `(function(){
         hints.push({ kind: 'HEIGHT', extra: 'row pair ' + Math.round(lastRow.h) + 'px vs ' + Math.round(r.height) + 'px', ex: ex });
       lastRowTop = r.top; lastRow = { h: r.height };
     }
+  });
+  /* TILEHOLE hint: a tiled list (.qgrid.stack / .blanks.sent, not .wide) whose LAST row does not span the
+     full grid — e.g. 3 items in a 2-tile grid, or 1 item with room for 2. The block is still full width, so
+     only the row's own geometry shows the hole (CSS spans an odd last item across every column, so this
+     normally reports nothing; a page that predates that rule is what it catches). */
+  [].slice.call(document.querySelectorAll('.qgrid.stack:not(.wide), .blanks.sent:not(.wide)')).forEach(function(g){
+    var tpl = getComputedStyle(g).gridTemplateColumns;
+    if (!tpl || tpl === 'none') return;
+    if (tpl.split(' ').filter(function(x){ return x.trim(); }).length < 2) return;
+    var gr = g.getBoundingClientRect();
+    var rows = {}, order = [];
+    [].slice.call(g.children).forEach(function(k){
+      var b = k.getBoundingClientRect();
+      if (!b.width) return;
+      var t = Math.round(b.top);
+      if (!(t in rows)) { rows[t] = { l: b.left, r: b.right, n: 0 }; order.push(t); }
+      rows[t].l = Math.min(rows[t].l, b.left);
+      rows[t].r = Math.max(rows[t].r, b.right);
+      rows[t].n++;
+    });
+    if (order.length < 2) return;
+    var last = rows[order[order.length - 1]];
+    var covered = last.r - last.l, have = gr.width - 2;
+    if (covered < have - 12)
+      hints.push({ kind: 'TILEHOLE', extra: Math.round(100 * covered / have) + '% of the row is used by its ' +
+        last.n + ' item(s)', ex: label(g) });
   });
   var escape = [];
   [].slice.call(document.querySelectorAll('.content-area *')).forEach(function(el){
@@ -330,8 +359,8 @@ const MEASURE = `(function(){
     spacing: { block: minBlock, row: minRow, opt: minOpt, chart: minChart }, hints: hints };
 })()`;
 
-function discover() {
-  const dir = path.join(ROOT, 'business');
+function discover(track) {
+  const dir = path.join(ROOT, track);
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir)
     .map(f => (f.match(/^lesson(\d+)\.html$/) || [])[1])
@@ -372,7 +401,14 @@ async function main() {
 
   const site = await server();
   const base = 'http://127.0.0.1:' + site.port;
-  const gate = { email: EMAIL, track: TRACK, teacher: false, sig: h(EMAIL + TRACK + SECRET) };
+  /* one signed gate per track in scope: the page reads the track from its own path, so a single
+     injected script opens every page of the run (kids + business, or just the one --track names) */
+  const scopeTracks = pickTracks();
+  const gateFor = t => ({ email: EMAIL, track: t, teacher: false, sig: h(EMAIL + t + SECRET) });
+  const gateMap = {};
+  for (const t of (scopeTracks.length ? scopeTracks : ['business'])) gateMap[t] = gateFor(t);
+  const gateSrc = 'try{var g=' + JSON.stringify(gateMap) + ';var k=(location.pathname.split("/")[1]||"");'
+    + 'sessionStorage.setItem("gate",JSON.stringify(g[k]||g[' + JSON.stringify(Object.keys(gateMap)[0]) + ']))}catch(e){}';
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'ovf-'));
   let chrome;
   try { chrome = await launchChrome(profile); }
@@ -384,11 +420,20 @@ async function main() {
   const ses = session(cdp, sessionId);
   await ses.send('Page.enable');
   await ses.send('Runtime.enable');
-  await ses.send('Page.addScriptToEvaluateOnNewDocument', { source: 'try{sessionStorage.setItem("gate",JSON.stringify(' + JSON.stringify(gate) + '))}catch(e){}' });
+  await ses.send('Page.addScriptToEvaluateOnNewDocument', { source: gateSrc });
 
   const measure = async (rel) => {
     await ses.send('Page.navigate', { url: base + '/' + rel });
     await sleep(selftest ? 900 : 1300);
+    /* style.css @imports Google Fonts, and a webfont that lands AFTER the first paint re-wraps every line — the
+       same page then reports a different ROWWRAP/CELL between two runs. Wait for the real font (bounded, so a
+       slow or unreachable CDN can never hang the sweep): the measurement is then what the student sees. */
+    try {
+      await ses.send('Runtime.evaluate', {
+        expression: '(document.fonts?Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,2500)})]):Promise.resolve()).then(function(){return 1})',
+        awaitPromise: true, returnByValue: true
+      });
+    } catch (e) { }
     const r = await ses.send('Runtime.evaluate', { expression: MEASURE, returnByValue: true });
     if (shotFile && !shotDone) {
       shotDone = true;
@@ -437,22 +482,35 @@ async function main() {
     console.log(broken === 0 ? '✅ overflow audit selftest green' : '❌ overflow audit selftest FAILED');
     fails = broken;
   } else {
-    const lessons = targets.length ? targets : discover();
-    if (!lessons.length) console.log('✅ overflow audit: no business lesson pages to check');
-    for (const L of lessons) {
-      const rel = 'business/lesson' + L + '.html';
-      if (!fs.existsSync(path.join(ROOT, rel))) {
-        if (targets.length) { console.log('lesson ' + L + ': ❌ page not found'); fails++; }
-        else console.log('lesson ' + L + ': (page missing, skipped)');
-        continue;
+    /* SCOPE: every track with pages, or only the one --track names. A lesson number that exists in no
+       track in scope is a hard error, so a typo can never be read as "no pages to measure". */
+    const tracks = scopeTracks;
+    const strict = hasTrackFlag();
+    const ghosts = missingTargets(tracks, targets);
+    if (ghosts.length) { console.log('❌ lesson ' + ghosts.join(', ') + ' does not exist in ' + scopeLabel(tracks)); fails += ghosts.length; }
+    if (!tracks.length) console.log('✅ overflow audit: no lesson pages in any track');
+    for (const TRACK of tracks) {
+      const lessons = targets.length ? targets : discover(TRACK);
+      if (!lessons.length) { console.log('✅ overflow audit: no ' + TRACK + ' lesson pages to check'); continue; }
+      let trackFails = 0;
+      for (const L of lessons) {
+        const rel = TRACK + '/lesson' + L + '.html';
+        if (!fs.existsSync(path.join(ROOT, rel))) {
+          if (strict) { console.log(TRACK + '/lesson' + L + ': ❌ page not found'); trackFails++; }
+          else console.log(TRACK + '/lesson' + L + ': (page missing, skipped)');
+          continue;
+        }
+        trackFails += report(TRACK + '/lesson' + L, await measure(rel));
       }
-      fails += report('lesson ' + L, await measure(rel));
+      fails += trackFails;
+      const label = TRACK + ' — ' + (lessons.length === 1 ? 'lesson ' : 'lessons ') + lessons.join(', ');
+      console.log(trackFails === 0
+        ? '✅ layout clean — no overflow, no balloon, no spacing gap, no drag-resizable text box, nothing escapes the canvas (' + label + ')'
+        : '❌ ' + trackFails + ' layout finding(s) — ' + TRACK);
     }
-    const label = targets.length ? ('lesson' + (lessons.length > 1 ? 's ' : ' ') + lessons.join(', '))
-      : (lessons.length ? 'lessons ' + lessons.join(', ') : 'no pages');
-    console.log(fails === 0
-      ? '✅ layout clean — no overflow, no balloon, no spacing gap, no drag-resizable text box, nothing escapes the canvas (' + label + ')'
-      : '❌ ' + fails + ' layout finding(s)');
+    if (tracks.length > 1) console.log(fails === 0
+      ? '✅ layout clean — ' + scopeLabel(tracks)
+      : '❌ ' + fails + ' layout finding(s) — ' + scopeLabel(tracks));
   }
 
   try { cdp.ws.close(); } catch (e) { }

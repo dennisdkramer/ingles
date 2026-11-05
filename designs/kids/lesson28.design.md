@@ -1,7 +1,5 @@
 # Lesson 28 (kids) — design (Pass A)
 
-`band: kids · L28 · C28 · registers: 2b (a friend, making plans) · 2a (the teacher, a club notice) · contexts: the school club, hobbies, the week's plan, chores at home, sports practice`
-
 ## Fundamental idea taken from the parent `designs/lesson28.design.md`
 A ideia do pai: **o padrão pertence ao verbo, não a quem fala** — não existe regra de sentido que preveja *enjoy + -ing*. O que existe é **memória**, e a aula dá as duas listas como **duas imagens**: um verbo de *-ing* é uma **atividade em que você está dentro**; um verbo de *to* é um **alvo para o qual você vai**. Depois vêm os pares que **mudam de sentido** (*stop, remember, forget, try*), o **infinitivo de propósito** (*to learn English, you need to listen*), o **verbo pelado** depois de *make / let / help* (*make them wait*, *let me try*) e o *-ing* **no lugar do sujeito** (*Learning English is fun* — verbo no singular). Kids trocam o plano de treinamento por **o plano do clube da escola**.
 
@@ -22,6 +20,7 @@ A ideia do pai: **o padrão pertence ao verbo, não a quem fala** — não exist
 - **Dependências**: o *-ing* da aula 4; a lista de preposição + *-ing* da 21 (aqui é a regra aplicada); o verbo pelado da 25.
 
 ## Situation
+A friend, making plans, the teacher, a club notice — the school club, hobbies, the week's plan, chores at home, sports practice.
 O **plano do clube da escola** para o semestre: o que as pessoas gostam de fazer, o que evitam, o que decidiram fazer, e o que a professora vai **fazer todo mundo praticar**. O aluno monta o plano falando e depois escreve o parágrafo do aviso do clube.
 
 ## Candidates (three channels)

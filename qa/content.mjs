@@ -1,5 +1,5 @@
 /**
- * qa/content.mjs — content/structure harness for every business lesson.
+ * qa/content.mjs — content/structure harness for the lesson pages.
  *
  * Loads each lesson with a mocked sessionStorage gate + mocked fetch, lets the page
  * inline engine1.js/engine2.js, and then checks:
@@ -9,7 +9,8 @@
  *   - #feed is a <textarea>
  *   - no leftover <!-- MORE --> build sentinel
  *
- * Run with: node qa/content.mjs [lessonNumber ...]   (no numbers = every business/lesson*.html that exists)
+ * Run with: node qa/content.mjs [--track=kids|business|adult] [lessonNumber ...]
+ *           (no numbers = every lesson page that exists; no --track = EVERY track with pages)
  */
 
 import { JSDOM } from 'jsdom';
@@ -17,6 +18,7 @@ import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { pickTracks, hasTrackFlag, pickNumbers, pickLessons, missingTargets, scopeLabel } from './track.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -55,10 +57,9 @@ function mockFetch() {
   };
 }
 
-async function checkLesson(serverUrl, n) {
-  const pageName = 'business/lesson' + n + '.html';
+async function checkLesson(serverUrl, track, n) {
+  const pageName = track + '/lesson' + n + '.html';
   const email = 'qa@test.com';
-  const track = 'business';
   const sig = h(email + track + SECRET);
   const filePath = path.join(ROOT, pageName);
   let html = fs.readFileSync(filePath, 'utf8');
@@ -167,7 +168,61 @@ async function checkLesson(serverUrl, n) {
   })())`));
   if (radioRes && radioRes.nulls > 0) errors.push(radioRes.nulls + ' of ' + radioRes.total + ' radios resolve no anchor');
 
+   // answer anchoring (EVERY gap / radio / textarea): a control that resolves no anchor is never saved or
+   // restored (data loss — B-I12), and two controls that resolve the same anchor AND the same place overwrite
+   // each other (two gaps alone in one table row, before the ordinal tie-breaker). Both are hard errors: they
+   // lose a student's answer silently, which no layout finding would ever show.
+   const ansRes = JSON.parse(w.eval(`JSON.stringify((function(){
+     var noAnchor = 0, total = 0, seen = {};
+     document.querySelectorAll('input.gap, input[type="radio"], textarea').forEach(function(el){
+       if (el.id === 'feed') return;
+       total++;
+       var o = ansOf(el);
+       if (!o || !o.anchor) { noAnchor++; return; }
+       if (el.type === 'radio') return;                 /* a radio GROUP legitimately shares one stem */
+       var p = ansPosOf(o);
+       var key = o.anchor + '\\u0000' + (p ? (p.b + ':' + p.o) : 'no-place');
+       seen[key] = (seen[key] || 0) + 1;
+     });
+     var clash = Object.keys(seen).filter(function(k){ return seen[k] > 1; })
+       .map(function(k){ return k.split('\\u0000')[0].slice(0, 40); });
+     return { total: total, noAnchor: noAnchor, clash: clash };
+   })())`));
+   if (ansRes && ansRes.noAnchor > 0) errors.push(ansRes.noAnchor + ' of ' + ansRes.total
+     + ' answer control(s) resolve NO anchor — their answers are never saved (data loss)');
+   if (ansRes && ansRes.clash.length) errors.push(ansRes.clash.length
+     + ' answer anchor(s) used by two controls in the SAME place — they overwrite each other: '
+     + ansRes.clash.slice(0, 3).map(a => '«' + a + '»').join(', ') + (ansRes.clash.length > 3 ? ', …' : ''));
+
+
   // stacked-radio save/restore round-trip: seed a row, renderAnswers must re-check the radio
+
+   // EVERY gap save/restore round-trip: seed one row per gap (through ansOf + ansPosOf, exactly as ansSet
+   // would key it), blank the fields, let renderAnswers restore, and require each gap to get ITS OWN value
+   // back — the check that two gaps sharing a prompt cannot silently trade or overwrite answers.
+   const gapRt = JSON.parse(w.eval(`JSON.stringify((function(){
+     var gaps = []; document.querySelectorAll('input.gap').forEach(function(g){ gaps.push(g); });
+     if (!gaps.length) return null;
+     var ids = [];
+     gaps.forEach(function(g, i){
+       var o = ansOf(g);
+       if (!o || !o.anchor) return;
+       var p = ansPosOf(o), id = 'qa_gap_' + i;
+       ids.push(id);
+       layer.push({ id: id, type: 'answer', anchor: o.anchor,
+         data: p ? JSON.stringify({ v: 'qa' + i, b: p.b, o: p.o }) : JSON.stringify({ v: 'qa' + i }) });
+     });
+     gaps.forEach(function(g){ g.value = ''; document.activeElement && document.activeElement.blur && document.activeElement.blur(); });
+     renderAnswers();
+     var bad = 0;
+     gaps.forEach(function(g, i){ if (g.value !== 'qa' + i) bad++; });
+     layer = layer.filter(function(r){ return ids.indexOf(r.id) < 0; });
+     renderAnswers();
+     return { bad: bad, total: gaps.length };
+   })())`));
+   if (gapRt && gapRt.bad > 0) errors.push(gapRt.bad + ' of ' + gapRt.total
+     + ' gap(s) did not get their own answer back (they share an anchor/place with another gap)');
+
   const stackedRt = JSON.parse(w.eval(`JSON.stringify((function(){
     var r = document.querySelector('.qgrid.stack input[type="radio"]');
     if (!r) return null;
@@ -211,20 +266,15 @@ async function checkLesson(serverUrl, n) {
   return { lesson: n, errors, counts, hints };
 }
 
-function discoverLessons() {
-  const dir = path.join(ROOT, 'business');
-  if (!fs.existsSync(dir)) return [];
-  return fs.readdirSync(dir)
-    .map(f => (f.match(/^lesson(\d+)\.html$/) || [])[1])
-    .filter(Boolean).map(Number).sort((a, b) => a - b);
-}
-
 async function main() {
-  const targets = process.argv.slice(2).map(Number).filter(n => Number.isInteger(n) && n >= 1);
-  // no numbers = whatever pages exist; named numbers are honoured, and a named page that is missing is a failure
-  const lessons = targets.length ? targets : discoverLessons();
-  console.log('🧪 Content structure harness — business lesson' + (lessons.length === 1 ? '' : 's') + ' ' + (lessons.length ? lessons.join(', ') : '(none)'));
-  if (!lessons.length) { console.log('✅ no business lesson pages to check'); process.exit(0); }
+  // scope: every track with pages, or the one --track names. No numbers = whatever pages exist; a named
+  // number that exists in no track in scope is a hard error (never read as "nothing to audit").
+  const tracks = pickTracks();
+  const strict = hasTrackFlag();
+  if (!tracks.length) { console.log('✅ no lesson pages in any track'); process.exit(0); }
+  const ghosts = missingTargets(tracks, pickNumbers());
+  if (ghosts.length) { console.log('❌ lesson ' + ghosts.join(', ') + ' does not exist in ' + scopeLabel(tracks)); process.exit(1); }
+
   const server = createServer();
   const PORT = 0; // ephemeral: a leftover or parallel run can never collide on a fixed port
   await new Promise(r => server.listen(PORT, r));
@@ -232,30 +282,39 @@ async function main() {
   mockFetch();
 
   const results = [];
-  for (const n of lessons) {
-    if (!fs.existsSync(path.join(ROOT, 'business', 'lesson' + n + '.html'))) {
-      results.push({ lesson: n, errors: ['page not found: business/lesson' + n + '.html'] });
-      console.log('❌ lesson' + n + '  page not found');
-      continue;
-    }
-    try {
-      const r = await checkLesson(serverUrl, n);
-      results.push(r);
-      const ok = r.errors.length === 0;
-      console.log((ok ? '✅' : '❌') + ' lesson' + n +
-        '  chart=' + (r.counts.chart ?? '-') + ' panel=' + (r.counts.panel ?? '-') +
-        ' listen=' + (r.counts.listen ?? '-') + ' gap=' + (r.counts.gap ?? '-') +
-        ' radio=' + (r.counts.radio ?? '-') + ' feed=' + (r.counts.feed ?? '-'));
-      if (!ok) r.errors.forEach(e => console.log('     - ' + e));
-      if (r.hints && r.hints.length) r.hints.forEach(hy => console.log('     (hint) ' + hy));
-    } catch (e) {
-      results.push({ lesson: n, errors: [e.message] });
-      console.log('❌ lesson' + n + ' threw: ' + e.message);
+  for (const TRACK of tracks) {
+    const lessons = pickLessons(TRACK);
+    if (!lessons.length) { console.log('✅ no ' + TRACK + ' lesson pages to check'); continue; }
+    console.log((tracks.length > 1 ? '\n— ' : '🧪 Content structure harness — ') + TRACK + ' lesson'
+      + (lessons.length === 1 ? '' : 's') + ' ' + lessons.join(', '));
+    for (const n of lessons) {
+      if (!fs.existsSync(path.join(ROOT, TRACK, 'lesson' + n + '.html'))) {
+        const msg = 'page not found: ' + TRACK + '/lesson' + n + '.html';
+        if (strict) { results.push({ track: TRACK, lesson: n, errors: [msg] }); console.log('❌ ' + TRACK + '/lesson' + n + '  page not found'); }
+        else console.log('(page missing, skipped) ' + TRACK + '/lesson' + n);
+        continue;
+      }
+      try {
+        const r = await checkLesson(serverUrl, TRACK, n);
+        r.track = TRACK;
+        results.push(r);
+        const ok = r.errors.length === 0;
+        console.log((ok ? '✅' : '❌') + ' ' + TRACK + '/lesson' + n +
+          '  chart=' + (r.counts.chart ?? '-') + ' panel=' + (r.counts.panel ?? '-') +
+          ' listen=' + (r.counts.listen ?? '-') + ' gap=' + (r.counts.gap ?? '-') +
+          ' radio=' + (r.counts.radio ?? '-') + ' feed=' + (r.counts.feed ?? '-'));
+        if (!ok) r.errors.forEach(e => console.log('     - ' + e));
+        if (r.hints && r.hints.length) r.hints.forEach(hy => console.log('     (hint) ' + hy));
+      } catch (e) {
+        results.push({ track: TRACK, lesson: n, errors: [e.message] });
+        console.log('❌ ' + TRACK + '/lesson' + n + ' threw: ' + e.message);
+      }
     }
   }
   server.close();
   const failed = results.filter(r => r.errors.length);
-  console.log('\n' + (failed.length ? ('❌ ' + failed.length + ' lesson(s) FAILED') : '✅ ALL LESSONS PASSED'));
+  console.log('\n' + (results.length ? results.length + ' page(s) checked, ' + scopeLabel(tracks) + ' — ' : '')
+    + (failed.length ? ('❌ ' + failed.length + ' lesson(s) FAILED') : '✅ ALL LESSONS PASSED'));
   process.exit(failed.length ? 1 : 0);
 }
 

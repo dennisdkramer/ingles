@@ -1,53 +1,75 @@
-# PEDAGOGY-MAP — COURSE ROADMAP
+# PEDAGOGY-MAP — COURSE ROADMAP - DO NOT MODIFY WITHOUT USER SIGN-OFF
 
-## TRACK - Student Persona & Goals - The 3 utilized [Registers] for each track - The Contexts that they should be used in. 
-### For any generated content: its socio-linguistic context defines its register as one of its TRACK's three context-dependent register options.
+## TRACK - Its Student Persona & Goals - Its 3 utilized [Registers] - The Contexts that guide their use
 
 1. BUSINESS TRACK - A Working adult who needs to communicate in meetings or a university setting. They may be a Researcher, an IT professional, an Engineer, or they may want to learn a more professional-sounding version of english for personal reasons. They value analysis and problem-solving. They have busy lives and value tangible progress.
-   a) [Confident and direct business-casual with context-aware formality]
+   a) [Confident and direct business-casual with context-aware formality]:
       - Normal interactions with family, coworkers, managers, clients, and service interactions. 
-   b) [Colloquial adult peer-to-peer speech]
+   b) [Colloquial adult peer-to-peer speech]:
       - Neutral communication with close family/friends/partners.
-   c) [Candid and uninhibited adult informal] - Include common slang, swears, touch on AAVE (eg. 'aint'),  Colloquial text-speak (eg. wtf, lol), 'youth' slang (eg. "That's cooked").
+   c) [Candid and uninhibited adult informal] - Include common slang, swears, touch on AAVE (eg. 'aint'),  Colloquial text-speak (eg. wtf, lol), 'youth' slang (eg. "That's cooked"):
 	  - Expressing anger, contempt, sarcasm, humor, dismissiveness/blunt phrasing ("Yeah, whatever..").
 	  - Included as sidenotes accompanying equivalent [business-casual] or [peer-to-peer] phrases.
 	  
-2. KIDS - A 14 year old boy. Preference for novelty, silly stakes, visible progress. Short attention span. internet culture, video games, and adolescent life become preferred contexts
-   a) [Colloquial adolescent casual but respectful]
-      - Default (with strangers, parents, teachers)
-   b) [Colloquial adolescent peer-to-peer speech] - prefers real day-to-day speech in this register but includes text-speak (eg. wtf, lol) and 'youth' slang (eg. "That's cooked").
-      - With friends or peers in school environment, 
-   c) [Informal - Memelord/Rizzlord] - very silly
-      - With close friends, casual environments, online chat
+2. KIDS - A 14 year old boy. Preference for novelty, silly stakes, visible progress. Short attention span. Internet culture, video games, and adolescent life are preferred contexts. Priority is realistic/modern and register adherence.  Meetings, Emails and other business topics must be fully re-contexed. TRACK uses any contexually propriate opportunity to teach or include realistic modern language, 'youth' slang (eg. "That's cooked"), and text-speak (eg. wtf, lol).
+   a) [Informal - Memelord/Rizzlord] - very silly:
+      - With close friends, casual environments, online chat.
+   b) [Colloquial adolescent peer-to-peer speech]:
+      - With friends or peers in school environment.
+   c) [Colloquial adolescent casual but respectful]:
+      - Among general public (eg. restaurant), communicating with parents, teachers
 
-3. ADULT - Culture and real life are the hooks; self-expression matters more than accuracy drills- goal of understanding AAVE and music. Swears and dirty language must be taught as a core element of the course, but may be censored according to model judgement ('f---', 'shi-', 'c---', etc..)
-   a) [Colloquial adult peer-to-peer speech] - (includes 'mild' swears eg. 'bullshit', 'that sucks', 'he's an asshole')
-      - Default
-   b) [Candid and uninhibited adult informal] - (Includes any commonly used adult language)
-      - With friends, family
-   c) [Uninhibited informal, raunchy and with street slang] - (when appropriate this register includes and explains the most taboo language in modern use, including slurs - and teaches the student if and when they should use or NOT use them. )
-      - In appropriate 'street' environments or with closest friends, romantic partners, joking, angry, etc..
-
+3. ADULT - Culture and real life are the hooks; self-expression matters more than accuracy drills- goal of understanding AAVE and music. Swears and dirty language must be taught as a core element of the course and included in the majority of contexts and lessons ->  Censoring only if mandated by the model ('f---', 'shi-', 'c---', etc..). Meetings, Emails and other business topics must be assessed for track relevance or the lesson re-contexted to fit the track. TRACK uses any contexually propriate opportunity to teach or include realistic modern language, slang, and common colloquialisms.
+   a) [Uninhibited informal, street slang and sexual language where possible] - (Register should include, explain, and [advise the student to use or not use] the most taboo language in modern use, including slurs):
+      - In appropriate 'street' environments. 
+      - Conversation with close friends, romantic partners, joking, angry, etc..
+   b) [Candid and uninhibited adult informal] - must include swearing, sarchasm, hyperbole as appropriate to track guidance:
+      - With friends, family.
+   c) [Colloquial adult peer-to-peer speech]:
+      - Among the general public.
+      - Contexts where maintaining decorum is mandatory.
 
 ## LESSON GENERATION (BINDING PROCESS)
 
 ### 1. Two passes, with a barrier between them
-**Pass A — design.** Inputs: this lesson's entry, a high-level understanding of the lesson's place in the overall plan, and minimal details of its adjacent lessons to optimize flow and reduce redundancy; the track persona; the student's level. Deliberately **withheld**: FORMAT.md, FUNCTION.md, the archived lessons, the primitive inventory (the class/component vocabulary) and the PAGE of every other lesson. Framing for the pass: *"You have no page, no classes and no build mechanics. You have a concept, a student, one session, and the world outside — and you decide what the session is made of and in what order."* Pass A **may say what FORM a piece of teaching wants** — a table to compare forms, a dialogue to hear, a listen-and-tick, a box to record, a chart of minimal pairs: naming a content type is a pedagogical recommendation, not page mechanics. It must not name classes, ids, widths or block layout. Output — `designs/lessonNN.design.md`:
-   - the **core**: 2-4 things the student must leave able to *do*, phrased as skill/behaviour - not as a topic- and:
-		a)*teaching beats* (per core item: what the student must be told, 1–2 sentences) and 
-		b)*dependencies* (every form and word used → taught where, or marked as intentional inference)
-   - the real situation in which that core is worth having;
-   - a **`band:` line the build reads** — `band: <track> · L<NN> · C<CC> (content level) · registers: <1a/2b/3c …> ·
-     contexts: <the fields the examples may use>`. It is the design's record of the §1 register choice and of the level
-     pair the §4 language rule runs on; it is not an extra rule.
-   - **three candidate (lesson) experiences, from three different channels** (heard / seen / done / read / said);
-   - the chosen one, why it beats the others *for this student*, and what the first 30 seconds feel like;
-   - what the student produces, what evidence it leaves, and any conflict with the defaults below;
-   - **the shape of the session**: what the student meets first, second, third — how many sections, their order, where content is better read side by side than in sequence, and which content type each section wants where that matters. The shape must be recognisably **a lesson page of THIS site** — one column of sections under a single title, opening with a short statement of what the lesson installs, ending with practice and a no-consultation quiz — and free in everything inside those guardrails (section count, order, internal divisions, which sections are heard / spoken / read / done). A shape that could not be reconciled with the site's shell is a defect of THIS pass, not of the build.
-**The shape is IMAGINED, not inherited.** Which sections the lesson has, how many, in what order, and how each divides its content is invented fresh in Pass A for THAT lesson — from its design, not from a template and not from another lesson. "The previous lesson did it this way" is not an input. **Copying a shape is allowed when the user asks for it**, and only then; copying one uninvited is a generation error. The archived / parked pages are **untracked and gitignored**: they must never be opened, read or used as a reference (owner instruction 2026-11-03). `style.css` is implementation only: the build may read it for an *implementation* question (which class or knob does what) — never to decide content or shape.
-**Pass B — build.** Inputs: the design (including its shape) + FORMAT.md + FUNCTION.md + **§3–§7 of this file** (the non-negotiables, content-authoring rules, level checkpoints, vehicles and site contract are build inputs, not background) + this lesson's roadmap entry + the redundancy check described below. The build is a **synthesis, not obedience**, and the feedback path is three-tier: (i) a purely mechanical realisation — how the shape is built with the available blocks — is Pass B's call, no escalation; (ii) a change that alters the shape or one of the design's teaching beats is made and then **written back into the design file** (§4); (iii) a conflict or ambiguity that cannot be resolved that way is escalated (§2). Pass B never silently contradicts a teaching beat, and it may not replace the design's shape on its own authority — only when the user instructs it, or after repeated failure to generate or implement that shape (in which case it proceeds, records the change in the design file, and does not escalate).
-   - **No other lesson's PAGE is read.** Redundancy and flow are checked against structured extracts only: the neighbouring lessons' roadmap entries (`Content:` / `Key vocabulary:` / `Focus:`) and the vocabulary/concept inventory (`VOCABULARY.md`). A page read is a shape absorbed, and no wording can un-read it.
-	
+**Pass A — design** (Output = `designs/<track>/lessonNN.design.md`) - Pass A FULLY REWRITES if file exists.
+   - Inputs: [existing lesson design.md if exists] ELSE [[This Lesson's entry in the BUSINESS TRACK roadmap] AND [A concise derived understanding of its higher-level educational purpose and content of adjascent lessons (to avoid redundancy)]], the track persona and its register details.
+   - Deliberately **withheld**: FORMAT.md, FUNCTION.md, the primitive inventory (the class/component vocabulary), the PAGEs and design.md of other lessons, and [any and all [other files/content (including elements of this file) not explicitly included]].
+   - Framing for the pass: *"You have no page, no classes and no build mechanics. You have a concept, a student, one session, and the world outside — and you decide what the session is made of and in what order."* 
+   - **May say what FORM a piece of teaching wants** — May freely imagine any form - The following are EXAMPLES, not suggestions: a table [to compare/contrast forms/concepts] or [to present vocabulary with translations], a written dialogue to practice reading out loud with the teacher, an audio dialog to practice listening or analysis, a listen-and-tick, a relevant real-world situation/story/music/video as an (explanatory or activity) showcase of the content's use.
+   - Naming a content type is a pedagogical recommendation, not page mechanics. It must not name classes, ids, widths or block layout.
+   - Write in the file:
+      1. The **core**: 2-4 things the student must leave able to *do* (phrased as skill/behaviour - not as a topic):
+		   a) *teaching beats* (per core item: what the student must be told, 1–2 sentences).
+		   b) *dependencies* (every form and word used → taught where, or marked as intentional inference).
+         c) The real situation in which that core is worth having.
+      2. **Three candidate (lesson) experiences, from three different channels** (heard / seen / done / read / said).
+      3. The chosen one, why it beats the others *for this student*, and what the first 30 seconds feel like.
+      4. What the student produces, what evidence it leaves, and any conflict with guidelines or defaults.
+      5. **the shape of the session**: what the student meets first, second, third, etc.., where content is better read side by side than in sequence, and content type recommendations when judged important to optimise the lesson. The shape must be compatible with  the site's shell. A shape that could not be reconciled with the site's shell is a defect of THIS pass, not of the build:
+         -  **The shape is IMAGINED, not inherited.** Which sections the lesson has, how many, in what order, and how each divides its content is invented, never copied or inherited. "The previous lesson did it this way" is not an input. 
+         - **Copying a shape is allowed ONLY when the user asks for it**, copying one uninvited is a generation error. Archived and parked contend must never be opened, read or used as a reference. (owner instruction 2026-11-03). 
+         - **`style.css` is implementation only**: the build may read it for an *implementation* question (which class or knob does what) — never to decide content or shape.
+         - Pass A shape and format descriptions are in plain english, never written in the design file as specific css class or code
+
+**Pass B — build.** (Output = `<track>/lessonNN.html`)
+Inputs: the design (including its shape) + FORMAT.md + FUNCTION.md + **§1–§6 of this file** (are high-priority build inputs, not background) + this lesson's roadmap entry + the redundancy check described below. The build is a **synthesis, not obedience**.
+   - How the shape is built with the available blocks — is Pass B's call, no escalation
+   - A change that alters the shape or one of the design's teaching beats is made and then **written back into the design file**; a conflict or ambiguity that cannot be resolved that way is escalated. 
+   - Pass B never silently contradicts a teaching beat, but may replace the design's shape with a strong defensible reason (in which case it proceeds, records the change in the design file, and does not escalate).
+   - **No other lesson's PAGE or design.md is read if the step is not explicitly instructed to do so** 
+   - Redundancy and flow are checked against structured extracts only of [the neighbouring lessons' roadmap entries (`Content:` / `Key vocabulary:` / `Focus:`)] and [the vocabulary/concept inventory (`VOCABULARY.md`)]. A page read is a shape absorbed.
+	- **HIGH PRIORITY**: 
+      1. For any generated [**Lesson introduction, explanatory text, tip, headline, or column header**], it is Portuguese [only if its parent  [LESSON NUMBER] < [CONTENT LEVEL]] ELSE [it is English and [CONTENT LEVEL] is as close as possible to [LESSON LEVEL]]. 
+      2. For any generated content of any other type, it is synthesized with [[derived socio-linguistic context] and [its TRACK's [register details and persona priorities]]], [CONTENT LEVEL] is as close as possible to [LESSON LEVEL], and [it is Portuguese ONLY when *defensibly optimal for teaching purposes*]
+   - Pass B has creative freedom and may choose or implement a broad spectrum of ideas, including but not limited to:
+      a) Standard pedagogical presentation, text explanation, charts, etc..
+      b) References to or analysis of music or video clips (embedded, linked, or simply described)
+      c) gamifying the activities
+      d) odd cultural references or stories
+      e) References to or review of content in other lessons
+      f) Other idea or content not listed here
+
 ### 2. ESCALATE / CONFER
 	- Existing plans, content types, and examples are **defaults that a better idea is expected to beat**. A plan that suggests substantive changes to the lesson contents or new designs/functions is presented to the owner for approval, feedback, or veto before it is executed.
 	- Conflicts and uncertainty always trigger escalation: **stop, present the idea, name the conflict, propose the resolution.** Never squash the idea to fit a rule, and never silently comply with the rule either.
@@ -76,43 +98,38 @@
 	h) Whenever feasible(sanity check the existance, relevance, appropriateness, and accessability of each), teach the rule, the reasoning(the mental model), and its direct consequences (integrated with the lesson content or in its own section as apppropriate); say plainly when [there is no clear or consistent] [rule and/or reasoning]. 
 	i) Each item carries the condition that decides it (a gloss that could go either way is not an item).
 	j) False cognates (eg. 'pretend' -X- 'pretender' -> 'intend') and words which [in one language cleanly map onto] [more than one word in the other] (eg. 'live' -> 'morar' / 'viver') are presented together with these characteriscs [shown/explained/demonstrated as appropriate].
-	l) Practice trains the lesson's concepts in conceptually distinct blocks, inline with what they train and/or in a penultimate section. The last section is a quiz that tests all of it — it may echo the training, never copy it.
-	m) Multiple-choice options are shuffled so the right one is not always in the same slot.
-	n) Boilerplate & filler are last resorts.
+	k) Practice trains the lesson's concepts in conceptually distinct blocks, inline with what they train and/or in a penultimate section. The last section is a quiz that tests all of it — it may echo the training, never copy it.
+	l) Multiple-choice options are shuffled so the right one is not always in the same slot.
+	m) Boilerplate & filler are last resorts.
 		
-		#### Lesson Length / Content Quantity
-	o) Never compress, summarise or omit an item to fit a page.
-	p) There is no cap on sections, tables, examples, exercises, dictation lines, recordings or quiz items, and no page-length limit. 
-	q) All primary concepts and specific items suggested by the entry must be appropriately explained and trained *in its own lesson* — explain → show → recognise → produce → test.
+#### Lesson Length / Content Quantity
+	n) Never compress, summarise or omit an item to fit a page.
+	o) There is no cap on sections, tables, examples, exercises, dictation lines, recordings or quiz items, and no page-length limit. 
+	p) All primary concepts and specific items suggested by the entry must be appropriately explained and trained *in its own lesson* — explain → show → recognise → produce → test.
 
-		####  Vocabulary - (`Key vocabulary:`)
-	r) Each lesson must present at least 10 new vocabulary items which are relevant to and may overlap with the other teaching needs of the lesson (eg. a lesson teaching modes counts "would" as a vocabulary item). 
-	s) Vocabulary lists are SUGGESTIONS, which must be analysed and grouped by function, teach inside phrases, drill and recycle as appropriate
+####  Vocabulary - (`Key vocabulary:`)
+	q) Each lesson must present at least 10 new vocabulary items which are relevant to the concepts and context of the lesson (eg. a lesson teaching modes counts "would" as a vocabulary item). 
+	r) Input Vocabulary items are SUGGESTIONS, any vocabulary that is relevant/useful to the lesson or student goals is taught. Presentation can be in the form of a list, inside phrases, or brief notes/tips accompanying related content. Drill and recycle the most useful items.
 
-		####  WHEN TO USE PORTUGUESE
-	t) For any generated [**lesson introduction, explanatory text, tip, headline, or column header**], it may be in portugues if its parent  [LESSON NUMBER] < [CONTENT LEVEL]. Portuguese within other content types is included ONLY when *defensibly optimal for teaching purposes* to do so. 
+#### LEVEL -
+ 	s) "STUDENT LEVEL" = [Current Lesson #] = "LESSON DIFFICULTY".
+   t) "LEVEL APPROPRIATE" = [STUDENT LEVEL ± 5] - ("appropriate"/"appropriateness" [must be clearly understandable as a specific characteristic defined by its parent phrase/context] ELSE = [LEVEL APPROPRIATE]).
+   u) "CONTENT LEVEL" is judged by "how much this piece of content asks of this student", on the same 1-50 scale as the lesson number. 
+   v) "VOCABULARY LEVEL" - Judged by intuition from 1 (extremely simple word/phrase/idea) to 50 (extremely complex, unusual or opaque to the learner). 
 
-      #### REGISTER
-   u) For any generated content: its socio-linguistic context defines its register as one of its TRACK's three context-dependent register options - (PEDAGOGY-MAP.md)
-
-### 5. LEVEL -
- 	v) "STUDENT LEVEL" = [Current Lesson #] = "LESSON DIFFICULTY".
-   w) "LEVEL APPROPRIATE" = [STUDENT LEVEL ± 5] - ("appropriate"/"appropriateness" [must be clearly understandable as a specific characteristic defined by its parent phrase/context] ELSE = [LEVEL APPROPRIATE]).
-   x) "CONTENT LEVEL" is judged at the point of generation: how much this piece of content asks of this student, on the same 1-50 scale as the lesson number. Difficulty follows the lesson number; nothing is scored.
-   y) "VOCABULARY LEVEL" - Judged by intuition from 1 (extremely simple word/phrase/idea) to 50 (extremely complex, unusual or opaque to the learner).
-  
     
   
 
-### 6. Vehicles
+### 5. Vehicles
 Any vehicle is allowed: authored text, dialogue or chart; real material (song, clip, article, document, photo); interactive (game, timed drill, role-play); a project; something nobody has tried yet. Two tiers decide how it gets built:
    - **Tier 0** — existing primitives (FORMAT.md): tables, cards, dialogues, audio chips, gap-fills, multiple choice, recording, text boxes.
    - **Tier 1** — one *generic* engine, then free with per-lesson data: `shootPair` (two targets, one right), `sortOut` (buckets), `raceClock` (timed drill), `revealGrid` (memory), `orderLine` (sequence). Novelty should be parameterised, not bespoke: a new game is usually item data + a skin on an existing engine. New Tier-1 engines are proposed to the owner and built once, then reused.
    - **Tier 2** — bespoke simulation or multi-step project: propose it, don't build it unbidden.
 Referencing material instead of embedding it is fine (a song named by lyric, "go and listen to it"); a *link* that ships must resolve, and the section must still teach if it dies.
 
-### 7. Site contract (mechanical)
+### 6. Site contract (mechanical)
    - Publish `<lesson>.html` **and an identical `<lesson>.edit.html`**.
+   - Build the page on `_shell.html` (repo root; placeholders `{{TRACK_TITLE}}`, `{{TRACK_UPPER}}`, `{{TRACK}}`, `{{L}}`, `{{LESSON_TITLE}}`) — never on another lesson's shell, which carries that lesson's comment, title and `L`.
    - Authored content sits in `.content-area` under one `<h1>` — that heading is the title `build-lessons.mjs` reads.
    - Navigation is purely sequential (`← Last` / `Next →`); there is no lesson count anywhere.
    - Exercise state must land on `input.gap`, `input[type=radio]` or a non-feed `textarea` — that is what persists (FUNCTION.md). If Pass A suggests a new exercise type that conflicts with this, escalate per #2.

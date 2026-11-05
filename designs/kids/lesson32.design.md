@@ -1,7 +1,5 @@
 # Lesson 32 (kids) — design (Pass A)
 
-`band: kids · L32 · C32 · registers: 1b (a friend, in the corridor) · 2a (the teacher's comments on a project) · contexts: the school project about the neighbourhood, the poster, the presentation, the group chat`
-
 ## Fundamental idea taken from the parent `designs/lesson32.design.md`
 A ideia do pai: **um marcador é uma afirmação sobre o argumento**, não enfeite. *however* diz "a próxima frase contradiz a expectativa que eu acabei de criar"; *therefore* diz "o que vem é consequência do que eu provei". E **o conjunto escrito e o conjunto falado são registros diferentes do mesmo movimento** — a aula emparelha coluna por coluna: *so / therefore*, *but / however*, *anyway / to sum up*. **Excesso é erro de registro**: *moreover* no corredor soa a documento; *and then* num relatório soa a transcrição. Por fim, **coesão por referência** é o hábito profissional: *this* para a ideia anterior inteira, *the former / the latter* para um par — com o aviso de que um *this* vago é pior que uma repetição. Kids trocam o relatório de negócio por **o projeto escolar sobre o bairro**: as anotações são uma lista de fatos; o cartaz precisa de ligações.
 
@@ -20,6 +18,7 @@ A ideia do pai: **um marcador é uma afirmação sobre o argumento**, não enfei
 - **Dependências**: as relativas (27) como a outra ferramenta de compressão; o registro do relatório (24).
 
 ## Situation
+A friend, in the corridor, the teacher's comments on a project — the school project about the neighbourhood, the poster, the presentation, the group chat.
 **O projeto do bairro**: as anotações do grupo são uma lista de fatos, e o cartaz precisa de **ligações**. O aluno transforma as anotações em texto, e depois **apresenta** com marcadores falados. Mesma matéria, dois canais: **no papel** (escrito) e **de pé** (falado).
 
 ## Candidates (three channels)

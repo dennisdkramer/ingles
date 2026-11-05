@@ -1,7 +1,5 @@
 # Lesson 6 (kids) — design (Pass A)
 
-`band: kids · L06 · C06 · registers: 2b (friends and classmates) · 2a (a teacher, the coach) · contexts: the class trip to the science museum, the group chat the day after, the bus, the lift home`
-
 ## Fundamental idea taken from `designs/kids/lesson05.design.md` and its parent `designs/lesson06.design.md`
 The parent design's idea: **the direction decides the word, not the Portuguese**. *go* leaves, *come* arrives; *take* goes away, *bring* comes here; **buscar** is *pick up*, **pegar** (a bus) is *catch*; and one Portuguese verb splits in two (*sair* → *leave / go out*, *chegar* → *arrive / get there*, *voltar* → *come back / go back*). And the past **arrives with the verb** — *went, came, took, got, left, met, arrived* — with the three sounds of *-ed* (/t/ · /d/ · /ɪd/) and the time words (*yesterday, last night, two days ago, in 2020*) carrying the tense so the student can signal the past without conjugating anything else. Kids keep the idea and swap the business trip for the **class trip**: the museum, the bus, the lift home, the group chat the next morning.
 
@@ -21,6 +19,7 @@ The parent design's idea: **the direction decides the word, not the Portuguese**
 - **Time words carry the tense.** *yesterday, last night, two days ago, last week* let the student signal the past with one word instead of a conjugation they do not control yet.
 
 ## Situation
+Friends and classmates, a teacher, the coach — the class trip to the science museum, the group chat the day after, the bus, the lift home.
 The morning after the class trip to the science museum. In the group chat, everybody tells the story at once: who went, who came late, who took the snacks, who picked up whom, when the bus left. The student must tell their own four-line version and understand three others read fast.
 
 ## Candidates (three channels)
@@ -58,7 +57,7 @@ Six direction choices, eight past forms written from the infinitive, six *-ed* s
 The map comes **after** the voice notes because this persona needs the sound of the trip first; the arrows then give a body to what the ear already caught.
 
 ## Notes for the build pass
-Portuguese for explanations, tips and headers (C06); English inside all exercises, all target sentences and all audio. Every arrow decision has audio on **both** options. Past forms are always shown in the three-column table (present · past · participle), never alone. The -ed sounds are trained on **these verbs only**. The spelling table (stop → stopped, arrive → arrived, study → studied) is the reference — no exercise asks for a verb whose spelling is not on it.
+Every arrow decision has audio on **both** options. Past forms are always shown in the three-column table (present · past · participle), never alone. The -ed sounds are trained on **these verbs only**. The spelling table (stop → stopped, arrive → arrived, study → studied) is the reference — no exercise asks for a verb whose spelling is not on it.
 
 `recycles:` lesson 1's *get*, *be* and the travel words; lesson 2's short spoken forms; lesson 3's *Where…?* and the repair chunks; lesson 4's present simple and the *-s*; lesson 5's *do/does* (only recognised as a fixed chunk inside *Did you go?* in the voice notes, glossed in one note — **not drilled**).
 `must not re-teach:` lesson 4 owns the present simple and *-s*; lesson 5 owns the *do/does* system; lesson 10 owns the consonant map; a later lesson owns the present perfect and the full past; lesson 8 owns frequency adverbs; lesson 14 owns connected speech.

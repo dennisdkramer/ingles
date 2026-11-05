@@ -1,7 +1,5 @@
 # Lesson 22 (kids) — design (Pass A)
 
-`band: kids · L22 · C22 · registers: 2b (friends, a group chat, a classmate) · 2a (a teacher, a coach) · contexts: a group project meeting, friends falling out and making up, someone arriving late, a club`
-
 ## Fundamental idea taken from the parent `designs/lesson22.design.md`
 A ideia do pai: estas são **conversation verbs** — a aula se organiza pelo que **acontece numa sala**: alguém **levanta um assunto** (*bring up*), alguém **passa os olhos** (*go over*), alguém **explica passo a passo** (*talk through*), alguém **aponta um problema** (*point out*), alguém **inventa uma solução** (*come up with*), alguém **chega atrasado** (*show up / turn up*). O **gêmeo formal** é a **troca de registro**: *bring up / raise*, *go over / review*, *come up with / devise*, *show up / attend* — o aluno escolhe pelo ouvinte. E **`turn` demonstra a lei da partícula**: quatro partículas, quatro sentidos, o mesmo verbo. A regra do pronome (aula 18) é **usada**, nunca reensinada: *point it out*, *talk it through*, *bring it up*. Kids mantêm o mecanismo e trocam a reunião de equipe por **o trabalho em grupo da escola e a briga entre amigos**.
 
@@ -21,6 +19,7 @@ A ideia do pai: estas são **conversation verbs** — a aula se organiza pelo qu
 - **Dependências**: os pedidos vêm das aulas 15 e 19; *talk to / talk about* vem da 21 e se estende em *talk through*.
 
 ## Situation
+Friends, a group chat, a classmate, a teacher, a coach — a group project meeting, friends falling out and making up, someone arriving late, a club.
 O trabalho em grupo da feira de ciências que dá errado num ponto pequeno: um assunto é levantado, uma nota é revista, alguém aponta o problema real, alguém inventa a solução, e um colega aparece atrasado e precisa fazer as pazes depois de uma discussão. Tudo é dito no registro que as pessoas realmente usam.
 
 ## Candidates (three channels)

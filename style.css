@@ -10,21 +10,23 @@
    FORMAT.md (mechanical contract) + FUNCTION.md (behaviour). This file only paints what those produce.
    Reading it during the BUILD, to answer an implementation question (which class or knob does what), is
    legitimate; deciding content or shape from it is not.
+   The answer to such a question lives in IMPLEMENTATION.md (the build manual: classes, knobs, mechanics,
+   owner specs, and the rationale that used to be commented in this file). Start there, not here.
    If you are here to decide what a lesson should look like, stop — you are in the wrong file.
    (Owner instruction 2026-11-03.)
    ================================================================================================== */
+
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&display=swap');
 :root{--cream:#f4eddd;--paper:#fdfaf2;--ink:#182136;--tan:#b9854c;--rose:#d9c1ba;--ptw:#96601f;--blue:#1d4ed8;--dkblue:#1e3a8a;--bluebg:rgba(29,78,216,.16)}
 *{box-sizing:border-box}body{margin:0;font:17px/1.6 'Public Sans',system-ui,sans-serif;background:var(--cream);color:var(--ink)}
 header.brand{width:1400px;margin-left:15px;text-align:center;padding:20px 14px 0}
 .control-bar{width:1400px;margin:10px 0 0 15px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:8px 14px;font-size:13px;text-align:center}
-/* site-functions legend (owner instruction 2026-11-03): ONE baked-in line under the control bar, so no
-   lesson opener ever has to explain the site's tools. Static HTML — never engine-generated. */
+
+/* site-functions legend: ONE baked-in line, static HTML (FORMAT §2c · IMPLEMENTATION §6.3) */
 .barhelp{width:1400px;margin:2px 0 8px 15px;padding:0 14px;text-align:center;font-size:14px;line-height:1.55;color:var(--ink)}
 .barhelp b{color:var(--ink);font-weight:600}
-/* the shell is not text to work with: the brand header, the control bar, the legend and the footer cannot be
-   selected (owner instruction 2026-11-03) — the notebook only exists inside .content-area, so selecting the
-   shell did nothing anyway; this stops the selection from ever starting. */
+
+/* the shell is not text to work with (IMPLEMENTATION §6.3) */
 header.brand,.control-bar,.barhelp,footer{user-select:none;-webkit-user-select:none}
 .barhelp .hlk{padding:0 4px;border-radius:4px}
 .barhelp .hlk-y{background:rgba(255,233,112,.85)}
@@ -38,19 +40,15 @@ h1 span{display:block;font-size:.42em;letter-spacing:.5em}
 main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
 .page-container{margin:0;background:var(--paper);border:2px solid var(--ink);border-radius:0;box-shadow:none;padding:0;position:absolute;left:15px;width:1400px}
 .content-area{width:1200px;margin:0 auto;padding:16px 0}
-/* live (non-edit) lesson prose reads as static, not as an editable text field */
+
 .content-area{cursor:default}
 .content-area a,.content-area button,.content-area label,.content-area mark.nb,.content-area summary{cursor:pointer}
 .content-area input.gap,.content-area textarea{cursor:text}
 .card{background:var(--paper);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--tan);padding:14px 18px;margin:14px 0}
 .row{margin:6px 0}
 button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;margin:4px 4px 4px 0;font:600 14px 'Public Sans';cursor:pointer;box-shadow:3px 3px 0 var(--tan)}
-/* default interaction for EVERY button (owner instruction 2026-11-03): one shared highlight on hover and
-   one shared press animation, so no page has to style its own. Both only MODULATE the button — brightness,
-   a 1px lift, and a press that moves it 2px into its own hard shadow — so a button that carries its own
-   colour or its own shadow (.listen = tan, .hlpal swatches with no shadow, .complete-btn, .remlink,
-   .bookmenu buttons) keeps them: the rules never set `background` or `box-shadow`. Disabled and locked
-   (greyed, not applicable) buttons do not react. */
+
+/* one shared hover/press for EVERY button (IMPLEMENTATION §5.7) */
 button{transition:transform .09s ease,filter .12s ease}
 button:hover:not(:disabled):not(.locked){filter:brightness(1.14);transform:translateY(-1px)}
 button:active:not(:disabled):not(.locked){filter:brightness(1.04);transform:translate(2px,2px);transition-duration:.04s}
@@ -62,28 +60,18 @@ button:focus-visible{outline:3px solid var(--tan);outline-offset:2px}
 a{color:var(--ink);font-weight:600}h2{font-family:'Playfair Display',serif;margin:.9em 0 .3em}
 .dim{color:#8a8072;font-size:13px}
 .pt{color:#5c5347;font-style:italic}.ptw{font-style:italic;color:var(--ptw);font-weight:600}
-/* .ptsound = the LESSON-12 vowel sound-map labels ONLY (English sounds rendered in PT characters,
-   e.g. ei/ai/ə). NOT part of the pronunciation key (data-pron / dictionary.json / PronKey) and NOT a
-   general pronunciation tag — do NOT reuse it for dictionary or key work. Renamed from
-   .ptpronounce 2026-10-27. */
+
+/* lesson-12 vowel-map labels ONLY — not the pronunciation key (IMPLEMENTATION §5.5) */
 .ptsound{color:var(--ptw);font-style:italic}
 .listen{background:var(--tan);box-shadow:3px 3px 0 var(--ink)}
 details{background:#fff8ea;border:2px dashed var(--tan);border-radius:12px;padding:8px 12px;margin:10px 0}
 mark.nb{background:transparent;cursor:pointer}
-/* recording = 2px BLUE underline (no trailing icon, owner spec 2026-10-12). Notes are painted on
-   their OWN layer (#noteLayer, see below) — a light-blue wash, exactly like a highlight — so a note
-   and a recording can overlap in any way and never interact. The recording underline is the ONLY
-   thing that lives in the text DOM now.
-   START/END INSET (owner spec 2026-10-12): the underline is painted 2px short of the text on each
-   side via the BACKGROUND (background-size + background-position), never box padding — padding would
-   SHIFT the prose, and the lesson content must never move (FORMAT.md fixed-content rule). Two ABUTTING
-   saves therefore leave a paper gap between them without moving the text. */
+
+/* recording = 2px blue underline, painted by the background with a 2px inset, so the prose never moves (IMPLEMENTATION §6.1) */
 mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-position:2px 100%;
  background-image:linear-gradient(var(--blue),var(--blue));background-size:calc(100% - 4px) 2px}
-/* the #barhelp legend DEMONSTRATES the two mark styles instead of describing them (owner instruction
-   2026-11-03): the recording underline and the note wash are the exact same declarations the real marks
-   use — .hb-rec is part of the mark.nb.has-rec rule above, and the note wash is #noteLayer .ntr's
-   --bluebg. Never restyle these two separately, or the legend starts lying about the site. */
+
+/* the legend DEMONSTRATES the note wash (IMPLEMENTATION §6.3) */
 .barhelp .hb-note{background:var(--bluebg);border-radius:3px}
 .pop{position:absolute;z-index:9;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:5px;width:auto;max-height:70vh;overflow:auto}
 .pop button{padding:4px 7px;margin:0;font-size:12.5px;border-radius:8px;box-shadow:2px 2px 0 var(--tan);height:24px;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
@@ -92,42 +80,29 @@ mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-positio
 #nbNote{margin:2px 0 4px;white-space:pre-wrap;font-size:16px;text-align:center;font-style:italic;font-family:Georgia,'Times New Roman',serif}
 #nbKey{margin:2px 0 4px;white-space:pre-wrap;font-size:18px;text-align:center;font-family:Georgia,'Times New Roman',serif;color:var(--ptw)}
 #nbKey .pr-g{color:grey}
-/* every note/recording popup button always EXISTS; the ones that do not apply yet are greyed out
-   (owner spec 2026-10-12) instead of being removed from the row. `.locked` carries the same grey
-   look WITHOUT the `disabled` attribute, for the presses that must still be heard: ⏺ Record as soon
-   as ANY recording is involved ("cannot overwrite recording, delete first")
-   and ▶ Play / 🔊 Delete while MORE THAN ONE recording is involved ("please select a distinct
-   recording"). */
+
+/* a popup button that does not apply yet is greyed out (FUNCTION.md · IMPLEMENTATION §5.7) */
 .pop button:disabled,.pop button.locked{opacity:.45;box-shadow:2px 2px 0 var(--tan);cursor:default}
-/* a popup button whose glyph became a processing SPIRAL (Record while capturing a clip, Play while
-   the clip is sounding) — the label text is hidden, leaving only the rotating ring, and the button
-   stays full-strength (never greyed), since the action is running, not unavailable */
+
+/* processing spiral: Record while capturing, Play while sounding (FUNCTION.md) */
 .pop button[data-spin] .lbl{display:inline-flex;align-items:center;justify-content:center;min-width:2em}
 .pop button .spin{border-color:currentColor;border-top-color:transparent;vertical-align:middle}
 .pop textarea{width:100%;margin:6px 0}
-/* HIGHLIGHT = its OWN PAINT LAYER (#hlLayer, never mark.nb). A highlight is a translucent
-   rectangle measured from the text range and painted over the text by #hlLayer, so it is NOT part
-   of the text DOM: it can cross a note/recording in any way and both stay whole. The layer keeps
-   pointer-events:none (clicking/dragging/selecting text is never blocked) and no z-index (so it
-   creates no stacking context and stays under .pop/#toast) — the only interaction a highlight has
-   is Ctrl+click to delete (see FUNCTION.md). */
+
+/* HIGHLIGHT paint layer — never mark.nb (IMPLEMENTATION §6.2) */
 #hlLayer{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
-/* mix-blend-mode:multiply (owner spec 2026-10-12, "highlight sits below text"): black ink stays
-   pure black under a multiply blend (black × anything = black), so the tint only shows through
-   the paper/background — visually the highlight sits BELOW the text with zero DOM/z-index change
-   and zero change to the coordinate math above it. */
+
+/* multiply = the tint sits BELOW the ink (IMPLEMENTATION §6.2) */
 #hlLayer .hlr{position:absolute;border-radius:3px;mix-blend-mode:multiply}
 #hlLayer .hlr-yellow{background:rgba(255,233,112,.55)}
 #hlLayer .hlr-red{background:rgba(255,64,64,.34)}
 #hlLayer .hlr-green{background:rgba(64,200,96,.34)}
-/* NOTE = its OWN paint layer (#noteLayer, same idea as #hlLayer): a light-blue wash rectangle
-   measured from the text range, so a note is NOT part of the text DOM and can overlap a recording in
-   any way. pointer-events:none (notes are hit-tested, never block a click/drag/selection), no
-   z-index, multiply blend so the wash sits below the text ink (black glyphs stay black). */
+
+/* NOTE paint layer (IMPLEMENTATION §6.2) */
 #noteLayer{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
 #noteLayer .ntr{position:absolute;border-radius:3px;mix-blend-mode:multiply;background:var(--bluebg)}
-/* tiny colour palette: yellow / transparent red / transparent green (the single source of truth
-   for the colours: the swatch backgrounds are defined here, not inline in the engine) */
+
+/* colour palette, single source of truth (IMPLEMENTATION §6.2) */
 .pop.hlpalpop{padding:4px;border-radius:12px;width:auto;box-shadow:3px 3px 0 var(--tan)}
 .hlpal{display:flex;align-items:center;gap:4px}
 .hlpal button{width:14px;height:14px;min-width:14px;padding:0;margin:0;border:2px solid var(--ink);border-radius:6px;box-shadow:none;cursor:pointer}
@@ -141,28 +116,22 @@ mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-positio
 .pulse{animation:pu 1s infinite;display:inline-block}
 @keyframes pu{50%{opacity:.25}}
 input.gap{border:0;border-bottom:2px solid var(--tan);background:#fff8ea;font:inherit;width:var(--gap-w,9em)}
-/* free-text blocks are FIXED SIZE (owner instruction 2026-11-03): the layout is fixed at generation, so no
-   authored textarea may be dragged — a resize handle lets the student widen it past its block and past the
-   canvas. Scoped to authored content: the note editor in the selection popup is not affected. */
+
+/* authored free-text blocks are FIXED SIZE (IMPLEMENTATION §4.6) */
 .content-area textarea{resize:none}
-/* fieldset is a BLOCK type too (FORMAT.md rule 2): a browser's default `min-inline-size: min-content`
-   would stop it shrinking into a half/third slot, so it gets the same min-width:0 escape as .panel. */
+
+/* fieldset is a BLOCK; min-width:0 so it shrinks into a slot (IMPLEMENTATION §2.5) */
 fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8px 12px;min-width:0}
 label{margin-right:10px;cursor:pointer}
 #feed{display:block;width:100%;min-height:9em;font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:12px 14px;box-shadow:5px 5px 0 var(--tan);resize:none;field-sizing:content}
 footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#8a8072}
 #printRoot{display:none}
-/* ===== lesson content template (2026-10 rework): charts, exercise blocks, compact audio chips ===== */
+
 h2{border-bottom:2px solid var(--rose);padding-bottom:6px;margin-top:1.6em}
 h2 .h2sub{font-family:'Public Sans',sans-serif;font-size:.55em;font-weight:400;letter-spacing:.03em;color:#8a8072}
+/* A CHART IS A BLOCK; its columns/rows are content-aware, never set here (IMPLEMENTATION §3.1) */
 .chart{border-collapse:collapse;width:100%;margin:14px 0;background:var(--paper);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--tan)}
-/* A CHART IS A BLOCK (FORMAT.md rule 2 "a block is any content type", owner instruction 2026-11-03): the
-   generic .itemsize* rules further down give it its block width, exactly like a .card or .panel — and the
-   two companions below make that explicit and order-proof, because a table's own `width:100%` above is only
-   the default of an untagged full block. Its COLUMNS/ROWS are content-aware and never set here. The same
-   pattern applies to any future content type that ships a default width of its own. */
-.chart.itemsize-half{width:calc(50% - 7px)}
-.chart.itemsize-third{width:calc(33.3333% - 9.3333px)}
+
 .chart th,.chart td{border:1px solid var(--tan);padding:8px 12px;text-align:left;vertical-align:middle}
 .chart thead th{background:var(--ink);color:var(--cream);font-weight:700;letter-spacing:.02em}
 .chart.center th,.chart.center td{text-align:center}
@@ -172,8 +141,6 @@ h2 .h2sub{font-family:'Public Sans',sans-serif;font-size:.55em;font-weight:400;l
 .chart tbody tr:nth-child(even) td{background:#fff8ea}
 .chips b{display:inline-block;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:2px 12px;margin:2px 6px 2px 0;font-weight:600}
 .ex-head{font-family:'Playfair Display',serif;font-weight:700;font-size:19px;color:var(--dkblue);margin:22px 0 8px;padding-left:10px;border-left:4px solid var(--tan);letter-spacing:.02em}
-.blanks{display:flex;flex-wrap:wrap;gap:10px 28px;margin:10px 0}
-.blanks>div{display:flex;align-items:center;gap:8px}
 .blanks>div .ptw{flex:0 0 auto}
 .dialog{margin:14px 0;padding:12px 16px;background:#fff8ea;border:2px solid var(--rose);border-radius:12px}
 .dialog p{margin:6px 0}
@@ -182,87 +149,76 @@ h2 .h2sub{font-family:'Public Sans',sans-serif;font-size:.55em;font-weight:400;l
 fieldset .qnum{margin-right:6px}
 fieldset label{margin-right:14px}
 button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+/* plain print path (IMPLEMENTATION §1.7) */
 @media print{#printRoot .listen{display:none}#barhelp{display:none}}
-/* a PLAIN print (browser Ctrl+P, no JS path) — FORMAT.md "@media print": the shell and the notebook are
-   hidden and the page frame is stripped so the lesson prints as prose. The app's own Print button takes the
-   `body.printing` path below, which hides everything except #printRoot instead. */
+
 @media print{
  header.brand,#controlbar,#barhelp,#feed,footer{display:none!important}
  .page-container{border:0!important;box-shadow:none!important}
  .panel,.chart,.card{break-inside:avoid}
 }
-/* exercise panels + aligned grids */
+
 .panel{border:2px dashed var(--tan);border-radius:12px;padding:12px 16px;background:var(--paper);min-width:0}
-/* vertical rhythm (owner instruction 2026-11-03): a block never touches the block above or below it.
-   Full-width panels carry the same 14px vertical margin as .card / .chart / .itemrow, so two stacked
-   panels (the Treino and Quiz groups) keep the same breathing space as every other block pair.
-   Row members are unaffected: `.itemrow>*{margin:0}` and the row's own `gap:14px` space them. */
+
+/* vertical rhythm: a block never touches the block above or below it (IMPLEMENTATION §2.4) */
 .content-area > .panel{margin:14px 0}
-.panel.full{grid-column:1/-1;width:fit-content;min-width:calc(50% - 7px);max-width:100%;justify-self:center}
-.panel.centered{grid-column:1/-1;justify-self:center;width:fit-content;max-width:calc(50% - 7px)}
 .panel .ex-head{margin-top:0}
 .panel > :not(.ex-head){margin-left:10px;margin-right:10px}
 .panel .chart{width:calc(100% - 20px)}
-/* block width slots: the sizing decision is tagged on the block — CSS only displays it.
-   A BLOCK IS ANY CONTENT TYPE THAT FILLS A SLOT (FORMAT.md rule 2): .card, .panel, .chart/table, .dialog,
-   fieldset, or a future type — all of them take these classes, and the class is what makes the element a
-   block. The BLOCK layout is the fixed 2/3 slot model (owner instruction 2026-11-03). The content-aware
-   rule — any number of columns/rows the content needs — applies INSIDE a block (a chart's columns, an
-   option row, a .blanks list), never to the blocks themselves. */
-.itemsize{width:100%}                                   /* default: full */
-.itemsize-half{width:calc(50% - 7px)}                    /* 14px row gap → 7px each side */
+
+/* block width slots: the sizing decision is tagged on the block, CSS only displays it (IMPLEMENTATION §2.1-2.3) */
+.itemsize{width:100%}
+.itemsize-half{width:calc(50% - 7px)}
 .itemsize-third{width:calc(33.3333% - 9.3333px)}
 .itemrow{display:flex;gap:14px;margin:14px 0;align-items:stretch;flex-wrap:nowrap}
 .itemrow>*{min-width:0;margin:0}
-.itemrow[data-cols="2"]>*{width:calc(50% - 7px)}         /* row and tag agree */
+.itemrow[data-cols="2"]>*{width:calc(50% - 7px)}
 .itemrow[data-cols="3"]>*{width:calc(33.3333% - 9.3333px)}
 .content-area > h2, .content-area > p{margin-left:10px;margin-right:10px}
+/* .qgrid/.panel/.qopts cap NOTHING; this template is the qnum|stem layout, not an option count (IMPLEMENTATION §4.4) */
 .qgrid{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;column-gap:14px;row-gap:12px;min-width:0}
-/* .qgrid / .panel / .qopts never cap ANYTHING: a question may carry 2, 3, 5… answer options and they wrap
-   (FORMAT rule 6 — the content decides); the 2-column template here is only the qnum|stem layout of the
-   flat pattern, not an option count, and .panel sets no limit on how many children or options it holds. */
+
 .qgrid .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 30px}
 .qgrid .qnum{font-weight:700}
 .qgrid .qstem{font-weight:700}
-.blanks{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px 24px}
+/* word + blank pairs, right-aligned (IMPLEMENTATION §4.2) */
+.blanks{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px 24px;margin:10px 0}
 .blanks>div{display:flex;justify-content:flex-end;align-items:center;gap:6px}
 .blanks>div input.gap{width:var(--gap-w,9em);flex:0 0 auto}
-.blanks--long{--prompt-w:15em;grid-template-columns:repeat(auto-fill,minmax(420px,1fr))}
 
-/* ---- content-shape styles (2026-10-17): explainer sub-heading, merged chart note, stacked MCQ,
-   sentence fill-ins with inline gaps, contiguous blank line, non-italic English inside italic PT ---- */
+/* GLOSS STANDARD: the BLOCK chooses inline-or-own-line, never one cell (IMPLEMENTATION §4.8) */
+.blanks.glossdrop>div{flex-wrap:wrap}
+.blanks.glossdrop>div .ptw{flex:1 1 100%;text-align:right}
+.chart.glossdrop .ptw{display:block}
+
+
 .lead{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#5c5347;margin:.2em 0 .7em;line-height:1.5}
 .pt b,.lead b{font-style:normal}
 .prep{color:var(--tan);font-weight:700}
 .pr-g{color:grey}
 .blank{display:inline-block;width:3.2em;border-bottom:2px solid var(--tan);vertical-align:baseline}
 .chart tr.note td{background:#fff8ea;font-style:italic;color:#5c5347;border-top:0;padding:10px 14px}
-.qgrid.stack{display:block}
-/* a list of SHORT exercise items fills its block by running in as many columns as the items need
-   (FORMAT rule 4): `.cols` = two columns of .qitem — the same `.cols` suffix `.blanks.sent` uses.
-   Nothing here caps the item count; it only decides how many abreast they sit. */
-.qgrid.stack.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px;align-items:start}
+
+/* TILING: the slot decides the column count (2 full / 1 in a half/third), no author decision (IMPLEMENTATION §3.2) */
+.qgrid.stack{display:grid;grid-template-columns:repeat(auto-fill,minmax(28em,1fr));column-gap:28px;align-items:start}
 .qgrid.stack .qitem{margin:0 0 16px}
 .qgrid.stack .qline{display:flex;align-items:baseline;gap:8px}
 .qgrid.stack .qline .qnum{flex:0 0 auto;font-weight:700}
 .qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 30px;margin-top:4px}
-.blanks.sent{display:block}
+.qgrid.stack.wide{display:block}
+.blanks.sent{display:grid;grid-template-columns:repeat(auto-fill,minmax(28em,1fr));column-gap:28px}
 .blanks.sent>div{display:block;margin:8px 0}
 .blanks.sent>div input.gap{display:inline-block;width:var(--gap-w,9em);margin:0 .2em;vertical-align:baseline}
-.blanks.sent.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
-.blanks.sent.cols>div{margin:6px 0}
-.blanks.line{display:block;margin:10px 0}
-.blanks.line>div{display:grid;grid-template-columns:var(--prompt-w,8ch) var(--gap-w,9em) 1fr;column-gap:10px;align-items:center;margin:8px 0}
-.blanks.line .p{text-align:right}
-.blanks.line .a{text-align:left}
-.blanks.line input.gap{width:100%}
+.blanks.sent.wide{display:block}
+
+/* an ODD last item takes the whole row, so a row is never left half blank (IMPLEMENTATION §3.2) */
+.qgrid.stack>:last-child:nth-child(odd),.blanks.sent>:last-child:nth-child(odd){grid-column:1/-1}
 
 body.editing #hlLayer,body.editing #noteLayer{display:none}
 body.editing mark.nb.has-rec{background-image:none}
 body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
-/* custom print button (2026-10-15): only the snapshot prints; marks are flat translucent fills + a
-   real underline (no mix-blend-mode), and print-color-adjust:exact forces the washes to print even when
-   the browser's "background graphics" checkbox is off. */
+
+/* custom print button: only the snapshot prints (IMPLEMENTATION §1.7) */
 @media print{
  body{background:white}
  body.printing>*:not(#printRoot){display:none!important}
@@ -282,7 +238,8 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
  #printRoot .pr-radio.pr-off{color:#8a8072}
 }
 
-/* ---- teacher admin area (2026-10-20): books row + pending/approved half columns ---- */
+
+/* teacher admin area (IMPLEMENTATION §6.7) */
 .tadmin-books{display:flex;gap:10px;margin-top:2px}
 .tadmin-books button{flex:1 1 0;margin:0;white-space:nowrap}
 .tadmin-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}
@@ -305,9 +262,10 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 .trow{display:flex;align-items:center;gap:8px;min-width:0}
 .trow .tname{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;min-width:0}
 .trow .temail{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1 1 auto;min-width:0}
-/* small half-full blocks: center their text (ugliness rule) */
+
+/* small half-full blocks centre their text (IMPLEMENTATION §2.7) */
 .card.center{text-align:center}
-/* ===== entrance / landing page (index.html) ===== */
+
 body.landing .landing-card{max-width:600px;margin:44px auto 12px;padding:32px 38px}
 body.landing .landing-title{font-size:26px;letter-spacing:.05em;margin:0 0 10px}
 body.landing #gtext{font-size:16px;margin:0 0 4px}
@@ -316,10 +274,8 @@ body.landing #needg{margin-top:10px;text-align:left}
 body.landing #needg p{font-size:15px;line-height:1.55;margin:10px 0}
 body.landing #needg button{margin:4px 0 8px}
 body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
-/* student landing page (owner instruction 2026-11-03): THREE track columns; the lesson TITLE is the link
-   (no per-lesson button); the "continue" button sits at the TOP of a granted track's list; a track the
-   student was not granted is greyed out and inert. Multi-track access is granted per student in the teacher
-   area (one access row per email+track, FUNCTION.md). */
+
+/* landing page (index.html), not a lesson (IMPLEMENTATION §6.6) */
 .landing-hello{margin:14px 0;border-color:var(--ink);background:linear-gradient(100deg,rgba(217,193,186,.60),rgba(185,133,76,.30) 55%,rgba(29,78,216,.16))}
 .hello-en{font-weight:600;font-size:18px;line-height:1.35}
 .hello-pt{margin-top:4px;font-style:italic;color:#5c5347}
@@ -329,9 +285,8 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .track-card .contbtn{display:block;width:100%;margin:0 0 10px;background:#0f766e}
 .track-card .row a.lesson-link{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 .track-card .row a.lesson-link:hover{text-decoration-thickness:2px}
-/* each entry reads "NN. Lesson Name" on ONE line (owner instruction 2026-11-03): the title truncates with
-   an ellipsis instead of wrapping past the column, and the full text stays available as a tooltip.
-   Progress is a colour now (the ✅/⬜ emoji prefix is gone), so a finished lesson turns teal. */
+
+/* one-line entries: the title truncates, the tooltip keeps the full text (IMPLEMENTATION §6.6) */
 .track-card .row{display:flex;align-items:baseline;gap:6px;white-space:nowrap;overflow:hidden}
 .track-card .row a.lesson-link,.track-card .row .dim{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .track-card .row.done a.lesson-link,.track-card .row.done .dim{color:#0f766e}
@@ -339,10 +294,8 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .track-card.locked .row,.track-card.locked h3{pointer-events:none}
 
 
-/* ---- Tier-1 game block (engine3.js). A game is a BLOCK like any other (FORMAT.md rule 2): it may sit at
-   full width or carry .itemsize-half/.itemsize-third inside an .itemrow. The authored answers stay in
-   .game-list as ordinary radios — that is what persists, what prints, and what shows if the engine never
-   runs. Everything below only dresses the animated layer the engine builds on top of them. */
+
+/* Tier-1 game block (engine3.js); the authored radios are what persists (IMPLEMENTATION §6.8) */
 .game{margin:14px 0;padding:12px 16px;background:var(--paper);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--tan);min-width:0}
 .game-stage{position:relative;height:240px;overflow:hidden;background:#eef4f7;border:2px dashed var(--tan);border-radius:12px;touch-action:manipulation}
 .game:not(.is-on) .game-stage{display:none}
@@ -367,4 +320,3 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .game-score-line{margin:10px 0 0;text-align:center;font-weight:700}
 @media (prefers-reduced-motion:reduce){.game-prompt{transition:none}.game-fade{transition:none}}
 @media print{.game-stage{display:none}.game.is-on .game-list{display:block}}
-

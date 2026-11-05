@@ -1,7 +1,5 @@
 # Lesson 15 (kids) — design (Pass A)
 
-`band: kids · L15 · C15 · registers: 2b (a friend, planning something fun) · 2c (a teacher, a museum clerk) · contexts: rules at school and at home, advice to a friend, planning a trip, three futures`
-
 ## Fundamental idea taken from the parent `designs/lesson15.design.md`
 A ideia do pai: **uma grade, cinco trabalhos** — habilidade (*can*), permissão (*can / could / may*), obrigação (*have to / has to / must / gotta*), conselho (*should*), ofertas e pedidos (*will / would / can / could*). Uma regra só: **modal + verbo pelado** — sem *to*, sem *-s*, sem *do/does*, uma negativa por modal. A **obrigação tem fonte**: *have to* = alguém de fora exige; *must* = eu exijo; *gotta* = o mesmo que *have to*, na fala (som já visto na aula 14). **Conselho não é ordem**: *should* deixa a escolha com o ouvinte. E o **futuro tem três graus de compromisso**, decididos pelo momento da decisão: agora (*will*), antes (*going to*), já marcado com hora (*present continuous*). Kids mantêm a grade e trocam a viagem de negócios por **um passeio de sábado com os amigos**.
 
@@ -21,6 +19,7 @@ A ideia do pai: **uma grade, cinco trabalhos** — habilidade (*can*), permissã
 - **Dependências:** *can't / won't* chegam contraídos da aula 14; *hafta / gotta* são ouvidos lá e aqui viram **forma**; *at three, on Saturday* vêm das aulas 8 e 9 — usados, não reensinados.
 
 ## Situation
+A friend, planning something fun, a teacher, a museum clerk — rules at school and at home, advice to a friend, planning a trip, three futures.
 Três amigos planejam o sábado: um tem os horários e o preço do museu, outro tem as regras de casa (tem de voltar às seis), e todos têm de escolher entre o parque e o museu. Tudo o que a aula instala é o que eles dizem **antes** de qualquer coisa ser marcada.
 
 

@@ -1,7 +1,5 @@
 # Lesson 34 (kids) — design (Pass A)
 
-`band: kids · L34 · C34 · registers: 1b (a friend, chat) · 2a (the teacher, e-mail) · 3a (the school office, a note) · contexts: asking for a file, the missing form, saying sorry, bad news about the trip`
-
 ## Fundamental idea taken from the parent `designs/lesson34.design.md`
 A ideia do pai: **tom é um conjunto de interruptores, não um humor** — saudação, contração, franqueza, imperativo, tamanho da frase, despedida. A aula trata cada um como **interruptor de três posições**. E **quem decide é o leitor**, não a personalidade de quem escreve: o mesmo conteúdo é educado para um cliente e frio para um colega — **ler o leitor é a habilidade**. O **imperativo é a armadilha**: *Send the file* é neutro dentro da equipe e rude para fora; *Could you send the file?* conserta com uma palavra. E **má notícia tem forma**: reconhecer → a notícia → o que se pode fazer — **nunca a notícia sozinha**. Kids trocam a fatura por **o formulário da excursão**: três leitores — o amigo que perguntou, a professora que precisa do papel, e a secretaria que fecha a lista.
 
@@ -21,6 +19,7 @@ A ideia do pai: **tom é um conjunto de interruptores, não um humor** — sauda
 - **Dependências**: as fórmulas de pedido (15/19/21); o distanciamento do passivo (29); os conectores (32).
 
 ## Situation
+A friend, chat, the teacher, e-mail, the school office, a note — asking for a file, the missing form, saying sorry, bad news about the trip.
 **Um problema só, três leitores**: o formulário da excursão que ninguém entregou. O aluno escreve **a mesma mensagem três vezes** — para o amigo que perguntou, para a professora que precisa do papel e para a secretaria que fecha a lista — e depois escolhe **qual mandar primeiro**.
 
 ## Candidates (three channels)

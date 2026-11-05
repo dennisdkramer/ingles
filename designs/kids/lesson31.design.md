@@ -1,7 +1,5 @@
 # Lesson 31 (kids) — design (Pass A)
 
-`band: kids · L31 · C31 · registers: 2b (a friend, remembering) · 2a (the teacher, a note about the new timetable) · contexts: the old flat and the new one, the school before and now, what I am used to, a new game`
-
 ## Fundamental idea taken from the parent `designs/lesson31.design.md`
 A ideia do pai: **duas ideias diferentes compartilham uma forma**. *used to* fala do **passado** (*I used to work nights*); *be used to* fala da **familiaridade no presente** (*I'm used to presenting in English*). A aula separa as duas **pelo tempo**, não pela tradução. Mais três peças: `would` **repete ações, nunca estados** (*we would meet every Friday*, mas não *there would be a shop*); a negativa é **didn't use to** — o *d* pertence ao passado e o *did* já o carrega; e *be used to* leva **substantivo ou -ing**, porque o *to* ali é **preposição**, não marcador de infinitivo — nomear isso resolve a confusão toda. Kids trocam o programa de mudança de escritório por **a mudança de casa e a escola do ano passado**.
 
@@ -21,6 +19,7 @@ A ideia do pai: **duas ideias diferentes compartilham uma forma**. *used to* fal
 - **Dependências**: o *-ing* (4/28); o passado simples (6); as reduções (14).
 
 ## Situation
+A friend, remembering, the teacher, a note about the new timetable — the old flat and the new one, the school before and now, what I am used to, a new game.
 **A mudança de casa e a escola nova no mesmo ano.** Os antigos vizinhos descrevem como **era antes**; o aluno descreve **a que ainda está se acostumando**; e um amigo confunde as duas coisas na frente de todo mundo. Mesmo conteúdo, dois tempos: **antes** (used to) e **agora** (be used to).
 
 ## Candidates (three channels)

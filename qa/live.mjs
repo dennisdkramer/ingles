@@ -40,6 +40,7 @@ import path from 'path';
 import os from 'os';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
+import { TRACKS } from './track.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -47,11 +48,15 @@ const OUT = path.join(__dirname, '_live');
 const CHROME = process.env.CHROME || 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const EMAIL = 'live.qa@ingles.test';
 const SECRET = 'abreportas2025';
-const TRACK = 'business';
 const LESSON = 1;
 
 const has = n => process.argv.includes(n);
 const arg = (n, d) => { const a = process.argv.find(x => x.startsWith(n + '=')); return a ? a.slice(n.length + 1) : d };
+const TRACK = (() => {
+  const t = String(arg('--track', 'business')).trim().toLowerCase();
+  if (!TRACKS.includes(t)) { console.error('❌ --track must be one of: ' + TRACKS.join(' | ') + '  (got "' + t + '")'); process.exit(1); }
+  return t;
+})();
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const log = (...a) => { const s = a.join(' '); console.log(s); try { fs.appendFileSync(path.join(OUT, 'run.txt'), s + '\n'); } catch (e) { } };
 
@@ -512,7 +517,7 @@ class Live {
     await this.wait('!!(window.__A&&window.__B)', 20000, 'engines loaded (__A/__B)');
     await sleep(400);
     const s = await this.state();
-    if (String(s.host).indexOf('/business/lesson1.html') < 0) throw new Error('the browser is not on the lesson page: ' + s.host + ' (gate rejected?) ' + JSON.stringify(s.errs));
+    if (String(s.host).indexOf('/' + TRACK + '/lesson' + LESSON + '.html') < 0) throw new Error('the browser is not on the lesson page: ' + s.host + ' (gate rejected?) ' + JSON.stringify(s.errs));
   }
   async nav(url) { await this.cdp.send('Page.navigate', { url: url || this.url }); await this.boot() }
   async reload() { await this.cdp.send('Page.reload', {}); await this.boot() }
@@ -1208,7 +1213,7 @@ async function scenDiag(live, site) {
   await live.drag({ sx: d.ex, sy: d.ey, ex: d.sx, ey: d.sy }, d, { ctrl: false, steps: 16 });
   log('   · sel=' + JSON.stringify(await selNow(live)) + '  events=' + JSON.stringify(await live.ev('window.__ct')));
   log('\n (5) CONTROL PAGE with NO engine at all — can CDP input select text there?');
-  const rootUrl = live.url.replace('/business/lesson1.html', '');
+  const rootUrl = live.url.replace('/' + TRACK + '/lesson' + LESSON + '.html', '');
   await live.cdp.send('Page.navigate', { url: rootUrl + '/qa/_live/control.html' });
   await sleep(1200);
   await live.ev(COUNT); await live.ev(DPSEEN);
@@ -1303,7 +1308,7 @@ async function main() {
   try { fs.writeFileSync(path.join(OUT, 'run.txt'), '') } catch (e) { }
 
   const site = await startSite();
-  const url = 'http://127.0.0.1:' + site.port + '/business/lesson1.html';
+  const url = 'http://127.0.0.1:' + site.port + '/' + TRACK + '/lesson' + LESSON + '.html';
   log('· repo   ' + ROOT + '   (node ' + process.version + ')');
   log('· page   ' + url + '   as ' + EMAIL);
   log('· chrome ' + CHROME + (has('--headful') ? '   [headful]' : '   [headless=new]'));

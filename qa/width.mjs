@@ -1,6 +1,7 @@
 /**
- * qa/width.mjs — static width/division audit for the business lessons.
- * Run with: node qa/width.mjs [lessonNumber ...]   (no numbers = every business/lesson*.html that exists)
+ * qa/width.mjs — static width/division audit for the lesson pages.
+ * Run with: node qa/width.mjs [--track=kids|business|adult] [lessonNumber ...]
+ *           (no numbers = every lesson page that exists; no --track = EVERY track with pages)
  *           node qa/width.mjs --selftest           (qa/fixtures/width-ok.html must pass, width-bad.html must fail)
  *
  * Markup-only audit (no browser, no layout). The BLOCK model is fixed (FORMAT.md): a full block, or a row of
@@ -10,7 +11,8 @@
  *   1. every .itemsize-half / .itemsize-third sits inside an .itemrow, and never carries both classes;
  *   2. every .itemrow is complete and size-consistent: data-cols="2" = exactly 2 .itemsize-half,
  *      data-cols="3" = exactly 3 .itemsize-third, no mixing, and no member sets its own width by hand;
- *   3. no retired class remains (.grid3, .panels, .dialog.half, .qgrid-4);
+ *   3. no retired class remains (.grid3, .panels, .dialog.half, .qgrid-4, and the width overrides the CSS
+ *      now owns by default: .qgrid.stack.cols / .blanks.sent.cols — items tile themselves, FORMAT rule 4);
  *   4. `.chart` never prescribes its own columns (the table's content decides them);
  *   5. every exercise / list / answer group is a BLOCK (FORMAT rule 4): a `.qgrid` or `.blanks` emitted
  *      directly into `.content-area` is a group with no block around it — it must sit in a `.panel`.
@@ -19,10 +21,11 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { JSDOM } from 'jsdom';
+import { pickTracks, hasTrackFlag, pickNumbers, pickLessons, missingTargets, scopeLabel } from './track.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
-const RETIRED = ['.grid3', '.panels', '.dialog.half', '.qgrid-4'];
+const RETIRED = ['.grid3', '.panels', '.dialog.half', '.qgrid-4', '.qgrid.stack.cols', '.blanks.sent.cols'];
 const CHART_COLS = '.chart colgroup, .chart col, .chart[data-cols], .chart [data-cols],'
   + ' .chart[style*="column"], .chart [style*="column"],'
   + ' .chart[style*="grid-template-columns"], .chart [style*="grid-template-columns"]';
@@ -103,27 +106,41 @@ if (process.argv.includes('--selftest')) {
   process.exit(broken ? 1 : 0);
 }
 
-/* ---- audit the real pages ---- */
-const targets = process.argv.slice(2).filter(a => /^\d+$/.test(a)).map(Number);
-let lessons = targets;
-if (!lessons.length) {
-  const dir = path.join(ROOT, 'business');
-  lessons = fs.existsSync(dir)
-    ? fs.readdirSync(dir).map(f => (f.match(/^lesson(\d+)\.html$/) || [])[1]).filter(Boolean).map(Number).sort((a, b) => a - b)
-    : [];
+/* ---- audit the real pages: every track with pages, or only the one --track names ---- */
+const tracks = pickTracks();
+const strict = hasTrackFlag();
+const named = pickNumbers();
+if (!tracks.length) { console.log('✅ width audit: no lesson pages in any track'); process.exit(0); }
+const ghosts = missingTargets(tracks, named);
+if (ghosts.length) {
+  console.log('❌ lesson ' + ghosts.join(', ') + ' does not exist in ' + scopeLabel(tracks));
+  process.exit(1);
 }
-if (!lessons.length) { console.log('✅ width audit: no business lesson pages to check'); process.exit(0); }
 
-let fails = 0;
-for (const n of lessons) {
-  const file = path.join(ROOT, 'business', 'lesson' + n + '.html');
-  if (!fs.existsSync(file)) {
-    if (targets.length) { console.log('lesson ' + n + ': ❌ page not found'); fails++; }
-    else console.log('lesson ' + n + ': (page missing, skipped)');
-    continue;
+let fails = 0, checked = 0;
+if (tracks.length > 1) console.log('🧪 width audit — scope: ' + scopeLabel(tracks) + '\n');
+for (const TRACK of tracks) {
+  const lessons = pickLessons(TRACK);
+  if (!lessons.length) { console.log('✅ width audit: no ' + TRACK + ' lesson pages to check'); continue; }
+  let trackFails = 0;
+  for (const n of lessons) {
+    const file = path.join(ROOT, TRACK, 'lesson' + n + '.html');
+    if (!fs.existsSync(file)) {
+      if (strict) { console.log(TRACK + '/lesson' + n + ': ❌ page not found'); trackFails++; }
+      else console.log(TRACK + '/lesson' + n + ': (page missing, skipped)');
+      continue;
+    }
+    const findings = audit(fs.readFileSync(file, 'utf8'));
+    if (findings.length) { console.log(TRACK + '/lesson' + n + ':'); printFindings(findings); trackFails += findings.length; }
   }
-  const findings = audit(fs.readFileSync(file, 'utf8'));
-  if (findings.length) { console.log('lesson ' + n + ':'); printFindings(findings); fails += findings.length; }
+  checked += lessons.length;
+  fails += trackFails;
+  console.log((trackFails ? '❌ ' + trackFails + ' width finding(s) — ' : '✅ widths OK — ')
+    + TRACK + ' (' + lessons.length + ' page' + (lessons.length === 1 ? '' : 's') + ')');
 }
-console.log(fails === 0 ? '✅ widths OK (' + lessons.length + ' page' + (lessons.length === 1 ? '' : 's') + ')' : '❌ ' + fails + ' width finding(s)');
+if (tracks.length > 1) {
+  console.log(fails === 0
+    ? '✅ widths OK — ' + scopeLabel(tracks) + ' (' + checked + ' page' + (checked === 1 ? '' : 's') + ')'
+    : '❌ ' + fails + ' width finding(s) — ' + scopeLabel(tracks));
+}
 process.exit(fails ? 1 : 0);

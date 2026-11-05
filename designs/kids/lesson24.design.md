@@ -1,7 +1,5 @@
 # Lesson 24 (kids) — design (Pass A)
 
-`band: kids · L24 · C24 · registers: 2b (a friend, a text message) · 2a (the teacher, a school notice) · contexts: jobs people do, the classroom, the playground, going to school / bed, a notice with missing articles`
-
 ## Fundamental idea taken from the parent `designs/lesson24.design.md`
 A ideia do pai: **o artigo é uma afirmação sobre conhecimento compartilhado**. Tudo o mais (primeira menção, unicidade, segunda menção) é caso particular de **uma pergunta só**: *o ouvinte sabe de qual estou falando?* Sim → **the**; não e é **um entre muitos** → **a/an**; não e é **a classe inteira** → **zero**. **`a/an` não é "um"** — é *um entre muitos*, e é por isso que **profissão pede artigo**: *she's an engineer*. Português **tira** o artigo, e esse é o erro mais frequente aqui. **Zero article é uma afirmação sobre a classe**: *cats are independent* (todos), *the cat is a predator* (a espécie como categoria), *a cat* (um animal). E a pronúncia é **uma regra só**: **/ði/** antes de som de vogal, **/ðə/** no resto. Kids mantêm a pergunta e trocam o relatório trimestral por **o aviso da escola escrito sem artigos**.
 
@@ -23,6 +21,7 @@ A ideia do pai: **o artigo é uma afirmação sobre conhecimento compartilhado**
 - **Dependências**: contabilidade da 16; superlativos da 13; ordinais da 12.
 
 ## Situation
+A friend, a text message, the teacher, a school notice — jobs people do, the classroom, the playground, going to school / bed, a notice with missing articles.
 O aviso da excursão que um colega escreveu **sem artigos**: o aluno conserta linha por linha e, ao fazer isso, decide se o leitor sabe de qual coisa se fala. Mesmo conteúdo, dois leitores: o mural da turma (solto) e o aviso para os pais (apertado).
 
 ## Candidates (three channels)

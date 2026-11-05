@@ -1,7 +1,5 @@
 # Lesson 33 (kids) — design (Pass A)
 
-`band: kids · L33 · C33 · registers: 2c (group work: four students deciding) · 2a (the teacher, listening) · contexts: the class party, the school trip, the group project, who does what`
-
 ## Fundamental idea taken from the parent `designs/lesson33.design.md`
 A ideia do pai: **uma reunião é uma máquina de tomar turnos**, e a língua é o que sinaliza **de quem é a vez** — o resto é conteúdo. O percurso é uma **sequência visível**: proposta → apoio → objeção → decisão, e **cada passo tem fórmula**. Discordar é um **movimento de duas partes**: reconhecer + contrapor (*I see your point, but…*) — o reconhecimento não é enfeite, é o que **mantém a conversa viva**. E **o fecho é a parte que todos pulam e a única que sobrevive**: ação + responsável + prazo, ensinado como moldura de três casas, treinado até ficar automático. Kids trocam a reunião de projeto por **a decisão da turma**: a festa, a excursão, o trabalho em grupo.
 
@@ -21,6 +19,7 @@ A ideia do pai: **uma reunião é uma máquina de tomar turnos**, e a língua é
 - **Dependências**: os marcadores (32) para abrir; os modais (15) para propor; o *by* (17) para prazos.
 
 ## Situation
+Group work: four students deciding, the teacher, listening — the class party, the school trip, the group project, who does what.
 **A decisão da turma**: dois planos na mesa (festa na sala × festa no pátio), um limite de dinheiro e quatro alunos que querem sair de lá **com uma decisão**. O aluno conduz — abre, recebe a proposta, trata a objeção, fecha com responsáveis e prazos — e depois escreve **o bilhete de três linhas** para o grupo.
 
 ## Candidates (three channels)

@@ -1,7 +1,5 @@
 # Lesson 17 (kids) — design (Pass A)
 
-`band: kids · L17 · C17 · registers: 2b (a friend, planning the week) · 2a (a teacher giving instructions) · contexts: a week with three fixed things, a deadline, a duration, a route`
-
 ## Fundamental idea taken from the parent `designs/lesson17.design.md`
 A ideia do pai: **preposição não é vocabulário, é geometria**. *at* = ponto, *on* = superfície/dia, *in* = caixa/recipiente (um mês é caixa, uma manhã é caixa) — e **as mesmas três palavras fazem tempo e lugar**. O par mais afiado é ***by* × *until***: os dois traduzem *até* e não são a mesma coisa — *by Friday* é o **prazo** (o mais tarde aceitável, muitas vezes antes); *until Friday* é **o trecho inteiro, contínuo**, até sexta. Se o verbo é ação pontual, *until* está errado: *send it by Friday*, nunca *send it until Friday*. ***for* × *during***: *for* mede comprimento (*for two hours*), *during* localiza dentro de um evento (*during the film*). ***ago* aponta para trás** e vem **depois** da quantidade (*two days ago*). Kids mantêm a ideia e trocam a semana de negócios por **a semana com o jogo, a festa e a prova**.
 
@@ -21,6 +19,7 @@ A ideia do pai: **preposição não é vocabulário, é geometria**. *at* = pont
 - **Dependências:** horas e calendário vêm das aulas 8 e 12; os compromissos marcados da aula 15; o trio de lugar da aula 9.
 
 ## Situation
+A friend, planning the week, a teacher giving instructions — a week with three fixed things, a deadline, a duration, a route.
 Uma semana com três pontos fixos: o jogo no sábado, a festa da amiga na sexta, a prova na quinta. O aluno monta a semana em voz alta — o que acontece **às** quatro, o que tem de estar pronto **até** quinta, **quanto tempo** dura a festa — e depois responde ao amigo que confunde o prazo com a duração.
 
 ## Candidates (three channels)

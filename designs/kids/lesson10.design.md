@@ -1,7 +1,5 @@
 # Lesson 10 (kids) — design (Pass A, double lesson)
 
-`band: kids · L10 · C10 · registers: 2b (friends and classmates) · 2a (a teacher) · contexts: classroom English, school subjects, words on the board`
-
 ## Fundamental idea taken from the parent `designs/lesson10.design.md`
 A ideia do pai: o aluno **encontra uma palavra que nunca viu e consegue uma aposta defensável sobre como ela soa** — e depois confere sozinho, sem professor por perto. Para isso precisa de três coisas: os **pares que traem brasileiros** (*ship/sheep, three/tree, hat/hot, west/vest*), o **mapa das consoantes que o português nunca treinou** (TH, R, H, NG, L escuro, T de flap) e a **chave** (sílabas, sílaba forte, vogal dormindo, versão cuidada × versão natural). Kids mantêm a ideia e trocam a reunião pela **sala de aula**: palavras do quadro, nomes de matérias, o que o professor fala rápido.
 
@@ -19,6 +17,7 @@ A ideia do pai: o aluno **encontra uma palavra que nunca viu e consegue uma apos
 - **Campo destravado pela chave:** *board, subject, science, history, geography, library, homework, answer, listen, question* — palavras da escola em que a chave realmente ajuda.
 
 ## Situation
+Friends and classmates, a teacher — classroom English, school subjects, words on the board.
 O aluno está na sala e o professor escreve uma palavra nova no quadro — sem tempo de perguntar. Ele aposta no som, e depois confere com o áudio da página. Na escola, a mesma cena acontece com o nome das matérias e com as instruções que o professor fala rápido.
 
 ## Candidates (three channels)

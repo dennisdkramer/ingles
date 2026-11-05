@@ -1,7 +1,5 @@
 # Lesson 29 (kids) — design (Pass A)
 
-`band: kids · L29 · C29 · registers: 2b (a friend, after practice) · 2a (the school, a rules notice) · contexts: classroom rules, the equipment cupboard, a school competition, a recipe, being picked for a team`
-
 ## Fundamental idea taken from the parent `designs/lesson29.design.md`
 A ideia do pai: **a passiva é um movimento de câmera, não um tempo verbal**. O acontecimento é o mesmo; o lugar do sujeito é dado a **quem recebe** a ação. E o tempo vive no **be**, nunca no particípio: *is done / was done / has been done / will be done* — uma coluna, quatro tempos, nenhuma morfologia nova. Três consequências que o kids aproveita: o *by* é **opcional e significativo** (nomear quem fez é uma decisão); a passiva de **get** é a de **fala** (*I got picked for the team*); e **o phrasal verb guarda a partícula** (*the game was called off*) — a regra da aula 18 vista do outro lado. Kids trocam o relatório de falha por **o aviso de regras da escola** e a **seleção do time**.
 
@@ -22,6 +20,7 @@ A ideia do pai: **a passiva é um movimento de câmera, não um tempo verbal**. 
 - **Dependências**: particípios das aulas 6-7; phrasal verbs da 18/23; o registro de aviso da 24/27.
 
 ## Situation
+A friend, after practice, the school, a rules notice — classroom rules, the equipment cupboard, a school competition, a recipe, being picked for a team.
 Uma **norma da escola** e um **incidente no pátio** na mesma semana: a norma diz **o que deve ser feito e até quando** (sem precisar de quem faz); o relato do incidente tem que descrever o que aconteceu **sem acusar ninguém** (quem fez fica de fora de propósito). O aluno escreve os dois e depois defende **uma** frase com *by*.
 
 ## Candidates (three channels)

@@ -1,7 +1,5 @@
 # Lesson 16 (kids) — design (Pass A)
 
-`band: kids · L16 · C16 · registers: 2a (a shop assistant) · 2b (a friend splitting the shopping) · contexts: buying things for a party, what there is in the fridge, how much / how many`
-
 ## Fundamental idea taken from the parent `designs/lesson16.design.md`
 A ideia do pai: **contável é o que aceita número na frente e plural**; **incontável não aceita plural nem *a/an***. O **quantificador é escolhido pelo substantivo, não pelo português** — *muito* é três palavras em inglês e o substantivo decide qual. *much / a few* com contáveis, *much / a little* com incontáveis, *a lot of* com os dois, *some / any* pelo tipo de frase. **O recipiente é a ponte**: *a cup of coffee, a bottle of water, a piece of advice* — o continente torna o incontável pedível, contável e precificável. **How many / how much** fazem a pergunta certa — e o mesmo *how much* faz o trabalho de preço da aula 12. Kids mantêm a ideia e trocam o escritório por **a compra da festa**: refrigerante, bolo, copos, salgadinhos.
 
@@ -21,6 +19,7 @@ A ideia do pai: **contável é o que aceita número na frente e plural**; **inco
 - **Dependências:** preços e números da aula 12; *is there / are there* da aula 9; o plural da aula 4.
 
 ## Situation
+A shop assistant, a friend splitting the shopping — buying things for a party, what there is in the fridge, how much / how many.
 Uma festa de aniversário no sábado: três amigos dividem a lista (refrigerante, bolo, copos, salgadinhos, gelo) e precisam responder ao balconista que pergunta **quanto** de cada coisa — e cada pergunta usa *how much* ou *how many*, nunca os dois.
 
 ## Candidates (three channels)

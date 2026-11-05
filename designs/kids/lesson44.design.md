@@ -1,7 +1,5 @@
 # Lesson 44 (kids) — design (Pass A)
 
-`band: kids · L44 · C44 · registers: 1b (a classmate explaining something) · 1a (a friend, in the corridor) · 2a (a teacher, instructions) · contexts: the teacher's instructions at the start of a lesson, the new student's timetable, the group chat with one ambiguous message, the lab safety talk`
-
 ## Fundamental idea taken from the parent `designs/lesson44.design.md`
 A ideia do pai: **existem dois consertos e eles são uma habilidade só.** Consertar a si mesmo (*I meant the Tuesday, not this Tuesday*) e consertar o outro (*do you mean X or Y?*) são o mesmo ato: você **percebeu um buraco e fechou em voz alta** em vez de torcer. **Conserte cedo ou pague depois**: um tremor consertado no segundo três custa uma oração; no segundo trinta custa o parágrafo; sem conserto custa uma semana. **A pergunta-hipótese vence o pedido aberto**: *Could you explain that another way?* devolve o trabalho inteiro ao outro e costuma produzir **as mesmas palavras, mais alto**; *Do you mean the lab or the classroom?* se responde com uma palavra e mostra onde está a sua confusão. **Resumir é a versão honesta de "entendi?"** — em três partes: *o que é preciso, até quando, por quê*; se o resumo estiver errado, o outro conserta de graça. **A palavra que falta não é um muro**: três rotas em volta — função, categoria, oposto — e a regra é **nunca parar no meio da frase**. **Entender de mentira é o erro caro**: concordar com a cabeça é o único erro desta aula que custa tempo de verdade, e admitir é o movimento forte. E **monitorar a si mesmo**: três padrões seus valem mais que vinte páginas de revisão.
 
@@ -24,6 +22,7 @@ A ideia do pai: **existem dois consertos e eles são uma habilidade só.** Conse
 - **Dependências**: as frases de reparo da 3 (usadas, não reensinadas), o resumo da 33, o discurso indireto da 30, o registro de erros da 43.
 
 ## Situation
+A classmate explaining something, a friend, in the corridor, a teacher, instructions — the teacher's instructions at the start of a lesson, the new student's timetable, the group chat with one ambiguous message, the lab safety talk.
 
 ## Candidates (three channels)
 - **Read — a aula que ninguém consertou.** Doze turnos, três linhas onde cabia um conserto, e uma nota no fim dizendo quanto custou. O aluno acha os três momentos e diz qual deveria ter sido o conserto.

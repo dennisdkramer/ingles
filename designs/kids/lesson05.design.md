@@ -1,7 +1,5 @@
 # Lesson 5 (kids) — design (Pass A)
 
-`band: kids · L05 · C05 · registers: 2b (friends and classmates) · 2a (a new classmate, the coach, a teacher) · contexts: the first week at a new school, the class group chat, the football team's group, the school app`
-
 ## Fundamental idea taken from `designs/kids/lesson04.design.md` and its parent `designs/lesson05.design.md`
 The parent design's idea: **every sentence is a skeleton** — `[dono] [modo] [verbo] [resto]` — and the `-s` **muda de casa**: when the mode slot is empty the verb carries it (*she works*); when the mode is filled with the helper **do/does**, the verb drops it (*does she work? · she doesn't work*). Negation is a *mode*, not a word after the verb; short answers **stop at the helper** (*Yes, I do · No, she doesn't*); and *do* the helper must be told apart from *do* the verb (*What do you do?*). Kids keep the idea and drop the client call, the analyst, the tools and the "scope"; the skeleton is applied to a new classmate's routine — clubs, teams, the school app.
 
@@ -20,6 +18,7 @@ The parent design's idea: **every sentence is a skeleton** — `[dono] [modo] [v
 - **Silly stakes.** First week at a new school: everyone asks what you do, and a "Yes, I does" travels through the group chat faster than any correct sentence. Asking well and answering short is how you sound like you belong on day one.
 
 ## Situation
+Friends and classmates, a new classmate, the coach, a teacher — the first week at a new school, the class group chat, the football team's group, the school app.
 First week at the new school. The student wants to know who plays in the team, who uses the school app, who goes to the robotics club, and must answer the same questions back — in the corridor, in the class group chat, and to the coach. Three answers arrive fast and swallowed (*D'you play? · Does she? · I dunno*), so the ear has to find the helper before the mouth uses it.
 
 ## Candidates (three channels)
@@ -55,7 +54,7 @@ Six questions written from ticks, six negatives, six short answers, four questio
 The interview comes first and the skeleton second: this persona needs to *hear* the helper before being shown the slot, and a question about a classmate is a question they actually want to ask.
 
 ## Notes for the build pass
-Portuguese for explanations, tips and headers (C05); English for every target question, the ticks, the short answers and all audio. The skeleton must look **the same** every time it appears (same order, same labels). Every target question carries audio, including the short answers. No modal is drilled.
+The skeleton must look **the same** every time it appears (same order, same labels). Every target question carries audio, including the short answers. No modal is drilled.
 
 `recycles:` lesson 1's `be` and *a/an*; lesson 2's short spoken forms (the helper is the same shrinking idea); lesson 3's wh- questions and the repair chunks (*Sorry, I didn't catch that* — used once, not re-taught); lesson 4's `-s` **and its owner** (this page only moves it).
 `must not re-teach:` lesson 4 owns the simple present, `-ing` and the -s itself; lesson 3 owns wh- + `be` and the polite embed; lesson 8 owns frequency adverbs; lesson 14 owns connected speech (*d'you* is heard, not explained); lesson 15 owns modals; lesson 10 owns the consonant map.

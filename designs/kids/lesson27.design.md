@@ -1,7 +1,5 @@
 # Lesson 27 (kids) — design (Pass A)
 
-`band: kids · L27 · C27 · registers: 2b (a friend, in the corridor) · 2a (the teacher, a lost-property notice) · contexts: describing a classmate, a game, a place in the school, a lost object, a pet`
-
 ## Fundamental idea taken from the parent `designs/lesson27.design.md`
 A ideia do pai: **o pronome relativo é um substituto de um substantivo já dito** — a escolha é mecânica: o substantivo é **pessoa → who/that**, **coisa → which/that**, **lugar → where**, **posse → whose**, **tempo → when**. E a segunda ideia, que é a que carrega sentido: **a vírgula é significado, não pontuação**. Sem vírgula, a oração **identifica** (*my brother who lives in Rio* = tenho vários irmãos); com vírgula, ela **acrescenta** (*my brother, who lives in Rio,* = tenho um só). *That* é o pronome da oração restritiva e **nunca** aparece depois de vírgula — isso dá ao aluno um segundo teste, agora audível. O kids troca o relatório trimestral por **descrever gente e coisas** na sala, no pátio e no achados-e-perdidos.
 
@@ -21,6 +19,7 @@ A ideia do pai: **o pronome relativo é um substituto de um substantivo já dito
 - **Dependências**: artigos da 24 (o substantivo dentro da oração); o registro de aviso da 23/24; a suavização da 26.
 
 ## Situation
+A friend, in the corridor, the teacher, a lost-property notice — describing a classmate, a game, a place in the school, a lost object, a pet.
 Um **aviso de achados-e-perdidos** no mural da escola: há três mochilas iguais, dois "Tom" na mesma série, e um casaco sem dono. O aluno precisa identificar em uma frase só — e, no meio do caminho, descobre que **uma vírgula a mais acusa a pessoa errada**. Depois ele escreve o aviso para o mural.
 
 ## Candidates (three channels)

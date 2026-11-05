@@ -1,7 +1,5 @@
 # Lesson 12 (kids) — design (Pass A)
 
-`band: kids · L12 · C12 · registers: 2b (friends and classmates) · 2a (a shop assistant, a teacher) · contexts: buying something, ages and birthdays, the score of the game`
-
 ## Fundamental idea taken from the parent `designs/lesson12.design.md`
 A ideia do pai: o gargalo é **produção sob pressão de tempo** — ouvir um número e escrever, depois dizer um número e ser entendido. Números grandes são construídos **de três em três** (*two hundred fifty*, *one thousand*), e a vírgula é a **respiração**, não uma pausa para pensar. Preços têm **dois gêmeos falados** (*twelve fifty* × *one thousand two hundred fifty*) e a escolha é registro, não correção. Depois, porcentagem, decimal, data e telefone são **scripts fixos** — o aluno não inventa. E por fim **um número sozinho não é frase**: o número vira fala quando reporta um movimento (*went up from 20 to 30*). Kids mantêm a ideia e trocam a revisão trimestral por **a loja, a idade, o aniversário e o placar do jogo**.
 
@@ -19,6 +17,7 @@ A ideia do pai: o gargalo é **produção sob pressão de tempo** — ouvir um n
 - **Dependência:** o passado simples da aula 6 fornece *went, rose, fell*; os números 1-100 são assumidos da vida; *price, cost, change, birthday, score, temperature* são glosados aqui porque são os substantivos aos quais as cifras se prendem.
 
 ## Situation
+Friends and classmates, a shop assistant, a teacher — buying something, ages and birthdays, the score of the game.
 Na loja, com dinheiro do aniversário no bolso: o aluno pergunta o preço, entende a resposta falada rápido, paga e confere o troco. Depois, no mesmo dia, conta a idade dos amigos, a data do aniversário e como ficou o placar do jogo.
 
 ## Candidates (three channels)

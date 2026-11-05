@@ -1,7 +1,5 @@
 # Lesson 19 (kids) — design (Pass A)
 
-`band: kids · L19 · C19 · registers: 2b (a friend, a sibling) · 2a (the teacher, a parent) · contexts: plans that depend on something, rules that are always true, wishes and regrets, polite requests`
-
 ## Fundamental idea taken from the parent `designs/lesson19.design.md`
 A ideia do pai: **escolher pelo distanciamento, não pelo tempo**. **0** = sempre verdade (*if you heat ice, it melts*); **1º** = real e futuro (*if it rains, we'll stay in*); **2º** = irreal **agora** (*if I had a bike, I would ride to school*); **3º** = irreal **no passado** (*if I had studied, I would have passed*). Uma lei só: **a oração do if volta um passo, o resultado pega o operador** — presente → will; passado → would; past perfect → would have. A frase que destrava a aula: **o passado do 2º não é tempo passado, é distância**. E o erro a matar: **if + will nunca acontece** (*if it rains*, nunca *if it will rain*). Kids trocam a reunião de projeto por **o plano do fim de semana que depende do tempo, da mesada e da nota**.
 
@@ -22,6 +20,7 @@ A ideia do pai: **escolher pelo distanciamento, não pelo tempo**. **0** = sempr
 - **Dependências**: os verbos de problema vêm da 18; os números da 12; o past simple da 11; o futuro da 15.
 
 ## Situation
+A friend, a sibling, the teacher, a parent — plans that depend on something, rules that are always true, wishes and regrets, polite requests.
 Uma viagem de sábado que depende de tudo: do tempo, da mesada, da nota da prova, do ônibus. Três pessoas decidem o que acontece **se** chover, o que fariam **com** mais dinheiro e o que teriam feito **diferente**. Toda frase da conversa é uma condição.
 
 ## Candidates (three channels)

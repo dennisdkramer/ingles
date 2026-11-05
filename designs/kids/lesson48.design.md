@@ -1,7 +1,5 @@
 # Lesson 48 (kids) — design (Pass A)
 
-`band: kids · L48 · C48 · registers: 1b (the group you lead) · 1a (a friend who is coasting) · 2a (the teacher, announcing a change) · contexts: the group project where you are the leader, the group chat, the conversation nobody wants`
-
 ## Fundamental idea taken from the parent `designs/lesson48.design.md`
 A ideia do pai: **um briefing tem cinco partes ou é um desejo** — o resultado, o porquê, o quando, os limites, e **quem decide o quê**. Quando falta uma, as perguntas voltam depois como erro, e a frase mais cara de um líder é *achei que você sabia o que eu queria*. **Delegar sem autoridade é uma tarefa com refém**: entregue a decisão tão explicitamente quanto o trabalho (*você decide o desenho, eu decido o texto*), e **dono compartilhado não é dono**. **A visão é uma frase porque tem de viajar sem você**: o que fazemos, para quem, e o que muda quando estiver pronto — quem precisa de slides tem um deck, não uma visão. **SBI existe para manter a pessoa fora da frase**: situação, comportamento, impacto — *na terça você interrompeu a Ana duas vezes, e ela parou de dar ideias*; nenhum adjetivo de caráter, porque *você é descuidado* é uma identidade, e identidades se defendem em vez de mudar. **O sanduíche é nomeado e descartado**: o recheio nunca é ouvido, o elogio vira sinal de alerta e a crítica vira boato. **Orientar é perguntar, mentorar é aconselhar, gerenciar é decidir** — confundir os três é por que tanta conversa vira relatório de status. **A conversa difícil tem forma**: fato + intenção, a distância entre o combinado e o observado, **uma pausa desconfortável**, e **um próximo comportamento observável com data**. E **anunciar mudança é quatro linhas**, sendo a quarta a credibilidade: o que muda, o que não muda, **o que eu ainda não sei**, e **quando eu conto**.
 
@@ -42,4 +40,5 @@ O quadro do briefing de cinco partes é de largura total (parte / a pergunta que
 - **Dependências**: decisões/donos/datas (33), os modais de obrigação e permissão (15), graduar a certeza (26), o tom e o leitor (34), a segunda pergunta (37), a crítica à ideia e não à pessoa (38), o conditional como compromisso (47).
 
 ## Situation
+The group you lead, a friend who is coasting, the teacher, announcing a change — the group project where you are the leader, the group chat, the conversation nobody wants.
 **A feira de ciências, e você é o líder do grupo.** Um integrante está há uma semana sem fazer a parte dele, outro quer mudar tudo na véspera, e a professora **muda a data**. Uma semana, nessa ordem: **briefar, delegar, dar retorno, orientar, anunciar a mudança** — e ter **a conversa que ninguém quer**.

@@ -1,7 +1,5 @@
 # Lesson 14 (kids) — design (Pass A)
 
-`band: kids · L14 · C14 · registers: 2b (a friend on a call, a fast video) · 2a (a teacher reading aloud) · contexts: fast speech, songs and videos, writing it back in full`
-
 ## Fundamental idea taken from the parent `designs/lesson14.design.md`
 A ideia do pai: **a forma escrita e a forma falada são dois registros da mesma frase**. Nada aqui é "inglês errado": *going to* vira *gonna* do mesmo jeito que *cannot* vira *can't*. A lição ensina o **mapeamento** e nunca uma grafia para usar em prova. A redução segue **frequência e posição** — encolhem as palavras sem acento (as seis da aula 10). O ***'d* é decidido pelo que vem depois**: *I'd go* (would + verbo) × *I'd finished* (had + particípio). E sotaques são **descritos, não imitados**. Kids mantêm a ideia e trocam a ligação de trabalho por **um amigo falando rápido no vídeo, uma música e uma legenda errada**.
 
@@ -20,6 +18,7 @@ A ideia do pai: **a forma escrita e a forma falada são dois registros da mesma 
 - **Sotaques são descritos, não imitados:** cada traço é nomeado com um som que o aluno já tem (o *r* da aula 10, o *bath* do mapa de vogais), para **localizar** um falante sem fazer paródia.
 
 ## Situation
+A friend on a call, a fast video, a teacher reading aloud — fast speech, songs and videos, writing it back in full.
 Um vídeo curto de um amigo estrangeiro, rápido, com legenda automática errada: o aluno **ouve**, **corrige a legenda**, e depois **responde no mesmo registro** — e mais tarde **conta a mesma coisa por escrito**, na forma completa.
 
 ## Candidates (three channels)

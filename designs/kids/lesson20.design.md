@@ -1,7 +1,5 @@
 # Lesson 20 (kids) — design (Pass A)
 
-`band: kids · L20 · C20 · registers: 2b (a new friend, a cousin) · 2a (the teacher, a coach) · contexts: hobbies you started and still do, homework already done or not yet, a project still in progress, how long`
-
 ## Fundamental idea taken from the parent `designs/lesson20.design.md`
 A ideia do pai: **o present perfect é uma ponte, não um passado**. A ação começa **antes de agora** e a frase termina **em agora** — por isso ele **não aceita *yesterday***: *I've sent it* não tem data; *I sent it yesterday* tem. **Contínuo responde "há quanto tempo / desde quando"; simples responde "quantos / já ou ainda não"**: *I've been writing the report* (ainda estou) contra *I've written the report* (pronto, aqui está). **`since` + ponto, `for` + duração** — o par que ficou adiado na aula 17, agora legal porque a forma que precisa dele chegou. **`already / just / yet`** são os advérbios de posição no tempo. **O contraste de três formas é decidido pela expressão de tempo, não pelo verbo.** Kids mantêm a ponte e trocam a revisão de cinco anos por **o projeto da escola e o "desde quando" de um amigo novo**.
 
@@ -21,6 +19,7 @@ A ideia do pai: **o present perfect é uma ponte, não um passado**. A ação co
 - **Dependências**: os particípios vêm das aulas 6-7; o *for* da 17; as perguntas da 5.
 
 ## Situation
+A new friend, a cousin, the teacher, a coach — hobbies you started and still do, homework already done or not yet, a project still in progress, how long.
 Uma feira de projetos na escola e um amigo novo na mesma semana: ele pergunta **desde quando** você toca violão, o que **já** está pronto, o que **ainda não** está, e o que você **anda fazendo** desde segunda. Toda resposta é uma forma perfect, e um tempo errado joga o fato para a semana errada.
 
 ## Candidates (three channels)

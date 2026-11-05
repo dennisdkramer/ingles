@@ -1,7 +1,5 @@
 # Lesson 25 (kids) — design (Pass A)
 
-`band: kids · L25 · C25 · registers: 2b (a friend, in the playground) · 2a (the teacher, a note to parents) · contexts: trading cards, borrowing a game, the class trip, deals on the school yard, a poster with a choice`
-
 ## Fundamental idea taken from the parent `designs/lesson25.design.md`
 A ideia do pai: **a hipótese é uma ferramenta de negociação** — dizer "se a gente pudesse dividir" baixa o preço de dizer não. Duas coisas dela sobrevivem no kids. (1) **Cada substituto de *if* carrega uma lógica diferente**: **unless** = a única exceção; **as long as / provided** = a condição que precisa valer; **in case** = preparação para uma possibilidade (não é condição!); **otherwise** = o resultado de NÃO fazer; **even if** = o resultado não muda. (2) **Misturar os tempos não é uma quinta forma: são duas formas costuradas na emenda** — cada metade guarda o seu tempo. Kids ficam com (1) inteiro, com (2) em uma única linha de contraste, e **trocam a renegociação de contrato por um acordo de recreio**: trocar figurinhas, emprestar o jogo, dividir o lanche. `wish / if only`, inversão (`Had I…`) e *would rather* ficam **fora** — são registro adulto e voltam na 26/adult.
 
@@ -24,6 +22,7 @@ A ideia do pai: **a hipótese é uma ferramenta de negociação** — dizer "se 
 - **Dependências**: as quatro formas da 19 (usadas, não reensinadas); a grade de operadores da 15; o perfeito da 20.
 
 ## Situation
+A friend, in the playground, the teacher, a note to parents — trading cards, borrowing a game, the class trip, deals on the school yard, a poster with a choice.
 Um acordo no recreio que não pode terminar em briga: o aluno quer o jogo que o colega trouxe, o colega quer as figurinhas, o sino toca em dez minutos. A única saída é uma hipótese — *If we could take turns, would that work?* O aluno faz a conversa e depois escreve o **bilhete do acordo** com uma hipótese e uma consequência.
 
 ## Candidates (three channels)

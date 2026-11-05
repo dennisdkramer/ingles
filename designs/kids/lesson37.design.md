@@ -1,7 +1,5 @@
 # Lesson 37 (kids) — design (Pass A)
 
-`band: kids · L37 · C37 · registers: 1b (a classmate, first meeting) · 1a (a friend of a friend) · 2a (a teacher, introductions) · contexts: the first day at a new school, the club fair, the lunch table, the bus queue`
-
 ## Fundamental idea taken from the parent `designs/lesson37.design.md`
 A ideia do pai: **conversa fiada é um teste, não uma troca** — ninguém quer saber do tempo; estão descobrindo, **barato**, se você é fácil de conversar e seguro de conversar. **A primeira pergunta é a porta; a segunda pergunta é a conversa.** A habilidade não é um abridor melhor, é **o que se faz com a resposta**: três receitas cobrem quase tudo — **devolver uma palavra** (*Busy how?*), **perguntar o como ou o porquê**, **pedir a pequena história** (*What happened?*). **Mudar de assunto em vez de fazer a segunda pergunta é a falha mais comum.** Os sinais mantêm o chão aberto: *right, yeah, no way, that makes sense* + um eco — silêncio depois de uma resposta **soa a veredicto**. **Revelar é troca, e é assimétrica de propósito**: você oferece primeiro, pequeno e **específico** (*I'm learning to skate, badly* bate *I like sports*). A saída tem **três partes**: o valor, o motivo, a porta. E **fronteiras não são frieza** — a lista é **cultural**, e o teste é *eu ficaria contente se me perguntassem isto na frente da pessoa que manda aqui?* Kids trocam o congresso por **o primeiro dia em uma escola nova**.
 
@@ -24,6 +22,7 @@ A ideia do pai: **conversa fiada é um teste, não uma troca** — ninguém quer
 - **Dependências**: as perguntas (3); a história curta (36); os amaciadores (26).
 
 ## Situation
+A classmate, first meeting, a friend of a friend, a teacher, introductions — the first day at a new school, the club fair, the lunch table, the bus queue.
 **O primeiro dia em uma escola nova.** O aluno chega sem conhecer ninguém e trabalha **três momentos**: a fila do ônibus, a mesa do refeitório e o clube de música. Mesmos quatro movimentos, **profundidades diferentes** — e, no fim, alguém que fala sem parar e de quem ele precisa sair.
 
 

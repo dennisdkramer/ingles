@@ -1,7 +1,5 @@
 # Lesson 21 (kids) — design (Pass A)
 
-`band: kids · L21 · C21 · registers: 2b (a classmate, a message thread) · 2a (the teacher, a club form) · contexts: waiting, depending on someone, being good at something, hobbies, a message thread about the school trip`
-
 ## Fundamental idea taken from the parent `designs/lesson21.design.md`
 A ideia do pai: **a preposição pertence ao verbo, não à tradução**. A unidade que se decora é **verbo + preposição**, uma palavra só: *depend on, wait for, arrive at, listen to, pay for, look at*. A aula nunca pergunta "qual preposição?" — pergunta "**qual verbo?**", porque o verbo já respondeu. A preposição portuguesa é **falso amigo de alta frequência**: *depender de* → **depend on**; *esperar por* → **wait for**; *casar com* → **marry** (zero); *chegar em* → **arrive at** (lugar) / **arrive in** (cidade). E **preposição antes de verbo pede -ing**: *good at, interested in, before/after, instead of, without*. Kids mantêm a unidade e trocam o e-mail de coordenação por **a mensagem combinando o passeio da turma**.
 
@@ -21,6 +19,7 @@ A ideia do pai: **a preposição pertence ao verbo, não à tradução**. A unid
 - **Dependências**: o *for* da aula 17 (duração) e o *by* (prazo) são usados, não reexplicados; o -ing já apareceu na 20.
 
 ## Situation
+A classmate, a message thread, the teacher, a club form — waiting, depending on someone, being good at something, hobbies, a message thread about the school trip.
 A mensagem que combina o passeio da turma: quem espera por quem, de quem depende o ônibus, quanto cada um paga, a que horas chega no museu, no que cada um é bom. Quatro linhas de conversa e quatro preposições erradas para consertar no rascunho de um colega.
 
 ## Candidates (three channels)

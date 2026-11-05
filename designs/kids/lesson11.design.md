@@ -1,7 +1,5 @@
 # Lesson 11 (kids) — design (Pass A)
 
-`band: kids · L11 · C11 · registers: 2b (friends and classmates) · 2a (a teacher, a parent) · contexts: last weekend, a story from the park, what somebody said`
-
 ## Fundamental idea taken from the parent `designs/lesson11.design.md`
 A ideia do pai: **dois passados fazem dois trabalhos**. O longo (*was/were + -ing*) é o **cenário**, o curto (passado simples) é o **acontecimento que corta o cenário**. Juntos eles são o tempo verbal — ensinar um sozinho deixa o aluno sem conseguir contar história. Depois: **perguntar** o que estava acontecendo (*What were you doing at nine? — I was driving.*), **negar** (*I wasn't listening*) e **reportar** o que alguém disse (*She said she was working when the client called.*), que é moldura, não tempo novo. Kids mantêm a ideia e trocam a crise do cliente por **o último fim de semana** e **uma história no parque**.
 
@@ -22,6 +20,7 @@ A ideia do pai: **dois passados fazem dois trabalhos**. O longo (*was/were + -in
 - **Campo do parque e do tempo:** *picnic, swing, slide, bench, kite, ball* · *sunny, cloudy, rainy, windy, hot, cold* — cada palavra glosada antes do uso e sempre dentro de uma frase com os dois passados.
 
 ## Situation
+Friends and classmates, a teacher, a parent — last weekend, a story from the park, what somebody said.
 Segunda-feira, na sala: o aluno conta o que **estava** fazendo quando o tempo virou, mostra quem estava no parque, e repete o que a mãe disse. Uma história só, com fundo e evento em cada linha.
 
 ## Candidates (three channels)

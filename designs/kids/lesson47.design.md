@@ -1,7 +1,5 @@
 # Lesson 47 (kids) — design (Pass A)
 
-`band: kids · L47 · C47 · registers: 1b (a classmate, the swap) · 1a (a friend, the favour) · 2a (a teacher, the group's request) · contexts: swapping stickers and cards at break, sharing one projector for two groups, splitting the work on a project, asking a parent for a later bedtime`
-
 ## Fundamental idea taken from the parent `designs/lesson47.design.md`
 A ideia do pai: **negocie interesses, não posições.** *I need ten percent off* é uma posição; o interesse é *meu orçamento está travado e a reunião é sexta*. **Posições são a última coisa que o outro conta** — e o primeiro movimento da aula é **a pergunta que transforma uma na outra**, feita **antes** de qualquer oferta. **O seu "se não der" é o seu único poder real**: se você não sabe o que faz quando isso falha, negocia a partir da esperança. **Âncora sem motivo é desconto garantido**: *we're at 80 because the last contract was 78* é âncora; *we're at 80* é desejo. **Toda concessão precisa de condição, dita no mesmo fôlego** — *if you can…, we can…* — e **duas concessões sem duas condições é o erro clássico**. **A forma da concessão é informação**: passos que encolhem (10 → 4 → 1) dizem "estamos quase no limite"; passos iguais (10 → 10 → 10) dizem "tem mais". **Troque por dimensões diferentes**, não dentro da mesma — o preço é a dimensão que os dois defendem, e o acordo mora nas outras. **Um travamento raramente é recusa: é um processo de decisão que você não vê** — então o contra-ataque é **procedimental**: *quem decide, e quando?* **Acordo bom é teste, não slogan**: tem de vencer os dois "se não der" e sobreviver à segunda conversa.
 
@@ -25,6 +23,7 @@ A ideia do pai: **negocie interesses, não posições.** *I need ten percent off
 - **Dependências**: o conditional (19/25), os modais de oferta (15), os comparativos e a recomendação (13), os números (12), a concessão antes do contra-argumento (38), o documento que confirma (45), a franqueza com quem está do outro lado (46).
 
 ## Situation
+A classmate, the swap, a friend, the favour, a teacher, the group's request — swapping stickers and cards at break, sharing one projector for two groups, splitting the work on a project, asking a parent for a later bedtime.
 
 ## Candidates (three channels)
 - **Read — as mesmas duas primeiras trocas.** *"Não troco por menos de três." — "Então não tem conversa."* contra *"Não troco por menos de três." — "Por que três? O que você quer juntar?"* O aluno escolhe qual conversa tem futuro e diz **o que a segunda pergunta comprou**.

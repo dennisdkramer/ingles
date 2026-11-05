@@ -1,7 +1,5 @@
 # Lesson 43 (kids) — design (Pass A)
 
-`band: kids · L43 · C43 · registers: 1b (the class group chat) · 2a (a teacher, spoken and written) · 1a (friends, at break) · contexts: the school day of the science-fair presentation`
-
 ## Fundamental idea taken from the parent `designs/lesson43.design.md`
 A ideia do pai: **integração é a última habilidade e o único teste honesto.** Cada aula treinou uma coisa; esta treina **a troca entre elas**, que é o que falha numa terça de verdade. Então a página nunca diz *hoje estudamos*: diz **são 7h50**. E **a informação tem de viajar**: a nota das 7h50 é **entrada**, não decoração — dois itens adiante não se respondem sem ela. **A troca de registro tem marcador visível**, não humor: *quick question* para o grupo, *do you have five minutes?* para a professora, *I'm writing to confirm* na nota escrita. **A negociação aqui é encenação, não técnica** — os movimentos (*if you can…, I can…*; confirmar o combinado) são de outra aula e são **usados, não ensinados**. **A nota final é onde o dia é julgado:** sem dono e sem data é descrição, não decisão — e o que estiver nela e não foi combinado vira a discussão da semana seguinte. **O registro de erros entrega a próxima aula**: sob carga, os erros reais aparecem, e **eles são o programa**.
 
@@ -22,6 +20,7 @@ A ideia do pai: **integração é a última habilidade e o único teste honesto.
 - **Dependências**: tudo. Tempos (4–7, 11), modais (15, 26), condicionais (19, 25), discurso indireto (30), reunião (33), tom e leitor (34), o balcão (35), história (36), conversa (37), discordar (38), pressa (41), phrasal verbs (42).
 
 ## Situation
+The class group chat, a teacher, spoken and written, friends, at break — the school day of the science-fair presentation.
 **O dia da apresentação da feira de ciências.** Quatro alunos, um cartaz, uma professora, um prazo que anda. **07:50** o corredor (o que vence hoje) · **08:00** o grupo (o combinado) · **10:20** o recreio (o cartaz molhou) · **11:10** a apresentação (quarenta segundos, sem ler) · **12:00** o feedback da professora (o que aceitar, o que responder) · **13:30** a nota escrita. **Um dia contínuo, com o relógio como única estrutura.**
 
 

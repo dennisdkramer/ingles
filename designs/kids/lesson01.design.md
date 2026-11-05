@@ -1,7 +1,5 @@
 # Lesson 1 (kids) — design (Pass A)
 
-`band: kids · L01 · C01 (content level) · registers: 2a (default, with the teacher and strangers) · 2b (the class group chat) · contexts: first day at a new school, the class group chat, a gaming profile, the school ID card`
-
 ## Fundamental idea taken from `designs/lesson01.design.md`
 The skeleton: **the subject is always spoken**, `be` is the whole first verb, `a/an` is decided by *sound*, and `it` is the word that carries time, weather and day. Plus the two sound habits that decide whether you are understood: the final consonant stops clean, and `p/t/k` come out with a puff (/ɪ/ vs /æ/ kept as the pair to start the ear).
 
@@ -22,6 +20,7 @@ Everything else — the job, the badge, the office door, the welcome note — is
 - **Silly stakes, real use.** The profile card is what other people read before they decide whether to talk to you — on a school forum, in a game lobby, in the class chat. `a engineer` or "Am from Brazil" on that card is the joke the lesson exists to prevent.
 
 ## Situation
+The teacher and strangers, the class group chat — first day at a new school, the class group chat, a gaming profile, the school ID card.
 Day one at a new school, and the class group chat is already open. Everyone's profile shows a name, a city, an age and one line. The student has four people to meet before the bell (the chat's four pinned voice notes), a bag on the desk to label, and one message to post about themselves.
 
 ## Candidates (three channels)
@@ -30,7 +29,7 @@ Day one at a new school, and the class group chat is already open. Everyone's pr
 - **Read — the pinned rules.** The group chat's pinned message: five short rules written with `be` and `it`, half of them wrong on purpose; the student fixes the ones that break the skeleton.
 
 ## Chosen
-**Done (the profile card), entered through Heard.** A 14-year-old fills in a profile card without being asked twice, and the card makes every target sentence *true of them* in under a minute — the visible progress this persona needs. The four voice notes are the entrance because the first thing that happens in a new group chat is that you hear people before you read them. The pinned rules are the weakest of the three at this level: decoding text is exactly the skill a C01 student does not have yet.
+**Done (the profile card), entered through Heard.** A 14-year-old fills in a profile card without being asked twice, and the card makes every target sentence *true of them* in under a minute — the visible progress this persona needs. The four voice notes are the entrance because the first thing that happens in a new group chat is that you hear people before you read them. The pinned rules are the weakest of the three at this level: decoding text is exactly the skill a first-lesson student does not have yet.
 
 **First 30 seconds:** a voice note plays — *"Hey, I'm Kai. I'm from Salvador."* — and the only thing on the page is one box for the student's own name. They type it. The subject law arrives **after** they have already used it correctly.
 
@@ -38,7 +37,7 @@ Day one at a new school, and the class group chat is already open. Everyone's pr
 Typed profile lines (name/city/age), eight `a/an` choices on real objects, four listen-and-tick items on the voice notes, four `it` lines (time/day/weather), one recorded sentence of introduction (*"Hey, I'm ___. I'm from ___."*), then a quiz that re-tests all four behaviours on material the training never used.
 
 ## Conflicts, and how I resolved them
-- **The roadmap entry asks for the consonant set, the final consonant and /ɪ/ vs /æ/ in one lesson.** At C01 that is three sound topics in one sitting for a student with a short attention span. Resolution: the stops are *presented* inside words the student is already saying (profile, pizza, token, controller) with no separate consonant section; the final consonant gets one four-word "say it and stop" beat; **/ɪ/ vs /æ/ gets one eight-item listen-and-choose.** Flagged: coverage traded for retention.
+- **The roadmap entry asks for the consonant set, the final consonant and /ɪ/ vs /æ/ in one lesson.** That is three sound topics in one sitting for a student with a short attention span. Resolution: the stops are *presented* inside words the student is already saying (profile, pizza, token, controller) with no separate consonant section; the final consonant gets one four-word "say it and stop" beat; **/ɪ/ vs /æ/ gets one eight-item listen-and-choose.** Flagged: coverage traded for retention.
 - **Recording at 14 can be cringe.** Resolution: one sentence, two options to pick from, model played twice first, and typing is always an equal route — the recording is never the only way to finish.
 - **`be` = *ser* + *estar* is a big claim for a kid.** Resolution: not taught as grammar but as one line beside two sentences from their own life (*I'm Gui / I'm tired*), trained only through `I'm`; the other persons are recognised, not produced.
 - **The day/time reference could swallow the lesson.** Resolution: numbers and days are a four-line reference marked *você já sabe*; `it` is the teaching, the calendar is not.
@@ -56,7 +55,7 @@ Typed profile lines (name/city/age), eight `a/an` choices on real objects, four 
 Sections 3-5 are short and physical (a card, a bag, a clock) rather than one long grammar table: this persona reads one idea per block and moves on.
 
 ## Notes for the build pass
-Explanations in Portuguese — C01 is the bottom of the scale, so this is the lesson where PT is the default for every explanatory string, the opener, every tip and every column header; English is reserved for the target sentences and their audio. The card is the spine, not a decoration: sections 3-5 all feed back into it. `data-say` on every target line.
+The card is the spine, not a decoration: sections 3-5 all feed back into it. `data-say` on every target line.
 
 `recycles:` nothing — first lesson of the track.
 `must not re-teach:` lesson 2 owns cognates, false friends and the -tion/-ity/-ic stress rule; lesson 3 owns the wh- words, the polite question and the repair chunks; lesson 10 owns the full sound inventory, the key, and /ɪ/ vs /iː/ (this page keeps /ɪ/ vs /æ/ only).

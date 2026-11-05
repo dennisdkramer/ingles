@@ -1,7 +1,7 @@
 # HARNESS — binding contract. RE-READ ON EVERY PROMPT, before any other action.
 This file is the single read-first hub after RULE 0 is read from the global rules.
 It is always in force and adherence is non-negotiable
-The category files (PENDING / PARKED / HANDOFF / ISSUES / FORMAT / FUNCTION / PEDAGOGY / VOCABULARY / STATUS / VERIFICATION / FILESYSTEM) hold the parameters of elements and functionality and are loaded only when they are in scope for the current task.
+The category files (PARKED / HANDOFF / ISSUES / FORMAT / FUNCTION / PEDAGOGY / VOCABULARY / STATUS / VERIFICATION / FILESYSTEM) hold the parameters of elements and functionality and are loaded only when they are in scope for the current task.
 
 ## RULE 1 — CONTEXT & TOKEN ECONOMY
 
@@ -27,7 +27,7 @@ confidence — not as a mandated step after every micro-edit. Trivial/doc-only/c
 need proof-pasting. Logic changes to engine1.js/engine2.js/backend should get at least one real
 check (QA and/or a reasoned read-through) before I call them done, at my discretion on depth.
 Verification or QA scoped to only what changed
-A single lesson HTML change → `node qa/content.mjs <n>`, `node qa/overflow.mjs <n>` and `node qa/width.mjs <n>` (all three take one or more lesson numbers, e.g. `node qa/content.mjs 5`; with no numbers they sweep every page that exists). A shared-file change (engine1.js, engine2.js, style.css, backend/Code.gs) MAY affect every lesson — but run the FULL un-scoped sweep ONLY when explicitly asked, or inferred from the task context with overwhelming certainty. A shared-file change that merely ADDS a new rule/class used by a single lesson (e.g. a new CSS class) is scoped to that lesson, not swept. For the affected kind: structure `qa/content.mjs <n>`, layout `qa/overflow.mjs <n>`, width slots `qa/width.mjs <n>`, engine `qa/smoke.mjs`. Content/layout changes (lesson HTML, style.css) 
+A single lesson HTML change → `node qa/content.mjs <n>`, `node qa/overflow.mjs <n>` and `node qa/width.mjs <n>` (all three take one or more lesson numbers, e.g. `node qa/content.mjs 5`; with no numbers they sweep every page that exists, and with no `--track` they sweep EVERY track that has pages — `--track=kids|business|adult` narrows the run to one track, so `npm run qa` needs no argument). A shared-file change (engine1.js, engine2.js, style.css, backend/Code.gs) MAY affect every lesson — but run the FULL un-scoped sweep ONLY when explicitly asked, or inferred from the task context with overwhelming certainty. A shared-file change that merely ADDS a new rule/class used by a single lesson (e.g. a new CSS class) is scoped to that lesson, not swept. For the affected kind: structure `qa/content.mjs <n>`, layout `qa/overflow.mjs <n>`, width slots `qa/width.mjs <n>`, engine `qa/smoke.mjs`. Content/layout changes (lesson HTML, style.css) 
 MUST run the real-browser overflow/balloon check — jsdom cannot see layout. 
 Never state something is verified if it wasn't; if I skipped verification, say so plainly
 "Done" means committed and pushed, with whatever verification I judged necessary per this rule
@@ -57,4 +57,4 @@ The shell reports the true exit code (`$LASTEXITCODE`); Cline's capture of it do
 
 
 ## STATUS
-Status lives in dedicated files: the ACTIVE plan in PENDING.md, the backlog in PARKED.md, bugs/problems in ISSUES.md, handoffs in HANDOFF.md, and current state + shared parameter values in STATUS.md. Nothing is cleared anywhere until it is done AND committed.
+Status lives in dedicated files: the backlog in PARKED.md, bugs/problems in ISSUES.md, handoffs in HANDOFF.md, and current state + shared parameter values in STATUS.md. Nothing is cleared anywhere until it is done AND committed.

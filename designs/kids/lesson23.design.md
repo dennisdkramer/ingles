@@ -1,7 +1,5 @@
 # Lesson 23 (kids) — design (Pass A)
 
-`band: kids · L23 · C23 · registers: 2b (the group chat, a teammate) · 2a (the teacher, the club coordinator) · contexts: a school project from start to delivery, what got stuck, a machine that failed, a deadline`
-
 ## Fundamental idea taken from the parent `designs/lesson23.design.md`
 A ideia do pai: **o projeto tem um ciclo de vida, e os verbos marcam as etapas** — *set up* → *carry out* → *wrap up* → *hand in* → *sign off*. Ensinar **em ordem** é o que os torna memoráveis; uma lista não faria isso. **Más notícias têm verbos próprios**: *break down* (a máquina falha / o professor analisa), *keep up with* (acompanhar o ritmo), *get over* (recuperar-se — reciclado). **`break down` são dois verbos**: uma máquina quebra; o professor analisa — o objeto decide. **`figure out` e `work out`** são intercambiáveis neste registro (e *work out* também é "malhar" — a nota avisa). A **separabilidade** usa só verbos novos, para o aluno **aplicar** a regra da 18 em vez de recitá-la. Kids mantêm o ciclo e trocam a retrospectiva de escritório por **o projeto da feira de ciências, do cartaz à nota**.
 
@@ -21,6 +19,7 @@ A ideia do pai: **o projeto tem um ciclo de vida, e os verbos marcam as etapas**
 - **Dependências**: os prazos vêm da 17; a obrigação (*we have to wrap this up*) da 15; os gêmeos formais continuam a 22.
 
 ## Situation
+The group chat, a teammate, the teacher, the club coordinator — a school project from start to delivery, what got stuck, a machine that failed, a deadline.
 A retrospectiva do projeto da feira: a montagem, a semana em que tudo quebrou, o conserto, a entrega, o aceite do professor. O aluno é quem precisa **explicar a sequência** a um colega que faltou.
 
 ## Candidates (three channels)
