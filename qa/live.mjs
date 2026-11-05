@@ -1,11 +1,11 @@
 /**
  * qa/live.mjs — LIVE English-lessons harness: a REAL headless Chrome driven over CDP.
  *
- * WHY THIS EXISTS (VERIFICATION.md): qa/smoke.mjs runs on jsdom, which has
- * no layout, no painting, no real selection/mouse and no real MediaRecorder — so it cannot see the
- * highlight layer being painted (#hlLayer), it cannot make a real text selection with a real drag and
- * it cannot see a rectangle land on the wrong characters. A previous bug (the Ctrl auto-repeat
- * palette) passed jsdom QA and still broke in the browser. This harness closes that hole:
+ * WHY THIS EXISTS (VERIFICATION.md): the jsdom harnesses have no layout, no painting, no real
+ * selection/mouse and no real MediaRecorder — they cannot see the highlight layer being painted
+ * (#hlLayer), cannot make a real text selection with a real drag, and cannot see a rectangle land on
+ * the wrong characters. A previous bug (the Ctrl auto-repeat palette) passed jsdom QA and still
+ * broke in the browser. This harness closes that hole:
  *
  *   node qa/live.mjs                  run every scenario
  *   node qa/live.mjs --only=diag       run one (diag | geo | bf2 | bf2b | bf3 | bf4 | all)
