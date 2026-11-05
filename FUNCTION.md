@@ -106,7 +106,7 @@ Shared by Highlight, Note and Recording; the per-feature within/overlap/contain 
 - A script lock serializes POSTs; every response is JSON (`{result}` / `{count,purged}` / `{error}`) and every thrown error comes back as `{error}`.
 - Access-control actions verify the Google ID token server-side (tokeninfo, audience = CLIENT_ID) before trusting an email; approve/reject/queue additionally verify the caller is a teacher (the TEACHERS constant, kept in sync with access.json). The `access` tab holds students+requests and must never be read or written as `layer` rows.
 - A Code.gs edit only takes effect after a NEW deployment version (Deploy → Manage deployments); the `/exec` URL does not change, so pages need no update.
-- qa/smoke.mjs mocks `fetch` and never calls this backend for real: verify backend changes by the diff plus the affected code path (real curl against the deployed URL only when the risk is real).
+- The jsdom harnesses (qa/content.mjs) mock `fetch` and never call this backend for real: verify backend changes by the diff plus the affected code path (real curl against the deployed URL only when the risk is real).
 
 ## Sync (cross-session push) — owner spec 2026-10-12
 - The ONLY re-check mechanism is an adaptive poll in engine2.js — 1s while the tab is visible and there is recent activity (a user input OR a poll that just saw a change), 5s only after 1 minute of neither, and paused while the tab is hidden — every add/set/del on either side (teacher or student) reaches the other session within one poll cycle (~1s while active), not instantly.

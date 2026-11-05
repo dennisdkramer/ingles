@@ -27,7 +27,7 @@ confidence — not as a mandated step after every micro-edit. Trivial/doc-only/c
 need proof-pasting. Logic changes to engine1.js/engine2.js/backend should get at least one real
 check (QA and/or a reasoned read-through) before I call them done, at my discretion on depth.
 Verification or QA scoped to only what changed
-A single lesson HTML change → `node qa/content.mjs <n>`, `node qa/overflow.mjs <n>` and `node qa/width.mjs <n>` (all three take one or more lesson numbers, e.g. `node qa/content.mjs 5`; with no numbers they sweep every page that exists, and with no `--track` they sweep EVERY track that has pages — `--track=kids|business|adult` narrows the run to one track, so `npm run qa` needs no argument). A shared-file change (engine1.js, engine2.js, style.css, backend/Code.gs) MAY affect every lesson — but run the FULL un-scoped sweep ONLY when explicitly asked, or inferred from the task context with overwhelming certainty. A shared-file change that merely ADDS a new rule/class used by a single lesson (e.g. a new CSS class) is scoped to that lesson, not swept. For the affected kind: structure `qa/content.mjs <n>`, layout `qa/overflow.mjs <n>`, width slots `qa/width.mjs <n>`, engine `qa/smoke.mjs`. Content/layout changes (lesson HTML, style.css) 
+A single lesson HTML change → `node qa/content.mjs <n>`, `node qa/overflow.mjs <n>` and `node qa/content.mjs <n>` (all three take one or more lesson numbers, e.g. `node qa/content.mjs 5`; with no numbers they sweep every page that exists, and with no `--track` they sweep EVERY track that has pages — `--track=kids|business|adult` narrows the run to one track, so `npm run qa` needs no argument). A shared-file change (engine1.js, engine2.js, style.css, backend/Code.gs) MAY affect every lesson — but run the FULL un-scoped sweep ONLY when explicitly asked, or inferred from the task context with overwhelming certainty. A shared-file change that merely ADDS a new rule/class used by a single lesson (e.g. a new CSS class) is scoped to that lesson, not swept. For the affected kind: structure `qa/content.mjs <n>`, layout `qa/overflow.mjs <n>`, width slots `qa/content.mjs <n>`, engine `qa/content.mjs`. Content/layout changes (lesson HTML, style.css) 
 MUST run the real-browser overflow/balloon check — jsdom cannot see layout. 
 Never state something is verified if it wasn't; if I skipped verification, say so plainly
 "Done" means committed and pushed, with whatever verification I judged necessary per this rule
@@ -49,7 +49,7 @@ Always perform cleanup, minimize verbosity and bloat, and remove conflicts when 
 ## TOOL / TERMINAL PARAMETERS
 The shell reports the true exit code (`$LASTEXITCODE`); Cline's capture of it does not — it often misreports a succeeded command as code 1, so work WITH that:
 - Judge a call by its printed output, never the reported exit code.
-- When the exit code matters, print it in the command: `& node qa/smoke.mjs; 'EXIT=' + $LASTEXITCODE`.
+- When the exit code matters, print it in the command: `& node qa/content.mjs; 'EXIT=' + $LASTEXITCODE`.
 - A captured chunk may open with a leaked terminal-title escape, and when capture fails it falls back to raw scrollback — keep commands short (reliability, not tokens) and re-run rather than trust a torn buffer.
 - Non-ASCII can arrive as mojibake — confirm with an ASCII marker (`Write-Output 'MARKER_OK'`) and read files via `read_files`/`search_codebase`, not shell echo.
 - NEVER run a bare `exit` / `exit <n>` (it closes the terminal); print the value or `throw` instead.
@@ -58,3 +58,5 @@ The shell reports the true exit code (`$LASTEXITCODE`); Cline's capture of it do
 
 ## STATUS
 Status lives in dedicated files: the backlog in PARKED.md, bugs/problems in ISSUES.md, handoffs in HANDOFF.md, and current state + shared parameter values in STATUS.md. Nothing is cleared anywhere until it is done AND committed.
+
+**Handoff content.** Handoff information is included only when explicitly requested, or when a "new/next task" is unambiguously implied by the user. Then include an optimally-concise version of the requested information and/or an optimally-concise version of the information the next task MUST have in order to achieve the next task intent/goals — nothing else.

@@ -1,19 +1,10 @@
 /* ==================================================================================================
    ⛔ STOP — DO NOT READ, INFER, REFERENCE OR USE THIS FILE FOR LESSON CONTENT CREATION ⛔
-   This stylesheet is IMPLEMENTATION ONLY. It must not be looked at, mined or used to [infer, reference
-   or guide] ANY part of lesson content creation: not which sections a lesson has, not their order, not
-   how a block is divided into columns or rows, not what a lesson's shape should be.
-   A LESSON'S SHAPE IS FREELY IMAGINED per PEDAGOGY-MAP.md -> LESSON GENERATION -> 1. Pass A (design),
-   from that lesson's design file and roadmap entry. There is no lesson template, and the archived /
-   parked pages (lessons-archive/) are deliberately withheld: untracked and gitignored.
+   This stylesheet is IMPLEMENTATION ONLY. A LESSON'S SHAPE IS FREELY IMAGINED. 
    The authority for WHAT a page contains, and the vocabulary of blocks/classes an author may use, is
-   FORMAT.md (mechanical contract) + FUNCTION.md (behaviour). This file only paints what those produce.
-   Reading it during the BUILD, to answer an implementation question (which class or knob does what), is
-   legitimate; deciding content or shape from it is not.
-   The answer to such a question lives in IMPLEMENTATION.md (the build manual: classes, knobs, mechanics,
-   owner specs, and the rationale that used to be commented in this file). Start there, not here.
-   If you are here to decide what a lesson should look like, stop — you are in the wrong file.
-   (Owner instruction 2026-11-03.)
+   PEDAGOGY-MAP.md, and FORMAT.md (mechanical contract). This file only paints what those produce.
+   Reading it to answer an implementation question (which class or knob does what), is
+   legitimate; deciding content or shape from it is not
    ================================================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&display=swap');
@@ -22,11 +13,11 @@
 header.brand{width:1400px;margin-left:15px;text-align:center;padding:20px 14px 0}
 .control-bar{width:1400px;margin:10px 0 0 15px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:8px 14px;font-size:13px;text-align:center}
 
-/* site-functions legend: ONE baked-in line, static HTML (FORMAT §2c · IMPLEMENTATION §6.3) */
+/* site-functions legend: ONE baked-in line, static HTML (FORMAT §2c) */
 .barhelp{width:1400px;margin:2px 0 8px 15px;padding:0 14px;text-align:center;font-size:14px;line-height:1.55;color:var(--ink)}
 .barhelp b{color:var(--ink);font-weight:600}
 
-/* the shell is not text to work with (IMPLEMENTATION §6.3) */
+/* the shell is not text to work with */
 header.brand,.control-bar,.barhelp,footer{user-select:none;-webkit-user-select:none}
 .barhelp .hlk{padding:0 4px;border-radius:4px}
 .barhelp .hlk-y{background:rgba(255,233,112,.85)}
@@ -48,7 +39,7 @@ main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
 .row{margin:6px 0}
 button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;margin:4px 4px 4px 0;font:600 14px 'Public Sans';cursor:pointer;box-shadow:3px 3px 0 var(--tan)}
 
-/* one shared hover/press for EVERY button (IMPLEMENTATION §5.7) */
+/* one shared hover/press for EVERY button */
 button{transition:transform .09s ease,filter .12s ease}
 button:hover:not(:disabled):not(.locked){filter:brightness(1.14);transform:translateY(-1px)}
 button:active:not(:disabled):not(.locked){filter:brightness(1.04);transform:translate(2px,2px);transition-duration:.04s}
@@ -61,17 +52,17 @@ a{color:var(--ink);font-weight:600}h2{font-family:'Playfair Display',serif;margi
 .dim{color:#8a8072;font-size:13px}
 .pt{color:#5c5347;font-style:italic}.ptw{font-style:italic;color:var(--ptw);font-weight:600}
 
-/* lesson-12 vowel-map labels ONLY — not the pronunciation key (IMPLEMENTATION §5.5) */
+/* lesson-12 vowel-map labels ONLY — not the pronunciation key */
 .ptsound{color:var(--ptw);font-style:italic}
 .listen{background:var(--tan);box-shadow:3px 3px 0 var(--ink)}
 details{background:#fff8ea;border:2px dashed var(--tan);border-radius:12px;padding:8px 12px;margin:10px 0}
 mark.nb{background:transparent;cursor:pointer}
 
-/* recording = 2px blue underline, painted by the background with a 2px inset, so the prose never moves (IMPLEMENTATION §6.1) */
+/* recording = 2px blue underline, painted by the background with a 2px inset, so the prose never moves */
 mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-position:2px 100%;
  background-image:linear-gradient(var(--blue),var(--blue));background-size:calc(100% - 4px) 2px}
 
-/* the legend DEMONSTRATES the note wash (IMPLEMENTATION §6.3) */
+/* the legend DEMONSTRATES the note wash */
 .barhelp .hb-note{background:var(--bluebg);border-radius:3px}
 .pop{position:absolute;z-index:9;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:5px;width:auto;max-height:70vh;overflow:auto}
 .pop button{padding:4px 7px;margin:0;font-size:12.5px;border-radius:8px;box-shadow:2px 2px 0 var(--tan);height:24px;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
@@ -81,7 +72,7 @@ mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-positio
 #nbKey{margin:2px 0 4px;white-space:pre-wrap;font-size:18px;text-align:center;font-family:Georgia,'Times New Roman',serif;color:var(--ptw)}
 #nbKey .pr-g{color:grey}
 
-/* a popup button that does not apply yet is greyed out (FUNCTION.md · IMPLEMENTATION §5.7) */
+/* a popup button that does not apply yet is greyed out (FUNCTION.md) */
 .pop button:disabled,.pop button.locked{opacity:.45;box-shadow:2px 2px 0 var(--tan);cursor:default}
 
 /* processing spiral: Record while capturing, Play while sounding (FUNCTION.md) */
@@ -89,20 +80,20 @@ mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-positio
 .pop button .spin{border-color:currentColor;border-top-color:transparent;vertical-align:middle}
 .pop textarea{width:100%;margin:6px 0}
 
-/* HIGHLIGHT paint layer — never mark.nb (IMPLEMENTATION §6.2) */
+/* HIGHLIGHT paint layer — never mark.nb */
 #hlLayer{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
 
-/* multiply = the tint sits BELOW the ink (IMPLEMENTATION §6.2) */
+/* multiply = the tint sits BELOW the ink */
 #hlLayer .hlr{position:absolute;border-radius:3px;mix-blend-mode:multiply}
 #hlLayer .hlr-yellow{background:rgba(255,233,112,.55)}
 #hlLayer .hlr-red{background:rgba(255,64,64,.34)}
 #hlLayer .hlr-green{background:rgba(64,200,96,.34)}
 
-/* NOTE paint layer (IMPLEMENTATION §6.2) */
+/* NOTE paint layer */
 #noteLayer{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
 #noteLayer .ntr{position:absolute;border-radius:3px;mix-blend-mode:multiply;background:var(--bluebg)}
 
-/* colour palette, single source of truth (IMPLEMENTATION §6.2) */
+/* colour palette, single source of truth */
 .pop.hlpalpop{padding:4px;border-radius:12px;width:auto;box-shadow:3px 3px 0 var(--tan)}
 .hlpal{display:flex;align-items:center;gap:4px}
 .hlpal button{width:14px;height:14px;min-width:14px;padding:0;margin:0;border:2px solid var(--ink);border-radius:6px;box-shadow:none;cursor:pointer}
@@ -117,10 +108,10 @@ mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-positio
 @keyframes pu{50%{opacity:.25}}
 input.gap{border:0;border-bottom:2px solid var(--tan);background:#fff8ea;font:inherit;width:var(--gap-w,9em)}
 
-/* authored free-text blocks are FIXED SIZE (IMPLEMENTATION §4.6) */
+/* authored free-text blocks are FIXED SIZE */
 .content-area textarea{resize:none}
 
-/* fieldset is a BLOCK; min-width:0 so it shrinks into a slot (IMPLEMENTATION §2.5) */
+/* fieldset is a BLOCK; min-width:0 so it shrinks into a slot */
 fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8px 12px;min-width:0}
 label{margin-right:10px;cursor:pointer}
 #feed{display:block;width:100%;min-height:9em;font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:12px 14px;box-shadow:5px 5px 0 var(--tan);resize:none;field-sizing:content}
@@ -129,7 +120,7 @@ footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#
 
 h2{border-bottom:2px solid var(--rose);padding-bottom:6px;margin-top:1.6em}
 h2 .h2sub{font-family:'Public Sans',sans-serif;font-size:.55em;font-weight:400;letter-spacing:.03em;color:#8a8072}
-/* A CHART IS A BLOCK; its columns/rows are content-aware, never set here (IMPLEMENTATION §3.1) */
+/* A CHART IS A BLOCK; its columns/rows are content-aware, never set here */
 .chart{border-collapse:collapse;width:100%;margin:14px 0;background:var(--paper);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--tan)}
 
 .chart th,.chart td{border:1px solid var(--tan);padding:8px 12px;text-align:left;vertical-align:middle}
@@ -149,7 +140,7 @@ h2 .h2sub{font-family:'Public Sans',sans-serif;font-size:.55em;font-weight:400;l
 fieldset .qnum{margin-right:6px}
 fieldset label{margin-right:14px}
 button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
-/* plain print path (IMPLEMENTATION §1.7) */
+/* plain print path */
 @media print{#printRoot .listen{display:none}#barhelp{display:none}}
 
 @media print{
@@ -160,13 +151,13 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 
 .panel{border:2px dashed var(--tan);border-radius:12px;padding:12px 16px;background:var(--paper);min-width:0}
 
-/* vertical rhythm: a block never touches the block above or below it (IMPLEMENTATION §2.4) */
+/* vertical rhythm: a block never touches the block above or below it */
 .content-area > .panel{margin:14px 0}
 .panel .ex-head{margin-top:0}
 .panel > :not(.ex-head){margin-left:10px;margin-right:10px}
 .panel .chart{width:calc(100% - 20px)}
 
-/* block width slots: the sizing decision is tagged on the block, CSS only displays it (IMPLEMENTATION §2.1-2.3) */
+/* block width slots: the sizing decision is tagged on the block, CSS only displays it */
 .itemsize{width:100%}
 .itemsize-half{width:calc(50% - 7px)}
 .itemsize-third{width:calc(33.3333% - 9.3333px)}
@@ -175,18 +166,20 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .itemrow[data-cols="2"]>*{width:calc(50% - 7px)}
 .itemrow[data-cols="3"]>*{width:calc(33.3333% - 9.3333px)}
 .content-area > h2, .content-area > p{margin-left:10px;margin-right:10px}
-/* .qgrid/.panel/.qopts cap NOTHING; this template is the qnum|stem layout, not an option count (IMPLEMENTATION §4.4) */
+/* .qgrid/.panel/.qopts cap NOTHING; this template is the qnum|stem layout, not an option count */
 .qgrid{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;column-gap:14px;row-gap:12px;min-width:0}
 
 .qgrid .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 30px}
 .qgrid .qnum{font-weight:700}
 .qgrid .qstem{font-weight:700}
-/* word + blank pairs, right-aligned (IMPLEMENTATION §4.2) */
-.blanks{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px 24px;margin:10px 0}
-.blanks>div{display:flex;justify-content:flex-end;align-items:center;gap:6px}
+/* word + blank pairs: the block's own markup decides the arrangement - nothing here aligns the
+   gaps, columns the items or right-justifies the pair */
+.blanks{display:flex;flex-wrap:wrap;gap:14px 24px;margin:10px 0}
+.blanks>div{display:flex;align-items:center;gap:6px}
+.blanks.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px 24px}
 .blanks>div input.gap{width:var(--gap-w,9em);flex:0 0 auto}
 
-/* GLOSS STANDARD: the BLOCK chooses inline-or-own-line, never one cell (IMPLEMENTATION §4.8) */
+/* gloss placement is a per-block opt-in (.glossdrop), used when the page asks for it - never imposed */
 .blanks.glossdrop>div{flex-wrap:wrap}
 .blanks.glossdrop>div .ptw{flex:1 1 100%;text-align:right}
 .chart.glossdrop .ptw{display:block}
@@ -199,26 +192,25 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .blank{display:inline-block;width:3.2em;border-bottom:2px solid var(--tan);vertical-align:baseline}
 .chart tr.note td{background:#fff8ea;font-style:italic;color:#5c5347;border-top:0;padding:10px 14px}
 
-/* TILING: the slot decides the column count (2 full / 1 in a half/third), no author decision (IMPLEMENTATION §3.2) */
-.qgrid.stack{display:grid;grid-template-columns:repeat(auto-fill,minmax(28em,1fr));column-gap:28px;align-items:start}
+/* a stack is one column unless the page asks to tile it (.cols): the page decides, not the CSS */
+/* a stack tiles to fill its block (dead space is the priority to avoid); .wide = one full-width column */
+.qgrid.stack,.qgrid.stack.cols{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(var(--rows,2),auto);grid-auto-columns:minmax(0,1fr);column-gap:28px;align-items:start}
+.qgrid.stack.wide{display:block}
 .qgrid.stack .qitem{margin:0 0 16px}
 .qgrid.stack .qline{display:flex;align-items:baseline;gap:8px}
 .qgrid.stack .qline .qnum{flex:0 0 auto;font-weight:700}
 .qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 30px;margin-top:4px}
-.qgrid.stack.wide{display:block}
-.blanks.sent{display:grid;grid-template-columns:repeat(auto-fill,minmax(28em,1fr));column-gap:28px}
+.blanks.sent,.blanks.sent.cols{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(var(--rows,2),auto);grid-auto-columns:minmax(0,1fr);column-gap:28px}
+.blanks.sent.wide{display:block}
 .blanks.sent>div{display:block;margin:8px 0}
 .blanks.sent>div input.gap{display:inline-block;width:var(--gap-w,9em);margin:0 .2em;vertical-align:baseline}
-.blanks.sent.wide{display:block}
 
-/* an ODD last item takes the whole row, so a row is never left half blank (IMPLEMENTATION §3.2) */
-.qgrid.stack>:last-child:nth-child(odd),.blanks.sent>:last-child:nth-child(odd){grid-column:1/-1}
 
 body.editing #hlLayer,body.editing #noteLayer{display:none}
 body.editing mark.nb.has-rec{background-image:none}
 body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 
-/* custom print button: only the snapshot prints (IMPLEMENTATION §1.7) */
+/* custom print button: only the snapshot prints */
 @media print{
  body{background:white}
  body.printing>*:not(#printRoot){display:none!important}
@@ -239,7 +231,7 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 }
 
 
-/* teacher admin area (IMPLEMENTATION §6.7) */
+/* teacher admin area */
 .tadmin-books{display:flex;gap:10px;margin-top:2px}
 .tadmin-books button{flex:1 1 0;margin:0;white-space:nowrap}
 .tadmin-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}
@@ -263,7 +255,7 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 .trow .tname{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;min-width:0}
 .trow .temail{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1 1 auto;min-width:0}
 
-/* small half-full blocks centre their text (IMPLEMENTATION §2.7) */
+/* small half-full blocks centre their text */
 .card.center{text-align:center}
 
 body.landing .landing-card{max-width:600px;margin:44px auto 12px;padding:32px 38px}
@@ -275,7 +267,7 @@ body.landing #needg p{font-size:15px;line-height:1.55;margin:10px 0}
 body.landing #needg button{margin:4px 0 8px}
 body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 
-/* landing page (index.html), not a lesson (IMPLEMENTATION §6.6) */
+/* landing page (index.html), not a lesson */
 .landing-hello{margin:14px 0;border-color:var(--ink);background:linear-gradient(100deg,rgba(217,193,186,.60),rgba(185,133,76,.30) 55%,rgba(29,78,216,.16))}
 .hello-en{font-weight:600;font-size:18px;line-height:1.35}
 .hello-pt{margin-top:4px;font-style:italic;color:#5c5347}
@@ -286,7 +278,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .track-card .row a.lesson-link{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 .track-card .row a.lesson-link:hover{text-decoration-thickness:2px}
 
-/* one-line entries: the title truncates, the tooltip keeps the full text (IMPLEMENTATION §6.6) */
+/* one-line entries: the title truncates, the tooltip keeps the full text */
 .track-card .row{display:flex;align-items:baseline;gap:6px;white-space:nowrap;overflow:hidden}
 .track-card .row a.lesson-link,.track-card .row .dim{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .track-card .row.done a.lesson-link,.track-card .row.done .dim{color:#0f766e}
@@ -295,7 +287,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 
 
 
-/* Tier-1 game block (engine3.js); the authored radios are what persists (IMPLEMENTATION §6.8) */
+/* Tier-1 game block (engine3.js); the authored radios are what persists */
 .game{margin:14px 0;padding:12px 16px;background:var(--paper);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--tan);min-width:0}
 .game-stage{position:relative;height:240px;overflow:hidden;background:#eef4f7;border:2px dashed var(--tan);border-radius:12px;touch-action:manipulation}
 .game:not(.is-on) .game-stage{display:none}

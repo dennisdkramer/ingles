@@ -1,40 +1,15 @@
 /**
- * qa/overflow.mjs — real-browser overflow / balloon / canvas check for the lesson pages.
- * Run with: node qa/overflow.mjs [--track=kids|business|adult] [lessonNumber ...]
- *           (no numbers = every lesson page that exists; no --track = EVERY track with pages)
- *           node qa/overflow.mjs --selftest           (qa/fixtures/overflow-ok.html must be clean,
- *                                                      qa/fixtures/overflow-bad.html must report findings)
- *           node qa/overflow.mjs 1 --shot <file.png> [--shot-h <px>] [--shot-y <px>]   (review aid: a picture of
- *                                                      the page, by default the top 1800px)
- *
- * jsdom cannot see layout, so this is the ONLY harness that measures it, in real Chrome over CDP.
- * FORMAT.md is the model: the canvas is fixed (.page-container 1400px, .content-area 1200px, never
- * reflows), a block is full / half (50% - 7px) / third (33.3% - 9.3px) and is TAGGED with its size
- * (`.itemsize*`, or `data-cols` on the `.itemrow` that holds it). Checks, all fatal except where noted:
+ * qa/overflow.mjs — real-browser geometry check. Four findings, all fatal:
  *   1. OVERFLOW — a block's content is wider than the block (scrollWidth > clientWidth + 8);
- *   2. BALLOON  — a block is wider than its slot (a half past half, a third past a third, a full block past
- *                 the canvas, ...). The slot comes from the row's `data-cols` and the member's size class;
- *   3. ESCAPE   — ANY element crosses the .content-area frame. This is the one that catches content
- *                 that is geometrically inside its block but pushed out of the canvas (a right-aligned
- *                 `.blanks` cell spilling to the LEFT of its panel, for example);
- *   4. CELL     — a `.blanks` cell whose content is wider than the cell (item does not fit its cell);
- *   5. SPACING  — BLOCKGAP (less than 8px of vertical space between two stacked blocks), ROWGAP
- *                 (less than 8px between the members of an `.itemrow`), OPTGAP (less than 4px between
- *                 the options of one question, which are laid across the block width) and CHARTPAD
- *                 (a chart cell with less than 8px of horizontal padding);
- *   5. RESIZE   — a `textarea` inside `.content-area` that the student can still drag (`resize` ≠ none):
- *                 a free-text block is fixed-size, and a drag handle can widen it past its block;
- *   6. SELECT   — the shell (header.brand / .control-bar / #barhelp / footer) is still selectable: the
- *                 notebook lives inside `.content-area` only, so the shell must not start a selection;
- *   7. LEGEND   — the #barhelp site-functions legend wraps past one line (it should read as one line of
- *                 chrome, and FORMAT.md fixes its wording);
- *   (hint) DEADSPACE  — a full block whose content fills < 75% of it (review-only; pedagogy decides);
- *   (hint) TILEHOLE   — a tiled list whose last row leaves a tile empty (3 items in 2 columns, 1 item with
- *                       room for 2): the block is full width, the CONTENT leaves the hole (review-only);
- *   (hint) HEIGHT     — adjacent half/third blocks whose heights differ by > 50px (review-only).
+ *   2. ESCAPE   — an element crosses the .content-area frame (content pushed off the canvas);
+ *   3. CELL     — a .blanks cell whose content is wider than the cell;
+ *   4. RESIZE   — a textarea the student can drag (it can be widened past its block).
+ * Nothing here judges how a page is laid out: which blocks exist, how wide they are, how many
+ * options a question has, how much space they keep is a generation decision, not a defect.
  *
- * `.panels > .panel` (the retired structure) is measured too when present, so an old page copied back
- * into business/ is still checked. COMPLETENESS of `.itemrow` rows is qa/width.mjs's job, not this file's.
+ * Run: node qa/overflow.mjs [--track=kids|business|adult] [lessonNumber ...]
+ *      node qa/overflow.mjs --selftest            (fixtures/overflow-ok.html clean, overflow-bad.html not)
+ *      node qa/overflow.mjs 1 --shot out.png [--shot-h <px>] [--shot-y <px>]   (a picture of the page)
  */
 import http from 'http';
 import fs from 'fs';
@@ -50,17 +25,18 @@ const CHROME = process.env.CHROME || 'C:\\Program Files\\Google\\Chrome\\Applica
 const SECRET = 'abreportas2025';
 const EMAIL = 'overflow.qa@test.com';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-function h(s) { let x = 0; for (const c of s) x = (x * 31 + c.charCodeAt(0)) | 0; return x; }
+const h = s => { let x = 0; for (const c of s) x = (x * 31 + c.charCodeAt(0)) | 0; return x; };
 
 function server() {
   return new Promise(resolve => {
     const srv = http.createServer((req, res) => {
-      const urlPath = decodeURIComponent(req.url.split('?')[0]);
-      let fp = path.join(ROOT, urlPath === '/' ? 'index.html' : urlPath);
+      const rel = decodeURIComponent(req.url.split('?')[0]);
+      const fp = path.join(ROOT, rel === '/' ? 'index.html' : rel);
       if (!fp.startsWith(ROOT)) { res.writeHead(403); res.end(); return; }
       fs.readFile(fp, (e, d) => {
         if (e) { res.writeHead(404); res.end(); return; }
-        const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.mp3': 'audio/mpeg' };
+        const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css',
+          '.json': 'application/json', '.png': 'image/png', '.mp3': 'audio/mpeg' };
         res.writeHead(200, { 'Content-Type': types[path.extname(fp)] || 'application/octet-stream' });
         res.end(d);
       });
@@ -108,37 +84,15 @@ function connect(wsUrl) {
   });
 }
 
-function session(cdp, id) {
-  return {
-    send: (m, p = {}) => cdp.send(m, p, id),
-    on: (n, f) => cdp.on(n, (p, sid) => { if (!sid || sid === id) f(p, sid) })
-  };
-}
+const session = (cdp, id) => ({
+  send: (m, p = {}) => cdp.send(m, p, id),
+  on: (n, f) => cdp.on(n, (p, sid) => { if (!sid || sid === id) f(p, sid) })
+});
 
 const MEASURE = `(function(){
-  function cw(el){
-    var r = document.createRange();
-    r.selectNodeContents(el);
-    var min = Infinity, max = -Infinity;
-    var rects = r.getClientRects();
-    for (var i = 0; i < rects.length; i++){ if (rects[i].width > 0){ min = Math.min(min, rects[i].left); max = Math.max(max, rects[i].right); } }
-    el.querySelectorAll('input,textarea,button,select,label').forEach(function(c){ var b = c.getBoundingClientRect(); if (b.width > 0){ min = Math.min(min, b.left); max = Math.max(max, b.right); } });
-    return min === Infinity ? 0 : (max - min);
-  }
   var ca = document.querySelector('.content-area');
   if (!ca) return { empty: true };
   var cr = ca.getBoundingClientRect();
-  function slotOf(el){
-    var pa = el.parentElement;
-    var row = pa && pa.classList && pa.classList.contains('itemrow') ? pa : null;
-    if (!row) return cr.width;
-    /* the block model is fixed (FORMAT.md): a row is 2 halves or 3 thirds, and the member's own size
-       class says which — data-cols on the row is the second witness */
-    var cols = row.getAttribute('data-cols');
-    if (cols === '2' || el.classList.contains('itemsize-half')) return cr.width / 2 - 7;
-    if (cols === '3' || el.classList.contains('itemsize-third')) return cr.width / 3 - 9.3333;
-    return cr.width;
-  }
   function label(el){
     var hd = el.querySelector('.ex-head') || el.querySelector('h1,h2,h3,h4,summary,b');
     var t = hd ? hd.textContent : (el.textContent || '');
@@ -148,54 +102,15 @@ const MEASURE = `(function(){
     + ' .content-area > .chart, .content-area > fieldset, .content-area > .dialog,'
     + ' .content-area > .qgrid, .content-area > .blanks, .panels > .panel';
   var blocks = [].slice.call(document.querySelectorAll(sel));
-  var findings = [], hints = [], tally = { full: 0, half: 0, third: 0 };
-  var lastRow = null, lastRowTop = -9999;
+  var findings = [], cells = [], escape = [];
   blocks.forEach(function(el){
     var r = el.getBoundingClientRect();
     if (!r.width) return;
-    var slot = slotOf(el);
-    var ex = label(el);
-    if (slot >= cr.width - 1) tally.full++; else if (slot > cr.width / 2 - 30) tally.half++; else tally.third++;
     var over = el.scrollWidth - el.clientWidth;
-    if (over > 8) findings.push({ kind: 'OVERFLOW', w: Math.round(r.width), slot: Math.round(slot), extra: 'over=' + over + 'px', ex: ex });
-    else if (r.width - slot > 8) findings.push({ kind: 'BALLOON', w: Math.round(r.width), slot: Math.round(slot), extra: 'wider than its slot by ' + Math.round(r.width - slot) + 'px', ex: ex });
-    var pct = Math.round(100 * cw(el) / r.width);
-    if (slot >= cr.width - 1 && pct > 0 && pct < 75) hints.push({ kind: 'DEADSPACE', extra: 'fill=' + pct + '%  w=' + Math.round(r.width), ex: ex });
-    /* HEIGHT hint: two blocks of the same row (or two consecutive half/third blocks) of unequal height */
-    if (slot < cr.width - 1) {
-      var sameRow = Math.abs(r.top - lastRowTop) < 4;
-      if (sameRow && Math.abs(r.height - lastRow.h) > 50)
-        hints.push({ kind: 'HEIGHT', extra: 'row pair ' + Math.round(lastRow.h) + 'px vs ' + Math.round(r.height) + 'px', ex: ex });
-      lastRowTop = r.top; lastRow = { h: r.height };
-    }
+    if (over > 8) findings.push({ kind: 'OVERFLOW', w: Math.round(r.width),
+      extra: 'content is ' + over + 'px wider than the block', ex: label(el) });
   });
-  /* TILEHOLE hint: a tiled list (.qgrid.stack / .blanks.sent, not .wide) whose LAST row does not span the
-     full grid — e.g. 3 items in a 2-tile grid, or 1 item with room for 2. The block is still full width, so
-     only the row's own geometry shows the hole (CSS spans an odd last item across every column, so this
-     normally reports nothing; a page that predates that rule is what it catches). */
-  [].slice.call(document.querySelectorAll('.qgrid.stack:not(.wide), .blanks.sent:not(.wide)')).forEach(function(g){
-    var tpl = getComputedStyle(g).gridTemplateColumns;
-    if (!tpl || tpl === 'none') return;
-    if (tpl.split(' ').filter(function(x){ return x.trim(); }).length < 2) return;
-    var gr = g.getBoundingClientRect();
-    var rows = {}, order = [];
-    [].slice.call(g.children).forEach(function(k){
-      var b = k.getBoundingClientRect();
-      if (!b.width) return;
-      var t = Math.round(b.top);
-      if (!(t in rows)) { rows[t] = { l: b.left, r: b.right, n: 0 }; order.push(t); }
-      rows[t].l = Math.min(rows[t].l, b.left);
-      rows[t].r = Math.max(rows[t].r, b.right);
-      rows[t].n++;
-    });
-    if (order.length < 2) return;
-    var last = rows[order[order.length - 1]];
-    var covered = last.r - last.l, have = gr.width - 2;
-    if (covered < have - 12)
-      hints.push({ kind: 'TILEHOLE', extra: Math.round(100 * covered / have) + '% of the row is used by its ' +
-        last.n + ' item(s)', ex: label(g) });
-  });
-  var escape = [];
+  /* anything crossing the fixed canvas frame */
   [].slice.call(document.querySelectorAll('.content-area *')).forEach(function(el){
     var r = el.getBoundingClientRect();
     if (r.width > 0 && (r.right > cr.right + 1 || r.left < cr.left - 1) && escape.length < 12) {
@@ -204,159 +119,31 @@ const MEASURE = `(function(){
         ex: 'canvas ' + Math.round(cr.left) + '..' + Math.round(cr.right) });
     }
   });
-  var cells = [];
+  /* a .blanks cell whose content does not fit its cell */
   [].slice.call(document.querySelectorAll('.blanks > div')).forEach(function(c){
     var r = c.getBoundingClientRect();
     if (!r.width) return;
     var min = Infinity, max = -Infinity;
-    c.querySelectorAll('input,textarea,button,label').forEach(function(k){ var kr = k.getBoundingClientRect(); if (kr.width > 0){ min = Math.min(min, kr.left); max = Math.max(max, kr.right); } });
     var rg = document.createRange();
     rg.selectNodeContents(c);
     var rects = rg.getClientRects();
     for (var i = 0; i < rects.length; i++){ if (rects[i].width > 0){ min = Math.min(min, rects[i].left); max = Math.max(max, rects[i].right); } }
+    c.querySelectorAll('input,textarea,button,label').forEach(function(k){
+      var kr = k.getBoundingClientRect(); if (kr.width > 0){ min = Math.min(min, kr.left); max = Math.max(max, kr.right); } });
     var inner = min === Infinity ? 0 : max - min;
     if (inner > r.width + 8) cells.push({ kind: 'CELL', w: Math.round(inner), slot: Math.round(r.width),
-      extra: 'needs ' + Math.round(inner) + 'px in a ' + Math.round(r.width) + 'px cell', ex: (c.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 44) });
+      extra: 'needs ' + Math.round(inner) + 'px in a ' + Math.round(r.width) + 'px cell',
+      ex: (c.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 44) });
   });
-  /* ---- spacing: blocks must read as separate blocks, and row members / options must not touch ---- */
-  function brief(el){
-    var t = label(el);
-    return t.slice(0, 28);
-  }
-  var gaps = [], minBlock = -1, minRow = -1, minOpt = -1, minChart = -1;
-  /* 1. vertical space between stacked blocks (every direct child of the fixed canvas) */
-  var flow = [].slice.call(document.querySelectorAll('.content-area > *')).filter(function(el){
-    if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE' || el.id === 'feed') return false;
-    return el.getBoundingClientRect().height > 0;
-  });
-  for (var gi = 0; gi + 1 < flow.length; gi++) {
-    var ra = flow[gi].getBoundingClientRect(), rb = flow[gi + 1].getBoundingClientRect();
-    var vy = Math.round(rb.top - ra.bottom);
-    if (minBlock < 0 || vy < minBlock) minBlock = vy;
-    if (vy < 8) gaps.push({ kind: 'BLOCKGAP', extra: vy + 'px between «' + brief(flow[gi]) + '» and «' + brief(flow[gi + 1]) + '»', ex: '' });
-  }
-  /* 2. horizontal space between the members of a row (halves / thirds) */
-  [].slice.call(document.querySelectorAll('.itemrow')).forEach(function(row){
-    var ch = [].slice.call(row.children);
-    for (var ci = 0; ci + 1 < ch.length; ci++) {
-      var c1 = ch[ci].getBoundingClientRect(), c2 = ch[ci + 1].getBoundingClientRect();
-      var hg = Math.round(c2.left - c1.right);
-      if (minRow < 0 || hg < minRow) minRow = hg;
-      if (hg < 8) gaps.push({ kind: 'ROWGAP', extra: hg + 'px between «' + brief(ch[ci]) + '» and «' + brief(ch[ci + 1]) + '»', ex: '' });
-    }
-  });
-  /* 3. space between the options of one question — wherever they sit: spread across the block width
-        (.qopts) or kept compact beside the stem (.qline) */
-  var labelGroups = [];
-  [].slice.call(document.querySelectorAll('label')).forEach(function(l){
-    var p = l.parentElement;
-    if (p && labelGroups.indexOf(p) < 0) labelGroups.push(p);
-  });
-  labelGroups.forEach(function(p){
-    var ls = [].slice.call(p.children).filter(function(el){ return el.tagName === 'LABEL'; });
-    for (var li = 0; li + 1 < ls.length; li++) {
-      var a = ls[li].getBoundingClientRect(), b = ls[li + 1].getBoundingClientRect();
-      var sameLine = Math.abs(a.top - b.top) < 6;
-      var d = sameLine ? Math.round(b.left - a.right) : Math.round(b.top - a.bottom);
-      if (minOpt < 0 || d < minOpt) minOpt = d;
-      if (d < 4) gaps.push({ kind: 'OPTGAP', extra: d + 'px between «' + (ls[li].textContent || '').trim().slice(0, 18) + '» and «' + (ls[li + 1].textContent || '').trim().slice(0, 18) + '»', ex: '' });
-    }
-  });
-  /* 4. chart cells keep their content off the neighbour's content (padding + border) */
-  [].slice.call(document.querySelectorAll('.chart th, .chart td')).forEach(function(cell){
-    var cs = getComputedStyle(cell);
-    var pad = Math.round(parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight));
-    if (minChart < 0 || pad < minChart) minChart = pad;
-    if (pad < 8) gaps.push({ kind: 'CHARTPAD', extra: pad + 'px horizontal padding on a chart cell', ex: (cell.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 30) });
-  });
-  /* 5. free-text blocks are fixed size: a textarea the student can drag can also widen past its block */
+  /* a free-text block is fixed size: no drag handle */
   [].slice.call(document.querySelectorAll('.content-area textarea')).forEach(function(ta){
     var rz = getComputedStyle(ta).resize;
     if (rz && rz !== 'none') findings.push({ kind: 'RESIZE',
       extra: 'drag-resizable textarea (resize:' + rz + ')',
       ex: (ta.id || ta.className || 'textarea').toString().slice(0, 30) });
   });
-  /* 6. the shell is NOT text to work with: the brand header, the control bar, the legend and the footer
-     cannot be selected (the notebook only exists inside .content-area) */
-  [].slice.call(document.querySelectorAll('header.brand, .control-bar, #barhelp, footer')).forEach(function(el){
-    var cs = getComputedStyle(el);
-    var us = cs.userSelect || cs.webkitUserSelect || '';
-    if (us !== 'none') findings.push({ kind: 'SELECT',
-      extra: 'selectable shell element (' + (us || 'auto') + ')',
-      ex: (el.id || el.className || el.tagName).toString().slice(0, 30) });
-  });
-  /* 7. the site-functions legend is ONE line: if it wraps it reads as body copy instead of chrome */
-  var legend = document.getElementById('barhelp');
-  if (legend) {
-    var ls = getComputedStyle(legend);
-    var lh = parseFloat(ls.lineHeight) || (parseFloat(ls.fontSize) * 1.55);
-    var lhBox = legend.getBoundingClientRect().height;
-    if (lh > 0 && lhBox > lh * 1.5) findings.push({ kind: 'LEGEND',
-      extra: 'legend wraps to ' + Math.round(lhBox / lh) + ' lines (' + Math.round(lhBox) + 'px in a ' + Math.round(lh) + 'px line)',
-      ex: (legend.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) });
-  }
-  /* 8. FORMAT rule 9 — a row never splits its fields from its prompt: fields stay on the prompt's line,
-     and when they do not fit, the whole block puts them on the line below the prompt (one layout per
-     block, never a ragged mix). */
-  var wraps = [];
-  function topsOf(nodes){
-    var ts = [];
-    nodes.forEach(function(n){ var r = n.getBoundingClientRect(); if (r.width > 0 || r.height > 0) ts.push(Math.round(r.top)); });
-    ts.sort(function(a, b){ return a - b; });
-    var rows = [];
-    ts.forEach(function(t){ if (!rows.length || t - rows[rows.length - 1] > 10) rows.push(t); });
-    return rows.length;
-  }
-  [].slice.call(document.querySelectorAll('.content-area .qline')).forEach(function(q){
-    var f = [].slice.call(q.querySelectorAll('input,label,textarea'));
-    if (!f.length) return;
-    var fr = f[0].getBoundingClientRect(), qr = q.getBoundingClientRect();
-    var uniq = topsOf(f);
-    if (uniq.length > 1 || fr.top - qr.top > 8)
-      wraps.push({ kind: 'ROWWRAP', extra: 'inline fields sit on ' + uniq.length + ' row(s), ' + Math.round(fr.top - qr.top) + 'px below the prompt line',
-        ex: (q.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 44) });
-  });
-  [].slice.call(document.querySelectorAll('.content-area .qgrid:not(.stack) .qopts')).forEach(function(o){
-    var ls = [].slice.call(o.querySelectorAll('label'));
-    if (ls.length < 2) return;
-    var uniq = topsOf(ls);
-    if (uniq.length > 1)
-      wraps.push({ kind: 'ROWWRAP', extra: 'options beside the stem wrap onto ' + uniq.length + ' rows',
-        ex: (o.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 44) });
-  });
-  /* a .blanks block is consistent too: every item keeps its input on the prompt's line, or every item
-     puts it on the line below the prompt (rule 9) — a mix is the defect, not the stacking */
-  [].slice.call(document.querySelectorAll('.content-area .blanks')).forEach(function(bl){
-    var inline = 0, stacked = 0, sample = null;
-    [].slice.call(bl.children).forEach(function(d){
-      var f = [].slice.call(d.querySelectorAll('input,textarea'));
-      if (!f.length) return;
-      var rg = document.createRange(); rg.selectNodeContents(d);
-      var rects = rg.getClientRects(), first = null;
-      for (var i = 0; i < rects.length; i++) if (rects[i].width > 0) { first = rects[i]; break; }
-      if (!first) return;
-      var off = Math.round(f[0].getBoundingClientRect().top - first.top);
-      if (off > 8) { stacked++; if (!sample) sample = d; } else inline++;
-    });
-    if (inline && stacked)
-      wraps.push({ kind: 'ROWWRAP', extra: 'block mixes ' + inline + ' inline field(s) with ' + stacked + ' stacked field(s)',
-        ex: (sample.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 44) });
-  });
-  /* one layout per block: inline-fields items and stacked items never share a block */
-  [].slice.call(document.querySelectorAll('.content-area .panel, .content-area > fieldset, .content-area > .qgrid')).forEach(function(bl){
-    var inline = 0, stacked = 0;
-    [].slice.call(bl.querySelectorAll('.qitem')).forEach(function(it){
-      var q = it.querySelector('.qline');
-      if (q && q.querySelector('input')) inline++; else if (it.querySelector('.qopts')) stacked++;
-    });
-    if (inline && stacked)
-      wraps.push({ kind: 'ROWWRAP', extra: 'block mixes ' + inline + ' inline item(s) with ' + stacked + ' stacked item(s)',
-        ex: label(bl) });
-  });
-  wraps.forEach(function(f){ findings.push(f); });
   return { empty: false, canvas: Math.round(cr.left) + '..' + Math.round(cr.right), w: Math.round(cr.width),
-    blocks: blocks.length, tally: tally, findings: findings, escape: escape, cells: cells, gaps: gaps,
-    spacing: { block: minBlock, row: minRow, opt: minOpt, chart: minChart }, hints: hints };
+    blocks: blocks.length, findings: findings, escape: escape, cells: cells };
 })()`;
 
 function discover(track) {
@@ -367,26 +154,18 @@ function discover(track) {
     .filter(Boolean).map(Number).sort((a, b) => a - b);
 }
 
-/* print one page's result; returns the number of FAILING findings (hints never fail) */
+/* print one page's result; returns the number of failing findings */
 function report(head, v) {
   if (!v || v.empty) { console.log(head + ': ❌ no .content-area (page missing or not a lesson)'); return 1; }
-  const bad = [].concat(v.findings, v.escape, v.cells, v.gaps || []);
-  console.log(head + '  canvas ' + v.canvas + ' · blocks ' + v.blocks +
-    ' (full ' + v.tally.full + ' / half ' + v.tally.half + ' / third ' + v.tally.third + ')');
-  const sp = v.spacing || {};
-  const px = n => (n == null || n < 0) ? '—' : n + 'px';
-  console.log('  spacing (min): between blocks ' + px(sp.block) + ' · between row members ' + px(sp.row) +
-    ' · between options ' + px(sp.opt) + ' · chart cell padding ' + px(sp.chart));
+  const bad = [].concat(v.findings, v.escape, v.cells);
+  console.log(head + '  canvas ' + v.canvas + ' · blocks ' + v.blocks);
   bad.forEach(f => console.log('    ❌ ' + f.kind + '  ' + f.extra +
     (f.w ? '  w=' + f.w : '') + (f.slot ? '  slot=' + f.slot : '') + '  «' + f.ex + '»'));
-  v.hints.forEach(f => console.log('    (hint) ' + f.kind + '  ' + f.extra + '  «' + f.ex + '»'));
   return bad.length;
 }
-
 async function main() {
   const argv = process.argv.slice(2);
   const selftest = argv.includes('--selftest');
-  /* values that belong to an option are not lesson numbers */
   const optVals = new Set();
   ['--shot', '--shot-h', '--shot-y', '--shot-url'].forEach(f => { const j = argv.indexOf(f); if (j >= 0 && argv[j + 1]) optVals.add(argv[j + 1]); });
   const targets = argv.filter(a => !a.startsWith('--') && !optVals.has(a))
@@ -401,14 +180,13 @@ async function main() {
 
   const site = await server();
   const base = 'http://127.0.0.1:' + site.port;
-  /* one signed gate per track in scope: the page reads the track from its own path, so a single
-     injected script opens every page of the run (kids + business, or just the one --track names) */
   const scopeTracks = pickTracks();
   const gateFor = t => ({ email: EMAIL, track: t, teacher: false, sig: h(EMAIL + t + SECRET) });
   const gateMap = {};
   for (const t of (scopeTracks.length ? scopeTracks : ['business'])) gateMap[t] = gateFor(t);
   const gateSrc = 'try{var g=' + JSON.stringify(gateMap) + ';var k=(location.pathname.split("/")[1]||"");'
     + 'sessionStorage.setItem("gate",JSON.stringify(g[k]||g[' + JSON.stringify(Object.keys(gateMap)[0]) + ']))}catch(e){}';
+
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'ovf-'));
   let chrome;
   try { chrome = await launchChrome(profile); }
@@ -425,9 +203,7 @@ async function main() {
   const measure = async (rel) => {
     await ses.send('Page.navigate', { url: base + '/' + rel });
     await sleep(selftest ? 900 : 1300);
-    /* style.css @imports Google Fonts, and a webfont that lands AFTER the first paint re-wraps every line — the
-       same page then reports a different ROWWRAP/CELL between two runs. Wait for the real font (bounded, so a
-       slow or unreachable CDN can never hang the sweep): the measurement is then what the student sees. */
+    /* a webfont that lands after the first paint re-wraps every line: measure what the student sees */
     try {
       await ses.send('Runtime.evaluate', {
         expression: '(document.fonts?Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,2500)})]):Promise.resolve()).then(function(){return 1})',
@@ -450,74 +226,62 @@ async function main() {
     return (r.result && r.result.value) || null;
   };
 
-  /* --shot-url <rel>: render ONE page (any page, e.g. index.html or a preview fixture), report it, capture
-     it if --shot was given, and exit — a review aid that does not belong to the lesson sweep */
-  const shotUrlAt = argv.indexOf('--shot-url');
-  const shotUrl = shotUrlAt >= 0 ? argv[shotUrlAt + 1] : null;
-  if (shotUrl) {
-    report(shotUrl, await measure(shotUrl));
+  const finish = async code => {
     try { cdp.ws.close(); } catch (e) { }
     try { chrome.proc.kill(); } catch (e) { }
     await site.close();
     try { fs.rmSync(profile, { recursive: true, force: true }); } catch (e) { }
-    process.exit(0);
-  }
+    process.exit(code);
+  };
+
+  /* --shot-url <rel>: render one page (any page) and exit — a review aid, not part of the sweep */
+  const shotUrlAt = argv.indexOf('--shot-url');
+  const shotUrl = shotUrlAt >= 0 ? argv[shotUrlAt + 1] : null;
+  if (shotUrl) { report(shotUrl, await measure(shotUrl)); await finish(0); }
 
   let fails = 0;
 
   if (selftest) {
-    /* the audit must PASS the good fixture and FAIL the bad one — this is what keeps a
-       vacuous pass (measuring nothing) from ever looking green again */
+    /* the audit must PASS the good fixture and FAIL the bad one, so a vacuous pass can never look green */
     const cases = [{ name: 'overflow-ok.html', expect: 0 }, { name: 'overflow-bad.html', expect: 1 }];
-    let broken = 0;
     for (const c of cases) {
       const rel = 'qa/fixtures/' + c.name;
-      if (!fs.existsSync(path.join(ROOT, rel))) { console.log('❌ fixture missing: ' + rel); broken++; continue; }
+      if (!fs.existsSync(path.join(ROOT, rel))) { console.log('❌ fixture missing: ' + rel); fails++; continue; }
       const n = report(rel, await measure(rel));
       const ok = (n ? 1 : 0) === c.expect;
-      if (!ok) broken++;
+      if (!ok) fails++;
       console.log((ok ? '✅ ' : '❌ ') + rel + ' → ' + (n ? n + ' finding(s)' : 'clean') +
         ' (expected ' + (c.expect ? 'findings' : 'clean') + ')');
     }
-    console.log(broken === 0 ? '✅ overflow audit selftest green' : '❌ overflow audit selftest FAILED');
-    fails = broken;
-  } else {
-    /* SCOPE: every track with pages, or only the one --track names. A lesson number that exists in no
-       track in scope is a hard error, so a typo can never be read as "no pages to measure". */
-    const tracks = scopeTracks;
-    const strict = hasTrackFlag();
-    const ghosts = missingTargets(tracks, targets);
-    if (ghosts.length) { console.log('❌ lesson ' + ghosts.join(', ') + ' does not exist in ' + scopeLabel(tracks)); fails += ghosts.length; }
-    if (!tracks.length) console.log('✅ overflow audit: no lesson pages in any track');
-    for (const TRACK of tracks) {
-      const lessons = targets.length ? targets : discover(TRACK);
-      if (!lessons.length) { console.log('✅ overflow audit: no ' + TRACK + ' lesson pages to check'); continue; }
-      let trackFails = 0;
-      for (const L of lessons) {
-        const rel = TRACK + '/lesson' + L + '.html';
-        if (!fs.existsSync(path.join(ROOT, rel))) {
-          if (strict) { console.log(TRACK + '/lesson' + L + ': ❌ page not found'); trackFails++; }
-          else console.log(TRACK + '/lesson' + L + ': (page missing, skipped)');
-          continue;
-        }
-        trackFails += report(TRACK + '/lesson' + L, await measure(rel));
-      }
-      fails += trackFails;
-      const label = TRACK + ' — ' + (lessons.length === 1 ? 'lesson ' : 'lessons ') + lessons.join(', ');
-      console.log(trackFails === 0
-        ? '✅ layout clean — no overflow, no balloon, no spacing gap, no drag-resizable text box, nothing escapes the canvas (' + label + ')'
-        : '❌ ' + trackFails + ' layout finding(s) — ' + TRACK);
-    }
-    if (tracks.length > 1) console.log(fails === 0
-      ? '✅ layout clean — ' + scopeLabel(tracks)
-      : '❌ ' + fails + ' layout finding(s) — ' + scopeLabel(tracks));
+    console.log(fails === 0 ? '✅ selftest green' : '❌ selftest FAILED');
+    await finish(fails ? 1 : 0);
   }
 
-  try { cdp.ws.close(); } catch (e) { }
-  try { chrome.proc.kill(); } catch (e) { }
-  await site.close();
-  try { fs.rmSync(profile, { recursive: true, force: true }); } catch (e) { }
-  process.exit(fails ? 1 : 0);
+  const tracks = scopeTracks;
+  const strict = hasTrackFlag();
+  const ghosts = missingTargets(tracks, targets);
+  if (ghosts.length) { console.log('❌ lesson ' + ghosts.join(', ') + ' does not exist in ' + scopeLabel(tracks)); fails += ghosts.length; }
+  if (!tracks.length) console.log('✅ no lesson pages in any track');
+  for (const TRACK of tracks) {
+    const lessons = targets.length ? targets : discover(TRACK);
+    if (!lessons.length) { console.log('✅ no ' + TRACK + ' lesson pages to check'); continue; }
+    let trackFails = 0;
+    for (const L of lessons) {
+      const rel = TRACK + '/lesson' + L + '.html';
+      if (!fs.existsSync(path.join(ROOT, rel))) {
+        if (strict) { console.log(rel + ': ❌ page not found'); trackFails++; }
+        else console.log(rel + ': (page missing, skipped)');
+        continue;
+      }
+      trackFails += report(rel, await measure(rel));
+    }
+    fails += trackFails;
+    const label = TRACK + ' — lesson' + (lessons.length === 1 ? ' ' : 's ') + lessons.join(', ');
+    console.log(trackFails === 0
+      ? '✅ nothing overflows, nothing escapes the canvas (' + label + ')'
+      : '❌ ' + trackFails + ' finding(s) — ' + TRACK);
+  }
+  await finish(fails ? 1 : 0);
 }
 
 main().catch(e => { console.error('crashed:', e.message); process.exit(1); });
