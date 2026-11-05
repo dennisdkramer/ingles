@@ -1,4 +1,5 @@
 /* MOTOR 2 — control bar, camadas, áudio com cache, realces persistentes */
+/* Behaviour contract: FUNCTION.md - read it before changing anything here. */
 const LAYER_VER="v4-server-truth-20261006"; /* Bump to mark a fresh data era */
 let wipeGuard=0; /* a Clear-page wipe in flight: the poll must not resurrect the rows it is deleting */
 let lastPollChange=Date.now(); /* last time the poll saw a change — keeps the poll fast while the student watches */

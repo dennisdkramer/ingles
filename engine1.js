@@ -1,4 +1,5 @@
 /* MOTOR 1 — popup, gravação, caderno, realce por trecho (Ctrl), âncoras robustas, seleção */
+/* Behaviour contract: FUNCTION.md - read it before changing anything here. */
 window.addEventListener("error",e=>{let b=document.getElementById("errb");
  if(!b){b=document.createElement("div");b.id="errb";b.style.cssText="background:#a33327;color:#fff;padding:8px 12px;font:14px system-ui;text-align:center";document.body.prepend(b);}
  b.innerHTML="⚠ ERRO: "+e.message;});
