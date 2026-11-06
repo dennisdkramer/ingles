@@ -15,7 +15,7 @@ header.brand{width:1400px;margin-left:15px;text-align:center;padding:20px 14px 0
 
 /* site-functions legend: ONE baked-in line, static HTML (FORMAT §2c) */
 .barhelp{width:1400px;margin:2px 0 8px 15px;padding:0 14px;text-align:center;font-size:14px;line-height:1.55;color:var(--ink)}
-.barhelp b{color:var(--ink);font-weight:600}
+.barhelp b{font-weight:600}
 
 /* the shell is not text to work with */
 header.brand,.control-bar,.barhelp,footer{user-select:none;-webkit-user-select:none}
@@ -51,9 +51,6 @@ button:focus-visible{outline:3px solid var(--tan);outline-offset:2px}
 a{color:var(--ink);font-weight:600}h2{font-family:'Playfair Display',serif;margin:.9em 0 .3em}
 .dim{color:#8a8072;font-size:13px}
 .pt{color:#5c5347;font-style:italic}.ptw{font-style:italic;color:var(--ptw);font-weight:600}
-
-/* lesson-12 vowel-map labels ONLY — not the pronunciation key */
-.ptsound{color:var(--ptw);font-style:italic}
 .listen{background:var(--tan);box-shadow:3px 3px 0 var(--ink)}
 details{background:#fff8ea;border:2px dashed var(--tan);border-radius:12px;padding:8px 12px;margin:10px 0}
 mark.nb{background:transparent;cursor:pointer}
@@ -64,13 +61,12 @@ mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-positio
 
 /* the legend DEMONSTRATES the note wash */
 .barhelp .hb-note{background:var(--bluebg);border-radius:3px}
-.pop{position:absolute;z-index:9;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:5px;width:auto;max-height:70vh;overflow:auto}
+.pop{position:absolute;z-index:9;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:5px;max-height:70vh;overflow:auto}
 .pop button{padding:4px 7px;margin:0;font-size:12.5px;border-radius:8px;box-shadow:2px 2px 0 var(--tan);height:24px;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
 .poprow{display:flex;justify-content:space-between;align-items:center;gap:4px;margin:3px 0}
 .poprow + .poprow{margin-top:5px}
 #nbNote{margin:2px 0 4px;white-space:pre-wrap;font-size:16px;text-align:center;font-style:italic;font-family:Georgia,'Times New Roman',serif}
 #nbKey{margin:2px 0 4px;white-space:pre-wrap;font-size:18px;text-align:center;font-family:Georgia,'Times New Roman',serif;color:var(--ptw)}
-#nbKey .pr-g{color:grey}
 
 /* a popup button that does not apply yet is greyed out (FUNCTION.md) */
 .pop button:disabled,.pop button.locked{opacity:.45;box-shadow:2px 2px 0 var(--tan);cursor:default}
@@ -94,7 +90,7 @@ mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-positio
 #noteLayer .ntr{position:absolute;border-radius:3px;mix-blend-mode:multiply;background:var(--bluebg)}
 
 /* colour palette, single source of truth */
-.pop.hlpalpop{padding:4px;border-radius:12px;width:auto;box-shadow:3px 3px 0 var(--tan)}
+.pop.hlpalpop{padding:4px;border-radius:12px;box-shadow:3px 3px 0 var(--tan)}
 .hlpal{display:flex;align-items:center;gap:4px}
 .hlpal button{width:14px;height:14px;min-width:14px;padding:0;margin:0;border:2px solid var(--ink);border-radius:6px;box-shadow:none;cursor:pointer}
 .hlpal button[data-c="yellow"]{background:rgba(255,233,112,.85)}
@@ -112,9 +108,9 @@ input.gap{border:0;border-bottom:2px solid var(--tan);background:#fff8ea;font:in
 .content-area textarea{resize:none}
 
 /* fieldset is a BLOCK; min-width:0 so it shrinks into a slot */
-fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8px 12px;min-width:0}
+fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8px 12px}
 label{margin-right:10px;cursor:pointer}
-#feed{display:block;width:100%;min-height:9em;font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:12px 14px;box-shadow:5px 5px 0 var(--tan);resize:none;field-sizing:content}
+#feed{display:block;width:100%;min-height:9em;font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:12px 14px;box-shadow:5px 5px 0 var(--tan);field-sizing:content}
 footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#8a8072}
 #printRoot{display:none}
 
@@ -123,11 +119,9 @@ h2 .h2sub{font-family:'Public Sans',sans-serif;font-size:.55em;font-weight:400;l
 /* A CHART IS A BLOCK; its columns/rows are content-aware, never set here */
 .chart{border-collapse:collapse;width:100%;margin:14px 0;background:var(--paper);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--tan)}
 
-.chart th,.chart td{border:1px solid var(--tan);padding:8px 12px;text-align:left;vertical-align:middle}
+.chart th,.chart td{border:1px solid var(--tan);padding:8px 12px;text-align:left}
 .chart thead th{background:var(--ink);color:var(--cream);font-weight:700;letter-spacing:.02em}
 .chart.center th,.chart.center td{text-align:center}
-.vowels th{text-align:center}
-.vowels td:nth-child(1),.vowels td:nth-child(2){text-align:center}
 .thsub{display:block;font-weight:400;font-size:.78em;letter-spacing:0;opacity:.82}:lang(pt){font-style:italic;font-weight:400}
 .chart tbody tr:nth-child(even) td{background:#fff8ea}
 .chips b{display:inline-block;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:2px 12px;margin:2px 6px 2px 0;font-weight:600}
@@ -149,7 +143,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
  .panel,.chart,.card{break-inside:avoid}
 }
 
-.panel{border:2px dashed var(--tan);border-radius:12px;padding:12px 16px;background:var(--paper);min-width:0}
+.panel{border:2px dashed var(--tan);border-radius:12px;padding:12px 16px;background:var(--paper)}
 
 /* vertical rhythm: a block never touches the block above or below it */
 .content-area > .panel{margin:14px 0}
@@ -161,7 +155,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .itemsize{width:100%}
 .itemsize-half{width:calc(50% - 7px)}
 .itemsize-third{width:calc(33.3333% - 9.3333px)}
-.itemrow{display:flex;gap:14px;margin:14px 0;align-items:stretch;flex-wrap:nowrap}
+.itemrow{display:flex;gap:14px;margin:14px 0;align-items:stretch}
 .itemrow>*{min-width:0;margin:0}
 .itemrow[data-cols="2"]>*{width:calc(50% - 7px)}
 .itemrow[data-cols="3"]>*{width:calc(33.3333% - 9.3333px)}
@@ -169,41 +163,40 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 /* .qgrid/.panel/.qopts cap NOTHING; this template is the qnum|stem layout, not an option count */
 .qgrid{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;column-gap:14px;row-gap:12px;min-width:0}
 
-.qgrid .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 30px}
-.qgrid .qnum{font-weight:700}
-.qgrid .qstem{font-weight:700}
+.qgrid .qopts,.qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 30px}
+.qgrid .qnum,.qgrid .qstem{font-weight:700}
 /* word + blank pairs: the block's own markup decides the arrangement - nothing here aligns the
    gaps, columns the items or right-justifies the pair */
 .blanks{display:flex;flex-wrap:wrap;gap:14px 24px;margin:10px 0}
 .blanks>div{display:flex;align-items:center;gap:6px}
-.blanks.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px 24px}
-.blanks>div input.gap{width:var(--gap-w,9em);flex:0 0 auto}
+.blanks.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.blanks>div input.gap{flex:0 0 auto}
 
 /* gloss placement is a per-block opt-in (.glossdrop), used when the page asks for it - never imposed */
 .blanks.glossdrop>div{flex-wrap:wrap}
 .blanks.glossdrop>div .ptw{flex:1 1 100%;text-align:right}
 .chart.glossdrop .ptw{display:block}
 
-
 .lead{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#5c5347;margin:.2em 0 .7em;line-height:1.5}
 .pt b,.lead b{font-style:normal}
 .prep{color:var(--tan);font-weight:700}
 .pr-g{color:grey}
-.blank{display:inline-block;width:3.2em;border-bottom:2px solid var(--tan);vertical-align:baseline}
+.blank{display:inline-block;width:3.2em;border-bottom:2px solid var(--tan)}
 .chart tr.note td{background:#fff8ea;font-style:italic;color:#5c5347;border-top:0;padding:10px 14px}
 
 /* a stack is one column unless the page asks to tile it (.cols): the page decides, not the CSS */
 /* a stack tiles to fill its block (dead space is the priority to avoid); .wide = one full-width column */
-.qgrid.stack,.qgrid.stack.cols{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(var(--rows,2),auto);grid-auto-columns:minmax(0,1fr);column-gap:28px;align-items:start}
+.qgrid.stack,.blanks.sent{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(var(--rows,2),auto);grid-auto-columns:minmax(0,1fr);column-gap:28px}
+.qgrid.stack{align-items:start}
 .qgrid.stack.wide{display:block}
 .qgrid.stack .qitem{margin:0 0 16px}
 .qgrid.stack .qline{display:flex;align-items:baseline;gap:8px}
-.qgrid.stack .qline .qnum{flex:0 0 auto;font-weight:700}
-.qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 30px;margin-top:4px}
-.blanks.sent,.blanks.sent.cols{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(var(--rows,2),auto);grid-auto-columns:minmax(0,1fr);column-gap:28px}
+.qgrid.stack .qline .qnum{flex:0 0 auto}
+.qgrid.stack .qopts{margin-top:4px}
+.blanks.sent{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(var(--rows,2),auto);grid-auto-columns:minmax(0,1fr);column-gap:28px}
 .blanks.sent.wide{display:block}
 .blanks.sent>div{display:block;margin:8px 0}
-.blanks.sent>div input.gap{display:inline-block;width:var(--gap-w,9em);margin:0 .2em;vertical-align:baseline}
+.blanks.sent>div input.gap{display:inline-block;margin:0 .2em}
 
 
 body.editing #hlLayer,body.editing #noteLayer{display:none}
@@ -252,7 +245,7 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 .jumpbtn{padding:6px 12px;flex:0 0 auto}
 .remlink{background:transparent;color:#7f1d1d;border:0;box-shadow:none;padding:0;font-weight:600;text-decoration:underline;cursor:pointer;flex:0 0 auto}
 .trow{display:flex;align-items:center;gap:8px;min-width:0}
-.trow .tname{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;min-width:0}
+.trow .tname{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .trow .temail{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1 1 auto;min-width:0}
 
 /* small half-full blocks centre their text */
@@ -288,7 +281,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 
 
 /* Tier-1 game block (engine3.js); the authored radios are what persists */
-.game{margin:14px 0;padding:12px 16px;background:var(--paper);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--tan);min-width:0}
+.game{margin:14px 0;padding:12px 16px;background:var(--paper);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--tan)}
 .game-stage{position:relative;height:240px;overflow:hidden;background:#eef4f7;border:2px dashed var(--tan);border-radius:12px;touch-action:manipulation}
 .game:not(.is-on) .game-stage{display:none}
 .game.is-on .game-list{display:none}
