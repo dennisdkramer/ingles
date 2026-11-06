@@ -59,7 +59,7 @@ be loud and a business page sober, and neither is more correct. Only these hold,
 The player's hands do the work: aim, time, catch, dodge. Each one drives ordinary `.qitem`s, so the answer
 that saves is the same radio a plain page would have.
 
-### `skeetRange` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
+### `skeetRange` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2 · **not shipped — cut; it did not carry its weight**
 
 - **does** — One moving target per item. Player aims with the cursor and takes **one shot**; a hit scores, a
   miss is spent. No spray, no endless retry — the constraint is what makes it feel like skill.
@@ -78,7 +78,7 @@ that saves is the same radio a plain page would have.
 - **can't** — recognition only; speed pressure makes it a poor fit for anything needing reflection.
 - **needs** — nothing; `engine4.js` ships it.
 
-### `brickRight` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
+### `brickRight` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2 · **not shipped — cut; it did not carry its weight**
 
 - **does** — Breakout. The paddle follows the pointer; the ball knocks out the brick carrying the right option.
   Wrong bricks cost a ball. A real game with real stakes, and the physics is two rectangles and a vector.
@@ -116,7 +116,7 @@ that saves is the same radio a plain page would have.
 - **can't** — recognition at speed only, and it is the most expensive of the arcade set.
 - **needs** — shared runner + gravity loop.
 
-### `raceLane` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 3 · **built: engine4.js**
+### `raceLane` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 3 · **not shipped — cut; it did not carry its weight**
 
 - **does** — Answer to accelerate. Correct answers push the avatar toward the finish; wrong ones stall it. The
   ghost of the student's best run is the opponent, so there is competition without a server.
@@ -131,7 +131,7 @@ that saves is the same radio a plain page would have.
 
 Slower, thinking games. No timer pressure; the tension is deduction.
 
-### `lockCode` — page · cost B · evidence gap — tests 2 · fun 3 · reuse 3 · **built: engine4.js**
+### `lockCode` — page · cost B · evidence gap — tests 2 · fun 3 · reuse 3 · **not shipped — cut; it did not carry its weight**
 
 - **does** — The section is an escape room. Each correct answer releases one digit; three digits open the next
   block. Turns loose exercises into one thing the student is trying to do.
@@ -213,7 +213,7 @@ No motion; the game is progression and risk. Cheapest of the set and they suit e
 - **can't** — one long arc, so it wants to be the page's quiz, not a mid-lesson drill.
 - **needs** — shared runner.
 
-### `boardQuiz` — page · cost A · evidence radio — tests 2 · fun 3 · reuse 3 · **built: engine4.js**
+### `boardQuiz` — page · cost A · evidence radio — tests 2 · fun 3 · reuse 3 · **not shipped — cut; it did not carry its weight**
 
 - **does** — A grid of categories by difficulty; each cell opens one item. Points awarded, two players or teams
   alternate. The one structure that works offline with a teacher driving it.
@@ -222,7 +222,7 @@ No motion; the game is progression and risk. Cheapest of the set and they suit e
 - **can't** — the difficulty axis has to be real, or a column is just an arbitrary label.
 - **needs** — `none` (markup + jump links).
 
-### `spinPick` — beat · cost B · evidence none — tests 0 · fun 2 · reuse 3 · **built: engine4.js**
+### `spinPick` — beat · cost B · evidence none — tests 0 · fun 2 · reuse 3 · **not shipped — cut; it did not carry its weight**
 
 - **does** — Chooses which item comes next: a wheel or a slot lever. Removes the "1, 2, 3" march and makes the
   order feel live. Two skins, one mechanism.
