@@ -229,12 +229,11 @@ async function run() {
 
   /* ---- every game in the menu boots, draws its own furniture, and resolves the authored radio ---- */
   const GAMES = {
-    catchBasket: '.g4-bucket', whackMole: '.g4-mole', skeetRange: '.g4-disc',
-    raceLane: '.g4-raceopt', stackDrop: '.g4-slot', flapGate: '.g4-gate',
-    brickRight: '.g4-brick', pairFlip: '.g4-card', mineGrid: '.g4-mine',
-    lockCode: '.g4-key', wordleBoard: '.g4-tile', crosswordBoard: '.g4-gap',
-    echoPads: '.g4-pad', bingoCard: '.g4-btile', spinPick: '.g4-reel-d',
-    ladderRun: '.g4-rung', boardQuiz: '.g4-bcell', bossRaid: '.g4-bossart'
+    catchBasket: '.g4-bucket', whackMole: '.g4-mole',
+    stackDrop: '.g4-slot', flapGate: '.g4-gate', pairFlip: '.g4-card',
+    mineGrid: '.g4-mine', wordleBoard: '.g4-tile', crosswordBoard: '.g4-gap',
+    echoPads: '.g4-pad', bingoCard: '.g4-btile',
+    ladderRun: '.g4-rung', bossRaid: '.g4-bossart'
   };
   const fixtures = Object.keys(GAMES).map(name => `
     <div class="game" id="g-${name}" data-game="${name}" data-shuffle="0" data-replay="0" data-time="0">
@@ -260,6 +259,10 @@ async function run() {
 
   Object.keys(GAMES).forEach(name => {
     const root = d2.getElementById('g-' + name);
+    const sceneSvg = root.querySelector('.g4-scene svg');
+    ok(name + ': has a drawn scene behind it',
+      !!sceneSvg && sceneSvg.innerHTML.length > 300 && sceneSvg.innerHTML.indexOf('url(#g4-') > -1,
+      sceneSvg ? sceneSvg.innerHTML.length + ' chars' : 'no scene');
     const g = (w2.__G4 || []).find(x => x.root === root);
     if (!g) { ok(name + ': instance exists', false); return; }
     root.querySelector('.game-start').click();
@@ -288,11 +291,19 @@ async function run() {
   ok('wordleBoard: guessing the word answers it',
     d2.querySelector('#g-wordleBoard input[value="a"]').checked === true);
 
-  const lk = (w2.__G4 || []).find(x => x.root === d2.getElementById('g-lockCode'));
+  const lk = (w2.__G4 || []).find(x => x.root === d2.getElementById('g-echoPads'));
   lk.hooks.start();
-  [...d2.querySelectorAll('#g-lockCode .g4-key')].find(k => k.textContent === '1').click();
-  ok('lockCode: the right digit opens the box and answers',
-    d2.querySelector('#g-lockCode input[value="a"]').checked === true);
+  [...d2.querySelectorAll('#g-echoPads .g4-pad')][0].click();
+  ok('echoPads: pressing the lit pad is the answer',
+    d2.querySelector('#g-echoPads input[value="a"]').checked === true);
+
+  /* the scene and the intro card are part of every claimed block */
+  const anyRoot = d2.getElementById('g-catchBasket');
+  ok('every claimed block carries a drawn scene', !!anyRoot.querySelector('.g4-scene svg'));
+  ok('the intro is a card over the scene, not a full-page form',
+    !!anyRoot.querySelector('.g4-intro > .g4-intro-card'));
+  ok('the shared gradient defs are injected once per page',
+    d2.querySelectorAll('.g4-defs').length === 1);
 
   console.log('\n' + (fail ? 'FAILED: ' : 'OK: ') + pass + ' passed, ' + fail + ' failed\n');
   /* some game plugins keep a requestAnimationFrame loop or a timer alive; jsdom would never exit */

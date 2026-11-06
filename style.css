@@ -313,7 +313,10 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
    nothing claimed the block (engine4.js missing/failed, or an unknown data-game) — no .g4-ready */
 .game.g4-ready .game-list{display:none}
 .game:not(.g4-ready) .game-start{display:none}
-.game.g4 .g4-intro{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:14px 18px;text-align:center;background:radial-gradient(ellipse at 50% 42%,rgba(253,250,242,.94),rgba(253,250,242,.8) 58%,rgba(234,243,248,.62))}
+.game.g4 .g4-intro{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:12px}
+/* the intro is a CARD over the game's own scene, so the art stays visible around it — the block reads
+   as the game it is about to become, not as a form with a button under it */
+.g4-intro-card{display:flex;flex-direction:column;align-items:center;gap:9px;max-width:min(560px,94%);padding:14px 18px;text-align:center;background:rgba(253,250,242,.92);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 rgba(185,133,76,.75);backdrop-filter:blur(2px)}
 .game.g4-ready.is-on .g4-intro{display:none}
 /* the poster: a still of the game's own art, drawn behind the intro so the block looks like the game
    it is about to become. Never interactive (pointer-events:none) and never a timer. */
@@ -333,6 +336,11 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-intro-meta b{font-weight:800}
 .g4-intro .game-start{font-size:16px;padding:10px 22px}
 .game.g4 .g4-stage{position:relative;margin:10px 0 0;height:280px;overflow:hidden;background:linear-gradient(#eaf3f8,#dce9f2);border:2px solid var(--ink);border-radius:14px}
+/* the scene: a finished picture of the place the game happens in; it sits under everything, for the
+   whole run, so play never happens on a bare colour */
+.g4-scene{position:absolute;inset:0;z-index:0;overflow:hidden}
+.g4-scene svg{display:block;width:100%;height:100%}
+.g4-defs{position:absolute;width:0;height:0;overflow:hidden}
 .g4-hud{position:absolute;right:10px;top:8px;z-index:5;display:flex;gap:12px;font:700 14px 'Public Sans',sans-serif;color:var(--ink)}
 .g4-hud .clock{min-width:3.2em;text-align:right}
 .g4-prompt{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:4;max-width:70%;padding:5px 16px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);font-weight:700;font-size:15px;text-align:center;opacity:0;transition:opacity .28s ease}

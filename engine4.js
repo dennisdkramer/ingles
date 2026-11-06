@@ -82,6 +82,7 @@ window.GAMES4 = (function () {
       } catch (e) { /* no sound is not an error */ }
     }
     return {
+      tone: tone,
       hit: function (on) { if (!on) return; tone(680, 90); setTimeout(function () { tone(1020, 110); }, 65); },
       miss: function (on) { if (on) tone(150, 200, 'sawtooth', 0.04); },
       win: function (on) {
@@ -165,8 +166,9 @@ window.GAMES4 = (function () {
        still of that game's art. So before play the block reads as the game it is about to become,
        not as a form with a button under it. The block's own how-text and Play button move inside. */
     var intro = el('div', 'g4-intro');
+    var card = el('div', 'g4-intro-card');
     var how = root.querySelector('.game-how');
-    if (how) intro.appendChild(how);
+    if (how) card.appendChild(how);
     var rounds = Math.max(0, num(root, 'data-rounds', 0)) || this.items.length;
     var meta = el('ul', 'g4-intro-meta');
     var bits = ['<li><b>' + rounds + '</b> ' + (rounds === 1 ? 'round' : 'rounds') + '</li>'];
@@ -176,9 +178,15 @@ window.GAMES4 = (function () {
       return i.opts.length;
     })) : 1) + '</b></li>');
     meta.innerHTML = bits.join('');
-    intro.appendChild(meta);
+    card.appendChild(meta);
+    intro.appendChild(card);
     this.intro = intro;
     var stage = el('div', 'g4-stage');
+    /* the scene: a finished picture of the place this game happens in, behind everything. It stays
+       for the whole run, so play never happens on a bare colour. */
+    var scene = el('div', 'g4-scene');
+    try { if (SCENE[this.name]) scene.innerHTML = SCENE[this.name](); } catch (e) { /* art never breaks play */ }
+    stage.appendChild(scene);
     var hud = el('div', 'g4-hud');
     hud.innerHTML = '<span class="wave"></span><span class="score"></span><span class="clock"></span>';
     stage.appendChild(hud);
@@ -200,7 +208,7 @@ window.GAMES4 = (function () {
     if (!btn) { btn = el('button', 'game-start', '▶ Play'); btn.type = 'button'; }
     if (!btn.getAttribute('type')) btn.setAttribute('type', 'button');
     btn.textContent = '▶ Play';
-    intro.appendChild(btn);          /* the button lives on the intro screen, not under the block */
+    card.appendChild(btn);           /* the button lives on the intro card, not under the block */
     btn.addEventListener('click', function () { self.start(); });
     this.btn = btn;
     this.view = this.plugin ? this.plugin(this) : null;
@@ -599,6 +607,65 @@ window.GAMES4 = (function () {
     return { show: show, mark: mark, clear: clear };
   };
 
+  /* ============================ SCENES ============================
+     Full-strength illustrated backdrops, one per game. Not a tint: a finished picture with sky,
+     depth and foreground, drawn with gradients so it reads as a place rather than a coloured box.
+     The palette is deliberately wider than the page's six colours — a scene is a picture, not UI.
+
+     All gradient and filter ids live in ONE injected <svg class="g4-defs"> (see boot), so any number
+     of game blocks on one page share them and no id can collide. Every scene is a 400x260 viewBox the
+     stage scales up, anchored to the bottom so the ground never floats in a letterbox. */
+  var DEFS = [
+    '<svg class="g4-defs" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">',
+    '<defs>',
+    '<linearGradient id="g4-dawn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fd0f0"/><stop offset=".55" stop-color="#cfe9f5"/><stop offset="1" stop-color="#fff3d9"/></linearGradient>',
+    '<linearGradient id="g4-dusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b4b8a"/><stop offset=".5" stop-color="#c86f8a"/><stop offset="1" stop-color="#ffcf9b"/></linearGradient>',
+    '<linearGradient id="g4-night" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1026"/><stop offset=".6" stop-color="#182b52"/><stop offset="1" stop-color="#2f2255"/></linearGradient>',
+    '<linearGradient id="g4-studio" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#101832"/><stop offset=".55" stop-color="#243a63"/><stop offset="1" stop-color="#3d2a58"/></linearGradient>',
+    '<linearGradient id="g4-cave" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b1220"/><stop offset=".6" stop-color="#3a1f2b"/><stop offset="1" stop-color="#6b2f2a"/></linearGradient>',
+    '<linearGradient id="g4-grass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7cc36a"/><stop offset="1" stop-color="#3d7a3a"/></linearGradient>',
+    '<linearGradient id="g4-soil" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9764b"/><stop offset="1" stop-color="#5d3a24"/></linearGradient>',
+    '<linearGradient id="g4-wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c98f5b"/><stop offset="1" stop-color="#8a562f"/></linearGradient>',
+    '<linearGradient id="g4-paper" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffdf5"/><stop offset="1" stop-color="#e9e0c9"/></linearGradient>',
+    '<linearGradient id="g4-brick" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d99a76"/><stop offset="1" stop-color="#a4603f"/></linearGradient>',
+    '<linearGradient id="g4-sand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0d9a8"/><stop offset="1" stop-color="#c99e63"/></linearGradient>',
+    '<linearGradient id="g4-curtain" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a3233c"/><stop offset="1" stop-color="#4c0f1d"/></linearGradient>',
+    '<radialGradient id="g4-glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".95"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient>',
+    '<radialGradient id="g4-vignette" cx=".5" cy=".45" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></radialGradient>',
+    '<filter id="g4-soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4"/></filter>',
+    '</defs></svg>'
+  ].join('');
+
+  /* small parts, so twelve scenes stay readable and keep the same sense of depth */
+  function sun(cx, cy, r) {
+    return '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r * 3.4) + '" fill="url(#g4-glow)"/>'
+      + '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="#fff1c4"/>';
+  }
+  function cloud(cx, cy, s, o) {
+    return '<g opacity="' + (o || .92) + '" fill="#fff"><ellipse cx="' + cx + '" cy="' + cy
+      + '" rx="' + (26 * s) + '" ry="' + (11 * s) + '"/>'
+      + '<ellipse cx="' + (cx - 16 * s) + '" cy="' + (cy + 4 * s) + '" rx="' + (16 * s) + '" ry="' + (8 * s) + '"/>'
+      + '<ellipse cx="' + (cx + 18 * s) + '" cy="' + (cy + 5 * s) + '" rx="' + (18 * s) + '" ry="' + (9 * s) + '"/></g>';
+  }
+  function hills(fill, y, o) {
+    return '<path d="M0 ' + y + ' Q70 ' + (y - 26) + ' 140 ' + y + ' T280 ' + y + ' T420 ' + y
+      + ' V260 H0Z" fill="' + fill + '" opacity="' + (o || 1) + '"/>';
+  }
+  function stars(n) {
+    var out = '', seed = 7;
+    for (var i = 0; i < n; i++) {
+      seed = (seed * 61 + 17) % 397;
+      out += '<circle cx="' + (seed % 400) + '" cy="' + (12 + ((seed * 3) % 90)) + '" r="'
+        + (i % 3 === 0 ? 1.6 : 1) + '" fill="#fff" opacity="' + (.35 + (i % 4) * .16) + '"/>';
+    }
+    return out;
+  }
+  function frame(inner) {
+    return '<svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">'
+      + inner + '<rect width="400" height="260" fill="url(#g4-vignette)"/></svg>';
+  }
+
+
   /* ---------------- posters: one still per game, drawn behind the intro overlay ----------------
      Each uses the same classes the live game uses, so the picture is styled by the same CSS, and the
      labels are the lesson's own option words — the student sees this lesson's content in the game's
@@ -607,6 +674,133 @@ window.GAMES4 = (function () {
     return (items[0].opts || []).slice(0, n || 3).map(function (o) { return o.text; });
   }
   function abs(node, css) { node.style.cssText = css; return node; }
+  /* one finished scene per game — the picture the game actually happens in */
+  var SCENE = {
+    /* orchard: baskets wait on the grass under the trees */
+    catchBasket: function () {
+      return frame('<rect width="400" height="260" fill="url(#g4-dawn)"/>' + sun(322, 46, 20)
+        + cloud(70, 34, .9) + cloud(196, 22, .7, .8)
+        + hills('#a8d8b4', 168, .9) + hills('url(#g4-grass)', 196)
+        + '<g fill="#4a7c46"><rect x="34" y="150" width="10" height="46" rx="4"/>'
+        + '<rect x="356" y="158" width="9" height="40" rx="4"/></g>'
+        + '<g fill="#5f9b52"><circle cx="39" cy="140" r="26"/><circle cx="361" cy="148" r="22"/>'
+        + '<circle cx="18" cy="158" r="16"/></g>'
+        + '<g fill="#c0392b" opacity=".85"><circle cx="31" cy="136" r="4"/><circle cx="49" cy="146" r="4"/>'
+        + '<circle cx="356" cy="144" r="3.5"/><circle cx="368" cy="156" r="3.5"/></g>');
+    },
+    /* garden at dusk: holes in the soil, hills behind */
+    whackMole: function () {
+      return frame('<rect width="400" height="260" fill="url(#g4-dusk)"/>' + sun(84, 58, 15)
+        + hills('#6b4a6e', 150, .85) + hills('#3f2d4a', 176)
+        + '<rect y="196" width="400" height="64" fill="url(#g4-soil)"/>'
+        + '<g fill="#2d1a12" opacity=".55"><ellipse cx="60" cy="228" rx="34" ry="9"/>'
+        + '<ellipse cx="200" cy="244" rx="40" ry="10"/><ellipse cx="340" cy="226" rx="32" ry="9"/></g>'
+        + '<g stroke="#7a5030" stroke-width="2" opacity=".5"><path d="M0 214h400"/>'
+        + '<path d="M0 238h400" stroke-dasharray="18 12"/></g>');
+    },
+    /* building site at sunset: the tower goes up here */
+    stackDrop: function () {
+      return frame('<rect width="400" height="260" fill="url(#g4-dusk)"/>' + sun(318, 52, 22)
+        + '<g fill="#3c3350" opacity=".95"><rect x="16" y="150" width="46" height="70"/>'
+        + '<rect x="72" y="128" width="34" height="92"/><rect x="300" y="140" width="52" height="60"/>'
+        + '<rect x="358" y="164" width="30" height="46"/></g>'
+        + '<rect y="212" width="400" height="48" fill="#241d33"/>'
+        + '<g stroke="#2a2238" stroke-width="4" fill="none"><path d="M150 212V96h70"/><path d="M150 110h44"/></g>'
+        + '<rect x="214" y="96" width="3" height="10" fill="#8f7f5e"/>');
+    },
+    /* open sky: the flier's playground */
+    flapGate: function () {
+      return frame('<rect width="400" height="260" fill="url(#g4-dawn)"/>' + sun(60, 40, 18)
+        + cloud(120, 52, 1.1) + cloud(268, 34, .8, .85) + cloud(340, 76, .95, .7) + cloud(40, 96, .7, .6)
+        + hills('#bfe3c6', 190, .85) + hills('url(#g4-grass)', 222)
+        + '<g stroke="#3f6b45" stroke-width="3" fill="none" opacity=".55"><path d="M18 232q8-10 16 0"/>'
+        + '<path d="M60 246q8-10 16 0"/><path d="M320 240q8-10 16 0"/></g>');
+    },
+    /* desk: cards laid out on wood */
+    pairFlip: function () {
+      return frame('<rect width="400" height="260" fill="url(#g4-paper)"/>'
+        + '<g stroke="#cfc3a3" stroke-width="1" opacity=".7"><path d="M0 40h400"/><path d="M0 78h400"/></g>'
+        + '<rect y="176" width="400" height="84" fill="url(#g4-wood)"/>'
+        + '<g stroke="#6f4523" stroke-width="1" opacity=".45"><path d="M0 196h400"/>'
+        + '<path d="M0 214h400"/><path d="M0 236h400"/></g>'
+        + '<rect y="170" width="400" height="8" fill="#5d3a1e" opacity=".5"/>');
+    },
+
+    /* minefield: dusty dunes and warning stakes */
+    mineGrid: function () {
+      return frame('<rect width="400" height="260" fill="url(#g4-dawn)"/>'
+        + '<path d="M0 150 Q120 120 240 152 T400 148 V260 H0Z" fill="url(#g4-sand)"/>'
+        + '<path d="M0 190 Q140 168 260 194 T400 186 V260 H0Z" fill="#b98c54" opacity=".85"/>'
+        + '<g stroke="#8a6537" stroke-width="3" opacity=".8"><path d="M48 206v-26"/><path d="M352 214v-26"/></g>'
+        + '<g stroke="#7a5427" stroke-width="2" opacity=".6" stroke-dasharray="10 10"><path d="M0 246h400"/></g>'
+        + '<g fill="#9a7a4a" opacity=".7"><circle cx="120" cy="238" r="4"/>'
+        + '<circle cx="248" cy="230" r="3"/><circle cx="300" cy="248" r="5"/></g>');
+    },
+    /* tiled wall: the word board hangs on bricks */
+    wordleBoard: function () {
+      var bricks = '', r, c, y;
+      for (r = 0; r < 7; r++) {
+        y = 12 + r * 36;
+        bricks += '<path d="M0 ' + y + 'h400"/>';
+        for (c = 0; c < 10; c++) bricks += '<path d="M' + (c * 40 + (r % 2 ? 0 : 20)) + ' ' + y + 'v36"/>';
+      }
+      return frame('<rect width="400" height="260" fill="url(#g4-brick)"/>'
+        + '<g stroke="#7d4526" stroke-width="2" opacity=".55">' + bricks + '</g>'
+        + '<rect x="112" y="34" width="176" height="192" rx="10" fill="#1d2733" opacity=".22"/>');
+    },
+    /* newspaper on a desk */
+    crosswordBoard: function () {
+      return frame('<rect width="400" height="260" fill="url(#g4-wood)"/>'
+        + '<rect x="18" y="14" width="364" height="232" rx="6" fill="url(#g4-paper)" filter="url(#g4-soft)" opacity=".55"/>'
+        + '<rect x="18" y="14" width="364" height="232" rx="6" fill="url(#g4-paper)"/>'
+        + '<g fill="#8a8371" opacity=".5"><rect x="34" y="30" width="120" height="8" rx="3"/>'
+        + '<rect x="34" y="46" width="80" height="6" rx="3"/></g>'
+        + '<g stroke="#cfc3a3" stroke-width="1" opacity=".6"><path d="M0 30h400"/></g>');
+    },
+    /* night arcade: the pads glow on a neon grid */
+    echoPads: function () {
+      return frame('<rect width="400" height="260" fill="url(#g4-night)"/>' + stars(26)
+        + '<circle cx="200" cy="150" r="120" fill="url(#g4-glow)" opacity=".28"/>'
+        + '<g stroke="#4ad4ff" stroke-width="1.4" opacity=".35"><path d="M0 214h400"/><path d="M0 236h400"/>'
+        + '<path d="M40 200l-30 60"/><path d="M150 200l-20 60"/><path d="M250 200l20 60"/>'
+        + '<path d="M360 200l30 60"/></g>'
+        + '<g fill="#ff5fa2" opacity=".5"><circle cx="60" cy="60" r="2"/><circle cx="340" cy="48" r="2"/>'
+        + '<circle cx="200" cy="34" r="2"/></g>');
+    },
+    /* bingo hall: curtain, lights, a stage to stand on */
+    bingoCard: function () {
+      return frame('<rect width="400" height="260" fill="url(#g4-studio)"/>'
+        + '<path d="M0 0h400v64q-100 40-200 0T0 64Z" fill="url(#g4-curtain)"/>'
+        + '<g fill="#ffd76a" opacity=".55"><circle cx="80" cy="30" r="4"/><circle cx="160" cy="18" r="4"/>'
+        + '<circle cx="240" cy="18" r="4"/><circle cx="320" cy="30" r="4"/></g>'
+        + '<rect y="216" width="400" height="44" fill="#2a1c33"/>'
+        + '<g stroke="#54406a" stroke-width="2" opacity=".7"><path d="M0 216h400"/></g>');
+    },
+    /* studio: spotlights over the ladder */
+    ladderRun: function () {
+      return frame('<rect width="400" height="260" fill="url(#g4-studio)"/>'
+        + '<path d="M120 260 60 0h60l40 260Z" fill="#8fb6ff" opacity=".16"/>'
+        + '<path d="M280 260 340 0h-60l-40 260Z" fill="#ffd0e6" opacity=".14"/>'
+        + '<rect y="222" width="400" height="38" fill="#141c33"/>'
+        + '<g stroke="#3d4f7d" stroke-width="2" opacity=".8"><path d="M0 222h400"/></g>'
+        + '<g fill="#ffd76a" opacity=".7"><circle cx="40" cy="18" r="3"/><circle cx="200" cy="10" r="3"/>'
+        + '<circle cx="360" cy="18" r="3"/></g>');
+    },
+    /* arena: torches and a floor */
+    bossRaid: function () {
+      return frame('<rect width="400" height="260" fill="url(#g4-cave)"/>'
+        + '<path d="M0 0h400v40q-60 26-120 0t-120 0T0 40Z" fill="#160d16"/>'
+        + '<g><circle cx="46" cy="74" r="30" fill="url(#g4-glow)" opacity=".8"/>'
+        + '<rect x="42" y="74" width="8" height="30" fill="#3a2a22"/></g>'
+        + '<g><circle cx="354" cy="74" r="30" fill="url(#g4-glow)" opacity=".8"/>'
+        + '<rect x="350" y="74" width="8" height="30" fill="#3a2a22"/></g>'
+        + '<rect y="214" width="400" height="46" fill="#241419"/>'
+        + '<g stroke="#4a2a2b" stroke-width="2" opacity=".8"><path d="M0 214h400"/></g>');
+    }
+  };
+  /* ---------------- posters: one still per game, drawn behind the intro overlay ----------------
+     Each uses the same classes the live game uses, so the picture is styled by the same CSS, and the
+     labels are the lesson's own option words. Nothing here reads or writes an answer. */
   var POSTER = {
     catchBasket: function (box, items) {
       var row = el('div', 'g4-bit');
@@ -637,20 +831,6 @@ window.GAMES4 = (function () {
         box.appendChild(h);
       }
     },
-    skeetRange: function (box, items) {
-      opts0(items, 3).forEach(function (t, i) {
-        box.appendChild(abs(el('div', 'g4-disc g4-bit', esc(t)),
-          'left:' + (8 + i * 30) + '%;top:' + (24 + i * 12) + '%;width:26%;padding:10px 8px'));
-      });
-    },
-    raceLane: function (box, items) {
-      opts0(items, 4).forEach(function (t, i) {
-        var lane = abs(el('div', 'g4-raceopt g4-bit'),
-          'left:6%;top:' + (14 + i * 19) + '%;width:' + (34 + i * 12) + '%;');
-        lane.innerHTML = '<i class="g4-car"></i><span>' + esc(t) + '</span>';
-        box.appendChild(lane);
-      });
-    },
     stackDrop: function (box, items) {
       opts0(items, 3).forEach(function (t, i) {
         box.appendChild(abs(el('div', 'g4-slot g4-bit', esc(t)),
@@ -665,15 +845,6 @@ window.GAMES4 = (function () {
           'left:56%;top:' + (12 + i * 26) + '%;width:38%;height:18%'));
       });
       box.appendChild(abs(el('div', 'g4-car g4-bit'), 'left:12%;top:40%;width:44px;height:26px'));
-    },
-    brickRight: function (box, items) {
-      var texts = opts0(items, 4);
-      for (var i = 0; i < 8; i++) {
-        box.appendChild(abs(el('div', 'g4-brick g4-bit', texts[i % texts.length] || ''),
-          'left:' + (4 + (i % 4) * 24) + '%;top:' + (8 + Math.floor(i / 4) * 16) + '%;width:22%;height:13%'));
-      }
-      box.appendChild(abs(el('div', 'g4-ball g4-bit'), 'left:46%;bottom:26%;width:18px;height:18px'));
-      box.appendChild(abs(el('div', 'g4-paddle g4-bit'), 'left:34%;bottom:9%;width:32%;height:12px'));
     },
     pairFlip: function (box, items) {
       var texts = opts0(items, 4);
@@ -693,16 +864,6 @@ window.GAMES4 = (function () {
       }
     },
 
-    lockCode: function (box, items) {
-    var dial = el('div', 'g4-dial g4-bit');
-    for (var i = 0; i < 3; i++) dial.appendChild(el('div', 'g4-digit', ''));
-    abs(dial, 'left:0;right:0;top:6%;display:flex;justify-content:center;gap:8px');
-    box.appendChild(dial);
-    var pad = el('div', 'g4-pad g4-bit');
-    for (var k = 1; k <= 5; k++) pad.appendChild(el('div', 'g4-key', String(k)));
-    abs(pad, 'left:6%;right:6%;bottom:8%;display:grid;grid-template-columns:repeat(5,1fr);gap:6px');
-    box.appendChild(pad);
-  },
   wordleBoard: function (box, items) {
     var word = String((items[0].opts[0] || {}).text || '').slice(0, 5);
     var grid = el('div', 'g4-wgrid g4-bit');
@@ -752,14 +913,6 @@ window.GAMES4 = (function () {
     abs(card, 'left:50%;top:50%;transform:translate(-50%,-50%);width:78%;height:74%;display:grid;grid-template-columns:repeat(3,1fr);gap:6px');
     box.appendChild(card);
   },
-  spinPick: function (box, items) {
-    var reel = el('div', 'g4-reel g4-bit');
-    ['7', '·', '3'].forEach(function (ch, i) {
-      reel.appendChild(el('div', 'g4-reel-d', i === 1 ? (String(items.length)) : ch));
-    });
-    abs(reel, 'left:50%;top:30%;transform:translateX(-50%);display:flex;gap:8px');
-    box.appendChild(reel);
-  },
   ladderRun: function (box, items) {
     var rungs = el('div', 'g4-rungs g4-bit');
     for (var i = 0; i < 8; i++) {
@@ -767,16 +920,6 @@ window.GAMES4 = (function () {
     }
     abs(rungs, 'left:6%;top:14%;bottom:14%;display:flex;flex-direction:column-reverse;gap:3px;width:64px');
     box.appendChild(rungs);
-  },
-  boardQuiz: function (box, items) {
-    var cols = Math.max(2, (items[0].opts || []).length);
-    var grid = el('div', 'g4-bgrid g4-bit');
-    grid.style.gridTemplateColumns = 'repeat(' + cols + ',1fr)';
-    for (var i = 0; i < cols * 3; i++) {
-      grid.appendChild(el('div', 'g4-bcell' + (i === 1 ? ' on' : ''), String((i % 3) + 1)));
-    }
-    abs(grid, 'left:50%;top:52%;transform:translate(-50%,-50%);width:80%');
-    box.appendChild(grid);
   },
   bossRaid: function (box, items) {
     var art = el('div', 'g4-bossart g4-bit');
@@ -787,7 +930,7 @@ window.GAMES4 = (function () {
       'left:14%;right:14%;top:56%;height:14px'));
     box.appendChild(abs(el('div', 'g4-hearts g4-bit', '●●●'), 'left:14%;top:4%;'));
   }
-};
+  };
 
 function say(text, lang) {
     try {
@@ -801,89 +944,7 @@ function say(text, lang) {
     } catch (e) { return false; }
   }
 
-  /* ---------------- skeetRange: aim, ONE shot per item ----------------
-     Each option is a disc drifting on its own slow arc; the cursor is the crosshair. One click is
-     the shot — no spray, no retry, which is exactly what makes it feel like skill. */
-  PLUGINS.skeetRange = function (r) {
-    var stage = r.stage;
-    var box = el('div', 'g4-skeet');
-    var discs = [];
-    stage.appendChild(box);
-    function clear() { box.innerHTML = ''; discs = []; }
-    function show(item) {
-      clear();
-      item.opts.forEach(function (o, i) {
-        var d = el('button', 'g4-disc', o.text);
-        d.type = 'button';
-        d.setAttribute('data-v', o.value);
-        d.style.top = (18 + (i % 3) * 26) + '%';
-        d.style.animationDuration = (5.2 + i * 1.1) + 's';
-        d.style.animationDelay = (i % 2 ? '-2.4s' : '0s');
-        d.addEventListener('click', function (e) {
-          e.stopPropagation();
-          if (r.phase === 'play') r.pick(o.value);
-        });
-        box.appendChild(d);
-        discs.push(d);
-      });
-    }
-    function mark(item, hit, value) {
-      discs.forEach(function (d) {
-        var v = d.getAttribute('data-v');
-        if (v === value) d.classList.add(hit ? 'ok' : 'no');
-        else if (!hit && v === item.key) d.classList.add('reveal');
-        d.classList.add('halt');
-      });
-    }
-    return { show: show, mark: mark, clear: clear };
-  };
 
-  /* ---------------- raceLane: answer to accelerate ----------------
-     Correct answers push the avatar toward the finish, wrong ones stall it, and the ghost of the
-     student's best run is the opponent — competition without a server. */
-  PLUGINS.raceLane = function (r) {
-    var stage = r.stage;
-    var box = el('div', 'g4-race');
-    var trackB = el('div', 'g4-lane ghost'), trackA = el('div', 'g4-lane');
-    var carA = el('div', 'g4-car'), carB = el('div', 'g4-car');
-    var opts = el('div', 'g4-raceopts');
-    trackA.appendChild(carA); trackB.appendChild(carB);
-    box.appendChild(trackB); box.appendChild(trackA); box.appendChild(opts);
-    stage.appendChild(box);
-    var ghostKey = 'g4ghost:' + (r.root.id || 'race') + ':' + r.total;
-    function ghost() { try { return Number(localStorage.getItem(ghostKey)) || 0; } catch (e) { return 0; } }
-    function place() {
-      var done = r.total ? Math.min(1, r.score / r.total) : 0;
-      carA.style.left = (done * 100).toFixed(1) + '%';
-      carB.style.left = (Math.min(1, ghost()) * 100).toFixed(1) + '%';
-    }
-    function clear() { opts.innerHTML = ''; place(); }
-    function show(item) {
-      opts.innerHTML = '';
-      place();
-      item.opts.forEach(function (o) {
-        var b = el('button', 'g4-raceopt', o.text);
-        b.type = 'button';
-        b.setAttribute('data-v', o.value);
-        b.addEventListener('click', function () { if (r.phase === 'play') r.pick(o.value); });
-        opts.appendChild(b);
-      });
-    }
-    function mark(item, hit, value) {
-      [].forEach.call(opts.querySelectorAll('.g4-raceopt'), function (b) {
-        var v = b.getAttribute('data-v');
-        if (v === value) b.classList.add(hit ? 'ok' : 'no');
-        else if (!hit && v === item.key) b.classList.add('reveal');
-      });
-      place();
-      if (hit) {
-        try {
-          if (r.score / r.total > ghost()) localStorage.setItem(ghostKey, String(r.score / r.total));
-        } catch (e) { /* private mode is not an error */ }
-      }
-    }
-    return { show: show, mark: mark, clear: clear };
-  };
 
   /* ---------------- stackDrop: drop the sliding block into a gap ----------------
      The gaps under the block are the options. Press (click / Space) to drop: land on a gap and that
@@ -1004,87 +1065,6 @@ function say(text, lang) {
     return { show: show, mark: mark, clear: clear, flap: flap };
   };
 
-  /* ---------------- brickRight: breakout, but the bricks are the options ----------------
-     The paddle follows the pointer, the ball does the choosing: the brick it knocks out is the
-     answer. Two rectangles and a vector is the whole physics. Reduced motion turns the bricks into
-     plain buttons. */
-  PLUGINS.brickRight = function (r) {
-    var stage = r.stage;
-    var box = el('div', 'g4-brk'), field = el('div', 'g4-bricks');
-    var canvas = document.createElement('canvas');
-    canvas.className = 'g4-canvas';
-    box.appendChild(field); box.appendChild(canvas);
-    stage.appendChild(box);
-    var raf = 0, live = false, bricks = [], paddleX = 0.5, ball = null, key = null, ctx = null;
-
-    function stop() { live = false; if (raf && window.cancelAnimationFrame) window.cancelAnimationFrame(raf); raf = 0; }
-    function clear() { stop(); field.innerHTML = ''; bricks = []; ball = null; }
-    function paint() {
-      if (!ctx) return;
-      var w = canvas.width, h = canvas.height;
-      ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = '#182136';
-      ctx.fillRect(paddleX * w - 34, h - 22, 68, 9);
-      if (ball) {
-        ctx.beginPath();
-        ctx.arc(ball.x, ball.y, 6, 0, Math.PI * 2);
-        ctx.fillStyle = '#b9854c';
-        ctx.fill();
-      }
-    }
-    function show(item) {
-      clear();
-      key = item.key;
-      item.opts.forEach(function (o) {
-        var b = el('button', 'g4-brick', o.text);
-        b.type = 'button';
-        b.setAttribute('data-v', o.value);
-        b.addEventListener('click', function () { if (r.phase === 'play') r.pick(o.value); });
-        field.appendChild(b);
-        bricks.push({ el: b, value: o.value, dead: false });
-      });
-      if (r.reduced) return;
-      canvas.width = canvas.clientWidth || 520;
-      canvas.height = canvas.clientHeight || 160;
-      ctx = canvas.getContext ? canvas.getContext('2d') : null;
-      ball = { x: canvas.width / 2, y: canvas.height - 40, vx: 2.2, vy: -2.6 };
-      live = true;
-      var frame = function () {
-        if (!live || !ball) return;
-        ball.x += ball.vx; ball.y += ball.vy;
-        if (ball.x < 6 || ball.x > canvas.width - 6) ball.vx *= -1;
-        if (ball.y < 6) ball.vy *= -1;
-        var px = paddleX * canvas.width;
-        if (ball.y > canvas.height - 26 && Math.abs(ball.x - px) < 44) ball.vy = -Math.abs(ball.vy);
-        if (ball.y > canvas.height + 12) {                     // a dropped ball is a free retry
-          ball.x = canvas.width / 2; ball.y = canvas.height - 40; ball.vy = -2.6;
-        }
-        paint();
-        raf = window.requestAnimationFrame ? window.requestAnimationFrame(frame) : 0;
-      };
-      raf = window.requestAnimationFrame ? window.requestAnimationFrame(frame) : 0;
-    }
-    function move(e) {
-      var box2 = box.getBoundingClientRect();
-      var p = (e.clientX - box2.left) / Math.max(1, box2.width);
-      paddleX = Math.min(0.94, Math.max(0.06, p));
-      paint();
-    }
-    box.addEventListener('pointermove', move);
-    box.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowLeft') { paddleX = Math.max(0.06, paddleX - 0.06); paint(); }
-      if (e.key === 'ArrowRight') { paddleX = Math.min(0.94, paddleX + 0.06); paint(); }
-    });
-    box.setAttribute('tabindex', '0');
-    function mark(item, hit, value) {
-      stop();
-      bricks.forEach(function (b) {
-        if (b.value === value) b.el.classList.add(hit ? 'ok' : 'no');
-        else if (!hit && b.value === key) b.el.classList.add('reveal');
-      });
-    }
-    return { show: show, mark: mark, clear: clear };
-  };
 
   /* ---------------- pairFlip: memory pairs, prompt ↔ option ----------------
      Cards start face down; the prompt is one of them. Turning the prompt and its match answers the
@@ -1168,54 +1148,6 @@ function say(text, lang) {
     return { show: show, mark: mark, clear: clear };
   };
 
-  /* ---------------- lockCode: every correct answer releases one digit ----------------
-     The expected digit is authored on the item (`data-code`), else it is the correct option's slot.
-     Typing it on the keypad opens that digit's box; a wrong digit is spent. */
-  PLUGINS.lockCode = function (r) {
-    var stage = r.stage;
-    var box = el('div', 'g4-lock'), dial = el('div', 'g4-dial'), pad = el('div', 'g4-pad');
-    var want = '';
-    box.appendChild(dial); box.appendChild(pad);
-    stage.appendChild(box);
-    function digitOf(item) {
-      var own = item.item.getAttribute('data-code');
-      if (own) return String(own).slice(0, 1);
-      var i = 0, at = 0;
-      item.opts.forEach(function (o) { if (o.value === item.key) at = i; i++; });
-      return String(at + 1);
-    }
-    function clear() { pad.innerHTML = ''; dial.innerHTML = ''; }
-    function show(item) {
-      clear();
-      want = digitOf(item);
-      var d = el('div', 'g4-digit', '?');
-      d.setAttribute('data-want', want);
-      dial.appendChild(d);
-      for (var n = 1; n <= 9; n++) {
-        (function (n) {
-          var b = el('button', 'g4-key', String(n));
-          b.type = 'button';
-          b.addEventListener('click', function () {
-            if (r.phase !== 'play') return;
-            if (String(n) === want) r.pick(item.key);
-            else r.expire();
-          });
-          pad.appendChild(b);
-        })(n);
-      }
-    }
-    function mark(item, hit) {
-      var d = dial.querySelector('.g4-digit');
-      if (d) {
-        d.textContent = hit ? want : '✕';
-        d.className = 'g4-digit ' + (hit ? 'ok' : 'no');
-      }
-      [].forEach.call(pad.querySelectorAll('.g4-key'), function (k) {
-        if (k.textContent === want) k.classList.add('reveal');
-      });
-    }
-    return { show: show, mark: mark, clear: clear };
-  };
 
   /* ---------------- wordleBoard (and hangman): one word, letter by letter ----------------
      The word is authored (`data-answer`) or is the correct option's text. Green = right letter,
@@ -1381,7 +1313,7 @@ function say(text, lang) {
       if (!p) return;
       p.classList.remove('lit');
       p.classList.add('lit');
-      tone(TONES[i % TONES.length], ms || 200, 'sine', 0.18);
+      SFX.tone(TONES[i % TONES.length], ms || 200, 'sine', 0.18);
       r.later(function () { p.classList.remove('lit'); }, (ms || 200) + 60);
     }
     /* the whole sequence is played back, then the student repeats it; every round adds one beat */
@@ -1499,54 +1431,6 @@ function say(text, lang) {
     return { show: show, mark: mark, clear: clear };
   };
 
-  /* ---------------- spinPick: the reel decides what comes next ----------------
-     Carries no answer: it is the companion that removes the "1, 2, 3" march. The reel lands on the
-     item's number, then the item is answered right under it. */
-  PLUGINS.spinPick = function (r) {
-    var stage = r.stage;
-    var box = el('div', 'g4-spin'), reel = el('div', 'g4-reel'), opts = el('div', 'g4-spinopts');
-    var lever = el('button', 'g4-lever', '🎰 Spin');
-    lever.type = 'button';
-    box.appendChild(reel); box.appendChild(lever); box.appendChild(opts);
-    stage.appendChild(box);
-    var digits = [], ticker = 0;
-    for (var i = 0; i < 3; i++) { var d = el('div', 'g4-reel-d', '0'); reel.appendChild(d); digits.push(d); }
-    function land(n) {
-      var s = String(n).padStart(3, '0');
-      digits.forEach(function (d, i) { d.textContent = s[i]; });
-      reel.classList.remove('spinning');
-    }
-    function go() {
-      if (ticker) { clearInterval(ticker); ticker = 0; }
-      if (r.reduced) { land(r.idx + 1); return; }
-      reel.classList.add('spinning');
-      ticker = setInterval(function () {
-        digits.forEach(function (d) { d.textContent = Math.floor(Math.random() * 10); });
-      }, 60);
-      r.later(function () { if (ticker) { clearInterval(ticker); ticker = 0; } land(r.idx + 1); }, 700);
-    }
-    lever.addEventListener('click', go);
-    function clear() { opts.innerHTML = ''; if (ticker) { clearInterval(ticker); ticker = 0; } }
-    function show(item) {
-      clear();
-      go();
-      item.opts.forEach(function (o) {
-        var b = el('button', 'g4-spinopt', o.text);
-        b.type = 'button';
-        b.setAttribute('data-v', o.value);
-        b.addEventListener('click', function () { if (r.phase === 'play') r.pick(o.value); });
-        opts.appendChild(b);
-      });
-    }
-    function mark(item, hit, value) {
-      [].forEach.call(opts.querySelectorAll('.g4-spinopt'), function (b) {
-        var v = b.getAttribute('data-v');
-        if (v === value) b.classList.add(hit ? 'ok' : 'no');
-        else if (!hit && v === item.key) b.classList.add('reveal');
-      });
-    }
-    return { show: show, mark: mark, clear: clear, spin: go };
-  };
 
   /* ---------------- ladderRun: rising stakes on a ladder, a safe rung every five ----------------
      A wrong answer drops the marker to the last safe rung — the run keeps what was safely earned,
@@ -1594,56 +1478,6 @@ function say(text, lang) {
     return { show: show, mark: mark, clear: clear };
   };
 
-  /* ---------------- boardQuiz: a board of cells, two teams, points ----------------
-     Teams alternate on every answer, so the board reads as a game long before anyone wins it. The
-     grid is the difficulty axis; the cells are the items. */
-  PLUGINS.boardQuiz = function (r) {
-    var stage = r.stage;
-    var box = el('div', 'g4-board'), grid = el('div', 'g4-bgrid'), head = el('div', 'g4-bhead');
-    var opts = el('div', 'g4-raceopts');
-    box.appendChild(head); box.appendChild(grid); box.appendChild(opts);
-    stage.appendChild(box);
-    var cells = [], team = 0, scores = [0, 0];
-    function drawHead() {
-      head.innerHTML = '<span class="g4-team' + (team === 0 ? ' on' : '') + '">A · ' + scores[0] + '</span>'
-        + '<span class="g4-team' + (team === 1 ? ' on' : '') + '">B · ' + scores[1] + '</span>';
-    }
-    function build() {
-      grid.innerHTML = ''; cells = [];
-      r.items.forEach(function (it, i) {
-        var c = el('div', 'g4-bcell', String(i + 1));
-        grid.appendChild(c);
-        cells.push(c);
-      });
-      grid.style.gridTemplateColumns = 'repeat(' + Math.min(6, Math.max(3, cells.length)) + ',1fr)';
-    }
-    function clear() { opts.innerHTML = ''; drawHead(); }
-    function show(item) {
-      if (!cells.length) build();
-      opts.innerHTML = '';
-      drawHead();
-      cells.forEach(function (c, i) { c.classList.toggle('on', i === r.idx); c.classList.remove('done'); });
-      item.opts.forEach(function (o) {
-        var b = el('button', 'g4-raceopt', o.text);
-        b.type = 'button';
-        b.setAttribute('data-v', o.value);
-        b.addEventListener('click', function () { if (r.phase === 'play') r.pick(o.value); });
-        opts.appendChild(b);
-      });
-    }
-    function mark(item, hit, value) {
-      if (hit) scores[team]++;
-      if (cells[r.idx]) cells[r.idx].classList.add(hit ? 'done' : 'lost');
-      team = 1 - team;
-      drawHead();
-      [].forEach.call(opts.querySelectorAll('.g4-raceopt'), function (b) {
-        var v = b.getAttribute('data-v');
-        if (v === value) b.classList.add(hit ? 'ok' : 'no');
-        else if (!hit && v === item.key) b.classList.add('reveal');
-      });
-    }
-    return { show: show, mark: mark, clear: clear, scores: function () { return scores.slice(); } };
-  };
 
   /* ---------------- bossRaid: a HP bar, three hearts, one ending ----------------
      Every correct answer lands a hit; every wrong one costs a heart. A long drill gets a shape and
@@ -1693,6 +1527,13 @@ function say(text, lang) {
   };
 
   function boot() {
+    /* the gradients and filters every scene shares: one hidden <svg> per page, so any number of
+       game blocks reuse the same ids and none can collide */
+    if (!document.querySelector('.g4-defs')) {
+      var host = document.createElement('div');
+      host.innerHTML = DEFS;
+      if (host.firstChild) document.body.appendChild(host.firstChild);
+    }
     var names = Object.keys(PLUGINS);
     var roots = [].slice.call(document.querySelectorAll('.game')).filter(function (root) {
       return names.indexOf(root.getAttribute('data-game')) > -1;
