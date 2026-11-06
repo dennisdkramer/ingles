@@ -32,7 +32,7 @@ Inputs: [Section `lessonNN` of `<TRACK>-ROADMAP.md`] + FORMAT.md §2 onwards + �
    - Limit [attempt quantity / time spent] on reconciliation and/or problem resolution. maximum of 3 attempts to solve the same/similar/connected problem(s) without significant progress. After third attempt, log in ISSUES.md and skip to next section/lesson/subtask batch as appropriate.
 	- If a rule would have blocked something better, that's an escalation, not a workaround (the mirror image of §2).
 	- Handling depends on scope of elements involved in any escalation/conflict: 
-		a) Planning/Content/Vehicle for a single section which does not interfere with successful generation of other sections -> (concise explanation of escalation and next-step recommendation appended to lessonNN.design.md - Affected content skipped, task processing continues)
+		a) Planning/Content/Vehicle for a single section which does not interfere with successful generation of other sections -> (Affected content skipped, task processing continues)
 		b) Conflict is limited to content of one specific lesson, but [more than one section is affected or risks being degraded] -> (task skips to next requested lesson generation if applicable)
 		c) Any issue that effects the content of multiple lessons or generation in general - (task is immediately paused to confer with the user)
 
