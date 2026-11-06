@@ -15,6 +15,7 @@
    - Framing for the pass: *"You have no page, no classes and no build mechanics. You have a concept, a student, one session, and the world outside — and you decide what the session is made of and in what order."* 
    - **May say what FORM a piece of teaching wants** — May freely imagine any form - The following are EXAMPLES, not suggestions: a table [to compare/contrast forms/concepts] or [to present vocabulary with translations], a written dialogue to practice reading out loud with the teacher, an audio dialog to practice listening or analysis, a listen-and-tick, a relevant real-world situation/story/music/video as an (explanatory or activity) showcase of the content's use.
    - Naming a content type is a pedagogical recommendation, not page mechanics. It must not name classes, ids, widths or block layout.
+   - Coverage of a concept or vocabulary class must not be redundant with a prior lesson: a topic returns deeper, wider, more natural or more register-appropriate — never as the same explanation and the same drills.
    - Write in the file:
       1. The **core**: 2-4 things the student must leave able to *do* (phrased as skill/behaviour - not as a topic):
 		   a) *teaching beats* (per core item: what the student must be told, 1–2 sentences).
@@ -69,8 +70,7 @@ Inputs: 'designs/<track>/<lessonNN.design.md>' + FORMAT.md + FUNCTION.md + **§1
 	d) Coverage ≠ section plan__: a roadmap item doesn't get its own h2 unless it earns one.
 	e) No budget ≠ no depth__: length is not a proxy, and enumeration is not depth.
     - Never show the answer in a prompt; a hint may only be in the language the student is not producing.
-    - No copy-exercises: the student produces from memory or meaning, never transcribes the prompt.
-	f) Coverage of a concept or vocabulary class must not be redundant with a prior lesson: a topic returns deeper, wider, more natural or more register-appropriate — never as the same explanation and the same drills.
+    f) No copy-exercises: the student produces from memory or meaning, never transcribes the prompt.
 	g) Teach in context, in phrases, inside a scenario, dialogue or story — not isolated glosses.
 	h) Whenever feasible(sanity check the existance, relevance, appropriateness, and accessability of each), teach the rule, the reasoning(the mental model), and its direct consequences (integrated with the lesson content or in its own section as apppropriate); say plainly when [there is no clear or consistent] [rule and/or reasoning]. 
 	i) Each item carries the condition that decides it (a gloss that could go either way is not an item).
