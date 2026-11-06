@@ -55,6 +55,8 @@
 
 ### Text and visual sizing philosophy
 - Minimum size an average person comfortably sees, clicks, reads.
+- Font sizes are fixed constants (no viewport-relative sizing).
+
 
 ## Lesson section/block formatting
 - .card: paper bg, 2px ink border, 16px radius, 5px 5px 0 tan hard shadow

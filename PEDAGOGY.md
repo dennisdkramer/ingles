@@ -1,22 +1,14 @@
 # PEDAGOGY - DO NOT MODIFY WITHOUT USER SIGN-OFF
-1.  This file guides the underlying pedagogy which serves the purpose of this project, which is to create a platform for teaching English to Brazilian Portuguese speakers, which has: 
-          a) unique tools and features for:
-              - collaborative teacher-student markup (highlighing, notes, voice recording).
-              - presenting a framework to understand real-world pronunciation (the dictionary, the pronunciation key, and the reductions of connected speech).
-          b) Lesson content which:
+	- This file contains underlying pedagogical ideas of the project and guides curriculum planning.
+    - The curriculum leverages the platform designed by this project which includes features like highlighing, recorded voice notes, and a custom dictionary/pronunciation key for the student to visualize connected speech.
+    - The target audience are Brazilian Portugues speakers who want to learn english. They often have taken classes or courses in the past but found it challenging.
+    - Our curriculum uses Lesson content which:
               - Provides logic for concepts that other methods teach by rote.
               - Is distilled to provide the most progress and the least extraneity.
               - Is designed to leverage the utility of a teacher who is fluent in both languages.
               - Remains accessible and informative for the student in the absence of a teacher.
-          c) 3 'Tracks' for student needs (Elaborated in `<TRACK>-REGISTER.md` — BUSINESS-REGISTER.md / KIDS-REGISTER.md / ADULT-REGISTER.md - same core grammar, modified vocabulary/context/activities):
-              - Business: Communicate with international clients or pass the IELTS to study abroad.
-              - Kids: Understand modern expressions, memes, and approach english in a more playful way.
-              - Adult: Communicate on the streets, learn vocabulary (and culture) of dating and sex. (AAVE-aware)
-2.  This file guides High-level course structure and provides intent and reasoning for tasks that:
-      a) create, brainstorm, choose, or elaborate teaching plans and needs.
-      b) guiding content generation
-3.  This file independently drives pedagogical decisions which in turn guide lesson content HTML generation - A subsequent step references PEDAGOGY-MAP.md (generation process and defaults). This file helps to make the course cohesive.
-      
+    - The curriculum is modified into 'Tracks' depending on the student's age, personality, and goals (`<TRACK>-REGISTER.md`). 
+	- Each track covers the same core concepts with heavily modified vocabulary, context, and activities)
 
 --------------
 --------------
@@ -24,11 +16,8 @@
 ## Curriculum, Planning, and Course structure
 
 1. Order is derived from this book's own difficulty model — not from any external grammar syllabus. 
-
 2. Concepts and vocabulary items are assessed by how far they sit from Portuguese (transparent / partial / opaque) times how important they are for understanding and producing spoken english  (core / common / marginal). 
-
 3. Balance between concept(s) presentation/explanation and training time is flexible based on model reasoning.
-
 
 ### The difficulty model
 
@@ -37,8 +26,7 @@
 - **Placement = the two axes combined by judgment.** Transparent + Core → earliest (fast wins). Opaque + Core → early, taught as a structural rule. Partial + Core → middle, taught as a meaning trap. Transparent + Marginal → a deliberate choice (early-with-its-kin OR late as "formal only"), recorded with a reason. Opaque + Common → mid-to-late, sized to importance. Opaque + Marginal → late or optional.
 - **Vocabulary is concept → context → mapping.**
 
-
-## Pedagogy principles
+### Pedagogy principles
 - **Unique ideas** Creatively synthesize teaching possibilities.. but dont throw the baby out with the bathwater: When appropriate, research several outside sources on the lesson's topic to brainstorm ideas, not to copy. 
 - **Contrast with Portuguese** The highest-value content is where English does NOT behave like Portuguese. The simple present is the flagship example:
   - EN simple present = FACTS and IN-GENERAL statements only. It never touches the past, and touches the future only as a scheduled FACT ("I start school tomorrow", "the train leaves at six").
@@ -47,7 +35,6 @@
 - **Keep training past lesson concepts and vocabulary** Incorporate skills and vocabulary learned in prior lessons where useful (not for filler, must be defensible training, not  redundance). Must not distract or take time from the current lesson.
 - **Early foundations** Lesson 1 teaches "vowels have no fixed sound"; cognates are taught with their suffix codes; reductions (gonna/wanna/woulda) are introduced early; `get` is taught as the wildcard ("coringa").
 - **"gonna" is a future MODE, not a verb** Teach `[be] + gonna + verb` as the spoken future ("I'm gonna call" = *vou ligar*), and keep it separate from the verb "go" with a PLACE after it ("I'm going to the office" = *estou indo ao escritório*). "I'm gonna go to the office" is therefore not a contradiction — "gonna" marks future and "go" is the verb. The student should use "gonna" (not avoid it); it is the natural spoken form, while "going to" is the written/formal twin.
-
 - **Phrase length and complexity**  Frase length is a lever for a block or item to reach its width: short phrases get there with more phrases or more columns, longer phrases get there with length.
 - **Carrier content escalates with the course.** The example phrases and contexts that carry each lesson's grammar are matched to the student's level at that point: they draw on everything already taught and grow in length and complexity (conforming to the register) as the course advances. For any item that is recycled (must have a defensible purpose) it reappears inside a richer frame.
 - **Phrasal verbs first, formal only to map meaning.** Where a native speaker would say the phrasal verb (put off, call off, set up, get back to, go over, wrap up), that is what the student learns and produces. The formal single-word twin (postpone, cancel, arrange, return, review, conclude) appears only as a gloss so the student can connect meaning — never as the default answer or the preferred form.
