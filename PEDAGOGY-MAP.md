@@ -9,9 +9,9 @@
 ## LESSON GENERATION (BINDING PROCESS)
 
 ### 1. Two passes, with a barrier between them
-**Pass A - design** - Done by an independent file.
 **Pass B — build.** - (Output = `<track>/lessonNN.html`)
-Inputs: `designs/<track>/<lessonNN.design.md>` + FORMAT.md §2 onwards + §Content contracts of FUNCTION.md + `<TRACK>-REGISTER.md` + §3–§6 of this file. (The build is a **synthesis, not obedience**)
+Inputs: [[`designs/<track>/<lessonNN.design.md>`if exists] else [`<TRACK>-ROADMAP.md` Section <LessonNN>]] + FORMAT.md §2 onwards + §Content contracts of FUNCTION.md + `<TRACK>-REGISTER.md`- **HIGH PRIORITY** + §3–§6 of this file. (The build is a **synthesis, not obedience**)
+	- Withhold: All other files.
 	- How the shape is built with the available blocks — is Pass B's call, no escalation
 	- A change that alters the shape or one of the design's teaching beats is made and then **written back into the design file**; a conflict or ambiguity that cannot be resolved that way is escalated. 
 	- Pass B never silently contradicts a teaching beat, but may replace the design's shape with a strong defensible reason (in which case it proceeds, records the change in the design file, and does not escalate).
@@ -89,7 +89,7 @@ Referencing material instead of embedding it is fine (a song named by lyric, "go
    - Authored content sits in `.content-area` under one `<h1>` — that heading is the title `build-lessons.mjs` reads.
    - Navigation is purely sequential (`← Last` / `Next →`); there is no lesson count anywhere.
    - Exercise state persists only through the three controls named in FUNCTION.md §Content contracts; if Pass A suggests an exercise type outside them, escalate per #2.
-   - Audio for `.listen`: the `data-say` rule, the render command and the publish gate are in FUNCTION.md §Content contracts.
+   - Audio for `.listen`: the `data-say` rule and the render command are in FUNCTION.md §Content contracts. Rendered clips are optional everywhere — the built-in backup voice (`speechSynthesis`) is the accepted delivery across the board, so a `data-say` string with no clip never blocks a lesson and `audio:check` is informational.
    - Shell, classes and sizing: FORMAT.md. Behaviour, engines and edit mode: FUNCTION.md.
 
 
