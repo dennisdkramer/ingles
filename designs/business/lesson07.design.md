@@ -31,7 +31,7 @@ A week of ordinary work: a colleague tells you what the client said, you find ou
 Eight sentence frames completed with the right verb of saying, six split-verb choices, eight past forms, a four-line recipe written with the imperative, a grocery receipt reconstructed, three recorded instructions, then a quiz on all four behaviours with no reused item.
 
 ## Conflicts, and how I resolved them
-- **say/tell/talk/speak were seeded in `VOCABULARY.md` for lesson 7** — this lesson is their home; the same goes for *esperar, achar, faltar, pagar, gastar*. Rule followed as written.
+- **say/tell/talk/speak for lesson 7** — this lesson is their home; the same goes for *esperar, achar, faltar, pagar, gastar*. Rule followed as written.
 - **The cooking imperative could be its own lesson.** Resolution: it gets **one section**, not a tense chapter — the recipe is the frame that makes commands natural, and modal obligation (should/must/have to) stays in lesson 15.
 - **The participle primer must be completed here** without teaching the present perfect. Resolution: the third column is filled (*said, told, spoken, thought, found, paid, spent*) and shown in **one** recognition contrast (*I paid / I've paid*); no production of the perfect.
 
