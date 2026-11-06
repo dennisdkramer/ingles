@@ -265,6 +265,15 @@ track. No example wording appears here on purpose — the lesson supplies it.
 - **does** — A short sentence plays at natural speed; the student types exactly what was heard, then compares.
 - **can't** — one playing is a memory test; allow replays or it measures recall, not listening.
 
+### `sentenceSurgery` — section · cost B · evidence gap — tests 2 · fun 3 · reuse 3
+
+- **does** — A sentence or a whole exchange is cut into chunks and handed over out of order; the student rebuilds
+  it. Word order, chunk order and linking all show up immediately, because a wrong order reads wrong.
+- **skins** — the chunks are buttons; the rebuilt order is typed as numbers into consecutive `gap`s, so the
+  evidence is the student's own sequence. A drag version is the same engine with pointer events.
+- **art** — flat chips in one accent, a hard snap when a chip lands, no card shadows.
+- **can't** — only sequences with one defensible order; if two orders both work, the item is broken.
+
 ### `registerContrast` — section · cost A · evidence radio — tests 2 · fun 1 · reuse 3
 
 - **does** — Two columns contrast a stiff wording with the spoken everyday one; the exercise picks which fits the
