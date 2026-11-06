@@ -58,13 +58,14 @@ function ok(name, cond, extra) {
 }
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-function mount(html) {
+function mount(html, prep) {
   const dom = new JSDOM(html || FIXTURE, {
     runScripts: 'dangerously', pretendToBeVisual: true, url: 'http://localhost/games4.html',
     beforeParse(w) {
       w.matchMedia = () => ({ matches: false, addListener: () => { }, removeListener: () => { } });
       w.console.error = (...a) => { console.log('  [page error] ' + a.join(' ')); };
       w.HTMLElement.prototype.scrollIntoView = () => { };
+      if (prep) prep(w);
     }
   });
   const w = dom.window;
@@ -231,9 +232,9 @@ async function run() {
   const GAMES = {
     catchBasket: '.g4-bucket', whackMole: '.g4-mole',
     stackDrop: '.g4-padbtn', flapGate: '.g4-gate', pairFlip: '.g4-card',
-    mineGrid: '.g4-mine', wordleBoard: '.g4-tile', crosswordBoard: '.g4-gap',
+    mineGrid: '.g4-mine', wordleBoard: '.g4-tile', crosswordBoard: '.g4-xboard',
     echoPads: '.g4-pad', bingoCard: '.g4-btile',
-    ladderRun: '.g4-rung', bossRaid: '.g4-bossart'
+    ladderRun: '.g4-lclimber', bossRaid: '.g4-bossart'
   };
   const fixtures = Object.keys(GAMES).map(name => `
     <div class="game" id="g-${name}" data-game="${name}" data-shuffle="0" data-replay="0" data-time="0">
@@ -271,8 +272,8 @@ async function run() {
     if (g.board) {
       /* a board game places every card up front and answers out of order — proven on its own below */
       ok(name + ': starts, lays its board out, claims the run',
-        on && g.phase === 'play' && root.querySelectorAll('.g4-card').length === 4,
-        root.querySelectorAll('.g4-card').length + ' cards');
+        on && g.phase === 'play' && !!drew,
+        drew ? '' : 'no ' + GAMES[name]);
       return;
     }
     g.hooks.pick('a');
@@ -404,6 +405,85 @@ async function run() {
     const faces = css.indexOf('.g4-face{') > -1 && /\.g4-face\{[^}]*(inset|width)/.test(css);
     ok('pairFlip faces are sized inside their card', faces);
   }
+
+  /* bingoCard must CALL a word, not read the question — the bug you spotted */
+  const spoken = [];
+  const bPage = mount(`<!doctype html><html><head><meta charset="utf-8"></head><body>
+    <div class="content-area">
+      <div class="game" id="bg" data-game="bingoCard" data-shuffle="0" data-time="0" data-sound="0">
+        <p class="game-how">Stamp the one you hear.</p>
+        <div class="game-list">
+          <div class="qitem" data-a="b">
+            <div class="qline"><span class="qstem">which of these means a finished action</span></div>
+            <div class="qopts"><label><input type="radio" name="bg1" value="a">running</label><label><input type="radio" name="bg1" value="b">walked</label></div>
+          </div>
+        </div>
+        <button class="game-start" type="button">▶ Play</button>
+      </div>
+    </div></body></html>`, w => {
+    w.speechSynthesis = { speak: u => spoken.push(u.text), cancel: () => { } };
+    w.SpeechSynthesisUtterance = function (t) { this.text = t; };
+  });
+  const bg = (bPage.__G4 || [])[0];
+  bPage.document.getElementById('bg').querySelector('.game-start').click();
+  await sleep(400);
+  ok('bingoCard calls the answer word, not the question',
+    spoken.length > 0 && spoken[spoken.length - 1] === 'walked', 'said «' + (spoken[spoken.length - 1] || '') + '»');
+
+  /* the crossword must be a REAL crossword: crossing words share their letter, typed once */
+  const xwItems = [['cat', 'a small pet'], ['are', 'you ___ ready']].map(([w, clue], i) => `
+    <div class="qitem" data-a="a" data-answer="${w}">
+      <div class="qline"><span class="qstem">${clue}</span></div>
+      <div class="qopts"><label><input type="radio" name="xw${i}" value="a">${w}</label><label><input type="radio" name="xw${i}" value="b">zzz</label></div>
+    </div>`).join('');
+  const xPage = mount(`<!doctype html><html><head><meta charset="utf-8"></head><body>
+    <div class="content-area">
+      <div class="game" id="xx" data-game="crosswordBoard" data-shuffle="0" data-time="0" data-sound="0">
+        <p class="game-how">Fill the grid.</p>
+        <div class="game-list">${xwItems}</div>
+        <button class="game-start" type="button">▶ Play</button>
+      </div>
+    </div></body></html>`);
+  const xr = xPage.document.getElementById('xx');
+  xr.querySelector('.game-start').click();
+  const xcells = [...xr.querySelectorAll('.g4-gap')];
+  ok('crosswordBoard lays the words so they cross (a shared letter, one cell)',
+    xcells.length < 6 && xcells.length >= 5, xcells.length + ' cells for 6 letters');
+  xcells.forEach(c => {
+    const k = c.getAttribute('data-key');
+    const want = { '0,0': 'c', '0,1': 'a', '0,2': 't', '1,1': 'r', '2,1': 'e' }[k];
+    if (want) { c.value = want; c.dispatchEvent(new xPage.Event('input', { bubbles: true })); }
+  });
+  ok('crosswordBoard: one typed shared letter finishes both words',
+    xr.querySelector('input[name="xw0"][value="a"]').checked === true &&
+    xr.querySelector('input[name="xw1"][value="a"]').checked === true);
+
+  /* ladderRun must actually climb, and a wrong answer must drop it back to the safe rung */
+  const lItems = Array.from({ length: 8 }, (_, i) => `
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qstem">rung ${i}</span></div>
+      <div class="qopts"><label><input type="radio" name="ld${i}" value="a">yes</label><label><input type="radio" name="ld${i}" value="b">no</label></div>
+    </div>`).join('');
+  const lPage = mount(`<!doctype html><html><head><meta charset="utf-8"></head><body>
+    <div class="content-area">
+      <div class="game" id="ld" data-game="ladderRun" data-shuffle="0" data-time="0" data-replay="0" data-sound="0">
+        <p class="game-how">Climb.</p>
+        <div class="game-list">${lItems}</div>
+        <button class="game-start" type="button">▶ Play</button>
+      </div>
+    </div></body></html>`);
+  const ld = lPage.document.getElementById('ld');
+  const lg = (lPage.__G4 || [])[0];
+  ld.querySelector('.game-start').click();
+  const climber = ld.querySelector('.g4-lclimber');
+  const y0 = climber.style.bottom;
+  lg.hooks.pick('a');
+  const y1 = climber.style.bottom;
+  ok('ladderRun climbs on a right answer', y0 !== y1, y0 + ' -> ' + y1);
+  await sleep(700);
+  lg.hooks.pick('b');
+  const y2 = climber.style.bottom;
+  ok('ladderRun drops back to the safe rung on a wrong one', y2 === y0, y2);
 
   console.log('\n' + (fail ? 'FAILED: ' : 'OK: ') + pass + ' passed, ' + fail + ' failed\n');
   /* some game plugins keep a requestAnimationFrame loop or a timer alive; jsdom would never exit */

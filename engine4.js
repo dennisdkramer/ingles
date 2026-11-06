@@ -144,7 +144,34 @@ window.GAMES4 = (function () {
       + '</svg>',
     star: '<svg class="g4-art" viewBox="0 0 40 40" aria-hidden="true" focusable="false">'
       + '<path d="M20 3l5.6 11.4L38 16l-9 8.8 2.2 12.4L20 31.4 8.8 37.2 11 24.8 2 16l12.4-1.6z"'
-      + ' fill="#ffd05a" stroke="#b07c10" stroke-width="2.4" stroke-linejoin="round"/></svg>'
+      + ' fill="#ffd05a" stroke="#b07c10" stroke-width="2.4" stroke-linejoin="round"/></svg>',
+    /* a ladder sized to the run: two rails and one rung per item, so the climb IS the item count */
+    ladder: function (n, safeEvery) {
+      n = Math.max(3, n | 0); safeEvery = safeEvery || 5;
+      var h = 200, gap = h / (n + 1);
+      var s = '<svg class="g4-art" viewBox="0 0 90 ' + (h + 20) + '" preserveAspectRatio="none" aria-hidden="true" focusable="false">'
+        + '<path d="M24 10v' + h + 'M66 10v' + h + '" stroke="#8a5a2b" stroke-width="7" stroke-linecap="round"/>';
+      for (var i = 1; i <= n; i++) {
+        var y = (h + 10 - i * gap).toFixed(1), safe = i % safeEvery === 0;
+        s += '<path d="M24 ' + y + 'h42" stroke="' + (safe ? '#ffd05a' : '#c08d55')
+          + '" stroke-width="' + (safe ? 7 : 5) + '" stroke-linecap="round"/>';
+      }
+      return s + '</svg>';
+    },
+    climber: '<svg class="g4-art" viewBox="0 0 46 52" aria-hidden="true" focusable="false">'
+      + '<path d="M23 30v-12" stroke="#2f6fb5" stroke-width="10" stroke-linecap="round"/>'
+      + '<circle cx="23" cy="11" r="8" fill="#f4c79b" stroke="#8a5a2b" stroke-width="2.2"/>'
+      + '<path d="M17 8q3-6 9-5t6 6" fill="#3d2a1a"/>'
+      + '<circle cx="20.5" cy="11.5" r="1.5" fill="#2a1c10"/><circle cx="26" cy="11.5" r="1.5" fill="#2a1c10"/>'
+      + '<path d="M23 20l-9-8M23 20l9-9" stroke="#f4c79b" stroke-width="4.2" stroke-linecap="round"/>'
+      + '<path d="M23 36l-7 12M23 36l7 12" stroke="#2b3a4a" stroke-width="5" stroke-linecap="round"/>'
+      + '</svg>',
+    chest: '<svg class="g4-art" viewBox="0 0 60 50" aria-hidden="true" focusable="false">'
+      + '<rect x="6" y="18" width="48" height="28" rx="4" fill="#b9854c" stroke="#6b4520" stroke-width="2.6"/>'
+      + '<path d="M6 26q0-16 24-16t24 16" fill="#d9a75f" stroke="#6b4520" stroke-width="2.6"/>'
+      + '<rect x="25" y="24" width="10" height="12" rx="2" fill="#ffd05a" stroke="#6b4520" stroke-width="2.2"/>'
+      + '<path d="M6 30h48" stroke="#6b4520" stroke-width="2"/>'
+      + '</svg>'
   };
 
   /* one item = one authored `.qitem`. The right answer is `data-a` when the author pinned it, else
@@ -1418,63 +1445,201 @@ function say(text, lang) {
     return { show: show, mark: mark, clear: clear, guess: guess, entry: entry };
   };
 
-  /* ---------------- crosswordBoard: crossed words, one letter per cell ----------------
-     Every item carries `data-answer`, `data-at="row,col"` and `data-dir="across|down"`. A cell that
-     has been right once keeps its letter, so words cross and the grid fills like a crossword. */
+  /* ---------------- crosswordBoard: a real crossword, generated from the lesson's own words ----------------
+     Every item carries `data-answer` (the word) and `.qstem` (its clue). The board LAYS OUT the whole
+     set at once: the first word across, every later word placed so it crosses an existing letter, and
+     anything that cannot cross dropped into its own row below. A shared letter is shared — typing it
+     once fills both words, which is the point of a crossword and why this is a board game. Each solved
+     word answers its own item, so the evidence is still the radio. */
   PLUGINS.crosswordBoard = function (r) {
     var stage = r.stage;
-    var box = el('div', 'g4-xw'), grid = el('div', 'g4-xgrid');
-    box.appendChild(grid);
+    var box = el('div', 'g4-xboard'), grid = el('div', 'g4-xgrid'), clue = el('div', 'g4-xclue');
+    box.appendChild(grid); box.appendChild(clue);
     stage.appendChild(box);
-    var solved = {}, cells = [];
-    function place(item) {
-      var ans = norm(item.item.getAttribute('data-answer')).replace(/[^a-z]/g, '');
-      if (!ans) return null;
-      var at = (item.item.getAttribute('data-at') || '0,0').split(',');
-      var down = (item.item.getAttribute('data-dir') || 'across') === 'down';
-      return { ans: ans, r0: parseInt(at[0], 10) || 0, c0: parseInt(at[1], 10) || 0, down: down };
+    var words = [], map = {}, inputs = {};
+
+    function letters(s) { return norm(s).replace(/[^a-z]/g, ''); }
+
+    /* place the words so they cross: try every shared letter against every placed word */
+    function layout() {
+      map = {};
+      var placed = [];
+      function at(rr, cc) { return map[rr + ',' + cc]; }
+      function fits(w, r0, c0, dir) {
+        var cross = 0;
+        for (var i = 0; i < w.length; i++) {
+          var rr = r0 + (dir ? i : 0), cc = c0 + (dir ? 0 : i), ex = at(rr, cc);
+          if (ex) { if (ex !== w[i]) return -1; cross++; }
+          else if (dir ? (at(rr, cc - 1) || at(rr, cc + 1)) : (at(rr - 1, cc) || at(rr + 1, cc))) return -1;
+        }
+        var rA = r0 - (dir ? 1 : 0), cA = c0 - (dir ? 0 : 1);
+        var rB = r0 + (dir ? w.length : 0), cB = c0 + (dir ? 0 : w.length);
+        if (at(rA, cA) || at(rB, cB)) return -1;
+        return cross;
+      }
+      function put(word, r0, c0, dir) {
+        for (var i = 0; i < word.w.length; i++) {
+          map[(r0 + (dir ? i : 0)) + ',' + (c0 + (dir ? 0 : i))] = word.w[i];
+        }
+        word.r = r0; word.c = c0; word.dir = dir;
+        placed.push(word);
+      }
+      put(words[0], 0, 0, 0);
+      for (var i = 1; i < words.length; i++) {
+        var w = words[i].w, best = null;
+        placed.forEach(function (p) {
+          for (var j = 0; j < p.w.length; j++) {
+            for (var k = 0; k < w.length; k++) {
+              if (w[k] !== p.w[j]) continue;
+              var dir = p.dir ? 0 : 1, r0, c0;
+              if (dir) { r0 = p.r - k; c0 = p.c + j; } else { r0 = p.r + j; c0 = p.c - k; }
+              var cross = fits(w, r0, c0, dir);
+              if (cross > 0 && (!best || cross > best.cross)) best = { r: r0, c: c0, dir: dir, cross: cross };
+            }
+          }
+        });
+        if (best) put(words[i], best.r, best.c, best.dir);
+        else {
+          /* could not cross: give it its own row under everything already placed */
+          var last = placed.reduce(function (m, p) { return Math.max(m, p.r + (p.dir ? p.w.length : 1)); }, 0);
+          put(words[i], last, 0, 0);
+        }
+      }
+      /* normalise to 0,0 and number the words in reading order */
+      var minR = 0, minC = 0;
+      Object.keys(map).forEach(function (k) {
+        var p = k.split(',');
+        minR = Math.min(minR, +p[0]); minC = Math.min(minC, +p[1]);
+      });
+      var fresh = {};
+      Object.keys(map).forEach(function (k) {
+        var p = k.split(',');
+        fresh[(+p[0] - minR) + ',' + (+p[1] - minC)] = map[k];
+      });
+      map = fresh;
+      words.forEach(function (w) { w.r -= minR; w.c -= minC; });
+      words.slice().sort(function (a, b) { return a.r - b.r || a.c - b.c; })
+        .forEach(function (w, i) { w.num = i + 1; });
     }
-    function clear() { grid.innerHTML = ''; cells = []; }
-    function show(item) {
-      clear();
-      var p = place(item);
-      if (!p) return;
-      grid.style.gridTemplateColumns = 'repeat(' + (p.down ? 1 : p.ans.length) + ',34px)';
-      for (var i = 0; i < p.ans.length; i++) {
-        var rr = p.r0 + (p.down ? i : 0), cc = p.c0 + (p.down ? 0 : i);
-        var k = rr + ',' + cc;
-        (function (k, i) {
-          var cell = el('div', 'g4-xcell'), inp = document.createElement('input');
-          inp.className = 'g4-gap' + (solved[k] ? ' from' : '');
+    function cellsOf(w) {
+      var out = [];
+      for (var i = 0; i < w.w.length; i++) {
+        var key = (w.r + (w.dir ? i : 0)) + ',' + (w.c + (w.dir ? 0 : i));
+        if (inputs[key]) out.push(inputs[key]);
+      }
+      return out;
+    }
+    function render() {
+      grid.innerHTML = ''; inputs = {};
+      var maxR = 0, maxC = 0;
+      Object.keys(map).forEach(function (k) {
+        var p = k.split(',');
+        maxR = Math.max(maxR, +p[0]); maxC = Math.max(maxC, +p[1]);
+      });
+      var cols = maxC + 1;
+      var avail = Math.max(240, (stage.clientWidth || 560) - 170);
+      var size = Math.max(19, Math.min(30, Math.floor(avail / cols)));
+      grid.style.gridTemplateColumns = 'repeat(' + cols + ',' + size + 'px)';
+      for (var rr = 0; rr <= maxR; rr++) {
+        for (var cc = 0; cc <= maxC; cc++) {
+          var key = rr + ',' + cc, letter = map[key];
+          if (!letter) { grid.appendChild(el('div', 'g4-xblock')); continue; }
+          var cell = el('div', 'g4-xcell' + (size < 24 ? ' small' : ''));
+          var inp = document.createElement('input');
+          inp.className = 'g4-gap';
           inp.setAttribute('maxlength', '1');
           inp.setAttribute('autocomplete', 'off');
-          inp.setAttribute('aria-label', 'Letter ' + (i + 1));
-          if (solved[k]) inp.value = solved[k].toUpperCase();
-          inp.addEventListener('input', function () { check(p); });
+          inp.setAttribute('aria-label', 'Row ' + (rr + 1) + ' column ' + (cc + 1));
+          inp.setAttribute('data-key', key);
+          inp.addEventListener('input', function () { type(this); });
+          inp.addEventListener('focus', function () { sayClue(this); });
+          inp.addEventListener('keydown', function (e) { if (e.key === 'Backspace' && !this.value) back(this); });
           cell.appendChild(inp);
           grid.appendChild(cell);
-          cells.push({ inp: inp, key: k });
-        })(k, i);
+          inputs[key] = inp;
+        }
       }
-      var first = cells.filter(function (c) { return !solved[c.key]; })[0];
-      if (first && first.inp.focus) { try { first.inp.focus({ preventScroll: true }); } catch (e) { first.inp.focus(); } }
+      words.forEach(function (w) {
+        var inp = inputs[w.r + ',' + w.c];
+        if (!inp) return;
+        inp.parentElement.appendChild(el('span', 'g4-xnum', String(w.num)));
+      });
     }
-    function check(p) {
+
+    function wordAt(inp) {
+      var key = inp.getAttribute('data-key');
+      return words.filter(function (w) {
+        return cellsOf(w).some(function (c) { return c.getAttribute('data-key') === key; });
+      });
+    }
+    function sayClue(inp) {
+      var ws = wordAt(inp);
+      var w = ws.filter(function (x) { return !x.solved; })[0] || ws[0];
+      if (!w) return;
+      clue.textContent = w.num + (w.dir ? ' down' : ' across') + ' — ' + w.clue;
+      clue.classList.add('on');
+      r.setPrompt(w.clue, true);
+    }
+    function nextIn(inp) {
+      var ws = wordAt(inp).filter(function (x) { return !x.solved; })[0];
+      if (!ws) return;
+      var list = cellsOf(ws), i = list.indexOf(inp);
+      for (var j = i + 1; j < list.length; j++) {
+        if (!list[j].value && !list[j].readOnly) { try { list[j].focus({ preventScroll: true }); } catch (e) { list[j].focus(); } return; }
+      }
+    }
+    function back(inp) {
+      var ws = wordAt(inp)[0];
+      if (!ws) return;
+      var list = cellsOf(ws), i = list.indexOf(inp);
+      for (var j = i - 1; j >= 0; j--) {
+        if (!list[j].readOnly) { try { list[j].focus({ preventScroll: true }); } catch (e) { list[j].focus(); } return; }
+      }
+    }
+    function type(inp) {
+      var v = (inp.value || '').replace(/[^a-zA-Z]/g, '').slice(-1).toUpperCase();
+      inp.value = v;
+      if (v) nextIn(inp);
+      check();
+    }
+
+    /* a word is done when every cell holds the right letter — so a shared letter finishes BOTH words.
+       A wrong full word shakes and clears, and its item stays blank: the blank is the evidence. */
+    function check() {
       if (r.phase !== 'play') return;
-      var typed = cells.map(function (c) { return (c.inp.value || '').toLowerCase(); }).join('');
-      if (typed.length < p.ans.length) return;
-      if (typed === p.ans) {
-        cells.forEach(function (c) { solved[c.key] = (c.inp.value || '').toLowerCase(); });
-        r.pick(r.queue[0].key);
-      } else {
-        cells.forEach(function (c) { if (!solved[c.key]) c.inp.value = ''; c.inp.classList.add('no'); });
-        r.later(function () { cells.forEach(function (c) { c.inp.classList.remove('no'); }); }, 600);
-      }
+      words.forEach(function (w) {
+        if (w.solved) return;
+        var list = cellsOf(w);
+        if (list.length !== w.w.length) return;
+        if (list.some(function (c) { return !c.value; })) return;
+        var typed = list.map(function (c) { return c.value.toLowerCase(); }).join('');
+        if (typed === w.w) {
+          w.solved = true;
+          list.forEach(function (c) { c.classList.add('ok'); c.readOnly = true; });
+          r.scoreBoard(w.it, w.it.key);
+        } else {
+          list.forEach(function (c) { if (!c.readOnly) { c.classList.add('no'); c.value = ''; } });
+          SFX.miss(r.sound);
+          r.later(function () { list.forEach(function (c) { c.classList.remove('no'); }); }, 520);
+        }
+      });
     }
-    function mark(item, hit) {
-      cells.forEach(function (c) { c.inp.classList.add(hit ? 'ok' : 'no'); c.inp.disabled = true; });
+
+    function begin(queue) {
+      words = [];
+      queue.forEach(function (it) {
+        var w = letters(it.item.getAttribute('data-answer'));
+        if (w.length >= 2) words.push({ w: w, it: it, clue: it.prompt || '', solved: false, r: 0, c: 0, dir: 0, num: 0 });
+      });
+      /* the whole run must be spellable, or this board cannot account for every item */
+      if (words.length < 2 || words.length !== queue.length) return false;
+      layout(); render();
+      var first = Object.keys(inputs).map(function (k) { return inputs[k]; })
+        .filter(function (i) { return !i.readOnly; })[0];
+      if (first && first.focus) { try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); } }
+      return true;
     }
-    return { show: show, mark: mark, clear: clear, check: check };
+    return { begin: begin, show: function () { }, mark: function () { }, clear: function () { }, check: check };
   };
 
   /* ---------------- echoPads: Simon, with language ----------------.
@@ -1587,10 +1752,16 @@ function say(text, lang) {
       return all;
     }
     again.addEventListener('click', function () { say(phrase); });
+    function heard(item) {
+      /* what the caller says: the clip when there is one, else the CORRECT OPTION's own words —
+         never the stem, because a stem is a question and a caller calls answers */
+      var right = item.opts.filter(function (o) { return o.value === item.key; })[0];
+      return item.say || (right ? right.text : '') || item.prompt || '';
+    }
     function clear() { card.innerHTML = ''; tiles = []; phrase = ''; }
     function show(item) {
       clear();
-      phrase = item.say || item.prompt || '';
+      phrase = heard(item);
       var mine = item.opts.map(function (o) { return { text: o.text, value: o.value }; });
       var extra = pool().filter(function (t) {
         return !mine.some(function (m) { return m.text === t; });
@@ -1620,37 +1791,48 @@ function say(text, lang) {
         if (hit && v === item.key) t.classList.add('stamped');
       });
       if (hit) yell.textContent = 'Line!';
-      else { yell.textContent = 'Not that one.'; say(item.say || item.prompt || ''); }
+      else { yell.textContent = 'Not that one.'; say(heard(item)); }
     }
     return { show: show, mark: mark, clear: clear };
   };
 
 
-  /* ---------------- ladderRun: rising stakes on a ladder, a safe rung every five ----------------
-     A wrong answer drops the marker to the last safe rung — the run keeps what was safely earned,
-     which is what makes a ladder a ladder and not a list. */
+  /* ---------------- ladderRun: climb the ladder, one rung per right answer ----------------
+     The ladder is drawn as tall as the run has items, a safe rung every five, a climber who steps up
+     on a right answer and slides back to the last safe rung on a wrong one, a chest at the top, and a
+     rising motif so height can be HEARD as well as seen. A wrong answer keeps what was safely earned —
+     that is what makes a ladder a ladder and not a list. */
   PLUGINS.ladderRun = function (r) {
     var stage = r.stage;
-    var box = el('div', 'g4-ladder'), rungs = el('div', 'g4-rungs'), opts = el('div', 'g4-raceopts');
-    var marker = el('div', 'g4-marker');
-    box.appendChild(rungs); box.appendChild(marker); box.appendChild(opts);
+    var box = el('div', 'g4-ladder'), track = el('div', 'g4-ltrack');
+    var rail = el('div', 'g4-rail'), climber = el('div', 'g4-lclimber');
+    var prize = el('div', 'g4-lprize'), opts = el('div', 'g4-raceopts');
+    prize.innerHTML = ART.chest;
+    climber.innerHTML = ART.climber;
+    track.appendChild(rail); track.appendChild(prize); track.appendChild(climber);
+    box.appendChild(track); box.appendChild(opts);
     stage.appendChild(box);
-    var cells = [], safe = 0;
+    var built = 0, climb = 0, safe = 0;
     function safeOf(n) { return Math.floor(n / 5) * 5; }
     function build() {
-      rungs.innerHTML = ''; cells = [];
-      for (var i = r.total; i >= 1; i--) {
-        var c = el('div', 'g4-rung' + (i % 5 === 0 ? ' safe' : ''), String(i));
-        rungs.appendChild(c);
-        cells.push({ el: c, n: i });
-      }
+      if (built === r.total) return;
+      built = r.total;
+      rail.innerHTML = ART.ladder(Math.max(3, r.total), 5);
+      step(0, true);
     }
-    function place(n) { cells.forEach(function (c) { c.el.classList.toggle('on', c.n === n); }); }
-    function clear() { opts.innerHTML = ''; place(r.score); }
+    /* one rung up is one small move; the safe rung is the floor a fall lands on */
+    function step(n, quiet) {
+      climb = Math.max(0, Math.min(r.total, n));
+      var pct = (climb / (Math.max(3, r.total) + 1)) * 100;
+      climber.style.bottom = 'calc(' + pct.toFixed(1) + '% + 6px)';
+      climber.classList.toggle('at-top', climb >= r.total);
+      prize.classList.toggle('won', climb >= r.total);
+      if (!quiet && climb % 5 === 0) SFX.blip(r.sound, 660 + climb * 22, 140);
+    }
+    function clear() { opts.innerHTML = ''; }
     function show(item) {
-      if (!cells.length) build();
+      build();
       opts.innerHTML = '';
-      place(r.score);
       item.opts.forEach(function (o) {
         var b = el('button', 'g4-raceopt', o.text);
         b.type = 'button';
@@ -1660,22 +1842,27 @@ function say(text, lang) {
       });
     }
     function mark(item, hit, value) {
-      if (hit) safe = safeOf(r.score);
       [].forEach.call(opts.querySelectorAll('.g4-raceopt'), function (b) {
         var v = b.getAttribute('data-v');
         if (v === value) b.classList.add(hit ? 'ok' : 'no');
         else if (!hit && v === item.key) b.classList.add('reveal');
       });
-      place(hit ? r.score : Math.max(0, safe));
-      if (!hit) cells.forEach(function (c) { if (c.n <= safe) c.el.classList.add('kept'); });
+      if (hit) {
+        step(climb + 1);
+        safe = safeOf(climb);
+        SFX.blip(r.sound, 380 + climb * 26, 110);
+      } else {
+        climber.classList.add('slip');
+        r.later(function () { climber.classList.remove('slip'); }, 500);
+        step(safe, true);
+        SFX.miss(r.sound);
+      }
     }
     return { show: show, mark: mark, clear: clear };
   };
 
 
-  /* ---------------- bossRaid: a HP bar, three hearts, one ending ----------------
-     Every correct answer lands a hit; every wrong one costs a heart. A long drill gets a shape and
-     an end, which is the whole reason to skin it at all. */
+
   /* ---------------- bossRaid: a hero, a boss, and three hearts ----------------
      Every right answer is a hit: the hero steps in and swings, the boss flashes and loses HP. Every
      wrong answer is the boss's turn: it swings back, the hero loses a heart and visibly picks up

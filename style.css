@@ -439,9 +439,25 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-echo-line{font:700 13px 'Public Sans',sans-serif;text-align:center;min-height:1.4em}
 
 /* crosswordBoard */
-.g4-xw{position:absolute;left:12px;right:12px;top:52px;bottom:12px;display:flex;align-items:center;justify-content:center}
-.g4-xgrid{display:grid;gap:4px}
-.g4-xcell{width:34px;height:34px}
+.g4-xboard{position:absolute;left:12px;right:12px;top:52px;bottom:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.g4-xgrid{display:grid;gap:3px;justify-content:center}
+.g4-xcell{position:relative;width:100%;height:100%}
+.g4-xcell.small{font-size:12px}
+.g4-xblock{width:100%;height:100%;border-radius:3px;background:rgba(24,33,54,.10)}
+.g4-xnum{position:absolute;left:1px;top:-1px;font:700 9px 'Public Sans',sans-serif;color:var(--tan);pointer-events:none}
+.g4-xclue{max-width:92%;padding:4px 12px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;font:700 13px 'Public Sans',sans-serif;text-align:center;opacity:0;transition:opacity .2s ease}
+.g4-xclue.on{opacity:1}
+/* ladderRun: a full-height rail, a climber, a prize at the top */
+.g4-ltrack{position:absolute;left:0;right:0;top:0;bottom:64px;outline:none}
+.g4-rail{position:absolute;left:26px;top:0;bottom:0;width:44px}
+.g4-rail svg{display:block;width:44px;height:100%}
+.g4-lclimber{position:absolute;left:30px;width:34px;height:48px;transition:bottom .42s cubic-bezier(.3,1.25,.6,1)}
+.g4-lclimber .g4-art{width:100%;height:100%}
+.g4-lclimber.slip{animation:g4shake .34s ease}
+.g4-lclimber.at-top{animation:g4cheer .5s ease 2}
+.g4-lprize{position:absolute;left:32px;top:-2px;width:32px;height:32px;opacity:.35;transition:opacity .3s ease}
+.g4-lprize .g4-art{width:100%;height:100%}
+.g4-lprize.won{opacity:1;animation:g4spin 1s ease-in-out 2}
 .g4-gap{width:100%;height:100%;text-align:center;text-transform:uppercase;border:2px solid var(--ink);border-radius:6px;font:800 15px 'Public Sans',sans-serif;background:var(--paper)}
 .g4-gap.from{background:#fff8ea;border-color:var(--tan)}
 .g4-gap.ok{border-color:#2f9e44;background:#e8f7ee}
