@@ -35,7 +35,7 @@
 - **Distance from Portuguese (transfer).** Transparent = a direct anchor exists (a cognate, or a structure whose meaning maps cleanly). Partial = an anchor exists but misleads (the form maps, the meaning does not — or vice-versa). Opaque = no anchor; it must be built from nothing.
 - **Utility in TRACK-appropriate context** Core = the sentence cannot be formed without it (word order, do-support, the dummy subject, the top workhorse verbs). Common = frequent and useful but not sentence-blocking. Marginal = rare, formal, or replaceable.
 - **Placement = the two axes combined by judgment.** Transparent + Core → earliest (fast wins). Opaque + Core → early, taught as a structural rule. Partial + Core → middle, taught as a meaning trap. Transparent + Marginal → a deliberate choice (early-with-its-kin OR late as "formal only"), recorded with a reason. Opaque + Common → mid-to-late, sized to importance. Opaque + Marginal → late or optional.
-- **Vocabulary is concept → context → mapping.** The concept inventory lives in VOCABULARY.md.
+- **Vocabulary is concept → context → mapping.**
 
 
 ## Pedagogy principles

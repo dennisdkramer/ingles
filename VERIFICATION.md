@@ -20,6 +20,3 @@ Scope belongs to the harnesses, not the caller: with no lesson numbers every pag
 pages is swept, `--track=kids|business|adult` narrows it (qa/track.mjs), and a named lesson that does not
 exist is a failure. `npm run qa` = build + content + landing + games; `npm run qa:layout` = the overflow
 selftest + sweep; `npm run qa:live` = the CDP probe. Every harness exits non-zero on a finding.
-
-After any change to `style.css` or to lesson markup, run `npm run qa:layout` (real browser) — the jsdom
-harnesses cannot see layout, and have stayed green while a page was visibly broken.

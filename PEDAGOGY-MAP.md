@@ -31,12 +31,11 @@
       6. **`sequence:`** (which slice of a multi-lesson strand this lesson owns, and what the other lessons own) and **`must not re-teach:`** (what a neighbouring lesson owns) — two lines, at the top of the file.
 
 **Pass B — build.** (Output = `<track>/lessonNN.html`)
-Inputs: designs/<track>/<lessonNN.design.md> + FORMAT.md + FUNCTION.md + **§1–§6 of this file** (are high-priority build inputs, not background). The build is a **synthesis, not obedience**.
+Inputs: 'designs/<track>/<lessonNN.design.md>' + FORMAT.md + FUNCTION.md + **§1–§6 of this file** (are high-priority build inputs, not background). The build is a **synthesis, not obedience**.
    - How the shape is built with the available blocks — is Pass B's call, no escalation
    - A change that alters the shape or one of the design's teaching beats is made and then **written back into the design file**; a conflict or ambiguity that cannot be resolved that way is escalated. 
    - Pass B never silently contradicts a teaching beat, but may replace the design's shape with a strong defensible reason (in which case it proceeds, records the change in the design file, and does not escalate).
    - **No other lesson's PAGE or design.md is read if the step is not explicitly instructed to do so** 
-   - Redundancy and flow are checked against structured extracts only of [the neighbouring lessons' entries in `BUSINESS-ROADMAP.md` (`Content:` / `Key vocabulary:` / `Focus:`)] and [the vocabulary/concept inventory (`VOCABULARY.md`)]. A page read is a shape absorbed.
 	- **HIGH PRIORITY**: 
       1. For any generated [**Lesson introduction, explanatory text, tip, headline, or column header**], it is Portuguese [only if its parent  [LESSON NUMBER] < [CONTENT LEVEL]] ELSE [it is English and [CONTENT LEVEL] is as close as possible to [LESSON LEVEL]]. 
       2. For any generated content of any other type, it is synthesized with [[derived socio-linguistic context] and [its TRACK's [register details and persona priorities]]], [CONTENT LEVEL] is as close as possible to [LESSON LEVEL], and [it is Portuguese ONLY when *defensibly optimal for teaching purposes*]
@@ -55,7 +54,7 @@ Inputs: designs/<track>/<lessonNN.design.md> + FORMAT.md + FUNCTION.md + **§1�
 	- If a rule would have blocked something better, that's an escalation, not a workaround (the mirror image of §2).
 	- Handling depends on scope of elements involved in any escalation/conflict: 
 		a) Planning/Content/Vehicle for a single section which does not interfere with successful generation of other sections -> (concise explanation of escalation and next-step recommendation appended to lessonNN.design.md - Affected content skipped, task processing continues)
-		b) Conflict is limited to content of one specific lesson, but [more than one section is affected or risks being degraded] -> (escalation elaborated in lessonNN.design.md, task skips to next requested lesson generation if applicable)
+		b) Conflict is limited to content of one specific lesson, but [more than one section is affected or risks being degraded] -> (append ##ISSUE and a one line explanation in lessonNN.design.md, task skips to next requested lesson generation if applicable)
 		c) Any issue that effects the content of multiple lessons or generation in general - (task is immediately paused to confer with the user)
 
 ### 3. Non-Negotiables

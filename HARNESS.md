@@ -1,7 +1,7 @@
 # HARNESS — binding contract. RE-READ ON EVERY PROMPT, before any other action.
 This file is the single read-first hub after RULE 0 is read from the global rules.
 It is always in force and adherence is non-negotiable
-The category files (FORMAT / FUNCTION / PEDAGOGY-MAP / VERIFICATION /) hold the parameters of elements and load only when they are in scope for the current task.
+The category files (FORMAT / FUNCTION / PEDAGOGY-MAP / VERIFICATION) hold the parameters of elements and load only when they are in scope for the current task — FORMAT: any page work · FUNCTION: any behaviour, engine or backend work · PEDAGOGY-MAP: any generation · VERIFICATION: only when the task is to verify or a QA decision has to be made, never an input to generation.
 
 ## RULE 1 — CONTEXT & TOKEN ECONOMY
 
