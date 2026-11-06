@@ -11,12 +11,12 @@
 <h1>Games v2 — preview</h1>
 <p>Not a lesson. Open this file, press <b>Start</b>, and judge the look and feel. Every game below reads
 the same kind of authored <code>.qitem</code> list, so swapping <code>data-game</code> changes the game
-without touching the content.</p>
+without touching the content. <code>data-time</code> is the per-item deadline in milliseconds.</p>
 
-<h2>1. catchBasket — sort it before it lands</h2>
+<h2>1. catchBasket — drag it into the basket that fits</h2>
 <h3>A. Which past form is it?</h3>
-<div class="game" data-game="catchBasket" data-skin="sort" data-speed="55" data-shuffle="1" data-replay="1">
-<p class="game-how">The verb falls. Click the basket it belongs in before it hits the ground — <b>1</b> / <b>2</b> also work.</p>
+<div class="game" data-game="catchBasket" data-skin="sort" data-time="8000" data-shuffle="1" data-replay="1">
+<p class="game-how">Drag the card into the basket it belongs in. Don't want to drag? Tap the basket — same answer. <b>1</b> / <b>2</b> work too.</p>
 <div class="game-list">
   <div class="qitem" data-a="a"><div class="qline"><span class="qnum">1.</span><span class="qstem">played</span></div><div class="qopts"><label><input type="radio" name="p1" value="a"> + ed, no change</label><label><input type="radio" name="p1" value="b"> whole word changes</label></div></div>
   <div class="qitem" data-a="b"><div class="qline"><span class="qnum">2.</span><span class="qstem">went</span></div><div class="qopts"><label><input type="radio" name="p2" value="a"> + ed, no change</label><label><input type="radio" name="p2" value="b"> whole word changes</label></div></div>
@@ -28,8 +28,8 @@ without touching the content.</p>
 
 <h2>2. whackMole — recognise it before it ducks</h2>
 <h3>A. Which one means what the Portuguese says?</h3>
-<div class="game" data-game="whackMole" data-speed="3000" data-shuffle="1" data-replay="1">
-<p class="game-how">The question is on the scoreboard. Hit the answer before it ducks — <b>1</b>–<b>3</b> also work.</p>
+<div class="game" data-game="whackMole" data-time="5000" data-shuffle="1" data-replay="1">
+<p class="game-how">The question is on the scoreboard. Hit the answer before the bar empties — <b>1</b>–<b>3</b> also work.</p>
 <div class="game-list">
   <div class="qitem" data-a="b"><div class="qline"><span class="qnum">1.</span><span class="qstem">Ela está lendo agora.</span></div><div class="qopts"><label><input type="radio" name="m1" value="a"> She reads now.</label><label><input type="radio" name="m1" value="b"> She's reading now.</label><label><input type="radio" name="m1" value="c"> She read now.</label></div></div>
   <div class="qitem" data-a="a"><div class="qline"><span class="qnum">2.</span><span class="qstem">A live começa às oito.</span></div><div class="qopts"><label><input type="radio" name="m2" value="a"> The stream starts at eight.</label><label><input type="radio" name="m2" value="b"> The stream start at eight.</label><label><input type="radio" name="m2" value="c"> The stream is start at eight.</label></div></div>

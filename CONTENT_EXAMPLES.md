@@ -67,13 +67,14 @@ that saves is the same radio a plain page would have.
 - **can't** — no production, no spelling; one shot per item means a careless click can hide what the student knew.
 - **needs** — shared runner (or `shootPair` refactored into it).
 
-### `whackMole` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2
+### `whackMole` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
-- **does** — Targets pop up from holes on a timer; the player taps the one that fits the prompt before it drops.
-- **skins** — same `.qitem` list; one pop per item, options distributed across holes so position never hints.
-- **art** — flat circles in three rows of holes; pop is scale-up with a squash-back, nothing else moves.
+- **does** — One drawn mole per option surfaces from a hole, stamped in stagger; the player hits the one that
+  fits before the runner's timer bar empties. The rest duck away the instant an answer lands.
+- **skins** — same `.qitem` list; the prompt sits on the HUD line, options become the moles' labels.
+- **art** — inline SVG mole + radial-gradient hole with a dirt rim, rise via `translateY`, reduced-motion path.
 - **can't** — recognition only; speed pressure makes it a poor fit for anything needing reflection.
-- **needs** — shared runner.
+- **needs** — nothing; `engine4.js` ships it.
 
 ### `brickRight` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2
 
@@ -84,15 +85,16 @@ that saves is the same radio a plain page would have.
 - **can't** — one hand is on the paddle, so the reading load must be tiny; long options break the geometry.
 - **needs** — shared runner + a collision loop.
 
-### `catchBasket` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 3
+### `catchBasket` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 3 · **built: engine4.js**
 
-- **does** — Words fall; the player steers two or three labelled baskets and must catch each word in the
-  category that fits. This is the *sorting* idea with real game pressure, which is what a bucket table lacks.
-- **skins** — each `.qitem` option is a falling token; each basket is a radio; catching dispatches the same
-  `input`/`change` a click would.
-- **art** — flat trapezoids for baskets, small rounded tokens, one gravity curve, no bounce chaos.
-- **can't** — only two or three categories survive the screen; fine distinctions don't fit.
-- **needs** — shared runner.
+- **does** — The prompt is a card; the player DRAGS it into the basket that fits. Real pointer drag (mouse, pen,
+  touch), with tap-a-basket and `1`/`2` keys as equal alternatives. Dropping outside springs the card back, so a
+  slipped finger costs nothing but time; the runner's bar is the deadline.
+- **skins** — one card per item (`.qstem`), one basket per option; a correct drop checks that option's radio.
+- **art** — inline SVG wicker basket, the card lifts and tilts its shadow while held, a correct drop flies the
+  card into the basket and shrinks it, a wrong drop shakes. Reduced motion keeps the state change, drops the travel.
+- **can't** — only two or three baskets fit a row; fine distinctions don't fit.
+- **needs** — nothing; `engine4.js` ships it.
 
 ### `stackDrop` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2
 

@@ -34,15 +34,15 @@ const item = (n, stem, key, opts) => `
 
 const FIXTURE = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>games4</title></head><body>
 <div class="content-area">
-  <div class="game" id="catch" data-game="catchBasket" data-shuffle="0" data-replay="1" data-speed="400">
-    <p class="game-how">Catch each one in the basket that fits.</p>
+  <div class="game" id="catch" data-game="catchBasket" data-shuffle="0" data-replay="1" data-time="6000">
+    <p class="game-how">Drag each one into the basket that fits.</p>
     <div class="game-list">
       ${item(1, 'a finished thing', 'a', [['a', 'past'], ['b', 'now']])}
       ${item(2, 'a thing happening', 'b', [['a', 'past'], ['b', 'now']])}
     </div>
     <button class="game-start" type="button">▶ Start</button>
   </div>
-  <div class="game" id="mole" data-game="whackMole" data-shuffle="0" data-speed="60000">
+  <div class="game" id="mole" data-game="whackMole" data-shuffle="0" data-time="60000">
     <p class="game-how">Hit the one that fits.</p>
     <div class="game-list">
       ${item(1, 'which one is a greeting', 'c', [['a', 'a'], ['b', 'b'], ['c', 'hello']])}
@@ -88,11 +88,14 @@ async function run() {
   ok('nothing is drawn before start',
     doc.querySelectorAll('.g4-bucket').length === 0 && doc.querySelectorAll('.g4-mole').length === 0);
 
-  /* --- catchBasket: buckets are options, the token is the prompt --- */
+  /* --- catchBasket: baskets are options, the card is the prompt, drag or tap both answer --- */
   rc.querySelector('.game-start').click();
   ok('Start begins the run', rc.classList.contains('is-on') && gc.state().running, gc.state().phase);
-  ok('one bucket per option', doc.querySelectorAll('#catch .g4-bucket').length === 2);
-  ok('the prompt is the falling token', doc.querySelector('#catch .g4-token').textContent === 'a finished thing');
+  ok('one basket per option', doc.querySelectorAll('#catch .g4-bucket').length === 2);
+  ok('every basket is drawn art, not a bare box', doc.querySelectorAll('#catch .g4-bucket .g4-art').length === 2);
+  ok('the prompt is a draggable card', doc.querySelector('#catch .g4-card').textContent === 'a finished thing');
+  ok('the deadline is visible as a bar', !!doc.querySelector('#catch .g4-timebar i'));
+  ok('data-time is read as the per-item deadline', gc.state().itemTime === 6000, 'itemTime=' + gc.state().itemTime);
   ok('the right answer is the authored data-a, not a written key', gc.state().key === 'a', 'key=' + gc.state().key);
 
   gc.hooks.pick('a');
@@ -129,11 +132,13 @@ async function run() {
   ok('the keyboard answers too (1..n)', gc.state().score === 1, 'score=' + gc.state().score);
   await sleep(700);
 
-  /* --- whackMole: moles are options, in holes, under a HUD prompt --- */
+  /* --- whackMole: moles are options, drawn, in holes, under a HUD prompt --- */
   rm.querySelector('.game-start').click();
-  ok('whackMole pops one mole per option', doc.querySelectorAll('#mole .g4-mole').length === 3);
+  ok('whackMole surfaces one mole per option', doc.querySelectorAll('#mole .g4-mole').length === 3);
+  ok('every mole is drawn art', doc.querySelectorAll('#mole .g4-mole .g4-art').length === 3);
   ok('the moles live in holes', doc.querySelectorAll('#mole .g4-hole').length >= 6,
     doc.querySelectorAll('#mole .g4-hole').length + ' holes');
+  ok('a hole has a dirt rim, so it reads as a hole', !!doc.querySelector('#mole .g4-hole .g4-dirt'));
   ok('the prompt sits on the HUD line', doc.querySelector('#mole .g4-prompt').textContent === 'which one is a greeting');
   const right = [...doc.querySelectorAll('#mole .g4-mole')].find(m => m.getAttribute('data-v') === 'c');
   right.click();
@@ -142,6 +147,20 @@ async function run() {
   ok('and scores', gm.state().score === 1);
   await sleep(700);
   ok('the single-item run ends', gm.state().phase === 'over', gm.state().phase);
+
+  /* --- a pointer drag answers through the same path as a click --- */
+  gc.hooks.start();
+  const card = doc.querySelector('#catch .g4-card');
+  const baskets = doc.querySelectorAll('#catch .g4-bucket');
+  ok('the card and the baskets are there to drag between', !!card && baskets.length === 2);
+  const fire = (elm, type) => elm.dispatchEvent(new w.MouseEvent(type, { bubbles: true, clientX: 0, clientY: 0 }));
+  fire(card, 'pointerdown');
+  ok('pointerdown lifts the card', card.classList.contains('dragging'));
+  fire(card, 'pointermove');
+  fire(card, 'pointerup');
+  ok('dropping the card on a basket answers, and marks the real radio',
+    doc.querySelector('#catch input[name="q1"][value="a"]').checked === true, 'score=' + gc.state().score);
+  await sleep(700);
 
   /* --- the levers are data, so difficulty is authored, never coded --- */
   const probe = doc.createElement('div');
