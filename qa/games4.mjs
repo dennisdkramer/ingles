@@ -53,8 +53,8 @@ const FIXTURE = `<!doctype html><html lang="en"><head><meta charset="utf-8"><tit
 
 let pass = 0, fail = 0;
 function ok(name, cond, extra) {
-  if (cond) { pass++; console.log('  ✅ ' + name + (extra ? '  «' + extra + '»' : '')); }
-  else { fail++; console.log('  ❌ ' + name + (extra ? '  «' + extra + '»' : '')); }
+  if (cond) { pass++; console.log('  PASS  ' + name + (extra ? '  <<' + extra + '>>' : '')); }
+  else { fail++; console.log('  FAIL  ' + name + (extra ? '  <<' + extra + '>>' : '')); }
 }
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -83,10 +83,38 @@ async function run() {
 
   ok('boot found both game blocks', w.__G4.length === 2 && !!gc && !!gm, (w.__booted || 0) + ' instance(s)');
   ok('both games read the same authored markup', gc.items.length === 2 && gm.items.length === 1);
-  ok('the authored list is visible before start (no-JS fallback)',
-    !rc.classList.contains('is-on') && !!rc.querySelector('.game-list input[type=radio]'));
-  ok('nothing is drawn before start',
+
+  /* --- the DEFAULT view is the game's intro screen --- */
+  ok('the block opens on an intro screen', !!rc.querySelector('.g4-intro') && !rc.classList.contains('is-on'));
+  ok('the intro carries the authored how-text',
+    /Drag each one/.test((rc.querySelector('.g4-intro .game-how') || {}).textContent || ''));
+  ok('the intro carries the Play button, not a form', !!rc.querySelector('.g4-intro .game-start'));
+  const meta = (rc.querySelector('.g4-intro-meta') || {}).textContent || '';
+  ok('the intro states the rounds, the deadline and the keys', /2/.test(meta) && /6s/.test(meta) && /1–/.test(meta), meta);
+  ok('the engine marks the block ready — that class is what hides the list', rc.classList.contains('g4-ready'));
+  ok('the authored radios survive in the DOM (hidden, not deleted)',
+    rc.querySelectorAll('.game-list input[type=radio]').length === 4);
+  ok('nothing is drawn on the stage before start',
     doc.querySelectorAll('.g4-bucket').length === 0 && doc.querySelectorAll('.g4-mole').length === 0);
+
+  /* --- the fallback: a block no game claimed stays a plain form --- */
+  const orphan = doc.createElement('div');
+  orphan.className = 'game';
+  orphan.setAttribute('data-game', 'noSuchGame');
+  orphan.innerHTML = '<p class="game-how">fallback</p><div class="game-list">'
+    + item(1, 'q', 'a', [['a', 'x']]) + '</div><button class="game-start" type="button">▶</button>';
+  doc.querySelector('.content-area').appendChild(orphan);
+  w.GAMES4.boot();
+  ok('an unclaimed block gets NO ready class, so its list and how-text stay visible',
+    !orphan.classList.contains('g4-ready') && !orphan.querySelector('.g4-intro'));
+  orphan.remove();
+
+  /* --- and CSS must actually express that, or the fallback is a fiction --- */
+  const CSS_SRC = fs.readFileSync(path.join(ROOT, 'style.css'), 'utf8').replace(/\s+/g, ' ');
+  ok('style.css hides the list only behind .g4-ready', /\.game\.g4-ready \.game-list\{display:none\}/.test(CSS_SRC));
+  ok('style.css hides a dead Start button on an unclaimed block',
+    /\.game:not\(\.g4-ready\) \.game-start\{display:none\}/.test(CSS_SRC));
+  ok('print always shows the authored list', /@media print\{[^\n]*\.game-list\{display:block !important/.test(CSS_SRC));
 
   /* --- catchBasket: baskets are options, the card is the prompt, drag or tap both answer --- */
   rc.querySelector('.game-start').click();
@@ -177,7 +205,7 @@ async function run() {
   ok('an empty game disables itself instead of pretending', !!pg && !!probe.querySelector('.game-start') && probe.querySelector('.game-start').disabled === true);
   ok('boot is idempotent (no double instances)', w.GAMES4.boot() === 3 && probe.__g4 === pg);
 
-  console.log('\n' + (fail ? '❌ ' : '✅ ') + pass + ' passed, ' + fail + ' failed\n');
+  console.log('\n' + (fail ? 'FAILED: ' : 'OK: ') + pass + ' passed, ' + fail + ' failed\n');
   process.exitCode = fail ? 1 : 0;
 }
 

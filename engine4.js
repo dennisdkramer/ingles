@@ -156,7 +156,28 @@ window.GAMES4 = (function () {
     this.running = false; this.replaying = false; this.phase = 'idle';
     this.missed = []; this.timers = []; this.clock = 0; this.barRaf = 0;
 
-    root.className += ' g4';
+    /* readiness: this class is what hides the authored list, and it is added ONLY by a live instance.
+       If engine4.js never loads, or this block names a game that does not exist, the class is absent
+       and the page falls back to plain radios and the how-text — the intended no-JS behaviour. */
+    root.className += ' g4 g4-ready';
+
+    /* the intro screen: the block's own how-text and Start button move inside it, so before play the
+       block reads as a screen instead of as a form with a button under it */
+    var intro = el('div', 'g4-intro');
+    var how = root.querySelector('.game-how');
+    if (how) intro.appendChild(how);
+    var rounds = Math.max(0, num(root, 'data-rounds', 0)) || this.items.length;
+    var meta = el('ul', 'g4-intro-meta');
+    var bits = ['<li><b>' + rounds + '</b> ' + (rounds === 1 ? 'round' : 'rounds') + '</li>'];
+    if (this.itemTime) bits.push('<li><b>' + (Math.round(this.itemTime / 100) / 10) + 's</b> each</li>');
+    if (this.limit) bits.push('<li><b>' + this.limit + 's</b> total</li>');
+    bits.push('<li>keys <b>1–' + (this.items.length ? Math.max.apply(null, this.items.map(function (i) {
+      return i.opts.length;
+    })) : 1) + '</b></li>');
+    meta.innerHTML = bits.join('');
+    intro.appendChild(meta);
+    root.insertBefore(intro, root.firstChild);
+    this.intro = intro;
     var stage = el('div', 'g4-stage');
     var hud = el('div', 'g4-hud');
     hud.innerHTML = '<span class="wave"></span><span class="score"></span><span class="clock"></span>';
@@ -172,12 +193,13 @@ window.GAMES4 = (function () {
     if (this.itemTime) stage.appendChild(bar);
     this.bar = bar; this.barFill = bar.querySelector('i');
     this.stage = stage; this.hudEl = hud;
-    var how = root.querySelector('.game-how');
-    root.insertBefore(stage, how ? how.nextSibling : root.firstChild);
+    root.insertBefore(stage, intro.nextSibling);
 
     var btn = root.querySelector('.game-start');
-    if (!btn) { btn = el('button', 'game-start', '▶ Start'); btn.type = 'button'; root.appendChild(btn); }
+    if (!btn) { btn = el('button', 'game-start', '▶ Play'); btn.type = 'button'; }
     if (!btn.getAttribute('type')) btn.setAttribute('type', 'button');
+    btn.textContent = '▶ Play';
+    intro.appendChild(btn);          /* the button lives on the intro screen, not under the block */
     btn.addEventListener('click', function () { self.start(); });
     this.btn = btn;
     this.view = this.plugin ? this.plugin(this) : null;

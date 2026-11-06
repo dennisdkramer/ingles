@@ -309,6 +309,17 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 @media print{.game-stage{display:none}.game.is-on .game-list{display:block}}
 
 /* ---- engine4.js — games v2: one runner, presentations as skins (the authored radios persist) ---- */
+/* the default view is the game's own intro screen; the authored list is the FALLBACK, shown only when
+   nothing claimed the block (engine4.js missing/failed, or an unknown data-game) — no .g4-ready */
+.game.g4-ready .game-list{display:none}
+.game:not(.g4-ready) .game-start{display:none}
+.game.g4 .g4-intro{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px 18px 18px;text-align:center}
+.game.g4-ready.is-on .g4-intro{display:none}
+.g4-intro .game-how{max-width:62ch;margin:0}
+.g4-intro-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:0;padding:0;list-style:none;font:600 13px 'Public Sans',sans-serif;color:var(--ink)}
+.g4-intro-meta li{padding:3px 11px;background:#fff8ea;border:2px solid var(--tan);border-radius:999px}
+.g4-intro-meta b{font-weight:800}
+.g4-intro .game-start{font-size:16px;padding:10px 22px}
 .game.g4 .g4-stage{position:relative;margin:10px 0 0;height:280px;overflow:hidden;background:linear-gradient(#eaf3f8,#dce9f2);border:2px solid var(--ink);border-radius:14px}
 .game:not(.is-on) .g4-stage{display:none}
 .g4-hud{position:absolute;right:10px;top:8px;z-index:5;display:flex;gap:12px;font:700 14px 'Public Sans',sans-serif;color:var(--ink)}
@@ -354,5 +365,5 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
   .g4-mole.no .g4-mole-t,.g4-bucket.reveal .g4-bucket-t,.g4-mole.reveal .g4-mole-t{animation:none}
   .g4-prompt{transition:none}
 }
-@media print{.g4-stage{display:none}}
+@media print{.g4-stage{display:none}.game-list{display:block !important}.g4-intro{display:none !important}}
 
