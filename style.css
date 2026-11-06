@@ -419,6 +419,10 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-tile.near{background:#d9a13c;border-color:#d9a13c;color:#fff}
 .g4-tile.no{background:#9aa4b2;border-color:#9aa4b2;color:#fff}
 .g4-wtype{width:200px;padding:7px 10px;border:2px solid var(--ink);border-radius:8px;font:700 14px 'Public Sans',sans-serif;text-align:center}
+.g4-wbg{position:absolute;inset:0;color:var(--ink);opacity:.55;pointer-events:none}
+.g4-wbg svg{display:block;width:100%;height:100%}
+.g4-echo-line{font:700 13px 'Public Sans',sans-serif;text-align:center;min-height:1.4em}
+
 /* crosswordBoard */
 .g4-xw{position:absolute;left:12px;right:12px;top:52px;bottom:12px;display:flex;align-items:center;justify-content:center}
 .g4-xgrid{display:grid;gap:4px}
@@ -474,6 +478,14 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 
 .g4-art{display:block;width:100%;height:100%}
 /* catchBasket — a card you drag into a basket */
+.g4-words{position:absolute;left:10px;right:10px;top:44px;bottom:132px;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;justify-content:center;align-content:flex-start;z-index:4;overflow:auto}
+.g4-chip{max-width:46%;padding:7px 14px;background:var(--paper);border:2px solid var(--ink);border-radius:999px;box-shadow:3px 3px 0 var(--tan);color:var(--ink);font:700 15px 'Public Sans',sans-serif;line-height:1.2;cursor:grab;touch-action:none;will-change:transform}
+.g4-chip.active{border-color:var(--tan);box-shadow:3px 3px 0 var(--ink)}
+.g4-chip.dragging{cursor:grabbing;box-shadow:6px 6px 0 var(--ink);transform:scale(1.06)}
+.g4-chip.caught{border-color:#2f9e44;background:#e8f7ee}
+.g4-chip.spilled{border-color:#c92a2a;background:#fdeaea;animation:g4shake .3s ease}
+@keyframes g4shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
 .g4-tray{position:absolute;left:12px;right:12px;bottom:16px;display:flex;gap:14px;z-index:2}
 .g4-bucket{position:relative;flex:1 1 0;min-width:0;height:104px;padding:44px 8px 0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);font:700 14px 'Public Sans',sans-serif;line-height:1.2;text-align:center;cursor:pointer;overflow:visible}
 .g4-bucket .g4-art{position:absolute;left:0;right:0;bottom:0;height:76px;width:100%;transition:transform .18s ease}

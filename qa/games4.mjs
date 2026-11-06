@@ -119,12 +119,18 @@ async function run() {
     /\.game:not\(\.g4-ready\) \.game-start\{display:none\}/.test(CSS_SRC));
   ok('print always shows the authored list', /@media print\{[^\n]*\.game-list\{display:block !important/.test(CSS_SRC));
 
-  /* --- catchBasket: baskets are options, the card is the prompt, drag or tap both answer --- */
+  /* --- catchBasket: a row of words on top, baskets from the block's own option labels --- */
   rc.querySelector('.game-start').click();
   ok('Start begins the run', rc.classList.contains('is-on') && gc.state().running, gc.state().phase);
   ok('one basket per option', doc.querySelectorAll('#catch .g4-bucket').length === 2);
   ok('every basket is drawn art, not a bare box', doc.querySelectorAll('#catch .g4-bucket .g4-art').length === 2);
-  ok('the prompt is a draggable card', doc.querySelector('#catch .g4-card').textContent === 'a finished thing');
+  ok('the buckets are labelled by the activity (its option text)',
+    [...doc.querySelectorAll('#catch .g4-bucket-t')].map(t => t.textContent).join('|') === 'past|now',
+    [...doc.querySelectorAll('#catch .g4-bucket-t')].map(t => t.textContent).join('|'));
+  ok('ONE word is on the row — the one being sorted, not all of them',
+    [...doc.querySelectorAll('#catch .g4-chip')].map(c => c.textContent).join('|') === 'a finished thing',
+    [...doc.querySelectorAll('#catch .g4-chip')].map(c => c.textContent).join('|'));
+  ok('the first word starts selected', doc.querySelector('#catch .g4-chip').classList.contains('active'));
   ok('the deadline is visible as a bar', !!doc.querySelector('#catch .g4-timebar i'));
   ok('data-time is read as the per-item deadline', gc.state().itemTime === 6000, 'itemTime=' + gc.state().itemTime);
   ok('the right answer is the authored data-a, not a written key', gc.state().key === 'a', 'key=' + gc.state().key);
@@ -136,14 +142,27 @@ async function run() {
   await sleep(700);
 
   ok('the next item follows on its own', gc.state().prompt === 'a thing happening', gc.state().prompt);
-  gc.hooks.pick('a');
-  ok('a wrong pick is a miss', gc.state().score === 1 && gc.state().missed === 1);
+  ok('the answered word leaves the row', doc.querySelectorAll('#catch .g4-chip').length === 1,
+    doc.querySelectorAll('#catch .g4-chip').length + ' chip(s) left');
+
+  /* any word can be answered, not only the front of the queue */
+  gc.hooks.start();
+  const it2 = gc.queue[1];
+  gc.pickOn(it2, 'b');
+  ok('a word that is NOT at the front can be answered (pickOn)',
+    doc.querySelector('#catch input[name="q2"][value="b"]').checked === true);
+  ok('pickOn counts it once, not twice', gc.state().score === 1, 'score=' + gc.state().score);
+  await sleep(700);
+
+  gc.hooks.pick('b');
+  ok('a wrong basket is a miss', gc.state().score === 1 && gc.state().missed === 1,
+    'score=' + gc.state().score + ' missed=' + gc.state().missed);
   ok('a miss leaves the radio blank — the blank is the evidence',
-    doc.querySelector('#catch input[name="q2"][value="a"]').checked === false);
-  await sleep(1000);
+    doc.querySelector('#catch input[name="q1"][value="b"]').checked === false);
+  await sleep(1100);
 
   ok('the missed item comes back once', gc.state().replaying === true, 'replaying=' + gc.state().replaying);
-  gc.hooks.pick('b');
+  gc.hooks.pick('a');
   await sleep(700);
   const line = rc.querySelector('.game-score-line');
   ok('the run ends with the score line',
@@ -181,9 +200,9 @@ async function run() {
 
   /* --- a pointer drag answers through the same path as a click --- */
   gc.hooks.start();
-  const card = doc.querySelector('#catch .g4-card');
+  const card = doc.querySelector('#catch .g4-chip');
   const baskets = doc.querySelectorAll('#catch .g4-bucket');
-  ok('the card and the baskets are there to drag between', !!card && baskets.length === 2);
+  ok('a word chip and the baskets are there to drag between', !!card && baskets.length === 2);
   const fire = (elm, type) => elm.dispatchEvent(new w.MouseEvent(type, { bubbles: true, clientX: 0, clientY: 0 }));
   fire(card, 'pointerdown');
   ok('pointerdown lifts the card', card.classList.contains('dragging'));

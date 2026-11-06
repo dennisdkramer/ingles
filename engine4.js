@@ -354,6 +354,16 @@ window.GAMES4 = (function () {
     if (!it || this.phase !== 'play') return false;
     return this.resolve(value, value === it.key ? 'hit' : 'miss');
   };
+  /* pickOn: answer a specific queued item. Used by games where the student chooses WHICH word to
+     work on (a sorting board, a board of tiles) rather than only which option. The item is moved
+     to the front first so the runner's own queue accounting stays honest. */
+  Runner.prototype.pickOn = function (it, value) {
+    if (!it || this.phase !== 'play') return false;
+    var at = this.queue.indexOf(it);
+    if (at < 0) return false;
+    if (at > 0) { this.queue.splice(at, 1); this.queue.unshift(it); }
+    return this.resolve(value, value === it.key ? 'hit' : 'miss');
+  };
   Runner.prototype.expire = function () {
     if (this.phase !== 'play') return false;
     return this.resolve(null, 'miss');
@@ -419,18 +429,25 @@ window.GAMES4 = (function () {
     };
   };
 
-  /* ---------------- catchBasket: DRAG the token into the basket that fits ----------------
-     Real pointer drag (mouse, pen, touch) with a tap-a-basket fallback, so a student who never
-     discovers dragging still answers. The deadline is the runner's bar, not the motion. */
+  /* ---------------- catchBasket: sort the words into the baskets ----------------
+     The words sit in a row along the top — as many as the run has, however many that is — and the
+     student drags ANY of them into the basket it belongs in. The baskets are the block's own option
+     labels, so the activity decides what they are (or pins them with data-buckets="left|right").
+     Real pointer drag (mouse, pen, touch) with a tap-word-then-tap-basket fallback and 1../9 keys,
+     so a student who never discovers dragging still answers. */
   PLUGINS.catchBasket = function (r) {
     var stage = r.stage;
+    var wordRow = el('div', 'g4-words');
     var tray = el('div', 'g4-tray');
-    stage.appendChild(tray);
-    var token = null, buckets = [], drag = null;
+    stage.appendChild(wordRow); stage.appendChild(tray);
+    var chips = [], buckets = [], drag = null, active = null;
 
-    function place(dx, dy, scale) {
-      if (!token) return;
-      token.style.transform = 'translate(-50%,-50%) translate(' + dx + 'px,' + dy + 'px) scale(' + (scale || 1) + ')';
+    /* the bucket labels are `data-buckets="A|B"` when the activity pins them, else the item's own
+       option labels — so a block can decide what its buckets are, per item or for the whole run */
+    function labels(item) {
+      var pinned = r.root.getAttribute('data-buckets');
+      if (pinned) return pinned.split('|').map(function (s) { return s.trim(); }).filter(Boolean);
+      return item ? item.opts.map(function (o) { return o.text; }) : [];
     }
     function bucketAt(x, y) {
       var found = null;
@@ -438,82 +455,99 @@ window.GAMES4 = (function () {
         b.classList.remove('hot');
         if (found) return;
         var q = b.getBoundingClientRect();
-        if (x >= q.left - 14 && x <= q.right + 14 && y >= q.top - 22 && y <= q.bottom + 30) found = b;
+        if (x >= q.left - 14 && x <= q.right + 14 && y >= q.top - 24 && y <= q.bottom + 30) found = b;
       });
       if (found) found.classList.add('hot');
       return found;
     }
     function clear() {
-      drag = null;
-      if (token && token.parentNode) token.parentNode.removeChild(token);
-      token = null;
-      buckets.forEach(function (b) { if (b.parentNode) b.parentNode.removeChild(b); });
-      buckets = [];
+      drag = null; active = null;
+      wordRow.innerHTML = ''; tray.innerHTML = '';
+      chips = []; buckets = [];
     }
     function show(item) {
       clear();
-      item.opts.forEach(function (o) {
+      var names = labels(item);
+      /* buckets first, so a drag can land on one before the student releases. The buckets belong to
+         THIS item, so a block can re-label them item by item. */
+      item.opts.forEach(function (o, i) {
         var b = el('button', 'g4-bucket');
         b.type = 'button';
         b.setAttribute('data-v', o.value);
-        b.innerHTML = ART.basket + '<span class="g4-bucket-t">' + esc(o.text) + '</span>';
-        b.addEventListener('click', function () { if (r.phase === 'play') r.pick(o.value); });
+        b.innerHTML = ART.basket + '<span class="g4-bucket-t">' + esc(names[i] || o.text) + '</span>';
+        b.addEventListener('click', function () { if (r.phase === 'play') r.pickOn(item, o.value); });
         tray.appendChild(b);
         buckets.push(b);
       });
-      token = el('div', 'g4-card', item.prompt);
-      stage.appendChild(token);
-      place(0, 0, 1);
-      if (window.PointerEvent) {
-        token.style.touchAction = 'none';
-        token.addEventListener('pointerdown', down);
-        token.addEventListener('pointermove', move);
-        token.addEventListener('pointerup', up);
-        token.addEventListener('pointercancel', up);
-      }
+      /* ONE card at a time — the word being sorted. A queue of chips asked the student to read words
+         they were not working on, and made the drag target unclear. */
+      var c = el('button', 'g4-chip active', item.prompt);
+      c.type = 'button';
+      c.__item = item;
+      c.setAttribute('data-v', item.key);
+      c.style.touchAction = 'none';
+      c.addEventListener('pointerdown', function (e) { down(e, c); });
+      c.addEventListener('pointermove', move);
+      c.addEventListener('pointerup', up);
+      c.addEventListener('pointercancel', up);
+      wordRow.appendChild(c);
+      chips.push(c);
+      active = item;
     }
-    function down(e) {
-      if (r.phase !== 'play' || !token) return;
+    function lift(c, e) {
+      var q = c.getBoundingClientRect();
+      c.__off = { x: e.clientX - q.left, y: e.clientY - q.top };
+      c.__w = q.width; c.__h = q.height;
+      c.style.position = 'fixed';
+      c.style.width = q.width + 'px';
+      c.style.height = q.height + 'px';
+      c.style.left = q.left + 'px';
+      c.style.top = q.top + 'px';
+      c.style.zIndex = '20';
+    }
+    function drop(c) {
+      c.style.position = ''; c.style.left = ''; c.style.top = '';
+      c.style.width = ''; c.style.height = ''; c.style.zIndex = '';
+    }
+    function down(e, c) {
+      if (r.phase !== 'play') return;
       if (e.preventDefault) e.preventDefault();
-      if (token.setPointerCapture) { try { token.setPointerCapture(e.pointerId); } catch (x) { /* older engines */ } }
-      drag = { x: e.clientX, y: e.clientY, id: e.pointerId };
-      token.classList.add('dragging');
+      if (c.setPointerCapture) { try { c.setPointerCapture(e.pointerId); } catch (x) { /* older engines */ } }
+      drag = { c: c, id: e.pointerId };
+      active = c.__item;
+      chips.forEach(function (x) { x.classList.remove('active'); });
+      c.classList.add('active', 'dragging');
+      lift(c, e);
     }
     function move(e) {
       if (!drag || e.pointerId !== drag.id) return;
-      place(e.clientX - drag.x, e.clientY - drag.y, 1.05);
+      var c = drag.c;
+      c.style.left = (e.clientX - c.__off.x) + 'px';
+      c.style.top = (e.clientY - c.__off.y) + 'px';
       bucketAt(e.clientX, e.clientY);
     }
     function up(e) {
       if (!drag) return;
+      var c = drag.c;
       drag = null;
-      if (token) token.classList.remove('dragging');
+      c.classList.remove('dragging');
       var b = bucketAt(e.clientX, e.clientY);
-      if (b) { r.pick(b.getAttribute('data-v')); return; }
-      if (!token) return;
-      token.style.transition = 'transform .28s cubic-bezier(.3,1.4,.6,1)';
-      place(0, 0, 1);
-      r.later(function () { if (token) token.style.transition = ''; }, 300);
+      if (b) { r.pickOn(c.__item, b.getAttribute('data-v')); return; }
+      drop(c);
+      c.classList.remove('active');
+      active = null;
     }
     function mark(item, hit, value) {
-      var target = null;
       buckets.forEach(function (b) {
         var v = b.getAttribute('data-v');
         b.classList.remove('hot');
-        if (v === value) { b.classList.add(hit ? 'ok' : 'no'); target = b; }
+        if (v === value) b.classList.add(hit ? 'ok' : 'no');
         else if (!hit && v === item.key) b.classList.add('reveal');
       });
-      if (!token) return;
-      if (hit && target) {
-        var tq = token.getBoundingClientRect(), bq = target.getBoundingClientRect();
-        token.style.transition = 'transform .34s ease-in,opacity .34s ease';
-        token.style.transform = 'translate(-50%,-50%) translate('
-          + ((bq.left + bq.width / 2) - (tq.left + tq.width / 2)) + 'px,'
-          + ((bq.top + bq.height / 2) - (tq.top + tq.height / 2)) + 'px) scale(.4)';
-        token.style.opacity = '.2';
-      } else {
-        token.classList.add('wrong');
-      }
+      chips.forEach(function (c) {
+        if (c.__item !== item) return;
+        c.classList.add(hit ? 'caught' : 'spilled');
+      });
     }
     return { show: show, mark: mark, clear: clear };
   };
@@ -575,15 +609,21 @@ window.GAMES4 = (function () {
   function abs(node, css) { node.style.cssText = css; return node; }
   var POSTER = {
     catchBasket: function (box, items) {
+      var row = el('div', 'g4-bit');
+      row.appendChild(el('div', 'g4-chip active', esc(items[0].prompt)));
+      abs(row, 'left:0;right:0;top:6%;display:flex;justify-content:center');
+      box.appendChild(row);
+      /* same flex tray the live stage uses, so the intro is a true still of the game */
       var texts = opts0(items, 3);
-      texts.forEach(function (t, i) {
-        var b = el('div', 'g4-bucket g4-bit');
+      var tray = el('div', 'g4-bit');
+      abs(tray, 'left:3%;right:3%;bottom:4%;display:flex;gap:10px');
+      texts.forEach(function (t) {
+        var b = el('div', 'g4-bucket');
+        b.style.flex = '1 1 0';
         b.innerHTML = ART.basket + '<span class="g4-bucket-t">' + esc(t) + '</span>';
-        abs(b, 'left:' + (4 + i * 32) + '%;bottom:6px;width:28%;height:30%');
-        box.appendChild(b);
+        tray.appendChild(b);
       });
-      box.appendChild(abs(el('div', 'g4-card g4-bit', items[0].prompt),
-        'left:50%;top:34%;transform:translate(-50%,-50%) rotate(-3deg)'));
+      box.appendChild(tray);
     },
     whackMole: function (box, items) {
       var texts = opts0(items, 3);
@@ -1191,6 +1231,13 @@ function say(text, lang) {
     entry.setAttribute('aria-label', 'Type your guess and press Enter');
     box.appendChild(grid); box.appendChild(entry);
     stage.appendChild(box);
+    /* a wall of faint tiles behind the board: the game reads as a board, not a form */
+    var back = el('div', 'g4-wbg');
+    back.innerHTML = '<svg viewBox="0 0 400 240" preserveAspectRatio="none" aria-hidden="true">'
+      + '<defs><pattern id="g4wt" width="42" height="42" patternUnits="userSpaceOnUse">'
+      + '<rect x="2" y="2" width="38" height="38" rx="6" fill="none" stroke="currentColor" stroke-opacity=".18" stroke-width="2"/>'
+      + '</pattern></defs><rect width="400" height="240" fill="url(#g4wt)"/></svg>';
+    stage.insertBefore(back, box);
     var word = '', rows = 6, guesses = [], done = false;
 
     function target(item) {
@@ -1323,30 +1370,67 @@ function say(text, lang) {
   PLUGINS.echoPads = function (r) {
     var stage = r.stage;
     var box = el('div', 'g4-echo'), pads = el('div', 'g4-pads');
-    var again = el('button', 'g4-again', '🔊 Say it again');
-    again.type = 'button';
-    box.appendChild(pads); box.appendChild(again);
+    var line = el('div', 'g4-echo-line', '');
+    box.appendChild(line); box.appendChild(pads);
     stage.appendChild(box);
-    var els = [], phrase = '';
-    again.addEventListener('click', function () { say(phrase); });
-    function clear() { pads.innerHTML = ''; els = []; phrase = ''; }
+    var els = [], pattern = [], step = 0, playing = false;
+    var TONES = [392, 523, 659, 784];
+
+    function lit(i, ms) {
+      var p = els[i];
+      if (!p) return;
+      p.classList.remove('lit');
+      p.classList.add('lit');
+      tone(TONES[i % TONES.length], ms || 200, 'sine', 0.18);
+      r.later(function () { p.classList.remove('lit'); }, (ms || 200) + 60);
+    }
+    /* the whole sequence is played back, then the student repeats it; every round adds one beat */
+    function play() {
+      if (r.phase !== 'play') return;
+      playing = true;
+      line.textContent = 'Listen… ' + pattern.length + ' beats';
+      var i = 0;
+      (function beat() {
+        if (r.phase !== 'play') { playing = false; return; }
+        if (i >= pattern.length) {
+          playing = false; step = 0;
+          line.textContent = 'Now you: all ' + pattern.length + ', in order';
+          return;
+        }
+        lit(pattern[i], 200);
+        i++;
+        r.later(beat, 420);
+      })();
+    }
+    function press(i) {
+      if (r.phase !== 'play' || playing) return;
+      lit(i, 200);
+      if (i !== pattern[step]) {
+        line.textContent = 'That was beat ' + (step + 1) + ' — it slipped.';
+        r.later(function () { if (r.phase === 'play') r.resolve(null, 'miss'); }, 340);
+        return;
+      }
+      step++;
+      if (step < pattern.length) return;
+      line.textContent = 'Echoed! ' + pattern.length + ' in a row.';
+      r.later(function () { if (r.phase === 'play') r.pick(r.queue[0].key); }, 360);
+    }
+    function clear() { pads.innerHTML = ''; els = []; pattern = []; step = 0; playing = false; line.textContent = ''; }
     function show(item) {
       clear();
-      phrase = item.say || item.prompt || '';
-      item.opts.forEach(function (o) {
+      item.opts.slice(0, 4).forEach(function (o, i) {
         var p = el('button', 'g4-pad', o.text);
         p.type = 'button';
         p.setAttribute('data-v', o.value);
-        p.addEventListener('click', function () {
-          if (r.phase !== 'play') return;
-          p.classList.add('lit');
-          r.later(function () { p.classList.remove('lit'); }, 260);
-          r.pick(o.value);
-        });
+        p.addEventListener('click', function () { press(i); });
         pads.appendChild(p);
         els.push(p);
       });
-      r.later(function () { if (r.phase === 'play') say(phrase); }, 260);
+      /* round 1 is two beats, and each later round is one longer — the runner's item index is the
+         round number, so the difficulty is the block's length, not a separate setting */
+      var want = Math.min(6, 2 + r.idx);
+      for (var i = 0; i < want; i++) pattern.push(Math.floor(Math.random() * Math.max(1, els.length)));
+      r.later(play, 420);
     }
     function mark(item, hit, value) {
       els.forEach(function (p) {
@@ -1354,7 +1438,7 @@ function say(text, lang) {
         if (v === value) p.classList.add(hit ? 'ok' : 'no');
         else if (!hit && v === item.key) p.classList.add('reveal');
       });
-      if (!hit) say(item.say || item.prompt || '');
+      if (!hit) line.textContent = 'It was ' + pattern.length + ' beats. Again next round.';
     }
     return { show: show, mark: mark, clear: clear };
   };
