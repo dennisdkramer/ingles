@@ -32,7 +32,7 @@
       6. **`sequence:`** (which slice of a multi-lesson strand this lesson owns, and what the other lessons own) and **`must not re-teach:`** (what a neighbouring lesson owns) — two lines, at the top of the file.
 
 **Pass B — build.** (Output = `<track>/lessonNN.html`)
-Inputs: 'designs/<track>/<lessonNN.design.md>' + FORMAT.md + FUNCTION.md + **§1–§6 of this file** (are high-priority build inputs, not background). The build is a **synthesis, not obedience**.
+Inputs: 'designs/<track>/<lessonNN.design.md>' + FORMAT.md + **§Content contracts of FUNCTION.md** + **§1–§6 of this file** (are high-priority build inputs, not background). The build is a **synthesis, not obedience**.
    - How the shape is built with the available blocks — is Pass B's call, no escalation
    - A change that alters the shape or one of the design's teaching beats is made and then **written back into the design file**; a conflict or ambiguity that cannot be resolved that way is escalated. 
    - Pass B never silently contradicts a teaching beat, but may replace the design's shape with a strong defensible reason (in which case it proceeds, records the change in the design file, and does not escalate).
@@ -99,17 +99,17 @@ Inputs: 'designs/<track>/<lessonNN.design.md>' + FORMAT.md + FUNCTION.md + **§1
 ### 5. Vehicles
 Any vehicle is allowed: authored text, dialogue or chart; real material (song, clip, article, document, photo); interactive (game, timed drill, role-play); a project; something nobody has tried yet. Two tiers decide how it gets built:
    - **Tier 0** — existing primitives (FORMAT.md): tables, cards, dialogues, audio chips, gap-fills, multiple choice, recording, text boxes.
-   - **Tier 1** — one *generic* engine, then free with per-lesson data: `shootPair` (two targets, one right), `sortOut` (buckets), `raceClock` (timed drill), `revealGrid` (memory), `orderLine` (sequence). Novelty should be parameterised, not bespoke: a new game is usually item data + a skin on an existing engine. New Tier-1 engines are proposed to the owner and built once, then reused.
+   - **Tier 1** — one *generic* engine, then free with per-lesson data: `shootPair` (two targets, one right), `sortOut` (buckets), `raceClock` (timed drill), `revealGrid` (memory), `orderLine` (sequence). Novelty should be parameterised, not bespoke: a new game is usually item data + a skin on an existing engine (the block's markup and levers: FUNCTION.md §Content contracts). New Tier-1 engines are proposed to the owner and built once, then reused.
    - **Tier 2** — bespoke simulation or multi-step project: propose it, don't build it unbidden.
 Referencing material instead of embedding it is fine (a song named by lyric, "go and listen to it"); a *link* that ships must resolve, and the section must still teach if it dies.
 
 ### 6. Site contract (mechanical)
-   - Publish `<lesson>.html` **and an identical `<lesson>.edit.html`**.
+   - Publish `<lesson>.html` and its `.edit.html` sidecar — identical by definition, FUNCTION.md §Content contracts.
    - Build the page on `_shell.html` (repo root; placeholders `{{TRACK_TITLE}}`, `{{TRACK_UPPER}}`, `{{TRACK}}`, `{{L}}`, `{{LESSON_TITLE}}`) — never on another lesson's shell, which carries that lesson's comment, title and `L`.
    - Authored content sits in `.content-area` under one `<h1>` — that heading is the title `build-lessons.mjs` reads.
    - Navigation is purely sequential (`← Last` / `Next →`); there is no lesson count anywhere.
-   - Exercise state must land on `input.gap`, `input[type=radio]` or a non-feed `textarea` — that is what persists (FUNCTION.md). If Pass A suggests a new exercise type that conflicts with this, escalate per #2.
-   - `data-say` carries how a line is **said**, not how it is written; `npm run build:audio` renders the clips.
+   - Exercise state persists only through the three controls named in FUNCTION.md §Content contracts; if Pass A suggests an exercise type outside them, escalate per #2.
+   - Audio for `.listen`: the `data-say` rule, the render command and the publish gate are in FUNCTION.md §Content contracts.
    - Shell, classes and sizing: FORMAT.md. Behaviour, engines and edit mode: FUNCTION.md.
 
 
