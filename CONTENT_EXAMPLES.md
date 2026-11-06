@@ -16,6 +16,8 @@ Where a shape is needed it is written as `<placeholder>`.
 - **The tone of a lesson comes from the lesson's copy, never from here.** Every game below is track-neutral by
   construction, so the same `whackMole` works for a business page and a kids page. Silly or slangy *skins* are
   per-track data layered on top — never baked into the mechanism.
+- **Two families.** Sections 1–4 are games, section 5 is drills, section 6 is **display**: blocks that teach
+  without asking anything. A page that is all section 1–5 is a test with a theme.
 
 ## The key
 
@@ -360,10 +362,257 @@ track. No example wording appears here on purpose — the lesson supplies it.
 
 ---
 
-# 6. Spines
+# 6. Display — blocks that teach without asking
 
-A page fails when every lesson is the same order of the same blocks. A spine is the one thing the page is *about*,
-chosen before any block is written; these are shapes that hold, not templates to rotate.
+The page has to teach before it tests. Every block in section 5 ends in a control; these end in **nothing** —
+no radio, no gap, no textarea. They are how the rule, the mental model, the scene and the useful subset get
+onto the page at all, so `evidence` is `none` for all of them and each one must sit beside a block that does ask
+something. The mark for any of them is the block that follows.
+
+Three rules for this family:
+
+1. **Never a restatement.** If the lesson already says it in prose, the block has to add a *shape* the prose
+   cannot: a comparison, a position on an axis, a branch, a sequence, a boundary case.
+2. **One per teaching beat.** Two display blocks in a row is a lecture and the student stops reading. Display →
+   practice → display → practice.
+3. **Earned by what follows.** A display block carries the rule that the next block tests. If nothing later
+   needs it, cut it.
+
+Fields: `does` — what it puts on the page · `markup` — the classes that build it (all exist today) ·
+`fits` — natural width and what to put beside it · `can't` — its failure mode.
+
+| family | what it puts on the page | blocks |
+|---|---|---|
+| **rule & boundary** | the mental model, and where it stops working | `contrastTable` `ruleCard` `signalTable` `exceptionBench` `errorGallery` `beforeAfterStrip` |
+| **form & sound** | how the thing is built, and what it sounds like | `workedExample` `annotatedExample` `formulaFrame` `soundGrid` `stressBar` `spellingSoundMap` |
+| **meaning & degree** | where a word sits, and what it goes with | `scaleAxis` `collocationMatrix` `falseFriendSplit` |
+| **people & place** | who is talking, to whom, and what that predicts | `audienceRow` `sceneCast` `dialogueMoves` `chatSample` `vocabField` `storyStrip` |
+
+The families are a reading order, not a sequence: most lessons need one from the first row and one from the
+fourth, and the middle rows only when the lesson is specifically about form or meaning.
+
+### `contrastTable` — section · cost A · evidence none — tests 0 · fun 1 · reuse 3
+
+- **does** — Two columns, A and B, holding the same sentence said both ways, so the only thing that changes is
+  the thing being taught. A note row under the table states the rule in one line.
+- **markup** — `.chart` (a real `<table>`): a header row naming both sides, three or four rows, then
+  `<tr class="note"><td colspan="N">` for the rule. Portuguese glosses in `lang="pt"`.
+- **fits** — full, or half beside the block that makes the student choose between A and B.
+- **can't** — shows the difference but never checks it; and if the two columns differ in more than one way, the
+  contrast is unreadable and the rule is lost.
+
+### `ruleCard` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 3
+
+- **does** — The mental model in three lines: the rule, one example that proves it, and the **boundary case** —
+  the sentence that looks like it should follow the rule and doesn't. The boundary case is the part that stops
+  the rule over-generalising, and the part a prose paragraph always loses.
+- **markup** — `.card` with a heading line and three labelled lines. No table; a card with a table in it is a
+  `contrastTable` wearing the wrong clothes.
+- **fits** — third or half; pair with a practice block of the same width.
+- **can't** — one card carries one rule. A card with three rules teaches none of them.
+
+### `workedExample` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 3
+
+- **does** — One sentence assembled step by step, each step labelled with what changed and why
+  (`<base>` → `<+ ending>` → `<final>`), so the student watches the form build instead of meeting it finished.
+- **markup** — `.panel`, one step per line, real arrow characters, the label as text (never an image).
+- **fits** — third; pair with `formulaFrame` at the same width.
+- **can't** — only for forms that genuinely build in steps (tense forms, questions, negation). On a fixed
+  phrase it is decoration.
+
+### `annotatedExample` — section · cost A · evidence none — tests 0 · fun 1 · reuse 3
+
+- **does** — One real sentence with its working parts named: what carries the tense, the chunk that can be
+  swapped, the piece that decides the meaning. Names sit beside or under the text.
+- **markup** — `.panel`; the target part in `<b>` with a caption line under it; `lang="pt"` only where a word
+  is genuinely new.
+- **fits** — full (a labelled sentence needs horizontal room) or half with two labels only.
+- **can't** — labels on everything mark nothing. Three labels maximum, or the student reads none of them.
+
+### `formulaFrame` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 3
+
+- **does** — A pattern as a skeleton with named slots (`<I'd rather> ___ <than> ___`), then two or three filled
+  versions. Teaches a shape to reuse rather than a conjugation table to stare at.
+- **markup** — `.panel`; the skeleton in `<b>` with `___` for slots; the filled versions below, slot content
+  marked so the student sees which part moved.
+- **fits** — half; pair with the drill that makes them fill the slots.
+- **can't** — only for patterns that are actually fixed. A frame with moveable parts teaches a false shape, and
+  the student will build sentences that look like the frame and are wrong.
+
+
+### `signalTable` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 3
+
+- **does** — The cue in the sentence, the choice it forces, one example each: `<cue>` → `<form it demands>`. This
+  is the display form of the condition that decides the item, and it is what makes a rule usable without
+  remembering a list of cases.
+- **markup** — `.chart`, three columns (`<cue>` · `<what it forces>` · `<example>`), four to six rows. A
+  `<tr class="note">` under it names the one cue that is a trap.
+- **fits** — half, if the cues are short; full when examples are sentences.
+- **can't** — no cue is decisive on its own; a table that reads "always" when the language only mostly does this
+  teaches a false rule.
+
+### `exceptionBench` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 2
+
+- **does** — The exceptions, grouped **by why they behave that way**, not listed as a set of facts to memorise.
+  Two or three items, each `<form>` — because `<reason>`.
+- **markup** — `.panel` with a short heading per group; two groups maximum. No table: an exception has a reason,
+  and a table cell is too narrow to hold it.
+- **fits** — half; pair with the practice block that uses both the rule and its exception.
+- **can't** — if the exceptions have no shared reason, this block is a list of things to memorise and should be
+  cut in favour of teaching them as separate items.
+
+### `errorGallery` — section · cost A · evidence none — tests 0 · fun 2 · reuse 3
+
+- **does** — Four or five sentences that **look** correct and aren't, each with the reason it fails. The fixes
+  are not shown: the student meets those again in the practice that follows, so the gallery trains the mistake,
+  not the correction.
+- **markup** — `.panel`, one line per trap: the sentence in `<b>`, the reason under it in `lang="pt"` or plain
+  English, numbered. Nothing else — a gallery with fixes in it is an answer key.
+- **fits** — half, or full beside a `ruleCard`.
+- **can't** — no production, and it is heavy with negatives; more than five traps in one gallery and the student
+  remembers none of them.
+
+### `beforeAfterStrip` — section · cost A · evidence none — tests 0 · fun 2 · reuse 3
+
+- **does** — One meaning written twice: the version a student at this level actually produces, then the version a
+  native speaker would. Both are grammatical — the difference is naturalness, not correctness — and that is the
+  whole point of the pair.
+- **markup** — two stacked `.panel`s with `<before>` / `<after>` labels, or `.itemrow` with the two half-width.
+  The natural version carries the changed chunk in `<b>`.
+- **fits** — half each, side by side.
+- **can't** — must never show an ungrammatical "before", or it teaches an error as the starting point; and one pair
+  makes one point — three pairs in a row is a lecture.
+
+### `soundGrid` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 3
+
+- **does** — One contrast, shown in three positions: the same pair of sounds at the start, in the middle and at the
+  end of a word, with a `.listen` chip on each example. Teaches that the contrast is a system, not two words.
+- **markup** — `.chart`: rows are the two sounds, columns are the positions; each cell holds `<word>` plus a
+  `.listen` chip. A `<tr class="note">` names the position where the student's own language interferes most.
+- **fits** — full; it is three columns of examples plus labels.
+- **can't** — it is listening and mouth-work only; no written form, and a grid with more than two sounds per row
+  stops being a contrast and becomes a catalogue.
+
+### `stressBar` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 2
+
+- **does** — The word broken into syllables with the stressed one marked, and **the rule that put the stress
+  there** — which is what makes it transferable to the next word instead of a fact about this one.
+- **markup** — `.panel`; syllables separated by a raised dot, the stressed syllable in `<b>`; one `.listen` chip for
+  the whole word; the rule as one caption line under it.
+- **fits** — third; two or three of them in an `.itemrow`.
+- **can't** — English stress is only partly rule-governed, so a stress rule that has more exceptions than cases is
+  worse than saying plainly that this one must be learned by ear.
+
+### `spellingSoundMap` — section · cost A · evidence none — tests 0 · fun 1 · reuse 2
+
+- **does** — The reverse direction of `soundGrid`: one sound, and the several spellings that produce it (or one
+  spelling and the sounds it makes), each with an example. Makes reading predictable instead of memorised.
+- **markup** — `.chart`, two columns (`<spelling>` · `<example word with a listen chip>`), grouped by position if
+  position changes the answer.
+- **fits** — half.
+- **can't** — English spelling is regular in patterns, not in rules; if the honest answer is "these four, and no
+  pattern", write that, or the block teaches a rule that will fail in the next paragraph the student reads.
+### `scaleAxis` — beat · cost A · evidence none — tests 0 · fun 2 · reuse 3
+
+- **does** — Items placed along a named continuum (`<weak>` ⟶ `<strong>`, `<formal>` ⟶ `<casual>`,
+  `<always>` ⟶ `<never>`), with the ends labelled. Teaches degree where a rule would only give two boxes.
+- **markup** — `.chart` used as a strip (one row, one cell per step) or a `.panel` with the items separated by arrow
+  characters and the two ends in `<b>`. Every item keeps its `lang="pt"` gloss if the word is new.
+- **fits** — full; a continuum needs the width to read as a line.
+- **can't** — it claims an order. If two items could swap places without changing meaning, the axis is invented and
+  must not ship.
+
+### `collocationMatrix` — section · cost A · evidence none — tests 0 · fun 2 · reuse 3
+
+- **does** — Two sets of words as rows and columns, with ticks showing what actually goes together. This is the
+  block that stops translation-shaped errors, because a pair that "means the same" in both languages lands in the
+  wrong cell here.
+- **markup** — `.chart`: `<set A>` down the side, `<set B>` across the top, `✓` and `✗` in the cells, and a
+  `<tr class="note">` naming the one cell students always get wrong.
+- **fits** — half if both sets are three items; full at four or more.
+- **can't** — ticks are not explanations; if a combination is blocked for a reason (not just by convention), a
+  matrix hides it and the reason belongs in a `ruleCard` beside it.
+
+### `falseFriendSplit` — beat · cost A · evidence none — tests 0 · fun 2 · reuse 3
+
+- **does** — One word in the student's language that splits into two in English (or one English word that covers
+  two things in the student's language), shown with **the test that decides which one** — a question the student can
+  ask themselves in the moment.
+- **markup** — `.panel`: the shared meaning on top, then each branch as `<English word> — <when it is the right one>`,
+  a short example line under each, the drawing question pinned at the bottom in `<b>`.
+- **fits** — half; pair with the drill that makes the student choose.
+- **can't** — only for genuine splits; a word with one clean equivalent presented here invents a difficulty the
+  language does not have.
+### `audienceRow` — section · cost A · evidence none — tests 0 · fun 2 · reuse 3
+
+- **does** — One message at three distances — a friend, an adult you know, an adult you don't — with **who you would
+  say it to** as the label on each version. Teaches register as a choice with a reason, not as politeness points.
+- **markup** — `.chart`: a `<when>` column naming the audience, a `<how it sounds>` column with the version. Two
+  `<tr class="note">` rows if a form is wrong for one audience rather than merely odd.
+- **fits** — full; three versions of one message do not fit across a half in readable type.
+- **can't** — it presents the ladder without walking it; the student still needs a block that makes them pick the
+  rung, or this is a poster about register.
+
+### `sceneCast` — beat · cost A · evidence none — tests 0 · fun 2 · reuse 3
+
+- **does** — Who is talking, where, what has already happened between them, and what is at stake — the facts that
+  predict which language the scene will use. This is the block that lets a dialogue or a roleplay be one thing
+  instead of four disconnected items.
+- **markup** — `.card` with four labelled lines (`who` · `where` · `what just happened` · `what's at stake`). No
+  dialogue yet: this block sets the scene, the next one uses it.
+- **fits** — third or half; pair with a dialogue at the same width.
+- **can't** — no language at all, so it is worth nothing without the scene it sets; and a cast list that only names
+  people ("Ana, her brother") predicts nothing — the stakes have to be social.
+
+### `dialogueMoves` — section · cost A · evidence none — tests 0 · fun 2 · reuse 3
+
+- **does** — A short exchange where each turn is labelled by **what it is doing** (`open` · `hedge` · `push back` ·
+  `concede` · `close`), so the student sees that a conversation has parts and that the parts have their own phrases.
+- **markup** — `.dialog` for the exchange (speaker, turn), and beside or under each turn its move label. The move
+  vocabulary must be named in the lesson before the labels appear.
+- **fits** — full; two columns of text plus labels.
+- **can't** — labels are metalanguage, not language; a student can label a hedge and still not produce one, so the
+  block must be followed by a drill that makes them produce a move.
+### `chatSample` — section · cost A · evidence none — tests 0 · fun 3 · reuse 2
+
+- **does** — A short thread as it actually appears on a screen, with the target language in the middle of ordinary
+  noise: a typo, an emoji, two messages in a row, a reply that ignores the question. The student meets the form in
+  the wild before they are asked to use it.
+- **markup** — `.dialog` with the thread (speaker bubble per line). A `<tr class="note">` or one caption line names
+  what to look for — the block must say why it is on the page.
+- **fits** — full or half; a thread is narrow, so half-width is natural beside the practice.
+- **can't** — real material dates. If the lesson would break when the slang in it ages, use it as one example
+  among several, never as the only presentation of a rule; and a thread whose every line is target language is a
+  dialogue pretending to be a chat.
+
+### `vocabField` — section · cost A · evidence none — tests 0 · fun 2 · reuse 3
+
+- **does** — The lesson's new words arranged by **the job they do in the situation** (people · things · actions ·
+  what you say · how it went), not as a numbered list with translations. A field is easier to use than a list
+  because the student retrieves by meaning.
+- **markup** — `.chart` with a `<when you need it>` column and the items in the cell; `lang="pt"` glosses only where
+  the word is genuinely new. Ten items minimum across the clusters.
+- **fits** — full; the columns are the teaching.
+- **can't** — no drill, and a field with arbitrary headings is a list with extra lines; every cluster name has to be
+  a situation the student will actually be in.
+
+### `storyStrip` — section · cost A · evidence none — tests 0 · fun 3 · reuse 2
+
+- **does** — Three or four short scenes carrying one continuous situation, with the target language embedded in
+  each and getting slightly harder. The student learns the language *inside* a story instead of meeting it as
+  examples, and later blocks can refer back to the scenes by name.
+- **markup** — `.itemrow` of `.panel`s (or `.card`s), each with a scene number, two or three lines, and the target
+  form in `<b>`. Sequential, so the order must read left to right and stack on a narrow screen.
+- **fits** — full width, panels in an `.itemrow`; two or three per row.
+- **can't** — a story is long, and length is not depth: if the scenes do not each teach something the previous one
+  did not, it is decoration that pushes the practice below the fold.
+
+---
+
+# 7. Spines — how a page is shaped
+
+A page fails when every lesson is the same order of the same blocks. A spine is the one thing the page is
+*about*, chosen before any block is written; these are shapes that hold, not templates to rotate.
 
 | spine | the page is… | beats | suits |
 |---|---|---|---|
