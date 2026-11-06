@@ -1,7 +1,7 @@
 # CONTENT_EXAMPLES — the vehicle menu
 
-Applies to **every track**. This is a menu of **mechanisms**, not of sentences: a game here is a skin that
-drives content already authored in the page's HTML. No entry carries lesson text, no entry is a script to copy.
+This is a menu of **mechanisms** and skins that drives content already authored in the page's HTML. 
+No entry carries lesson text, no entry is a script to copy.
 Where a shape is needed it is written as `<placeholder>`.
 
 ## How to use this file
@@ -23,6 +23,53 @@ Where a shape is needed it is written as `<placeholder>`.
   the only difference is whether the answer comes from a rule the lesson taught or from the material itself.
   A page that is all games and drills is a test with a theme.
 
+## Reading this file in two steps
+
+The file is ~106 KB. A build must never read it whole — it reads it in two cheap moves.
+
+**Step 1 — browse the headings, nothing else.** Every `###` heading is self-contained: it carries the name, the
+size, the cost, the evidence, the `fits` tag, the four ratings and the build/cut status. One filter gives all 98:
+
+```
+Select-String -Path CONTENT_EXAMPLES.md -Pattern '^### '
+```
+
+That is the whole selection surface. Pick by `fits` (what kind of language the block is for) and `size` (does it
+fit the beat you are filling), then discard anything marked **cut**. Do not read any entry body to choose.
+
+**Step 2 — read only the entry you chose.** Read that one `###` heading's line range, ending at the next `###`
+(or the next `---`). That body is the implementation contract: `does`, `skins` (which authoring markup it
+drives), `art`, `can't`, `needs`. Nothing else in the file is opened.
+
+A build that cannot decide from the headings alone is a build that does not yet know what its beat is for.
+
+## The `fits` vocabulary
+
+`fits` says what *kind of language* the shape is for — it is the field you select on. One or two tags, from a fixed
+set, so a build can match a beat to a shape without reading bodies:
+
+| tag | the block is for work on… |
+|---|---|
+| `form` | the shape of the language itself — tense, agreement, word class, word order |
+| `lexis` | words and multi-word chunks as items to be learned |
+| `sound` | pronunciation, connected speech, stress, intonation |
+| `meaning` | nuance; the difference between near-equivalents |
+| `register` | who is being spoken to — politeness, formality, distance |
+| `text` | sentences and stretches of discourse; reading and writing at length |
+| `interaction` | spoken exchange — turns, roles, repair, keeping a conversation alive |
+| `listening` | ear-first work, where the answer exists only in what was heard |
+| `culture` | context, places, taboos, varieties, what a community takes as given |
+| `music` | songs, rhythm, melodic contour as the substance of the exercise |
+| `error` | finding and fixing what is wrong |
+| `model` | showing a worked example to imitate or analyse |
+| `reference` | a table, frame or grid to keep and consult |
+| `review` | mixed consolidation of a whole page's ground |
+| `order` | arranging or re-arranging parts into the right sequence |
+| `recognition` | picking the right one from offered alternatives, under any pressure |
+
+Tags name the *content*, never the medium: `sound` can be a table, `music` can be a gap-fill, `text` can be a game.
+A shape whose `fits` could be swapped for any other shape's is describing its own furniture, not a teaching job.
+
 ## The key
 
 | field | meaning |
@@ -30,6 +77,7 @@ Where a shape is needed it is written as `<placeholder>`.
 | `size` | **beat** (one item's worth) · **section** (a whole activity) · **page** (a spine that spans sections) |
 | `cost` | **A** markup only, no JS · **B** a plugin on the shared runner, ~40–80 lines · **C** new state or dictionary, ~100+ lines |
 | `evidence` | which persisted control carries the mark: `radio` · `gap` · `textarea` · `audio` · `none` |
+| `fits` | one or two tags from the vocabulary above — the kind of language work the shape is for |
 | `tests` | 0 exposure · 1 recognise · 2 controlled produce · 3 free produce |
 | `fun` | 0–3, engagement |
 | `reuse` | 0–3, how many lessons it survives before going stale |
@@ -58,12 +106,11 @@ be loud and a business page sober, and neither is more correct. Only these hold,
 
 ---
 
-# 1. Games — arcade and reflex
+# 1. Games — arcade, reflex, puzzle, and logic
 
-The player's hands do the work: aim, time, catch, dodge. Each one drives ordinary `.qitem`s, so the answer
-that saves is the same radio a plain page would have.
+Interactive activities. Each one drives ordinary `.qitem`s, so the answer that saves is the same radio a plain page would have.
 
-### `skeetRange` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2 · **not shipped — cut; it did not carry its weight**
+### `skeetRange` — section · cost B · evidence radio · fits recognition+sound — tests 2 · fun 3 · reuse 2 · **not shipped — cut; it did not carry its weight**
 
 - **does** — One moving target per item. Player aims with the cursor and takes **one shot**; a hit scores, a
   miss is spent. No spray, no endless retry — the constraint is what makes it feel like skill.
@@ -73,7 +120,7 @@ that saves is the same radio a plain page would have.
 - **can't** — no production, no spelling; one shot per item means a careless click can hide what the student knew.
 - **needs** — shared runner (or `shootPair` refactored into it).
 
-### `whackMole` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
+### `whackMole` — section · cost B · evidence radio · fits recognition+meaning — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — One drawn mole per option surfaces from a hole, stamped in stagger; the player hits the one that
   fits before the runner's timer bar empties. The rest duck away the instant an answer lands.
@@ -82,16 +129,8 @@ that saves is the same radio a plain page would have.
 - **can't** — recognition only; speed pressure makes it a poor fit for anything needing reflection.
 - **needs** — nothing; `engine4.js` ships it.
 
-### `brickRight` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2 · **not shipped — cut; it did not carry its weight**
 
-- **does** — Breakout. The paddle follows the pointer; the ball knocks out the brick carrying the right option.
-  Wrong bricks cost a ball. A real game with real stakes, and the physics is two rectangles and a vector.
-- **skins** — `.qitem` options become brick labels; the prompt stays on the HUD line.
-- **art** — flat rounded rectangles, one accent colour per correct-state, dotted ball trail.
-- **can't** — one hand is on the paddle, so the reading load must be tiny; long options break the geometry.
-- **needs** — shared runner + a collision loop.
-
-### `catchBasket` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 3 · **built: engine4.js**
+### `catchBasket` — section · cost B · evidence radio · fits form+meaning — tests 2 · fun 3 · reuse 3 · **built: engine4.js**
 
 - **does** — One word is shown at a time; the player **drags it into the basket that fits** (or taps a basket, or
   presses `1`/`2`). Dropping outside springs the word back, so a slipped finger costs time, not the item. The
@@ -104,7 +143,7 @@ that saves is the same radio a plain page would have.
   basket, a wrong drop shakes.
 - **can't** — only two or three baskets fit a row; fine distinctions don't fit.
 
-### `stackDrop` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
+### `stackDrop` — section · cost B · evidence radio · fits order+form — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — A block carrying the question slides left and right above a tower; the answer buttons sit below. A
   correct answer locks the block in as a **rung** of the ladder; a wrong one makes it fall away and the rung stays
@@ -118,7 +157,7 @@ that saves is the same radio a plain page would have.
 - **can't** — timing dominates; keep the language load per level to a phrase.
 - **needs** — shared runner.
 
-### `flapGate` — section · cost C · evidence radio — tests 1 · fun 3 · reuse 2 · **built: engine4.js**
+### `flapGate` — section · cost C · evidence radio · fits recognition+meaning — tests 1 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — One-button flight; the player passes through the gate labelled with the right option. Contact
   with a wrong gate costs a life.
@@ -127,31 +166,7 @@ that saves is the same radio a plain page would have.
 - **can't** — recognition at speed only, and it is the most expensive of the arcade set.
 - **needs** — shared runner + gravity loop.
 
-### `raceLane` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 3 · **not shipped — cut; it did not carry its weight**
-
-- **does** — Answer to accelerate. Correct answers push the avatar toward the finish; wrong ones stall it. The
-  ghost of the student's best run is the opponent, so there is competition without a server.
-- **skins** — any existing drill; the game only adds a track, two avatars and a timer.
-- **art** — two flat bars, a finish line, a lap counter. Cheapest strong game in the list.
-- **can't** — rewards speed, so it flatters a guesser; pair with a producing block.
-- **needs** — shared runner + the existing `data-limit` timer.
-
----
-
-# 2. Games — puzzle and logic
-
-Slower, thinking games. No timer pressure; the tension is deduction.
-
-### `lockCode` — page · cost B · evidence gap — tests 2 · fun 3 · reuse 3 · **not shipped — cut; it did not carry its weight**
-
-- **does** — The section is an escape room. Each correct answer releases one digit; three digits open the next
-  block. Turns loose exercises into one thing the student is trying to do.
-- **skins** — `input.gap` per answer; the code display reads the gaps that are already there.
-- **art** — three flat digit boxes that fill with a hard cut, then a bar that slides open once.
-- **can't** — needs a section whose answers reduce to one character; housekeeping, not teaching.
-- **needs** — `none` (markup + ~40 lines to read the gaps).
-
-### `wordleBoard` — section · cost C · evidence gap — tests 3 · fun 3 · reuse 3 · **built: engine4.js**
+### `wordleBoard` — section · cost C · evidence gap · fits form+review — tests 3 · fun 3 · reuse 3 · **built: engine4.js**
 
 - **does** — The student guesses letters; the board marks right letter/right place, right letter/wrong place.
   Hangman is the same engine with a different face (a revealed blank row instead of coloured tiles).
@@ -161,7 +176,7 @@ Slower, thinking games. No timer pressure; the tension is deduction.
 - **can't** — only words of one fixed length; nothing for phrases, meaning or listening.
 - **needs** — shared runner + a letter-state machine.
 
-### `pairFlip` — section · cost B · evidence radio — tests 1 · fun 3 · reuse 2 · **built: engine4.js**
+### `pairFlip` — section · cost B · evidence radio · fits form+meaning — tests 1 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — Memory pairs: flip two cards, keep them if they belong together. Six pairs is one screen.
 - **skins** — pairs are the `.qitem` stem↔option links; a match checks that radio.
@@ -169,7 +184,7 @@ Slower, thinking games. No timer pressure; the tension is deduction.
 - **can't** — recognition of a pair only; it teaches nothing about producing the form.
 - **needs** — shared runner.
 
-### `mineGrid` — section · cost B · evidence radio — tests 2 · fun 2 · reuse 2 · **built: engine4.js**
+### `mineGrid` — section · cost B · evidence radio · fits recognition+meaning — tests 2 · fun 2 · reuse 2 · **built: engine4.js**
 
 - **does** — The field is the options, face down. The student picks a tile and **a figure runs to it**. The right
   tile hands back the answer; a wrong one explodes under him. He survives two blasts and looks worse each time
@@ -180,7 +195,7 @@ Slower, thinking games. No timer pressure; the tension is deduction.
 - **art** — dunes with warning stakes, a drawn figure with three hurt states, a blast, a life counter.
 - **can't** — binary judgement per tile; four-way choice needs a different frame.
 
-### `crosswordBoard` — section · cost C · evidence gap — tests 3 · fun 2 · reuse 2 · **built: engine4.js**
+### `crosswordBoard` — section · cost C · evidence gap · fits form+review — tests 3 · fun 2 · reuse 2 · **built: engine4.js**
 
 - **does** — A **real generated crossword**. Each `.qitem` carries `data-answer` (the word) and its `.qstem` is the
   clue. The engine lays the whole set out at once: the first word across, every later word placed so it **crosses**
@@ -193,13 +208,7 @@ Slower, thinking games. No timer pressure; the tension is deduction.
   only sit in their own rows, so a lesson whose vocabulary shares nothing is a bad fit.
 - **needs** — nothing; `engine4.js` ships it. Authoring: `data-answer` on each `.qitem`, clue in `.qstem`.
 
----
-
-# 3. Games — memory and listening
-
-The ear does the work. Both need the built-in voice, not a rendered clip.
-
-### `echoPads` — section · cost B · evidence gap — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
+### `echoPads` — section · cost B · evidence gap · fits listening+review — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — Simon, in words. Four pads, one per option, **each with its own tone**. Round 1 plays one beat, round 2
   plays two, round *n* plays *n* — the whole pattern is replayed every round, so the student is echoing a growing
@@ -212,7 +221,7 @@ The ear does the work. Both need the built-in voice, not a rendered clip.
   listening and recall, not spelling.
 - **needs** — nothing; `engine4.js` ships it (tones are synthesised, no audio files).
 
-### `bingoCard` — section · cost B · evidence radio — tests 1 · fun 3 · reuse 2 · **built: engine4.js**
+### `bingoCard` — section · cost B · evidence radio · fits listening+meaning — tests 1 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — A 3×3 card is built from the item's own options **plus decoys drawn from the rest of the block**, so the
   card is never trivially small. The voice **calls the correct answer's word** (the clip when the item has one, else
@@ -224,13 +233,7 @@ The ear does the work. Both need the built-in voice, not a rendered clip.
   decoy pool runs dry.
 - **needs** — nothing; `engine4.js` ships it (uses the built-in voice).
 
----
-
-# 4. Games — quiz-show and stakes
-
-No motion; the game is progression and risk. Cheapest of the set and they suit every track.
-
-### `ladderRun` — page · cost B · evidence radio — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
+### `ladderRun` — page · cost B · evidence radio · fits review+form — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — A full-height rail with a climber and a chest at the top. One rung per right answer, a **safe rung every
   five**, and the height is **heard** as well as seen (a rising motif as you climb). A wrong answer slides the climber
@@ -243,25 +246,7 @@ No motion; the game is progression and risk. Cheapest of the set and they suit e
   safe rung is deliberately harsh, so keep items fair.
 - **needs** — nothing; `engine4.js` ships it.
 
-### `boardQuiz` — page · cost A · evidence radio — tests 2 · fun 3 · reuse 3 · **not shipped — cut; it did not carry its weight**
-
-- **does** — A grid of categories by difficulty; each cell opens one item. Points awarded, two players or teams
-  alternate. The one structure that works offline with a teacher driving it.
-- **skins** — a matrix of `.qitem`s; the cell is a jump link, the item is ordinary.
-- **art** — a flat grid, one accent per column, hard flip in the cell.
-- **can't** — the difficulty axis has to be real, or a column is just an arbitrary label.
-- **needs** — `none` (markup + jump links).
-
-### `spinPick` — beat · cost B · evidence none — tests 0 · fun 2 · reuse 3 · **not shipped — cut; it did not carry its weight**
-
-- **does** — Chooses which item comes next: a wheel or a slot lever. Removes the "1, 2, 3" march and makes the
-  order feel live. Two skins, one mechanism.
-- **skins** — the `.qitem` order; the chosen item is answered normally right after.
-- **art** — flat wheel with even segments and a hard stop, or three reels that land together.
-- **can't** — carries no answer at all; always a companion to a real block.
-- **needs** — `none`.
-
-### `bossRaid` — page · cost C · evidence radio — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
+### `bossRaid` — page · cost C · evidence radio · fits review+meaning — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — A drawn hero stands in front of the boss. A correct answer makes him **step in and swing** — the boss
   loses HP with a flash. A wrong answer and the boss swings back: the hero recoils and loses one of three hearts.
@@ -340,7 +325,7 @@ width and what to put beside it · `vary` the lever that changes difficulty **wi
 is what stops a drill being "hard" only because the words got rarer · `can't` the failure mode, which is also the
 answer to "why not another vehicle".
 
-### `twoWordVerb` — section · cost A · evidence gap — tests 2 · fun 1 · reuse 3
+### `twoWordVerb` — section · cost A · evidence gap · fits lexis+form — tests 2 · fun 1 · reuse 3
 
 - **does** — A chart puts the everyday two-word verb beside its one-word twin; the student then writes the everyday
   form into the gap (`<everyday verb>` ↔ `<one-word twin>`). Production is always the everyday form: it is the one
@@ -354,7 +339,7 @@ answer to "why not another vehicle".
 - **can't** — the pairing has to be genuinely interchangeable, or the chart teaches a false equation; and it is a
   vocabulary lesson, not a meaning lesson — the student learns the register of a word they already understand.
 
-### `chunkBank` — section · cost A · evidence gap — tests 2 · fun 1 · reuse 3
+### `chunkBank` — section · cost A · evidence gap · fits lexis+interaction — tests 2 · fun 1 · reuse 3
 
 - **does** — Whole fixed expressions taught as one unit with audio, then used: the student writes the chunk that fits
   a stated situation into the gap, or matches the chunk to what it answers.
@@ -366,7 +351,7 @@ answer to "why not another vehicle".
 - **can't** — a chunk whose parts can be swapped is not a chunk, so check it is said as one piece; and it never
   teaches the grammar inside it — that is the point, and also the limit.
 
-### `connectedSpeech` — section · cost A · evidence gap — tests 1 · fun 2 · reuse 2
+### `connectedSpeech` — section · cost A · evidence gap · fits sound+listening — tests 1 · fun 2 · reuse 2
 
 - **does** — Full form beside its spoken form (`want to` → `wanna`, `going to` → `gonna`), with audio, then a
   listen-and-choose "what did you hear?" and a gap that asks for the spoken spelling. These spellings are the real
@@ -380,7 +365,7 @@ answer to "why not another vehicle".
 - **can't** — trains the ear only, nothing about meaning; and it cannot be tested by writing, because a student can
   spell `gonna` without being able to hear it.
 
-### `dictation` — beat · cost A · evidence textarea — tests 3 · fun 1 · reuse 3
+### `dictation` — beat · cost A · evidence textarea · fits listening+form — tests 3 · fun 1 · reuse 3
 
 - **does** — A short sentence plays at natural speed; the student types exactly what was heard, then compares
   against the written form.
@@ -393,7 +378,7 @@ answer to "why not another vehicle".
 - **can't** — one playing is a memory test, so allow replays or it measures recall, not listening; and the mark
   needs the teacher, because two spellings can both be defensible.
 
-### `sentenceSurgery` — section · cost B · evidence gap — tests 2 · fun 3 · reuse 3
+### `sentenceSurgery` — section · cost B · evidence gap · fits order+form — tests 2 · fun 3 · reuse 3
 
 - **does** — A sentence or a whole exchange is cut into chunks and handed over out of order; the student rebuilds it.
   Word order, chunk order and linking all show up immediately, because a wrong order reads wrong.
@@ -406,7 +391,7 @@ answer to "why not another vehicle".
 - **can't** — only sequences with one defensible order; and it tests assembly, not meaning — a student can rebuild a
   sentence they cannot translate.
 
-### `registerContrast` — section · cost A · evidence radio — tests 2 · fun 1 · reuse 3
+### `registerContrast` — section · cost A · evidence radio · fits register+meaning — tests 2 · fun 1 · reuse 3
 
 - **does** — Two columns contrast a stiff wording with the spoken everyday one; the exercise picks which fits the
   stated audience. The audience is always named, or the item is unjudgeable.
@@ -419,7 +404,7 @@ answer to "why not another vehicle".
 - **can't** — needs a described situation; with no audience both columns are defensible. And it only ever *chooses*
   between wordings someone else wrote — it never produces one, which is why it pairs with `politeLadder`.
 
-### `questionBuilding` — beat · cost A · evidence gap — tests 3 · fun 1 · reuse 3
+### `questionBuilding` — beat · cost A · evidence gap · fits order+interaction — tests 3 · fun 1 · reuse 3
 
 - **does** — Given an answer, form the question; given a context, ask the follow-up.
 - **markup** — item list of `input.gap`s, one per answer. The prompt is the answer the student is talking to — never
@@ -430,7 +415,7 @@ answer to "why not another vehicle".
 - **can't** — graded on form only, or free answers become unmarkable, so state what counts as right; and it does not
   teach turn-taking — a perfect question in the wrong place is still a failed exchange, which is `roleCard`'s job.
 
-### `repairMoves` — beat · cost A · evidence gap — tests 2 · fun 1 · reuse 2
+### `repairMoves` — beat · cost A · evidence gap · fits interaction+register — tests 2 · fun 1 · reuse 2
 
 - **does** — The fixed moves for when communication breaks: ask for a repeat, check a guess, restate.
 - **markup** — item list: a short exchange with the break marked, then one `input.gap` holding the move that repairs
@@ -441,7 +426,7 @@ answer to "why not another vehicle".
 - **can't** — teaches the move, not the conversation; needs a scene to mean anything, and a teacher to judge whether
   the student could actually say it under pressure.
 
-### `shadowRecord` — section · cost A · evidence audio — tests 3 · fun 2 · reuse 2
+### `shadowRecord` — section · cost A · evidence audio · fits sound+interaction — tests 3 · fun 2 · reuse 2
 
 - **does** — A short linked passage is played, then recorded by the student. The prompt stays complete and
   read-aloud-able: a shadowing text with gaps in it is unscorable.
@@ -453,7 +438,7 @@ answer to "why not another vehicle".
   What makes it harder is speed and length together, never length alone.
 - **can't** — no automatic feedback; the teacher's ear is the only judge, so it is a rehearsal, not a test.
 
-### `pronLab` — section · cost A · evidence radio/gap — tests 2 · fun 1 · reuse 3
+### `pronLab` — section · cost A · evidence radio/gap · fits sound — tests 2 · fun 1 · reuse 3
 
 - **does** — For a sound the student's first language lacks: a mouth-position guide (in Portuguese) beside a
   first-language-vs-English contrast table, then items that test the distinction.
@@ -466,7 +451,7 @@ answer to "why not another vehicle".
 - **can't** — needs a real first-language error to be worth the space, so generic "pronunciation" pages teach nothing;
   and it teaches *one* phoneme — never claim it fixes an accent.
 
-### `minimalPairs` — beat · cost A · evidence radio — tests 1 · fun 2 · reuse 3
+### `minimalPairs` — beat · cost A · evidence radio · fits sound+meaning — tests 1 · fun 2 · reuse 3
 
 - **does** — The target word beside its near-neighbours, each with audio, so the ear separates one phoneme by its
   minimal difference. Also covers homophones from a flap T or a silent letter.
@@ -478,7 +463,7 @@ answer to "why not another vehicle".
 - **can't** — recognition only; it never shows the student can say it, and it deliberately uses words the student
   already knows, so it cannot carry new vocabulary.
 
-### `listenIdentify` — beat · cost A · evidence radio — tests 1 · fun 1 · reuse 2
+### `listenIdentify` — beat · cost A · evidence radio · fits listening+lexis — tests 1 · fun 1 · reuse 2
 
 - **does** — A binary or ternary recognition item: which sound, which ending, which stress pattern was heard.
 - **markup** — item list of radios with the `.listen` chip doing the asking; the prompt only says what to listen for,
@@ -490,7 +475,7 @@ answer to "why not another vehicle".
 - **can't** — two options invites a coin flip, so three minimum for anything that matters; and it tells you the
   student heard *a difference*, not that they know what either word means.
 
-### `errorCorrection` — beat · cost A · evidence radio — tests 2 · fun 1 · reuse 3
+### `errorCorrection` — beat · cost A · evidence radio · fits error+form — tests 2 · fun 1 · reuse 3
 
 - **does** — Pick the correct item among distractors that each encode the classic first-language error, at whatever
   granularity fits: one word or a whole sentence.
@@ -502,7 +487,7 @@ answer to "why not another vehicle".
 - **can't** — distractors must be real errors, or it becomes a spot-the-typo; and it never shows the student can
   *produce* the form, only refuse the wrong one — pair it with a gap drill in the same lesson.
 
-### `syllableLab` — beat · cost A · evidence gap — tests 2 · fun 1 · reuse 3
+### `syllableLab` — beat · cost A · evidence gap · fits sound+form — tests 2 · fun 1 · reuse 3
 
 - **does** — The three pillars of rhythm: count the beats, place the stress, find the schwa.
 - **markup** — three short item lists of `input.gap`s, one per pillar, so a wrong answer says *which* pillar failed.
@@ -513,7 +498,7 @@ answer to "why not another vehicle".
 - **can't** — nothing about connected speech — counting beats tells you nothing about what happens when two words
   meet; pair it with `connectedSpeech` if rhythm is the point.
 
-### `errorHunt` — section · cost A · evidence gap — tests 3 · fun 2 · reuse 2
+### `errorHunt` — section · cost A · evidence gap · fits error+text — tests 3 · fun 2 · reuse 2
 
 - **does** — A short text with a stated number of errors; the student types the corrections below. Saying how many
   there are is what makes it a task rather than a browse.
@@ -525,7 +510,7 @@ answer to "why not another vehicle".
 - **can't** — needs a self-contained text, so it is not a beat-sized vehicle; and a student who finds all the errors may
   still not know why they were errors — the debrief is the teacher's.
 
-### `oddOneOut` — beat · cost A · evidence radio + textarea — tests 2 · fun 2 · reuse 3
+### `oddOneOut` — beat · cost A · evidence radio + textarea · fits meaning+lexis — tests 2 · fun 2 · reuse 3
 
 - **does** — One item doesn't belong; the student picks it **and says why** in a line.
 - **markup** — item list of radios for the pick, plus **one block-level `<textarea>`** for the reasons. The textarea is
@@ -536,7 +521,7 @@ answer to "why not another vehicle".
 - **can't** — if two items can be defended, the item is broken, so the justification is mandatory and the teacher reads
   it; and it never produces the target form.
 
-### `spotTheDiff` — section · cost A · evidence gap — tests 3 · fun 2 · reuse 2
+### `spotTheDiff` — section · cost A · evidence gap · fits text+meaning — tests 3 · fun 2 · reuse 2
 
 - **does** — Two versions of the same short text, chat or notice; find and state the differences.
 - **markup** — worked pair: `.itemrow` of two `.panel`s side by side, then one gap per stated difference number. The two
@@ -547,7 +532,7 @@ answer to "why not another vehicle".
 - **can't** — the differences must be meaningful, not punctuation; and it does not say which version is right — that is
   the next block's job.
 
-### `predictReveal` — beat · cost A · evidence textarea — tests 3 · fun 3 · reuse 2
+### `predictReveal` — beat · cost A · evidence textarea · fits listening+meaning — tests 3 · fun 3 · reuse 2
 
 - **does** — The scene stops mid-way; the student writes what happens next, then reveals the real ending.
 - **markup** — open response: the scene as prose, one `<textarea>`, then the real ending inside `<details>` so the page
@@ -558,7 +543,7 @@ answer to "why not another vehicle".
 - **can't** — no marking; it produces investment, not accuracy, so it must be followed by a block that does ask for a
   right answer — otherwise the page has no evidence at all.
 
-### `miniProject` — page · cost A · evidence textarea — tests 3 · fun 3 · reuse 2
+### `miniProject` — page · cost A · evidence textarea · fits text+culture — tests 3 · fun 3 · reuse 2
 
 - **does** — Build something in English: a plan, a poster, a set of rules, an order. Word bank plus textarea.
 - **markup** — open response plus a `.panel` word bank. The brief is a **checklist**, not a paragraph: five things the
@@ -570,7 +555,7 @@ answer to "why not another vehicle".
 - **can't** — free production only, so nothing here trains a form under control and it needs a drill beside it; and it
   cannot be auto-marked — the checklist is what the teacher marks against.
 
-### `cheatSheet` — section · cost A · evidence textarea — tests 1 · fun 1 · reuse 3
+### `cheatSheet` — section · cost A · evidence textarea · fits reference+review — tests 1 · fun 1 · reuse 3
 
 - **does** — The student writes their own summary of what they just learned, in their own words.
 - **markup** — open response with **one** `<textarea>` and a short prompt naming the two or three things to include.
@@ -582,7 +567,7 @@ answer to "why not another vehicle".
 - **can't** — evidence of effort, not of accuracy: a confident wrong summary looks identical to a confident right one,
   so the teacher must read it.
 
-### `connectedFlow` — section · cost A · evidence gap — tests 1 · fun 1 · reuse 2
+### `connectedFlow` — section · cost A · evidence gap · fits sound+listening — tests 1 · fun 1 · reuse 2
 
 - **does** — Where two words meet: a consonant glides into a vowel (`<word> + <word>` → `/j/`), a sound is inserted
   (`<word> + <word>` → `/w/`), or one is dropped. The student marks the join, then hears it.
@@ -595,7 +580,7 @@ answer to "why not another vehicle".
 - **can't** — the ear only, and it is invisible to a written test: a student who marks every join can still say none of
   them. It also needs real recorded joins, never a guess about how a sentence "should" flow.
 
-### `stressShift` — beat · cost A · evidence radio — tests 2 · fun 1 · reuse 3
+### `stressShift` — beat · cost A · evidence radio · fits sound+meaning — tests 2 · fun 1 · reuse 3
 
 - **does** — The same written word carries its stress differently depending on the job it does (`<noun form>` vs
   `<verb form>`); the student picks which reading fits the sentence they were given.
@@ -608,7 +593,7 @@ answer to "why not another vehicle".
 - **can't** — it teaches the *pattern*, not the sound — the student can pass and still stress both wrong. Pair with
   `shadowRecord` for the mouth.
 
-### `emphaticBeat` — beat · cost A · evidence gap — tests 3 · fun 2 · reuse 2
+### `emphaticBeat` — beat · cost A · evidence gap · fits sound+meaning — tests 3 · fun 2 · reuse 2
 
 - **does** — The same sentence stressed three ways, three meanings. The student is given the *intended meaning* and
   marks which word has to carry the beat.
@@ -620,7 +605,7 @@ answer to "why not another vehicle".
 - **can't** — only produces a marked word, never the sound; and it is genuinely hard for students whose first language
   marks emphasis with word order instead — that difficulty is the lesson, not a defect.
 
-### `falseFix` — section · cost A · evidence gap — tests 3 · fun 2 · reuse 3
+### `falseFix` — section · cost A · evidence gap · fits error+meaning — tests 3 · fun 2 · reuse 3
 
 - **does** — Every sentence is **false**: exactly one word is wrong. The student types only the replacement word. The
   wrongness is the task, so there is no true/false judgement to hedge.
@@ -633,7 +618,7 @@ answer to "why not another vehicle".
 - **can't** — it can only test words with one defensible replacement; if two words fix the sentence, the item has no
   single answer and must be rewritten.
 
-### `dictogloss` — section · cost A · evidence textarea — tests 3 · fun 2 · reuse 2
+### `dictogloss` — section · cost A · evidence textarea · fits listening+text — tests 3 · fun 2 · reuse 2
 
 - **does** — A short passage is heard twice at natural speed, then the student reconstructs it from memory in writing,
   then compares against the original. The gap between what they wrote and what was said is the whole lesson.
@@ -645,7 +630,7 @@ answer to "why not another vehicle".
 - **can't** — no key, so it needs a teacher; and it measures everything at once (listening, memory, spelling, grammar),
   which makes it a good diagnostic and a poor test.
 
-### `wordFamily` — section · cost A · evidence gap — tests 2 · fun 1 · reuse 3
+### `wordFamily` — section · cost A · evidence gap · fits lexis+form — tests 2 · fun 1 · reuse 3
 
 - **does** — One root, four jobs: the student takes `<root>` and puts the right member into each gap by what the sentence
   needs (the doer, the thing, the doing, the how). The lesson is that a family is not a set of synonyms — each member
@@ -658,7 +643,7 @@ answer to "why not another vehicle".
 - **can't** — only works on roots that really do have distinct members in use; inventing `<root>ness` to fill the grid
   teaches a word nobody says, and the student will use it confidently.
 
-### `collocationGap` — section · cost A · evidence gap — tests 2 · fun 1 · reuse 3
+### `collocationGap` — section · cost A · evidence gap · fits lexis+interaction — tests 2 · fun 1 · reuse 3
 
 - **does** — The student writes the partner word: which verb goes with `<noun>`, which noun goes with `<adjective>`. What is
   tested is the pairing, not the meaning of either word — a student can know both words and still not know they go
@@ -671,7 +656,7 @@ answer to "why not another vehicle".
 - **can't** — the answer has to be genuinely predictable; if two partners are natural, the item has no single answer and
   is unfair. Check by asking whether a native speaker would hesitate.
 
-### `scaleChoice` — section · cost A · evidence radio — tests 2 · fun 1 · reuse 3
+### `scaleChoice` — section · cost A · evidence radio · fits meaning+lexis — tests 2 · fun 1 · reuse 3
 
 - **does** — A meaning is given and the student picks which of the lesson's words sits at that point on a strength scale
   (`<weak>` … `<strong>`). Forces the realisation that words of a set are not interchangeable but ordered.
@@ -683,7 +668,7 @@ answer to "why not another vehicle".
 - **can't** — every item needs one defensible answer. Degree words blur under scrutiny, so the prompt must carry the
   deciding context or the item is an argument, not an exercise.
 
-### `prepositionScene` — section · cost A · evidence gap — tests 2 · fun 1 · reuse 3
+### `prepositionScene` — section · cost A · evidence gap · fits form+lexis — tests 2 · fun 1 · reuse 3
 
 - **does** — The same small set of function words placed against **pictures described in words**: the student writes
   which one the scene needs (in/on/at, to/for/with). Function words are learned by scene, not by translation, and a
@@ -696,7 +681,7 @@ answer to "why not another vehicle".
 - **can't** — it can only teach the cases in the lesson's own set; the general rule behind them is bigger than any block,
   so resist stating one.
 
-### `summarySqueeze` — section · cost A · evidence textarea — tests 3 · fun 2 · reuse 3
+### `summarySqueeze` — section · cost A · evidence textarea · fits text — tests 3 · fun 2 · reuse 3
 
 - **does** — The same content written at two lengths, then the student writes the middle length. What gets dropped first is
   the lesson: function words go last, so a squeeze that only cuts content words is the version that still sounds like
@@ -709,7 +694,7 @@ answer to "why not another vehicle".
 - **can't** — no key unless the lesson accepts several good answers; and a word ceiling that is too tight forces
   telegraphic English, which teaches the wrong thing.
 
-### `sentenceCombine` — section · cost A · evidence gap — tests 3 · fun 2 · reuse 3
+### `sentenceCombine` — section · cost A · evidence gap · fits form+text — tests 3 · fun 2 · reuse 3
 
 - **does** — Two short sentences given, one joined sentence required, with the joining word left as the gap. The student
   supplies the relationship (cause, contrast, condition, sequence), which is the part they cannot see in either half.
@@ -721,7 +706,7 @@ answer to "why not another vehicle".
 - **can't** — the given meaning has to be implied by the content; if either relationship works, the item tests preference,
   not grammar.
 
-### `expandCompress` — section · cost A · evidence gap — tests 2 · fun 2 · reuse 2
+### `expandCompress` — section · cost A · evidence gap · fits text+register — tests 2 · fun 2 · reuse 2
 
 - **does** — One sentence, two directions: expand it by adding the detail the lesson's forms are for, then compress a
   longer one back to its skeleton. The pair of directions is what shows the student that detail is added *by* the grammar,
@@ -733,7 +718,7 @@ answer to "why not another vehicle".
   overwritten, which is the direction students almost never get.
 - **can't** — expansion invites padding; every added word must be a form the lesson taught, or the block teaches volume.
 
-### `politeLadder` — section · cost A · evidence gap — tests 2 · fun 1 · reuse 3
+### `politeLadder` — section · cost A · evidence gap · fits register+interaction — tests 2 · fun 1 · reuse 3
 
 - **does** — One request, said at three levels of politeness, all three correct, ordered. The student then writes the
   version that fits a stated hearer. Politeness here is a *choice of form*, not an adjective on a word.
@@ -745,7 +730,7 @@ answer to "why not another vehicle".
 - **can't** — the rungs must be interchangeable in meaning, or the student is choosing content rather than tone; and it
   teaches no grammar — only which of several known forms to reach for.
 
-### `infoGap` — section · cost A · evidence gap — tests 2 · fun 3 · reuse 3
+### `infoGap` — section · cost A · evidence gap · fits interaction+meaning — tests 2 · fun 3 · reuse 3
 
 - **does** — Two halves of one situation, each on its own panel, each missing what the other has. The student writes the
   question that gets the missing piece, then the answer that gives it. The information asymmetry is what makes the
@@ -758,7 +743,7 @@ answer to "why not another vehicle".
 - **can't** — everything has to be answerable from the page, so it is a written information gap and not a speaking one;
   and a half that already contains the other half's answers kills it.
 
-### `roleCard` — section · cost A · evidence textarea — tests 3 · fun 3 · reuse 3
+### `roleCard` — section · cost A · evidence textarea · fits interaction+culture — tests 3 · fun 3 · reuse 3
 
 - **does** — A card gives who the student is, who they are talking to, and what they need out of it — never what to say.
   The student produces the lines. This is the only block in the family that forces a whole turn rather than a form.
@@ -770,7 +755,7 @@ answer to "why not another vehicle".
 - **can't** — no key, so it needs a teacher or a partner; and a card that lists the target phrases turns the block into
   copying, which is the one thing it exists to avoid.
 
-### `audienceShift` — section · cost A · evidence gap — tests 2 · fun 2 · reuse 3
+### `audienceShift` — section · cost A · evidence gap · fits register+text — tests 2 · fun 2 · reuse 3
 
 - **does** — One event, described to two different hearers, then the student writes the version for a third. What changes
   is not just formality but *selection* — what you mention first, what you leave out, what you admit to. The lesson is
@@ -783,7 +768,7 @@ answer to "why not another vehicle".
 - **can't** — it grades badly: two students can both be right and sound different. Mark it for the *shift*, never for the
   wording; and it needs the event to be one the student has an opinion about.
 
-### `pulseStress` — section · cost A · evidence gap — tests 3 · fun 2 · reuse 3
+### `pulseStress` — section · cost A · evidence gap · fits sound+music — tests 3 · fun 2 · reuse 3
 
 - **does** — A line printed under a row of numbered beats. The student writes **which beat** the main stress lands on, then
   beats the line out loud. English is stress-timed: the beats are roughly even and the unstressed syllables are squeezed
@@ -797,7 +782,7 @@ answer to "why not another vehicle".
 - **can't** — it marks beats, never produces the rhythm; the student can answer every item and still not be able to say it
   evenly. Follow it with a `shadowRecord` if the rhythm is the goal.
 
-### `lyricGap` — section · cost A · evidence gap — tests 3 · fun 3 · reuse 2
+### `lyricGap` — section · cost A · evidence gap · fits listening+music — tests 3 · fun 3 · reuse 2
 
 - **does** — One line, heard at speed, with the words that the delivery swallows left as gaps — the articles, the `to`, the
   auxiliary. It is `dictation` narrowed to exactly the words that disappear, which is the opposite of the usual drill that
@@ -810,7 +795,7 @@ answer to "why not another vehicle".
 - **can't** — it depends entirely on the clip being real connected speech; a clip that pronounces every word carefully has
   no gaps to find and the block cannot be rescued.
 
-### `lineRepair` — section · cost A · evidence gap — tests 3 · fun 2 · reuse 2
+### `lineRepair` — section · cost A · evidence gap · fits error+sound — tests 3 · fun 2 · reuse 2
 
 - **does** — Two versions of one line side by side: the written form and the performed form. The student writes what the
   performer changed — dropped, blended, moved the stress, added a word. Naming the change is the skill; knowing the line
@@ -823,7 +808,7 @@ answer to "why not another vehicle".
 - **can't** — the lesson has to supply a genuinely performed clip; and the labels are a small vocabulary of their own, so
   teach them once or the student is guessing at your words instead of at the language.
 
-### `contourMatch` — beat · cost A · evidence radio — tests 2 · fun 2 · reuse 3
+### `contourMatch` — beat · cost A · evidence radio · fits music+sound — tests 2 · fun 2 · reuse 3
 
 - **does** — A line is heard and the student picks which **movement** it made — up, down, up-then-down, flat-and-then-up —
   and what that movement means in this situation (finished · not finished · asking · doubting · listing). The pair of
@@ -836,7 +821,7 @@ answer to "why not another vehicle".
 - **can't** — one hearing, one judgement, and real speech is messier than four labels; if the clip is ambiguous the item is
   unfair and there is no way to argue with a student who picked another one.
 
-### `placeScript` — section · cost A · evidence gap — tests 2 · fun 2 · reuse 3
+### `placeScript` — section · cost A · evidence gap · fits culture+text — tests 2 · fun 2 · reuse 3
 
 - **does** — A routine exchange written as a **sequence of moves** (open → ask → answer → close), each move a slot the
   student fills. What is being taught is the shape of the routine, not any one line in it: a student who knows all the
@@ -849,7 +834,7 @@ answer to "why not another vehicle".
 - **can't** — it teaches one routine in one setting; the lesson supplies the setting and the lines, and a block that tries
   to cover "how people are here" covers nothing. Mark order and fit, never fluency.
 
-### `directnessDial` — section · cost A · evidence radio — tests 2 · fun 2 · reuse 3
+### `directnessDial` — section · cost A · evidence radio · fits culture+register — tests 2 · fun 2 · reuse 3
 
 - **does** — One message, three ways of saying it, and a hearer. The student picks which level of directness the hearer
   takes — and, crucially, one option is **too** direct for that hearer, so the task is not "choose the softest" but "choose
@@ -863,7 +848,7 @@ answer to "why not another vehicle".
 - **can't** — directness is not a universal scale, so the lesson must state which setting it is talking about; a block that
   implies one right answer for all English users is teaching a stereotype with a rubric.
 
-### `generationGap` — section · cost A · evidence radio — tests 2 · fun 2 · reuse 2
+### `generationGap` — section · cost A · evidence radio · fits culture+register — tests 2 · fun 2 · reuse 2
 
 - **does** — The same thing said by two generations, both correct, both current — an older form and a newer one with a
   stated speaker. The student decides which speaker the line belongs to. Slang ages, so the block pairs each newer form with
@@ -876,7 +861,7 @@ answer to "why not another vehicle".
 - **can't** — everything here expires. Any item whose answer depends on slang staying slang must be replaceable without
   rewriting the block, or within two years the lesson teaches a rule that is no longer true.
 
-### `mediaSnippet` — section · cost A · evidence radio — tests 2 · fun 3 · reuse 2
+### `mediaSnippet` — section · cost A · evidence radio · fits culture+text — tests 2 · fun 3 · reuse 2
 
 - **does** — One real line — a lyric, a headline, a line from a show — and three questions about the *speaker*: who they are
   talking to, what they assume the listener already knows, and what they are not saying. The language is real, so the
@@ -921,7 +906,7 @@ Fields: `does` — what it puts on the page · `markup` — the classes that bui
 The families are a reading order, not a sequence: most lessons need one from the first row and one from the
 fourth, and the middle rows only when the lesson is specifically about form or meaning.
 
-### `contrastTable` — section · cost A · evidence none — tests 0 · fun 1 · reuse 3
+### `contrastTable` — section · cost A · evidence none · fits model+form — tests 0 · fun 1 · reuse 3
 
 - **does** — Two columns, A and B, holding the same sentence said both ways, so the only thing that changes is
   the thing being taught. A note row under the table states the rule in one line.
@@ -931,7 +916,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — shows the difference but never checks it; and if the two columns differ in more than one way, the
   contrast is unreadable and the rule is lost.
 
-### `ruleCard` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 3
+### `ruleCard` — beat · cost A · evidence none · fits model+form — tests 0 · fun 1 · reuse 3
 
 - **does** — The mental model in three lines: the rule, one example that proves it, and the **boundary case** —
   the sentence that looks like it should follow the rule and doesn't. The boundary case is the part that stops
@@ -941,7 +926,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **fits** — third or half; pair with a practice block of the same width.
 - **can't** — one card carries one rule. A card with three rules teaches none of them.
 
-### `workedExample` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 3
+### `workedExample` — beat · cost A · evidence none · fits model+form — tests 0 · fun 1 · reuse 3
 
 - **does** — One sentence assembled step by step, each step labelled with what changed and why
   (`<base>` → `<+ ending>` → `<final>`), so the student watches the form build instead of meeting it finished.
@@ -950,7 +935,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — only for forms that genuinely build in steps (tense forms, questions, negation). On a fixed
   phrase it is decoration.
 
-### `annotatedExample` — section · cost A · evidence none — tests 0 · fun 1 · reuse 3
+### `annotatedExample` — section · cost A · evidence none · fits model+text — tests 0 · fun 1 · reuse 3
 
 - **does** — One real sentence with its working parts named: what carries the tense, the chunk that can be
   swapped, the piece that decides the meaning. Names sit beside or under the text.
@@ -959,7 +944,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **fits** — full (a labelled sentence needs horizontal room) or half with two labels only.
 - **can't** — labels on everything mark nothing. Three labels maximum, or the student reads none of them.
 
-### `formulaFrame` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 3
+### `formulaFrame` — beat · cost A · evidence none · fits model+form — tests 0 · fun 1 · reuse 3
 
 - **does** — A pattern as a skeleton with named slots (`<I'd rather> ___ <than> ___`), then two or three filled
   versions. Teaches a shape to reuse rather than a conjugation table to stare at.
@@ -970,7 +955,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
   the student will build sentences that look like the frame and are wrong.
 
 
-### `signalTable` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 3
+### `signalTable` — beat · cost A · evidence none · fits reference+form — tests 0 · fun 1 · reuse 3
 
 - **does** — The cue in the sentence, the choice it forces, one example each: `<cue>` → `<form it demands>`. This
   is the display form of the condition that decides the item, and it is what makes a rule usable without
@@ -981,7 +966,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — no cue is decisive on its own; a table that reads "always" when the language only mostly does this
   teaches a false rule.
 
-### `exceptionBench` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 2
+### `exceptionBench` — beat · cost A · evidence none · fits reference+error — tests 0 · fun 1 · reuse 2
 
 - **does** — The exceptions, grouped **by why they behave that way**, not listed as a set of facts to memorise.
   Two or three items, each `<form>` — because `<reason>`.
@@ -991,7 +976,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — if the exceptions have no shared reason, this block is a list of things to memorise and should be
   cut in favour of teaching them as separate items.
 
-### `errorGallery` — section · cost A · evidence none — tests 0 · fun 2 · reuse 3
+### `errorGallery` — section · cost A · evidence none · fits model+error — tests 0 · fun 2 · reuse 3
 
 - **does** — Four or five sentences that **look** correct and aren't, each with the reason it fails. The fixes
   are not shown: the student meets those again in the practice that follows, so the gallery trains the mistake,
@@ -1002,7 +987,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — no production, and it is heavy with negatives; more than five traps in one gallery and the student
   remembers none of them.
 
-### `beforeAfterStrip` — section · cost A · evidence none — tests 0 · fun 2 · reuse 3
+### `beforeAfterStrip` — section · cost A · evidence none · fits model+register — tests 0 · fun 2 · reuse 3
 
 - **does** — One meaning written twice: the version a student at this level actually produces, then the version a
   native speaker would. Both are grammatical — the difference is naturalness, not correctness — and that is the
@@ -1013,7 +998,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — must never show an ungrammatical "before", or it teaches an error as the starting point; and one pair
   makes one point — three pairs in a row is a lecture.
 
-### `soundGrid` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 3
+### `soundGrid` — beat · cost A · evidence none · fits reference+sound — tests 0 · fun 1 · reuse 3
 
 - **does** — One contrast, shown in three positions: the same pair of sounds at the start, in the middle and at the
   end of a word, with a `.listen` chip on each example. Teaches that the contrast is a system, not two words.
@@ -1023,7 +1008,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — it is listening and mouth-work only; no written form, and a grid with more than two sounds per row
   stops being a contrast and becomes a catalogue.
 
-### `stressBar` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 2
+### `stressBar` — beat · cost A · evidence none · fits reference+sound — tests 0 · fun 1 · reuse 2
 
 - **does** — The word broken into syllables with the stressed one marked, and **the rule that put the stress
   there** — which is what makes it transferable to the next word instead of a fact about this one.
@@ -1033,7 +1018,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — English stress is only partly rule-governed, so a stress rule that has more exceptions than cases is
   worse than saying plainly that this one must be learned by ear.
 
-### `spellingSoundMap` — section · cost A · evidence none — tests 0 · fun 1 · reuse 2
+### `spellingSoundMap` — section · cost A · evidence none · fits reference+sound — tests 0 · fun 1 · reuse 2
 
 - **does** — The reverse direction of `soundGrid`: one sound, and the several spellings that produce it (or one
   spelling and the sounds it makes), each with an example. Makes reading predictable instead of memorised.
@@ -1042,7 +1027,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **fits** — half.
 - **can't** — English spelling is regular in patterns, not in rules; if the honest answer is "these four, and no
   pattern", write that, or the block teaches a rule that will fail in the next paragraph the student reads.
-### `scaleAxis` — beat · cost A · evidence none — tests 0 · fun 2 · reuse 3
+### `scaleAxis` — beat · cost A · evidence none · fits model+meaning — tests 0 · fun 2 · reuse 3
 
 - **does** — Items placed along a named continuum (`<weak>` ⟶ `<strong>`, `<formal>` ⟶ `<casual>`,
   `<always>` ⟶ `<never>`), with the ends labelled. Teaches degree where a rule would only give two boxes.
@@ -1052,7 +1037,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — it claims an order. If two items could swap places without changing meaning, the axis is invented and
   must not ship.
 
-### `collocationMatrix` — section · cost A · evidence none — tests 0 · fun 2 · reuse 3
+### `collocationMatrix` — section · cost A · evidence none · fits reference+lexis — tests 0 · fun 2 · reuse 3
 
 - **does** — Two sets of words as rows and columns, with ticks showing what actually goes together. This is the
   block that stops translation-shaped errors, because a pair that "means the same" in both languages lands in the
@@ -1063,7 +1048,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — ticks are not explanations; if a combination is blocked for a reason (not just by convention), a
   matrix hides it and the reason belongs in a `ruleCard` beside it.
 
-### `falseFriendSplit` — beat · cost A · evidence none — tests 0 · fun 2 · reuse 3
+### `falseFriendSplit` — beat · cost A · evidence none · fits model+lexis — tests 0 · fun 2 · reuse 3
 
 - **does** — One word in the student's language that splits into two in English (or one English word that covers
   two things in the student's language), shown with **the test that decides which one** — a question the student can
@@ -1073,7 +1058,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **fits** — half; pair with the drill that makes the student choose.
 - **can't** — only for genuine splits; a word with one clean equivalent presented here invents a difficulty the
   language does not have.
-### `audienceRow` — section · cost A · evidence none — tests 0 · fun 2 · reuse 3
+### `audienceRow` — section · cost A · evidence none · fits model+register — tests 0 · fun 2 · reuse 3
 
 - **does** — One message at three distances — a friend, an adult you know, an adult you don't — with **who you would
   say it to** as the label on each version. Teaches register as a choice with a reason, not as politeness points.
@@ -1083,7 +1068,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — it presents the ladder without walking it; the student still needs a block that makes them pick the
   rung, or this is a poster about register.
 
-### `sceneCast` — beat · cost A · evidence none — tests 0 · fun 2 · reuse 3
+### `sceneCast` — beat · cost A · evidence none · fits model+interaction — tests 0 · fun 2 · reuse 3
 
 - **does** — Who is talking, where, what has already happened between them, and what is at stake — the facts that
   predict which language the scene will use. This is the block that lets a dialogue or a roleplay be one thing
@@ -1094,7 +1079,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — no language at all, so it is worth nothing without the scene it sets; and a cast list that only names
   people ("Ana, her brother") predicts nothing — the stakes have to be social.
 
-### `dialogueMoves` — section · cost A · evidence none — tests 0 · fun 2 · reuse 3
+### `dialogueMoves` — section · cost A · evidence none · fits model+interaction — tests 0 · fun 2 · reuse 3
 
 - **does** — A short exchange where each turn is labelled by **what it is doing** (`open` · `hedge` · `push back` ·
   `concede` · `close`), so the student sees that a conversation has parts and that the parts have their own phrases.
@@ -1103,7 +1088,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **fits** — full; two columns of text plus labels.
 - **can't** — labels are metalanguage, not language; a student can label a hedge and still not produce one, so the
   block must be followed by a drill that makes them produce a move.
-### `chatSample` — section · cost A · evidence none — tests 0 · fun 3 · reuse 2
+### `chatSample` — section · cost A · evidence none · fits model+register — tests 0 · fun 3 · reuse 2
 
 - **does** — A short thread as it actually appears on a screen, with the target language in the middle of ordinary
   noise: a typo, an emoji, two messages in a row, a reply that ignores the question. The student meets the form in
@@ -1115,7 +1100,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
   among several, never as the only presentation of a rule; and a thread whose every line is target language is a
   dialogue pretending to be a chat.
 
-### `vocabField` — section · cost A · evidence none — tests 0 · fun 2 · reuse 3
+### `vocabField` — section · cost A · evidence none · fits reference+lexis — tests 0 · fun 2 · reuse 3
 
 - **does** — The lesson's new words arranged by **the job they do in the situation** (people · things · actions ·
   what you say · how it went), not as a numbered list with translations. A field is easier to use than a list
@@ -1126,7 +1111,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — no drill, and a field with arbitrary headings is a list with extra lines; every cluster name has to be
   a situation the student will actually be in.
 
-### `storyStrip` — section · cost A · evidence none — tests 0 · fun 3 · reuse 2
+### `storyStrip` — section · cost A · evidence none · fits model+text — tests 0 · fun 3 · reuse 2
 
 - **does** — Three or four short scenes carrying one continuous situation, with the target language embedded in
   each and getting slightly harder. The student learns the language *inside* a story instead of meeting it as
@@ -1137,7 +1122,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — a story is long, and length is not depth: if the scenes do not each teach something the previous one
   did not, it is decoration that pushes the practice below the fold.
 
-### `melodyContour` — beat · cost A · evidence none — tests 0 · fun 2 · reuse 3
+### `melodyContour` — beat · cost A · evidence none · fits model+music — tests 0 · fun 2 · reuse 3
 
 - **does** — One line of text with a **drawn line over it** showing where the voice rises and falls, and a one-word label
   under the shape (`finished` · `waiting` · `asking` · `doubt`). It is the only way to put intonation on a printed page:
@@ -1148,7 +1133,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — it shows the shape and proves nothing; and a contour over a line the student cannot hear is an abstraction —
   the clip has to be there too, or this is decoration.
 
-### `beatGrid` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 3
+### `beatGrid` — beat · cost A · evidence none · fits reference+music — tests 0 · fun 1 · reuse 3
 
 - **does** — A sentence laid onto a row of even beats, unstressed syllables squeezed into the cells between them, with the
   stressed syllable marked. Shows the thing students never believe from prose: the beats are evenly spaced and the words
@@ -1159,7 +1144,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — one line per grid; two lines stacked invite the student to read them as equal length, which is the opposite
   of the point.
 
-### `stanceScale` — beat · cost A · evidence none — tests 0 · fun 1 · reuse 3
+### `stanceScale` — beat · cost A · evidence none · fits model+meaning — tests 0 · fun 1 · reuse 3
 
 - **does** — An axis, and the lesson's words placed on it (`<weak>` — `<neutral>` — `<strong>`), including the gaps where
   nothing sits. Position is the teaching: two words that looked like synonyms are shown to be neighbours or not.
@@ -1169,7 +1154,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 - **can't** — an axis implies a single dimension; if two of the words differ in kind rather than degree, the axis is a lie
   and a `collocationMatrix` is the honest shape.
 
-### `routineMap` — section · cost A · evidence none — tests 0 · fun 1 · reuse 3
+### `routineMap` — section · cost A · evidence none · fits reference+interaction — tests 0 · fun 1 · reuse 3
 
 - **does** — A routine drawn as a **path with branches** rather than a list: the moves in order, and at the points where the
   exchange can go two ways, both ways shown and where each ends. This is the shape `placeScript` tests and prose cannot
@@ -1217,7 +1202,7 @@ Fields: identical to §5 (`does` / `markup` / `fits` / `vary` / `can't`). `vary`
 else, because the temptation with real material is to answer the interesting question by making the artefact harder
 to decode. That is not difficulty, it is noise.
 
-### `rhymeCoda` — section · cost A · evidence radio — tests 2 · fun 2 · reuse 3
+### `rhymeCoda` — section · cost A · evidence radio · fits music+sound — tests 2 · fun 2 · reuse 3
 
 - **does** — Lines from one lyric are on the page; the student marks which two rhyme, then decides what letters spell
   the shared sound. Finding a pattern in real text is a different job from judging a supplied pair, and the second
@@ -1231,7 +1216,7 @@ to decode. That is not difficulty, it is noise.
 - **can't** — it needs lines whose rhyme is visible in the spelling, so it cannot carry a sound the student cannot
   yet hear, and it must never be used with a lyric whose rhyme depends on a performance the page does not have.
 
-### `songStructure` — section · cost A · evidence gap — tests 2 · fun 2 · reuse 2
+### `songStructure` — section · cost A · evidence gap · fits music+text — tests 2 · fun 2 · reuse 2
 
 - **does** — A lyric laid out as text with its parts unlabelled; the student names each part by what it *does*
   (returns, turns, closes) and marks the line that comes back changed. Repetition is taught as a decision rather than
@@ -1244,7 +1229,7 @@ to decode. That is not difficulty, it is noise.
 - **can't** — no audio and no song: this is the shape of a text, and presenting it as listening is dishonest. It also
   cannot teach vocabulary — it assumes the student already understands the lines.
 
-### `barCount` — beat · cost A · evidence gap — tests 2 · fun 2 · reuse 3
+### `barCount` — beat · cost A · evidence gap · fits music+sound — tests 2 · fun 2 · reuse 3
 
 - **does** — Count the beats a line actually lands on, and where the count breaks. Rhythm becomes a number the
   student can check, which is what "say it with stress" fails to give them.
@@ -1256,7 +1241,7 @@ to decode. That is not difficulty, it is noise.
 - **can't** — speech only: a page cannot carry a metronome, so the count is the lesson's judgement and the block must
   not present itself as measuring anything. It teaches nothing about meaning.
 
-### `moodTrack` — section · cost A · evidence radio — tests 2 · fun 3 · reuse 3
+### `moodTrack` — section · cost A · evidence radio · fits music+culture — tests 2 · fun 3 · reuse 3
 
 - **does** — A scene, plus three short descriptions of how a track sounds; the student picks the one that fits and
   defends it in one written line. The defence is the work: mood words are easy to guess and hard to justify.
@@ -1267,7 +1252,7 @@ to decode. That is not difficulty, it is noise.
 - **can't** — nothing is played. It is vocabulary and justification, and grading it as a listening task would be a
   lie; it also cannot teach genre names it never states.
 
-### `genreDoc` — section · cost A · evidence radio — tests 3 · fun 2 · reuse 3
+### `genreDoc` — section · cost A · evidence radio · fits culture+music — tests 3 · fun 2 · reuse 3
 
 - **does** — A real-world artefact rebuilt as a small table — a menu, a ticket, a timetable, a receipt, a form — plus
   questions only it can answer: what it costs, what it excludes, what happens if you are late, what you must bring.
@@ -1281,7 +1266,7 @@ to decode. That is not difficulty, it is noise.
   convention that does not exist. It also needs the lesson to name what the artefact is for, or the questions are
   guesswork.
 
-### `signScan` — section · cost A · evidence radio — tests 1 · fun 1 · reuse 3
+### `signScan` — section · cost A · evidence radio · fits culture+text — tests 1 · fun 1 · reuse 3
 
 - **does** — A set of notices from one place, each with a different force; the student matches each to what it does
   to them — forbids, permits, warns, requests — and then names the word doing the work.
@@ -1291,7 +1276,7 @@ to decode. That is not difficulty, it is noise.
 - **can't** — recognition only, and it must keep two axes apart: how hard a notice is and how polite it is are
   different questions, and a block that asks both at once cannot be marked.
 
-### `formFill` — section · cost A · evidence gap — tests 3 · fun 2 · reuse 2
+### `formFill` — section · cost A · evidence gap · fits culture+text — tests 3 · fun 2 · reuse 2
 
 - **does** — The other direction from `genreDoc`: a blank artefact and a set of details to put in the right boxes —
   the shape of a name, an order for a date, a code, a signature. The conventions are the lesson; the language is
@@ -1304,7 +1289,7 @@ to decode. That is not difficulty, it is noise.
 - **can't** — near-zero language load, so it cannot carry a lesson on its own, and it is only honest when the
   convention was stated by the lesson rather than assumed by the author.
 
-### `measureLocal` — beat · cost A · evidence gap — tests 2 · fun 1 · reuse 3
+### `measureLocal` — beat · cost A · evidence gap · fits culture+register — tests 2 · fun 1 · reuse 3
 
 - **does** — The units an artefact uses against the ones the student lives in: order of a date, clock convention,
   money, distance, size, temperature. The student converts both ways and then marks which reading is ambiguous.
@@ -1315,7 +1300,7 @@ to decode. That is not difficulty, it is noise.
 - **can't** — arithmetic crowds out language quickly — keep it to five rows — and it teaches nothing about how anyone
   actually speaks.
 
-### `tabooMap` — section · cost A · evidence radio — tests 2 · fun 2 · reuse 2
+### `tabooMap` — section · cost A · evidence radio · fits culture+register — tests 2 · fun 2 · reuse 2
 
 - **does** — Given situations the lesson has already written, the student marks which question is off-limits in each
   and rewrites one so it becomes askable. Pragmatics as a boundary rather than a list of polite phrases.
@@ -1328,7 +1313,7 @@ to decode. That is not difficulty, it is noise.
   scene as a national trait instead of a specific situation, the block writes a stereotype into a page and signs it.
   It is only usable when the scene is *a place and a person*, never a people.
 
-### `accentVariant` — section · cost A · evidence radio — tests 1 · fun 2 · reuse 2
+### `accentVariant` — section · cost A · evidence radio · fits culture+sound — tests 1 · fun 2 · reuse 2
 
 - **does** — The same word or line as it appears in material from different places; the student matches each form to
   the material it came from and marks that no form is an error. What a learner needs is tolerance, and tolerance is
@@ -1342,7 +1327,7 @@ to decode. That is not difficulty, it is noise.
   reproduce them in writing. And it must never be phrased as "which is correct" — the block exists to kill that
   question, not to ask it.
 
-### `idiomOrigin` — beat · cost A · evidence gap — tests 2 · fun 3 · reuse 2
+### `idiomOrigin` — beat · cost A · evidence gap · fits culture+lexis — tests 2 · fun 3 · reuse 2
 
 - **does** — Three things at once: the idiom, what it literally says, and where it came from. Then one line where the
   literal reading would be wrong. The origin is what makes the literal trap stick, which is why this is not
@@ -1353,7 +1338,7 @@ to decode. That is not difficulty, it is noise.
 - **can't** — origins are frequently folk etymology. If the source is not certain the block must say "one story is" —
   an invented origin is worse than none. It is also one lexical item at a time and never generalises.
 
-### `humourFlag` — beat · cost A · evidence radio — tests 2 · fun 3 · reuse 2
+### `humourFlag` — beat · cost A · evidence radio · fits culture+meaning — tests 2 · fun 3 · reuse 2
 
 - **does** — A line that is meant to be funny, and the student marks what is doing the work — a pun, an
   understatement, a reversal, a pause — then names what it would lose if translated.
@@ -1371,7 +1356,7 @@ cheapest improvement to any page is a student who knows what they got wrong and 
 Their `evidence` is **self-report**: a record of the student's judgement, not of accuracy. No mark scheme may treat
 it as a score, and no lesson may use one of these as the only check on a target — that is what section 5 is for.
 
-### `rubricCard` — beat · cost A · evidence radio — tests 1 · fun 1 · reuse 3
+### `rubricCard` — beat · cost A · evidence radio · fits reference+text — tests 1 · fun 1 · reuse 3
 
 - **does** — Three criteria in the student's own words ("it means what I wanted", "a stranger would get it", "I could
   say it out loud"), each with a yes / not-yet tick. The student marks their own attempt before anyone else does.
@@ -1382,7 +1367,7 @@ it as a score, and no lesson may use one of these as the only check on a target 
 - **can't** — students over-mark, consistently, so this is not evidence of learning. Its only value is that it makes
   the next attempt specific.
 
-### `errorLog` — section · cost A · evidence textarea — tests 2 · fun 1 · reuse 3
+### `errorLog` — section · cost A · evidence textarea · fits error+text — tests 2 · fun 1 · reuse 3
 
 - **does** — The page asks for the two errors the student actually made in this lesson, in their own words, with the
   fix. A take-away artefact, and spaced revision has to run on something.
@@ -1393,7 +1378,7 @@ it as a score, and no lesson may use one of these as the only check on a target 
 - **can't** — it depends entirely on the page having given honest feedback earlier. If nothing was marked, the log
   records nothing and the block is decoration.
 
-### `choiceBoard` — section · cost A · evidence textarea — tests 3 · fun 3 · reuse 3
+### `choiceBoard` — section · cost A · evidence textarea · fits text+culture — tests 3 · fun 3 · reuse 3
 
 - **does** — Three tasks of equal value along different roads — one written, one spoken, one built — and the student
   takes one while the page accepts any. The same language gets produced by a route the student chose, which is the
@@ -1406,7 +1391,7 @@ it as a score, and no lesson may use one of these as the only check on a target 
 - **can't** — three tasks means triple authoring, and it cannot be scored as a single thing, so the quiz stays
   separate.
 
-### `freeWrite` — section · cost A · evidence textarea — tests 3 · fun 2 · reuse 3
+### `freeWrite` — section · cost A · evidence textarea · fits text+culture — tests 3 · fun 2 · reuse 3
 
 - **does** — One prompt, a floor and a clock: a number of lines or seconds, and no model answer on the page. This is
   the only block in the file that asks for language the lesson did not supply.
