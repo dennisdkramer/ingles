@@ -1,0 +1,39 @@
+
+==============================================================================
+FILE: <repo>\<TRACK>-ROADMAP.md   (path genericised in this sample)
+==============================================================================
+
+--- STRUCTURE ---
+  PASS  sections present and in order: Decisions -> Shape -> [Labels] -> Lesson 1..N
+  PASS  50 lesson entries, ascending, none missing
+
+--- SHAPE ---
+  PASS  Shape carries Start, End and Blocks (no Spine pointer - the spine is a work artifact)
+  INFO  no spine lines in the deliverable and no spine work file (fine - the blocks still describe the shape)
+
+--- PARSE LABELS AND ENTRIES ---
+  INFO  labels defined: 0
+  INFO  no label list and no ledger: label set derived from teaches: (144 labels)
+  PASS  every label is lowercase area/thing with at most 3 parts
+  PASS  each of the 144 labels appears in exactly one teaches: line
+
+--- NO FORWARD REFERENCES ---
+  PASS  every uses/deepens points at a strictly earlier lesson
+
+--- VOCABULARY ---
+  PASS  every teaching lesson has 10-12 items and 3-6 labels; exams carry neither
+  PASS  no bare particles in vocabulary
+  PASS  no vocabulary item repeats across lessons
+
+--- ENTRY FIELDS ---
+  PASS  all entries carry their fields (8 on teaching lessons, Focus/Uses/Generation on exams)
+  PASS  all 5 lessons after L45 carry the tail statement
+
+--- STYLE GUARDS ---
+  PASS  no entry names a page, class or section
+  PASS  no 'register' label and no per-entry register assignment
+
+--- SUMMARY ---
+  files checked: 1   failures: 0   warnings: 0
+  RESULT: PASS
+
