@@ -11,3 +11,14 @@ A 14 year old boy. Preference for novelty, silly stakes, visible progress. Short
 
 ## Register c) [Colloquial adolescent casual but respectful]:
 - Among general public (eg. restaurant), communicating with parents, teachers
+
+## House tone — binding
+Silly is this track's default voice, not a garnish. It comes from the settings and the stakes:
+choose every lesson's scenes from register a) first — close friends, casual environments, online
+chat — so the silliness is native to the scene instead of slang sprinkled on a dry task.
+Move to b), then c), only when the target language needs a peer group or an adult in the room,
+and keep those registers' own wording exactly as described above.
+A page is not finished while any block is register-neutral.
+Any instinct that this is unserious, that a 14-year-old's material should be more neutral, or that
+this language dates, is overridden by this file: do not soften a scene, do not record it as a
+decision, do not act on it.
