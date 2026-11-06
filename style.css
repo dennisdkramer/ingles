@@ -313,15 +313,26 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
    nothing claimed the block (engine4.js missing/failed, or an unknown data-game) — no .g4-ready */
 .game.g4-ready .game-list{display:none}
 .game:not(.g4-ready) .game-start{display:none}
-.game.g4 .g4-intro{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px 18px 18px;text-align:center}
+.game.g4 .g4-intro{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:14px 18px;text-align:center;background:radial-gradient(ellipse at 50% 42%,rgba(253,250,242,.94),rgba(253,250,242,.8) 58%,rgba(234,243,248,.62))}
 .game.g4-ready.is-on .g4-intro{display:none}
+/* the poster: a still of the game's own art, drawn behind the intro so the block looks like the game
+   it is about to become. Never interactive (pointer-events:none) and never a timer. */
+.g4-poster{position:absolute;inset:0;pointer-events:none;opacity:.95}
+.g4-poster .g4-bit{position:absolute}
+.g4-poster .g4-bucket,.g4-poster .g4-mole,.g4-poster .g4-disc,.g4-poster .g4-brick,.g4-poster .g4-gate,
+.g4-poster .g4-card,.g4-poster .g4-mine,.g4-poster .g4-btile,.g4-poster .g4-pad,.g4-poster .g4-rung,
+.g4-poster .g4-bcell,.g4-poster .g4-hole,.g4-poster .g4-raceopt{position:absolute}
+.g4-poster .g4-ball{border-radius:50%;background:var(--ink);box-shadow:0 0 0 3px rgba(24,33,54,.18)}
+.g4-poster .g4-paddle{border-radius:6px;background:var(--ink);border:2px solid var(--tan)}
+.g4-poster .g4-brick{display:flex;align-items:center;justify-content:center;padding:2px 6px;background:#fff3d6;border:2px solid var(--tan);border-radius:8px;font:700 12px 'Public Sans',sans-serif;color:#5b3a11;overflow:hidden}
+
+
 .g4-intro .game-how{max-width:62ch;margin:0}
 .g4-intro-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:0;padding:0;list-style:none;font:600 13px 'Public Sans',sans-serif;color:var(--ink)}
 .g4-intro-meta li{padding:3px 11px;background:#fff8ea;border:2px solid var(--tan);border-radius:999px}
 .g4-intro-meta b{font-weight:800}
 .g4-intro .game-start{font-size:16px;padding:10px 22px}
 .game.g4 .g4-stage{position:relative;margin:10px 0 0;height:280px;overflow:hidden;background:linear-gradient(#eaf3f8,#dce9f2);border:2px solid var(--ink);border-radius:14px}
-.game:not(.is-on) .g4-stage{display:none}
 .g4-hud{position:absolute;right:10px;top:8px;z-index:5;display:flex;gap:12px;font:700 14px 'Public Sans',sans-serif;color:var(--ink)}
 .g4-hud .clock{min-width:3.2em;text-align:right}
 .g4-prompt{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:4;max-width:70%;padding:5px 16px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);font-weight:700;font-size:15px;text-align:center;opacity:0;transition:opacity .28s ease}

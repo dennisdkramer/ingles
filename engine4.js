@@ -161,8 +161,9 @@ window.GAMES4 = (function () {
        and the page falls back to plain radios and the how-text — the intended no-JS behaviour. */
     root.className += ' g4 g4-ready';
 
-    /* the intro screen: the block's own how-text and Start button move inside it, so before play the
-       block reads as a screen instead of as a form with a button under it */
+    /* the intro screen is an OVERLAY over the game's own stage, and the stage is pre-drawn with a
+       still of that game's art. So before play the block reads as the game it is about to become,
+       not as a form with a button under it. The block's own how-text and Play button move inside. */
     var intro = el('div', 'g4-intro');
     var how = root.querySelector('.game-how');
     if (how) intro.appendChild(how);
@@ -176,7 +177,6 @@ window.GAMES4 = (function () {
     })) : 1) + '</b></li>');
     meta.innerHTML = bits.join('');
     intro.appendChild(meta);
-    root.insertBefore(intro, root.firstChild);
     this.intro = intro;
     var stage = el('div', 'g4-stage');
     var hud = el('div', 'g4-hud');
@@ -193,7 +193,8 @@ window.GAMES4 = (function () {
     if (this.itemTime) stage.appendChild(bar);
     this.bar = bar; this.barFill = bar.querySelector('i');
     this.stage = stage; this.hudEl = hud;
-    root.insertBefore(stage, intro.nextSibling);
+    root.insertBefore(stage, root.firstChild);   /* how-text and Play moved into the overlay above */
+    stage.appendChild(intro);                    /* the intro sits ON the stage, not above it */
 
     var btn = root.querySelector('.game-start');
     if (!btn) { btn = el('button', 'game-start', '▶ Play'); btn.type = 'button'; }
@@ -204,6 +205,7 @@ window.GAMES4 = (function () {
     this.btn = btn;
     this.view = this.plugin ? this.plugin(this) : null;
     if (!this.items.length) { btn.disabled = true; btn.textContent = 'No items'; }
+    else this.poster();          /* the still of this game's art, behind the intro overlay */
 
     /* the keyboard is a first-class way to answer: 1..n picks that option */
     root.addEventListener('keydown', function (e) {
@@ -271,6 +273,7 @@ window.GAMES4 = (function () {
     var self = this;
     if (!this.items.length) return false;
     this.clearTimers();
+    this.clearPoster();
     this.running = true; this.replaying = false;
     this.score = 0; this.idx = 0; this.missed = [];
     var list = this.items.slice();
@@ -377,8 +380,25 @@ window.GAMES4 = (function () {
     line.textContent = 'Score: ' + this.score + ' / ' + this.total
       + (this.score === this.total ? ' — clean run.' : ' — go again when you like.');
     this.btn.textContent = '↻ Play again';
+    this.poster();               /* the art comes back behind the intro overlay */
     return this.score;
   };
+  Runner.prototype.clearPoster = function () {
+    if (this.posterEl && this.posterEl.parentNode) this.posterEl.parentNode.removeChild(this.posterEl);
+    this.posterEl = null;
+  };
+  /* poster: a still of this game's own art, drawn behind the intro overlay. No timers, no audio,
+     no answer state — it is a picture of the game, using the lesson's own words as labels. */
+  Runner.prototype.poster = function () {
+    this.clearPoster();
+    var draw = POSTER[this.name];
+    if (!draw || !this.items.length) return;
+    var box = el('div', 'g4-poster');
+    try { draw(box, this.items); } catch (e) { /* a poster must never break the page */ }
+    this.stage.insertBefore(box, this.stage.firstChild);
+    this.posterEl = box;
+  };
+
   Runner.prototype.state = function () {
     return {
       phase: this.phase, idx: this.idx, score: this.score, total: this.total,
@@ -545,8 +565,191 @@ window.GAMES4 = (function () {
     return { show: show, mark: mark, clear: clear };
   };
 
-  /* ---- say: the built-in voice. Games that need the ear use this, never a network clip. ---- */
-  function say(text, lang) {
+  /* ---------------- posters: one still per game, drawn behind the intro overlay ----------------
+     Each uses the same classes the live game uses, so the picture is styled by the same CSS, and the
+     labels are the lesson's own option words — the student sees this lesson's content in the game's
+     furniture before pressing Play. Nothing here reads or writes an answer. */
+  function opts0(items, n) {
+    return (items[0].opts || []).slice(0, n || 3).map(function (o) { return o.text; });
+  }
+  function abs(node, css) { node.style.cssText = css; return node; }
+  var POSTER = {
+    catchBasket: function (box, items) {
+      var texts = opts0(items, 3);
+      texts.forEach(function (t, i) {
+        var b = el('div', 'g4-bucket g4-bit');
+        b.innerHTML = ART.basket + '<span class="g4-bucket-t">' + esc(t) + '</span>';
+        abs(b, 'left:' + (4 + i * 32) + '%;bottom:6px;width:28%;height:30%');
+        box.appendChild(b);
+      });
+      box.appendChild(abs(el('div', 'g4-card g4-bit', items[0].prompt),
+        'left:50%;top:34%;transform:translate(-50%,-50%) rotate(-3deg)'));
+    },
+    whackMole: function (box, items) {
+      var texts = opts0(items, 3);
+      for (var i = 0; i < 6; i++) {
+        var h = el('div', 'g4-hole g4-bit');
+        h.innerHTML = '<span class="g4-dirt"></span>';
+        abs(h, 'left:' + (5 + (i % 3) * 31) + '%;top:' + (30 + Math.floor(i / 3) * 34) + '%;width:27%;height:30%');
+        if (texts[i] && i !== 1) {
+          h.appendChild(el('div', 'g4-mole', ART.mole + '<span class="g4-mole-t">' + esc(texts[i]) + '</span>'));
+        }
+        box.appendChild(h);
+      }
+    },
+    skeetRange: function (box, items) {
+      opts0(items, 3).forEach(function (t, i) {
+        box.appendChild(abs(el('div', 'g4-disc g4-bit', esc(t)),
+          'left:' + (8 + i * 30) + '%;top:' + (24 + i * 12) + '%;width:26%;padding:10px 8px'));
+      });
+    },
+    raceLane: function (box, items) {
+      opts0(items, 4).forEach(function (t, i) {
+        var lane = abs(el('div', 'g4-raceopt g4-bit'),
+          'left:6%;top:' + (14 + i * 19) + '%;width:' + (34 + i * 12) + '%;');
+        lane.innerHTML = '<i class="g4-car"></i><span>' + esc(t) + '</span>';
+        box.appendChild(lane);
+      });
+    },
+    stackDrop: function (box, items) {
+      opts0(items, 3).forEach(function (t, i) {
+        box.appendChild(abs(el('div', 'g4-slot g4-bit', esc(t)),
+          'left:' + (10 + i * 26) + '%;bottom:' + (6 + i * 18) + '%;width:30%;height:16%'));
+      });
+      box.appendChild(abs(el('div', 'g4-slot g4-bit', items[0].prompt),
+        'left:36%;top:8%;width:34%;height:16%;transform:rotate(-2deg)'));
+    },
+    flapGate: function (box, items) {
+      opts0(items, 3).forEach(function (t, i) {
+        box.appendChild(abs(el('div', 'g4-gate g4-bit', esc(t)),
+          'left:56%;top:' + (12 + i * 26) + '%;width:38%;height:18%'));
+      });
+      box.appendChild(abs(el('div', 'g4-car g4-bit'), 'left:12%;top:40%;width:44px;height:26px'));
+    },
+    brickRight: function (box, items) {
+      var texts = opts0(items, 4);
+      for (var i = 0; i < 8; i++) {
+        box.appendChild(abs(el('div', 'g4-brick g4-bit', texts[i % texts.length] || ''),
+          'left:' + (4 + (i % 4) * 24) + '%;top:' + (8 + Math.floor(i / 4) * 16) + '%;width:22%;height:13%'));
+      }
+      box.appendChild(abs(el('div', 'g4-ball g4-bit'), 'left:46%;bottom:26%;width:18px;height:18px'));
+      box.appendChild(abs(el('div', 'g4-paddle g4-bit'), 'left:34%;bottom:9%;width:32%;height:12px'));
+    },
+    pairFlip: function (box, items) {
+      var texts = opts0(items, 4);
+      for (var i = 0; i < 4; i++) {
+        var c = el('div', 'g4-card g4-bit' + (i === 1 ? ' up' : ''));
+        c.innerHTML = '<span class="g4-face back"></span><span class="g4-face front">'
+          + esc(texts[i] || '') + '</span>';
+        abs(c, 'left:' + (8 + (i % 2) * 44) + '%;top:' + (16 + Math.floor(i / 2) * 34) + '%;width:40%;height:28%');
+        box.appendChild(c);
+      }
+    },
+    mineGrid: function (box, items) {
+      var texts = opts0(items, 4);
+      for (var i = 0; i < 4; i++) {
+        box.appendChild(abs(el('div', 'g4-mine g4-bit' + (i === 0 ? ' open' : ''), esc(texts[i] || '')),
+          'left:' + (6 + (i % 2) * 46) + '%;top:' + (18 + Math.floor(i / 2) * 32) + '%;width:42%;height:28%'));
+      }
+    },
+
+    lockCode: function (box, items) {
+    var dial = el('div', 'g4-dial g4-bit');
+    for (var i = 0; i < 3; i++) dial.appendChild(el('div', 'g4-digit', ''));
+    abs(dial, 'left:0;right:0;top:6%;display:flex;justify-content:center;gap:8px');
+    box.appendChild(dial);
+    var pad = el('div', 'g4-pad g4-bit');
+    for (var k = 1; k <= 5; k++) pad.appendChild(el('div', 'g4-key', String(k)));
+    abs(pad, 'left:6%;right:6%;bottom:8%;display:grid;grid-template-columns:repeat(5,1fr);gap:6px');
+    box.appendChild(pad);
+  },
+  wordleBoard: function (box, items) {
+    var word = String((items[0].opts[0] || {}).text || '').slice(0, 5);
+    var grid = el('div', 'g4-wgrid g4-bit');
+    for (var r = 0; r < 3; r++) {
+      var row = el('div', 'g4-wrow');
+      for (var c = 0; c < Math.max(3, word.length); c++) {
+        var t = el('div', 'g4-tile');
+        if (r === 0 && word[c]) t.textContent = word[c].toUpperCase();
+        if (r === 0 && word[c]) t.classList.add(c === 1 ? 'near' : 'ok');
+        row.appendChild(t);
+      }
+      grid.appendChild(row);
+    }
+    abs(grid, 'left:50%;top:14%;transform:translateX(-50%)');
+    box.appendChild(grid);
+    box.appendChild(abs(el('div', 'g4-wtype g4-bit', '​'),
+      'left:50%;bottom:10%;transform:translateX(-50%);width:180px'));
+  },
+  crosswordBoard: function (box, items) {
+    var word = String((items[0].opts[0] || {}).text || '').slice(0, 6);
+    var grid = el('div', 'g4-xgrid g4-bit');
+    grid.style.gridTemplateColumns = 'repeat(' + Math.max(3, word.length) + ',34px)';
+    for (var i = 0; i < Math.max(3, word.length); i++) {
+      var cell = el('div', 'g4-xcell');
+      var g = el('div', 'g4-gap' + (i === 0 ? ' from' : ''), i === 0 ? word[0].toUpperCase() : '');
+      cell.appendChild(g);
+      grid.appendChild(cell);
+    }
+    abs(grid, 'left:50%;top:30%;transform:translateX(-50%)');
+    box.appendChild(grid);
+  },
+  echoPads: function (box, items) {
+    var pads = el('div', 'g4-pads g4-bit');
+    (items[0].opts || []).slice(0, 4).forEach(function (o, i) {
+      pads.appendChild(el('div', 'g4-pad' + (i === 0 ? ' lit' : ''), esc(o.text)));
+    });
+    abs(pads, 'left:10%;right:10%;top:20%');
+    box.appendChild(pads);
+  },
+  bingoCard: function (box, items) {
+    var texts = [];
+    items.forEach(function (it) { (it.opts || []).forEach(function (o) { if (texts.length < 9) texts.push(o.text); }); });
+    var card = el('div', 'g4-bcard g4-bit');
+    for (var i = 0; i < 9; i++) {
+      card.appendChild(el('div', 'g4-btile' + (i === 4 ? ' stamped' : ''), esc(texts[i] || '')));
+    }
+    abs(card, 'left:50%;top:50%;transform:translate(-50%,-50%);width:78%;height:74%;display:grid;grid-template-columns:repeat(3,1fr);gap:6px');
+    box.appendChild(card);
+  },
+  spinPick: function (box, items) {
+    var reel = el('div', 'g4-reel g4-bit');
+    ['7', '·', '3'].forEach(function (ch, i) {
+      reel.appendChild(el('div', 'g4-reel-d', i === 1 ? (String(items.length)) : ch));
+    });
+    abs(reel, 'left:50%;top:30%;transform:translateX(-50%);display:flex;gap:8px');
+    box.appendChild(reel);
+  },
+  ladderRun: function (box, items) {
+    var rungs = el('div', 'g4-rungs g4-bit');
+    for (var i = 0; i < 8; i++) {
+      rungs.appendChild(el('div', 'g4-rung' + (i === 3 ? ' safe' : '') + (i === 2 ? ' on' : ''), String(i + 1)));
+    }
+    abs(rungs, 'left:6%;top:14%;bottom:14%;display:flex;flex-direction:column-reverse;gap:3px;width:64px');
+    box.appendChild(rungs);
+  },
+  boardQuiz: function (box, items) {
+    var cols = Math.max(2, (items[0].opts || []).length);
+    var grid = el('div', 'g4-bgrid g4-bit');
+    grid.style.gridTemplateColumns = 'repeat(' + cols + ',1fr)';
+    for (var i = 0; i < cols * 3; i++) {
+      grid.appendChild(el('div', 'g4-bcell' + (i === 1 ? ' on' : ''), String((i % 3) + 1)));
+    }
+    abs(grid, 'left:50%;top:52%;transform:translate(-50%,-50%);width:80%');
+    box.appendChild(grid);
+  },
+  bossRaid: function (box, items) {
+    var art = el('div', 'g4-bossart g4-bit');
+    art.innerHTML = ART.hex;
+    abs(art, 'left:50%;top:8%;transform:translateX(-50%);width:96px;height:96px');
+    box.appendChild(art);
+    box.appendChild(abs(el('div', 'g4-hp g4-bit', '<span class="g4-hp-fill" style="width:72%"></span>'),
+      'left:14%;right:14%;top:56%;height:14px'));
+    box.appendChild(abs(el('div', 'g4-hearts g4-bit', '●●●'), 'left:14%;top:4%;'));
+  }
+};
+
+function say(text, lang) {
     try {
       if (!text || !window.speechSynthesis) return false;
       var u = new SpeechSynthesisUtterance(String(text));

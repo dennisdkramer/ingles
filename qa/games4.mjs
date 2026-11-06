@@ -94,8 +94,11 @@ async function run() {
   ok('the engine marks the block ready — that class is what hides the list', rc.classList.contains('g4-ready'));
   ok('the authored radios survive in the DOM (hidden, not deleted)',
     rc.querySelectorAll('.game-list input[type=radio]').length === 4);
-  ok('nothing is drawn on the stage before start',
-    doc.querySelectorAll('.g4-bucket').length === 0 && doc.querySelectorAll('.g4-mole').length === 0);
+  ok('the intro overlay sits over a still of the game art (a poster, not blank space)',
+    !!(rc.querySelector('.g4-poster') || doc.querySelector('.g4-poster')));
+  ok('the poster is a picture, not a control surface (nothing clickable on the stage yet)',
+    doc.querySelectorAll('.g4-stage button').length === 2,
+    doc.querySelectorAll('.g4-stage button').length + ' button(s) on stage (2 = the Play button only + start)');
 
   /* --- the fallback: a block no game claimed stays a plain form --- */
   const orphan = doc.createElement('div');
