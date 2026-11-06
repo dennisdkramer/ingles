@@ -13,7 +13,7 @@
         - EXCEPTIONS (eg. Exam Page, user-specific feedback/review pages).
     d) OUT OF SCOPE for this file:
         - [linguistics and/or pedagogy and/or teaching] analysis/decisions (PEDAGOGY.md) - This file must not influence.
-        - Lesson content is generated and organized according to PEDAGOGY-MAP.md (its process, defaults and per-lesson entries). This file is the mechanical contract — shell, classes, sizing.
+        - Lesson content is generated and organized according to PEDAGOGY-MAP.md (its process and defaults), the track roadmap (`<TRACK>-ROADMAP.md`, e.g. `BUSINESS-ROADMAP.md`) and the track register file (`<TRACK>-REGISTER.md`). This file is the mechanical contract — shell, classes, sizing.
         - Elements which exist because a FUNCTION creates them (Selection popup, note/recording marks, highlight rectangles, colour palette, toast, indicators/spinners, etc.) are styled by style.css, which remains the single styling source for the whole site.
 
 2. SITE CORE CHARACTERISTICS -
@@ -67,17 +67,15 @@
 - Lesson navigation: the control bar carries "← Last" / "Next →" buttons (always present, rendered by engine2.js from `L` alone — there is no lesson count: "Next →" is always enabled and goes to `lesson{L+1}`, "← Last" is disabled on lesson 1).
 
 ### Layout STANDARDS at generation (width & fill techniques; CSS stays fixed)
-CSS uses fixed constants (no dynamic/viewport sizing and no CSS wrapping to force a fit). Layout is not pre-assigned: a block's width and column count are chosen to fit its content, and CSS only implements that choice — rarely rescales and never wraps content to force a fit. The width/fill/alignment techniques below are STANDARDS serving goals of "no dead space" and "professional-looking results":
 a) Width: a block takes ONE of THREE slot widths inside the fixed 1200px content area, with a 14px row gap — full 1200 · half (1200 − 14)/2 = 593 · third (1200 − 2×14)/3 = 391 (CSS implements exactly that: `.itemsize` 100%, `.itemsize-half` `calc(50% - 7px)`, `.itemsize-third` `calc(33.3333% - 9.3333px)`, equal siblings in one `.itemrow`). A block MAY sit half-width beside another block of the same width; a block left on its own CAN be widened with more content.
 b) Priority is minimizing dead space.
 c) Block width decisions are content-aware of what they contain AND context aware of adjacent blocks - If any block must be made half-width and an adjacent block COULD be made half width, do so and pair the two blocks horizontally per (a).
-d) Columns are free - prioritize filling block width.
-e) Adjacent blocks of different heights should be analysed to determine the quantity (and type) of (real, relevant) content that could be added to extend the shorter of the two and trigger a 'cleanup' generation step to do so.
-f) Block contents and their child elements (eg. multiple choice options) should be generated (or shortened/lengthened in cleanup) so that the total length of [each item/option] OR [all items/options] fills >50% of its parent block's width. If <50% is filled, block should be made half-width. Between 50%-70% filled is acceptable but reflow/tiling is preferred if it achieves better width fill. If reflowed to columns, sequential/numbered items must preserve their order top to bottom per column, sequence continuing in the next column (left to right))
-g) Consecutive questions are separated by a small, consistent vertical gap.
-h) A concise section explainer (a standalone introduction to the section) CAN be a sub-heading under the h2: serif (Playfair), ~1pt larger than body, italic — written (in portugues or english as appropriate for lesson level) only when it adds important context and does not restate anything that the lesson already says.
-i) A note that applies to one chart row CAN be a merged row directly under it: `<tr class="note"><td colspan="N">…</td></tr>` — a bare row spliced into `<tbody>` will not span.
-j) Contrasting [linguistic, phonetic, or grammatical] [classes, categories, or concepts] are made visually distinct (using columns, spacing, block separation, or colors as appropriate) so the contrast reads - **This does not supersede 'professional-looking results' goal of 'layout STANDARDS' or other formatting rules**. 
-k) A chart is a BLOCK when it stands alone — it then takes any of the three widths in (a) — and a CHILD of a block when it sits inside one (`.panel .chart` = the block’s width minus its 20px side margin). Its column count and row shapes are content-aware, never fixed by CSS.
-l) Activity and quiz items are numbered
-m) Reflow: a reflowed block states `--rows` (items per column, e.g. `--rows:2`) in its own style attribute — never on a section or wrapper, so a section can never be split into columns; the column count follows from the item count.
+d) Adjacent blocks of different heights should be analysed to determine the quantity (and type) of (real, relevant) content that could be added to extend the shorter of the two and trigger a 'cleanup' generation step to do so.
+e) Block contents and their child elements (eg. multiple choice options) should be generated (or shortened/lengthened in cleanup) so that the total length of [each item/option] OR [all items/options] fills >50% of its parent block's width. If <50% is filled, block should be made half-width. Between 50%-70% filled is acceptable but reflow/tiling is preferred if it achieves better width fill. If reflowed to columns, sequential/numbered items must preserve their order top to bottom per column, sequence continuing in the next column (left to right))
+f) Consecutive questions are separated by a small, consistent vertical gap.
+g) A concise section explainer (a standalone introduction to the section) CAN be a sub-heading under the h2: serif (Playfair), ~1pt larger than body, italic — written (in portugues or english as appropriate for lesson level) only when it adds important context and does not restate anything that the lesson already says.
+h) A note that applies to one chart row CAN be a merged row directly under it: `<tr class="note"><td colspan="N">…</td></tr>` — a bare row spliced into `<tbody>` will not span.
+i) Contrasting [linguistic, phonetic, or grammatical] [classes, categories, or concepts] are made visually distinct (using columns, spacing, block separation, or colors as appropriate) so the contrast reads - **This does not supersede 'professional-looking results' goal of 'layout STANDARDS' or other formatting rules**. 
+j) A chart is a BLOCK when it stands alone — it then takes any of the three widths in (a) — and a CHILD of a block when it sits inside one (`.panel .chart` = the block’s width minus its 20px side margin). Its column count and row shapes are content-aware, never fixed by CSS.
+k) Activity and quiz items are numbered
+l) Reflow: a reflowed block states `--rows` (items per column, e.g. `--rows:2`) in its own style attribute — never on a section or wrapper, so a section can never be split into columns; the column count follows from the item count.
