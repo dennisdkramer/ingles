@@ -49,6 +49,9 @@ The shell reports the true exit code (`$LASTEXITCODE`); Cline's capture of it do
 - NEVER run a bare `exit` / `exit <n>` (it closes the terminal); print the value or `throw` instead.
 - A session may be logged `status: failed` / `exit_code 1` after a real success — that log status is noise.
 
+## NOTE BOXES — a request in a box is the task, and the box is its tracker
+`textarea.qa-note` boxes (`qa/preview-games4.html`, `qa/preview-blocks.html`) hold the owner's requests for the item they sit under. When one is completed, delete that text out of the box: a finished request left in place reads as outstanding work. If a box holds finished text and new text together, delete only the finished part and execute what remains. The boxes hold open work, not history — the record of what was done is the commit.
+
 ## STATUS
 Status lives in dedicated files: the active batch plan in PENDING.md, bugs/problems in ISSUES.md, handoffs in HANDOFF.md, and current state + shared parameter values in STATUS.md. Nothing is cleared anywhere until it is done AND committed.
 

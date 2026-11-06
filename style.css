@@ -391,14 +391,14 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-gate{position:absolute;right:14px;width:44%;padding:8px 12px;background:var(--paper);border:3px solid var(--ink);border-radius:8px;color:var(--ink);font:700 13px 'Public Sans',sans-serif;cursor:pointer}
 .g4-gate.ok{border-color:#2f9e44;background:#e8f7ee}.g4-gate.no{border-color:#c92a2a;background:#fdeaea}
 .g4-gate.reveal{border-style:dashed;border-color:#2f9e44}
-/* skeetRange — a disc per option drifting through its own lane, one crosshair, one shot. The ring is
-   drawn with a radial gradient so it needs no art file, and the label is a plaque under it because a
-   word on a curve is unreadable at speed. */
+/* skeetRange — a disc per option thrown across the range on its own arc, one crosshair, one shot. The
+   ring is drawn with a radial gradient so it needs no art file, and the option's plaque sits ON the
+   disc, not under it: the disc is what the student aims at, so the word has to fly with it. */
 .g4-range{position:absolute;inset:0;cursor:crosshair;touch-action:manipulation}
 .g4-discs{position:absolute;inset:0}
-.g4-target{position:absolute;left:0;top:0;width:112px;height:78px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:crosshair;transform:translate(0,0);will-change:transform}
+.g4-target{position:absolute;left:0;top:0;width:112px;height:58px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:crosshair;transform:translate(0,0);will-change:transform}
 .g4-ring{position:absolute;left:50%;top:0;width:58px;height:58px;margin-left:-29px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#fff8ea 0 30%,var(--tan) 31% 42%,#fff8ea 43% 58%,var(--ink) 59% 66%,#fff8ea 67%);box-shadow:2px 2px 0 rgba(24,33,54,.22)}
-.g4-target-t{position:absolute;left:50%;top:60px;transform:translateX(-50%);max-width:112px;padding:2px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 13px 'Public Sans',sans-serif;line-height:1.18;white-space:nowrap;overflow:hidden}
+.g4-target-t{position:absolute;left:50%;top:29px;transform:translate(-50%,-50%);max-width:104px;padding:2px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 13px 'Public Sans',sans-serif;line-height:1.18;white-space:nowrap;overflow:hidden}
 .g4-target:hover .g4-target-t{border-color:#1d4ed8}
 .g4-target.ok .g4-target-t{border-color:#2f9e44;background:#e8f7ee}
 .g4-target.ok .g4-ring{background:radial-gradient(circle at 50% 50%,#e8f7ee 0 30%,#2f9e44 31% 42%,#e8f7ee 43% 58%,#2f9e44 59% 66%,#e8f7ee 67%)}

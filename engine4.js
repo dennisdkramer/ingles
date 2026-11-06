@@ -915,8 +915,8 @@ window.GAMES4 = (function () {
       row.appendChild(el('div', 'g4-chip active', esc(items[0].prompt)));
       abs(row, 'left:0;right:0;top:6%;display:flex;justify-content:center');
       box.appendChild(row);
-      /* same flex tray the live stage uses, so the intro is a true still of the game */
-      var texts = opts0(items, 3);
+      /* same flex tray the live stage uses, and one basket per option the item has */
+      var texts = (items[0].opts || []).map(function (o) { return o.text; });
       var tray = el('div', 'g4-bit');
       abs(tray, 'left:3%;right:3%;bottom:4%;display:flex;gap:10px');
       texts.forEach(function (t) {
@@ -928,29 +928,35 @@ window.GAMES4 = (function () {
       box.appendChild(tray);
     },
     whackMole: function (box, items) {
-      var texts = opts0(items, 3);
+      /* the six holes are the still's garden; the moles are one per option, as in the live game */
+      var texts = (items[0].opts || []).map(function (o) { return o.text; });
       for (var i = 0; i < 6; i++) {
         var h = el('div', 'g4-hole g4-bit');
         h.innerHTML = '<span class="g4-dirt"></span>';
         abs(h, 'left:' + (5 + (i % 3) * 31) + '%;top:' + (30 + Math.floor(i / 3) * 34) + '%;width:27%;height:30%');
-        if (texts[i] && i !== 1) {
+        if (texts[i]) {
           h.appendChild(el('div', 'g4-mole', ART.mole + '<span class="g4-mole-t">' + esc(texts[i]) + '</span>'));
         }
         box.appendChild(h);
       }
     },
     stackDrop: function (box, items) {
-      opts0(items, 3).forEach(function (t, i) {
+      /* one landing slot per option, spread by how many the item has */
+      var texts = (items[0].opts || []).map(function (o) { return o.text; });
+      var n = Math.max(1, texts.length);
+      texts.forEach(function (t, i) {
         box.appendChild(abs(el('div', 'g4-slot g4-bit', esc(t)),
-          'left:' + (10 + i * 26) + '%;bottom:' + (6 + i * 18) + '%;width:30%;height:16%'));
+          'left:' + (10 + i * (78 / n)).toFixed(1) + '%;bottom:' + (6 + i * (46 / n)).toFixed(1) + '%;width:30%;height:16%'));
       });
       box.appendChild(abs(el('div', 'g4-slot g4-bit', items[0].prompt),
         'left:36%;top:8%;width:34%;height:16%;transform:rotate(-2deg)'));
     },
     flapGate: function (box, items) {
-      opts0(items, 3).forEach(function (t, i) {
+      var texts = (items[0].opts || []).map(function (o) { return o.text; });
+      var n = Math.max(1, texts.length);
+      texts.forEach(function (t, i) {
         box.appendChild(abs(el('div', 'g4-gate g4-bit', esc(t)),
-          'left:56%;top:' + (12 + i * 26) + '%;width:38%;height:18%'));
+          'left:56%;top:' + (12 + i * (66 / n)).toFixed(1) + '%;width:38%;height:18%'));
       });
       box.appendChild(abs(el('div', 'g4-car g4-bit'), 'left:12%;top:40%;width:44px;height:26px'));
     },
@@ -1005,7 +1011,8 @@ window.GAMES4 = (function () {
   },
   echoPads: function (box, items) {
     var pads = el('div', 'g4-pads g4-bit');
-    (items[0].opts || []).slice(0, 4).forEach(function (o, i) {
+    /* one pad per option, as the live game lays them out — the grid wraps them two to a row */
+    (items[0].opts || []).forEach(function (o, i) {
       pads.appendChild(el('div', 'g4-pad' + (i === 0 ? ' lit' : ''), esc(o.text)));
     });
     abs(pads, 'left:10%;right:10%;top:20%');
@@ -1039,11 +1046,14 @@ window.GAMES4 = (function () {
     box.appendChild(abs(el('div', 'g4-hearts g4-bit', '●●●'), 'left:14%;top:4%;'));
   },
   skeetRange: function (box, items) {
-    var texts = opts0(items, 3);
+    /* one disc per option the lesson actually wrote (two to four), label on the disc like the live
+       game, and spread across the width so the last disc is never pushed out of frame */
+    var texts = (items[0].opts || []).map(function (o) { return o.text; });
+    var n = Math.max(1, texts.length);
     texts.forEach(function (t, i) {
       box.appendChild(abs(el('div', 'g4-target g4-bit',
         '<span class="g4-ring"></span><span class="g4-target-t">' + esc(t) + '</span>'),
-        'left:' + (8 + i * 27) + '%;top:' + (14 + (i % 2) * 28) + '%;width:26%;height:76px;animation:none'));
+        'left:' + (4 + i * (92 / n)).toFixed(1) + '%;top:' + (14 + (i % 2) * 28) + '%;width:24%;animation:none'));
     });
     box.appendChild(abs(el('div', 'g4-cross g4-bit'), 'left:52%;top:56%;width:46px;height:46px;margin:-23px 0 0 -23px'));
   }
@@ -1235,19 +1245,24 @@ function say(text, lang) {
      Turn two; a true pair stays up AND answers that item (its radio is checked), a false pair turns
      back. The reading is the game — you cannot match what you have not understood — and every match
      is recorded, so a page of matches is a page of answered items. */
-  /* ---------------- skeetRange: one moving target per option, one shot per item ----------------
-     The range is never empty: each option's disc drifts left to right in its own lane and wraps,
-     so a slow reader still gets a target to aim at. The SHOT is the constraint — one click, the
-     discs freeze, and where it landed is the answer. Clicking the sky is still your one shot,
-     which is why the crosshair is the cursor and not decoration.
-     Authoring: `.qitem` per item, `data-a` the right option, `data-time` the deadline (the runner's
-     bar). `data-replay` brings the misses back the way every other game does. */
+  /* ---------------- skeetRange: one flying target per option, one shot per item ----------------
+     Each option's disc is thrown from off the left edge on its own arc and flies away past the right
+     edge. The flight lasts exactly the item's own deadline (`data-time`), so the timer running out
+     and the last disc leaving the range are the same moment: let them all fly past and the item is
+     lost. Nothing is ever teleported — a disc starts and finishes outside the frame — so the travel
+     you see is the whole of the throw; with no deadline the same throw simply comes round again.
+     The SHOT is the constraint — one click, the discs freeze, and where it landed is the answer.
+     Clicking the sky is still your one shot, which is why the crosshair is the cursor and not
+     decoration.
+     Authoring: `.qitem` per item, one disc per option (two to four, as the lesson writes them),
+     `data-a` the right option, `data-time` the deadline and the flight time. `data-replay` brings
+     the misses back the way every other game does. */
   PLUGINS.skeetRange = function (r) {
     var stage = r.stage;
     var box = el('div', 'g4-range'), field = el('div', 'g4-discs'), cross = el('div', 'g4-cross');
     box.appendChild(field); box.appendChild(cross);
     stage.appendChild(box);
-    var SPEED = 78;                     /* px per second: slow enough to aim, fast enough to matter */
+    var FLIGHT = 7000;                  /* only when the block has no data-time: the throw repeats */
     var raf = 0, live = false, t0 = 0, discs = [], spent = false;
     function now() { return (window.performance && performance.now) ? performance.now() : Date.now(); }
     function stop() { live = false; if (raf && window.cancelAnimationFrame) window.cancelAnimationFrame(raf); raf = 0; }
@@ -1272,17 +1287,24 @@ function say(text, lang) {
       if (ev.target.closest('.g4-target')) return;    /* the disc's own handler already took it */
       shot(null);
     });
+    /* a real throw: out of the trap off-screen left, up over the range, away behind the right edge.
+       `p` is the share of the flight that has gone, and the flight IS the item's own deadline. */
     function draw(t) {
-      var w = box.clientWidth || 640, span = w + 260, secs = t / 1000;
+      var w = box.clientWidth || 640, span = w + 240;
+      var flight = r.itemTime || FLIGHT;
+      var p = t / flight;
+      if (!r.itemTime) p = p % 1;                    /* no deadline: throw after throw */
+      p = Math.min(1, Math.max(0, p));
       discs.forEach(function (d) {
-        var x = d._x + secs * SPEED;
-        x = ((x + 260) % span + span) % span - 260;   /* wrap, so the range never runs dry */
-        d.style.transform = 'translate(' + Math.round(x) + 'px,' +
-          Math.round(Math.sin(secs * 0.9 + d._seed) * 6) + 'px)';
+        var x = -120 + p * span;
+        var lift = d._arc * 4 * p * (1 - p);         /* zero at both edges, highest at half way */
+        d.style.transform = 'translate(' + Math.round(x) + 'px,' + Math.round(-lift) + 'px)';
       });
     }
     function show(item) {
       clear();
+      /* the lesson decides how many targets there are — one per option, two to four — and the order
+         of the options decides the lanes, so no disc ever flies behind another */
       var n = Math.max(1, item.opts.length);
       item.opts.forEach(function (o, i) {
         var d = el('button', 'g4-target');
@@ -1291,17 +1313,17 @@ function say(text, lang) {
         d.innerHTML = '<span class="g4-ring"></span><span class="g4-target-t">' + esc(o.text) + '</span>';
         d.addEventListener('click', function (ev) { ev.stopPropagation(); shot(o.value); });
         field.appendChild(d);
-        d._lane = (i + 0.5) / n;
-        d._x = -150 - i * 70;                        /* a stagger, so two discs never arrive stacked */
-        d._seed = i * 1.7;
-        d.style.top = (5 + d._lane * 60) + '%';
+        d._lane = n === 1 ? 0.5 : i / (n - 1);       /* even bands, first option highest */
+        d._arc = 22 + (i % 3) * 9;                   /* 22 / 31 / 40px, so neighbours never mirror */
+        d.style.top = (16 + d._lane * 40) + '%';
+        d.style.transform = 'translate(-120px,0)';   /* already off the left edge on frame zero */
         discs.push(d);
       });
-      /* reduced motion keeps the state change and drops the travel: the discs sit still and you
-         still get exactly one shot at them */
+      /* reduced motion keeps the state change and drops the travel: the discs sit still in their
+         lanes and you still get exactly one shot at them */
       if (r.reduced) {
         discs.forEach(function (d, i) {
-          d.style.left = (5 + (i * 32) / Math.max(1, n)) + '%';
+          d.style.left = (5 + (i * 32) / n) + '%';
           d.style.transform = 'none';
         });
         return;

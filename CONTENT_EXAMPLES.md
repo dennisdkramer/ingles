@@ -99,11 +99,13 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 
 ### `skeetRange` — section · cost B · evidence radio · fits recognition+sound — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
-- **does** — One moving target per item. Player aims with the cursor and takes **one shot**; a hit scores, a
+- **does** — One flying target per option. Player aims with the cursor and takes **one shot**; a hit scores, a
   miss is spent. No spray, no endless retry — the constraint is what makes it feel like skill.
-- **skins** — `.game > .game-list` of `.qitem`; the stem is the prompt line, the options are the targets.
-- **art** — one flat ring or disc per option, drifting on a slow eased arc in its own lane; a thin crosshair
-  that is the cursor; a single puff on impact.
+- **skins** — `.game > .game-list` of `.qitem`; the stem is the prompt line, the options are the targets — one
+  disc each, so the item's own options (two to four) decide how many fly.
+- **art** — one flat ring per option thrown from off the left edge on its own arc to past the right one, the word
+  on a plaque over the disc; a thin crosshair that is the cursor; a single puff on impact. The flight takes
+  exactly `data-time`, so the timer emptying and the last disc leaving the range are the same moment.
 - **can't** — no production, no spelling; one shot per item means a careless click can hide what the student knew.
 - **needs** — nothing; `engine4.js` ships it.
 
