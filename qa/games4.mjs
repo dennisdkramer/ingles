@@ -231,7 +231,7 @@ async function run() {
   /* ---- every game in the menu boots, draws its own furniture, and resolves the authored radio ---- */
   const GAMES = {
     catchBasket: '.g4-bucket', whackMole: '.g4-mole',
-    stackDrop: '.g4-padbtn', flapGate: '.g4-gate', pairFlip: '.g4-card',
+    stackDrop: '.g4-padbtn', flapGate: '.g4-gate',
     mineGrid: '.g4-mine', wordleBoard: '.g4-tile', crosswordBoard: '.g4-xboard',
     echoPads: '.g4-pad', bingoCard: '.g4-btile',
     ladderRun: '.g4-lclimber', bossRaid: '.g4-bossart'
@@ -282,47 +282,6 @@ async function run() {
       on && !!drew && !!radio && radio.checked === true,
       (on ? '' : 'not started ') + (drew ? '' : 'no ' + GAMES[name] + ' '));
   });
-
-  /* pairFlip is a board: six pairs, twelve cards, and a true pair answers its own item */
-  const pfItems = Array.from({ length: 6 }, (_, i) => `
-    <div class="qitem" data-a="a">
-      <div class="qline"><span class="qstem">w${i}</span></div>
-      <div class="qopts"><label><input type="radio" name="pf${i}" value="a">right${i}</label><label><input type="radio" name="pf${i}" value="b">wrong${i}</label></div>
-    </div>`).join('');
-  const pfPage = mount(`<!doctype html><html><head><meta charset="utf-8"></head><body>
-    <div class="content-area">
-      <div class="game" id="pf" data-game="pairFlip" data-shuffle="1" data-time="0" data-sound="0">
-        <p class="game-how">Match each one with its partner.</p>
-        <div class="game-list">${pfItems}</div>
-        <button class="game-start" type="button">▶ Play</button>
-      </div>
-    </div></body></html>`);
-  const pd = pfPage.document, pf = (pfPage.__G4 || [])[0];
-  pd.getElementById('pf').querySelector('.game-start').click();
-  ok('pairFlip: twelve cards for six pairs', pd.querySelectorAll('#pf .g4-card').length === 12,
-    pd.querySelectorAll('#pf .g4-card').length + ' cards');
-  ok('pairFlip: every card carries a backed face, so nothing renders blank',
-    pd.querySelectorAll('#pf .g4-card .g4-face.front').length === 12);
-  const stack = [...pd.querySelectorAll('#pf .g4-card')];
-  const first = stack[0];
-  const mate = stack.find(c => c !== first && c.getAttribute('data-pair') === first.getAttribute('data-pair'));
-  ok('pairFlip: each card has exactly one mate', !!mate);
-  first.click(); mate.click();
-  await sleep(500);
-  const pairIdx = Number(first.getAttribute('data-pair'));
-  const rights = [...pd.querySelectorAll('#pf input[value="a"]')];
-  const checkedIdx = rights.findIndex(r => r.checked);
-  const texts = [first, mate].map(c => c.querySelector('.g4-face.front').textContent).sort().join('|');
-  ok('pairFlip: a true pair stays up and answers its own item',
-    first.classList.contains('up') && first.classList.contains('ok') && checkedIdx > -1
-      && texts === ['right' + checkedIdx, 'w' + checkedIdx].sort().join('|'),
-    'pair=' + pairIdx + ' answered item ' + checkedIdx + ' cards "' + texts + '"');
-  ok('pairFlip: matching scores', pf.score === 1, 'score=' + pf.score);
-  const a2 = stack.find(c => !c.classList.contains('up'));
-  const b2 = stack.find(c => c !== a2 && !c.classList.contains('up') && c.getAttribute('data-pair') !== a2.getAttribute('data-pair'));
-  a2.click(); b2.click();
-  await sleep(950);
-  ok('pairFlip: a false pair turns back over', !a2.classList.contains('up') && !b2.classList.contains('up'));
 
   /* the three games whose input is typed, not clicked */
   const xw = (w2.__G4 || []).find(x => x.root === d2.getElementById('g-crosswordBoard'));

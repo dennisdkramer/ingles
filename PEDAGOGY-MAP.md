@@ -73,7 +73,7 @@ Inputs: [the single `## Lesson NN` section of `<TRACK>-ROADMAP.md` — located b
 ### 5. Vehicles
 Any vehicle is allowed: authored text, dialogue or chart; real material (song, clip, article, document, photo); interactive (game, timed drill, role-play); a project; something nobody has tried yet. Two tiers decide how it gets built:
    - **Tier 0** — existing primitives (FORMAT.md): tables, cards, dialogues, audio chips, gap-fills, multiple choice, recording, text boxes.
-   - **Tier 1** — one *generic* engine, then free with per-lesson data: `whackMole` (a moving choice), `catchBasket` (sort into buckets), `skeetRange` (one shot at a moving target), `stackDrop` (order), `pairFlip` (memory), `ladderRun` (timed climb). Novelty should be parameterised, not bespoke: a new game is usually item data + a plugin on the existing engine (the block's markup and levers: FUNCTION.md §Content contracts). New plugins are proposed to the owner and built once, then reused.
+   - **Tier 1** — one *generic* engine, then free with per-lesson data: `whackMole` (a moving choice), `catchBasket` (sort into buckets), `skeetRange` (one shot at a moving target), `stackDrop` (order), `ladderRun` (timed climb). Novelty should be parameterised, not bespoke: a new game is usually item data + a plugin on the existing engine (the block's markup and levers: FUNCTION.md §Content contracts). New plugins are proposed to the owner and built once, then reused.
    - **Tier 2** — bespoke simulation or multi-step project: propose it, don't build it unbidden.
 Referencing material instead of embedding it is fine (a song named by lyric, "go and listen to it"); a *link* that ships must resolve, and the section must still teach if it dies.
 

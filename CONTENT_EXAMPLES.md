@@ -168,14 +168,6 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — only words of one fixed length; nothing for phrases, meaning or listening.
 - **needs** — shared runner + a letter-state machine.
 
-### `pairFlip` — section · cost B · evidence radio · fits form+meaning — tests 1 · fun 3 · reuse 2 · **built: engine4.js** · CountUp -6
-
-- **does** — Memory pairs: flip two cards, keep them if they belong together. Six pairs is one screen.
-- **skins** — pairs are the `.qitem` stem↔option links; a match checks that radio.
-- **art** — flat rounded rectangles with a hard flip, one accent edge, no motif on the backs.
-- **can't** — recognition of a pair only; it teaches nothing about producing the form.
-- **needs** — shared runner.
-
 ### `mineGrid` — section · cost B · evidence radio · fits recognition+meaning — tests 2 · fun 2 · reuse 2 · **built: engine4.js** · CountDown 3
 
 - **does** — The field is the options, face down. The student picks a tile and **a figure runs to it**. The right

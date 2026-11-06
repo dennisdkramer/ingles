@@ -322,7 +322,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
    it is about to become. Never interactive (pointer-events:none) and never a timer. */
 .g4-poster{position:absolute;inset:0;pointer-events:none;opacity:.95}
 .g4-poster .g4-bit{position:absolute}
-.g4-poster .g4-bucket,.g4-poster .g4-mole,.g4-poster .g4-gate,.g4-poster .g4-card,
+.g4-poster .g4-bucket,.g4-poster .g4-mole,.g4-poster .g4-gate,
 .g4-poster .g4-mine,.g4-poster .g4-btile,.g4-poster .g4-pad,.g4-poster .g4-rung,
 .g4-poster .g4-hole,.g4-poster .g4-tile,.g4-poster .g4-gap{position:absolute}
 
@@ -423,18 +423,6 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 /* A button inside a game stage must never inherit the site's cream-on-dark button text: every game
    paints its own paper background, so unset colour made whole option rows invisible. */
 .g4-stage button{color:var(--ink)}
-/* pairFlip — a 4x3 board of paired cards. `.g4-card` MUST carry the size: the faces are absolutely
-   positioned inside it, so a card with no width/height renders as nothing at all. */
-.g4-pairs{position:absolute;left:12px;right:12px;top:38px;bottom:10px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);gap:8px}
-.g4-card{position:relative;min-width:0;min-height:0;padding:0;margin:0;background:transparent;border:0;box-shadow:none;cursor:pointer;perspective:600px}
-.g4-card.up .g4-face.back{transform:rotateY(-180deg)}
-.g4-card.up .g4-face.front{transform:rotateY(0)}
-.g4-card.ok .g4-face.front{border-color:#2f9e44;background:#e8f7ee}
-.g4-card.dead{opacity:.45;cursor:default}
-.g4-face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:3px 5px;border-radius:10px;border:2px solid var(--ink);font:700 12px/1.15 'Public Sans',sans-serif;text-align:center;overflow:hidden;word-break:break-word;backface-visibility:hidden;transition:transform .3s ease}
-.g4-face.back{background:var(--ink);color:var(--cream);box-shadow:3px 3px 0 var(--tan)}
-.g4-face.front{background:var(--paper);color:var(--ink);transform:rotateY(180deg)}
-/* mineGrid */
 /* mineGrid: the words are readable from the start — what is hidden is which cell is mined */
 .g4-mines{position:absolute;left:12px;right:12px;top:12px;bottom:12px}
 .g4-field{position:absolute;left:0;right:0;top:26px;bottom:0;display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:1fr;gap:10px}
@@ -525,7 +513,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-hero.down{transform:translate(-6px,34px) rotate(78deg);opacity:.55;transition:transform .7s ease,opacity .7s ease}
 .g4-bossart.strike{animation:g4strike .46s ease}
 @keyframes g4strike{0%{transform:translateX(-50%)}35%{transform:translateX(-50%) translateX(-34px) scale(1.1)}100%{transform:translateX(-50%)}}
-@media (prefers-reduced-motion:reduce){.g4-face,.g4-hp-fill,.g4-pad{transition:none}.g4-bossart.hurt{animation:none}}
+@media (prefers-reduced-motion:reduce){.g4-hp-fill,.g4-pad{transition:none}.g4-bossart.hurt{animation:none}}
 
 
 

@@ -11,7 +11,7 @@
      `data-game` is a presentation choice and never a content choice.
    Levers (all optional, on the `.game` element):
      data-game      which presentation (one per PLUGINS key: catchBasket, whackMole, stackDrop,
-                   flapGate, skeetRange, pairFlip, mineGrid, wordleBoard, crosswordBoard,
+                   flapGate, skeetRange, mineGrid, wordleBoard, crosswordBoard,
                    echoPads, bingoCard, ladderRun, bossRaid)
      data-time      ms per item, 0 = no deadline   (0)   ← this is difficulty
      data-limit     seconds for the whole run, 0 = off (0)
@@ -255,7 +255,7 @@ window.GAMES4 = (function () {
     try { if (SCENE[this.name]) scene.innerHTML = SCENE[this.name](); } catch (e) { /* art never breaks play */ }
     stage.appendChild(scene);
     var hud = el('div', 'g4-hud');
-    hud.innerHTML = '<span class="wave"></span><span class="score"></span><span class="clock"></span>';
+    hud.innerHTML = '<span class="score"></span><span class="clock"></span>';
     stage.appendChild(hud);
     if (this.usePrompt) {
       var prompt = el('div', 'g4-prompt');
@@ -311,14 +311,15 @@ window.GAMES4 = (function () {
   };
   /* The score is a number over its own ceiling, never a word with a unit after it: counting up it is
      the items got out of the run's items and starts at 0/6; an activity that reports lives, attempts
-     or health starts full and counts down (3/3, 2/3…). The pair of numbers says which way it goes. */
+     or health starts full and counts down (3/3, 2/3…). The pair of numbers says which way it goes, and
+     it is the whole of the top-right count — there is no separate round counter, because two fractions
+     side by side read as one muddled number. The clock joins it only when the block sets a total limit. */
   Runner.prototype.hud = function () {
     var lives = (this.view && typeof this.view.lives === 'function') ? Math.max(0, this.view.lives()) : null;
     if (lives != null) this.livesTop = Math.max(this.livesTop || 0, lives);
     this.hudEl.querySelector('.score').textContent = lives == null
       ? this.score + '/' + this.total
       : lives + '/' + (this.livesTop || lives);
-    this.hudEl.querySelector('.wave').textContent = Math.min(this.idx + 1, this.total) + '/' + this.total;
     this.hudEl.querySelector('.clock').textContent = this.limit ? Math.ceil(this.limitLeft) + 's' : '';
   };
   Runner.prototype.setPrompt = function (text, on) {
@@ -378,7 +379,7 @@ window.GAMES4 = (function () {
         if (self.limitLeft <= 0) self.finish();
       }, 1000);
     }
-    /* a board game (pairFlip) lays every item out at once and runs its own order of play. It claims
+    /* a board game (echoPads) lays every item out at once and runs its own order of play. It claims
        the run by returning true from begin(), so the runner does not march the queue. */
     if (this.view && this.view.begin && this.view.begin(this.queue) === true) {
       this.board = true; this.phase = 'play'; this.answered = 0;
@@ -828,16 +829,6 @@ window.GAMES4 = (function () {
         + '<g stroke="#3f6b45" stroke-width="3" fill="none" opacity=".55"><path d="M18 232q8-10 16 0"/>'
         + '<path d="M60 246q8-10 16 0"/><path d="M320 240q8-10 16 0"/></g>');
     },
-    /* desk: cards laid out on wood */
-    pairFlip: function () {
-      return frame('<rect width="400" height="260" fill="url(#g4-paper)"/>'
-        + '<g stroke="#cfc3a3" stroke-width="1" opacity=".7"><path d="M0 40h400"/><path d="M0 78h400"/></g>'
-        + '<rect y="176" width="400" height="84" fill="url(#g4-wood)"/>'
-        + '<g stroke="#6f4523" stroke-width="1" opacity=".45"><path d="M0 196h400"/>'
-        + '<path d="M0 214h400"/><path d="M0 236h400"/></g>'
-        + '<rect y="170" width="400" height="8" fill="#5d3a1e" opacity=".5"/>');
-    },
-
     /* minefield: dusty dunes and warning stakes */
     mineGrid: function () {
       return frame('<rect width="400" height="260" fill="url(#g4-dawn)"/>'
@@ -974,16 +965,6 @@ window.GAMES4 = (function () {
           'left:56%;top:' + (12 + i * (66 / n)).toFixed(1) + '%;width:38%;height:18%'));
       });
       box.appendChild(abs(el('div', 'g4-car g4-bit'), 'left:12%;top:40%;width:44px;height:26px'));
-    },
-    pairFlip: function (box, items) {
-      var texts = opts0(items, 4);
-      for (var i = 0; i < 4; i++) {
-        var c = el('div', 'g4-card g4-bit' + (i === 1 ? ' up' : ''));
-        c.innerHTML = '<span class="g4-face back"></span><span class="g4-face front">'
-          + esc(texts[i] || '') + '</span>';
-        abs(c, 'left:' + (8 + (i % 2) * 44) + '%;top:' + (16 + Math.floor(i / 2) * 34) + '%;width:40%;height:28%');
-        box.appendChild(c);
-      }
     },
     mineGrid: function (box, items) {
       var texts = opts0(items, 4);
@@ -1252,14 +1233,6 @@ function say(text, lang) {
   };
 
 
-  /* ---------------- pairFlip: memory pairs, prompt ↔ option ----------------
-     Cards start face down; the prompt is one of them. Turning the prompt and its match answers the
-     item. A mismatched pair only costs time, which is the honest cost in a memory game. */
-  /* ---------------- pairFlip: a 4x3 board of pairs ----------------
-     Six pairs of cards face down: each item's prompt on one card and its right option on another.
-     Turn two; a true pair stays up AND answers that item (its radio is checked), a false pair turns
-     back. The reading is the game — you cannot match what you have not understood — and every match
-     is recorded, so a page of matches is a page of answered items. */
   /* ---------------- skeetRange: one flying target per option, one shot per item ----------------
      Each option's disc is thrown from off the left edge on its own arc and flies away past the right
      edge. The flight takes the item's deadline less 10% (`data-time` / 1.1), so every disc is off
@@ -1380,75 +1353,6 @@ function say(text, lang) {
     }
     return { show: show, mark: mark, clear: clear };
   };
-
-  PLUGINS.pairFlip = function (r) {
-    var stage = r.stage;
-    var box = el('div', 'g4-pairs'), cards = [], open = [], locked = false, answered = [];
-    stage.appendChild(box);
-
-    function begin(queue) {
-      var pairs = [];
-      queue.forEach(function (it) {
-        if (pairs.length >= 6) return;
-        var right = null;
-        (it.opts || []).forEach(function (o) { if (o.value === it.key) right = o; });
-        var left = (it.prompt || '').trim();
-        if (!right || !left) return;
-        pairs.push({ id: pairs.length, item: it, left: left, right: right.text });
-      });
-      if (!pairs.length) return false;
-      r.total = pairs.length;
-      var faces = [];
-      pairs.forEach(function (p) {
-        faces.push({ pair: p.id, side: 0, text: p.left, item: p.item });
-        faces.push({ pair: p.id, side: 1, text: p.right, item: p.item });
-      });
-      box.innerHTML = ''; cards = []; open = []; locked = false; answered = [];
-      shuffle(faces).forEach(function (f) {
-        var c = el('button', 'g4-card');
-        c.type = 'button';
-        c.innerHTML = '<span class="g4-face back">?</span><span class="g4-face front">' + esc(f.text) + '</span>';
-        c.setAttribute('data-pair', String(f.pair));
-        c.setAttribute('data-side', String(f.side));
-        c.addEventListener('click', function () { turn(c, f); });
-        box.appendChild(c);
-        cards.push({ el: c, face: f });
-      });
-      return true;
-    }
-
-    function turn(c, f) {
-      if (r.phase === 'over' || locked) return;
-      if (c.classList.contains('up')) return;
-      c.classList.add('up');
-      open.push({ el: c, face: f });
-      SFX.blip(r.sound, 440 + 60 * open.length);
-      if (open.length < 2) return;
-      var a = open[0], b = open[1];
-      if (a.face.pair === b.face.pair && a.face.side !== b.face.side) {
-        locked = true;
-        open.forEach(function (o) { o.el.classList.add('ok'); });
-        var it = a.face.item;
-        open = [];
-        r.later(function () {
-          locked = false;
-          if (answered.indexOf(it) < 0) { answered.push(it); r.scoreBoard(it, it.key); }
-        }, 340);
-        return;
-      }
-      locked = true;
-      r.later(function () {
-        open.forEach(function (o) { o.el.classList.remove('up'); });
-        open = []; locked = false;
-      }, 760);
-    }
-
-    function show() { /* board mode: everything is placed up front */ }
-    function mark() { /* feedback is the flip itself; the runner does not step in board mode */ }
-    function clear() { box.innerHTML = ''; cards = []; open = []; locked = false; }
-    return { begin: begin, show: show, mark: mark, clear: clear, turn: turn };
-  };
-
 
   /* ---------------- mineGrid: send the runner to the cell you trust ----------------
      The field is the options, every word readable, and one cell is mined. Picking a cell is the
