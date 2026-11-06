@@ -9,7 +9,7 @@ _(Active batches, newest first. Cleared once done AND committed.)_
 Method: one lesson fully, in order; commit + push after each batch of 3. QA postponed to the end of the whole task (single QA pass after batch 17).
 
 - [x] 1 — Batch 1: lessons 1–3 → commit/push
-- [ ] 2 — Batch 2: lessons 4–6 → commit/push
+- [x] 2 — Batch 2: lessons 4–6 → commit/push
 - [ ] 3 — Batch 3: lessons 7–9 → commit/push
 - [ ] 4 — Batch 4: lessons 10–12 → commit/push
 - [ ] 5 — Batch 5: lessons 13–15 → commit/push
