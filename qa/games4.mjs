@@ -58,8 +58,8 @@ function ok(name, cond, extra) {
 }
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-function mount() {
-  const dom = new JSDOM(FIXTURE, {
+function mount(html) {
+  const dom = new JSDOM(html || FIXTURE, {
     runScripts: 'dangerously', pretendToBeVisual: true, url: 'http://localhost/games4.html',
     beforeParse(w) {
       w.matchMedia = () => ({ matches: false, addListener: () => { }, removeListener: () => { } });
@@ -205,8 +205,76 @@ async function run() {
   ok('an empty game disables itself instead of pretending', !!pg && !!probe.querySelector('.game-start') && probe.querySelector('.game-start').disabled === true);
   ok('boot is idempotent (no double instances)', w.GAMES4.boot() === 3 && probe.__g4 === pg);
 
+  /* ---- every game in the menu boots, draws its own furniture, and resolves the authored radio ---- */
+  const GAMES = {
+    catchBasket: '.g4-bucket', whackMole: '.g4-mole', skeetRange: '.g4-disc',
+    raceLane: '.g4-raceopt', stackDrop: '.g4-slot', flapGate: '.g4-gate',
+    brickRight: '.g4-brick', pairFlip: '.g4-card', mineGrid: '.g4-mine',
+    lockCode: '.g4-key', wordleBoard: '.g4-tile', crosswordBoard: '.g4-gap',
+    echoPads: '.g4-pad', bingoCard: '.g4-btile', spinPick: '.g4-reel-d',
+    ladderRun: '.g4-rung', boardQuiz: '.g4-bcell', bossRaid: '.g4-bossart'
+  };
+  const fixtures = Object.keys(GAMES).map(name => `
+    <div class="game" id="g-${name}" data-game="${name}" data-shuffle="0" data-replay="0" data-time="0">
+      <p class="game-how">Block for ${name}.</p>
+      <div class="game-list">
+        <div class="qitem" data-a="a" data-code="1" data-answer="hi" data-at="0,0" data-dir="across">
+          <div class="qline"><span class="qstem">first prompt</span></div>
+          <div class="qopts"><label><input type="radio" name="n-${name}-1" value="a">hi</label><label><input type="radio" name="n-${name}-1" value="b">bye</label></div>
+        </div>
+        <div class="qitem" data-a="b" data-code="2" data-answer="ta" data-at="0,0" data-dir="across">
+          <div class="qline"><span class="qstem">second prompt</span></div>
+          <div class="qopts"><label><input type="radio" name="n-${name}-2" value="a">no</label><label><input type="radio" name="n-${name}-2" value="b">ta</label></div>
+        </div>
+      </div>
+      <button class="game-start" type="button">▶ Start</button>
+    </div>`).join('');
+
+  const w2 = mount(`<!doctype html><html lang="en"><head><meta charset="utf-8"><title>all</title></head>
+    <body><div class="content-area">${fixtures}</div></body></html>`);
+  const d2 = w2.document;
+  ok('every game in the menu boots', (w2.__G4 || []).length === Object.keys(GAMES).length,
+    (w2.__G4 || []).length + '/' + Object.keys(GAMES).length);
+
+  Object.keys(GAMES).forEach(name => {
+    const root = d2.getElementById('g-' + name);
+    const g = (w2.__G4 || []).find(x => x.root === root);
+    if (!g) { ok(name + ': instance exists', false); return; }
+    root.querySelector('.game-start').click();
+    const drew = root.querySelector(GAMES[name]);
+    const on = root.classList.contains('is-on');
+    g.hooks.pick('a');
+    const radio = root.querySelector('input[name="n-' + name + '-1"][value="a"]');
+    ok(name + ': starts, draws its own furniture, marks the radio',
+      on && !!drew && !!radio && radio.checked === true,
+      (on ? '' : 'not started ') + (drew ? '' : 'no ' + GAMES[name] + ' '));
+  });
+
+  /* the three games whose input is typed, not clicked */
+  const xw = (w2.__G4 || []).find(x => x.root === d2.getElementById('g-crosswordBoard'));
+  xw.hooks.start();
+  const cells = [...d2.querySelectorAll('#g-crosswordBoard .g4-gap')];
+  cells.forEach((c, i) => { c.value = ['h', 'i'][i]; c.dispatchEvent(new w2.Event('input', { bubbles: true })); });
+  ok('crosswordBoard: spelling the word answers it',
+    d2.querySelector('#g-crosswordBoard input[value="a"]').checked === true);
+
+  const wd = (w2.__G4 || []).find(x => x.root === d2.getElementById('g-wordleBoard'));
+  wd.hooks.start();
+  const entry = d2.querySelector('#g-wordleBoard .g4-wtype');
+  entry.value = 'hi';
+  entry.dispatchEvent(new w2.KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  ok('wordleBoard: guessing the word answers it',
+    d2.querySelector('#g-wordleBoard input[value="a"]').checked === true);
+
+  const lk = (w2.__G4 || []).find(x => x.root === d2.getElementById('g-lockCode'));
+  lk.hooks.start();
+  [...d2.querySelectorAll('#g-lockCode .g4-key')].find(k => k.textContent === '1').click();
+  ok('lockCode: the right digit opens the box and answers',
+    d2.querySelector('#g-lockCode input[value="a"]').checked === true);
+
   console.log('\n' + (fail ? 'FAILED: ' : 'OK: ') + pass + ' passed, ' + fail + ' failed\n');
-  process.exitCode = fail ? 1 : 0;
+  /* some game plugins keep a requestAnimationFrame loop or a timer alive; jsdom would never exit */
+  process.exit(fail ? 1 : 0);
 }
 
 run().catch(e => { console.error(e); process.exitCode = 1; });

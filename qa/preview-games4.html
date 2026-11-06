@@ -39,7 +39,177 @@ game without touching the content; <code>data-time</code> is the per-item deadli
 <button class="game-start" type="button">▶ Start</button>
 </div>
 
-<h2>3. The same list, no engine</h2>
+<h2>3. skeetRange — one shot, one target</h2>
+<div class="game" data-game="skeetRange" data-time="6000" data-shuffle="1">
+<p class="game-how">Aim with the cursor, take one shot. One click per round — make it count. <b>1</b>/<b>2</b> also fire.</p>
+<div class="game-list">
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">Which one is a habit?</span></div><div class="qopts"><label><input type="radio" name="s1" value="a">I play every day.</label><label><input type="radio" name="s1" value="b">I am playing now.</label></div></div>
+  <div class="qitem" data-a="b"><div class="qline"><span class="qstem">Which one is happening now?</span></div><div class="qopts"><label><input type="radio" name="s2" value="a">She works there.</label><label><input type="radio" name="s2" value="b">She is working now.</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>4. raceLane — pick the lane, watch it run</h2>
+<div class="game" data-game="raceLane" data-time="7000" data-shuffle="1">
+<p class="game-how">Every option is a lane. Pick one and the cars race — only the right lane wins.</p>
+<div class="game-list">
+  <div class="qitem" data-a="b"><div class="qline"><span class="qstem">yesterday I ___ to school</span></div><div class="qopts"><label><input type="radio" name="r1" value="a">go</label><label><input type="radio" name="r1" value="b">went</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">last night we ___ pizza</span></div><div class="qopts"><label><input type="radio" name="r2" value="a">ate</label><label><input type="radio" name="r2" value="b">eated</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>5. stackDrop — land it in the gap</h2>
+<div class="game" data-game="stackDrop" data-speed="190" data-shuffle="1">
+<p class="game-how">Press <b>Space</b> (or click) to drop the block. Land in the gap and the tower grows.</p>
+<div class="game-list">
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">which is the past of "buy"?</span></div><div class="qopts"><label><input type="radio" name="t1" value="a">bought</label><label><input type="radio" name="t1" value="b">buyed</label></div></div>
+  <div class="qitem" data-a="b"><div class="qline"><span class="qstem">which is the past of "teach"?</span></div><div class="qopts"><label><input type="radio" name="t2" value="a">teached</label><label><input type="radio" name="t2" value="b">taught</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>6. flapGate — fly through the right gate</h2>
+<div class="game" data-game="flapGate" data-speed="120" data-shuffle="1">
+<p class="game-how">Tap or press <b>Space</b> to flap. Fly through the gate carrying the right answer.</p>
+<div class="game-list">
+  <div class="qitem" data-a="b"><div class="qline"><span class="qstem">choose the correct sentence</span></div><div class="qopts"><label><input type="radio" name="f1" value="a">He don't like it.</label><label><input type="radio" name="f1" value="b">He doesn't like it.</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">choose the correct sentence</span></div><div class="qopts"><label><input type="radio" name="f2" value="a">They are coming.</label><label><input type="radio" name="f2" value="b">They is coming.</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>7. brickRight — break the right brick</h2>
+<div class="game" data-game="brickRight" data-speed="1" data-shuffle="1">
+<p class="game-how">Move the paddle with the pointer or <b>←</b>/<b>→</b>. Break the brick with the answer.</p>
+<div class="game-list">
+  <div class="qitem" data-a="b"><div class="qline"><span class="qstem">1st person, past, "see"</span></div><div class="qopts"><label><input type="radio" name="b1" value="a">seed</label><label><input type="radio" name="b1" value="b">saw</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">3rd person, past, "write"</span></div><div class="qopts"><label><input type="radio" name="b2" value="a">wrote</label><label><input type="radio" name="b2" value="b">writed</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>8. pairFlip — match the pairs</h2>
+<div class="game" data-game="pairFlip" data-shuffle="1">
+<p class="game-how">Flip two cards. Match each form with the option that spells it the same way.</p>
+<div class="game-list">
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">went</span></div><div class="qopts"><label><input type="radio" name="pf1" value="a">went</label><label><input type="radio" name="pf1" value="b">goed</label></div></div>
+  <div class="qitem" data-a="b"><div class="qline"><span class="qstem">ate</span></div><div class="qopts"><label><input type="radio" name="pf2" value="a">eated</label><label><input type="radio" name="pf2" value="b">ate</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>9. mineGrid — clear the field, avoid the bombs</h2>
+<div class="game" data-game="mineGrid" data-shuffle="1">
+<p class="game-how">Open the cell with the right answer. The rest are bombs.</p>
+<div class="game-list">
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">past of "run"</span></div><div class="qopts"><label><input type="radio" name="mg1" value="a">ran</label><label><input type="radio" name="mg1" value="b">runned</label></div></div>
+  <div class="qitem" data-a="b"><div class="qline"><span class="qstem">past of "drink"</span></div><div class="qopts"><label><input type="radio" name="mg2" value="a">drinked</label><label><input type="radio" name="mg2" value="b">drank</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>10. lockCode — earn a digit, open the box</h2>
+<div class="game" data-game="lockCode" data-time="9000" data-shuffle="0">
+<p class="game-how">Each right answer unlocks one digit of the code. Press the keypad digits in order.</p>
+<div class="game-list">
+  <div class="qitem" data-a="a" data-code="4"><div class="qline"><span class="qstem">past of "eat"</span></div><div class="qopts"><label><input type="radio" name="lc1" value="a">ate</label><label><input type="radio" name="lc1" value="b">eated</label></div></div>
+  <div class="qitem" data-a="b" data-code="7"><div class="qline"><span class="qstem">past of "think"</span></div><div class="qopts"><label><input type="radio" name="lc2" value="a">thinked</label><label><input type="radio" name="lc2" value="b">thought</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>11. wordleBoard — guess the word</h2>
+<div class="game" data-game="wordleBoard" data-shuffle="0">
+<p class="game-how">Type a word and press Enter. Green = right letter, right place; amber = right letter, wrong place.</p>
+<div class="game-list">
+  <div class="qitem" data-a="a" data-answer="went"><div class="qline"><span class="qstem">past of "go"</span></div><div class="qopts"><label><input type="radio" name="wd1" value="a">went</label><label><input type="radio" name="wd1" value="b">goed</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>12. crosswordBoard — spell it into the grid</h2>
+<div class="game" data-game="crosswordBoard" data-shuffle="0">
+<p class="game-how">Type one letter per cell. The word turns green when it is spelled right.</p>
+<div class="game-list">
+  <div class="qitem" data-a="a" data-answer="ate" data-at="0,0" data-dir="across"><div class="qline"><span class="qstem">past of "eat"</span></div><div class="qopts"><label><input type="radio" name="cw1" value="a">ate</label><label><input type="radio" name="cw1" value="b">eated</label></div></div>
+  <div class="qitem" data-a="b" data-answer="saw" data-at="1,0" data-dir="across"><div class="qline"><span class="qstem">past of "see"</span></div><div class="qopts"><label><input type="radio" name="cw2" value="a">seed</label><label><input type="radio" name="cw2" value="b">saw</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>13. echoPads — Simon, with words</h2>
+<div class="game" data-game="echoPads" data-shuffle="0">
+<p class="game-how">Watch the pads light up in order, then press them back in the same order.</p>
+<div class="game-list">
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">pad one</span></div><div class="qopts"><label><input type="radio" name="ep1" value="a">went</label><label><input type="radio" name="ep1" value="b">goed</label></div></div>
+  <div class="qitem" data-a="b"><div class="qline"><span class="qstem">pad two</span></div><div class="qopts"><label><input type="radio" name="ep2" value="a">eated</label><label><input type="radio" name="ep2" value="b">ate</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>14. bingoCard — nine tiles, one call at a time</h2>
+<div class="game" data-game="bingoCard" data-shuffle="1">
+<p class="game-how">The voice calls a word. Tap it on your card. Fill a line to win.</p>
+<div class="game-list">
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">1</span></div><div class="qopts"><label><input type="radio" name="bg1" value="a">went</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">2</span></div><div class="qopts"><label><input type="radio" name="bg2" value="a">ate</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">3</span></div><div class="qopts"><label><input type="radio" name="bg3" value="a">saw</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">4</span></div><div class="qopts"><label><input type="radio" name="bg4" value="a">ran</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">5</span></div><div class="qopts"><label><input type="radio" name="bg5" value="a">drank</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">6</span></div><div class="qopts"><label><input type="radio" name="bg6" value="a">bought</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">7</span></div><div class="qopts"><label><input type="radio" name="bg7" value="a">taught</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">8</span></div><div class="qopts"><label><input type="radio" name="bg8" value="a">wrote</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">9</span></div><div class="qopts"><label><input type="radio" name="bg9" value="a">thought</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>15. spinPick — let the reels choose</h2>
+<div class="game" data-game="spinPick" data-shuffle="0">
+<p class="game-how">The reels pick which item comes next. Answer it like any other round.</p>
+<div class="game-list">
+  <div class="qitem" data-a="b"><div class="qline"><span class="qstem">past of "give"</span></div><div class="qopts"><label><input type="radio" name="sp1" value="a">gived</label><label><input type="radio" name="sp1" value="b">gave</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">past of "make"</span></div><div class="qopts"><label><input type="radio" name="sp2" value="a">made</label><label><input type="radio" name="sp2" value="b">maked</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>16. ladderRun — climb, and don't fall</h2>
+<div class="game" data-game="ladderRun" data-shuffle="0">
+<p class="game-how">Safe rungs every few steps. A wrong answer drops you back to the last one. Two lifelines: <b>50:50</b> and <b>ask</b>.</p>
+<div class="game-list">
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">past of "come"</span></div><div class="qopts"><label><input type="radio" name="lr1" value="a">came</label><label><input type="radio" name="lr1" value="b">comed</label></div></div>
+  <div class="qitem" data-a="b"><div class="qline"><span class="qstem">past of "speak"</span></div><div class="qopts"><label><input type="radio" name="lr2" value="a">speaked</label><label><input type="radio" name="lr2" value="b">spoke</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">past of "bring"</span></div><div class="qopts"><label><input type="radio" name="lr3" value="a">brought</label><label><input type="radio" name="lr3" value="b">bringed</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>17. boardQuiz — a grid of cells, two teams</h2>
+<div class="game" data-game="boardQuiz" data-shuffle="0">
+<p class="game-how">Pick a cell. Right answer keeps the cell and the turn; wrong answer hands the turn over.</p>
+<div class="game-list">
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">easy 1</span></div><div class="qopts"><label><input type="radio" name="bq1" value="a">saw</label><label><input type="radio" name="bq1" value="b">seed</label></div></div>
+  <div class="qitem" data-a="b"><div class="qline"><span class="qstem">easy 2</span></div><div class="qopts"><label><input type="radio" name="bq2" value="a">eated</label><label><input type="radio" name="bq2" value="b">ate</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">easy 3</span></div><div class="qopts"><label><input type="radio" name="bq3" value="a">ran</label><label><input type="radio" name="bq3" value="b">runned</label></div></div>
+  <div class="qitem" data-a="b"><div class="qline"><span class="qstem">easy 4</span></div><div class="qopts"><label><input type="radio" name="bq4" value="a">drinked</label><label><input type="radio" name="bq4" value="b">drank</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>18. bossRaid — hit it until it drops</h2>
+<div class="game" data-game="bossRaid" data-shuffle="1">
+<p class="game-how">A right answer lands a hit. A wrong one costs you a heart. Three hearts, one boss.</p>
+<div class="game-list">
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">past of "find"</span></div><div class="qopts"><label><input type="radio" name="br1" value="a">found</label><label><input type="radio" name="br1" value="b">finded</label></div></div>
+  <div class="qitem" data-a="b"><div class="qline"><span class="qstem">past of "leave"</span></div><div class="qopts"><label><input type="radio" name="br2" value="a">leaved</label><label><input type="radio" name="br2" value="b">left</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qstem">past of "sleep"</span></div><div class="qopts"><label><input type="radio" name="br3" value="a">slept</label><label><input type="radio" name="br3" value="b">sleeped</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>19. The same list, no engine</h2>
 <p>What a student sees if <code>engine4.js</code> never loads — the authored radios, which is also what prints:</p>
 <div class="game" data-game="notAGameYet">
 <div class="game-list">

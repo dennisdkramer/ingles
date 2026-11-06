@@ -545,6 +545,866 @@ window.GAMES4 = (function () {
     return { show: show, mark: mark, clear: clear };
   };
 
+  /* ---- say: the built-in voice. Games that need the ear use this, never a network clip. ---- */
+  function say(text, lang) {
+    try {
+      if (!text || !window.speechSynthesis) return false;
+      var u = new SpeechSynthesisUtterance(String(text));
+      u.lang = lang || 'en-US';
+      u.rate = 0.92;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+      return true;
+    } catch (e) { return false; }
+  }
+
+  /* ---------------- skeetRange: aim, ONE shot per item ----------------
+     Each option is a disc drifting on its own slow arc; the cursor is the crosshair. One click is
+     the shot — no spray, no retry, which is exactly what makes it feel like skill. */
+  PLUGINS.skeetRange = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-skeet');
+    var discs = [];
+    stage.appendChild(box);
+    function clear() { box.innerHTML = ''; discs = []; }
+    function show(item) {
+      clear();
+      item.opts.forEach(function (o, i) {
+        var d = el('button', 'g4-disc', o.text);
+        d.type = 'button';
+        d.setAttribute('data-v', o.value);
+        d.style.top = (18 + (i % 3) * 26) + '%';
+        d.style.animationDuration = (5.2 + i * 1.1) + 's';
+        d.style.animationDelay = (i % 2 ? '-2.4s' : '0s');
+        d.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (r.phase === 'play') r.pick(o.value);
+        });
+        box.appendChild(d);
+        discs.push(d);
+      });
+    }
+    function mark(item, hit, value) {
+      discs.forEach(function (d) {
+        var v = d.getAttribute('data-v');
+        if (v === value) d.classList.add(hit ? 'ok' : 'no');
+        else if (!hit && v === item.key) d.classList.add('reveal');
+        d.classList.add('halt');
+      });
+    }
+    return { show: show, mark: mark, clear: clear };
+  };
+
+  /* ---------------- raceLane: answer to accelerate ----------------
+     Correct answers push the avatar toward the finish, wrong ones stall it, and the ghost of the
+     student's best run is the opponent — competition without a server. */
+  PLUGINS.raceLane = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-race');
+    var trackB = el('div', 'g4-lane ghost'), trackA = el('div', 'g4-lane');
+    var carA = el('div', 'g4-car'), carB = el('div', 'g4-car');
+    var opts = el('div', 'g4-raceopts');
+    trackA.appendChild(carA); trackB.appendChild(carB);
+    box.appendChild(trackB); box.appendChild(trackA); box.appendChild(opts);
+    stage.appendChild(box);
+    var ghostKey = 'g4ghost:' + (r.root.id || 'race') + ':' + r.total;
+    function ghost() { try { return Number(localStorage.getItem(ghostKey)) || 0; } catch (e) { return 0; } }
+    function place() {
+      var done = r.total ? Math.min(1, r.score / r.total) : 0;
+      carA.style.left = (done * 100).toFixed(1) + '%';
+      carB.style.left = (Math.min(1, ghost()) * 100).toFixed(1) + '%';
+    }
+    function clear() { opts.innerHTML = ''; place(); }
+    function show(item) {
+      opts.innerHTML = '';
+      place();
+      item.opts.forEach(function (o) {
+        var b = el('button', 'g4-raceopt', o.text);
+        b.type = 'button';
+        b.setAttribute('data-v', o.value);
+        b.addEventListener('click', function () { if (r.phase === 'play') r.pick(o.value); });
+        opts.appendChild(b);
+      });
+    }
+    function mark(item, hit, value) {
+      [].forEach.call(opts.querySelectorAll('.g4-raceopt'), function (b) {
+        var v = b.getAttribute('data-v');
+        if (v === value) b.classList.add(hit ? 'ok' : 'no');
+        else if (!hit && v === item.key) b.classList.add('reveal');
+      });
+      place();
+      if (hit) {
+        try {
+          if (r.score / r.total > ghost()) localStorage.setItem(ghostKey, String(r.score / r.total));
+        } catch (e) { /* private mode is not an error */ }
+      }
+    }
+    return { show: show, mark: mark, clear: clear };
+  };
+
+  /* ---------------- stackDrop: drop the sliding block into a gap ----------------
+     The gaps under the block are the options. Press (click / Space) to drop: land on a gap and that
+     option answers; miss every gap and the item is spent. */
+  PLUGINS.stackDrop = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-stack'), slots = el('div', 'g4-slots');
+    var block = el('div', 'g4-block');
+    box.appendChild(block); box.appendChild(slots);
+    stage.appendChild(box);
+    var raf = 0, live = false, t0 = 0, slotsEls = [];
+    function stop() { live = false; if (raf && window.cancelAnimationFrame) window.cancelAnimationFrame(raf); raf = 0; }
+    function clear() { stop(); slots.innerHTML = ''; slotsEls = []; block.style.left = '50%'; }
+    function show(item) {
+      clear();
+      item.opts.forEach(function (o) {
+        var s = el('button', 'g4-slot', o.text);
+        s.type = 'button';
+        s.setAttribute('data-v', o.value);
+        s.addEventListener('click', function () { if (r.phase === 'play') { stop(); r.pick(o.value); } });
+        slots.appendChild(s);
+        slotsEls.push(s);
+      });
+      block.textContent = item.prompt || '⋯';
+      if (r.reduced) return;
+      live = true;
+      t0 = (window.performance && performance.now) ? performance.now() : Date.now();
+      var frame = function (now) {
+        if (!live) return;
+        var t = ((now || t0) - t0) / 1000;
+        block.style.left = (50 + Math.sin(t * 1.6) * 40).toFixed(2) + '%';
+        raf = window.requestAnimationFrame ? window.requestAnimationFrame(frame) : 0;
+      };
+      raf = window.requestAnimationFrame ? window.requestAnimationFrame(frame) : 0;
+    }
+    function drop() {
+      if (!live || r.phase !== 'play') return;
+      stop();
+      var bb = block.getBoundingClientRect(), mid = bb.left + bb.width / 2;
+      var best = null, bestD = 1e9;
+      slotsEls.forEach(function (s) {
+        var sb = s.getBoundingClientRect();
+        var d = Math.abs(sb.left + sb.width / 2 - mid);
+        if (d < bestD) { bestD = d; best = s; }
+      });
+      if (best && bestD < bb.width / 2 + 24) r.pick(best.getAttribute('data-v'));
+      else r.expire();
+    }
+    box.addEventListener('click', function () { drop(); });
+    box.setAttribute('tabindex', '0');
+    box.addEventListener('keydown', function (e) {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); drop(); }
+    });
+    function mark(item, hit, value) {
+      stop();
+      slotsEls.forEach(function (s) {
+        var v = s.getAttribute('data-v');
+        if (v === value) s.classList.add(hit ? 'ok' : 'no');
+        else if (!hit && v === item.key) s.classList.add('reveal');
+      });
+      block.classList.add(hit ? 'ok' : 'no');
+    }
+    return { show: show, mark: mark, clear: clear, drop: drop };
+  };
+
+  /* ---------------- flapGate: one-button flight through the right gate ----------------
+     Taps lift the avatar; the gates scroll toward it, each labelled with an option. Fly through the
+     gate that fits. Contact with a wrong gate is the answer, honestly taken. */
+  PLUGINS.flapGate = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-sky'), avatar = el('div', 'g4-avatar'), field = el('div', 'g4-gates');
+    box.appendChild(field); box.appendChild(avatar);
+    stage.appendChild(box);
+    var raf = 0, live = false, y = 50, vy = 0, t0 = 0, gates = [];
+    function stop() { live = false; if (raf && window.cancelAnimationFrame) window.cancelAnimationFrame(raf); raf = 0; }
+    function clear() { stop(); field.innerHTML = ''; gates = []; y = 50; vy = 0; avatar.style.top = '50%'; }
+    function show(item) {
+      clear();
+      item.opts.forEach(function (o, i) {
+        var g = el('button', 'g4-gate', o.text);
+        g.type = 'button';
+        g.setAttribute('data-v', o.value);
+        g.style.top = (12 + (i * 76) / Math.max(1, item.opts.length)) + '%';
+        g.addEventListener('click', function () { if (r.phase === 'play') { stop(); r.pick(o.value); } });
+        field.appendChild(g);
+        gates.push(g);
+      });
+      if (r.reduced) return;
+      live = true;
+      t0 = (window.performance && performance.now) ? performance.now() : Date.now();
+      var frame = function (now) {
+        if (!live) return;
+        var dt = Math.min(0.05, ((now || t0) - t0) / 1000); t0 = now || Date.now();
+        vy += 120 * dt;                    // gravity
+        y = Math.min(100, Math.max(0, y + vy * dt));
+        avatar.style.top = y.toFixed(1) + '%';
+        raf = window.requestAnimationFrame ? window.requestAnimationFrame(frame) : 0;
+      };
+      raf = window.requestAnimationFrame ? window.requestAnimationFrame(frame) : 0;
+    }
+    function flap() {
+      if (!live || r.phase !== 'play') return;
+      vy = -46;
+    }
+    box.addEventListener('click', flap);
+    box.setAttribute('tabindex', '0');
+    box.addEventListener('keydown', function (e) {
+      if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'Enter') { e.preventDefault(); flap(); }
+    });
+    function mark(item, hit, value) {
+      stop();
+      gates.forEach(function (g) {
+        var v = g.getAttribute('data-v');
+        if (v === value) g.classList.add(hit ? 'ok' : 'no');
+        else if (!hit && v === item.key) g.classList.add('reveal');
+      });
+    }
+    return { show: show, mark: mark, clear: clear, flap: flap };
+  };
+
+  /* ---------------- brickRight: breakout, but the bricks are the options ----------------
+     The paddle follows the pointer, the ball does the choosing: the brick it knocks out is the
+     answer. Two rectangles and a vector is the whole physics. Reduced motion turns the bricks into
+     plain buttons. */
+  PLUGINS.brickRight = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-brk'), field = el('div', 'g4-bricks');
+    var canvas = document.createElement('canvas');
+    canvas.className = 'g4-canvas';
+    box.appendChild(field); box.appendChild(canvas);
+    stage.appendChild(box);
+    var raf = 0, live = false, bricks = [], paddleX = 0.5, ball = null, key = null, ctx = null;
+
+    function stop() { live = false; if (raf && window.cancelAnimationFrame) window.cancelAnimationFrame(raf); raf = 0; }
+    function clear() { stop(); field.innerHTML = ''; bricks = []; ball = null; }
+    function paint() {
+      if (!ctx) return;
+      var w = canvas.width, h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = '#182136';
+      ctx.fillRect(paddleX * w - 34, h - 22, 68, 9);
+      if (ball) {
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, 6, 0, Math.PI * 2);
+        ctx.fillStyle = '#b9854c';
+        ctx.fill();
+      }
+    }
+    function show(item) {
+      clear();
+      key = item.key;
+      item.opts.forEach(function (o) {
+        var b = el('button', 'g4-brick', o.text);
+        b.type = 'button';
+        b.setAttribute('data-v', o.value);
+        b.addEventListener('click', function () { if (r.phase === 'play') r.pick(o.value); });
+        field.appendChild(b);
+        bricks.push({ el: b, value: o.value, dead: false });
+      });
+      if (r.reduced) return;
+      canvas.width = canvas.clientWidth || 520;
+      canvas.height = canvas.clientHeight || 160;
+      ctx = canvas.getContext ? canvas.getContext('2d') : null;
+      ball = { x: canvas.width / 2, y: canvas.height - 40, vx: 2.2, vy: -2.6 };
+      live = true;
+      var frame = function () {
+        if (!live || !ball) return;
+        ball.x += ball.vx; ball.y += ball.vy;
+        if (ball.x < 6 || ball.x > canvas.width - 6) ball.vx *= -1;
+        if (ball.y < 6) ball.vy *= -1;
+        var px = paddleX * canvas.width;
+        if (ball.y > canvas.height - 26 && Math.abs(ball.x - px) < 44) ball.vy = -Math.abs(ball.vy);
+        if (ball.y > canvas.height + 12) {                     // a dropped ball is a free retry
+          ball.x = canvas.width / 2; ball.y = canvas.height - 40; ball.vy = -2.6;
+        }
+        paint();
+        raf = window.requestAnimationFrame ? window.requestAnimationFrame(frame) : 0;
+      };
+      raf = window.requestAnimationFrame ? window.requestAnimationFrame(frame) : 0;
+    }
+    function move(e) {
+      var box2 = box.getBoundingClientRect();
+      var p = (e.clientX - box2.left) / Math.max(1, box2.width);
+      paddleX = Math.min(0.94, Math.max(0.06, p));
+      paint();
+    }
+    box.addEventListener('pointermove', move);
+    box.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { paddleX = Math.max(0.06, paddleX - 0.06); paint(); }
+      if (e.key === 'ArrowRight') { paddleX = Math.min(0.94, paddleX + 0.06); paint(); }
+    });
+    box.setAttribute('tabindex', '0');
+    function mark(item, hit, value) {
+      stop();
+      bricks.forEach(function (b) {
+        if (b.value === value) b.el.classList.add(hit ? 'ok' : 'no');
+        else if (!hit && b.value === key) b.el.classList.add('reveal');
+      });
+    }
+    return { show: show, mark: mark, clear: clear };
+  };
+
+  /* ---------------- pairFlip: memory pairs, prompt ↔ option ----------------
+     Cards start face down; the prompt is one of them. Turning the prompt and its match answers the
+     item. A mismatched pair only costs time, which is the honest cost in a memory game. */
+  PLUGINS.pairFlip = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-pairs'), cards = [], open = [], matched = false;
+    stage.appendChild(box);
+    function clear() { box.innerHTML = ''; cards = []; open = []; matched = false; }
+    function show(item) {
+      clear();
+      var faces = [{ kind: 'prompt', text: item.prompt || '?', value: null }]
+        .concat(item.opts.map(function (o) { return { kind: 'opt', text: o.text, value: o.value }; }));
+      shuffle(faces.slice()).forEach(function (f) {
+        var c = el('button', 'g4-card');
+        c.type = 'button';
+        c.innerHTML = '<span class="g4-face back">?</span><span class="g4-face front">' + esc(f.text) + '</span>';
+        c.setAttribute('data-kind', f.kind);
+        c.setAttribute('data-v', f.value == null ? '' : f.value);
+        c.addEventListener('click', function () { turn(c, f); });
+        box.appendChild(c);
+        cards.push({ el: c, face: f });
+      });
+    }
+    function turn(c, f) {
+      if (r.phase !== 'play' || matched) return;
+      if (c.classList.contains('up') || open.length >= 2) return;
+      c.classList.add('up');
+      open.push({ el: c, face: f });
+      if (open.length < 2) return;
+      var a = open[0].face, b = open[1].face;
+      var hitPair = (a.kind === 'prompt' && b.value === r.queue[0].key)
+        || (b.kind === 'prompt' && a.value === r.queue[0].key);
+      if (hitPair) { matched = true; r.pick(r.queue[0].key); return; }
+      r.later(function () {
+        open.forEach(function (o) { o.el.classList.remove('up'); });
+        open = [];
+      }, 620);
+    }
+    function mark(item, hit, value) {
+      cards.forEach(function (c) {
+        if (c.face.kind === 'opt' && c.face.value === item.key) c.el.classList.add('up', 'ok');
+      });
+    }
+    return { show: show, mark: mark, clear: clear, turn: turn };
+  };
+
+  /* ---------------- mineGrid: open the field without setting off the trap ----------------
+     Each tile hides a claim; one hides a trap. Opening a tile takes the judgement it carries, so a
+     blind click is an answer the student made. */
+  PLUGINS.mineGrid = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-mines'), tiles = [];
+    stage.appendChild(box);
+    function clear() { box.innerHTML = ''; tiles = []; }
+    function show(item) {
+      clear();
+      var cells = item.opts.map(function (o) { return { text: o.text, value: o.value, trap: false }; });
+      cells.push({ text: '✷', value: null, trap: true });
+      shuffle(cells.slice()).forEach(function (c) {
+        var t = el('button', 'g4-mine' + (c.trap ? ' trap' : ''), '');
+        t.type = 'button';
+        t.innerHTML = '<span class="g4-mine-in">' + esc(c.text) + '</span>';
+        t.addEventListener('click', function () {
+          if (r.phase !== 'play' || t.classList.contains('open')) return;
+          t.classList.add('open');
+          if (c.trap) r.expire();
+          else r.pick(c.value);
+        });
+        box.appendChild(t);
+        tiles.push({ el: t, cell: c });
+      });
+    }
+    function mark(item, hit, value) {
+      tiles.forEach(function (t) {
+        if (t.cell.trap) t.el.classList.add('open', 'boom');
+        else if (t.cell.value === item.key) { t.el.classList.add('open', 'ok'); }
+        else if (t.cell.value === value) t.el.classList.add('open', 'no');
+      });
+    }
+    return { show: show, mark: mark, clear: clear };
+  };
+
+  /* ---------------- lockCode: every correct answer releases one digit ----------------
+     The expected digit is authored on the item (`data-code`), else it is the correct option's slot.
+     Typing it on the keypad opens that digit's box; a wrong digit is spent. */
+  PLUGINS.lockCode = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-lock'), dial = el('div', 'g4-dial'), pad = el('div', 'g4-pad');
+    var want = '';
+    box.appendChild(dial); box.appendChild(pad);
+    stage.appendChild(box);
+    function digitOf(item) {
+      var own = item.item.getAttribute('data-code');
+      if (own) return String(own).slice(0, 1);
+      var i = 0, at = 0;
+      item.opts.forEach(function (o) { if (o.value === item.key) at = i; i++; });
+      return String(at + 1);
+    }
+    function clear() { pad.innerHTML = ''; dial.innerHTML = ''; }
+    function show(item) {
+      clear();
+      want = digitOf(item);
+      var d = el('div', 'g4-digit', '?');
+      d.setAttribute('data-want', want);
+      dial.appendChild(d);
+      for (var n = 1; n <= 9; n++) {
+        (function (n) {
+          var b = el('button', 'g4-key', String(n));
+          b.type = 'button';
+          b.addEventListener('click', function () {
+            if (r.phase !== 'play') return;
+            if (String(n) === want) r.pick(item.key);
+            else r.expire();
+          });
+          pad.appendChild(b);
+        })(n);
+      }
+    }
+    function mark(item, hit) {
+      var d = dial.querySelector('.g4-digit');
+      if (d) {
+        d.textContent = hit ? want : '✕';
+        d.className = 'g4-digit ' + (hit ? 'ok' : 'no');
+      }
+      [].forEach.call(pad.querySelectorAll('.g4-key'), function (k) {
+        if (k.textContent === want) k.classList.add('reveal');
+      });
+    }
+    return { show: show, mark: mark, clear: clear };
+  };
+
+  /* ---------------- wordleBoard (and hangman): one word, letter by letter ----------------
+     The word is authored (`data-answer`) or is the correct option's text. Green = right letter,
+     right place; amber = right letter, wrong place. Guessing the word answers the item, so the
+     evidence is still the radio — the board is the work. */
+  PLUGINS.wordleBoard = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-wordle'), grid = el('div', 'g4-wgrid');
+    var entry = document.createElement('input');
+    entry.className = 'g4-wtype';
+    entry.setAttribute('type', 'text');
+    entry.setAttribute('autocomplete', 'off');
+    entry.setAttribute('aria-label', 'Type your guess and press Enter');
+    box.appendChild(grid); box.appendChild(entry);
+    stage.appendChild(box);
+    var word = '', rows = 6, guesses = [], done = false;
+
+    function target(item) {
+      var own = item.item.getAttribute('data-answer');
+      if (own) return norm(own).replace(/[^a-z]/g, '');
+      var t = '';
+      item.opts.forEach(function (o) { if (o.value === item.key) t = o.text; });
+      return norm(t).replace(/[^a-z]/g, '');
+    }
+    function draw() {
+      grid.innerHTML = '';
+      for (var i = 0; i < rows; i++) {
+        var row = el('div', 'g4-wrow');
+        for (var j = 0; j < word.length; j++) row.appendChild(el('span', 'g4-tile'));
+        grid.appendChild(row);
+      }
+      guesses.forEach(function (g, ri) {
+        var row = grid.children[ri];
+        if (!row) return;
+        var left = word.split('');
+        g.split('').forEach(function (ch, ci) {
+          var t = row.children[ci];
+          if (!t) return;
+          t.textContent = ch.toUpperCase();
+          if (word[ci] === ch) { t.className = 'g4-tile ok'; left[ci] = ''; }
+        });
+        g.split('').forEach(function (ch, ci) {
+          var t = row.children[ci];
+          if (!t || t.className.indexOf('ok') > -1) return;
+          var at = left.indexOf(ch);
+          if (at > -1) { t.className = 'g4-tile near'; left[at] = ''; }
+          else t.className = 'g4-tile no';
+        });
+      });
+    }
+    function clear() { grid.innerHTML = ''; entry.value = ''; guesses = []; word = ''; done = false; }
+    function show(item) {
+      clear();
+      word = target(item);
+      draw();
+      entry.disabled = !word;
+      if (word && entry.focus) { try { entry.focus({ preventScroll: true }); } catch (e) { entry.focus(); } }
+    }
+    function guess(text) {
+      if (done || r.phase !== 'play' || !word) return false;
+      var g = norm(text).replace(/[^a-z]/g, '');
+      if (!g || g.length !== word.length) return false;
+      guesses.push(g);
+      entry.value = '';
+      draw();
+      if (g === word) { done = true; r.pick(r.queue[0].key); return true; }
+      if (guesses.length >= rows) { done = true; r.expire(); }
+      return false;
+    }
+    entry.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); guess(entry.value); }
+    });
+    function mark(item, hit) {
+      done = true;
+      if (!hit) return;
+      var last = el('div', 'g4-wrow');
+      word.split('').forEach(function (ch) { last.appendChild(el('span', 'g4-tile ok', ch.toUpperCase())); });
+      grid.appendChild(last);
+    }
+    return { show: show, mark: mark, clear: clear, guess: guess, entry: entry };
+  };
+
+  /* ---------------- crosswordBoard: crossed words, one letter per cell ----------------
+     Every item carries `data-answer`, `data-at="row,col"` and `data-dir="across|down"`. A cell that
+     has been right once keeps its letter, so words cross and the grid fills like a crossword. */
+  PLUGINS.crosswordBoard = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-xw'), grid = el('div', 'g4-xgrid');
+    box.appendChild(grid);
+    stage.appendChild(box);
+    var solved = {}, cells = [];
+    function place(item) {
+      var ans = norm(item.item.getAttribute('data-answer')).replace(/[^a-z]/g, '');
+      if (!ans) return null;
+      var at = (item.item.getAttribute('data-at') || '0,0').split(',');
+      var down = (item.item.getAttribute('data-dir') || 'across') === 'down';
+      return { ans: ans, r0: parseInt(at[0], 10) || 0, c0: parseInt(at[1], 10) || 0, down: down };
+    }
+    function clear() { grid.innerHTML = ''; cells = []; }
+    function show(item) {
+      clear();
+      var p = place(item);
+      if (!p) return;
+      grid.style.gridTemplateColumns = 'repeat(' + (p.down ? 1 : p.ans.length) + ',34px)';
+      for (var i = 0; i < p.ans.length; i++) {
+        var rr = p.r0 + (p.down ? i : 0), cc = p.c0 + (p.down ? 0 : i);
+        var k = rr + ',' + cc;
+        (function (k, i) {
+          var cell = el('div', 'g4-xcell'), inp = document.createElement('input');
+          inp.className = 'g4-gap' + (solved[k] ? ' from' : '');
+          inp.setAttribute('maxlength', '1');
+          inp.setAttribute('autocomplete', 'off');
+          inp.setAttribute('aria-label', 'Letter ' + (i + 1));
+          if (solved[k]) inp.value = solved[k].toUpperCase();
+          inp.addEventListener('input', function () { check(p); });
+          cell.appendChild(inp);
+          grid.appendChild(cell);
+          cells.push({ inp: inp, key: k });
+        })(k, i);
+      }
+      var first = cells.filter(function (c) { return !solved[c.key]; })[0];
+      if (first && first.inp.focus) { try { first.inp.focus({ preventScroll: true }); } catch (e) { first.inp.focus(); } }
+    }
+    function check(p) {
+      if (r.phase !== 'play') return;
+      var typed = cells.map(function (c) { return (c.inp.value || '').toLowerCase(); }).join('');
+      if (typed.length < p.ans.length) return;
+      if (typed === p.ans) {
+        cells.forEach(function (c) { solved[c.key] = (c.inp.value || '').toLowerCase(); });
+        r.pick(r.queue[0].key);
+      } else {
+        cells.forEach(function (c) { if (!solved[c.key]) c.inp.value = ''; c.inp.classList.add('no'); });
+        r.later(function () { cells.forEach(function (c) { c.inp.classList.remove('no'); }); }, 600);
+      }
+    }
+    function mark(item, hit) {
+      cells.forEach(function (c) { c.inp.classList.add(hit ? 'ok' : 'no'); c.inp.disabled = true; });
+    }
+    return { show: show, mark: mark, clear: clear, check: check };
+  };
+
+  /* ---------------- echoPads: hear it, then press the pad that matches ----------------
+     The voice says the item; the pads are the options. A pad lights when pressed, so the room can
+     see the guess, and the "again" button says it again. No files: the built-in voice is the clip. */
+  PLUGINS.echoPads = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-echo'), pads = el('div', 'g4-pads');
+    var again = el('button', 'g4-again', '🔊 Say it again');
+    again.type = 'button';
+    box.appendChild(pads); box.appendChild(again);
+    stage.appendChild(box);
+    var els = [], phrase = '';
+    again.addEventListener('click', function () { say(phrase); });
+    function clear() { pads.innerHTML = ''; els = []; phrase = ''; }
+    function show(item) {
+      clear();
+      phrase = item.say || item.prompt || '';
+      item.opts.forEach(function (o) {
+        var p = el('button', 'g4-pad', o.text);
+        p.type = 'button';
+        p.setAttribute('data-v', o.value);
+        p.addEventListener('click', function () {
+          if (r.phase !== 'play') return;
+          p.classList.add('lit');
+          r.later(function () { p.classList.remove('lit'); }, 260);
+          r.pick(o.value);
+        });
+        pads.appendChild(p);
+        els.push(p);
+      });
+      r.later(function () { if (r.phase === 'play') say(phrase); }, 260);
+    }
+    function mark(item, hit, value) {
+      els.forEach(function (p) {
+        var v = p.getAttribute('data-v');
+        if (v === value) p.classList.add(hit ? 'ok' : 'no');
+        else if (!hit && v === item.key) p.classList.add('reveal');
+      });
+      if (!hit) say(item.say || item.prompt || '');
+    }
+    return { show: show, mark: mark, clear: clear };
+  };
+
+  /* ---------------- bingoCard: the voice calls it, you stamp the card ----------------
+     Nine tiles: the item's options plus decoys drawn from the rest of the block, so the card is
+     never trivially small. A wrong stamp is an answer, taken honestly. */
+  PLUGINS.bingoCard = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-bingo'), card = el('div', 'g4-bcard');
+    var again = el('button', 'g4-again', '🔊 Call it again');
+    again.type = 'button';
+    var yell = el('div', 'g4-yell', 'Listen, then stamp it.');
+    box.appendChild(yell); box.appendChild(card); box.appendChild(again);
+    stage.appendChild(box);
+    var tiles = [], phrase = '';
+    function pool() {
+      var all = [];
+      r.items.forEach(function (it) { it.opts.forEach(function (o) { if (all.indexOf(o.text) < 0) all.push(o.text); }); });
+      return all;
+    }
+    again.addEventListener('click', function () { say(phrase); });
+    function clear() { card.innerHTML = ''; tiles = []; phrase = ''; }
+    function show(item) {
+      clear();
+      phrase = item.say || item.prompt || '';
+      var mine = item.opts.map(function (o) { return { text: o.text, value: o.value }; });
+      var extra = pool().filter(function (t) {
+        return !mine.some(function (m) { return m.text === t; });
+      }).slice(0, Math.max(0, 9 - mine.length)).map(function (t) { return { text: t, value: '~' + t }; });
+      var cells = shuffle(mine.concat(extra).slice(0, 9));
+      while (cells.length < 9) cells.push({ text: '·', value: '~' });
+      cells.forEach(function (c) {
+        var t = el('button', 'g4-btile', c.text);
+        t.type = 'button';
+        t.setAttribute('data-v', c.value);
+        t.addEventListener('click', function () {
+          if (r.phase !== 'play' || t.classList.contains('stamped')) return;
+          t.classList.add('stamped');
+          r.pick(c.value);
+        });
+        card.appendChild(t);
+        tiles.push(t);
+      });
+      yell.textContent = 'Listen, then stamp it.';
+      r.later(function () { if (r.phase === 'play') say(phrase); }, 260);
+    }
+    function mark(item, hit, value) {
+      tiles.forEach(function (t) {
+        var v = t.getAttribute('data-v');
+        if (v === value) t.classList.add(hit ? 'ok' : 'no');
+        else if (!hit && v === item.key) t.classList.add('reveal');
+        if (hit && v === item.key) t.classList.add('stamped');
+      });
+      if (hit) yell.textContent = 'Line!';
+      else { yell.textContent = 'Not that one.'; say(item.say || item.prompt || ''); }
+    }
+    return { show: show, mark: mark, clear: clear };
+  };
+
+  /* ---------------- spinPick: the reel decides what comes next ----------------
+     Carries no answer: it is the companion that removes the "1, 2, 3" march. The reel lands on the
+     item's number, then the item is answered right under it. */
+  PLUGINS.spinPick = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-spin'), reel = el('div', 'g4-reel'), opts = el('div', 'g4-spinopts');
+    var lever = el('button', 'g4-lever', '🎰 Spin');
+    lever.type = 'button';
+    box.appendChild(reel); box.appendChild(lever); box.appendChild(opts);
+    stage.appendChild(box);
+    var digits = [], ticker = 0;
+    for (var i = 0; i < 3; i++) { var d = el('div', 'g4-reel-d', '0'); reel.appendChild(d); digits.push(d); }
+    function land(n) {
+      var s = String(n).padStart(3, '0');
+      digits.forEach(function (d, i) { d.textContent = s[i]; });
+      reel.classList.remove('spinning');
+    }
+    function go() {
+      if (ticker) { clearInterval(ticker); ticker = 0; }
+      if (r.reduced) { land(r.idx + 1); return; }
+      reel.classList.add('spinning');
+      ticker = setInterval(function () {
+        digits.forEach(function (d) { d.textContent = Math.floor(Math.random() * 10); });
+      }, 60);
+      r.later(function () { if (ticker) { clearInterval(ticker); ticker = 0; } land(r.idx + 1); }, 700);
+    }
+    lever.addEventListener('click', go);
+    function clear() { opts.innerHTML = ''; if (ticker) { clearInterval(ticker); ticker = 0; } }
+    function show(item) {
+      clear();
+      go();
+      item.opts.forEach(function (o) {
+        var b = el('button', 'g4-spinopt', o.text);
+        b.type = 'button';
+        b.setAttribute('data-v', o.value);
+        b.addEventListener('click', function () { if (r.phase === 'play') r.pick(o.value); });
+        opts.appendChild(b);
+      });
+    }
+    function mark(item, hit, value) {
+      [].forEach.call(opts.querySelectorAll('.g4-spinopt'), function (b) {
+        var v = b.getAttribute('data-v');
+        if (v === value) b.classList.add(hit ? 'ok' : 'no');
+        else if (!hit && v === item.key) b.classList.add('reveal');
+      });
+    }
+    return { show: show, mark: mark, clear: clear, spin: go };
+  };
+
+  /* ---------------- ladderRun: rising stakes on a ladder, a safe rung every five ----------------
+     A wrong answer drops the marker to the last safe rung — the run keeps what was safely earned,
+     which is what makes a ladder a ladder and not a list. */
+  PLUGINS.ladderRun = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-ladder'), rungs = el('div', 'g4-rungs'), opts = el('div', 'g4-raceopts');
+    var marker = el('div', 'g4-marker');
+    box.appendChild(rungs); box.appendChild(marker); box.appendChild(opts);
+    stage.appendChild(box);
+    var cells = [], safe = 0;
+    function safeOf(n) { return Math.floor(n / 5) * 5; }
+    function build() {
+      rungs.innerHTML = ''; cells = [];
+      for (var i = r.total; i >= 1; i--) {
+        var c = el('div', 'g4-rung' + (i % 5 === 0 ? ' safe' : ''), String(i));
+        rungs.appendChild(c);
+        cells.push({ el: c, n: i });
+      }
+    }
+    function place(n) { cells.forEach(function (c) { c.el.classList.toggle('on', c.n === n); }); }
+    function clear() { opts.innerHTML = ''; place(r.score); }
+    function show(item) {
+      if (!cells.length) build();
+      opts.innerHTML = '';
+      place(r.score);
+      item.opts.forEach(function (o) {
+        var b = el('button', 'g4-raceopt', o.text);
+        b.type = 'button';
+        b.setAttribute('data-v', o.value);
+        b.addEventListener('click', function () { if (r.phase === 'play') r.pick(o.value); });
+        opts.appendChild(b);
+      });
+    }
+    function mark(item, hit, value) {
+      if (hit) safe = safeOf(r.score);
+      [].forEach.call(opts.querySelectorAll('.g4-raceopt'), function (b) {
+        var v = b.getAttribute('data-v');
+        if (v === value) b.classList.add(hit ? 'ok' : 'no');
+        else if (!hit && v === item.key) b.classList.add('reveal');
+      });
+      place(hit ? r.score : Math.max(0, safe));
+      if (!hit) cells.forEach(function (c) { if (c.n <= safe) c.el.classList.add('kept'); });
+    }
+    return { show: show, mark: mark, clear: clear };
+  };
+
+  /* ---------------- boardQuiz: a board of cells, two teams, points ----------------
+     Teams alternate on every answer, so the board reads as a game long before anyone wins it. The
+     grid is the difficulty axis; the cells are the items. */
+  PLUGINS.boardQuiz = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-board'), grid = el('div', 'g4-bgrid'), head = el('div', 'g4-bhead');
+    var opts = el('div', 'g4-raceopts');
+    box.appendChild(head); box.appendChild(grid); box.appendChild(opts);
+    stage.appendChild(box);
+    var cells = [], team = 0, scores = [0, 0];
+    function drawHead() {
+      head.innerHTML = '<span class="g4-team' + (team === 0 ? ' on' : '') + '">A · ' + scores[0] + '</span>'
+        + '<span class="g4-team' + (team === 1 ? ' on' : '') + '">B · ' + scores[1] + '</span>';
+    }
+    function build() {
+      grid.innerHTML = ''; cells = [];
+      r.items.forEach(function (it, i) {
+        var c = el('div', 'g4-bcell', String(i + 1));
+        grid.appendChild(c);
+        cells.push(c);
+      });
+      grid.style.gridTemplateColumns = 'repeat(' + Math.min(6, Math.max(3, cells.length)) + ',1fr)';
+    }
+    function clear() { opts.innerHTML = ''; drawHead(); }
+    function show(item) {
+      if (!cells.length) build();
+      opts.innerHTML = '';
+      drawHead();
+      cells.forEach(function (c, i) { c.classList.toggle('on', i === r.idx); c.classList.remove('done'); });
+      item.opts.forEach(function (o) {
+        var b = el('button', 'g4-raceopt', o.text);
+        b.type = 'button';
+        b.setAttribute('data-v', o.value);
+        b.addEventListener('click', function () { if (r.phase === 'play') r.pick(o.value); });
+        opts.appendChild(b);
+      });
+    }
+    function mark(item, hit, value) {
+      if (hit) scores[team]++;
+      if (cells[r.idx]) cells[r.idx].classList.add(hit ? 'done' : 'lost');
+      team = 1 - team;
+      drawHead();
+      [].forEach.call(opts.querySelectorAll('.g4-raceopt'), function (b) {
+        var v = b.getAttribute('data-v');
+        if (v === value) b.classList.add(hit ? 'ok' : 'no');
+        else if (!hit && v === item.key) b.classList.add('reveal');
+      });
+    }
+    return { show: show, mark: mark, clear: clear, scores: function () { return scores.slice(); } };
+  };
+
+  /* ---------------- bossRaid: a HP bar, three hearts, one ending ----------------
+     Every correct answer lands a hit; every wrong one costs a heart. A long drill gets a shape and
+     an end, which is the whole reason to skin it at all. */
+  PLUGINS.bossRaid = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-boss'), art = el('div', 'g4-bossart'), bar = el('div', 'g4-hp'),
+      hpFill = el('div', 'g4-hp-fill'), hearts = el('div', 'g4-hearts'), opts = el('div', 'g4-raceopts');
+    art.innerHTML = '<svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">'
+      + '<polygon points="60,8 105,34 105,86 60,112 15,86 15,34" fill="#3b2b4a" stroke="#1c1327" stroke-width="4"/>'
+      + '<polygon points="60,26 88,42 88,78 60,94 32,78 32,42" fill="none" stroke="#c9a0e0" stroke-width="3"/>'
+      + '<circle cx="45" cy="56" r="7" fill="#f2d6ff"/><circle cx="75" cy="56" r="7" fill="#f2d6ff"/>'
+      + '<path d="M42 78q18 12 36 0" stroke="#f2d6ff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>';
+    bar.appendChild(hpFill);
+    box.appendChild(art); box.appendChild(bar); box.appendChild(hearts); box.appendChild(opts);
+    stage.appendChild(box);
+    var lives = 3;
+    function drawHud() {
+      var hp = r.total ? 1 - r.score / r.total : 0;
+      hpFill.style.width = Math.max(0, Math.round(hp * 100)) + '%';
+      hearts.textContent = '♥♥♥'.slice(0, lives) + '♡♡♡'.slice(0, 3 - lives);
+    }
+    function clear() { opts.innerHTML = ''; drawHud(); }
+    function show(item) {
+      opts.innerHTML = '';
+      drawHud();
+      item.opts.forEach(function (o) {
+        var b = el('button', 'g4-raceopt', o.text);
+        b.type = 'button';
+        b.setAttribute('data-v', o.value);
+        b.addEventListener('click', function () { if (r.phase === 'play') r.pick(o.value); });
+        opts.appendChild(b);
+      });
+    }
+    function mark(item, hit, value) {
+      if (hit) art.classList.add('hurt'); else lives = Math.max(0, lives - 1);
+      drawHud();
+      r.later(function () { art.classList.remove('hurt'); }, 300);
+      [].forEach.call(opts.querySelectorAll('.g4-raceopt'), function (b) {
+        var v = b.getAttribute('data-v');
+        if (v === value) b.classList.add(hit ? 'ok' : 'no');
+        else if (!hit && v === item.key) b.classList.add('reveal');
+      });
+      if (!lives) r.later(function () { if (r.running) r.finish(); }, 700);
+    }
+    return { show: show, mark: mark, clear: clear, lives: function () { return lives; } };
+  };
+
   function boot() {
     var names = Object.keys(PLUGINS);
     var roots = [].slice.call(document.querySelectorAll('.game')).filter(function (root) {

@@ -57,7 +57,7 @@ be loud and a business page sober, and neither is more correct. Only these hold,
 The player's hands do the work: aim, time, catch, dodge. Each one drives ordinary `.qitem`s, so the answer
 that saves is the same radio a plain page would have.
 
-### `skeetRange` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2
+### `skeetRange` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — One moving target per item. Player aims with the cursor and takes **one shot**; a hit scores, a
   miss is spent. No spray, no endless retry — the constraint is what makes it feel like skill.
@@ -76,7 +76,7 @@ that saves is the same radio a plain page would have.
 - **can't** — recognition only; speed pressure makes it a poor fit for anything needing reflection.
 - **needs** — nothing; `engine4.js` ships it.
 
-### `brickRight` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2
+### `brickRight` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — Breakout. The paddle follows the pointer; the ball knocks out the brick carrying the right option.
   Wrong bricks cost a ball. A real game with real stakes, and the physics is two rectangles and a vector.
@@ -96,7 +96,7 @@ that saves is the same radio a plain page would have.
 - **can't** — only two or three baskets fit a row; fine distinctions don't fit.
 - **needs** — nothing; `engine4.js` ships it.
 
-### `stackDrop` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2
+### `stackDrop` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — A block slides left and right; the player drops it inside the marked gap. A drop in the gap earns
   the item; a miss narrows the gap. Timing skill, then the item is answered normally.
@@ -105,7 +105,7 @@ that saves is the same radio a plain page would have.
 - **can't** — timing dominates; keep the language load per level to a phrase.
 - **needs** — shared runner.
 
-### `flapGate` — section · cost C · evidence radio — tests 1 · fun 3 · reuse 2
+### `flapGate` — section · cost C · evidence radio — tests 1 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — One-button flight; the player passes through the gate labelled with the right option. Contact
   with a wrong gate costs a life.
@@ -114,7 +114,7 @@ that saves is the same radio a plain page would have.
 - **can't** — recognition at speed only, and it is the most expensive of the arcade set.
 - **needs** — shared runner + gravity loop.
 
-### `raceLane` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 3
+### `raceLane` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 3 · **built: engine4.js**
 
 - **does** — Answer to accelerate. Correct answers push the avatar toward the finish; wrong ones stall it. The
   ghost of the student's best run is the opponent, so there is competition without a server.
@@ -129,7 +129,7 @@ that saves is the same radio a plain page would have.
 
 Slower, thinking games. No timer pressure; the tension is deduction.
 
-### `lockCode` — page · cost B · evidence gap — tests 2 · fun 3 · reuse 3
+### `lockCode` — page · cost B · evidence gap — tests 2 · fun 3 · reuse 3 · **built: engine4.js**
 
 - **does** — The section is an escape room. Each correct answer releases one digit; three digits open the next
   block. Turns loose exercises into one thing the student is trying to do.
@@ -138,7 +138,7 @@ Slower, thinking games. No timer pressure; the tension is deduction.
 - **can't** — needs a section whose answers reduce to one character; housekeeping, not teaching.
 - **needs** — `none` (markup + ~40 lines to read the gaps).
 
-### `wordleBoard` — section · cost C · evidence gap — tests 3 · fun 3 · reuse 3
+### `wordleBoard` — section · cost C · evidence gap — tests 3 · fun 3 · reuse 3 · **built: engine4.js**
 
 - **does** — The student guesses letters; the board marks right letter/right place, right letter/wrong place.
   Hangman is the same engine with a different face (a revealed blank row instead of coloured tiles).
@@ -148,7 +148,7 @@ Slower, thinking games. No timer pressure; the tension is deduction.
 - **can't** — only words of one fixed length; nothing for phrases, meaning or listening.
 - **needs** — shared runner + a letter-state machine.
 
-### `pairFlip` — section · cost B · evidence radio — tests 1 · fun 3 · reuse 2
+### `pairFlip` — section · cost B · evidence radio — tests 1 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — Memory pairs: flip two cards, keep them if they belong together. Six pairs is one screen.
 - **skins** — pairs are the `.qitem` stem↔option links; a match checks that radio.
@@ -156,7 +156,7 @@ Slower, thinking games. No timer pressure; the tension is deduction.
 - **can't** — recognition of a pair only; it teaches nothing about producing the form.
 - **needs** — shared runner.
 
-### `mineGrid` — section · cost B · evidence radio — tests 2 · fun 2 · reuse 2
+### `mineGrid` — section · cost B · evidence radio — tests 2 · fun 2 · reuse 2 · **built: engine4.js**
 
 - **does** — A grid of tiles; opening one reveals a claim and the student judges whether it is sound. One tile
   hides a trap. Reveal the field without setting it off.
@@ -165,7 +165,7 @@ Slower, thinking games. No timer pressure; the tension is deduction.
 - **can't** — binary judgement only; four-way choices need a different frame.
 - **needs** — shared runner.
 
-### `crosswordBoard` — section · cost C · evidence gap — tests 3 · fun 2 · reuse 2
+### `crosswordBoard` — section · cost C · evidence gap — tests 3 · fun 2 · reuse 2 · **built: engine4.js**
 
 - **does** — A small authored crossword; clues are the stems, answers are the gaps.
 - **art** — flat grid, black blocks, one accent on the current word.
@@ -179,7 +179,7 @@ Slower, thinking games. No timer pressure; the tension is deduction.
 
 The ear does the work. Both need the built-in voice, not a rendered clip.
 
-### `echoPads` — section · cost B · evidence gap — tests 2 · fun 3 · reuse 2
+### `echoPads` — section · cost B · evidence gap — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — Four pads, each tied to one item's audio. The engine plays a sequence; the student repeats it by
   pressing the pads in order. Sequences grow each round. Simon, with language instead of tones.
@@ -188,7 +188,7 @@ The ear does the work. Both need the built-in voice, not a rendered clip.
 - **can't** — memory span caps the round at about five; no written form involved.
 - **needs** — shared runner + `playSay`.
 
-### `bingoCard` — section · cost B · evidence radio — tests 1 · fun 3 · reuse 2
+### `bingoCard` — section · cost B · evidence radio — tests 1 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — The voice calls items in random order; the student taps them on a 3×3 card. Lines win.
 - **skins** — a 3×3 slice of a `.qitem` set; every tile is the radio that records the call.
@@ -202,7 +202,7 @@ The ear does the work. Both need the built-in voice, not a rendered clip.
 
 No motion; the game is progression and risk. Cheapest of the set and they suit every track.
 
-### `ladderRun` — page · cost B · evidence radio — tests 2 · fun 3 · reuse 2
+### `ladderRun` — page · cost B · evidence radio — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — A ladder of questions with rising stakes, a safe rung every five, and two lifelines: drop two wrong
   options, and ask the audience (shows the class's own tally). A wrong answer drops to the last safe rung.
@@ -211,7 +211,7 @@ No motion; the game is progression and risk. Cheapest of the set and they suit e
 - **can't** — one long arc, so it wants to be the page's quiz, not a mid-lesson drill.
 - **needs** — shared runner.
 
-### `boardQuiz` — page · cost A · evidence radio — tests 2 · fun 3 · reuse 3
+### `boardQuiz` — page · cost A · evidence radio — tests 2 · fun 3 · reuse 3 · **built: engine4.js**
 
 - **does** — A grid of categories by difficulty; each cell opens one item. Points awarded, two players or teams
   alternate. The one structure that works offline with a teacher driving it.
@@ -220,7 +220,7 @@ No motion; the game is progression and risk. Cheapest of the set and they suit e
 - **can't** — the difficulty axis has to be real, or a column is just an arbitrary label.
 - **needs** — `none` (markup + jump links).
 
-### `spinPick` — beat · cost B · evidence none — tests 0 · fun 2 · reuse 3
+### `spinPick` — beat · cost B · evidence none — tests 0 · fun 2 · reuse 3 · **built: engine4.js**
 
 - **does** — Chooses which item comes next: a wheel or a slot lever. Removes the "1, 2, 3" march and makes the
   order feel live. Two skins, one mechanism.
@@ -229,7 +229,7 @@ No motion; the game is progression and risk. Cheapest of the set and they suit e
 - **can't** — carries no answer at all; always a companion to a real block.
 - **needs** — `none`.
 
-### `bossRaid` — page · cost C · evidence radio — tests 2 · fun 3 · reuse 2
+### `bossRaid` — page · cost C · evidence radio — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — A boss with an HP bar; each correct answer lands a hit, each wrong one costs the student a heart.
   Waves get harder. Gives a long drill a reason to exist and an ending.
