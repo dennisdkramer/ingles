@@ -12,7 +12,6 @@
     "qa:fast": "node build-lessons.mjs && node qa/content.mjs && node qa/landing.mjs",
     "qa:layout": "node qa/overflow.mjs --selftest && node qa/overflow.mjs",
     "qa:live": "node qa/live.mjs",
-    "qa:notes": "node qa/notes.mjs",
     "build:dict": "node build-dictionary.mjs"
   },
   "devDependencies": {
