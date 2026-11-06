@@ -94,7 +94,7 @@ const MEASURE = `(function(){
   if (!ca) return { empty: true };
   var cr = ca.getBoundingClientRect();
   function label(el){
-    var hd = el.querySelector('.ex-head') || el.querySelector('h1,h2,h3,h4,summary,b');
+    var hd = el.querySelector('h3') || el.querySelector('h1,h2,h4,summary,b');
     var t = hd ? hd.textContent : (el.textContent || '');
     return t.replace(/\\s+/g, ' ').trim().slice(0, 54);
   }

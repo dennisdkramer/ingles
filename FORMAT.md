@@ -13,7 +13,7 @@
         - EXCEPTIONS (eg. Exam Page, user-specific feedback/review pages).
     d) OUT OF SCOPE for this file:
         - [linguistics and/or pedagogy and/or teaching] analysis/decisions (PEDAGOGY.md) - This file must not influence.
-        - Lesson content is generated and organized according to PEDAGOGY-MAP.md (its process and defaults), the track roadmap (`<TRACK>-ROADMAP.md`, e.g. `BUSINESS-ROADMAP.md`) and the track register file (`<TRACK>-REGISTER.md`). This file is the mechanical contract — shell, classes, sizing.
+        - Lesson content is generated and organized according to PEDAGOGY-MAP.md and the files it references. This file is the mechanical contract — shell, classes, sizing.
         - Elements which exist because a FUNCTION creates them (Selection popup, note/recording marks, highlight rectangles, colour palette, toast, indicators/spinners, etc.) are styled by style.css, which remains the single styling source for the whole site.
 
 2. SITE CORE CHARACTERISTICS -
@@ -22,39 +22,35 @@
 
 
 
-### Fonts
-- Playfair Display 700/900 → h1, h2 (letter-spacing .14em)
-- Caveat 700 → .script (handwritten accents, rotated -2deg)
-- Public Sans 400/600/700 → body, base 17px/1.6
-- All font sizes are fixed constants (no viewport-relative sizing): h1 38px, .script 38px, body 17px 
-- Resizing the viewport never changes text size and print output is identical on any device
-
 ### Standard element formatting guidance
-- The lesson title (h1) must be written short enough to sit on ONE line at the fixed 38px size inside the 1200px content area 
+- The lesson title (h1) must be written short enough to sit on ONE line at the fixed 38px size inside the 1200px content area.
 - **Portuguese text is ALWAYS italic.** Mark it with `lang="pt"` (CSS `:lang(pt){font-style:italic}` italicizes it in any element), or use the legacy `<i>` / `.pt` / `.ptw` markers. 
-- .pt = Portuguese explanation text: italic. .ptw = Portuguese word in exercises: italic, --ptw color, weight 600
-- Content within a block may never overflow the block, should not look cramped or contain unnecessary space 
+- .pt = Portuguese explanation text: it	alic. .ptw = Portuguese word in exercises: italic, --ptw color, weight 600.
+- Content within a block may never overflow the block, and items within a block should not touch or overlap.
+- Lesson sections are numbered `1.`… (h2). 
+- Blocks inside a section are lettered `A.`… (h3), restarting at A in every section .
+- Exercise items are numbered `1..n`, top to bottom then left to right, restarting in every block.
+- A concise, standalone explainer follows the header of a section or block ONLY IF [it is defensibly helpful (use your judgement) for the student to understand the contents or task] AND [it is not restate anything that the lesson already says]. 
+- An item may never ask for a judgement on an axis the page never defined before the item asks for it. the item and its column headers may not be labelled with a word invented for the table.
+
 
 #### Mechanical limits (the only MUSTs — each prevents an answer or a line from being lost)
 - The `#barhelp` legend under the title is hand-baked shell chrome, one Portuguese line: no `lang="pt"`/`.pt` (the always-italic rule is for authored content) and inert — it sits outside `.content-area`, where the notebook gestures do not exist.
 - Every control that carries an answer (`input.gap`, radio, authored `textarea`) resolves exactly ONE anchor: an unanchored control is never saved, and two controls on the same anchor+place overwrite each other.
 - Question stems are unique within a block — a repeated stem gives two controls one saved answer.
 - A `textarea` inside `.content-area` is fixed size (`resize:none`): the page never reflows and a drag handle could push the box past its block.
-- Unbuilt work is marked, never faked: `<h3 class="ex-head">TO-DO — not built: <name></h3>`, naming the primitive the student uses today. Never a TO-DO for teaching.
+- Unbuilt work is marked, never faked: `<h3>TO-DO — not built: <name></h3>`, naming the primitive the student uses today. Never a TO-DO for teaching.
 
 #### Following are guidance **IF** relevant content used, not mandatory, not templates
 - .thsub = a chart-column-header subtitle (the second line under the main label): block, weight 400, smaller, reduced opacity.
 - input.gap = fill-in blank: transparent, 2px tan bottom border, #fff8ea bg — a CONTIGUOUS line, never literal "___" underscores in the prompt
-- fieldset = exercise block: dashed tan border, 12px radius
 - .chart = structured data table (cognate rules, phrase translations, to-be chunks, false friends): paper, 2px ink frame + tan shadow, ink header row, tan grid
 - .chips = wrapping keyword pills ("quase iguais" list)
 - .grid3 = an available 3-column row of cards
-- .ex-head = exercise-group sub-heading inside Treino/Quiz: serif (Playfair), dark blue, tan left bar
 - .blanks = wrapping row of fill-in pairs (word + input.gap)
 - .dialog = dialogue block: #fff8ea fill, rose frame, bold speaker labels
 - .listen = compact ▶ audio chip placed inline beside what it speaks
 - A fill-in hint/gloss (Portuguese, italic) sits on its own line BELOW the input. Author it with the block fill-in layout (`.blanks.sent` / `.blanks.sent.cols`) so the line break actually renders — a `<br>` inside the default flex `.blanks` row is ignored.
-- section headings (h2) carry a rose underline; exercise items are numbered 1..n under their group heading (no repeated section letter)
 - @media print: hides header/#controlbar/#feed/footer, strips container border/shadow
 
 ### Text and visual sizing philosophy
@@ -73,9 +69,8 @@ c) Block width decisions are content-aware of what they contain AND context awar
 d) Adjacent blocks of different heights should be analysed to determine the quantity (and type) of (real, relevant) content that could be added to extend the shorter of the two and trigger a 'cleanup' generation step to do so.
 e) Block contents and their child elements (eg. multiple choice options) should be generated (or shortened/lengthened in cleanup) so that the total length of [each item/option] OR [all items/options] fills >50% of its parent block's width. If <50% is filled, block should be made half-width. Between 50%-70% filled is acceptable but reflow/tiling is preferred if it achieves better width fill. If reflowed to columns, sequential/numbered items must preserve their order top to bottom per column, sequence continuing in the next column (left to right))
 f) Consecutive questions are separated by a small, consistent vertical gap.
-g) A concise section explainer (a standalone introduction to the section) CAN be a sub-heading under the h2: serif (Playfair), ~1pt larger than body, italic — written (in portugues or english as appropriate for lesson level) only when it adds important context and does not restate anything that the lesson already says.
-h) A note that applies to one chart row CAN be a merged row directly under it: `<tr class="note"><td colspan="N">…</td></tr>` — a bare row spliced into `<tbody>` will not span.
-i) Contrasting [linguistic, phonetic, or grammatical] [classes, categories, or concepts] are made visually distinct (using columns, spacing, block separation, or colors as appropriate) so the contrast reads - **This does not supersede 'professional-looking results' goal of 'layout STANDARDS' or other formatting rules**. 
-j) A chart is a BLOCK when it stands alone — it then takes any of the three widths in (a) — and a CHILD of a block when it sits inside one (`.panel .chart` = the block’s width minus its 20px side margin). Its column count and row shapes are content-aware, never fixed by CSS.
-k) Activity and quiz items are numbered
-l) Reflow: a reflowed block states `--rows` (items per column, e.g. `--rows:2`) in its own style attribute — never on a section or wrapper, so a section can never be split into columns; the column count follows from the item count.
+g) A note that applies to one chart row CAN be a merged row directly under it: `<tr class="note"><td colspan="N">…</td></tr>` — a bare row spliced into `<tbody>` will not span.
+h) Contrasting [linguistic, phonetic, or grammatical] [classes, categories, or concepts] are made visually distinct (using columns, spacing, block separation, or colors as appropriate) so the contrast reads - **This does not supersede 'professional-looking results' goal of 'layout STANDARDS' or other formatting rules**. 
+i) A chart is a BLOCK when it stands alone — it then takes any of the three widths in (a) — and a CHILD of a block when it sits inside one (`.panel .chart` = the block’s width minus its 20px side margin). Its column count and row shapes are content-aware, never fixed by CSS.
+j) Activity and quiz items are numbered
+k) Reflow: a reflowed block states `--rows` (items per column, e.g. `--rows:2`) in its own style attribute — never on a section or wrapper, so a section can never be split into columns; the column count follows from the item count.
