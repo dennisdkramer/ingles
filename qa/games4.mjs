@@ -230,7 +230,7 @@ async function run() {
   /* ---- every game in the menu boots, draws its own furniture, and resolves the authored radio ---- */
   const GAMES = {
     catchBasket: '.g4-bucket', whackMole: '.g4-mole',
-    stackDrop: '.g4-slot', flapGate: '.g4-gate', pairFlip: '.g4-card',
+    stackDrop: '.g4-padbtn', flapGate: '.g4-gate', pairFlip: '.g4-card',
     mineGrid: '.g4-mine', wordleBoard: '.g4-tile', crosswordBoard: '.g4-gap',
     echoPads: '.g4-pad', bingoCard: '.g4-btile',
     ladderRun: '.g4-rung', bossRaid: '.g4-bossart'
@@ -268,12 +268,60 @@ async function run() {
     root.querySelector('.game-start').click();
     const drew = root.querySelector(GAMES[name]);
     const on = root.classList.contains('is-on');
+    if (g.board) {
+      /* a board game places every card up front and answers out of order — proven on its own below */
+      ok(name + ': starts, lays its board out, claims the run',
+        on && g.phase === 'play' && root.querySelectorAll('.g4-card').length === 4,
+        root.querySelectorAll('.g4-card').length + ' cards');
+      return;
+    }
     g.hooks.pick('a');
     const radio = root.querySelector('input[name="n-' + name + '-1"][value="a"]');
     ok(name + ': starts, draws its own furniture, marks the radio',
       on && !!drew && !!radio && radio.checked === true,
       (on ? '' : 'not started ') + (drew ? '' : 'no ' + GAMES[name] + ' '));
   });
+
+  /* pairFlip is a board: six pairs, twelve cards, and a true pair answers its own item */
+  const pfItems = Array.from({ length: 6 }, (_, i) => `
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qstem">w${i}</span></div>
+      <div class="qopts"><label><input type="radio" name="pf${i}" value="a">right${i}</label><label><input type="radio" name="pf${i}" value="b">wrong${i}</label></div>
+    </div>`).join('');
+  const pfPage = mount(`<!doctype html><html><head><meta charset="utf-8"></head><body>
+    <div class="content-area">
+      <div class="game" id="pf" data-game="pairFlip" data-shuffle="1" data-time="0" data-sound="0">
+        <p class="game-how">Match each one with its partner.</p>
+        <div class="game-list">${pfItems}</div>
+        <button class="game-start" type="button">▶ Play</button>
+      </div>
+    </div></body></html>`);
+  const pd = pfPage.document, pf = (pfPage.__G4 || [])[0];
+  pd.getElementById('pf').querySelector('.game-start').click();
+  ok('pairFlip: twelve cards for six pairs', pd.querySelectorAll('#pf .g4-card').length === 12,
+    pd.querySelectorAll('#pf .g4-card').length + ' cards');
+  ok('pairFlip: every card carries a backed face, so nothing renders blank',
+    pd.querySelectorAll('#pf .g4-card .g4-face.front').length === 12);
+  const stack = [...pd.querySelectorAll('#pf .g4-card')];
+  const first = stack[0];
+  const mate = stack.find(c => c !== first && c.getAttribute('data-pair') === first.getAttribute('data-pair'));
+  ok('pairFlip: each card has exactly one mate', !!mate);
+  first.click(); mate.click();
+  await sleep(500);
+  const pairIdx = Number(first.getAttribute('data-pair'));
+  const rights = [...pd.querySelectorAll('#pf input[value="a"]')];
+  const checkedIdx = rights.findIndex(r => r.checked);
+  const texts = [first, mate].map(c => c.querySelector('.g4-face.front').textContent).sort().join('|');
+  ok('pairFlip: a true pair stays up and answers its own item',
+    first.classList.contains('up') && first.classList.contains('ok') && checkedIdx > -1
+      && texts === ['right' + checkedIdx, 'w' + checkedIdx].sort().join('|'),
+    'pair=' + pairIdx + ' answered item ' + checkedIdx + ' cards "' + texts + '"');
+  ok('pairFlip: matching scores', pf.score === 1, 'score=' + pf.score);
+  const a2 = stack.find(c => !c.classList.contains('up'));
+  const b2 = stack.find(c => c !== a2 && !c.classList.contains('up') && c.getAttribute('data-pair') !== a2.getAttribute('data-pair'));
+  a2.click(); b2.click();
+  await sleep(950);
+  ok('pairFlip: a false pair turns back over', !a2.classList.contains('up') && !b2.classList.contains('up'));
 
   /* the three games whose input is typed, not clicked */
   const xw = (w2.__G4 || []).find(x => x.root === d2.getElementById('g-crosswordBoard'));
@@ -304,6 +352,58 @@ async function run() {
     !!anyRoot.querySelector('.g4-intro > .g4-intro-card'));
   ok('the shared gradient defs are injected once per page',
     d2.querySelectorAll('.g4-defs').length === 1);
+
+  /* ---- structural guards: the two bug classes we kept hitting ----
+     1. a class the engine creates with NO rule in style.css renders as unstyled text (the greyed
+        options), and
+     2. two games sharing one class name means the later rule silently restyles the earlier game. */
+  const css = fs.readFileSync(path.join(ROOT, 'style.css'), 'utf8');
+  const styled = new Set([...css.matchAll(/\.(g4-[a-z0-9-]+)/g)].map(m => m[1]));
+  const src = fs.readFileSync(path.join(ROOT, 'engine4.js'), 'utf8');
+  const made = new Set([...src.matchAll(/el\('[a-z]+', '(g4-[a-z0-9-]+)/g)].map(m => m[1]));
+  const unstyled = [...made].filter(c => !styled.has(c));
+  ok('every class the engine creates has a rule in style.css', unstyled.length === 0, unstyled.join(' '));
+
+  /* classes owned by more than one game: only ones that are deliberately shared are allowed */
+  const SHARED = new Set(['g4-again', 'g4-raceopt', 'g4-raceopts']);
+  const starts = [];
+  src.split('\n').forEach((l, i) => {
+    const m = l.match(/^\s*PLUGINS\.([a-zA-Z]+) = function/);
+    if (m) starts.push({ name: m[1], start: i });
+  });
+  const owners = new Map();
+  /* the SCENE/POSTER tables build stills out of every game's furniture, so they are not an owner */
+  const sceneStart = src.split('\n').findIndex(l => /var SCENE = \{/.test(l));
+  const sceneEnd = src.split('\n').findIndex((l, i) => i > sceneStart && /^\s*PLUGINS\./.test(l));
+  starts.forEach((s, i) => {
+    const body = src.split('\n')
+      .map((l, n) => (n >= sceneStart && n < sceneEnd) ? '' : l)
+      .slice(s.start, i + 1 < starts.length ? starts[i + 1].start : src.split('\n').length).join('\n');
+    const seen = new Set([...body.matchAll(/el\('[a-z]+', '(g4-[a-z0-9-]+)/g)].map(m => m[1]));
+    seen.forEach(c => { if (!owners.has(c)) owners.set(c, new Set()); owners.get(c).add(s.name); });
+  });
+  const clashes = [...owners.entries()].filter(([c, o]) => o.size > 1 && !SHARED.has(c))
+    .map(([c, o]) => c + ':' + [...o].join('/'));
+  ok('no two games fight over one class name', clashes.length === 0, clashes.join(' '));
+
+  /* the invisible-options guard: every element the engine makes CLICKABLE must have a base CSS rule
+     and a size. pairFlip's cards were absolutely-positioned faces inside a 0x0 button, so the whole
+     board was invisible; this makes that impossible to ship again. */
+  {
+    const css = fs.readFileSync(path.join(ROOT, 'style.css'), 'utf8');
+    const eng = fs.readFileSync(path.join(ROOT, 'engine4.js'), 'utf8');
+    const clickable = [...new Set([...eng.matchAll(/el\('button', '([a-z0-9 -]+)'/g)]
+      .flatMap(m => m[1].split(' ')).filter(c => c.indexOf('g4-') === 0))];
+    ok('the engine marks a set of clickable game classes', clickable.length >= 10, clickable.length + ' classes');
+    const unsized = clickable.filter(c => {
+      const rule = css.split('\n').filter(l => new RegExp('^\\.' + c + '[ ,{]').test(l.trim())).join(' ');
+      return !rule || !/(width|min-width|min-height|height|inset|padding)/.test(rule);
+    });
+    ok('every clickable game class has CSS with a size (nothing renders 0x0 or invisible)',
+      unsized.length === 0, unsized.join(', ') || 'all sized');
+    const faces = css.indexOf('.g4-face{') > -1 && /\.g4-face\{[^}]*(inset|width)/.test(css);
+    ok('pairFlip faces are sized inside their card', faces);
+  }
 
   console.log('\n' + (fail ? 'FAILED: ' : 'OK: ') + pass + ' passed, ' + fail + ' failed\n');
   /* some game plugins keep a requestAnimationFrame loop or a timer alive; jsdom would never exit */

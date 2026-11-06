@@ -322,12 +322,9 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
    it is about to become. Never interactive (pointer-events:none) and never a timer. */
 .g4-poster{position:absolute;inset:0;pointer-events:none;opacity:.95}
 .g4-poster .g4-bit{position:absolute}
-.g4-poster .g4-bucket,.g4-poster .g4-mole,.g4-poster .g4-disc,.g4-poster .g4-brick,.g4-poster .g4-gate,
-.g4-poster .g4-card,.g4-poster .g4-mine,.g4-poster .g4-btile,.g4-poster .g4-pad,.g4-poster .g4-rung,
-.g4-poster .g4-bcell,.g4-poster .g4-hole,.g4-poster .g4-raceopt{position:absolute}
-.g4-poster .g4-ball{border-radius:50%;background:var(--ink);box-shadow:0 0 0 3px rgba(24,33,54,.18)}
-.g4-poster .g4-paddle{border-radius:6px;background:var(--ink);border:2px solid var(--tan)}
-.g4-poster .g4-brick{display:flex;align-items:center;justify-content:center;padding:2px 6px;background:#fff3d6;border:2px solid var(--tan);border-radius:8px;font:700 12px 'Public Sans',sans-serif;color:#5b3a11;overflow:hidden}
+.g4-poster .g4-bucket,.g4-poster .g4-mole,.g4-poster .g4-gate,.g4-poster .g4-card,
+.g4-poster .g4-mine,.g4-poster .g4-btile,.g4-poster .g4-pad,.g4-poster .g4-rung,
+.g4-poster .g4-hole,.g4-poster .g4-tile,.g4-poster .g4-gap{position:absolute}
 
 
 .g4-intro .game-how{max-width:62ch;margin:0}
@@ -351,73 +348,83 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-timebar.low i{background:#c92a2a}
 /* ---- engine4.js games, part 2: each game styles itself; only the shared furniture is common ---- */
 .g4-again,.g4-lever{margin:8px auto 0;display:block;padding:6px 12px;background:var(--ink);color:var(--cream);border:0;border-radius:10px;font:700 13px 'Public Sans',sans-serif;box-shadow:3px 3px 0 var(--tan);cursor:pointer}
-.g4-raceopt,.g4-spinopt{flex:1 1 0;min-width:0;padding:8px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);color:var(--ink);font:700 14px 'Public Sans',sans-serif;cursor:pointer}
-.g4-raceopts,.g4-spinopts{display:flex;gap:8px;position:absolute;left:10px;right:10px;bottom:10px}
-.g4-raceopt.ok,.g4-spinopt.ok,.g4-key.ok,.g4-pad.ok{border-color:#2f9e44;background:#e8f7ee}
-.g4-raceopt.no,.g4-spinopt.no,.g4-pad.no{border-color:#c92a2a;background:#fdeaea}
-.g4-raceopt.reveal,.g4-spinopt.reveal,.g4-key.reveal,.g4-pad.reveal{border-style:dashed;border-color:#2f9e44}
 /* skeetRange */
-.g4-skeet{position:absolute;inset:0;cursor:crosshair}
-.g4-disc{position:absolute;left:0;min-width:96px;max-width:46%;padding:10px 16px;background:var(--paper);border:3px solid var(--ink);border-radius:999px;box-shadow:3px 3px 0 var(--tan);font:700 14px 'Public Sans',sans-serif;cursor:crosshair;animation:g4drift 6s linear infinite alternate}
-.g4-disc.ok{border-color:#2f9e44;background:#e8f7ee}
-.g4-disc.no{border-color:#c92a2a;background:#fdeaea}
-.g4-disc.halt{animation-play-state:paused}
-.g4-disc.reveal{border-style:dashed;border-color:#2f9e44}
-@keyframes g4drift{from{transform:translateX(4%)}to{transform:translateX(120%)}}
 /* raceLane */
-.g4-race{position:absolute;left:10px;right:10px;top:44px;bottom:76px}
-.g4-lane{position:relative;height:34px;margin:10px 0;background:#e6eef2;border:2px solid var(--ink);border-radius:10px}
-.g4-lane.ghost{background:#f2ece0;border-style:dashed;opacity:.75}
-.g4-lane:after{content:'';position:absolute;right:6px;top:0;bottom:0;width:4px;background:var(--tan)}
-.g4-car{position:absolute;top:5px;left:0;width:24px;height:24px;border-radius:7px;background:var(--ink);transition:left .4s ease}
-.g4-lane.ghost .g4-car{background:var(--tan)}
-/* stackDrop */
-.g4-stack{position:absolute;left:10px;right:10px;top:40px;bottom:76px}
-.g4-block{position:absolute;top:4px;left:50%;transform:translateX(-50%);max-width:60%;padding:10px 14px;background:var(--ink);color:var(--cream);border-radius:10px;font:700 14px 'Public Sans',sans-serif}
-.g4-block.ok{background:#2f9e44}.g4-block.no{background:#c92a2a}
-.g4-slots{position:absolute;left:0;right:0;bottom:0;display:flex;gap:8px;height:64px}
-.g4-slot{flex:1 1 0;min-width:0;background:var(--paper);border:2px dashed var(--tan);border-radius:10px;color:var(--ink);font:700 13px 'Public Sans',sans-serif;cursor:pointer;overflow:hidden}
-.g4-slot.ok{border-style:solid;border-color:#2f9e44;background:#e8f7ee}
-.g4-slot.no{border-style:solid;border-color:#c92a2a;background:#fdeaea}
-.g4-slot.reveal{border-style:dashed;border-color:#2f9e44}
+/* stackDrop: the question is a block, a right answer becomes a rung, the climber climbs to the star */
+.g4-tower{position:absolute;inset:0;outline:none}
+.g4-built{position:absolute;left:26px;bottom:76px;width:58px;top:44px}
+.g4-rung-slot{position:absolute;left:0;width:58px;height:18px;border-radius:5px;border:2px dashed rgba(24,33,54,.22);background:transparent}
+.g4-rung-slot.filled{border:2px solid #8a5a2b;background:linear-gradient(#d9a765,#b9854c);box-shadow:inset 0 -3px 0 rgba(0,0,0,.18);animation:g4drop-in .32s cubic-bezier(.3,1.4,.6,1)}
+.g4-climber{position:absolute;left:92px;width:34px;height:52px;transition:bottom .38s cubic-bezier(.3,1.3,.6,1)}
+.g4-climber .g4-art{width:100%;height:100%}
+.g4-climber.cheer{animation:g4cheer .5s ease 2}
+.g4-prize{position:absolute;left:96px;top:2px;width:30px;height:30px;opacity:.35}
+.g4-prize .g4-art{width:100%;height:100%}
+.g4-prize.won{opacity:1;animation:g4spin 1s ease-in-out 2}
+.g4-block{position:absolute;left:50%;top:56px;z-index:3;max-width:56%;padding:9px 16px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--tan);font:700 15px 'Public Sans',sans-serif;text-align:center;transform:translate(-50%,0);transition:transform .34s cubic-bezier(.3,1.2,.6,1)}
+.g4-block.lean-left{animation:g4lean-l 3.4s ease-in-out infinite alternate}
+.g4-block.lean-right{animation:g4lean-r 3.4s ease-in-out infinite alternate}
+.g4-block.falling{transition:transform .3s cubic-bezier(.5,0,.9,.6)}
+.g4-block.ok{border-color:#2f9e44;background:#e8f7ee;opacity:.25}
+.g4-block.no{border-color:#c92a2a;background:#fdeaea;animation:g4shake .34s ease;opacity:.35}
+.g4-towerpads{position:absolute;left:26px;right:12px;bottom:10px;display:flex;gap:8px;height:56px}
+/* the answer row shared by ladderRun and bossRaid, plus their poster stills */
+.g4-raceopts{display:flex;gap:8px;position:absolute;left:10px;right:10px;bottom:10px}
+.g4-raceopt{flex:1 1 0;min-width:0;padding:8px 10px;margin:0;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);font:700 13.5px 'Public Sans',sans-serif;color:var(--ink);cursor:pointer}
+.g4-raceopt.ok{border-color:#2f9e44;background:#e8f7ee}
+.g4-raceopt.no{border-color:#c92a2a;background:#fdeaea}
+.g4-raceopt.reveal{border-style:dashed;border-color:#2f9e44}
+.g4-marker{position:absolute;left:68px;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:11px solid var(--ink);transition:bottom .3s ease}
+.g4-slot,.g4-car{border-radius:6px;background:var(--ink);border:2px solid var(--tan)}
+.g4-padbtn{flex:1 1 0;min-width:0;padding:6px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);color:var(--ink);font:700 13px 'Public Sans',sans-serif;line-height:1.2;cursor:pointer;overflow:hidden}
+.g4-padbtn.ok{border-color:#2f9e44;background:#e8f7ee}
+.g4-padbtn.no{border-color:#c92a2a;background:#fdeaea}
+.g4-padbtn.reveal{border-style:dashed;border-color:#2f9e44}
+@keyframes g4lean-l{from{transform:translate(-50%,0)}to{transform:translate(calc(-50% - 26px),0)}}
+@keyframes g4lean-r{from{transform:translate(-50%,0)}to{transform:translate(calc(-50% + 26px),0)}}
+@keyframes g4drop-in{from{transform:translateY(-16px);opacity:0}to{transform:none;opacity:1}}
+@keyframes g4cheer{50%{transform:translateY(-12px) rotate(-6deg)}}
 /* flapGate */
 .g4-sky{position:absolute;inset:0;background:linear-gradient(#dff0f7,#eef7ea);cursor:pointer}
 .g4-avatar{position:absolute;left:34px;top:50%;width:22px;height:22px;border-radius:6px;background:var(--ink);z-index:2}
 .g4-gates{position:absolute;inset:0}
-.g4-gate{position:absolute;right:14px;width:44%;padding:8px 12px;background:var(--paper);border:3px solid var(--ink);border-radius:8px;font:700 13px 'Public Sans',sans-serif;cursor:pointer}
+.g4-gate{position:absolute;right:14px;width:44%;padding:8px 12px;background:var(--paper);border:3px solid var(--ink);border-radius:8px;color:var(--ink);font:700 13px 'Public Sans',sans-serif;cursor:pointer}
 .g4-gate.ok{border-color:#2f9e44;background:#e8f7ee}.g4-gate.no{border-color:#c92a2a;background:#fdeaea}
 .g4-gate.reveal{border-style:dashed;border-color:#2f9e44}
 /* brickRight */
 .g4-brk{position:absolute;left:10px;right:10px;top:40px;bottom:8px}
-.g4-bricks{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
-.g4-brick{padding:8px 12px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:3px 3px 0 var(--tan);font:700 13.5px 'Public Sans',sans-serif;cursor:pointer}
-.g4-brick.ok{border-color:#2f9e44;background:#e8f7ee}.g4-brick.no{border-color:#c92a2a;background:#fdeaea}
-.g4-brick.reveal{border-style:dashed;border-color:#2f9e44}
-.g4-canvas{position:absolute;left:0;right:0;bottom:0;width:100%;height:150px;display:block}
-/* pairFlip */
-.g4-pairs{position:absolute;left:12px;right:12px;top:44px;bottom:12px;display:flex;flex-wrap:wrap;gap:10px;align-content:center;justify-content:center}
-.g4-card{position:relative;width:calc(50% - 5px);max-width:190px;height:62px;padding:0;background:transparent;border:0;box-shadow:none;cursor:pointer;perspective:600px}
-.g4-face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:4px 8px;border-radius:12px;border:2px solid var(--ink);font:700 13px 'Public Sans',sans-serif;backface-visibility:hidden;transition:transform .3s ease}
-.g4-face.back{background:var(--ink);color:var(--cream);box-shadow:3px 3px 0 var(--tan)}
-.g4-face.front{background:var(--paper);color:var(--ink);transform:rotateY(180deg)}
+/* A button inside a game stage must never inherit the site's cream-on-dark button text: every game
+   paints its own paper background, so unset colour made whole option rows invisible. */
+.g4-stage button{color:var(--ink)}
+/* pairFlip — a 4x3 board of paired cards. `.g4-card` MUST carry the size: the faces are absolutely
+   positioned inside it, so a card with no width/height renders as nothing at all. */
+.g4-pairs{position:absolute;left:12px;right:12px;top:38px;bottom:10px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);gap:8px}
+.g4-card{position:relative;min-width:0;min-height:0;padding:0;margin:0;background:transparent;border:0;box-shadow:none;cursor:pointer;perspective:600px}
 .g4-card.up .g4-face.back{transform:rotateY(-180deg)}
 .g4-card.up .g4-face.front{transform:rotateY(0)}
 .g4-card.ok .g4-face.front{border-color:#2f9e44;background:#e8f7ee}
+.g4-card.dead{opacity:.45;cursor:default}
+.g4-face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:3px 5px;border-radius:10px;border:2px solid var(--ink);font:700 12px/1.15 'Public Sans',sans-serif;text-align:center;overflow:hidden;word-break:break-word;backface-visibility:hidden;transition:transform .3s ease}
+.g4-face.back{background:var(--ink);color:var(--cream);box-shadow:3px 3px 0 var(--tan)}
+.g4-face.front{background:var(--paper);color:var(--ink);transform:rotateY(180deg)}
 /* mineGrid */
-.g4-mines{position:absolute;left:12px;right:12px;top:52px;bottom:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.g4-mine{background:#e6eef2;border:2px dashed var(--tan);border-radius:12px;color:transparent;font:700 14px 'Public Sans',sans-serif;cursor:pointer;overflow:hidden}
-.g4-mine.open{color:var(--ink);background:var(--paper);border-style:solid;border-color:var(--ink)}
+/* mineGrid: the words are readable from the start — what is hidden is which cell is mined */
+.g4-mines{position:absolute;left:12px;right:12px;top:12px;bottom:12px}
+.g4-field{position:absolute;left:0;right:0;top:26px;bottom:0;display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:1fr;gap:10px}
+.g4-lives{position:absolute;right:0;top:0;font:700 16px system-ui;color:#c92a2a;letter-spacing:2px}
+.g4-runner{position:absolute;left:50%;bottom:-6px;width:30px;height:46px;margin-left:-15px;z-index:4;transition:transform .42s cubic-bezier(.3,1.1,.6,1);pointer-events:none}
+.g4-runner .g4-art{width:100%;height:100%}
+.g4-runner.blown{animation:g4blown .6s ease}
+.g4-runner.down{transform:translate(var(--dx, 0),42px) rotate(84deg) !important;opacity:.6}
+@keyframes g4blown{0%{transform:translate(var(--dx,0),var(--dy,0)) rotate(0)}45%{transform:translate(var(--dx,0),-24px) rotate(26deg)}100%{transform:translate(var(--dx,0),var(--dy,0)) rotate(0)}}
+.g4-mine{position:relative;display:flex;align-items:center;justify-content:center;padding:4px 8px;background:#e6eef2;border:2px dashed var(--tan);border-radius:12px;color:var(--ink);font:700 14px 'Public Sans',sans-serif;line-height:1.2;text-align:center;cursor:pointer;overflow:hidden;transition:background .18s ease,transform .18s ease}
+.g4-mine.trap::after{content:'✷';position:absolute;font-size:26px;color:#c92a2a;opacity:0}
+.g4-mine.trap.open::after{opacity:1}
+.g4-mine.trap.open .g4-mine-in{opacity:0}
+.g4-mine.open{background:var(--paper);border-style:solid;border-color:var(--ink)}
 .g4-mine.ok.open{border-color:#2f9e44;background:#e8f7ee}
 .g4-mine.no.open{border-color:#c92a2a;background:#fdeaea}
-.g4-mine.boom.open{border-color:#c92a2a;background:#f7d0d0}
-/* lockCode */
-.g4-lock{position:absolute;left:12px;right:12px;top:52px;bottom:12px;display:flex;flex-direction:column;justify-content:space-between}
-.g4-dial{display:flex;gap:8px;justify-content:center}
-.g4-digit{width:64px;height:64px;display:flex;align-items:center;justify-content:center;background:var(--paper);border:3px solid var(--ink);border-radius:12px;font:800 30px 'Public Sans',sans-serif}
-.g4-digit.ok{border-color:#2f9e44;background:#e8f7ee}
-.g4-digit.no{border-color:#c92a2a;background:#fdeaea}
-.g4-pad{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.g4-key{padding:10px 0;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:2px 2px 0 var(--tan);font:700 16px 'Public Sans',sans-serif;cursor:pointer}
+.g4-mine.boom.open{border-color:#c92a2a;background:#f7d0d0;animation:g4shake .34s ease}
 /* wordleBoard */
 .g4-wordle{position:absolute;left:12px;right:12px;top:48px;bottom:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
 .g4-wgrid{display:flex;flex-direction:column;gap:4px}
@@ -442,21 +449,17 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 /* echoPads / bingoCard */
 .g4-echo{position:absolute;left:12px;right:12px;top:52px;bottom:12px;display:flex;flex-direction:column;justify-content:center;gap:10px}
 .g4-pads{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.g4-pad{min-height:64px;padding:8px;background:var(--paper);border:3px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--tan);font:700 14px 'Public Sans',sans-serif;cursor:pointer;transition:transform .12s ease}
+.g4-pad{min-height:64px;padding:8px;background:var(--paper);border:3px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--tan);color:var(--ink);font:700 14px 'Public Sans',sans-serif;cursor:pointer;transition:transform .12s ease}
 .g4-pad.lit{transform:scale(.96);background:#fff3d6}
 .g4-bingo{position:absolute;left:12px;right:12px;top:44px;bottom:8px;display:flex;flex-direction:column;gap:6px;align-items:center}
 .g4-yell{font:700 13px 'Public Sans',sans-serif}
 .g4-bcard{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:420px;flex:1}
-.g4-btile{background:var(--paper);border:2px solid var(--ink);border-radius:10px;font:700 12.5px 'Public Sans',sans-serif;cursor:pointer;overflow:hidden;padding:2px 4px}
+.g4-btile{background:var(--paper);border:2px solid var(--ink);border-radius:10px;font:700 12.5px 'Public Sans',sans-serif;color:var(--ink);cursor:pointer;overflow:hidden;padding:2px 4px}
 .g4-btile.stamped{border-width:3px;border-style:double}
 .g4-btile.ok{border-color:#2f9e44;background:#e8f7ee}
 .g4-btile.no{border-color:#c92a2a;background:#fdeaea}
 .g4-btile.reveal{border-style:dashed;border-color:#2f9e44}
 /* spinPick */
-.g4-spin{position:absolute;left:12px;right:12px;top:52px;bottom:8px;display:flex;flex-direction:column;align-items:center;gap:6px}
-.g4-reel{display:flex;gap:8px}
-.g4-reel-d{width:46px;height:56px;display:flex;align-items:center;justify-content:center;background:var(--paper);border:3px solid var(--ink);border-radius:10px;font:800 26px 'Public Sans',sans-serif}
-.g4-reel.spinning .g4-reel-d{opacity:.75}
 /* ladderRun / boardQuiz / bossRaid */
 .g4-ladder,.g4-board,.g4-boss{position:absolute;left:12px;right:12px;top:44px;bottom:8px}
 .g4-rungs{position:absolute;left:0;top:0;bottom:64px;width:66px;display:flex;flex-direction:column-reverse;gap:2px;overflow:hidden}
@@ -464,15 +467,6 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-rung.safe{background:#ffe9b8;color:#7a5210}
 .g4-rung.on{background:var(--ink);color:var(--cream)}
 .g4-rung.kept{outline:2px solid #2f9e44}
-.g4-marker{position:absolute;left:68px;width:0;height:0}
-.g4-bgrid{display:grid;gap:5px}
-.g4-bcell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:#e6eef2;border:2px solid var(--ink);border-radius:8px;font:700 12px 'Public Sans',sans-serif;color:#5a6474}
-.g4-bcell.on{background:#fff3d6;border-color:var(--tan);color:var(--ink)}
-.g4-bcell.done{background:#2f9e44;color:#fff}
-.g4-bcell.lost{background:#c92a2a;color:#fff}
-.g4-bhead{display:flex;gap:8px;margin-bottom:6px}
-.g4-team{padding:3px 10px;border:2px solid var(--tan);border-radius:999px;font:700 12px 'Public Sans',sans-serif}
-.g4-team.on{background:var(--ink);color:var(--cream);border-color:var(--ink)}
 .g4-bossart{position:absolute;left:50%;top:0;transform:translateX(-50%);width:110px;height:110px}
 .g4-bossart svg{width:100%;height:100%}
 .g4-bossart.hurt{animation:g4hurt .3s ease}
@@ -480,7 +474,15 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-hp{position:absolute;left:0;right:0;top:118px;height:14px;background:#e6eef2;border:2px solid var(--ink);border-radius:8px;overflow:hidden}
 .g4-hp-fill{height:100%;width:100%;background:#c92a2a;transition:width .4s ease}
 .g4-hearts{position:absolute;left:0;top:140px;font:700 18px system-ui;color:#c92a2a;letter-spacing:2px}
-@media (prefers-reduced-motion:reduce){.g4-disc{animation:none}.g4-face,.g4-car,.g4-hp-fill,.g4-pad{transition:none}.g4-bossart.hurt{animation:none}}
+/* bossRaid: the hero steps in on a hit, the boss swings back on a miss */
+.g4-hero{position:absolute;left:6px;bottom:64px;width:54px;height:84px;transition:transform .22s cubic-bezier(.3,1.4,.6,1)}
+.g4-hero .g4-art{width:100%;height:100%}
+.g4-hero.lunge{transform:translate(52px,-8px) rotate(-8deg)}
+.g4-hero.recoil{transform:translate(-14px,4px) rotate(10deg)}
+.g4-hero.down{transform:translate(-6px,34px) rotate(78deg);opacity:.55;transition:transform .7s ease,opacity .7s ease}
+.g4-bossart.strike{animation:g4strike .46s ease}
+@keyframes g4strike{0%{transform:translateX(-50%)}35%{transform:translateX(-50%) translateX(-34px) scale(1.1)}100%{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.g4-face,.g4-hp-fill,.g4-pad{transition:none}.g4-bossart.hurt{animation:none}}
 
 
 
@@ -503,9 +505,6 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-bucket.ok .g4-bucket-t{border-color:#2f9e44;background:#e8f7ee}
 .g4-bucket.no .g4-bucket-t{border-color:#c92a2a;background:#fdeaea}
 .g4-bucket.reveal .g4-bucket-t{border-style:dashed;border-color:#2f9e44;animation:g4pulse .7s ease-in-out 2}
-.g4-card{position:absolute;left:50%;top:44%;z-index:3;max-width:66%;padding:10px 18px;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);font:700 17px 'Public Sans',sans-serif;text-align:center;cursor:grab;user-select:none;will-change:transform;transition:transform .18s ease}
-.g4-card.dragging{cursor:grabbing;box-shadow:8px 10px 0 var(--tan);transition:none}
-.g4-card.wrong{animation:g4shake .34s ease-in-out;border-color:#c92a2a}
 /* whackMole — moles surface from holes */
 .g4-grid{position:absolute;left:14px;right:14px;top:52px;bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:10px;z-index:2}
 .g4-hole{position:relative;border-radius:16px;background:radial-gradient(ellipse at 50% 88%,#5a3f22 0 42%,#7c5a33 43% 100%);overflow:hidden;box-shadow:inset 0 4px 10px rgba(0,0,0,.35)}
@@ -523,7 +522,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 @keyframes g4pulse{0%,100%{box-shadow:2px 2px 0 var(--tan)}50%{box-shadow:0 0 0 4px rgba(47,158,68,.35)}}
 @media (prefers-reduced-motion:reduce){
   .g4-mole{transition:none}
-  .g4-card,.g4-card.wrong,.g4-bucket .g4-art{transition:none;animation:none}
+  .g4-chip,.g4-bucket .g4-art{transition:none;animation:none}
   .g4-mole.no .g4-mole-t,.g4-bucket.reveal .g4-bucket-t,.g4-mole.reveal .g4-mole-t{animation:none}
   .g4-prompt{transition:none}
 }

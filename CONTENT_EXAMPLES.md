@@ -89,20 +89,27 @@ that saves is the same radio a plain page would have.
 
 ### `catchBasket` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 3 · **built: engine4.js**
 
-- **does** — The prompt is a card; the player DRAGS it into the basket that fits. Real pointer drag (mouse, pen,
-  touch), with tap-a-basket and `1`/`2` keys as equal alternatives. Dropping outside springs the card back, so a
-  slipped finger costs nothing but time; the runner's bar is the deadline.
-- **skins** — one card per item (`.qstem`), one basket per option; a correct drop checks that option's radio.
-- **art** — inline SVG wicker basket, the card lifts and tilts its shadow while held, a correct drop flies the
-  card into the basket and shrinks it, a wrong drop shakes. Reduced motion keeps the state change, drops the travel.
+- **does** — One word is shown at a time; the player **drags it into the basket that fits** (or taps a basket, or
+  presses `1`/`2`). Dropping outside springs the word back, so a slipped finger costs time, not the item. The
+  runner's bar is the deadline for each word.
+- **teaches** — sorting a form into a category: past vs now, one ending vs another, which pattern a word belongs
+  to. The decision is made in one gesture, so hesitation is visible.
+- **skins** — one word per item (`.qstem`), one basket per option (the radio labels); a correct drop checks that
+  option's radio.
+- **art** — inline SVG wicker basket, the word lifts and tilts while held, a correct drop flies it into the
+  basket, a wrong drop shakes.
 - **can't** — only two or three baskets fit a row; fine distinctions don't fit.
-- **needs** — nothing; `engine4.js` ships it.
 
 ### `stackDrop` — section · cost B · evidence radio — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
-- **does** — A block slides left and right; the player drops it inside the marked gap. A drop in the gap earns
-  the item; a miss narrows the gap. Timing skill, then the item is answered normally.
-- **skins** — a `.qitem` per level; the label on the block is the stem.
+- **does** — A block carrying the question slides left and right above a tower; the answer buttons sit below. A
+  correct answer locks the block in as a **rung** of the ladder; a wrong one makes it fall away and the rung stays
+  empty. When every rung is built, the little climber walks up the ladder and takes the star at the top.
+- **teaches** — accumulate-and-complete: the reward is the finished ladder, so a long drill has a shape and an end.
+  Each rung is one item answered, so the tower *is* the progress bar.
+- **skins** — one `.qitem` per rung; the block label is the stem, the buttons are the options.
+- **art** — flat rectangles, a dashed empty rung for each unearned step, a climber figure that rises on completion.
+- **can't** — one item per rung, so it wants six to ten items; a two-item block has nowhere to climb.
 - **art** — flat rectangles, hard edges, a rising stack. Six levels, then an end screen.
 - **can't** — timing dominates; keep the language load per level to a phrase.
 - **needs** — shared runner.
@@ -160,12 +167,14 @@ Slower, thinking games. No timer pressure; the tension is deduction.
 
 ### `mineGrid` — section · cost B · evidence radio — tests 2 · fun 2 · reuse 2 · **built: engine4.js**
 
-- **does** — A grid of tiles; opening one reveals a claim and the student judges whether it is sound. One tile
-  hides a trap. Reveal the field without setting it off.
-- **skins** — tiles are options; the judgement is the radio.
-- **art** — flat squares, one accent on open tiles, a hard crack on the trap. No numbers, no flags.
-- **can't** — binary judgement only; four-way choices need a different frame.
-- **needs** — shared runner.
+- **does** — The field is the options, face down. The student picks a tile and **a figure runs to it**. The right
+  tile hands back the answer; a wrong one explodes under him. He survives two blasts and looks worse each time
+  (singed, then bandaged); the third wrong pick ends the run.
+- **teaches** — commitment under stakes. Because he only gets three mistakes, a guess has a price, so the student
+  reads before moving. Every wrong pick leaves its radio blank, so the blanks are the teacher's evidence.
+- **skins** — one tile per option; the prompt stays on the HUD line.
+- **art** — dunes with warning stakes, a drawn figure with three hurt states, a blast, a life counter.
+- **can't** — binary judgement per tile; four-way choice needs a different frame.
 
 ### `crosswordBoard` — section · cost C · evidence gap — tests 3 · fun 2 · reuse 2 · **built: engine4.js**
 
@@ -232,6 +241,15 @@ No motion; the game is progression and risk. Cheapest of the set and they suit e
 - **needs** — `none`.
 
 ### `bossRaid` — page · cost C · evidence radio — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
+
+- **does** — A drawn hero stands in front of the boss. A correct answer makes him **step in and swing** — the boss
+  loses HP with a flash. A wrong answer and the boss swings back: the hero recoils and loses one of three hearts.
+  No hearts, he goes down and the raid is over.
+- **teaches** — a long drill with a visible cost. Every item is a swing, so the class can see the health bar move
+  and knows how much of the drill is left. Wrong answers are the only thing that shortens it.
+- **skins** — the `.qitem` list is the attack sequence; the options are the answer buttons.
+- **art** — a torch-lit arena, a hero with lunge/recoil/down states, a ringed geometric boss, an HP bar, hearts.
+- **can't** — ritual stakes can mask weak items; every item must still be defensible on its own.
 
 - **does** — A boss with an HP bar; each correct answer lands a hit, each wrong one costs the student a heart.
   Waves get harder. Gives a long drill a reason to exist and an ending.

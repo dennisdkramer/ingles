@@ -83,6 +83,8 @@ window.GAMES4 = (function () {
     }
     return {
       tone: tone,
+      /* one short note at a chosen pitch — a flip, a step, a pad */
+      blip: function (on, hz, ms) { if (on) tone(hz || 440, ms || 90); },
       hit: function (on) { if (!on) return; tone(680, 90); setTimeout(function () { tone(1020, 110); }, 65); },
       miss: function (on) { if (on) tone(150, 200, 'sawtooth', 0.04); },
       win: function (on) {
@@ -110,7 +112,39 @@ window.GAMES4 = (function () {
       + '<circle cx="41" cy="40" r="3.4" fill="#20140b"/><circle cx="59" cy="40" r="3.4" fill="#20140b"/>'
       + '<circle cx="42.2" cy="38.8" r="1.1" fill="#fff"/><circle cx="60.2" cy="38.8" r="1.1" fill="#fff"/>'
       + '<path d="M36 74q6-7 12-1M64 74q-6-7-12-1" stroke="#3a2314" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
-      + '</svg>'
+      + '</svg>',
+    /* the one little character shared by the three progress games: tower climb, mine runner, boss
+       fight. Drawn once so his proportions never disagree between games. */
+    hero: '<svg class="g4-art" viewBox="0 0 60 92" aria-hidden="true" focusable="false">'
+      + '<circle cx="30" cy="16" r="12" fill="#f4c79b" stroke="#8a5a2b" stroke-width="2.5"/>'
+      + '<path d="M18 12q4-9 12-9t12 9" fill="#3d2a1a"/>'
+      + '<circle cx="25.5" cy="17" r="1.9" fill="#2a1c10"/><circle cx="34.5" cy="17" r="1.9" fill="#2a1c10"/>'
+      + '<path d="M26 22q4 3 8 0" stroke="#8a5a2b" stroke-width="2" fill="none" stroke-linecap="round"/>'
+      + '<path d="M30 28v26" stroke="#2f6fb5" stroke-width="11" stroke-linecap="round"/>'
+      + '<path d="M30 34l-13 12M30 34l13 12" stroke="#f4c79b" stroke-width="5" stroke-linecap="round"/>'
+      + '<path d="M30 52l-8 22M30 52l8 22" stroke="#2b3a4a" stroke-width="6" stroke-linecap="round"/>'
+      + '<path d="M22 76h-6M38 76h6" stroke="#1d2733" stroke-width="5" stroke-linecap="round"/>'
+      + '</svg>',
+    heroHurt: '<svg class="g4-art" viewBox="0 0 60 92" aria-hidden="true" focusable="false">'
+      + '<circle cx="30" cy="16" r="12" fill="#e8b78e" stroke="#8a5a2b" stroke-width="2.5"/>'
+      + '<path d="M18 12q4-9 12-9t12 9" fill="#2b1d12"/>'
+      + '<path d="M22 15l6 4M38 15l-6 4" stroke="#2a1c10" stroke-width="2.4" stroke-linecap="round"/>'
+      + '<path d="M26 24q4-2 8 0" stroke="#8a5a2b" stroke-width="2" fill="none" stroke-linecap="round"/>'
+      + '<path d="M30 28v26" stroke="#5f7a92" stroke-width="11" stroke-linecap="round"/>'
+      + '<path d="M30 34l-13 8M30 34l13 8" stroke="#e8b78e" stroke-width="5" stroke-linecap="round"/>'
+      + '<path d="M30 52l-8 22M30 52l8 22" stroke="#2b3a4a" stroke-width="6" stroke-linecap="round"/>'
+      + '<path d="M21 20l18 8" stroke="#fdfaf2" stroke-width="5" stroke-linecap="round"/>'
+      + '</svg>',
+    boss: '<svg class="g4-art" viewBox="0 0 120 120" aria-hidden="true" focusable="false">'
+      + '<path d="M60 6l14 12 18-4 4 18 14 12-8 17 8 17-14 12-4 18-18-4-14 12-14-12-18 4-4-18-14-12 8-17-8-17 14-12 4-18 18 4z" fill="#5c3b8f" stroke="#2e1d4d" stroke-width="3" stroke-linejoin="round"/>'
+      + '<circle cx="45" cy="52" r="7" fill="#ffd76a"/><circle cx="75" cy="52" r="7" fill="#ffd76a"/>'
+      + '<circle cx="45" cy="52" r="3" fill="#2e1d4d"/><circle cx="75" cy="52" r="3" fill="#2e1d4d"/>'
+      + '<path d="M42 82q18 12 36 0" stroke="#2e1d4d" stroke-width="4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M48 78l4 8M60 82v8M72 78l-4 8" stroke="#fdfaf2" stroke-width="3" stroke-linecap="round"/>'
+      + '</svg>',
+    star: '<svg class="g4-art" viewBox="0 0 40 40" aria-hidden="true" focusable="false">'
+      + '<path d="M20 3l5.6 11.4L38 16l-9 8.8 2.2 12.4L20 31.4 8.8 37.2 11 24.8 2 16l12.4-1.6z"'
+      + ' fill="#ffd05a" stroke="#b07c10" stroke-width="2.4" stroke-linejoin="round"/></svg>'
   };
 
   /* one item = one authored `.qitem`. The right answer is `data-a` when the author pinned it, else
@@ -301,6 +335,12 @@ window.GAMES4 = (function () {
         if (self.limitLeft <= 0) self.finish();
       }, 1000);
     }
+    /* a board game (pairFlip) lays every item out at once and runs its own order of play. It claims
+       the run by returning true from begin(), so the runner does not march the queue. */
+    if (this.view && this.view.begin && this.view.begin(this.queue) === true) {
+      this.board = true; this.phase = 'play'; this.answered = 0;
+      return true;
+    }
     this.step();
     return true;
   };
@@ -377,9 +417,37 @@ window.GAMES4 = (function () {
     return this.resolve(null, 'miss');
   };
 
+  /* board mode: a game that places every item at once answers them out of order. The runner still
+     owns scoring, the radio write and the score line, so what saves is exactly what always saved. */
+  Runner.prototype.scoreBoard = function (it, value) {
+    var self = this;
+    if (!it || this.phase === 'over') return false;
+    var hit = value === it.key, opt = null;
+    (it.opts || []).forEach(function (o) { if (o.value === value) opt = o; });
+    if (hit) {
+      this.score++;
+      if (opt && opt.radio) {
+        opt.radio.checked = true;
+        if (window.Event) {
+          opt.radio.dispatchEvent(new Event('input', { bubbles: true }));
+          opt.radio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+      SFX.hit(this.sound);
+    } else {
+      this.missed.push(it);
+      SFX.miss(this.sound);
+    }
+    this.answered++;
+    this.idx = Math.min(this.answered, this.total);
+    this.hud();
+    if (this.answered >= this.total) this.later(function () { self.finish(); }, 800);
+    return hit;
+  };
+
   /* finish: replay the misses once, then write the score and hand the authored list back */
   Runner.prototype.finish = function () {
-    if (this.replay && !this.replaying && this.missed.length) {
+    if (!this.board && this.replay && !this.replaying && this.missed.length) {
       this.replaying = true;
       this.queue = this.missed.slice();
       this.missed = [];
@@ -946,66 +1014,110 @@ function say(text, lang) {
 
 
 
-  /* ---------------- stackDrop: drop the sliding block into a gap ----------------
-     The gaps under the block are the options. Press (click / Space) to drop: land on a gap and that
-     option answers; miss every gap and the item is spent. */
+  /* ---------------- stackDrop: answer, and the answer becomes a rung of a tower ----------------
+     The question is a block hovering over a row of landing pads, each pad labelled with one option.
+     Pick a pad (click it, or the block lands on the one under it) and the block DROPS into the tower.
+     A right drop becomes a rung and the little climber climbs one level; a wrong one crumbles and no
+     rung is added. Place every rung and he reaches the star at the top — the reward for finishing is
+     the climb, which is why stacking is worth caring about at all.
+     Authoring: `.qitem` per question; `data-rounds` is unnecessary (the tower is as tall as the
+     list). Difficulty is the list's length and `data-time`. */
   PLUGINS.stackDrop = function (r) {
     var stage = r.stage;
-    var box = el('div', 'g4-stack'), slots = el('div', 'g4-slots');
-    var block = el('div', 'g4-block');
-    box.appendChild(block); box.appendChild(slots);
+    var box = el('div', 'g4-tower'), pads = el('div', 'g4-towerpads'), tower = el('div', 'g4-built');
+    var block = el('div', 'g4-block'), climber = el('div', 'g4-climber'), prize = el('div', 'g4-prize');
+    climber.innerHTML = ART.hero;
+    prize.innerHTML = ART.star;
+    box.appendChild(climber); box.appendChild(tower); box.appendChild(prize);
+    box.appendChild(block); box.appendChild(pads);
     stage.appendChild(box);
-    var raf = 0, live = false, t0 = 0, slotsEls = [];
-    function stop() { live = false; if (raf && window.cancelAnimationFrame) window.cancelAnimationFrame(raf); raf = 0; }
-    function clear() { stop(); slots.innerHTML = ''; slotsEls = []; block.style.left = '50%'; }
+    var padsEls = [], rungs = [], level = 0, total = 0;
+    prize.style.display = 'none';
+
+    function clear() {
+      pads.innerHTML = ''; padsEls = [];
+      block.classList.remove('ok', 'no', 'falling');
+      if (!total) total = r.items.length;
+      /* the tower is drawn from the very start, empty, so the student can see how far there is to go */
+      tower.innerHTML = '';
+      rungs = [];
+      for (var i = 0; i < total; i++) {
+        var rg = el('div', 'g4-rung-slot');
+        rg.style.bottom = (i * 22) + 'px';
+        tower.appendChild(rg);
+        rungs.push(rg);
+      }
+      level = 0;
+      climb();
+    }
+    function climb() {
+      climber.style.bottom = (level * 22 - 2) + 'px';
+    }
     function show(item) {
       clear();
       item.opts.forEach(function (o) {
-        var s = el('button', 'g4-slot', o.text);
-        s.type = 'button';
-        s.setAttribute('data-v', o.value);
-        s.addEventListener('click', function () { if (r.phase === 'play') { stop(); r.pick(o.value); } });
-        slots.appendChild(s);
-        slotsEls.push(s);
+        var p = el('button', 'g4-padbtn', o.text);
+        p.type = 'button';
+        p.setAttribute('data-v', o.value);
+        p.addEventListener('click', function () {
+          if (r.phase !== 'play') return;
+          dropTo(o.value, p);
+        });
+        pads.appendChild(p);
+        padsEls.push(p);
       });
       block.textContent = item.prompt || '⋯';
-      if (r.reduced) return;
-      live = true;
-      t0 = (window.performance && performance.now) ? performance.now() : Date.now();
-      var frame = function (now) {
-        if (!live) return;
-        var t = ((now || t0) - t0) / 1000;
-        block.style.left = (50 + Math.sin(t * 1.6) * 40).toFixed(2) + '%';
-        raf = window.requestAnimationFrame ? window.requestAnimationFrame(frame) : 0;
-      };
-      raf = window.requestAnimationFrame ? window.requestAnimationFrame(frame) : 0;
+      block.style.transform = '';
+      block.classList.remove('ok', 'no', 'falling', 'left', 'right');
+      /* he wobbles, he never leaves the stage: the old left% drift wrapped text at the edges */
+      if (!r.reduced) block.classList.add(level % 2 ? 'lean-left' : 'lean-right');
     }
+    /* picking a pad IS the answer; the block falls to that pad so the choice is visible */
+    function dropTo(value, pad) {
+      block.classList.remove('lean-left', 'lean-right');
+      block.classList.add('falling');
+      if (pad) {
+        var bb = box.getBoundingClientRect(), pb = pad.getBoundingClientRect();
+        var dx = (pb.left + pb.width / 2) - (bb.left + bb.width / 2);
+        block.style.transform = 'translate(-50%,' + Math.min(150, pb.top - bb.top - 34) + 'px) translateX(' + dx.toFixed(0) + 'px)';
+      }
+      r.pick(value);
+    }
+    /* Space/Enter drops the block on the pad it is nearest to, so the game works without aiming */
     function drop() {
-      if (!live || r.phase !== 'play') return;
-      stop();
-      var bb = block.getBoundingClientRect(), mid = bb.left + bb.width / 2;
+      if (r.phase !== 'play' || !padsEls.length) return;
+      var mid = block.getBoundingClientRect().left + block.getBoundingClientRect().width / 2;
       var best = null, bestD = 1e9;
-      slotsEls.forEach(function (s) {
-        var sb = s.getBoundingClientRect();
-        var d = Math.abs(sb.left + sb.width / 2 - mid);
-        if (d < bestD) { bestD = d; best = s; }
+      padsEls.forEach(function (p) {
+        var pb = p.getBoundingClientRect();
+        var d = Math.abs(pb.left + pb.width / 2 - mid);
+        if (d < bestD) { bestD = d; best = p; }
       });
-      if (best && bestD < bb.width / 2 + 24) r.pick(best.getAttribute('data-v'));
-      else r.expire();
+      if (best) dropTo(best.getAttribute('data-v'), best);
     }
-    box.addEventListener('click', function () { drop(); });
     box.setAttribute('tabindex', '0');
     box.addEventListener('keydown', function (e) {
       if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); drop(); }
     });
     function mark(item, hit, value) {
-      stop();
-      slotsEls.forEach(function (s) {
-        var v = s.getAttribute('data-v');
-        if (v === value) s.classList.add(hit ? 'ok' : 'no');
-        else if (!hit && v === item.key) s.classList.add('reveal');
+      padsEls.forEach(function (p) {
+        var v = p.getAttribute('data-v');
+        if (v === value) p.classList.add(hit ? 'ok' : 'no');
+        else if (!hit && v === item.key) p.classList.add('reveal');
       });
+      block.classList.remove('falling');
       block.classList.add(hit ? 'ok' : 'no');
+      if (hit) {
+        var rg = rungs[level];
+        if (rg) { rg.classList.add('filled'); }
+        level++;
+        climb();
+        if (level >= total) {
+          prize.style.display = '';
+          prize.classList.add('won');
+          climber.classList.add('cheer');
+        }
+      }
     }
     return { show: show, mark: mark, clear: clear, drop: drop };
   };
@@ -1069,83 +1181,152 @@ function say(text, lang) {
   /* ---------------- pairFlip: memory pairs, prompt ↔ option ----------------
      Cards start face down; the prompt is one of them. Turning the prompt and its match answers the
      item. A mismatched pair only costs time, which is the honest cost in a memory game. */
+  /* ---------------- pairFlip: a 4x3 board of pairs ----------------
+     Six pairs of cards face down: each item's prompt on one card and its right option on another.
+     Turn two; a true pair stays up AND answers that item (its radio is checked), a false pair turns
+     back. The reading is the game — you cannot match what you have not understood — and every match
+     is recorded, so a page of matches is a page of answered items. */
   PLUGINS.pairFlip = function (r) {
     var stage = r.stage;
-    var box = el('div', 'g4-pairs'), cards = [], open = [], matched = false;
+    var box = el('div', 'g4-pairs'), cards = [], open = [], locked = false, answered = [];
     stage.appendChild(box);
-    function clear() { box.innerHTML = ''; cards = []; open = []; matched = false; }
-    function show(item) {
-      clear();
-      var faces = [{ kind: 'prompt', text: item.prompt || '?', value: null }]
-        .concat(item.opts.map(function (o) { return { kind: 'opt', text: o.text, value: o.value }; }));
-      shuffle(faces.slice()).forEach(function (f) {
+
+    function begin(queue) {
+      var pairs = [];
+      queue.forEach(function (it) {
+        if (pairs.length >= 6) return;
+        var right = null;
+        (it.opts || []).forEach(function (o) { if (o.value === it.key) right = o; });
+        var left = (it.prompt || '').trim();
+        if (!right || !left) return;
+        pairs.push({ id: pairs.length, item: it, left: left, right: right.text });
+      });
+      if (!pairs.length) return false;
+      r.total = pairs.length;
+      var faces = [];
+      pairs.forEach(function (p) {
+        faces.push({ pair: p.id, side: 0, text: p.left, item: p.item });
+        faces.push({ pair: p.id, side: 1, text: p.right, item: p.item });
+      });
+      box.innerHTML = ''; cards = []; open = []; locked = false; answered = [];
+      shuffle(faces).forEach(function (f) {
         var c = el('button', 'g4-card');
         c.type = 'button';
         c.innerHTML = '<span class="g4-face back">?</span><span class="g4-face front">' + esc(f.text) + '</span>';
-        c.setAttribute('data-kind', f.kind);
-        c.setAttribute('data-v', f.value == null ? '' : f.value);
+        c.setAttribute('data-pair', String(f.pair));
+        c.setAttribute('data-side', String(f.side));
         c.addEventListener('click', function () { turn(c, f); });
         box.appendChild(c);
         cards.push({ el: c, face: f });
       });
+      return true;
     }
+
     function turn(c, f) {
-      if (r.phase !== 'play' || matched) return;
-      if (c.classList.contains('up') || open.length >= 2) return;
+      if (r.phase === 'over' || locked) return;
+      if (c.classList.contains('up')) return;
       c.classList.add('up');
       open.push({ el: c, face: f });
+      SFX.blip(r.sound, 440 + 60 * open.length);
       if (open.length < 2) return;
-      var a = open[0].face, b = open[1].face;
-      var hitPair = (a.kind === 'prompt' && b.value === r.queue[0].key)
-        || (b.kind === 'prompt' && a.value === r.queue[0].key);
-      if (hitPair) { matched = true; r.pick(r.queue[0].key); return; }
+      var a = open[0], b = open[1];
+      if (a.face.pair === b.face.pair && a.face.side !== b.face.side) {
+        locked = true;
+        open.forEach(function (o) { o.el.classList.add('ok'); });
+        var it = a.face.item;
+        open = [];
+        r.later(function () {
+          locked = false;
+          if (answered.indexOf(it) < 0) { answered.push(it); r.scoreBoard(it, it.key); }
+        }, 340);
+        return;
+      }
+      locked = true;
       r.later(function () {
         open.forEach(function (o) { o.el.classList.remove('up'); });
-        open = [];
-      }, 620);
+        open = []; locked = false;
+      }, 760);
     }
-    function mark(item, hit, value) {
-      cards.forEach(function (c) {
-        if (c.face.kind === 'opt' && c.face.value === item.key) c.el.classList.add('up', 'ok');
-      });
-    }
-    return { show: show, mark: mark, clear: clear, turn: turn };
+
+    function show() { /* board mode: everything is placed up front */ }
+    function mark() { /* feedback is the flip itself; the runner does not step in board mode */ }
+    function clear() { box.innerHTML = ''; cards = []; open = []; locked = false; }
+    return { begin: begin, show: show, mark: mark, clear: clear, turn: turn };
   };
 
-  /* ---------------- mineGrid: open the field without setting off the trap ----------------
-     Each tile hides a claim; one hides a trap. Opening a tile takes the judgement it carries, so a
-     blind click is an answer the student made. */
+
+  /* ---------------- mineGrid: send the runner to the cell you trust ----------------
+     The field is the options, every word readable, and one cell is mined. Picking a cell is the
+     answer, and the runner WALKS to it so the choice is a character's risk, not a bare click. A right
+     cell and he grabs the word; a mine throws him, he survives twice (then visibly damaged) and the
+     third one finishes him. Three wrong picks ends the run. */
   PLUGINS.mineGrid = function (r) {
     var stage = r.stage;
-    var box = el('div', 'g4-mines'), tiles = [];
+    var box = el('div', 'g4-mines'), field = el('div', 'g4-field'), tiles = [];
+    var hero = el('div', 'g4-runner'), lives = el('div', 'g4-lives');
+    hero.innerHTML = ART.hero;
+    box.appendChild(lives); box.appendChild(field); box.appendChild(hero);
     stage.appendChild(box);
-    function clear() { box.innerHTML = ''; tiles = []; }
+    var left = 3, busy = false;
+    function drawLives() {
+      lives.textContent = '♥♥♥'.slice(0, left) + '♡♡♡'.slice(0, 3 - left);
+    }
+    function clear() {
+      field.innerHTML = ''; tiles = []; busy = false;
+      left = 3;
+      hero.innerHTML = ART.hero;
+      hero.classList.remove('blown', 'down');
+      hero.style.transform = 'translate(0,0)';
+      drawLives();
+    }
+    function walkTo(t) {
+      var hb = box.getBoundingClientRect(), tb = t.getBoundingClientRect();
+      var dx = (tb.left + tb.width / 2) - (hb.left + hb.width / 2);
+      var dy = (tb.top + tb.height / 2) - (hb.top + hb.height * 0.52);
+      hero.style.transform = 'translate(' + dx.toFixed(0) + 'px,' + Math.max(-72, Math.min(20, dy)).toFixed(0) + 'px)';
+    }
     function show(item) {
       clear();
       var cells = item.opts.map(function (o) { return { text: o.text, value: o.value, trap: false }; });
-      cells.push({ text: '✷', value: null, trap: true });
+      cells.push({ text: '', value: null, trap: true });
       shuffle(cells.slice()).forEach(function (c) {
-        var t = el('button', 'g4-mine' + (c.trap ? ' trap' : ''), '');
+        var t = el('button', 'g4-mine' + (c.trap ? ' trap' : ''));
         t.type = 'button';
+        t.setAttribute('data-v', c.value == null ? '' : c.value);
         t.innerHTML = '<span class="g4-mine-in">' + esc(c.text) + '</span>';
         t.addEventListener('click', function () {
-          if (r.phase !== 'play' || t.classList.contains('open')) return;
+          if (r.phase !== 'play' || busy || t.classList.contains('open')) return;
+          busy = true;
+          walkTo(t);
           t.classList.add('open');
-          if (c.trap) r.expire();
-          else r.pick(c.value);
+          r.later(function () {
+            if (c.trap) r.expire(); else r.pick(c.value);
+          }, r.reduced ? 60 : 420);
         });
-        box.appendChild(t);
+        field.appendChild(t);
         tiles.push({ el: t, cell: c });
       });
     }
     function mark(item, hit, value) {
       tiles.forEach(function (t) {
         if (t.cell.trap) t.el.classList.add('open', 'boom');
-        else if (t.cell.value === item.key) { t.el.classList.add('open', 'ok'); }
+        else if (t.cell.value === item.key) t.el.classList.add('open', 'ok');
         else if (t.cell.value === value) t.el.classList.add('open', 'no');
       });
+      if (!hit) {
+        left = Math.max(0, left - 1);
+        hero.innerHTML = left < 2 ? ART.heroHurt : ART.hero;
+        hero.classList.add('blown');
+        r.later(function () { hero.classList.remove('blown'); }, 620);
+        drawLives();
+        if (!left) {
+          hero.classList.add('down');
+          r.later(function () { if (r.running) r.finish(); }, 700);
+        }
+      }
+      r.later(function () { busy = false; }, 520);
     }
-    return { show: show, mark: mark, clear: clear };
+    return { show: show, mark: mark, clear: clear, lives: function () { return left; } };
   };
 
 
@@ -1296,14 +1477,18 @@ function say(text, lang) {
     return { show: show, mark: mark, clear: clear, check: check };
   };
 
-  /* ---------------- echoPads: hear it, then press the pad that matches ----------------
-     The voice says the item; the pads are the options. A pad lights when pressed, so the room can
-     see the guess, and the "again" button says it again. No files: the built-in voice is the clip. */
+  /* ---------------- echoPads: Simon, with language ----------------.
+     Four pads, one per option, each with its own tone. Every round plays the WHOLE pattern then adds
+     one beat to it, so the student is echoing a growing sequence rather than guessing a single pad.
+     Echo the full pattern back and the item is answered; a wrong press ends the round honestly.
+     "Say it again" replays the same pattern without penalty — memory of a sound is not a guess. */
   PLUGINS.echoPads = function (r) {
     var stage = r.stage;
     var box = el('div', 'g4-echo'), pads = el('div', 'g4-pads');
     var line = el('div', 'g4-echo-line', '');
-    box.appendChild(line); box.appendChild(pads);
+    var again = el('button', 'g4-again', '🔊 Say it again');
+    again.type = 'button';
+    box.appendChild(line); box.appendChild(pads); box.appendChild(again);
     stage.appendChild(box);
     var els = [], pattern = [], step = 0, playing = false;
     var TONES = [392, 523, 659, 784];
@@ -1313,39 +1498,47 @@ function say(text, lang) {
       if (!p) return;
       p.classList.remove('lit');
       p.classList.add('lit');
-      SFX.tone(TONES[i % TONES.length], ms || 200, 'sine', 0.18);
+      SFX.tone(TONES[i % TONES.length], ms || 200, 'sine', 0.2);
       r.later(function () { p.classList.remove('lit'); }, (ms || 200) + 60);
     }
-    /* the whole sequence is played back, then the student repeats it; every round adds one beat */
+    /* the whole sequence is played back, then the student repeats it */
     function play() {
       if (r.phase !== 'play') return;
       playing = true;
+      step = 0;
+      els.forEach(function (p) { p.classList.add('muted'); });
       line.textContent = 'Listen… ' + pattern.length + ' beats';
       var i = 0;
       (function beat() {
         if (r.phase !== 'play') { playing = false; return; }
         if (i >= pattern.length) {
-          playing = false; step = 0;
-          line.textContent = 'Now you: all ' + pattern.length + ', in order';
+          playing = false;
+          els.forEach(function (p) { p.classList.remove('muted'); });
+          line.textContent = 'Your turn: all ' + pattern.length + ', in order';
           return;
         }
-        lit(pattern[i], 200);
+        lit(pattern[i], 210);
         i++;
-        r.later(beat, 420);
+        r.later(beat, 430);
       })();
     }
+    again.addEventListener('click', function () {
+      if (playing || r.phase !== 'play') return;
+      SFX.blip && SFX.blip();
+      play();
+    });
     function press(i) {
       if (r.phase !== 'play' || playing) return;
       lit(i, 200);
       if (i !== pattern[step]) {
-        line.textContent = 'That was beat ' + (step + 1) + ' — it slipped.';
-        r.later(function () { if (r.phase === 'play') r.resolve(null, 'miss'); }, 340);
+        line.textContent = 'Beat ' + (step + 1) + ' slipped — it was the ' + (pattern[step] + 1) + '.';
+        r.later(function () { if (r.phase === 'play') r.resolve(null, 'miss'); }, 400);
         return;
       }
       step++;
       if (step < pattern.length) return;
       line.textContent = 'Echoed! ' + pattern.length + ' in a row.';
-      r.later(function () { if (r.phase === 'play') r.pick(r.queue[0].key); }, 360);
+      r.later(function () { if (r.phase === 'play') r.pick(r.queue[0].key); }, 380);
     }
     function clear() { pads.innerHTML = ''; els = []; pattern = []; step = 0; playing = false; line.textContent = ''; }
     function show(item) {
@@ -1354,15 +1547,16 @@ function say(text, lang) {
         var p = el('button', 'g4-pad', o.text);
         p.type = 'button';
         p.setAttribute('data-v', o.value);
+        p.setAttribute('data-tone', TONES[i % TONES.length]);
         p.addEventListener('click', function () { press(i); });
         pads.appendChild(p);
         els.push(p);
       });
-      /* round 1 is two beats, and each later round is one longer — the runner's item index is the
-         round number, so the difficulty is the block's length, not a separate setting */
-      var want = Math.min(6, 2 + r.idx);
+      /* round N is N+1 beats, capped so the last rounds stay winnable; the block's length sets the
+         difficulty, so a lesson with four items is a four-round climb, not a separate setting */
+      var want = Math.min(8, 1 + r.idx);
       for (var i = 0; i < want; i++) pattern.push(Math.floor(Math.random() * Math.max(1, els.length)));
-      r.later(play, 420);
+      r.later(play, 480);
     }
     function mark(item, hit, value) {
       els.forEach(function (p) {
@@ -1370,7 +1564,7 @@ function say(text, lang) {
         if (v === value) p.classList.add(hit ? 'ok' : 'no');
         else if (!hit && v === item.key) p.classList.add('reveal');
       });
-      if (!hit) line.textContent = 'It was ' + pattern.length + ' beats. Again next round.';
+      if (!hit) line.textContent = 'It was ' + pattern.length + ' beats — again next round.';
     }
     return { show: show, mark: mark, clear: clear };
   };
@@ -1482,19 +1676,25 @@ function say(text, lang) {
   /* ---------------- bossRaid: a HP bar, three hearts, one ending ----------------
      Every correct answer lands a hit; every wrong one costs a heart. A long drill gets a shape and
      an end, which is the whole reason to skin it at all. */
+  /* ---------------- bossRaid: a hero, a boss, and three hearts ----------------
+     Every right answer is a hit: the hero steps in and swings, the boss flashes and loses HP. Every
+     wrong answer is the boss's turn: it swings back, the hero loses a heart and visibly picks up
+     damage. Three hearts gone and he goes down — so a long drill has an ending that belongs to the
+     answers, not to a timer. */
   PLUGINS.bossRaid = function (r) {
     var stage = r.stage;
-    var box = el('div', 'g4-boss'), art = el('div', 'g4-bossart'), bar = el('div', 'g4-hp'),
-      hpFill = el('div', 'g4-hp-fill'), hearts = el('div', 'g4-hearts'), opts = el('div', 'g4-raceopts');
-    art.innerHTML = '<svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">'
-      + '<polygon points="60,8 105,34 105,86 60,112 15,86 15,34" fill="#3b2b4a" stroke="#1c1327" stroke-width="4"/>'
-      + '<polygon points="60,26 88,42 88,78 60,94 32,78 32,42" fill="none" stroke="#c9a0e0" stroke-width="3"/>'
-      + '<circle cx="45" cy="56" r="7" fill="#f2d6ff"/><circle cx="75" cy="56" r="7" fill="#f2d6ff"/>'
-      + '<path d="M42 78q18 12 36 0" stroke="#f2d6ff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>';
+    var box = el('div', 'g4-boss');
+    var art = el('div', 'g4-bossart'), bar = el('div', 'g4-hp'), hpFill = el('div', 'g4-hp-fill');
+    var hearts = el('div', 'g4-hearts'), opts = el('div', 'g4-raceopts');
+    var hero = el('div', 'g4-hero');
+    art.innerHTML = ART.boss;
+    hero.innerHTML = ART.hero;
     bar.appendChild(hpFill);
-    box.appendChild(art); box.appendChild(bar); box.appendChild(hearts); box.appendChild(opts);
+    box.appendChild(art); box.appendChild(bar); box.appendChild(hearts);
+    box.appendChild(hero); box.appendChild(opts);
     stage.appendChild(box);
     var lives = 3;
+    function face(hurt) { hero.innerHTML = hurt ? ART.heroHurt : ART.hero; }
     function drawHud() {
       var hp = r.total ? 1 - r.score / r.total : 0;
       hpFill.style.width = Math.max(0, Math.round(hp * 100)) + '%';
@@ -1504,6 +1704,7 @@ function say(text, lang) {
     function show(item) {
       opts.innerHTML = '';
       drawHud();
+      face(lives < 2);
       item.opts.forEach(function (o) {
         var b = el('button', 'g4-raceopt', o.text);
         b.type = 'button';
@@ -1513,15 +1714,29 @@ function say(text, lang) {
       });
     }
     function mark(item, hit, value) {
-      if (hit) art.classList.add('hurt'); else lives = Math.max(0, lives - 1);
+      if (hit) {
+        /* the hero steps in and swings; the boss takes it */
+        hero.classList.add('lunge');
+        art.classList.add('hurt');
+        r.later(function () { hero.classList.remove('lunge'); art.classList.remove('hurt'); }, 420);
+      } else {
+        /* the boss swings back and the hero takes it */
+        lives = Math.max(0, lives - 1);
+        art.classList.add('strike');
+        hero.classList.add('recoil');
+        face(lives < 2);
+        r.later(function () { art.classList.remove('strike'); hero.classList.remove('recoil'); }, 460);
+      }
       drawHud();
-      r.later(function () { art.classList.remove('hurt'); }, 300);
       [].forEach.call(opts.querySelectorAll('.g4-raceopt'), function (b) {
         var v = b.getAttribute('data-v');
         if (v === value) b.classList.add(hit ? 'ok' : 'no');
         else if (!hit && v === item.key) b.classList.add('reveal');
       });
-      if (!lives) r.later(function () { if (r.running) r.finish(); }, 700);
+      if (!lives) {
+        hero.classList.add('down');
+        r.later(function () { if (r.running) r.finish(); }, 800);
+      }
     }
     return { show: show, mark: mark, clear: clear, lives: function () { return lives; } };
   };
