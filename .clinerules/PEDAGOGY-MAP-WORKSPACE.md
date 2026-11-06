@@ -33,7 +33,7 @@ Inputs: [Section `lessonNN` of `<TRACK>-ROADMAP.md`] + FORMAT.md §2 onwards + �
 	- If a rule would have blocked something better, that's an escalation, not a workaround (the mirror image of §2).
 	- Handling depends on scope of elements involved in any escalation/conflict: 
 		a) Planning/Content/Vehicle for a single section which does not interfere with successful generation of other sections -> (concise explanation of escalation and next-step recommendation appended to lessonNN.design.md - Affected content skipped, task processing continues)
-		b) Conflict is limited to content of one specific lesson, but [more than one section is affected or risks being degraded] -> (append ##ISSUE and a one line explanation in lessonNN.design.md, task skips to next requested lesson generation if applicable)
+		b) Conflict is limited to content of one specific lesson, but [more than one section is affected or risks being degraded] -> (task skips to next requested lesson generation if applicable)
 		c) Any issue that effects the content of multiple lessons or generation in general - (task is immediately paused to confer with the user)
 
 ### 3. Non-Negotiables
@@ -42,7 +42,7 @@ Inputs: [Section `lessonNN` of `<TRACK>-ROADMAP.md`] + FORMAT.md §2 onwards + �
     
 
 ### 4. CONTENT AUTHORING
-	a) Restructuring Pass A is allowed: Pass B may merge/split/reorder to serve the teaching beats, writing changes back into the design file; escalation is for unresolved *conflicts* only.
+	a) Restructuring Pass A is allowed: Pass B may merge/split/reorder to serve the teaching beats; escalation is for unresolved *conflicts* only.
 	b) Explanatory layer may live anywhere__: lead, chart cell, an extra explanation column, a `tr.note` row. A chart is a teaching device, not a display device.
 	c) Every (word/new form) the student must understand is [taught or glossed inline in PT] before it is used, else removed; if a block wants the student to *infer*, the page says so.
 	d) Coverage ≠ section plan__: a roadmap item doesn't get its own h2 unless it earns one.
