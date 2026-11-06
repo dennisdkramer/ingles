@@ -1,7 +1,7 @@
 # HARNESS — binding contract. RE-READ ON EVERY PROMPT, before any other action.
 This file is the single read-first hub after RULE 0 is read from the global rules.
 It is always in force and adherence is non-negotiable
-The category files (PARKED / HANDOFF / ISSUES / FORMAT / FUNCTION / PEDAGOGY / VOCABULARY / STATUS / VERIFICATION / FILESYSTEM) hold the parameters of elements and functionality and are loaded only when they are in scope for the current task.
+The category files (HANDOFF / ISSUES / FORMAT / FUNCTION / PEDAGOGY / ROADMAP / REGISTER / VOCABULARY / STATUS / VERIFICATION / FILESYSTEM) hold the parameters of elements and functionality and are loaded only when they are in scope for the current task.
 
 ## RULE 1 — CONTEXT & TOKEN ECONOMY
 
@@ -9,6 +9,7 @@ The category files (PARKED / HANDOFF / ISSUES / FORMAT / FUNCTION / PEDAGOGY / V
     b) Never skip a needed read, shorten reasoning, or attempt to save tokens if it risks degrading task performance
 	c) **Reading large files (truncation).** A single read of a large file can come back MIDDLE-TRUNCATED (an elided span marked `[truncated N chars]`) - if it does, you must: 
 		- Page through the file in bounded chunks with `start_line`/`end_line` (keep each chunk well under ~6000 characters — dense files like FUNCTION.md need ~15–20 line chunks) until the full file is read, then re-read the full file before relying on it.
+    d) **Created prose.** All created prose must have defensible critical importance to the task or function, not as a default.
 
         ### Priorities are (ordered by importance):
     - Detection and reporting of conflicts, rule failures, misunderstanding, or context drift which threaten subsequent priorities
@@ -55,6 +56,6 @@ The shell reports the true exit code (`$LASTEXITCODE`); Cline's capture of it do
 
 
 ## STATUS
-Status lives in dedicated files: the backlog in PARKED.md, bugs/problems in ISSUES.md, handoffs in HANDOFF.md, and current state + shared parameter values in STATUS.md. Nothing is cleared anywhere until it is done AND committed.
+Status lives in dedicated files: bugs/problems in ISSUES.md, handoffs in HANDOFF.md, and current state + shared parameter values in STATUS.md. Nothing is cleared anywhere until it is done AND committed.
 
 **Handoff content.** Handoff information is included only when explicitly requested, or when a "new/next task" is unambiguously implied by the user. Then include an optimally-concise version of the requested information and/or an optimally-concise version of the information the next task MUST have in order to achieve the next task intent/goals — nothing else.
