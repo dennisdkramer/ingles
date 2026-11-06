@@ -10,7 +10,7 @@
 
 ### 1. Two passes, with a barrier between them
 **Pass B — build.** - (Output = `<track>/lessonNN.html`, plus a byte-identical `.edit.html` sidecar, built on `_shell.html`)
-Inputs: [the single `## Lesson NN` section of `<TRACK>-ROADMAP.md` — located by that heading and read as its own line range, never the whole file] + FORMAT.md §2 onwards + §Content contracts of FUNCTION.md + `<TRACK>-REGISTER.md`- **HIGH PRIORITY** + §3–§6 of this file + `CONTENT_EXAMPLES.md` — a vehicle menu, opened in **two steps and never whole**: (1) read **only its `###` headings** (`Select-String -Path CONTENT_EXAMPLES.md -Pattern '^### '`) — each heading is self-contained (`name · size · cost · evidence · fits · tests · fun · reuse · status`), so select by `fits` + `size` and discard anything marked *cut*; (2) read **only the chosen entry's line range** (its `###` heading to the next `###` or `---`) for the implementation contract (`skins` / `needs`). No rotation, no required order, no obligation to use any of it — and **no page is required to contain a game**. (The build is a **synthesis, not obedience**)
+Inputs: [the single `## Lesson NN` section of `<TRACK>-ROADMAP.md` — located by that heading and read as its own line range, never the whole file] + FORMAT.md §2 onwards + §Content contracts of FUNCTION.md + `<TRACK>-REGISTER.md`- **HIGH PRIORITY** + `## READ HEADINGS` section of `CONTENT_EXAMPLES.md` — located by that heading and read as its own line range, never the whole file. (The build is a **synthesis, not obedience**)
 	- Withhold: All other files.
 	- **Vehicle justification — recorded per beat (binding)**: for every numbered beat of the `## Lesson NN` section, Pass B MUST record why that vehicle and not another, appending one line per beat to that same `## Lesson NN` section of `<TRACK>-ROADMAP.md` — `beat N → <vehicle> — because <why this and not another>` — written as the beat is built, never reconstructed afterwards. A beat whose vehicle could be swapped for another without changing what is learnt is generic: re-cut it before building it.
 	- **The menu is selected by `fits`, never by memory**: `fits` names the kind of language work a shape is for — `form` `lexis` `sound` `meaning` `register` `text` `interaction` `listening` `culture` `music` `error` `model` `reference` `review` `order` `recognition` (meanings in `CONTENT_EXAMPLES.md` §The `fits` vocabulary). A beat takes the shape whose `fits` matches what that beat teaches; a shape carried over from the previous lesson because it was the visible precedent is a defect even when it fits.
@@ -20,13 +20,7 @@ Inputs: [the single `## Lesson NN` section of `<TRACK>-ROADMAP.md` — located b
 	- **HIGH PRIORITY**:
       1. For any generated [**Lesson introduction, explanatory text, tip, headline, or column header**], it is Portuguese [only if its parent  [LESSON NUMBER] < [CONTENT LEVEL]] ELSE [it is English and [CONTENT LEVEL] is as close as possible to [LESSON LEVEL]]. 
       2. For any generated content of any other type, it is synthesized with [[derived socio-linguistic context] and [its TRACK's [register details and persona priorities]]], [CONTENT LEVEL] is as close as possible to [LESSON LEVEL], and [it is Portuguese ONLY when *defensibly optimal for teaching purposes*]
-	- Pass B has creative freedom and may choose or implement a broad spectrum of ideas, including but not limited to:
-      a) Standard pedagogical presentation, text explanation, charts, etc..
-      b) References to or analysis of music or video clips (embedded, linked, or simply described)
-      c) gamifying the activities
-      d) odd cultural references or stories
-      e) References to or review of content in other lessons
-      f) Other idea or content not listed here
+	- Pass B has creative freedom to choose the optimal order of a lesson's contents, and to include or not include any vehicles and/or content types for any section or block. If an item from among `CONTENT_EXAMPLES.md` headings is shown, read only that heading's line range for the implementation contract: `does`, `skins` (which authoring markup it drives), `art`, `can't`, `needs`. Nothing else in the file is opened.
 
 ### 2. ESCALATE / CONFER
 	- Existing plans, content types, and examples are **defaults that a better idea is expected to beat**. A plan that suggests substantive changes to the lesson contents or new designs/functions is presented to the owner for approval, feedback, or veto before it is executed.
@@ -79,7 +73,7 @@ Inputs: [the single `## Lesson NN` section of `<TRACK>-ROADMAP.md` — located b
 ### 5. Vehicles
 Any vehicle is allowed: authored text, dialogue or chart; real material (song, clip, article, document, photo); interactive (game, timed drill, role-play); a project; something nobody has tried yet. Two tiers decide how it gets built:
    - **Tier 0** — existing primitives (FORMAT.md): tables, cards, dialogues, audio chips, gap-fills, multiple choice, recording, text boxes.
-   - **Tier 1** — one *generic* engine, then free with per-lesson data: `shootPair` (two targets, one right), `sortOut` (buckets), `raceClock` (timed drill), `revealGrid` (memory), `orderLine` (sequence). Novelty should be parameterised, not bespoke: a new game is usually item data + a skin on an existing engine (the block's markup and levers: FUNCTION.md §Content contracts). New Tier-1 engines are proposed to the owner and built once, then reused.
+   - **Tier 1** — one *generic* engine, then free with per-lesson data: `whackMole` (a moving choice), `catchBasket` (sort into buckets), `skeetRange` (one shot at a moving target), `stackDrop` (order), `pairFlip` (memory), `ladderRun` (timed climb). Novelty should be parameterised, not bespoke: a new game is usually item data + a plugin on the existing engine (the block's markup and levers: FUNCTION.md §Content contracts). New plugins are proposed to the owner and built once, then reused.
    - **Tier 2** — bespoke simulation or multi-step project: propose it, don't build it unbidden.
 Referencing material instead of embedding it is fine (a song named by lyric, "go and listen to it"); a *link* that ships must resolve, and the section must still teach if it dies.
 

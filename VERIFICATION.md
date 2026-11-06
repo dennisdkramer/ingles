@@ -12,7 +12,7 @@ counts, spacing and class names are generation decisions, not defects.
   top — the fastest way to see a real defect; `--selftest` proves the harness still catches a broken page.
 - `node qa/landing.mjs` — the student index (index.html) in jsdom: three tracks, title as the link,
   continue above the list, locked tracks inert, the `go()` gate, the teacher's grant/remove controls.
-- `node qa/games.mjs` — engine3.js / shootPair state machine in jsdom.
+- `node qa/games4.mjs` — the engine4.js game runner and every plugin's state machine in jsdom.
 - `node qa/live.mjs` — real-Chrome probe for what jsdom cannot reproduce (timing, auto-repeat, real
   mouse/keyboard, on-screen position). Reach for it when a report mentions any of those.
 

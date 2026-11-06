@@ -1,3 +1,6 @@
+---
+disabled: true
+---
 # KIDS-REGISTER — persona, goals & the 3 registers - DO NOT MODIFY WITHOUT USER SIGN-OFF
 
 ## Persona & goals

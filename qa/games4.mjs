@@ -493,6 +493,53 @@ async function run() {
   const y2 = climber.style.bottom;
   ok('ladderRun drops back to the safe rung on a wrong one', y2 === y0, y2);
 
+  /* skeetRange: one disc per option, ONE shot per item, and a click on the sky spends that shot */
+  const skPage = mount(`<!doctype html><html><head><meta charset="utf-8"></head><body>
+    <div class="content-area">
+      <div class="game" id="sk" data-game="skeetRange" data-shuffle="0" data-time="0" data-replay="0" data-sound="0">
+        <p class="game-how">One shot per round. Hit the disc that fits.</p>
+        <div class="game-list">
+          <div class="qitem" data-a="b">
+            <div class="qline"><span class="qstem">which one ends with the sound in wanted</span></div>
+            <div class="qopts"><label><input type="radio" name="sk1" value="a">walked</label><label><input type="radio" name="sk1" value="b">needed</label></div>
+          </div>
+          <div class="qitem" data-a="a">
+            <div class="qline"><span class="qstem">which one has the long i</span></div>
+            <div class="qopts"><label><input type="radio" name="sk2" value="a">seat</label><label><input type="radio" name="sk2" value="b">sick</label></div>
+          </div>
+        </div>
+        <button class="game-start" type="button">▶ Play</button>
+      </div>
+    </div></body></html>`);
+  const skr = skPage.document.getElementById('sk');
+  const skg = (skPage.__G4 || [])[0];
+  skr.querySelector('.game-start').click();
+  ok('skeetRange: one disc per option', skr.querySelectorAll('.g4-target').length === 2,
+    skr.querySelectorAll('.g4-target').length + ' disc(s)');
+  ok('skeetRange: every disc is a drawn ring with its label on a plaque',
+    skr.querySelectorAll('.g4-target .g4-ring').length === 2 &&
+    [...skr.querySelectorAll('.g4-target .g4-target-t')].map(t => t.textContent).join('|') === 'walked|needed',
+    [...skr.querySelectorAll('.g4-target .g4-target-t')].map(t => t.textContent).join('|'));
+  ok('skeetRange: the stem is the prompt line on the stage',
+    /wanted/.test((skr.querySelector('.g4-prompt') || {}).textContent || ''));
+  /* the sky is a shot: one click that hits no disc spends the item and is a miss */
+  skr.querySelector('.g4-range').dispatchEvent(new skPage.MouseEvent('click', { bubbles: true }));
+  ok('skeetRange: a click on the sky is your one shot, and it is a miss',
+    skg.state().missed === 1 && skg.state().score === 0,
+    'score=' + skg.state().score + ' missed=' + skg.state().missed);
+  ok('skeetRange: a miss leaves the radio blank — the blank is the evidence',
+    skr.querySelector('input[name="sk1"][value="a"]').checked === false &&
+    skr.querySelector('input[name="sk1"][value="b"]').checked === false);
+  await sleep(1200);
+  ok('skeetRange: the spent item does not come back (data-replay="0")',
+    skg.state().replaying !== true, 'replaying=' + skg.state().replaying);
+  const goodDisc = [...skr.querySelectorAll('.g4-target')].find(d => d.getAttribute('data-v') === 'a');
+  ok('skeetRange: the next item lays its own discs', !!goodDisc);
+  if (goodDisc) goodDisc.click();
+  ok('skeetRange: hitting the right disc checks the REAL radio (that is what persists)',
+    skr.querySelector('input[name="sk2"][value="a"]').checked === true);
+  ok('skeetRange: a hit scores', skg.state().score === 1, 'score=' + skg.state().score);
+
   console.log('\n' + (fail ? 'FAILED: ' : 'OK: ') + pass + ' passed, ' + fail + ' failed\n');
   /* some game plugins keep a requestAnimationFrame loop or a timer alive; jsdom would never exit */
   process.exit(fail ? 1 : 0);

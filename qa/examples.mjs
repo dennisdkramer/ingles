@@ -86,7 +86,7 @@ ok('no tag in the vocabulary goes unused', unusedInTable.length === 0, unusedInT
 
 /* the selection protocol must stay stated, or a build will read 106 KB to pick one shape */
 ok('the two-step reading protocol is stated',
-  /Reading this file in two steps/.test(text) &&
+  /reads it in two cheap moves/.test(text) &&
   /Select-String -Path CONTENT_EXAMPLES\.md -Pattern '\^### '/.test(text) &&
   /read only the entry you chose/i.test(text));
 ok('fits is documented in the key', /^\| `fits` \|/m.test(text));

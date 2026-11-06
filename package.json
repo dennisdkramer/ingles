@@ -8,10 +8,11 @@
     "build:lessons": "node build-lessons.mjs",
     "build:audio": "node build-audio.mjs",
     "audio:check": "node build-audio.mjs --check",
-    "qa": "node qa/examples.mjs && node build-lessons.mjs && node qa/content.mjs && node qa/landing.mjs && node qa/games.mjs && node qa/games4.mjs",
+    "qa": "node qa/examples.mjs && node build-lessons.mjs && node qa/content.mjs && node qa/landing.mjs && node qa/games4.mjs",
     "qa:fast": "node build-lessons.mjs && node qa/content.mjs && node qa/landing.mjs",
     "qa:layout": "node qa/overflow.mjs --selftest && node qa/overflow.mjs",
     "qa:live": "node qa/live.mjs",
+    "qa:notes": "node qa/notes.mjs",
     "build:dict": "node build-dictionary.mjs"
   },
   "devDependencies": {

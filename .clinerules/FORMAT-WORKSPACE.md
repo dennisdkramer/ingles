@@ -1,3 +1,6 @@
+---
+disabled: true
+---
 ### Layout STANDARDS at generation (width & fill techniques; CSS stays fixed)
 a) Width: a block takes ONE of THREE slot widths inside the fixed 1200px content area, with a 14px row gap — full 1200 · half (1200 − 14)/2 = 593 · third (1200 − 2×14)/3 = 391 (CSS implements exactly that: `.itemsize` 100%, `.itemsize-half` `calc(50% - 7px)`, `.itemsize-third` `calc(33.3333% - 9.3333px)`, equal siblings in one `.itemrow`). A block MAY sit half-width beside another block of the same width; a block left on its own CAN be widened with more content.
 b) Priority is minimizing dead space.

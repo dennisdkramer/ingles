@@ -6,34 +6,21 @@ Where a shape is needed it is written as `<placeholder>`.
 
 ## How to use this file
 
-- **A menu, not a checklist.** Nothing here is required in any lesson, in any order, any number of times.
-  Reaching for a vehicle because it is listed — rather than because that beat needs it — is a defect.
-- **Choose per beat, and be able to say why not another.** The recorded justification (`PEDAGOGY-MAP.md`)
-  is only honest if this file says what each vehicle *cannot* do. That is the `can't` field.
-- **The content is already in the page.** Games drive authored `.qitem`s (stem + optional `.listen` + radios),
-  `input.gap`, or a textarea — nothing else. Whatever the engine animates is presentation; the saved answer
-  is always one of those controls. If a mechanism cannot end in one, it is not a vehicle, it is a decoration.
-- **The tone of a lesson comes from the lesson's copy, never from here.** Every game below is track-neutral by
-  construction, so the same `whackMole` works for a business page and a kids page. Silly or slangy *skins* are
-  per-track data layered on top — never baked into the mechanism.
-- **Five families, one file.** Sections 1–4 are **games**; 5 is **drills**; 6 is **display** (blocks that teach
-  without asking); 7 is **source** (a real artefact — a sign, a ticket, a lyric, a thread — rebuilt in markup, with a
-  question whose answer is only inside it); 8 is **self-management** (the student marks, logs or chooses); and 9 is
-  **spines**, the shapes a whole page can take. Sections 5 and 7 are the same field set and both end in a control —
-  the only difference is whether the answer comes from a rule the lesson taught or from the material itself.
-  A page that is all games and drills is a test with a theme.
+- **A menu, not a checklist.** Nothing here is required in any lesson, nor required to be in any specific section/order when used. Reaching for a vehicle because it is listed — rather than because that beat needs it — is a defect.
+- **Choose per beat, and be able to say why not another.** The recorded justification (`PEDAGOGY-MAP.md`) is only honest if this file says what each vehicle *cannot* do. That is the `can't` field.
+- **The content in the page.** Games drive authored `.qitem`s (stem + optional `.listen` + radios), `input.gap`, or a textarea — nothing else. Whatever the engine animates is presentation; the saved answer is always one of those controls. If a mechanism cannot end in one, it is not a vehicle, it is a decoration. 
+- **The tone of a lesson comes from the lesson's copy, never from here.** Every game below is track-neutral, *skins* may be per-track data layered on top — never baked into the mechanism.
 
-## Reading this file in two steps
+
+## READ HEADINGS
 
 The file is ~106 KB. A build must never read it whole — it reads it in two cheap moves.
 
 **Step 1 — browse the headings, nothing else.** Every `###` heading is self-contained: it carries the name, the
-size, the cost, the evidence, the `fits` tag, the four ratings and the build/cut status. One filter gives all 98:
-
+size, the cost, the evidence, the `fits` tag, the four ratings and the build/cut status. use:
 ```
 Select-String -Path CONTENT_EXAMPLES.md -Pattern '^### '
 ```
-
 That is the whole selection surface. Pick by `fits` (what kind of language the block is for) and `size` (does it
 fit the beat you are filling), then discard anything marked **cut**. Do not read any entry body to choose.
 
@@ -110,15 +97,15 @@ be loud and a business page sober, and neither is more correct. Only these hold,
 
 Interactive activities. Each one drives ordinary `.qitem`s, so the answer that saves is the same radio a plain page would have.
 
-### `skeetRange` — section · cost B · evidence radio · fits recognition+sound — tests 2 · fun 3 · reuse 2 · **not shipped — cut; it did not carry its weight**
+### `skeetRange` — section · cost B · evidence radio · fits recognition+sound — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
 - **does** — One moving target per item. Player aims with the cursor and takes **one shot**; a hit scores, a
   miss is spent. No spray, no endless retry — the constraint is what makes it feel like skill.
 - **skins** — `.game > .game-list` of `.qitem`; the stem is the prompt line, the options are the targets.
-- **art** — one flat ring or disc per option, drifting on a slow eased arc; a thin crosshair; a single puff on
-  impact. This is the intended replacement path for `shootPair`'s look, not another game beside it.
+- **art** — one flat ring or disc per option, drifting on a slow eased arc in its own lane; a thin crosshair
+  that is the cursor; a single puff on impact.
 - **can't** — no production, no spelling; one shot per item means a careless click can hide what the student knew.
-- **needs** — shared runner (or `shootPair` refactored into it).
+- **needs** — nothing; `engine4.js` ships it.
 
 ### `whackMole` — section · cost B · evidence radio · fits recognition+meaning — tests 2 · fun 3 · reuse 2 · **built: engine4.js**
 
@@ -261,13 +248,13 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   Waves get harder. Gives a long drill a reason to exist and an ending.
 - **skins** — the `.qitem` list is the attack sequence.
 - **art** — one flat geometric boss (a ringed hexagon beats a drawn monster), a thin HP bar, a hard flash.
-  **This vehicle lives or dies on art quality; never ship it in the `shootPair` visual style.**
+  **This vehicle lives or dies on art quality; never ship it in a flat two-tone card style.**
 - **can't** — ritual stakes can mask weak items; every item must still be defensible on its own.
 - **needs** — shared runner + HP state.
 
 ---
 
-# 5. Blocks — teaching shapes
+# 2. Blocks — teaching shapes
 
 Not games: the page itself is the vehicle. Nearly all are markup-only (**cost A**) and every one is reusable in every
 track. No example wording appears here on purpose — the lesson supplies it.
@@ -877,7 +864,7 @@ answer to "why not another vehicle".
 
 ---
 
-# 6. Display — blocks that teach without asking
+# 3. Display — blocks that teach without asking
 
 The page has to teach before it tests. Every block in section 5 ends in a control; these end in **nothing** —
 no radio, no gap, no textarea. They are how the rule, the mental model, the scene and the useful subset get
@@ -1167,7 +1154,7 @@ fourth, and the middle rows only when the lesson is specifically about form or m
 
 ---
 
-# 7. Source — blocks built on a real thing
+# 4. Source — blocks built on a real thing
 
 The page carries an artefact — a sign, a ticket, a menu, a lyric, a notice, a thread — rebuilt in markup, and every
 question is answered from that artefact and not from a rule stated above it. These end in a control, so they are

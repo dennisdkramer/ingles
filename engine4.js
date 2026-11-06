@@ -10,7 +10,9 @@
      supplies only `show / mark / clear`. Content authoring is identical for every game, so
      `data-game` is a presentation choice and never a content choice.
    Levers (all optional, on the `.game` element):
-     data-game      catchBasket | whackMole        which presentation
+     data-game      which presentation (one per PLUGINS key: catchBasket, whackMole, stackDrop,
+                   flapGate, skeetRange, pairFlip, mineGrid, wordleBoard, crosswordBoard,
+                   echoPads, bingoCard, ladderRun, bossRaid)
      data-time      ms per item, 0 = no deadline   (0)   ← this is difficulty
      data-limit     seconds for the whole run, 0 = off (0)
      data-replay    0 | 1   missed items return once at the end (1)
@@ -891,6 +893,17 @@ window.GAMES4 = (function () {
         + '<rect x="350" y="74" width="8" height="30" fill="#3a2a22"/></g>'
         + '<rect y="214" width="400" height="46" fill="#241419"/>'
         + '<g stroke="#4a2a2b" stroke-width="2" opacity=".8"><path d="M0 214h400"/></g>');
+    },
+    /* outdoor range at dawn: sky for the discs, a fence to shoot over */
+    skeetRange: function () {
+      return frame('<rect width="400" height="260" fill="url(#g4-dawn)"/>' + sun(316, 42, 16)
+        + cloud(74, 38, .9, .85) + cloud(208, 24, .65, .7)
+        + hills('#a8d8b4', 156, .9) + hills('#4f7a52', 188)
+        + '<rect y="204" width="400" height="56" fill="url(#g4-grass)"/>'
+        + '<path d="M12 216h376" stroke="#8a5622" stroke-width="4" stroke-linecap="round" opacity=".85"/>'
+        + '<g stroke="#6b4520" stroke-width="5" stroke-linecap="round" opacity=".9">'
+        + '<path d="M22 216v38"/><path d="M104 216v38"/><path d="M186 216v38"/>'
+        + '<path d="M268 216v38"/><path d="M350 216v38"/></g>');
     }
   };
   /* ---------------- posters: one still per game, drawn behind the intro overlay ----------------
@@ -1024,6 +1037,15 @@ window.GAMES4 = (function () {
     box.appendChild(abs(el('div', 'g4-hp g4-bit', '<span class="g4-hp-fill" style="width:72%"></span>'),
       'left:14%;right:14%;top:56%;height:14px'));
     box.appendChild(abs(el('div', 'g4-hearts g4-bit', '●●●'), 'left:14%;top:4%;'));
+  },
+  skeetRange: function (box, items) {
+    var texts = opts0(items, 3);
+    texts.forEach(function (t, i) {
+      box.appendChild(abs(el('div', 'g4-target g4-bit',
+        '<span class="g4-ring"></span><span class="g4-target-t">' + esc(t) + '</span>'),
+        'left:' + (8 + i * 27) + '%;top:' + (14 + (i % 2) * 28) + '%;width:26%;height:76px;animation:none'));
+    });
+    box.appendChild(abs(el('div', 'g4-cross g4-bit'), 'left:52%;top:56%;width:46px;height:46px;margin:-23px 0 0 -23px'));
   }
   };
 
@@ -1213,6 +1235,99 @@ function say(text, lang) {
      Turn two; a true pair stays up AND answers that item (its radio is checked), a false pair turns
      back. The reading is the game — you cannot match what you have not understood — and every match
      is recorded, so a page of matches is a page of answered items. */
+  /* ---------------- skeetRange: one moving target per option, one shot per item ----------------
+     The range is never empty: each option's disc drifts left to right in its own lane and wraps,
+     so a slow reader still gets a target to aim at. The SHOT is the constraint — one click, the
+     discs freeze, and where it landed is the answer. Clicking the sky is still your one shot,
+     which is why the crosshair is the cursor and not decoration.
+     Authoring: `.qitem` per item, `data-a` the right option, `data-time` the deadline (the runner's
+     bar). `data-replay` brings the misses back the way every other game does. */
+  PLUGINS.skeetRange = function (r) {
+    var stage = r.stage;
+    var box = el('div', 'g4-range'), field = el('div', 'g4-discs'), cross = el('div', 'g4-cross');
+    box.appendChild(field); box.appendChild(cross);
+    stage.appendChild(box);
+    var SPEED = 78;                     /* px per second: slow enough to aim, fast enough to matter */
+    var raf = 0, live = false, t0 = 0, discs = [], spent = false;
+    function now() { return (window.performance && performance.now) ? performance.now() : Date.now(); }
+    function stop() { live = false; if (raf && window.cancelAnimationFrame) window.cancelAnimationFrame(raf); raf = 0; }
+    function clear() { stop(); field.innerHTML = ''; discs = []; spent = false; }
+    function aim(ev) {
+      var b = box.getBoundingClientRect();
+      cross.style.transform = 'translate(' + Math.round(ev.clientX - b.left) + 'px,' + Math.round(ev.clientY - b.top) + 'px)';
+      cross.classList.add('live');
+    }
+    box.addEventListener('mousemove', aim);
+    /* one shot: the disc is the answer, and the sky is a miss. Either way the item is spent. */
+    function shot(value) {
+      if (r.phase !== 'play' || spent) return false;
+      spent = true;
+      stop();
+      cross.classList.add('fire');
+      r.later(function () { cross.classList.remove('fire'); }, 240);
+      return r.pick(value);
+    }
+    box.addEventListener('click', function (ev) {
+      if (!ev.target || !ev.target.closest) return;
+      if (ev.target.closest('.g4-target')) return;    /* the disc's own handler already took it */
+      shot(null);
+    });
+    function draw(t) {
+      var w = box.clientWidth || 640, span = w + 260, secs = t / 1000;
+      discs.forEach(function (d) {
+        var x = d._x + secs * SPEED;
+        x = ((x + 260) % span + span) % span - 260;   /* wrap, so the range never runs dry */
+        d.style.transform = 'translate(' + Math.round(x) + 'px,' +
+          Math.round(Math.sin(secs * 0.9 + d._seed) * 6) + 'px)';
+      });
+    }
+    function show(item) {
+      clear();
+      var n = Math.max(1, item.opts.length);
+      item.opts.forEach(function (o, i) {
+        var d = el('button', 'g4-target');
+        d.type = 'button';
+        d.setAttribute('data-v', o.value);
+        d.innerHTML = '<span class="g4-ring"></span><span class="g4-target-t">' + esc(o.text) + '</span>';
+        d.addEventListener('click', function (ev) { ev.stopPropagation(); shot(o.value); });
+        field.appendChild(d);
+        d._lane = (i + 0.5) / n;
+        d._x = -150 - i * 70;                        /* a stagger, so two discs never arrive stacked */
+        d._seed = i * 1.7;
+        d.style.top = (5 + d._lane * 60) + '%';
+        discs.push(d);
+      });
+      /* reduced motion keeps the state change and drops the travel: the discs sit still and you
+         still get exactly one shot at them */
+      if (r.reduced) {
+        discs.forEach(function (d, i) {
+          d.style.left = (5 + (i * 32) / Math.max(1, n)) + '%';
+          d.style.transform = 'none';
+        });
+        return;
+      }
+      live = true;
+      t0 = now();
+      draw(0);
+      var frame = function (ts) {
+        if (!live) return;
+        draw((ts || now()) - t0);
+        raf = window.requestAnimationFrame ? window.requestAnimationFrame(frame)
+          : setTimeout(function () { frame(now()); }, 16);
+      };
+      raf = window.requestAnimationFrame ? window.requestAnimationFrame(frame)
+        : setTimeout(function () { frame(now()); }, 16);
+    }
+    function mark(item, hit, value) {
+      discs.forEach(function (d) {
+        var v = d.getAttribute('data-v');
+        if (v === value) d.classList.add(hit ? 'ok' : 'no');
+        else if (!hit && v === item.key) d.classList.add('reveal');
+      });
+    }
+    return { show: show, mark: mark, clear: clear };
+  };
+
   PLUGINS.pairFlip = function (r) {
     var stage = r.stage;
     var box = el('div', 'g4-pairs'), cards = [], open = [], locked = false, answered = [];
