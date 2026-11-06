@@ -10,7 +10,7 @@ Method: one lesson fully, in order; commit + push after each batch of 3. QA post
 
 - [x] 1 — Batch 1: lessons 1–3 → commit/push
 - [x] 2 — Batch 2: lessons 4–6 → commit/push
-- [ ] 3 — Batch 3: lessons 7–9 → commit/push
+- [x] 3 — Batch 3: lessons 7–9 → commit/push
 - [ ] 4 — Batch 4: lessons 10–12 → commit/push
 - [ ] 5 — Batch 5: lessons 13–15 → commit/push
 - [ ] 6 — Batch 6: lessons 16–18 → commit/push
