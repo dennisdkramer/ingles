@@ -38,6 +38,18 @@ Duas armadilhas de compreensão da chamada, uma auditoria de expressões (qual d
 ## Width note (for Pass B)
 O quadro contexto-baixo / contexto-alto é de largura total (estilo / como a mensagem é carregada / o que um "não" direto faz / o texto que funciona), porque os quatro campos **são** a comparação. O bloco "a mesma mensagem de três jeitos" é de largura total, em três colunas: três versões de uma frase, cada uma precisando de uma oração inteira de espaço. A auditoria de expressões e as leituras de "yes" ficam como metades — seis itens cada, todos curtos. As quatro respostas são quatro cards empilhados em largura total, um por país, para serem comparados rolando em vez de apertando os olhos.
 
+## Pass B — what was built (write-back)
+
+**Forma entregue:** 10 seções — 1 chamada (Heard) · 2 imposto da gíria · 3 quatro respostas (Read) · 4 botão da franqueza (Done) · 5 “yes” · 6 silêncio · 7 face · 8 acomodar · 9 escrever no papel · 10 quiz sem consulta. Título: **“Get Understood, Not Native”**. Todos os beats do design foram preservados.
+
+Mudanças em relação ao design, com motivo:
+1. **Seção 6 tem quatro silêncios, não três.** O quarto (ser interrompido duas vezes na mesma chamada) é o que o aluno encontra todos os dias e é o único que exercita a leitura “nessa sala o turno passa mais rápido”. Com três, “Recusa” e “Pensamento” ficavam treinados e a leitura de ritmo não.
+2. **Seção 2 deixou de ser meia largura.** A auditoria de expressões virou dois blocos de largura total: o quadro das seis expressões (`.chart`) e o jogo `shootPair` dos seis pares. Motivo: os itens do jogo são pares de duas opções com placa curta; em meia largura a placa e o prompt ficam ilegíveis. As seis leituras de “yes” ficaram como metades (6 itens, `--rows:3`), como o design pedia.
+3. **Seção 8 ganhou três blocos de produção além de A/B** (os três movimentos + o hábito de escrever a linha-chave): **C** números, datas e horas — a dependência “como os números se dizem (12)” virou bloco visível (5 pares “em vez disso → diga assim → por quê” + 3 itens de produção); **D** dizer em voz alta; **E** quatro reparos de uma frase (os três movimentos + o hábito, produzidos sobre uma única frase-isca). O design pedia “quatro versões acomodadas de uma frase” na lista de evidências: é o bloco E.
+4. **Seção 9 e 10 nominais.** 9 = resumo escrito da chamada (donos e datas, três linhas) + os dois itens de reflexão sobre o próprio padrão, sem gabarito. 10 = quiz de consulta fechada com 9 itens mistos (5 gaps + 4 escolhas), nenhum repetindo item do treino.
+5. **Larguras conforme a width note:** as quatro respostas são quatro cards empilhados em largura total dentro de um `.panel`; “a mesma mensagem de três jeitos” é largura total em três colunas; o quadro contexto-baixo / contexto-alto é largura total com a quarta coluna em branco para os três marcadores do aluno.
+
 ## Situation
+
 Kids from other countries, in a video call, a teacher chairing the call, your own class, afterwards — the international video call, the shared slide deck, the group chat with five time zones, the summary written afterwards.
 **Uma videochamada de quatro países.** A turma do aluno, uma turma na Holanda (rápida e direta), uma no Japão (educada, calada, não diz não), uma no Brasil (calorosa, indireta sobre prazos) e uma professora britânica que preside e usa três expressões por minuto. **Uma decisão tem de ser tomada e escrita.** O inglês de ninguém é o problema; **as suposições de todos são**.

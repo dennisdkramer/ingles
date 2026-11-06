@@ -4,3 +4,5 @@ The live working plan for the CURRENT task. When a prompt decomposes into subtas
 
 _(Active batches, newest first. Cleared once done AND committed.)_
 
+_(No active batches.)_
+
