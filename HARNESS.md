@@ -1,7 +1,7 @@
 # HARNESS — binding contract. RE-READ ON EVERY PROMPT, before any other action.
 This file is the single read-first hub after RULE 0 is read from the global rules.
 It is always in force and adherence is non-negotiable
-The category files (HANDOFF / ISSUES / FORMAT / FUNCTION / PEDAGOGY / ROADMAP / REGISTER / VOCABULARY / STATUS / VERIFICATION / FILESYSTEM) hold the parameters of elements and functionality and are loaded only when they are in scope for the current task.
+The category files (FORMAT / FUNCTION / PEDAGOGY / ROADMAP / REGISTER / VOCABULARY / STATUS / VERIFICATION / FILESYSTEM/ HANDOFF / ISSUES /) hold the parameters of elements and functionality and are loaded only when they are in scope for the current task.
 
 ## RULE 1 — CONTEXT & TOKEN ECONOMY
 
@@ -28,7 +28,7 @@ The category files (HANDOFF / ISSUES / FORMAT / FUNCTION / PEDAGOGY / ROADMAP / 
 - Use discretion on QA depth and scope, be conservative. When scope is most or all live pages, pick a few with defensible relevance to test/verify. Request user sign-off before [sweeping the rest only if defensibly necessary].
 - For user instructions that involve assessing a 'visual' or 'space fill' issue, run the real-browser overflow/balloon check — jsdom cannot see layout. 
 - Never state something is verified if it wasn't.
-- "Done" means committed and pushed, with whatever verification I judged necessary per this rule. For any changes that are not pushed, user must be notified.
+- "Done" means committed and pushed, with whatever verification judged necessary per this rule. For any changes that are not pushed, user must be notified.
 
 
 ## RULE 3 — COMMIT & PUSH
@@ -56,6 +56,6 @@ The shell reports the true exit code (`$LASTEXITCODE`); Cline's capture of it do
 
 
 ## STATUS
-Status lives in dedicated files: bugs/problems in ISSUES.md, handoffs in HANDOFF.md, and current state + shared parameter values in STATUS.md. Nothing is cleared anywhere until it is done AND committed.
+Status lives in dedicated files: the active batch plan in PENDING.md, bugs/problems in ISSUES.md, handoffs in HANDOFF.md, and current state + shared parameter values in STATUS.md. Nothing is cleared anywhere until it is done AND committed.
 
 **Handoff content.** Handoff information is included only when explicitly requested, or when a "new/next task" is unambiguously implied by the user. Then include an optimally-concise version of the requested information and/or an optimally-concise version of the information the next task MUST have in order to achieve the next task intent/goals — nothing else.
