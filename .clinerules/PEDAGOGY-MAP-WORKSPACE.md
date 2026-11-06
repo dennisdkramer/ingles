@@ -10,7 +10,7 @@
 
 ### 1. Two passes, with a barrier between them
 **Pass B — build.** - (Output = `<track>/lessonNN.html`, plus a byte-identical `.edit.html` sidecar, built on `_shell.html`)
-Inputs: [Section `lessonNN` of `<TRACK>-ROADMAP.md`] + FORMAT.md §2 onwards + §Content contracts of FUNCTION.md + `<TRACK>-REGISTER.md`- **HIGH PRIORITY** + §3–§6 of this file. (The build is a **synthesis, not obedience**)
+Inputs: [the single `## Lesson NN` section of `<TRACK>-ROADMAP.md` — located by that heading and read as its own line range, never the whole file] + FORMAT.md §2 onwards + §Content contracts of FUNCTION.md + `<TRACK>-REGISTER.md`- **HIGH PRIORITY** + §3–§6 of this file. (The build is a **synthesis, not obedience**)
 	- Withhold: All other files.
 	- How the shape is built with the available blocks — is Pass B's call, no escalation
 	- Pass B never silently contradicts a teaching beat, but may replace the design's shape with a strong defensible reason.

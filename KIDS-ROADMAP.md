@@ -1,22 +1,5 @@
 # KIDS-ROADMAP
 
-## Decisions
-
-   · Item budget: 10 vocabulary items in every teaching lesson, the floor of the 10–12 window. The student is 14 with a short attention span, so width comes from labels and carrier length, never from more words.
-   · Label budget: 3–4 labels per teaching lesson. The pinned lessons 1–2 carry 3 each, because PEDAGOGY.md pins one overview plus one code for each of them and a fourth would be a drill, not a lesson.
-   · Exam budget: exams at 25 and 45 own no `teaches:` and no `vocabulary:`, and each names exactly 10 primary labels under `uses:` (`-ExamUses 10`). Ten is the diagnosis: the ones where a failure means the block has not landed.
-   · Tail policy: lessons 46–50 are tail — nothing in 1–45 depends on them.
-   · Split rule: a concept a student could fail while passing its neighbour is two labels, never one wider label — hence `sound/short-vs-long` and `sound/vowel-pairs` side by side in lesson 2.
-   · Spelling ruling (ambiguity): US spellings are used throughout (favorite, color, soccer), chosen once so a vocabulary item is never split into two spellings.
-   · Tail-length ruling (ambiguity): the generator fixes 25 and 45 as exams but not the shape after them. Ruling: block 2 ends at 44 and the tail is 46–50, five lessons, which is the shape the checker counts.
-   · Numbers: the counts below came out of `Test-Roadmap.ps1 -Counts` after the last lesson was written, never from memory.
-   · Shape of the cut: 27 families, 181 labels over 27 areas, 480 vocabulary items, 48 teaching lessons and 2 exams.
-
-## Shape
-
-   · Blocks: 1–24 Foundations (sound, hooks, one skeleton, fact and right-now, prepositions, past) · 25 EXAM · 26–44 Building (future, phrasal families, the perfect, comparison, conditions, reporting) · 45 EXAM · 46–50 Tail (past perfect, imaginary conditionals, passive, tags, slang)
-   · Spine: 27 families — spine kept in `ROADMAP GENERATION/work/kids-spine.md` (not shipped)
-
 ## Lesson 1
 
    - Focus: What this track is and the two codes that make English readable: letters are not sounds, and a cognate's ending tells you how to say it.
@@ -258,8 +241,8 @@
    - Real-world relevance: Ordering food, splitting a bill and checking what is left in the fridge all live here, and "many money" is the giveaway that the countable split was never made.
 
 ## Lesson 25
-
-   - Focus: Block 1 diagnosis: the frame, the fact-versus-right-now choice, the past in place, and the prepositions that Portuguese merges.
+	- THIS LESSON IS AN EXAM, THOROUGHLY TEST THE STUDENT'S UNDERSTANDING OF THE INCLUDED ITEMS AND FREELY PROBE TRACK-RELEVANT TOPICS AT THE STUDENT'S LEVEL
+   - Focus:  the fact-versus-right-now choice, the past in place, and the prepositions that Portuguese merges.
    - Uses: `mode/skeleton`, `mode/do-support`, `present/facts-not-now`, `continuous/right-now`, `present/state-verbs-no-ing`, `past/irregular-verbs`, `past/did-back-to-base`, `prep/para-split`, `prep/time-preps`, `question/wh-front`
 
 ## Lesson 26
@@ -453,8 +436,8 @@
    - Real-world relevance: Being the messenger between two friends is a daily job, and getting the pronouns and the tense wrong is how a message turns into a misunderstanding.
 
 ## Lesson 45
-
-   - Focus: Block 2 diagnosis: the future modes, the phrasal families, the perfect, comparison and conditions, scored so a failure names its label.
+		- THIS LESSON IS AN EXAM, THOROUGHLY TEST THE STUDENT'S UNDERSTANDING OF THE INCLUDED ITEMS AND FREELY PROBE TRACK-RELEVANT TOPICS AT THE STUDENT'S LEVEL
+   - Focus: the future modes, the phrasal families, the perfect, comparison and conditions, scored so a failure names its label.
    - Uses: `future/will-vs-gonna`, `future/continuous-arrangement`, `phrasal/separable-split`, `sound/wanna-gotta`, `perfect/experience-ever-never`, `perfect/since-point`, `compare/superlative-est`, `modal/dont-have-to-vs-mustnt`, `if/first-conditional`, `relative/who-for-people`
 
 ## Lesson 46
