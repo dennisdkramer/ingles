@@ -9,7 +9,7 @@
 ## LESSON GENERATION (BINDING PROCESS)
 
 ### 1. Two passes, with a barrier between them
-**Pass B — build.** - (Output = `<track>/lessonNN.html`)
+**Pass B — build.** - (Output = `<track>/lessonNN.html`, plus a byte-identical `.edit.html` sidecar, built on `_shell.html`)
 Inputs: [Section `lessonNN` of `<TRACK>-ROADMAP.md`] + FORMAT.md §2 onwards + §Content contracts of FUNCTION.md + `<TRACK>-REGISTER.md`- **HIGH PRIORITY** + §3–§6 of this file. (The build is a **synthesis, not obedience**)
 	- Withhold: All other files.
 	- How the shape is built with the available blocks — is Pass B's call, no escalation
@@ -84,8 +84,8 @@ Referencing material instead of embedding it is fine (a song named by lyric, "go
 ### 6. Site contract (mechanical)
    - Publish `<lesson>.html` and its `.edit.html` sidecar — identical by definition, FUNCTION.md §Content contracts.
    - Build the page on `_shell.html` (repo root; placeholders `{{TRACK_TITLE}}`, `{{TRACK_UPPER}}`, `{{TRACK}}`, `{{L}}`, `{{LESSON_TITLE}}`) — never on another lesson's shell, which carries that lesson's comment, title and `L`.
-   - Authored content sits in `.content-area` under one `<h1>` — that heading is the title `build-lessons.mjs` reads.
+   - Authored content sits in `.content-area` under one `<h1>` — that heading is the title `build-lessons.mjs` reads, and the build may set or change it at will (the next `build:lessons` run writes the new title into `lessons.json`).
    - Navigation is purely sequential (`← Last` / `Next →`); there is no lesson count anywhere.
    - Exercise state persists only through the three controls named in FUNCTION.md §Content contracts; if Pass A suggests an exercise type outside them, escalate per #2.
-   - Audio for `.listen`: the `data-say` rule and the render command are in FUNCTION.md §Content contracts. Rendered clips are optional everywhere — the built-in backup voice (`speechSynthesis`) is the accepted delivery across the board, so a `data-say` string with no clip never blocks a lesson and `audio:check` is informational.
+   - Audio for `.listen`: the built-in voice (`speechSynthesis`) is the **default delivery** — a `data-say` string with no clip is complete content and nothing waits on a render. Rendering clips is an optional later step: `npm run build:audio` does it at any time, `audio:check` is informational, and the `data-say` rule plus both commands are in FUNCTION.md §Content contracts.
    - Shell, classes and sizing: FORMAT.md. Behaviour, engines and edit mode: FUNCTION.md.
