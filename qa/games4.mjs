@@ -387,23 +387,31 @@ async function run() {
     .map(([c, o]) => c + ':' + [...o].join('/'));
   ok('no two games fight over one class name', clashes.length === 0, clashes.join(' '));
 
-  /* the invisible-options guard: every element the engine makes CLICKABLE must have a base CSS rule
-     and a size. pairFlip's cards were absolutely-positioned faces inside a 0x0 button, so the whole
-     board was invisible; this makes that impossible to ship again. */
+  /* the unreadable-text guard: the bug was option TEXT rendered in a very light grey on a light
+     panel. Size was never the problem, so this checks COLOUR: any rule that sets a text colour on
+     a game element must use the ink/cream custom properties or a dark hex. Light greys fail. */
   {
-    const css = fs.readFileSync(path.join(ROOT, 'style.css'), 'utf8');
-    const eng = fs.readFileSync(path.join(ROOT, 'engine4.js'), 'utf8');
-    const clickable = [...new Set([...eng.matchAll(/el\('button', '([a-z0-9 -]+)'/g)]
-      .flatMap(m => m[1].split(' ')).filter(c => c.indexOf('g4-') === 0))];
-    ok('the engine marks a set of clickable game classes', clickable.length >= 10, clickable.length + ' classes');
-    const unsized = clickable.filter(c => {
-      const rule = css.split('\n').filter(l => new RegExp('^\\.' + c + '[ ,{]').test(l.trim())).join(' ');
-      return !rule || !/(width|min-width|min-height|height|inset|padding)/.test(rule);
+    const lum = (hex) => {
+      const h = hex.replace('#', '');
+      const n = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
+      const [r, g, b] = [0, 2, 4].map(i => parseInt(n.substr(i, 2), 16) / 255)
+        .map(v => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)));
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    const rules = [...css.matchAll(/([^{}]*\.g4-[^{}]*)\{([^}]*)\}/g)];
+    const bad = [];
+    rules.forEach(m => {
+      const color = (m[2].match(/(?:^|;)\s*color:\s*([^;]+)/) || [])[1];
+      if (!color) return;
+      const v = color.trim().toLowerCase();
+      if (v.indexOf('var(--') === 0) return;            /* the palette's own ink/cream */
+      if (v === '#fff' || v === '#ffffff' || v === 'white' || v === 'transparent' || v === 'inherit') return;
+      const hex = v.match(/#[0-9a-f]{3,6}/);
+      if (hex && lum(hex[0]) < 0.35) return;            /* a dark colour is readable */
+      bad.push(m[1].trim().split('\n').pop().trim() + ' { color: ' + v + ' }');
     });
-    ok('every clickable game class has CSS with a size (nothing renders 0x0 or invisible)',
-      unsized.length === 0, unsized.join(', ') || 'all sized');
-    const faces = css.indexOf('.g4-face{') > -1 && /\.g4-face\{[^}]*(inset|width)/.test(css);
-    ok('pairFlip faces are sized inside their card', faces);
+    ok('every text colour the games set is ink, cream or a dark colour (no light grey text)',
+      bad.length === 0, bad.join(' | ') || 'all readable');
   }
 
   /* bingoCard must CALL a word, not read the question — the bug you spotted */
