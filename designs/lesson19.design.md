@@ -1,5 +1,7 @@
 # Lesson 19 — design (Pass A)
 
+`sequence:` conditionals, slice 1 of 2 — the four forms at sentence level (slice 2: lesson 25, mixed and alternative hypotheticals). The alternatives — unless, in case, provided, the inversions — are lesson 25's.
+
 `recycles:` lesson 15 (will / going to — the 1st conditional's future half), lesson 11 (past simple — the 2nd
 conditional's "past"), lesson 14 (woulda / coulda / shoulda as sound), lesson 18 (sort out / get through — the
 problem-solving verbs), lesson 12 (prices and figures inside the conditions).

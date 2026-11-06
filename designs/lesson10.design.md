@@ -1,5 +1,7 @@
 # Lesson 10 — design (Pass A, double lesson)
 
+`sequence:` the sound work, slice 1 of 2 — the inventory and the key (slice 2: lesson 14, contractions and reductions). No later lesson re-teaches this; later lessons only use it inline.
+
 ## Core (what the student can do afterwards)
 1. Look at a word they have never seen and make a defensible guess at how it sounds — then check it without asking a person.
 2. Say out loud the pairs that betray Brazilians, and hear the difference when they come back at them fast: *ship/sheep, three/tree, hat/hot, west/vest*.

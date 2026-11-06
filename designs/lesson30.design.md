@@ -1,5 +1,7 @@
 # Lesson 30 — design (Pass A)
 
+`sequence:` reported speech, slice 2 of 2 — the full system (slice 1: lesson 11 owns backshift of the two past forms inside narration; that frame is not re-taught here).
+
 `recycles:` lesson 11 (backshift of the two past forms inside narration — that frame is used, not re-taught),
 lesson 19 (would/should/could as operators), lesson 20 (the perfect), lesson 29 (reporting passives — the same
 "report without claiming" instinct), lesson 26 (hedging a claim).

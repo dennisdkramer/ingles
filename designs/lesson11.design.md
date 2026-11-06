@@ -1,5 +1,8 @@
 # Lesson 11 — design (Pass A)
 
+`sequence:` reported speech, slice 1 of 2 — backshift of the two past forms only, inside the narration frame (slice 2: lesson 30, which owns the full system and must not re-teach this frame).
+`must not re-teach:` there is no past perfect yet, so backshift stays present → past here; the past perfect form arrives with the third conditional in lesson 19.
+
 ## Core (what the student can do afterwards)
 1. **Set a scene and interrupt it**: *We were having lunch when the client called. · I was writing the report at nine.* (past continuous × past simple in one sentence).
 2. **Ask what was happening**: *What were you doing at nine? — I was driving.* (question + negative: *I wasn't listening*).

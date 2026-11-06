@@ -8,7 +8,7 @@
               - Is distilled to provide the most progress and the least extraneity.
               - Is designed to leverage the utility of a teacher who is fluent in both languages.
               - Remains accessible and informative for the student in the absence of a teacher.
-          c) 3 'Tracks' for student needs (Elaborated in PEDAGOGY-MAP.md TRACK section - same core grammar, modified vocabulary/context/activities):
+          c) 3 'Tracks' for student needs (Elaborated in `<TRACK>-REGISTER.md` — BUSINESS-REGISTER.md / KIDS-REGISTER.md / ADULT-REGISTER.md - same core grammar, modified vocabulary/context/activities):
               - Business: Communicate with international clients or pass the IELTS to study abroad.
               - Kids: Understand modern expressions, memes, and approach english in a more playful way.
               - Adult: Communicate on the streets, learn vocabulary (and culture) of dating and sex. (AAVE-aware)

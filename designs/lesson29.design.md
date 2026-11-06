@@ -1,5 +1,7 @@
 # Lesson 29 — design (Pass A)
 
+`sequence:` the passive — this lesson owns it; lessons 6-7 preview the participles and lesson 18 uses them, neither teaches the passive.
+
 `recycles:` lesson 6-7 (the participles, previewed), lesson 18/23 (phrasal verbs whose particle must survive the
 passive), lesson 20 (the perfect — *has been done*), lesson 26 (the reporting hedge — *is expected to* is its formal
 cousin), lesson 24 (the report register), lesson 27 (the reduced clause is *not* the passive — the contrast is

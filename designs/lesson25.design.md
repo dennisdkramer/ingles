@@ -1,5 +1,7 @@
 # Lesson 25 — design (Pass A)
 
+`sequence:` conditionals, slice 2 of 2 — mixed and alternative hypotheticals (slice 1: lesson 19 owns the four forms).
+
 `recycles:` lesson 19 (the four conditional forms — used, never re-taught), lesson 15 (the operator grid),
 lesson 21 (verb + preposition in the negotiation lines), lesson 20 (the perfect inside *wish / if only*),
 lesson 23 (broke down, figured out — the problem the negotiation is about).

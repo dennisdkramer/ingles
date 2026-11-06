@@ -1,5 +1,7 @@
 # Lesson 15 — design (Pass A)
 
+`sequence:` modals, slice 1 of 3 — the operators and their core meanings (slice 2: lesson 26, deduction and possibility; consolidation: lesson 41).
+
 `recycles:` lesson 14 (gonna / hafta / gotta as *sound*, contractions can't / won't), lesson 10 (weak vowel, dark L),
 lesson 8 (times and frequency), lesson 12 (prices, booking figures), lesson 13 (choosing between options), lesson 6
 (leave / come / go).

@@ -1,5 +1,7 @@
 # Lesson 14 — design (Pass A)
 
+`sequence:` the sound work, slice 2 of 2 — contractions and reductions, built on the key of lesson 10 (slice 1). No later lesson re-teaches connected speech; later lessons only use it.
+
 ## Core (what the student can do afterwards)
 1. **Hear** the reduced forms and stop losing the sentence: *gonna, wanna, hafta, gotta, dunno, kinda, lotta, lemme, gimme, 'cause, outta*.
 2. **Say** them too, in the register where they belong (a call with a colleague, not a contract).

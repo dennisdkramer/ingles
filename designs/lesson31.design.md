@@ -4,7 +4,8 @@
 frequency), lesson 28 (verb + -ing — *be used to* takes the -ing form), lesson 14 (reductions — *used to* is
 pronounced /juːstə/).
 `must not re-teach:` the past simple itself; frequency adverbs (8); the -ing vs to system (28) — only the
-*be used to + -ing* slot is new.
+*be used to + -ing* slot is new; pronunciation stays inline here (the key of lesson 10, the reductions of lesson 14) —
+connected speech is not this lesson's main idea.
 
 ## Core (what the student can do afterwards)
 1. **Past habit**: *used to + base* — *I used to work nights*; and past state: *there used to be a shop here*.

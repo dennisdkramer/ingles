@@ -1,5 +1,7 @@
 # Lesson 23 — design (Pass A)
 
+`sequence:` phrasal verbs, slice 3 of 3 (slices 1-2: lessons 18 and 22).
+
 `recycles:` lesson 18 (the machinery; *set up, put off, sort out, look into, break down, get over* already owned),
 lesson 22 (*turn into*, the formal-twin habit), lesson 17 (*by* deadlines, *until*), lesson 20 (the perfect for
 "already done"), lesson 15 (obligation: *we have to wrap this up*).

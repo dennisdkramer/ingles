@@ -1,5 +1,7 @@
 # Lesson 26 — design (Pass A)
 
+`sequence:` modals, slice 2 of 3 — deduction and speculation, present and past (slice 1: lesson 15; consolidation: lesson 41).
+
 `recycles:` lesson 15 (the operator grid: can/have to/should — the present forms this lesson grades),
 lesson 19 (*should have* met inside the 3rd conditional; the past perfect block *had + participle*),
 lesson 14 (*might've / must've* as sound), lesson 21 (*look at / seem* in reports), lesson 25 (the hypothetical as

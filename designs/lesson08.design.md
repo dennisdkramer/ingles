@@ -1,5 +1,7 @@
 # Lesson 8 — design (Pass A)
 
+`must not re-teach:` prepositions of time belong to lesson 17 — at/on/in and the fixed blocks are not taught here.
+
 ## Core (what the student can do afterwards)
 1. Say **how often** with the six adverbs and put them in the right place: *I **always** work from home. · She is **usually** late. · I **never** drink coffee after six.*
 2. Read a clock out loud: *o'clock · half past · quarter past · quarter to · noon · midnight*.

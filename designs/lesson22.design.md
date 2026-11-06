@@ -1,5 +1,7 @@
 # Lesson 22 — design (Pass A)
 
+`sequence:` phrasal verbs, slice 2 of 3 — people and talk (slice 1: lesson 18; slice 3: lesson 23).
+
 `recycles:` lesson 18 (the machinery: particle meanings, separability, pronoun placement; *get along with* and
 *look after* are already owned — used here, never re-taught), lesson 15 (requests and offers inside the meeting),
 lesson 19 (would for the polite move), lesson 21 (talk to / talk about — the preposition pair this lesson extends).

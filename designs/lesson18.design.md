@@ -1,11 +1,13 @@
 # Lesson 18 — design (Pass A)
 
+`sequence:` phrasal verbs, slice 1 of 3 — the machinery and the get family (slice 2: lesson 22, people and talk; slice 3: lesson 23, work, planning and problems; lesson 42 consolidates the strand without new items).
+
 `recycles:` lesson 6 (go out, come back — movement), lesson 7 (say/tell/talk + pick up, put on, take off),
 lesson 15 (the operator grid — *have to get through* reuses modals), lesson 14 (gonna/gotta as sound),
 lesson 17 (by/until — the deadline the office script runs against).
 `must not re-teach:` the passive (lesson 29 owns it — participles are only used); the full phrasal-verb system of
 people and talk (lesson 22) and of work/planning/problems (lesson 23) — this lesson installs the machinery and the
-*get* family only; reported speech (lesson 11).
+*get* family only; reported speech (lesson 11); lessons 6-7 preview the participles and this lesson only uses them.
 
 ## Core (what the student can do afterwards)
 1. **Recognise the machine**: verb + particle = one new word with a meaning you cannot get from the parts — and
