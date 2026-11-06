@@ -7,7 +7,7 @@ A `<TRACK>-ROADMAP.md` for one track: what is taught at which lesson, and which 
 # Process
 
 ## INPUT AND OBJECTIVE
-- Inputs: `PEDAGOGY.md` + `<TRACK>-REGISTER.md` . Withheld: designs, pages, `FORMAT.md`, `FUNCTION.md`, other tracks' roadmaps.
+- Inputs: `PEDAGOGY.md` + `<TRACK>-REGISTER.md` . Withheld: all other files.
 - One entry per lesson, 1–50. 25 and 45 are EXAMS and their entries here should be summary explanations of how best to test the student's skills with the most important learned concepts up to that point.
 
 ## Register
