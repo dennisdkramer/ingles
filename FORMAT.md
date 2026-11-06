@@ -76,3 +76,4 @@ h) Contrasting [linguistic, phonetic, or grammatical] [classes, categories, or c
 i) A chart is a BLOCK when it stands alone — it then takes any of the three widths in (a) — and a CHILD of a block when it sits inside one (`.panel .chart` = the block’s width minus its 20px side margin). Its column count and row shapes are content-aware, never fixed by CSS.
 j) Activity and quiz items are numbered
 k) Reflow: a reflowed block states `--rows` (items per column, e.g. `--rows:2`) in its own style attribute — never on a section or wrapper, so a section can never be split into columns; the column count follows from the item count.
+l) A lettered block is a VISIBLE block: its content sits inside a framed container — `.panel` (or `.card`) when the inside is `.qgrid` / `.blanks` / `.chips`, or the block IS `.chart` / `.game` / `.dialog` / `.card`. `.qgrid` and `.blanks` carry no frame in CSS, so unwrapped they read as loose page text instead of a block.

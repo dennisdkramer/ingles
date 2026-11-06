@@ -10,8 +10,9 @@
 
 ### 1. Two passes, with a barrier between them
 **Pass B — build.** - (Output = `<track>/lessonNN.html`, plus a byte-identical `.edit.html` sidecar, built on `_shell.html`)
-Inputs: [the single `## Lesson NN` section of `<TRACK>-ROADMAP.md` — located by that heading and read as its own line range, never the whole file] + FORMAT.md §2 onwards + §Content contracts of FUNCTION.md + `<TRACK>-REGISTER.md`- **HIGH PRIORITY** + §3–§6 of this file. (The build is a **synthesis, not obedience**)
+Inputs: [the single `## Lesson NN` section of `<TRACK>-ROADMAP.md` — located by that heading and read as its own line range, never the whole file] + FORMAT.md §2 onwards + §Content contracts of FUNCTION.md + `<TRACK>-REGISTER.md`- **HIGH PRIORITY** + §3–§6 of this file + `CONTENT_EXAMPLES.md` — a vehicle menu: choose per beat whichever vehicle fits that beat; no rotation, no required order, no obligation to use any of it. (The build is a **synthesis, not obedience**)
 	- Withhold: All other files.
+	- **Vehicle justification — recorded per beat (binding)**: for every numbered beat of the `## Lesson NN` section, Pass B MUST record why that vehicle and not another, appending one line per beat to that same `## Lesson NN` section of `<TRACK>-ROADMAP.md` — `beat N → <vehicle> — because <why this and not another>` — written as the beat is built, never reconstructed afterwards. A beat whose vehicle could be swapped for another without changing what is learnt is generic: re-cut it before building it.
 	- How the shape is built with the available blocks — is Pass B's call, no escalation
 	- Pass B never silently contradicts a teaching beat, but may replace the design's shape with a strong defensible reason.
 	- **`style.css` is implementation only**: the build may read it for an *implementation* question (which class or knob does what) — never to decide content or shape.
