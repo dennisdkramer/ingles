@@ -43,17 +43,16 @@ neither exists the label set is derived from the `teaches:` lines, which is the 
 | Check | Failure it prevents |
 |---|---|
 | `## Decisions` -> `## Shape` -> (`## Labels`, optional) -> `## Lesson 1..N` present and in order; N=50; ascending; none missing | truncated or shuffled output |
-| Shape carries `Start:`, `End:`, `Blocks:`; a `Spine:` pointer is optional and only its line count is reported, from that line or from the spine work file | empty frame, or a spine that only exists in someone's head |
+| Shape carries `Blocks:`; a `Spine:` pointer is optional and only its line count is reported, from that line or from the spine work file | empty frame, or a spine that only exists in someone's head |
 | Every label lowercase `area/thing`, max 3 parts, defined once | naming drift, duplicate definitions |
 | Every label taught exactly once; every taught label listed; every listed label taught | a real failure mode: 3 labels taught at L37 and listed nowhere |
 | Work files, when present: `## Labels` and the labels ledger agree; every `teaches:` matches the ledger's `→ L<n>`; unassigned labels reported | the seam that broke first: the label list and the `teaches:` lines drifting apart |
 | Every `uses:`/`deepens:` points at a **strictly earlier** lesson, and at a label somebody teaches or an item somebody introduced | forward references, self-references (a lesson leaning on a label it teaches) |
 | Teaching lessons: `MinItems`-`MaxItems` vocabulary items and `MinLabels`-`MaxLabels` labels | one-item lessons, padded chapters |
 | Exams: no `teaches:`, no vocabulary items, `Focus:` present, `Uses:` present, and `Uses:` = `-ExamUses` labels when that is set | exams silently becoming lessons; exams that list 40 labels instead of diagnosing 10 |
-| Every lesson after the last exam says `tail` in its `Generation:` line | a tail lesson something later depends on, declared nowhere |
 | No vocabulary item repeated in another lesson unless the later lesson names it in `deepens:`; no bare particle (`up`, `on`, `by`, ...) | the 10 duplicates that had to be repaired late in the run |
 | Item ledger, when present: every item is used somewhere and at the lesson the ledger claims | a ledger filled in at the end, which catches nothing |
-| Every entry carries its 8 fields in order (exams: Focus/Uses/Generation) | dropped `Real-world relevance` / `Generation` lines |
+| Every entry carries its 7 fields in order (exams: Focus/Uses) | dropped `Real-world relevance` / `Examples` lines |
 | No `page`/`section`/`class`/`chapter` meta references; no `register` label or `Register:` field | spec bans the entry naming a page, a class or a width |
 
 Thresholds are parameters, so a different track's decisions can be encoded instead of argued with.

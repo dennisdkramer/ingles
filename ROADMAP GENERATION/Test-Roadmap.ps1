@@ -209,10 +209,10 @@ function Test-OneRoadmap([string]$file) {
     Say ''
     Say '--- SHAPE ---'
     $body = $lines -join "`n"
-    $shapeMissing = @('Start:', 'End:', 'Blocks:') | Where-Object { $body -notmatch [regex]::Escape($_) }
+    $shapeMissing = @('Blocks:') | Where-Object { $body -notmatch [regex]::Escape($_) }
     if ($shapeMissing) { foreach ($s in $shapeMissing) { Fail "## Shape is missing '$s'" } }
-    elseif ($body -match [regex]::Escape('Spine:')) { Pass 'Shape carries Start, End, Blocks and a Spine pointer' }
-    else { Pass 'Shape carries Start, End and Blocks (no Spine pointer - the spine is a work artifact)' }
+    elseif ($body -match [regex]::Escape('Spine:')) { Pass 'Shape carries Blocks and a Spine pointer' }
+    else { Pass 'Shape carries Blocks (no Spine pointer - the spine is a work artifact)' }
     $spineLines = @()
     $inSpine = $false
     foreach ($l in $lines) {
@@ -245,7 +245,7 @@ function Test-OneRoadmap([string]$file) {
             $lesson = [int]$Matches[1]
             if (-not $lessons.ContainsKey($lesson)) {
                 $lessons[$lesson] = [pscustomobject]@{
-                    fields = @(); teaches = @(); uses = @(); deepens = @(); deepensText = ''; items = @(); vocabDash = $false; genText = ''
+                    fields = @(); teaches = @(); uses = @(); deepens = @(); deepensText = ''; items = @(); vocabDash = $false
                 }
             }
             continue
@@ -254,12 +254,12 @@ function Test-OneRoadmap([string]$file) {
             if ($line.Trim() -eq '') { continue }
             $lb = Get-LabelFromLine $line
             if ($lb) { $defined.Add($lb) }
-            elseif ($line -match '^\s*(?:[-*\u00b7]\s*)?(?:Source|Areas|Spine|Blocks|Start|End)\s*:') { continue }
+            elseif ($line -match '^\s*(?:[-*\u00b7]\s*)?(?:Source|Areas|Spine|Blocks)\s*:') { continue }
             else { Warn "unparsed line in ## Labels: $line" }
             continue
         }
         if ($lesson -le 0) { continue }
-        if ($line -match '^\s*-\s*(Focus|teaches|Deepens|Uses|Vocabulary|Examples|Real-world relevance|Generation):\s*(.*)$') {
+        if ($line -match '^\s*-\s*(Focus|teaches|Deepens|Uses|Vocabulary|Examples|Real-world relevance):\s*(.*)$') {
             $field = $Matches[1]; $value = $Matches[2]
             if ($lessons[$lesson].fields -notcontains $field) { $lessons[$lesson].fields += $field }
             switch ($field) {
@@ -269,7 +269,6 @@ function Test-OneRoadmap([string]$file) {
                     $lessons[$lesson].deepens = @(Get-BacktickRefs $value)
                     $lessons[$lesson].deepensText = $value
                 }
-                'Generation' { $lessons[$lesson].genText = $value }
                 'Vocabulary' {
                     $lessons[$lesson].items = @(Get-VocabItems $value)
                     if ($value.Trim() -eq '-') { $lessons[$lesson].vocabDash = $true }
@@ -500,13 +499,13 @@ function Test-OneRoadmap([string]$file) {
 
     Say ''
     Say '--- ENTRY FIELDS ---'
-    $expectedFields = @('Focus', 'teaches', 'Deepens', 'Uses', 'Vocabulary', 'Examples', 'Real-world relevance', 'Generation')
+    $expectedFields = @('Focus', 'teaches', 'Deepens', 'Uses', 'Vocabulary', 'Examples', 'Real-world relevance')
     $fieldProblems = 0
     foreach ($k in ($lessons.Keys | Sort-Object)) {
         $f = $lessons[$k].fields
         $isExam = ($ExamLessons -contains $k)
         if ($isExam) {
-            foreach ($need in @('Focus', 'Uses', 'Generation')) {
+            foreach ($need in @('Focus', 'Uses')) {
                 if ($f -notcontains $need) { Fail "exam L$k is missing '$need'"; $fieldProblems++ }
             }
         }
@@ -517,21 +516,14 @@ function Test-OneRoadmap([string]$file) {
             if (($f -join ',') -ne ($expectedFields -join ',')) { Warn "L$k field order is: $($f -join ', ')" }
         }
     }
-    if ($fieldProblems -eq 0) { Pass 'all entries carry their fields (8 on teaching lessons, Focus/Uses/Generation on exams)' }
+    if ($fieldProblems -eq 0) { Pass 'all entries carry their fields (7 on teaching lessons, Focus/Uses on exams)' }
 
     $lastExam = 0
     if (@($ExamLessons).Count -gt 0) { $lastExam = ($ExamLessons | Measure-Object -Maximum).Maximum }
     if ($lastExam -gt 0) {
-        $tailProblems = 0
         $tailLessons = @($lessons.Keys | Where-Object { $_ -gt $lastExam } | Sort-Object)
-        foreach ($k in $tailLessons) {
-            if ([string]$lessons[$k].genText -notmatch '(?i)\btail\b') {
-                Fail "L$k sits after the last exam (L$lastExam) but its Generation: line does not say the lesson is tail"
-                $tailProblems++
-            }
-        }
         if ($tailLessons.Count -eq 0) { Warn "no lessons after the last exam (L$lastExam) - is the tail missing?" }
-        elseif ($tailProblems -eq 0) { Pass "all $($tailLessons.Count) lessons after L$lastExam carry the tail statement" }
+        else { Pass "$($tailLessons.Count) lessons sit after L$lastExam (the tail) - no marker field required" }
     }
 
     Say ''
