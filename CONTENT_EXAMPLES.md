@@ -32,22 +32,23 @@ Where a shape is needed it is written as `<placeholder>`.
 Scales are four-point on purpose: 0–5 clusters at 3. `evidence: none` means the vehicle cannot stand alone —
 it selects, reveals or decorates, and a real control must carry the answer alongside it.
 
-## Art rules (binding on every game)
+## Constraints on every game (technical, not aesthetic)
 
-`shootPair` exists and its logic is fine; its **appearance** is the known failure. These rules are how the whole
-set gets fixed at once, and why a new game must not be authored to look like that.
+There is **no house style**. Look, palette, motion and mood are chosen per game and per track — a kids page may
+be loud and a business page sober, and neither is more correct. Only these hold, because they are mechanical:
 
-1. **One flat vector language.** Solid geometric shapes, 2px strokes, no gradients, no bevels, no shadow-blur,
-   no emoji, no clip-art, no skeuomorphism. A circle and a rounded rectangle, used well, look intentional.
-2. **One palette per track, three colours max** — two neutrals + one accent — declared once as CSS custom
-   properties on `.game` so a skin changes colours, not code.
-3. **Motion is `transform` + `opacity` only**, with real easing (`cubic-bezier`, never `linear`), and a
-   reduced-motion path that removes travel and keeps the state change. No layout reflow, no `left/top` animation.
-4. **Everything scales off the stage width**, so a `.itemsize-half` game looks the same as a full-width one.
-5. **Shared stage + HUD**: every game reuses the same stage box, score line, timer and end-of-wave summary, so
-   one art fix upgrades the whole set and no page grows a second visual dialect.
-6. **The page must still teach if the engine fails to load.** The authored `.qitem`s are ordinary radios: they
-   render and save with no JS at all. That is the fallback, and it is not optional.
+1. **The page still works if the engine never loads.** The authored `.qitem`s are ordinary radios: they render,
+   save and print with no JS. That fallback is not optional.
+2. **No network at run time.** Art is CSS, inline SVG, or a local file. Nothing fetched from another host, so a
+   page that ships today still renders in two years.
+3. **Fits its slot.** The stage scales to the block's width (`.itemsize` / `-half` / `-third`) and never overflows
+   it; no fixed pixel width that a half-width block cannot honour.
+4. **Reduced motion is honoured** — `prefers-reduced-motion` removes travel and keeps the state change, so the
+   game still tells the student what happened.
+5. **Cheap frames.** Animate `transform` and `opacity`; avoid animating layout properties, which jank on a school
+   laptop.
+6. **Difficulty and content are data.** Every game reads its items from the page and its knobs from `data-*`
+   attributes, so a teacher can add items or change difficulty without editing an engine.
 
 ---
 

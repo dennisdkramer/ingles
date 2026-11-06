@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>games v2 — preview (engine4.js)</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main class="page-container"><div class="content-area">
+<h1>Games v2 — preview</h1>
+<p>Not a lesson. Open this file, press <b>Start</b>, and judge the look and feel. Every game below reads
+the same kind of authored <code>.qitem</code> list, so swapping <code>data-game</code> changes the game
+without touching the content.</p>
+
+<h2>1. catchBasket — sort it before it lands</h2>
+<h3>A. Which past form is it?</h3>
+<div class="game" data-game="catchBasket" data-skin="sort" data-speed="55" data-shuffle="1" data-replay="1">
+<p class="game-how">The verb falls. Click the basket it belongs in before it hits the ground — <b>1</b> / <b>2</b> also work.</p>
+<div class="game-list">
+  <div class="qitem" data-a="a"><div class="qline"><span class="qnum">1.</span><span class="qstem">played</span></div><div class="qopts"><label><input type="radio" name="p1" value="a"> + ed, no change</label><label><input type="radio" name="p1" value="b"> whole word changes</label></div></div>
+  <div class="qitem" data-a="b"><div class="qline"><span class="qnum">2.</span><span class="qstem">went</span></div><div class="qopts"><label><input type="radio" name="p2" value="a"> + ed, no change</label><label><input type="radio" name="p2" value="b"> whole word changes</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qnum">3.</span><span class="qstem">watched</span></div><div class="qopts"><label><input type="radio" name="p3" value="a"> + ed, no change</label><label><input type="radio" name="p3" value="b"> whole word changes</label></div></div>
+  <div class="qitem" data-a="b"><div class="qline"><span class="qnum">4.</span><span class="qstem">ate</span></div><div class="qopts"><label><input type="radio" name="p4" value="a"> + ed, no change</label><label><input type="radio" name="p4" value="b"> whole word changes</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>2. whackMole — recognise it before it ducks</h2>
+<h3>A. Which one means what the Portuguese says?</h3>
+<div class="game" data-game="whackMole" data-speed="3000" data-shuffle="1" data-replay="1">
+<p class="game-how">The question is on the scoreboard. Hit the answer before it ducks — <b>1</b>–<b>3</b> also work.</p>
+<div class="game-list">
+  <div class="qitem" data-a="b"><div class="qline"><span class="qnum">1.</span><span class="qstem">Ela está lendo agora.</span></div><div class="qopts"><label><input type="radio" name="m1" value="a"> She reads now.</label><label><input type="radio" name="m1" value="b"> She's reading now.</label><label><input type="radio" name="m1" value="c"> She read now.</label></div></div>
+  <div class="qitem" data-a="a"><div class="qline"><span class="qnum">2.</span><span class="qstem">A live começa às oito.</span></div><div class="qopts"><label><input type="radio" name="m2" value="a"> The stream starts at eight.</label><label><input type="radio" name="m2" value="b"> The stream start at eight.</label><label><input type="radio" name="m2" value="c"> The stream is start at eight.</label></div></div>
+  <div class="qitem" data-a="c"><div class="qline"><span class="qnum">3.</span><span class="qstem">Gatos odeiam água.</span></div><div class="qopts"><label><input type="radio" name="m3" value="a"> Cats hates water.</label><label><input type="radio" name="m3" value="b"> Cats hating water.</label><label><input type="radio" name="m3" value="c"> Cats hate water.</label></div></div>
+</div>
+<button class="game-start" type="button">▶ Start</button>
+</div>
+
+<h2>3. The same list, no engine</h2>
+<p>What a student sees if <code>engine4.js</code> never loads — the authored radios, which is also what prints:</p>
+<div class="game" data-game="notAGameYet">
+<div class="game-list">
+  <div class="qitem"><div class="qline"><span class="qnum">1.</span><span class="qstem">she ___ (go) home</span></div><div class="qopts"><label><input type="radio" name="x1" value="a"> went</label><label><input type="radio" name="x1" value="b"> goed</label></div></div>
+</div>
+</div>
+
+</div></main>
+<script src="../engine4.js"></script>
+</body>
+</html>

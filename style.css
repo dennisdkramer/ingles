@@ -307,3 +307,31 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .game-score-line{margin:10px 0 0;text-align:center;font-weight:700}
 @media (prefers-reduced-motion:reduce){.game-prompt{transition:none}.game-fade{transition:none}}
 @media print{.game-stage{display:none}.game.is-on .game-list{display:block}}
+
+/* ---- engine4.js — games v2: one runner, presentations as skins (the authored radios persist) ---- */
+.game.g4 .g4-stage{position:relative;margin:10px 0 0;height:260px;overflow:hidden;background:#eef4f7;border:2px dashed var(--tan);border-radius:14px}
+.game:not(.is-on) .g4-stage{display:none}
+.g4-hud{position:absolute;right:10px;top:8px;z-index:3;display:flex;gap:12px;font:700 14px 'Public Sans',sans-serif;color:var(--ink)}
+.g4-hud .clock{min-width:3.2em;text-align:right}
+.g4-prompt{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:3;max-width:76%;padding:4px 14px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;font-weight:700;font-size:15px;text-align:center;opacity:0;transition:opacity .3s ease}
+.g4-prompt.in{opacity:1}
+/* catchBasket: a token falls, the options are the buckets */
+.g4-tray{position:absolute;left:10px;right:10px;bottom:10px;display:flex;gap:10px;z-index:2}
+.g4-bucket{flex:1 1 0;min-width:0;height:64px;padding:6px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--tan);color:var(--ink);font:700 14px 'Public Sans',sans-serif;line-height:1.25;overflow:hidden;cursor:pointer}
+.g4-bucket.ok{border-color:#2f9e44;background:#e8f7ee}
+.g4-bucket.no{border-color:#c92a2a;background:#fdeaea}
+.g4-bucket.reveal{border-style:dashed;border-color:#2f9e44}
+.g4-token{position:absolute;left:50%;top:0;z-index:1;max-width:72%;padding:8px 16px;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--tan);font:700 16px 'Public Sans',sans-serif;text-align:center;transform:translate(-50%,8px);will-change:transform}
+.g4-token.caught{transform:translate(-50%,150px) scale(.55);opacity:.25;transition:transform .42s cubic-bezier(.3,1.35,.6,1),opacity .42s ease}
+.g4-token.spilled{transform:translate(-50%,196px) rotate(14deg) scale(.8);opacity:.2;transition:transform .5s ease-in,opacity .5s ease}
+/* whackMole: the options pop out of holes and duck again */
+.g4-grid{position:absolute;left:12px;right:12px;top:54px;bottom:76px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.g4-hole{position:relative;border-radius:14px;background:rgba(24,33,54,.07)}
+.g4-mole{position:absolute;inset:5px;display:flex;align-items:center;justify-content:center;padding:4px 8px;margin:0;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);color:var(--ink);font:700 13.5px 'Public Sans',sans-serif;line-height:1.2;text-align:center;overflow:hidden;cursor:pointer;animation:g4pop .26s cubic-bezier(.3,1.5,.6,1)}
+.g4-mole.ok{border-color:#2f9e44;background:#e8f7ee}
+.g4-mole.no{border-color:#c92a2a;background:#fdeaea}
+.g4-mole.reveal{border-style:dashed;border-color:#2f9e44}
+@keyframes g4pop{from{transform:scale(.55);opacity:0}to{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.g4-mole{animation:none}.g4-token.caught,.g4-token.spilled,.g4-prompt{transition:none}}
+@media print{.g4-stage{display:none}}
+
