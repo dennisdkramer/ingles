@@ -1,8 +1,5 @@
----
-disabled: true
----
 ## TOOL DISCIPLINE
-
+- suspend QA and verification steps. If you deem them necessary because you have noticed a problem, request user sign-off. *NO QA to look for potential problems*
 - `read_files` requires `start_line`/`end_line` for any file over ~400 lines, or for any file you only need part of; read a roadmap lesson by its heading range, never the file. A file you are building or auditing (a lesson, a rule file) is read whole once — that is cheaper than paging it.
 
 - No `Get-Content -Raw`; no output path may print a whole file.
