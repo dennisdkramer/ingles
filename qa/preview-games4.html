@@ -380,8 +380,9 @@ option words, so what you see is this block's content in the game's furniture.</
   <button class="game-start" type="button">▶ Play</button>
 </div>
 </div></main>
-<script src="../engine1.js"></script>
-<script src="../engine2.js"></script>
+<!-- engine1.js and engine2.js are deliberately NOT loaded here: engine1's first act is a login gate
+     (it redirects to ../index.html unless sessionStorage.gate carries this page's SECRET/TRACK), and
+     this file is a preview, not a lesson. engine4.js is the only script the games need. -->
 <script src="../engine4.js"></script>
 </body>
 </html>
