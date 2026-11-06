@@ -21,6 +21,10 @@
      data-prompt    0 | 1   show the stem on the HUD line (1)
      data-sound     0 | 1   hit / miss / win blips (1)
      data-skin      free-form name; CSS may theme on it, the engine never reads it
+   The score in the HUD is a pair of numbers and never a word with a unit: `got/items`, counting up
+   from 0/6 as items are got; or `left/lives` when the presentation reports lives or health
+   (`view.lives()` — mineGrid, bossRaid), which starts full (3/3) and counts down. A presentation may
+   also expose `view.reset()`, called when a run starts, so a restart opens full.
    Test hook: window.__G4 lists live runners; each exposes `_test`
    (start / step / pick / expire / finish / state) so a headless test drives the state machine.
 ------------------------------------------------------------------------------------------------ */
@@ -305,8 +309,15 @@ window.GAMES4 = (function () {
     if (this.barRaf && window.cancelAnimationFrame) window.cancelAnimationFrame(this.barRaf);
     this.barRaf = 0;
   };
+  /* The score is a number over its own ceiling, never a word with a unit after it: counting up it is
+     the items got out of the run's items and starts at 0/6; an activity that reports lives, attempts
+     or health starts full and counts down (3/3, 2/3…). The pair of numbers says which way it goes. */
   Runner.prototype.hud = function () {
-    this.hudEl.querySelector('.score').textContent = this.score + ' pt';
+    var lives = (this.view && typeof this.view.lives === 'function') ? Math.max(0, this.view.lives()) : null;
+    if (lives != null) this.livesTop = Math.max(this.livesTop || 0, lives);
+    this.hudEl.querySelector('.score').textContent = lives == null
+      ? this.score + '/' + this.total
+      : lives + '/' + (this.livesTop || lives);
     this.hudEl.querySelector('.wave').textContent = Math.min(this.idx + 1, this.total) + '/' + this.total;
     this.hudEl.querySelector('.clock').textContent = this.limit ? Math.ceil(this.limitLeft) + 's' : '';
   };
@@ -346,13 +357,16 @@ window.GAMES4 = (function () {
     this.clearTimers();
     this.clearPoster();
     this.running = true; this.replaying = false;
-    this.score = 0; this.idx = 0; this.missed = [];
+    this.score = 0; this.idx = 0; this.missed = []; this.livesTop = 0;
     var list = this.items.slice();
     if (this.shuffleOn) shuffle(list);
     var rounds = Math.max(0, num(this.root, 'data-rounds', 0));
     if (rounds > 0 && rounds < list.length) list = list.slice(0, rounds);
     this.queue = list; this.total = list.length;
     this.limitLeft = this.limit;
+    /* a presentation that holds run state of its own (lives, attempts) puts it back before the HUD
+       reads it, so a restart starts full and the score can never open at 0/0 */
+    if (this.view && typeof this.view.reset === 'function') this.view.reset();
     this.root.classList.add('is-on');
     var line = this.root.querySelector('.game-score-line');
     if (line) line.textContent = '';
@@ -418,6 +432,7 @@ window.GAMES4 = (function () {
     this.hud();
     if (hit) SFX.hit(this.sound); else SFX.miss(this.sound);
     if (this.view) this.view.mark(it, hit, value);
+    this.hud();          /* an activity that spends a life shows it at once, not on the next item */
     this.later(function () {
       if (self.view) self.view.clear();
       self.queue.shift(); self.idx++;
@@ -1247,10 +1262,15 @@ function say(text, lang) {
      is recorded, so a page of matches is a page of answered items. */
   /* ---------------- skeetRange: one flying target per option, one shot per item ----------------
      Each option's disc is thrown from off the left edge on its own arc and flies away past the right
-     edge. The flight lasts exactly the item's own deadline (`data-time`), so the timer running out
-     and the last disc leaving the range are the same moment: let them all fly past and the item is
-     lost. Nothing is ever teleported — a disc starts and finishes outside the frame — so the travel
-     you see is the whole of the throw; with no deadline the same throw simply comes round again.
+     edge. The flight takes the item's deadline less 10% (`data-time` / 1.1), so every disc is off
+     the right edge BEFORE the timer runs out and the item expires: the last disc you can still see
+     is never the one you were waiting for. Nothing is ever teleported — a disc starts and finishes
+     outside the frame — so the travel you see is the whole of the throw; with no deadline the same
+     throw simply comes round again.
+     Every attribute of that throw carries a 5% randomizer: the arc's direction (some ride high,
+     some sag low) and height, the speed it takes to cross, and where it starts (both across and
+     up the range). The 10% margin is what pays for it — the slowest roll still finishes inside the
+     deadline, so the one-shot rule stays exactly as fair as before.
      The SHOT is the constraint — one click, the discs freeze, and where it landed is the answer.
      Clicking the sky is still your one shot, which is why the crosshair is the cursor and not
      decoration.
@@ -1263,6 +1283,11 @@ function say(text, lang) {
     box.appendChild(field); box.appendChild(cross);
     stage.appendChild(box);
     var FLIGHT = 7000;                  /* only when the block has no data-time: the throw repeats */
+    /* The deadline is 10% longer than the throw. Then even the slowest roll of the 5% randomizer
+       (1.05 / 1.1 = 95.5% of the deadline) is across the range before the item expires. */
+    var PAD = 1.1;
+    function jitter(v) { return v * (0.95 + Math.random() * 0.1); }
+    function throwTime() { return (r.itemTime || FLIGHT) / PAD; }
     var raf = 0, live = false, t0 = 0, discs = [], spent = false;
     function now() { return (window.performance && performance.now) ? performance.now() : Date.now(); }
     function stop() { live = false; if (raf && window.cancelAnimationFrame) window.cancelAnimationFrame(raf); raf = 0; }
@@ -1287,18 +1312,18 @@ function say(text, lang) {
       if (ev.target.closest('.g4-target')) return;    /* the disc's own handler already took it */
       shot(null);
     });
-    /* a real throw: out of the trap off-screen left, up over the range, away behind the right edge.
-       `p` is the share of the flight that has gone, and the flight IS the item's own deadline. */
+    /* a real throw: out of the trap off-screen left, over the range, away behind the right edge.
+       Each disc rolls its own flight and its own start, so no two take the same line, and `p` is
+       the share of THAT disc's flight that has gone. */
     function draw(t) {
       var w = box.clientWidth || 640, span = w + 240;
-      var flight = r.itemTime || FLIGHT;
-      var p = t / flight;
-      if (!r.itemTime) p = p % 1;                    /* no deadline: throw after throw */
-      p = Math.min(1, Math.max(0, p));
       discs.forEach(function (d) {
-        var x = -120 + p * span;
+        var p = t / d._flight;
+        if (!r.itemTime) p = p % 1;                  /* no deadline: throw after throw */
+        p = Math.min(1, Math.max(0, p));
+        var x = d._x0 + p * span;
         var lift = d._arc * 4 * p * (1 - p);         /* zero at both edges, highest at half way */
-        d.style.transform = 'translate(' + Math.round(x) + 'px,' + Math.round(-lift) + 'px)';
+        d.style.transform = 'translate(' + Math.round(x) + 'px,' + Math.round(d._dir * lift) + 'px)';
       });
     }
     function show(item) {
@@ -1306,6 +1331,7 @@ function say(text, lang) {
       /* the lesson decides how many targets there are — one per option, two to four — and the order
          of the options decides the lanes, so no disc ever flies behind another */
       var n = Math.max(1, item.opts.length);
+      var flight = throwTime();
       item.opts.forEach(function (o, i) {
         var d = el('button', 'g4-target');
         d.type = 'button';
@@ -1314,9 +1340,14 @@ function say(text, lang) {
         d.addEventListener('click', function (ev) { ev.stopPropagation(); shot(o.value); });
         field.appendChild(d);
         d._lane = n === 1 ? 0.5 : i / (n - 1);       /* even bands, first option highest */
-        d._arc = 22 + (i % 3) * 9;                   /* 22 / 31 / 40px, so neighbours never mirror */
-        d.style.top = (16 + d._lane * 40) + '%';
-        d.style.transform = 'translate(-120px,0)';   /* already off the left edge on frame zero */
+        /* the 5% randomizer: direction, height, speed and where it starts. The lane still says which
+           option is where — the jitter is too small to reorder them — so the range stays readable. */
+        d._dir = Math.random() < 0.5 ? -1 : 1;       /* arcs up, or sags low */
+        d._arc = jitter(22 + (i % 3) * 9);           /* 22 / 31 / 40px, so neighbours never mirror */
+        d._flight = jitter(flight);
+        d._x0 = -120 * jitter(1);                    /* off the left edge, never on it */
+        d.style.top = (16 + d._lane * 40 + (Math.random() * 3 - 1.5)) + '%';
+        d.style.transform = 'translate(' + Math.round(d._x0) + 'px,0)';
         discs.push(d);
       });
       /* reduced motion keeps the state change and drops the travel: the discs sit still in their
@@ -1435,6 +1466,8 @@ function say(text, lang) {
     function drawLives() {
       lives.textContent = '♥♥♥'.slice(0, left) + '♡♡♡'.slice(0, 3 - left);
     }
+    /* a restart begins with three lives: run state, so the runner resets it on start */
+    function reset() { left = 3; drawLives(); }
     function clear() {
       field.innerHTML = ''; tiles = []; busy = false;
       left = 3;
@@ -1490,7 +1523,7 @@ function say(text, lang) {
       }
       r.later(function () { busy = false; }, 520);
     }
-    return { show: show, mark: mark, clear: clear, lives: function () { return left; } };
+    return { show: show, mark: mark, clear: clear, reset: reset, lives: function () { return left; } };
   };
 
 
@@ -2025,6 +2058,8 @@ function say(text, lang) {
       hearts.textContent = '♥♥♥'.slice(0, lives) + '♡♡♡'.slice(0, 3 - lives);
     }
     function clear() { opts.innerHTML = ''; drawHud(); }
+    /* a restart begins with a whole boss: lives are run state, so the runner resets them on start */
+    function reset() { lives = 3; drawHud(); }
     function show(item) {
       opts.innerHTML = '';
       drawHud();
@@ -2062,7 +2097,7 @@ function say(text, lang) {
         r.later(function () { if (r.running) r.finish(); }, 800);
       }
     }
-    return { show: show, mark: mark, clear: clear, lives: function () { return lives; } };
+    return { show: show, mark: mark, clear: clear, reset: reset, lives: function () { return lives; } };
   };
 
   function boot() {
