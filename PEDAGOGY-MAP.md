@@ -31,7 +31,7 @@
       6. **`sequence:`** (which slice of a multi-lesson strand this lesson owns, and what the other lessons own) and **`must not re-teach:`** (what a neighbouring lesson owns) — two lines, at the top of the file.
 
 **Pass B — build.** (Output = `<track>/lessonNN.html`)
-Inputs: the design (including its shape) + FORMAT.md + FUNCTION.md + **§1–§6 of this file** (are high-priority build inputs, not background) + this lesson's entry in `BUSINESS-ROADMAP.md` + the redundancy check described below. The build is a **synthesis, not obedience**.
+Inputs: designs/<track>/<lessonNN.design.md> + FORMAT.md + FUNCTION.md + **§1–§6 of this file** (are high-priority build inputs, not background). The build is a **synthesis, not obedience**.
    - How the shape is built with the available blocks — is Pass B's call, no escalation
    - A change that alters the shape or one of the design's teaching beats is made and then **written back into the design file**; a conflict or ambiguity that cannot be resolved that way is escalated. 
    - Pass B never silently contradicts a teaching beat, but may replace the design's shape with a strong defensible reason (in which case it proceeds, records the change in the design file, and does not escalate).
