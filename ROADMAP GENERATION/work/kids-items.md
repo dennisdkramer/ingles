@@ -1,0 +1,484 @@
+# KIDS — ITEMS (work file, PHASE 3)
+
+Every vocabulary item with the lesson that introduced it. Check here before adding an item to a lesson.
+
+- video — L1
+- computer — L1
+- music — L1
+- possible — L1
+- famous — L1
+- natural — L1
+- invention — L1
+- creature — L1
+- distance — L1
+- action — L1
+- parent — L2
+- push — L2
+- pretend — L2
+- actually — L2
+- library — L2
+- college — L2
+- cheese — L2
+- foot — L2
+- moon — L2
+- tree — L2
+- hungry — L3
+- bored — L3
+- tired — L3
+- ready — L3
+- late — L3
+- sick — L3
+- dead — L3
+- free — L3
+- ticket — L3
+- battery — L3
+- money — L4
+- idea — L4
+- job — L4
+- chore — L4
+- homework — L4
+- dish — L4
+- mess — L4
+- room — L4
+- project — L4
+- "have fun" — L4
+- shop — L5
+- street — L5
+- park — L5
+- mall — L5
+- cinema — L5
+- gym — L5
+- field — L5
+- court — L5
+- "bus stop" — L5
+- snack — L5
+- play — L6
+- like — L6
+- want — L6
+- live — L6
+- walk — L6
+- run — L6
+- eat — L6
+- watch — L6
+- study — L6
+- sleep — L6
+- know — L7
+- need — L7
+- speak — L7
+- drive — L7
+- cook — L7
+- sing — L7
+- dance — L7
+- swim — L7
+- read — L7
+- work — L7
+- name — L8
+- favorite — L8
+- phone — L8
+- password — L8
+- username — L8
+- nickname — L8
+- score — L8
+- seat — L8
+- team — L8
+- price — L8
+- cat — L9
+- dog — L9
+- spider — L9
+- snake — L9
+- sun — L9
+- ice — L9
+- grow — L9
+- bite — L9
+- hate — L9
+- prefer — L9
+- alarm — L10
+- breakfast — L10
+- shower — L10
+- lunch — L10
+- dinner — L10
+- clock — L10
+- weekday — L10
+- weekend — L10
+- uniform — L10
+- toothbrush — L10
+- chat — L11
+- stream — L11
+- download — L11
+- upload — L11
+- search — L11
+- scroll — L11
+- type — L11
+- click — L11
+- charge — L11
+- "log in" — L11
+- sofa — L12
+- fridge — L12
+- "living room" — L12
+- charger — L12
+- headphones — L12
+- noise — L12
+- volume — L12
+- screen — L12
+- blanket — L12
+- curtain — L12
+- opinion — L13
+- truth — L13
+- smell — L13
+- taste — L13
+- sound — L13
+- memory — L13
+- joke — L13
+- secret — L13
+- luck — L13
+- reason — L13
+- skate — L14
+- guitar — L14
+- trick — L14
+- coach — L14
+- level — L14
+- skill — L14
+- ball — L14
+- bike — L14
+- goal — L14
+- race — L14
+- gift — L15
+- card — L15
+- favor — L15
+- prize — L15
+- ride — L15
+- lift — L15
+- winner — L15
+- coin — L15
+- tip — L15
+- balloon — L15
+- box — L16
+- drawer — L16
+- pocket — L16
+- wall — L16
+- shelf — L16
+- corner — L16
+- floor — L16
+- roof — L16
+- gate — L16
+- door — L16
+- "wait for" — L17
+- "depend on" — L17
+- "listen to" — L17
+- "agree with" — L17
+- "belong to" — L17
+- "worry about" — L17
+- "ask for" — L17
+- "pay for" — L17
+- "laugh at" — L17
+- "think about" — L17
+- weather — L18
+- party — L18
+- trip — L18
+- game — L18
+- crowd — L18
+- line — L18
+- hill — L18
+- beach — L18
+- farm — L18
+- hotel — L18
+- visit — L19
+- start — L19
+- finish — L19
+- stop — L19
+- call — L19
+- help — L19
+- move — L19
+- order — L19
+- arrive — L19
+- answer — L19
+- take — L20
+- keep — L20
+- leave — L20
+- find — L20
+- buy — L20
+- bring — L20
+- catch — L20
+- throw — L20
+- break — L20
+- fall — L20
+- suddenly — L21
+- later — L21
+- finally — L21
+- then — L21
+- "at first" — L21
+- "in the end" — L21
+- luckily — L21
+- anyway — L21
+- immediately — L21
+- afterwards — L21
+- cousin — L22
+- neighbor — L22
+- uncle — L22
+- aunt — L22
+- group — L22
+- twin — L22
+- brother — L22
+- sister — L22
+- player — L22
+- owner — L22
+- press — L23
+- hold — L23
+- tap — L23
+- swipe — L23
+- drag — L23
+- skip — L23
+- pause — L23
+- mute — L23
+- restart — L23
+- "log out" — L23
+- soda — L24
+- juice — L24
+- bread — L24
+- rice — L24
+- sugar — L24
+- salt — L24
+- meat — L24
+- fruit — L24
+- bottle — L24
+- packet — L24
+- schedule — L26
+- calendar — L26
+- invite — L26
+- reminder — L26
+- "group chat" — L26
+- selfie — L26
+- movie — L26
+- concert — L26
+- camping — L26
+- barbecue — L26
+- promise — L27
+- deal — L27
+- "right away" — L27
+- "in a minute" — L27
+- probably — L27
+- sure — L27
+- maybe — L27
+- "of course" — L27
+- definitely — L27
+- "no worries" — L27
+- appointment — L28
+- practice — L28
+- rehearsal — L28
+- tournament — L28
+- deadline — L28
+- tomorrow — L28
+- tonight — L28
+- "next time" — L28
+- "the day after" — L28
+- midday — L28
+- "get up" — L29
+- "get back" — L29
+- "get on" — L29
+- "get off" — L29
+- "get in" — L29
+- "get out" — L29
+- "get over" — L29
+- "get along" — L29
+- "get together" — L29
+- "get away" — L29
+- "look at" — L30
+- "look for" — L30
+- "look up" — L30
+- "look over" — L30
+- "look after" — L30
+- "look out" — L30
+- "look forward to" — L30
+- "look around" — L30
+- "look into" — L30
+- "look away" — L30
+- "wanna" — L31
+- "gotta" — L31
+- "kinda" — L31
+- "sorta" — L31
+- "dunno" — L31
+- "lemme" — L31
+- "gimme" — L31
+- yeah — L31
+- nope — L31
+- yep — L31
+- write — L32
+- win — L32
+- lose — L32
+- hear — L32
+- feel — L32
+- send — L32
+- spend — L32
+- sell — L32
+- tell — L32
+- sit — L32
+- "all day" — L33
+- "all week" — L33
+- "for ages" — L33
+- "a long time" — L33
+- "so far" — L33
+- lately — L33
+- recently — L33
+- "these days" — L33
+- still — L33
+- neighborhood — L33
+- try — L34
+- abroad — L34
+- mountain — L34
+- waterfall — L34
+- cave — L34
+- island — L34
+- jungle — L34
+- snowboard — L34
+- hike — L34
+- surf — L34
+- age — L35
+- childhood — L35
+- "primary school" — L35
+- "high school" — L35
+- "first time" — L35
+- "last time" — L35
+- month — L35
+- year — L35
+- decade — L35
+- anniversary — L35
+- fast — L36
+- slow — L36
+- big — L36
+- small — L36
+- easy — L36
+- hard — L36
+- cheap — L36
+- expensive — L36
+- funny — L36
+- loud — L36
+- champion — L37
+- record — L37
+- medal — L37
+- trophy — L37
+- legend — L37
+- ranking — L37
+- scoreboard — L37
+- rival — L37
+- audience — L37
+- season — L37
+- rule — L38
+- curfew — L38
+- allowance — L38
+- permission — L38
+- punishment — L38
+- warning — L38
+- helmet — L38
+- seatbelt — L38
+- bedtime — L38
+- excuse — L38
+- forecast — L39
+- rain — L39
+- storm — L39
+- thunder — L39
+- lightning — L39
+- sunshine — L39
+- umbrella — L39
+- muddy — L39
+- freezing — L39
+- humid — L39
+- guy — L40
+- gamer — L40
+- stranger — L40
+- teammate — L40
+- creator — L40
+- fan — L40
+- hater — L40
+- channel — L40
+- comment — L40
+- post — L40
+- hobby — L41
+- puzzle — L41
+- chess — L41
+- karaoke — L41
+- cosplay — L41
+- manga — L41
+- anime — L41
+- band — L41
+- drum — L41
+- skateboard — L41
+- remember — L42
+- "photo album" — L42
+- "back then" — L42
+- village — L42
+- "roller skates" — L42
+- treehouse — L42
+- marbles — L42
+- toy — L42
+- playground — L42
+- "way back" — L42
+- hallway — L43
+- footsteps — L43
+- streetlight — L43
+- background — L43
+- "all of a sudden" — L43
+- meanwhile — L43
+- flashlight — L43
+- "power cut" — L43
+- siren — L43
+- silence — L43
+- "told me" — L44
+- rumor — L44
+- whisper — L44
+- shout — L44
+- reply — L44
+- argument — L44
+- apology — L44
+- "the truth" — L44
+- gossip — L44
+- "last night" — L44
+- sunscreen — L46
+- sunburn — L46
+- sandcastle — L46
+- tide — L46
+- seashell — L46
+- cooler — L46
+- towel — L46
+- horizon — L46
+- sunset — L46
+- souvenir — L46
+- lottery — L47
+- millionaire — L47
+- superpower — L47
+- "time machine" — L47
+- rocket — L47
+- desert — L47
+- castle — L47
+- dragon — L47
+- spaceship — L47
+- wish — L47
+- invented — L48
+- discovered — L48
+- released — L48
+- updated — L48
+- uploaded — L48
+- blocked — L48
+- translated — L48
+- designed — L48
+- hosted — L48
+- downloaded — L48
+- "right?" — L49
+- seriously — L49
+- "no way" — L49
+- "for real" — L49
+- obviously — L49
+- totally — L49
+- "I guess" — L49
+- "me neither" — L49
+- "me too" — L49
+- "same here" — L49
+- emoji — L50
+- meme — L50
+- hashtag — L50
+- vibe — L50
+- flex — L50
+- "brb" — L50
+- "idk" — L50
+- "tbh" — L50
+- "ngl" — L50
+- "dm" — L50
