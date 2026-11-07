@@ -433,11 +433,28 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-prize .g4-art{width:100%;height:100%}
 .g4-prize.won{opacity:1;animation:g4spin 1s ease-in-out 2}
 @keyframes g4spin{50%{transform:rotate(180deg) scale(1.12)}100%{transform:rotate(360deg)}}
+/* stackDrop — the finish: the flag he runs and jumps to, the coin it knocks out, the run-and-jump, and
+   the face-first fall when the tower never reached the roof */
+.g4-flag{position:absolute;font-size:22px;line-height:1;opacity:0;transition:opacity .18s ease;pointer-events:none}
+.g4-flag.on{opacity:1}
+.g4-coin{position:absolute;font-size:20px;line-height:1;opacity:0;pointer-events:none}
+.g4-coin.pop{animation:g4coin .35s ease-out forwards}
+@keyframes g4coin{0%{opacity:0;transform:translateY(0) scale(.6)}35%{opacity:1}100%{opacity:0;transform:translateY(-42px) scale(1.15)}}
+.g4-climber.mario{animation:g4mario .55s cubic-bezier(.4,.2,.3,1) forwards}
+@keyframes g4mario{0%{transform:translate(0,0)}30%{transform:translate(36px,-30px) rotate(-6deg)}
+  62%{transform:translate(82px,0)}100%{transform:translate(112px,-4px)}}
+.g4-climber.faceplant{animation:g4faceplant .55s ease-in forwards}
+@keyframes g4faceplant{to{transform:translateY(24px) rotate(84deg);opacity:.8}}
+/* bossRaid — the boss keels over when the killing hit lands (keeps the centring translateX) */
+.g4-bossart.down{animation:g4bossdown .9s ease-in forwards}
+@keyframes g4bossdown{to{transform:translateX(-50%) translateY(22px) rotate(-6deg);opacity:.28}}
 /* the answer block in flight, from the tray to the top of the tower */
 .g4-flyblk{position:absolute;z-index:8;min-width:46px;max-width:72%;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:9px;color:var(--ink);font:700 12.5px 'Public Sans',sans-serif;text-align:center;pointer-events:none;box-shadow:3px 3px 0 var(--tan);transition:transform .3s cubic-bezier(.4,1,.5,1),opacity .3s ease}
 .g4-flyblk.go{opacity:.85}
 .g4-padbtn.lifted{box-shadow:6px 6px 0 var(--ink);cursor:grabbing;pointer-events:none}
-.g4-towerpads{position:absolute;left:var(--tw);right:12px;bottom:8px;display:flex;gap:8px;height:48px}
+.g4-towerpads{position:absolute;right:10px;bottom:10px;display:flex;flex-direction:column;gap:30px;width:150px;height:auto}
+/* the two answer blocks stand bottom-right as a vertical pair, 30px apart; each keeps its own height */
+.g4-towerpads .g4-padbtn{flex:0 0 auto;min-height:44px}
 /* the answer row shared by ladderRun and bossRaid, plus their poster stills */
 .g4-raceopts{display:flex;gap:8px;position:absolute;left:10px;right:10px;bottom:10px}
 .g4-raceopt{flex:1 1 0;min-width:0;padding:8px 10px;margin:0;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);font:700 13.5px 'Public Sans',sans-serif;color:var(--ink);cursor:pointer}
@@ -698,7 +715,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-echo-w.given{background:#fff8ea;border-style:dashed;border-color:var(--tan)}
 .g4-echo-cursor{color:var(--tan);animation:g4blink 1s steps(2) infinite}
 .g4-echo-blank{color:var(--tan)}
-.g4-echo-hint{min-height:1.5em;text-align:center;font:700 12.5px 'Public Sans',sans-serif;line-height:1.3;color:#4a5568}
+.g4-echo-hint{min-height:1.5em;text-align:center;font:700 12.5px 'Public Sans',sans-serif;line-height:1.3;color:#fff}
 @keyframes g4blink{50%{opacity:.15}}
 @keyframes g4land2{from{transform:scale(.72);opacity:0}to{transform:none;opacity:1}}
 .g4-pads{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
@@ -721,9 +738,10 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-bingo{position:absolute;inset:24px 12px 8px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:15px}
 /* the wrap IS the card's footprint and it is FIXED: one box, centred in the stage, so the grid never
    re-measures between items and the curtain can never slide over the stage above it. It takes the
-   stage's own width up to 840px — twice the box it used to be — so a tile is a readable word plaque
-   instead of a chip. */
-.g4-card-wrap{position:relative;flex:1 1 auto;width:min(840px,100%);min-height:0;display:flex;overflow:hidden;border-radius:10px}
+   stage's own width up to 795px — about twice the box it used to be — so a tile is a readable word
+   plaque instead of a chip. 795 and not 840: the footprint is 45px (3 × 15px) tighter, so EACH of the
+   three tiles is 15px narrower than the doubled card was, while the curtain still wraps the grid. */
+.g4-card-wrap{position:relative;flex:1 1 auto;width:min(795px,100%);min-height:0;display:flex;overflow:hidden;border-radius:10px}
 /* equal thirds: a long word on one tile can never make its row taller than the others and shift the
    board between items */
 .g4-bcard{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:8px;width:100%;flex:1}

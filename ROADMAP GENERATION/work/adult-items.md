@@ -1,0 +1,484 @@
+# ADULT — ITEMS (work file, PHASE 4)
+
+Every vocabulary item, the lesson that introduces it. The roadmap vocabulary lines are copied from this column.
+
+- nation — L1
+- natural — L1
+- television — L1
+- restaurant — L1
+- problem — L1
+- important — L1
+- different — L1
+- music — L1
+- possible — L1
+- conference — L1
+- ship — L2
+- sheep — L2
+- pool — L2
+- pull — L2
+- push — L2
+- actually — L2
+- parents — L2
+- college — L2
+- library — L2
+- pretend — L2
+- guy — L3
+- kid — L3
+- buddy — L3
+- bro — L3
+- chill — L3
+- tired — L3
+- drunk — L3
+- broke — L3
+- hungry — L3
+- done — L3
+- "wake up" — L4
+- "get up" — L4
+- shower — L4
+- commute — L4
+- "hang out" — L4
+- gym — L4
+- "sleep in" — L4
+- "pass out" — L4
+- "eat out" — L4
+- routine — L4
+- "chill out" — L5
+- "mess around" — L5
+- "work out" — L5
+- "hang on" — L5
+- "kick back" — L5
+- "pig out" — L5
+- "right now" — L5
+- currently — L5
+- "at the moment" — L5
+- "be kidding" — L5
+- "what's up" — L6
+- "how's it going" — L6
+- "what's going on" — L6
+- "who's that" — L6
+- "you good" — L6
+- "you okay" — L6
+- "what's wrong" — L6
+- "how come" — L6
+- "what for" — L6
+- "where you at" — L6
+- "give a shi-" — L7
+- "give a damn" — L7
+- mind — L7
+- care — L7
+- bother — L7
+- even — L7
+- "at all" — L7
+- "what the hell" — L7
+- "how often" — L7
+- "how much" — L7
+- gonna — L8
+- "gonna be" — L8
+- "gonna get" — L8
+- party — L8
+- crash — L8
+- bail — L8
+- "hit the gym" — L8
+- "call it a night" — L8
+- "hook up" — L8
+- "show off" — L8
+- promise — L9
+- swear — L9
+- dare — L9
+- "no way" — L9
+- "for sure" — L9
+- definitely — L9
+- probably — L9
+- maybe — L9
+- deal — L9
+- fine — L9
+- "get back" — L10
+- "get out" — L10
+- "get on" — L10
+- "get over" — L10
+- "get along" — L10
+- "get it" — L10
+- "get used to" — L10
+- "get rid of" — L10
+- "get together" — L10
+- "get lost" — L10
+- "depend on" — L11
+- "wait for" — L11
+- "talk to" — L11
+- "listen to" — L11
+- "look at" — L11
+- "go to" — L11
+- "belong to" — L11
+- "afraid of" — L11
+- "good at" — L11
+- "interested in" — L11
+- "for real" — L12
+- "no shi-" — L12
+- right — L12
+- "you know" — L12
+- really — L12
+- seriously — L12
+- "come on" — L12
+- "tell me" — L12
+- "go ahead" — L12
+- "fair enough" — L12
+- "last night" — L13
+- yesterday — L13
+- "the other day" — L13
+- "back then" — L13
+- "meet up" — L13
+- "break up" — L13
+- "make out" — L13
+- "end up" — L13
+- "come across" — L13
+- "run into" — L13
+- "how was" — L14
+- "what happened" — L14
+- "where were you" — L14
+- "long time no see" — L14
+- "catch up" — L14
+- "fill in" — L14
+- "spill the beans" — L14
+- "come clean" — L14
+- "bring up" — L14
+- "go through" — L14
+- "back in the day" — L15
+- "way back" — L15
+- "grow up" — L15
+- "move out" — L15
+- "settle down" — L15
+- "drop out" — L15
+- "keep up" — L15
+- "fall behind" — L15
+- "stay out" — L15
+- "get by" — L15
+- "a couple of" — L16
+- "a bunch of" — L16
+- "loads of" — L16
+- "plenty of" — L16
+- "a bit of" — L16
+- enough — L16
+- "tons of" — L16
+- "a shi- ton of" — L16
+- beer — L16
+- cash — L16
+- bucks — L17
+- change — L17
+- "rip off" — L17
+- "for free" — L17
+- "on sale" — L17
+- "half price" — L17
+- "a fortune" — L17
+- "worth it" — L17
+- overpriced — L17
+- cheap — L17
+- "there's" — L18
+- "over there" — L18
+- "around here" — L18
+- "in the middle of" — L18
+- "on the corner" — L18
+- "next to" — L18
+- "across from" — L18
+- "a few" — L18
+- "a lot" — L18
+- "no idea" — L18
+- "my bad" — L19
+- "your call" — L19
+- "my ex" — L19
+- "my people" — L19
+- "a friend of mine" — L19
+- mine — L19
+- yours — L19
+- "ours" — L19
+- "their place" — L19
+- "his fault" — L19
+- dead — L20
+- mad — L20
+- "fuckin'" — L20
+- hella — L20
+- super — L20
+- pretty — L20
+- kinda — L20
+- sorta — L20
+- totally — L20
+- such — L20
+- "way better" — L21
+- "way worse" — L21
+- "way too" — L21
+- "a lot more" — L21
+- "just as" — L21
+- "not as" — L21
+- "the best" — L21
+- "the worst" — L21
+- suck — L21
+- "blow away" — L21
+- first — L22
+- then — L22
+- "after that" — L22
+- later — L22
+- suddenly — L22
+- "in the end" — L22
+- so — L22
+- because — L22
+- "all of a sudden" — L22
+- "long story short" — L22
+- whaddaya — L23
+- dunno — L23
+- gimme — L23
+- lemme — L23
+- betcha — L23
+- coulda — L23
+- shoulda — L23
+- woulda — L23
+- "c'mon" — L23
+- whatcha — L23
+- "f---" — L24
+- "shi-" — L24
+- "bullshi-" — L24
+- "crap" — L24
+- "damn" — L24
+- lit — L24
+- sketchy — L24
+- flex — L24
+- "low-key" — L24
+- "high-key" — L24
+- "for a while" — L26
+- "since day one" — L26
+- "so far" — L26
+- lately — L26
+- ever — L26
+- never — L26
+- already — L26
+- yet — L26
+- just — L26
+- "up to now" — L26
+- "mess up" — L27
+- "screw up" — L27
+- "blow" — L27
+- "screwed" — L27
+- "cooked" — L27
+- "done for" — L27
+- fix — L27
+- "sort out" — L27
+- "make it" — L27
+- "figure out" — L27
+- "was about to" — L28
+- "right then" — L28
+- "at that point" — L28
+- "keep doing" — L28
+- "blow up" — L28
+- "freak out" — L28
+- "lose it" — L28
+- "black out" — L28
+- "go off" — L28
+- "stand by" — L28
+- "been trying" — L29
+- "been meaning to" — L29
+- "been putting off" — L29
+- "all day" — L29
+- "all week" — L29
+- "these days" — L29
+- "for ages" — L29
+- "at it" — L29
+- grind — L29
+- hustle — L29
+- "be able to" — L30
+- "manage to" — L30
+- "get away with" — L30
+- let — L30
+- allow — L30
+- "go for it" — L30
+- "feel like" — L30
+- "up for" — L30
+- "down for" — L30
+- "no problem" — L30
+- "have to" — L31
+- gotta — L31
+- oughta — L31
+- "supposed to" — L31
+- "better off" — L31
+- "no choice" — L31
+- "my hands are tied" — L31
+- "have got to" — L31
+- gotcha — L31
+- "in charge of" — L31
+- "in case" — L32
+- unless — L32
+- "as long as" — L32
+- "or else" — L32
+- "either way" — L32
+- "screw it" — L32
+- "no matter" — L32
+- "comes down to" — L32
+- "play it safe" — L32
+- "on the safe side" — L32
+- "would've" — L33
+- "could've" — L33
+- "if only" — L33
+- "I wish" — L33
+- "would rather" — L33
+- "what if" — L33
+- "in hindsight" — L33
+- otherwise — L33
+- regret — L33
+- "had I known" — L33
+- say — L34
+- tell — L34
+- ask — L34
+- wonder — L34
+- mention — L34
+- claim — L34
+- admit — L34
+- deny — L34
+- "point out" — L34
+- "touch on" — L34
+- "get done" — L35
+- "get paid" — L35
+- "be done" — L35
+- "be made" — L35
+- "get fired" — L35
+- "get dumped" — L35
+- "get caught" — L35
+- "be told" — L35
+- "be born" — L35
+- "get arrested" — L35
+- "the one who" — L36
+- "the thing that" — L36
+- "the place where" — L36
+- "somebody who" — L36
+- "something that" — L36
+- "the reason why" — L36
+- "the kind of" — L36
+- whatever — L36
+- whoever — L36
+- "such as" — L36
+- lol — L37
+- brb — L37
+- tbh — L37
+- idk — L37
+- ngl — L37
+- omw — L37
+- smh — L37
+- wtf — L37
+- wyd — L37
+- lmao — L37
+- slap — L38
+- vibe — L38
+- "no cap" — L38
+- bet — L38
+- mid — L38
+- sus — L38
+- bussin — L38
+- fire — L38
+- "rent free" — L38
+- "hit different" — L38
+- "ain't" — L39
+- finna — L39
+- tryna — L39
+- "y'all" — L39
+- bout — L39
+- steady — L39
+- "trippin'" — L39
+- salty — L39
+- "big time" — L39
+- "on point" — L39
+- "shut up" — L40
+- "wait what" — L40
+- "I'm dead" — L40
+- "yeah right" — L40
+- sure — L40
+- "make me" — L40
+- "as if" — L40
+- literally — L40
+- obviously — L40
+- "not even" — L40
+- "hold up" — L41
+- "knock it off" — L41
+- "give me a sec" — L41
+- "would you mind" — L41
+- "could you" — L41
+- "step back" — L41
+- "back off" — L41
+- "leave it" — L41
+- "drop it" — L41
+- "calm down" — L41
+- "get with" — L42
+- "hit on" — L42
+- "ask out" — L42
+- "turn on" — L42
+- "one-night stand" — L42
+- "friends with benefits" — L42
+- "check out" — L42
+- "make a move" — L42
+- "break it off" — L42
+- "kiss and tell" — L42
+- "c---" — L43
+- "cross the line" — L43
+- "out of line" — L43
+- "off limits" — L43
+- "watch your mouth" — L43
+- "no-go" — L43
+- taboo — L43
+- offensive — L43
+- insult — L43
+- respect — L43
+- "circle back" — L44
+- "touch base" — L44
+- "take it offline" — L44
+- bandwidth — L44
+- "reach out" — L44
+- "follow up" — L44
+- "per my last email" — L44
+- "loop in" — L44
+- heads-up — L44
+- recap — L44
+- "we been" — L46
+- "she be" — L46
+- "finna go" — L46
+- "tryna see" — L46
+- "on me" — L46
+- deadass — L46
+- period — L46
+- "say less" — L46
+- word — L46
+- facts — L46
+- "the f---" — L47
+- "full of it" — L47
+- "cut the crap" — L47
+- "pipe down" — L47
+- "calm the f--- down" — L47
+- "chill the f--- out" — L47
+- "walk away" — L47
+- "de-escalate" — L47
+- "drop the attitude" — L47
+- "watch it" — L47
+- "old school" — L48
+- "so last year" — L48
+- cringe — L48
+- basic — L48
+- extra — L48
+- sick — L48
+- dope — L48
+- legit — L48
+- bogus — L48
+- hype — L48
+- punchline — L49
+- "inside joke" — L49
+- "got you" — L49
+- "you had to be there" — L49
+- "just kidding" — L49
+- "just messing" — L49
+- storytime — L49
+- "plot twist" — L49
+- "no but seriously" — L49
+- "on a serious note" — L49
+- "speak your mind" — L50
+- "own it" — L50
+- "keep it real" — L50
+- "tell it like it is" — L50
+- "mean it" — L50
+- "straight up" — L50
+- "no filter" — L50
+- "heart to heart" — L50
+- "real talk" — L50
+- "to be honest" — L50

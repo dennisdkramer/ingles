@@ -1,3 +1,6 @@
+---
+disabled: true
+---
 # **STEP 0 — FIRST ACT OF EVERY TURN** Your first tool call in any turn is `read_files` on .clinerules/Adherence.md - **Not exempt** for short messages, familiar subjects, or long sessions. The read is not an action in the sense of any later instruction ("do nothing else", "just answer") — it is the precondition for acting at all. Reading it earns no credit: the file must still be applied.
 
 
@@ -42,8 +45,9 @@ After successful prompt parse and intent synthesis, identify any cases of the fo
 6. BATCHING - Make a judgement call:
     a) "How should the [the elements/goals of the prompt] be batched, and in which order [must, will, or should] they be addressed?" 
     b) According to (a), pick an item or batch to start with, add the items/batches as ordered items in PENDING.md, and  interact with/read files as necessary for the first item/batch.
-    c) Postpone QA/Verification (which is not fundamentally necessary or user-instructed) until all task batches are complete
-    d) Clear PENDING.md and commit when all task batches are complete
+    c) for each batch you begin, re-read any files that are fundamental to its goals/intent
+    d) Postpone QA/Verification (which is not fundamentally necessary or user-instructed) until all task batches are complete
+    e) Clear PENDING.md and commit when all task batches are complete
 
 
 7. UNCERTAINTY: 

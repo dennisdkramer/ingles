@@ -4,5 +4,14 @@ The live working plan for the CURRENT task. When a prompt decomposes into subtas
 
 _(Active batches, newest first. Cleared once done AND committed.)_
 
-_(No active batches. Round of game fixes landed and committed; the open requests live in `qa/notes.md`.)_
+## Batch — resolve `## preview-blocks.html` requests in CONTENT_EXAMPLES.md
+- [ ] A1 rename `chunkBank` → `contextFit` (catalogue row 47, heading 377, refs 1336 & 1338)
+- [ ] A2 delete `connectedSpeech` (section, catalogue row 44, reword refs 548 & 625)
+- [ ] A3 delete `dictation` (section, catalogue row 45, reword refs 678, 837 & 841)
+- [ ] A4 delete `shadowRecord` (section, catalogue row 49, reword refs 643 & 832)
+- [ ] A5 `questionBuilding` — add level/placement note (lesson 10+, only in a lesson touching questions)
+- [ ] (done already in the contract, just clear notes) `sentenceSurgery` drag-line+alternate; `registerContrast` both-forms-real rule
+- [ ] B clear the resolved `###` sections from `qa/notes.md`
+- [ ] C `repairMoves` rephrase 'repair'/'come apart' → 'interjecting' (await user clarification)
+
 

@@ -1,0 +1,26 @@
+{
+  // Generated / scratch trees VS Code should not watch.
+  // node_modules is default-excluded by VS Code, but stated here so a settings
+  // reset or a second machine cannot silently re-enable it.
+  // qa/_live holds throwaway browser profiles: thousands of .db/.log files that
+  // a browser rewrites continuously while `npm run qa:live` runs.
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/qa/_live/**": true,
+    "**/ARCHIVED/**": true
+  },
+
+  // Text search never usefully hits these.
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/qa/_live": true,
+    "**/ARCHIVED": true
+  },
+
+  // Hidden from the Explorer and from quick-open. Remove a line here if you want
+  // to browse that folder by hand (node_modules and qa/_live screenshots/logs).
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/qa/_live": true
+  }
+}
