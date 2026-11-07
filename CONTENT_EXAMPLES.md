@@ -70,7 +70,9 @@ A shape whose `fits` could be swapped for any other shape's is describing its ow
 | `fun` | 0–3, engagement |
 | `reuse` | 0–3, how many lessons it survives before going stale |
 | `needs` | `none` (ships as markup today) or the engine it requires |
-| `count` | **CountUp** — the score climbs from 0 as items are got, which is the default · **CountDown** — the shape spends a limited resource (lives, hearts, guesses), so the score starts full and falls. Beside it, `<min-max>` is the number or numbers the shape must be built with: `3` for three hearts, `9` for a 3×3 card, `-6` for at most six holes, `5-8` for a span between. `""` means it takes any number. It is the last thing on the heading line. |
+| `count` | **CountUp** — the score climbs from 0 with each correct answer, which is the default · **CountDown** —the score starts full and falls per error.
+| `resource` | `<type>` - the shape spends a limited resource (lives, hearts, guesses),
+| `<min-max>` | defines the minimum and/or maximum amount of questions or options the shape requires - `""` means no requirement for that particular parameter. 
 
 Scales are four-point on purpose: 0–5 clusters at 3. `evidence: none` means the vehicle cannot stand alone —
 it selects, reveals or decorates, and a real control must carry the answer alongside it.
@@ -144,14 +146,16 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 
 ### `stackDrop` — section · cost B · evidence radio · fits order+form — tests 2 · fun 3 · reuse 2 · **built: engine4.js** · CountUp ""
 
-- **does** — The question arrives as the next block of a tower and the player **drags the right answer on top of it**:
-  the block flies up, lands and **stays in the tower**. A wrong answer tumbles off and the question stays exactly
-  where it was, so the tower never loses what was earned and its height IS the progress. A ladder grows up the left
-  side, one rung per answer placed, and the climber climbs with it to the chest at the top.
+- **does** — The question arrives as the next block of a tower and the player **puts the right answer on top of it**
+  by picking it: the block flies up, lands and **stays in the tower**. A wrong answer tumbles off and the question
+  stays exactly where it was, so the tower never loses what was earned and its height IS the progress. The climber
+  climbs the tower itself to the chest at the top.
 - **teaches** — accumulate-and-complete: the reward is the finished tower, so a long drill has a shape and an end.
   Every answer placed is one item answered, so the tower is the progress bar.
 - **skins** — one `.qitem` per block; the question block is the stem, the buttons are the options. Six to ten items
-  makes a climb. The question block IS the prompt, so it is not printed a second time on the HUD line.
+  makes a climb: the tower is half the stage's width and each block's HEIGHT comes from the run's own length, so the
+  whole stack stands inside the stage up to ten blocks (the most that keeps a word readable) and a longer run keeps
+  that height and slides. The question block IS the prompt, so it is not printed a second time on the HUD line.
 - **art** — flat blocks with hard edges, two ladder rails and a rung per answer, a drawn climber, a chest that
   lights up at the top. The tower slides down to keep the newest block in view once it outgrows the stage.
 - **can't** — one item per block, so a two-item block has nowhere to climb; timing dominates, so keep the language
@@ -164,6 +168,10 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   per option, and the gap the bird is inside when the wall arrives is the answer. A click on a gap answers at once
   (the honest "I know it" path, and the only one a keyboard or reduced-motion student has); a click anywhere else
   flaps.
+- **the wall is the stake** — a right gap is a point and the flight carries on through it into the next question. A
+  wrong word costs nothing: the flight continues. Flying into the **brick** costs one of three hearts *and the run* —
+  the block starts again at its first question, in the same order, with what was already answered left as it was
+  written. A restart is a second attempt, so the score a finished block shows is the **best attempt**, not the last.
 - **skins** — gaps are options; the prompt is fixed on the HUD.
 - **art** — a drawn bird that flaps its wings on every lift, including the one automatic flap as the round opens, so
   it is never falling before the student has touched anything; a brick wall with the words sitting in its gaps; sky
@@ -209,7 +217,9 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   clue. The engine lays the whole set out at once: the first word across, every later word placed so it **crosses**
   an existing letter, anything that cannot cross dropped into its own row below. A shared letter is one cell, so
   typing it once fills both words and **solves both items** — that is the point of a crossword and why this is a
-  board, not a drill. A full word typed wrongly clears and shakes; its item stays blank, so the blank is the evidence.
+  board, not a drill. A full word typed wrongly is **answered**: it clears, shakes, and its item goes down as a
+  miss with its radio left blank — one chance per word, because this board keeps no lives to pay for a second
+  one. Its cells stay typeable, so a crossing word can still use those letters.
 - **art** — the site's own grid: a flat block per gap, a small number in the corner of each word's first cell.
   The cells are sized to **fill the stage** (10px of margin all round, height and width each get a say), and the
   clue for the word you are typing sits in its own panel **beside the grid** — one clue on the stage, never the
@@ -237,6 +247,12 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   reads out the sentence as it stands.
 - **can't** — one sentence per block and one word per item, so the wording has to be planned end to end; nothing
   here trains spelling or listening.
+- **guardrail** — the sentence comes FIRST and the pads are generated second, one word at a time, LEFT TO
+  RIGHT: for each `.qitem`, read the words already on the board (`data-first` plus every item before it), then
+  write the one word that fits and check the three distractors against that same reading. A distractor that
+  could follow what is placed is a broken item — the student is reading the sentence, not recalling a rule, so
+  the pad that also fits is the pad that teaches nothing and scores a coin flip. Generating the three options
+  before the phrase is written, or from the whole sentence at once, is what produces them.
 - **needs** — nothing; `engine4.js` ships it (the voice is the built-in speech).
 
 ### `bingoCard` — section · cost B · evidence radio · fits listening+meaning — tests 1 · fun 3 · reuse 2 · **built: engine4.js** · CountUp 9
@@ -360,8 +376,10 @@ answer to "why not another vehicle".
   they will be heard using, and the twin exists only to prove the meaning is unchanged.
 - **markup** — column pair: `.chart` with the twin in the left column and `input.gap` in the right, then three to
   six item-list gaps that ask for the form from the other direction.
-- **fits** — full width (the chart needs two readable columns); pair with `registerContrast` when the lesson also
-  has a stiff/spoken axis, or with `sentenceCombine` when the pair changes the rhythm of a whole sentence.
+- **fits** — HALF, by width fill: a two-column chart of short pairs plus a few gaps does not fill a full row, so
+  it collapses to half width and is centred when it is alone (its lead-in and notes wrap to that width and never
+  count as fill). Pair with `registerContrast` when the lesson also has a stiff/spoken axis, or with
+  `sentenceCombine` when the pair changes the rhythm of a whole sentence.
 - **vary** — reverse the direction (twin → everyday) before widening the vocabulary; then move the verb into a
   sentence with a subject that forces agreement. Rarer verbs make it *unfairer*, not harder.
 - **can't** — the pairing has to be genuinely interchangeable, or the chart teaches a false equation; and it is a
@@ -373,7 +391,7 @@ answer to "why not another vehicle".
   a stated situation into the gap, or matches the chunk to what it answers.
 - **markup** — column pair for the bank itself (chunk ↔ what it does), then an item list of situations with one
   `input.gap` each. The `.listen` chip carries the chunk, so the student hears it as one piece.
-- **fits** — full, or half beside a `chatSample` that shows the chunks in their natural habitat.
+- **fits** — full only when its content fills the row; the bank plus its situations is usually a HALF, and it collapses to half width on width fill alone (its note and lead-in text do not count toward that fill). Best beside a `chatSample` that shows the chunks in their natural habitat.
 - **vary** — start with the chunk fully given and gap only the situation; then invert. The real lever is *which*
   chunks are in the bank: same function, different politeness, is harder than more chunks of the same politeness.
 - **can't** — a chunk whose parts can be swapped is not a chunk, so check it is said as one piece; and it never
@@ -387,7 +405,7 @@ answer to "why not another vehicle".
 - **markup** — column pair for the contrast, then an item list of recognition items using the `.listen` chip. The
   answer key is the clip's `data-say`, so the option that matches what was played is the right one with no key
   written into the page.
-- **fits** — full, or half beside `dictation` (the same sentence typed at speed is the proof it was heard).
+- **fits** — half, by width fill: a contrast pair and a short recognition list do not fill a full row, so this block collapses to half width (centred if it is alone). Best beside `dictation` (the same sentence typed at speed is the proof it was heard).
 - **vary** — same contrast in a longer sentence before adding a second contrast; then remove the written form
   entirely so only the ear has it. Adding a third reduced form to the same item is what breaks it.
 - **can't** — trains the ear only, nothing about meaning; and it cannot be tested by writing, because a student can
@@ -405,14 +423,19 @@ answer to "why not another vehicle".
   sentence is easier than a short one full of contrasts the student cannot yet separate.
 - **can't** — one playing is a memory test, so allow replays or it measures recall, not listening; and the mark
   needs the teacher, because two spellings can both be defensible.
+- **level** — lesson **15 and above**. A sentence played at natural speed asks the student to hold a whole
+  clause in memory and reproduce every ending of it, so below that level the block measures memory rather than
+  listening; use `listenIdentify` or `minimalPairs` there instead.
 
 ### `sentenceSurgery` — section · cost B · evidence gap · fits order+form — tests 2 · fun 3 · reuse 3 · CountUp ""
 
 - **does** — A sentence or a whole exchange is cut into chunks and handed over out of order; the student rebuilds it.
   Word order, chunk order and linking all show up immediately, because a wrong order reads wrong.
-- **markup** — the chunks are listed as a bank; the rebuilt order is typed as numbers into consecutive `gap`s, so the
-  evidence is the student's own sequence and it survives a reload. A drag version is the same block with pointer
-  events and does not change what is being tested.
+- **markup** — the chunks are listed as a bank, and BELOW the bank there is one ORDER LINE the student drags them
+  into: position comes from where a chunk is dropped, not from a number typed beside it, so the sentence is the
+  thing being built and nothing is written twice. A keyboard path exists for every drag (a chunk picks up and
+  drops on Space/Enter), because the line must not be pointer-only. **Alternate form** — the same block, cut the
+  other way: the sentence arrives with EXTRA words in it and the student removes the ones that do not belong.
 - **fits** — full, or half beside `dictogloss` when the lesson is also about holding a sentence in memory.
 - **vary** — more chunks before longer chunks; then remove the numbered scaffold so the whole sentence must be typed.
   A sentence with two defensible orders is not a harder item, it is a broken one.
@@ -429,8 +452,12 @@ answer to "why not another vehicle".
   audience the page never described.
 - **vary** — two clearly different audiences before two similar ones. The lever is how close the two audiences are
   (a teacher vs a head teacher vs a friend's parent), not how rude the options get.
-- **can't** — needs a described situation; with no audience both columns are defensible. And it only ever *chooses*
-  between wordings someone else wrote — it never produces one, which is why it pairs with `politeLadder`.
+- **can't** — needs a described situation; with no audience both columns are defensible. And both wordings must be
+  ones people REALLY say or write: a softened form invented for a phrase that never needs softening (or a stiff form
+  for a phrase that never has one) teaches a register the student will never meet, which is worse than teaching
+  none. If one of the two forms is not genuinely in use, the contrast is not a contrast — pick another phrase.
+  And it only ever *chooses* between wordings someone else wrote — it never produces one, which is why it pairs
+  with `politeLadder`.
 
 ### `questionBuilding` — beat · cost A · evidence gap · fits order+interaction — tests 3 · fun 1 · reuse 3 · CountUp ""
 
@@ -442,6 +469,11 @@ answer to "why not another vehicle".
   begin with `<question word>`. Loading two new demands into one item is the standard way this drill becomes unfair.
 - **can't** — graded on form only, or free answers become unmarkable, so state what counts as right; and it does not
   teach turn-taking — a perfect question in the wrong place is still a failed exchange, which is `roleCard`'s job.
+- **difficulty** — the item is harder than it looks: one answer can often be asked two or three correct ways, and a
+  context can be so open that the "right" question is a judgement the page never defined. So each item names ONE
+  thing being asked (the tense, the question word, the subject) and accepts every form that fits that one thing, and
+  the answer it is built from is specific enough that only one question really answers it. If two different questions
+  would both be right and both natural, it is not a harder item — it is a broken one.
 
 ### `repairMoves` — beat · cost A · evidence gap · fits interaction+register — tests 2 · fun 1 · reuse 2 · CountUp ""
 

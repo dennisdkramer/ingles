@@ -6,7 +6,7 @@
    - The engine only PRESENTS those items and MARKS the radios: a correct pick checks the option it
      stands for and dispatches `change`, so engine1/engine2 save it like any answer. A wrong pick
      leaves the radio blank — the blank is the teacher's evidence.
-   - Versatility rule: the runner owns the queue, scoring, replay, HUD, deadline and sound; a game
+   - Versatility rule: the runner owns the queue, scoring, HUD, deadline and sound; a game
      supplies only `show / mark / clear`. Content authoring is identical for every game, so
      `data-game` is a presentation choice and never a content choice.
    Levers (all optional, on the `.game` element):
@@ -15,10 +15,11 @@
                    echoPads, bingoCard, ladderRun, bossRaid)
      data-time      ms per item, 0 = no deadline   (0)   ← this is difficulty
      data-limit     seconds for the whole run, 0 = off (0)
-     data-replay    0 | 1   missed items return once at the end (1)
-     data-retry     0 | 1   the run may be repeated at all: no replay of the misses and no Play again
-                            (1). A block that IS the quiz sets 0 — what the student answered once,
-                            stands; a block in the training part leaves it on (default 1)
+     data-retry     0 | 1   the run may be repeated at all (1). A game that TRAINS leaves the default on;
+                            the block that IS the page's quiz writes 0, because what the student answered
+                            once is the evidence and a replay would only let them edit it. So a generated
+                            quiz-section `.game` carries data-retry="0" and a training-section one carries
+                            nothing.
      data-shuffle   0 | 1   present items in random order (1)
      data-rounds    how many items a run uses, 0 = all authored (0)
      data-prompt    0 | 1   show the stem on the HUD line (1)
@@ -29,6 +30,14 @@
    (`view.lives()`) gets a row of HEARTS in the stage's top-left corner, on a card, because a heart is
    read at a glance and a pair of numbers has to be read. A presentation may also expose
    `view.reset()`, called when a run starts, so a restart opens full.
+   ONE PASS, NO RECYCLING: an item is answered once per run and a miss is never put back in the queue,
+   on any game. A run therefore uses each of its items exactly once and a point lost is lost — no second
+   chance at the same question, which would be the run marking its own work down as a formality.
+   RECYCLING BELONGS TO A GAME THAT COSTS LIVES: a presentation that reports `view.lives()` may show the
+   student the same question or answer again, because the retry is paid out of a count the HUD displays
+   (echoPads re-asks the word it was told is wrong, and charges a life). A presentation with no lives
+   never does — replayable or not: a block that charges nothing for a second try has no reason to offer
+   one, and the blank radio is worth more than an answer the student reached on the third attempt.
    ONE fail condition, and the runner enforces it: `view.lives()` reaching 0 ends the run, for every
    game, without the presentation having to say so. A shape that spends a life in its own `mark()`
    simply reports the smaller number and the run ends on the next beat; the misses are not replayed
@@ -40,6 +49,11 @@
                           the runner does not draw the same words a second time on the HUD line
      PLUGINS.x.timeScale  a static number; the block's `data-time` is multiplied by it, because that
                           game needs a slower clock than the one the author wrote (skeetRange)
+     PLUGINS.x.noTimer    true: the game IS its own clock — flapGate's wall coming at the bird — so the
+                          block runs with no deadline at all: no "each" chip on the intro card, no time
+                          bar, nothing to expire. `data-time` on such a block is ignored rather than fought
+     PLUGINS.x.noShuffle  true: the game's OWN order is the content — echoPads' sentence is read word by
+                          word — so the items are never shuffled, whatever `data-shuffle` says
    Test hook: window.__G4 lists live runners; each exposes `_test`
    (start / step / pick / expire / finish / state) so a headless test drives the state machine.
 ------------------------------------------------------------------------------------------------ */
@@ -85,6 +99,38 @@ window.GAMES4 = (function () {
      Browsers gate audio until a gesture, and Start is a gesture, so nothing plays unbidden. ---- */
   var SFX = (function () {
     var ctx = null;
+    /* Two of the sounds a game makes cannot be synthesized honestly: a GUNSHOT and a wrong-answer
+       BUZZER. Those are files, published free by Mixkit (free for personal and commercial use, no
+       attribution required, but not to be re-hosted on their own), so the engine points at the
+       publisher's own copy instead of shipping a copy in this repo. A page that wants its own files —
+       a school with no internet, or a school that wants a different gun — says so BEFORE this script
+       runs:
+         window.SFX_FILES = { gunshot: 'sfx/gunshot.mp3', buzzer: 'sfx/buzzer.mp3' };
+       A file that will not load is silence, never an error: the game still runs, and it still plays the
+       synthesized cues around it. */
+    var CLIPS = {
+      /* "Game gun shot" — 1s https://mixkit.co/free-sound-effects/gunshot/ */
+      gunshot: 'https://assets.mixkit.co/active_storage/sfx/1662/1662-preview.mp3',
+      /* "Wrong answer bass buzzer" — 2s https://mixkit.co/free-sound-effects/buzzer/ */
+      buzzer: 'https://assets.mixkit.co/active_storage/sfx/948/948-preview.mp3'
+    };
+    if (window.SFX_FILES) { for (var k in window.SFX_FILES) { if (window.SFX_FILES[k]) CLIPS[k] = window.SFX_FILES[k]; } }
+    var loaded = {};                    /* name -> the one Audio element, so a file is fetched once */
+    /* play a recorded clip; `ms` cuts it short, `vol` is its own level (see the buzzer below) */
+    function clip(name, ms, vol) {
+      try {
+        var src = CLIPS[name];
+        if (!src) return false;
+        var a = loaded[name];
+        if (!a) { a = loaded[name] = new Audio(src); a.preload = 'auto'; }
+        a.volume = vol || 0.55;
+        try { a.currentTime = 0; } catch (e) { /* not loaded yet: it starts at the top anyway */ }
+        var p = a.play();
+        if (p && p.catch) p.catch(function () { /* autoplay refused, or no file: silence */ });
+        if (ms) setTimeout(function () { try { a.pause(); } catch (e) { /* gone */ } }, ms);
+        return true;
+      } catch (e) { return false; }
+    }
     function tone(freq, ms, type, vol) {
       try {
         if (!ctx) {
@@ -133,6 +179,19 @@ window.GAMES4 = (function () {
       win: function (on) {
         if (!on) return;
         [523, 659, 784, 1047].forEach(function (f, i) { setTimeout(function () { tone(f, 150); }, i * 85); });
+      },
+      /* the recorded two (see CLIPS): played only where they are what the moment actually is */
+      clip: clip,
+      /* the shot: the disc was hit and the gun went off */
+      shot: function (on) { if (on) clip('gunshot', 0, 0.6); },
+      /* a wrong answer: the buzzer, at HALF the level it used to play at — it is a correction, not an
+         alarm, and it is never played on its own (the range fires the gun with it) */
+      wrong: function (on) { if (on) clip('buzzer', 0, 0.25); },
+      /* point a name at another file at runtime (the page can also do it before the script loads) */
+      setSrc: function (name, url) {
+        if (!name || !url) return false;
+        CLIPS[name] = url; loaded[name] = null;
+        return true;
       }
     };
   })();
@@ -327,6 +386,18 @@ window.GAMES4 = (function () {
       + '<path d="M6 26q0-16 24-16t24 16" fill="#d9a75f" stroke="#6b4520" stroke-width="2.6"/>'
       + '<rect x="25" y="24" width="10" height="12" rx="2" fill="#ffd05a" stroke="#6b4520" stroke-width="2.2"/>'
       + '<path d="M6 30h48" stroke="#6b4520" stroke-width="2"/>'
+      + '</svg>',
+    /* ladderRun's graffiti: the paint thrown over the prompt at the top of the ladder — three sprayed
+       blobs, a tag and their drips, drawn once and stretched to whatever board it covers */
+    graffiti: '<svg class="g4-art g4-graffiti" viewBox="0 0 240 70" preserveAspectRatio="none" aria-hidden="true" focusable="false">'
+      + '<g fill="#ff3d81" opacity=".9"><ellipse cx="54" cy="26" rx="46" ry="19"/>'
+      + '<ellipse cx="36" cy="42" rx="21" ry="10"/><rect x="30" y="42" width="5" height="20" rx="2.5"/></g>'
+      + '<g fill="#ffd23f" opacity=".9"><ellipse cx="134" cy="34" rx="42" ry="16"/>'
+      + '<ellipse cx="152" cy="18" rx="19" ry="9"/><rect x="150" y="34" width="4" height="24" rx="2"/></g>'
+      + '<g fill="#38d0c4" opacity=".9"><ellipse cx="196" cy="26" rx="34" ry="14"/>'
+      + '<rect x="196" y="34" width="4" height="18" rx="2"/></g>'
+      + '<path d="M40 22q14-10 30-2t30 0" stroke="#fdfaf2" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/>'
+      + '<path d="M112 46q16-12 34-2" stroke="#2a1c10" stroke-width="4" fill="none" stroke-linecap="round" opacity=".55"/>'
       + '</svg>'
   };
 
@@ -363,7 +434,6 @@ window.GAMES4 = (function () {
     this.items = readItems(root);
     this.queue = [];
     this.idx = 0; this.score = 0; this.total = 0;
-    this.replay = flag(root, 'data-replay', 1);
     this.retry = flag(root, 'data-retry', 1);
     this.shuffleOn = flag(root, 'data-shuffle', 1);
     this.usePrompt = flag(root, 'data-prompt', 1);
@@ -372,10 +442,13 @@ window.GAMES4 = (function () {
        author's `data-time` once, here, so the intro card already shows the clock that will run */
     this.itemTime = Math.round(Math.max(0, num(root, 'data-time', 0))
       * ((this.plugin && this.plugin.timeScale) || 1));              // ms per item
+    /* a game that is its own clock has no deadline to keep: the lever wins over the authored data-time,
+       so a page written before the game lost its timer cannot put one back */
+    if (this.plugin && this.plugin.noTimer) this.itemTime = 0;
     this.limit = Math.max(0, num(root, 'data-limit', 0));         // seconds per run
     this.limitLeft = this.limit;
     this.reduced = reduceMotion;
-    this.running = false; this.replaying = false; this.phase = 'idle';
+    this.running = false; this.phase = 'idle';
     this.missed = []; this.timers = []; this.clock = 0; this.barRaf = 0;
     this.livesEl = null;
 
@@ -401,7 +474,6 @@ window.GAMES4 = (function () {
     })) : 1) + '</b></li>');
     meta.innerHTML = bits.join('');
     card.appendChild(meta);
-    this.metaEl = meta;              /* finish() writes the last score into this list */
     intro.appendChild(card);
     this.intro = intro;
     var stage = el('div', 'g4-stage');
@@ -413,6 +485,14 @@ window.GAMES4 = (function () {
     var hud = el('div', 'g4-hud');
     hud.innerHTML = '<span class="score"></span><span class="clock"></span>';
     stage.appendChild(hud);
+    /* the score of the run that has just ended, printed in the corner the LIVE score uses while playing:
+       the same place, so a returning student reads "Score: 4/6" as that card's vacancy filled in. It is
+       the block's ONE place for a final score — nothing is printed under the block — and it is hidden
+       during a run (the live score is there) and until there is something to show. */
+    var prev = el('div', 'g4-prev');
+    prev.innerHTML = '<span>Score:</span><b></b>';
+    stage.appendChild(prev);
+    this.prevEl = prev;
     if (this.usePrompt) {
       var prompt = el('div', 'g4-prompt');
       stage.appendChild(prompt);
@@ -470,8 +550,11 @@ window.GAMES4 = (function () {
      or health starts full and counts down (3/3, 2/3…). The pair of numbers says which way it goes, and
      it is the whole of the top-right count — there is no separate round counter, because two fractions
      side by side read as one muddled number. The clock joins it only when the block sets a total limit.
-     A presentation whose score is NOT "items answered" — flapGate scores the best streak it reached
-     before a life was lost — reports it through `view.score()`, and that number is what the HUD shows. */
+     A presentation whose score is NOT "items answered" reports it through `view.score()`, and that
+     number is what the HUD shows. `this.best` is the same idea kept HIDDEN: the highest a run has
+     reached while it was still going, which is what a run that RESTARTS keeps (a presentation that
+     sends the run back to its first item sets the live score to zero, and this is the count that is not
+     thrown away — the final score is the best attempt, not the last one). */
   Runner.prototype.hud = function () {
     var lives = (this.view && typeof this.view.lives === 'function') ? Math.max(0, this.view.lives()) : null;
     if (lives != null) this.livesTop = Math.max(this.livesTop || 0, lives);
@@ -555,12 +638,17 @@ window.GAMES4 = (function () {
     this.clearPoster();
     this.running = true; this.replaying = false;
     this.dead = false;
-    this.score = 0; this.idx = 0; this.missed = []; this.livesTop = 0;
+    this.score = 0; this.best = 0; this.idx = 0; this.missed = []; this.livesTop = 0;
     var list = this.items.slice();
-    if (this.shuffleOn) shuffle(list);
+    /* shuffle is the default, but a game whose CONTENT is the item order (echoPads: one word per item,
+       making one sentence) can never be shuffled — a shuffled sentence is a nonsense sentence */
+    if (this.shuffleOn && !(this.plugin && this.plugin.noShuffle)) shuffle(list);
     var rounds = Math.max(0, num(this.root, 'data-rounds', 0));
     if (rounds > 0 && rounds < list.length) list = list.slice(0, rounds);
     this.queue = list; this.total = list.length;
+    /* the order this run was dealt in, kept so a run that restarts (a wall strike) asks the same
+       questions in the same order — a restart is a second attempt, not a different test */
+    this.dealt = list.slice();
     this.limitLeft = this.limit;
     /* a presentation that holds run state of its own (lives, attempts) puts it back before the HUD
        reads it, so a restart starts full and the score can never open at 0/0 */
@@ -619,6 +707,7 @@ window.GAMES4 = (function () {
     var hit = why === 'hit';
     if (hit) {
       this.score++;
+      this.best = Math.max(this.best || 0, this.score);
       var opt = null;
       (it.opts || []).forEach(function (o) { if (o.value === value) opt = o; });
       if (opt && opt.radio) {
@@ -632,15 +721,17 @@ window.GAMES4 = (function () {
       this.missed.push(it);
     }
     this.hud();
-    /* the generic miss is only a fallback: a presentation that owns its own miss sound (whackMole's
-       groan) sets PLUGINS.x.ownMiss, and then the runner does not play a second sound on top of it */
-    if (hit) SFX.hit(this.sound);
+    /* the generic cues are only a fallback: a presentation that owns its own sound (whackMole's groan,
+       skeetRange's gun / buzzer / crowd) sets PLUGINS.x.ownMiss — or ownSound, for both cues — and then
+       the runner does not play a second sound on top of it */
+    if (this.plugin && this.plugin.ownSound) { /* the presentation has played it already */ }
+    else if (hit) SFX.hit(this.sound);
     else if (!(this.plugin && this.plugin.ownMiss)) SFX.miss(this.sound);
     if (this.view) this.view.mark(it, hit, value);
     this.hud();          /* an activity that spends a life shows it at once, not on the next item */
     /* THE fail condition, for every game in the engine: no lives left ends the run. A presentation
        that keeps lives (mineGrid's three bites, wordleBoard's two wrong words, flapGate's bricks,
-       echoPads' points) does not have to know about it — spending the last one here is enough. The
+       echoPads' three wrong pads) does not have to know about it — spending the last one here is enough. The
        run is over for real, so the misses are not replayed afterwards. */
     if (this.livesLeft() === 0) this.dead = true;
     this.later(function () {
@@ -671,6 +762,39 @@ window.GAMES4 = (function () {
     return this.resolve(null, 'miss');
   };
 
+  /* finalScore: the number a run is judged on. A run that never restarts is judged on exactly what it
+     scored; a run that restarts (flapGate's wall strike) may have had its live score zeroed on the way,
+     so the best it reached is kept and the BEST attempt is the number the block hands back. */
+  Runner.prototype.finalScore = function () {
+    return Math.max(this.got(), this.best || 0);
+  };
+  /* restartRun: put the run back to its FIRST item, still running, with the same questions in the same
+     order — a second attempt at the same test, not a different one. The live score goes back to zero,
+     because those items are about to be asked again and a count that kept them would pay twice for one
+     answer. Nothing that is written in the page is taken back: the radios of the attempt that ended stay
+     written, so the evidence survives its restart. The PRESENTATION is not reset — the lives it holds are
+     spent, which is what a restart costs. Only a game with lives calls this: the same question shown
+     twice is what the hearts pay for. */
+  Runner.prototype.restartRun = function () {
+    var self = this;
+    if (!this.running || this.phase === 'over' || !this.dealt) return false;
+    this.clearTimers();
+    if (this.view) this.view.clear();
+    this.dead = false;
+    this.score = 0; this.answered = 0; this.idx = 0; this.missed = [];
+    this.queue = this.dealt.slice();
+    this.total = this.queue.length;
+    this.limitLeft = this.limit;
+    if (this.limit) {
+      this.clock = setInterval(function () {
+        self.limitLeft--; self.hud();
+        if (self.limitLeft <= 0) self.finish();
+      }, 1000);
+    }
+    this.step();
+    return true;
+  };
+
   /* board mode: a game that places every item at once answers them out of order. The runner still
      owns scoring, the radio write and the score line, so what saves is exactly what always saved. */
   Runner.prototype.scoreBoard = function (it, value) {
@@ -680,6 +804,7 @@ window.GAMES4 = (function () {
     (it.opts || []).forEach(function (o) { if (o.value === value) opt = o; });
     if (hit) {
       this.score++;
+      this.best = Math.max(this.best || 0, this.score);
       if (opt && opt.radio) {
         opt.radio.checked = true;
         if (window.Event) {
@@ -705,43 +830,32 @@ window.GAMES4 = (function () {
     return hit;
   };
 
-  /* finish: replay the misses once, then write the score and hand the authored list back.
+  /* finish: write the score and hand the authored list back. No second pass over the misses: an item is
+     answered once per run, so a point lost is lost and the run never recycles its questions.
      Idempotent: a shape that spends its last life calls this itself, and the runner calls it too when
      the clock or the queue runs out — the second call must not score the run twice or play the win
      sting again, so an already-finished run is simply handed back. */
   Runner.prototype.finish = function () {
-    if (this.phase === 'over' && !this.running) return this.score;
-    if (!this.board && this.replay && this.retry && !this.replaying && !this.dead && this.missed.length) {
-      this.replaying = true;
-      this.queue = this.missed.slice();
-      this.missed = [];
-      this.idx = Math.max(0, this.total - this.queue.length);
-      return this.step();
-    }
+    if (this.phase === 'over' && !this.running) return this.finalScore();
     this.phase = 'over';
     this.running = false;
     this.root.classList.remove('is-on');
     this.setPrompt('', false);
     if (this.view) this.view.clear();
     this.clearTimers();
-    SFX.win(this.sound && this.score > 0);
-    var line = this.root.querySelector('.game-score-line');
-    if (!line) { line = el('p', 'game-score-line'); this.root.appendChild(line); }
-    line.textContent = 'Score: ' + this.got() + ' / ' + this.total
-      + (this.dead ? ' — out of lives.'
-        : this.got() === this.total ? ' — clean run.'
-          : (this.retry ? ' — go again when you like.' : ' — one attempt, as the page asked.'));
+    SFX.win(this.sound && this.finalScore() > 0);
     this.btn.textContent = this.retry ? '↻ Play again' : 'Run complete';
     this.btn.disabled = !this.retry;
-    /* the run's score is not a thing you lose by looking away: the intro card comes back over the
-       stage, so the last score goes on it and stays there until the next run is finished. */
-    if (this.metaEl) {
-      var last = this.metaEl.querySelector('.g4-intro-last');
-      if (!last) { last = el('li', 'g4-intro-last'); this.metaEl.appendChild(last); }
-      last.innerHTML = 'last run <b>' + this.got() + '/' + this.total + '</b>';
+    /* the run's score is not a thing you lose by looking away, and it is not a sentence under the block
+       either: the intro comes back over the stage, and the run that just ended is written in the corner
+       the live score uses — "Score:" over the pair — so it reads as that card coming back with the
+       number still on it. Same corner, same card, every game. */
+    if (this.prevEl) {
+      this.prevEl.querySelector('b').textContent = this.finalScore() + '/' + this.total;
+      this.prevEl.classList.add('on');
     }
     this.poster();               /* the art comes back behind the intro overlay */
-    return this.score;
+    return this.finalScore();
   };
   Runner.prototype.clearPoster = function () {
     if (this.posterEl && this.posterEl.parentNode) this.posterEl.parentNode.removeChild(this.posterEl);
@@ -793,7 +907,7 @@ window.GAMES4 = (function () {
     var wordRow = el('div', 'g4-words');
     var tray = el('div', 'g4-tray');
     stage.appendChild(wordRow); stage.appendChild(tray);
-    var chips = [], buckets = [], drag = null, active = null;
+    var chips = [], buckets = [], drag = null, active = null, cur = null;
     /* how many flowers each pot has grown, by option value: it survives the item, so a pot keeps what
        it earned across the whole run and only a new run plants it empty */
     var blooms = {};
@@ -830,29 +944,49 @@ window.GAMES4 = (function () {
         box.appendChild(f);
       }
     }
+    /* one pot, made once. A pot is the answer's target, so it reads its value and its word OFF THE
+       STAGE at the moment it is used, not from the item that happened to build it. */
+    function addPot() {
+      var b = el('button', 'g4-bucket');
+      b.type = 'button';
+      b.innerHTML = ART.pot
+        + '<span class="g4-bucket-t"></span>'
+        + '<span class="g4-splash" aria-hidden="true"><i></i><i></i><i></i></span>'
+        + '<span class="g4-blooms" aria-hidden="true"></span>';
+      b.addEventListener('click', function () {
+        if (r.phase === 'play' && cur) r.pickOn(cur, b.getAttribute('data-v'));
+      });
+      tray.appendChild(b);
+      buckets.push(b);
+      return b;
+    }
+    /* clear ends an ITEM, and the garden is not part of an item: the pots and every flower already grown
+       in them stay exactly where they are, and only the answer's own colours come off. Rebuilding them
+       grew the whole garden again after every answer, which reads as a reload rather than a garden. */
     function clear() {
       drag = null; active = null;
-      wordRow.innerHTML = ''; tray.innerHTML = '';
-      chips = []; buckets = [];
+      wordRow.innerHTML = '';
+      chips = [];
+      buckets.forEach(function (b) { b.classList.remove('ok', 'no', 'reveal', 'hot'); });
     }
     function show(item) {
       clear();
+      cur = item;
       var names = labels(item);
       /* pots first, so a drag can land on one before the student releases. The pots belong to
-         THIS item, so a block can re-label them item by item. */
+         THIS item, so a block can re-label them item by item — but the pot itself and the flowers in it
+         are the RUN's, so an item only re-points and re-labels them. */
+      while (buckets.length < item.opts.length) paint(addPot());
       item.opts.forEach(function (o, i) {
-        var b = el('button', 'g4-bucket');
-        b.type = 'button';
+        var b = buckets[i];
+        b.style.display = '';
         b.setAttribute('data-v', o.value);
-        b.innerHTML = ART.pot
-          + '<span class="g4-bucket-t">' + esc(names[i] || o.text) + '</span>'
-          + '<span class="g4-splash" aria-hidden="true"><i></i><i></i><i></i></span>'
-          + '<span class="g4-blooms" aria-hidden="true"></span>';
-        b.addEventListener('click', function () { if (r.phase === 'play') r.pickOn(item, o.value); });
-        tray.appendChild(b);
-        buckets.push(b);
-        paint(b);
+        b.classList.remove('watered');
+        var t = b.querySelector('.g4-bucket-t');
+        if (t) t.textContent = names[i] || o.text;
       });
+      /* a pot this item does not use is put away, not removed: it keeps its flowers for the next item */
+      for (var i = item.opts.length; i < buckets.length; i++) buckets[i].style.display = 'none';
       /* ONE card at a time — the word being sorted. A queue of chips asked the student to read words
          they were not working on, and made the drag target unclear. */
       var c = el('button', 'g4-chip active', item.prompt);
@@ -931,8 +1065,9 @@ window.GAMES4 = (function () {
         c.classList.add(hit ? 'caught' : 'spilled');
       });
     }
-    /* a new run plants an empty garden */
-    function reset() { blooms = {}; }
+    /* a new run plants an empty garden — the pots are the same pots, so each is repainted empty rather
+       than thrown away and made again */
+    function reset() { blooms = {}; buckets.forEach(paint); }
     return {
       show: show, mark: mark, clear: clear, reset: reset, ownsPrompt: true
     };
@@ -940,7 +1075,8 @@ window.GAMES4 = (function () {
   /* ---------------- whackMole: the answers surface from holes, then duck ----------------
      One mole per option; the right one must be hit before the runner's bar empties. The moles are
      drawn art, they rise and duck, and the others drop away the moment an answer lands.
-     While they wait, each mole glances left or right at its own random moments (the eyes are one group
+     While they wait every mole bobs shallowly on its own clock and blinks at its own pace (two CSS
+     vars per mole), and each glances left or right at its own random moments (the eyes are one group
      inside the art), so the garden reads as alive rather than as a row of pictures. A right hit
      squeaks; a wrong one is the runner's own miss sound. */
   PLUGINS.whackMole = function (r) {
@@ -986,6 +1122,13 @@ window.GAMES4 = (function () {
         var m = el('button', 'g4-mole');
         m.type = 'button';
         m.setAttribute('data-v', o.value);
+        /* each mole breathes on its own clock: a different period and a negative delay, so the garden
+           never pulses in time and no two neighbours are at the same point of the bob */
+        m.className += ' alive';
+        m.style.setProperty('--bob-d', (2.1 + Math.random() * 1.1).toFixed(2) + 's');
+        m.style.setProperty('--bob-t', (-Math.random() * 2.4).toFixed(2) + 's');
+        m.style.setProperty('--blink-d', (4.2 + Math.random() * 3.4).toFixed(2) + 's');
+        m.style.setProperty('--blink-t', (-Math.random() * 5).toFixed(2) + 's');
         m.innerHTML = ART.mole + '<span class="g4-mole-t">' + esc(o.text) + '</span>';
         m.addEventListener('click', function () { if (r.phase === 'play') r.pick(o.value); });
         slots[k].appendChild(m);
@@ -1004,7 +1147,7 @@ window.GAMES4 = (function () {
       if (idle) { clearTimeout(idle); idle = 0; }
       moles.forEach(function (m) {
         var v = m.getAttribute('data-v');
-        m.classList.remove('look-l', 'look-r');
+        m.classList.remove('look-l', 'look-r', 'alive');
         if (v === value) m.classList.add(hit ? 'ok' : 'no');
         else if (!hit && v === item.key) m.classList.add('reveal');
         else m.style.transform = 'translateY(104%)';
@@ -1071,6 +1214,49 @@ window.GAMES4 = (function () {
     return '<svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">'
       + inner + '<rect width="400" height="260" fill="url(#g4-vignette)"/></svg>';
   }
+  /* the orchard is never quite still. A meadow of flowers that nod on their stems, petals coming down
+     out of the trees, and a butterfly working along the grass. All of it is SVG plus the class names
+     style.css animates, so it costs no timer, needs no attention from the engine, and stops entirely
+     under `prefers-reduced-motion`. */
+  function fxFlower(x, y, r, face) {
+    return '<path d="M' + x + ' ' + (y + r * 2.6) + 'V' + y + '" stroke="#2f6b33" stroke-width="1.6" stroke-linecap="round"/>'
+      + '<g fill="' + face + '">'
+      + '<circle cx="' + x + '" cy="' + (y - r * .7) + '" r="' + (r * .72) + '"/>'
+      + '<circle cx="' + (x - r * .8) + '" cy="' + (y - r * .1) + '" r="' + (r * .64) + '"/>'
+      + '<circle cx="' + (x + r * .8) + '" cy="' + (y - r * .1) + '" r="' + (r * .64) + '"/>'
+      + '<circle cx="' + (x - r * .42) + '" cy="' + (y - r * 1.15) + '" r="' + (r * .52) + '"/>'
+      + '<circle cx="' + (x + r * .42) + '" cy="' + (y - r * 1.15) + '" r="' + (r * .52) + '"/>'
+      + '</g><circle cx="' + x + '" cy="' + (y - r * .5) + '" r="' + (r * .44) + '" fill="#ffd05a"/>';
+  }
+  function fxMeadow() {
+    var faces = ['#e4557f', '#f7f2e4', '#ffb703', '#d97fd4', '#f7f2e4'];
+    var xs = [14, 40, 68, 96, 126, 268, 298, 328, 356, 384], out = '';
+    for (var i = 0; i < xs.length; i++) {
+      var y = 176 + (i % 3) * 8, r = 5.5 + (i % 3);
+      /* each flower nods on its own clock, so the meadow breathes instead of pulsing together */
+      out += '<g class="g4-fx-bloom" style="animation-delay:-' + (i * 0.83).toFixed(2) + 's">'
+        + fxFlower(xs[i], y, r, faces[i % faces.length]) + '</g>';
+    }
+    return out;
+  }
+  function fxPetals() {
+    var seeds = [[44, -2.2, 9], [98, -5.4, 11], [152, -8.1, 10], [238, -3.1, 12],
+      [302, -6.6, 9.5], [352, -9.2, 11.5], [190, -1.4, 13]], out = '';
+    for (var i = 0; i < seeds.length; i++) {
+      out += '<circle class="g4-fx-petal" cx="' + seeds[i][0] + '" cy="120" r="'
+        + (1.7 + (i % 2) * 0.6) + '" fill="' + (i % 3 ? '#e4557f' : '#f8dbe6') + '"'
+        + ' style="animation-delay:' + seeds[i][1] + 's;animation-duration:' + seeds[i][2] + 's"/>';
+    }
+    return out;
+  }
+  function fxButterfly(x, y, dur, delay) {
+    return '<g transform="translate(' + x + ',' + y + ')">'
+      + '<g class="g4-fx-fly" style="animation-duration:' + dur + 's;animation-delay:' + delay + 's">'
+      + '<g class="g4-fx-flap">'
+      + '<ellipse cx="-4.4" cy="-1" rx="5.4" ry="3.8" fill="#ffb703" stroke="#a9741a" stroke-width="1"/>'
+      + '<ellipse cx="4.4" cy="-1" rx="5.4" ry="3.8" fill="#ffb703" stroke="#a9741a" stroke-width="1"/>'
+      + '</g><circle r="1.5" fill="#5a3a12"/></g></g>';
+  }
 
 
   /* ---------------- posters: one still per game, drawn behind the intro overlay ----------------
@@ -1083,7 +1269,7 @@ window.GAMES4 = (function () {
   function abs(node, css) { node.style.cssText = css; return node; }
   /* one finished scene per game — the picture the game actually happens in */
   var SCENE = {
-    /* orchard: baskets wait on the grass under the trees */
+    /* orchard: baskets wait on the grass under the trees — and the grass itself is awake */
     catchBasket: function () {
       return frame('<rect width="400" height="260" fill="url(#g4-dawn)"/>' + sun(322, 46, 20)
         + cloud(70, 34, .9) + cloud(196, 22, .7, .8)
@@ -1093,7 +1279,8 @@ window.GAMES4 = (function () {
         + '<g fill="#5f9b52"><circle cx="39" cy="140" r="26"/><circle cx="361" cy="148" r="22"/>'
         + '<circle cx="18" cy="158" r="16"/></g>'
         + '<g fill="#c0392b" opacity=".85"><circle cx="31" cy="136" r="4"/><circle cx="49" cy="146" r="4"/>'
-        + '<circle cx="356" cy="144" r="3.5"/><circle cx="368" cy="156" r="3.5"/></g>');
+        + '<circle cx="356" cy="144" r="3.5"/><circle cx="368" cy="156" r="3.5"/></g>'
+        + fxMeadow() + fxPetals() + fxButterfly(70, 132, 7.5, -1) + fxButterfly(276, 120, 9.5, -4.5));
     },
     /* garden at dusk: holes in the soil, hills behind */
     whackMole: function () {
@@ -1261,26 +1448,26 @@ window.GAMES4 = (function () {
       }
     },
     stackDrop: function (box, items) {
-      /* the still is the tower as it stands, drawn in the live game's own furniture: the question card
-         held on the left, three blocks already placed, the climber against the tower's left face, the
-         chest on top of what has been built, and the answer tray along the floor. No ladder — he climbs
-         the stack itself. Same classes as the live game, so the same CSS draws it. */
+      /* the still is the tower as it stands, drawn in the live game's own furniture: three blocks already
+         placed, the climber against the tower's left face, and the chest waiting on the roof the tower is
+         being built to. No question on the poster either — the game has none. Same classes as the live
+         game, so the same CSS draws it. */
       var texts = (items[0].opts || []).map(function (o) { return o.text; });
-      box.appendChild(abs(el('div', 'g4-qcard g4-bit', esc(items[0].prompt || '')),
-        'left:10px;top:50%;width:30%'));
       [0, 30, 60].forEach(function (b, i) {
         box.appendChild(abs(el('div', 'g4-layer g4-bit', esc(texts[i] || '')),
-          'left:34%;right:12%;bottom:' + (46 + b) + 'px'));
+          'left:52px;bottom:' + (46 + b) + 'px;height:26px'));
       });
       box.appendChild(abs(el('div', 'g4-climber g4-bit', ART.hero),
-        'left:34%;bottom:76px;width:30px;height:44px;margin-left:-8px'));
-      box.appendChild(abs(el('div', 'g4-prize g4-bit', ART.chest),
-        'left:34%;right:12%;bottom:136px;width:38px;height:34px;opacity:.85'));
+        'left:52px;bottom:76px;width:30px;height:44px;margin-left:-8px'));
+      box.appendChild(abs(el('div', 'g4-ledge g4-bit'), 'left:52px;bottom:132px;height:10px'));
+      box.appendChild(abs(el('div', 'g4-prize g4-bit', ART.chest), 'bottom:142px;height:34px;opacity:.85'));
+      box.appendChild(abs(el('div', 'g4-roof g4-bit'), 'bottom:176px;height:12px'));
       var n = Math.max(1, texts.length);
+      var tray = abs(el('div', 'g4-towerpads g4-bit'), 'left:52px;right:12px;bottom:8px;height:40px');
       texts.forEach(function (t, i) {
-        box.appendChild(abs(el('div', 'g4-padbtn g4-bit', esc(t)),
-          'left:' + (36 + i * (52 / n)).toFixed(1) + '%;bottom:8px;width:' + (44 / n).toFixed(1) + '%;height:40px'));
+        tray.appendChild(el('div', 'g4-padbtn', esc(t)));
       });
+      box.appendChild(tray);
     },
     flapGate: function (box, items) {
       /* the still is the wall at the moment it arrives: gaps cut for the words, the bird in one of them */
@@ -1301,21 +1488,34 @@ window.GAMES4 = (function () {
       box.appendChild(abs(el('div', 'g4-bird g4-bit', ART.bird), 'left:14px;top:40%;width:40px;height:30px'));
     },
     mineGrid: function (box, items) {
-      /* the still is the street: one saloon door per option, hung with its word, the hero watching */
+      /* the still is the street as the game draws it: the SAME saloon frontage, the same boardwalk and the
+         same row of doorways in the same place, so the doors stand on the saloon's foot and not down in
+         the road — and NO word hangs over them, because a word is the answer card and a block nobody has
+         started asks nothing yet. */
       var texts = opts0(items, 4);
-      var n = Math.max(1, texts.length);
-      box.appendChild(abs(el('div', 'g4-road'), 'left:0;right:0;bottom:0;height:34%'));
-      texts.forEach(function (t, i) {
-        var door = el('div', 'g4-door g4-bit');
-        door.innerHTML = '<span class="g4-doorsign">' + esc(t) + '</span>'
-          + '<span class="g4-dframe"><span class="g4-dhole"></span>'
+      /* the stage's own insets, so every absolute child lands exactly where the live game puts it: the
+         frontage, the boardwalk and the row of doors are the same three pieces the game builds, in the
+         same order and from the same classes */
+      var frame_ = el('div', 'g4-bit');
+      abs(frame_, 'left:10px;right:10px;top:8px;bottom:8px');
+      var facade = el('div', 'g4-facade');
+      facade.innerHTML = '<span class="g4-cornice"></span>'
+        + '<span class="g4-saloon-win a"></span><span class="g4-saloon-win b"></span>';
+      var road = el('div', 'g4-road');
+      abs(road, 'left:-10px;right:-10px;bottom:0;height:74px');
+      var row = el('div', 'g4-doors');
+      texts.forEach(function () {
+        var door = el('div', 'g4-door');
+        door.innerHTML = '<span class="g4-dframe" aria-hidden="true">'
+          + '<span class="g4-dhole"></span>'
           + '<span class="g4-dleaf left">' + ART.saloonLeaf + '</span>'
           + '<span class="g4-dleaf right">' + ART.saloonLeaf + '</span>'
           + '<span class="g4-djamb">' + ART.saloonFrame + '</span></span>';
-        abs(door, 'left:' + (3 + i * (94 / n)).toFixed(1) + '%;bottom:12%;width:' + (86 / n).toFixed(1) + '%;height:56%');
-        box.appendChild(door);
+        row.appendChild(door);
       });
-      box.appendChild(abs(el('div', 'g4-runner g4-bit', ART.hero), 'left:50%;bottom:10%;width:26px;height:40px'));
+      frame_.appendChild(facade); frame_.appendChild(road); frame_.appendChild(row);
+      box.appendChild(frame_);
+      box.appendChild(abs(el('div', 'g4-runner g4-bit', ART.hero), 'left:50%;bottom:4px;width:30px;height:46px;margin-left:-15px'));
     },
 
   wordleBoard: function (box, items) {
@@ -1350,8 +1550,11 @@ window.GAMES4 = (function () {
     box.appendChild(grid);
   },
   echoPads: function (box, items) {
-    /* the still is the sentence as far as it goes: the given opening, one word placed, then the pads */
-    var first = (items[0].item.getAttribute('data-first') || '').trim();
+    /* the still is the sentence as far as it goes: the given opening, one word placed, then the pads.
+       The opening is an authoring attribute of the BLOCK (data-first), not of a question, so it is read
+       off the block — reading it off the first `.qitem` found nothing and the poster lost its opening. */
+    var host = items[0].item.closest ? items[0].item.closest('.game') : null;
+    var first = ((host && host.getAttribute('data-first')) || '').trim();
     var line = el('div', 'g4-echo-say g4-bit');
     if (first) line.appendChild(el('span', 'g4-echo-w given', esc(first)));
     var k = 0;
@@ -1387,15 +1590,17 @@ window.GAMES4 = (function () {
     }
     abs(rungs, 'left:6%;top:14%;bottom:14%;display:flex;flex-direction:column-reverse;gap:3px;width:64px');
     box.appendChild(rungs);
+    /* NO PROMPT BOARD in the still: the board at the top of the rail is the item's own stem, so drawing
+       it on the start page hangs the first question over a block that has not started yet. The still is
+       the ladder only — the question appears when Play does. */
   },
   bossRaid: function (box, items) {
-    /* the still is the arena: the boss, its health, and the swordsman it is about to meet */
+    /* the still is the arena: the boss and the swordsman it is about to meet. NO health bar — the bar
+       is a count of the run, and the start page is the block before anything has been played. */
     var art = el('div', 'g4-bossart g4-bit');
     art.innerHTML = ART.boss;
     abs(art, 'left:50%;top:8%;transform:translateX(-50%);width:96px;height:96px');
     box.appendChild(art);
-    box.appendChild(abs(el('div', 'g4-hp g4-bit', '<span class="g4-hp-fill" style="width:72%"></span>'),
-      'left:14%;right:14%;top:56%;height:14px'));
     box.appendChild(abs(el('div', 'g4-hero g4-bit', ART.heroSword), 'left:6%;bottom:12%;width:52px;height:76px'));
   },
   skeetRange: function (box, items) {
@@ -1427,36 +1632,45 @@ function say(text, lang) {
 
 
   /* ---------------- stackDrop: the answer is a block, and the tower is what you build ----------------
-     The question sits to the LEFT of the tower, vertically centred, because it is the thing being built
-     AGAINST and not a block stacked on top of the work. The tower stands on the stage floor to its
-     right: the right answer is dragged onto it (or clicked, or pressed), the block flies up, lands, and
-     stays for the rest of the run. A wrong one tumbles off and the tower is untouched, so the tower
-     never loses what was earned and its height IS the progress.
+     THERE IS NO QUESTION ON THE STAGE. The task is telling the right phrase from the wrong one, so the
+     option blocks are the whole of what is read: a prompt beside them would be a second thing to read
+     for an answer the student picks by recognising the phrase. `ownsPrompt` stays on, so the runner
+     leaves the HUD line empty as well.
+     The tower stands on the stage floor: the right answer is dragged onto it (or clicked, or pressed),
+     the block flies up, lands, and stays for the rest of the run. A block is as big as the option it came
+     from — same height as the tray's blocks — so the tower is visibly built out of the answers
+     themselves. A wrong one tumbles off and the tower is untouched, so the tower never loses what was
+     earned and its height IS the progress.
+     WHY the tower is built: it is built to a ROOF. The ledge, the chest on it and the roof over it are
+     fixed from the first block, at the height the finished tower reaches, so the stack has a destination
+     the student can see and every right answer is one block nearer to it. A ledge that rises with the
+     tower asks for nothing, and a tower with nothing above it is a scoreboard with pictures on it. Reach
+     the roof and the chest is won — that is every block placed — and the climber celebrates.
      There is no ladder: the climber climbs the tower itself, one answer at a time, standing against its
-     left face. Place every answer and he reaches the chest on top — that is the only reason to stack,
-     and it is what the tower is for.
+     left face.
      Authoring: `.qitem` per question (six to ten makes a climb); options are the blocks. `data-time`
-     is the deadline for one block. The question card IS the prompt, so the stage does not print the
-     same words again on the HUD line (ownsPrompt). */
+     is the deadline for one block. */
   PLUGINS.stackDrop = function (r) {
     var stage = r.stage;
     var box = el('div', 'g4-tower');
-    var qcard = el('div', 'g4-qcard', '');
     var view = el('div', 'g4-stackview');
     var scroll = el('div', 'g4-scroll');
     var stack = el('div', 'g4-stack');
     var climber = el('div', 'g4-climber');
+    var ledge = el('div', 'g4-ledge');
     var prize = el('div', 'g4-prize');
+    var roof = el('div', 'g4-roof');
     var pads = el('div', 'g4-towerpads');
     climber.innerHTML = ART.hero;
     prize.innerHTML = ART.chest;
     scroll.appendChild(stack);
-    scroll.appendChild(climber); scroll.appendChild(prize);
+    scroll.appendChild(climber); scroll.appendChild(ledge); scroll.appendChild(prize);
+    scroll.appendChild(roof);
     view.appendChild(scroll);
-    box.appendChild(qcard); box.appendChild(view); box.appendChild(pads);
+    box.appendChild(view); box.appendChild(pads);
     stage.appendChild(box);
 
-    var AH = 26, GAP = 4;               /* one tower block, and the seam between two */
+    var AH = 48, GAP = 4, LH = 10;      /* one tower block (= the option block), the seam, the ledge */
     var top = 0;                        /* how tall the tower stands, in px */
     var placed = 0;                     /* answers that have joined the tower */
     var bits = [];                      /* every layer this run drew, so reset can take them back */
@@ -1468,15 +1682,42 @@ function say(text, lang) {
       var viewH = view.clientHeight || 210;
       scroll.style.transform = top > viewH ? 'translateY(' + (top - viewH) + 'px)' : '';
     }
+    /* The height of one block comes from the run's own length: the whole tower has to stand inside the
+       window, so ten blocks — the most a stage holds with the words still readable, and the reason the
+       fit stops counting at ten — share the height that is there, and a shorter run gets taller blocks up
+       to the block's own size (48px). A tower of eleven or twelve keeps the ten-block height and scrolls:
+       a block shorter than the word inside it is not a block. The tray takes the same height, so an
+       answer and the block it becomes are one size. */
+    var MAXFIT = 10;
+    function fitBlocks() {
+      var n = Math.min(MAXFIT, Math.max(1, r.total));
+      var stageH = box.clientHeight || 280;
+      /* the window is what is left above the tray: the tray is one block tall plus its 8px foot and a 6px
+         gap, and the ledge rides on top of the stack, so both come out before the share is cut */
+      AH = Math.floor((stageH - 25 - (n - 1) * GAP) / (n + 1));
+      AH = Math.max(19, Math.min(48, AH));
+      pads.style.height = AH + 'px';
+      view.style.bottom = (AH + 14) + 'px';
+    }
+    /* the roof the tower is built TO. It is fixed the moment the tray tells us how tall a block is, at the
+       height the finished tower will reach, so the goal is in the picture from the first answer and every
+       block placed closes the gap on it. A ledge that moves up with the tower is a goal that asks for
+       nothing. */
+    function raiseRoof() {
+      var goal = Math.max(1, r.total) * (AH + GAP);
+      ledge.style.bottom = goal + 'px';
+      prize.style.bottom = (goal + LH) + 'px';
+      roof.style.bottom = (goal + LH + 34) + 'px';
+    }
     /* one block of the tower, and the climber rises to its top: he climbs the STACK, there is no ladder */
     function layer(text, cls) {
       var d = el('div', 'g4-layer' + (cls ? ' ' + cls : ''), text);
+      d.style.height = AH + 'px';
       d.style.bottom = top + 'px';
       stack.appendChild(d);
       bits.push(d);
       top += AH + GAP;
-      prize.style.bottom = top + 'px';        /* the chest sits on top of what has been built */
-      climber.style.bottom = (top - AH - GAP) + 'px';
+      climber.style.bottom = Math.max(0, top - AH - GAP) + 'px';
       scrollTo();
       return d;
     }
@@ -1488,22 +1729,22 @@ function say(text, lang) {
         d.classList.remove('mark-ok', 'mark-no');
       });
     }
-    /* a new run builds a new tower */
+    /* a new run builds a new tower, and the roof goes back to its own height with it */
     function reset() {
       bits.forEach(function (b) { if (b.parentNode) b.parentNode.removeChild(b); });
       bits = [];
       stack.innerHTML = '';
       top = 0; placed = 0;
-      qcard.textContent = '';
       climber.style.bottom = '0px';
       climber.classList.remove('cheer');
+      ledge.style.bottom = '0px';
+      roof.style.bottom = '0px';
       prize.classList.remove('won');
-      prize.style.bottom = '0px';
+      prize.style.bottom = LH + 'px';
       scroll.style.transform = '';
     }
     function show(item) {
       clear();
-      qcard.textContent = item.prompt || '⋯';
       item.opts.forEach(function (o) {
         var p = el('button', 'g4-padbtn', o.text);
         p.type = 'button';
@@ -1518,6 +1759,7 @@ function say(text, lang) {
         });
         pads.appendChild(p);
       });
+      if (!bits.length) { fitBlocks(); raiseRoof(); }   /* an empty tower sets this run's block size */
     }
     /* the block travels from the tray to the top of the tower, then the answer is taken */
     function place(value, pad) {
@@ -1533,7 +1775,10 @@ function say(text, lang) {
       fly.style.marginLeft = (-fly.offsetWidth / 2).toFixed(0) + 'px';
       var viewH = view.clientHeight || 210;
       var d = Math.max(0, top - viewH);
-      var tx = bb.width * 0.61;                       /* the tower's own centre line */
+      /* the tower's own centre line, taken from its LEDGE: the ledge is exactly as wide as the blocks, so
+         the flight is aimed where the block will land rather than at the middle of the answer tray */
+      var sb = ledge.getBoundingClientRect();
+      var tx = sb.left - bb.left + sb.width / 2;
       var ty = viewH - top + d - AH;                  /* where the new block's top edge will be */
       fly.style.transform = 'translate(' + (tx - x0).toFixed(0) + 'px,'
         + (ty - y0).toFixed(0) + 'px) scale(.88)';
@@ -1601,13 +1846,13 @@ function say(text, lang) {
           climber.classList.add('cheer');
         }
       } else {
-        /* the block tumbles off the tower: it is never part of what gets built */
+        /* the block tumbles off the tower: it is never part of what gets built, and the roof stays where
+           the run set it — the tower is now one block further from the chest, not the chest nearer */
         var bad = layer(text || '—', 'mark-no fall');
         var at = top;
         r.later(function () {
           if (bad.parentNode) bad.parentNode.removeChild(bad);
           top = at - AH - GAP;
-          prize.style.bottom = top + 'px';
           climber.style.bottom = Math.max(0, top - AH - GAP) + 'px';
           scrollTo();
         }, r.reduced ? 20 : 520);
@@ -1620,22 +1865,28 @@ function say(text, lang) {
 
   /* ---------------- flapGate: one-button flight through the right gap ----------------
      The gaps are real holes in a wall. One gap per option, each labelled, and the wall scrolls toward
-     the bird at its own speed; the wall reaches the bird about 45% of the way through the item's
-     clock, so the words come round more than once. Where the bird is at that moment is the answer —
-     the gap it flew through, or the brick it flew into. The words are text in the gaps, not buttons:
-     the whole sky is the control, so a click (or Space) flaps and nothing in the wall takes one.
+     the bird at its own pace. There is NO TIMER (`PLUGINS.flapGate.noTimer`): the wall arriving is the
+     whole of the clock, so nothing is on a deadline, nothing expires, and the student has as long as the
+     stream of walls lasts. Where the bird is when the wall reaches it is the answer — the gap it flew
+     through, or the brick it flew into. The words are text in the gaps, not buttons: the whole sky is
+     the control, so a click (or Space) flaps and nothing in the wall takes one.
+     A RIGHT gap is flown THROUGH: he does not stop in the doorway he chose, he carries on out the far
+     side of it, and the next wall is already on its way in from the right, so the next choice arrives
+     straight after this one instead of after a wait.
      The bird is drawn, not a black square, and it flaps its wings on every lift — including the one
      automatic flap as the round opens, so it is never falling before the student has touched anything.
      Fall is half what this game used to be: half the gravity, the same lift.
-     SCORING, and it is deliberately not "items answered":
-       · a right gap is a POINT, and the flight carries on into the next question;
-       · a wrong gap is no point at all — it costs nothing else, and the flight carries on;
-       · only the BRICK — flying into the wall — costs a life. A life loss zeroes the streak and puts
-         the bird back in the middle of the sky, still on the same question, which is what makes the
-         wall the one thing worth flying well for.
-     So the score is the BEST STREAK reached in any life (`view.score()`), not the number of items got:
-     three clean runs of four are worth more than one clean run of six interrupted twice.
-     Authoring: `.qitem` per item, one gap per option, `data-time` the deadline (and the wall's speed). */
+     SCORING:
+        · a right gap is a POINT, and the flight carries on through it into the next question;
+        · a wrong gap is no point at all — it costs nothing else, and the flight carries on;
+        · the BRICK — flying into the wall — costs a heart AND THE RUN: the block starts again at its
+          first question, with the same questions in the same order, and the live score goes back to
+          zero, because the attempt is over and those items are about to be asked again. The hearts
+          that are left are what the next attempt flies with; the spent ones stay spent.
+     So a run that hits a wall twice can still end on its best attempt: the runner keeps the highest
+     score any attempt reached and that is the block's final score (`finalScore`), never the last,
+     half-flown attempt.
+     Authoring: `.qitem` per item, one gap per option. `data-time` is not used by this game. */
   PLUGINS.flapGate = function (r) {
     var stage = r.stage;
     var box = el('div', 'g4-sky'), wall = el('div', 'g4-walls'), bird = el('div', 'g4-bird');
@@ -1644,37 +1895,38 @@ function say(text, lang) {
     stage.appendChild(box);
     var BX = 64, BH = 34, GAPH = 65;   /* the bird sits 30px further right than it used to; gaps 15px taller */
     var G = 168, LIFT = -128;          /* px per second² and px per second: half the old fall */
+    /* how long one wall takes to reach the bird. This is the game's clock, because there is no timer:
+       nothing expires, the stream just keeps coming */
+    var CROSS = 2800;
     var raf = 0, live = false, y = 0, vy = 0, t0 = 0, flight = 0, speed = 0.06;
     var gaps = [], judged = false, lastPass = -1, left = 3, target = '';
-    var points = 0, best = 0;          /* the streak, and the best streak any life reached */
     function stop() { live = false; if (raf && window.cancelAnimationFrame) window.cancelAnimationFrame(raf); raf = 0; }
     function home() { return ((box.clientHeight || 280) / 2) - BH / 2; }
-    function reset() { left = 3; points = 0; best = 0; }
+    function reset() { left = 3; }
     function clear() {
       stop();
       wall.innerHTML = ''; gaps = []; judged = false; lastPass = -1; target = '';
       y = home(); vy = 0; flight = 0;
       bird.style.top = y + 'px';
-      bird.classList.remove('ok', 'no');
+      bird.classList.remove('ok', 'no', 'through');
     }
-    /* the BRICK, and only the brick: one life, the streak goes back to zero, and the bird is put back
-       in the middle of the sky on the SAME question — nothing that was answered is taken back */
+    /* the BRICK, and only the brick: one heart, and then the RUN starts again — the block goes back to
+       its first question in the order it was dealt, and the score of the attempt that just ended is gone
+       with it. Nothing that was answered is taken back out of the page: those radios stay written. */
     function hitWall() {
       left = Math.max(0, left - 1);
-      points = 0;
       bird.classList.remove('no');
       void bird.offsetWidth;
       bird.classList.add('no');
       SFX.miss(r.sound);
       r.hud();
+      stop();                                  /* this wall's flight is over either way */
       if (!left) {
-        stop();
         r.later(function () { if (r.running) r.finish(); }, 700);
         return true;
       }
-      y = home(); vy = LIFT;                  /* back to the middle, on the same round's lift */
-      bird.style.top = y + 'px';
-      return false;
+      r.later(function () { if (r.running) r.restartRun(); }, 620);
+      return true;
     }
     function show(item) {
       clear();
@@ -1701,10 +1953,11 @@ function say(text, lang) {
       }
       if (h > prev) wall.appendChild(seg(prev, h - prev));
       wall.style.transform = 'translateX(' + W + 'px)';
-      /* A pass takes a little under half the item's clock, so the words come round again: the wall is
-         never a single throw you either catch or miss, it is a stream you can read twice. */
-      speed = (W - BX) / Math.max(1400, (r.itemTime || 6000) * 0.45);
-      if (r.reduced) return;
+      /* one wall's crossing of the stage is the whole clock this game has (noTimer): a fixed pace, so
+         the words come round again and again until one is flown through */
+      speed = (W - BX) / CROSS;
+      /* the loop runs under `prefers-reduced-motion` too: the wall's flight is the GAME, not an effect,
+         and with no timer there is nothing else that could ever bring a wall to the bird or end an item */
       live = true;
       t0 = (window.performance && performance.now) ? performance.now() : Date.now();
       var frame = function (now) {
@@ -1730,10 +1983,19 @@ function say(text, lang) {
           if (picked) {
             /* a gap is an ANSWER, right or wrong: the runner takes it and the flight moves on to the
                next question. Only the brick costs a life, so a wrong gap is just no point. */
+            var right = picked.value === target;
             live = false;
-            picked.gap.classList.add(picked.value === target ? 'ok' : 'no');
-            bird.classList.add(picked.value === target ? 'ok' : 'no');
-            r.pick(picked.value);
+            picked.gap.classList.add(right ? 'ok' : 'no');
+            bird.classList.add(right ? 'ok' : 'no');
+            if (right) {
+              /* THROUGH the gap: he carries on out the far side of it rather than stopping in it, and
+                 the answer is taken while he is still moving, so the next wall is already on its way in
+                 when this one is gone — the next choice follows straight on from this one */
+              bird.classList.add('through');
+              r.later(function () { if (r.phase === 'play') r.pick(picked.value); }, r.reduced ? 0 : 260);
+            } else {
+              r.pick(picked.value);
+            }
             return;
           }
           /* the bricks: the one thing in this game that costs a life */
@@ -1770,20 +2032,18 @@ function say(text, lang) {
         else if (!hit && v === item.key) g.gap.classList.add('reveal');
       });
       bird.classList.add(hit ? 'ok' : 'no');
-      /* a point for a right gap; a wrong gap (or the clock running out on one) is no point and
-         nothing else — the only thing that costs a life here is flying into the wall */
-      if (hit) {
-        points++;
-        best = Math.max(best, points);
-        r.hud();
-      }
+      /* a right gap is a point, counted by the runner; a wrong gap — or the clock running out on one —
+         is no point and nothing else. The only thing that costs a heart here is flying into the wall. */
+      if (hit) r.hud();
     }
     return {
       show: show, mark: mark, clear: clear, flap: flap, reset: reset,
-      lives: function () { return left; },
-      score: function () { return best; }
+      lives: function () { return left; }
     };
   };
+  /* this game has no timer: the wall coming at the bird is the clock, and a deadline on top of it would
+     be a second thing to watch */
+  PLUGINS.flapGate.noTimer = true;
 
 
   /* ---------------- skeetRange: one flying target per option, a fixed number of shots ----------------
@@ -1798,6 +2058,11 @@ function say(text, lang) {
      The range runs 30% slower than the block's own deadline (PLUGINS.skeetRange.timeScale), because a
      word flying past is a word nobody reads: the discs and the clock slow together, so the shot rule is
      unchanged and simply has more time in it.
+     The two sounds are recorded, not synthesized, because the verdicts are different things: the GUN
+     goes off on every shot, and the BUZZER says the shot was wrong — on the wrong disc and on a shot at
+     nothing at all, where it plays UNDER the gun. There is no crowd. The files are listed in SFX (see
+     CLIPS) and the range plays its own, so the runner's generic pair is switched off for it
+     (PLUGINS.skeetRange.ownSound).
      Authoring: `.qitem` per item, one disc per option (two to four, as the lesson writes them),
      `data-a` the right option, `data-time` the deadline and the flight time (0 = the throw simply
      repeats, which is the range with no clock). */
@@ -1815,16 +2080,17 @@ function say(text, lang) {
        stop the rack being a fixed picture and too little to move a word out of reading order */
     function jitter(v) { return v * (0.95 + Math.random() * 0.1); }
     function throwTime() { return (r.itemTime || FLIGHT) / PAD; }
-    var raf = 0, live = false, t0 = 0, discs = [], spent = false;
+    var raf = 0, live = false, t0 = 0, discs = [], spent = false, cur = null;
     /* the AMMO: one shot per item, so a run of six questions is six shots and the range never resets
-       a shot back into the gun. The pips are the block's own count of shots still in hand. */
+       a shot back into the gun. The cartridges are the block's own count of shots still in hand. */
     var ammoEl = el('div', 'g4-ammo'), ammo = 0, ammoTop = 0;
     box.appendChild(ammoEl);
     function drawAmmo() {
       var html = '';
-      for (var i = 0; i < ammoTop; i++) html += '<span class="g4-shot' + (i < ammo ? ' full' : '') + '">●</span>';
+      for (var i = 0; i < ammoTop; i++) html += '<span class="g4-shot' + (i < ammo ? ' full' : '') + '"></span>';
       ammoEl.innerHTML = html;
       ammoEl.classList[ammo ? 'remove' : 'add']('empty');
+      ammoEl.setAttribute('aria-label', ammo + ' of ' + ammoTop + ' shots left');
     }
     function reset() {
       ammoTop = Math.max(0, r.items.length);
@@ -1849,6 +2115,12 @@ function say(text, lang) {
       stop();
       cross.classList.add('fire');
       r.later(function () { cross.classList.remove('fire'); }, 240);
+      /* THE SOUND IS THE VERDICT: a shot was fired either way, so the GUN goes off either way — and
+         when the disc was the wrong one, or nothing was hit at all, the buzzer says so underneath it.
+         There are two verdicts, not three: a miss and a wrong disc cost the same thing and sound the
+         same. */
+      SFX.shot(r.sound);
+      if (value == null || !cur || value !== cur.key) SFX.wrong(r.sound);
       var out = r.pick(value);
       if (!ammo && r.phase === 'play') r.later(function () { if (r.phase === 'play') r.finish(); }, 900);
       return out;
@@ -1874,6 +2146,7 @@ function say(text, lang) {
     }
     function show(item) {
       clear();
+      cur = item;
       /* the lesson decides how many targets there are — one per option, two to four — and the order
          of the options decides the lanes, so no disc ever flies behind another */
       var n = Math.max(1, item.opts.length);
@@ -1929,15 +2202,26 @@ function say(text, lang) {
      runner (see the levers at the top), so the discs and the timer slow by the same 30% and a word can
      be read before it has to be shot at. */
   PLUGINS.skeetRange.timeScale = 1.3;
+  /* the range plays its own three sounds — the gun, the buzzer, the crowd — so the runner's generic
+     pair would be a second verdict on top of each shot */
+  PLUGINS.skeetRange.ownSound = true;
 
   /* ---------------- mineGrid: open the saloon door you trust ----------------
-     The street is the item: every option is a pair of batwing doors into its own saloon, the word hung
-     over the top where it can be read. Picking a door is the answer — he WALKS to it first, so the
-     choice is a character's risk rather than a bare click — and the door swings open before anything
-     is decided, because what is behind it IS the answer.
-       right  he goes in: a glass clinks on the bar, the street fades out, and the next question fades
-              in on an empty street.
-       wrong  a snake comes out of the dark and bites him: one of his three lives gone.
+     ONE building, four doorways: a rustic timber frontage runs behind the doors with a painted SALOON
+     board on it, so the four doors read as entrances to one saloon rather than four kiosks. Each option
+     is a pair of batwing doors in its own opening, and its word hangs over the top where it can be read
+     — the card's BOTTOM edge is pinned to the TOP of its doorway, so the words line up with the doors
+     they belong to however tall the doors are.
+     The building fills about three quarters of the stage, is shifted right together with the doors, and
+     the question is a board on the LEFT of the doors, drawn by this game (ownsPrompt) so the runner does
+     not print the same sentence a second time on the HUD line.
+     Picking a door is the answer: he WALKS to it and stands in front of it, and the door swings open
+     before anything is decided, because what is behind it IS the answer.
+       right  he goes in — the step through the door and his fade run as ONE movement — a glass clinks on
+              the bar, the street fades out, and the next question fades in on an empty street.
+       wrong  a snake comes out of the dark and bites him: one of his three lives gone, and he ends every
+              bite the same way — down on the spot he is standing on, then out of sight. He never snaps
+              back to the middle of the road between questions; the street coming back brings him back.
      Three bites end the run. The lives belong to the RUN, not to the item: they are set on the way in
      (reset) and never on the way between items (clear), because the runner empties the stage after
      every answer and a life that came back with the next question would mean a miss cost nothing.
@@ -1949,41 +2233,58 @@ function say(text, lang) {
   PLUGINS.mineGrid = function (r) {
     var stage = r.stage;
     var box = el('div', 'g4-mines'), street = el('div', 'g4-street');
+    var facade = el('div', 'g4-facade');        /* the saloon itself: one frontage behind every door */
+    /* the built parts of the frontage CSS alone has no pseudo-element left for: the cornice under the
+       eave, and a window either side of the porch. Background, never controls. */
+    facade.innerHTML = '<span class="g4-cornice"></span>'
+      + '<span class="g4-saloon-win a"></span><span class="g4-saloon-win b"></span>';
     var road = el('div', 'g4-road'), doors = el('div', 'g4-doors'), tiles = [];
+    var ask = el('div', 'g4-mprompt');          /* the question, on its own board to the left of the doors */
     var hero = el('div', 'g4-runner');
     var flash = el('div', 'g4-flash');          /* the screen flash a snake bite throws */
     hero.innerHTML = ART.hero;
-    street.appendChild(road); street.appendChild(doors); street.appendChild(hero);
+    street.appendChild(facade); street.appendChild(road); street.appendChild(doors);
+    street.appendChild(ask); street.appendChild(hero);
     box.appendChild(street); box.appendChild(flash);
     stage.appendChild(box);
     var left = 3, busy = false, picked = null, dx = 0;
 
-    /* a restart begins with three lives: run state, so the runner resets it on start */
-    function reset() { left = 3; }
+    /* a restart begins with three lives: run state, so the runner resets it on start — and the question
+       board goes blank, because the last run's question is not this run's */
+    function reset() { left = 3; ask.classList.remove('in'); ask.textContent = ''; }
     function clear() {
-      /* the street is emptied between items — the LIVES are not: they were paid for */
+      /* the street is emptied between items — the LIVES are not: they were paid for. The question board
+         goes too: it is this game's own prompt card, and a card left standing is the intro screen asking a
+         question nobody has been given. `show` puts it back with the next item. */
       doors.innerHTML = ''; tiles = []; busy = false; picked = null; dx = 0;
+      ask.classList.remove('in');
       hero.innerHTML = left < 2 ? ART.heroHurt : ART.hero;
-      hero.classList.remove('enter', 'bitten', 'down');
+      hero.classList.remove('enter', 'bitten', 'down', 'gone');
       hero.style.transform = 'translate(0,0)';
+      hero.style.setProperty('--dx', '0px');
     }
+    /* he stands in front of the door he picked: the walk is the choice being made, and his own x is
+       what the `down` state reads, so a fighter who goes down goes down where he stood */
     function walkTo(d) {
       var hb = box.getBoundingClientRect(), db = d.getBoundingClientRect();
       dx = Math.round((db.left + db.width / 2) - (hb.left + hb.width / 2));
       hero.style.transform = 'translate(' + dx + 'px,0)';
-      /* the CSS `down` state reads the walk from this variable, so a fighter who goes down goes down
-         WHERE HE STOOD — never teleported back to the middle of the street */
       hero.style.setProperty('--dx', dx + 'px');
     }
-    /* he goes in: the glass, the fade, then the answer is taken so the radio is written by the runner */
+    /* he goes in: the step through the doorway and the fade are one movement, then the answer is taken
+       so the radio is written by the runner. The street is held for a beat longer than the step, so the
+       door is seen closing behind him rather than blinking out from under him */
     function goIn(d, value) {
       d.classList.add('ok');
       SFX.clink(r.sound);
       hero.classList.add('enter');
-      r.later(function () { street.classList.add('away'); }, r.reduced ? 20 : 240);
-      r.later(function () { if (r.phase === 'play') r.pick(value); }, r.reduced ? 80 : 560);
+      r.later(function () { street.classList.add('away'); }, r.reduced ? 20 : 420);
+      r.later(function () { if (r.phase === 'play') r.pick(value); }, r.reduced ? 80 : 640);
     }
-    /* the snake: it comes out of the dark, he takes the bite, and the choice still counts as his */
+    /* the snake: it comes out of the dark, he takes the bite, and the choice still counts as his.
+       EVERY bite ends the same way, not only the last one: he reels where he stands, he goes down at the
+       door he chose (never back in the middle of the road), and he is gone before the next question
+       arrives. The street fading back in is what brings him back. */
     function bitten(d, value) {
       d.classList.add('bitten', 'no');
       SFX.hiss(r.sound);
@@ -1992,7 +2293,9 @@ function say(text, lang) {
       flash.classList.remove('on');
       void flash.offsetWidth;
       if (!r.reduced) flash.classList.add('on');
-      r.later(function () { if (r.phase === 'play') r.pick(value); }, r.reduced ? 80 : 520);
+      r.later(function () { if (r.phase === 'play') hero.classList.add('down'); }, r.reduced ? 20 : 300);
+      r.later(function () { if (r.phase === 'play') hero.classList.add('gone'); }, r.reduced ? 40 : 640);
+      r.later(function () { if (r.phase === 'play') r.pick(value); }, r.reduced ? 80 : 820);
     }
     function show(item) {
       clear();
@@ -2000,12 +2303,17 @@ function say(text, lang) {
       street.classList.remove('away', 'settle');
       void street.offsetWidth;
       street.classList.add('settle');
+      /* the question is drawn by THIS game, on its board to the LEFT of the doors, so the runner leaves
+         the HUD line empty (ownsPrompt): the same sentence in two places is the same sentence twice */
+      if (r.usePrompt) { ask.textContent = item.prompt || ''; ask.classList.add('in'); }
       item.opts.forEach(function (o) {
         var d = el('button', 'g4-door');
         d.type = 'button';
         d.setAttribute('data-v', o.value);
-        d.innerHTML = '<span class="g4-doorsign">' + esc(o.text) + '</span>'
-          + '<span class="g4-dframe" aria-hidden="true">'
+        /* the word is a child of the DOORWAY, so its bottom edge sits on the doorway's top edge by
+           construction and no change of door height can separate a word from its door */
+        d.innerHTML = '<span class="g4-dframe" aria-hidden="true">'
+          + '<span class="g4-doorsign">' + esc(o.text) + '</span>'
           + '<span class="g4-dhole"></span>'
           + '<span class="g4-dleaf left">' + ART.saloonLeaf + '</span>'
           + '<span class="g4-dleaf right">' + ART.saloonLeaf + '</span>'
@@ -2015,13 +2323,11 @@ function say(text, lang) {
         d.addEventListener('click', function () {
           if (r.phase !== 'play' || busy) return;
           busy = true; picked = d;
-          /* he does NOT walk to the door he picked: which door is safe is exactly what he does not
-             know yet, and a man who strides confidently up to the door a snake comes out of reads as
-             the game having told him. He walks in only when the door turns out to be the right one. */
-          d.classList.add('open');
+          walkTo(d);
+          r.later(function () { d.classList.add('open'); }, r.reduced ? 0 : 260);
           r.later(function () {
             if (o.value === item.key) goIn(d, o.value); else bitten(d, o.value);
-          }, r.reduced ? 60 : 360);
+          }, r.reduced ? 60 : 620);
         });
         doors.appendChild(d);
         tiles.push({ el: d, value: o.value });
@@ -2044,7 +2350,7 @@ function say(text, lang) {
       }
       r.later(function () { busy = false; }, 520);
     }
-    return { show: show, mark: mark, clear: clear, reset: reset, lives: function () { return left; } };
+    return { show: show, mark: mark, clear: clear, reset: reset, ownsPrompt: true, lives: function () { return left; } };
   };
 
 
@@ -2059,9 +2365,10 @@ function say(text, lang) {
      A wrong length is not an answer and does not cost a row: it says so on the right ("too many
      letters", "too few letters") for 0.5s in, 2s up, 0.5s out, on a card with a red border — the same
      card as the clue, so a mistake reads as part of the board rather than as a floating label.
-     The score COUNTDOWNS: the run banks one point per item and a word that is not got (all rows used,
-     the clock spent, or the game moving on) costs one. At zero the run is over — a run of easy words
-     cannot be "won" by guesswork, because every word you lose is a point you never get back. */
+     The score COUNTS UP: it is the words actually spelled right, out of the block's own answers, and a
+     word that is not got (all rows used, the clock spent, or the game moving on) simply never adds one.
+     Missing a word costs a LIFE instead: two of them (`data-lives`, default 2) and the run is over at
+     zero — the runner's one fail condition, not the board's own. */
   PLUGINS.wordleBoard = function (r) {
     var stage = r.stage;
     var box = el('div', 'g4-wordle');
@@ -2250,8 +2557,16 @@ function say(text, lang) {
       });
       map = fresh;
       words.forEach(function (w) { w.r -= minR; w.c -= minC; });
+      /* ONE number per square, not per word: an across word and a down word that begin in the same
+         square are the same clue number on a printed crossword, and two numbers stacked in one cell is
+         just a smudge. So the number is handed out to the CELL, and both words read it back. */
+      var numbered = {}, n = 0;
       words.slice().sort(function (a, b) { return a.r - b.r || a.c - b.c; })
-        .forEach(function (w, i) { w.num = i + 1; });
+        .forEach(function (w) {
+          var k = w.r + ',' + w.c;
+          if (numbered[k] == null) { n++; numbered[k] = n; }
+          w.num = numbered[k];
+        });
     }
     function cellsOf(w) {
       var out = [];
@@ -2296,9 +2611,12 @@ function say(text, lang) {
           inputs[key] = inp;
         }
       }
+      var drawn = {};
       words.forEach(function (w) {
-        var inp = inputs[w.r + ',' + w.c];
-        if (!inp) return;
+        var key = w.r + ',' + w.c, inp = inputs[key];
+        /* one number per cell: a word that starts in a square already numbered shares that number */
+        if (!inp || drawn[key]) return;
+        drawn[key] = true;
         inp.parentElement.appendChild(el('span', 'g4-xnum', String(w.num)));
       });
     }
@@ -2342,7 +2660,9 @@ function say(text, lang) {
     }
 
     /* a word is done when every cell holds the right letter — so a shared letter finishes BOTH words.
-       A wrong full word shakes and clears, and its item stays blank: the blank is the evidence. */
+       A wrong full word shakes, clears, and is ANSWERED: its item goes down as a miss with its radio
+       left blank (the blank is the evidence), and the word is settled so it is never scored again. One
+       chance per word, because this board keeps no lives to pay for a second one. */
     function check() {
       if (r.phase !== 'play') return;
       words.forEach(function (w) {
@@ -2356,8 +2676,12 @@ function say(text, lang) {
           list.forEach(function (c) { c.classList.add('ok'); c.readOnly = true; });
           r.scoreBoard(w.it, w.it.key);
         } else {
+          /* one chance per word: the letters clear, the item is scored as a MISS with its radio left
+             blank, and the word is settled so it can never be scored a second time. The cells stay
+             typeable — a crossing word may still need those letters — but the point is already gone. */
           list.forEach(function (c) { if (!c.readOnly) { c.classList.add('no'); c.value = ''; } });
-          SFX.miss(r.sound);
+          w.solved = true;
+          r.scoreBoard(w.it, '');            /* no option carries '': a miss, and nothing is checked */
           r.later(function () { list.forEach(function (c) { c.classList.remove('no'); }); }, 520);
         }
       });
@@ -2392,14 +2716,29 @@ function say(text, lang) {
      word that fits after the words already placed, plus three that are close but do not fit the grammar
      of what is already on the board. So the sentence on the stage is the question, and the pads are
      the only words that could follow it.
+     THE ITEMS ARE NEVER SHUFFLED (`PLUGINS.echoPads.noShuffle`): the order of the `.qitem`s IS the
+     sentence, so a shuffled queue reads the words in the wrong order and the sentence becomes the
+     nonsense this game exists to prevent. The options are still one word that fits and three near
+     misses, so nothing is given away by keeping the order.
      A right pad puts the word in the sentence, answers that item, and moves on. A wrong pad costs one
-     point and does NOT move on: the student tries again until that word is right, because the sentence
+     LIFE and does NOT move on: the student tries again until that word is right, because the sentence
      cannot continue with a word that does not fit.
-     The score is a COUNTDOWN (the HUD pair, `left/start`): `data-lives` points, one gone per wrong
-     word; at zero the run is over. That is the whole fail state — no hidden penalty, no timer.
-     Authoring: `data-first` the given opening, `data-lives` the countdown (10), one `.qitem` per word
-     of the sentence, `data-a` the word that fits, three near misses in the options. `data-time` does
-     not apply: a board you fill at your own pace. */
+     The score COUNTS UP — the words placed, out of the sentence's own words — and it is the HUD pair,
+     `got/total`. LIVES are separate and are the row of hearts: `data-lives` of them (3), one gone per
+     wrong word, and the last one is the end of the run. At zero the score on the board is the final
+     score: nothing is taken back and nothing is replayed.
+     Authoring: `data-first` the given opening, `data-lives` the lives (3), one `.qitem` per word
+     of the sentence, `data-a` the word that fits, three near misses in the options. The sentence has to
+     be sensible from the given opening to the last pad, and each item has exactly ONE answer that could
+     plausibly follow what is already on the board: a pad that also fits is a broken item, because the
+     student who reads the sentence is the one who gets it wrong.
+     THE THREE NEAR MISSES ARE WRITTEN IN A SECOND PASS, per item, against the words placed BEFORE it
+     (never after), and each candidate is TESTED by substituting it into that context and reading the
+     result: a candidate that still reads as a possible continuation is rejected and replaced. No script
+     can do that test — only a reader can — so it is a rule of authoring, not a check. The shape is
+     mechanical and must hold too: four pads per item, each a single word, none repeated within its
+     item, and one item per word after `data-first`.
+     `data-time` does not apply: a board you fill at your own pace. */
   PLUGINS.echoPads = function (r) {
     var stage = r.stage;
     var box = el('div', 'g4-echo');
@@ -2411,7 +2750,7 @@ function say(text, lang) {
     box.appendChild(sayLine); box.appendChild(hint); box.appendChild(pads); box.appendChild(again);
     stage.appendChild(box);
 
-    var queue = [], at = 0, parts = [], given = '', points = 10, top = 10, busy = false;
+    var queue = [], at = 0, parts = [], given = '', lives = 3, top = 3, busy = false;
 
     function sentence() { return (given + ' ' + parts.join(' ')).replace(/\s+/g, ' ').trim(); }
     function paint() {
@@ -2430,8 +2769,8 @@ function say(text, lang) {
     function reset() {
       queue = []; at = 0; parts = []; busy = false;
       given = (r.root.getAttribute('data-first') || '').trim();
-      top = Math.max(1, num(r.root, 'data-lives', 10));
-      points = top;
+      top = Math.max(1, num(r.root, 'data-lives', 3));
+      lives = top;
       hint.textContent = '';
       pads.innerHTML = '';
       paint();
@@ -2456,14 +2795,15 @@ function say(text, lang) {
       var it = queue[at];
       if (!it) return;
       if (o.value !== it.key) {
-        /* one point gone, and the same word is still owed: the sentence cannot move on past it */
-        points = Math.max(0, points - 1);
+        /* one life gone, and the same word is still owed: the sentence cannot move on past it */
+        lives = Math.max(0, lives - 1);
         r.hud();
         pad.classList.remove('no');
         void pad.offsetWidth;
         pad.classList.add('no');
-        hint.textContent = 'Not that one — ' + points + ' left. Try the word that fits "' + sentence() + '".';
-        if (!points) {
+        hint.textContent = 'Not that one — ' + lives + ' ' + (lives === 1 ? 'life' : 'lives')
+          + ' left. Try the word that fits "' + sentence() + '".';
+        if (!lives) {
           busy = true;
           r.later(function () { if (r.phase === 'play') r.finish(); }, 700);
         }
@@ -2506,20 +2846,32 @@ function say(text, lang) {
     }
     return {
       begin: begin, show: function () { }, mark: mark, clear: clear, reset: reset,
-      lives: function () { return points; }, ownsPrompt: true
+      lives: function () { return lives; }, ownsPrompt: true
     };
   };
 
+  /* the sentence is read from its first word to its last: shuffling the items shuffles the WORDS, and a
+     shuffled sentence is exactly the nonsense this game is here to teach against. The order IS the
+     content, so this one presentation turns the shuffle off rather than fighting it. */
+  PLUGINS.echoPads.noShuffle = true;
+
   /* ---------------- bingoCard: the caller says it once, then the curtain opens ----------------
-     One item per call. The card is covered by a theatre curtain. Two countdowns run the item, and
-     neither sits on the curtain: they stand BESIDE the card, in their own cards, so the number is
-     always readable against the stage rather than against red velvet.
-       left   3 · 2 · 1 — the caller says the word ONCE at the start (no replay and no button: paying
-              attention to the one chance IS the activity), and the curtain rises when it reaches zero
-       right  5 · 4 · 3 · 2 · 1 — runs only while the card is open. It reaches zero and the curtain
-              FALLS, which is the item's deadline: the word is marked wrong and the point it was worth
-              is gone.
-     A stamp answers the item there and then and stops the right-hand countdown. What was said is
+     One item per call. The card is covered by a theatre curtain and it is DEAD CENTRE of the stage at
+     every moment: the grid is one fixed box, centred in a column, so the deadline card beside it cannot
+     push it off centre and the card never re-measures between items. The grid takes the stage's own
+     width (up to 840px) — twice the box it had — so a tile is a readable word plaque, and it shrinks
+     rather than overflowing on a narrow screen.
+     A ROUND IS STARTED, NOT ARRIVED AT: 15px under the grid sits 'Begin Round — Hear Word'. Nothing is
+     said until it is pressed, and pressing it says the word ONCE and starts the count — so the one
+     chance at the word is a decision the student made rather than a sound that arrived while they were
+     still reading the tiles. The button is dead for the rest of that round and comes back for the next.
+     Two countdowns run the item, each where it belongs:
+       on the curtain  3 · 2 · 1 — dead centre over the velvet, because it belongs to the card it is about
+              to uncover, and the curtain rises when it reaches zero
+       right   5 · 4 · 3 · 2 · 1 — 30px to the right of the grid, on the grid's own middle line, and only
+              while the card is open. It reaches zero and the curtain FALLS, which is the item's deadline:
+              the word is marked wrong and the point it was worth is gone.
+     A stamp answers the item there and then and stops the deadline countdown. What was said is
      never shown and the right tile is never revealed: a miss ends the item the way it was answered.
      Nine tiles: the item's options plus decoys taken from the rest of the block, so the card is never
      trivially small. The instruction is the block's own `.game-how` and nothing else — nothing inside
@@ -2532,10 +2884,16 @@ function say(text, lang) {
     var curtain = el('div', 'g4-curtain');
     var lead = el('div', 'g4-count g4-count-lead'), rush = el('div', 'g4-count g4-count-rush');
     var wrap = el('div', 'g4-card-wrap');
-    wrap.appendChild(card); wrap.appendChild(curtain);
-    box.appendChild(lead); box.appendChild(wrap); box.appendChild(rush);
+    /* the round's own start, 15px under the grid: the word is not said until this is pressed, so the one
+       chance at it is a decision the student made. Pressing it says the word ONCE and starts 3 · 2 · 1. */
+    var begin = el('button', 'g4-begin', 'Begin Round — Hear Word');
+    begin.type = 'button';
+    /* the lead-in count lives ON the curtain and inside the card's own box, so "dead centre" is the
+       card's centre and not the stage's; the deadline sits outside, 30px off the grid's right edge */
+    wrap.appendChild(card); wrap.appendChild(curtain); wrap.appendChild(lead);
+    box.appendChild(wrap); box.appendChild(begin); box.appendChild(rush);
     stage.appendChild(box);
-    var tiles = [], phrase = '', open = false, said = false, gen = 0;
+    var tiles = [], phrase = '', open = false, said = false, gen = 0, armed = 'off';
     function pool() {
       var all = [];
       r.items.forEach(function (it) { it.opts.forEach(function (o) { if (all.indexOf(o.text) < 0) all.push(o.text); }); });
@@ -2551,9 +2909,19 @@ function say(text, lang) {
       gen++;                                        /* every timer of the old item is now stale */
       card.innerHTML = ''; tiles = []; phrase = '';
       open = false; said = false;
+      armed = 'off';
+      begin.disabled = true;
+      begin.textContent = 'Begin Round — Hear Word';
       box.classList.remove('open');
       lead.textContent = ''; rush.textContent = '';
       lead.classList.remove('pop'); rush.classList.remove('pop');
+    }
+    /* the deadline card sits 30px to the RIGHT of the grid's own right edge, on the grid's middle line.
+       It is measured off the grid rather than guessed, because the grid takes the stage's width; the
+       layout itself never moves, so this is a placement, not a thing that happens between items. */
+    function placeRush() {
+      var gb = wrap.getBoundingClientRect(), bb = box.getBoundingClientRect();
+      rush.style.left = Math.round(gb.right - bb.left + 30) + 'px';
     }
     /* one second per number, in the count's own card; the last beat clears it instead of popping 0 */
     function tick(node, n, done) {
@@ -2605,32 +2973,52 @@ function say(text, lang) {
         card.appendChild(t);
         tiles.push(t);
       });
-      if (phrase && !said) { said = true; say(phrase); }   /* once per item, and only once */
-      countdown();
+      placeRush();
+      /* the round is ARMED, not running: the word is said when Begin is pressed, and not before */
+      armed = 'ready';
+      begin.disabled = false;
     }
+    /* Begin: the word is said ONCE, the button goes quiet for the round, and 3 · 2 · 1 starts over the
+       curtain. A second press cannot happen — the button is disabled for the rest of the item. */
+    begin.addEventListener('click', function () {
+      if (r.phase !== 'play' || armed !== 'ready') return;
+      armed = 'run';
+      begin.disabled = true;
+      begin.textContent = 'Listen…';
+      if (phrase && !said) { said = true; say(phrase); }
+      countdown();
+    });
     function mark(item, hit, value) {
       tiles.forEach(function (t) {
         if (t.getAttribute('data-v') !== value) return;
         t.classList.add(hit ? 'ok' : 'no');
       });
     }
-    return { show: show, mark: mark, clear: clear };
+    /* the prompt is CLAIMED and left empty: the stem is the word "listen" and the caller already says that
+       word, so a card at the top would be the instruction printed over a word nobody reads */
+    return { show: show, mark: mark, clear: clear, ownsPrompt: true };
   };
 
 
   /* ---------------- ladderRun: climb the ladder, one rung per right answer ----------------
-     The ladder is drawn as tall as the run has items, a safe rung every five, a climber who steps up
-     on a right answer and slides back to the last safe rung on a wrong one, a chest at the top, and a
-     rising motif so height can be HEARD as well as seen. A wrong answer keeps what was safely earned —
-     that is what makes a ladder a ladder and not a list. */
+     The ladder rises to the PROMPT, not to a prize: the item's own stem is a board at the top of the
+     rail, so what the student climbs toward is the question itself. One right answer is one rung of
+     distance, out of as many rungs as the run has items — the same pair the HUD shows, climbed/run.
+     A wrong answer keeps what was safely earned: the climber slides back to the last safe rung, every
+     fifth, which is what makes a ladder a ladder and not a list. A rung only ever comes from a right
+     answer, so he reaches the top only when every answer was right — and the man who reaches the top
+     paints over the question he has just climbed: the board takes his graffiti, drips and all, so the
+     prompt is covered by the run that beat it. A rising motif per rung, so height can be HEARD. */
   PLUGINS.ladderRun = function (r) {
     var stage = r.stage;
     var box = el('div', 'g4-ladder'), track = el('div', 'g4-ltrack');
     var rail = el('div', 'g4-rail'), climber = el('div', 'g4-lclimber');
-    var prize = el('div', 'g4-lprize'), opts = el('div', 'g4-raceopts');
-    prize.innerHTML = ART.chest;
+    var board = el('div', 'g4-lprompt'), boardT = el('span', 'g4-lprompt-t');
+    var paint = el('span', 'g4-lpaint'), opts = el('div', 'g4-raceopts');
+    paint.innerHTML = ART.graffiti;
+    board.appendChild(boardT); board.appendChild(paint);
     climber.innerHTML = ART.climber;
-    track.appendChild(rail); track.appendChild(prize); track.appendChild(climber);
+    track.appendChild(rail); track.appendChild(board); track.appendChild(climber);
     box.appendChild(track); box.appendChild(opts);
     stage.appendChild(box);
     var built = 0, climb = 0, safe = 0;
@@ -2641,18 +3029,30 @@ function say(text, lang) {
       rail.innerHTML = ART.ladder(Math.max(3, r.total), 5);
       step(0, true);
     }
-    /* one rung up is one small move; the safe rung is the floor a fall lands on */
+    /* one rung up is one move toward the board: his head finishes level with its bottom edge, so the
+       last rung is him standing at the question. Measured in the track's own pixels — a percentage of a
+       box whose height only exists at run time cannot put him at the top */
     function step(n, quiet) {
       climb = Math.max(0, Math.min(r.total, n));
-      var pct = (climb / (Math.max(3, r.total) + 1)) * 100;
-      climber.style.bottom = 'calc(' + pct.toFixed(1) + '% + 6px)';
+      var room = Math.max(0, (track.clientHeight || 200) - 48);
+      climber.style.bottom = ((r.total ? climb / r.total : 0) * room).toFixed(1) + 'px';
       climber.classList.toggle('at-top', climb >= r.total);
-      prize.classList.toggle('won', climb >= r.total);
-      if (!quiet && climb % 5 === 0) SFX.blip(r.sound, 660 + climb * 22, 140);
+      if (climb >= r.total) {
+        board.classList.add('painted');          /* the graffiti lands over the prompt */
+        if (!quiet) SFX.blip(r.sound, 940, 220);
+      }
+    }
+    function reset() {
+      climb = 0; safe = 0; built = 0;
+      board.classList.remove('painted');
+      boardT.textContent = '';
+      opts.innerHTML = '';
+      climber.style.bottom = '0px';
     }
     function clear() { opts.innerHTML = ''; }
     function show(item) {
       build();
+      boardT.textContent = item.prompt || '';
       opts.innerHTML = '';
       item.opts.forEach(function (o) {
         var b = el('button', 'g4-raceopt', o.text);
@@ -2679,7 +3079,7 @@ function say(text, lang) {
         SFX.miss(r.sound);
       }
     }
-    return { show: show, mark: mark, clear: clear };
+    return { show: show, mark: mark, clear: clear, reset: reset, ownsPrompt: true };
   };
 
 
@@ -2690,9 +3090,11 @@ function say(text, lang) {
      throws a fireball that bursts on the boss, the archer's arrow flies straight and fast. So the
      correct answer is visibly thrown by the character the student made, which is the whole appeal of a
      fight game.
-     A wrong answer is the boss's turn, and the boss does not repeat itself: it takes turns between a
-     BITE (it lunges at the fighter) and ACID (it spits a drop that lands on him). Three hits taken and
-     the fighter goes down, so a long drill has an ending that belongs to the answers, not to a timer.
+     A wrong answer is the boss's turn, and the boss always answers the same way: it SPITS ACID — a
+     drop that travels across the arena and bursts on the fighter in a green splash. One attack, read
+     once, so a wrong answer is never confusing and never takes two different shapes. Three hits taken
+     and the fighter goes down, so a long drill has an ending that belongs to the answers, not to a
+     timer.
      The lives are the RUN's and the HUD already counts them (this presentation reports `lives`), so the
      arena draws no second copy of the count — the HP bar is the boss's health, which the HUD cannot say.
      Authoring: `.qitem` per question, options are the answers, `data-time` the deadline. Nothing about
@@ -2716,7 +3118,7 @@ function say(text, lang) {
       wizard: { at: 'shot', art: ART.heroWizard, label: 'fireball', shot: ART.fireball, cls: 'fire', ms: 440, hz: 300 },
       archer: { at: 'shot', art: ART.heroArcher, label: 'bow', shot: ART.arrow, cls: 'arrow', ms: 260, hz: 760 }
     };
-    var fighter = 'sword', lives = 3, turn = 0, pickBtns = {};
+    var fighter = 'sword', lives = 3, pickBtns = {};
 
     function choose(k) {
       if (!FIGHTERS[k]) return;
@@ -2771,14 +3173,14 @@ function say(text, lang) {
     function clear() {
       opts.innerHTML = ''; shots.innerHTML = '';
       hero.classList.remove('recoil', 'hurt');
-      art.classList.remove('bite', 'hurt');
+      art.classList.remove('hurt');
       drawHud();
     }
     /* a restart begins with a whole boss: lives are run state, so the runner resets them on start */
     function reset() {
-      lives = 3; turn = 0;
-      hero.classList.remove('down', 'recoil', 'hurt');
-      art.classList.remove('bite', 'hurt');
+      lives = 3;
+      hero.classList.remove('down', 'recoil', 'hurt', 'charge');
+      art.classList.remove('hurt');
       shots.innerHTML = '';
       drawHud();
     }
@@ -2793,11 +3195,30 @@ function say(text, lang) {
         opts.appendChild(b);
       });
     }
+    /* the acid's splash: the green the drop was carrying, thrown outward off the body it hit.
+       Its own class names — catchBasket already owns `.g4-splash`, `.g4-drop` and `g4splash`, and the
+       later @keyframes of a shared name would have replaced this one outright */
+    function splash(x, y) {
+      var s = el('div', 'g4-acid-splash');
+      s.style.left = x + 'px'; s.style.top = y + 'px';
+      for (var i = 0; i < 7; i++) {
+        var d = el('span', 'g4-acid-drop'), a = (i / 7) * Math.PI * 2, r = 14 + (i % 3) * 9;
+        d.style.setProperty('--dx', Math.round(Math.cos(a) * r) + 'px');
+        d.style.setProperty('--dy', Math.round(Math.sin(a) * r) + 'px');
+        d.style.setProperty('--sz', (i % 3 === 0 ? 1.3 : 0.85) + '');
+        s.appendChild(d);
+      }
+      arena.appendChild(s);
+      r.later(function () { if (s.parentNode) s.parentNode.removeChild(s); }, 620);
+    }
     /* a right answer: the fighter's own attack, drawn across the arena it crosses */
     function attack() {
       var f = FIGHTERS[fighter], from = centre(hero), to = centre(art);
       if (f.at === 'cut') {
-        hero.classList.add('lunge');
+        /* he RUNS to the boss, cuts at close range and runs back: the run is the distance between the
+           two of them, not a fixed nudge, so the sword lands on the body it was aimed at */
+        hero.style.setProperty('--run', Math.max(40, Math.round(to.x - from.x - 30)) + 'px');
+        hero.classList.add('charge');
         r.later(function () {
           var s = el('div', 'g4-slash');
           s.style.left = to.x + 'px'; s.style.top = to.y + 'px';
@@ -2805,8 +3226,8 @@ function say(text, lang) {
           SFX.tone(f.hz, 120, 'square', 0.05);
           hurtBoss();
           r.later(function () { if (s.parentNode) s.parentNode.removeChild(s); }, 440);
-        }, r.reduced ? 20 : 150);
-        r.later(function () { hero.classList.remove('lunge'); }, r.reduced ? 60 : 380);
+        }, r.reduced ? 20 : 300);
+        r.later(function () { hero.classList.remove('charge'); }, r.reduced ? 60 : 640);
         return;
       }
       var p = el('div', 'g4-proj ' + f.cls);
@@ -2824,17 +3245,8 @@ function say(text, lang) {
         r.later(function () { if (p.parentNode) p.parentNode.removeChild(p); }, 240);
       }, r.reduced ? 20 : f.ms);
     }
-    /* a wrong answer: the boss answers, and it does not answer the same way twice */
+    /* a wrong answer: the boss always spits — the drop travels, and it lands in a green splash */
     function bossTurn() {
-      turn++;
-      if (turn % 2) {
-        /* bite: it comes at him */
-        art.classList.add('bite');
-        r.later(hurtHero, r.reduced ? 20 : 200);
-        r.later(function () { art.classList.remove('bite'); }, r.reduced ? 60 : 540);
-        return;
-      }
-      /* acid: it spits, and the drop travels */
       var from = centre(art), to = centre(hero);
       var p = el('div', 'g4-proj spit');
       p.innerHTML = ART.acid;
@@ -2843,8 +3255,10 @@ function say(text, lang) {
       void p.offsetWidth;
       p.style.transform = 'translate(' + Math.round(to.x - from.x) + 'px,'
         + Math.round(to.y - from.y) + 'px)';
+      SFX.tone(300, 90, 'triangle', 0.05);
       r.later(function () {
         p.classList.add('burst');
+        splash(to.x, to.y);
         hurtHero();
         r.later(function () { if (p.parentNode) p.parentNode.removeChild(p); }, 240);
       }, r.reduced ? 20 : 460);
