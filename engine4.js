@@ -464,16 +464,8 @@ window.GAMES4 = (function () {
     var card = el('div', 'g4-intro-card');
     var how = root.querySelector('.game-how');
     if (how) card.appendChild(how);
-    var rounds = Math.max(0, num(root, 'data-rounds', 0)) || this.items.length;
-    var meta = el('ul', 'g4-intro-meta');
-    var bits = ['<li><b>' + rounds + '</b> ' + (rounds === 1 ? 'round' : 'rounds') + '</li>'];
-    if (this.itemTime) bits.push('<li><b>' + (Math.round(this.itemTime / 100) / 10) + 's</b> each</li>');
-    if (this.limit) bits.push('<li><b>' + this.limit + 's</b> total</li>');
-    bits.push('<li>keys <b>1–' + (this.items.length ? Math.max.apply(null, this.items.map(function (i) {
-      return i.opts.length;
-    })) : 1) + '</b></li>');
-    meta.innerHTML = bits.join('');
-    card.appendChild(meta);
+    /* NO rounds / deadline / keys strip on the start card: the student sees the game's own picture and
+       the Play button, not a stat line before they have played anything. */
     intro.appendChild(card);
     this.intro = intro;
     var stage = el('div', 'g4-stage');
@@ -558,7 +550,17 @@ window.GAMES4 = (function () {
   Runner.prototype.hud = function () {
     var lives = (this.view && typeof this.view.lives === 'function') ? Math.max(0, this.view.lives()) : null;
     if (lives != null) this.livesTop = Math.max(this.livesTop || 0, lives);
-    this.hudEl.querySelector('.score').textContent = this.got() + '/' + this.total;
+    /* the default HUD score is a live pair of numbers. ANY presentation whose score must not be read while
+       it is being played — bossRaid today — declares `PLUGINS.<game>.hideScoreLive = true`, and this one
+       block of the runner hides the WHOLE score card for it (the paper pill and all, not just its digits).
+       The gate is `running`, not `phase === 'play'`: resolve() moves the run through `done` for the beat
+       between an answer and the next item, so a play-only test would let the card flash for that whole
+       beat. `running` is true from start() until finish(), so the card is hidden for the entire run and the
+       run's number still returns on the end card like every other game. */
+    var scoreEl = this.hudEl.querySelector('.score');
+    var hideScore = !!(this.plugin && this.plugin.hideScoreLive && this.running);
+    scoreEl.style.display = hideScore ? 'none' : '';
+    if (!hideScore) scoreEl.textContent = this.got() + '/' + this.total;
     this.hudEl.querySelector('.clock').textContent = this.limit ? Math.ceil(this.limitLeft) + 's' : '';
     this.drawLives(lives);
   };
@@ -1550,22 +1552,9 @@ window.GAMES4 = (function () {
     box.appendChild(grid);
   },
   echoPads: function (box, items) {
-    /* the still is the sentence as far as it goes: the given opening, one word placed, then the pads.
-       The opening is an authoring attribute of the BLOCK (data-first), not of a question, so it is read
-       off the block — reading it off the first `.qitem` found nothing and the poster lost its opening. */
-    var host = items[0].item.closest ? items[0].item.closest('.game') : null;
-    var first = ((host && host.getAttribute('data-first')) || '').trim();
-    var line = el('div', 'g4-echo-say g4-bit');
-    if (first) line.appendChild(el('span', 'g4-echo-w given', esc(first)));
-    var k = 0;
-    (items[0].opts || []).forEach(function (o) {
-      if (k || o.value !== items[0].key) return;
-      line.appendChild(el('span', 'g4-echo-w', esc(o.text)));
-      k = 1;
-    });
-    line.appendChild(el('span', 'g4-echo-cursor', '▌'));
-    abs(line, 'left:8%;right:8%;top:12%');
-    box.appendChild(line);
+    /* NO PROMPT CARD on the start page: the sentence card (the given opening + the word placed) is the
+       item's own content, and drawing it here hangs a prompt over a block that has not started yet. The
+       still is the pad row only — the sentence appears when Play does. */
     var pads = el('div', 'g4-pads g4-bit');
     (items[0].opts || []).forEach(function (o) {
       pads.appendChild(el('div', 'g4-pad', esc(o.text)));
@@ -1661,13 +1650,15 @@ function say(text, lang) {
     var prize = el('div', 'g4-prize');
     var roof = el('div', 'g4-roof');
     var pads = el('div', 'g4-towerpads');
+    var flag = el('div', 'g4-flag'); flag.textContent = '🏁';
+    var coin = el('div', 'g4-coin'); coin.textContent = '🪙';
     climber.innerHTML = ART.hero;
     prize.innerHTML = ART.chest;
     scroll.appendChild(stack);
     scroll.appendChild(climber); scroll.appendChild(ledge); scroll.appendChild(prize);
     scroll.appendChild(roof);
     view.appendChild(scroll);
-    box.appendChild(view); box.appendChild(pads);
+    box.appendChild(view); box.appendChild(pads); box.appendChild(flag); box.appendChild(coin);
     stage.appendChild(box);
 
     var AH = 48, GAP = 4, LH = 10;      /* one tower block (= the option block), the seam, the ledge */
@@ -1692,12 +1683,13 @@ function say(text, lang) {
     function fitBlocks() {
       var n = Math.min(MAXFIT, Math.max(1, r.total));
       var stageH = box.clientHeight || 280;
-      /* the window is what is left above the tray: the tray is one block tall plus its 8px foot and a 6px
-         gap, and the ledge rides on top of the stack, so both come out before the share is cut */
-      AH = Math.floor((stageH - 25 - (n - 1) * GAP) / (n + 1));
+      /* the answers now stand on the RIGHT, so the tower has the bottom of the stage to itself: its floor
+         drops 35px, which is the note's "move the stack items down 35px". The old tray top sat at ~62px
+         above the floor (a full 48px block plus its 14px foot), so the new floor is ~27px. Each block then
+         shares the height from that floor to the top across the run. */
+      AH = Math.floor((stageH - 40 - (n - 1) * GAP) / n);   /* 27px floor + ~13px of roof headroom */
       AH = Math.max(19, Math.min(48, AH));
-      pads.style.height = AH + 'px';
-      view.style.bottom = (AH + 14) + 'px';
+      view.style.bottom = '27px';
     }
     /* the roof the tower is built TO. It is fixed the moment the tray tells us how tall a block is, at the
        height the finished tower will reach, so the goal is in the picture from the first answer and every
@@ -1708,12 +1700,38 @@ function say(text, lang) {
       ledge.style.bottom = goal + 'px';
       prize.style.bottom = (goal + LH) + 'px';
       roof.style.bottom = (goal + LH + 34) + 'px';
+      /* the flag he runs and jumps to at the end — to the RIGHT of the finished tower, where he runs — and
+         the coin that pops out when he reaches it */
+      flag.style.bottom = (goal + LH) + 'px';
+      flag.style.left = 'calc(var(--tw) + var(--tww) + 22px)';
+      coin.style.bottom = (goal + LH + 26) + 'px';
+      coin.style.left = 'calc(var(--tw) + var(--tww) + 26px)';
+      flag.classList.remove('on');
+      coin.classList.remove('pop');
+    }
+    /* the finish, all answers right: he runs along the finished tower and jumps at the flag, and the coin it
+       knocks out pops up */
+    function runToFlag() {
+      if (r.reduced) { flag.classList.add('on'); return; }
+      climber.classList.add('mario');
+      r.later(function () { flag.classList.add('on'); coin.classList.add('pop'); }, 300);
+    }
+    /* the finish, short of the top: he does not reach the flag — he trips and falls on his face */
+    function faceplant() {
+      if (r.reduced) return;
+      r.later(function () { climber.classList.add('faceplant'); }, 300);
     }
     /* one block of the tower, and the climber rises to its top: he climbs the STACK, there is no ladder */
     function layer(text, cls) {
+      var idx = Math.round(top / (AH + GAP));    /* which block up the tower this is (0 = the first) */
       var d = el('div', 'g4-layer' + (cls ? ' ' + cls : ''), text);
       d.style.height = AH + 'px';
       d.style.bottom = top + 'px';
+      /* RIGHT-JUSTIFIED and tapering: every block shares the tower's right edge, and each block above the
+         first is 20px narrower than the one below it, so the stack narrows as it climbs to the roof */
+      d.style.left = 'auto';
+      d.style.right = 'calc(100% - var(--tw) - var(--tww))';
+      d.style.width = 'max(60px, calc(var(--tww) - ' + (idx * 20) + 'px))';
       stack.appendChild(d);
       bits.push(d);
       top += AH + GAP;
@@ -1736,7 +1754,9 @@ function say(text, lang) {
       stack.innerHTML = '';
       top = 0; placed = 0;
       climber.style.bottom = '0px';
-      climber.classList.remove('cheer');
+      climber.classList.remove('cheer', 'mario', 'faceplant');
+      flag.classList.remove('on');
+      coin.classList.remove('pop');
       ledge.style.bottom = '0px';
       roof.style.bottom = '0px';
       prize.classList.remove('won');
@@ -1842,8 +1862,10 @@ function say(text, lang) {
         layer(text, 'mark-ok');
         placed++;
         if (placed >= r.total) {
+          /* every answer was right, so the stack reached the roof: he runs and jumps to the flag and the
+             coin pops out (the run ends right after, so the win plays as the run closes) */
           prize.classList.add('won');
-          climber.classList.add('cheer');
+          runToFlag();
         }
       } else {
         /* the block tumbles off the tower: it is never part of what gets built, and the roof stays where
@@ -1857,6 +1879,9 @@ function say(text, lang) {
           scrollTo();
         }, r.reduced ? 20 : 520);
       }
+      /* the run is closing (this was the last item) and the tower never reached the roof — a miss kept a
+         block off it — so he does not get to the flag: he falls on his face */
+      if (r.queue.length <= 1 && placed < r.total) faceplant();
     }
     return {
       show: show, mark: mark, clear: clear, reset: reset, ownsPrompt: true
@@ -2054,7 +2079,8 @@ function say(text, lang) {
      The AMMO is the run, not the item: you get one shot per item (`data-rounds`/list length), the pips
      in the top-left corner are the shots still in hand, and when the last shot is fired — hit, miss or
      a click on the sky — the run is over and the score is the targets hit. Nothing comes back for a
-     second try, so `data-replay="0"` is what a real range writes.
+     second try inside the run (a miss is spent); whether the RUN itself may be replayed is `data-retry`
+     — on by default for training, `0` for the block that is the page's quiz.
      The range runs 30% slower than the block's own deadline (PLUGINS.skeetRange.timeScale), because a
      word flying past is a word nobody reads: the discs and the clock slow together, so the shot rule is
      unchanged and simply has more time in it.
@@ -2202,8 +2228,9 @@ function say(text, lang) {
      runner (see the levers at the top), so the discs and the timer slow by the same 30% and a word can
      be read before it has to be shot at. */
   PLUGINS.skeetRange.timeScale = 1.3;
-  /* the range plays its own three sounds — the gun, the buzzer, the crowd — so the runner's generic
-     pair would be a second verdict on top of each shot */
+  /* the range plays its own two sounds — the gun on every shot, the buzzer (at half level) only when the
+     shot was wrong or hit nothing — so the runner's generic pair would be a second verdict on top of each
+     shot. There is no crowd sound. */
   PLUGINS.skeetRange.ownSound = true;
 
   /* ---------------- mineGrid: open the saloon door you trust ----------------
@@ -3118,7 +3145,7 @@ function say(text, lang) {
       wizard: { at: 'shot', art: ART.heroWizard, label: 'fireball', shot: ART.fireball, cls: 'fire', ms: 440, hz: 300 },
       archer: { at: 'shot', art: ART.heroArcher, label: 'bow', shot: ART.arrow, cls: 'arrow', ms: 260, hz: 760 }
     };
-    var fighter = 'sword', lives = 3, pickBtns = {};
+    var fighter = 'sword', lives = 3, pickBtns = {}, hits = 0, need = 1;
 
     function choose(k) {
       if (!FIGHTERS[k]) return;
@@ -3166,9 +3193,12 @@ function say(text, lang) {
       r.later(function () { hero.classList.remove('recoil', 'hurt'); }, 440);
     }
 
+    /* the boss's health is `need` (= total questions − 2) hits: the bar is those hits LEFT, counting DOWN
+       as the fighter lands them, and an empty bar is the boss dead — the bar is the fight's own clock, not a
+       mirror of the score */
     function drawHud() {
-      var hp = r.total ? 1 - r.score / r.total : 0;
-      hpFill.style.width = Math.max(0, Math.round(hp * 100)) + '%';
+      var hp = need ? 1 - hits / need : 0;
+      hpFill.style.width = Math.max(0, Math.round(Math.max(0, hp) * 100)) + '%';
     }
     function clear() {
       opts.innerHTML = ''; shots.innerHTML = '';
@@ -3179,8 +3209,10 @@ function say(text, lang) {
     /* a restart begins with a whole boss: lives are run state, so the runner resets them on start */
     function reset() {
       lives = 3;
+      hits = 0;
+      need = Math.max(1, r.total - 2);
       hero.classList.remove('down', 'recoil', 'hurt', 'charge');
-      art.classList.remove('hurt');
+      art.classList.remove('hurt', 'down');
       shots.innerHTML = '';
       drawHud();
     }
@@ -3271,7 +3303,18 @@ function say(text, lang) {
       });
       if (hit) {
         attack();                               /* the fighter the student picked lands it */
+        hits++;
+        drawHud();
+        if (hits >= need) {
+          /* `need` hits and the boss is dead: the fight is won there, even if the item list has more. Marking
+             the run dead lets the runner's own post-answer step CLOSE it (resolve finishes instead of
+             stepping to the next item), so no next question flashes past after the boss falls. */
+          art.classList.add('down');
+          r.dead = true;
+        }
       } else {
+        /* a hit costs a LIFE, never a point: the score only ever counts the hits that landed, so a wrong
+           answer takes a heart and leaves the score exactly where it was. */
         lives = Math.max(0, lives - 1);
         bossTurn();
         if (!lives) {
@@ -3283,6 +3326,12 @@ function say(text, lang) {
     }
     return { show: show, mark: mark, clear: clear, reset: reset, lives: function () { return lives; } };
   };
+  /* bossRaid opts into the runner's generic hide-the-score switch: its score counts the hits that landed
+     and the student must not read it mid-fight. The switch is not bossRaid-specific — ANY presentation can
+     hide its HUD score card the same way, by setting `PLUGINS.<game>.hideScoreLive = true`; the runner
+     hides the whole score card for that game while a run is live and prints the run's number on the end
+     card like every other game. Enabling it elsewhere is this one line. */
+  PLUGINS.bossRaid.hideScoreLive = true;
 
   function boot() {
     /* the gradients and filters every scene shares: one hidden <svg> per page, so any number of
