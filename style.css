@@ -331,6 +331,9 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-intro-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:0;padding:0;list-style:none;font:600 13px 'Public Sans',sans-serif;color:var(--ink)}
 .g4-intro-meta li{padding:3px 11px;background:#fff8ea;border:2px solid var(--tan);border-radius:999px}
 .g4-intro-meta b{font-weight:800}
+/* the score of the run that just ended: it goes on the intro card and stays until the next finish */
+.g4-intro-last{background:#e8f7ee !important;border-color:#2f9e44 !important}
+.g4-intro-last b{color:#1d5c2c}
 .g4-intro .game-start{font-size:16px;padding:10px 22px}
 .game.g4 .g4-stage{position:relative;margin:10px 0 0;height:280px;overflow:hidden;background:linear-gradient(#eaf3f8,#dce9f2);border:2px solid var(--ink);border-radius:14px}
 /* the scene: a finished picture of the place the game happens in; it sits under everything, for the
@@ -338,9 +341,25 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-scene{position:absolute;inset:0;z-index:0;overflow:hidden}
 .g4-scene svg{display:block;width:100%;height:100%}
 .g4-defs{position:absolute;width:0;height:0;overflow:hidden}
-.g4-hud{position:absolute;right:10px;top:8px;z-index:5;display:flex;gap:12px;font:700 14px 'Public Sans',sans-serif;color:var(--ink)}
+/* the HUD sits in the stage's top-right corner. The score is a CARD, 20px in from that corner, and the
+   number is set in the site's own header type (Playfair Display — the h1 face — with the header's
+   tracking) so the count reads as the game's headline, not as body text. The clock sits to its left,
+   which is why the row runs `row-reverse`: the score is anchored to the corner, not to the row. */
+/* the count cards belong to a RUN, not to the block: the intro card is the block before anything has
+   been played, so the score and the hearts are not on it at all. They appear when Play puts the game
+   on and go again with it, for every game. */
+.g4-hud,.g4-hearts{opacity:0;transition:opacity .25s ease}
+.game.g4-ready.is-on .g4-hud,.game.g4-ready.is-on .g4-hearts{opacity:1}
+.g4-hud{position:absolute;right:20px;top:20px;z-index:5;display:flex;flex-direction:row-reverse;align-items:flex-start;gap:10px;font:700 14px 'Public Sans',sans-serif;color:var(--ink)}
+.g4-hud .score{min-width:2.6em;padding:3px 12px;text-align:center;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);font:700 22px/1.2 'Playfair Display',serif;letter-spacing:.14em}
 .g4-hud .clock{min-width:3.2em;text-align:right}
-.g4-prompt{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:4;max-width:70%;padding:5px 16px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);font-weight:700;font-size:15px;text-align:center;opacity:0;transition:opacity .28s ease}
+/* hearts: a game that reports lives shows them in the stage's TOP-LEFT corner, 20px in, on the same
+   card as the score. A spent life is a hollow heart rather than a missing one, so the row is the same
+   width all run and a life lost reads as a heart going out. */
+.g4-hearts{position:absolute;left:20px;top:20px;z-index:5;display:flex;gap:2px;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);font:700 18px/1 system-ui,sans-serif;letter-spacing:1px;color:#d64545}
+.g4-heart{opacity:.26}
+.g4-heart.full{opacity:1}
+.g4-prompt{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:4;max-width:calc(100% - 240px);padding:5px 16px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);font-weight:700;font-size:15px;text-align:center;opacity:0;transition:opacity .28s ease}
 .g4-prompt.in{opacity:1}
 /* the deadline is a bar you can watch empty */
 .g4-timebar{position:absolute;left:0;right:0;bottom:0;z-index:6;height:8px;background:rgba(24,33,54,.12)}
@@ -350,24 +369,33 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-again,.g4-lever{margin:8px auto 0;display:block;padding:6px 12px;background:var(--ink);color:var(--cream);border:0;border-radius:10px;font:700 13px 'Public Sans',sans-serif;box-shadow:3px 3px 0 var(--tan);cursor:pointer}
 /* skeetRange */
 /* raceLane */
-/* stackDrop: the question is a block, a right answer becomes a rung, the climber climbs to the star */
-.g4-tower{position:absolute;inset:0;outline:none}
-.g4-built{position:absolute;left:26px;bottom:76px;width:58px;top:44px}
-.g4-rung-slot{position:absolute;left:0;width:58px;height:18px;border-radius:5px;border:2px dashed rgba(24,33,54,.22);background:transparent}
-.g4-rung-slot.filled{border:2px solid #8a5a2b;background:linear-gradient(#d9a765,#b9854c);box-shadow:inset 0 -3px 0 rgba(0,0,0,.18);animation:g4drop-in .32s cubic-bezier(.3,1.4,.6,1)}
-.g4-climber{position:absolute;left:92px;width:34px;height:52px;transition:bottom .38s cubic-bezier(.3,1.3,.6,1)}
+/* stackDrop: a tower you build out of answers, with the question to its LEFT and vertically centred —
+   the question is what the tower is built against, not a block on top of it. The right answer is
+   dragged onto the tower and stays, a wrong one tumbles off. No ladder: the climber climbs the tower
+   itself, against its left face, to the chest that sits on top. */
+.g4-tower{position:absolute;inset:0}
+.g4-qcard{position:absolute;left:10px;top:50%;width:30%;max-width:196px;transform:translateY(-50%);padding:10px 12px;z-index:4;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--tan);font:700 14px/1.25 'Public Sans',sans-serif;text-align:center}
+.g4-stackview{position:absolute;left:0;right:0;top:0;bottom:62px;overflow:hidden}
+.g4-scroll{position:absolute;left:0;right:0;bottom:0;height:0;transition:transform .3s cubic-bezier(.3,1.1,.6,1)}
+.g4-stack{position:absolute;left:0;right:0;bottom:0;height:0}
+/* the tower stands between 34% and 88%: the climber hangs off its left face and the chest sits on top */
+.g4-layer{position:absolute;left:34%;right:12%;height:26px;display:flex;align-items:center;justify-content:center;padding:2px 9px;overflow:hidden;text-align:center;border-radius:9px;font:700 12.5px 'Public Sans',sans-serif;line-height:1.15;box-shadow:3px 3px 0 var(--tan);background:#e6eef2;border:2px solid #8b98a8;color:#31404f;animation:g4land .3s cubic-bezier(.3,1.4,.6,1)}
+.g4-layer.mark-ok{background:#e8f7ee;border-color:#2f9e44;color:#1d5c2c}
+.g4-layer.mark-no{background:#fdeaea;border-color:#c92a2a;color:#7d1f1f}
+.g4-layer.mark-no.fall{animation:g4tumble .52s ease-in forwards}
+@keyframes g4land{from{transform:translateY(-26px);opacity:0}to{transform:none;opacity:1}}
+@keyframes g4tumble{to{transform:translate(46px,26px) rotate(16deg);opacity:0}}
+.g4-climber{position:absolute;left:34%;width:30px;height:44px;margin-left:-8px;transition:bottom .34s cubic-bezier(.3,1.3,.6,1)}
 .g4-climber .g4-art{width:100%;height:100%}
 .g4-climber.cheer{animation:g4cheer .5s ease 2}
-.g4-prize{position:absolute;left:96px;top:2px;width:30px;height:30px;opacity:.35}
+.g4-prize{position:absolute;left:34%;right:12%;margin:0 auto;width:38px;height:34px;opacity:.4;transition:opacity .3s ease,bottom .3s ease}
 .g4-prize .g4-art{width:100%;height:100%}
 .g4-prize.won{opacity:1;animation:g4spin 1s ease-in-out 2}
-.g4-block{position:absolute;left:50%;top:56px;z-index:3;max-width:56%;padding:9px 16px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--tan);font:700 15px 'Public Sans',sans-serif;text-align:center;transform:translate(-50%,0);transition:transform .34s cubic-bezier(.3,1.2,.6,1)}
-.g4-block.lean-left{animation:g4lean-l 3.4s ease-in-out infinite alternate}
-.g4-block.lean-right{animation:g4lean-r 3.4s ease-in-out infinite alternate}
-.g4-block.falling{transition:transform .3s cubic-bezier(.5,0,.9,.6)}
-.g4-block.ok{border-color:#2f9e44;background:#e8f7ee;opacity:.25}
-.g4-block.no{border-color:#c92a2a;background:#fdeaea;animation:g4shake .34s ease;opacity:.35}
-.g4-towerpads{position:absolute;left:26px;right:12px;bottom:10px;display:flex;gap:8px;height:56px}
+/* the answer block in flight, from the tray to the top of the tower */
+.g4-flyblk{position:absolute;z-index:8;min-width:46px;max-width:72%;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:9px;color:var(--ink);font:700 12.5px 'Public Sans',sans-serif;text-align:center;pointer-events:none;box-shadow:3px 3px 0 var(--tan);transition:transform .3s cubic-bezier(.4,1,.5,1),opacity .3s ease}
+.g4-flyblk.go{opacity:.85}
+.g4-padbtn.lifted{box-shadow:6px 6px 0 var(--ink);cursor:grabbing;pointer-events:none}
+.g4-towerpads{position:absolute;left:36%;right:12px;bottom:8px;display:flex;gap:8px;height:48px}
 /* the answer row shared by ladderRun and bossRaid, plus their poster stills */
 .g4-raceopts{display:flex;gap:8px;position:absolute;left:10px;right:10px;bottom:10px}
 .g4-raceopt{flex:1 1 0;min-width:0;padding:8px 10px;margin:0;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);font:700 13.5px 'Public Sans',sans-serif;color:var(--ink);cursor:pointer}
@@ -385,12 +413,25 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 @keyframes g4drop-in{from{transform:translateY(-16px);opacity:0}to{transform:none;opacity:1}}
 @keyframes g4cheer{50%{transform:translateY(-12px) rotate(-6deg)}}
 /* flapGate */
-.g4-sky{position:absolute;inset:0;background:linear-gradient(#dff0f7,#eef7ea);cursor:pointer}
-.g4-avatar{position:absolute;left:34px;top:50%;width:22px;height:22px;border-radius:6px;background:var(--ink);z-index:2}
-.g4-gates{position:absolute;inset:0}
-.g4-gate{position:absolute;right:14px;width:44%;padding:8px 12px;background:var(--paper);border:3px solid var(--ink);border-radius:8px;color:var(--ink);font:700 13px 'Public Sans',sans-serif;cursor:pointer}
-.g4-gate.ok{border-color:#2f9e44;background:#e8f7ee}.g4-gate.no{border-color:#c92a2a;background:#fdeaea}
-.g4-gate.reveal{border-style:dashed;border-color:#2f9e44}
+/* flapGate — a wall with real gaps, scrolling at the bird */
+.g4-sky{position:absolute;inset:0;background:linear-gradient(#dff0f7,#eef7ea);cursor:pointer;overflow:hidden}
+/* flapGate: the wall is a 100px column of bricks; the gaps cut out of it are where the bird must be.
+   The answer in a gap is SCENERY TEXT, not a control: 80% transparent, centred, one line (never
+   wrapped), and it takes no pointer of its own — the sky is the only control (click or Space flaps). */
+.g4-walls{position:absolute;top:0;bottom:0;left:0;width:100px;will-change:transform}
+.g4-seg{position:absolute;left:0;right:0;background:linear-gradient(#9aa9b6,#7f8f9e);border-top:2px solid #61707d;border-bottom:2px solid #61707d;box-shadow:inset 0 0 0 2px rgba(255,255,255,.16)}
+.g4-gapg{position:absolute;left:0;right:0;display:flex;align-items:center;justify-content:center;padding:0 4px;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:inherit;pointer-events:none}
+.g4-gapg-t{display:block;padding:2px 8px;background:var(--paper);border-radius:6px;font:700 18px 'Public Sans',sans-serif;line-height:1.1;text-align:center;white-space:nowrap;color:#3a3f47;opacity:1}
+.g4-gapg.ok .g4-gapg-t{background:#e8f7ee;color:#1d5c2c;opacity:1}
+.g4-gapg.no .g4-gapg-t{background:#fdeaea;color:#7d1f1f;opacity:1}
+.g4-gapg.reveal .g4-gapg-t{background:#e8f7ee;color:#1d5c2c;outline:2px dashed #2f9e44;opacity:1}
+.g4-bird{position:absolute;left:64px;width:46px;height:34px;z-index:3;pointer-events:none}
+.g4-bird .g4-art{width:100%;height:100%}
+.g4-bird.ok{filter:drop-shadow(0 0 5px rgba(47,158,68,.95))}
+.g4-bird.no{filter:drop-shadow(0 0 5px rgba(201,42,42,.95))}
+.g4-wing{transform-box:fill-box;transform-origin:82% 84%}
+.g4-bird.flap .g4-wing{animation:g4wing .26s ease}
+@keyframes g4wing{50%{transform:rotate(-28deg) scaleY(.8)}}
 /* skeetRange — a disc per option thrown across the range on its own arc, one crosshair, one shot. The
    ring is drawn with a radial gradient so it needs no art file, and the option's plaque sits ON the
    disc, not under it: the disc is what the student aims at, so the word has to fly with it. */
@@ -411,6 +452,12 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-cross::after{top:50%;left:0;height:2px;width:100%;margin-top:-1px}
 .g4-cross.live{opacity:.85}
 .g4-cross.fire{opacity:1;animation:g4flash .3s ease-out}
+/* the ammo: one pip per shot the run was given, on the same card the score and the hearts use, so the
+   constraint is visible before the shot is spent. A spent pip stays as a hollow ring. */
+.g4-ammo{position:absolute;left:20px;top:20px;z-index:5;display:flex;gap:3px;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);font:700 15px/1 system-ui,sans-serif;letter-spacing:1px;color:#b9854c}
+.g4-shot{opacity:.28}
+.g4-shot.full{opacity:1}
+.g4-ammo.empty{border-color:#c92a2a;box-shadow:3px 3px 0 rgba(201,42,42,.45)}
 @keyframes g4puff{0%{transform:scale(1)}45%{transform:scale(1.16)}100%{transform:scale(1)}}
 @keyframes g4flash{0%{opacity:1}50%{opacity:.25}100%{opacity:1}}
 /* reduced motion: the discs do not travel (the plugin places them in a row), the crosshair does not
@@ -423,25 +470,66 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 /* A button inside a game stage must never inherit the site's cream-on-dark button text: every game
    paints its own paper background, so unset colour made whole option rows invisible. */
 .g4-stage button{color:var(--ink)}
-/* mineGrid: the words are readable from the start — what is hidden is which cell is mined */
-.g4-mines{position:absolute;left:12px;right:12px;top:12px;bottom:12px}
-.g4-field{position:absolute;left:0;right:0;top:26px;bottom:0;display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:1fr;gap:10px}
-.g4-lives{position:absolute;right:0;top:0;font:700 16px system-ui;color:#c92a2a;letter-spacing:2px}
-.g4-runner{position:absolute;left:50%;bottom:-6px;width:30px;height:46px;margin-left:-15px;z-index:4;transition:transform .42s cubic-bezier(.3,1.1,.6,1);pointer-events:none}
+/* mineGrid: a street of saloons. Every option is a pair of batwing doors with its word hung over the
+   top and readable from the start; what is hidden is what is behind each door — the saloon, or a
+   snake. The door SWINGS open on the pick, so the answer is the thing behind it. */
+.g4-mines{position:absolute;left:10px;right:10px;top:8px;bottom:8px}
+/* the street fades out when he goes in, so the next question fades in on an empty street */
+.g4-street{position:absolute;inset:0;transition:opacity .34s ease}
+.g4-street.away{opacity:0}
+.g4-street.settle{animation:g4settle .38s ease both}
+@keyframes g4settle{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* the boardwalk: packed dust with a wheel track, so the doors stand ON something */
+.g4-road{position:absolute;left:-10px;right:-10px;bottom:0;height:74px;background:linear-gradient(#c79b62,#a97c45);border-top:3px solid #8a6537;box-shadow:inset 0 7px 10px rgba(0,0,0,.14)}
+.g4-road::after{content:'';position:absolute;left:0;right:0;top:30px;height:7px;border-radius:4px;background:repeating-linear-gradient(90deg,#e8cfa4 0 26px,rgba(232,207,164,0) 26px 54px);opacity:.75}
+.g4-doors{position:absolute;left:0;right:0;top:2px;bottom:54px;display:flex;align-items:flex-end;justify-content:center;gap:10px}
+.g4-door{position:relative;flex:1 1 0;min-width:0;max-width:124px;height:100%;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;overflow:visible}
+.g4-doorsign{display:block;max-width:100%;margin-bottom:5px;padding:4px 9px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 12.5px 'Public Sans',sans-serif;line-height:1.15;text-align:center;transition:border-color .15s ease,background .15s ease,transform .15s ease}
+.g4-door:hover .g4-doorsign{border-color:#1d4ed8;transform:translateY(-2px)}
+/* the doorway: a dark opening, the two leaves hung on the OUTER jambs so the door SPLITS down the
+   middle, and the snake waiting inside. The jamb ring is drawn over the leaves, so the boards sit
+   behind the frame's edges instead of floating on top of it. */
+.g4-dframe{position:relative;display:block;width:100%;max-width:86px;flex:1 1 auto;min-height:0;perspective:420px}
+.g4-dhole{position:absolute;inset:0;border-radius:3px 3px 0 0;background:linear-gradient(#150e05,#2b1d12 62%,#1b1208);box-shadow:inset 0 0 16px rgba(0,0,0,.9)}
+/* a leaf fills one half of the opening (the jambs and rail are 14% / 18% of the frame art); it hinges
+   on its own outer edge */
+.g4-dleaf{position:absolute;top:18%;bottom:0;width:36%;transform-origin:0% 50%;transition:transform .44s cubic-bezier(.3,1.15,.6,1);backface-visibility:hidden;will-change:transform}
+.g4-dleaf.left{left:14%}
+.g4-dleaf.right{right:14%;transform-origin:100% 50%}
+.g4-dleaf .g4-art{display:block;width:100%;height:100%}
+/* the right leaf is the same drawing turned round, so the two knobs meet in the middle */
+.g4-dleaf.right .g4-art{transform:scaleX(-1)}
+.g4-door.open .g4-dleaf.left{transform:rotateY(-82deg)}
+.g4-door.open .g4-dleaf.right{transform:rotateY(82deg)}
+/* the frame itself: drawn as a ring, so the middle stays open for the leaves and the snake */
+.g4-djamb{position:absolute;inset:0;pointer-events:none}
+.g4-djamb .g4-art{display:block;width:100%;height:100%}
+/* the bite: the whole street goes red for a moment — the sting is the screen, not the sprite, so he is
+   never teleported back to the middle of the road for it */
+.g4-flash{position:absolute;inset:0;z-index:8;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 55%,rgba(255,90,70,.55),rgba(160,20,20,.82))}
+.g4-flash.on{animation:g4bite .44s ease-out}
+@keyframes g4bite{0%{opacity:0}12%{opacity:1}38%{opacity:.55}100%{opacity:0}}
+.g4-snake{position:absolute;left:50%;bottom:0;width:70%;transform:translate(-50%,70%);opacity:0;pointer-events:none;transition:transform .3s cubic-bezier(.3,1.6,.6,1),opacity .18s ease}
+.g4-snake .g4-art{display:block;width:100%;height:auto}
+.g4-door.bitten .g4-snake{transform:translate(-50%,0);opacity:1}
+.g4-door.ok .g4-doorsign{border-color:#2f9e44;background:#e8f7ee}
+.g4-door.no .g4-doorsign{border-color:#c92a2a;background:#fdeaea;animation:g4shake .34s ease}
+.g4-door.reveal .g4-doorsign{border-style:dashed;border-color:#2f9e44;animation:g4pulse .7s ease-in-out 2}
+.g4-runner{position:absolute;left:50%;bottom:4px;width:30px;height:46px;margin-left:-15px;z-index:4;transition:transform .42s cubic-bezier(.3,1.1,.6,1),opacity .3s ease;pointer-events:none}
 .g4-runner .g4-art{width:100%;height:100%}
-.g4-runner.blown{animation:g4blown .6s ease}
+.g4-runner.enter{opacity:0}
+.g4-runner.bitten{animation:g4shake .4s ease}
 .g4-runner.down{transform:translate(var(--dx, 0),42px) rotate(84deg) !important;opacity:.6}
-@keyframes g4blown{0%{transform:translate(var(--dx,0),var(--dy,0)) rotate(0)}45%{transform:translate(var(--dx,0),-24px) rotate(26deg)}100%{transform:translate(var(--dx,0),var(--dy,0)) rotate(0)}}
-.g4-mine{position:relative;display:flex;align-items:center;justify-content:center;padding:4px 8px;background:#e6eef2;border:2px dashed var(--tan);border-radius:12px;color:var(--ink);font:700 14px 'Public Sans',sans-serif;line-height:1.2;text-align:center;cursor:pointer;overflow:hidden;transition:background .18s ease,transform .18s ease}
-.g4-mine.trap::after{content:'✷';position:absolute;font-size:26px;color:#c92a2a;opacity:0}
-.g4-mine.trap.open::after{opacity:1}
-.g4-mine.trap.open .g4-mine-in{opacity:0}
-.g4-mine.open{background:var(--paper);border-style:solid;border-color:var(--ink)}
-.g4-mine.ok.open{border-color:#2f9e44;background:#e8f7ee}
-.g4-mine.no.open{border-color:#c92a2a;background:#fdeaea}
-.g4-mine.boom.open{border-color:#c92a2a;background:#f7d0d0;animation:g4shake .34s ease}
 /* wordleBoard */
-.g4-wordle{position:absolute;left:12px;right:12px;top:48px;bottom:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+/* wordleBoard: clue on the left, letters and the typing box in the middle, a message on the right —
+   one line, centred, so nothing moves when a letter lands */
+.g4-wordle{position:absolute;left:12px;right:12px;top:44px;bottom:8px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;column-gap:12px}
+.g4-wmain{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.g4-wclue{justify-self:end;align-self:center;max-width:26ch;text-align:right}
+.g4-wclue-t{display:block;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:2px 2px 0 var(--tan);font:700 12.5px 'Public Sans',sans-serif;line-height:1.25}
+.g4-wmsg{justify-self:start;align-self:center;max-width:26ch;opacity:0;padding:5px 11px;background:var(--paper);border:2px solid #c92a2a;border-radius:10px;box-shadow:2px 2px 0 rgba(201,42,42,.42);font:700 12.5px 'Public Sans',sans-serif;line-height:1.25;color:var(--ink)}
+.g4-wmsg.show{animation:g4msg 3s ease forwards}
+@keyframes g4msg{0%{opacity:0}17%{opacity:1}83%{opacity:1}100%{opacity:0}}
 .g4-wgrid{display:flex;flex-direction:column;gap:4px}
 .g4-wrow{display:flex;gap:4px;justify-content:center}
 .g4-tile{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:2px solid var(--tan);border-radius:6px;font:800 15px 'Public Sans',sans-serif;background:var(--paper)}
@@ -451,16 +539,16 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-wtype{width:200px;padding:7px 10px;border:2px solid var(--ink);border-radius:8px;font:700 14px 'Public Sans',sans-serif;text-align:center}
 .g4-wbg{position:absolute;inset:0;color:var(--ink);opacity:.55;pointer-events:none}
 .g4-wbg svg{display:block;width:100%;height:100%}
-.g4-echo-line{font:700 13px 'Public Sans',sans-serif;text-align:center;min-height:1.4em}
 
 /* crosswordBoard */
-.g4-xboard{position:absolute;left:12px;right:12px;top:52px;bottom:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
-.g4-xgrid{display:grid;gap:3px;justify-content:center}
+/* crosswordBoard: the grid fills the stage (10px of margin) with the clue in a panel beside it */
+.g4-xboard{position:absolute;left:10px;right:10px;top:10px;bottom:10px;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:16px}
+.g4-xgrid{display:grid;gap:3px;justify-content:center;align-content:center}
 .g4-xcell{position:relative;width:100%;height:100%}
 .g4-xcell.small{font-size:12px}
 .g4-xblock{width:100%;height:100%;border-radius:3px;background:rgba(24,33,54,.10)}
-.g4-xnum{position:absolute;left:1px;top:-1px;font:700 9px 'Public Sans',sans-serif;color:var(--tan);pointer-events:none}
-.g4-xclue{max-width:92%;padding:4px 12px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;font:700 13px 'Public Sans',sans-serif;text-align:center;opacity:0;transition:opacity .2s ease}
+.g4-xnum{position:absolute;left:1px;top:-1px;font:700 14px 'Public Sans',sans-serif;line-height:1;color:var(--tan);pointer-events:none}
+.g4-xclue{flex:0 1 32%;min-width:104px;max-width:34%;padding:8px 12px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:2px 2px 0 var(--tan);font:700 13px 'Public Sans',sans-serif;line-height:1.35;text-align:center;opacity:0;transition:opacity .2s ease}
 .g4-xclue.on{opacity:1}
 /* ladderRun: a full-height rail, a climber, a prize at the top */
 .g4-ltrack{position:absolute;left:0;right:0;top:0;bottom:64px;outline:none}
@@ -478,42 +566,113 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-gap.ok{border-color:#2f9e44;background:#e8f7ee}
 .g4-gap.no{border-color:#c92a2a;background:#fdeaea}
 /* echoPads / bingoCard */
-.g4-echo{position:absolute;left:12px;right:12px;top:52px;bottom:12px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+/* echoPads: the sentence being built, the pad row that says which word comes next */
+.g4-echo{position:absolute;left:12px;right:12px;top:44px;bottom:10px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.g4-echo-say{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:7px 12px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);font:700 15px 'Public Sans',sans-serif;line-height:1.25}
+.g4-echo-w{padding:1px 7px;background:#e8f7ee;border:2px solid #2f9e44;border-radius:7px;animation:g4land2 .28s ease}
+.g4-echo-w.given{background:#fff8ea;border-style:dashed;border-color:var(--tan)}
+.g4-echo-cursor{color:var(--tan);animation:g4blink 1s steps(2) infinite}
+.g4-echo-blank{color:var(--tan)}
+.g4-echo-hint{min-height:1.5em;text-align:center;font:700 12.5px 'Public Sans',sans-serif;line-height:1.3;color:#4a5568}
+@keyframes g4blink{50%{opacity:.15}}
+@keyframes g4land2{from{transform:scale(.72);opacity:0}to{transform:none;opacity:1}}
 .g4-pads{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.g4-pad{min-height:64px;padding:8px;background:var(--paper);border:3px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--tan);color:var(--ink);font:700 14px 'Public Sans',sans-serif;cursor:pointer;transition:transform .12s ease}
-.g4-pad.lit{transform:scale(.96);background:#fff3d6}
-.g4-bingo{position:absolute;left:12px;right:12px;top:44px;bottom:8px;display:flex;flex-direction:column;gap:6px;align-items:center}
-.g4-yell{font:700 13px 'Public Sans',sans-serif}
-.g4-bcard{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:420px;flex:1}
+.g4-pad{min-height:56px;padding:8px;background:var(--paper);border:3px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--tan);color:var(--ink);font:700 14px 'Public Sans',sans-serif;cursor:pointer;transition:transform .12s ease,background .15s ease}
+.g4-pad:hover{border-color:#1d4ed8}
+.g4-pad.ok{border-color:#2f9e44;background:#e8f7ee}
+.g4-pad.no{border-color:#c92a2a;background:#fdeaea;animation:g4shake .34s ease}
+.g4-bingo{position:absolute;left:12px;right:12px;top:44px;bottom:8px;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:10px}
+.g4-card-wrap{position:relative;flex:1 1 auto;max-width:420px;align-self:stretch;display:flex}
+.g4-bcard{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;flex:1}
+/* bingoCard: the card is shut behind a velvet curtain until the caller has said the word. The two
+   countdowns stand BESIDE the card, not on it — one in its own card at the grid's left edge (3·2·1
+   before the curtain rises) and one at its right (5·4·3·2·1 while the card is open, which is the
+   item's deadline). Each is the same paper card as the prompt, so a number reads against the stage
+   and never against red velvet. The curtain's own drop accelerates: it starts almost too slowly to
+   notice, then falls away (an ease-in curve). */
+.g4-curtain{position:absolute;inset:0;z-index:3;border-radius:10px;background:repeating-linear-gradient(90deg,#8e1b31 0 14px,#a3233c 14px 28px);box-shadow:inset 0 -10px 18px rgba(0,0,0,.35);transition:transform .8s cubic-bezier(.92,0,.98,.32)}
+.g4-bingo.open .g4-curtain{transform:translateY(-104%)}
+.g4-count{flex:0 0 auto;min-width:56px;min-height:62px;display:flex;align-items:center;justify-content:center;padding:4px 6px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);font:800 30px/1 'Playfair Display',serif;color:var(--ink);opacity:0}
+.g4-count.pop{animation:g4count 1s ease-out forwards}
+/* the lead-in is the rehearsal beat, so it reads quiet: a dashed slot, grey number */
+.g4-count-lead{border-style:dashed;color:#4a5568}
+/* the rush is the deadline, so it reads loud: red rim, and it is only there while the card is open */
+.g4-count-rush{border-color:#c92a2a;color:#c92a2a;visibility:hidden}
+.g4-bingo.open .g4-count-rush{visibility:visible}
+@keyframes g4count{0%{opacity:0;transform:scale(.45)}22%{opacity:1;transform:scale(1.12)}
+  60%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.9)}}
 .g4-btile{background:var(--paper);border:2px solid var(--ink);border-radius:10px;font:700 12.5px 'Public Sans',sans-serif;color:var(--ink);cursor:pointer;overflow:hidden;padding:2px 4px}
 .g4-btile.stamped{border-width:3px;border-style:double}
 .g4-btile.ok{border-color:#2f9e44;background:#e8f7ee}
 .g4-btile.no{border-color:#c92a2a;background:#fdeaea}
-.g4-btile.reveal{border-style:dashed;border-color:#2f9e44}
+/* no `.g4-btile.reveal`: the right tile is never shown, because what the caller said must not be readable off
+   the card afterwards. The only trace of an item is the tile the student actually stamped. */
 /* spinPick */
-/* ladderRun / boardQuiz / bossRaid */
-.g4-ladder,.g4-board,.g4-boss{position:absolute;left:12px;right:12px;top:44px;bottom:8px}
+/* ladderRun / bossRaid: the stage container each of them fills. (boardQuiz was removed; its `.g4-board`
+   box rule used to sit in this selector, and it merged onto mineGrid's `.g4-board` signpost plaque,
+   turning every signpost board into a full-stage absolutely-positioned box — the class now belongs to
+   the signpost only.) */
+.g4-ladder,.g4-boss{position:absolute;left:12px;right:12px;top:44px;bottom:8px}
 .g4-rungs{position:absolute;left:0;top:0;bottom:64px;width:66px;display:flex;flex-direction:column-reverse;gap:2px;overflow:hidden}
 .g4-rung{height:14px;border-radius:4px;background:#e6eef2;font:700 9px 'Public Sans',sans-serif;text-align:center;line-height:14px;color:#5a6474}
 .g4-rung.safe{background:#ffe9b8;color:#7a5210}
 .g4-rung.on{background:var(--ink);color:var(--cream)}
 .g4-rung.kept{outline:2px solid #2f9e44}
-.g4-bossart{position:absolute;left:50%;top:0;transform:translateX(-50%);width:110px;height:110px}
+.g4-bossart{position:absolute;left:50%;top:4px;width:104px;height:104px;transform:translateX(-50%);transition:transform .2s ease}
 .g4-bossart svg{width:100%;height:100%}
-.g4-bossart.hurt{animation:g4hurt .3s ease}
-@keyframes g4hurt{50%{transform:translateX(-50%) scale(1.06);filter:brightness(1.6)}}
-.g4-hp{position:absolute;left:0;right:0;top:118px;height:14px;background:#e6eef2;border:2px solid var(--ink);border-radius:8px;overflow:hidden}
+.g4-bossart.hurt{animation:g4hurt .34s ease}
+@keyframes g4hurt{0%,100%{transform:translateX(-50%)}40%{transform:translateX(-50%) scale(1.08);filter:brightness(1.9) saturate(.5)}}
+/* the bite: the boss comes at the fighter and goes back */
+.g4-bossart.bite{animation:g4bite .54s cubic-bezier(.4,0,.5,1)}
+@keyframes g4bite{0%,100%{transform:translateX(-50%)}
+  28%{transform:translateX(-50%) translateX(-46px) scale(1.09) rotate(-4deg)}
+  58%{transform:translateX(-50%) translateX(-40px) rotate(-2deg)}}
+.g4-hp{position:absolute;left:16%;right:16%;top:110px;height:13px;background:#e6eef2;border:2px solid var(--ink);border-radius:8px;overflow:hidden}
 .g4-hp-fill{height:100%;width:100%;background:#c92a2a;transition:width .4s ease}
-.g4-hearts{position:absolute;left:0;top:140px;font:700 18px system-ui;color:#c92a2a;letter-spacing:2px}
-/* bossRaid: the hero steps in on a hit, the boss swings back on a miss */
-.g4-hero{position:absolute;left:6px;bottom:64px;width:54px;height:84px;transition:transform .22s cubic-bezier(.3,1.4,.6,1)}
+/* bossRaid: the arena — the fighter stands at the left, the boss over the middle, and one projectile
+   layer carries whatever travels between them. The HP bar is the boss's health; the lives are the HUD's
+   count, so the arena draws no second copy of it. */
+.g4-arena{position:absolute;left:0;right:0;top:0;bottom:56px;overflow:hidden}
+.g4-hero{position:absolute;left:14px;bottom:2px;width:52px;height:76px;transition:transform .22s cubic-bezier(.3,1.4,.6,1)}
 .g4-hero .g4-art{width:100%;height:100%}
-.g4-hero.lunge{transform:translate(52px,-8px) rotate(-8deg)}
-.g4-hero.recoil{transform:translate(-14px,4px) rotate(10deg)}
-.g4-hero.down{transform:translate(-6px,34px) rotate(78deg);opacity:.55;transition:transform .7s ease,opacity .7s ease}
-.g4-bossart.strike{animation:g4strike .46s ease}
+.g4-hero.lunge{transform:translateX(66px) rotate(-5deg)}
+.g4-hero.recoil{transform:translate(-12px,3px) rotate(9deg)}
+/* taking damage is a colour state, not a different drawing: the fighter the student picked keeps its
+   own art and turns sickly when the boss lands something */
+.g4-hero.hurt{filter:brightness(.8) sepia(.45) hue-rotate(-28deg) saturate(2.6)}
+.g4-hero.down{transform:translate(-4px,26px) rotate(72deg);opacity:.5;transition:transform .7s ease,opacity .7s ease}
+/* the projectile layer: one element moved by transform, so the same code throws a fireball, an arrow
+   or a drop of acid */
+.g4-shots{position:absolute;inset:0;z-index:6;pointer-events:none}
+/* the projectile itself is `g4-proj`, not `g4-shot`: skeetRange's `g4-shot` is an ammo pip that sits in
+   the flow of the ammo row, so sharing the name would position a pip out of the row and onto the stage */
+.g4-proj{position:absolute;width:32px;height:32px;margin:-16px 0 0 -16px;transition:transform .44s linear}
+.g4-proj .g4-art{width:100%;height:100%}
+.g4-proj.fire{animation:g4spinfast 1.2s linear infinite}
+.g4-proj.arrow{width:58px;height:16px;margin:-8px 0 0 -29px;transition-duration:.26s}
+.g4-proj.spit{width:26px;height:26px;margin:-13px 0 0 -13px;transition-duration:.46s}
+.g4-proj.burst{opacity:0;filter:brightness(2);transition:opacity .22s ease,filter .22s ease}
+@keyframes g4spinfast{to{transform:rotate(360deg)}}
+/* the sword's cut: a white crescent that opens and dies where it landed */
+.g4-slash{position:absolute;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;border:5px solid rgba(255,255,255,.95);border-left-color:transparent;border-bottom-color:transparent;animation:g4slash .42s ease-out forwards}
+@keyframes g4slash{0%{opacity:0;transform:rotate(-40deg) scale(.55)}
+  35%{opacity:1}
+  100%{opacity:0;transform:rotate(30deg) scale(1.3)}}
+/* the fighter picker on the intro card: three drawings, and the one you pick is the one that fights */
+.g4-pick-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
+.g4-pick-lead{margin:0;font:700 12px 'Public Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6b7280}
+.g4-pick{display:flex;gap:8px;justify-content:center}
+.g4-pick-btn{display:flex;flex-direction:column;align-items:center;gap:2px;width:76px;padding:5px 4px 3px;background:var(--paper);border:2px solid var(--tan);border-radius:12px;box-shadow:2px 2px 0 rgba(185,133,76,.5);color:var(--ink);font:700 11px 'Public Sans',sans-serif;cursor:pointer}
+.g4-pick-btn .g4-art{width:38px;height:46px}
+.g4-pick-t{display:block}
+.g4-pick-btn:hover{border-color:#1d4ed8}
+.g4-pick-btn.on{border-color:var(--ink);background:#fff8ea;box-shadow:3px 3px 0 var(--ink)}
+.g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:2px}
 @keyframes g4strike{0%{transform:translateX(-50%)}35%{transform:translateX(-50%) translateX(-34px) scale(1.1)}100%{transform:translateX(-50%)}}
-@media (prefers-reduced-motion:reduce){.g4-hp-fill,.g4-pad{transition:none}.g4-bossart.hurt{animation:none}}
+@media (prefers-reduced-motion:reduce){
+  .g4-hp-fill,.g4-pad{transition:none}
+  .g4-bossart.hurt,.g4-bossart.bite,.g4-proj,.g4-proj.fire,.g4-slash{animation:none;transition:none}
+}
 
 
 
@@ -527,16 +686,42 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-chip.spilled{border-color:#c92a2a;background:#fdeaea;animation:g4shake .3s ease}
 @keyframes g4shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 
-.g4-tray{position:absolute;left:12px;right:12px;bottom:16px;display:flex;gap:14px;z-index:2}
-.g4-bucket{position:relative;flex:1 1 0;min-width:0;height:104px;padding:44px 8px 0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);font:700 14px 'Public Sans',sans-serif;line-height:1.2;text-align:center;cursor:pointer;overflow:visible}
-.g4-bucket .g4-art{position:absolute;left:0;right:0;bottom:0;height:76px;width:100%;transition:transform .18s ease}
-.g4-bucket-t{position:relative;z-index:2;display:block;padding:2px 6px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan)}
+.g4-tray{position:absolute;left:12px;right:12px;bottom:10px;display:flex;gap:14px;z-index:2}
+/* catchBasket: the options are POTS. A right answer waters the pot it belongs in and grows one flower
+   there; the flowers are the run's garden, so a pot keeps every bloom it earned. Each pot's word is its
+   LABEL UNDER THE POT, and the pots themselves are lifted clear of it. */
+.g4-bucket{position:relative;flex:1 1 0;min-width:0;height:134px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);font:700 14px 'Public Sans',sans-serif;line-height:1.15;text-align:center;cursor:pointer;overflow:visible}
+.g4-bucket .g4-art{position:absolute;left:0;right:0;bottom:32px;height:56px;width:100%;transition:transform .18s ease}
+.g4-bucket-t{position:absolute;left:50%;bottom:0;transform:translateX(-50%);z-index:2;display:block;max-width:100%;padding:2px 7px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);white-space:nowrap;overflow:hidden}
+/* the flowers: grown in the soil, one per right answer, side by side as the pot fills */
+.g4-blooms{position:absolute;left:0;right:0;bottom:64px;height:52px;z-index:1;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+.g4-bloom{flex:0 0 auto;width:18px;height:46px;transform-origin:50% 100%;animation:g4grow .5s cubic-bezier(.3,1.5,.6,1)}
+.g4-bloom+.g4-bloom{margin-left:-6px}
+.g4-bloom:nth-child(2n){transform:rotate(-8deg)}
+.g4-bloom:nth-child(3n){transform:rotate(7deg)}
+.g4-bloom:nth-child(4n){transform:rotate(-3deg) scale(.92)}
+.g4-bloom-art{display:block;width:100%;height:100%}
+/* the watering: a splash of drops over the rim, then the flower appears */
+.g4-splash{position:absolute;left:50%;bottom:78px;width:64px;height:30px;margin-left:-32px;z-index:3;pointer-events:none;opacity:0}
+.g4-splash i{position:absolute;bottom:0;width:7px;height:7px;border-radius:50% 50% 50% 0;background:#4aa3df;box-shadow:0 0 0 1px rgba(255,255,255,.7)}
+.g4-splash i:nth-child(1){left:4px}
+.g4-splash i:nth-child(2){left:28px;bottom:8px;width:6px;height:6px}
+.g4-splash i:nth-child(3){left:50px}
+.g4-bucket.watered .g4-splash{animation:g4splash .7s ease-out}
 .g4-bucket.hot .g4-art{transform:translateY(-6px) scale(1.04)}
 .g4-bucket.hot .g4-bucket-t{border-color:#1d4ed8}
 .g4-bucket.ok .g4-bucket-t{border-color:#2f9e44;background:#e8f7ee}
 .g4-bucket.no .g4-bucket-t{border-color:#c92a2a;background:#fdeaea}
 .g4-bucket.reveal .g4-bucket-t{border-style:dashed;border-color:#2f9e44;animation:g4pulse .7s ease-in-out 2}
-/* whackMole — moles surface from holes */
+@keyframes g4grow{0%{transform:scaleY(.15) scaleX(.6);opacity:0}60%{transform:scaleY(1.08)}100%{opacity:1}}
+@keyframes g4splash{0%{opacity:0;transform:translateY(-10px) scaleY(.7)}
+  25%{opacity:1;transform:none}
+  70%{opacity:1;transform:translateY(3px)}
+  100%{opacity:0;transform:translateY(8px) scaleY(.9)}}
+/* whackMole — moles surface from holes, and glance about while they wait */
+.g4-eyes{transition:transform .18s ease}
+.g4-mole.look-l .g4-eyes{transform:translateX(-4px)}
+.g4-mole.look-r .g4-eyes{transform:translateX(4px)}
 .g4-grid{position:absolute;left:14px;right:14px;top:52px;bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:10px;z-index:2}
 .g4-hole{position:relative;border-radius:16px;background:radial-gradient(ellipse at 50% 88%,#5a3f22 0 42%,#7c5a33 43% 100%);overflow:hidden;box-shadow:inset 0 4px 10px rgba(0,0,0,.35)}
 .g4-dirt{position:absolute;left:0;right:0;bottom:0;height:34%;background:#4a3418;border-radius:50% 50% 0 0/60% 60% 0 0}

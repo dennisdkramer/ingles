@@ -105,10 +105,13 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   miss is spent. No spray, no endless retry — the constraint is what makes it feel like skill.
 - **skins** — `.game > .game-list` of `.qitem`; the stem is the prompt line, the options are the targets — one
   disc each, so the item's own options (two to four) decide how many fly.
-- **art** — one flat ring per option thrown from off the left edge on its own arc to past the right one, the word
-  on a plaque over the disc; a thin crosshair that is the cursor; a single puff on impact. Every attribute of the
-  throw carries a 5% randomizer — the arc's direction and height, the speed, where it starts — and the flight
-  takes `data-time` less a tenth, so even the slowest disc is across the range before the timer empties.
+- **art** — one flat ring per option, the word on a plaque over the disc; a thin crosshair that is the cursor; a
+  single puff on impact. Every disc takes the SAME line — one arc, one speed, no wobble, no sine wave — and the
+  lanes are spread over the full height of the range, so the four words read as one rack, not a scatter.
+- **pace** — the range carries a clock 30% slower than the block's own: `data-time` is stretched by 1.3 (the
+  lever is `PLUGINS.skeetRange.timeScale`, applied by the runner), so the discs and the timer slow together and a
+  word can be read before it has to be shot at. A block therefore writes the deadline it *wants minus 30%* — or
+  simply leaves the default and takes the slower range as it comes.
 - **can't** — no production, no spelling; one shot per item means a careless click can hide what the student knew.
 - **needs** — nothing; `engine4.js` ships it.
 
@@ -117,6 +120,9 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **does** — One drawn mole per option surfaces from a hole, stamped in stagger; the player hits the one that
   fits before the runner's timer bar empties. The rest duck away the instant an answer lands.
 - **skins** — same `.qitem` list; the prompt sits on the HUD line, options become the moles' labels.
+- **authoring the stem** — the prompt is the thing to FIND, so it is written as that thing and nothing more:
+  `past`, `a place you sleep`, `sorry, say that again?` — never `which one is past`, because the moles are
+  already the candidates and the sentence only restates the game.
 - **art** — inline SVG mole + radial-gradient hole with a dirt rim, rise via `translateY`, reduced-motion path.
 - **can't** — recognition only; speed pressure makes it a poor fit for anything needing reflection.
 - **needs** — nothing; `engine4.js` ships it.
@@ -124,60 +130,78 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 
 ### `catchBasket` — section · cost B · evidence radio · fits form+meaning — tests 2 · fun 3 · reuse 3 · **built: engine4.js** · CountUp ""
 
-- **does** — One word is shown at a time; the player **drags it into the basket that fits** (or taps a basket, or
-  presses `1`/`2`). Dropping outside springs the word back, so a slipped finger costs time, not the item. The
-  runner's bar is the deadline for each word.
+- **does** — One word is shown at a time; the player **drags it into the pot that fits** (or taps a pot, or presses
+  `1`/`2`). Dropping outside springs the word back, so a slipped finger costs time, not the item. A right drop tips
+  water over that pot and **grows a flower in it**; the flowers stay for the rest of the run, one per right answer,
+  so the block becomes a garden the class has grown rather than a score.
 - **teaches** — sorting a form into a category: past vs now, one ending vs another, which pattern a word belongs
   to. The decision is made in one gesture, so hesitation is visible.
-- **skins** — one word per item (`.qstem`), one basket per option (the radio labels); a correct drop checks that
-  option's radio.
-- **art** — inline SVG wicker basket, the word lifts and tilts while held, a correct drop flies it into the
-  basket, a wrong drop shakes.
-- **can't** — only two or three baskets fit a row; fine distinctions don't fit.
+- **skins** — one word per item (`.qstem`), one pot per option (the radio labels); a correct drop checks that
+  option's radio. The word card IS the prompt, so the stage does not print the same words again on the HUD line.
+- **art** — inline SVG terracotta pot, water drops over the rim on a right drop, a flower grows out of the soil and
+  stays there (six to a pot); the word lifts and tilts while held, a wrong drop shakes.
+- **can't** — only two to four pots fit a row; fine distinctions don't fit, and a seventh flower would swamp the pot.
 
 ### `stackDrop` — section · cost B · evidence radio · fits order+form — tests 2 · fun 3 · reuse 2 · **built: engine4.js** · CountUp ""
 
-- **does** — A block carrying the question slides left and right above a tower; the answer buttons sit below. A
-  correct answer locks the block in as a **rung** of the ladder; a wrong one makes it fall away and the rung stays
-  empty. When every rung is built, the little climber walks up the ladder and takes the star at the top.
-- **teaches** — accumulate-and-complete: the reward is the finished ladder, so a long drill has a shape and an end.
-  Each rung is one item answered, so the tower *is* the progress bar.
-- **skins** — one `.qitem` per rung; the block label is the stem, the buttons are the options.
-- **art** — flat rectangles, a dashed empty rung for each unearned step, a climber figure that rises on completion.
-- **can't** — one item per rung, so it wants six to ten items; a two-item block has nowhere to climb.
-- **art** — flat rectangles, hard edges, a rising stack. Six levels, then an end screen.
-- **can't** — timing dominates; keep the language load per level to a phrase.
-- **needs** — shared runner.
+- **does** — The question arrives as the next block of a tower and the player **drags the right answer on top of it**:
+  the block flies up, lands and **stays in the tower**. A wrong answer tumbles off and the question stays exactly
+  where it was, so the tower never loses what was earned and its height IS the progress. A ladder grows up the left
+  side, one rung per answer placed, and the climber climbs with it to the chest at the top.
+- **teaches** — accumulate-and-complete: the reward is the finished tower, so a long drill has a shape and an end.
+  Every answer placed is one item answered, so the tower is the progress bar.
+- **skins** — one `.qitem` per block; the question block is the stem, the buttons are the options. Six to ten items
+  makes a climb. The question block IS the prompt, so it is not printed a second time on the HUD line.
+- **art** — flat blocks with hard edges, two ladder rails and a rung per answer, a drawn climber, a chest that
+  lights up at the top. The tower slides down to keep the newest block in view once it outgrows the stage.
+- **can't** — one item per block, so a two-item block has nowhere to climb; timing dominates, so keep the language
+  load to a phrase per block.
+- **needs** — nothing; `engine4.js` ships it.
 
 ### `flapGate` — section · cost C · evidence radio · fits recognition+meaning — tests 1 · fun 3 · reuse 2 · **built: engine4.js** · CountDown ""
 
-- **does** — One-button flight; the player passes through the gate labelled with the right option. Contact
-  with a wrong gate costs a life.
-- **skins** — gates are options; the prompt is fixed on the HUD.
-- **art** — two flat rounded rectangles per gate, a square avatar, sky as a flat fill. Nothing else.
+- **does** — One-button flight. The bird holds its place and the wall scrolls at it; the wall has **real gaps**, one
+  per option, and the gap the bird is inside when the wall arrives is the answer. A click on a gap answers at once
+  (the honest "I know it" path, and the only one a keyboard or reduced-motion student has); a click anywhere else
+  flaps.
+- **skins** — gaps are options; the prompt is fixed on the HUD.
+- **art** — a drawn bird that flaps its wings on every lift, including the one automatic flap as the round opens, so
+  it is never falling before the student has touched anything; a brick wall with the words sitting in its gaps; sky
+  as a flat fill. Fall is half what it was, lift unchanged.
 - **can't** — recognition at speed only, and it is the most expensive of the arcade set.
 - **needs** — shared runner + gravity loop.
 
 ### `wordleBoard` — section · cost C · evidence gap · fits form+review — tests 3 · fun 3 · reuse 3 · **built: engine4.js** · CountDown 5
 
-- **does** — The student guesses letters; the board marks right letter/right place, right letter/wrong place.
-  Hangman is the same engine with a different face (a revealed blank row instead of coloured tiles).
+- **does** — The student guesses the word and presses Enter; the board marks right letter/right place and right
+  letter/wrong place. Five rows and the run is over. Hangman is the same engine with a different face (a revealed
+  blank row instead of coloured tiles).
 - **skins** — one target word per item, typed into a `gap` at the end, so the evidence is spelling the student
-  produced rather than letters guessed.
-- **art** — a flat 5×6 tile grid, two terminal colours and one absent colour; no drawn keyboard, use the native one.
+  produced rather than letters guessed. The stem is the clue, so it is not printed a second time on the HUD line.
+- **art** — the stage reads left to right: the **clue on the left**, the tile grid and the box you type into as the
+  centre pair, and a **message on the right** ("too many letters", "too few letters") that fades in over .5s, holds
+  2s and fades out over .5s. The three are centred vertically and the board never grows, so nothing moves when a
+  word lands — a wrong length costs a message, not a row.
 - **can't** — only words of one fixed length; nothing for phrases, meaning or listening.
-- **needs** — shared runner + a letter-state machine.
+- **needs** — nothing; `engine4.js` ships it.
 
 ### `mineGrid` — section · cost B · evidence radio · fits recognition+meaning — tests 2 · fun 2 · reuse 2 · **built: engine4.js** · CountDown 3
 
-- **does** — The field is the options, face down. The student picks a tile and **a figure runs to it**. The right
-  tile hands back the answer; a wrong one explodes under him. He survives two blasts and looks worse each time
-  (singed, then bandaged); the third wrong pick ends the run.
+- **does** — The options are planted as **pairs of batwing saloon doors along a street**, the word hung over the top
+  where it can be read. Pick a door and **the figure walks to it**, which makes the choice a character's risk rather
+  than a bare click; the door then swings open, because what is behind it IS the answer. **Right:** he goes in, a glass
+  clinks on the bar, the street fades out and the next question fades in on an empty street. **Wrong:** a snake comes
+  out of the dark and bites him — one of three lives gone, and his drawing changes as they go. Three bites end the run.
 - **teaches** — commitment under stakes. Because he only gets three mistakes, a guess has a price, so the student
   reads before moving. Every wrong pick leaves its radio blank, so the blanks are the teacher's evidence.
-- **skins** — one tile per option; the prompt stays on the HUD line.
-- **art** — dunes with warning stakes, a drawn figure with three hurt states, a blast, a life counter.
-- **can't** — binary judgement per tile; four-way choice needs a different frame.
+- **skins** — four options is what the street holds: one door per option. The lives belong to the RUN, not to the item,
+  so they are set on the way in and never between items — a life that came back with the next question would mean a
+  miss cost nothing. The count is the HUD's, and the stage draws no second copy of it.
+- **marking** — exact: on a right answer only the door he opened turns green; on a wrong one that door turns red with
+  the snake in it and the right door is outlined, and nothing else on the street reacts.
+- **art** — a street and a boardwalk, a signed doorframe per word with a drawn batwing door that swings on its hinge,
+  a drawn snake, and a figure with hurt and down states.
+- **can't** — one answer per door; a lesson that writes two or three options leaves the street short.
 
 ### `crosswordBoard` — section · cost C · evidence gap · fits form+review — tests 3 · fun 2 · reuse 2 · **built: engine4.js** · CountUp ""
 
@@ -186,36 +210,54 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   an existing letter, anything that cannot cross dropped into its own row below. A shared letter is one cell, so
   typing it once fills both words and **solves both items** — that is the point of a crossword and why this is a
   board, not a drill. A full word typed wrongly clears and shakes; its item stays blank, so the blank is the evidence.
-- **art** — the site's own grid: a flat block per gap, a small number in the corner of each word's first cell, the
-  current clue under the board and repeated on the HUD line.
+- **art** — the site's own grid: a flat block per gap, a small number in the corner of each word's first cell.
+  The cells are sized to **fill the stage** (10px of margin all round, height and width each get a say), and the
+  clue for the word you are typing sits in its own panel **beside the grid** — one clue on the stage, never the
+  same clue twice.
 - **can't** — the set must be spellable and the words short, or the grid gets fat; words with no shared letter can
   only sit in their own rows, so a lesson whose vocabulary shares nothing is a bad fit.
 - **needs** — nothing; `engine4.js` ships it. Authoring: `data-answer` on each `.qitem`, clue in `.qstem`.
 
-### `echoPads` — section · cost B · evidence gap · fits listening+review — tests 2 · fun 3 · reuse 2 · **built: engine4.js** · CountUp 4
+### `echoPads` — section · cost B · evidence radio · fits form+order — tests 2 · fun 3 · reuse 2 · **built: engine4.js** · CountDown 12
 
-- **does** — Simon, in words. Four pads, one per option, **each with its own tone**. Round 1 plays one beat, round 2
-  plays two, round *n* plays *n* — the whole pattern is replayed every round, so the student is echoing a growing
-  sequence rather than guessing a single pad. Echo the full pattern and the item is answered; a wrong press ends the
-  round honestly as a miss. "Say it again" replays the same pattern with no penalty — memory of a sound is not a guess.
-- **skins** — pads are the item's options; the pattern is generated by the engine and grows with the round (capped at
-  8 so late rounds stay winnable).
-- **art** — four flat pads on the neon arcade scene, lit on press by its own tone.
-- **can't** — memory span caps the useful round at about five or six; nothing written is involved, so it trains
-  listening and recall, not spelling.
-- **needs** — nothing; `engine4.js` ships it (tones are synthesised, no audio files).
+- **does** — Builds **one sentence, word by word**. `data-first` is the opening the student is given ("Yesterday
+  I"); every `.qitem` after it is the next word of that sentence, and its options are the word that fits after
+  what is already on the board plus **three that are close but do not fit the grammar** of the words placed. A
+  right pad puts the word in the sentence, answers that item and moves on. A wrong pad costs one point and does
+  **not** move on: a sentence cannot continue past a word that does not fit, so the student tries that same word
+  again. At zero points the run is over.
+- **teaches** — word order and collocation under a constraint the student can see: the sentence on the stage IS
+  the question, so every choice is judged against the words already placed rather than against a rule recalled.
+- **skins** — one `.qitem` per word of the sentence, `data-a` the word that fits, three near misses as the other
+  pads. `data-first` the given opening, `data-lives` the countdown of points (default 10) — the HUD pair counts
+  `left/start` down, one point per wrong pad. `data-time` does not apply: a board you fill at your own pace. The
+  sentence and the hint line are the prompt, so nothing is printed a second time on the HUD line.
+- **art** — a paper sentence strip that fills in as words land: the given words in a dashed tan chip, the placed
+  words in green, a caret holding the next place; four word pads on the neon arcade scene; "Say the sentence"
+  reads out the sentence as it stands.
+- **can't** — one sentence per block and one word per item, so the wording has to be planned end to end; nothing
+  here trains spelling or listening.
+- **needs** — nothing; `engine4.js` ships it (the voice is the built-in speech).
 
 ### `bingoCard` — section · cost B · evidence radio · fits listening+meaning — tests 1 · fun 3 · reuse 2 · **built: engine4.js** · CountUp 9
 
 - **does** — A 3×3 card is built from the item's own options **plus decoys drawn from the rest of the block**, so the
-  card is never trivially small. The voice **calls the correct answer's word** (the clip when the item has one, else
-  the right option's text — never the question). The student stamps the tile they hear; a wrong stamp is a real
-  answer, taken honestly as a miss. "Call it again" repeats the word.
-- **skins** — tiles are options, so the words on the card are the lesson's words.
-- **art** — a bingo hall: red curtain, footlights, a stamped tile gets a hard double border.
-- **can't** — recognition of the spoken form only; the card needs at least a few options across the block or the
-  decoy pool runs dry.
-- **needs** — nothing; `engine4.js` ships it (uses the built-in voice).
+  card is never trivially small. The card arrives shut behind a velvet curtain and the voice **calls the correct
+  answer's word exactly once** (the clip when the item has one, else the right option's text — never the question).
+  There is no replay button: paying attention to the one chance IS the activity. A **3·2·1 countdown** in its own
+  card at the grid's left edge runs while the caller speaks; at zero the curtain rises, and a **5·4·3·2·1 countdown**
+  in a card at the right edge starts. Stamp the tile you heard and the item is answered. Let the second countdown
+  reach zero and the curtain **falls on the item**: it is marked wrong and the point it was worth is gone.
+- **skins** — tiles are options, so the words on the card are the lesson's words. The instruction is the block's own
+  `.game-how` and nothing else — nothing inside the stage prints "listen" as a second heading.
+- **marking** — exact: the tile the student stamped turns green or red, and nothing else on the card reacts. The right
+  tile is never revealed, so what the caller said is never shown.
+- **art** — a bingo hall: red velvet curtain that drops away on an ease-in curve (it starts almost too slowly to
+  notice, then falls), footlights, two countdown cards in the site's own paper-and-ink style, and a stamped tile
+  that takes a hard double border.
+- **can't** — recognition of the spoken form only, one word per item; the card needs a few options across the block
+  or the decoy pool runs dry, and a lesson block cannot set the two countdowns — they are the game's own clock.
+- **needs** — nothing; `engine4.js` ships it (uses the built-in voice). Leave `data-time` at 0.
 
 ### `ladderRun` — page · cost B · evidence radio · fits review+form — tests 2 · fun 3 · reuse 2 · **built: engine4.js** · CountUp ""
 
@@ -228,26 +270,28 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   the chest lights when he reaches the top.
 - **can't** — one continuous arc, so it wants to be the page's quiz, not a mid-lesson drill; and a fall back to the
   safe rung is deliberately harsh, so keep items fair.
+- **authoring the answer key** — **exactly one option may be defensible.** Two options that are both grammatical, or
+  both true of the clue (a real answer and a close synonym, `stay` and `will stay` under `if it rains`), is a broken
+  item: the student who reads carefully is the one who gets it wrong. Write the wrong option so it is wrong for a
+  reason the lesson has taught, and read every item back as a picky teacher before shipping it.
 - **needs** — nothing; `engine4.js` ships it.
 
 ### `bossRaid` — page · cost C · evidence radio · fits review+meaning — tests 2 · fun 3 · reuse 2 · **built: engine4.js** · CountDown 3
 
-- **does** — A drawn hero stands in front of the boss. A correct answer makes him **step in and swing** — the boss
-  loses HP with a flash. A wrong answer and the boss swings back: the hero recoils and loses one of three hearts.
-  No hearts, he goes down and the raid is over.
-- **teaches** — a long drill with a visible cost. Every item is a swing, so the class can see the health bar move
-  and knows how much of the drill is left. Wrong answers are the only thing that shortens it.
-- **skins** — the `.qitem` list is the attack sequence; the options are the answer buttons.
-- **art** — a torch-lit arena, a hero with lunge/recoil/down states, a ringed geometric boss, an HP bar, hearts.
+- **does** — The student **picks a fighter on the intro card** — sword, wizard or archer — and the choice is not
+  decoration: it decides HOW the right answer lands. The swordsman steps in and cuts, the wizard throws a fireball that
+  bursts on the boss, the archer's arrow flies straight and fast. So the hit is thrown by the character the student
+  made, which is the whole appeal of a fight game.
+- **the boss answers back** — a wrong answer is the boss's turn, and it does not repeat itself: it takes turns between
+  a **bite** (it lunges at the fighter) and **acid** (it spits a drop that flies across the arena and lands on him).
+  Three hits taken and the fighter goes down, so a long drill has an ending that belongs to the answers, not a timer.
+- **teaches** — a long drill with a visible cost. The HP bar is the boss's health and it only moves when answers are
+  right; the fighter's three hits are the only thing that shortens the run.
+- **skins** — the `.qitem` list is the attack sequence; the options are the answer buttons. Nothing about the fighter
+  is authored — the game offers its own three — so a lesson block is just a list of items.
+- **art** — a torch-lit arena, three drawn fighters with their own weapons, a fireball, an arrow and an acid drop as
+  separate sprites, a drawn boss with bite/hurt states, a slash arc, an HP bar.
 - **can't** — ritual stakes can mask weak items; every item must still be defensible on its own.
-
-- **does** — A boss with an HP bar; each correct answer lands a hit, each wrong one costs the student a heart.
-  Waves get harder. Gives a long drill a reason to exist and an ending.
-- **skins** — the `.qitem` list is the attack sequence.
-- **art** — one flat geometric boss (a ringed hexagon beats a drawn monster), a thin HP bar, a hard flash.
-  **This vehicle lives or dies on art quality; never ship it in a flat two-tone card style.**
-- **can't** — ritual stakes can mask weak items; every item must still be defensible on its own.
-- **needs** — shared runner + HP state.
 
 ---
 
