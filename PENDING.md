@@ -4,18 +4,11 @@ The live working plan for the CURRENT task. When a prompt decomposes into subtas
 
 _(Active batches, newest first. Cleared once done AND committed.)_
 
-## 2026-11-06 (cont.) — retire the clip pipeline; qa/ out of git; rules file
+## 2026-11-06 (cont.) — open question for the owner
 
-1. ✅ Clip pipeline retired: `build-audio.mjs` deleted; `build:audio` / `audio:check` and the
-   `kokoro-js` + `@breezystack/lamejs` devDependencies dropped from `package.json`; the `audio/`
-   entries dropped from `.vscode/settings.json`. (`engine2.js`, `FUNCTION.md`, `PEDAGOGY-MAP.md`,
-   `STATUS.md` landed earlier this session; `audio/` itself was deleted by the owner.)
-2. ✅ `qa/` untracked — `.gitignore` gains `qa/`, then `git rm -r --cached qa/`: 14 tracked files
-   leave the repo, the folder stays on disk and still runs `npm run qa`.
-3. ✅ `.clinerules/TOOL-DISCIPLINE.md` rewritten (batching, bounded output, no scratch files).
-4. ✅ Commit + push.
-5. ⬜ NOT pushed, awaiting the owner's decision: the 132 unrelated tracked deletions in the working
-   tree — `designs/` 100, `kids/` 22, `adult/` 6, `PASS-A.md`, and 3 `.clinerules/` workspace files.
+1. The working tree still carries 132 tracked deletions — `designs/` 100, `kids/` 22, `adult/` 6,
+   `PASS-A.md`, and 3 `.clinerules/` workspace files. Not committed: say whether they should be
+   committed as deletions or restored.
 
 ## 2026-11-06 (cont.) — remaining items from qa/NOTES.md
 
