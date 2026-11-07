@@ -197,15 +197,23 @@
   "adult": [
     {
       "n": 1,
-      "title": "First Talk & the Sentence Skeleton"
+      "title": "Start Here — Nothing Sounds the Way It Looks"
     },
     {
       "n": 2,
-      "title": "The Cognate Fast Lane"
+      "title": "Vowels You Can Hear, Cognates That Lie"
     },
     {
       "n": 3,
-      "title": "Questions at the Bar"
+      "title": "The Sentence Skeleton, and Who You Are"
+    },
+    {
+      "n": 4,
+      "title": "Got It — Now Be Doing It"
+    },
+    {
+      "n": 5,
+      "title": "Review Night — Everything at the Same Table"
     }
   ]
 }
