@@ -1,4 +1,4 @@
-/* MOTOR 2 — control bar, camadas, áudio com cache, realces persistentes */
+/* MOTOR 2 — control bar, camadas, fala (speechSynthesis), realces persistentes */
 /* Behaviour contract: FUNCTION.md - read it before changing anything here. */
 const LAYER_VER="v4-server-truth-20261006"; /* Bump to mark a fresh data era */
 let wipeGuard=0; /* a Clear-page wipe in flight: the poll must not resurrect the rows it is deleting */
@@ -6,17 +6,7 @@ let lastPollChange=Date.now(); /* last time the poll saw a change — keeps the 
 let lastFull=""; /* the layer content signature used to detect that change */
 let completeNow=false; /* optimistic state of the "Complete?" tag button */
 
-/* ---- audio: pre-rendered clips (build-audio.mjs) + natural-voice TTS fallback ---- */
-let sayClips=null,sayLoad=null,sayEl=null;
-function loadSayClips(){
-  if(sayLoad)return sayLoad;
-  sayLoad=fetch("../audio/manifest.json",{cache:"force-cache"})
-    .then(r=>r.ok?r.json():null)
-    .then(m=>{sayClips=(m&&m.clips)||{};return sayClips})
-    .catch(()=>{sayClips={};return sayClips});
-  return sayLoad;
-}
-try{loadSayClips();}catch(e){sayClips={};}
+/* ---- audio: the built-in voice (speechSynthesis) is the delivery — no clips, no manifest ---- */
 const SAY_VOICE_WANT=[/aria.*online/i,/jenny.*online/i,/michelle.*online/i,/samantha/i,/allison/i,/ava/i,/susan/i,/google us english/i,/zira/i];
 function sayVoice(){
   let vs=[];try{vs=speechSynthesis.getVoices()||[];}catch(e){}
@@ -32,24 +22,12 @@ function saySpeak(t,rate){
   }catch(e){}
 }
 function sayStop(){
-  try{if(sayEl){sayEl.pause();sayEl.currentTime=0;sayEl=null;}}catch(e){}
   try{speechSynthesis.cancel();}catch(e){}
 }
-/* playSay(text[,rate]) — plays audio/<hash>.mp3 when the clip exists, else speaks it */
+/* playSay(text[,rate]) — speaks the string with the built-in voice, stopping whatever was playing */
 async function playSay(t,rate){
   if(!t)return;
   sayStop();
-  let clips=sayClips;
-  if(!clips)clips=await loadSayClips();
-  const f=clips&&clips[t];
-  if(f){
-    try{
-      sayEl=new Audio("../audio/"+f);
-      if(rate&&rate!==1)sayEl.playbackRate=rate;
-      await sayEl.play();
-      return;
-    }catch(e){sayEl=null;}
-  }
   saySpeak(t,rate||0.95);
 }
 window.playSay=playSay;window.saySpeak=saySpeak;

@@ -83,5 +83,5 @@ Referencing material instead of embedding it is fine (a song named by lyric, "go
    - Authored content sits in `.content-area` under one `<h1>` — that heading is the title `build-lessons.mjs` reads, and the build may set or change it at will (the next `build:lessons` run writes the new title into `lessons.json`).
    - Navigation is purely sequential (`← Last` / `Next →`); there is no lesson count anywhere.
    - Exercise state persists only through the three controls named in FUNCTION.md §Content contracts; if Pass A suggests an exercise type outside them, escalate per #2.
-   - Audio for `.listen`: the built-in voice (`speechSynthesis`) is the **default delivery** — a `data-say` string with no clip is complete content and nothing waits on a render. Rendering clips is an optional later step: `npm run build:audio` does it at any time, `audio:check` is informational, and the `data-say` rule plus both commands are in FUNCTION.md §Content contracts.
+   - Audio for `.listen`: the built-in voice (`speechSynthesis`) is the delivery — a `data-say` string is complete content and there is nothing to render or wait on; the rule is in FUNCTION.md §Content contracts.
    - Shell, classes and sizing: FORMAT.md. Behaviour, engines and edit mode: FUNCTION.md.
