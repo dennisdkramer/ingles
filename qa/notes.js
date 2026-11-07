@@ -3,16 +3,22 @@
  *
  * This is authoring chrome, not lesson code: it touches no answer, no radio and no engine.
  *   - every `textarea.qa-note` fills its block and grows with its own text;
- *   - the notes live in one file, qa/NOTES.md — one `##` block per preview page, one `###`
- *     section per item, the item heading being the item's own name (the same name as the `###`
- *     heading in CONTENT_EXAMPLES.md, so a note and the contract it argues with sit side by side);
- *   - the page reads and writes that file itself, through the browser's file-system access.
- *     A web page may never touch the disk without a gesture, so the first time in a browser you
- *     click the "link qa/NOTES.md" button and pick that file once; the handle is kept in
- *     IndexedDB, so later visits need at most one allow-click, not a fresh search. Chrome and
- *     Edge only. There is no server and nothing listens on a port — you double-click the page;
- *   - autosave: 700 ms after you stop typing the box's section is written into qa/NOTES.md;
- *     emptying a box removes its section; Ctrl+S saves every box at once;
+ *   - qa/NOTES.md is where the notes live and it is the source of truth: one `##` block per
+ *     preview page, one `###` section per item, and every section body opens with a pointer to
+ *     that item's `###` heading in CONTENT_EXAMPLES.md. The section is the request; the pointer
+ *     names the contract it argues with. A request is never copied into CONTENT_EXAMPLES.md;
+ *   - the boxes and the file follow each other. Typing writes the section into the file 700 ms
+ *     after you stop; the file is re-read every 2 s and on window focus, so a section deleted in
+ *     an editor leaves its box empty without a reload, and a reload always shows the file as it
+ *     stands. A box you are typing in is never overwritten; Ctrl+S saves every box at once;
+ *   - the page reaches the file through the browser's file-system access. A page may never touch
+ *     the disk without a gesture, so the first time in a browser you click the "link qa/NOTES.md"
+ *     button and pick that file once; the handle is kept in IndexedDB, so later visits need at
+ *     most one allow-click, not a fresh search. Chrome and Edge only. There is no server and
+ *     nothing listens on a port — you double-click the page;
+ *   - localStorage holds only text that has NOT reached the file: a draft typed before linking,
+ *     or text whose write failed. The draft is dropped the moment its section is written, so a
+ *     draft can never put back a note you deleted from qa/NOTES.md;
  *   - a browser without that API (Firefox, Safari) cannot reach the file at all: the text stays
  *     in the tab and in localStorage, and Ctrl+S downloads the markdown fragment to paste in.
  *
@@ -29,27 +35,44 @@
   var status = document.getElementById('qa-status');
   var KEY = 'qa-notes:' + page + ':';
   var STORE = 'qa/NOTES.md';
+  var CONTRACT = 'CONTENT_EXAMPLES.md';
   var HANDLE_KEY = 'notes-file';
   var PICKER = typeof window.showOpenFilePicker === 'function';
+  var POLL_MS = 2000;            // how often a linked page re-reads the file
 
   var HEADER = [
     '# Preview notes',
     '',
-    'One `##` block per preview page and one `###` section per item, written by the note boxes',
-    'themselves (open a preview page in Chrome or Edge, click "link ' + STORE + '", then type).',
-    'The item heading is the same name as the `###` heading in CONTENT_EXAMPLES.md, so a note and',
-    'the contract it argues with can be read against each other by heading alone. Emptying a box',
-    'removes its section; the record of work done is the commit.',
+    'Open requests: one `##` block per preview page, one `###` section per item. The note boxes on',
+    'the preview pages read and write this file directly (Chrome or Edge, click "link ' + STORE + '"',
+    'once), so this file is the whole record and editing it here edits the boxes.',
+    '',
+    'Every section opens with a pointer to the item\'s `###` heading in `' + CONTRACT + '` — that',
+    'heading is the contract the request argues with. The request stays here and is never copied',
+    'into ' + CONTRACT + '. Emptying a box, or deleting a section here, removes the request; the',
+    'record of work done is the commit.',
     ''
   ].join('\n');
 
   var file = null;               // FileSystemFileHandle for qa/NOTES.md, once linked
   var linked = false;            // handle known and readable
   var timers = {};
-  var touched = {};
+  var touched = {};              // typed in, or a draft: the file must not overwrite this box
+  var busy = 0;                  // writes in flight, so a poll cannot read a half-written file
+  var lastSrc = null;            // the file text the boxes are showing
+  var poll = 0;
   var button = null;
 
   /* ---- the markdown shape of qa/NOTES.md ------------------------------------------------ */
+
+  var POINTER = /^→\s*CONTENT_EXAMPLES\.md/;      // the line every section opens with
+
+  function pointer(item) { return '→ ' + CONTRACT + ' §`' + item + '`'; }
+
+  /** body lines with the pointer removed: what a box shows, and what a box's text becomes */
+  function strip(lines) {
+    return lines.filter(function (l) { return !POINTER.test(l.trim()); }).join('\n').trim();
+  }
 
   function parse(src) {
     var model = { preamble: [], groups: [] };
@@ -72,11 +95,11 @@
     var pre = model.preamble.join('\n').trim();
     if (pre) chunks.push(pre);
     model.groups.forEach(function (group) {
-      if (!group.items.length) return;
+      var kept = group.items.filter(function (item) { return strip(item.lines); });
+      if (!kept.length) return;
       chunks.push('## ' + group.page);
-      group.items.forEach(function (item) {
-        var body = item.lines.join('\n').trim();
-        if (body) chunks.push('### ' + item.item + '\n\n' + body);
+      kept.forEach(function (item) {
+        chunks.push('### ' + item.item + '\n\n' + pointer(item.item) + '\n' + strip(item.lines));
       });
     });
     return (chunks.length ? chunks.join('\n\n') : HEADER.trim()) + '\n';
@@ -88,11 +111,11 @@
     return found;
   }
 
-  /** this page's notes in the file, keyed by item name */
+  /** this page's notes in the file, keyed by item name, the pointer line taken out */
   function readPage(src) {
     var map = {};
     var group = groupFor(parse(src), page);
-    if (group) group.items.forEach(function (i) { map[i.item] = i.lines.join('\n').trim(); });
+    if (group) group.items.forEach(function (i) { map[i.item] = strip(i.lines); });
     return map;
   }
 
@@ -103,7 +126,7 @@
     if (!group) { group = { page: page, items: [] }; model.groups.push(group); }
     var at = -1;
     group.items.forEach(function (i, n) { if (i.item === item) at = n; });
-    body = String(body == null ? '' : body).replace(/\r\n?/g, '\n').trim();
+    body = strip(String(body == null ? '' : body).replace(/\r\n?/g, '\n').split('\n'));
     if (!body) {
       if (at >= 0) group.items.splice(at, 1);
     } else if (at >= 0) {
@@ -134,8 +157,21 @@
 
   function time() { return new Date().toLocaleTimeString(); }
 
+  /* ---- drafts: the only text localStorage may keep --------------------------------------- */
+
+  function draftKey(el) { return KEY + name(el); }
+
   function hold(el) {
-    try { localStorage.setItem(KEY + name(el), el.value); } catch (e) { /* private mode */ }
+    try { localStorage.setItem(draftKey(el), el.value); } catch (e) { /* private mode */ }
+  }
+
+  /** the section is in the file now, so the draft must not outlive it */
+  function drop(el) {
+    try { localStorage.removeItem(draftKey(el)); } catch (e) { /* private mode */ }
+  }
+
+  function draft(el) {
+    try { return localStorage.getItem(draftKey(el)); } catch (e) { return null; }
   }
 
   function buttonLabel() {
@@ -192,7 +228,27 @@
 
   /* ---- the boxes follow the file --------------------------------------------------------- */
 
-  /** untouched boxes take the file's text; a box you are typing in is never thrown away */
+  /** one write at a time: read, edit, write, and remember the text the boxes are now showing */
+  function write(edit) {
+    busy++;
+    return readFile(file).then(function (src) {
+      var out = edit(src);
+      if (out === src) return src;
+      return writeFile(file, out).then(function () { return out; });
+    }).then(function (out) {
+      busy--;
+      lastSrc = out;
+      return out;
+    }, function (e) {
+      busy--;
+      throw e;
+    });
+  }
+
+  /**
+   * The file says what the boxes say. A box you are typing in is never thrown away, and a box
+   * whose section is gone from the file is emptied — that is the point of the link.
+   */
   function adopt(src) {
     var map = readPage(src);
     var count = 0;
@@ -200,46 +256,81 @@
       var id = name(el);
       if (touched[id]) return;
       var text = map[id] || '';
-      if (text && el.value !== text) { el.value = text; grow(el); count++; }
-      else if (!text && el.value.trim()) { grow(el); }   // not in the file: keep what is on screen
+      if (el.value === text) return;
+      el.value = text;
+      el.removeAttribute('data-draft');
+      grow(el);
+      count++;
     });
     return count;
   }
 
-  /** whatever was typed before the file could be read is written now, without losing anything */
-  function flushTyped(handle, src) {
+  /** text that never reached the file — a draft typed before linking — is written now */
+  function flushDrafts(handle, src) {
     var out = src;
-    var map = readPage(out);
-    var pending = 0;
+    var written = {};
+    var n = 0;
     boxes.forEach(function (el) {
-      var text = el.value.trim();
-      if (!text || map[name(el)] === text) return;
-      out = setSection(out, name(el), text);
-      map = readPage(out);
-      pending++;
+      var id = name(el);
+      if (!touched[id]) return;                     // the file's own text, not a draft
+      var before = out;
+      out = setSection(out, id, el.value.trim());
+      if (out === before) {                         // the file already says this
+        delete touched[id];
+        drop(el);
+        return;
+      }
+      written[id] = el;
+      n++;
     });
-    if (!pending) return Promise.resolve(0);
-    return writeFile(handle, out).then(function () { return pending; });
+    if (!n) return Promise.resolve({ written: 0, src: out });
+    return writeFile(handle, out).then(function () {
+      boxes.forEach(function (el) {
+        if (!written[name(el)]) return;
+        delete touched[name(el)];
+        drop(el);
+      });
+      return { written: n, src: out };
+    });
   }
 
   function linkUp(handle) {
     return readFile(handle).then(function (src) {
       var count = adopt(src);
-      return flushTyped(handle, src).then(function (written) {
+      return flushDrafts(handle, src).then(function (res) {
         linked = true;
         buttonLabel();
-        if (written) boxes.forEach(function (el) { delete touched[name(el)]; });
+        lastSrc = res.src;
         var msg = count
-          ? count + ' note' + (count === 1 ? '' : 's') + ' read from ' + STORE
-          : STORE + ' linked — no notes for this page yet';
-        if (written) msg += ' · ' + written + ' box' + (written === 1 ? '' : 'es') + ' saved';
+          ? count + ' note' + (count === 1 ? '' : 's') + ' shown from ' + STORE
+          : STORE + ' linked — nothing outstanding for this page';
+        if (res.written) msg += ' · ' + res.written + ' draft' + (res.written === 1 ? '' : 's') + ' saved';
         say(msg);
+        watch();
       });
     }).catch(function (e) {
       linked = false;
       buttonLabel();
       say('cannot read ' + STORE + ': ' + e.message, true);
     });
+  }
+
+  /** the file changed under us: a section deleted or edited in an editor reaches its box here */
+  function tick() {
+    if (!file || !linked || busy) return;
+    return readFile(file).then(function (src) {
+      if (src === lastSrc) return;
+      lastSrc = src;
+      var count = adopt(src);
+      if (count) say(count + ' box' + (count === 1 ? '' : 'es') + ' refreshed from ' + STORE + ' · ' + time());
+    }).catch(function () { /* not readable this second: the next tick tries again */ });
+  }
+
+  function watch() {
+    if (poll) return;
+    poll = setInterval(tick, POLL_MS);
+    window.addEventListener('focus', tick);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) tick(); });
   }
 
   /* ---- actions -------------------------------------------------------------------------- */
@@ -272,15 +363,14 @@
   function save(el) {
     var id = name(el);
     var text = el.value.trim();
-    hold(el);
+    hold(el);                                    // a draft until the write lands
     if (!file) { say('not linked to ' + STORE + ' — click “link ' + STORE + '” once', true); return; }
-    readFile(file).then(function (src) {
-      return writeFile(file, setSection(src, id, text));
-    }).then(function () {
+    return write(function (src) { return setSection(src, id, text); }).then(function () {
       delete touched[id];
+      drop(el);
       say((text ? 'saved ' + size(text) + ' bytes' : 'section removed') + ' in ' + STORE + ' · ' + time());
     }).catch(function (e) {
-      say('NOT saved: ' + e.message, true);
+      say('NOT saved: ' + e.message + ' — kept as a draft in this browser', true);
     });
   }
 
@@ -293,16 +383,19 @@
 
   function saveAll() {
     if (!file) { say('not linked to ' + STORE + ' — click “link ' + STORE + '” once', true); return; }
-    readFile(file).then(function (src) {
+    var changed = false;
+    boxes.forEach(hold);
+    return write(function (src) {
       var out = src;
       boxes.forEach(function (el) { out = setSection(out, name(el), el.value); });
-      if (out === src) { say('nothing to save — ' + STORE + ' already says this'); return; }
-      return writeFile(file, out).then(function () {
-        boxes.forEach(function (el) { delete touched[name(el)]; });
-        say('saved every box in ' + STORE + ' · ' + time());
-      });
+      changed = out !== src;
+      return out;
+    }).then(function () {
+      boxes.forEach(function (el) { delete touched[name(el)]; drop(el); });
+      say(changed ? 'saved every box in ' + STORE + ' · ' + time()
+                  : 'nothing to save — ' + STORE + ' already says this');
     }).catch(function (e) {
-      say('NOT saved: ' + e.message, true);
+      say('NOT saved: ' + e.message + ' — kept as a draft in this browser', true);
     });
   }
 
@@ -311,7 +404,7 @@
     var chunks = ['## ' + page];
     boxes.forEach(function (el) {
       var text = el.value.trim();
-      if (text) chunks.push('### ' + name(el) + '\n\n' + text);
+      if (text) chunks.push('### ' + name(el) + '\n\n' + pointer(name(el)) + '\n' + text);
     });
     var out = page.replace(/\.html$/, '.NOTES.md');
     var a = document.createElement('a');
@@ -340,23 +433,25 @@
 
   boxes.forEach(function (el) { grow(el); });
 
-  /* no handle yet, or no permission: show what this browser typed earlier rather than nothing */
+  /**
+   * A draft that never reached the file comes back. A section deleted from the file has no
+   * draft — its draft was dropped when the section was written — so it stays deleted.
+   */
   function recover() {
     var restored = 0;
     boxes.forEach(function (el) {
-      if (touched[name(el)] || el.value.trim()) return;
-      var stored = null;
-      try { stored = localStorage.getItem(KEY + name(el)); } catch (e) { stored = null; }
-      if (stored && stored.trim()) {
-        el.value = stored;
-        el.setAttribute('data-recovered', '1');
-        grow(el);
-        restored++;
-      }
+      if (el.value.trim()) return;
+      var text = draft(el);
+      if (!text || !text.trim()) return;
+      el.value = text;
+      touched[name(el)] = true;
+      el.setAttribute('data-draft', '1');
+      grow(el);
+      restored++;
     });
     if (restored) {
-      say(restored + ' box' + (restored === 1 ? '' : 'es') + ' held in this browser, not in ' +
-          STORE + ' — click “link ' + STORE + '” to save them', true);
+      say(restored + ' box' + (restored === 1 ? '' : 'es') + ' held as a draft in this browser, not in ' +
+          STORE + ' — click “link ' + STORE + '” to save ' + (restored === 1 ? 'it' : 'them'), true);
     }
     return restored;
   }
@@ -364,7 +459,7 @@
   document.addEventListener('input', function (e) {
     var el = e.target;
     if (!el || el.tagName !== 'TEXTAREA' || !el.classList.contains('qa-note')) return;
-    el.removeAttribute('data-recovered');
+    el.removeAttribute('data-draft');
     grow(el);
     queue(el);
   });
@@ -383,7 +478,7 @@
     return;
   }
 
-  if (!recover()) say('click “link ' + STORE + '” once — then every box saves itself', true);
+  if (!recover()) say('click “link ' + STORE + '” once — then the file and the boxes follow each other', true);
 
   /* a handle from an earlier visit: if the browser still allows it, the boxes fill themselves */
   idbGet(HANDLE_KEY).then(function (handle) {

@@ -11,13 +11,11 @@
  *   - the two-step reading protocol is still stated, and the `fits` field is in the key
  *
  * STANDING INSTRUCTION TO THE ASSISTANT — a task that names text in a preview page's note box is a
- * task against that box (`textarea.qa-note` in qa/preview-games4.html, qa/preview-blocks.html). If
- * the requested text is not there when you look, do NOT conclude the box is empty, and do NOT
- * replace the request with one of your own. Start the notes server yourself, without asking:
- *   node qa/notes.mjs   → http://127.0.0.1:8130/qa/preview-games4.html  (and .../preview-blocks.html)
- * The boxes only write themselves into the .html file while a page served by that process is open,
- * so the text can exist in a browser and not yet in the file. Serve it, have the owner keep the page
- * open on that URL, reload, and re-read the file. "The box is empty" is a finding only after that.
+ * task against that box (`textarea.qa-note` in qa/preview-games4.html, qa/preview-blocks.html), and
+ * every box mirrors its `###` section in qa/NOTES.md. There is no server: the page writes the file
+ * itself through the browser's file-system access. So the request is in qa/NOTES.md — read it there.
+ * An empty box means the section is not in the file either, and never a reason to substitute a
+ * request of your own.
  *
  * Run with: node qa/examples.mjs
  */

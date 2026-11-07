@@ -5,38 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>games — preview (engine4.js)</title>
 <link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="preview.css">
 <style>
 /* LOCAL to this preview. style.css line ~398 says `.g4-stage button{color:var(--ink)}` so game-stage
    buttons never inherit cream-on-dark text; engine4 moved the Play button INTO the stage, so that rule
    now paints `▶ Play` in ink on the button's own ink background and the label disappears. This restores
    it here only — the shipped rule is unchanged and still collides on every real lesson page. */
 .g4-stage .g4-intro-card .game-start{color:var(--cream)}
-
-/* ---- preview chrome: note boxes (qa/notes.js) --------------------------------------------
-   The box fills the width and grows with its own text (field-sizing where supported,
-   qa/notes.js measures otherwise). Nothing here is used by a lesson page. */
-.content-area textarea.qa-note{display:block;width:100%;box-sizing:border-box;min-height:2.6em;
-  padding:6px 10px;margin:6px 0 10px;font:inherit;line-height:1.45;color:var(--ink);
-  background:#fff;border:2px dashed var(--tan);border-radius:8px;box-shadow:none;
-  resize:none;overflow:hidden;field-sizing:content}
-.content-area textarea.qa-note:focus{outline:none;border-style:solid;border-color:var(--ink);background:#fff8ea}
-.content-area textarea.qa-note:not(:placeholder-shown){border-color:var(--ink)}
-/* a section must not lose the insets the h2/p/panel rules give a direct child of .content-area */
-.qa-item > h2, .qa-item > p{margin-left:10px;margin-right:10px}
-.qa-item > .panel{margin:14px 0}
-.qa-toc{margin:10px;padding:8px 12px;border:2px dashed var(--tan);border-radius:12px;background:var(--paper);
-  font-size:14px;line-height:2}
-.qa-toc a{color:inherit;text-decoration:none;border-bottom:2px solid var(--tan);padding:0 2px;white-space:nowrap}
-.qa-toc a:hover{border-bottom-color:var(--ink)}
-.qa-status{position:fixed;right:14px;bottom:14px;z-index:120;max-width:44ch;padding:6px 12px;font-size:13px;
-  color:var(--cream);background:var(--ink);border-radius:999px;opacity:.9;pointer-events:none}
-.qa-status-bad{background:#8c2f39}
-.qa-link{position:fixed;right:14px;bottom:52px;z-index:120;margin:0;padding:6px 12px;font:inherit;
-  font-size:13px;color:var(--ink);background:var(--cream);border:2px solid var(--ink);border-radius:999px;
-  cursor:pointer;opacity:.9}
-.qa-link:hover{opacity:1;background:#fff8ea}
-.qa-link-on{border-color:var(--tan);background:var(--paper)}
-.qa-note[data-recovered]{border-color:#8c2f39}
 </style>
 </head>
 <body>
@@ -54,8 +29,9 @@ only where a board needs it (wordleBoard, crosswordBoard, the bingo caller).</p>
 <section class="qa-item" id="item-skeetRange">
 <h2>skeetRange — recognition + sound</h2>
 <textarea data-item="skeetRange" aria-label="notes for skeetRange" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">section · cost B · evidence radio · one disc per option thrown on its own arc, randomized 5% and
-finished with a tenth of the deadline to spare; one shot per item, and a click on the sky is that shot.</p>
+<p class="dim">section · cost B · evidence radio · one disc per option, all on the same arc and the same speed, with the
+lanes spread wide; the whole range runs 30% slower than the deadline written on the block, so a word can be
+read before it has to be shot at. One shot per item, and a click on the sky is that shot.</p>
 <div class="game" data-game="skeetRange" data-time="6000">
   <p class="game-how">One shot per round. Hit the disc that fits before it flies off the range.</p>
   <div class="game-list">
@@ -88,30 +64,30 @@ finished with a tenth of the deadline to spare; one shot per item, and a click o
 <textarea data-item="whackMole" aria-label="notes for whackMole" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">section · cost B · evidence radio · one mole per option, the right one ducks fastest.</p>
 <div class="game" data-game="whackMole" data-time="6500">
-  <p class="game-how">Hit the one that fits before it ducks.</p>
+  <p class="game-how">Hit the mole that fits before it ducks.</p>
   <div class="game-list">
     <div class="qitem" data-a="b">
-      <div class="qline"><span class="qnum">1.</span><span class="qstem">which one is a greeting</span></div>
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">a greeting</span></div>
       <div class="qopts"><label><input type="radio" name="p-whackMole-1" value="a">thanks</label><label><input type="radio" name="p-whackMole-1" value="b">hey</label><label><input type="radio" name="p-whackMole-1" value="c">sorry</label></div>
     </div>
     <div class="qitem" data-a="c">
-      <div class="qline"><span class="qnum">2.</span><span class="qstem">which one means "very tired"</span></div>
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">very tired</span></div>
       <div class="qopts"><label><input type="radio" name="p-whackMole-2" value="a">bored</label><label><input type="radio" name="p-whackMole-2" value="b">late</label><label><input type="radio" name="p-whackMole-2" value="c">wiped out</label></div>
     </div>
     <div class="qitem" data-a="a">
-      <div class="qline"><span class="qnum">3.</span><span class="qstem">which one asks someone to repeat</span></div>
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">asks someone to repeat</span></div>
       <div class="qopts"><label><input type="radio" name="p-whackMole-3" value="a">sorry, say that again?</label><label><input type="radio" name="p-whackMole-3" value="b">nice to meet you</label><label><input type="radio" name="p-whackMole-3" value="c">no worries</label></div>
     </div>
     <div class="qitem" data-a="b">
-      <div class="qline"><span class="qnum">4.</span><span class="qstem">which one is a place you sleep</span></div>
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">a place you sleep</span></div>
       <div class="qopts"><label><input type="radio" name="p-whackMole-4" value="a">kitchen</label><label><input type="radio" name="p-whackMole-4" value="b">bedroom</label><label><input type="radio" name="p-whackMole-4" value="c">corridor</label></div>
     </div>
     <div class="qitem" data-a="c">
-      <div class="qline"><span class="qnum">5.</span><span class="qstem">which one is past</span></div>
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">past</span></div>
       <div class="qopts"><label><input type="radio" name="p-whackMole-5" value="a">she walks</label><label><input type="radio" name="p-whackMole-5" value="b">she is walking</label><label><input type="radio" name="p-whackMole-5" value="c">she walked</label></div>
     </div>
     <div class="qitem" data-a="a">
-      <div class="qline"><span class="qnum">6.</span><span class="qstem">which one turns a request down politely</span></div>
+      <div class="qline"><span class="qnum">6.</span><span class="qstem">turning a request down politely</span></div>
       <div class="qopts"><label><input type="radio" name="p-whackMole-6" value="a">I'd love to, but I can't</label><label><input type="radio" name="p-whackMole-6" value="b">see you tomorrow</label><label><input type="radio" name="p-whackMole-6" value="c">that's mine</label></div>
     </div>
   </div>
@@ -121,9 +97,10 @@ finished with a tenth of the deadline to spare; one shot per item, and a click o
 <section class="qa-item" id="item-catchBasket">
 <h2>catchBasket — form + meaning</h2>
 <textarea data-item="catchBasket" aria-label="notes for catchBasket" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">section · cost B · evidence radio · one basket per option; the token falls and is dragged home.</p>
+<p class="dim">section · cost B · evidence radio · one pot per option; every right answer waters a pot and grows a flower
+there.</p>
 <div class="game" data-game="catchBasket" data-time="9000">
-  <p class="game-how">Drag each card into the basket that fits.</p>
+  <p class="game-how">Drag the card into the pot where the word fits. Every right answer grows a flower in that pot.</p>
   <div class="game-list">
     <div class="qitem" data-a="a">
       <div class="qline"><span class="qnum">1.</span><span class="qstem">she ___ here every day</span></div>
@@ -152,9 +129,10 @@ finished with a tenth of the deadline to spare; one shot per item, and a click o
 <section class="qa-item" id="item-stackDrop">
 <h2>stackDrop — order + form</h2>
 <textarea data-item="stackDrop" aria-label="notes for stackDrop" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">page · cost B · evidence radio · a right answer becomes a rung; a wrong one drops the block.</p>
+<p class="dim">page · cost B · evidence radio · the question is the next block; drag the right answer on top of it and the
+tower keeps it.</p>
 <div class="game" data-game="stackDrop" data-time="10000">
-  <p class="game-how">Pick the order that fits. Every right answer adds a rung.</p>
+  <p class="game-how">Drag the answer that fits onto the question block. A right answer stays in the tower and the climber climbs; a wrong one tumbles off. Build it all and he reaches the chest.</p>
   <div class="game-list">
     <div class="qitem" data-a="b">
       <div class="qline"><span class="qnum">1.</span><span class="qstem">how long have you lived here</span></div>
@@ -187,9 +165,10 @@ finished with a tenth of the deadline to spare; one shot per item, and a click o
 <section class="qa-item" id="item-flapGate">
 <h2>flapGate — recognition + meaning</h2>
 <textarea data-item="flapGate" aria-label="notes for flapGate" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">section · cost C · evidence radio · a gate per option; the flyer passes through the right one.</p>
+<p class="dim">section · cost C · evidence radio · one gap per option cut out of a scrolling wall; the gap the bird is in
+when the wall arrives is the answer.</p>
 <div class="game" data-game="flapGate" data-time="9000">
-  <p class="game-how">Fly through the gate whose meaning fits the clue.</p>
+  <p class="game-how">Click (or Space) to flap. Fly through the gap whose meaning fits the clue — the wall is coming whether you flap or not.</p>
   <div class="game-list">
     <div class="qitem" data-a="a">
       <div class="qline"><span class="qnum">1.</span><span class="qstem">to cancel something</span></div>
@@ -249,33 +228,34 @@ finished with a tenth of the deadline to spare; one shot per item, and a click o
 <section class="qa-item" id="item-mineGrid">
 <h2>mineGrid — recognition + meaning</h2>
 <textarea data-item="mineGrid" aria-label="notes for mineGrid" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">section · cost B · evidence radio · one cell per option, three mine hits and the runner is out.</p>
+<p class="dim">section · cost B · evidence radio · one pair of saloon doors per option; four options is what the street holds. A
+wrong door opens on a snake, and three bites end the run.</p>
 <div class="game" data-game="mineGrid" data-time="9000">
-  <p class="game-how">Send him to the cell that answers the clue. Wrong cells are mines — three and he is out.</p>
+  <p class="game-how">Open the door whose sign answers the clue. Behind a wrong one there is a snake, and three bites finish you.</p>
   <div class="game-list">
     <div class="qitem" data-a="b">
       <div class="qline"><span class="qnum">1.</span><span class="qstem">the room where you cook</span></div>
-      <div class="qopts"><label><input type="radio" name="p-mineGrid-1" value="a">hall</label><label><input type="radio" name="p-mineGrid-1" value="b">kitchen</label><label><input type="radio" name="p-mineGrid-1" value="c">garage</label></div>
+      <div class="qopts"><label><input type="radio" name="p-mineGrid-1" value="a">hall</label><label><input type="radio" name="p-mineGrid-1" value="b">kitchen</label><label><input type="radio" name="p-mineGrid-1" value="c">garage</label><label><input type="radio" name="p-mineGrid-1" value="d">cellar</label></div>
     </div>
     <div class="qitem" data-a="c">
       <div class="qline"><span class="qnum">2.</span><span class="qstem">the person who fixes a car</span></div>
-      <div class="qopts"><label><input type="radio" name="p-mineGrid-2" value="a">baker</label><label><input type="radio" name="p-mineGrid-2" value="b">driver</label><label><input type="radio" name="p-mineGrid-2" value="c">mechanic</label></div>
+      <div class="qopts"><label><input type="radio" name="p-mineGrid-2" value="a">baker</label><label><input type="radio" name="p-mineGrid-2" value="b">driver</label><label><input type="radio" name="p-mineGrid-2" value="c">mechanic</label><label><input type="radio" name="p-mineGrid-2" value="d">plumber</label></div>
     </div>
     <div class="qitem" data-a="a">
       <div class="qline"><span class="qnum">3.</span><span class="qstem">something you borrow from a library</span></div>
-      <div class="qopts"><label><input type="radio" name="p-mineGrid-3" value="a">a book</label><label><input type="radio" name="p-mineGrid-3" value="b">a ticket</label><label><input type="radio" name="p-mineGrid-3" value="c">a receipt</label></div>
+      <div class="qopts"><label><input type="radio" name="p-mineGrid-3" value="a">a book</label><label><input type="radio" name="p-mineGrid-3" value="b">a ticket</label><label><input type="radio" name="p-mineGrid-3" value="c">a receipt</label><label><input type="radio" name="p-mineGrid-3" value="d">a fridge</label></div>
     </div>
     <div class="qitem" data-a="b">
       <div class="qline"><span class="qnum">4.</span><span class="qstem">what you do to a light</span></div>
-      <div class="qopts"><label><input type="radio" name="p-mineGrid-4" value="a">open it</label><label><input type="radio" name="p-mineGrid-4" value="b">switch it on</label><label><input type="radio" name="p-mineGrid-4" value="c">fill it in</label></div>
+      <div class="qopts"><label><input type="radio" name="p-mineGrid-4" value="a">open it</label><label><input type="radio" name="p-mineGrid-4" value="b">switch it on</label><label><input type="radio" name="p-mineGrid-4" value="c">fill it in</label><label><input type="radio" name="p-mineGrid-4" value="d">sign it</label></div>
     </div>
     <div class="qitem" data-a="c">
       <div class="qline"><span class="qnum">5.</span><span class="qstem">the opposite of "expensive"</span></div>
-      <div class="qopts"><label><input type="radio" name="p-mineGrid-5" value="a">crowded</label><label><input type="radio" name="p-mineGrid-5" value="b">quiet</label><label><input type="radio" name="p-mineGrid-5" value="c">cheap</label></div>
+      <div class="qopts"><label><input type="radio" name="p-mineGrid-5" value="a">crowded</label><label><input type="radio" name="p-mineGrid-5" value="b">quiet</label><label><input type="radio" name="p-mineGrid-5" value="c">cheap</label><label><input type="radio" name="p-mineGrid-5" value="d">tidy</label></div>
     </div>
     <div class="qitem" data-a="a">
       <div class="qline"><span class="qnum">6.</span><span class="qstem">what "I'd rather" does</span></div>
-      <div class="qopts"><label><input type="radio" name="p-mineGrid-6" value="a">states a preference</label><label><input type="radio" name="p-mineGrid-6" value="b">asks permission</label><label><input type="radio" name="p-mineGrid-6" value="c">makes a promise</label></div>
+      <div class="qopts"><label><input type="radio" name="p-mineGrid-6" value="a">states a preference</label><label><input type="radio" name="p-mineGrid-6" value="b">asks permission</label><label><input type="radio" name="p-mineGrid-6" value="c">makes a promise</label><label><input type="radio" name="p-mineGrid-6" value="d">gives advice</label></div>
     </div>
   </div>
   <button class="game-start" type="button">▶ Play</button>
@@ -314,27 +294,48 @@ so they cross, and a shared letter is typed once.</p>
 </div>
 </section>
 <section class="qa-item" id="item-echoPads">
-<h2>echoPads — listening + review</h2>
+<h2>echoPads — build a sentence, word by word</h2>
 <textarea data-item="echoPads" aria-label="notes for echoPads" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">section · cost B · evidence gap · up to four pads per item; the sequence grows by one each round.</p>
-<div class="game" data-game="echoPads" data-time="0">
-  <p class="game-how">Listen to the pattern, then press the pads back in the same order.</p>
+<p class="dim">section · cost B · evidence radio · one sentence, one word per item; the first word is given, and
+a wrong pad costs a point without letting the sentence move on.</p>
+<div class="game" data-game="echoPads" data-time="0" data-first="Yesterday I" data-lives="12">
+  <p class="game-how">One word at a time. The words already placed are on the board and the first word is given — pick the word that fits after them. A wrong pad costs a point and the sentence waits.</p>
   <div class="game-list">
-    <div class="qitem" data-a="a">
-      <div class="qline"><span class="qnum">1.</span><span class="qstem">one beat</span></div>
-      <div class="qopts"><label><input type="radio" name="p-echoPads-1" value="a">tax</label><label><input type="radio" name="p-echoPads-1" value="b">text</label><label><input type="radio" name="p-echoPads-1" value="c">taps</label><label><input type="radio" name="p-echoPads-1" value="d">tips</label></div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">the action, past simple</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-1" value="a">walk</label><label><input type="radio" name="p-echoPads-1" value="b">walked</label><label><input type="radio" name="p-echoPads-1" value="c">walking</label><label><input type="radio" name="p-echoPads-1" value="d">walks</label></div>
     </div>
     <div class="qitem" data-a="a">
-      <div class="qline"><span class="qnum">2.</span><span class="qstem">two beats</span></div>
-      <div class="qopts"><label><input type="radio" name="p-echoPads-2" value="a">ship</label><label><input type="radio" name="p-echoPads-2" value="b">sheep</label><label><input type="radio" name="p-echoPads-2" value="c">chip</label><label><input type="radio" name="p-echoPads-2" value="d">cheap</label></div>
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">where it went</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-2" value="a">to</label><label><input type="radio" name="p-echoPads-2" value="b">too</label><label><input type="radio" name="p-echoPads-2" value="c">at</label><label><input type="radio" name="p-echoPads-2" value="d">of</label></div>
+    </div>
+    <div class="qitem" data-a="c">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">one shop we both know</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-3" value="a">a</label><label><input type="radio" name="p-echoPads-3" value="b">these</label><label><input type="radio" name="p-echoPads-3" value="c">the</label><label><input type="radio" name="p-echoPads-3" value="d">some</label></div>
     </div>
     <div class="qitem" data-a="a">
-      <div class="qline"><span class="qnum">3.</span><span class="qstem">three beats</span></div>
-      <div class="qopts"><label><input type="radio" name="p-echoPads-3" value="a">walked</label><label><input type="radio" name="p-echoPads-3" value="b">walk</label><label><input type="radio" name="p-echoPads-3" value="c">walks</label><label><input type="radio" name="p-echoPads-3" value="d">walking</label></div>
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">one shop, not many</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-4" value="a">shop</label><label><input type="radio" name="p-echoPads-4" value="b">shopping</label><label><input type="radio" name="p-echoPads-4" value="c">shops</label><label><input type="radio" name="p-echoPads-4" value="d">shopper</label></div>
+    </div>
+    <div class="qitem" data-a="d">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">the reason</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-5" value="a">so</label><label><input type="radio" name="p-echoPads-5" value="b">but</label><label><input type="radio" name="p-echoPads-5" value="c">although</label><label><input type="radio" name="p-echoPads-5" value="d">because</label></div>
     </div>
     <div class="qitem" data-a="a">
-      <div class="qline"><span class="qnum">4.</span><span class="qstem">four beats</span></div>
-      <div class="qopts"><label><input type="radio" name="p-echoPads-4" value="a">I'd rather stay</label><label><input type="radio" name="p-echoPads-4" value="b">I'd better stay</label><label><input type="radio" name="p-echoPads-4" value="c">I'd love to stay</label><label><input type="radio" name="p-echoPads-4" value="d">I'd have to stay</label></div>
+      <div class="qline"><span class="qnum">6.</span><span class="qstem">the person who needed it</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-6" value="a">I</label><label><input type="radio" name="p-echoPads-6" value="b">me</label><label><input type="radio" name="p-echoPads-6" value="c">my</label><label><input type="radio" name="p-echoPads-6" value="d">mine</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">7.</span><span class="qstem">the action again, past simple</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-7" value="a">need</label><label><input type="radio" name="p-echoPads-7" value="b">needed</label><label><input type="radio" name="p-echoPads-7" value="c">needing</label><label><input type="radio" name="p-echoPads-7" value="d">needs</label></div>
+    </div>
+    <div class="qitem" data-a="d">
+      <div class="qline"><span class="qnum">8.</span><span class="qstem">a small amount</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-8" value="a">many</label><label><input type="radio" name="p-echoPads-8" value="b">any</label><label><input type="radio" name="p-echoPads-8" value="c">a</label><label><input type="radio" name="p-echoPads-8" value="d">some</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">9.</span><span class="qstem">what you buy in a shop</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-9" value="a">bread</label><label><input type="radio" name="p-echoPads-9" value="b">breads</label><label><input type="radio" name="p-echoPads-9" value="c">bake</label><label><input type="radio" name="p-echoPads-9" value="d">baker</label></div>
     </div>
   </div>
   <button class="game-start" type="button">▶ Play</button>
@@ -417,8 +418,8 @@ safe rung.</p>
       <div class="qopts"><label><input type="radio" name="p-ladderRun-5" value="a">likes</label><label><input type="radio" name="p-ladderRun-5" value="b">like</label></div>
     </div>
     <div class="qitem" data-a="a">
-      <div class="qline"><span class="qnum">6.</span><span class="qstem">if it rains, we ___ inside</span></div>
-      <div class="qopts"><label><input type="radio" name="p-ladderRun-6" value="a">stay</label><label><input type="radio" name="p-ladderRun-6" value="b">will stay</label></div>
+      <div class="qline"><span class="qnum">6.</span><span class="qstem">he ___ to the party yesterday</span></div>
+      <div class="qopts"><label><input type="radio" name="p-ladderRun-6" value="a">didn't come</label><label><input type="radio" name="p-ladderRun-6" value="b">doesn't come</label></div>
     </div>
     <div class="qitem" data-a="b">
       <div class="qline"><span class="qnum">7.</span><span class="qstem">I'd rather ___ at home tonight</span></div>
@@ -435,9 +436,10 @@ safe rung.</p>
 <section class="qa-item" id="item-bossRaid">
 <h2>bossRaid — review + meaning</h2>
 <textarea data-item="bossRaid" aria-label="notes for bossRaid" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">page · cost C · evidence radio · a right answer lands a hit; a wrong one and the boss hits back.</p>
+<p class="dim">page · cost C · evidence radio · you pick a fighter on the intro card; a right answer lands that fighter's attack, a
+wrong one and the boss answers back (a bite, or acid).</p>
 <div class="game" data-game="bossRaid" data-time="12000">
-  <p class="game-how">A right answer lands a hit. A wrong one and the boss hits back.</p>
+  <p class="game-how">Pick your fighter, then answer. A right answer lands a hit with your own weapon; a wrong one and the boss hits back.</p>
   <div class="game-list">
     <div class="qitem" data-a="b">
       <div class="qline"><span class="qnum">1.</span><span class="qstem">"it's up to you" means…</span></div>
