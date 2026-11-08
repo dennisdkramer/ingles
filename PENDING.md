@@ -44,7 +44,7 @@
 #### [S1] Roadmap lines 48-56; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B4> <DONE - 2026-11-08 - kids/lesson4.html + .edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 items, catchBasket do/make sorting drill + whackMole quiz at data-retry="0">
 
 ### [B6] Lesson 5 — a, the and there is; same shape as [B2]
-#### [S1] Roadmap lines 58-66; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 58-66; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B4> <DONE - 2026-11-08 - kids/lesson5.html + .edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 items, catchBasket training game + skeetRange quiz at data-retry="0">
 
 ### [B7] Lesson 6 — the sentence skeleton and the -s of he, she, it; same shape as [B2]
 #### [S1] Roadmap lines 68-76; author + sidecar + §5 lines + commit and push
