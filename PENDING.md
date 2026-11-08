@@ -47,7 +47,7 @@
 #### [S1] Roadmap lines 58-66; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B5> <DONE - 2026-11-08 - kids/lesson5.html + .edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 items, catchBasket training game + skeetRange quiz at data-retry="0">
 
 ### [B7] Lesson 6 — the sentence skeleton and the -s of he, she, it; same shape as [B2]
-#### [S1] Roadmap lines 68-76; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 68-76; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B6> <DONE - 2026-11-08 - kids/lesson6.html + .edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 items, catchBasket subject-sort training + skeetRange quiz at data-retry="0", tags balanced 95/95 divs and 3/3 tables>
 
 ### [B8] Lesson 7 — saying no, don't and doesn't; same shape as [B2]
 #### [S1] Roadmap lines 78-86; author + sidecar + §5 lines + commit and push
