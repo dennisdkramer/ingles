@@ -1,5 +1,30 @@
 {
-  "kids": [],
+  "kids": [
+    {
+      "n": 1,
+      "title": "Two Codes That Make English Readable"
+    },
+    {
+      "n": 2,
+      "title": "The Silent E and the Cognates That Lie"
+    },
+    {
+      "n": 3,
+      "title": "be, get and it: States and What You Got"
+    },
+    {
+      "n": 4,
+      "title": "have, do, make, go"
+    },
+    {
+      "n": 5,
+      "title": "a, the and there is"
+    },
+    {
+      "n": 6,
+      "title": "The Sentence Skeleton and the -s"
+    }
+  ],
   "business": [
     {
       "n": 1,
