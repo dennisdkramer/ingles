@@ -30,7 +30,7 @@
 
 #### [S1] Read the inputs named above, none whole where a range will do <PEDAGOGY-MAP.md §1/§2/§5> <nothing> <DONE - 2026-11-08 - read-only, no file modified>
 
-### [B2] Lesson 1 authored and shipped as its own batch; serves "lessons 1-50" + "each lesson is a batch, commit and push when a batch is done"; artifact = kids/lesson1.html + kids/lesson1.edit.html; exit = both files on origin/main in one commit; risk = a page that misses the 10-vocabulary floor or the closing quiz (PEDAGOGY-MAP.md §q/§k)
+### [B2] Lesson 1 authored and shipped as its own batch; serves "lessons 1-50" + "each lesson is a batch, commit and push when a batch is done"; artifact = kids/lesson1.html + kids/lesson1.edit.html **+ the lesson's entry in lessons.json** (`{n,title}` — this file, not the commit, is what the live index reads; a batch that skips it ships a page no one can see) **+ COUNTS.kids in index.html raised to the new count**; exit = both files on origin/main in one commit AND the live `lessons.json` returning the new entry (fetch it after the Pages rebuild); risk = a page that misses the 10-vocabulary floor or the closing quiz (PEDAGOGY-MAP.md §q/§k), or a page that is correct but unlisted
 
 #### [S1] Read KIDS-ROADMAP.md lines 18-26 as the lesson's own range, diff the other mandatory inputs, author on _shell.html, mirror to .edit.html, append the two §5 lines to PAST_BATCHES.md, commit and push <PEDAGOGY-MAP.md §1/§4/§5, FORMAT.md> <B1> <DONE - 2026-11-08 - kids/lesson1.html, kids/lesson1.edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 vocabulary items, closing skeetRange quiz at data-retry="0">>
 
@@ -50,7 +50,7 @@
 #### [S1] Roadmap lines 68-76; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B6> <DONE - 2026-11-08 - kids/lesson6.html + .edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 items, catchBasket subject-sort training + skeetRange quiz at data-retry="0", tags balanced 95/95 divs and 3/3 tables>
 
 ### [B8] Lesson 7 — saying no, don't and doesn't; same shape as [B2]
-#### [S1] Roadmap lines 78-86; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 78-86; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B7> <DONE - 2026-11-08 - kids/lesson7.html + .edit.html (byte-identical), lessons.json n=7, COUNTS.kids=7, PAST_BATCHES.md - 6 sections, 12/12 items, catchBasket drill + whackMole quiz at data-retry="0">
 
 ### [B9] Lesson 8 — asking, do/does, wh-front, short answer; same shape as [B2]
 #### [S1] Roadmap lines 88-96; author + sidecar + §5 lines + commit and push
