@@ -38,7 +38,7 @@
 #### [S1] Roadmap lines 28-36; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B2> <DONE - 2026-11-08 - kids/lesson2.html + .edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 items, catchBasket training game (replayable) + whackMole quiz at data-retry="0">
 
 ### [B4] Lesson 3 — be, get and it; same shape as [B2]
-#### [S1] Roadmap lines 38-46; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 38-46; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B3> <DONE - 2026-11-08 - kids/lesson3.html + .edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 items, video from lesson 1 returns in a be sentence, stackDrop quiz at data-retry="0">
 
 ### [B5] Lesson 4 — have, do, make, go; same shape as [B2]
 #### [S1] Roadmap lines 48-56; author + sidecar + §5 lines + commit and push
