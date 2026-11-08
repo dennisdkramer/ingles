@@ -24,16 +24,6 @@
 
 # [CURRENT] Prompt - (Active batches, newest first)
 
-## [1] Wire the repo for kids lesson generation: the three edits the user named, then commit and push — "yes, change all references to lessonNN.html to lesson<N>.html / clear out the status file / put engine4.js in the shells input list / then commit and push"
-
-### [B1] Make the filename convention, the status file and the input list true across the repo, then land the work on origin [PEDAGOGY-MAP.md], [STATUS.md] — artifact: PEDAGOGY-MAP.md + STATUS.md on origin/main — exit: zero `lessonNN.html` references, STATUS.md carrying no stale state, `engine4.js` as an input-list item, `origin/main..HEAD` empty, tree clean — the rule at risk: a staged commit carrying files the request never named, showing as a commit message that describes three files while the commit contains eight
-
-#### [S1] Rewrite every `lessonNN.html` reference to `lesson<N>.html` and confirm none remain [PEDAGOGY-MAP.md line 7 Output] — DONE - 2026-11-08 - PEDAGOGY-MAP.md (verified: `lessonNN` occurrences 0, `lesson<N>.html` present only there)
-
-#### [S2] Clear the stale state section from STATUS.md and keep the live parameters [STATUS.md] — DONE - 2026-11-08 - STATUS.md (9 lines, state section gone)
-
-#### [S3] Add `engine4.js` to the as-needed shells input list, commit and push [PEDAGOGY-MAP.md line 11 inputs] — DONE - 2026-11-08 - PEDAGOGY-MAP.md (`d)`, with PAST_BATCHES re-lettered `e)`), commit 3efd2b6, origin/main
-
 ## [PAST]
 
 - 2026-11-08 — "i still dont see a tongue animation so get back to work on those items, especially the parts of speech labeling ... relatively subtle and not take up space" — remains: the tongue figure still measures as motionless (frame comparison A/B byte-identical), so the travel has never been shown to work; and `qa/pos.mjs` plus the `.pos-*` marks are in `edb72bc` but the generator's repair pass was never re-verified after its bug fix

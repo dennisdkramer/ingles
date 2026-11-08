@@ -19,8 +19,11 @@ counts, spacing and class names are generation decisions, not defects.
 
 Scope belongs to the harnesses, not the caller: with no lesson numbers every page in every track that has
 pages is swept, `--track=kids|business|adult` narrows it (qa/track.mjs), and a named lesson that does not
-exist is a failure. `npm run qa` = build + content + landing + games; `npm run qa:layout` = the overflow
-selftest + sweep; `npm run qa:live` = the CDP probe. Every harness exits non-zero on a finding.
+exist is a failure. `npm run qa -- <member>` runs ONE harness and nothing else (`qa/run.mjs`);
+`node qa/run.mjs` with no member prints the menu and exits non-zero, and a member that does not honour
+`--track`/`--all`/lesson numbers is refused when one is passed rather than silently sweeping every
+track. `npm run qa:layout` = the overflow selftest + sweep; `npm run qa:live` = the CDP probe. Every
+harness exits non-zero on a finding.
 
 Which of those to run, and how deep, is the caller's decision, not the harness's: when scope is most or
 all live pages, pick a few with defensible relevance to test/verify. Request user sign-off before
