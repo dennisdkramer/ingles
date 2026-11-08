@@ -437,3 +437,55 @@
 @media print{
   .tl-span[data-end="open"]{border-right-style:solid}
 }
+
+/* ---- tonguePath: the tongue TRAVELLING between two sounds, on the same sagittal plate -------
+   The figure is one group that moves. Two poses with no travel between them read as a flicker,
+   and the flicker is exactly what a student already has in a before/after strip — so here the
+   tongue slides, the tip leaves the ridge, a tracer dot walks the route and the gap opens under
+   the hard palate. What has to be imagined is the DISTANCE, not the two endpoints.
+   Only transform and opacity animate (Build Constraint 5). Under reduced motion the tongue parks
+   at the second pose and the first pose stays on screen as a dashed ghost, so the state change
+   survives the loss of travel instead of the figure going blank.
+   A different sound pair is two poses in the markup and two labels — no rule here changes. */
+.vz-plate .tg-anim,.tg-anim{animation-duration:6s;animation-iteration-count:infinite;
+  animation-timing-function:cubic-bezier(.45,.05,.55,.95)}
+.vz-plate .tg-tongue{animation-name:tg-slide}
+.vz-plate .tg-contact{animation-name:tg-contact;opacity:1}
+.vz-plate .tg-gap{animation-name:tg-gap;opacity:0}
+.tg-laba{animation-name:tg-laba;opacity:1}
+.tg-labb{animation-name:tg-labb;opacity:0}
+/* two labels, one slot: the caption never reflows when the state changes */
+.tg-swap{display:inline-grid;vertical-align:baseline}
+.tg-swap>*{grid-area:1/1}
+.vz-plate .tg-ghost{opacity:0}
+
+/* A: the tip rests on the ridge, contact made.  B: pulled back, nothing touching. */
+@keyframes tg-slide{
+  0%,14%{transform:translate(0,0)}
+  42%,76%{transform:translate(26px,30px)}
+  96%,100%{transform:translate(0,0)}}
+@keyframes tg-contact{
+  0%,16%{opacity:1}
+  32%,84%{opacity:0}
+  96%,100%{opacity:1}}
+@keyframes tg-gap{
+  0%,38%{opacity:0}
+  52%,80%{opacity:1}
+  90%,100%{opacity:0}}
+@keyframes tg-laba{
+  0%,16%{opacity:1}
+  30%,86%{opacity:0}
+  96%,100%{opacity:1}}
+@keyframes tg-labb{
+  0%,38%{opacity:0}
+  50%,80%{opacity:1}
+  92%,100%{opacity:0}}
+
+@media (prefers-reduced-motion:reduce){
+  .tg-anim{animation:none}
+  .vz-plate .tg-tongue{transform:translate(26px,30px)}
+  .vz-plate .tg-contact{opacity:0}
+  .vz-plate .tg-gap,.vz-plate .tg-ghost{opacity:1}
+  .tg-laba{opacity:0}
+  .tg-labb{opacity:1}
+}

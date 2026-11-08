@@ -1,20 +1,15 @@
 # CONTENT_EXAMPLES — A menu of **mechanisms** and skins for content authored in the page's HTML
 
-## INSTRUCTIONS
+## [INSTRUCTIONS]
 
-- **A menu, not a checklist.** Nothing here is required in any lesson, nor required to be in any specific section/order when used. Reaching for a vehicle because it is listed — rather than because that beat needs it — is a defect.
-- **Choose per beat, and be able to say why not another.** The recorded justification (`PEDAGOGY-MAP.md`) is only honest if this file says what each vehicle *cannot* do. That is the `can't` field.
+- **A menu, not a checklist.** Nothing here is required to be in any lesson or in any order.
 - **The content in the page.** Games drive authored `.qitem`s (stem + optional `.listen` + radios), `input.gap`, or a textarea — nothing else. Whatever the engine animates is presentation; the saved answer is always one of those controls. If a mechanism cannot end in one, it is not a vehicle, it is a decoration. 
-- **The tone of a lesson comes from the lesson's copy, never from here.** Every game below is track-neutral, *skins* may be per-track data layered on top — never baked into the mechanism.
+- **The tone of a lesson comes from the lesson's copy, never from here.** Every game below is track-neutral, *skins* layered on top — never baked in
 
+## Build [Constraints] - Ignore this section for lesson generation
 
-## Build Constraints - Ignore this section for lesson generation
-
-There is **no house style**. Look, palette, motion and mood are chosen per game and per track — a kids page may
-be loud and a business page sober, and neither is more correct. Only these hold, because they are mechanical:
-
-1. **The page still works if the engine never loads.** The authored `.qitem`s are ordinary radios: they render,
-   save and print with no JS. That fallback is not optional.
+There is **no house style**. Look, palette, motion and mood are chosen per game and per track — a kids page may be loud and a business page sober, and neither is more correct. Only these hold, because they are mechanical:
+1. **The page must still work if the engine never loads.** The authored `.qitem`s are ordinary radios: they render, save and print with no JS. That fallback is not optional.
 2. **No network at run time.** Art is CSS, inline SVG, or a local file. Nothing fetched from another host, so a
    page that ships today still renders in two years.
 3. **Fits its slot.** The stage scales to the block's width (`.itemsize` / `-half` / `-third`) and never overflows
@@ -25,8 +20,11 @@ be loud and a business page sober, and neither is more correct. Only these hold,
    laptop.
 6. **Difficulty and content are data.** Every game reads its items from the page and its knobs from `data-*`
    attributes, so a teacher can add items or change difficulty without editing an engine.
-   
-## [HEADLINES] - (A3, B3, C1, D1, E0, F1, G0, H1, I1, J1)
+
+- - - 
+
+
+## [HEADLINES] 
 **Step 1 — browse the headings, nothing else.** 
 
 
@@ -1204,7 +1202,7 @@ be loud and a business page sober, and neither is more correct. Only these hold,
 
 ---
 
-# 4. Visual — drawn blocks (DRAFTS, not in the menu yet)
+# [VISUALS] - IN BLOCK elements for broad re-use  (DRAFTS, not in the menu yet)
 
 **Built and on screen.** All nine are prototyped as real markup on `qa/preview-blocks.html` under their own
 `<section class="qa-item" id="item-NAME">`, with the drawing CSS in `qa/preview-visual.css` (`.vz-*`, one file, so
@@ -1244,8 +1242,9 @@ section, which is a genuinely 2-D object.
   slider, a hotspot, a hover-reveal or a `<details>` would look interactive and score nothing, so a gauge or a level can
   only ever be *display*, and the scored answer stays a radio or a gap.
 - **Art is CSS, inline SVG, or a local file — never a URL** (Build Constraint 2). "A picture from outside" therefore
-  means *downloaded into this repo*; the repo ships exactly one image today (`logo.png` at the root, referenced as
-  `../logo.png` from each track folder), so the first vendored figure also sets the folder and path convention.
+  means *downloaded into this repo*; the repo ships `logo.png` at the root (referenced as `../logo.png` from each track
+  folder) and `assets/` — the two anatomy plates, provenance in `assets/README.md` — and that folder is the convention a
+  new figure follows: `assets/<name>.<ext>`, referenced from a track page as `../assets/<name>.<ext>`.
 - **No CSS change.** `style.css` has no rule for a content `<svg>` (the only `svg` rules are per-game: `.target svg`,
   `.g4-* svg`), so an authored `<svg viewBox="…">` sized to its parent scales to `.itemsize` / `-half` / `-third` as it
   is. A new class is a stylesheet edit and a sign-off — and `qa/overflow.mjs` enumerates the block selectors, so a new
@@ -1360,7 +1359,29 @@ section, which is a genuinely 2-D object.
   chart. The primitive is *image + overlay + numbered key*, and it is the cheapest way to get a real-world visual into a
   block without drawing it badly.
 
-#### `massBasket` — countable units vs an undivided mass (draft)
+#### `tonguePath` — the tongue travelling between two sounds (draft → built in `qa/preview-blocks.html`)
+
+- **draws** — the same plate and the same crop as `mouthCut`, but the teaching is the **travel**, not two stills. One tip
+  marker slides from resting on the ridge to pulled back with nothing touching; the green contact ring dies as it leaves,
+  the place it started stays behind as a dashed ghost, and a green double arrow opens under the hard roof. The pair here is
+  pt-BR tap (contact) against English `r` (no contact) — one instruction, **leave the gap**. A before/after pair is a
+  flicker the student has already seen; what has to be imagined is the distance between the two poses.
+- **built from** — `assets/speech-organs-mouth.png` plus `<svg class="ov" viewBox="0 0 456 344">` and three numbered
+  `.vz-pin`s, exactly as `mouthCut` — with the marker as **one `<g>` that moves**. Every animated property is `transform`
+  or `opacity` (Build Constraint 5), so nothing repaints mid-loop. Rules live in `qa/preview-visual.css` under `.tg-*`.
+  A different sound pair is two poses and two labels in the markup: no rule changes.
+- **ends in** — radios on *what happens at 1* and *where the gap is measured*, plus one `input.gap`. The figure is never
+  scored; it is the thing the radios point at.
+- **fits** — one column at ≤540px. The `wide` variant makes the overlay overwhelm the engraving and the pins float.
+- **the risk** — a marker claims less than a silhouette, and that is deliberate: the plate already draws the tongue, so an
+  authored tongue laid over it is wrong somewhere, and the first build of this figure did exactly that — a red arc cutting
+  across the engraving and ending past the drawn tongue. Show the **tip and its route**, never the organ.
+- **generalises to** — any figure where the difference is *where something goes*: minimal pairs separated only by place
+  (`θ`/`s`/`t`), the tongue between vowels in connected speech, jaw height for `æ` against `e`. The primitive is
+  *plate + sliding marker + ghost + gap*.
+- **resting state** — reduced motion, print or a paused screenshot parks the marker at the second pose with the first left
+  as a dashed ghost, so the state change survives the loss of travel instead of the figure going blank.
+
 
 - **draws** — left: two bounded units with `1` and `2` under them (books). Right: one amorphous block (water, luggage,
   advice) plus three container outlines, each labelled with the quantifier that divides it (`a bottle of`, `a piece of`,
@@ -1417,8 +1438,9 @@ section, which is a genuinely 2-D object.
 ## Outside art — what exists, and the three conditions on it
 
 - **Vendored, never hotlinked.** Build Constraint 2 forbids a run-time fetch, so an outside picture means download the file
-  into this repo. There is no `assets/` folder today and every page references `../logo.png`; the first vendored figure sets
-  that convention, and it needs a caption carrying its source.
+  into this repo. `assets/` now holds the two anatomy plates, with provenance and licence in `assets/README.md`; the
+  convention they set is `assets/<name>.<ext>`, referenced from a track page as `../assets/<name>.<ext>`, with a caption
+  carrying the source on the page that uses it.
 - **The licence travels with the file.** Checked against the Wikimedia Commons API while drafting: `File:Adultvocaltract.jpeg`
   — mid-sagittal section with the tongue labelled `T`, CC BY-SA 4.0, attribution "Cengst"; `File:Tract.gif` — constriction
   areas of the vocal tract, CC BY-SA 3.0, attribution "Megsmith". Both require attribution *and* a licence link on the page,
