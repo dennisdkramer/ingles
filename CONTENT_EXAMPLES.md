@@ -1,10 +1,6 @@
-# 0. CONTENT_EXAMPLES — the vehicle menu
+# CONTENT_EXAMPLES — A menu of **mechanisms** and skins for content authored in the page's HTML
 
-This is a menu of **mechanisms** and skins that drives content already authored in the page's HTML. 
-No entry carries lesson text, no entry is a script to copy.
-Where a shape is needed it is written as `<placeholder>`.
-
-## How to use this file
+## INSTRUCTIONS
 
 - **A menu, not a checklist.** Nothing here is required in any lesson, nor required to be in any specific section/order when used. Reaching for a vehicle because it is listed — rather than because that beat needs it — is a defect.
 - **Choose per beat, and be able to say why not another.** The recorded justification (`PEDAGOGY-MAP.md`) is only honest if this file says what each vehicle *cannot* do. That is the `can't` field.
@@ -12,61 +8,7 @@ Where a shape is needed it is written as `<placeholder>`.
 - **The tone of a lesson comes from the lesson's copy, never from here.** Every game below is track-neutral, *skins* may be per-track data layered on top — never baked into the mechanism.
 
 
-## READ HEADINGS
-
-### The Headline Key - (A3, B3, C1, D1, E0, F1, G0, H1, I1, J1)
-**Step 1 — browse the headings, nothing else.** Every `###` heading is self-contained and contains a score on the following axes:
-
-A) Presentational Utility "can cleanly display or utilize its contents for teaching".
-B) Ambiguity -> Clarity "Student will understand how the information is presented or what they are supposed to do immediately" .
-C) Utility for challenging and advanced Student .
-D) Fun/Engaging .
-E) Multi-Axis Comparative Utility - eg. contrast 3 tenses/parts of speech/verb-preposition pairs.
-F) Utility for presenting/training Writing/Reading 
-G) Utility for presenting/training Speech/Listening
- - To what degree its utility depends on or is limited by the student's:
-H) Linguistic Level.
-I) General Intellect.
-J) Socio-Cultural/Life experiences.
-
-Each score is **0–3**, the same scale this file already uses for `tests`, `fun` and `reuse`. On **A–G a higher number
-is better**; on **H–J a higher number means the vehicle's utility is *more* limited by** that trait — `H0` is
-level-proof, `H3` needs a prepared class — so H–J are read the opposite way round from the others.
-```
-Select-String -Path CONTENT_EXAMPLES.md -Pattern '^### '
-```
-That is the whole selection surface, and the scores are the whole of it. **Pick by the axes, never by the body:** a
-beat that has to contrast three forms is an `E` beat, a beat that has to be heard is a `G` beat, a class whose level
-you cannot rely on wants `H` low, a beat that must end in writing wants `F` high. `fits` (what kind of language the
-block is for) and the width it needs are settled in step 2, from the body — so shortlist from the numbers, then open
-the one entry you picked.
-
-**Step 2 — read only the entry you chose.** Read that one `###` heading's line range, ending at the next `###`
-(or the next `---`), and read it against the axis that shortlisted it. That body is the implementation contract:
-`fits` (its width, and where in the page it sits — the `size` question lives here now, not in the heading),
-`does`, `markup`/`skins` (which authoring markup it drives), `art`, `vary`, `can't`, `needs`. Nothing else in the
-file is opened.
-
-
-
-## The key
-
-Headings carry only the A–J scores, so none of the fields below is read off a heading: where a field is not stated
-outright in the entry body (`needs`, `fits`), the entry's `does` and `can't` lines are the record of it.
-
-| `evidence` | which persisted control carries the mark: `radio` · `gap` · `textarea` · `audio` · `none` |
-| `tests` | 0 exposure · 1 recognise · 2 controlled produce · 3 free produce |
-| `fun` | 0–3, engagement |
-| `reuse` | 0–3, how many lessons it survives before going stale |
-| `needs` | `none` (ships as markup today) or the engine it requires |
-| `count` | **CountUp** — the score climbs from 0 with each correct answer, which is the default · **CountDown** —the score starts full and falls per error.
-| `resource` | `<type>` - the shape spends a limited resource (lives, hearts, guesses),
-| `<min-max>` | defines the minimum and/or maximum amount of questions or options the shape requires - `""` means no requirement for that particular parameter. 
-
-
-
-
-## Constraints on every game (technical, not aesthetic)
+## Build Constraints - Ignore this section for lesson generation
 
 There is **no house style**. Look, palette, motion and mood are chosen per game and per track — a kids page may
 be loud and a business page sober, and neither is more correct. Only these hold, because they are mechanical:
@@ -83,14 +25,12 @@ be loud and a business page sober, and neither is more correct. Only these hold,
    laptop.
 6. **Difficulty and content are data.** Every game reads its items from the page and its knobs from `data-*`
    attributes, so a teacher can add items or change difficulty without editing an engine.
+   
+## [HEADLINES] - (A3, B3, C1, D1, E0, F1, G0, H1, I1, J1)
+**Step 1 — browse the headings, nothing else.** 
 
----
 
-# 1. Games — arcade, reflex, puzzle, and logic
-
-Interactive activities. Each one drives ordinary `.qitem`s, so the answer that saves is the same radio a plain page would have.
-
-### `skeetRange - (A2, B2, C1, D3, E1, F1, G1, H3, I1, J1)`
+### `skeetRange - (best for: one-shot word recognition under a clock; arcade stakes that force a commitment; a fast read of what a student really knows · can't: teach production or spelling — one shot per item lets a careless click hide what they knew · purpose 9/10 · fun 9/10)`
 
 - **does** — One flying target per option. Player aims with the cursor and takes **one shot**; a hit scores, a
   miss is spent. No spray, no endless retry — the constraint is what makes it feel like skill.
@@ -106,7 +46,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — no production, no spelling; one shot per item means a careless click can hide what the student knew.
 - **needs** — nothing; `engine4.js` ships it.
 
-### `whackMole - (A2, B2, C1, D3, E2, F1, G1, H3, I1, J1)`
+### `whackMole - (best for: spotting which option fits among lookalikes; engagement in a restless class; exposing hesitation · can't: anything needing reflection — speed pressure is the whole mechanism; recognition only · purpose 9/10 · fun 8/10)`
 
 - **does** — One drawn mole per option surfaces from a hole, stamped in stagger; the player hits the one that
   fits before the runner's timer bar empties. The rest duck away the instant an answer lands.
@@ -119,7 +59,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **needs** — nothing; `engine4.js` ships it.
 
 
-### `catchBasket - (A3, B3, C2, D3, E3, F1, G0, H2, I1, J1)`
+### `catchBasket - (best for: sorting a form into its category; making a rule decision a single physical gesture; showing hesitation in public · can't: more than two to four categories per row, and a seventh item swamps the pot · purpose 9/10 · fun 8/10)`
 
 - **does** — One word is shown at a time; the player **drags it into the pot that fits** (or taps a pot, or presses
   `1`/`2`). Dropping outside springs the word back, so a slipped finger costs time, not the item. A right drop tips
@@ -133,7 +73,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   stays there (six to a pot); the word lifts and tilts while held, a wrong drop shakes.
 - **can't** — only two to four pots fit a row; fine distinctions don't fit, and a seventh flower would swamp the pot.
 
-### `stackDrop - (A2, B2, C1, D3, E1, F1, G0, H2, I1, J1)`
+### `stackDrop - (best for: giving a long drill a shape and an end; accumulate-and-complete motivation; the tower as progress bar · can't: run on a two-item block (nowhere to climb), and timing dominates, so one phrase per block · purpose 8/10 · fun 8/10)`
 
 - **does** — The question arrives as the next block of a tower and the player **puts the right answer on top of it**
   by picking it: the block flies up, lands and **stays in the tower**. A wrong answer tumbles off and the question
@@ -151,7 +91,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   load to a phrase per block.
 - **needs** — nothing; `engine4.js` ships it.
 
-### `flapGate - (A2, B1, C1, D3, E1, F1, G0, H3, I1, J1)`
+### `flapGate - (best for: recognition at speed; arcade engagement; a keyboard and reduced-motion path to answering · can't: anything beyond recognition at speed, and it is the most expensive of the arcade set · purpose 8/10 · fun 9/10)`
 
 - **does** — One-button flight. The bird holds its place and the wall scrolls at it; the wall has **real gaps**, one
   per option, and the gap the bird is inside when the wall arrives is the answer. A click on a gap answers at once
@@ -168,7 +108,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — recognition at speed only, and it is the most expensive of the arcade set.
 - **needs** — shared runner + gravity loop.
 
-### `wordleBoard - (A3, B3, C2, D3, E1, F2, G0, H3, I2, J1)`
+### `wordleBoard - (best for: spelling one word to a five-try limit; the deduction pleasure of letter feedback; repeated right-letter evidence · can't: run on phrases or on any word length but the fixed one; teaches no meaning and no listening · purpose 9/10 · fun 9/10)`
 
 - **does** — The student guesses the word and presses Enter; the board marks right letter/right place and right
   letter/wrong place. Five rows and the run is over. Hangman is the same engine with a different face (a revealed
@@ -182,7 +122,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — only words of one fixed length; nothing for phrases, meaning or listening.
 - **needs** — nothing; `engine4.js` ships it.
 
-### `mineGrid - (A2, B2, C1, D3, E1, F1, G0, H1, I1, J1)`
+### `mineGrid - (best for: making a guess cost something; reading before moving; leaving blanks a teacher can read as evidence · can't: run on a lesson that writes two or three options — the street comes up short · purpose 8/10 · fun 7/10)`
 
 - **does** — The options are planted as **pairs of batwing saloon doors along a street**, the word hung over the top
   where it can be read. Pick a door and **the figure walks to it**, which makes the choice a character's risk rather
@@ -200,7 +140,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   a drawn snake, and a figure with hurt and down states.
 - **can't** — one answer per door; a lesson that writes two or three options leaves the street short.
 
-### `crosswordBoard - (A3, B3, C3, D2, E2, F2, G0, H3, I2, J1)`
+### `crosswordBoard - (best for: spelling a word to its clue; showing that words share letters; a board where one shared cell solves two items · can't: handle long or unspellable words, and a vocabulary sharing no letter can only sit in separate rows · purpose 9/10 · fun 8/10)`
 
 - **does** — A **real generated crossword**. Each `.qitem` carries `data-answer` (the word) and its `.qstem` is the
   clue. The engine lays the whole set out at once: the first word across, every later word placed so it **crosses**
@@ -217,7 +157,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   only sit in their own rows, so a lesson whose vocabulary shares nothing is a bad fit.
 - **needs** — nothing; `engine4.js` ships it. Authoring: `data-answer` on each `.qitem`, clue in `.qstem`.
 
-### `echoPads - (A3, B2, C2, D3, E1, F2, G1, H2, I1, J1)`
+### `echoPads - (best for: word order and collocation one word at a time; a constraint the student can see on the stage; planning a sentence end to end · can't: cover more than one sentence per block, and trains neither spelling nor listening · purpose 9/10 · fun 7/10)`
 
 - **does** — Builds **one sentence, word by word**. `data-first` is the opening the student is given ("Yesterday
   I"); every `.qitem` after it is the next word of that sentence, and its options are the word that fits after
@@ -244,7 +184,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   before the phrase is written, or from the whole sentence at once, is what produces them.
 - **needs** — nothing; `engine4.js` ships it (the voice is the built-in speech).
 
-### `bingoCard - (A3, B2, C1, D3, E1, F0, G3, H3, I1, J1)`
+### `bingoCard - (best for: recognising the spoken form of a word; one-chance attention with no replay; hearing under a countdown · can't: hear anything longer than a word, and it needs several options across the block or the decoy pool runs dry (the two countdowns are the game's own) · purpose 8/10 · fun 9/10)`
 
 - **does** — A 3×3 card is built from the item's own options **plus decoys drawn from the rest of the block**, so the
   card is never trivially small. The card arrives shut behind a velvet curtain and the voice **calls the correct
@@ -264,7 +204,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   or the decoy pool runs dry, and a lesson block cannot set the two countdowns — they are the game's own clock.
 - **needs** — nothing; `engine4.js` ships it (uses the built-in voice). Leave `data-time` at 0.
 
-### `ladderRun - (A2, B3, C2, D3, E1, F1, G1, H2, I1, J1)`
+### `ladderRun - (best for: the page's quiz rather than a drill; keeping what was safely earned; scaling one block from five items to a full test · can't: act as a mid-lesson beat — one continuous arc — and its fall to the safe rung is harsh, so items must be fair · purpose 9/10 · fun 8/10)`
 
 - **does** — A full-height rail with a climber and a chest at the top. One rung per right answer, a **safe rung every
   five**, and the height is **heard** as well as seen (a rising motif as you climb). A wrong answer slides the climber
@@ -281,7 +221,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   reason the lesson has taught, and read every item back as a picky teacher before shipping it.
 - **needs** — nothing; `engine4.js` ships it.
 
-### `bossRaid - (A2, B2, C1, D3, E1, F1, G0, H1, I1, J1)`
+### `bossRaid - (best for: a long drill with a visible cost; ritual stakes and a chosen fighter; an ending that belongs to the answers, not a timer · can't: rescue weak items — the stakes mask them, so every item must still be defensible on its own · purpose 8/10 · fun 10/10)`
 
 - **does** — The student **picks a fighter on the intro card** — sword, wizard or archer — and the choice is not
   decoration: it decides HOW the right answer lands. The swordsman steps in and cuts, the wizard throws a fireball that
@@ -298,20 +238,44 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   separate sprites, a drawn boss with bite/hurt states, a slash arc, an HP bar.
 - **can't** — ritual stakes can mask weak items; every item must still be defensible on its own.
 
----
+### `trainOrder - (best for: one fixed adjective order made physical; the two ways a sentence sounds wrong; a rule felt instead of memorised · can't: contrast two orders, or produce anything — the sentence is built, never written or said · purpose 9/10 · fun 8/10)`
 
-# 2. Blocks — teaching shapes
+- **does** — The eight adjective slots are the eight cars of a train standing under a low bridge, and the student
+  **loads the sentence onto it**: every word of the sentence waits on the loading dock at one size, and dropping one
+  into a car makes it **grow to the height its own slot is allowed**. The track climbs to the right — the front car
+  stands lowest and takes the tallest load, every car behind it stands 6px higher and has 6px less headroom — so a
+  load in its own car tops out on one level line, **3px under the bridge**. A word put in a car further back than its
+  own grows through the deck. The train then leaves: a clean one runs out under the bridge and is stamped CLEARED; a
+  wrong one hits it, the plank over that car breaks, the car tips over and a heart goes with it. **An empty car is
+  fine** — a sentence need not use all eight slots — and a word placed too early only leaves a gap, though it still
+  scores nothing, because the car it stands in was not its car.
+- **teaches** — a SEQUENCE, with a consequence for breaking it. Opinion → Size → Age → Shape → Color → Origin →
+  Material → Purpose is the whole content; the train is what makes the order physical instead of a rule to memorise,
+  and the two ways of being wrong (through the bridge / a gap with the load short of it) are the two ways a sentence
+  can sound wrong.
+- **skins** — one `.qitem` per WORD: the stem is the word, and the options are the eight cars, one radio per car,
+  `value` naming the slot (`opinion`, `size`, … or `1`–`8`). `data-a` on the item is the slot the word belongs in, so
+  the answer that saves is the ordinary radio of the car the student chose. `data-train="2"` on an item puts it in the
+  second sentence's train; items with no `data-train` ride together, in authored order.
+- **levers** — `data-depart` (seconds the train waits on the dock before it leaves with whatever is loaded, default
+  30, `0` = wait for ever), `data-lives` (trains that may be wrecked before the run ends; absent = one per train, at
+  most three), `data-slots` (replace the eight slot names, pipe separated), `data-labels` (`auto` / `1` / `0`) with
+  `data-label-max` — at `auto` the car labels are **shown up to level 30 and hidden above it**, read from the lesson's
+  own `L` (or `data-level` on the block), because naming the category is the training wheel and the level-30 student
+  is meant to read the cars as positions only.
+- **art** — a drawn saddle-tank locomotive facing left, eight flatbeds on a ballasted grade, a lattice girder bridge
+  with a hazard-striped deck in eight planks (one per car, so the collision breaks the piece the wrong car hits),
+  splinters, steam, a slammed CLEARED / DERAILED stamp, and a departure clock that turns red and ticks in the last
+  six seconds.
+- **fits** — full width only: eight cars cannot be read at a half.
+- **can't** — one order, so it trains one rule: it cannot contrast two orders, and it is not a production exercise —
+  the sentence is built, never written or said. Word-level vocabulary has to be known already, since the sentence is
+  never spelled out beyond its own words.
+- **needs** — nothing; `engine4.js` ships it. Author four to eight words per train, and put the ORDER on the page
+  above the block (a chart or a one-line rule) — the game tests it, it never states it.
 
-	- Nearly all are markup-only (**cost A**)  No example wording appears here on purpose — the lesson supplies it.
 
-## Rules:
-
-1. **One control per item.** A drill that asks for a gap *and* a radio in the same item cannot be scored or
-   printed, and the student answers neither carefully.
-2. **The instruction is part of the block.** A drill with no verb ("Sentence surgery") is a riddle; the first line
-   says what the student's hands do.
-
-### `twoWordVerb - (A3, B3, C2, D1, E2, F1, G0, H2, I1, J1)`
+### `twoWordVerb - (best for: the register of a word already understood; producing the everyday form; proving the one-word twin means the same · can't: teach meaning, and it teaches a false equation whenever the pair is not genuinely interchangeable · purpose 8/10 · fun 5/10)`
 
 - **does** — A chart puts the everyday two-word verb beside its one-word twin; the student then writes the everyday
   form into the gap (`<everyday verb>` ↔ `<one-word twin>`). Production is always the everyday form: it is the one
@@ -327,7 +291,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — the pairing has to be genuinely interchangeable, or the chart teaches a false equation; and it is a
   vocabulary lesson, not a meaning lesson — the student learns the register of a word they already understand.
 
-### `contextFit - (A2, B2, C2, D1, E2, F1, G2, H2, I1, J2)`
+### `contextFit - (best for: whole fixed expressions used in a stated situation; matching a chunk to what it answers; teaching a chunk as one piece with audio · can't: teach the grammar inside the chunk, and a chunk whose parts can be swapped is not a chunk · purpose 8/10 · fun 5/10)`
 
 - **does** — Whole fixed expressions taught as one unit with audio, then used: the student writes the chunk that fits
   a stated situation into the gap, or matches the chunk to what it answers.
@@ -339,7 +303,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — a chunk whose parts can be swapped is not a chunk, so check it is said as one piece; and it never
   teaches the grammar inside it — that is the point, and also the limit.
 
-### `sentenceSurgery - (A3, B3, C2, D3, E1, F2, G0, H2, I1, J1)`
+### `sentenceSurgery - (best for: word and chunk order; assembly that reads wrong until it is right; holding a whole sentence in memory · can't: handle a sentence with two defensible orders, and it tests assembly, not meaning — the student can rebuild what they cannot translate · purpose 9/10 · fun 6/10)`
 
 - **does** — A sentence or a whole exchange is cut into chunks and handed over out of order; the student rebuilds it.
   Word order, chunk order and linking all show up immediately, because a wrong order reads wrong.
@@ -354,7 +318,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — only sequences with one defensible order; and it tests assembly, not meaning — a student can rebuild a
   sentence they cannot translate.
 
-### `registerContrast - (A3, B2, C2, D1, E3, F1, G0, H2, I1, J2)`
+### `registerContrast - (best for: choosing register for a named audience; showing stiff beside spoken; sharpening a choice the student half knows · can't: judge without a described audience, and it only ever chooses between wordings someone else wrote · purpose 7/10 · fun 4/10)`
 
 - **does** — Two columns contrast a stiff wording with the spoken everyday one; the exercise picks which fits the
   stated audience. The audience is always named, or the item is unjudgeable.
@@ -371,7 +335,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   And it only ever *chooses* between wordings someone else wrote — it never produces one, which is why it pairs
   with `politeLadder`.
 
-### `questionBuilding - (A2, B2, C2, D1, E1, F2, G1, H2, I1, J1)`
+### `questionBuilding - (best for: forming the question from its answer; asking the follow-up a context needs; form practice with a reason · can't: teach turn-taking (a perfect question in the wrong place still fails) and it is only markable if the acceptable forms are stated · purpose 8/10 · fun 5/10)`
 
 - **does** — Given an answer, form the question; given a context, ask the follow-up.
 - **markup** — item list of `input.gap`s, one per answer. The prompt is the answer the student is talking to — never
@@ -387,7 +351,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   the answer it is built from is specific enough that only one question really answers it. If two different questions
   would both be right and both natural, it is not a harder item — it is a broken one.
 
-### `repairMoves - (A2, B2, C2, D1, E1, F1, G2, H2, I1, J2)`
+### `repairMoves - (best for: the fixed moves that repair a breakdown; hearing the tone of the repair; whose fault the break is · can't: teach the conversation — needs a scene, and a teacher to judge whether the student could say it under pressure · purpose 7/10 · fun 4/10)`
 
 - **does** — The fixed moves for when communication breaks: ask for a repeat, check a guess, restate.
 - **markup** — item list: a short exchange with the break marked, then one `input.gap` holding the move that repairs
@@ -398,7 +362,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — teaches the move, not the conversation; needs a scene to mean anything, and a teacher to judge whether
   the student could actually say it under pressure.
 
-### `pronLab - (A3, B2, C2, D1, E2, F1, G3, H3, I1, J1)`
+### `pronLab - (best for: one phoneme the first language lacks; mouth position beside a contrast table; testing the distinction after showing it · can't: justify its space without a real first-language error, and it covers one phoneme — never an accent · purpose 8/10 · fun 4/10)`
 
 - **does** — For a sound the student's first language lacks: a mouth-position guide (in Portuguese) beside a
   first-language-vs-English contrast table, then items that test the distinction.
@@ -411,7 +375,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — needs a real first-language error to be worth the space, so generic "pronunciation" pages teach nothing;
   and it teaches *one* phoneme — never claim it fixes an accent.
 
-### `minimalPairs - (A2, B3, C1, D2, E2, F0, G3, H3, I1, J1)`
+### `minimalPairs - (best for: separating two near-identical sounds; homophones from a flap T or a silent letter; a quick ear beat under a display · can't: show that the student can say it, and it uses words they already know, so it carries no new vocabulary · purpose 9/10 · fun 6/10)`
 
 - **does** — The target word beside its near-neighbours, each with audio, so the ear separates one phoneme by its
   minimal difference. Also covers homophones from a flap T or a silent letter.
@@ -423,7 +387,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — recognition only; it never shows the student can say it, and it deliberately uses words the student
   already knows, so it cannot carry new vocabulary.
 
-### `listenIdentify - (A1, B3, C1, D1, E1, F0, G3, H2, I1, J1)`
+### `listenIdentify - (best for: a ternary recognition beat (sound, ending, stress); the cheapest listening block; an ear check before production · can't: work on two options (a coin flip), and it proves a difference was heard, not that either word means anything · purpose 8/10 · fun 5/10)`
 
 - **does** — A binary or ternary recognition item: which sound, which ending, which stress pattern was heard.
 - **markup** — item list of radios with the `.listen` chip doing the asking; the prompt only says what to listen for,
@@ -435,7 +399,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — two options invites a coin flip, so three minimum for anything that matters; and it tells you the
   student heard *a difference*, not that they know what either word means.
 
-### `errorCorrection - (A2, B3, C1, D1, E2, F1, G0, H2, I1, J1)`
+### `errorCorrection - (best for: refusing the classic first-language error; distractors that each encode one real error; word-sized or sentence-sized granularity · can't: show production — it only shows the wrong form was refused, so pair it with a gap drill · purpose 8/10 · fun 5/10)`
 
 - **does** — Pick the correct item among distractors that each encode the classic first-language error, at whatever
   granularity fits: one word or a whole sentence.
@@ -447,18 +411,15 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — distractors must be real errors, or it becomes a spot-the-typo; and it never shows the student can
   *produce* the form, only refuse the wrong one — pair it with a gap drill in the same lesson.
 
-### `syllableLab - (A3, B2, C2, D1, E2, F1, G2, H2, I1, J0)`
+### `syllableLab - (best for: counting syllables; locating the beat the stress lands on · can't: anything yet — this file states no mechanism, no art and no limit for it, so nothing here is claimed · purpose 3/10 · fun 3/10)`
 
-- **does** — The three pillars of rhythm: count the beats, place the stress, find the schwa.
-- **markup** — three short item lists of `input.gap`s, one per pillar, so a wrong answer says *which* pillar failed.
-  A single gap per word that asks for all three at once teaches nothing.
-- **fits** — half. It is a beat, and it should sit under the `stressBar` or `soundGrid` that shows the pattern.
-- **vary** — count only → stress only → schwa only → all three on a new word. Mixing pillars inside one item is how
-  this becomes a memory game.
-- **can't** — nothing about connected speech — counting beats tells you nothing about what happens when two words
-  meet; pair it with `connectedFlow` if rhythm is the point.
+- **does** — 
+- **markup** —
+- **fits** — 
+- **vary** — 
+- **can't** 
 
-### `errorHunt - (A3, B3, C3, D2, E1, F3, G0, H3, I2, J1)`
+### `errorHunt - (best for: proofreading a whole short text; a stated error count that turns browsing into a task; cumulative review of taught errors · can't: be beat-sized (it needs a self-contained text), and finding all the errors is not knowing why they were errors · purpose 9/10 · fun 6/10)`
 
 - **does** — A short text with a stated number of errors; the student types the corrections below. Saying how many
   there are is what makes it a task rather than a browse.
@@ -470,7 +431,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — needs a self-contained text, so it is not a beat-sized vehicle; and a student who finds all the errors may
   still not know why they were errors — the debrief is the teacher's.
 
-### `oddOneOut - (A2, B2, C3, D2, E3, F2, G0, H2, I2, J2)`
+### `oddOneOut - (best for: making a category decision that needs a reason; discrimination the student must justify; a discussion opener · can't: survive two defensible answers, so the justification is mandatory and the teacher must read it; it never produces the target form · purpose 7/10 · fun 6/10)`
 
 - **does** — One item doesn't belong; the student picks it **and says why** in a line.
 - **markup** — item list of radios for the pick, plus **one block-level `<textarea>`** for the reasons. The textarea is
@@ -481,7 +442,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — if two items can be defended, the item is broken, so the justification is mandatory and the teacher reads
   it; and it never produces the target form.
 
-### `spotTheDiff - (A3, B3, C2, D2, E2, F3, G0, H3, I2, J1)`
+### `spotTheDiff - (best for: noticing what changed between two texts; close reading of a chat or a notice; finding the difference before naming the rule · can't: say which version is right, and it is wasted on differences that are only punctuation · purpose 7/10 · fun 6/10)`
 
 - **does** — Two versions of the same short text, chat or notice; find and state the differences.
 - **markup** — worked pair: `.itemrow` of two `.panel`s side by side, then one gap per stated difference number. The two
@@ -492,7 +453,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — the differences must be meaningful, not punctuation; and it does not say which version is right — that is
   the next block's job.
 
-### `predictReveal - (A2, B3, C3, D3, E1, F3, G0, H2, I2, J2)`
+### `predictReveal - (best for: investment before the answer arrives; writing what happens next; making a scene matter · can't: mark anything — it produces investment, not accuracy, and needs a right-answer block after it or the page has no evidence · purpose 8/10 · fun 8/10)`
 
 - **does** — The scene stops mid-way; the student writes what happens next, then reveals the real ending.
 - **markup** — open response: the scene as prose, one `<textarea>`, then the real ending inside `<details>` so the page
@@ -503,7 +464,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — no marking; it produces investment, not accuracy, so it must be followed by a block that does ask for a
   right answer — otherwise the page has no evidence at all.
 
-### `miniProject - (A2, B2, C3, D3, E1, F3, G0, H3, I2, J3)`
+### `miniProject - (best for: free production toward a real artefact; a word bank and a textarea; end-of-lesson synthesis · can't: train a form under control or be auto-marked — the checklist is what the teacher marks against · purpose 8/10 · fun 7/10)`
 
 - **does** — Build something in English: a plan, a poster, a set of rules, an order. Word bank plus textarea.
 - **markup** — open response plus a `.panel` word bank. The brief is a **checklist**, not a paragraph: five things the
@@ -515,7 +476,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — free production only, so nothing here trains a form under control and it needs a drill beside it; and it
   cannot be auto-marked — the checklist is what the teacher marks against.
 
-### `cheatSheet - (A1, B2, C2, D1, E1, F3, G0, H2, I2, J1)`
+### `cheatSheet - (best for: the student's own summary in their own words; recall of what was just taught; a revision artefact they keep · can't: prove accuracy — a confident wrong summary looks exactly like a confident right one · purpose 7/10 · fun 3/10)`
 
 - **does** — The student writes their own summary of what they just learned, in their own words.
 - **markup** — open response with **one** `<textarea>` and a short prompt naming the two or three things to include.
@@ -527,7 +488,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — evidence of effort, not of accuracy: a confident wrong summary looks identical to a confident right one,
   so the teacher must read it.
 
-### `connectedFlow - (A2, B2, C2, D1, E2, F1, G3, H3, I1, J1)`
+### `connectedFlow - (best for: marking where two words join; hearing a glide or a dropped sound; connected speech the printed page hides · can't: be seen by a written test, and it needs real recorded joins rather than a guess at how a line should flow · purpose 8/10 · fun 5/10)`
 
 - **does** — Where two words meet: a consonant glides into a vowel (`<word> + <word>` → `/j/`), a sound is inserted
   (`<word> + <word>` → `/w/`), or one is dropped. The student marks the join, then hears it.
@@ -539,7 +500,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — the ear only, and it is invisible to a written test: a student who marks every join can still say none of
   them. It also needs real recorded joins, never a guess about how a sentence "should" flow.
 
-### `stressShift - (A3, B2, C3, D1, E3, F1, G3, H3, I1, J0)`
+### `stressShift - (best for: stress that changes a word's job; choosing the reading the sentence needs; the pattern behind noun/verb pairs · can't: teach the sound — the student can pass every item and still stress both forms wrong · purpose 8/10 · fun 5/10)`
 
 - **does** — The same written word carries its stress differently depending on the job it does (`<noun form>` vs
   `<verb form>`); the student picks which reading fits the sentence they were given.
@@ -552,7 +513,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — it teaches the *pattern*, not the sound — the student can pass and still stress both wrong. Pair with
   `pronLab` for the mouth.
 
-### `emphaticBeat - (A2, B2, C3, D2, E2, F1, G2, H3, I1, J1)`
+### `emphaticBeat - (best for: tying stress to intended meaning; showing one sentence has three readings; tone work beside a dialogue · can't: produce the sound (it marks a word), and it is genuinely hard where emphasis is marked by word order · purpose 7/10 · fun 6/10)`
 
 - **does** — The same sentence stressed three ways, three meanings. The student is given the *intended meaning* and
   marks which word has to carry the beat.
@@ -564,7 +525,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — only produces a marked word, never the sound; and it is genuinely hard for students whose first language
   marks emphasis with word order instead — that difficulty is the lesson, not a defect.
 
-### `falseFix - (A2, B3, C3, D2, E1, F2, G0, H2, I1, J1)`
+### `falseFix - (best for: fixing the one wrong word; testing words that have one defensible replacement; turning a statement of fact into an item · can't: handle a sentence two words would fix — that item has no single answer and must be rewritten · purpose 9/10 · fun 5/10)`
 
 - **does** — Every sentence is **false**: exactly one word is wrong. The student types only the replacement word. The
   wrongness is the task, so there is no true/false judgement to hedge.
@@ -577,7 +538,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — it can only test words with one defensible replacement; if two words fix the sentence, the item has no
   single answer and must be rewritten.
 
-### `dictogloss - (A2, B2, C3, D2, E1, F3, G3, H3, I2, J1)`
+### `dictogloss - (best for: reconstructing heard text from memory; exposing the gap between what was heard and what was written; diagnosis · can't: be marked without a teacher, and it measures listening, memory, spelling and grammar at once — a good diagnostic, a poor test · purpose 8/10 · fun 6/10)`
 
 - **does** — A short passage is heard twice at natural speed, then the student reconstructs it from memory in writing,
   then compares against the original. The gap between what they wrote and what was said is the whole lesson.
@@ -589,7 +550,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — no key, so it needs a teacher; and it measures everything at once (listening, memory, spelling, grammar),
   which makes it a good diagnostic and a poor test.
 
-### `wordFamily - (A3, B2, C2, D1, E3, F1, G0, H2, I1, J1)`
+### `wordFamily - (best for: one root's four jobs; showing that a family is not a set of synonyms; choosing a member by what the sentence needs · can't: run on a root with no distinct members in use — an invented member teaches a word nobody says · purpose 8/10 · fun 5/10)`
 
 - **does** — One root, four jobs: the student takes `<root>` and puts the right member into each gap by what the sentence
   needs (the doer, the thing, the doing, the how). The lesson is that a family is not a set of synonyms — each member
@@ -602,7 +563,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — only works on roots that really do have distinct members in use; inventing `<root>ness` to fill the grid
   teaches a word nobody says, and the student will use it confidently.
 
-### `collocationGap - (A2, B2, C2, D1, E2, F1, G0, H2, I1, J2)`
+### `collocationGap - (best for: the partner word a noun or adjective takes; the pairing rather than the meaning; errors that survive knowing both words · can't: carry an answer that is not genuinely predictable — two natural partners make the item unfair · purpose 8/10 · fun 4/10)`
 
 - **does** — The student writes the partner word: which verb goes with `<noun>`, which noun goes with `<adjective>`. What is
   tested is the pairing, not the meaning of either word — a student can know both words and still not know they go
@@ -615,7 +576,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — the answer has to be genuinely predictable; if two partners are natural, the item has no single answer and
   is unfair. Check by asking whether a native speaker would hesitate.
 
-### `scaleChoice - (A3, B2, C2, D1, E3, F1, G0, H2, I1, J1)`
+### `scaleChoice - (best for: ordering the words of one set by strength; matching a degree to a stated meaning; undoing the synonym assumption · can't: settle a blurred degree word — without deciding context in the prompt the item is an argument, not an exercise · purpose 7/10 · fun 5/10)`
 
 - **does** — A meaning is given and the student picks which of the lesson's words sits at that point on a strength scale
   (`<weak>` … `<strong>`). Forces the realisation that words of a set are not interchangeable but ordered.
@@ -627,7 +588,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — every item needs one defensible answer. Degree words blur under scrutiny, so the prompt must carry the
   deciding context or the item is an argument, not an exercise.
 
-### `prepositionScene - (A3, B2, C2, D1, E3, F1, G0, H2, I1, J2)`
+### `prepositionScene - (best for: function words learned by scene; the in/on/at cases a translation table gets wrong; writing the word a described picture needs · can't: get past the cases in the lesson's own set, and the general rule behind them is bigger than any block · purpose 8/10 · fun 5/10)`
 
 - **does** — The same small set of function words placed against **pictures described in words**: the student writes
   which one the scene needs (in/on/at, to/for/with). Function words are learned by scene, not by translation, and a
@@ -640,7 +601,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — it can only teach the cases in the lesson's own set; the general rule behind them is bigger than any block,
   so resist stating one.
 
-### `summarySqueeze - (A3, B2, C3, D2, E2, F3, G0, H3, I2, J1)`
+### `summarySqueeze - (best for: writing the middle length between two versions; showing what gets dropped first; compression that still sounds like English · can't: be keyed unless several answers are accepted, and too tight a ceiling forces telegraphic English · purpose 7/10 · fun 4/10)`
 
 - **does** — The same content written at two lengths, then the student writes the middle length. What gets dropped first is
   the lesson: function words go last, so a squeeze that only cuts content words is the version that still sounds like
@@ -653,7 +614,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — no key unless the lesson accepts several good answers; and a word ceiling that is too tight forces
   telegraphic English, which teaches the wrong thing.
 
-### `sentenceCombine - (A2, B3, C2, D2, E2, F2, G0, H2, I1, J1)`
+### `sentenceCombine - (best for: supplying the joining word; the relationship two halves imply; cause, contrast, condition and sequence in one decision · can't: work when either relationship is defensible — that item tests preference, not grammar · purpose 8/10 · fun 5/10)`
 
 - **does** — Two short sentences given, one joined sentence required, with the joining word left as the gap. The student
   supplies the relationship (cause, contrast, condition, sequence), which is the part they cannot see in either half.
@@ -665,7 +626,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — the given meaning has to be implied by the content; if either relationship works, the item tests preference,
   not grammar.
 
-### `expandCompress - (A3, B2, C3, D2, E2, F3, G0, H3, I1, J1)`
+### `expandCompress - (best for: adding detail by grammar rather than by piling on words; pairing expansion with compression; showing the skeleton under a sentence · can't: stop padding on its own — every added word must be a form the lesson taught, or it teaches volume · purpose 7/10 · fun 4/10)`
 
 - **does** — One sentence, two directions: expand it by adding the detail the lesson's forms are for, then compress a
   longer one back to its skeleton. The pair of directions is what shows the student that detail is added *by* the grammar,
@@ -677,7 +638,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   overwritten, which is the direction students almost never get.
 - **can't** — expansion invites padding; every added word must be a form the lesson taught, or the block teaches volume.
 
-### `politeLadder - (A3, B2, C2, D1, E3, F1, G0, H2, I1, J2)`
+### `politeLadder - (best for: politeness as a choice of form for a stated hearer; three correct versions of one request; tone with no new grammar · can't: teach grammar, and the rungs must mean the same or the student is choosing content rather than tone · purpose 8/10 · fun 5/10)`
 
 - **does** — One request, said at three levels of politeness, all three correct, ordered. The student then writes the
   version that fits a stated hearer. Politeness here is a *choice of form*, not an adjective on a word.
@@ -689,7 +650,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — the rungs must be interchangeable in meaning, or the student is choosing content rather than tone; and it
   teaches no grammar — only which of several known forms to reach for.
 
-### `infoGap - (A3, B2, C2, D3, E1, F2, G1, H2, I1, J2)`
+### `infoGap - (best for: writing the question that gets the missing piece; real asymmetry between two panels; question and answer as one pair · can't: be a speaking gap (everything must be answerable from the page), and a half holding the other half's answers kills it · purpose 8/10 · fun 6/10)`
 
 - **does** — Two halves of one situation, each on its own panel, each missing what the other has. The student writes the
   question that gets the missing piece, then the answer that gives it. The information asymmetry is what makes the
@@ -702,7 +663,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — everything has to be answerable from the page, so it is a written information gap and not a speaking one;
   and a half that already contains the other half's answers kills it.
 
-### `roleCard - (A2, B2, C3, D3, E1, F2, G2, H3, I2, J3)`
+### `roleCard - (best for: producing a whole turn from a role; forcing the student to decide what to say; the only block here that demands a turn rather than a form · can't: be marked without a teacher or partner, and a card that lists the target phrases turns it into copying · purpose 8/10 · fun 8/10)`
 
 - **does** — A card gives who the student is, who they are talking to, and what they need out of it — never what to say.
   The student produces the lines. This is the only block in the family that forces a whole turn rather than a form.
@@ -714,7 +675,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — no key, so it needs a teacher or a partner; and a card that lists the target phrases turns the block into
   copying, which is the one thing it exists to avoid.
 
-### `audienceShift - (A2, B2, C3, D2, E3, F3, G0, H3, I2, J3)`
+### `audienceShift - (best for: telling one event to a different hearer; selection — what you mention first and what you leave out; showing that telling is a choice · can't: be graded on wording — two students can both be right and sound different, so mark the shift · purpose 7/10 · fun 7/10)`
 
 - **does** — One event, described to two different hearers, then the student writes the version for a third. What changes
   is not just formality but *selection* — what you mention first, what you leave out, what you admit to. The lesson is
@@ -727,7 +688,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — it grades badly: two students can both be right and sound different. Mark it for the *shift*, never for the
   wording; and it needs the event to be one the student has an opinion about.
 
-### `pulseStress - (A3, B2, C3, D2, E1, F1, G2, H3, I1, J0)`
+### `pulseStress - (best for: finding which beat carries the main stress; hearing that English is stress-timed; counting beats instead of syllables · can't: produce the rhythm — every item can be right and the line still said unevenly; follow it with record-and-repeat · purpose 7/10 · fun 4/10)`
 
 - **does** — A line printed under a row of numbered beats. The student writes **which beat** the main stress lands on, then
   beats the line out loud. English is stress-timed: the beats are roughly even and the unstressed syllables are squeezed
@@ -741,7 +702,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — it marks beats, never produces the rhythm; the student can answer every item and still not be able to say it
   evenly. Follow it with a record-and-repeat task if the rhythm is the goal.
 
-### `lyricGap - (A3, B3, C2, D3, E1, F1, G3, H3, I1, J1)`
+### `lyricGap - (best for: the words a delivery swallows; dictation narrowed to what disappears; articles, `to` and auxiliaries instead of content words · can't: work without a real connected-speech clip — careful pronunciation leaves no gaps and nothing rescues the block · purpose 8/10 · fun 7/10)`
 
 - **does** — One line, heard at speed, with the words that the delivery swallows left as gaps — the articles, the `to`, the
   auxiliary. It is `dictation` narrowed to exactly the words that disappear, which is the opposite of the usual drill that
@@ -754,7 +715,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — it depends entirely on the clip being real connected speech; a clip that pronounces every word carefully has
   no gaps to find and the block cannot be rescued.
 
-### `lineRepair - (A3, B2, C3, D2, E2, F1, G3, H3, I1, J1)`
+### `lineRepair - (best for: naming what a performer changed; the written form beside the performed one; building a small label vocabulary · can't: run without a genuinely performed clip, and the labels have to be taught once or the student guesses at your words · purpose 7/10 · fun 6/10)`
 
 - **does** — Two versions of one line side by side: the written form and the performed form. The student writes what the
   performer changed — dropped, blended, moved the stress, added a word. Naming the change is the skill; knowing the line
@@ -767,7 +728,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — the lesson has to supply a genuinely performed clip; and the labels are a small vocabulary of their own, so
   teach them once or the student is guessing at your words instead of at the language.
 
-### `contourMatch - (A2, B2, C2, D2, E2, F0, G3, H3, I1, J1)`
+### `contourMatch - (best for: linking a pitch movement to its meaning; finished, not finished, asking, doubting; one hear-and-decide beat · can't: argue with a student who heard it differently — one hearing, one judgement, and real speech is messier than four labels · purpose 7/10 · fun 6/10)`
 
 - **does** — A line is heard and the student picks which **movement** it made — up, down, up-then-down, flat-and-then-up —
   and what that movement means in this situation (finished · not finished · asking · doubting · listing). The pair of
@@ -780,7 +741,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — one hearing, one judgement, and real speech is messier than four labels; if the clip is ambiguous the item is
   unfair and there is no way to argue with a student who picked another one.
 
-### `placeScript - (A3, B3, C2, D2, E2, F2, G0, H3, I1, J3)`
+### `placeScript - (best for: the shape of a routine (open, ask, answer, close); order as the thing being taught; showing why the right words in the wrong order still sound wrong · can't: cover more than one routine in one setting, and it marks order and fit, never fluency · purpose 8/10 · fun 5/10)`
 
 - **does** — A routine exchange written as a **sequence of moves** (open → ask → answer → close), each move a slot the
   student fills. What is being taught is the shape of the routine, not any one line in it: a student who knows all the
@@ -793,7 +754,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — it teaches one routine in one setting; the lesson supplies the setting and the lines, and a block that tries
   to cover "how people are here" covers nothing. Mark order and fit, never fluency.
 
-### `directnessDial - (A3, B2, C3, D2, E3, F1, G0, H3, I1, J3)`
+### `directnessDial - (best for: the level of directness a hearer actually allows; showing that too direct is one of the options; choosing a level rather than the softest · can't: claim a universal scale — the setting must be stated or the block teaches a stereotype with a rubric · purpose 7/10 · fun 6/10)`
 
 - **does** — One message, three ways of saying it, and a hearer. The student picks which level of directness the hearer
   takes — and, crucially, one option is **too** direct for that hearer, so the task is not "choose the softest" but "choose
@@ -807,7 +768,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — directness is not a universal scale, so the lesson must state which setting it is talking about; a block that
   implies one right answer for all English users is teaching a stereotype with a rubric.
 
-### `generationGap - (A2, B2, C3, D2, E3, F1, G0, H3, I1, J3)`
+### `generationGap - (best for: which generation a line belongs to; pairing an older form with the newer one it replaced; register that moves · can't: last — every item whose answer depends on slang staying slang must be replaceable, or it expires in two years · purpose 6/10 · fun 7/10)`
 
 - **does** — The same thing said by two generations, both correct, both current — an older form and a newer one with a
   stated speaker. The student decides which speaker the line belongs to. Slang ages, so the block pairs each newer form with
@@ -820,7 +781,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — everything here expires. Any item whose answer depends on slang staying slang must be replaceable without
   rewriting the block, or within two years the lesson teaches a rule that is no longer true.
 
-### `mediaSnippet - (A2, B2, C3, D3, E2, F3, G0, H3, I2, J3)`
+### `mediaSnippet - (best for: reading a situation off one real line; who is speaking to whom and what they assume; catching what is not said · can't: stay current or be owned — quote a line, never a verse, and cut any item that does not stand alone · purpose 7/10 · fun 7/10)`
 
 - **does** — One real line — a lyric, a headline, a line from a show — and three questions about the *speaker*: who they are
   talking to, what they assume the listener already knows, and what they are not saying. The language is real, so the
@@ -834,12 +795,8 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — it dates and it is somebody's property: quote a line, never a verse, and never build an item whose answer
   needs the student to know the source. If it does not stand alone, cut it.
 
----
 
-# 3. Explanatory — blocks that teach without asking
-
-
-### `contrastTable - (A3, B3, C1, D1, E3, F2, G0, H2, I1, J1)`
+### `contrastTable - (best for: displaying the one thing that changes; the same sentence said both ways; a one-line rule under the table · can't: check anything — it shows the difference and never tests it, and two differences in the columns make it unreadable · purpose 9/10 · fun 2/10)`
 
 - **does** — Two columns, A and B, holding the same sentence said both ways, so the only thing that changes is
   the thing being taught. A note row under the table states the rule in one line.
@@ -849,7 +806,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — shows the difference but never checks it; and if the two columns differ in more than one way, the
   contrast is unreadable and the rule is lost.
 
-### `ruleCard - (A3, B3, C2, D1, E1, F2, G0, H2, I2, J1)`
+### `ruleCard - (best for: the rule, one proving example and the boundary case in three lines; stopping a rule from over-generalising; a model the student can hold · can't: carry more than one rule — a card with three teaches none · purpose 9/10 · fun 2/10)`
 
 - **does** — The mental model in three lines: the rule, one example that proves it, and the **boundary case** —
   the sentence that looks like it should follow the rule and doesn't. The boundary case is the part that stops
@@ -859,7 +816,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **fits** — third or half; pair with a practice block of the same width.
 - **can't** — one card carries one rule. A card with three rules teaches none of them.
 
-### `workedExample - (A3, B3, C1, D1, E1, F1, G0, H2, I1, J0)`
+### `workedExample - (best for: watching a form build step by step; labelled steps that name what changed; tense, question and negation forms · can't: work on a fixed phrase (it is decoration there) — only forms that genuinely build in steps · purpose 9/10 · fun 2/10)`
 
 - **does** — One sentence assembled step by step, each step labelled with what changed and why
   (`<base>` → `<+ ending>` → `<final>`), so the student watches the form build instead of meeting it finished.
@@ -868,7 +825,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — only for forms that genuinely build in steps (tense forms, questions, negation). On a fixed
   phrase it is decoration.
 
-### `annotatedExample - (A3, B2, C2, D1, E1, F2, G0, H2, I2, J1)`
+### `annotatedExample - (best for: naming the working parts of a real sentence; three labels that carry meaning; showing what carries the tense · can't: label everything — labels on everything mark nothing, so three is the ceiling · purpose 8/10 · fun 3/10)`
 
 - **does** — One real sentence with its working parts named: what carries the tense, the chunk that can be
   swapped, the piece that decides the meaning. Names sit beside or under the text.
@@ -877,7 +834,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **fits** — full (a labelled sentence needs horizontal room) or half with two labels only.
 - **can't** — labels on everything mark nothing. Three labels maximum, or the student reads none of them.
 
-### `formulaFrame - (A3, B3, C2, D1, E1, F1, G0, H2, I1, J0)`
+### `formulaFrame - (best for: a pattern as a skeleton with named slots; filled versions beside the frame; patterns that really are fixed · can't: safely frame a pattern with moveable parts — the student then builds sentences that look like the frame and are wrong · purpose 8/10 · fun 3/10)`
 
 - **does** — A pattern as a skeleton with named slots (`<I'd rather> ___ <than> ___`), then two or three filled
   versions. Teaches a shape to reuse rather than a conjugation table to stare at.
@@ -888,7 +845,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   the student will build sentences that look like the frame and are wrong.
 
 
-### `signalTable - (A3, B3, C3, D1, E2, F2, G0, H3, I1, J0)`
+### `signalTable - (best for: the cue in the sentence and the form it forces; a rule usable without remembering a list of cases; the display form of the condition behind an item · can't: promise decisive cues — "always" where the language only mostly does this teaches a false rule · purpose 9/10 · fun 2/10)`
 
 - **does** — The cue in the sentence, the choice it forces, one example each: `<cue>` → `<form it demands>`. This
   is the display form of the condition that decides the item, and it is what makes a rule usable without
@@ -899,7 +856,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — no cue is decisive on its own; a table that reads "always" when the language only mostly does this
   teaches a false rule.
 
-### `exceptionBench - (A2, B2, C3, D1, E1, F1, G0, H3, I2, J0)`
+### `exceptionBench - (best for: exceptions grouped by why they behave that way; two or three items each carrying its reason; stopping a rule over-reaching · can't: help when the exceptions share no reason — then it is a list to memorise and should be cut · purpose 7/10 · fun 3/10)`
 
 - **does** — The exceptions, grouped **by why they behave that way**, not listed as a set of facts to memorise.
   Two or three items, each `<form>` — because `<reason>`.
@@ -909,7 +866,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — if the exceptions have no shared reason, this block is a list of things to memorise and should be
   cut in favour of teaching them as separate items.
 
-### `errorGallery - (A3, B2, C3, D2, E2, F2, G0, H3, I1, J1)`
+### `errorGallery - (best for: sentences that look right and are not; training the mistake rather than the correction; a striking opener · can't: produce anything, and it is heavy with negatives — more than five traps in one gallery and none are remembered · purpose 8/10 · fun 5/10)`
 
 - **does** — Four or five sentences that **look** correct and aren't, each with the reason it fails. The fixes
   are not shown: the student meets those again in the practice that follows, so the gallery trains the mistake,
@@ -920,7 +877,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — no production, and it is heavy with negatives; more than five traps in one gallery and the student
   remembers none of them.
 
-### `beforeAfterStrip - (A3, B3, C2, D2, E2, F2, G0, H2, I1, J1)`
+### `beforeAfterStrip - (best for: naturalness rather than correctness; the version the student produces against a native one; one point per pair · can't: show an ungrammatical "before" (that teaches an error as the starting point), and three pairs in a row is a lecture · purpose 8/10 · fun 4/10)`
 
 - **does** — One meaning written twice: the version a student at this level actually produces, then the version a
   native speaker would. Both are grammatical — the difference is naturalness, not correctness — and that is the
@@ -931,7 +888,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — must never show an ungrammatical "before", or it teaches an error as the starting point; and one pair
   makes one point — three pairs in a row is a lecture.
 
-### `soundGrid - (A3, B3, C1, D1, E3, F1, G3, H2, I1, J0)`
+### `soundGrid - (best for: one contrast in three positions; showing a contrast as a system rather than two words; listening and mouth work with audio on every example · can't: carry written form, and more than two sounds per row stops being a contrast and becomes a catalogue · purpose 8/10 · fun 4/10)`
 
 - **does** — One contrast, shown in three positions: the same pair of sounds at the start, in the middle and at the
   end of a word, with a `.listen` chip on each example. Teaches that the contrast is a system, not two words.
@@ -941,7 +898,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — it is listening and mouth-work only; no written form, and a grid with more than two sounds per row
   stops being a contrast and becomes a catalogue.
 
-### `stressBar - (A3, B3, C2, D1, E1, F1, G2, H1, I1, J0)`
+### `stressBar - (best for: the word's syllables with the stressed one marked; the rule that put the stress there; transfer to the next word · can't: promise a rule — English stress is only partly rule-governed, and a rule with more exceptions than cases is worse than "learn it by ear" · purpose 8/10 · fun 3/10)`
 
 - **does** — The word broken into syllables with the stressed one marked, and **the rule that put the stress
   there** — which is what makes it transferable to the next word instead of a fact about this one.
@@ -951,7 +908,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — English stress is only partly rule-governed, so a stress rule that has more exceptions than cases is
   worse than saying plainly that this one must be learned by ear.
 
-### `spellingSoundMap - (A3, B3, C2, D1, E3, F3, G2, H2, I1, J0)`
+### `spellingSoundMap - (best for: one sound and the several spellings that produce it; making reading predictable; the reverse direction of a sound grid · can't: promise rules — spelling is regular in patterns, and a claim that fails in the next paragraph is worse than "these four, no pattern" · purpose 8/10 · fun 3/10)`
 
 - **does** — The reverse direction of `soundGrid`: one sound, and the several spellings that produce it (or one
   spelling and the sounds it makes), each with an example. Makes reading predictable instead of memorised.
@@ -960,7 +917,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **fits** — half.
 - **can't** — English spelling is regular in patterns, not in rules; if the honest answer is "these four, and no
   pattern", write that, or the block teaches a rule that will fail in the next paragraph the student reads.
-### `scaleAxis - (A3, B3, C2, D2, E3, F1, G0, H1, I1, J0)`
+### `scaleAxis - (best for: placing the lesson's words on a named continuum; degree where a rule only gives two boxes; labelled ends · can't: be honest when two items could swap places — that axis is invented and must not ship · purpose 8/10 · fun 3/10)`
 
 - **does** — Items placed along a named continuum (`<weak>` ⟶ `<strong>`, `<formal>` ⟶ `<casual>`,
   `<always>` ⟶ `<never>`), with the ends labelled. Teaches degree where a rule would only give two boxes.
@@ -970,7 +927,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — it claims an order. If two items could swap places without changing meaning, the axis is invented and
   must not ship.
 
-### `collocationMatrix - (A3, B3, C3, D2, E3, F2, G0, H2, I2, J1)`
+### `collocationMatrix - (best for: what actually goes together; stopping translation-shaped errors; rows and columns as a map of the set · can't: explain a blocked combination — ticks are not reasons, and the reason belongs in a ruleCard beside it · purpose 9/10 · fun 3/10)`
 
 - **does** — Two sets of words as rows and columns, with ticks showing what actually goes together. This is the
   block that stops translation-shaped errors, because a pair that "means the same" in both languages lands in the
@@ -981,7 +938,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — ticks are not explanations; if a combination is blocked for a reason (not just by convention), a
   matrix hides it and the reason belongs in a `ruleCard` beside it.
 
-### `falseFriendSplit - (A3, B3, C2, D2, E2, F1, G0, H2, I1, J1)`
+### `falseFriendSplit - (best for: one first-language word that splits into two in English; the test that decides which; errors that survive knowing both words · can't: help a word with one clean equivalent — presenting it here invents a difficulty the language does not have · purpose 8/10 · fun 4/10)`
 
 - **does** — One word in the student's language that splits into two in English (or one English word that covers
   two things in the student's language), shown with **the test that decides which one** — a question the student can
@@ -991,7 +948,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **fits** — half; pair with the drill that makes the student choose.
 - **can't** — only for genuine splits; a word with one clean equivalent presented here invents a difficulty the
   language does not have.
-### `audienceRow - (A3, B3, C2, D2, E3, F1, G0, H2, I1, J2)`
+### `audienceRow - (best for: one message at three distances; register as a choice with a reason; setting up the exercise that makes the student pick · can't: walk the ladder — it presents the rungs, so on its own it is a poster about register · purpose 8/10 · fun 3/10)`
 
 - **does** — One message at three distances — a friend, an adult you know, an adult you don't — with **who you would
   say it to** as the label on each version. Teaches register as a choice with a reason, not as politeness points.
@@ -1001,7 +958,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — it presents the ladder without walking it; the student still needs a block that makes them pick the
   rung, or this is a poster about register.
 
-### `sceneCast - (A3, B3, C2, D2, E0, F1, G0, H1, I2, J3)`
+### `sceneCast - (best for: who, where, what has happened and what is at stake; letting a dialogue be one scene instead of four items; predicting which language the scene will use · can't: supply any language at all — worth nothing without the scene it sets, and a cast list that only names people predicts nothing · purpose 7/10 · fun 5/10)`
 
 - **does** — Who is talking, where, what has already happened between them, and what is at stake — the facts that
   predict which language the scene will use. This is the block that lets a dialogue or a roleplay be one thing
@@ -1012,7 +969,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — no language at all, so it is worth nothing without the scene it sets; and a cast list that only names
   people ("Ana, her brother") predicts nothing — the stakes have to be social.
 
-### `dialogueMoves - (A3, B2, C2, D2, E2, F2, G1, H3, I2, J2)`
+### `dialogueMoves - (best for: labelling each turn by what it does; showing that a conversation has parts; a phrase set per move · can't: produce a move — the labels are metalanguage, so a production drill must follow · purpose 8/10 · fun 4/10)`
 
 - **does** — A short exchange where each turn is labelled by **what it is doing** (`open` · `hedge` · `push back` ·
   `concede` · `close`), so the student sees that a conversation has parts and that the parts have their own phrases.
@@ -1021,7 +978,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **fits** — full; two columns of text plus labels.
 - **can't** — labels are metalanguage, not language; a student can label a hedge and still not produce one, so the
   block must be followed by a drill that makes them produce a move.
-### `chatSample - (A3, B2, C2, D3, E1, F3, G0, H3, I1, J3)`
+### `chatSample - (best for: the target form inside ordinary noise; meeting a form in the wild first; real threads with typos, emoji and ignored questions · can't: stay current, and a thread where every line is target language is a dialogue pretending to be a chat · purpose 7/10 · fun 7/10)`
 
 - **does** — A short thread as it actually appears on a screen, with the target language in the middle of ordinary
   noise: a typo, an emoji, two messages in a row, a reply that ignores the question. The student meets the form in
@@ -1033,7 +990,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   among several, never as the only presentation of a rule; and a thread whose every line is target language is a
   dialogue pretending to be a chat.
 
-### `vocabField - (A3, B3, C1, D2, E3, F1, G0, H2, I1, J2)`
+### `vocabField - (best for: arranging new words by the job they do in the situation; retrieval by meaning instead of a numbered list; a map a later block can point back to · can't: drill anything, and arbitrary headings make it a list with extra lines · purpose 7/10 · fun 4/10)`
 
 - **does** — The lesson's new words arranged by **the job they do in the situation** (people · things · actions ·
   what you say · how it went), not as a numbered list with translations. A field is easier to use than a list
@@ -1044,7 +1001,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — no drill, and a field with arbitrary headings is a list with extra lines; every cluster name has to be
   a situation the student will actually be in.
 
-### `storyStrip - (A3, B3, C2, D3, E1, F3, G0, H3, I1, J2)`
+### `storyStrip - (best for: language carried inside a story; scenes that each teach something new; later blocks referring back by scene name · can't: use length as depth — if the scenes stop teaching, the strip is decoration that pushes practice below the fold · purpose 7/10 · fun 7/10)`
 
 - **does** — Three or four short scenes carrying one continuous situation, with the target language embedded in
   each and getting slightly harder. The student learns the language *inside* a story instead of meeting it as
@@ -1055,7 +1012,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — a story is long, and length is not depth: if the scenes do not each teach something the previous one
   did not, it is decoration that pushes the practice below the fold.
 
-### `melodyContour - (A3, B3, C2, D2, E1, F1, G2, H2, I1, J0)`
+### `melodyContour - (best for: putting intonation on a printed page; a drawn line showing where the voice moves; one-word labels for the shape · can't: prove anything on its own, and without the clip it is an abstraction · purpose 7/10 · fun 4/10)`
 
 - **does** — One line of text with a **drawn line over it** showing where the voice rises and falls, and a one-word label
   under the shape (`finished` · `waiting` · `asking` · `doubt`). It is the only way to put intonation on a printed page:
@@ -1066,7 +1023,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — it shows the shape and proves nothing; and a contour over a line the student cannot hear is an abstraction —
   the clip has to be there too, or this is decoration.
 
-### `beatGrid - (A3, B2, C2, D1, E1, F1, G2, H2, I1, J0)`
+### `beatGrid - (best for: even beats with syllables squeezed between them; the thing prose cannot make students believe; one line at a time · can't: stack two lines — they invite the reading that both are equal length, the opposite of the point · purpose 8/10 · fun 3/10)`
 
 - **does** — A sentence laid onto a row of even beats, unstressed syllables squeezed into the cells between them, with the
   stressed syllable marked. Shows the thing students never believe from prose: the beats are evenly spaced and the words
@@ -1077,7 +1034,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — one line per grid; two lines stacked invite the student to read them as equal length, which is the opposite
   of the point.
 
-### `stanceScale - (A3, B3, C2, D1, E3, F1, G0, H1, I1, J0)`
+### `stanceScale - (best for: strength on one named axis; including the gaps where nothing sits; undoing a synonym assumption · can't: hold words that differ in kind rather than degree — the axis is then a lie and a matrix is the honest shape · purpose 8/10 · fun 3/10)`
 
 - **does** — An axis, and the lesson's words placed on it (`<weak>` — `<neutral>` — `<strong>`), including the gaps where
   nothing sits. Position is the teaching: two words that looked like synonyms are shown to be neighbours or not.
@@ -1087,7 +1044,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — an axis implies a single dimension; if two of the words differ in kind rather than degree, the axis is a lie
   and a `collocationMatrix` is the honest shape.
 
-### `routineMap - (A3, B2, C2, D1, E2, F1, G0, H2, I2, J2)`
+### `routineMap - (best for: a routine drawn as a path with branches; both routes and where each ends; the shape a script tests · can't: choose the route for the student — it shows the map, and the judgement belongs to the practice after it · purpose 8/10 · fun 4/10)`
 
 - **does** — A routine drawn as a **path with branches** rather than a list: the moves in order, and at the points where the
   exchange can go two ways, both ways shown and where each ends. This is the shape `placeScript` tests and prose cannot
@@ -1098,9 +1055,8 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — it is a map of one routine in one setting; and it shows the route, never which route to take — that is the
   judgement the practice block after it has to test.
 
----
 
-### `rhymeCoda - (A2, B2, C2, D2, E2, F2, G2, H2, I1, J1)`
+### `rhymeCoda - (best for: finding which lines rhyme; the same sound under different spellings; pattern-hunting in real text · can't: carry a sound the student cannot yet hear, and never rely on a rhyme that lives in a performance the page does not have · purpose 7/10 · fun 6/10)`
 
 - **does** — Lines from one lyric are on the page; the student marks which two rhyme, then decides what letters spell
   the shared sound. Finding a pattern in real text is a different job from judging a supplied pair, and the second
@@ -1114,7 +1070,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — it needs lines whose rhyme is visible in the spelling, so it cannot carry a sound the student cannot
   yet hear, and it must never be used with a lyric whose rhyme depends on a performance the page does not have.
 
-### `songStructure - (A3, B2, C3, D2, E2, F3, G0, H3, I2, J2)`
+### `songStructure - (best for: naming a lyric's parts by what they do; repetition as a decision rather than filler; the line that comes back changed · can't: be listening — there is no audio, so presenting it as listening is dishonest, and it assumes comprehension rather than teaching words · purpose 6/10 · fun 5/10)`
 
 - **does** — A lyric laid out as text with its parts unlabelled; the student names each part by what it *does*
   (returns, turns, closes) and marks the line that comes back changed. Repetition is taught as a decision rather than
@@ -1127,7 +1083,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — no audio and no song: this is the shape of a text, and presenting it as listening is dishonest. It also
   cannot teach vocabulary — it assumes the student already understands the lines.
 
-### `barCount - (A3, B2, C2, D2, E1, F1, G2, H2, I1, J0)`
+### `barCount - (best for: counting the beats a line lands on; turning rhythm into a number the student can check; where the count breaks · can't: measure anything — a page carries no metronome, so the count is the lesson's judgement, and it says nothing about meaning · purpose 6/10 · fun 3/10)`
 
 - **does** — Count the beats a line actually lands on, and where the count breaks. Rhythm becomes a number the
   student can check, which is what "say it with stress" fails to give them.
@@ -1139,7 +1095,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — speech only: a page cannot carry a metronome, so the count is the lesson's judgement and the block must
   not present itself as measuring anything. It teaches nothing about meaning.
 
-### `moodTrack - (A2, B2, C3, D3, E2, F2, G0, H3, I2, J3)`
+### `moodTrack - (best for: justifying a mood in one written line; the vocabulary of how a track sounds; defending a judgement in language · can't: play anything — grading it as listening would be a lie, and it cannot teach genre names it never states · purpose 6/10 · fun 6/10)`
 
 - **does** — A scene, plus three short descriptions of how a track sounds; the student picks the one that fits and
   defends it in one written line. The defence is the work: mood words are easy to guess and hard to justify.
@@ -1150,7 +1106,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — nothing is played. It is vocabulary and justification, and grading it as a listening task would be a
   lie; it also cannot teach genre names it never states.
 
-### `genreDoc - (A3, B2, C3, D2, E2, F3, G0, H3, I2, J3)`
+### `genreDoc - (best for: functional reading of a real artefact; questions only that table can answer; what it costs, excludes or requires · can't: test production, and an invented artefact teaches a convention that does not exist · purpose 8/10 · fun 4/10)`
 
 - **does** — A real-world artefact rebuilt as a small table — a menu, a ticket, a timetable, a receipt, a form — plus
   questions only it can answer: what it costs, what it excludes, what happens if you are late, what you must bring.
@@ -1164,7 +1120,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   convention that does not exist. It also needs the lesson to name what the artefact is for, or the questions are
   guesswork.
 
-### `signScan - (A3, B2, C2, D1, E2, F3, G0, H3, I1, J3)`
+### `signScan - (best for: what a notice does to you (forbids, permits, warns); naming the word doing the work; a set of notices from one place · can't: ask force and politeness at once — those are two axes and a block that merges them cannot be marked · purpose 8/10 · fun 4/10)`
 
 - **does** — A set of notices from one place, each with a different force; the student matches each to what it does
   to them — forbids, permits, warns, requests — and then names the word doing the work.
@@ -1174,7 +1130,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — recognition only, and it must keep two axes apart: how hard a notice is and how polite it is are
   different questions, and a block that asks both at once cannot be marked.
 
-### `formFill - (A3, B2, C2, D2, E1, F3, G0, H3, I1, J3)`
+### `formFill - (best for: the conventions of a form; details into the right boxes; a language-light slot in a course of sentences · can't: carry a lesson (near-zero language load), and it is only honest when the lesson stated the convention rather than assuming it · purpose 8/10 · fun 3/10)`
 
 - **does** — The other direction from `genreDoc`: a blank artefact and a set of details to put in the right boxes —
   the shape of a name, an order for a date, a code, a signature. The conventions are the lesson; the language is
@@ -1187,7 +1143,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — near-zero language load, so it cannot carry a lesson on its own, and it is only honest when the
   convention was stated by the lesson rather than assumed by the author.
 
-### `measureLocal - (A3, B3, C2, D1, E2, F2, G0, H2, I2, J3)`
+### `measureLocal - (best for: date, clock, money, distance and temperature conventions; converting both ways; spotting an ambiguous reading · can't: keep language in front — arithmetic crowds it out past five rows, and it teaches nothing about how anyone speaks · purpose 7/10 · fun 4/10)`
 
 - **does** — The units an artefact uses against the ones the student lives in: order of a date, clock convention,
   money, distance, size, temperature. The student converts both ways and then marks which reading is ambiguous.
@@ -1198,7 +1154,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — arithmetic crowds out language quickly — keep it to five rows — and it teaches nothing about how anyone
   actually speaks.
 
-### `tabooMap - (A2, B2, C3, D2, E2, F1, G0, H3, I1, J3)`
+### `tabooMap - (best for: which question is off-limits in a given situation; rewriting one so it becomes askable; pragmatics as a boundary · can't: keep itself safe — given a people instead of a place and a person it writes a stereotype into the page and signs it · purpose 6/10 · fun 5/10)`
 
 - **does** — Given situations the lesson has already written, the student marks which question is off-limits in each
   and rewrites one so it becomes askable. Pragmatics as a boundary rather than a list of polite phrases.
@@ -1211,7 +1167,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   scene as a national trait instead of a specific situation, the block writes a stereotype into a page and signs it.
   It is only usable when the scene is *a place and a person*, never a people.
 
-### `accentVariant - (A3, B2, C2, D2, E3, F2, G1, H3, I1, J3)`
+### `accentVariant - (best for: tolerance of variation; matching a form to the material it came from; killing the question "which one is correct" · can't: come from one voice — variants must be reproduced in writing, and it must never be phrased as a correctness question · purpose 7/10 · fun 5/10)`
 
 - **does** — The same word or line as it appears in material from different places; the student matches each form to
   the material it came from and marks that no form is an error. What a learner needs is tolerance, and tolerance is
@@ -1225,7 +1181,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
   reproduce them in writing. And it must never be phrased as "which is correct" — the block exists to kill that
   question, not to ask it.
 
-### `idiomOrigin - (A2, B2, C3, D3, E1, F1, G0, H3, I1, J3)`
+### `idiomOrigin - (best for: the idiom, its literal reading and its source together; making the literal trap stick; one lexical item at a time · can't: generalise, and the origin is often folk etymology — if the source is not certain it must say "one story is" · purpose 7/10 · fun 7/10)`
 
 - **does** — Three things at once: the idiom, what it literally says, and where it came from. Then one line where the
   literal reading would be wrong. The origin is what makes the literal trap stick, which is why this is not
@@ -1236,7 +1192,7 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **can't** — origins are frequently folk etymology. If the source is not certain the block must say "one story is" —
   an invented origin is worse than none. It is also one lexical item at a time and never generalises.
 
-### `humourFlag - (A2, B2, C3, D3, E2, F1, G0, H3, I2, J3)`
+### `humourFlag - (best for: naming what makes a line funny; what a joke loses in translation; one sharp moment in a lesson · can't: be a rule — funny is not generalisable and explaining a joke can kill it; never grade taste as accuracy · purpose 6/10 · fun 8/10)`
 
 - **does** — A line that is meant to be funny, and the student marks what is doing the work — a pun, an
   understatement, a reversal, a pause — then names what it would lose if translated.
@@ -1245,4 +1201,231 @@ Interactive activities. Each one drives ordinary `.qitem`s, so the answer that s
 - **vary** — from naming the mechanism to predicting whether a second line will land.
 - **can't** — funny is not a rule, and explaining a joke can kill it, so use it once per lesson at most. It must never
   be graded as though taste were accuracy.
+
+---
+
+# 4. Visual — drawn blocks (DRAFTS, not in the menu yet)
+
+**Built and on screen.** All nine are prototyped as real markup on `qa/preview-blocks.html` under their own
+`<section class="qa-item" id="item-NAME">`, with the drawing CSS in `qa/preview-visual.css` (`.vz-*`, one file, so
+it moves into `style.css` as a piece if a shape is kept). Geometry-checked by `qa/overflow.mjs --shot-url
+qa/preview-blocks.html` (no OVERFLOW / ESCAPE), and every figure was inspected in a screenshot. Still drafts —
+no A–J scores — but no longer paper.
+
+## Depth: the rule every drawn figure now follows
+
+A flat drawing cannot show *in*. Two panels of a 2-D box — a dot outside, a dot inside — are the same picture with the
+dot in a slightly different place, so `spaceScene` was teaching nothing until its figures were redrawn axonometric.
+Depth in a flat figure is carried by three cues, in this order of importance: **occlusion** (the near face is painted
+over what is inside, so a ball in an open tin loses its bottom while a ball on the closed lid keeps its whole circle —
+this is the cue that separates in from on), **the opening** (an ellipse filled dark says you are looking into
+something, without a single perspective line), and **a contact shadow** (an ellipse the object sits on, not a circle
+floating in space). The primitives are `.lid`, `.side`, `.cav`, `.shadow`, `.screen`; every figure that needs depth
+draws its near face last for exactly that reason.
+
+Redrawn on the second pass: `spaceScene` (a tin, closed and open), `massBasket` (books as boxes with top and side
+faces, and a broken boundary for the mass), `slotBlocks` (bricks lit on top and dark underneath), `voiceSeesaw` (a beam
+and a fulcrum, replacing a row of three boxes that showed no movement at all), and the two flat parallelograms in
+`literalSplit` (the ice slab, and the tin of beans, now a tipped cylinder). What stays flat on purpose: `ruleTree`,
+`timelineBridge` and `levelGauge` are abstract diagrams where depth would add noise, and `mouthCut` is a sagittal
+section, which is a genuinely 2-D object.
+
+## Why these headers are `####` and not `###`
+
+- The browse surface is `^### ` and "the scores are the whole of it". A `###` heading is a promise of a complete
+  contract (`does` / `markup` / `fits` / `vary` / `can't`); these are drafts, so they carry no scores and sit below the
+  surface until one is finished. Promoting a draft = `####` to `###`, add A–J, write the five fields.
+- What each draft adds is a *shape* (a drawing), not a capability: `routineMap` already ships "a `.chart` or a `.panel`
+  with an inline `<svg>` of boxes and connectors", so drawn blocks are inside the existing contract.
+
+## What every draft here must obey
+
+- **The drawing ends in a control.** `.qitem` radios, `input.gap` or an authored `textarea` — nothing else saves. A
+  slider, a hotspot, a hover-reveal or a `<details>` would look interactive and score nothing, so a gauge or a level can
+  only ever be *display*, and the scored answer stays a radio or a gap.
+- **Art is CSS, inline SVG, or a local file — never a URL** (Build Constraint 2). "A picture from outside" therefore
+  means *downloaded into this repo*; the repo ships exactly one image today (`logo.png` at the root, referenced as
+  `../logo.png` from each track folder), so the first vendored figure also sets the folder and path convention.
+- **No CSS change.** `style.css` has no rule for a content `<svg>` (the only `svg` rules are per-game: `.target svg`,
+  `.g4-* svg`), so an authored `<svg viewBox="…">` sized to its parent scales to `.itemsize` / `-half` / `-third` as it
+  is. A new class is a stylesheet edit and a sign-off — and `qa/overflow.mjs` enumerates the block selectors, so a new
+  top-level class has to be added there or it is never width-checked.
+- **Label in HTML, draw in SVG.** SVG text does not reflow, so words live in the markup beside the drawing and only
+  geometry lives inside it.
+
+#### `ruleTree` — the relative-pronoun decision tree (draft)
+
+- **draws** — a root question, three yes/no nodes, leaves that are choices (`who` · `which/that` · `whose` · no pronoun
+  at all), and one leaf that is deliberately "either — and here is what changes".
+- **built from** — the `routineMap` shape at a larger scale: one `.panel`, one inline `<svg>` of boxes and connectors,
+  labels as HTML beside the nodes.
+- **ends in** — 3–5 `.qitem`s: a sentence pair as `.qstem`, the leaves as radios. The tree comes first, because FORMAT
+  forbids asking for a judgement on an axis the page has not defined.
+- **fits** — full only; `routineMap` already records that a branch diagram at a third is a scribble. Three levels max.
+- **the risk** — a real `which`/`that` choice is register and rhythm, not logic. Any leaf that pretends it is binary
+  teaches a rule that fails in the next paragraph the student reads.
+
+#### `literalSplit` — an idiom as literal scene vs figurative meaning (draft)
+
+- **draws** — one row, two halves: the absurd literal reading on the left, what it actually means plus one real usage on
+  the right.
+- **built from** — `.itemrow` of two `.panel`s (`beforeAfterStrip` already pairs panels this way) plus one small inline
+  `<svg>` on the left; the literal reading is also written as a sentence, so the block still teaches if the drawing is cut.
+- **ends in** — one `input.gap` per idiom, used correctly in a stated situation; or radios — which of two situations a
+  speaker would say this in.
+- **fits** — half each, side by side. Three idioms is one block; five is a catalogue.
+- **the risk** — a drawing that has to be explained is a riddle, not a mnemonic, and the pun does not survive translation:
+  the picture must carry the absurdity alone. `idiomOrigin` already owns idiom-plus-origin, so this must not repeat it.
+
+#### `timelineBridge` — one axis, three sizes (draft → built in `qa/preview-blocks.html`)
+
+- **draws** — one time axis placed by a single `--now` value, with four kinds of mark: a **span** whose end says what the
+  form claims (open arrow = still true now, closed bar = the period is over), a **point** for a single moment, a **wall**
+  for a deadline, and a **hatch** for time outside the sentence. Present perfect is the span that reaches `now`; simple
+  past is the same span stopping early, with the leftover drawn as a gap to `now`. The gap is the lesson: it is what the
+  student hears when they say `I saw it twice` to mean `I've seen it twice`.
+- **built from** — pure CSS geometry on inline custom properties (`--now --a --b --at`), no `<svg>`: `.tl` (full, labelled
+  rows), `.tl--half`, `.tl--third`, and `.tl--stamp`, which is small enough to sit **inside an answer option**. Nothing in
+  the component is a control, so the radio or gap beside it is always what saves.
+- **ends in** — two jobs the size decides. Full: radios choosing the form for scenes that differ only in whether the span
+  reaches now. Third: the options **are** timelines (`a bar into now` / `a short closed bar` / `one dot`), so the student
+  picks a shape and reads its name second — a naming question that cannot be answered by remembering a rule.
+- **fits** — all three, and that is the point: full for the comparison, half for a past inside a past (`was cooking` /
+  `rang`) or a bar that must reach a deadline wall, third inside the options.
+- **the risk** — a timeline separates *where* an event sits and *whether* it reaches now, and nothing else. It cannot show
+  register, frequency or modal choice, and it cannot separate two forms that would draw the same shape — when that
+  happens the block is wrong and the gap belongs in a sentence.
+- **also demonstrated on** — `since` vs `for`, which no translation distinguishes: one word measures a length (a span),
+  the other plants a mark (a point).
+- **built as a block, then rebuilt as an element** — the usable version is `inlineTimeline` below: the same
+  axis with no frame and no heading, so it can sit *under one sentence* inside a block that already exists.
+  A timeline that has to be its own block is a poster; a timeline that can be dropped under the sentence it
+  explains is a teaching tool. This entry stays for the three-size demonstration.
+
+#### `inlineTimeline` — the same axis as an IN-BLOCK element (built in `qa/preview-blocks.html`)
+
+- **draws** — one horizontal axis where the only two numbers are `--now` (where the speaker stands) and the
+  extent of a claim. Words in the sentence are *linked* to marks by a `data-k` letter, drawn twice: as a
+  superscript on the word and at the head of its mark, so the pairing survives greyscale, print and a screen
+  reader. Colour is the fast path, never the only one.
+- **two shapes for the two claims that Portuguese collapses** — `recent`: the bar reaches `now` and its left
+  end **dissolves**, because *lately* names no start (`I've been sick lately`); `field`: a hatched band
+  **above** the line spanning birth to now, with the event as a dot inside it, because *in my life* is a
+  container you are somewhere inside, not a duration (`I've been to Disney World`). Drawn as a field rather
+  than a length, it cannot be misread as "still happening", which is the mistake.
+- **built from** — `.tlx` + `.tlx-say` + `.tlx-axis`, marks placed by `--a --b --at`; `.tlx-mark`
+  (open/closed end, `data-form="recent"` for the fade), `.tlx-band`, `.tlx-dot`, `.tlx-tick`, `.tlx-wall`,
+  `.tlx-now`, plus `.tlx-field` / `.tlx-under` because a mark's *meaning* decides whether it sits on, above
+  or below the line. No `<svg>`, no script, no frame, no width of its own.
+- **ends in** — two interactive modes that both save: `.tlx-pick` (which **word** carries the claim? the
+  radio lives inside the word's label, so the answer is the word) and `.tlx-build` (place the timeline
+  yourself: three candidate axes, one radio on each shape, so the student decides what the sentence claims
+  before they have a name for it). Everything else is display-only and answered by the block's own radios or gaps.
+- **fits** — full, half **and third**: it takes the width of whatever host it is dropped into, which is why it
+  is an element and not a block. Demonstrated inside a question stem, a dialogue line and a chart note.
+- **the risk** — the same limit as last entry, and it is load-bearing: an axis separates *when* and *whether it
+  reaches now* and nothing else. Two answers that would place the same shape teach nothing. The guard is a
+  sentence in the block itself, not a hope.
+
+#### `spaceScene` — at / on / in as a point, a surface, an enclosure (draft)
+
+- **draws** — three scenes across one row: a dot at a junction (`at`), a marker sitting on a flat surface (`on`), a shape
+  inside a closed outline (`in`). Then the motion pair as its own row: ball → box (`to`) beside ball → *inside* box (`into`).
+- **built from** — `.itemrow[data-cols="3"]` of three `.itemsize-third` panels, one small inline `<svg>` each; the arrows
+  are a `<path>` with a `<marker>`. `.itemsize-third` is already 391px, so three fit a row with no CSS change.
+- **ends in** — radios pairing a sentence with the picture that matches it, then one `input.gap` per new scene of the
+  same type.
+- **fits** — three thirds, then the motion pair as two halves.
+- **the risk** — `prepositionScene` covers this in words and warns that a translation table gets `in`/`on` wrong; the drawn
+  version must show the concrete scene and never state at/on/in as a universal rule (at the corner / on the corner /
+  in the corner all exist).
+
+#### `mouthCut` — a real plate, marked on (draft → built in `qa/preview-blocks.html`)
+
+- **draws** — a vendored public-domain anatomy engraving, not an authored silhouette, with our teaching drawn **on top** in
+  the image's own pixel space: numbered pins for the four places that matter (ridge, hard roof, soft roof, throat wall),
+  then the same mouth crop twice carrying one instruction each — the back of the tongue travelling up to the soft roof for
+  pt-BR `rr`, and a **measurement across the gap** at the tip for English `r`. A mark lands on a feature because it is
+  positioned in the file's coordinates, not by eye.
+- **built from** — `assets/speech-organs.png` and `assets/speech-organs-mouth.png` (provenance and licence in
+  `assets/README.md`), an `<img>` plus an absolutely-positioned `<svg class="ov">` whose `viewBox` equals the file's pixel
+  size, and `.vz-pin` markers in HTML percentages so the key is real text. Every stroke is drawn twice — white halo,
+  then colour — because a single line on an engraving is a line you have to hunt for.
+- **ends in** — radios on *where the sound happens* (four scenes, including the diagnostic `very` → `veddy`) plus two gaps;
+  the plate itself is never scored.
+- **fits** — full width or two halves; the pins work at any rendered size because the two layers share a box.
+- **the risk** — anatomy is not instruction. A correct label still does not tell a student what to do, so the arrow, the
+  measurement and the find-it-yourself steps carry the teaching and the plate only supplies the truth of the ground.
+- **generalises to** — any photograph or diagram a lesson wants to talk about: a street scene for prepositions, a menu, a
+  chart. The primitive is *image + overlay + numbered key*, and it is the cheapest way to get a real-world visual into a
+  block without drawing it badly.
+
+#### `massBasket` — countable units vs an undivided mass (draft)
+
+- **draws** — left: two bounded units with `1` and `2` under them (books). Right: one amorphous block (water, luggage,
+  advice) plus three container outlines, each labelled with the quantifier that divides it (`a bottle of`, `a piece of`,
+  `a slice of`).
+- **built from** — `.itemrow` of two halves; the mass is an inline `<svg>` blob or one CSS shape, the containers are
+  outlines. `catchBasket` already exists as the *drill* (drag a word into a pot) — pair it, do not rebuild it.
+- **ends in** — radios (countable / not) per word, then one `input.gap` per quantifier. `collocationMatrix` is the stricter
+  version when two quantifiers compete for one noun.
+- **fits** — half each, side by side; a full-width diagram of two boxes is dead space.
+- **the risk** — the picture shows a *tendency*: coffee, paper and experience are both, and `luggage` has no clean
+  Portuguese counterpart. The panel shows the item, never the category name as a rule.
+
+#### `slotBlocks` — a clause as colour-coded bricks (draft)
+
+- **draws** — the sentence as bricks, one per function, with a legend line directly above it (`S` subject · `V` verb ·
+  `O` object) and the letter inside each brick as well as the colour.
+- **built from** — inline `<span>`s with an inline `style` for the fill inside a `.panel` (`.chips` is the wrapping-pill
+  shape if the bricks must wrap). Colour comes from the block, so there is no stylesheet edit and no per-track palette drift.
+- **ends in** — gaps for the missing brick's word, or radios for which brick is the subject. `formulaFrame` is the same
+  shape without colour, so this earns its slot only where the *category* is what the lesson teaches.
+- **fits** — half; one clause plus a legend does not fill a full row.
+- **the risk** — colour alone fails accessibility and dies in the `@media print` path, which is why every brick carries its
+  letter; and the letters must match whatever the lesson's grammar section already used.
+
+#### `voiceSeesaw` — active to passive as positions, not as two sentences (draft)
+
+- **draws** — one bar, two rows. Active row: the actor large on the left, an arrow running to the small object on the right.
+  Passive row: the object has moved to the left, a `be + V3` helper has appeared over the verb, and the actor sits at the far
+  right behind a translucent `by` screen.
+- **built from** — two stacked `.panel`s with the changed element drawn in both rows and a dashed leader between its two
+  positions (or one inline `<svg>`). `beforeAfterStrip` is the pair without the movement, so the leader line is the whole
+  difference between them.
+- **ends in** — `input.gap`s converting a given sentence, plus one item where the passive is the *wrong* choice — that
+  judgement is the lesson, not the transformation.
+- **fits** — full; three positions plus a helper need the width.
+- **the risk** — a seesaw implies the conversion is always available, when the real content is "passive when the actor is
+  unknown or unwanted". Without that item the block teaches a transformation nobody asked for.
+
+#### `levelGauge` — a filled gauge in front of an existing scale (draft)
+
+- **draws** — the same axis `scaleAxis` and `stanceScale` already draw, with a filled level or a marker instead of a bare row
+  of cells: modal certainty, adverb frequency, or a register gradient from faint disagreement up to open contempt.
+- **built from** — an inline `<svg>` track plus one filled bar plus an optional marker; the fill is authored data. A real
+  `input type="range"` cannot ship: only radios, `input.gap` and `textarea` save, so a slider would look interactive and score
+  nothing.
+- **ends in** — radios ("which rung fits this hearer") with the hearer in the `.qstem`; that is `directnessDial`'s shape, so
+  the gauge is its display half.
+- **fits** — full; a continuum needs the width, as `scaleAxis` already says.
+- **the risk** — this is the idea on the list that is mostly already built (`scaleAxis`, `stanceScale`, `scaleChoice`, plus
+  `politeLadder` and `directnessDial`), so the honest version is a level field on `scaleAxis`, never a ninth scale block. And
+  a disagreement gradient's top rungs are register and risk, not vocabulary: they belong to a track whose persona allows them,
+  and the block has to show *who you may say it to*, not how far up the scale it sits.
+
+## Outside art — what exists, and the three conditions on it
+
+- **Vendored, never hotlinked.** Build Constraint 2 forbids a run-time fetch, so an outside picture means download the file
+  into this repo. There is no `assets/` folder today and every page references `../logo.png`; the first vendored figure sets
+  that convention, and it needs a caption carrying its source.
+- **The licence travels with the file.** Checked against the Wikimedia Commons API while drafting: `File:Adultvocaltract.jpeg`
+  — mid-sagittal section with the tongue labelled `T`, CC BY-SA 4.0, attribution "Cengst"; `File:Tract.gif` — constriction
+  areas of the vocal tract, CC BY-SA 3.0, attribution "Megsmith". Both require attribution *and* a licence link on the page,
+  and share-alike means a recoloured or highlighted derivative must be released under the same licence — which is exactly
+  what `mouthCut` wants to do to it. An old public-domain plate of the same region avoids the share-alike at the cost of an
+  anatomically dated drawing.
+- **A real anatomical plate teaches anatomy, not articulation.** Nothing licensed shows where *this* student's tongue must
+  go; the arrow, the highlighted path and the Portuguese instruction line do that. So draw the schematic and use outside art
+  as the accuracy reference — or as one optional full-width plate if the schematic proves unreadable at full width.
 

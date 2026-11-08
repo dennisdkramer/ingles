@@ -12,7 +12,7 @@
    Levers (all optional, on the `.game` element):
      data-game      which presentation (one per PLUGINS key: catchBasket, whackMole, stackDrop,
                    flapGate, skeetRange, mineGrid, wordleBoard, crosswordBoard,
-                   echoPads, bingoCard, ladderRun, bossRaid)
+                   echoPads, bingoCard, ladderRun, bossRaid, trainOrder)
      data-time      ms per item, 0 = no deadline   (0)   ← this is difficulty
      data-limit     seconds for the whole run, 0 = off (0)
      data-retry     0 | 1   the run may be repeated at all (1). A game that TRAINS leaves the default on;
@@ -44,7 +44,7 @@
    afterwards, because the run is over for real. A presentation may additionally call `r.finish()`
    itself (flapGate does, from its flight loop) — `finish` is idempotent, so the second call is a
    no-op rather than a second score line.
-   A presentation may also claim two things about the stage it draws:
+   A presentation may also claim these things about the stage it draws, and one about its end:
      view.ownsPrompt      it draws the item's own stem itself (a chip, a clue panel, a tower block), so
                           the runner does not draw the same words a second time on the HUD line
      PLUGINS.x.timeScale  a static number; the block's `data-time` is multiplied by it, because that
@@ -54,6 +54,12 @@
                           bar, nothing to expire. `data-time` on such a block is ignored rather than fought
      PLUGINS.x.noShuffle  true: the game's OWN order is the content — echoPads' sentence is read word by
                           word — so the items are never shuffled, whatever `data-shuffle` says
+     view.finale(done)    the run ends with a picture of its own ending, and only the presentation knows
+                          when it has finished: `finish()` keeps the stage, the run's score card and the
+                          hidden intro until `done()` is called, so the train is still leaving the yard
+                          when the last answer lands (trainOrder). It plays its own end cue — the runner
+                          plays no win sting — and a throw settles the stage like any other ending
+
    Test hook: window.__G4 lists live runners; each exposes `_test`
    (start / step / pick / expire / finish / state) so a headless test drives the state machine.
 ------------------------------------------------------------------------------------------------ */
@@ -163,6 +169,41 @@ window.GAMES4 = (function () {
       },
       /* mineGrid: the snake's warning — a short breathy hiss, two low saws against each other */
       hiss: function (on) { if (!on) return; tone(220, 190, 'sawtooth', 0.03); tone(180, 240, 'sawtooth', 0.025); },
+      /* trainOrder: a coupling closing — a wooden knock with a metal ring on top of it */
+      clank: function (on) {
+        if (!on) return;
+        tone(520, 70, 'square', 0.035);
+        setTimeout(function () { tone(1180, 60, 'sine', 0.028); }, 22);
+      },
+      /* trainOrder: the guard's whistle — two short, then one long, in the same breath */
+      horn: function (on) {
+        if (!on) return;
+        tone(494, 150, 'sine', 0.05);
+        setTimeout(function () { tone(440, 330, 'sine', 0.05); }, 170);
+      },
+      /* trainOrder: the wheels getting moving — five beats that quicken as they go */
+      chuff: function (on) {
+        if (!on) return;
+        [0, 150, 280, 390, 480].forEach(function (d, i) {
+          setTimeout(function () { tone(96 + i * 6, 90, 'sawtooth', 0.03); }, d);
+        });
+      },
+      /* trainOrder: the departure whistle — a rise, a top, a fall, which is what makes it read as a
+         train and not as a beep */
+      sweep: function (on) {
+        if (!on) return;
+        tone(392, 130, 'sine', 0.045);
+        setTimeout(function () { tone(523, 160, 'sine', 0.05); }, 120);
+        setTimeout(function () { tone(392, 260, 'sine', 0.045); }, 290);
+      },
+      /* trainOrder: the wreck — a low boom with falling steel over it */
+      crash: function (on) {
+        if (!on) return;
+        tone(70, 460, 'sawtooth', 0.06);
+        setTimeout(function () { tone(122, 220, 'square', 0.03); }, 60);
+        setTimeout(function () { tone(1500, 90, 'square', 0.02); }, 120);
+        setTimeout(function () { tone(88, 300, 'sawtooth', 0.03); }, 260);
+      },
       /* whackMole: the mole's squeak — a quick high chirp that rises and cuts off */
       squeak: function (on) {
         if (!on) return;
@@ -398,6 +439,25 @@ window.GAMES4 = (function () {
       + '<rect x="196" y="34" width="4" height="18" rx="2"/></g>'
       + '<path d="M40 22q14-10 30-2t30 0" stroke="#fdfaf2" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/>'
       + '<path d="M112 46q16-12 34-2" stroke="#2a1c10" stroke-width="4" fill="none" stroke-linecap="round" opacity=".55"/>'
+      + '</svg>',
+    /* trainOrder's locomotive, drawn facing LEFT: the train runs out of the yard to the left, so the
+       engine is at the front of it and the only way out is across the front of the bridge */
+    loco: '<svg viewBox="0 0 100 74" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false">'
+      + '<g stroke="#1a2127" stroke-width="2">'
+      + '<circle cx="24" cy="63" r="10" fill="#39434e"/><circle cx="24" cy="63" r="3.4" fill="#98a4b1"/>'
+      + '<circle cx="54" cy="63" r="10" fill="#39434e"/><circle cx="54" cy="63" r="3.4" fill="#98a4b1"/>'
+      + '<circle cx="82" cy="63" r="10" fill="#39434e"/><circle cx="82" cy="63" r="3.4" fill="#98a4b1"/>'
+      + '</g>'
+      + '<rect x="6" y="27" width="58" height="24" rx="5" fill="#4a5a6a" stroke="#28323c" stroke-width="2"/>'
+      + '<rect x="56" y="14" width="38" height="37" rx="3" fill="#3d4b59" stroke="#28323c" stroke-width="2"/>'
+      + '<rect x="62" y="20" width="18" height="13" rx="2" fill="#cfe9f5" opacity=".85"/>'
+      + '<path d="M52 14h46l-4-6H56z" fill="#2f3a45" stroke="#232c35" stroke-width="2"/>'
+      + '<path d="M56 51h42v5H56z" fill="#8a4d2c" stroke="#5c3018" stroke-width="2"/>'
+      + '<rect x="10" y="12" width="12" height="16" rx="2" fill="#2f3a45" stroke="#232c35" stroke-width="2"/>'
+      + '<rect x="7" y="8" width="18" height="5" rx="2" fill="#243039" stroke="#1a2127" stroke-width="1"/>'
+      + '<circle cx="38" cy="27" r="6" fill="#b9854c" stroke="#7d5527" stroke-width="2"/>'
+      + '<path d="M6 51l-5 8h12z" fill="#b9854c" stroke="#7d5527" stroke-width="2"/>'
+      + '<rect x="4" y="47" width="4" height="6" fill="#2f3a45"/>'
       + '</svg>'
   };
 
@@ -421,7 +481,10 @@ window.GAMES4 = (function () {
       }
       return {
         item: it, prompt: stem ? stem.textContent.trim() : '',
-        say: listen ? listen.getAttribute('data-say') : '', opts: opts, key: key
+        say: listen ? listen.getAttribute('data-say') : '', opts: opts, key: key,
+        /* the authored element itself: a presentation that groups its items by an attribute of the
+           source (trainOrder's `data-train`) reads it here rather than guessing from the prompt */
+        el: it
       };
     });
   }
@@ -640,6 +703,7 @@ window.GAMES4 = (function () {
     this.clearPoster();
     this.running = true; this.replaying = false;
     this.dead = false;
+    this.settled = false;
     this.score = 0; this.best = 0; this.idx = 0; this.missed = []; this.livesTop = 0;
     var list = this.items.slice();
     /* shuffle is the default, but a game whose CONTENT is the item order (echoPads: one word per item,
@@ -817,6 +881,18 @@ window.GAMES4 = (function () {
       SFX.hit(this.sound);
     } else {
       this.missed.push(it);
+      /* A board game's answer IS a choice among the item's own options — trainOrder's car is the option
+         the student picked — so a wrong choice still writes the radio it names: that radio is what the
+         teacher reads, and "they put it in the Size car" is the evidence. A miss that names NO option
+         (wordleBoard's used-up row, trainOrder's word left on the dock) writes nothing, because there is
+         nothing to write. */
+      if (opt && opt.radio && opt.radio.checked !== true) {
+        opt.radio.checked = true;
+        if (window.Event) {
+          opt.radio.dispatchEvent(new Event('input', { bubbles: true }));
+          opt.radio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
       SFX.miss(this.sound);
     }
     this.answered++;
@@ -841,24 +917,45 @@ window.GAMES4 = (function () {
     if (this.phase === 'over' && !this.running) return this.finalScore();
     this.phase = 'over';
     this.running = false;
-    this.root.classList.remove('is-on');
     this.setPrompt('', false);
-    if (this.view) this.view.clear();
+    /* A presentation may end its run with a picture of its OWN ending, and only it knows when that
+       picture is finished: trainOrder's last train is still running out of the yard (or standing in it
+       wrecked) when the last answer lands, and the intro card coming back over the stage would cover
+       the moment the run was played for. So a view that defines `view.finale(done)` keeps the stage —
+       and the run's score card, and the intro — until it calls `done()`. Everything else hands the
+       stage back here and now, exactly as before; a finale that throws must never leave the block
+       dead looking unfinished, so the throw settles it. */
+    var self = this;
+    var ending = !!(this.view && typeof this.view.finale === 'function');
     this.clearTimers();
-    SFX.win(this.sound && this.finalScore() > 0);
+    if (!ending) {
+      this.root.classList.remove('is-on');
+      if (this.view) this.view.clear();
+      SFX.win(this.sound && this.finalScore() > 0);
+    }
     this.btn.textContent = this.retry ? '↻ Play again' : 'Run complete';
     this.btn.disabled = !this.retry;
     /* the run's score is not a thing you lose by looking away, and it is not a sentence under the block
        either: the intro comes back over the stage, and the run that just ended is written in the corner
        the live score uses — "Score:" over the pair — so it reads as that card coming back with the
        number still on it. Same corner, same card, every game. */
-    if (this.prevEl) {
-      this.prevEl.querySelector('b').textContent = this.finalScore() + '/' + this.total;
-      this.prevEl.classList.add('on');
-    }
-    this.poster();               /* the art comes back behind the intro overlay */
+    var settle = function () {
+      if (self.settled) return;
+      self.settled = true;
+      self.root.classList.remove('is-on');
+      if (self.view) self.view.clear();
+      if (self.prevEl) {
+        self.prevEl.querySelector('b').textContent = self.finalScore() + '/' + self.total;
+        self.prevEl.classList.add('on');
+      }
+      self.poster();               /* the art comes back behind the intro overlay */
+    };
+    if (!ending) { settle(); return this.finalScore(); }
+    try { this.view.finale(settle); } catch (e) { settle(); }
     return this.finalScore();
   };
+  /* `settled` is per FINISH: a run that starts again clears it, so the same block can end twice in one
+     page's life (a replayed run) without the second ending being skipped as already written */
   Runner.prototype.clearPoster = function () {
     if (this.posterEl && this.posterEl.parentNode) this.posterEl.parentNode.removeChild(this.posterEl);
     this.posterEl = null;
@@ -1412,6 +1509,22 @@ window.GAMES4 = (function () {
         + '<g stroke="#6b4520" stroke-width="5" stroke-linecap="round" opacity=".9">'
         + '<path d="M22 216v38"/><path d="M104 216v38"/><path d="M186 216v38"/>'
         + '<path d="M268 216v38"/><path d="M350 216v38"/></g>');
+    },
+    /* the yard at dawn. The scene is composed for the band the stage actually shows: on a wide block
+       the picture is sliced from the BOTTOM, so the town, the mill chimney and the water tower sit just
+       above the embankment the live game draws over them, and the sky above is there for narrow screens */
+    trainOrder: function () {
+      return frame('<rect width="400" height="260" fill="url(#g4-dawn)"/>' + sun(58, 44, 15)
+        + cloud(196, 30, .9, .78) + cloud(322, 22, .65, .6)
+        + hills('#a9cfae', 198, .9) + hills('#6d9a79', 218)
+        + '<g fill="#48565f" opacity=".9"><rect x="16" y="176" width="12" height="60"/>'
+        + '<rect x="38" y="202" width="54" height="34"/><path d="M38 202l27-14 27 14z"/>'
+        + '<rect x="300" y="190" width="9" height="46"/><rect x="290" y="178" width="28" height="12"/>'
+        + '<rect x="318" y="208" width="54" height="28"/></g>'
+        + '<g fill="#3f4b53" opacity=".55"><rect x="196" y="212" width="64" height="24"/>'
+        + '<rect x="130" y="218" width="30" height="18"/></g>'
+        + '<rect y="226" width="400" height="34" fill="url(#g4-sand)"/>'
+        + '<g stroke="#a97c45" stroke-width="2" opacity=".32"><path d="M0 240h400"/></g>');
     }
   };
   /* ---------------- posters: one still per game, drawn behind the intro overlay ----------------
@@ -1603,7 +1716,35 @@ window.GAMES4 = (function () {
         'left:' + (4 + i * (92 / n)).toFixed(1) + '%;top:' + (14 + (i % 2) * 28) + '%;width:24%;animation:none'));
     });
     box.appendChild(abs(el('div', 'g4-cross g4-bit'), 'left:52%;top:56%;width:46px;height:46px;margin:-23px 0 0 -23px'));
-  }
+  },
+    trainOrder: function (box) {
+      /* the still is the yard it happens in: the girder, the grade, and a train of EMPTY flatbeds
+         climbing it. Not one word of the lesson is on it — the words are what the run answers, so a
+         block nobody has started must not show its first answer on the start card. */
+      box.appendChild(el('div', 'g4-tgirder g4-bit'));
+      box.appendChild(el('div', 'g4-tsign g4-bit', '⚠ LOW BRIDGE · 3px'));
+      var deck = el('div', 'g4-tdeck g4-bit');
+      deck.appendChild(el('div', 'g4-tdspace'));
+      for (var i = 0; i < 8; i++) deck.appendChild(el('div', 'g4-tplank'));
+      box.appendChild(deck);
+      box.appendChild(el('div', 'g4-tbank g4-bit'));
+      box.appendChild(el('div', 'g4-ttrack g4-bit'));
+      var train = el('div', 'g4-ttrain g4-bit');
+      var loco = el('div', 'g4-tloco');
+      loco.innerHTML = ART.loco;
+      train.appendChild(loco);
+      for (var k = 0; k < 8; k++) {
+        var car = el('div', 'g4-tcar');
+        car.style.height = (122 - 6 * k) + 'px';
+        car.style.marginBottom = (6 * k) + 'px';
+        car.appendChild(el('div', 'g4-tbed'));
+        car.appendChild(el('i', 'g4-twheel a'));
+        car.appendChild(el('i', 'g4-twheel b'));
+        train.appendChild(car);
+      }
+      box.appendChild(train);
+    }
+
   };
 
 function say(text, lang) {
@@ -3332,6 +3473,7 @@ function say(text, lang) {
      hides the whole score card for that game while a run is live and prints the run's number on the end
      card like every other game. Enabling it elsewhere is this one line. */
   PLUGINS.bossRaid.hideScoreLive = true;
+
 
   function boot() {
     /* the gradients and filters every scene shares: one hidden <svg> per page, so any number of

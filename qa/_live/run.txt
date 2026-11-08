@@ -1,0 +1,172 @@
+· repo   C:\Users\denni\Documents\GitHub\ingles   (node v24.21.0)
+· page   http://127.0.0.1:54387/business/lesson1.html   as live.qa@ingles.test
+· chrome C:\Program Files\Google\Chrome\Application\chrome.exe   [headless=new]
+· runner diag, geo, bf2, bf2b, bf3, bf4
+
+
+################### scenario diag ###################
+
+================ DIAG · does real input reach the page? ================
+   · hasFocus=true  innerHeight=848  dpr=1
+   · dot = {"txt":"My name's Daniel.","occ":872,"lines":1,"sx":130,"sy":416,"ex":273,"ey":416,"rect":[129,406,145,20]}
+   · element at the drag start = B. pe=auto us=auto <My name's Daniel.
+   · body user-select = auto
+
+ (1) a PLAIN drag across the phrase
+   · events the page saw: {"mousemove":9,"mousedown":1,"mouseup":1,"keydown":0}
+   · preventDefault seen by the page (window bubble = last word): {"md":false,"ss":false,"mu":false}  selectstart fired 1×
+   · sel="My name's Daniel."  popup=true  marks=0
+   · +500ms: popup=true  btns="▶ Hear▶ Play⏺ Record🔊 Delete📝 Note📖 Pronunciation 🔑📝 Delete"  toast=null
+
+ (2) the same drag while Ctrl is held as a REAL key (no modifier flag on the mouse)
+  bp ← POST set notebook notebook_live.qa@ingles. rows=1
+   · sel="My name's Daniel."  hlr=0
+   · +600ms: hlr=0  rows=1  events={"mousemove":9,"mousedown":1,"mouseup":1,"keydown":2}
+
+ (3) the modifier-flag drag (the gesture the scenarios use)
+  bp ← POST set notebook notebook_live.qa@ingles. rows=1
+   · sel="My name's Daniel."  hlr=1  rows=1  events={"mousemove":9,"mousedown":1,"mouseup":1,"keydown":0}
+
+ (4) the plain drag again, right→left and with more steps
+  bp ← POST add hl 1793589604696_9032 rows=1
+  bp ← POST set notebook notebook_live.qa@ingles. rows=2
+   · sel=""  events={"mousemove":17,"mousedown":1,"mouseup":1,"keydown":0}
+
+ (5) CONTROL PAGE with NO engine at all — can CDP input select text there?
+   · on the control page: probe present  text="404"
+   ❌ scenario diag threw: page eval failed: TypeError: Cannot read properties of null (reading 'getClientRects')
+    at <anonymous>:1:55
+    at <anonymous>:1:201
+  expr: (function(){var b=document.querySelector("b");var r=b.getClientRects()[0];return {sx:Math.round(r.left+1),sy:Math.round(r.top+r.height/2),ex:Math.round(r.right-1),ey:Math.round(r.bottom-r.height/2)}})()
+          at <anonymous>:1:55
+          at <anonymous>:1:201
+   · scenario diag finished in 8s
+
+
+################### scenario geo ###################
+
+================ GEO · ruler + #hlLayer geometry off-screen ================
+  bp ← POST set notebook notebook_live.qa@ingles. rows=1
+   ❌ scenario geo threw: TIMEOUT waiting for: a page taller than the window
+          at Live.wait (file:///C:/Users/denni/Documents/GitHub/ingles/qa/live.mjs:506:39)
+          at async Object.scenGeo [as geo] (file:///C:/Users/denni/Documents/GitHub/ingles/qa/live.mjs:1089:3)
+   · scenario geo finished in 9s
+
+
+################### scenario bf2 ###################
+
+================ B-F2 · HIGHLIGHT PERMANENCE (painted #hlLayer) ================
+  bp ← POST set notebook notebook_live.qa@ingles. rows=1
+   ── page loaded
+      marks   : []
+      hlr     : []
+      hlList  : []
+      layer   : []
+      nbLocal : []
+      pending : []
+      popup   : null
+
+ step 1 — Ctrl+drag a phrase: it must be painted AND written as one "hl" row
+   · ctrl-drag "I'm Marina." → sel="I'm Marina." lines=1 rect=[129,406,89,20]
+   ✅ paint: the Ctrl gesture selected exactly the phrase
+   ── after the Ctrl+drag
+      marks   : []
+      hlr     : [{"id":"1793589617164_843","cls":"hlr hlr-yellow","doc":[129,1064,89,20]}]
+      hlList  : [{"id":"1793589617164_843","color":"yellow","anchor":"I'm Marina.","b":26,"start":0,"end":11,"nrects":1}]
+      layer   : [{"id":"notebook_live.qa@ingles.test_1","type":"notebook","anchor":"","data":"","fileId":""}]
+      nbLocal : []
+      pending : ["1793589617164_843|add|12s"]
+      popup   : {"cls":"pop hlpalpop","buttons":",,","note":null,"editing":false,"text":""}
+   ✅ the phrase is painted on #hlLayer
+   ✅ the painted rectangle sits on the text it covers
+   ❌ exactly one server row, type "hl"   → [{"id":"notebook_live.qa@ingles.test_1","email":"live.qa@ingles.test","track":"business","lesson":1,"type":"notebook","anchor":"","data":"","author":"aluno","ts":"2026-11-02T03:20:16.565Z","b64":"","fileId":""}]
+   ❌ the row carries anchor + {color,b,o}   → {"anchor":"","data":""}
+   ✅ the palette opened above the fresh highlight
+  bp ← POST add hl 1793589617164_843 rows=2
+      📷 C:\Users\denni\Documents\GitHub\ingles\qa\_live\bf2-1-created.png
+
+ step 2 — two 1s polls later the highlight must still be exactly where it was
+   ── after ~2 polls
+      marks   : []
+      hlr     : [{"id":"1793589617164_843","cls":"hlr hlr-yellow","doc":[129,1064,89,20]}]
+      hlList  : [{"id":"1793589617164_843","color":"yellow","anchor":"I'm Marina.","b":26,"start":0,"end":11,"nrects":1}]
+      layer   : [{"id":"notebook_live.qa@ingles.test_1","type":"notebook","anchor":"","data":"","fileId":""},{"id":"1793589617164_843","type":"hl","anchor":"I'm Marina.","data":"{\"color\":\"yellow\",\"b\":26,\"o\":0}","fileId":""}]
+      nbLocal : []
+      pending : ["1793589617164_843|add|9s"]
+      popup   : null
+   ✅ still painted after the polls
+   ✅ geometry unchanged across the polls
+   ❌ still exactly one server row (no duplicate write)   → ["notebook_live.qa@ingles.test_1","1793589617164_843"]
+   ✅ the local record kept its id and colour
+
+ step 3 — RELOAD: the row is on the server, so the highlight must come back by itself
+  bp ← POST set notebook notebook_live.qa@ingles. rows=2
+   ── after a reload
+      marks   : []
+      hlr     : [{"id":"1793589617164_843","cls":"hlr hlr-yellow","doc":[129,1064,89,20]}]
+      hlList  : [{"id":"1793589617164_843","color":"yellow","anchor":"I'm Marina.","b":26,"start":0,"end":11,"nrects":1}]
+      layer   : [{"id":"notebook_live.qa@ingles.test_1","type":"notebook","anchor":"","data":"","fileId":""},{"id":"1793589617164_843","type":"hl","anchor":"I'm Marina.","data":"{\"color\":\"yellow\",\"b\":26,\"o\":0}","fileId":""}]
+      nbLocal : []
+      pending : []
+      popup   : null
+   ✅ restored after a reload
+   ✅ restored on the very same characters
+   ✅ restored with its colour
+      📷 C:\Users\denni\Documents\GitHub\ingles\qa\_live\bf2-2-after-reload.png
+   · scenario bf2 finished in 5s
+
+
+################### scenario bf2b ###################
+
+ step 4 — the SAME string twice in the page: block+offset must win over the text alone
+  bp ← POST set notebook notebook_live.qa@ingles. rows=1
+   · ctrl-drag "Are you from São Paulo?" → sel="Are you from São Paulo?" lines=1 rect=[129,406,198,20]
+   ❌ scenario bf2b threw: dragOver(Are you from São Paulo?): text not found: Are you from São Paulo?
+          at dragOver (file:///C:/Users/denni/Documents/GitHub/ingles/qa/live.mjs:612:25)
+          at async paint (file:///C:/Users/denni/Documents/GitHub/ingles/qa/live.mjs:620:13)
+   · scenario bf2b finished in 1s
+
+
+################### scenario bf3 ###################
+
+================ B-F3 · NOTES/RECORDINGS ANCHORING + PRESENTATION ================
+
+ step 1 — a note on the phrase: stored, painted ONCE, covering exactly its own text
+  bp ← POST add hl 1793589621765_9882 rows=1
+  bp ← POST set notebook notebook_live.qa@ingles. rows=2
+   · drag "My name's Daniel." → sel="My name's Daniel."
+  bp ← POST add note 1793589623198_3686 rows=3
+   ❌ scenario bf3 threw: TIMEOUT waiting for: the editor closing on Save
+          at Live.wait (file:///C:/Users/denni/Documents/GitHub/ingles/qa/live.mjs:506:39)
+          at async saveNote (file:///C:/Users/denni/Documents/GitHub/ingles/qa/live.mjs:774:3)
+   · scenario bf3 finished in 5s
+
+
+################### scenario bf4 ###################
+
+================ B-F4 · OVERLAPPING SAVES (cut / split marks) ================
+
+ step 1 — a recording across a phrase PAIR (one mark over <b>…</b> = <i>…</i>)
+  bp ← POST set notebook notebook_live.qa@ingles. rows=1
+   · drag "My name's Daniel." → "Meu nome é Daniel."  sel="My name's Daniel.\tMeu nome é Daniel."
+   ✅ the recording’s selection was made
+   ❌ scenario bf4 threw: TIMEOUT waiting for: the selection popup
+          at Live.wait (file:///C:/Users/denni/Documents/GitHub/ingles/qa/live.mjs:506:39)
+          at async selectSpan (file:///C:/Users/denni/Documents/GitHub/ingles/qa/live.mjs:755:3)
+   · scenario bf4 finished in 5s
+
+──────────────────────────────────────────────────────────────────────────────
+❌ live harness: 8 failed, 11 passed
+   failures:
+     · diag (threw): page eval failed: TypeError: Cannot read properties of null (reading 'getClientRects')
+    at <anonymous>:1:55
+    at <anonymous>:1:201
+  expr: (function(){var b=document.querySelector("b");var r=b.getClientRects()[0];return {sx:Math.round(r.left+1),sy:Math.round(r.top+r.height/2),ex:Math.round(r.right-1),ey:Math.round(r.bottom-r.height/2)}})()
+     · geo (threw): TIMEOUT waiting for: a page taller than the window
+     · exactly one server row, type "hl"
+     · the row carries anchor + {color,b,o}
+     · still exactly one server row (no duplicate write)
+     · bf2b (threw): dragOver(Are you from São Paulo?): text not found: Are you from São Paulo?
+     · bf3 (threw): TIMEOUT waiting for: the editor closing on Save
+     · bf4 (threw): TIMEOUT waiting for: the selection popup
+   log  : C:\Users\denni\Documents\GitHub\ingles\qa\_live\run.txt

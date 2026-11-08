@@ -7,9 +7,7 @@ A `<TRACK>-ROADMAP.md` for one track: what is taught at which lesson, and which 
 # Process
 
 ## INPUT AND OBJECTIVE
-- Inputs: `PEDAGOGY.md` + `<TRACK>-REGISTER.md` (files may truncate). Withheld: all other files.
-- A single read of a file can come back MIDDLE-TRUNCATED. If it does, you must: 
-- Page through the file in bounded chunks with `start_line`/`end_line`, keeping each chunk well under ~6000 characters, until the full file is read, then re-read the full file before relying on it.
+- Inputs: `PEDAGOGY.md` + `<TRACK>-REGISTER.md`. Withheld: all other files.
 - Helper/verification files exist in `ROADMAP GENERATION` folder
 - `ROADMAP GENERATION/Test-Roadmap.ps1` is the mechanical half of this file's own check list: run it after the labels exist, then every ~5 lessons, then at the end with `-Report`. It exits 1 on any failure, so it is a test, not a suggestion.
 - Working state (spine, labels, item ledger) lives in `ROADMAP GENERATION/work/` — see WORKING FILES below. Do not hold it in memory and do not park it in the roadmap file.

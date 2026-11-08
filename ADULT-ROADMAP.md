@@ -1,25 +1,5 @@
 # ADULT-ROADMAP — real life, self-expression, and the language people actually speak
 
-## Decisions
-
-- Item budget — exactly 10 vocabulary items per teaching lesson (the floor), spaced so no item is spent before its lesson needs it; exams 25 and 45 add none.
-- Label budget — 3 to 5 labels per teaching lesson (hard ceiling 6), one label owned by exactly one lesson; a split topic becomes two labels, never one label in two lessons.
-- Exam-uses budget — each exam names exactly 10 primary labels, each one a family that must have landed for the block to count.
-- Repeated-vocabulary policy — every item is introduced once; the only legal repeat is an item named in a later lesson's `Deepens:` line, and the `work/adult-items.md` ledger is checked before any item is added.
-- Tail policy — lessons 46 to 50 are pure extension: deeper AAVE, borrowing/dated/regional slang, heated argument, long-form humour and a capstone. Nothing before depends on them, and every piece of required language is finished before the last exam.
-- Tone: the scene-first, close-friends-and-street voice is the default for contexts, carriers and vocabulary; the required swear, slang, sexual, taboo, AAVE, music and text language is taught in `vocabulary:` and/or labels, spread across both blocks and finished before the last exam — and no lesson is ever told which voice it is in.
-- Censoring — the masked forms `f---`, `shi-`, `c---` are the only masking used; slurs are explained, never used, and every swear/taboo item carries its use-it / don't-use-it advice.
-- When two carriers would do the same job, the street/close-friends version beats its neutral dictionary twin unless the neutral word is the very thing being taught (e.g. a counting lesson about `bucks`).
-- Counts (copied from `Test-Roadmap.ps1 -Counts`, not from memory) — 50 lessons: 48 teaching plus 2 exams (25, 45); 26 spine families; 170 labels across 49 distinct areas, every label taught exactly once; 480 vocabulary items, exactly 10 per teaching lesson.
-
-## Shape
-
-   · Blocks: 1–24 sound, sentence machinery, and the first real talk · 25 EXAM · 26–44 tense range, modals, conditional, report and the whole register · 45 EXAM · 46–50 the tail
-   · Spine: 26 families — spine kept in `ROADMAP GENERATION/work/adult-spine.md` (not shipped)
-   · Block 1 (1–24) — by the end the student can describe facts and habits, do things now, narrate the past, plan with gonna/will, ask and answer every basic question, run `get` and a phrasal family, command vowels, cognates and connected speech, use the core prepositions by meaning, count and talk money, stack adjectives and compare, tell a story, and swear casually with the rules. It owns the sound system, casual swearing core, and the street-vs-friend line.
-   · Block 2 (26–44) — assumes all of that and adds the perfect tenses, past continuous, every core modal, conditionals, reported speech, the passive, relative clauses, text-speak, internet/music culture, AAVE, sarcasm and roasting, politeness, sexual language, the hardest taboo and slurs (explained), and the public/work ceiling. This block carries the heaviest required language, all finished before the second exam.
-   · Block 3 / tail (46–50) — assumes both blocks and pushes into deeper AAVE, borrowing and dated slang, real argument, long jokes and a capstone; an extension only, adding nothing the earlier blocks need.
-
 ## Lesson 1: Welcome — no fixed vowel sounds, and Portuguese is your cheat code
 
    - Focus: open the track, show that English vowels have no fixed sound, and prove that Portuguese already hands you thousands of English words.
@@ -27,7 +7,7 @@
    - Deepens: —
    - Uses: —
    - Vocabulary: nation, natural, television, restaurant, problem, important, different, music, possible, conference
-   - Examples: "This restaurant is a problem, bro." · "The music is important to me, seriously." · "My conference is different this year." · "Television? Nah, I watch everything on my phone."
+   - Examples: "This restaurant is a f---in' rip-off, bro." · "Music is f---in' important to me — that shi- is my whole life." · "My conference is different this year — last year was pure bullshi-." · "Television? Nah, I watch everything on my phone."
    - Real-world relevance: These are the words the student already meets in every song, menu, meme and work email, so the first win is loud and instant.
 
 ## Lesson 2: Vowels you can hear, cognates that lie
@@ -37,7 +17,7 @@
    - Deepens: `sound/cognate-suffix-code` — now where the stress actually lands on a -tion/-ic/-ity word, just before the ending.
    - Uses: `sound/letter-vs-sound`
    - Vocabulary: ship, sheep, pool, pull, push, actually, parents, college, library, pretend
-   - Examples: "Don't push, man, it's a pull door." · "Actually, my parents hate that club." · "This pool is for the ship crew, not for us." · "You pretend you don't know, but you do."
+   - Examples: "Don't f---in' push, man — it's a pull door." · "Pull up to the pool at nine — the whole crew's f---in' there." · "Actually, my parents would lose their shi- if they saw this." · "You pretend you don't know, but you f---in' do."
    - Real-world relevance: The beach-beach/bitch, pull/push and actually/atualmente mix-ups blow up in real conversations, so they are drilled here before a friend corrects the student in public.
 
 ## Lesson 3: The sentence skeleton, and saying who you are
@@ -47,7 +27,7 @@
    - Deepens: —
    - Uses: —
    - Vocabulary: guy, kid, buddy, bro, chill, tired, drunk, broke, hungry, done
-   - Examples: "That guy is my buddy from the gym." · "I'm broke, bro, I'm done this week." · "The kid is tired, leave him alone." · "You're drunk, you're not chill — go home."
+   - Examples: "That guy is my f---in' buddy from the gym." · "I'm broke, bro — I'm f---in' done this week." · "The kid is tired as shi-, leave him alone." · "You're drunk, you're not chill — go the f--- home."
    - Real-world relevance: The whole skeleton runs a bar scene, a group chat, and a family dinner, so ordering words right is the very first thing a stranger hears.
 
 ## Lesson 4: Daily routine — facts, never "right now"
@@ -57,7 +37,7 @@
    - Deepens: —
    - Uses: `word-order/skeleton`, `verb/be-identity`
    - Vocabulary: "wake up", "get up", shower, commute, "hang out", gym, "sleep in", "pass out", "eat out", routine
-   - Examples: "I wake up at six, hit the gym, and I'm done by nine." · "She always sleeps in on Sunday, don't call her." · "He never eats out, the guy is broke." · "We usually hang out, then I pass out on the couch."
+   - Examples: "She always f---in' sleeps in on Sunday, so don't call her." · "He never eats out — the guy's broke as shi-." · "I wake up at six, hit the gym, and I'm done by nine." · "We usually hang out, then I pass the f--- out on the couch."
    - Real-world relevance: First dates and office small talk run almost entirely on routines, so getting the -s and the fact-not-now rule right is the difference between sounding fluent and sounding translated.
 
 ## Lesson 5: Right now — the present continuous
@@ -67,7 +47,7 @@
    - Deepens: `present-simple/facts-not-now` — the same scene now split by meaning: in general takes the simple, this minute takes the continuous.
    - Uses: `present-simple/pt-now-trap`, `sound/letter-vs-sound`
    - Vocabulary: "chill out", "mess around", "work out", "hang on", "kick back", "pig out", "right now", currently, "at the moment", "be kidding"
-   - Examples: "I'm just chilling out right now, come over." · "He's working out, so he's not messing around." · "You're kidding me — at the moment? Seriously?" · "We're pigging out, don't judge me."
+   - Examples: "What the f--- are you doing right now?" · "I'm just chilling out, so come the f--- over." · "You're f---in' kidding me — at the moment? Seriously?" · "We're pigging out, so don't f---in' judge me."
    - Real-world relevance: Answering "what are you doing?" wrong is the single most common tell of a Portuguese speaker, so this is drilled in texts, calls and doorways.
 
 ## Lesson 6: "To be" questions — the exception that skips do
@@ -77,7 +57,7 @@
    - Deepens: `verb/be-identity` — the same am/is/are statement, now flipped into a question and a two-word answer.
    - Uses: `word-order/skeleton`
    - Vocabulary: "what's up", "how's it going", "what's going on", "who's that", "you good", "you okay", "what's wrong", "how come", "what for", "where you at"
-   - Examples: "What's up, you good?" · "How's it going, bro — you okay?" · "Who's that guy, what's wrong with him?" · "How come you're here? Where you at?"
+   - Examples: "What's up, you good? What the f--- happened to you?" · "Who the hell is that guy, what's wrong with him?" · "How come you're here, bro — where you at?" · "What's going on with her? She's not okay, no shi-."
    - Real-world relevance: These are the exact openers of a group chat, a bar hello and a worried check-in, so a student who can't flip be into a question can't start a conversation.
 
 ## Lesson 7: Do-support — questions and negatives in the present
@@ -87,7 +67,7 @@
    - Deepens: `present-simple/third-person-s` — the -s leaves the verb now and lives on does/don't.
    - Uses: `word-order/skeleton`, `present-simple/facts-not-now`
    - Vocabulary: "give a shi-", "give a damn", mind, care, bother, even, "at all", "what the hell", "how often", "how much"
-   - Examples: "Do you even care, or do you not give a shi-?" · "She doesn't mind, she doesn't give a damn." · "Why the hell do you bother — how often do you two fight?" · "I don't like it at all, what the hell."
+   - Examples: "Do you even care, or do you not give a shi-?" · "Why the hell do you bother — how often do you two fight?" · "She doesn't mind, she doesn't give a damn." · "I don't give a damn — I don't like it at all."
    - Real-world relevance: The everyday fight, the group-chat poll and the nosy relative all arrive as a do-question, so a student who forgets the helper sounds foreign in every argument.
 
 ## Lesson 8: Gonna — the spoken future (and it is not the verb "go")
@@ -97,7 +77,7 @@
    - Deepens: `sound/reduction-preview` — the squeezed form previewed in lesson one is now the real spoken future.
    - Uses: —
    - Vocabulary: gonna, "gonna be", "gonna get", party, crash, bail, "hit the gym", "call it a night", "hook up", "show off"
-   - Examples: "I'm gonna call it a night, I'm crashing at your place." · "We gonna party, so don't bail on me." · "I'm going to the office, I'm gonna be late." · "He's gonna hook up, just watch him show off."
+   - Examples: "We're gonna get f---ed up tonight, so don't bail on me." · "I'm gonna call it a night — I'm crashing at your place, no shi-." · "He's gonna try to hook up, so f---in' watch him show off." · "I'm going to the office, I'm gonna be late."
    - Real-world relevance: Plans made out loud at a bar, a party or in a DM are nearly all gonna, and mixing it up with "going to the office" is a classic beginner slip.
 
 ## Lesson 9: Will and won't — promises, offers, decisions on the spot
@@ -107,7 +87,7 @@
    - Deepens: `future/gonna-mode` — will joins gonna as a second future: one for a plan, one for decided-now.
    - Uses: —
    - Vocabulary: promise, swear, dare, "no way", "for sure", definitely, probably, maybe, deal, fine
-   - Examples: "I promise I won't tell anyone, I swear." · "I dare you to say it to her face." · "I'll get the next round, for sure — probably, fine." · "No way — deal, I'll do it tonight."
+   - Examples: "I won't f---in' tell anyone, I swear." · "I dare you to say that shi- to her face." · "I'll get the next round, for sure — probably." · "No way — f--- that, I'll do it tomorrow."
    - Real-world relevance: Promises, dares and last-minute "I'll do it" decisions are the currency of friendships, so distinguishing will from gonna keeps the student from sounding stiff or unreliable.
 
 ## Lesson 10: Want, need, like — and get, the coringa
@@ -117,7 +97,7 @@
    - Deepens: —
    - Uses: `word-order/skeleton`
    - Vocabulary: "get back", "get out", "get on", "get over", "get along", "get it", "get used to", "get rid of", "get together", "get lost"
-   - Examples: "I want to get out tonight, I can't get used to this city." · "We get along, let's get together later." · "Do you get it? Get rid of that, it's garbage." · "Get back to me, don't get lost."
+   - Examples: "I want to get the f--- out of here — I can't get used to this city." · "Do you get it? Get rid of that garbage." · "We get along, so let's get together later, no shi-." · "Get back to me, and don't get f---in' lost."
    - Real-world relevance: Get appears in nearly every casual plan and complaint, so owning it plus the want/need/like shapes unlocks real requests fast.
 
 ## Lesson 11: The prepositions by meaning — TO, FOR, ON, IN, AT
@@ -127,7 +107,7 @@
    - Deepens: —
    - Uses: —
    - Vocabulary: "depend on", "wait for", "talk to", "listen to", "look at", "go to", "belong to", "afraid of", "good at", "interested in"
-   - Examples: "I'm waiting for you, talk to me." · "I depend on this, I'm good at it." · "Listen to this — look at that on the table." · "I'm interested in her, but I'm afraid of it."
+   - Examples: "I've been waiting for you for an hour — f---, talk to me." · "I'm interested in her, but I'm too f---in' scared to talk to her." · "I depend on this job, and I'm good at it." · "Listen to this shi- — look at that on the table."
    - Real-world relevance: The "para" split and shaky verb+preposition pairs are the most persistent error a Brazilian makes, so they are drilled with real verbs from the very start.
 
 ## Lesson 12: Small talk that keeps going — tags, fillers, follow-ups
@@ -137,7 +117,7 @@
    - Deepens: `question/short-answer` — the short answer grows into a whole back-channel: an echo plus a check-tag.
    - Uses: `question/be-inversion`
    - Vocabulary: "for real", "no shi-", right, "you know", really, seriously, "come on", "tell me", "go ahead", "fair enough"
-   - Examples: "For real? No shi- — tell me everything." · "You know, right? Come on, seriously." · "Yeah, right — for real though, go ahead." · "Fair enough, so what happened?"
+   - Examples: "For real? No shi- — tell me everything." · "Come on, you're f---in' kidding me, right?" · "Yeah, right — for real though, go ahead." · "Fair enough, so what the hell happened?"
    - Real-world relevance: Real talk is 50% listening noises and 50% questions; a student who only answers and never fills the gaps kills every conversation.
 
 ## Lesson 13: Past simple — the story tense
@@ -147,7 +127,7 @@
    - Deepens: `mode/empty-vs-filled` — the empty mode now carries a past marker instead of a present one.
    - Uses: `word-order/skeleton`
    - Vocabulary: "last night", yesterday, "the other day", "back then", "meet up", "break up", "make out", "end up", "come across", "run into"
-   - Examples: "Last night I ran into my ex — we broke up back then, it was a mess." · "The other day I met up with the guys and we ended up drinking." · "I came across her profile, we made out once, whatever." · "Yesterday? I worked, I crashed, that's it."
+   - Examples: "Last night I ran into my ex — we broke up back then, it was a f---in' mess." · "The other day I met up with the guys and we ended up f---in' wasted." · "I came across her profile, we made out once, whatever." · "Yesterday? I worked, I crashed — that's f---in' it."
    - Real-world relevance: Every story about a night out, a fight or a hookup is a run of past simples, so the irregulars are memorized through gossip rather than tables.
 
 ## Lesson 14: Past questions and negatives — did takes the wheel
@@ -157,7 +137,7 @@
    - Deepens: `question/do-support` — the same helper move reused in the past, with the verb back to base.
    - Uses: `past-simple/irregular-set`
    - Vocabulary: "how was", "what happened", "where were you", "long time no see", "catch up", "fill in", "spill the beans", "come clean", "bring up", "go through"
-   - Examples: "Where were you? What happened last night?" · "Long time no see — catch me up, fill me in." · "Did you spill the beans? Don't bring it up again." · "It was a mess, we went through a lot, don't ask."
+   - Examples: "Where the f--- were you last night? What happened?" · "Did you f---in' spill the beans? Don't bring it up again." · "Long time no see — catch me up, fill me in." · "It was a mess, we went through a lot of shi-, don't ask."
    - Real-world relevance: Interrogating a friend about a night out is a did-question drill by nature, and the -ed slip ("did you went") is the loudest tell there is.
 
 ## Lesson 15: Used to and would — the good old days
@@ -167,7 +147,7 @@
    - Deepens: `past-simple/empty-mode-marker` — a third past shape now sits beside the plain past: a habit that stopped.
    - Uses: `past-simple/irregular-set`
    - Vocabulary: "back in the day", "way back", "grow up", "move out", "settle down", "drop out", "keep up", "fall behind", "stay out", "get by"
-   - Examples: "Back in the day I used to stay out all night." · "We would drink on the beach, way back, before anyone settled down." · "I dropped out, it was hard to keep up, I fell behind." · "I grew up there, then I moved out, we got by."
+   - Examples: "Back in the day I used to get f---ed up every weekend." · "We would drink on the beach, way back, before anyone f---in' settled down." · "I dropped out, it was hard to keep up — I f---in' fell behind." · "I grew up there, then I moved out, and we got by."
    - Real-world relevance: Nostalgia talk with friends and family runs on used to and would, and mixing the two up (or using would for states) marks a learner instantly.
 
 ## Lesson 16: Countable, uncountable, and a shi- ton of beer
@@ -177,7 +157,7 @@
    - Deepens: —
    - Uses: —
    - Vocabulary: "a couple of", "a bunch of", "loads of", "plenty of", "a bit of", enough, "tons of", "a shi- ton of", beer, cash
-   - Examples: "There's a shi- ton of beer, plenty of ice, we're fine." · "I've got loads of cash, a bunch of people are coming." · "A bit of music, a couple of games, enough for tonight." · "Any beer? Some cash? We need tons of it."
+   - Examples: "There's a shi- ton of beer, plenty of ice — we're f---in' fine." · "I've got loads of cash, and a bunch of f---in' people are coming." · "A bit of music, a couple of games, enough for tonight." · "Any f---in' beer? Some cash? We need tons of it."
    - Real-world relevance: Ordering, shopping and splitting a bill all force the count/mass choice, so it is drilled on beers and cash, the two things an adult actually counts.
 
 ## Lesson 17: Money talk — bucks, change, and a rip-off
@@ -187,7 +167,7 @@
    - Deepens: `noun/countable-uncountable` — the numbers and plurals now ride on top of the count/mass split.
    - Uses: `quantifier/a-lot-of`
    - Vocabulary: bucks, change, "rip off", "for free", "on sale", "half price", "a fortune", "worth it", overpriced, cheap
-   - Examples: "Fifteen fifty for that? A rip-off, not worth it." · "These drinks are overpriced, those are for free." · "I got it on sale, half price — a fortune saved." · "Got change? This shirt is cheap but it's garbage."
+   - Examples: "Fifteen fifty for that? A f---in' rip-off, not worth it." · "These drinks are f---in' overpriced — those are for free." · "I got it on sale, half price — a fortune saved, no shi-." · "Got change? This shirt is cheap, but it's garbage."
    - Real-world relevance: A bar tab, a market and a group chat splitting the bill all run on prices and bucks, and getting the plural wrong makes the number sound wrong.
 
 ## Lesson 18: There is / there are — pointing at what exists
@@ -197,7 +177,7 @@
    - Deepens: `preposition/on-surface-and-days` — the place words now sit inside an existence sentence.
    - Uses: `word-order/skeleton`
    - Vocabulary: "there's", "over there", "around here", "in the middle of", "on the corner", "next to", "across from", "a few", "a lot", "no idea"
-   - Examples: "There's a bar on the corner, next to the one across from mine." · "Are there any seats? There isn't — try over there." · "A few people, a lot of noise, in the middle of nowhere." · "There's no beer around here, I've got no idea."
+   - Examples: "There's a f---in' bar on the corner, next to the one across from mine." · "Are there any f---in' seats? There isn't — try over there." · "A few people, a lot of noise, in the middle of nowhere." · "There's no f---in' beer around here, and I've got no idea."
    - Real-world relevance: Finding a table, a bathroom or a party is all there is/are plus a place phrase, so this is the exact language of arriving somewhere new.
 
 ## Lesson 19: Mine, my, and a friend of mine
@@ -207,18 +187,18 @@
    - Deepens: —
    - Uses: `verb/be-identity`
    - Vocabulary: "my bad", "your call", "my ex", "my people", "a friend of mine", mine, yours, "ours", "their place", "his fault"
-   - Examples: "My bad, that's your call — it's their place, not ours." · "A friend of mine is my ex, it's a whole mess." · "That's mine, this one is yours." · "My people are coming; it's his fault they're late."
+   - Examples: "My bad — that's your f---in' call, it's their place, not ours." · "A friend of mine hooked up with my ex — it's a whole f---in' mess." · "That's mine, this one is yours." · "My people are coming; it's his f---in' fault they're late."
    - Real-world relevance: Claiming, blaming and inviting all need possession (my bad, your call, their place), so this is the grammar of the group chat and the shared apartment.
 
-## Lesson 20: Adjectives, order, and a fuckin' good night
+## Lesson 20: Adjectives, order, and a f---in' good night
 
    - Focus: place and order adjectives, then load them with intensity, including the taboo boosters.
    - teaches: `adjective/position`, `adjective/order`, `intensifier/very-so-really`, `intensifier/swear-booster`
    - Deepens: —
    - Uses: `verb/be-identity`
-   - Vocabulary: dead, mad, "fuckin'", hella, super, pretty, kinda, sorta, totally, such
-   - Examples: "That was a fuckin' good night, I'm dead serious." · "She's mad cool, hella funny, super chill." · "It's kinda late, sorta cold, such a long day." · "That's a pretty big deal — so worth it, no lie."
-   - Real-world relevance: Real opinions are almost never neutral, so a student who can't say "hella good", "dead tired" or "fuckin' perfect" sounds like a textbook read aloud.
+   - Vocabulary: dead, mad, "f---in'", hella, super, pretty, kinda, sorta, totally, such
+   - Examples: "That was a f---in' good night, I'm dead serious." · "She's mad cool, hella funny, super chill, no shi-." · "It's kinda late, sorta cold — such a f---in' long day." · "That's a pretty big deal — so worth it, I'm dead."
+   - Real-world relevance: Real opinions are almost never neutral, so a student who can't say "hella good", "dead tired" or "f---in' perfect" sounds like a textbook read aloud.
 
 ## Lesson 21: Comparisons — way better, way worse
 
@@ -227,7 +207,7 @@
    - Deepens: `intensifier/very-so-really` — those boosters now sit before a comparative to widen the gap.
    - Uses: `adjective/position`
    - Vocabulary: "way better", "way worse", "way too", "a lot more", "just as", "not as", "the best", "the worst", suck, "blow away"
-   - Examples: "This bar is way better, that one sucks." · "The new job is way worse — a lot more work." · "It's just as loud, not as cheap, the worst deal." · "Their food blows mine away, way too good."
+   - Examples: "This bar is way better — that one sucks." · "The new job is way worse, a lot more f---in' work." · "It's just as loud, not as cheap — the worst deal." · "Their food blows mine away, way too f---in' good."
    - Real-world relevance: Ranking bars, jobs, exes and food is what friends do for fun, so comparisons have to come out fast and street-ready, not in a grammar table.
 
 ## Lesson 22: Telling a story — first, then, all of a sudden
@@ -237,7 +217,7 @@
    - Deepens: `past-simple/irregular-set` — the past verb now chains events in order instead of naming one.
    - Uses: `past-simple/was-were`, `past/recounting-sequence`
    - Vocabulary: first, then, "after that", later, suddenly, "in the end", so, because, "all of a sudden", "long story short"
-   - Examples: "First we were at the bar, then all of a sudden it kicked off." · "We were broke, so we left, because nobody paid." · "Later we ate, after that we crashed, and in the end it was fine." · "Long story short: it happened suddenly and it was a mess."
+   - Examples: "First we were at the bar, then all of a sudden it f---in' kicked off." · "We were broke, so we left, because nobody f---in' paid." · "Later we ate, after that we crashed, and in the end it was fine." · "Long story short: the shi- hit the fan."
    - Real-world relevance: Gossip, complaints and excuses all live or die on ordering and cause, so this is the first lesson where the student can actually hold the floor with a story.
 
 ## Lesson 23: Connected speech — how words glue and vanish
@@ -247,7 +227,7 @@
    - Deepens: `sound/vowel-pairs` — now whole phrases move their sounds, not just single vowels.
    - Uses: `sound/letter-vs-sound`
    - Vocabulary: whaddaya, dunno, gimme, lemme, betcha, coulda, shoulda, woulda, "c'mon", whatcha
-   - Examples: "Whaddaya want? Gimme a sec, lemme see." · "Dunno — coulda been worse, shoulda called." · "Betcha woulda stayed, c'mon, whatcha doing?" · "I dunno, gimme five minutes."
+   - Examples: "Whaddaya want? Gimme a f---in' sec, lemme see." · "Dunno — coulda been worse, shoulda f---in' called." · "Betcha woulda stayed, c'mon, whatcha doing?" · "I dunno, gimme five minutes — what's the f---in' rush?"
    - Real-world relevance: Nobody says "what do you want" — they say "whaddaya want", so a student who only learned the full forms can't follow a fast friend or a song.
 
 ## Lesson 24: Swearing you can actually use — and when you can't
@@ -272,7 +252,7 @@
    - Deepens: `past-simple/empty-mode-marker` — a new shape where a helper, not the verb, carries the link to now.
    - Uses: `past-simple/irregular-set`
    - Vocabulary: "for a while", "since day one", "so far", lately, ever, never, already, yet, just, "up to now"
-   - Examples: "I've worked here for five years, since day one." · "Have you ever been there? Never, not yet." · "I've already eaten — I just got home." · "So far, up to now, I've had enough."
+   - Examples: "I've f---in' had it — five years in this job, since day one." · "Have you ever f---ed up that bad? Never, not yet." · "I've already eaten — I just got home, no shi-." · "So far, up to now, I've had enough of this shi-."
    - Real-world relevance: This is the single biggest Portuguese-to-English correction there is, so it is drilled with real jobs, relationships and streaks a friend would actually ask about.
 
 ## Lesson 27: Present perfect II — results you can see
@@ -282,7 +262,7 @@
    - Deepens: `present-perfect/duration-for-since` — from pure duration to the result that is staring you in the face.
    - Uses: `present-perfect/vs-past-simple`
    - Vocabulary: "mess up", "screw up", "blow", "screwed", "cooked", "done for", fix, "sort out", "make it", "figure out"
-   - Examples: "I've messed up — I'm screwed, I'm cooked." · "She's blown it, we're done for." · "Have you figured it out? Sort it out, fix it." · "We've made it, it's over."
+   - Examples: "I've f---ed up big time — I'm screwed, I'm cooked." · "She's f---in' blown it, we're done for." · "Have you figured it out yet? Sort it out." · "We've f---in' made it — it's over."
    - Real-world relevance: The excuse, the panic and the "I'm cooked" text all hinge on a result-now perfect, so this turns apology and disaster into fluent English.
 
 ## Lesson 28: Past continuous and the interrupted story
@@ -292,7 +272,7 @@
    - Deepens: `past/scene-then-event` — the scene is now a full continuous tense, not just was/were.
    - Uses: `past-simple/irregular-set`, `past-simple/was-were`
    - Vocabulary: "was about to", "right then", "at that point", "keep doing", "blow up", "freak out", "lose it", "black out", "go off", "stand by"
-   - Examples: "I was about to leave when he blew up — he freaked out." · "She kept doing it, and right then I lost it." · "At that point he blacked out, the guy went off." · "I was standing by while it all happened."
+   - Examples: "I was about to leave when he blew up — he f---in' freaked out." · "She kept doing it, and right then I f---in' lost it." · "At that point he blacked out, the guy f---in' went off." · "I was just standing by while all that shi- happened."
    - Real-world relevance: Every dramatic story ("I was just standing there when he went off") is scene-plus-interruption, so this is the tense of real gossip and real fights.
 
 ## Lesson 29: Present perfect continuous — how long, with feeling
@@ -302,7 +282,7 @@
    - Deepens: `present-perfect/duration-for-since` — from counting time to feeling the activity still running.
    - Uses: `present-perfect/result-now`, `present-continuous/now`
    - Vocabulary: "been trying", "been meaning to", "been putting off", "all day", "all week", "these days", "for ages", "at it", grind, hustle
-   - Examples: "I've been trying to call you all day." · "I've been meaning to — I've been putting it off for ages." · "These days I've been grinding, hustling all week." · "I've been at it since morning, I'm wrecked."
+   - Examples: "I've been trying to call you all f---in' day." · "I've been meaning to sort it out, but I've been putting it off for f---in' ages." · "These days I've been grinding, hustling all week — I'm f---in' wrecked." · "I've been at it since morning, no shi-."
    - Real-world relevance: The apology, the excuse and the grind update ("I've been grinding all week") are all perfect continuous, so it carries both complaint and flex.
 
 ## Lesson 30: Modals of ability and permission — can, could, be able to
@@ -312,7 +292,7 @@
    - Deepens: —
    - Uses: —
    - Vocabulary: "be able to", "manage to", "get away with", let, allow, "go for it", "feel like", "up for", "down for", "no problem"
-   - Examples: "Can you manage it? I'll be able to, no problem." · "Could you be quieter? Could you help me here?" · "I'm up for it, I'm down for it — let's go for it." · "I feel like staying, if you allow me."
+   - Examples: "Can you f---in' manage tonight? — Yeah, no problem." · "Could you keep the music down? I'm trying to f---in' sleep." · "I'm up for it, I'm down for it — let's f---in' go for it." · "I'll be able to make it if you let me crash at your place."
    - Real-world relevance: Asking a favour, getting away with a rule and saying yes or no are everyday moves, and could versus can is exactly the politeness dial a stranger hears.
 
 ## Lesson 31: Modals of obligation and advice — must, have to, should
@@ -322,7 +302,7 @@
    - Deepens: `modal/can-could-ability` — a second modal family: obligation and advice instead of ability.
    - Uses: `verb/want-to-need-to`
    - Vocabulary: "have to", gotta, oughta, "supposed to", "better off", "no choice", "my hands are tied", "have got to", gotcha, "in charge of"
-   - Examples: "I gotta go, I have to, no choice." · "You oughta tell her, you should, you'd better." · "You're supposed to be in charge of this — gotcha." · "My hands are tied, I've got to; I'm better off saying nothing."
+   - Examples: "I gotta f---in' go, I have to — no choice." · "You oughta tell her, you should — you'd f---in' better." · "You're supposed to be in charge of this shi- — gotcha." · "My hands are tied, I've got to; I'm better off saying nothing."
    - Real-world relevance: Rules, excuses and "you should just text him" advice run on this set, so a student who can't tell have to from must hears the wrong level of pressure every time.
 
 ## Lesson 32: Conditionals I — if it rains, we're staying in
@@ -332,7 +312,7 @@
    - Deepens: `future/gonna-mode` — a plan now lives inside an if-clause.
    - Uses: `future/will`, `present-simple/facts-not-now`
    - Vocabulary: "in case", unless, "as long as", "or else", "either way", "screw it", "no matter", "comes down to", "play it safe", "on the safe side"
-   - Examples: "If it rains, we're staying in — screw it." · "If you come, I'll show you, unless you're busy." · "As long as you text me, in case — either way." · "No matter what, play it safe; it comes down to money."
+   - Examples: "If it rains, we're staying in — f--- it." · "If you don't f---in' answer, I'm leaving, or else." · "Unless you text me first, I'm not f---in' coming." · "No matter what, play it safe and bring cash, in case."
    - Real-world relevance: Plans, warnings and "if you don't answer I'm leaving" texts are all first conditional, so it is the grammar of making plans with people who flake.
 
 ## Lesson 33: Conditionals II — the unreal "if I had…"
@@ -342,7 +322,7 @@
    - Deepens: `condition/first` — from a real future to an imagined present and an unreal past.
    - Uses: `past-simple/was-were`, `past-simple/irregular-set`
    - Vocabulary: "would've", "could've", "if only", "I wish", "would rather", "what if", "in hindsight", otherwise, regret, "had I known"
-   - Examples: "If I had money I'd go — if only, I wish." · "I would've called, I could've; in hindsight." · "What if I'd stayed? Had I known — otherwise, regret." · "I'd rather stay, if I had the choice."
+   - Examples: "If I had the money, I'd be out of this shi- tomorrow." · "I wish I'd never f---in' met him." · "I would've called, I swear — in hindsight I should've." · "I'd rather stay home, if I had the choice."
    - Real-world relevance: Regret and hypotheticals are where friends process breakups and bad nights ("I should've stayed home"), so this is the grammar of late-night talk.
 
 ## Lesson 34: Reported speech — "he said he was coming"
@@ -352,7 +332,7 @@
    - Deepens: `past-simple/regular-ed` — reporting pushes the verb one step further back.
    - Uses: `past-simple/irregular-set`
    - Vocabulary: say, tell, ask, wonder, mention, claim, admit, deny, "point out", "touch on"
-   - Examples: "He said he was coming — he told me that." · "She mentioned it, she claimed it, then she denied it." · "He asked where I was; I wondered, I admitted it." · "They pointed it out, they touched on it, then they left."
+   - Examples: "He said he was coming — he f---in' told me that, I swear." · "She claimed she didn't do it, then she admitted the whole shi-." · "He asked where the f--- I was, so I told him." · "She said she was over it — bullshi-, she's still mad."
    - Real-world relevance: Gossip is reported speech from start to finish ("she said, then he told me"), so a student who can't shift the tense turns every story into confusion.
 
 ## Lesson 35: The passive — "the shi- got handled"
@@ -362,7 +342,7 @@
    - Deepens: `past-simple/irregular-set` — the participle now rides with be instead of standing alone as a past verb.
    - Uses: `past-simple/was-were`
    - Vocabulary: "get done", "get paid", "be done", "be made", "get fired", "get dumped", "get caught", "be told", "be born", "get arrested"
-   - Examples: "The shi- got handled — nothing gets done here." · "She got dumped, he got fired, they got caught." · "I was born here, I was told to leave." · "It'll be done, it'll be made right."
+   - Examples: "The shi- got handled — nothing f---in' gets done here." · "She got dumped, he got fired, they got caught — no shi-." · "He got f---ed over by his own brother." · "I was born here, and I was told to leave."
    - Real-world relevance: Gossip and news both hide the doer ("he got fired", "it got sorted"), so the passive is how adults say what happened without naming who did it.
 
 ## Lesson 36: Relative clauses — the guy who, the place where
@@ -372,7 +352,7 @@
    - Deepens: —
    - Uses: `word-order/skeleton`
    - Vocabulary: "the one who", "the thing that", "the place where", "somebody who", "something that", "the reason why", "the kind of", whatever, whoever, "such as"
-   - Examples: "The guy who runs it — that's the place where we met." · "The thing that bugs me is the reason why I left." · "Somebody who gets it, something that works." · "Whatever you want, whoever shows up, the kind of guy who pays."
+   - Examples: "That's the guy who f---ed me over — the one who never pays." · "The thing that bugs me is the f---in' price, that's the reason why I left." · "The guy who runs it is a real asshole." · "Whatever you want, whoever shows up — I don't give a shi-."
    - Real-world relevance: Describing a person, a bar or a grudge needs relative clauses, so this is what turns two flat sentences into one adult one.
 
 ## Lesson 37: Text-speak and DMs — lol, brb, ngl
@@ -382,7 +362,7 @@
    - Deepens: `swear/masked-forms` — the masking now moves off the page and into texts and captions.
    - Uses: `discourse/backchannel`
    - Vocabulary: lol, brb, tbh, idk, ngl, omw, smh, wtf, wyd, lmao
-   - Examples: "ngl that's rough, lol, smh." · "omw — brb, tbh idk yet." · "wyd? wtf happened lmao." · "idk, tbh, ngl — lmao."
+   - Examples: "ngl that's rough, lol, smh." · "omw — brb, tbh idk yet." · "wyd? wtf happened lmao." · "this shi- again? smh, ngl I'm done."
    - Real-world relevance: Half a friendship now lives in DMs and captions, so a student who can't read ngl or omw inside a joke is reading the words but missing the message.
 
 ## Lesson 38: Internet and music culture — "this slaps", vibes, and lyric English
@@ -392,7 +372,7 @@
    - Deepens: `slang/street-basics` — from street basics to the internet-and-music layer that turns over every year.
    - Uses: `sound/elision`
    - Vocabulary: slap, vibe, "no cap", bet, mid, sus, bussin, fire, "rent free", "hit different"
-   - Examples: "This track slaps — no cap, it's fire." · "That take is mid, kinda sus, not bussin." · "It lives in my head rent free, it hits different." · "Bet — the vibe is immaculate."
+   - Examples: "This track f---in' slaps — no cap, it's fire." · "That take is mid as f---, kinda sus." · "It lives in my head rent free, it hits different." · "Bet — the vibe is immaculate, no shi-."
    - Real-world relevance: The student's stated goal is understanding music and internet culture, so this is the lesson where the slang they already hear stops being noise.
 
 ## Lesson 39: AAVE I — a real variety, spoken and attributed
@@ -402,7 +382,7 @@
    - Deepens: —
    - Uses: `present-simple/third-person-s`
    - Vocabulary: "ain't", finna, tryna, "y'all", bout, steady, "trippin'", salty, "big time", "on point"
-   - Examples: "He be working late; she be trippin'." · "I done told you, I been knew — y'all ain't listening." · "I don't know nothing about it, steady going off, big time." · "That outfit is on point — finna copy it."
+   - Examples: "He be working late; she be f---in' trippin'." · "I done told you, I been knew — y'all ain't f---in' listening." · "I don't know nothing about it, big time." · "That outfit is on point — finna copy it."
    - Real-world relevance: Music and online speech are full of AAVE, so it is taught as language people actually speak and are owed credit for, never as a joke or as broken English.
 
 ## Lesson 40: Sarcasm, hyperbole, and roasting
@@ -412,7 +392,7 @@
    - Deepens: `intensifier/swear-booster` — exaggeration now runs a whole joke, not just one adjective.
    - Uses: `discourse/backchannel`
    - Vocabulary: "shut up", "wait what", "I'm dead", "yeah right", sure, "make me", "as if", literally, obviously, "not even"
-   - Examples: "Oh great, another meeting — sure, yeah right." · "Shut up, I'm dead, literally." · "You roasted me? As if — make me, obviously." · "I'm not even mad — wait what."
+   - Examples: "Oh great, another f---in' meeting — sure, yeah right." · "Shut the f--- up, I'm dead, literally." · "You roasted me? As if — make me." · "I'm not even mad — wait what."
    - Real-world relevance: Friends and coworkers live on dry jokes and exaggeration, so a student who only reads sentences literally is constantly confused or offended by accident.
 
 ## Lesson 41: Telling people what to do — imperatives and softened requests
@@ -422,7 +402,7 @@
    - Deepens: `mode/empty-vs-filled` — the empty subject is now deliberate: a command aimed at you.
    - Uses: `modal/could-polite`
    - Vocabulary: "hold up", "knock it off", "give me a sec", "would you mind", "could you", "step back", "back off", "leave it", "drop it", "calm down"
-   - Examples: "Hold up — knock it off, calm down." · "Give me a sec; would you mind, could you?" · "Step back, back off, leave it, drop it." · "Don't do that, just wait a minute."
+   - Examples: "Hold up — knock that shi- off, calm down." · "Step the f--- back, back off, leave it, drop it." · "Would you mind giving me a sec? Could you?" · "Don't do that — just wait a f---in' minute."
    - Real-world relevance: Every crowded bar, shared kitchen and tense group chat runs on orders and softened requests, so the ability to say "back off" or "could you give me a sec" without a fight is daily survival.
 
 ## Lesson 42: Sexual and intimate language — said plainly, with advice
@@ -432,7 +412,7 @@
    - Deepens: `swear/where-not-to-use` — the same use-it / don't-use-it line, now drawn around the bedroom words.
    - Uses: `swear/core-verbs`
    - Vocabulary: "get with", "hit on", "ask out", "turn on", "one-night stand", "friends with benefits", "check out", "make a move", "break it off", "kiss and tell"
-   - Examples: "He hit on her, asked her out, made his move." · "They're friends with benefits — a one-night stand, whatever." · "She turns me on; I'd get with her, no kiss and tell." · "Check her out if you want, but if she says no, back off and respect it."
+   - Examples: "He f---in' hit on her, asked her out, made his move." · "They're friends with benefits — a one-night stand, whatever." · "She turns me on; I'd get with her, but no kiss and tell." · "Check her out if you want, but if she says no, back off and respect it."
    - Real-world relevance: Dating, hookups and consent are ordinary adult life, and a student who can't say any of it in English is stuck reading between the lines of every chat.
 
 ## Lesson 43: The hardest taboo — the words you learn but never use
@@ -442,7 +422,7 @@
    - Deepens: `swear/masked-forms` — the masking rules now stretch to the worst words, with slurs explained and never spoken here.
    - Uses: `swear/where-not-to-use`
    - Vocabulary: "c---", "cross the line", "out of line", "off limits", "watch your mouth", "no-go", taboo, offensive, insult, respect
-   - Examples: "c--- is the hardest word in English — you learn it to recognise it, not to say it." · "That joke crossed the line, it's out of line, off limits." · "Slurs are never used in this course: you learn what they are so you can stay clear of them." · "Watch your mouth in that room, it's a total no-go."
+   - Examples: "Don't ever call her that — c--- is the hardest word in English, and you don't get to use it." · "He called me a piece of shi- — that was f---in' out of line." · "That joke crossed the f---in' line — off limits." · "Watch your mouth in that room — it's a total no-go."
    - Real-world relevance: Subtitles, lyrics and strangers' mouths are full of the worst words, so the student needs to know their weight and their walls — and why a reputation is the price of getting it wrong.
 
 ## Lesson 44: The decorum ceiling — strangers, the public, and the work email
@@ -452,7 +432,7 @@
    - Deepens: `politeness/could-would-mind` — the softened request now scales up to email and the general public.
    - Uses: `swear/where-not-to-use`
    - Vocabulary: "circle back", "touch base", "take it offline", bandwidth, "reach out", "follow up", "per my last email", "loop in", heads-up, recap
-   - Examples: "Per my last email, just following up and circling back." · "Let's take it offline, touch base later, loop me in." · "I hear you, but I see it differently — I think, if you ask me." · "Heads-up and a quick recap, then I'll reach out."
+   - Examples: "Per my last email, just following up — I kept it polite." · "'Per my last email' is just polite for 'you f---ed up again'." · "I hear you, but I see it differently — let's take it offline." · "Heads-up: the boss is in a shi- mood, so no bullshi- in that meeting."
    - Real-world relevance: The same person who says f--- with friends has to write to a boss and talk to a cop, and this is the ceiling where the street voice has to stop.
 
 ## Lesson 45: EXAM — can the student carry a whole adult day, from the meeting to the bar to the argument
@@ -467,7 +447,7 @@
    - Deepens: `aave/aspect-markers` — from done/been as plain markers to stressed BEEN carrying remote time.
    - Uses: `aave/habitual-be`
    - Vocabulary: "we been", "she be", "finna go", "tryna see", "on me", deadass, period, "say less", word, facts
-   - Examples: "We been here — deadass, period." · "I'm finna go, tryna see what's up." · "Say less, that's on me." · "Word, facts — she be on it, we been knew."
+   - Examples: "We been knew, deadass — y'all be late every f---in' time." · "I'm finna go, tryna see what's up; this shi-'s dead." · "Say less, that's on me." · "Word, facts — she be on it."
    - Real-world relevance: This is the language of the music and creators the student follows, and the lesson keeps it accurate, credited, and honestly framed.
 
 ## Lesson 47: Heated argument — hard disagreement and the way out
@@ -487,7 +467,7 @@
    - Deepens: `slang/use-advice` — from who can say a word to when a word is already dead or from the wrong country.
    - Uses: `slang/internet-set`
    - Vocabulary: "old school", "so last year", cringe, basic, extra, sick, dope, legit, bogus, hype
-   - Examples: "That's so last year — kinda cringe, basic." · "Dope, sick, legit — old school, but it works." · "Bogus excuse, extra drama, all hype." · "That's a cringe take — not gonna lie."
+   - Examples: "That fit is so last year — kinda cringe, basic." · "Old school dope is still sick, legit — f--- what they say." · "Bogus f---in' excuse, all hype, extra drama." · "That's a cringe take — not gonna lie."
    - Real-world relevance: Slang is the fastest way to sound either native or ridiculous, so the student needs the borrowing rules before they drop a dead word in a live conversation.
 
 ## Lesson 49: Long jokes, callbacks, and switching the tone
@@ -497,7 +477,7 @@
    - Deepens: `humor/roast` — from a quick roast to a whole story built to land a punchline.
    - Uses: `connector/time-order`
    - Vocabulary: punchline, "inside joke", "got you", "you had to be there", "just kidding", "just messing", storytime, "plot twist", "no but seriously", "on a serious note"
-   - Examples: "Storytime — plot twist, punchline, got you." · "It's an inside joke; you had to be there, just kidding." · "Just messing — no but seriously, on a serious note." · "That callback got you, and now, back to the joke."
+   - Examples: "Storytime: plot twist at the end, and the punchline? He f---in' paid." · "It's an inside joke — you had to be there, no shi-." · "Just messing — no but seriously, on a serious note." · "That callback f---in' got you, just kidding."
    - Real-world relevance: The friend who can hold a group with a story and then read the room is the one people invite out, so this is the social payoff of the whole course.
 
 ## Lesson 50: Capstone — saying what you mean in your own voice
@@ -507,7 +487,7 @@
    - Deepens: `discourse/tone-shift` — from switching tone on purpose to owning the whole voice at once.
    - Uses: `argument/boundaries`, `slang/borrowing`
    - Vocabulary: "speak your mind", "own it", "keep it real", "tell it like it is", "mean it", "straight up", "no filter", "heart to heart", "real talk", "to be honest"
-   - Examples: "I'll speak my mind, keep it real, tell it like it is." · "Straight up, no filter — real talk." · "Heart to heart, to be honest, I mean it." · "Own it — say it like you mean it."
+   - Examples: "I'm gonna speak my f---in' mind — keep it real, no filter." · "Straight up, no filter: real talk, that shi- was weak." · "Heart to heart, to be honest — I mean it." · "Own it and say it like you f---in' mean it."
    - Real-world relevance: By the end the student is the one texting, arguing, flirting, joking and apologizing in their own voice, in whatever room they walk into, with no teacher in the room to pick the level.
 
 

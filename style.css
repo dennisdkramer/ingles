@@ -943,5 +943,302 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
   .g4-mole.no .g4-mole-t,.g4-bucket.reveal .g4-bucket-t,.g4-mole.reveal .g4-mole-t{animation:none}
   .g4-prompt{transition:none}
 }
+/* ------------------------------------------------------------------------------------------------
+   trainOrder — the order of adjectives, on rails, under a low bridge.
+
+   THE ARGUMENT, DRAWN. The track is FLAT: every car's wheels stand on one rail line. What steps up is
+   the CAR BODY — each car behind the front one is 6px taller, and 6px less room above it. A block
+   grows to the height ITS OWN slot is allowed, so the word that belongs in front is the TALLEST and
+   the word that belongs at the back is the shortest: loaded correctly, every block tops out on ONE
+   level line, 3px under the deck. A word put in a car further back than its own therefore stands 6px
+   proud of that line for every car it overshoots, and 3px is all the clearance there is. Then the
+   train runs LEFT, out through the bridge, and the first block that is too tall takes the deck down.
+   The arithmetic is ONE geometry in two places that must agree: here (--rail / --car0 / --step /
+   --deck) and the plugin's own constants of the same names.
+   Vertical budget of the 340px stage, from the bottom: dock 6..44 · crew 48..124 · rail 140 · the
+   front car's roof 186 · a correct block's top 286 · the deck's underside 289 · the girder to 340. */
+.game[data-game="trainOrder"] .g4-stage{height:340px}
+.g4-yard{position:absolute;inset:0;z-index:2;
+  --rail:140px;--car0:46px;--step:6px;--deck:289px;--tw:76%;--loco:8%;
+  --gap:calc((100% - var(--tw)) / 2)}
+.g4-tground{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(#ded0ad 0,#cbb893 46%,#b6a077 100%)}
+.g4-tplat{position:absolute;left:0;right:0;bottom:124px;height:4px;z-index:0;pointer-events:none;
+  background:#9a855f;box-shadow:0 2px 0 rgba(255,255,255,.34),0 -2px 3px rgba(60,44,20,.16)}
+.g4-tsleep{position:absolute;left:0;right:0;bottom:calc(var(--rail) - 15px);height:15px;z-index:1;
+  pointer-events:none;
+  background:repeating-linear-gradient(90deg,#8b6b45 0 9px,#7b5d3a 9px 11px,transparent 11px 31px)}
+.g4-trail{position:absolute;left:0;right:0;bottom:calc(var(--rail) - 3px);height:6px;z-index:1;
+  pointer-events:none;
+  background:linear-gradient(#cfd8e1 0 2px,#7c8894 2px 4px,#57626e 4px);
+  box-shadow:0 2px 3px rgba(40,30,15,.32)}
+/* ---- the bridge: left of the train, over the track the train leaves along ----------------------
+   A girder with the tunnel mouth cut out of it, and a solid deck across the bottom: the deck's
+   underside is the line every block is measured against, and it is the piece that comes down. */
+.g4-tbridge{position:absolute;left:0;top:0;bottom:var(--deck);width:calc(var(--gap) + 10px);
+  z-index:5;pointer-events:none}
+.g4-tgirder{position:absolute;left:0;right:0;top:0;bottom:9px;
+  background:repeating-linear-gradient(58deg,transparent 0 19px,#4c5a68 19px 22px),
+             repeating-linear-gradient(-58deg,transparent 0 19px,#4c5a68 19px 22px),
+             linear-gradient(#6d7d8d,#4d5b69);
+  border-top:7px solid #728294;border-bottom:3px solid #2f3945;opacity:.97;
+  clip-path:polygon(0 0,100% 0,100% 100%,80% 100%,80% 0,46% 0,46% 100%,0 100%)}
+.g4-tdeck{position:absolute;left:0;right:0;bottom:0;height:9px;
+  background:linear-gradient(#e2e9ef 0 3px,#9aa7b5 3px 6px,#77838f 6px);
+  box-shadow:0 2px 4px rgba(30,24,14,.42)}
+.g4-tabut{position:absolute;left:0;top:0;bottom:0;width:9%;
+  background:repeating-linear-gradient(#8d8578 0 7px,#7a7165 7px 9px);
+  border-right:2px solid #57503f}
+.g4-tsignl{position:absolute;left:12%;bottom:11px;padding:1px 7px;background:#f2c53d;
+  border:2px solid #2b3540;border-radius:5px;font:800 10px 'Public Sans',sans-serif;
+  letter-spacing:.07em;color:#2b3540;white-space:nowrap;transform:rotate(-1.5deg)}
+/* the deck going down: the girder first, the slab a frame later, the sign after that */
+.g4-tbridge.hit .g4-tgirder{animation:g4tbfall .85s ease-in forwards}
+@keyframes g4tbfall{0%{transform:none}12%{transform:translate(2px,4px) rotate(1.4deg)}
+  100%{transform:translate(-12px,96px) rotate(-8deg);opacity:0}}
+.g4-tbridge.hit .g4-tdeck{animation:g4tbfall .85s .07s ease-in forwards}
+.g4-tbridge.hit .g4-tsignl{animation:g4tsignfall .8s ease-in forwards}
+@keyframes g4tsignfall{0%{transform:rotate(-1.5deg)}
+  100%{transform:translate(-22px,104px) rotate(-62deg);opacity:0}}
+/* the crumbling edge the impact leaves: it stays after the wreck, so the hole is the record of it */
+.g4-tbrk{position:absolute;left:0;right:0;bottom:0;height:12px;background:#3b4653;opacity:0;
+  clip-path:polygon(0 0,100% 0,100% 100%,88% 52%,76% 100%,62% 44%,48% 96%,34% 40%,20% 92%,8% 48%,0 88%);
+  transition:opacity .2s ease}
+.g4-tbridge.hit .g4-tbrk{opacity:1}
+
+/* ---- the train ---------------------------------------------------------------------------------
+   The cars are FLOW items on one rail line (align-items:flex-end puts every car's bottom on the rail);
+   only their heights differ, so the bodies step up and the wheels never leave the line. */
+.g4-ttrain{position:absolute;left:var(--gap);width:var(--tw);bottom:var(--rail);
+  height:calc(var(--car0) + 7 * var(--step));z-index:3;display:flex;align-items:flex-end;
+  pointer-events:none;will-change:transform}
+.g4-ttrain.in{animation:g4tarrive .62s cubic-bezier(.22,.9,.3,1)}
+@keyframes g4tarrive{from{transform:translateX(-128%)}to{transform:none}}
+/* away: the whole train runs out to the left, through the bridge it fits under */
+.g4-ttrain.run{animation:g4trun var(--runms,1750ms) cubic-bezier(.45,0,.78,1) forwards}
+@keyframes g4trun{to{transform:translateX(calc(-1 * (var(--gap) + var(--tw) + 6%)))}}
+/* the lurch when something hits: a shove back, a bounce, then it stands where it stopped */
+.g4-ttrain.jolt{animation:g4tjolt .9s ease-out forwards}
+@keyframes g4tjolt{0%{transform:translateX(0)}16%{transform:translateX(-4.4%)}
+  34%{transform:translateX(-1.1%)}52%{transform:translateX(-5.2%)}100%{transform:translateX(-4.7%)}}
+.g4-tloco{position:relative;flex:0 0 var(--loco);align-self:flex-end;
+  height:calc(var(--car0) + 18px);z-index:1}
+.g4-tloco svg{display:block;width:100%;height:100%;overflow:visible}
+/* one car: as tall as the room its own slot allows, standing on the rail */
+.g4-tcar{position:relative;flex:1 1 0;min-width:0;
+  height:calc(var(--car0) + var(--k) * var(--step));
+  display:flex;align-items:flex-end;justify-content:center;pointer-events:auto;cursor:pointer}
+.g4-tbody{position:absolute;left:0;right:0;top:0;bottom:0;border-radius:4px 4px 2px 2px;
+  background:linear-gradient(#82909f,#5b6978);border:2px solid #333c46;
+  box-shadow:inset 0 3px 0 rgba(255,255,255,.26),inset 0 -9px 0 rgba(20,26,32,.3)}
+.g4-tcar.hot .g4-tbody{border-color:#1d4ed8;
+  box-shadow:inset 0 0 0 2px rgba(29,78,216,.6),inset 0 3px 0 rgba(255,255,255,.26)}
+.g4-thold{position:absolute;left:5px;right:5px;top:4px;bottom:13px;border:2px dashed rgba(24,33,54,.46);
+  border-radius:4px;background:rgba(24,33,54,.14);
+  transition:background .15s ease,border-color .15s ease}
+.g4-tcar.hot .g4-thold{border-color:#1d4ed8;background:rgba(29,78,216,.2)}
+/* the slot name, on the EMPTY car only: once a block is in, the block is the car's content */
+.g4-tnum{position:absolute;left:50%;bottom:2px;transform:translateX(-50%);z-index:1;
+  pointer-events:none;padding:0 4px;background:var(--paper);border:1.5px solid var(--ink);
+  border-radius:4px;font:700 9.5px/1.35 'Public Sans',sans-serif;color:var(--ink);white-space:nowrap;
+  transition:opacity .18s ease}
+.g4-tcar.loaded .g4-tnum{opacity:0}
+.g4-tcouple{position:absolute;left:-3px;bottom:10px;width:7px;height:9px;border-radius:2px;background:#39434e}
+.g4-twheels{position:absolute;left:5%;right:5%;bottom:-11px;height:22px;pointer-events:none}
+.g4-twheel{position:absolute;bottom:0;width:16px;height:16px;border-radius:50%;
+  background:radial-gradient(circle,#727e8c 0 34%,#333c46 36% 100%);border:2px solid #1a2127}
+.g4-twheel.a{left:4%}
+.g4-twheel.b{right:4%}
+
+/* the block, in the car it was thrown into. Its height is set by the engine to the room its OWN slot
+   allows, and it STANDS ON THE CAR'S ROOF (bottom:100%), which is what makes a wrong car visible long
+   before the train moves: the block further back than its own stands up through the deck. Nothing red
+   or green is drawn at this point — the crash is what says it. */
+.g4-tload{position:absolute;left:5px;right:5px;bottom:100%;z-index:2;display:flex;align-items:center;
+  justify-content:center;padding:2px 5px;overflow:hidden;text-align:center;
+  background:var(--paper);border:2px solid var(--ink);border-radius:5px;color:var(--ink);
+  box-shadow:2px 2px 0 var(--tan);font:700 12.5px/1.12 'Public Sans',sans-serif;
+  transition:height .34s cubic-bezier(.3,1.4,.6,1)}
+/* the card arriving: it was thrown up off a man's hand, so it lands on the deck from above */
+.g4-tload.fly{animation:g4tland .4s cubic-bezier(.3,1.3,.55,1)}
+@keyframes g4tland{0%{opacity:0;transform:translateY(44px) rotate(-8deg) scale(.88)}
+  55%{opacity:1}100%{transform:none}}
+/* the inquest, AFTER the crash: only the cars that were wrong blush, and only then */
+.g4-tcar.no .g4-tload{border-color:#c92a2a;background:#fdeaea;box-shadow:2px 2px 0 rgba(201,42,42,.5)}
+.g4-tcar.no .g4-tbody{border-color:#b03636;box-shadow:inset 0 0 0 2px rgba(201,42,42,.35)}
+.g4-tcar.tilt{animation:g4ttilt .7s ease-out forwards}
+@keyframes g4ttilt{to{transform:translateY(3px) rotate(-5deg)}}
+/* the moment of impact: a white burst where the block meets the deck */
+.g4-tburst{position:absolute;left:50%;top:0;width:46px;height:46px;margin:-23px 0 0 -23px;z-index:6;
+  pointer-events:none;border-radius:50%;
+  background:radial-gradient(circle,#fffbe0 0 14%,#f7c948 15% 38%,rgba(242,120,40,.6) 39% 58%,rgba(242,120,40,0) 60%);
+  animation:g4tburst .5s ease-out forwards}
+@keyframes g4tburst{0%{transform:scale(.2);opacity:1}55%{opacity:1}100%{transform:scale(2.4);opacity:0}}
+/* the board that says how the stop went — a word or two, and nothing else: no colour on a car, no
+   sound, no score. The verdict is announced when the train has had its moment */
+.g4-tverdict{position:absolute;left:calc(var(--gap) / 2);top:34px;transform:translate(-50%,-50%);
+  z-index:7;pointer-events:none;opacity:0;padding:2px 12px;border:3px solid;border-radius:9px;
+  background:rgba(253,250,242,.95);font:800 13px/1.2 'Public Sans',sans-serif;letter-spacing:.09em;
+  white-space:nowrap}
+.g4-tverdict.ok{border-color:#2f9e44;color:#1d5c2c}
+.g4-tverdict.bad{border-color:#c92a2a;color:#7d1f1f}
+.g4-tverdict.on{animation:g4tboard .3s ease-out forwards}
+@keyframes g4tboard{0%{opacity:0;transform:translate(-50%,-50%) scale(1.6)}
+  100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+/* ---- the dock: the clock, and the words of this train waiting to be carried -------------------- */
+.g4-tdepot{position:absolute;left:10px;right:10px;bottom:6px;height:40px;z-index:6;
+  display:flex;align-items:center;gap:8px;padding:3px 7px;background:rgba(253,250,242,.92);
+  border:2px solid var(--ink);border-radius:11px;box-shadow:3px 3px 0 rgba(185,133,76,.7)}
+.g4-tclock{flex:0 0 auto;min-width:64px;height:100%;padding:0 6px;background:var(--ink);border-radius:7px;
+  color:var(--cream);font:700 9px/1.1 'Public Sans',sans-serif;letter-spacing:.09em;text-align:center;
+  display:flex;flex-direction:column;align-items:center;justify-content:center}
+.g4-tclock b{display:block;font:700 20px/1 'Playfair Display',Georgia,serif;letter-spacing:.03em}
+.g4-tclock.low{background:#c92a2a;animation:g4ttick .5s ease-in-out infinite alternate}
+@keyframes g4ttick{from{transform:scale(1)}to{transform:scale(1.06)}}
+.g4-tcount{flex:0 0 auto;padding:2px 9px;background:var(--paper);border:2px solid var(--ink);
+  border-radius:999px;font:700 10.5px/1.4 'Public Sans',sans-serif;letter-spacing:.05em;
+  color:var(--ink);white-space:nowrap}
+.g4-tsay{flex:1 1 auto;min-width:0;text-align:center;padding:2px 8px;font:700 12.5px/1.25 'Public Sans',sans-serif;
+  color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;
+  transition:opacity .2s ease}
+.g4-tsay.on{opacity:1}
+
+/* ---- the men who load the train ----------------------------------------------------------------
+   One man in front of each car, his feet on the platform and his head just under the rail, so he
+   stands clearly in FRONT of the car he serves. The card he is given sits in his raised hand. The
+   crew's left/width are the train's own, so man n is in front of car n at every block width. */
+.g4-tcrew{position:absolute;left:var(--gap);width:var(--tw);bottom:48px;height:76px;z-index:4;
+  display:flex;align-items:flex-end;pointer-events:none}
+.g4-tguy{position:relative;flex:1 1 0;min-width:0;height:100%;display:flex;flex-direction:column;
+  justify-content:flex-end;align-items:center;gap:2px;pointer-events:none;
+  opacity:0;transform:translateY(18px);
+  transition:opacity .26s ease,transform .38s cubic-bezier(.3,1.35,.6,1);
+  transition-delay:calc(var(--i) * 70ms)}
+.g4-tguy.up{opacity:1;transform:none}
+.g4-tguy.gone{opacity:0;transform:translateY(20px);transition-delay:calc(var(--i) * 40ms)}
+.g4-tguy svg{display:block;width:22px;height:40px;flex:0 0 auto;overflow:visible}
+/* the card he holds: handed to him from the dock, thrown from this spot into the car */
+.g4-tagrip{position:relative;z-index:2;max-width:calc(100% - 2px);padding:3px 7px;background:var(--paper);
+  border:2px solid var(--ink);border-radius:6px;box-shadow:2px 2px 0 var(--tan);color:var(--ink);
+  font:700 11.5px/1.1 'Public Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  animation:g4thand .24s ease-out}
+@keyframes g4thand{from{opacity:0;transform:translateY(-10px) scale(.9)}to{transform:none}}
+/* the card in the dock, before it is given to anyone */
+.g4-tcard{flex:0 1 auto;min-width:0;max-width:150px;padding:5px 11px;background:var(--paper);
+  border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);color:var(--ink);
+  font:700 13px/1.15 'Public Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  cursor:grab;touch-action:none;user-select:none;transition:transform .16s ease,box-shadow .16s ease,
+  border-color .16s ease}
+.g4-tcard:hover{border-color:#1d4ed8}
+.g4-tcard.picked{transform:translateY(-3px) scale(1.05);border-color:#1d4ed8;
+  box-shadow:3px 3px 0 #1d4ed8;cursor:grabbing}
+.g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px}
+.g4-tcard.ghost{position:fixed;z-index:80;margin:0;pointer-events:none;cursor:grabbing;
+  box-shadow:7px 7px 0 var(--ink);transform:translate(-50%,-50%) scale(1.06)}
+.g4-tcard.thrown{position:fixed;z-index:80;margin:0;pointer-events:none;
+  animation:g4tto .46s cubic-bezier(.4,.1,.7,1) forwards}
+@keyframes g4tto{0%{transform:translate(-50%,-50%) scale(1)}
+  45%{transform:translate(calc(-50% + var(--dx) * .55),calc(-50% + var(--dy) * .55 - 26px)) scale(.9)}
+  100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.55);opacity:.15}}
+/* a row of empty cars waiting for a word: the car under the pointer glows while a card is in hand */
+.g4-yard.holding .g4-tcar:not(.loaded) .g4-tbody{animation:g4topen 1.4s ease-in-out infinite}
+@keyframes g4topen{50%{filter:brightness(1.14)}}
+
+/* ---- the end of a run with time left: the yard empties, then the intro comes back ------------- */
+.g4-yard.fade .g4-ttrain,.g4-yard.fade .g4-tcrew,.g4-yard.fade .g4-tdepot{
+  animation:g4tfade .5s ease forwards}
+@keyframes g4tfade{to{opacity:0}}
+/* ---- THE WRECK: the next train comes in from behind the stopped one, and it does not slow down --
+   `--ramms` is set from the stage width, so it always looks like the same speed. */
+.g4-tram{position:absolute;left:calc(var(--gap) + var(--tw) * .56);width:calc(var(--tw) * .44);
+  bottom:var(--rail);height:calc(var(--car0) + 18px);z-index:3;pointer-events:none;opacity:0}
+.g4-tram.in{opacity:1;animation:g4tramin var(--ramms,430ms) cubic-bezier(.55,0,.9,.45) forwards}
+@keyframes g4tramin{from{transform:translateX(210%)}to{transform:translateX(8%)}}
+.g4-tram svg{display:block;width:100%;height:100%}
+/* the fireball: it sits where the two trains met */
+.g4-tboom{position:absolute;z-index:8;pointer-events:none;width:190px;height:190px;
+  margin:-95px 0 0 -95px;border-radius:50%;opacity:0;
+  background:radial-gradient(circle,#fffbe4 0 11%,#ffd23f 12% 27%,#ff9a3c 28% 46%,
+    rgba(216,70,28,.62) 47% 66%,rgba(216,70,28,0) 68%)}
+.g4-tboom.go{animation:g4tboom .82s ease-out forwards}
+@keyframes g4tboom{0%{opacity:0;transform:scale(.2)}13%{opacity:1;transform:scale(1.02)}
+  52%{opacity:.96;transform:scale(1.1)}100%{opacity:0;transform:scale(1.55)}}
+.g4-tfx{position:absolute;inset:0;z-index:9;pointer-events:none}
+.g4-tbit{position:absolute;width:8px;height:8px;background:#80603c;border:1.5px solid #3d2a13;
+  border-radius:2px;animation:g4tfly var(--life,.95s) ease-out forwards}
+@keyframes g4tfly{0%{transform:none;opacity:1}
+  100%{transform:translate(var(--dx,0),var(--dy,44px)) rotate(var(--rt,220deg));opacity:0}}
+.g4-tsmoke{position:absolute;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.94);
+  animation:g4tpuff 1.15s ease-out forwards}
+@keyframes g4tpuff{0%{transform:translate(0,0) scale(.35);opacity:.95}
+  100%{transform:translate(var(--dx,-12px),-58px) scale(1.8);opacity:0}}
+/* the FAIL stamp: huge, red, slammed down off-square, and gone before the next train is in */
+.g4-tfail{position:absolute;left:50%;top:44%;z-index:10;pointer-events:none;opacity:0;
+  padding:2px 24px;border:6px double #7d1f1f;border-radius:12px;background:rgba(253,250,242,.9);
+  font:800 44px/1.06 'Playfair Display',Georgia,serif;letter-spacing:.13em;color:#c92a2a;
+  white-space:nowrap;text-shadow:2px 2px 0 rgba(125,31,31,.28)}
+.g4-tfail.go{animation:g4tfail 1.45s ease-out forwards}
+@keyframes g4tfail{0%{opacity:0;transform:translate(-50%,-50%) scale(2.7) rotate(10deg)}
+  15%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-7deg)}
+  74%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-7deg)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.03) rotate(-7deg)}}
+/* what the ram leaves: the train that was hit is shoved, and then the yard is emptied */
+.g4-ttrain.shoved{transform:translateX(-3.2%)}
+@media (prefers-reduced-motion:reduce){
+  .g4-ttrain.in,.g4-ttrain.run,.g4-ttrain.jolt,.g4-tcar.tilt,.g4-tload.fly,
+  .g4-tburst,.g4-tbit,.g4-tsmoke,.g4-tverdict.on,.g4-tfail.go,.g4-tboom.go,.g4-tram.in,
+  .g4-tclock.low,.g4-tbridge.hit .g4-tgirder,.g4-tbridge.hit .g4-tdeck,
+  .g4-tbridge.hit .g4-tsignl,.g4-tyard.fade .g4-ttrain,.g4-tyard.fade .g4-tcrew,
+  .g4-tyard.fade .g4-tdepot,.g4-tcard.thrown,.g4-tagrip,.g4-yard.holding .g4-tcar .g4-tbody{
+    animation:none}
+  .g4-tverdict.on,.g4-tfail.go{opacity:1}
+  .g4-tload,.g4-tguy,.g4-tcard{transition:none}
+  .g4-tguy{opacity:1;transform:none}
+}
 @media print{.g4-stage{display:none}.game-list{display:block !important}.g4-intro{display:none !important}}
+
+/* the train: the cars are spaced across --tw (76% of the yard, centred) and the locomotive rides ahead
+   of the front car, in the --loco slot to its left. `--pw` is the car pitch the JS also uses to lay the
+   boys and the bridge planks out, so the three can never disagree about where car 3 is */
+.g4-ttrain{position:absolute;left:var(--gap);width:var(--tw);bottom:var(--rail);
+  height:calc(var(--car0) + 8 * var(--step) + 4px);z-index:4;pointer-events:none}
+.g4-tloco{position:absolute;left:calc(var(--loco) * -1);bottom:0;width:var(--loco);
+  height:calc(var(--car0) + 22px)}
+.g4-tloco svg{display:block;width:100%;height:100%}
+/* a car: wheels on the rail, body stepped up by its slot's 6px, and the block's own opening on top */
+.g4-tcar{position:absolute;bottom:0;height:calc(var(--car0) + var(--step) * var(--k));
+  transition:left .45s cubic-bezier(.4,0,.7,1)}
+.g4-tbody{position:absolute;left:0;right:0;bottom:0;height:100%;display:flex;flex-direction:column;
+  justify-content:flex-end;overflow:hidden;background:linear-gradient(#6d7c8c,#4a5765);
+  border:2px solid #29313a;border-radius:5px 5px 3px 3px;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.24)}
+.g4-tbowl{position:absolute;left:50%;top:2px;width:26px;height:10px;margin-left:-13px;z-index:1;
+  border-radius:0 0 12px 12px;background:#2b333c;box-shadow:inset 0 -2px 0 rgba(255,255,255,.14)}
+.g4-thold{position:absolute;left:2px;right:2px;top:16px;bottom:20px;z-index:1;
+  border:2px dashed rgba(226,236,244,.5);border-radius:4px;
+  transition:border-color .15s ease,background .15s ease}
+.g4-tcar.hot .g4-thold{border-color:#7fd2ff;background:rgba(127,210,255,.22)}
+.g4-tstripe{position:absolute;left:0;right:0;bottom:19px;height:3px;background:#d9a441;opacity:.9}
+.g4-tslot{position:absolute;left:50%;top:15px;transform:translateX(-50%);z-index:3;pointer-events:none;
+  max-width:calc(100% - 8px);padding:0 5px;background:var(--paper);border:2px solid var(--ink);
+  border-radius:4px;font:700 10px/1.5 'Public Sans',sans-serif;color:var(--ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g4-twheel{position:absolute;bottom:-7px;width:14px;height:14px;border-radius:50%;z-index:2;
+  background:radial-gradient(circle,#8b97a4 0 34%,#3a434d 36% 100%);border:2px solid #1c232a}
+.g4-twheel.a{left:8%}
+.g4-twheel.b{right:8%}
+.g4-tstep{position:absolute;left:0;right:0;bottom:-6px;height:6px;border-radius:2px;
+  background:#3b454f;box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+/* the block in the car. Its height is the height of the column it is stacked in — the column of the CAR
+   IT SITS IN. So a block in the wrong car is taller than the column it grew in, and its top paints OVER
+   the block on the car in front of it: the runaway is visible before the train has moved a pixel. */
+.g4-tbin{position:absolute;left:0;right:0;bottom:20px;
+  height:calc(var(--car0) + var(--step) * var(--k) - 22px);
+  display:flex;flex-direction:column-reverse}
+.g4-tload{position:relative;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  padding:1px 4px;overflow:hidden;text-align:center;background:#fff8ea;border:2px solid #6b4e26;
+  border-radius:4px;box-shadow:0 2px 0 rgba(40,30,15,.22);
+  font:700 12px/1.1 'Public Sans',sans-serif;color:var(--ink);
+  transition:height .18s cubic-bezier(.3,1.4,.6,1)}
+.g4-tload.tall{background:#ffe8c6;border-color:#1d4ed8}
 

@@ -10,6 +10,7 @@ counts, spacing and class names are generation decisions, not defects.
   (content wider than its block), ESCAPE (an element across the `.content-area` frame), CELL (a `.blanks`
   cell whose item does not fit), RESIZE (a draggable textarea). `--shot <file>` saves a picture of the page
   top — the fastest way to see a real defect; `--selftest` proves the harness still catches a broken page.
+  A user instruction that asks about a "visual" or "space fill" issue is answered with this harness, never from jsdom.
 - `node qa/landing.mjs` — the student index (index.html) in jsdom: three tracks, title as the link,
   continue above the list, locked tracks inert, the `go()` gate, the teacher's grant/remove controls.
 - `node qa/games4.mjs` — the engine4.js game runner and every plugin's state machine in jsdom.
@@ -20,3 +21,7 @@ Scope belongs to the harnesses, not the caller: with no lesson numbers every pag
 pages is swept, `--track=kids|business|adult` narrows it (qa/track.mjs), and a named lesson that does not
 exist is a failure. `npm run qa` = build + content + landing + games; `npm run qa:layout` = the overflow
 selftest + sweep; `npm run qa:live` = the CDP probe. Every harness exits non-zero on a finding.
+
+Which of those to run, and how deep, is the caller's decision, not the harness's: when scope is most or
+all live pages, pick a few with defensible relevance to test/verify. Request user sign-off before
+[sweeping the rest only if defensibly necessary].

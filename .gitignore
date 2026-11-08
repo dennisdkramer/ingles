@@ -3,6 +3,5 @@ probe_dom.txt
 .env
 progress.log
 .continue/
-qa/
 IMPLEMENTATION.md
 ARCHIVED/
