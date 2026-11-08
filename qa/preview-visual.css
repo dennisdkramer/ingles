@@ -438,58 +438,6 @@
   .tl-span[data-end="open"]{border-right-style:solid}
 }
 
-/* ---- tonguePath: the tongue TRAVELLING between two sounds, on the same sagittal plate -------
-   The figure is one group that moves. Two poses with no travel between them read as a flicker,
-   and the flicker is exactly what a student already has in a before/after strip — so here the
-   tongue slides, the tip leaves the ridge, a tracer dot walks the route and the gap opens under
-   the hard palate. What has to be imagined is the DISTANCE, not the two endpoints.
-   Only transform and opacity animate (Build Constraint 5). Under reduced motion the tongue parks
-   at the second pose and the first pose stays on screen as a dashed ghost, so the state change
-   survives the loss of travel instead of the figure going blank.
-   A different sound pair is two poses in the markup and two labels — no rule here changes. */
-.vz-plate .tg-anim,.tg-anim{animation-duration:6s;animation-iteration-count:infinite;
-  animation-timing-function:cubic-bezier(.45,.05,.55,.95)}
-.vz-plate .tg-tongue{animation-name:tg-slide}
-.vz-plate .tg-contact{animation-name:tg-contact;opacity:1}
-.vz-plate .tg-gap{animation-name:tg-gap;opacity:0}
-.tg-laba{animation-name:tg-laba;opacity:1}
-.tg-labb{animation-name:tg-labb;opacity:0}
-/* two labels, one slot: the caption never reflows when the state changes */
-.tg-swap{display:inline-grid;vertical-align:baseline}
-.tg-swap>*{grid-area:1/1}
-.vz-plate .tg-ghost{opacity:0}
-
-/* A: the tip rests on the ridge, contact made.  B: pulled back, nothing touching. */
-@keyframes tg-slide{
-  0%,14%{transform:translate(0,0)}
-  42%,76%{transform:translate(26px,30px)}
-  96%,100%{transform:translate(0,0)}}
-@keyframes tg-contact{
-  0%,16%{opacity:1}
-  32%,84%{opacity:0}
-  96%,100%{opacity:1}}
-@keyframes tg-gap{
-  0%,38%{opacity:0}
-  52%,80%{opacity:1}
-  90%,100%{opacity:0}}
-@keyframes tg-laba{
-  0%,16%{opacity:1}
-  30%,86%{opacity:0}
-  96%,100%{opacity:1}}
-@keyframes tg-labb{
-  0%,38%{opacity:0}
-  50%,80%{opacity:1}
-  92%,100%{opacity:0}}
-
-@media (prefers-reduced-motion:reduce){
-  .tg-anim{animation:none}
-  .vz-plate .tg-tongue{transform:translate(26px,30px)}
-  .vz-plate .tg-contact{opacity:0}
-  .vz-plate .tg-gap,.vz-plate .tg-ghost{opacity:1}
-  .tg-laba{opacity:0}
-  .tg-labb{opacity:1}
-}
-
 /* ---- .mk-* — inline marks: the phrase is the figure ------------------------------------------
    A mark that rides on the text needs no container, no width decision and no script: it fits a
    full panel and a .third column, it prints, it cannot overflow, and it stays on the word if the
@@ -519,3 +467,167 @@
   .mk-pair{background:none;box-shadow:none;border-bottom:2px solid #000}
   .mk-drop{text-decoration-color:#000}
 }
+/* ==== tonguePath v2 — motion needs its own geometry, not a marker on an engraving ==============
+   v1 put a small marker on the 456px plate; measured with a paused-frame test it moved only a few
+   pixels and landed on the engraving's "Tongue" label, so the travel — the entire teaching — was
+   invisible. A schematic is the right tool for MOVEMENT (the anatomical-truth rule belongs to
+   labelling, which is what mouthCut is for): here the tongue is one authored path that slides, so
+   the shape can be seen leaving the ridge instead of a dot being hunted.
+   Inline, 320px max, left aligned: it sits inside a sentence as an aside, not as a figure block. */
+.tp2{display:inline-block;width:100%;max-width:320px;margin:8px 0 2px;vertical-align:top}
+.tp2 svg{display:block;width:100%;height:auto;overflow:visible}
+.tp2 .roof{fill:#f3ece0;stroke:#182136;stroke-width:2}
+.tp2 .tooth{fill:#fff;stroke:#182136;stroke-width:2}
+.tp2 .tongue{fill:#d9a08c;stroke:#182136;stroke-width:2}
+.tp2 .ghost{fill:none;stroke:#2f7d4f;stroke-width:2;stroke-dasharray:5 4}
+.tp2 .gapmark{stroke:#2f7d4f;stroke-width:2;fill:none}
+.tp2 .lbl{font:700 10px 'Public Sans',sans-serif;fill:#6f6656}
+.tp2 .tp2-tongue{animation:tp2-slide 5.2s cubic-bezier(.4,0,.2,1) infinite}
+.tp2 .tp2-gap{animation:tp2-gap 5.2s linear infinite;opacity:0}
+.tp2 .tp2-on{animation:tp2-on 5.2s linear infinite;opacity:1}
+@keyframes tp2-slide{
+  0%,14%{transform:translate(0,0)}
+  44%,74%{transform:translate(26px,10px)}
+  96%,100%{transform:translate(0,0)}}
+@keyframes tp2-gap{
+  0%,38%{opacity:0}
+  50%,76%{opacity:1}
+  90%,100%{opacity:0}}
+@keyframes tp2-on{
+  0%,14%{opacity:1}
+  30%,86%{opacity:0}
+  96%,100%{opacity:1}}
+/* the step control: a checkbox, not a scoring input, so the student can hold either pose and
+   compare — and under reduced motion it is the way the travel is still shown (one 0.9s slide) */
+.tp2-step{display:inline-flex;align-items:center;gap:6px;margin:6px 0 0;
+  font:600 11px 'Public Sans',sans-serif;letter-spacing:.05em;text-transform:uppercase;color:#6f6656}
+.tp2-step input{appearance:none;width:30px;height:16px;margin:0;border:2px solid var(--ink);
+  border-radius:999px;background:#fff8ea;position:relative;cursor:pointer}
+.tp2-step input::after{content:'';position:absolute;top:1px;left:1px;width:10px;height:10px;
+  border-radius:50%;background:#b03a2e;transition:transform .9s ease}
+.tp2-step input:checked::after{transform:translateX(14px)}
+.tp2-step input:checked ~ .tp2 svg .tp2-tongue{transform:translate(26px,10px)}
+.tp2-step input:checked ~ .tp2 svg .tp2-gap{opacity:1}
+.tp2-step input:checked ~ .tp2 svg .tp2-on{opacity:0}
+@media (prefers-reduced-motion:reduce){
+  .tp2 .tp2-tongue,.tp2 .tp2-gap,.tp2 .tp2-on{animation:none}
+  .tp2 .tp2-tongue{transition:transform .9s ease}
+  .tp2 .tp2-gap,.tp2 .tp2-on{transition:opacity .9s ease}
+}
+
+/* ---- .pos-* — parts of speech as a mark on the word ------------------------------------------
+   Subtle in space, real in help: no column, no baseline shift, no box — the mark is the word's own
+   underline, so it costs ZERO layout and survives any sentence length. Generated, not typed:
+   `node qa/pos.mjs "sentence"` emits this markup, which is what makes long sentences tractable.
+   Two channels so colour is never the only one — the LINE STYLE (solid / double / dotted / dashed
+   / wavy) separates the classes and colour reinforces it, so grayscale print and colour blindness
+   both still read the class. `.pos-labels` adds a one-letter superscript for spelling a class out;
+   off by default because it costs space. */
+.pos-n,.pos-v,.pos-adj,.pos-adv,.pos-det,.pos-pron,.pos-prep,.pos-conj,.pos-aux,.pos-wh,.pos-num{
+  text-underline-offset:3px;text-decoration-thickness:2px;text-decoration-skip-ink:none}
+.pos-n{text-decoration:underline solid #2f7d4f}
+.pos-v{text-decoration:underline double #b03a2e}
+.pos-adj{text-decoration:underline dotted #1d4ed8}
+.pos-adv{text-decoration:underline dashed #7a3fa0}
+.pos-det{text-decoration:underline solid #b9854c;text-decoration-thickness:1px}
+.pos-pron{text-decoration:underline dashed #8a6d3b;text-decoration-thickness:1px}
+.pos-prep{text-decoration:underline solid #0f766e}
+.pos-conj{text-decoration:underline dotted #a16207;text-decoration-thickness:1px}
+.pos-aux{text-decoration:underline wavy #b03a2e;text-decoration-thickness:1px}
+.pos-wh{text-decoration:underline wavy #1d4ed8;text-decoration-thickness:1px}
+.pos-num{text-decoration:underline solid #6b7280}
+.pos-legend{display:flex;flex-wrap:wrap;gap:3px 13px;margin:7px 0 0;padding:0;list-style:none;
+  font:600 10.5px 'Public Sans',sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6f6656}
+.pos-legend li{display:flex;align-items:center;gap:5px}
+.pos-legend s{display:block;width:15px;border-bottom:2px solid #6f6656;text-decoration:none}
+.pos-legend .l-n{border-bottom:2px solid #2f7d4f}
+.pos-legend .l-v{border-bottom:3px double #b03a2e}
+.pos-legend .l-adj{border-bottom:2px dotted #1d4ed8}
+.pos-legend .l-adv{border-bottom:2px dashed #7a3fa0}
+.pos-legend .l-prep{border-bottom:2px solid #0f766e}
+.pos-legend .l-aux{border-bottom:2px wavy #b03a2e}
+.pos-labels .pos-n::after,.pos-labels .pos-v::after,.pos-labels .pos-adj::after,
+.pos-labels .pos-adv::after,.pos-labels .pos-prep::after,.pos-labels .pos-conj::after,
+.pos-labels .pos-aux::after,.pos-labels .pos-det::after,.pos-labels .pos-pron::after,
+.pos-labels .pos-wh::after{font:700 .58em 'Public Sans',sans-serif;vertical-align:.62em;
+  margin-left:.12em;letter-spacing:0;opacity:.72}
+.pos-labels .pos-n::after{content:'N'}
+.pos-labels .pos-v::after{content:'V'}
+.pos-labels .pos-adj::after{content:'ADJ'}
+.pos-labels .pos-adv::after{content:'ADV'}
+.pos-labels .pos-prep::after{content:'PREP'}
+.pos-labels .pos-conj::after{content:'CONJ'}
+.pos-labels .pos-aux::after{content:'AUX'}
+.pos-labels .pos-det::after{content:'DET'}
+.pos-labels .pos-pron::after{content:'PRN'}
+.pos-labels .pos-wh::after{content:'WH'}
+
+
+/* the step control sits as a sibling of .tp2, so :has() carries the state across */
+.tp2-step:has(input:checked) ~ .tp2 svg .tp2-tongue{animation:none;transform:translate(26px,10px)}
+.tp2-step:has(input:checked) ~ .tp2 svg .tp2-gap{animation:none;opacity:1}
+.tp2-step:has(input:checked) ~ .tp2 svg .tp2-on{animation:none;opacity:0}
+@media (prefers-reduced-motion:reduce){
+  .tp2-step:has(input:checked) ~ .tp2 svg .tp2-tongue,
+  .tp2-step:has(input:checked) ~ .tp2 svg .tp2-gap,
+  .tp2-step:has(input:checked) ~ .tp2 svg .tp2-on{animation:none}
+}
+
+/* ---- tonguePath: a DRAWN side view whose tongue travels between two sounds -------------------
+   The plate-and-overlay version could not be made to move: the overlay sat on a vendored image and
+   the animation classes were never reachable, so the figure was two stills with a caption claiming
+   motion. This one is drawn in the block, which means the motion is the block's own: one <g> is the
+   tongue, and the tongue is what animates. A schematic is honest as long as it is labelled one, and
+   what it teaches is the ROUTE — the tip leaving the ridge — which no photograph shows either.
+   Transform and opacity only. Reduced motion, print or a paused screenshot parks the tongue at the
+   second pose, with the first pose left on screen as the ghost, so the state change survives. */
+.tp-wrap{max-width:520px;margin:10px 0 4px;border:2px solid var(--ink);border-radius:12px;
+  background:#fff8ea;overflow:hidden}
+.tp-wrap svg{display:block;width:100%;height:auto}
+.tp-cavity{fill:#fffdf8;stroke:none}
+.tp-bone{fill:none;stroke:#182136;stroke-width:2.5;stroke-linecap:round}
+.tp-teeth rect{fill:#fdfaf2;stroke:#182136;stroke-width:1.5}
+.tp-ridge{fill:#e6d7c2;stroke:#182136;stroke-width:1.8}
+.tp-tongue path{fill:#e2a2a2;stroke:#8c3a3a;stroke-width:2}
+.tp-tongue{animation:tp-move 6s cubic-bezier(.4,0,.2,1) infinite}
+.tp-ghost{fill:none;stroke:#b3a894;stroke-width:2;stroke-dasharray:5 5}
+.tp-route{fill:none;stroke:#2f7d4f;stroke-width:2;stroke-dasharray:4 5;opacity:.85}
+.tp-dot{fill:#2f7d4f;animation:tp-dot 6s linear infinite}
+.tp-gap path{fill:none;stroke:#2f7d4f;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.tp-gap text{font:700 13px 'Public Sans',sans-serif;fill:#2f7d4f}
+.tp-gap{animation:tp-fade 6s linear infinite;opacity:0}
+.tp-pin{fill:#b03a2e;stroke:#fff;stroke-width:2}
+.tp-pin2{fill:#1d4ed8;stroke:#fff;stroke-width:2}
+.tp-pinnum{font:700 11px 'Public Sans',sans-serif;fill:#fff;text-anchor:middle}
+.tp-lead{stroke:#c9bfae;stroke-width:1.5;stroke-dasharray:2 4}
+
+/* 44px of travel: a twelfth of the drawing. Pose A has the tip on the ridge; in pose B the whole
+   body has slid back and down and the tip touches nothing, which is the English r. */
+@keyframes tp-move{
+  0%,12%{transform:translate(0,0)}
+  42%,70%{transform:translate(44px,16px)}
+  92%,100%{transform:translate(0,0)}}
+@keyframes tp-dot{
+  0%,12%{opacity:0;transform:translate(0,0)}
+  16%{opacity:1;transform:translate(0,0)}
+  30%{transform:translate(22px,8px)}
+  42%,70%{opacity:1;transform:translate(44px,16px)}
+  86%{opacity:0;transform:translate(0,0)}
+  100%{opacity:0}}
+@keyframes tp-fade{
+  0%,34%{opacity:0}
+  46%,74%{opacity:1}
+  88%,100%{opacity:0}}
+
+@media (prefers-reduced-motion:reduce){
+  .tp-tongue,.tp-dot,.tp-gap{animation:none}
+  .tp-tongue{transform:translate(44px,16px)}
+  .tp-dot{opacity:0}
+  .tp-gap{opacity:1}
+}
+@media print{
+  .tp-tongue{animation:none;transform:translate(44px,16px)}
+  .tp-gap{opacity:1}
+  .tp-dot{opacity:0}
+}
+

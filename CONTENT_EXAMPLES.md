@@ -1393,31 +1393,34 @@ Authoring is one span at the point of the mark, empty where the mark is the whol
   chart. The primitive is *image + overlay + numbered key*, and it is the cheapest way to get a real-world visual into a
   block without drawing it badly.
 
-#### `tonguePath` — the tongue travelling between two sounds (draft → built in `qa/preview-blocks.html`)
 
-- **draws** — the same plate and the same crop as `mouthCut`, but the teaching is the **travel**, not two stills. One tip
-  marker slides from resting on the ridge to pulled back with nothing touching; the green contact ring dies as it leaves,
-  the place it started stays behind as a dashed ghost, and a green double arrow opens under the hard roof. The pair here is
-  pt-BR tap (contact) against English `r` (no contact) — one instruction, **leave the gap**. A before/after pair is a
-  flicker the student has already seen; what has to be imagined is the distance between the two poses.
-- **built from** — `assets/speech-organs-mouth.png` plus `<svg class="ov" viewBox="0 0 456 344">` and three numbered
-  `.vz-pin`s, exactly as `mouthCut` — with the marker as **one `<g>` that moves**. Every animated property is `transform`
-  or `opacity` (Build Constraint 5), so nothing repaints mid-loop. Rules live in `qa/preview-visual.css` under `.tg-*`.
-  A different sound pair is two poses and two labels in the markup: no rule changes.
-- **ends in** — radios on *what happens at 1* and *where the gap is measured*, plus one `input.gap`. The figure is never
-  scored; it is the thing the radios point at.
-- **fits** — one column at ≤540px. The `wide` variant makes the overlay overwhelm the engraving and the pins float.
-- **the risk** — a marker claims less than a silhouette, and that is deliberate: the plate already draws the tongue, so an
-  authored tongue laid over it is wrong somewhere, and the first build of this figure did exactly that — a red arc cutting
-  across the engraving and ending past the drawn tongue. Show the **tip and its route**, never the organ.
-- **generalises to** — any figure where the difference is *where something goes*: minimal pairs separated only by place
-  (`θ`/`s`/`t`), the tongue between vowels in connected speech, jaw height for `æ` against `e`. The primitive is
-  *plate + sliding marker + ghost + gap*.
-- **resting state** — reduced motion, print or a paused screenshot parks the marker at the second pose with the first left
-  as a dashed ghost, so the state change survives the loss of travel instead of the figure going blank.
+#### `tonguePath` — the tongue travelling between two sounds (built)
+- **seen in** — `qa/preview-blocks.html` `#item-tonguePath`; the markup there is the reference copy.
 
+
+- **draws** — a side view of the mouth and one tongue that MOVES: pose A has the tip on the ridge
+  behind the upper teeth (the pt-BR tap); pose B has pulled back so the tip touches nothing (the
+  English r). A dashed ghost of pose A stays on screen, a dot walks the route, a green double arrow
+  opens under the hard roof, and two numbered pins name the only two landmarks that matter. The
+  contrast is one instruction — *leave the gap* — so the figure is not teaching two sounds, it is
+  teaching the distance between them.
+- **built from** — inline `<svg>` (no image, so nothing to fail to load), one `<g class="tp-tongue">`
+  that animates as a body, and `transform`/`opacity` only. 44px of travel on a 520px drawing is what
+  makes the motion visible; the first build moved 34px and read as static.
+- **ends in** — radios ("what does the tip do at 1?") and a gap inside a sentence; the drawing is
+  display, the item still saves.
+- **fits** — a `.panel` at any width down to a `.third`, because the viewBox scales and no text sits
+  inside the drawing except two pins and the word *gap*.
+- **the risk** — a schematic is only honest when it is labelled one: this is not a photograph, and
+  the drawn ridge is a position, not anatomy. Reduced motion, print and any paused screenshot park
+  at pose B with pose A left as the ghost, so the state change survives losing the travel.
+- **generalises to** — any pair that differs only in where contact stops: θ/s/t, /d/ vs /ð/, the
+  affricate against its fricative; for vowels, the same figure with the tongue silhouette swapped
+  and no ridge contact at all.
 
 #### `inlineMarks` — the phrase is the figure (built in `qa/preview-blocks.html`)
+- **seen in** — `qa/preview-blocks.html` `#item-inlineMarks`; the markup there is the reference copy.
+
 
 - **draws** — nothing but the sentence. Seven phrase-level marks, each a `<span>` at the letters that carry the point:
   stress dot, ↗/↘ tune, dotted tie, struck letter, syllable rule, differing-letter highlight, opened spacing. The
@@ -1437,7 +1440,38 @@ Authoring is one span at the point of the mark, empty where the mark is the whol
 - **generalises to** — any point that lives inside a sentence rather than beside it: word stress, contrastive stress,
   intonation, linking, elision, syllable count, the letters that differ in a minimal pair, vowel length.
 
+#### `posMarks` — parts of speech as an underline, generated (built in `qa/preview-blocks.html`)
+- **seen in** — `qa/preview-blocks.html` `#item-posMarks`; the markup there is the reference copy.
+
+
+- **draws** — nothing. The mark is the word's own **underline**, so it costs no layout at all: no column, no baseline
+  shift, no chip, no `<svg>`, and it scales from a two-word answer to a forty-word sentence without a width decision.
+  Eleven classes — noun, verb, adjective, adverb, determiner, pronoun, preposition, conjunction, auxiliary, wh-word,
+  numeral — each an underline **style** plus a colour.
+- **two channels, so colour is never the only one** — the line style separates the classes (solid noun, double verb,
+  dotted adjective, dashed adverb, wavy auxiliary) and the colour reinforces it. A greyscale print, a projector and a
+  colour-blind reader all still read the class from the style alone. This is the same rule the `.mk-*` marks follow.
+- **built from** — `node qa/pos.mjs "<sentence>"` tags the sentence and emits the spans, so the marks are generated rather
+  than hand-written: that is what makes a long sentence tractable and makes them consistent between lessons. The tagger
+  handles the cases that break a naive lookup: `-ed`/`-ing` forms that are adjectives (`a tired student`), a determiner
+  against a pronoun (`his` against `she`), an auxiliary against a main verb (`had finished`), and a wh-word starting a
+  question against the same word linking a clause. Any word it cannot place is left unmarked and reported, never guessed.
+- **ends in** — radios or a gap, as always: *which class is `quietly`*, or *the word `told` takes the ____ underline*. The
+  marks are display. A marked stem **is** the question in the cheap form — the student reads the class off the underline
+  they can see rather than parsing the sentence cold.
+- **fits** — any width, including a `.third`. The only width risk is a superscript letter run in `.pos-labels`, which is
+  opt-in for exactly that reason.
+- **the risk** — a mark that is always on makes every sentence look annotated, and a student learns to read the underlines
+  instead of the words. Use it on the sentence under discussion, not on every sentence in the lesson, and prefer the plain
+  line styles so the page does not turn into a colour chart.
+- **generalises to** — any label that belongs to a word rather than beside it: tense and aspect on the verb, `a`/`an`/`the`
+  on the determiner, countable against mass on the noun, register on any word. The primitive is *class on the span + a
+  legend line*, and a new axis is a new class, not a new figure.
+
+
+
 #### `massBasket` — countable against mass, as objects you can see (draft)
+
 
 - **draws** — left: two bounded units with `1` and `2` under them (books). Right: one amorphous block (water, luggage,
   advice) plus three container outlines, each labelled with the quantifier that divides it (`a bottle of`, `a piece of`,
