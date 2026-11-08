@@ -1,17 +1,27 @@
-# PENDING — active subtask batch plan (global RULE 0, item 6)
+# PENDING — active batch plan (authored at Adherence.md [BATCHING] 3, summary and clearing at 6 and 7)
 
-The live working plan for the CURRENT task. When a prompt decomposes into subtask batches (global RULE 0, item 6) they are written here, executed in order, and cleared here once done AND committed. Deferred / not-yet-started work does not live here — it stays in the backlog. Bugs/problems live in ISSUES.md. Handoffs live in HANDOFF.md.
+## [GUIDELINES]
+- Requested changes are committed and pushed when done by default. For any changes that are not pushed, the user must be notified at Turn completion.
+- Avoid rapid successive pushes when a single combined push would do — build markers, a live-site curl or a fixed sleep are tools reached for when the risk of an undetected deploy problem is real, not mandatory steps after every push.
 
-_(Active batches, newest first. Cleared once done AND committed.)_
+## [HANDLING]
+- Each completed `[Sn]` is marked `DONE - <date> - <which files it modified>` and triggers beginning work on the following `[Sn]` or the first `[Sn]` in the following `[Bn]`.
+- Read only the `### [Bn]` batch section you are on. Don't read ahead without verifiable need or user instruction.
+- Heading depth is fixed per prompt, and every level is a real heading - never a bold line standing in for one, never a bullet:
+	- `## [n]` - the Prompt line, directly under `# [CURRENT]`
+	- `### [Bn]` - a batch
+	- `#### [Sn]` - a step
+- Author in the following format:
 
-## Batch — resolve `## preview-blocks.html` requests in CONTENT_EXAMPLES.md
-- [ ] A1 rename `chunkBank` → `contextFit` (catalogue row 47, heading 377, refs 1336 & 1338)
-- [ ] A2 delete `connectedSpeech` (section, catalogue row 44, reword refs 548 & 625)
-- [ ] A3 delete `dictation` (section, catalogue row 45, reword refs 678, 837 & 841)
-- [ ] A4 delete `shadowRecord` (section, catalogue row 49, reword refs 643 & 832)
-- [ ] A5 `questionBuilding` — add level/placement note (lesson 10+, only in a lesson touching questions)
-- [ ] (done already in the contract, just clear notes) `sentenceSurgery` drag-line+alternate; `registerContrast` both-forms-real rule
-- [ ] B clear the resolved `###` sections from `qa/notes.md`
-- [ ] C `repairMoves` rephrase 'repair'/'come apart' → 'interjecting' (await user clarification)
+```markdown
+## [n] <1 line summary of the user prompt; all of its batches sit beneath it> — this line is not one of the lines Adherence.md [PARSE] 1) and 2) put in the turn's first message: those are the per-element lines and the batch list.
+
+### [Bn] <the purpose of batching its child steps - the overarching thing getting done> <the user's words it serves> <artifact produced> <exit condition> <the rule most likely to be broken in this batch, and how that would show>
+
+#### [Sn] <the action or goal of the step> <the File & Section name of the rules which are most relevant> <any prerequisite items or actions> <exit condition>
+```
+
+# [CURRENT] Prompt - (Active batches, newest first)
 
 
+# [PAST] Prompts  
