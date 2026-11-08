@@ -489,3 +489,33 @@
   .tg-laba{opacity:0}
   .tg-labb{opacity:1}
 }
+
+/* ---- .mk-* — inline marks: the phrase is the figure ------------------------------------------
+   A mark that rides on the text needs no container, no width decision and no script: it fits a
+   full panel and a .third column, it prints, it cannot overflow, and it stays on the word if the
+   sentence is edited. Colour only reinforces the shape — dot, arrow, tie, strike, rule, gap — so
+   all seven survive a grey print and a colour-blind reader. These belong in style.css once kept;
+   until then they live here with the other drafts. No keyframes, so nothing to stop for reduced
+   motion, and no overflow entry is needed because a span cannot widen a block. */
+.mk-stress{font-weight:700;text-emphasis-style:filled dot;text-emphasis-color:#b03a2e;
+  text-emphasis-position:over right}
+.mk-fallback-note{display:none}
+@supports not (text-emphasis-style:dot){
+  .mk-stress{position:relative}
+  .mk-stress::before{content:'';position:absolute;left:50%;top:-.5em;width:.34em;height:.34em;
+    margin-left:-.17em;border-radius:50%;background:#b03a2e}
+}
+.mk-rise::after{content:'\2197';margin-left:.1em;font-size:1.05em;font-weight:700;color:#2f7d4f}
+.mk-fall::after{content:'\2198';margin-left:.1em;font-size:1.05em;font-weight:700;color:#2f7d4f}
+.mk-link{display:inline-block;width:1.1em;height:0;vertical-align:baseline;
+  border-bottom:2px dotted #1d4ed8;margin:0 .1em;transform:translateY(-.16em)}
+.mk-drop{text-decoration:line-through;text-decoration-thickness:2px;
+  text-decoration-color:#b03a2e;opacity:.45}
+.mk-syl{display:inline-block;width:0;height:.92em;vertical-align:-.1em;
+  border-left:1px solid #b3a894;margin:0 .14em}
+.mk-pair{background:#fdf0c9;box-shadow:inset 0 -2px 0 #e0a33c;font-weight:600}
+.mk-slow{letter-spacing:.2em;font-style:italic}
+@media print{
+  .mk-pair{background:none;box-shadow:none;border-bottom:2px solid #000}
+  .mk-drop{text-decoration-color:#000}
+}

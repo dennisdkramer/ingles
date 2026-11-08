@@ -24,4 +24,37 @@
 
 # [CURRENT] Prompt - (Active batches, newest first)
 
+## [1] Improve CONTENT_EXAMPLES.md visuals, starting with an animated tongue figure that shows the tongue travelling between two sounds
+
+### [B1] Establish how a drawn element is declared, chosen, embedded and validated today - DONE - 2026-11-08 - read only, no edits
+
+#### [S1] Read [VISUALS], mouthCut/plate markup, preview-visual.css, assets/README.md, overflow.mjs - DONE - 2026-11-08 - read only
+
+#### [S2] Record the reference/selection mechanism as it exists - DONE - 2026-11-08 - read only; finding: A-J scoring had been deleted, so promotion was impossible
+
+### [B2] Build the animated tongue figure - DONE - 2026-11-08 - qa/preview-visual.css, qa/preview-blocks.html
+
+#### [S3] Two articulations and the path between them on the real plate - DONE - 2026-11-08
+
+#### [S4] Animate with transform/opacity only plus a reduced-motion park - DONE - 2026-11-08; first build drew a tongue silhouette that missed the plate, replaced by tip marker + ghost + gap
+
+### [B3] Make the figure referenceable and choosable - DONE - 2026-11-08 - CONTENT_EXAMPLES.md
+
+#### [S5] Write the #### tonguePath entry, fits, scored control, generalisation - DONE - 2026-11-08
+
+### [B4] Verify the figure renders, animates and holds geometry - DONE - 2026-11-08 - screenshots + harness run
+
+#### [S6] qa/overflow.mjs against the page, screenshots inspected, harness re-run - DONE - 2026-11-08
+
+### [B5] Correct the [VISUALS] rules the user struck down and implement the phrase-level marks they point at - "the drawing does NOT have to end in a control ... some of them to be css classes that can be put on individual phrases ... don't know why or if the ''label in html, draw in svg'' is a limitation" - corrected rules, seven .mk-* marks, a harness that stops enforcing the deleted A-J contract, two orphaned draft headings restored
+
+#### [S7] Rewrite the three wrong draft rules (figure optional; CSS expected; label placement per figure) and add the Inline marks section - DONE - 2026-11-08 - CONTENT_EXAMPLES.md
+
+#### [S8] Implement the seven .mk-* marks, an inlineMarks preview item and its #### entry - DONE - 2026-11-08 - qa/preview-visual.css, qa/preview-blocks.html, CONTENT_EXAMPLES.md
+
+#### [S9] Replace qa/examples.mjs so it asserts the surviving contract, incl. draft-to-preview reachability - DONE - 2026-11-08 - qa/examples.mjs; 7 checks pass
+
+#### [S10] Restore #### ruleTree and #### massBasket headings whose bodies had been left orphaned - DONE - 2026-11-08 - CONTENT_EXAMPLES.md
+
+
 # [PAST] Prompts  

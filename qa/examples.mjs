@@ -1,13 +1,16 @@
 /**
- * qa/examples.mjs — the CONTENT_EXAMPLES.md contract.
+ * qa/examples.mjs — the CONTENT_EXAMPLES.md structure contract.
  *
- * The file is a menu a build selects from by reading ONLY its `###` headings. That only works if every
- * heading is machine-readable and complete, so this asserts exactly that:
- *   - every ENTRY `###` heading parses as  name - (A0 … J0)  with all ten scores present in 0–3
- *     (the only non-entry `###` heading allowed is the Headline Key that defines the axes)
- *   - no duplicate entry names
- *   - the A–J Headline Key is present, and the A–J axes are defined in READ HEADINGS
- *   - the two-step reading protocol is still stated (browse headings → read only the chosen body)
+ * The A–J scoring block was removed from the file, so this no longer asserts it: a harness that
+ * keeps checking a deleted rule fails forever and trains everyone to ignore it. What is checked is
+ * what still breaks silently:
+ *   - the file has entries (`###`) and drafts (`####`), and every heading parses;
+ *   - no name is used twice across entries and drafts;
+ *   - every draft declares the five fields the drafts share
+ *     (draws / built from / ends in / fits / the risk);
+ *   - a draft that says it is built in `qa/preview-blocks.html` has a matching `id="item-NAME"`
+ *     there — so "chosen, then implemented" cannot rot into a pointer at nothing. This is the
+ *     check that keeps a draft reachable from a lesson build.
  *
  * STANDING INSTRUCTION TO THE ASSISTANT — a task that names text in a preview page's note box is a
  * task against that box (`textarea.qa-note` in qa/preview-games4.html, qa/preview-blocks.html), and
@@ -33,43 +36,54 @@ const ok = (name, cond, extra) => {
   else { fail++; console.log('  FAIL ' + name + (extra ? '  «' + extra + '»' : '')); }
 };
 
-/* an entry heading is `### `name - (A0, B0, … J0)`` — name alphanumeric, every score a digit 0–3 */
-const ENTRY_RE = /^### `([A-Za-z0-9]+) - \(A([0-3]), B([0-3]), C([0-3]), D([0-3]), E([0-3]), F([0-3]), G([0-3]), H([0-3]), I([0-3]), J([0-3])\)`$/;
+/* an entry is              `### `name - (best for: …)``
+   a draft is               `#### `name` — one line about it``                              */
+const ENTRY_RE = /^### `([A-Za-z0-9]+) - \(/;
+const DRAFT_RE = /^#### `([A-Za-z0-9]+)`/;
+const FIELDS = ['**draws**', '**built from**', '**ends in**', '**fits**', '**the risk**'];
 
-const heads = [];
-const unparsed = [];
-let keySeen = false;
+const entries = [], drafts = [], unparsed = [];
 lines.forEach((l, i) => {
-  if (!l.startsWith('### ')) return;
-  const m = l.match(ENTRY_RE);
-  if (m) { heads.push({ n: i + 1, name: m[1], scores: m.slice(2) }); return; }
-  if (/^### The Headline Key\b/.test(l)) { keySeen = true; return; }
-  unparsed.push((i + 1) + ': ' + l.slice(0, 80));
+  if (l.startsWith('### ')) {
+    const m = l.match(ENTRY_RE);
+    if (m) entries.push({ n: i + 1, name: m[1] });
+    else unparsed.push((i + 1) + ': ' + l.slice(0, 80));
+    return;
+  }
+  if (l.startsWith('#### ')) {
+    const m = l.match(DRAFT_RE);
+    if (m) drafts.push({ n: i + 1, name: m[1], body: '' });
+    else unparsed.push((i + 1) + ': ' + l.slice(0, 80));
+  }
 });
 
-console.log('\nCONTENT_EXAMPLES contract\n');
+/* a draft's body runs from its own heading to the next heading of any level — the heading counts,
+   because "built in qa/preview-blocks.html" is stated in the heading itself */
+for (const d of drafts) {
+  for (let i = d.n - 1; i < lines.length && (i === d.n - 1 || !/^#{1,4} /.test(lines[i])); i++) d.body += lines[i] + '\n';
+}
 
-ok('the file has entries', heads.length > 50, heads.length + ' entries');
-ok('every entry ### heading is machine-readable', unparsed.length === 0,
+console.log('\nCONTENT_EXAMPLES structure\n');
+
+ok('the file has entries', entries.length > 50, entries.length + ' entries');
+ok('the file has drafts', drafts.length > 0, drafts.length + ' drafts');
+ok('every ### and #### heading parses', unparsed.length === 0,
   unparsed.length ? unparsed.slice(0, 5).join(' | ') : 'all parse');
-ok('the A–J Headline Key is present', keySeen);
 
-const badScore = heads.filter(h => h.scores.some(s => !/^[0-3]$/.test(s))).map(h => h.name);
-ok('every entry carries ten A–J scores in 0–3', badScore.length === 0, badScore.join(', '));
+const names = entries.concat(drafts).map(h => h.name);
+const dupes = names.filter((n, i, a) => a.indexOf(n) !== i);
+ok('no name is used twice', dupes.length === 0, [...new Set(dupes)].join(', '));
 
-const dupes = heads.map(h => h.name).filter((n, i, a) => a.indexOf(n) !== i);
-ok('no duplicate entry names', dupes.length === 0, [...new Set(dupes)].join(', '));
+const thin = drafts.filter(d => FIELDS.some(f => d.body.indexOf(f) === -1)).map(d => d.name);
+ok('every draft declares the five shared fields', thin.length === 0, thin.join(', '));
 
-/* the axis meanings must stay defined, or the scores a build selects on are arbitrary numbers */
-const missingAxes = ['A) Presentational Utility', 'E) Multi-Axis Comparative Utility', 'J) Socio-Cultural']
-  .filter(s => text.indexOf(s) === -1);
-ok('the A–J axes are defined in READ HEADINGS', missingAxes.length === 0, missingAxes.join(', '));
-
-/* the selection protocol must stay stated, or a build will read ~106 KB to pick one shape */
-ok('the two-step reading protocol is stated',
-  /Step 1 — browse the headings/.test(text) &&
-  /Select-String -Path CONTENT_EXAMPLES\.md -Pattern '\^### '/.test(text) &&
-  /Step 2 — read only the entry you chose/.test(text));
+/* draft → built: a pointer in the markdown must land on a real item in the preview page */
+const preview = fs.readFileSync(path.join(ROOT, 'qa', 'preview-blocks.html'), 'utf8');
+const claimed = drafts.filter(d => d.body.indexOf('qa/preview-blocks.html') !== -1);
+const orphans = claimed.filter(d => preview.indexOf('id="item-' + d.name + '"') === -1).map(d => d.name);
+ok('at least one draft is linked to a built item', claimed.length > 0, claimed.length + ' linked');
+ok('every draft built in the preview page has an item there',
+  orphans.length === 0, orphans.join(', ') || claimed.map(d => d.name).join(', '));
 
 console.log('\n' + (fail ? 'FAILED: ' : 'OK: ') + pass + ' passed, ' + fail + ' failed\n');
 process.exitCode = fail ? 1 : 0;

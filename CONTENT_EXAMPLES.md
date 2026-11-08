@@ -1228,29 +1228,63 @@ and a fulcrum, replacing a row of three boxes that showed no movement at all), a
 `timelineBridge` and `levelGauge` are abstract diagrams where depth would add noise, and `mouthCut` is a sagittal
 section, which is a genuinely 2-D object.
 
-## Why these headers are `####` and not `###`
-
-- The browse surface is `^### ` and "the scores are the whole of it". A `###` heading is a promise of a complete
-  contract (`does` / `markup` / `fits` / `vary` / `can't`); these are drafts, so they carry no scores and sit below the
-  surface until one is finished. Promoting a draft = `####` to `###`, add A–J, write the five fields.
-- What each draft adds is a *shape* (a drawing), not a capability: `routineMap` already ships "a `.chart` or a `.panel`
-  with an inline `<svg>` of boxes and connectors", so drawn blocks are inside the existing contract.
-
 ## What every draft here must obey
 
-- **The drawing ends in a control.** `.qitem` radios, `input.gap` or an authored `textarea` — nothing else saves. A
-  slider, a hotspot, a hover-reveal or a `<details>` would look interactive and score nothing, so a gauge or a level can
-  only ever be *display*, and the scored answer stays a radio or a gap.
+- **A figure is optional.** Nothing here has to become a drawing. When a beat is about *where a sound sits in a word* —
+  the stress, the linking, the letter nobody pronounces — the cheapest and clearest visual is a **class on the phrase**,
+  and a picture that only repeats the sentence is worse than the sentence. Draw when the point is *where something is* in
+  space or *how something moves*, which words cannot place.
+- **If the beat is scored, the control saves it.** `.qitem` radios, `input.gap` and an authored `textarea` are what the
+  engine records; a slider, a hotspot, a hover-reveal or a `<details>` looks interactive and records nothing. A figure may
+  illustrate an item but never stands in for the control — and an item with no figure at all is the normal case.
+- **CSS is fair game.** New classes are expected, not an exception: `style.css` for anything a lesson page will use,
+  `qa/preview-visual.css` while a shape is still a draft. Phrase-level marks are the main use — see *Inline marks* below.
+  One mechanical consequence remains: `qa/overflow.mjs` enumerates the block selectors, so a new **top-level block** class
+  has to be added to that list or it is never width-checked. An inline span needs no entry, because it cannot widen a block.
 - **Art is CSS, inline SVG, or a local file — never a URL** (Build Constraint 2). "A picture from outside" therefore
   means *downloaded into this repo*; the repo ships `logo.png` at the root (referenced as `../logo.png` from each track
   folder) and `assets/` — the two anatomy plates, provenance in `assets/README.md` — and that folder is the convention a
   new figure follows: `assets/<name>.<ext>`, referenced from a track page as `../assets/<name>.<ext>`.
-- **No CSS change.** `style.css` has no rule for a content `<svg>` (the only `svg` rules are per-game: `.target svg`,
-  `.g4-* svg`), so an authored `<svg viewBox="…">` sized to its parent scales to `.itemsize` / `-half` / `-third` as it
-  is. A new class is a stylesheet edit and a sign-off — and `qa/overflow.mjs` enumerates the block selectors, so a new
-  top-level class has to be added there or it is never width-checked.
-- **Label in HTML, draw in SVG.** SVG text does not reflow, so words live in the markup beside the drawing and only
-  geometry lives inside it.
+- **Where the words live is a per-figure choice, not a rule.** An HTML label reflows, wraps at any width and is announced
+  by a screen reader; an SVG `<text>` stays at a fixed point in a drawing but cannot wrap and is read out of order. So
+  prose-length labels go in HTML beside the figure, a one-word mark that must sit *at* a point (a `gap`, a `1`) may live
+  in the drawing, and an inline mark has no split at all — the mark **is** the span on the phrase. Pick per figure.
+
+## Inline marks — the phrase is the figure
+
+Most of what a lesson wants to *show* about pronunciation is a property of one or two letters inside a sentence: which
+syllable is loud, where the tune turns, which sound joins the next word, which letter is written and not said. None of
+that needs a figure. It needs a `<span>` with a class, because the mark then travels with the text — it fits a full-width
+panel and a `.third` column without a width decision, it prints black and white, it cannot overflow, it stays glued to the
+word if the sentence is edited, and it is the only form of visual that survives a screen reader with its meaning intact
+(the mark is on the word, not beside it).
+
+The vocabulary, all of it `.mk-*` and all of it due in `style.css`:
+
+| class | draws | suits |
+|---|---|---|
+| `.mk-stress` | a filled dot above the syllable | stress placement, `RE-cord` against `re-CORD` |
+| `.mk-rise` / `.mk-fall` | a small ↗ or ↘ at the point of the turn | intonation, statement against question |
+| `.mk-link` | a dotted tie between two words | connected speech, `an_apple`, `go_on` |
+| `.mk-drop` | a struck letter | a letter written and not said, `Wed(d)nesday`, `(h)our` |
+| `.mk-syl` | a thin rule between syllables | syllable counting, `com|pu|ter` |
+| `.mk-pair` | a highlight with an underline | the two letters that differ, `s(i)t` / `s(ea)t` |
+| `.mk-slow` | opened letter-spacing | a sound held longer, `so(oo)n` |
+
+Two rules, and they are the whole contract:
+
+- **The shape carries the meaning.** Colour only reinforces it. A dot, an arrow, a tie, a strike and a rule are five
+  different shapes; a student who prints in grey, or cannot separate red from green, still reads all five.
+- **The mark never replaces the control.** A marked sentence is still an item: it takes radios, or a gap in the sentence
+  itself (`input.gap` sits inside the phrase, which is the same insight as the mark). Display alone records nothing.
+
+Authoring is one span at the point of the mark, empty where the mark is the whole content:
+
+```html
+<p>I <span class="mk-stress">RE</span>cord it, then we
+   <span class="mk-pair">s</span>it on the <span class="mk-pair">s</span>eat<span class="mk-rise"></span></p>
+```
+
 
 #### `ruleTree` — the relative-pronoun decision tree (draft)
 
@@ -1382,6 +1416,28 @@ section, which is a genuinely 2-D object.
 - **resting state** — reduced motion, print or a paused screenshot parks the marker at the second pose with the first left
   as a dashed ghost, so the state change survives the loss of travel instead of the figure going blank.
 
+
+#### `inlineMarks` — the phrase is the figure (built in `qa/preview-blocks.html`)
+
+- **draws** — nothing but the sentence. Seven phrase-level marks, each a `<span>` at the letters that carry the point:
+  stress dot, ↗/↘ tune, dotted tie, struck letter, syllable rule, differing-letter highlight, opened spacing. The
+  vocabulary table and the two rules are in *Inline marks* above.
+- **built from** — `.mk-*` classes, in `qa/preview-visual.css` while a draft and in `style.css` once kept. A mark is
+  `::before` / `::after`, `text-decoration` or `text-emphasis` — no container, no `<svg>`, no script, no width of its own,
+  and nothing for `qa/overflow.mjs` to enumerate. `.mk-stress` uses `text-emphasis` because the browser centres the dot
+  over the syllable itself; the absolutely positioned dot it replaced drifted right of the syllable in the first render,
+  and survives only inside `@supports not (text-emphasis-style:dot)`.
+- **ends in** — the marked sentence is still an item: `.qitem` radios whose stem carries the marks, or `input.gap` sitting
+  inside the phrase. A mark is display and records nothing on its own.
+- **fits** — full, half **and third**, because the mark travels with the text instead of taking a column. The only width
+  risk is `.mk-slow`'s letter-spacing in a narrow third, and it opens the line rather than the block.
+- **the risk** — two marks on one span collide above the text (a stress dot under a `.mk-pair` highlight), and a mark laid
+  on text that already reads as UI — a chip, a button label — is read as interface, not as annotation. One mark per span;
+  the shape carries the meaning and colour only reinforces it.
+- **generalises to** — any point that lives inside a sentence rather than beside it: word stress, contrastive stress,
+  intonation, linking, elision, syllable count, the letters that differ in a minimal pair, vowel length.
+
+#### `massBasket` — countable against mass, as objects you can see (draft)
 
 - **draws** — left: two bounded units with `1` and `2` under them (books). Right: one amorphous block (water, luggage,
   advice) plus three container outlines, each labelled with the quantifier that divides it (`a bottle of`, `a piece of`,
