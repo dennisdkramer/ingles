@@ -6,7 +6,7 @@
 		3) the literal `batch success` as the last line. `batch success` without 1) and 2) is not a parse and does not count.
 	- **Entry**: `ADHERENCE.md` and nothing else may be read before that first message; it is the only file exempt and only for this. Content already in context counts as read — quoting it is not a read, and re-reading it is not a step.
 	- **Address**: every tool call after the first message carries, in the same message, one clause naming an element of the current prompt or a `[Bn]` step of the plan it produced. An element of an earlier prompt is not an address: a call whose clause would have to reach back to one, or would have to say `none`, is not made.
-	- **Breach**: a tool call in the first message, or a call with no address clause, is `batch BREACH <tool, target, element-or-none>` in place of `batch success`, written as the first text of the message in which it is noticed, and the turn ends there — no further tool call until the user replies. `none` is a complete answer and the one that matters. Writing it late does not repair it — the transcript shows the order.
+	- **Breach**: a tool call in the first message, or a call with no address clause, is `batch BREACH <tool, target, element-or-none>` in place of `batch success`, written as the first text of the message in which it is noticed, and the turn ends there — no further tool call until the user replies. `none` is a complete answer and the one that matters. Writing it late does not repair it — the transcript shows the order. Executing any step of a batch while (PENDING.md [CURRENT]) carries no entry for the current prompt is the same breach: `batch BREACH (pending, none, <element>)`.
 	
 ### [UNDERSTANDING], DISAGREEMENT, UNCERTAINTY, and Communicating with the User
 	- Be **concise** - the shortest wording that keeps 100% of the information. Do not explain or repeat yourself without defensible need. 
@@ -49,7 +49,7 @@
 		g) Efficiency (time efficiency supercedes token efficiency).
 		
 	2) If there is any previously authored text in (PENDING.md [CURRENT]) section after [BATCHING], move it down to (PENDING.md [PAST]), alert the user of the contents, and prompt them to 1) delete the contents of (PENDING.md [PAST]), 2) migrate the contents out and append them on PAST_BATCHES.md, 3) Merge with items in (PENDING.md [CURRENT]), or 4) Ignore
-	3) Author current plan into (PENDING.md [CURRENT]) according to the formatting described in (PENDING.md [HANDLING]).
+	3) Author current plan into (PENDING.md [CURRENT]) according to the formatting described in (PENDING.md [HANDLING]). This is not optional: until [CURRENT] holds an entry for the current prompt, no project file is edited and no step of any batch is executed, and the plan carried in the turn's first message is not a substitute for the file.
 	4) Begin working on the first batch, update its entry as necessary when an item changes or is completed.
 	5) On resume after compaction, new workflow, or new Prompt, read (PENDING.md [CURRENT]).
 	6) When all batches in (PENDING.md [CURRENT]) are verifiably complete, author a 1-3 line summary - and append it in `PAST_BATCHES.md` at the repo root (the file already exists and is kept empty until the first summary; never carry a past summary back into it) - which includes:
