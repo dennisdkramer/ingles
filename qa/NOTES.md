@@ -140,18 +140,19 @@ this one is terrible. we need to pull in an existing image and ideally be able t
 ### massBasket
 
 → CONTENT_EXAMPLES.md §`massBasket`
+improve and generalize visuals so they arent showing individual items but concepts
 
 ### slotBlocks
 
 → CONTENT_EXAMPLES.md §`slotBlocks`
-the idea of this onei want you to think a lot deeper on all of these : "how is this useful to the student? How is it BETTER than normal text/spoken explanations?" i dont see how this implementation is useful at all, especially not in this form. Can you also stop and explain to me why its only filling half the block?
+getting better, but work on something that can be applied to individual sentences within their blocks without seeming like its own exercise. remember these are supposed to be tools and elements that implement INSIDE existing content blocks
 
 ### voiceSeesaw
 
 → CONTENT_EXAMPLES.md §`voiceSeesaw`
-'move the word to the other side' doesnt really gain anything over just having words. Rethink the concept, preferably using actual motion and the subject moving behind a veil, if you can think of something else to use the seesaw for, separate it out
+the idea is getting better, but its still basically its own block type. Try something that can take a normal sentence which is tagged as passive and put the subject behind a veil and then go from there
 
 ### levelGauge
 
 → CONTENT_EXAMPLES.md §`levelGauge`
-the thermometer with vertically stacked words is kind of okay but it fits a lot better with intensity than certainty. Id like a much nicer looking thermometer if possible, and make the gradient cool-hot colors eg. blue to red instead of green. the second part of the activity is bad, come up with a new idea
+the third block is terrible and in general i want some kind of marker that can go below individual words or phrases, since having a vertical thermometer next to a clumn of words doesnt really add anything that just puitting them in order wouldnt be able to explain
