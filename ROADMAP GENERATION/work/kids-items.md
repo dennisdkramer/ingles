@@ -112,6 +112,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - click — L11
 - charge — L11
 - "log in" — L11
+- lol — L11
+- wtf — L11
 - sofa — L12
 - fridge — L12
 - "living room" — L12
@@ -232,6 +234,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - mute — L23
 - restart — L23
 - "log out" — L23
+- chill — L23
+- dip — L23
 - soda — L24
 - juice — L24
 - bread — L24
@@ -362,6 +366,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - rival — L37
 - audience — L37
 - season — L37
+- mid — L37
+- goat — L37
 - rule — L38
 - curfew — L38
 - allowance — L38

@@ -1,6 +1,21 @@
 # KIDS-ROADMAP
 
-## Lesson 1
+## Decisions
+   · Item budget: 10 to 12 items in every teaching lesson, 486 across the 48 of them - the floor because a lesson that cannot fill ten has not met its concept yet, the ceiling because a longer list stops being a drill and turns into a dictionary page.
+   · Label budget: 3 to 6 labels under each `teaches:`, 184 labels in total over 27 areas - one label is one thing told once and then drilled, so fewer is a chapter and more is a drill sheet.
+   · Exam-uses budget: 25 and 45 name exactly 10 labels each, the ten where a failure means the block has not landed. It is a diagnosis, not an inventory.
+   · Repeated vocabulary: an item belongs to one lesson; a repeat is legal only where the later lesson names it in its `deepens:` line, and the checker reports one such reference in the whole course.
+   · Tail policy: 46-50 carries only what nothing later depends on - the past perfect, the imaginary conditional, the passive, tags, and the tone of a word that has gone stale - so no exam waits on them.
+   · Tone: register a) in KIDS-REGISTER.md (close friends, casual, online chat, silly stakes) is the default voice of every scene, carrier and vocabulary list, with b) wherever the language needs a peer group and c) wherever an adult has to be in the room. The register's own required language is taught in the course rather than parked in the tail: the text-speak code at 11, the border where slang stops being allowed at 23, the slang map at 37 - all three finished before the last exam, and the tail only goes past them. No lesson is told which register it is in.
+
+## Shape
+   · Blocks: 1-24 the sentence and its tenses, inside the student's own chat and school day · 25 EXAM · 26-44 plans, phrasal families, the perfect, comparison, conditions and reporting · 45 EXAM · 46-50 the tail
+   · Block 1 (1-24): by its end the student holds a real conversation about themselves and their day with nothing but facts, right-now actions, the past, a modal or two and a command, asking and answering without translating first. It owns register a)'s everyday scenes and register c)'s first requests to an adult, and it carries the text-speak code and the border where slang stops being allowed.
+   · Block 2 (26-44): assumes block 1 and adds what makes plans, stories and opinions sound native - gonna, will, arrangements, the two phrasal families, the perfect, comparison, duty, conditions, relatives, gerund against infinitive, and reporting. It owns the peer scenes that need them (group chat, rankings, arguments) and lands the slang map where the ranking is taught.
+   · Tail (46-50): assumes both blocks and goes past them - the past perfect, the imaginary conditional, the passive, tags, and how a message carries tone once the slang itself has gone stale. Nothing here is a prerequisite for anything.
+   · Spine: 28 families - kept in `ROADMAP GENERATION/work/kids-spine.md` (not shipped)
+
+## Lesson 1: Welcome - the two codes that make English readable
 
    - Focus: What this track is and the two codes that make English readable: letters are not sounds, and a cognate's ending tells you how to say it.
    - teaches: `sound/vowel-no-fixed`, `cognate/suffix-codes`, `method/one-rule-then-drill`
@@ -10,7 +25,7 @@
    - Examples: "video is vii-dee-oh, not vee-dee-oh"; "invention ends in -tion, so it lands as invenção"; "famous ends in -ous, so it lands as famoso"; "distance ends in -ance, so it lands as distância"
    - Real-world relevance: Every stream title and chat message is full of these words, and a 14-year-old meets them before knowing why they sound wrong in Portuguese shape.
 
-## Lesson 2
+## Lesson 2: The silent e, the vowel pairs, and the cognates that lie
 
    - Focus: Same letter, two sounds: the silent e that flips a vowel and the vowel pairs that are one sound, plus the cognates whose shape lies.
    - teaches: `sound/short-vs-long`, `sound/vowel-pairs`, `cognate/partial-trap`
@@ -20,7 +35,7 @@
    - Examples: "hat and hate, bit and bite"; "cheese and feet carry ee, moon carries oo"; "my parents are not meus parentes"; "actually means na verdade, not atualmente"
    - Real-world relevance: These are the words that make a student sound fluent in English and say the opposite of what they meant in front of the wrong person.
 
-## Lesson 3
+## Lesson 3: be, get and it - states, weather, and what you got
 
    - Focus: be, get and it: how to say how you are, what you got, and what the weather is doing.
    - teaches: `hook/be-state`, `hook/get-wildcard`, `hook/it-empty-subject`, `sound/contractions-be`
@@ -30,7 +45,7 @@
    - Examples: "I'm hungry, it's late, my battery is dead"; "I got a ticket for the match"; "it's raining, not está chovendo with no subject"
    - Real-world relevance: A student states their own state and reports a small win or a small loss dozens of times a day, and every one of those sentences is be or get.
 
-## Lesson 4
+## Lesson 4: have, do, make, go - the four verbs that cover ter and fazer
 
    - Focus: have, do, make, go: the four verbs that cover what Portuguese splits and merges with ter and fazer.
    - teaches: `hook/have-own`, `hook/do-action`, `hook/make-vs-do`, `hook/go-place`
@@ -40,7 +55,7 @@
    - Examples: "I have a project and no idea"; "do the dishes, make a mess, make a plan"; "I go to school by bus"; "I'm gonna get some money for it"
    - Real-world relevance: Pocket money, chores and school projects are an adolescent's main economy, and Portuguese covers all of it with ter and fazer.
 
-## Lesson 5
+## Lesson 5: a, the and there is - introducing a thing, then pointing back at it
 
    - Focus: a, the and there is: how English introduces a thing, then points back at it, and how it says something exists.
    - teaches: `hook/there-is-are`, `article/a-vs-the`, `article/no-article-general`
@@ -50,7 +65,7 @@
    - Examples: "there's a gym near the park"; "I go to the gym, I go to the park"; "I like snacks, not I like the snacks"; "the shop on the corner"
    - Real-world relevance: Every description of where something is starts with a or the, and "tem um parque perto daqui" is the sentence a Brazilian says wrong most often in English.
 
-## Lesson 6
+## Lesson 6: The sentence skeleton and the -s of he, she, it
 
    - Focus: The frame every English sentence is built on, and the one place the verb itself changes: the -s of he, she and it.
    - teaches: `mode/skeleton`, `mode/empty-mode-verb-marks`, `present/third-person-s`, `mode/verb-base-form`
@@ -60,7 +75,7 @@
    - Examples: "subject + mode + verb + object + place + time"; "he plays, they play"; "I play after school, I play at the park"
    - Real-world relevance: The frame is what makes a sentence the student has never heard sayable, which is the whole point of a 14-year-old learning a language for memes and games.
 
-## Lesson 7
+## Lesson 7: Saying no - don't and doesn't take the marker
 
    - Focus: Saying no: the marker leaves the verb and sits on don't or doesn't, and the verb goes back to base.
    - teaches: `mode/filled-mode-marker-moves`, `mode/do-support`, `mode/negation-dont-doesnt`, `sound/contractions-negative`
@@ -70,7 +85,7 @@
    - Examples: "he doesn't speak, she doesn't drive"; "I don't cook and I don't need to"; "it isn't far, I'm not tired"
    - Real-world relevance: Refusing, disagreeing and saying "I can't" is most of what a teenager says to a parent, and "he doesn't plays" is the error that never dies.
 
-## Lesson 8
+## Lesson 8: Asking - do, does, wh-front, and the short answer
 
    - Focus: Asking: do and does move in front of the subject, a wh-word goes first, and the short answer repeats the mode.
    - teaches: `question/do-does-front`, `question/short-answer`, `question/wh-front`, `question/subject-who`
@@ -80,7 +95,7 @@
    - Examples: "what's your username"; "who plays on your team"; "do you have the password"; "yes I do, no I don't"
    - Real-world relevance: Joining a lobby, swapping handles or finding the score are all questions, and a kid who cannot ask stays outside the group.
 
-## Lesson 9
+## Lesson 9: The simple present is a fact, never right now
 
    - Focus: The simple present means a fact, a habit or a rule of the world, and it never means happening now.
    - teaches: `present/facts-not-now`, `present/general-truth`, `present/habit`, `present/scheduled-fact-future`
@@ -90,7 +105,7 @@
    - Examples: "cats hate water"; "the stream starts at eight"; "I walk to school every day"; "spiders bite, snakes bite"
    - Real-world relevance: Facts are how a student argues about games, animals and rules, and "I study English" is the sentence that gets mistranslated into "I am studying" every single time.
 
-## Lesson 10
+## Lesson 10: Frequency, routine order, and in, on, at
 
    - Focus: Frequency words in the right slot, a routine told in order, and where in, on and at sit when the routine needs a time.
    - teaches: `present/frequency-adverbs`, `present/routine-chain`, `present/every-and-once`, `prep/at-night-in-the-morning`
@@ -100,17 +115,17 @@
    - Examples: "I always hit snooze"; "it's eight at night"; "in the morning, at night, on Monday"; "on weekdays I'm at school"
    - Real-world relevance: The routine is the only context where a student repeats the same ten sentences every day, which makes it the cheapest place to make the grammar automatic.
 
-## Lesson 11
+## Lesson 11: Right now - be + -ing, the spelling, and what you type in chat
 
    - Focus: The other form of the present: be + -ing for the action in progress, and the spelling that -ing needs.
-   - teaches: `continuous/be-plus-ing`, `continuous/right-now`, `continuous/temporary`, `continuous/ing-spelling`
+   - teaches: `continuous/be-plus-ing`, `continuous/right-now`, `continuous/temporary`, `continuous/ing-spelling`, `text/abbreviation-set`
    - Deepens: `hook/be-state` - be carried a state alone in lesson 3; with -ing behind it the same be carries an action in progress, which is the one thing the fact block cannot say.
    - Uses: `mode/skeleton`, `present/facts-not-now` - the frame is unchanged and the fact form is the contrast this lesson is measured against.
-   - Vocabulary: chat, stream, download, upload, search, scroll, type, click, charge, "log in"
-   - Examples: "I'm charging my phone"; "he's downloading the update"; "I'm living with my uncle this month"; "getting, running, making"
+   - Vocabulary: chat, stream, download, upload, search, scroll, type, click, charge, "log in", lol, wtf
+   - Examples: "I'm charging my phone"; "he's downloading the update"; "I'm scrolling and typing lol at the same time"; "he texted wtf, so I called him"; "I'm living with my uncle this month"
    - Real-world relevance: A kid narrating what they are doing on a phone is the natural habitat of this form, and "estou baixando" is the sentence that exposes the mistake instantly.
 
-## Lesson 12
+## Lesson 12: Fact against moment, side by side
 
    - Focus: The same verb in both forms: the fact and the moment, standing next to each other so the choice stops being a guess.
    - teaches: `present/simple-vs-continuous`, `present/not-now-trap`, `present/question-simple-vs-continuous`, `continuous/with-always`
@@ -120,7 +135,7 @@
    - Examples: "do you play? are you playing?"; "I'm on the sofa, I sit on the sofa when I study"; "you're always losing the charger"
    - Real-world relevance: "O que você está fazendo?" answered with "I study" is the sound of a Brazilian speaking English, and it is fixed in exactly one lesson of paired drills.
 
-## Lesson 13
+## Lesson 13: The verbs that refuse -ing
 
    - Focus: The verbs that refuse -ing: know, like, want, need, hate, believe, and the senses.
    - teaches: `present/state-verbs-no-ing`, `present/state-in-now`, `present/have-possession-vs-action`, `present/senses-simple`
@@ -130,7 +145,7 @@
    - Examples: "I want water now"; "it smells like rain"; "I'm having lunch, but I have a bike"; "I know the truth"
    - Real-world relevance: A teenager states opinions and wants all day, and "I'm wanting" or "I'm knowing" is the mark of a student who learned -ing as a decoration.
 
-## Lesson 14
+## Lesson 14: can - ability, permission and requests in one word
 
    - Focus: can: ability, permission and requests in one word that never changes shape.
    - teaches: `modal/can-ability`, `modal/can-permission-request`, `modal/can-question-order`, `sound/can-vs-cant`
@@ -140,7 +155,7 @@
    - Examples: "I can play the guitar"; "can you skate?"; "I can't do that, not yet"; "can I go now?"
    - Real-world relevance: "I can't" and "can I" open every door in a game lobby and in a house with rules, and the spoken can/can't difference decides whether the answer was yes.
 
-## Lesson 15
+## Lesson 15: to and for - direction, purpose, and the one para that splits
 
    - Focus: to and for: direction, the infinitive marker, purpose, and the one Portuguese word that splits into both.
    - teaches: `prep/to-direction`, `prep/to-infinitive-marker`, `prep/for-purpose`, `prep/para-split`
@@ -150,7 +165,7 @@
    - Examples: "give it to me"; "this is for you"; "I made it for fun"; "I want to try"; "can you do me a favor?"
    - Real-world relevance: "para" is one word in Portuguese and two in English, so this is the split that marks a speaker as translating rather than speaking.
 
-## Lesson 16
+## Lesson 16: on, in, at - contact, container, point
 
    - Focus: on, in and at as three shapes: contact, container, point — in space and in time.
    - teaches: `prep/on-contact`, `prep/in-container`, `prep/at-point`, `prep/time-preps`
@@ -160,7 +175,7 @@
    - Examples: "in the box, on the shelf, at the door"; "in 2026, on Monday, at eight"; "it's on the app, in the game"
    - Real-world relevance: Finding things and fixing times is most of what a student texts about, and one wrong preposition is the error a native speaker notices first.
 
-## Lesson 17
+## Lesson 17: Verbs that carry their preposition
 
    - Focus: Verbs that carry their preposition: the pair is the word, changing the preposition changes the meaning, and the object can hide at the end of a question.
    - teaches: `prep/verb-plus-prep-unit`, `prep/prep-changes-meaning`, `prep/prep-at-end-in-questions`
@@ -170,7 +185,7 @@
    - Examples: "who are you waiting for?"; "it depends on the weather"; "I listen to music every day"; "I agree with you"; "he never pays for anything"
    - Real-world relevance: These ten pairs cover waiting, paying, worrying and listening, which is what a group chat is made of, and the preposition is what a teacher can hear going wrong.
 
-## Lesson 18
+## Lesson 18: The past of be, and there was
 
    - Focus: was and were: the past of be, there was and there were, and the one verb that never borrows did.
    - teaches: `past/be-was-were`, `past/there-was-were`, `past/was-there-question`, `past/be-past-vs-simple`
@@ -180,7 +195,7 @@
    - Examples: "I was at the game"; "we were at the beach"; "there was a crowd, there were lines"; "were you at the party?"
    - Real-world relevance: Where you were and how it was is the opening of every story a 14-year-old tells, and "I did be" is what comes out when be is treated like any other verb.
 
-## Lesson 19
+## Lesson 19: -ed, its three sounds, and the time words that force it
 
    - Focus: Regular past: -ed, the three sounds it makes, and the time words that force it.
    - teaches: `past/regular-ed`, `past/past-time-markers`, `sound/ed-sound-rules`
@@ -190,7 +205,7 @@
    - Examples: "I called, he helped, we finished"; "yesterday, last night, two hours ago"; "wanted and needed end in -id"
    - Real-world relevance: Recounting yesterday is the most common past-tense act in a teenager's day, and the -ed ending is the first place a Brazilian accent shows.
 
-## Lesson 20
+## Lesson 20: The verbs that ignore -ed, and did
 
    - Focus: The verbs that ignore -ed, and did: the past mode that takes the marker so the verb can go back to base.
    - teaches: `past/irregular-verbs`, `past/did-back-to-base`, `past/did-questions`, `past/irregular-families`
@@ -200,7 +215,7 @@
    - Examples: "did you take it?"; "I didn't break it"; "he took, he kept, he left"; "sing sang, drink drank, begin began"
    - Real-world relevance: Every story a kid tells about a lost charger, a broken controller or a fight is made of these ten verbs, and "did you went" is the error that survives years of lessons.
 
-## Lesson 21
+## Lesson 21: Telling it in the past, in order
 
    - Focus: Telling it in the past: the finished time that forces the form, the action/state choice, and the linkers that make the order audible.
    - teaches: `past/finished-time-rule`, `past/past-narrative`, `past/did-vs-was`, `story/linking-then-after`
@@ -210,7 +225,7 @@
    - Examples: "first there was a line, then we got in"; "I took the bus, then I walked"; "later it broke, and afterwards I was fine"
    - Real-world relevance: Retelling a match, a stream or a school fight in order is the single most requested act of a teenage speaker, and the linkers are what keep the listener oriented.
 
-## Lesson 22
+## Lesson 22: Whose is it - object pronouns, possessives, and the reflexive
 
    - Focus: Whose is it: object pronouns, possessives, and the reflexive that points back at the subject.
    - teaches: `pronoun/object-forms`, `pronoun/possessive-adjectives`, `pronoun/possessive-pronouns`, `pronoun/reflexive-self`
@@ -220,17 +235,17 @@
    - Examples: "that's mine, not his"; "I did it myself"; "give it to them"; "my brother and his friend"
    - Real-world relevance: Ownership fights over a controller, a seat or a phone are settled with these forms, and "the my phone" is a sentence that marks a beginner forever.
 
-## Lesson 23
+## Lesson 23: Commands, let's, and the softeners that keep it polite
 
    - Focus: Commands and invitations: the bare verb with no subject, don't for no, let's for us, and the softeners that keep it polite.
-   - teaches: `mode/imperative-base`, `mode/imperative-negative`, `mode/lets-invite`, `mode/polite-imperative-softeners`
+   - teaches: `mode/imperative-base`, `mode/imperative-negative`, `mode/lets-invite`, `mode/polite-imperative-softeners`, `slang/where-not-to-use`
    - Deepens: `mode/skeleton` - the frame loses its subject and keeps everything else, so the command is the same skeleton with an empty first slot, which is why the verb cannot take -s.
    - Uses: `mode/negation-dont-doesnt` - don't already negated an action; here it negates a command with no subject in front of it.
-   - Vocabulary: press, hold, tap, swipe, drag, skip, pause, mute, restart, "log out"
-   - Examples: "press start, don't skip it"; "hold the button"; "let's try again"; "could you pass it, please?"
-   - Real-world relevance: Every tutorial, every app and every request to a parent or a teacher is an imperative, so this is the form the student meets before any sentence with a subject.
+   - Vocabulary: press, hold, tap, swipe, drag, skip, pause, mute, restart, "log out", chill, dip
+   - Examples: "press start, don't skip it"; "chill, I'm doing it"; "let's dip before the bell"; "hold the button"; "could you pass it, please?"
+   - Real-world relevance: Every tutorial, every app and every request to a parent or a teacher is an imperative, so this is the form the student meets before any sentence with a subject - and it is the same form that makes "chill" a joke with a friend and an insult in a teacher's mouth.
 
-## Lesson 24
+## Lesson 24: How much, how many, some, any
 
    - Focus: How much and how many: countable against uncountable, some and any, and the safe default a lot of.
    - teaches: `count/countable-vs-uncountable`, `count/some-vs-any`, `count/much-vs-many`, `count/a-lot-of-both`
@@ -240,12 +255,12 @@
    - Examples: "there isn't much sugar"; "how many bottles?"; "some juice, any bread?"; "a lot of rice, a lot of friends"
    - Real-world relevance: Ordering food, splitting a bill and checking what is left in the fridge all live here, and "many money" is the giveaway that the countable split was never made.
 
-## Lesson 25
-	- THIS LESSON IS AN EXAM, THOROUGHLY TEST THE STUDENT'S UNDERSTANDING OF THE INCLUDED ITEMS AND FREELY PROBE TRACK-RELEVANT TOPICS AT THE STUDENT'S LEVEL
-   - Focus:  the fact-versus-right-now choice, the past in place, and the prepositions that Portuguese merges.
+## Lesson 25: EXAM - the first block, crossed as one conversation
+
+   - Focus: Test it as one conversation in three moves: a routine told in facts, a live call in the middle of something, and a text about last weekend - each answer is scored against the ten families below instead of one question per label, so a family that fails is re-asked in a different scene before the lesson ends.
    - Uses: `mode/skeleton`, `mode/do-support`, `present/facts-not-now`, `continuous/right-now`, `present/state-verbs-no-ing`, `past/irregular-verbs`, `past/did-back-to-base`, `prep/para-split`, `prep/time-preps`, `question/wh-front`
 
-## Lesson 26
+## Lesson 26: gonna - the spoken future, and why it is not the verb go
 
    - Focus: gonna: how English says the future out loud, and why it is not the verb go.
    - teaches: `future/gonna-mode`, `future/going-to-place`, `future/gonna-go-distinction`, `sound/gonna-reduction`
@@ -255,7 +270,7 @@
    - Examples: "I'm gonna stream at eight"; "I'm going to the mall"; "I'm gonna go to the mall"; "we're gonna camp on the weekend"
    - Real-world relevance: Plans are a teenager's main social currency, and "I'm going to study" versus "I'm gonna study" is the difference between a plan and a future that the student hears every day on stream.
 
-## Lesson 27
+## Lesson 27: will - the decision taken while you speak
 
    - Focus: will: the decision taken as you speak, against gonna, the plan that was already made.
    - teaches: `future/will-sudden-decision`, `future/will-vs-gonna`, `future/wont-negative`, `future/will-question-offer`
@@ -265,7 +280,7 @@
    - Examples: "I'll help you, I promise"; "will you bring it? of course"; "I'm gonna study later, probably"; "I won't tell anyone"
    - Real-world relevance: Promising, offering and refusing politely is how a kid negotiates a favour with a parent or a friend, and will is the word that makes it a promise instead of a plan.
 
-## Lesson 28
+## Lesson 28: The arranged future - be + -ing with a time
 
    - Focus: The arranged future: be + -ing with a time, and the time words that make the future audible.
    - teaches: `future/continuous-arrangement`, `future/time-expression-required`, `future/in-two-weeks`, `future/next-vs-last`
@@ -275,7 +290,7 @@
    - Examples: "I'm meeting him at eight"; "the tournament is next week"; "I'm playing in two weeks"; "tonight I'm not doing anything"
    - Real-world relevance: A practice, a tournament and a deadline are the three fixed points of a student's week, and dropping the time word is what makes English sound vague instead of arranged.
 
-## Lesson 29
+## Lesson 29: The get family - one root, four particles, four actions
 
    - Focus: The get family: one root, four particles, four different actions, and where the object goes.
    - teaches: `phrasal/get-family`, `phrasal/particle-changes-meaning`, `phrasal/get-literal-vs-idiom`, `phrasal/object-after-particle`
@@ -285,7 +300,7 @@
    - Examples: "I get up at seven"; "get on the bus, get off at the mall"; "we get along"; "I got back before dark"
    - Real-world relevance: Getting up, getting on a bus and getting along with someone are three sentences a 14-year-old needs every single day, and English says all three with get.
 
-## Lesson 30
+## Lesson 30: The look family, and the particle that splits
 
    - Focus: The look family: the same pattern with a second root, plus the particle that splits when a pronoun appears.
    - teaches: `phrasal/look-family`, `phrasal/separable-split`, `phrasal/phrasal-first-formal-gloss`, `phrasal/look-after-care`
@@ -295,7 +310,7 @@
    - Examples: "look it up"; "look after your brother"; "I'm looking forward to it"; "look out!"
    - Real-world relevance: Searching a word, checking a message and watching a sibling are all look, and the formal twins (consult, verify, supervise) are glosses the student should recognise but never use by default.
 
-## Lesson 31
+## Lesson 31: What English sounds like when it is fast
 
    - Focus: What English sounds like when it is fast: wanna, gotta, kinda, and the consonants that slide.
    - teaches: `sound/wanna-gotta`, `sound/kinda-sorta`, `sound/linking-consonant-vowel`, `sound/weak-forms-of-to`
@@ -305,7 +320,7 @@
    - Examples: "I wanna go, I gotta go"; "whatcha doing?"; "turn it off" heard as one word; "kinda cool, kinda weird"
    - Real-world relevance: This is the English of a stream, a rap verse and a group voice note, and a student who only knows the written forms cannot hear the spoken ones.
 
-## Lesson 32
+## Lesson 32: have + participle, and the participles you cannot guess
 
    - Focus: The third form: have or has + past participle, and the pile of participles that are neither the base nor the past.
    - teaches: `perfect/have-participle`, `perfect/irregular-participles`, `perfect/no-time-anchor`, `perfect/contractions-ive`
@@ -315,7 +330,7 @@
    - Examples: "I've never written a song"; "he's lost his keys"; "have you eaten?"; "go went gone, do did done"
    - Real-world relevance: "I've seen it" and "I saw it" split the two pasts a student mixes most, and the third column is where a Brazilian gets stuck because Portuguese has no such form.
 
-## Lesson 33
+## Lesson 33: The perfect for duration - the trap Portuguese sets
 
    - Focus: The perfect for a duration that started in the past and is still true: the trap that Portuguese sets with the simple present.
    - teaches: `perfect/duration-from-past`, `perfect/vs-simple-present`, `perfect/still-yet-duration`
@@ -325,7 +340,7 @@
    - Examples: "I've worked here for five years"; "I've lived here all my life"; "I've known him for ages"
    - Real-world relevance: "Trabalho aqui há cinco anos" said as "I work here for five years" is the single sentence that identifies a Brazilian speaker, so it gets a whole lesson rather than a warning.
 
-## Lesson 34
+## Lesson 34: ever, never, just, already, yet - the perfect for experience
 
    - Focus: The perfect for experience: ever, never, just, already, yet, and the question that forces the past instead.
    - teaches: `perfect/experience-ever-never`, `perfect/asking-with-ever`, `perfect/just-already-yet`, `perfect/vs-past-when-question`
@@ -335,7 +350,7 @@
    - Examples: "have you ever been abroad?"; "I've never tried surfing"; "I've just seen it"; "when did you go?"
    - Real-world relevance: Comparing what you have and have not done is the conversation a teenager has with a stranger on the first day of anything, and the when-question is where it flips to the past.
 
-## Lesson 35
+## Lesson 35: since and for - starting point against length
 
    - Focus: since and for: the starting point against the length, and the how-long question that needs both.
    - teaches: `perfect/for-length`, `perfect/since-point`, `perfect/how-long-question`, `perfect/ago-vs-since`
@@ -345,7 +360,7 @@
    - Examples: "I've played since I was nine"; "I've played for six years"; "how long have you had it?"; "two years ago, not since two years"
    - Real-world relevance: How long you have had a phone, a friend or a game account is small talk a 14-year-old runs on, and mixing since with for turns a clear answer into a puzzle.
 
-## Lesson 36
+## Lesson 36: -er or more, and the than that follows
 
    - Focus: Comparing two things: -er or more, the than that follows, and the four forms that refuse both.
    - teaches: `compare/short-er`, `compare/long-more`, `compare/than-link`, `compare/irregular-forms`
@@ -355,17 +370,17 @@
    - Examples: "mine is faster than yours"; "this one is more expensive"; "better, worse, further"; "which one is bigger?"
    - Real-world relevance: Comparing phones, teams and prices is the sport of a school corridor, and "more fast" is the mistake that survives the longest.
 
-## Lesson 37
+## Lesson 37: The best out of all of them - and the slang that ranks
 
    - Focus: Picking one out of all of them: the superlative with the, equal and unequal with as, and the plural after one of the.
-   - teaches: `compare/superlative-est`, `compare/as-as-equal`, `compare/best-vs-better`, `compare/one-of-the`
-   - Deepens: `compare/than-link`, `compare/short-er` - comparing two was the pair; choosing one out of a group widens the same mechanism and puts the in front of it.
+   - teaches: `compare/superlative-est`, `compare/as-as-equal`, `compare/best-vs-better`, `compare/one-of-the`, `slang/teen-slang-map`
+   - Deepens: `compare/than-link`, `compare/short-er` - comparing two was the pair; choosing one out of a group widens the same mechanism and puts the in front of it, and the slang items here squeeze that same ranking into a single word.
    - Uses: `article/a-vs-the`, `compare/irregular-forms` - the is the article pointing at the only one, and the irregular forms supply the best and the worst.
-   - Vocabulary: champion, record, medal, trophy, legend, ranking, scoreboard, rival, audience, season
-   - Examples: "he's the best player in the season"; "one of the best"; "not as fast as him"; "the worst game ever"
-   - Real-world relevance: Ranking a team, a player or a game is a teenager's favourite judgement, and the superlative is how a player becomes a legend in a group chat.
+   - Vocabulary: champion, record, medal, trophy, legend, ranking, scoreboard, rival, audience, season, mid, goat
+   - Examples: "he's the best player in the season"; "one of the best"; "that game is mid"; "he's the goat, no debate"; "not as fast as him"; "the worst game ever"
+   - Real-world relevance: Ranking a team, a player or a game is a teenager's favourite judgement, and the superlative is how a player becomes a legend in a group chat - the same verdict the slang words carry when nobody has time for a full sentence.
 
-## Lesson 38
+## Lesson 38: have to, don't have to, mustn't, should - duty and advice
 
    - Focus: Duty and advice: have to, don't have to, mustn't, should and must, and the two negatives that mean opposite things.
    - teaches: `modal/have-to-duty`, `modal/dont-have-to-vs-mustnt`, `modal/should-advice`, `modal/must-strong`
@@ -375,7 +390,7 @@
    - Examples: "I have to be home by ten"; "you don't have to, but you should"; "you mustn't tell anyone"; "we should try it"
    - Real-world relevance: Curfew, screen time and permission are the daily negotiation between a 14-year-old and an adult, and don't have to versus mustn't is the difference between freedom and a ban.
 
-## Lesson 39
+## Lesson 39: If this happens, that follows
 
    - Focus: If this happens, that follows: the first conditional, with the present in the condition and will or gonna in the result.
    - teaches: `if/first-conditional`, `if/no-will-in-if-clause`, `if/comma-and-order`, `if/unless`
@@ -385,7 +400,7 @@
    - Examples: "if it rains, we're gonna stay in"; "I'll go unless it's freezing"; "if you finish, you can play"
    - Real-world relevance: Every negotiation over a match, a trip or a game comes out as an if-sentence, and the will in the if-half is the mistake that sounds wrong to every listener.
 
-## Lesson 40
+## Lesson 40: who, that, where - saying which one you mean
 
    - Focus: Saying which one you mean: who for people, that for things, where for places, and the link that can disappear.
    - teaches: `relative/who-for-people`, `relative/that-for-things`, `relative/where-for-places`, `relative/dropped-object`
@@ -395,7 +410,7 @@
    - Examples: "the guy who beat me"; "the game that broke"; "the place where we met"; "the one I told you about"
    - Real-world relevance: Every recommendation a kid makes carries a who or a that, and without it the description stops at "the guy" and the listener has to guess.
 
-## Lesson 41
+## Lesson 41: like doing against want to do
 
    - Focus: Doing against wanting to do: like, love, hate and enjoy take -ing, want, need, plan and hope take to.
    - teaches: `verb/like-doing`, `verb/want-to-do`, `verb/stop-doing-vs-to-do`, `verb/go-doing-activities`
@@ -405,7 +420,7 @@
    - Examples: "I like playing chess"; "I want to learn the drums"; "I stopped playing, I stopped to eat"; "we go skateboarding"
    - Real-world relevance: Asking what someone likes and inviting them to try it is the whole social engine of a school break, and the wrong form after like is the error a teacher corrects first.
 
-## Lesson 42
+## Lesson 42: used to - the habits that are gone
 
    - Focus: used to: the habits and states that are gone, and the two ways it is not the same as being used to something.
    - teaches: `past/used-to-habit`, `past/used-to-vs-past-simple`, `past/used-to-be-vs-be-used-to`, `past/used-to-question-negative`
@@ -415,7 +430,7 @@
    - Examples: "I used to play marbles"; "I didn't use to like anime"; "did you use to live here?"; "I'm used to it now"
    - Real-world relevance: Talking about how things were when you were small is how kids find out what they have in common, and "I use to" versus "I'm used to" is the pair that gets confused for years.
 
-## Lesson 43
+## Lesson 43: The past continuous, and the when or while that joins it
 
    - Focus: The past continuous: what was already happening when something else happened, and the when or while that joins the two.
    - teaches: `past/continuous-background`, `past/when-vs-while`, `past/continuous-vs-past-simple`, `past/two-continuous-and`
@@ -425,7 +440,7 @@
    - Examples: "I was watching when the power cut"; "while I was eating, the alarm went off"; "we were talking and laughing"
    - Real-world relevance: Every story a teenager tells about something that went wrong is built out of a background and an interruption, so this is the tense of the best story in the group.
 
-## Lesson 44
+## Lesson 44: Passing on what someone said
 
    - Focus: Passing on what someone said: say against tell, the tense that steps back, and the pronouns that have to move.
    - teaches: `report/say-vs-tell`, `report/backshift`, `report/reporting-question`, `report/reporting-pronouns-time`
@@ -435,12 +450,12 @@
    - Examples: "she said she was tired"; "he told me he'd be late"; "she asked where I was"; "I told him I didn't know"
    - Real-world relevance: Being the messenger between two friends is a daily job, and getting the pronouns and the tense wrong is how a message turns into a misunderstanding.
 
-## Lesson 45
-		- THIS LESSON IS AN EXAM, THOROUGHLY TEST THE STUDENT'S UNDERSTANDING OF THE INCLUDED ITEMS AND FREELY PROBE TRACK-RELEVANT TOPICS AT THE STUDENT'S LEVEL
-   - Focus: the future modes, the phrasal families, the perfect, comparison and conditions, scored so a failure names its label.
+## Lesson 45: EXAM - the second block, crossed as a plan, a story and a ranking
+
+   - Focus: Test it as one plan, one story and one ranking: arrangements made out loud, something someone said passed on, and a judgement argued - every answer is scored against the ten families below, and any family that fails is re-asked inside a different scene, so what fails is the grammar and not the topic.
    - Uses: `future/will-vs-gonna`, `future/continuous-arrangement`, `phrasal/separable-split`, `sound/wanna-gotta`, `perfect/experience-ever-never`, `perfect/since-point`, `compare/superlative-est`, `modal/dont-have-to-vs-mustnt`, `if/first-conditional`, `relative/who-for-people`
 
-## Lesson 46
+## Lesson 46: had + participle - the step before the story starts
 
    - Focus: The step before the story starts: had + participle, and the two events that get their order fixed by it.
    - teaches: `perfect/past-perfect`, `perfect/past-perfect-order`, `perfect/before-experience`
@@ -450,7 +465,7 @@
    - Examples: "when we got there, the game had started"; "I had never seen the sea before that trip"; "she had already left"
    - Real-world relevance: Telling a story out of order is what makes it a story rather than a list, and a kid who cannot step back one event cannot explain why they were late.
 
-## Lesson 47
+## Lesson 47: If it were true - would, and the were that every speaker keeps for I
 
    - Focus: If it were true: the second conditional, would, and the were that every speaker keeps for I.
    - teaches: `if/second-conditional`, `if/would-vs-will-imaginary`, `if/were-you`
@@ -460,7 +475,7 @@
    - Examples: "if I had a million, I'd buy a car"; "if I were you, I'd go"; "what would you do?"
    - Real-world relevance: Hypotheticals are how a teenager tests a decision before making it, and "if I were you" is the exact phrase a friend uses when the advice matters.
 
-## Lesson 48
+## Lesson 48: When the doer does not matter
 
    - Focus: When the doer does not matter: be + participle, the by that names the agent, and the reason to choose it.
    - teaches: `passive/be-plus-participle`, `passive/agent-with-by`, `passive/why-passive`
@@ -470,7 +485,7 @@
    - Examples: "the game was released in May"; "it was made in Brazil"; "my account got blocked"; "English is spoken here"
    - Real-world relevance: Release dates, blocked accounts and "made in" labels are all passive, and a student who only reads active sentences misreads half of what a product page says.
 
-## Lesson 49
+## Lesson 49: Question tags, and the answer that follows
 
    - Focus: Question tags: the flipped short question at the end, the mode it repeats, and the answer that follows it.
    - teaches: `tag/positive-negative-flip`, `tag/repeat-the-mode`, `tag/answer-with-mode`
@@ -480,12 +495,12 @@
    - Examples: "you play, don't you?"; "she can't come, can she?"; "no, she can't"; "it's cold, isn't it?"
    - Real-world relevance: A tag turns a statement into an invitation to agree, which is the politest way a teenager has of checking something without asking directly.
 
-## Lesson 50
+## Lesson 50: The layer under the grammar - tone without a voice, and a slang word that is already dead
 
-   - Focus: The layer under the grammar: slang, abbreviations, and the one question that decides whether they are allowed.
-   - teaches: `slang/teen-slang-map`, `slang/where-not-to-use`, `text/abbreviation-set`
-   - Deepens: `sound/wanna-gotta`, `sound/kinda-sorta` - the reductions were the spoken layer of informal English; slang and texting are the written layer of the same thing, and both are learned as a map with borders.
-   - Uses: `sound/vowel-no-fixed`, `cognate/partial-trap` - abbreviations break the spelling-sound rule and the cognate guess at the same time, so both earlier warnings are what make reading them safe.
+   - Focus: The layer under the grammar, one level further: how a message carries tone with no voice in it, and how to tell whether a slang word is still alive.
+   - teaches: `text/case-and-punctuation-as-tone`, `text/emoji-as-tone`, `slang/dated-vs-current`
+   - Deepens: `text/abbreviation-set` - the abbreviations were chosen for speed in lesson 11; here the same message is read for tone, which the letters alone never carried.
+   - Uses: `slang/teen-slang-map`, `slang/where-not-to-use` - the map and its border were settled earlier, and this lesson judges which of those words is still worth using.
    - Vocabulary: emoji, meme, hashtag, vibe, flex, "brb", "idk", "tbh", "ngl", "dm"
-   - Examples: "idk, tbh"; "that's a flex"; "dm me"; "brb, gaming"
-   - Real-world relevance: This is the English a kid actually types all day, and the skill being taught is not the slang but the border: where it earns a laugh and where it costs an interview.
+   - Examples: "ok." lands cold and "ok!!" lands warm; "he answered with the skull, so it was a joke"; "brb, this is taking forever"; "ngl, that word is dead, my teacher says it now"; "idk, tbh"
+   - Real-world relevance: A kid's social life runs through messages where the tone has to be typed, and the two ways to get it wrong are the same two this lesson names: missing the capitals and the emoji, or using a word that everyone older than you has already adopted.

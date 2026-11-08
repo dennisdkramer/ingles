@@ -8,20 +8,20 @@ FILE: C:\Users\denni\Documents\GitHub\ingles\KIDS-ROADMAP.md
   PASS  50 lesson entries, ascending, none missing
 
 --- SHAPE ---
-  PASS  Shape carries Start, End, Blocks and a Spine pointer
-  INFO  spine ledger: C:\Users\denni\Documents\GitHub\ingles\ROADMAP GENERATION\work\kids-spine.md (27 families)
-  INFO  spine work file: 27 families; the lines stay out of the deliverable
+  PASS  Shape carries Blocks and a Spine pointer
+  INFO  spine ledger: C:\Users\denni\Documents\GitHub\ingles\ROADMAP GENERATION\work\kids-spine.md (28 families)
+  INFO  spine work file: 28 families; the lines stay out of the deliverable
 
 --- PARSE LABELS AND ENTRIES ---
   INFO  labels defined: 0
-  INFO  labels ledger: C:\Users\denni\Documents\GitHub\ingles\ROADMAP GENERATION\work\kids-labels.md (181 label lines)
+  INFO  labels ledger: C:\Users\denni\Documents\GitHub\ingles\ROADMAP GENERATION\work\kids-labels.md (184 label lines)
   INFO  ## Labels is a pointer; validating the ledger instead
-  INFO  ledger assignments: 181 of 181 labels
-  INFO  labels ledger: C:\Users\denni\Documents\GitHub\ingles\ROADMAP GENERATION\work\kids-labels.md (181 label lines)
+  INFO  ledger assignments: 184 of 184 labels
+  INFO  labels ledger: C:\Users\denni\Documents\GitHub\ingles\ROADMAP GENERATION\work\kids-labels.md (184 label lines)
   PASS  ## Labels and the labels ledger agree
-  INFO  ledger assignments: 181 of 181 labels
+  INFO  ledger assignments: 184 of 184 labels
   PASS  every label is lowercase area/thing with at most 3 parts
-  PASS  all 181 labels are listed and each is taught exactly once
+  PASS  all 184 labels are listed and each is taught exactly once
   PASS  every teaches: line matches the ledger assignment
 
 --- NO FORWARD REFERENCES ---
@@ -32,12 +32,12 @@ FILE: C:\Users\denni\Documents\GitHub\ingles\KIDS-ROADMAP.md
   PASS  every teaching lesson has 10-12 items and 3-6 labels; exams carry neither
   PASS  no bare particles in vocabulary
   PASS  no vocabulary item repeats across lessons
-  INFO  item ledger: C:\Users\denni\Documents\GitHub\ingles\ROADMAP GENERATION\work\kids-items.md (480 items)
-  PASS  the item ledger matches the roadmap's vocabulary (480 items)
+  INFO  item ledger: C:\Users\denni\Documents\GitHub\ingles\ROADMAP GENERATION\work\kids-items.md (486 items)
+  PASS  the item ledger matches the roadmap's vocabulary (486 items)
 
 --- ENTRY FIELDS ---
-  PASS  all entries carry their fields (8 on teaching lessons, Focus/Uses/Generation on exams)
-  PASS  all 5 lessons after L45 carry the tail statement
+  PASS  all entries carry their fields (7 on teaching lessons, Focus/Uses on exams)
+  PASS  5 lessons sit after L45 (the tail) - no marker field required
 
 --- STYLE GUARDS ---
   PASS  no entry names a page, class or section

@@ -28,4 +28,5 @@ One line per concept family, in teaching order. `Test-Roadmap.ps1 -Counts` count
 - gerund and infinitive — lesson 41 — partial + core; the -ing/-to split is where the continuous and the infinitive marker finally meet.
 - past habits and past continuous — lessons 42–43 — partial + common; used to and was + -ing both lean on the past block from 18–21 and set up the reporting in 44.
 - reported speech — lesson 44 — opaque + common; it is last in block 2 because the backshift table needs every tense the course has taught.
-- tail: past perfect, imaginary conditionals, passive, tags, slang — lessons 46–50 — nothing later depends on any of it, so it sits after the last exam by definition.
+- the street layer: text-speak and youth slang — lessons 11–37 — partial + core for a 14-year-old who lives in chat; the abbreviation code opens block 1, the politeness border lands with the commands in 23, and the slang map lands with the ranking in 37, so the register's own language is finished before the last exam instead of parked in the tail.
+- tail: past perfect, imaginary conditionals, passive, tags, dead slang — lessons 46–50 — nothing later depends on any of it, so it sits after the last exam by definition.

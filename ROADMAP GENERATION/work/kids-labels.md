@@ -257,9 +257,12 @@ Every label, its one-sentence gloss, and its assignment column `→ L<n>`. The o
 
 ## slang
 
-- `slang/teen-slang-map` — Modern adolescent slang is a small set of evaluative words whose meaning is social rather than literal (cooked, mid, rizz). → L50
-- `slang/where-not-to-use` — Slang belongs with peers only, because in a respectful conversation it reads as mocking the moment. → L50
+- `slang/teen-slang-map` — Modern adolescent slang is a small set of evaluative words whose meaning is social rather than literal (cooked, mid, rizz). → L37
+- `slang/where-not-to-use` — Slang belongs with peers only, because in a respectful conversation it reads as mocking the moment. → L23
+- `slang/dated-vs-current` — A slang word's age is audible in who uses it: once teachers, ads and parents have picked it up it has stopped being current, so the word to trust is the one you hear from your own group. → L50
 
 ## text
 
-- `text/abbreviation-set` — Text-speak shortens by dropping letters and sounds (lol, wtf, idk, tbh), so it is a code for the small screen and not for speech. → L50
+- `text/abbreviation-set` — Text-speak shortens by dropping letters and sounds (lol, wtf, idk, tbh), so it is a code for the small screen and not for speech. → L11
+- `text/case-and-punctuation-as-tone` — In a message the capitals and the punctuation do the job a voice would do: all caps is shouting, and "ok." lands colder than "ok!". → L50
+- `text/emoji-as-tone` — An emoji stands in for the tone of voice the writing has lost, and a small set of them (the skull, the upside-down smile) flips the sentence into its opposite. → L50

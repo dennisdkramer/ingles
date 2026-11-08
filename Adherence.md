@@ -1,6 +1,6 @@
 # ADHERENCE - This file governs prompt and intent parsing, batching Prompts/steps, and communicating with the User
 ## [PARSE] AND CLASSIFY FIRST — NON-NEGOTIABLE:
-	- **Sequencing** (order is what the transcript shows, not what was intended): for each prompt, [PARSE], [ANALYSE], and [BATCH] complete before any project file read, edit, or tool call. This resets on every user message; applying it in an earlier turn does NOT satisfy the current turn. The turn's first message is text only — no tool call of any kind — and contains, in this order:
+	- **Sequencing** (order is what the transcript shows, not what was intended): for each prompt, [PARSE], [ANALYSE], and [BATCH] complete before any project file read, edit, or tool call. This resets on every user message; applying it in an earlier turn does NOT satisfy the current turn. On the first turn of a session the first message is text only — no tool call of any kind — and contains, in this order (on later turns the same three items are carried as the opening text of the message that also makes the first tool call):
 		1) one line per prompt element, tagged `a)`, `b)` or `c)` exactly as [ANALYSE] defines them, beginning with quotation of the element's own words;
 		2) the batch list, one line per batch — `<the element it serves> [Bn] → <artifact produced>`;
 		3) the literal `batch success` as the last line. `batch success` without 1) and 2) is not a parse and does not count.
@@ -48,7 +48,7 @@
 		f) Differentiation/Specificity (Items which must not be overly similar to other items are separated).
 		g) Efficiency (time efficiency supercedes token efficiency).
 		
-	2) If there is any previously authored text in (PENDING.md [CURRENT]) section after [BATCHING], move it down to (PENDING.md [PAST]), alert the user of the contents, and prompt them to 1) delete the contents of the section, 2) migrate the contents out and append them on PAST_BATCHES.md, 3) Merge with items in (PENDING.md [CURRENT]), or 4) Ignore
+	2) If there is any previously authored text in (PENDING.md [CURRENT]) section after [BATCHING], move it down to (PENDING.md [PAST]), alert the user of the contents, and prompt them to 1) delete the contents of (PENDING.md [PAST]), 2) migrate the contents out and append them on PAST_BATCHES.md, 3) Merge with items in (PENDING.md [CURRENT]), or 4) Ignore
 	3) Author current plan into (PENDING.md [CURRENT]) according to the formatting described in (PENDING.md [HANDLING]).
 	4) Begin working on the first batch, update its entry as necessary when an item changes or is completed.
 	5) On resume after compaction, new workflow, or new Prompt, read (PENDING.md [CURRENT]).
