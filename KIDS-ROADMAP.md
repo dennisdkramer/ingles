@@ -1,18 +1,18 @@
 # KIDS-ROADMAP
 
 ## Decisions
-   · Item budget: 10 to 12 items in every teaching lesson, 576 across the 48 of them and twelve in every one after the slang pass - the floor because a lesson that cannot fill ten has not met its concept yet, the ceiling because a longer list stops being a drill and turns into a dictionary page, and the slang layer is spread two items per lesson so it fills the ceiling evenly instead of piling into the lessons that are about slang.
+   · Item budget: 10 to 12 items in every teaching lesson, 576 across the 48 of them and twelve in every one after the slang pass - the floor because a lesson that cannot fill ten has not met its concept yet, the ceiling because a longer list stops being a drill and turns into a dictionary page, and the slang layer is spread two or three items per lesson so it fills the ceiling evenly instead of piling into the lessons that are about slang.
    · Label budget: 3 to 6 labels under each `teaches:`, 184 labels in total over 27 areas - one label is one thing told once and then drilled, so fewer is a chapter and more is a drill sheet.
    · Exam-uses budget: 25 and 45 name exactly 10 labels each, the ten where a failure means the block has not landed. It is a diagnosis, not an inventory.
    · Repeated vocabulary: an item belongs to one lesson; a repeat is legal only where the later lesson names it in its `deepens:` line, and the checker reports one such reference in the whole course.
    · Tail policy: 46-50 carries only what nothing later depends on - the past perfect, the imaginary conditional, the passive, tags, and the tone of a word that has gone stale - so no exam waits on them.
-   · Tone: register a) in KIDS-REGISTER.md (close friends, casual, online chat, silly stakes) is the default voice of every scene, carrier and vocabulary list, with b) wherever the language needs a peer group and c) wherever an adult has to be in the room. The register's own required language is taught in the course rather than parked in the tail: the text-speak code at 11, the border where slang stops being allowed at 23, the slang map at 37 - all three finished before the last exam, and the tail only goes past them. Every other teaching lesson carries two slang items chosen for the scene its own grammar already builds, so the register is met by the whole course rather than demonstrated three times. No lesson is told which register it is in.
+   · Tone: register a) in KIDS-REGISTER.md (close friends, casual, online chat, silly stakes) is the default voice of every scene, carrier and vocabulary list, with b) wherever the language needs a peer group and c) wherever an adult has to be in the room. The register's own required language is taught in the course rather than parked in the tail: the text-speak code at 11, the border where slang stops being allowed at 23, the slang map at 37 - all three finished before the last exam, and the tail only goes past them. Every other teaching lesson carries two or three slang items chosen for the scene its own grammar already builds, so the register is met by the whole course rather than demonstrated three times. No lesson is told which register it is in.
 
 ## Shape
    · Blocks: 1-24 the sentence and its tenses, inside the student's own chat and school day · 25 EXAM · 26-44 plans, phrasal families, the perfect, comparison, conditions and reporting · 45 EXAM · 46-50 the tail
-   · Block 1 (1-24): by its end the student holds a real conversation about themselves and their day with nothing but facts, right-now actions, the past, a modal or two and a command, asking and answering without translating first. It owns register a)'s everyday scenes and register c)'s first requests to an adult, and it carries the text-speak code and the border where slang stops being allowed. Slang runs through all of it, two items per lesson.
-   · Block 2 (26-44): assumes block 1 and adds what makes plans, stories and opinions sound native - gonna, will, arrangements, the two phrasal families, the perfect, comparison, duty, conditions, relatives, gerund against infinitive, and reporting. It owns the peer scenes that need them (group chat, rankings, arguments) and lands the slang map where the ranking is taught. Its slang runs at two items per lesson as well, and it holds the last live slang before exam 45.
-   · Tail (46-50): assumes both blocks and goes past them - the past perfect, the imaginary conditional, the passive, tags, and how a message carries tone once the slang itself has gone stale. Nothing here is a prerequisite for anything. It carries two slang items per lesson like the blocks before it, and 50 is the only lesson whose items are chosen because they are dead.
+   · Block 1 (1-24): by its end the student holds a real conversation about themselves and their day with nothing but facts, right-now actions, the past, a modal or two and a command, asking and answering without translating first. It owns register a)'s everyday scenes and register c)'s first requests to an adult, and it carries the text-speak code and the border where slang stops being allowed. Slang runs through all of it, two or three items per lesson.
+   · Block 2 (26-44): assumes block 1 and adds what makes plans, stories and opinions sound native - gonna, will, arrangements, the two phrasal families, the perfect, comparison, duty, conditions, relatives, gerund against infinitive, and reporting. It owns the peer scenes that need them (group chat, rankings, arguments) and lands the slang map where the ranking is taught. Its slang runs at two or three items per lesson as well, and it holds the last live slang before exam 45.
+   · Tail (46-50): assumes both blocks and goes past them - the past perfect, the imaginary conditional, the passive, tags, and how a message carries tone once the slang itself has gone stale. Nothing here is a prerequisite for anything. It carries two or three slang items per lesson like the blocks before it, and 50 is the only lesson whose items are chosen because they are dead.
    · Spine: 28 families - kept in `ROADMAP GENERATION/work/kids-spine.md` (not shipped)
 
 ## Lesson 1: Welcome - the two codes that make English readable
@@ -141,8 +141,8 @@
    - teaches: `present/state-verbs-no-ing`, `present/state-in-now`, `present/have-possession-vs-action`, `present/senses-simple`
    - Deepens: `present/facts-not-now` - the fact form was chosen for facts; here it is forced on a set of verbs even when the moment is right now.
    - Uses: `continuous/right-now`, `continuous/be-plus-ing` - these verbs are defined by what they refuse, so the continuous has to be on screen to be refused.
-   - Vocabulary: opinion, truth, smell, taste, sound, memory, joke, secret, luck, reason, "understand the assignment", "the ick"
-   - Examples: "I want water now"; "it smells like rain"; "I'm having lunch, but I have a bike"; "I know the truth"; "he understands the assignment every single time"; "I have the ick from that video"
+   - Vocabulary: opinion, truth, smell, taste, sound, memory, joke, secret, bussin, reason, "understand the assignment", "the ick"
+   - Examples: "I want water now"; "it smells like rain"; "I'm having lunch, but I have a bike"; "I know the truth"; "he understands the assignment every single time"; "I have the ick from that video"; "this pizza is bussin"
    - Real-world relevance: A teenager states opinions and wants all day, and "I'm wanting" or "I'm knowing" is the mark of a student who learned -ing as a decoration.
 
 ## Lesson 14: can - ability, permission and requests in one word
@@ -251,9 +251,9 @@
    - teaches: `count/countable-vs-uncountable`, `count/some-vs-any`, `count/much-vs-many`, `count/a-lot-of-both`
    - Deepens: `article/no-article-general` - the general statement took no article; here it takes a quantity word instead, and which one depends on whether the noun is countable.
    - Uses: `hook/there-is-are`, `question/wh-front` - how much and how many open the question, and there is or there are finishes the answer.
-   - Vocabulary: soda, juice, bread, rice, sugar, salt, meat, fruit, bottle, packet, copium, brainrot
-   - Examples: "there isn't much sugar"; "how many bottles?"; "some juice, any bread?"; "a lot of rice, a lot of friends"; "how much copium is he on"; "there's so much brainrot in that feed"
-   - Real-world relevance: Ordering food, splitting a bill and checking what is left in the fridge all live here, and "many money" is the giveaway that the countable split was never made. Copium and brainrot are the two words this scene needs: one is counted in bottles and the other cannot be counted at all, so the pair makes the split audible.
+   - Vocabulary: soda, juice, bread, rice, sugar, aura, meat, fruit, bottle, packet, copium, brainrot
+   - Examples: "there isn't much sugar"; "how many bottles?"; "some juice, any bread?"; "a lot of rice, a lot of friends"; "how much copium is he on"; "there's so much brainrot in that feed"; "he lost so much aura in that clip"
+   - Real-world relevance: Ordering food, splitting a bill and checking what is left in the fridge all live here, and "many money" is the giveaway that the countable split was never made. Copium and brainrot are the two words this scene needs: one is counted in bottles and the other cannot be counted at all, so the pair makes the split audible. Aura is the third case and the hardest: uncountable on its own, countable the moment a kid says aura points, so the same word crosses the split.
 
 ## Lesson 25: EXAM - the first block, crossed as one conversation
 
@@ -376,8 +376,8 @@
    - teaches: `compare/superlative-est`, `compare/as-as-equal`, `compare/best-vs-better`, `compare/one-of-the`, `slang/teen-slang-map`
    - Deepens: `compare/than-link`, `compare/short-er` - comparing two was the pair; choosing one out of a group widens the same mechanism and puts the in front of it, and the slang items here squeeze that same ranking into a single word.
    - Uses: `article/a-vs-the`, `compare/irregular-forms` - the is the article pointing at the only one, and the irregular forms supply the best and the worst.
-   - Vocabulary: champion, record, medal, trophy, legend, ranking, scoreboard, rival, audience, season, mid, goat
-   - Examples: "he's the best player in the season"; "one of the best"; "that game is mid"; "he's the goat, no debate"; "not as fast as him"; "the worst game ever"
+   - Vocabulary: champion, record, medal, trophy, legend, ranking, scoreboard, rival, goated, season, mid, goat
+   - Examples: "he's the best player in the season"; "one of the best"; "that game is mid"; "he's the goat, no debate"; "not as fast as him"; "the worst game ever"; "he's goated, he never loses"
    - Real-world relevance: Ranking a team, a player or a game is a teenager's favourite judgement, and the superlative is how a player becomes a legend in a group chat - the same verdict the slang words carry when nobody has time for a full sentence.
 
 ## Lesson 38: have to, don't have to, mustn't, should - duty and advice
@@ -406,8 +406,8 @@
    - teaches: `relative/who-for-people`, `relative/that-for-things`, `relative/where-for-places`, `relative/dropped-object`
    - Deepens: `question/subject-who` - who asked a question in lesson 8; here the same word stops asking and starts linking, which is why the pattern is recognisable rather than new.
    - Uses: `article/a-vs-the`, `question/wh-front` - the is doing the pointing and the wh-words are being recycled as linkers.
-   - Vocabulary: guy, gamer, stranger, teammate, creator, fan, hater, channel, comment, post, ratio, NPC
-   - Examples: "the guy who beat me"; "the game that broke"; "the place where we met"; "the one I told you about"; "the post that got a ratio is the one I meant"; "the guy who wrote that comment is an NPC"
+   - Vocabulary: guy, gamer, sigma, teammate, creator, fan, hater, channel, comment, post, ratio, NPC
+   - Examples: "the guy who beat me"; "the game that broke"; "the place where we met"; "the one I told you about"; "the post that got a ratio is the one I meant"; "the guy who wrote that comment is an NPC"; "the guy who never joins the call is a sigma"
    - Real-world relevance: Every recommendation a kid makes carries a who or a that, and without it the description stops at "the guy" and the listener has to guess. The same clause is how a post gets dismissed: the comment that got ratioed and the guy who wrote it are both described by a group that has one word for him.
 
 ## Lesson 41: like doing against want to do
@@ -416,8 +416,8 @@
    - teaches: `verb/like-doing`, `verb/want-to-do`, `verb/stop-doing-vs-to-do`, `verb/go-doing-activities`
    - Deepens: `continuous/be-plus-ing`, `prep/to-infinitive-marker` - the -ing was the continuous's marker and to was the infinitive marker; here both become noun-like slots after a verb, which is where the two rules meet.
    - Uses: `present/state-verbs-no-ing` - like and hate refuse -ing on themselves, so the same lesson explains why the thing enjoyed still takes it.
-   - Vocabulary: hobby, puzzle, chess, karaoke, cosplay, manga, anime, band, drum, skateboard, speedrun, grind
-   - Examples: "I like playing chess"; "I want to learn the drums"; "I stopped playing, I stopped to eat"; "we go skateboarding"; "the guy who speedruns it in nine minutes is my favorite creator"; "this hobby is a grind, but I like it"
+   - Vocabulary: hobby, chess, karaoke, cosplay, manga, anime, band, drum, "flow state", skateboard, speedrun, grind
+   - Examples: "I like playing chess"; "I want to learn the drums"; "I stopped playing, I stopped to eat"; "we go skateboarding"; "the guy who speedruns it in nine minutes is my favorite creator"; "this hobby is a grind, but I like it"; "I need to get in a flow state before I speedrun"
    - Real-world relevance: Asking what someone likes and inviting them to try it is the whole social engine of a school break, and the wrong form after like is the error a teacher corrects first.
 
 ## Lesson 42: used to - the habits that are gone
@@ -491,8 +491,8 @@
    - teaches: `tag/positive-negative-flip`, `tag/repeat-the-mode`, `tag/answer-with-mode`
    - Deepens: `question/short-answer` - the short answer already repeated the mode instead of the verb; the tag does the same job at the other end of the sentence, which is why the mode is the thing being tested.
    - Uses: `sound/can-vs-cant`, `mode/do-support` - the tag is where a weak spoken form carries the meaning, and do-support supplies the do inside the tag.
-   - Vocabulary: "right?", seriously, "no way", "for real", obviously, totally, "I guess", "me neither", "me too", "same here", "or nah", "you feel me"
-   - Examples: "you play, don't you?"; "she can't come, can she?"; "no, she can't"; "it's cold, isn't it?"; "it's good, or nah"; "that's a W, you feel me"
+   - Vocabulary: "right?", seriously, "no way", "for real", based, totally, "I guess", "me neither", "me too", "same here", "or nah", "you feel me"
+   - Examples: "you play, don't you?"; "she can't come, can she?"; "no, she can't"; "it's cold, isn't it?"; "it's good, or nah"; "that's a W, you feel me"; "based, that is exactly what I think"
    - Real-world relevance: A tag turns a statement into an invitation to agree, which is the politest way a teenager has of checking something without asking directly.
 
 ## Lesson 50: The layer under the grammar - tone without a voice, and a slang word that is already dead
@@ -501,6 +501,6 @@
    - teaches: `text/case-and-punctuation-as-tone`, `text/emoji-as-tone`, `slang/dated-vs-current`
    - Deepens: `text/abbreviation-set` - the abbreviations were chosen for speed in lesson 11; here the same message is read for tone, which the letters alone never carried.
    - Uses: `slang/teen-slang-map`, `slang/where-not-to-use` - the map and its border were settled earlier, and this lesson judges which of those words is still worth using.
-   - Vocabulary: emoji, meme, hashtag, vibe, flex, "brb", "idk", "tbh", "ngl", "dm", cheugy, yeet
-   - Examples: "ok." lands cold and "ok!!" lands warm; "he answered with the skull, so it was a joke"; "brb, this is taking forever"; "ngl, that word is dead, my teacher says it now"; "idk, tbh"; "cheugy sounds like a word an advert would use now"; "yeet was everywhere years ago and nobody says it now"
+   - Vocabulary: emoji, meme, skibidi, vibe, flex, "brb", "idk", "tbh", "ngl", "dm", cheugy, yeet
+   - Examples: "ok." lands cold and "ok!!" lands warm; "he answered with the skull, so it was a joke"; "brb, this is taking forever"; "ngl, that word is dead, my teacher says it now"; "idk, tbh"; "cheugy sounds like a word an advert would use now"; "yeet was everywhere years ago and nobody says it now"; "skibidi was everywhere two years ago and now it means nothing"
    - Real-world relevance: A kid's social life runs through messages where the tone has to be typed, and the two ways to get it wrong are the same two this lesson names: missing the capitals and the emoji, or using a word that everyone older than you has already adopted. Cheugy and yeet are the worked examples: one is a word adverts use and the other is a word nobody under twenty says, so the lesson can point at a corpse instead of describing one.

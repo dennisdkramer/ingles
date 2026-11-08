@@ -154,7 +154,7 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - memory — L13
 - joke — L13
 - secret — L13
-- luck — L13
+- bussin — L13
 - reason — L13
 - understand the assignment — L13
 - the ick — L13
@@ -283,7 +283,7 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - bread — L24
 - rice — L24
 - sugar — L24
-- salt — L24
+- aura — L24
 - meat — L24
 - fruit — L24
 - bottle — L24
@@ -430,7 +430,7 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - ranking — L37
 - scoreboard — L37
 - rival — L37
-- audience — L37
+- goated — L37
 - season — L37
 - mid — L37
 - goat — L37
@@ -460,7 +460,7 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - mess around and find out — L39
 - guy — L40
 - gamer — L40
-- stranger — L40
+- sigma — L40
 - teammate — L40
 - creator — L40
 - fan — L40
@@ -471,7 +471,6 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - ratio — L40
 - NPC — L40
 - hobby — L41
-- puzzle — L41
 - chess — L41
 - karaoke — L41
 - cosplay — L41
@@ -479,6 +478,7 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - anime — L41
 - band — L41
 - drum — L41
+- flow state — L41
 - skateboard — L41
 - speedrun — L41
 - grind — L41
@@ -558,7 +558,7 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - seriously — L49
 - "no way" — L49
 - "for real" — L49
-- obviously — L49
+- based — L49
 - totally — L49
 - "I guess" — L49
 - "me neither" — L49
@@ -568,7 +568,7 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - you feel me — L49
 - emoji — L50
 - meme — L50
-- hashtag — L50
+- skibidi — L50
 - vibe — L50
 - flex — L50
 - "brb" — L50
