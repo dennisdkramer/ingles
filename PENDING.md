@@ -35,7 +35,7 @@
 #### [S1] Read KIDS-ROADMAP.md lines 18-26 as the lesson's own range, diff the other mandatory inputs, author on _shell.html, mirror to .edit.html, append the two §5 lines to PAST_BATCHES.md, commit and push <PEDAGOGY-MAP.md §1/§4/§5, FORMAT.md> <B1> <DONE - 2026-11-08 - kids/lesson1.html, kids/lesson1.edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 vocabulary items, closing skeetRange quiz at data-retry="0">>
 
 ### [B3] Lesson 2 — the silent e, the vowel pairs, the cognates that lie; same artifact/exit/risk shape as [B2]
-#### [S1] Roadmap lines 28-36; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 28-36; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B2> <DONE - 2026-11-08 - kids/lesson2.html + .edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 items, catchBasket training game (replayable) + whackMole quiz at data-retry="0">
 
 ### [B4] Lesson 3 — be, get and it; same shape as [B2]
 #### [S1] Roadmap lines 38-46; author + sidecar + §5 lines + commit and push
