@@ -32,8 +32,8 @@ FILE: C:\Users\denni\Documents\GitHub\ingles\KIDS-ROADMAP.md
   PASS  every teaching lesson has 10-12 items and 3-6 labels; exams carry neither
   PASS  no bare particles in vocabulary
   PASS  no vocabulary item repeats across lessons
-  INFO  item ledger: C:\Users\denni\Documents\GitHub\ingles\ROADMAP GENERATION\work\kids-items.md (486 items)
-  PASS  the item ledger matches the roadmap's vocabulary (486 items)
+  INFO  item ledger: C:\Users\denni\Documents\GitHub\ingles\ROADMAP GENERATION\work\kids-items.md (576 items)
+  PASS  the item ledger matches the roadmap's vocabulary (576 items)
 
 --- ENTRY FIELDS ---
   PASS  all entries carry their fields (7 on teaching lessons, Focus/Uses on exams)

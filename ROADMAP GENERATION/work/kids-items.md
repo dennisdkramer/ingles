@@ -12,6 +12,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - creature — L1
 - distance — L1
 - action — L1
+- bruh — L1
+- tuff — L1
 - parent — L2
 - push — L2
 - pretend — L2
@@ -22,6 +24,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - foot — L2
 - moon — L2
 - tree — L2
+- slay — L2
+- sheesh — L2
 - hungry — L3
 - bored — L3
 - tired — L3
@@ -32,6 +36,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - free — L3
 - ticket — L3
 - battery — L3
+- cooked — L3
+- locked in — L3
 - money — L4
 - idea — L4
 - job — L4
@@ -42,6 +48,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - room — L4
 - project — L4
 - "have fun" — L4
+- drip — L4
+- glow-up — L4
 - shop — L5
 - street — L5
 - park — L5
@@ -52,6 +60,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - court — L5
 - "bus stop" — L5
 - snack — L5
+- function — L5
+- baddie — L5
 - play — L6
 - like — L6
 - want — L6
@@ -62,6 +72,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - watch — L6
 - study — L6
 - sleep — L6
+- ghost — L6
+- yap — L6
 - know — L7
 - need — L7
 - speak — L7
@@ -72,6 +84,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - swim — L7
 - read — L7
 - work — L7
+- sleep on — L7
+- simp — L7
 - name — L8
 - favorite — L8
 - phone — L8
@@ -82,6 +96,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - seat — L8
 - team — L8
 - price — L8
+- rizz — L8
+- main character — L8
 - cat — L9
 - dog — L9
 - spider — L9
@@ -92,6 +108,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - bite — L9
 - hate — L9
 - prefer — L9
+- slaps — L9
+- hits different — L9
 - alarm — L10
 - breakfast — L10
 - shower — L10
@@ -102,6 +120,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - weekend — L10
 - uniform — L10
 - toothbrush — L10
+- doomscroll — L10
+- lowkey — L10
 - chat — L11
 - stream — L11
 - download — L11
@@ -124,6 +144,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - screen — L12
 - blanket — L12
 - curtain — L12
+- tweaking — L12
+- crash out — L12
 - opinion — L13
 - truth — L13
 - smell — L13
@@ -134,6 +156,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - secret — L13
 - luck — L13
 - reason — L13
+- understand the assignment — L13
+- the ick — L13
 - skate — L14
 - guitar — L14
 - trick — L14
@@ -144,6 +168,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - bike — L14
 - goal — L14
 - race — L14
+- clutch — L14
+- carry — L14
 - gift — L15
 - card — L15
 - favor — L15
@@ -154,6 +180,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - coin — L15
 - tip — L15
 - balloon — L15
+- for the plot — L15
+- no cap — L15
 - box — L16
 - drawer — L16
 - pocket — L16
@@ -164,6 +192,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - roof — L16
 - gate — L16
 - door — L16
+- on god — L16
+- in my feels — L16
 - "wait for" — L17
 - "depend on" — L17
 - "listen to" — L17
@@ -174,6 +204,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - "pay for" — L17
 - "laugh at" — L17
 - "think about" — L17
+- hit me up — L17
+- hop off — L17
 - weather — L18
 - party — L18
 - trip — L18
@@ -184,6 +216,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - beach — L18
 - farm — L18
 - hotel — L18
+- beef — L18
+- gucci — L18
 - visit — L19
 - start — L19
 - finish — L19
@@ -194,6 +228,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - order — L19
 - arrive — L19
 - answer — L19
+- fumbled — L19
+- washed — L19
 - take — L20
 - keep — L20
 - leave — L20
@@ -204,6 +240,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - throw — L20
 - break — L20
 - fall — L20
+- took an L — L20
+- caught a W — L20
 - suddenly — L21
 - later — L21
 - finally — L21
@@ -214,6 +252,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - anyway — L21
 - immediately — L21
 - afterwards — L21
+- plot twist — L21
+- out of pocket — L21
 - cousin — L22
 - neighbor — L22
 - uncle — L22
@@ -224,6 +264,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - sister — L22
 - player — L22
 - owner — L22
+- my bad — L22
+- your loss — L22
 - press — L23
 - hold — L23
 - tap — L23
@@ -246,6 +288,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - fruit — L24
 - bottle — L24
 - packet — L24
+- copium — L24
+- brainrot — L24
 - schedule — L26
 - calendar — L26
 - invite — L26
@@ -256,6 +300,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - concert — L26
 - camping — L26
 - barbecue — L26
+- finna — L26
+- fit check — L26
 - promise — L27
 - deal — L27
 - "right away" — L27
@@ -266,6 +312,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - "of course" — L27
 - definitely — L27
 - "no worries" — L27
+- say less — L27
+- bet — L27
 - appointment — L28
 - practice — L28
 - rehearsal — L28
@@ -276,6 +324,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - "next time" — L28
 - "the day after" — L28
 - midday — L28
+- link up — L28
+- pull up — L28
 - "get up" — L29
 - "get back" — L29
 - "get on" — L29
@@ -286,6 +336,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - "get along" — L29
 - "get together" — L29
 - "get away" — L29
+- get mogged — L29
+- get gassed — L29
 - "look at" — L30
 - "look for" — L30
 - "look up" — L30
@@ -296,6 +348,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - "look around" — L30
 - "look into" — L30
 - "look away" — L30
+- looksmaxxing — L30
+- skill issue — L30
 - "wanna" — L31
 - "gotta" — L31
 - "kinda" — L31
@@ -306,6 +360,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - yeah — L31
 - nope — L31
 - yep — L31
+- ain't — L31
+- tryna — L31
 - write — L32
 - win — L32
 - lose — L32
@@ -316,6 +372,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - sell — L32
 - tell — L32
 - sit — L32
+- glazing — L32
+- beating the allegations — L32
 - "all day" — L33
 - "all week" — L33
 - "for ages" — L33
@@ -326,6 +384,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - "these days" — L33
 - still — L33
 - neighborhood — L33
+- since forever — L33
+- down bad — L33
 - try — L34
 - abroad — L34
 - mountain — L34
@@ -336,6 +396,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - snowboard — L34
 - hike — L34
 - surf — L34
+- never have I ever — L34
+- touch grass — L34
 - age — L35
 - childhood — L35
 - "primary school" — L35
@@ -346,6 +408,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - year — L35
 - decade — L35
 - anniversary — L35
+- day one — L35
+- ride or die — L35
 - fast — L36
 - slow — L36
 - big — L36
@@ -356,6 +420,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - expensive — L36
 - funny — L36
 - loud — L36
+- built different — L36
+- fire — L36
 - champion — L37
 - record — L37
 - medal — L37
@@ -378,6 +444,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - seatbelt — L38
 - bedtime — L38
 - excuse — L38
+- you better not — L38
+- must be nice — L38
 - forecast — L39
 - rain — L39
 - storm — L39
@@ -388,6 +456,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - muddy — L39
 - freezing — L39
 - humid — L39
+- if you know you know — L39
+- mess around and find out — L39
 - guy — L40
 - gamer — L40
 - stranger — L40
@@ -398,6 +468,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - channel — L40
 - comment — L40
 - post — L40
+- ratio — L40
+- NPC — L40
 - hobby — L41
 - puzzle — L41
 - chess — L41
@@ -408,6 +480,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - band — L41
 - drum — L41
 - skateboard — L41
+- speedrun — L41
+- grind — L41
 - remember — L42
 - "photo album" — L42
 - "back then" — L42
@@ -418,6 +492,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - toy — L42
 - playground — L42
 - "way back" — L42
+- OG — L42
+- peak — L42
 - hallway — L43
 - footsteps — L43
 - streetlight — L43
@@ -428,6 +504,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - "power cut" — L43
 - siren — L43
 - silence — L43
+- go off — L43
+- side-eye — L43
 - "told me" — L44
 - rumor — L44
 - whisper — L44
@@ -438,6 +516,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - "the truth" — L44
 - gossip — L44
 - "last night" — L44
+- spill the tea — L44
+- throw shade — L44
 - sunscreen — L46
 - sunburn — L46
 - sandcastle — L46
@@ -448,6 +528,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - horizon — L46
 - sunset — L46
 - souvenir — L46
+- had me dead — L46
+- villain arc — L46
 - lottery — L47
 - millionaire — L47
 - superpower — L47
@@ -458,6 +540,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - dragon — L47
 - spaceship — L47
 - wish — L47
+- Roman Empire — L47
+- rent free — L47
 - invented — L48
 - discovered — L48
 - released — L48
@@ -468,6 +552,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - designed — L48
 - hosted — L48
 - downloaded — L48
+- nerfed — L48
+- leaked — L48
 - "right?" — L49
 - seriously — L49
 - "no way" — L49
@@ -478,6 +564,8 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - "me neither" — L49
 - "me too" — L49
 - "same here" — L49
+- or nah — L49
+- you feel me — L49
 - emoji — L50
 - meme — L50
 - hashtag — L50
@@ -488,3 +576,5 @@ Every vocabulary item with the lesson that introduced it. Check here before addi
 - "tbh" — L50
 - "ngl" — L50
 - "dm" — L50
+- cheugy — L50
+- yeet — L50
