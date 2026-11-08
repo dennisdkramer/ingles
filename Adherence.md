@@ -5,7 +5,7 @@
 		2) the batch list, one line per batch — `<the element it serves> [Bn] → <artifact produced>`;
 		3) the literal `batch success` as the last line. `batch success` without 1) and 2) is not a parse and does not count.
 	- **Entry**: `ADHERENCE.md` and nothing else may be read before that first message; it is the only file exempt and only for this. Content already in context counts as read — quoting it is not a read, and re-reading it is not a step.
-	- **Address**: every tool call after the first message carries, in the same message, one clause naming the element or `[Bn]` step it serves. A call whose clause would have to say `none` is not made.
+	- **Address**: every tool call after the first message carries, in the same message, one clause naming an element of the current prompt or a `[Bn]` step of the plan it produced. An element of an earlier prompt is not an address: a call whose clause would have to reach back to one, or would have to say `none`, is not made.
 	- **Breach**: a tool call in the first message, or a call with no address clause, is `batch BREACH <tool, target, element-or-none>` in place of `batch success`, written as the first text of the message in which it is noticed, and the turn ends there — no further tool call until the user replies. `none` is a complete answer and the one that matters. Writing it late does not repair it — the transcript shows the order.
 	
 	### [UNDERSTANDING], DISAGREEMENT, UNCERTAINTY, and Communicating with the User
