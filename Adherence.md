@@ -54,4 +54,4 @@
 	5) On resume after compaction, new workflow, or new Prompt, read (PENDING.md [CURRENT]).
 	6) When all batches in (PENDING.md [CURRENT]) are verifiably complete, author a 1-3 line summary - and append it in `PAST_BATCHES.md` at the repo root (the file already exists and is kept empty until the first summary; never carry a past summary back into it) - which includes:
 		- `A summary of what that Prompt involved and how it was accomplished, the most unexpectedly difficult element of the Prompt, any deviation from the goals or sequence of the original batch items, what that deviation was, why it happened, and the date`
-	7) Clear the contents of (PENDING.md [CURRENT]) and report any important details to the user.
+	7) Clear the contents of (PENDING.md [CURRENT]) and report any important details to the user. Before clearing, any step not marked `DONE` and any element of the turn's Prompt that was never addressed is moved into (PENDING.md [PAST]) in the format (PENDING.md [HANDLING]) defines. This item never clears [PAST]: only the user clears [PAST].

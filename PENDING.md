@@ -7,6 +7,7 @@
 ## [HANDLING]
 - Each completed `[Sn]` is marked `DONE - <date> - <which files it modified>` and triggers beginning work on the following `[Sn]` or the first `[Sn]` in the following `[Bn]`.
 - Read only the `### [Bn]` batch section you are on. Don't read ahead without verifiable need or user instruction.
+- An unfinished item is moved into `[PAST]` at the end of the turn, one line, newest first: `<date> — <the user's words> — <what remains>`. It is a record, not a queue: it is not read back as a mandatory step on later prompts, and its entries are not named unless asked.
 - Heading depth is fixed per prompt, and every level is a real heading - never a bold line standing in for one, never a bullet:
 	- `## [n]` - the Prompt line, directly under `# [CURRENT]`
 	- `### [Bn]` - a batch
