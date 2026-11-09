@@ -559,7 +559,12 @@ window.GAMES4 = (function () {
     if (this.itemTime) stage.appendChild(bar);
     this.bar = bar; this.barFill = bar.querySelector('i');
     this.stage = stage; this.hudEl = hud;
-    root.insertBefore(stage, root.firstChild);   /* how-text and Play moved into the overlay above */
+    /* the stage goes BELOW the block's lettered header, never above it: FORMAT.md requires the h3 to be
+       the block's first line, so a block that opens with one keeps it on top and the stage lands directly
+       under it. A block whose markup has no heading is inserted at the top exactly as before. */
+    var head = root.firstElementChild;
+    if (head && /^H[1-6]$/.test(head.tagName)) root.insertBefore(stage, head.nextSibling);
+    else root.insertBefore(stage, root.firstChild);   /* how-text and Play moved into the overlay above */
     stage.appendChild(intro);                    /* the intro sits ON the stage, not above it */
 
     var btn = root.querySelector('.game-start');

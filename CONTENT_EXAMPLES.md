@@ -49,6 +49,7 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
 - **does** — One drawn mole per option surfaces from a hole, stamped in stagger; the player hits the one that
   fits before the runner's timer bar empties. The rest duck away the instant an answer lands.
 - **skins** — same `.qitem` list; the prompt sits on the HUD line, options become the moles' labels.
+- **opts** — **3 to 6 per run**, one mole per option (the grid lays 6–9 holes, so the count changes the crowd, never the layout). Below 3 there is nothing to spot among; above 6 the moles stop reading as separate targets.
 - **authoring the stem** — the prompt is the thing to FIND, so it is written as that thing and nothing more:
   `past`, `a place you sleep`, `sorry, say that again?` — never `which one is past`, because the moles are
   already the candidates and the sentence only restates the game.
