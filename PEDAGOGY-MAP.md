@@ -13,7 +13,7 @@
    - b) CONTENT_EXAMPLES.md [HEADLINES] - the `###` heading lines only, each read as its own line range. A `####` heading is a draft, not a menu item: it is never read, chosen or implemented by a build.
    - c) _shell.html
    - d) engine4.js **implementation only** - the game-presentation engine (`window.GAMES4`). `_shell.html` does NOT load it, so a page that uses a game block must add `<script src="../engine4.js"></script>` itself, after engine2.js.
-   - e) PAST_BATCHES.md
+   - e) PAST_BATCHES.md **artifact creation, do not read**
 3. Allow: Downloaded material, song, clip, article, document, photo, assets/. **Withhold all other files unless you have a strong defensible need to access them.** **No `*/*lesson<N>.html` is read while authoring any lesson** - a structural question is answered by 2.a-2.d, and continuity of concept or vocabulary comes from this lesson's own roadmap entry (`uses:`/`deepens:`), never from a prior page. `PEDAGOGY.md` is withheld outright: it governs roadmap generation, not lessons.
 4. Output = `<track>/lesson<N>.html`, **unpadded** (`lesson1.html`, never `lesson01.html` - the landing links are built as `track/lesson`+n+`.html`), plus a byte-identical `.edit.html` sidecar, built on `_shell.html`
 5. At the beginning of each Lesson generation
@@ -66,6 +66,13 @@
 - l) Multiple-choice options are shuffled so the right one is not always in the same slot.
 - m) Boilerplate & filler are last resorts.
 - n) All concepts that are meant to be trained in the Lesson must be appropriately explained and concepts demonstrated.
+
+#### [Claims, practice and budget]
+- q) **A claim is made only if it is true, and the student can check it on this page.** Claims about English - how a form works, where it came from, how often it is used - are wanted where they are true, because a rule with a reason sticks. What is forbidden is that sentence with the truth removed: an absolute this page cannot support (`every phrasal verb`, `no word ever`, `always`, `never` standing outside the rule being taught), a frequency claim nobody counted, and a history presented as fact with nothing behind it. A joke is allowed; a false absolute bought for a laugh is not. **Never coin a name for a class of words** - if this repo already names it (a phrasal verb, the *look* family, a particle), use that name; if nothing names it, describe the thing rather than labelling it. Humour, voice and invention belong in the scenario, the dialogue and the exercise - not in a claim about the language.
+- r) **Prose is budgeted against what the lesson teaches, not against the page.** Allowance = 60 words for each taught element (every roadmap vocabulary item + every concept on `teaches:`) + 240, and no single section may spend more than 40% of it. The measure is the running explanation: `<p>` and `.lead` outside `.dialog`, `.qstem`, `.qopts`, `.game-how`, `.blanks` and tables - so stating a rule inside a chart cell is inside the budget's intent, not a way around it. Separately, **at most one sentence per section may talk about the lesson itself** ("this is the method", "read that twice", "you will see this again"); that commentary is what grows without bound, and it is the prose that pushes teaching out of the page.
+- s) **Every block that trains something declares which move it asks for** - `data-move="spot|choose|produce|correct|contrast|recall"` (FORMAT.md states the vocabulary). A page of radio buttons is one move repeated, so each concept on `teaches:` must be served by **at least two distinct moves, one of them `produce`**. Where this lesson's roadmap `Deepens:` names a concept from an earlier lesson, the page carries a `recall` block marked `data-recalls="<that pid>"`: deepening is not mentioning.
+- t) **A `produce` block must carry a control that accepts written language** - an `input.gap` inside a sentence, or a `textarea` other than `#feed`. A radio can recognise; it cannot produce, and a block of radios that claims `produce` is the claim the block cannot keep.
+- u) **Adjacent sections do not repeat a shape.** No two neighbouring sections may use the same vehicle sequence, and a lesson uses at least three distinct vehicles. The same vehicle may return later in the lesson - what is banned is the run of look-alike sections that makes each new section feel like the last one, which is how a lesson becomes one exercise printed eight times.
 
 #### [Length] / Content Quantity
 - o) Never compress, summarise or omit an item to fit a page.

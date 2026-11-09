@@ -124,6 +124,18 @@ function roadmapTeaches(body) {
   return rest.split(/[,;]/).map(s => norm(s)).filter(Boolean);
 }
 
+/** the `- Deepens:` line of one lesson entry — the earlier concepts this lesson is meant to deepen.
+ *  Anything named here is a claim that the page RETRIEVES it, not merely that it mentions it. */
+function roadmapDeepens(body) {
+  const line = String(body).split(/\r?\n/).find(l => /^\s*-\s*Deepens?\s*:/i.test(l));
+  if (!line) return [];
+  const rest = line.replace(/^\s*-\s*Deepens?\s*:/i, '').trim();
+  return [...rest.matchAll(/`([^`]+)`/g)].map(m => norm(m[1])).filter(Boolean);
+}
+
+/** the moves FORMAT.md's block vocabulary allows — anything else is a typo the page cannot honour */
+const MOVES = ['spot', 'choose', 'produce', 'correct', 'contrast', 'recall'];
+
 /** an item as it would appear in prose; word-boundaries only where the item has word edges */
 function itemPattern(item) {
   const esc = item.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -179,6 +191,19 @@ function answersOf(el) {
     if (host && !host.classList.contains('qitem')) out.push(norm(host.getAttribute('data-answer')));
   }
   return out.filter(Boolean);
+}
+
+/** the concept ids on ONE element, `data-teaches` only — no descent, so a wrapper cannot claim what
+ *  sits inside it. Used to pair a move with the concept it is asking the student to do. */
+function pidsOn(el) {
+  const v = el && el.getAttribute && el.getAttribute('data-teaches');
+  return v ? String(v).split(/[\s,]+/).map(norm).filter(Boolean) : [];
+}
+
+/** a control that accepts LANGUAGE the student writes, which is the only thing that can produce */
+function hasWritable(el) {
+  if (el.querySelector('input.gap')) return true;
+  return [...el.querySelectorAll('textarea')].some(t => t.id !== 'feed');
 }
 
 /**
@@ -245,7 +270,8 @@ function sectionsOf(html) {
     if (el.tagName === 'H2') {
       if (isFeedHeading(el)) { cur = null; continue; }
       cur = { title: norm(el.textContent), tokens: [], text: norm(el.textContent), pids: new Set(),
-        answers: [], askPids: new Set() };
+        answers: [], askPids: new Set(), moves: new Set(), movePids: new Map(), recalls: new Set(),
+        badMoves: [], moveNoPid: [], fakeProduce: [] };
       pidsOf(el).forEach(p => cur.pids.add(p));
       sections.push(cur);
       continue;
@@ -259,6 +285,29 @@ function sectionsOf(html) {
     if (el.querySelector(ANSWERABLE)) {
       ps.forEach(p => cur.askPids.add(p));
       cur.answers.push(...answersOf(el));
+    }
+    /* which move each training block asks for, and which concept it asks it of. The pid comes from the
+       block's own element or the nearest marked ancestor, never from a descendant: a wrapper that holds
+       four differently-marked blocks must not be able to claim all four moves for one concept. */
+    for (const b of [el, ...el.querySelectorAll('[data-move]')]) {
+      const mv = b.getAttribute && b.getAttribute('data-move');
+      if (!mv) continue;
+      const how = norm(mv);
+      if (!MOVES.includes(how)) { cur.badMoves.push(how); continue; }
+      cur.moves.add(how);
+      const host = b.closest('[data-teaches]');
+      const taught = pidsOn(host);
+      if (!taught.length) { cur.moveNoPid.push(how); continue; }
+      for (const p of taught) {
+        if (!cur.movePids.has(p)) cur.movePids.set(p, new Set());
+        cur.movePids.get(p).add(how);
+      }
+      if (how === 'produce' && !hasWritable(b)) cur.fakeProduce.push(taught.join(', '));
+    }
+    const rec = el.getAttribute && el.getAttribute('data-recalls');
+    if (rec) String(rec).split(/[\s,]+/).map(norm).filter(Boolean).forEach(p => cur.recalls.add(p));
+    for (const d of el.querySelectorAll('[data-recalls]')) {
+      String(d.getAttribute('data-recalls')).split(/[\s,]+/).map(norm).filter(Boolean).forEach(p => cur.recalls.add(p));
     }
     cur.text = norm(cur.text + ' ' + proseOf(el));
   }
@@ -456,6 +505,69 @@ function auditLesson({ root, track, n, record, peers, retired }) {
       warns.push('concept(s) trained with none of the lesson\'s new vocabulary (' + bareConcept.join(', ') +
         ') — the practice items should carry the new words');
     }
+
+    /* ---- R3 R4 R5: what the page ASKS the student to do, not what it mentions ---------------- */
+    const movesByPid = new Map();
+    trainSecs.forEach(s => s.movePids.forEach((set, p) => {
+      if (!movesByPid.has(p)) movesByPid.set(p, new Set());
+      set.forEach(m => movesByPid.get(p).add(m));
+    }));
+    const oneMove = [], noProduce = [];
+    for (const c of concepts) {
+      const mv = movesByPid.get(c) || new Set();
+      if (mv.size < 2) oneMove.push(c + ' (' + (mv.size ? [...mv].join('+') : 'no move declared') + ')');
+      else if (!mv.has('produce')) noProduce.push(c + ' (' + [...mv].join('+') + ')');
+    }
+    if (oneMove.length) {
+      errors.push(oneMove.length + ' concept(s) are asked for in fewer than two different moves (' +
+        oneMove.join('; ') + ') — [s]: a page of radio buttons is one move repeated, so each concept needs' +
+        ' at least two, and `data-move` on the block is how the page says which it asks for');
+    }
+    if (noProduce.length) {
+      errors.push(noProduce.length + ' concept(s) are never produced (' + noProduce.join('; ') +
+        ') — [s]: recognition is not production, so one of the moves must be `produce`');
+    }
+    const fakeProduce = [...new Set(trainSecs.flatMap(s => s.fakeProduce))];
+    if (fakeProduce.length) {
+      errors.push('a block claims `data-move="produce"` with no control that accepts written language (' +
+        fakeProduce.join('; ') + ') — [t]: a radio can recognise, it cannot produce');
+    }
+    const everySec = quiz ? trainSecs.concat([quiz]) : trainSecs;
+    const badMoves = [...new Set(everySec.flatMap(s => s.badMoves))];
+    if (badMoves.length) {
+      errors.push('data-move value(s) outside FORMAT.md\'s vocabulary (' + badMoves.join(', ') +
+        ') — allowed: ' + MOVES.join(', '));
+    }
+    const moveNoPid = [...new Set(everySec.flatMap(s => s.moveNoPid))];
+    if (moveNoPid.length) {
+      warns.push('move(s) declared on a block that names no concept (' + moveNoPid.join(', ') +
+        ') — a block that trains nothing (a chart of reference, a dialogue) declares no move');
+    }
+    const deepens = roadmapDeepens(span.body).filter(p => !concepts.includes(p));
+    const recalled = new Set();
+    everySec.forEach(s => s.recalls.forEach(p => recalled.add(p)));
+    const unrecalled = deepens.filter(p => !recalled.has(p));
+    if (deepens.length && unrecalled.length) {
+      errors.push('the roadmap Deepens: names ' + unrecalled.join(', ') + ' and no `data-recalls="<pid>"`' +
+        ' block retrieves it — [s]: deepening is not mentioning');
+    }
+    const sig = s => s.tokens.join('+') || '—';
+    const twins = [];
+    for (let i = 1; i < page.sections.length; i++) {
+      /* the pair compared is sections[i-1] and sections[i], which are sections i and i+1 counted from
+         one. Printing i+1 and i+2 named the sections AFTER the ones that matched, and a report that
+         points at the wrong pair sends the fix to the wrong place. */
+      if (sig(page.sections[i]) === sig(page.sections[i - 1])) twins.push(i + ' and ' + (i + 1) + ' (' + sig(page.sections[i]) + ')');
+    }
+    if (twins.length) {
+      errors.push(twins.length + ' pair(s) of neighbouring sections use the same vehicles (' + twins.join('; ') +
+        ') — [u]: vary the vehicle so a section does not read as the last one printed again');
+    }
+    const distinctVehicles = new Set(page.sections.flatMap(s => s.tokens));
+    if (distinctVehicles.size < 3) {
+      errors.push('the lesson uses only ' + distinctVehicles.size + ' distinct vehicle(s) (' +
+        [...distinctVehicles].join(', ') + ') — [u] asks for at least three');
+    }
   }
   return { errors, warns };
 }
@@ -559,7 +671,10 @@ function selftest() {
     else { fails++; console.log('❌ ' + name + (detail ? '\n      ' + detail : '')); }
   };
 
-  const VOC = ['look at', 'look for', 'look up'];
+  /* ten items, because [q] makes a lesson teach at least ten and a fixture below that floor would be
+     testing its own non-compliance */
+  const VOC = ['look at', 'look for', 'look up', 'look over', 'look after', 'look out',
+    'look forward to', 'look around', 'look into', 'look away'];
   /* one question per item, with that item as the CORRECT option: coverage counts ANSWERS, so a fixture
      whose quiz is only prose would measure nothing at all */
   const ask = items => items.map((it, i) =>
@@ -568,32 +683,37 @@ function selftest() {
     '<label><input type="radio" name="f' + i + '" value="a"> ' + it + '</label>' +
     '<label><input type="radio" name="f' + i + '" value="b"> not this one</label></div></div>').join('');
   const SECS = [
-    { t: '1. The family', v: ['panel'], x: 'look at it, look for it', p: 'tense/fixture' },
+    { t: '1. The family', v: ['panel'], x: 'look at, look for, look up, look over, look after, look out, look forward to, look around, look into, look away', p: 'tense/fixture', m: 'spot' },
     { t: '2. Training', v: ['chart', 'game:catchBasket'], x: 'look up a word', p: 'tense/fixture' },
-    { t: '3. Quiz', v: ['panel'], x: ask(VOC), p: 'tense/fixture', in: true },
+    { t: '3. Write it', v: ['card'], x: 'I <input class="gap"> it up before I say it.', p: 'tense/fixture', m: 'produce', in: true },
+    { t: '4. Quiz', v: ['panel'], x: ask(VOC), p: 'tense/fixture', in: true },
   ];
   const block = (v, inner) => v.startsWith('game:')
     ? '<div class="game" data-game="' + v.slice(5) + '"><div class="stub">x</div></div>'
     : v === 'chart' ? '<table class="chart"><tbody><tr><td>a</td></tr></tbody></table>'
       : '<div class="' + v + '">' + (inner || '<div class="qgrid"><div>q</div></div>') + '</div>';
-  /* the concept mark sits on the block itself, which is how a real page declares it */
-  const blockAttr = (v, p, inner) => {
+  /* the concept mark and the move sit on the block itself, which is how a real page declares them */
+  const blockAttr = (v, p, inner, mv) => {
     const h = block(v, inner);
-    return p ? h.replace('>', ' data-teaches="' + p + '">') : h;
+    let attrs = '';
+    if (p) attrs += ' data-teaches="' + p + '"';
+    if (mv) attrs += ' data-move="' + mv + '"';
+    return attrs ? h.replace('>', attrs + '>') : h;
   };
   /* a section's `x` is its prose; `in: true` puts it INSIDE the first block instead, which is where a
      question has to live for a concept mark on that block to be a question rather than a label */
   const pageHtml = secs => '<!doctype html><html><body><main><div class="page-container"><div class="content-area">'
     + '<h1>Fixture</h1>'
     + secs.map(s => '<h2>' + s.t + '</h2>'
-      + s.v.map((v, i) => blockAttr(v, s.p, i === 0 && s.in ? s.x : '')).join('')
+      + s.v.map((v, i) => blockAttr(v, i === 0 ? s.p : '', i === 0 && s.in ? s.x : '', i === 0 ? s.m : '')).join('')
       + (s.in ? '' : '<div>' + s.x + '</div>')).join('')
     + '<h2>\u{1F4D2} Caderno compartilhado</h2><textarea id="feed" rows="8"></textarea>'
     + '</div></div></main></body></html>';
-  const roadmapOf = (vocab, raw) => [
+  const roadmapOf = (vocab, raw, deepens) => [
     '## Lesson 1: One', '',
     '   - Focus: fixture',
     '   - teaches: `tense/fixture`',
+    ...(deepens ? ['   - Deepens: `' + deepens + '` - the earlier concept this lesson is said to deepen'] : []),
     '   - Vocabulary: ' + (raw || vocab.map(v => '"' + v + '"').join(', ')), '',
     '## Lesson 2: Two', '',
     '   - Focus: fixture',
@@ -608,7 +728,7 @@ function selftest() {
     fs.writeFileSync(path.join(root, 'FUNCTION.md'), 'function\n');
     fs.writeFileSync(path.join(root, 'KIDS-REGISTER.md'), 'register\n');
     fs.writeFileSync(path.join(root, '_shell.html'), '<div class="content-area"></div>\n');
-    fs.writeFileSync(path.join(root, 'KIDS-ROADMAP.md'), roadmapOf(opts.vocab || VOC, opts.vocabRaw));
+    fs.writeFileSync(path.join(root, 'KIDS-ROADMAP.md'), roadmapOf(opts.vocab || VOC, opts.vocabRaw, opts.deepens));
     fs.mkdirSync(path.join(root, 'kids'), { recursive: true });
     fs.writeFileSync(path.join(root, 'kids', 'lesson1.html'), pageHtml(opts.secs || SECS));
     fs.writeFileSync(path.join(root, 'kids', 'lesson2.html'),
@@ -675,22 +795,24 @@ function selftest() {
   }
   // 7. an item the quiz never asks about in a question of its own
   {
-    const secs = SECS.map(s => (s.t === '3. Quiz' ? { ...s, x: ask(['look at', 'look for']) } : s));
+    const secs = SECS.map(s => (s.t === '4. Quiz' ? { ...s, x: ask(['look at', 'look for']) } : s));
     const root = build({ secs });
     const r = audit(root, 1, recordFor(root, 1));
     say(/never the answer to a question of their own/.test(r.errors.join(' ')),
       'an item the quiz never asks about fails', r.errors.join(' | '));
   }
-  // 8. an item that appears only in the quiz — presented, never trained
+  // 8. an item that appears only in the quiz — presented, never trained. The item is one the page
+  //    teaches nowhere: `look through`, which is deliberately NOT in VOC, so [q]'s count and the
+  //    "untrained" finding stay separate questions.
   {
-    const secs = SECS.map(s => (s.t === '3. Quiz' ? { ...s, x: s.x + ' look out' } : s));
-    const root = build({ vocab: [...VOC, 'look out'], secs });
+    const secs = SECS.map(s => (s.t === '4. Quiz' ? { ...s, x: s.x + ' look through' } : s));
+    const root = build({ vocab: [...VOC, 'look through'], secs });
     const r = audit(root, 1, recordFor(root, 1));
     say(/trained nowhere/.test(r.errors.join(' ')), 'an untrained item fails', r.errors.join(' | '));
   }
   // 9. a roadmap item the build dropped — a WARN, because [BUILD] permits changing vocabulary
   {
-    const root = build({ vocab: [...VOC, 'look into'] });
+    const root = build({ vocab: [...VOC, 'look through'] });
     const r = audit(root, 1, recordFor(root, 1));
     say(r.errors.length === 0 && /do not appear on the page/.test(r.warns.join(' ')),
       'a dropped roadmap item warns only', r.errors.concat(r.warns).join(' | '));
@@ -709,7 +831,7 @@ function selftest() {
 
   // 12. a concept on no training block — the lesson names the tense and never has anyone use it
   {
-    const secs = SECS.map(s => (s.t === '3. Quiz' ? s : { ...s, p: '' }));
+    const secs = SECS.map(s => (s.t === '4. Quiz' ? s : { ...s, p: '' }));
     const root = build({ secs });
     const r = audit(root, 1, recordFor(root, 1));
     say(/carry no training block/.test(r.errors.join(' ')),
@@ -717,7 +839,7 @@ function selftest() {
   }
   // 13. a concept the closing quiz never tests
   {
-    const secs = SECS.map(s => (s.t === '3. Quiz' ? { ...s, p: '' } : s));
+    const secs = SECS.map(s => (s.t === '4. Quiz' ? { ...s, p: '' } : s));
     const root = build({ secs });
     const r = audit(root, 1, recordFor(root, 1));
     say(/absent from the quiz/.test(r.errors.join(' ')),
@@ -725,7 +847,7 @@ function selftest() {
   }
   // 14. a concept trained with none of the lesson's new vocabulary
   {
-    const secs = SECS.map(s => (s.t === '3. Quiz' ? s : { ...s, x: 'nothing to see here' }));
+    const secs = SECS.map(s => (s.t === '4. Quiz' ? s : { ...s, x: 'nothing to see here' }));
     const root = build({ secs });
     const r = audit(root, 1, recordFor(root, 1));
     say(/trained with none of the lesson's new vocabulary/.test(r.warns.join(' ')),
@@ -754,10 +876,13 @@ function selftest() {
   //     lesson's 70% floor be computed over 7 of its 12 items. Here the bare item is trained nowhere,
   //     so a parser that stops at the quotes reports nothing at all.
   {
-    const secs = SECS.map(s => (s.t === '2. Training' ? { ...s, x: 'nothing here' } : s));
+    const secs = SECS.map(s => s.t === '1. The family' ? { ...s, x: 'look at, look for' }
+      : s.t === '2. Training' ? { ...s, x: 'nothing here' } : s);
     const root = build({ secs, vocabRaw: '"look at", "look for", look up' });
     const r = audit(root, 1, recordFor(root, 1));
-    say(/trained nowhere/.test(r.errors.join(' ')),
+    /* the two quoted items are trained, the bare one is not: a parser that reads only the quoted run
+       finds nothing untrained at all, so this fails unless the whole line is read */
+    say(/trained nowhere/.test(r.errors.join(' ')) && /look up/.test(r.errors.join(' ')),
       'a bare (unquoted) vocabulary item is read too', r.errors.concat(r.warns).join(' | '));
   }
   // 18. text that runs across adjacent elements still yields whole words: `<td>yeah</td><td>yes</td>`
@@ -778,7 +903,7 @@ function selftest() {
     const trap = '<div class="qitem" data-a="a"><div class="qopts">' +
       '<label><input type="radio" name="t" value="a"> nothing at all</label>' +
       '<label><input type="radio" name="t" value="b"> look up</label></div></div>';
-    const secs = SECS.map(s => (s.t === '3. Quiz' ? { ...s, x: ask(['look at', 'look for']) + trap } : s));
+    const secs = SECS.map(s => (s.t === '4. Quiz' ? { ...s, x: ask(['look at', 'look for']) + trap } : s));
     const root = build({ secs });
     const r = audit(root, 1, recordFor(root, 1));
     say(/look up/.test(r.errors.join(' ')) && /never the answer to a question of their own/.test(r.errors.join(' ')),
@@ -786,10 +911,10 @@ function selftest() {
   }
   // 20. an item mentioned in the quiz's prose, with no question about it at all
   {
-    const secs = SECS.map(s => (s.t === '3. Quiz' ? { ...s, x: 'remember look at, look for and look up' } : s));
+    const secs = SECS.map(s => (s.t === '4. Quiz' ? { ...s, x: 'remember look at, look for and look up' } : s));
     const root = build({ secs });
     const r = audit(root, 1, recordFor(root, 1));
-    say(/3 of 3 present item\(s\) are never the answer/.test(r.errors.join(' ')),
+    say(/10 of 10 present item\(s\) are never the answer/.test(r.errors.join(' ')),
       'prose is not a question', r.errors.concat(r.warns).join(' | '));
   }
   // 21. one question whose answer names two items: it tests neither on its own
@@ -797,7 +922,7 @@ function selftest() {
     const both = '<div class="qitem" data-a="a"><div class="qopts">' +
       '<label><input type="radio" name="b1" value="a"> look at and look for</label>' +
       '<label><input type="radio" name="b1" value="b"> nothing at all</label></div></div>';
-    const secs = SECS.map(s => (s.t === '3. Quiz' ? { ...s, x: both + ask(['look up']) } : s));
+    const secs = SECS.map(s => (s.t === '4. Quiz' ? { ...s, x: both + ask(['look up']) } : s));
     const root = build({ secs });
     const r = audit(root, 1, recordFor(root, 1));
     say(/name more than one new item/.test(r.warns.join(' ')) &&
@@ -806,7 +931,7 @@ function selftest() {
   }
   // 22. a concept marked in the quiz on a block with no answerable control: a label, not a question
   {
-    const secs = SECS.map(s => (s.t === '3. Quiz' ? { ...s, x: 'nothing to answer here', p: 'tense/fixture' } : s));
+    const secs = SECS.map(s => (s.t === '4. Quiz' ? { ...s, x: 'nothing to answer here', p: 'tense/fixture' } : s));
     const root = build({ secs });
     const r = audit(root, 1, recordFor(root, 1));
     say(/sit on a block with no answerable control/.test(r.warns.join(' ')),

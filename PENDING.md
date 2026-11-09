@@ -23,6 +23,31 @@
 ```
 
 # [CURRENT] Prompt - (Active batches, newest first)
+## [7] Answer how a reference like "the last prompt" should be defined and targeted, and implement the revised R1-R5 generation rules
+
+### [B1] Answer the two questions about how I locate a prompt the user is pointing at; serves "'the last' in my mind is the same thing as 'the one immediately prior in the sequence'" + "is that something worth defining in adherence.md" + "is there some better way for me to prompt you"; artifact = a written answer naming the mechanism that made me mis-target, a recommendation for Adherence.md, and cheaper ways for the user to target a specific earlier prompt; exit = both questions answered with a concrete recommendation and no file edited, since Adherence.md is the user's file and was not authorised; risk = editing Adherence.md to "help", which is a change to the rules that govern me made without instruction
+
+#### [S1] Answer both questions, and name the exact mechanism that made "the last prompt" resolve to the wrong one <Adherence.md [PARSE] [ANALYSE]> <none> <done: answered in the turn opening; Adherence.md not edited by design>
+
+### [B2] Put the five revised rules where a build is allowed to read them; serves "you can make all the revised r1-5 changes"; artifact = R1 and R2 in PEDAGOGY-MAP.md, R3's and R4's markup in FORMAT.md and their obligation in PEDAGOGY-MAP.md, R5 as a shape rule, and a VERIFICATION.md section naming the checks; exit = each rule is stated once, in MUST/NEVER form, paired with a named check that exits non-zero; risk = a rule the harness cannot measure, which is a rule a build can satisfy in words and ignore in the page
+
+#### [S1] R1: claims about English and etymology are allowed and must be verifiably true; a joke is allowed and a false absolute bought for a laugh is not; never a coined label standing in for a term the repo already uses <PEDAGOGY-MAP.md [BUILD] HIGH PRIORITY> <none> <done: PEDAGOGY-MAP.md:71 + qa/prose.mjs banned-claim list>
+#### [S2] R2, revised: the prose budget is a function of the elements taught, not one flat number for every lesson, plus a per-section share so one section cannot eat the budget <PEDAGOGY-MAP.md [BUILD] HIGH PRIORITY> <S1> <done: PEDAGOGY-MAP.md:72 + qa/prose.mjs element-scaled budget>
+#### [S3] R3 and R4: every training block declares its move, every concept is served by two distinct moves one of which is produce, and a produce block must carry a control that accepts written language <FORMAT.md block vocabulary; PEDAGOGY-MAP.md [BUILD]> <S2> <done: PEDAGOGY-MAP.md:73-74 + FORMAT.md:16>
+#### [S4] R5 and the VERIFICATION.md entry: no two adjacent sections share a vehicle and move, at least three distinct vehicles per lesson, and the checks named where the other checks are named <PEDAGOGY-MAP.md; VERIFICATION.md> <S3> <done: PEDAGOGY-MAP.md:75 + VERIFICATION.md:15-18>
+
+### [B3] Build the mechanical half so none of the five is a rule in words only; serves "you can make all the revised r1-5 changes"; artifact = qa/prose.mjs for R1 and R2, R3 R4 R5 as predicates in qa/provenance.mjs, both registered in qa/run.mjs, each with a self-test; exit = each check is seen to fail on a planted defect and to pass on a clean page, and an unfamiliar edit to the page turns at least one of them red; risk = a check that measures the words on the page without measuring what the page asks the student to do, which is the defect R3-R5 exist to catch
+
+#### [S1] Author qa/prose.mjs: the banned-claim list for R1 and the element-scaled budget for R2, with a --selftest <VERIFICATION.md: a harness exits non-zero on a finding, and is trusted only once seen to fail> <B2> <done: qa/prose.mjs, 11 selftest cases green>
+#### [S2] Add R3 R4 R5 to qa/provenance.mjs and give each a fixture <VERIFICATION.md> <S1> <done: qa/provenance.mjs, 22 selftest cases green>
+#### [S3] Register prose in qa/run.mjs with its scope, and give it its VERIFICATION.md line <qa/run.mjs; VERIFICATION.md> <S2> <done: qa/run.mjs:41-42>
+
+### [B4] Bring the two pages into conformance and prove it; serves "you can make all the revised r1-5 changes"; artifact = kids/lesson30.html and kids/lesson31.html conforming to R1-R5, with sidecars and amended records; exit = prose and provenance green on both pages and neither page's teaching content reduced to satisfy a check; risk = trimming prose to fit the budget while leaving every exercise the same shape, which satisfies R2 and dishonours R3
+
+#### [S1] Conform kids/lesson30.html: move declarations, a produce block, a recall block because the roadmap Deepens a prior concept, adjacent-section variety, and any claim R1 rejects <kids/lesson30.html; KIDS-ROADMAP.md 303-311> <B3> <done: kids/lesson30.html, provenance+prose+lang+content green>
+#### [S2] Conform kids/lesson31.html the same way, amend both records, and run prose provenance lang content on both pages <kids/lesson31.html; provenance.jsonl> <S1> <done: kids/lesson31.html, provenance+prose+lang+content green>
+
+
 
 # [PAST]
 
