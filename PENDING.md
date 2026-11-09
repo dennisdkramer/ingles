@@ -71,7 +71,7 @@
 #### [S1] Roadmap lines 138-146; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B2> <DONE - 2026-11-08 - kids/lesson13.html + .edit.html (byte-identical), lessons.json n=13, COUNTS.kids=13 - 7 sections, 12/12 items, 105/105 divs, catchBasket state-verb sort + whackMole quiz at data-retry="0">
 
 ### [B15] Lesson 14 — can: ability, permission and requests; same shape as [B2]
-#### [S1] Roadmap lines 148-156; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 148-156; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B2> <DONE - 2026-11-08 - kids/lesson14.html + .edit.html (byte-identical), lessons.json n=14, COUNTS.kids=14 - 7 sections, 12/12 items, 120/120 divs, 35 chips all voiced, catchBasket ability/permission/request sort + skeetRange quiz at data-retry="0">
 
 ### [B16] Lesson 15 — to and for, and the one para that splits; same shape as [B2]
 #### [S1] Roadmap lines 158-166; author + sidecar + §5 lines + commit and push
