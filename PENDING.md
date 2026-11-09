@@ -23,31 +23,19 @@
 ```
 
 # [CURRENT] Prompt - (Active batches, newest first)
-## [7] Answer how a reference like "the last prompt" should be defined and targeted, and implement the revised R1-R5 generation rules
+## [8] Find out why lesson 31 and the changes to lesson 30 are not visible live, and make them visible
 
-### [B1] Answer the two questions about how I locate a prompt the user is pointing at; serves "'the last' in my mind is the same thing as 'the one immediately prior in the sequence'" + "is that something worth defining in adherence.md" + "is there some better way for me to prompt you"; artifact = a written answer naming the mechanism that made me mis-target, a recommendation for Adherence.md, and cheaper ways for the user to target a specific earlier prompt; exit = both questions answered with a concrete recommendation and no file edited, since Adherence.md is the user's file and was not authorised; risk = editing Adherence.md to "help", which is a change to the rules that govern me made without instruction
+### [B1] Separate the two possible causes - an undeployed file and an unreachable one - before changing any file; serves "i dont see lesson 31 or the chnges to 30 pushed live"; artifact = the live copies of lessons.json, kids/lesson30.html and kids/lesson31.html fetched from Pages and compared against the local tree; exit = each of the three named as live-and-current, live-but-stale, or missing; risk = assuming a deploy failure and re-pushing when the defect is a stale manifest, which would leave the page invisible while looking fixed
 
-#### [S1] Answer both questions, and name the exact mechanism that made "the last prompt" resolve to the wrong one <Adherence.md [PARSE] [ANALYSE]> <none> <done: answered in the turn opening; Adherence.md not edited by design>
+#### [S1] Fetch the three live URLs and compare them to the working copies, then read how index.html consumes the manifest <FILESYSTEM.md; build-lessons.mjs> <none> <done: content files were current; lessons.json had kids 1-30 only and a stale title for 30; index.html:20 COUNTS said kids:30>
 
-### [B2] Put the five revised rules where a build is allowed to read them; serves "you can make all the revised r1-5 changes"; artifact = R1 and R2 in PEDAGOGY-MAP.md, R3's and R4's markup in FORMAT.md and their obligation in PEDAGOGY-MAP.md, R5 as a shape rule, and a VERIFICATION.md section naming the checks; exit = each rule is stated once, in MUST/NEVER form, paired with a named check that exits non-zero; risk = a rule the harness cannot measure, which is a rule a build can satisfy in words and ignore in the page
+### [B2] Fix the cause and make the failure unrepeatable; serves the same prompt; artifact = regenerated lessons.json, a build that keeps index.html's COUNTS in step, and a cleaned R1 leftover on lesson 30; exit = a new lesson cannot exist in the folder and be absent from the manifest or the fallback count; risk = fixing lessons.json by hand, which re-creates the drift the next time a page is added
 
-#### [S1] R1: claims about English and etymology are allowed and must be verifiably true; a joke is allowed and a false absolute bought for a laugh is not; never a coined label standing in for a term the repo already uses <PEDAGOGY-MAP.md [BUILD] HIGH PRIORITY> <none> <done: PEDAGOGY-MAP.md:71 + qa/prose.mjs banned-claim list>
-#### [S2] R2, revised: the prose budget is a function of the elements taught, not one flat number for every lesson, plus a per-section share so one section cannot eat the budget <PEDAGOGY-MAP.md [BUILD] HIGH PRIORITY> <S1> <done: PEDAGOGY-MAP.md:72 + qa/prose.mjs element-scaled budget>
-#### [S3] R3 and R4: every training block declares its move, every concept is served by two distinct moves one of which is produce, and a produce block must carry a control that accepts written language <FORMAT.md block vocabulary; PEDAGOGY-MAP.md [BUILD]> <S2> <done: PEDAGOGY-MAP.md:73-74 + FORMAT.md:16>
-#### [S4] R5 and the VERIFICATION.md entry: no two adjacent sections share a vehicle and move, at least three distinct vehicles per lesson, and the checks named where the other checks are named <PEDAGOGY-MAP.md; VERIFICATION.md> <S3> <done: PEDAGOGY-MAP.md:75 + VERIFICATION.md:15-18>
+#### [S1] Regenerate the manifest, derive COUNTS in build-lessons.mjs with a loud error when the anchor is missing, correct lesson30 q13's coined label, re-run all four checks, amend nothing, and push <build-lessons.mjs; index.html:20; kids/lesson30.html; PEDAGOGY-MAP.md [l] [Claims]> <S1 above> <done: lessons.json kids 31 with 8 refreshed titles; COUNTS derived; q13 rewritten; provenance, prose, lang, content all green; live confirmations in the report>
 
-### [B3] Build the mechanical half so none of the five is a rule in words only; serves "you can make all the revised r1-5 changes"; artifact = qa/prose.mjs for R1 and R2, R3 R4 R5 as predicates in qa/provenance.mjs, both registered in qa/run.mjs, each with a self-test; exit = each check is seen to fail on a planted defect and to pass on a clean page, and an unfamiliar edit to the page turns at least one of them red; risk = a check that measures the words on the page without measuring what the page asks the student to do, which is the defect R3-R5 exist to catch
+### [B3] Report which cause it was, and what the deploy now serves; serves the same prompt; artifact = the fetched evidence after the push; exit = the live manifest showing kids 31 and the live page showing the corrected quiz stem; risk = reporting a fix from the local tree without fetching the live copy again
 
-#### [S1] Author qa/prose.mjs: the banned-claim list for R1 and the element-scaled budget for R2, with a --selftest <VERIFICATION.md: a harness exits non-zero on a finding, and is trusted only once seen to fail> <B2> <done: qa/prose.mjs, 11 selftest cases green>
-#### [S2] Add R3 R4 R5 to qa/provenance.mjs and give each a fixture <VERIFICATION.md> <S1> <done: qa/provenance.mjs, 22 selftest cases green>
-#### [S3] Register prose in qa/run.mjs with its scope, and give it its VERIFICATION.md line <qa/run.mjs; VERIFICATION.md> <S2> <done: qa/run.mjs:41-42>
-
-### [B4] Bring the two pages into conformance and prove it; serves "you can make all the revised r1-5 changes"; artifact = kids/lesson30.html and kids/lesson31.html conforming to R1-R5, with sidecars and amended records; exit = prose and provenance green on both pages and neither page's teaching content reduced to satisfy a check; risk = trimming prose to fit the budget while leaving every exercise the same shape, which satisfies R2 and dishonours R3
-
-#### [S1] Conform kids/lesson30.html: move declarations, a produce block, a recall block because the roadmap Deepens a prior concept, adjacent-section variety, and any claim R1 rejects <kids/lesson30.html; KIDS-ROADMAP.md 303-311> <B3> <done: kids/lesson30.html, provenance+prose+lang+content green>
-#### [S2] Conform kids/lesson31.html the same way, amend both records, and run prose provenance lang content on both pages <kids/lesson31.html; provenance.jsonl> <S1> <done: kids/lesson31.html, provenance+prose+lang+content green>
-
-
+#### [S1] Re-fetch lessons.json and kids/lesson30.html with a cache-buster after the push and state the result <VERIFICATION.md> <S1, S2> <done: live manifest lists kids 31 "Fast English: how it really sounds" and kids 30 under its current h1; live page carries the corrected q13>
 
 # [PAST]
 
@@ -116,4 +104,3 @@
 ### [B5] DECIDED: every lesson in the track is regenerated, so no legacy policy exists; serves "[b5] all lessons in the track will need to be regenerated" + "lesson 1 completely failed and i didnt notice it"; artifact = 50 provenance records, each written before its page, identical in form to any new lesson; exit = the member treats a missing record as a defect and the only amnesty is a lesson not yet regenerated; risk = a track-wide rewrite that inherits old shapes because nobody re-derived the beat (PEDAGOGY-MAP.md §1.e) - UPDATED this batch asked you to choose a posture toward lessons 1-29; you decided the whole track is regenerated, because lesson 1 failed unnoticed
 
 #### [S1] No legacy posture: a missing record is a defect everywhere in the track, and lesson 1 is regenerated rather than grandfathered <VERIFICATION.md> <B3> <DONE - 2026-11-09 - decision recorded, no file edited>
-
