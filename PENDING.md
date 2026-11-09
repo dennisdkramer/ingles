@@ -104,7 +104,7 @@
 #### [S1] Roadmap lines 248-256; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B24> <DONE - 2026-11-08 - kids/lesson24.html + .edit.html (byte-identical), lessons.json n=24, COUNTS kids=24, PAST_BATCHES.md - 6 sections, 12/12 vocab, catchBasket split drill + stackDrop quiz at data-retry="0". Defect repaired mid-batch: an anchor edit replaced the section 2 heading instead of appending, leaving section 3 before section 2; region rebuilt in TEMP and swapped, order verified 1-2-3>
 
 ### [B26] Lesson 25 is an EXAM and stays a blank shell, per "Exam lessons left as blank shells"; artifact = kids/lesson25.html + sidecar carrying the shell, the roadmap title, and no authored section; exit = both files on origin/main with nothing between the shell's LESSON CONTENT markers; risk = inventing exam content the user asked to withhold
-#### [S1] Copy _shell.html, fill the five placeholders from roadmap lines 258-261, write the byte-identical sidecar, commit and push
+#### [S1] Copy _shell.html, fill the five placeholders from roadmap lines 258-261, write the byte-identical sidecar, commit and push <PEDAGOGY-MAP.md §1/§4/§5, FORMAT.md> <B25> <DONE - 2026-11-08 - kids/lesson25.html + .edit.html, 40 lines, 0 unresolved placeholders, 8/8 divs, 1 #feed, no authored section between the LESSON CONTENT markers; lessons.json n=25, COUNTS kids=25. engine4.js deliberately omitted: a blank shell runs no game and the shell says that script belongs only where a game is used>
 
 ### [B27] Lesson 26 — gonna, the spoken future; same shape as [B2]
 #### [S1] Roadmap lines 263-271; author + sidecar + §5 lines + commit and push
