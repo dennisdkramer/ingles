@@ -257,9 +257,13 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 .trow.tid .remstudent{margin-left:auto}
 /* one switch per track: ON = thumb the track's 200 swatch at 100%, track the same swatch at 50%;
    OFF = thumb Grey 400 #BDBDBD 100%, track #FFFFFF 30%; DISABLED = thumb Grey 800 #424242 100%,
-   track #FFFFFF 10%. --sw is set per switch from track.json's "color". */
+   track #FFFFFF 10%. --sw is set per switch from track.json's "color".
+   The SWITCH AS A WHOLE then reads at 80% when off and 100% when on (owner instruction 2026-11-09), so a row
+   of switches shows at a glance which books are held. That is the component's own opacity, layered on the part
+   fills above; the parts keep their own values. */
 .tswitches{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.tswitch{position:relative;display:inline-flex;align-items:center;--sw:#90CAF9}
+.tswitch{position:relative;display:inline-flex;align-items:center;--sw:#90CAF9;opacity:.8;transition:opacity .16s}
+.tswitch.on{opacity:1}
 .tswitch input{position:absolute;width:0;height:0;margin:0;opacity:0}
 .tsw-track{display:flex;align-items:center;width:46px;height:26px;padding:0 3px;border-radius:13px;background:#FFFFFF;opacity:.3;transition:opacity .16s,background .16s}
 .tsw-thumb{display:flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#BDBDBD;font-size:12px;line-height:1;transition:transform .16s,background .16s}
