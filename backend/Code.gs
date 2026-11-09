@@ -332,6 +332,34 @@ function doPost(e) {
       return json_({ result: "ok", status: "removed", email: o.email, track: o.track || "", tracks: accessTracks_(o.email) });
     }
 
+    /* ---- batch grant (owner instruction 2026-11-09) ------------------------------------------------
+       The teacher's switches send ONE student's whole desired track set in one call. doPost holds the script
+       lock for its entire duration and verifyToken_ is a network round trip, so N one-track calls did not
+       interleave — they queued behind one lock, each paying both costs, until the later ones ran out of wait
+       and came back as errors. One call for the whole set pays them once. It reuses accessGrant_/accessRemove_
+       so the sheet's shape and the pending-row upgrade are exactly what the single-track actions produce. */
+    if (action === "accessset") {
+      var info6 = verifyToken_(o.token);
+      if (!isTeacher_(info6.email)) return json_({ error: "not a teacher" });
+      if (!o.email) return json_({ error: "missing email" });
+      var want = [], raw = o.tracks || [];
+      for (var ri = 0; ri < raw.length; ri++) {
+        var tw = String(raw[ri] || "").trim();
+        if (tw && want.indexOf(tw) < 0) want.push(tw);
+      }
+      var mine6 = accessRowsFor_(o.email), nm6 = "";
+      for (var m6 = 0; m6 < mine6.length; m6++) if (mine6[m6].name) { nm6 = mine6[m6].name; break; }
+      var have6 = accessTracks_(o.email);
+      for (var wi = 0; wi < want.length; wi++) {
+        if (have6.indexOf(want[wi]) < 0) accessGrant_(o.email, nm6 || o.name || o.email, want[wi], "approved");
+      }
+      for (var hi6 = 0; hi6 < have6.length; hi6++) {
+        if (want.indexOf(have6[hi6]) < 0) accessRemove_(o.email, have6[hi6]);
+      }
+      if (!want.length) accessRemove_(o.email, "");   /* emptied: the student leaves the approved list */
+      return json_({ result: "ok", email: o.email, tracks: accessTracks_(o.email) });
+    }
+
     if (action === "queue") {
       var info4 = verifyToken_(o.token);
       if (!isTeacher_(info4.email)) return json_({ error: "not a teacher" });

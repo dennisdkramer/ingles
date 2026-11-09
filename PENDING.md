@@ -23,6 +23,20 @@
 ```
 
 # [CURRENT] Prompt - (Active batches, newest first)
+## [11] Several quick access changes errored, and a signed-in return still waited seconds — coalesce the writes server-side and paint before any request
+
+### [B1] Stop N access changes from contending for the backend's single script lock; serves "if i change student access several times in a short period the requests give errors. maybe they should be batched in some way?"; artifact = one batched action plus a coalescing writer in the page; exit = a burst of flips is ONE call carrying the whole desired set, and two students are never written concurrently; risk = batching by sending N deltas in one request, which loses a flip made while it is in flight — the call must carry the target set, not the change
+
+#### [S1] Add `accessSet` to Code.gs: verify the teacher once, then reconcile that student's rows to the desired set reusing accessGrant_/accessRemove_ <FUNCTION.md [API]; the lock is held for the whole POST and verifyToken_ is a network round trip> <none> <DONE - 2026-11-09 - backend/Code.gs:335-361: teacher-checked once, dedupes the wanted set, grants what is missing, removes what is not wanted, and an empty set removes the student; `node --check` clean>
+
+#### [S2] Replace the per-flip request in index.html with a desired-set per student, an 80ms coalescing window, and one write in flight at a time, plus a per-track fallback if the deployment lacks `accessSet` <FUNCTION.md [RULES]> <S1> <DONE - 2026-11-09 - index.html:93-154 DES/ACQ/ACRUN/queueAccess/flushAccess/sendAccessDiff; a failed call puts the row back from the last confirmed state; the switches of that student are disabled while their batch is out>
+
+### [B2] Make a signed-in return paint without waiting for the network; serves "when someone is signed in and returns to the index, why does it still take a few seconds to load?"; artifact = a synchronous first paint from cache with the network only correcting it; exit = the shell and its data are on screen before any request resolves, and the session is still verified before any teacher action is possible; risk = painting cached data and calling it verified — the paint must be corrected by the server answer, and every action stays authorised server-side
+
+#### [S3] Cache the role beside the queue/status answer and paint from all three synchronously before the first fetch <FUNCTION.md [CONTROL]> <S2> <DONE - 2026-11-09 - index.html:162-198 start/paintQueue/paintStudent: the first paint needs no request; the session check runs beside the two static fetches; a token error still bounces in place; the ?Date.now() buster became cache:"no-cache" so revalidation is a cheap 304>
+
+#### [S4] Rewrite the harness to the batched model and prove the burst behaviour <VERIFICATION.md> <S3> <DONE - 2026-11-09 - qa/landing.mjs: 46 checks, `node qa/landing.mjs` exit 0. New: a burst of two flips is ONE accessSet carrying the whole set, two students are written one at a time (max 1 in flight), an older deployment falls back to per-track calls after `unknown action`, and a signed-in refresh paints from cache before the network. The harness executes the real page under jsdom, so the rewritten page is proven to parse and run>
+
 ## [11] The index loads behind a centred spinner, an approved student becomes a truncating identity line with a right-justified "remove student" link and one per-track switch, and no protected page paints before its session is validated
 
 ### [B1] Settle the one thing the code cannot answer - which colour "Swatch 200" is per track - and read the surfaces the change touches; serves "each with the associated track icon with the following appearance: Thumb On: Swatch 200, Opacity 100%" and "The second line should be just switches"; artifact = the swatch base named by the owner, plus the exact CSS/renderer/API surfaces listed; exit = the user names the swatch family and the icon source, and every file to be edited is named with its line; risk = inventing a palette the repo does not define, so the switch is drawn in colours the owner then has to correct

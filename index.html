@@ -42,14 +42,23 @@ function decodeJwt(t){
  let b=t.split(".")[1].replace(/-/g,"+").replace(/_/g,"/");while(b.length%4)b+="=";
  return JSON.parse(atob(b));
 }
-window.addEventListener("load",()=>{let tries=0;
- (function ready(){
-  if(!window.google){if(++tries<5){setTimeout(ready,1200);return}log("ERRO: script Google não carregou.");return}
-  google.accounts.id.initialize({client_id:CLIENT_ID,callback:onLogin,auto_select:true});
-  if(restoreSession()){enableGoogleUI();start();return}
-  probeSession();
- })();
+/* boot: the session is restored and the page PAINTED without waiting for Google's script. The GIS client is
+   async+defer, so a `load` listener waits for it (and this listener then retried for up to 6s), which was pure
+   loading time for someone already signed in (owner report 2026-11-09). Google's UI is attached when its
+   script arrives; nothing on the signed-in path needs it. */
+document.addEventListener("DOMContentLoaded",()=>{
+ const restored=restoreSession();
+ if(restored)start();
+ bootGoogle(!restored);
 });
+function bootGoogle(wantPrompt){let tries=0;
+ (function ready(){
+  if(!window.google){if(++tries<5){setTimeout(ready,800);return}log("ERRO: script Google não carregou.");if($("needg"))showNeedGoogle();return}
+  google.accounts.id.initialize({client_id:CLIENT_ID,callback:onLogin,auto_select:true});
+  enableGoogleUI();
+  if(wantPrompt)probeSession();
+ })();
+}
 let gbtnReady=false;
 function enableGoogleUI(){
  if(!gbtnReady){google.accounts.id.renderButton($("gbtn"),{theme:"outline",size:"large",shape:"pill"});gbtnReady=true;}
@@ -81,6 +90,68 @@ function tokenErr(j){return !!(j&&j.error&&/token/i.test(String(j.error)));}
 /* the last queue/status read is kept so a refresh paints at once and revalidates behind it */
 function readCache(k){try{return JSON.parse(localStorage.getItem("eod_"+k+"_"+profile.email)||"null")}catch(e){return null}}
 function writeCache(k,v){try{localStorage.setItem("eod_"+k+"_"+profile.email,JSON.stringify(v))}catch(e){}}
+/* ---- access writes: one call per student, coalesced, and never two in flight -------------------------
+   Owner report 2026-11-09: changing access several times in a short period returned errors. Every POST holds
+   the Apps Script script lock for its whole duration AND does a tokeninfo round trip (~2.5s measured), so
+   parallel flips did not race each other — they queued behind one lock until the later ones ran out of wait.
+   DES holds each student's DESIRED track set, the 80ms window collapses a flurry of clicks into one request,
+   and the request carries the whole set rather than one delta, so a flip made during a call cannot be lost. */
+const DES=new Map();                            /* email → the tracks the row should end up holding */
+const ACQ=new Set();                            /* emails whose desired set has not been sent yet */
+let ACRUN=false,ACTIMER=0,ACSINGLE=false;       /* ACSINGLE: the deployment has no accessSet (older script) */
+function confirmedTracks(email){
+ const s=QUEUE.approved.find(x=>x.email===email);if(!s)return [];
+ const trs=(s.tracks&&s.tracks.length)?s.tracks:(s.track?[{track:s.track}]:[]);
+ return trs.map(x=>x.track).filter(Boolean);
+}
+function heldTracks(email){return DES.has(email)?DES.get(email).slice():confirmedTracks(email);}
+function markSwitches(email,busy){
+ [].forEach.call(document.querySelectorAll(".tswitch"),x=>{
+  if(String(x.getAttribute("data-k")||"").indexOf(email+"|")!==0)return;
+  const i=x.querySelector("input");if(i)i.disabled=busy;
+ });
+}
+function queueAccess(email){ACQ.add(email);if(!ACTIMER)ACTIMER=setTimeout(()=>{ACTIMER=0;flushAccess()},80);}
+/* the pre-batch fallback: one call per changed track, still one at a time */
+async function sendAccessDiff(email,want){
+ const have=confirmedTracks(email);let last={result:"ok"};
+ for(const t of want){if(have.indexOf(t)<0){last=await api("approve",{token:cred,email:email,track:t});if(last.result!=="ok")return last}}
+ for(const t of have){if(want.indexOf(t)<0){last=await api("remove",{token:cred,email:email,track:t});if(last.result!=="ok")return last}}
+ return last;
+}
+async function flushAccess(){
+ if(ACRUN)return;
+ ACRUN=true;
+ try{
+  while(ACQ.size){
+   const email=ACQ.values().next().value;ACQ.delete(email);
+   const want=heldTracks(email);
+   let j;
+   if(ACSINGLE)j=await sendAccessDiff(email,want);
+   else{
+    j=await api("accessSet",{token:cred,email:email,tracks:want});
+    if(j&&/unknown action/i.test(String(j.error||""))){ACSINGLE=true;j=await sendAccessDiff(email,want);}
+   }
+   const s=QUEUE.approved.find(x=>x.email===email);
+   if(j&&j.result==="ok"){
+    const prev=(s&&s.tracks)||[];
+    if(s){
+     const trs=(j.tracks||want).map(t=>({track:t,lastCompleted:((prev.find(x=>x.track===t)||{}).lastCompleted)||0}));
+     s.tracks=trs;
+     if(trs.length)s.track=trs[0].track;else delete s.track;
+     writeCache("queue",QUEUE);
+    }
+    DES.delete(email);markSwitches(email,false);
+    log("acesso salvo ✔");
+   }else{
+    /* the row goes back to the last state the server confirmed */
+    DES.delete(email);markSwitches(email,false);
+    log("ERRO ao salvar o acesso: "+((j&&j.error)||"desconhecido"));
+    if($("tcols"))$("tcols").innerHTML=pendingHTML()+approvedHTML();
+   }
+  }
+ }finally{ACRUN=false}
+}
 function hideAcct(){const c=$("controlbar").querySelector("#acct"),lo=$("controlbar").querySelector("#logout");c.hidden=true;lo.hidden=true;const g=$("gcard");if(g)g.hidden=false;}
 /* a rejected session ends on the login card, in place — a reload is what made it feel like being thrown out */
 function bounce(){clearSession();MYTRACKS=[];QUEUE={pending:[],approved:[]};$("app").innerHTML="";hideAcct();try{enableGoogleUI()}catch(e){}}
@@ -88,30 +159,43 @@ function bounce(){clearSession();MYTRACKS=[];QUEUE={pending:[],approved:[]};$("a
    paint as signed-in in order to be booted a moment later (owner report 2026-11-09: 2-3s of apparent access). */
 function restoreSession(){try{const s=JSON.parse(localStorage.getItem(SESSION_KEY)||"null");if(s&&s.cred&&s.profile&&s.profile.email){if(s.profile.exp&&s.profile.exp*1000<Date.now()+30000){clearSession();return false}cred=s.cred;profile=s.profile;studentName=s.name||"";return true}}catch(e){}return false}
 async function start(){
- $("app").innerHTML=spinnerHTML();   /* nothing protected paints until the session has been checked */
- try{const r=await fetch("access.json?"+Date.now());if(!r.ok)throw new Error("access.json não encontrado (HTTP "+r.status+")");teacher=(await r.json()).teachers.includes(profile.email);}
- catch(e){$("app").innerHTML='<div class="card">⚠️ '+e.message+"</div>";return}
+ /* PAINT BEFORE ANY NETWORK. A signed-in return used to wait for access.json and then for the Apps Script
+    call, which measures 2-3s; the role is cached beside the data, so the first paint needs no request at all.
+    A demoted teacher can see an empty shell for one round trip — every teacher action stays authorised
+    server-side (isTeacher_ in Code.gs), so nothing is exposed by painting early. */
+ const role=readCache("role"),cq=readCache("queue"),cs=readCache("status");
+ let painted=false;
+ if(role==="teacher"&&cq){paintQueue(cq);painted=true;}
+ else if(cs&&cs.status==="approved"){paintStudent(cs);painted=true;}
+ if(!painted)$("app").innerHTML=spinnerHTML();
+ try{const r=await fetch("access.json",{cache:"no-cache"});
+  if(!r.ok)throw new Error("access.json não encontrado (HTTP "+r.status+")");
+  teacher=(await r.json()).teachers.includes(profile.email);
+ }catch(e){$("app").innerHTML='<div class="card">⚠️ '+e.message+"</div>";return}
+ writeCache("role",teacher?"teacher":"student");
  /* the session check is STARTED here and runs beside the two static fetches: it is the answer the page is
     waiting for, and it must not queue behind lessons.json and tracks.json. */
  const check=(teacher?api("queue",{token:cred}):api("status",{token:cred})).catch(e=>({error:String(e)}));
- try{const lr=await fetch("lessons.json?"+Date.now());if(lr.ok)LESSONS=await lr.json();}catch(e){}
- try{const tr=await fetch("tracks.json?"+Date.now());if(tr.ok)applyTracks(await tr.json());}catch(e){}
+ try{const lr=await fetch("lessons.json",{cache:"no-cache"});if(lr.ok)LESSONS=await lr.json();}catch(e){}
+ try{const tr=await fetch("tracks.json",{cache:"no-cache"});if(tr.ok)applyTracks(await tr.json());}catch(e){}
  const j=await check;
  if(tokenErr(j)){log("sessão expirada — entre novamente");bounce();return}
  if(teacher){
-  /* a signed-in refresh paints the last queue at once and revalidates behind it, so it never waits again */
-  const c=readCache("queue");
-  if(c){QUEUE=c;showAcct();$("app").innerHTML=teacherShell();$("tcols").innerHTML=pendingHTML()+approvedHTML();}
-  if(j.error){showAcct();$("app").innerHTML=teacherShell();$("tcols").innerHTML='<div class="card tadmin-col"><p class="todo">Não foi possível carregar os pedidos: '+esc(j.error)+'</p></div>';return}
-  QUEUE={pending:j.pending||[],approved:j.approved||[]};writeCache("queue",QUEUE);
-  showAcct();$("app").innerHTML=teacherShell();$("tcols").innerHTML=pendingHTML()+approvedHTML();return;
+  if(j.error){if(!painted)paintQueue({pending:[],approved:[]});$("tcols").innerHTML='<div class="card tadmin-col"><p class="todo">Não foi possível carregar os pedidos: '+esc(j.error)+'</p></div>';return}
+  const q={pending:j.pending||[],approved:j.approved||[]};writeCache("queue",q);paintQueue(q);return;
  }
- const cs=readCache("status");                 /* the student's own last answer, painted before the network */
- if(cs&&cs.status==="approved"){MYTRACKS=(cs.tracks||[]).slice();showAcct();renderStudent(MYTRACKS,cs.name);}
- if(j.status==="approved"){writeCache("status",{status:"approved",tracks:j.tracks||[],name:j.name||""});MYTRACKS=(j.tracks&&j.tracks.length)?j.tracks.slice():(j.track?[j.track]:[]);showAcct();renderStudent(MYTRACKS, j.name);return}
+ if(j.status==="approved"){
+  const st={status:"approved",tracks:j.tracks||[],name:j.name||""};writeCache("status",st);paintStudent(st);return;
+ }
  if(j.status==="pending"){showAcct();$("app").innerHTML=pendingCard(profile.email,"Seu pedido de acesso já foi enviado e está aguardando o professor aprovar.");return}
  showAcct();renderRequest();
 }
+/* one paint path each, used both by the cached first paint and by the validated one */
+function paintQueue(q){
+ QUEUE=q;QUEUE.pending=QUEUE.pending||[];QUEUE.approved=QUEUE.approved||[];
+ showAcct();$("app").innerHTML=teacherShell();$("tcols").innerHTML=pendingHTML()+approvedHTML();
+}
+function paintStudent(st){MYTRACKS=(st.tracks||[]).slice();showAcct();renderStudent(MYTRACKS,st.name);}
 function pendingCard(email,msg){
  return '<div class="card"><h3>Aguardando aprovação</h3><p class="dim">'+esc(email)+'</p><p>'+msg+'</p></div>';
 }
@@ -199,7 +283,7 @@ function pendingHTML(){
    --sw is the track's 200 swatch from track.json; the thumb carries the track's icon. */
 function trackSwitch(email,t,on){
  const col=/^#[0-9a-f]{3,8}$/i.test(String(TC[t]||""))?TC[t]:"#90CAF9";
- return '<label class="tswitch'+(on?' on':'')+'" title="'+esc(TN[t])+'" style="--sw:'+col+'">'
+ return '<label class="tswitch'+(on?' on':'')+'" data-k="'+esc(email+'|'+t)+'" title="'+esc(TN[t])+'" style="--sw:'+col+'">'
   +'<input type="checkbox"'+(on?' checked':'')+' onchange="toggleTrack(this,\''+esc(email)+'\',\''+esc(t)+'\')" aria-label="'+esc(TN[t])+'">'
   +'<span class="tsw-track"><span class="tsw-thumb">'+esc(TI[t]||"")+'</span></span></label>';
 }
@@ -210,8 +294,7 @@ function approvedHTML(){
  let h='<div class="card tadmin-col"><h4>Alunos aprovados</h4>';
  if(!QUEUE.approved.length)h+='<p class="dim">Nenhum aluno aprovado ainda.</p>';
  [...QUEUE.approved].sort((a,b)=>(a.name||a.email).localeCompare(b.name||b.email)).forEach(s=>{
-  const trs=(s.tracks&&s.tracks.length)?s.tracks:(s.track?[{track:s.track,lastCompleted:s.lastCompleted||0}]:[]);
-  const held=trs.map(x=>x.track);
+  const held=heldTracks(s.email);   /* the DESIRED set while a batch is unsaved, else the confirmed one */
   h+='<div class="tadmin-item"><div class="trow tid">'
    +'<span class="twho"><b class="tname" title="'+esc(s.name||s.email)+'">'+esc(s.name||s.email)+'</b>'
    +'<span class="dim temail" title="'+esc(s.email)+'">'+esc(s.email)+'</span></span>'
@@ -249,26 +332,19 @@ window.removeStudent=async function(email){
  if(j.result==="ok"){log("Removido ✔");renderTeacher();}
  else log("ERRO: "+(j.error||"desconhecido"));
 };
-/* the switches ARE the grant (owner instruction 2026-11-09): flipping one on appends that book, flipping one
-   off takes exactly that book away. The switch is disabled while its call is in flight — which is what the
-   disabled colours describe — and the row is not re-rendered on success, so the teacher's place is not lost. */
-window.toggleTrack=async function(el,email,track){
+/* the switches ARE the grant (owner instruction 2026-11-09). A flip updates the row's DESIRED track set and
+   queues ONE batched write for that student (flushAccess), which is what stops several quick flips from
+   contending for the backend's script lock. The row is disabled while its batch is out, and is put back from
+   the last confirmed state if the call fails. */
+window.toggleTrack=function(el,email,track){
  const box=el.closest(".tswitch"),on=!!el.checked;
  box.classList.toggle("on",on);
- el.disabled=true;
- const j=await api(on?"approve":"remove",{token:cred,email:email,track:track});
- if(j.result!=="ok"){el.checked=!on;box.classList.toggle("on",!on);el.disabled=false;log("ERRO: "+(j.error||"desconhecido"));return}
- el.disabled=false;
- const s=QUEUE.approved.find(x=>x.email===email);
- if(s){
-  const trs=(s.tracks||[]).filter(x=>x.track!==track);
-  if(on)trs.push({track:track,lastCompleted:0});
-  s.tracks=trs;
-  if(!trs.length)delete s.track;
-  writeCache("queue",QUEUE);
-  if(!trs.length)log("sem trilhas: "+email+" sai da lista de aprovados no próximo carregamento");
- }
- log((on?"Acesso a ":"Acesso removido de ")+TN[track]+" ✔");
+ const want=heldTracks(email).filter(t=>t!==track);
+ if(on)want.push(track);
+ DES.set(email,want);
+ markSwitches(email,true);
+ log((on?"Concedendo ":"Removendo ")+TN[track]+"…");
+ queueAccess(email);
 };
 const prog=()=>JSON.parse(localStorage.getItem("prog_"+profile.email)||"{}");
 function go(t,i){if(!teacher&&MYTRACKS.indexOf(t)<0){log("sem acesso a esta trilha");return}sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,teacherName:teacher?(profile.name||""):"",name:teacher?(profile.name||""):studentName,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}

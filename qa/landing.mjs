@@ -104,21 +104,69 @@ ok('teacher: "remove student" on the identity line', !!remBtn && /remove student
 ok('teacher: name + email live in the shrink box, the link outside it',
   !!who && !!who.querySelector('.tname') && !!who.querySelector('.temail') && !who.contains(remBtn),
   who ? [...who.children].map(e => e.className).join(' | ') : 'no .twho');
-/* flipping a switch IS the grant: ON → approve, OFF → remove */
+/* flipping switches writes ONE batched call per student, and a burst collapses into one request
+   (owner report 2026-11-09: several quick changes returned errors) */
 const sent = [];
-w.fetch = async (u, o) => { sent.push(JSON.parse(o.body)); return { ok: true, json: async () => ({ result: 'ok' }) }; };
+let inFlight = 0, maxInFlight = 0;
+w.fetch = async (u, o) => {
+  const body = JSON.parse(o.body);
+  sent.push(body);
+  inFlight++; maxInFlight = Math.max(maxInFlight, inFlight);
+  await new Promise(r => setTimeout(r, 25));
+  inFlight--;
+  return { ok: true, json: async () => ({ result: 'ok', tracks: body.tracks }) };
+};
 const adultInput = swOf(/Adulto/).querySelector('input');
-adultInput.checked = true;
-await w.toggleTrack(adultInput, 's@x.y', 'adult');
-ok('flipping ON grants that book',
-  sent.length === 1 && sent[0].action === 'approve' && sent[0].track === 'adult', JSON.stringify(sent[0] || {}));
-ok('the switch commits to ON', swOf(/Adulto/).classList.contains('on'));
+adultInput.checked = true; w.toggleTrack(adultInput, 's@x.y', 'adult');
+ok('a flip disables its row while the batch is out', adultInput.disabled === true);
 const kidsInput = swOf(/Kids/).querySelector('input');
-kidsInput.checked = false;
-await w.toggleTrack(kidsInput, 's@x.y', 'kids');
-ok('flipping OFF removes that book',
-  sent.length === 2 && sent[1].action === 'remove' && sent[1].track === 'kids', JSON.stringify(sent[1] || {}));
-ok('the switch commits to OFF', !swOf(/Kids/).classList.contains('on'));
+kidsInput.checked = false; w.toggleTrack(kidsInput, 's@x.y', 'kids');   /* same burst, second flip */
+await new Promise(r => setTimeout(r, 400));
+ok('a burst of flips becomes ONE request', sent.length === 1, sent.length + ' request(s)');
+ok('the request carries the whole desired set, not one delta',
+  !!sent[0] && sent[0].action === 'accessSet' && sent[0].tracks.indexOf('adult') >= 0 &&
+  sent[0].tracks.indexOf('kids') < 0, JSON.stringify(sent[0] || {}));
+ok('both switches show what was flipped',
+  swOf(/Adulto/).classList.contains('on') && !swOf(/Kids/).classList.contains('on'));
+ok('the row is re-enabled once saved', adultInput.disabled === false && kidsInput.disabled === false);
+/* two students flipped at once are still written one at a time — the backend holds one script lock */
+sent.length = 0; maxInFlight = 0;
+w.eval('DES.clear();ACQ.clear();'
+  + 'QUEUE={pending:[],approved:[{email:"a@x.y",name:"A",tracks:[]},{email:"b@x.y",name:"B",tracks:[]}]};'
+  + 'document.getElementById("app").innerHTML=approvedHTML();');
+const sA = d.querySelector('.tswitch[data-k="a@x.y|kids"] input');
+const sB = d.querySelector('.tswitch[data-k="b@x.y|kids"] input');
+sA.checked = true; w.toggleTrack(sA, 'a@x.y', 'kids');
+sB.checked = true; w.toggleTrack(sB, 'b@x.y', 'kids');
+await new Promise(r => setTimeout(r, 400));
+ok('two students are written one at a time',
+  sent.length === 2 && maxInFlight === 1, sent.length + ' call(s), max ' + maxInFlight + ' in flight');
+/* a frontend published ahead of the backend deployment degrades to one call per change, never to nothing */
+sent.length = 0;
+w.fetch = async (u, o) => {
+  const body = JSON.parse(o.body); sent.push(body);
+  return { ok: true, json: async () => (body.action === 'accessSet' ? { error: 'unknown action' } : { result: 'ok' }) };
+};
+w.eval('ACSINGLE=false;DES.clear();ACQ.clear();'
+  + 'QUEUE={pending:[],approved:[{email:"c@x.y",name:"C",tracks:[{track:"kids"}]}]};'
+  + 'document.getElementById("app").innerHTML=approvedHTML();');
+const cSw = d.querySelector('.tswitch[data-k="c@x.y|adult"] input');
+cSw.checked = true; w.toggleTrack(cSw, 'c@x.y', 'adult');
+await new Promise(r => setTimeout(r, 300));
+ok('an older deployment falls back to per-track calls',
+  sent.length === 2 && sent[0].action === 'accessSet' && sent[1].action === 'approve' && sent[1].track === 'adult',
+  sent.map(x => x.action + (x.track ? ':' + x.track : '')).join(','));
+/* and a signed-in return paints from the cache before it makes any request at all */
+w.fetch = async (u) => ({ ok: true, json: async () => (/access\.json/.test(String(u)) ? { teachers: ['t@x.y'] } : { pending: [], approved: [] }) });
+w.eval('profile={email:"t@x.y",name:"Tee"};'
+  + 'localStorage.setItem("eod_role_t@x.y",JSON.stringify("teacher"));'
+  + 'localStorage.setItem("eod_queue_t@x.y",JSON.stringify({pending:[],approved:[{email:"s@x.y",name:"Sol",tracks:[{track:"kids"}]}]}));'
+  + 'document.getElementById("app").innerHTML="";');
+const booting = w.start();
+ok('a signed-in refresh paints from cache before the network',
+  /Alunos aprovados/.test(d.getElementById('app').innerHTML) && /Sol/.test(d.getElementById('app').innerHTML),
+  d.getElementById('app').innerHTML.slice(0, 40));
+await booting;
 
 /* THE FUTURE TRACK CASE: "advanced" exists in no folder and no constant — it arrives only as tracks.json
    would deliver it, which is exactly how a track created next year will arrive. */
