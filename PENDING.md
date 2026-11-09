@@ -98,7 +98,7 @@
 #### [S1] Roadmap lines 228-236; author + sidecar + §5 lines + commit and push
 
 ### [B24] Lesson 23 — commands, let's, the softeners, and the border where slang stops; same shape as [B2]
-#### [S1] Roadmap lines 238-246; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 238-246; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B23> <DONE - 2026-11-08 - kids/lesson23.html + .edit.html (byte-identical), lessons.json n=23, COUNTS.kids 23 - 8 sections, 12/12 vocabulary items, registerContrast panel for the chill/dip boundary, stackDrop quiz at data-retry="0">
 
 ### [B25] Lesson 24 — how much, how many, some, any; same shape as [B2]
 #### [S1] Roadmap lines 248-256; author + sidecar + §5 lines + commit and push
