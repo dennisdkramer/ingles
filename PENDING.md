@@ -77,7 +77,7 @@
 #### [S1] Roadmap lines 158-166; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B15> <DONE 2026-11-08 - kids/lesson15.html + .edit.html byte-identical; 102/102 divs, 4/4 tables, 8 sections, 34 chips all data-say, vocabulary 12/12; registered n=15, COUNTS.kids 15>
 
 ### [B17] Lesson 16 — on, in, at: contact, container, point; same shape as [B2]
-#### [S1] Roadmap lines 168-176; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 168-176; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B16> <DONE 2026-11-08 - kids/lesson16.html + .edit.html byte-identical; 102/102 divs, 4/4 tables, 9 h2, 31 chips all data-say, vocabulary 12/12; registered n=16, COUNTS.kids 16>
 
 ### [B18] Lesson 17 — verbs that carry their preposition; same shape as [B2]
 #### [S1] Roadmap lines 178-186; author + sidecar + §5 lines + commit and push
