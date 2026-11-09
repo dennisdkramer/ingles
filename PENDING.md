@@ -23,21 +23,10 @@
 ```
 
 # [CURRENT] Prompt - (Active batches, newest first)
-## [8] Find out why lesson 31 and the changes to lesson 30 are not visible live, and make them visible
-
-### [B1] Separate the two possible causes - an undeployed file and an unreachable one - before changing any file; serves "i dont see lesson 31 or the chnges to 30 pushed live"; artifact = the live copies of lessons.json, kids/lesson30.html and kids/lesson31.html fetched from Pages and compared against the local tree; exit = each of the three named as live-and-current, live-but-stale, or missing; risk = assuming a deploy failure and re-pushing when the defect is a stale manifest, which would leave the page invisible while looking fixed
-
-#### [S1] Fetch the three live URLs and compare them to the working copies, then read how index.html consumes the manifest <FILESYSTEM.md; build-lessons.mjs> <none> <done: content files were current; lessons.json had kids 1-30 only and a stale title for 30; index.html:20 COUNTS said kids:30>
-
-### [B2] Fix the cause and make the failure unrepeatable; serves the same prompt; artifact = regenerated lessons.json, a build that keeps index.html's COUNTS in step, and a cleaned R1 leftover on lesson 30; exit = a new lesson cannot exist in the folder and be absent from the manifest or the fallback count; risk = fixing lessons.json by hand, which re-creates the drift the next time a page is added
-
-#### [S1] Regenerate the manifest, derive COUNTS in build-lessons.mjs with a loud error when the anchor is missing, correct lesson30 q13's coined label, re-run all four checks, amend nothing, and push <build-lessons.mjs; index.html:20; kids/lesson30.html; PEDAGOGY-MAP.md [l] [Claims]> <S1 above> <done: lessons.json kids 31 with 8 refreshed titles; COUNTS derived; q13 rewritten; provenance, prose, lang, content all green; live confirmations in the report>
-
-### [B3] Report which cause it was, and what the deploy now serves; serves the same prompt; artifact = the fetched evidence after the push; exit = the live manifest showing kids 31 and the live page showing the corrected quiz stem; risk = reporting a fix from the local tree without fetching the live copy again
-
-#### [S1] Re-fetch lessons.json and kids/lesson30.html with a cache-buster after the push and state the result <VERIFICATION.md> <S1, S2> <done: live manifest lists kids 31 "Fast English: how it really sounds" and kids 30 under its current h1; live page carries the corrected q13>
 
 # [PAST]
+
+2026-11-09 — "Make it so that i can grant or remove access to more than one track for each student" — awaiting the owner's Apps Script "New deployment" (Deploy → Manage deployments → pencil → Version: New deployment → Deploy), then the check that IAP_backpack!access holds two rows for one email and the student's landing page lists both columns.
 
 ### [B1] Find where each of the four rules actually belongs, and what the vehicles can already do; serves "Make more tweaks to the generation rules for all lessons"; artifact = the governing lines quoted by file:line; exit = every item has a named file and section, and item 3's cause is attributed to rule or code; risk = writing a rule that already exists and leaving the mechanism that breaks it untouched — DONE
 ### [B2] Retire the closed plan and author this one before any project file is touched <Adherence.md [BATCHING] 2 and 3> <B1> — DONE
