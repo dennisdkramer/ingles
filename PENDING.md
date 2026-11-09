@@ -83,7 +83,7 @@
 #### [S1] Roadmap lines 178-186; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B18> <DONE - 2026-11-08 - kids/lesson17.html + .edit.html (byte-identical), lessons.json n=17, COUNTS.kids 16->17, PAST_BATCHES.md - 7 sections, 12/12 items, catchBasket 4-pot drill + stackDrop quiz at data-retry="0">
 
 ### [B19] Lesson 18 — the past of be, and there was; same shape as [B2]
-#### [S1] Roadmap lines 188-196; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 188-196; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B2> <DONE - 2026-11-08 - kids/lesson18.html + .edit.html (Sidecar=True), lessons.json n=18, COUNTS kids=18, 7 sections, 86/86 divs, 31 chips 0 nosay, 12/12 vocabulary>
 
 ### [B20] Lesson 19 — -ed, its three sounds, and the time words that force it; same shape as [B2]
 #### [S1] Roadmap lines 198-206; author + sidecar + §5 lines + commit and push
