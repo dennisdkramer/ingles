@@ -10,7 +10,8 @@
  *   - "Continuar da lição N" sits at the TOP of a granted track's list;
  *   - a track the student was not granted is greyed and inert ("sem acesso", no links);
  *   - go() refuses a track the student does not hold;
- *   - the teacher list shows one jump + one per-track removal per held track, plus an add-book control.
+ *   - the teacher list: per student an identity line with a right-justified "remove student", then one
+ *     switch per track whose ON state is the grant (owner instruction 2026-11-09).
  * The last case is the one that matters for the future: a track that exists in NO file today must still get
  * a column, its track.json label and a grantable option.
  */
@@ -72,14 +73,52 @@ d.getElementById('debug').innerHTML = '';
 w.eval('go("business",1)');
 ok('go() allows a granted track (no refusal)', !/sem acesso/.test(d.getElementById('debug').textContent));
 
-/* the teacher list: a student with TWO tracks gets two jumps, two removals and an add control */
+/* the teacher list (owner instruction 2026-11-09): TWO lines per student — the identity with a right-justified
+   "remove student" link, then one switch per track, whose ON state IS the grant. */
 w.eval('teacher=true;'
   + 'QUEUE={pending:[],approved:[{email:"s@x.y",name:"Sol",tracks:[{track:"kids",lastCompleted:0},{track:"business",lastCompleted:1}]}]};'
   + 'document.getElementById("app").innerHTML=approvedHTML();');
 const approved = d.getElementById('app');
-ok('teacher: one jump button per held track', approved.querySelectorAll('button.jumpbtn').length === 2, approved.querySelectorAll('button.jumpbtn').length + '');
-ok('teacher: one per-track remove', /× Kids/.test(approved.innerHTML) && /× Business/.test(approved.innerHTML));
-ok('teacher: can grant the remaining track', !!approved.querySelector('select') && /dar acesso/.test(approved.innerHTML));
+const row = approved.querySelector('.tadmin-item');
+const idLine = row && row.querySelector('.trow.tid');
+const sw = row ? [...row.querySelectorAll('.tswitch')] : [];
+const swOf = re => sw.find(x => re.test(x.getAttribute('title') || ''));
+ok('teacher: one switch per track', sw.length === w.eval('TRACKSALL.length'), sw.length + ' switches');
+ok('teacher: the switches are the SECOND line', !!row && row.children[1].classList.contains('tswitches'));
+ok('teacher: a held track reads ON', !!swOf(/Kids/) && swOf(/Kids/).classList.contains('on'));
+ok('teacher: an unheld track reads OFF', !!swOf(/Adulto/) && !swOf(/Adulto/).classList.contains('on'));
+ok('teacher: each switch carries its track.json colour',
+  sw.every(x => /--sw:#[0-9a-f]{6}/i.test(x.getAttribute('style') || '')),
+  sw.map(x => (x.getAttribute('style') || '').replace('--sw:', '')).join(' '));
+ok('teacher: the thumb carries the track icon',
+  !!swOf(/Kids/) && /🛹/.test(swOf(/Kids/).querySelector('.tsw-thumb').textContent));
+ok('teacher: the checkbox is the state',
+  !!swOf(/Kids/) && swOf(/Kids/).querySelector('input').checked === true &&
+  !!swOf(/Adulto/) && swOf(/Adulto/).querySelector('input').checked === false);
+ok('teacher: no per-book jump or per-book removal remains',
+  approved.querySelectorAll('.jumpbtn').length === 0 && !/× Kids/.test(approved.innerHTML));
+/* line 1: the link sits OUTSIDE the box that truncates, so no name or email length can ever reach it */
+const who = idLine && idLine.querySelector('.twho');
+const remBtn = idLine && idLine.querySelector('.remstudent');
+ok('teacher: "remove student" on the identity line', !!remBtn && /remove student/i.test(remBtn.textContent));
+ok('teacher: name + email live in the shrink box, the link outside it',
+  !!who && !!who.querySelector('.tname') && !!who.querySelector('.temail') && !who.contains(remBtn),
+  who ? [...who.children].map(e => e.className).join(' | ') : 'no .twho');
+/* flipping a switch IS the grant: ON → approve, OFF → remove */
+const sent = [];
+w.fetch = async (u, o) => { sent.push(JSON.parse(o.body)); return { ok: true, json: async () => ({ result: 'ok' }) }; };
+const adultInput = swOf(/Adulto/).querySelector('input');
+adultInput.checked = true;
+await w.toggleTrack(adultInput, 's@x.y', 'adult');
+ok('flipping ON grants that book',
+  sent.length === 1 && sent[0].action === 'approve' && sent[0].track === 'adult', JSON.stringify(sent[0] || {}));
+ok('the switch commits to ON', swOf(/Adulto/).classList.contains('on'));
+const kidsInput = swOf(/Kids/).querySelector('input');
+kidsInput.checked = false;
+await w.toggleTrack(kidsInput, 's@x.y', 'kids');
+ok('flipping OFF removes that book',
+  sent.length === 2 && sent[1].action === 'remove' && sent[1].track === 'kids', JSON.stringify(sent[1] || {}));
+ok('the switch commits to OFF', !swOf(/Kids/).classList.contains('on'));
 
 /* THE FUTURE TRACK CASE: "advanced" exists in no folder and no constant — it arrives only as tracks.json
    would deliver it, which is exactly how a track created next year will arrive. */
@@ -96,10 +135,30 @@ ok('a granted new track is live, not locked', !!adv && !adv.classList.contains('
 ok('its lessons are listed from lessons.json', !!adv && adv.querySelectorAll('a.lesson-link').length === 2);
 w.eval('teacher=true;QUEUE={pending:[],approved:[{email:"s@x.y",name:"Sol",'
   + 'tracks:[{track:"business",lastCompleted:1}]}]};document.getElementById("app").innerHTML=approvedHTML();');
-const grantSelect = d.querySelector('#app select');
-ok('teacher: the new track can be granted', !!grantSelect &&
-  [...grantSelect.options].some(o => o.value === 'advanced'),
-  grantSelect ? [...grantSelect.options].map(o => o.value).join(',') : 'no select');
+const advSw = [...d.querySelectorAll('#app .tswitch')].find(x => /Advanced/.test(x.getAttribute('title') || ''));
+ok('teacher: the new track gets a switch even though nobody holds it', !!advSw && !advSw.classList.contains('on'));
+ok('teacher: the new track switch has a colour to turn ON in',
+  !!advSw && /--sw:#[0-9a-f]{6}/i.test(advSw.getAttribute('style') || ''),
+  advSw ? advSw.getAttribute('style') : 'none');
+
+/* the owner's speed/security report (2026-11-09): the "Carregando" line is a centred spiral; an expired
+   credential is refused BEFORE anything protected is painted; a rejected session lands on the login card in
+   place, where a reload is what made it feel like being thrown out. */
+const spin = w.eval('spinnerHTML()');
+ok('the loading state is a centred spiral, not a "Carregando" line',
+  /class="loadwrap"/.test(spin) && /class="spinner"/.test(spin) && !/Carregando…/.test(d.body.innerHTML),
+  spin.slice(0, 46));
+const css = fs.readFileSync('style.css', 'utf8');
+ok('the spiral is centred and animated',
+  /\.loadwrap\{[^}]*justify-content:center/.test(css) && /\.spinner\{[^}]*animation:spin/.test(css));
+w.localStorage.setItem('eod_session',
+  JSON.stringify({ cred: 'x', profile: { email: 'e@x.y', exp: Math.floor(Date.now() / 1000) - 60 } }));
+ok('an expired credential is refused before any paint',
+  w.eval('restoreSession()') === false && !w.localStorage.getItem('eod_session'));
+w.eval('profile={email:"e@x.y"};cred="x";teacher=true;document.getElementById("app").innerHTML="protected";bounce();');
+ok('a rejected session shows the login card without a reload',
+  d.getElementById('acct').hidden === true && d.getElementById('gcard').hidden === false &&
+  d.getElementById('app').innerHTML === '');
 
 console.log('\nstudent landing index — jsdom render');
 out.forEach(r => console.log('  ' + (r.pass ? '✅ ' : '❌ ') + r.name + (r.extra ? '  «' + r.extra + '»' : '')));

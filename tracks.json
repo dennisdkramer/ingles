@@ -2,18 +2,24 @@
   {
     "name": "kids",
     "label": "Kids 🛹",
+    "icon": "🛹",
+    "color": "#FFE082",
     "order": 1,
     "count": 31
   },
   {
     "name": "business",
     "label": "Business 💼",
+    "icon": "💼",
+    "color": "#90CAF9",
     "order": 2,
     "count": 48
   },
   {
     "name": "adult",
     "label": "Adulto 🔞",
+    "icon": "🔞",
+    "color": "#FFAB91",
     "order": 3,
     "count": 22
   }

@@ -51,7 +51,12 @@ function readTrackMeta(track) {
   const name = String(track);
   const label = String(meta.label || (name.charAt(0).toUpperCase() + name.slice(1)));
   const order = Number.isFinite(Number(meta.order)) ? Number(meta.order) : 1000;
-  return { name: name, label: label, order: order };
+  /* icon: the emoji the approved-student switch carries in its thumb. color: the 200 swatch that switch
+     turns ON in (owner instruction 2026-11-09). Both travel through tracks.json, so a track created later
+     supplies its own and no code holds a track's colour. */
+  const icon = String(meta.icon || '');
+  const color = /^#[0-9a-f]{3,8}$/i.test(String(meta.color || '')) ? String(meta.color) : '';
+  return { name: name, label: label, icon: icon, color: color, order: order };
 }
 
 function decodeEntities(s) {
@@ -99,7 +104,7 @@ const summary = Object.fromEntries(Object.entries(manifest).map(([k, v]) => [k, 
 
 // tracks.json is what index.html reads to build its columns and its "＋ dar acesso" options, so the page
 // holds no track name of its own: the list, the labels and their order all come from the folders.
-const trackList = META.map(m => ({ name: m.name, label: m.label, order: m.order, count: summary[m.name] || 0 }));
+const trackList = META.map(m => ({ name: m.name, label: m.label, icon: m.icon, color: m.color, order: m.order, count: summary[m.name] || 0 }));
 fs.writeFileSync(path.join(ROOT, 'tracks.json'), JSON.stringify(trackList, null, 2) + '\n', 'utf8');
 
 // index.html keeps a COUNTS fallback for the case where lessons.json cannot be fetched, and it is

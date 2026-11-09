@@ -22,6 +22,10 @@ const COUNTS={kids:31,business:48,adult:22};
    track.json) replaces both values below at load, so a NEW TRACK NEEDS NO EDIT IN THIS FILE. The two lines
    are only the fallback for when tracks.json cannot be fetched. */
 let TN={kids:"Kids 🛹",business:"Business 💼",adult:"Adulto 🔞"};
+/* per-track icon and 200 swatch, both read from track.json through tracks.json, so a track created later
+   carries its own and no code holds a track's colour. These two are the fallback when tracks.json cannot load. */
+let TI={kids:"🛹",business:"💼",adult:"🔞"};
+let TC={kids:"#FFE082",business:"#90CAF9",adult:"#FFAB91"};
 const $=id=>document.getElementById(id);
 const log=m=>{debug.innerHTML+="› "+m+"<br>"};
 const h=s=>{let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x};
@@ -71,19 +75,42 @@ function onLogin(resp){
 }
 function persistSession(){try{localStorage.setItem(SESSION_KEY,JSON.stringify({cred:cred,profile:profile,name:studentName}))}catch(e){}}
 function clearSession(){try{localStorage.removeItem(SESSION_KEY)}catch(e){}}
-function restoreSession(){try{const s=JSON.parse(localStorage.getItem(SESSION_KEY)||"null");if(s&&s.cred&&s.profile&&s.profile.email){cred=s.cred;profile=s.profile;studentName=s.name||"";return true}}catch(e){}return false}
+/* the load spiral (owner instruction 2026-11-09) — the only thing on screen until the session is checked */
+function spinnerHTML(){return '<div class="loadwrap" role="status" aria-live="polite" aria-label="Carregando"><div class="spinner"></div></div>';}
+function tokenErr(j){return !!(j&&j.error&&/token/i.test(String(j.error)));}
+/* the last queue/status read is kept so a refresh paints at once and revalidates behind it */
+function readCache(k){try{return JSON.parse(localStorage.getItem("eod_"+k+"_"+profile.email)||"null")}catch(e){return null}}
+function writeCache(k,v){try{localStorage.setItem("eod_"+k+"_"+profile.email,JSON.stringify(v))}catch(e){}}
+function hideAcct(){const c=$("controlbar").querySelector("#acct"),lo=$("controlbar").querySelector("#logout");c.hidden=true;lo.hidden=true;const g=$("gcard");if(g)g.hidden=false;}
+/* a rejected session ends on the login card, in place — a reload is what made it feel like being thrown out */
+function bounce(){clearSession();MYTRACKS=[];QUEUE={pending:[],approved:[]};$("app").innerHTML="";hideAcct();try{enableGoogleUI()}catch(e){}}
+/* the token is checked LOCALLY first: an expired Google credential cannot be honoured, so the page must never
+   paint as signed-in in order to be booted a moment later (owner report 2026-11-09: 2-3s of apparent access). */
+function restoreSession(){try{const s=JSON.parse(localStorage.getItem(SESSION_KEY)||"null");if(s&&s.cred&&s.profile&&s.profile.email){if(s.profile.exp&&s.profile.exp*1000<Date.now()+30000){clearSession();return false}cred=s.cred;profile=s.profile;studentName=s.name||"";return true}}catch(e){}return false}
 async function start(){
+ $("app").innerHTML=spinnerHTML();   /* nothing protected paints until the session has been checked */
  try{const r=await fetch("access.json?"+Date.now());if(!r.ok)throw new Error("access.json não encontrado (HTTP "+r.status+")");teacher=(await r.json()).teachers.includes(profile.email);}
  catch(e){$("app").innerHTML='<div class="card">⚠️ '+e.message+"</div>";return}
+ /* the session check is STARTED here and runs beside the two static fetches: it is the answer the page is
+    waiting for, and it must not queue behind lessons.json and tracks.json. */
+ const check=(teacher?api("queue",{token:cred}):api("status",{token:cred})).catch(e=>({error:String(e)}));
  try{const lr=await fetch("lessons.json?"+Date.now());if(lr.ok)LESSONS=await lr.json();}catch(e){}
  try{const tr=await fetch("tracks.json?"+Date.now());if(tr.ok)applyTracks(await tr.json());}catch(e){}
- showAcct();
- if(teacher){renderTeacher();return}
- const st=await api("status",{token:cred});
- if(st.error && /token/i.test(String(st.error))){clearSession();location.reload();return}
- if(st.status==="approved"){MYTRACKS=(st.tracks&&st.tracks.length)?st.tracks.slice():(st.track?[st.track]:[]);renderStudent(MYTRACKS, st.name);return}
- if(st.status==="pending"){$("app").innerHTML=pendingCard(profile.email,"Seu pedido de acesso já foi enviado e está aguardando o professor aprovar.");return}
- renderRequest();
+ const j=await check;
+ if(tokenErr(j)){log("sessão expirada — entre novamente");bounce();return}
+ if(teacher){
+  /* a signed-in refresh paints the last queue at once and revalidates behind it, so it never waits again */
+  const c=readCache("queue");
+  if(c){QUEUE=c;showAcct();$("app").innerHTML=teacherShell();$("tcols").innerHTML=pendingHTML()+approvedHTML();}
+  if(j.error){showAcct();$("app").innerHTML=teacherShell();$("tcols").innerHTML='<div class="card tadmin-col"><p class="todo">Não foi possível carregar os pedidos: '+esc(j.error)+'</p></div>';return}
+  QUEUE={pending:j.pending||[],approved:j.approved||[]};writeCache("queue",QUEUE);
+  showAcct();$("app").innerHTML=teacherShell();$("tcols").innerHTML=pendingHTML()+approvedHTML();return;
+ }
+ const cs=readCache("status");                 /* the student's own last answer, painted before the network */
+ if(cs&&cs.status==="approved"){MYTRACKS=(cs.tracks||[]).slice();showAcct();renderStudent(MYTRACKS,cs.name);}
+ if(j.status==="approved"){writeCache("status",{status:"approved",tracks:j.tracks||[],name:j.name||""});MYTRACKS=(j.tracks&&j.tracks.length)?j.tracks.slice():(j.track?[j.track]:[]);showAcct();renderStudent(MYTRACKS, j.name);return}
+ if(j.status==="pending"){showAcct();$("app").innerHTML=pendingCard(profile.email,"Seu pedido de acesso já foi enviado e está aguardando o professor aprovar.");return}
+ showAcct();renderRequest();
 }
 function pendingCard(email,msg){
  return '<div class="card"><h3>Aguardando aprovação</h3><p class="dim">'+esc(email)+'</p><p>'+msg+'</p></div>';
@@ -104,15 +131,19 @@ function trackLessons(t){
 /* tracks.json → the student columns and the "＋ dar acesso" options. A track known to COUNTS but missing
    from a stale response keeps its column, so this can never hide a track that already exists. */
 function applyTracks(list){
- const names=[],labels={};
+ const names=[],labels={},icons={},colors={};
  (Array.isArray(list)?list:[]).forEach(x=>{
   const n=x&&x.name?String(x.name):"";if(!n||names.indexOf(n)>=0)return;
   names.push(n);labels[n]=String(x.label||(n.charAt(0).toUpperCase()+n.slice(1)));
+  if(x.icon)icons[n]=String(x.icon);
+  if(/^#[0-9a-f]{3,8}$/i.test(String(x.color||"")))colors[n]=String(x.color);
  });
  Object.keys(COUNTS).forEach(n=>{if(names.indexOf(n)<0)names.push(n);});
  Object.keys(TN).forEach(n=>{if(!labels[n])labels[n]=TN[n];});
+ Object.keys(TI).forEach(n=>{if(!icons[n])icons[n]=TI[n];});
+ Object.keys(TC).forEach(n=>{if(!colors[n])colors[n]=TC[n];});
  names.forEach(n=>{if(!labels[n])labels[n]=n.charAt(0).toUpperCase()+n.slice(1);});
- if(names.length){TRACKSALL=names;TN=labels;}
+ if(names.length){TRACKSALL=names;TN=labels;TI=icons;TC=colors;}
 }
 /* the student index (owner instruction 2026-11-03): ONE COLUMN PER TRACK, whatever tracks.json lists; the
    lesson TITLE is the link (no per-lesson button); the "continue" button sits at the TOP of each granted
@@ -159,41 +190,49 @@ function pendingHTML(){
  if(!QUEUE.pending.length)h+='<p class="dim">Nenhum pedido pendente.</p>';
  [...QUEUE.pending].sort((a,b)=>(a.name||a.email).localeCompare(b.name||b.email)).forEach(q=>{
   h+='<div class="tadmin-item"><div><b>'+esc(q.name||q.email)+'</b> <span class="dim">'+esc(q.email)+'</span></div>'
-   +'<div><select id="book_'+esc(q.email)+'"><option value="kids">Kids 🛹</option><option value="business" selected>Business 💼</option><option value="adult">Adulto 🔞</option></select></div>'
+   +'<div><select id="book_'+esc(q.email)+'">'+TRACKSALL.map(t=>'<option value="'+t+'"'+(t==="business"?" selected":"")+'>'+TN[t]+'</option>').join('')+'</select></div>'
    +'<div><button onclick="decide(\''+esc(q.email)+'\',\'approve\')">Aprovar</button> <button onclick="decide(\''+esc(q.email)+'\',\'reject\')">Recusar</button></div></div>';
  });
  return h+'</div>';
 }
+/* one switch per track (owner instruction 2026-11-09): ON = the track holds this book, OFF = it does not.
+   --sw is the track's 200 swatch from track.json; the thumb carries the track's icon. */
+function trackSwitch(email,t,on){
+ const col=/^#[0-9a-f]{3,8}$/i.test(String(TC[t]||""))?TC[t]:"#90CAF9";
+ return '<label class="tswitch'+(on?' on':'')+'" title="'+esc(TN[t])+'" style="--sw:'+col+'">'
+  +'<input type="checkbox"'+(on?' checked':'')+' onchange="toggleTrack(this,\''+esc(email)+'\',\''+esc(t)+'\')" aria-label="'+esc(TN[t])+'">'
+  +'<span class="tsw-track"><span class="tsw-thumb">'+esc(TI[t]||"")+'</span></span></label>';
+}
+/* each approved student is TWO lines: the identity (name + email, truncating) with a right-justified
+   "remove student" link, then one switch per track. The former per-book ⏭ jump, per-book × removal and
+   ＋ dar acesso select are replaced by the switches (owner instruction 2026-11-09). */
 function approvedHTML(){
  let h='<div class="card tadmin-col"><h4>Alunos aprovados</h4>';
  if(!QUEUE.approved.length)h+='<p class="dim">Nenhum aluno aprovado ainda.</p>';
  [...QUEUE.approved].sort((a,b)=>(a.name||a.email).localeCompare(b.name||b.email)).forEach(s=>{
-  /* a student may hold SEVERAL tracks (multi-track access): one jump + one "×" per book, plus a control to
-     grant another book without touching the ones they already have (owner instruction 2026-11-03) */
   const trs=(s.tracks&&s.tracks.length)?s.tracks:(s.track?[{track:s.track,lastCompleted:s.lastCompleted||0}]:[]);
-  h+='<div class="tadmin-item"><div class="trow"><b class="tname">'+esc(s.name||s.email)+'</b>'
-   +'<span class="dim temail">'+esc(s.email)+'</span></div><div class="trow">';
-  trs.forEach(x=>{
-   const next=(x.lastCompleted||0)+1, total=trackLessons(x.track).length, atEnd=next>total;
-   h+='<button class="jumpbtn" '+(atEnd?'disabled':'')+' onclick="goStudent(\''+x.track+'\','+(atEnd?total:next)+',\''+s.email+'\')">⏭ '+TN[x.track]+' '+(atEnd?total:next)+'</button>'
-    +'<button class="remlink" onclick="removeTrack(\''+esc(s.email)+'\',\''+x.track+'\')">× '+TN[x.track]+'</button>';
-  });
-  const free=TRACKSALL.filter(t=>!trs.some(x=>x.track===t));
-  if(free.length){
-   h+='<select id="add_'+esc(s.email)+'">'+free.map(t=>'<option value="'+t+'">'+TN[t]+'</option>').join('')+'</select>'
-    +'<button onclick="addTrack(\''+esc(s.email)+'\')">＋ dar acesso</button>';
-  }
-  h+='<button class="remlink" onclick="removeStudent(\''+esc(s.email)+'\')">remover aluno</button></div></div>';
+  const held=trs.map(x=>x.track);
+  h+='<div class="tadmin-item"><div class="trow tid">'
+   +'<span class="twho"><b class="tname" title="'+esc(s.name||s.email)+'">'+esc(s.name||s.email)+'</b>'
+   +'<span class="dim temail" title="'+esc(s.email)+'">'+esc(s.email)+'</span></span>'
+   +'<button type="button" class="remlink remstudent" onclick="removeStudent(\''+esc(s.email)+'\')">remove student</button>'
+   +'</div><div class="trow tswitches">'
+   +TRACKSALL.map(t=>trackSwitch(s.email,t,held.indexOf(t)>=0)).join('')
+   +'</div></div>';
  });
  return h+'</div>';
 }
-async function renderTeacher(){
- $("app").innerHTML='<div class="card tadmin"><div class="tadmin-books">'
+function teacherShell(){
+ return '<div class="card tadmin"><div class="tadmin-books">'
   +TRACKSALL.map(bookButton).join('')      /* one book dropdown per discovered track */
-  +'</div></div><div class="tadmin-cols" id="tcols"><p class="dim">Carregando…</p></div>';
+  +'</div></div><div class="tadmin-cols" id="tcols"></div>';
+}
+async function renderTeacher(){
+ $("app").innerHTML=teacherShell();$("tcols").innerHTML=spinnerHTML();
  const j=await api("queue",{token:cred});
- if(j.error){ if(/token/i.test(String(j.error))){clearSession();location.reload();return} $("tcols").innerHTML='<div class="card tadmin-col"><p class="todo">Não foi possível carregar os pedidos: '+esc(j.error)+'</p></div>';return }
- QUEUE={pending:j.pending||[],approved:j.approved||[]};
+ if(tokenErr(j)){log("sessão expirada — entre novamente");bounce();return}
+ if(j.error){$("tcols").innerHTML='<div class="card tadmin-col"><p class="todo">Não foi possível carregar os pedidos: '+esc(j.error)+'</p></div>';return}
+ QUEUE={pending:j.pending||[],approved:j.approved||[]};writeCache("queue",QUEUE);
  $("tcols").innerHTML=pendingHTML()+approvedHTML();
 }
 window.decide=async function(email,action){
@@ -210,21 +249,31 @@ window.removeStudent=async function(email){
  if(j.result==="ok"){log("Removido ✔");renderTeacher();}
  else log("ERRO: "+(j.error||"desconhecido"));
 };
-/* multi-track access (owner instruction 2026-11-03): approve ADDS a book, remove takes one book away */
-window.addTrack=async function(email){
- const sel=$("add_"+email);if(!sel)return;
- const j=await api("approve",{token:cred,email:email,track:sel.value});
- if(j.result==="ok"){log("Acesso a "+TN[sel.value]+" concedido ✔");renderTeacher();}
- else log("ERRO: "+(j.error||"desconhecido"));
-};
-window.removeTrack=async function(email,track){
- if(!confirm("Tirar o acesso de "+email+" a "+TN[track]+"?"))return;
- const j=await api("remove",{token:cred,email:email,track:track});
- if(j.result==="ok"){log("Acesso a "+TN[track]+" removido ✔");renderTeacher();}
- else log("ERRO: "+(j.error||"desconhecido"));
+/* the switches ARE the grant (owner instruction 2026-11-09): flipping one on appends that book, flipping one
+   off takes exactly that book away. The switch is disabled while its call is in flight — which is what the
+   disabled colours describe — and the row is not re-rendered on success, so the teacher's place is not lost. */
+window.toggleTrack=async function(el,email,track){
+ const box=el.closest(".tswitch"),on=!!el.checked;
+ box.classList.toggle("on",on);
+ el.disabled=true;
+ const j=await api(on?"approve":"remove",{token:cred,email:email,track:track});
+ if(j.result!=="ok"){el.checked=!on;box.classList.toggle("on",!on);el.disabled=false;log("ERRO: "+(j.error||"desconhecido"));return}
+ el.disabled=false;
+ const s=QUEUE.approved.find(x=>x.email===email);
+ if(s){
+  const trs=(s.tracks||[]).filter(x=>x.track!==track);
+  if(on)trs.push({track:track,lastCompleted:0});
+  s.tracks=trs;
+  if(!trs.length)delete s.track;
+  writeCache("queue",QUEUE);
+  if(!trs.length)log("sem trilhas: "+email+" sai da lista de aprovados no próximo carregamento");
+ }
+ log((on?"Acesso a ":"Acesso removido de ")+TN[track]+" ✔");
 };
 const prog=()=>JSON.parse(localStorage.getItem("prog_"+profile.email)||"{}");
 function go(t,i){if(!teacher&&MYTRACKS.indexOf(t)<0){log("sem acesso a esta trilha");return}sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,teacherName:teacher?(profile.name||""):"",name:teacher?(profile.name||""):studentName,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
+/* the teacher's "open this student's next lesson" gate. Currently UNREFERENCED: the per-book ⏭ button it
+   served was removed with the switches (2026-11-09), and it is kept so restoring that jump is one line. */
 function goStudent(t,i,email){const s=QUEUE.approved.find(x=>x.email===email);sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher:true,teacherName:profile.name||"",name:s?(s.name||""):"",student:email,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
 function showAcct(){const c=$("controlbar").querySelector("#acct"),lo=$("controlbar").querySelector("#logout");c.hidden=false;c.innerHTML="Signed in: <b>"+profile.email+"</b>";lo.hidden=false;lo.onclick=logout;const g=$("gcard");if(g)g.hidden=true;}
 function logout(){clearSession();if(window.google&&google.accounts&&google.accounts.id)try{google.accounts.id.disableAutoSelect()}catch(e){}location.reload();}
