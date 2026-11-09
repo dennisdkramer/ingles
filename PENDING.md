@@ -65,10 +65,10 @@
 #### [S1] Roadmap lines 118-126; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B11> <DONE - 2026-11-08 - kids/lesson11.html + .edit.html (byte-identical), lessons.json n=11, COUNTS.kids 10->11, PAST_BATCHES - 6 sections, 12/12 items, catchBasket three-pot -ing sort (replayable) + whackMole quiz at data-retry="0"; repaired the section-2 blanks/panel that the prior fragment left unclosed>
 
 ### [B13] Lesson 12 — fact against moment, side by side; same shape as [B2]
-#### [S1] Roadmap lines 128-136; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 128-136; author + sidecar + §5 lines + commit and push <DONE 600378c - registered n=12, COUNTS 12>
 
 ### [B14] Lesson 13 — the verbs that refuse -ing; same shape as [B2]
-#### [S1] Roadmap lines 138-146; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 138-146; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B2> <DONE - 2026-11-08 - kids/lesson13.html + .edit.html (byte-identical), lessons.json n=13, COUNTS.kids=13 - 7 sections, 12/12 items, 105/105 divs, catchBasket state-verb sort + whackMole quiz at data-retry="0">
 
 ### [B15] Lesson 14 — can: ability, permission and requests; same shape as [B2]
 #### [S1] Roadmap lines 148-156; author + sidecar + §5 lines + commit and push
