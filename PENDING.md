@@ -110,7 +110,7 @@
 #### [S1] Roadmap lines 263-271; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP §1/§4/§5> <B26> <DONE - 2026-11-08 - kids/lesson26.html + .edit.html (byte-identical), 6 sections, 12/12 items, catchBasket drill (movement vs future) + skeetRange quiz at data-retry="0"; registered n=26, COUNTS.kids 25 -> 26>
 
 ### [B28] Lesson 27 — will, the decision taken while you speak; same shape as [B2]
-#### [S1] Roadmap lines 273-281; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 273-281; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B27> <DONE - 2026-11-08 - kids/lesson27.html + .edit.html (byte-identical), 79/79 divs, 7 sections, 25/25 chips with data-say, 12/12 vocabulary, catchBasket will-vs-gonna drill + stackDrop quiz at data-retry="0", registered n=27, COUNTS.kids 26 -> 27>
 
 ### [B29] Lesson 28 — the arranged future, be + -ing with a time; same shape as [B2]
 #### [S1] Roadmap lines 283-291; author + sidecar + §5 lines + commit and push
