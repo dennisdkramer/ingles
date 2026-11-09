@@ -119,7 +119,7 @@
 #### [S1] Roadmap lines 293-301; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B2> <DONE - 2026-11-08 - kids/lesson29.html + .edit.html (byte-identical), lessons.json n=29, COUNTS kids:29, PAST_BATCHES.md - 7 sections, 12/12 vocabulary, catchBasket particle drill + whackMole quiz at data-retry="0">
 
 ### [B31] Lesson 30 — the look family and the particle that splits; same shape as [B2]
-#### [S1] Roadmap lines 303-311; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 303-311; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B30> <DONE - 2026-11-08 - kids/lesson30.html + .edit.html (byte-identical); 92/92 divs, 3/3 tables, 7 sections, 34/34 chips with data-say, 12/12 vocabulary, catchBasket particles + skeetRange quiz at data-retry="0"; registered n=30, COUNTS kids=30 ->
 
 ### [B32] Lesson 31 — what English sounds like when it is fast; same shape as [B2]
 #### [S1] Roadmap lines 313-321; author + sidecar + §5 lines + commit and push
