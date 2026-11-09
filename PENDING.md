@@ -59,7 +59,7 @@
 #### [S1] Roadmap lines 98-106; author + sidecar + §5 lines + commit and push
 
 ### [B11] Lesson 10 — frequency, routine order, in/on/at; same shape as [B2]
-#### [S1] Roadmap lines 108-116; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 108-116; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B9> <DONE - 2026-11-08 - kids/lesson10.html + .edit.html (byte-identical), lessons.json + COUNTS.kids=10 - frequency slot, routine chain, in/on/at with catchBasket 3-pot sort and stackDrop quiz at data-retry="0">
 
 ### [B12] Lesson 11 — right now, be + -ing, and the text-speak code the register requires; same shape as [B2]
 #### [S1] Roadmap lines 118-126; author + sidecar + §5 lines + commit and push
