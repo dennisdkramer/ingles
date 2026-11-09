@@ -92,7 +92,7 @@
 #### [S1] Roadmap lines 208-216; author + sidecar + §5 lines + commit and push
 
 ### [B22] Lesson 21 — telling it in the past, in order; same shape as [B2]
-#### [S1] Roadmap lines 218-226; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 218-226; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B21> <DONE - 2026-11-08 - kids/lesson21.html + .edit.html (byte-identical), lessons.json n=21, COUNTS.kids 20 -> 21, PAST_BATCHES.md - 7 sections, 12/12 items, catchBasket order-vs-comment drill + skeetRange quiz at data-retry="0">
 
 ### [B23] Lesson 22 — object pronouns, possessives, reflexive; same shape as [B2]
 #### [S1] Roadmap lines 228-236; author + sidecar + §5 lines + commit and push
