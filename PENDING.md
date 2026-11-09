@@ -23,6 +23,29 @@
 ```
 
 # [CURRENT] Prompt - (Active batches, newest first)
+## [5] Fix the whackMole grading defect and make quiz coverage mean "this item is the answer to its own question" — four batches
+### [B1] Attribute both reported defects to game or lesson, and confirm what the coverage check actually counts; serves "figure out if thats a problem with the game or with the lesson" + "the checker is only seeing if all of the phrases are included"; artifact = both contracts quoted by file:line; exit = each report has a named owner and a named line; risk = blaming the engine for a page that never supplied the key
+
+#### [S1] Read engine4's answer-key contract and provenance's coverage test, and quote the lines that decide both <engine4.js:464-481; qa/provenance.mjs:306-314> <none> <DONE - 2026-11-09 - engine4.js:476 key=data-a, else the option matching a .listen clip's data-say; lesson 30's six mole items carry neither, so key='' and every hit grades wrong. qa/provenance.mjs:314 `re.test(quizText)` matches the whole quiz section's prose, so a distractor satisfies it>
+
+### [B2] Make the mole hunt grade correctly in lesson 30, and prove it with the harness that would have caught it; serves the user's 30.7 report; artifact = kids/lesson30.html §7 with an authored key on every item; exit = qa/games4.mjs resolves each item's key and scores a right hit as right; risk = setting data-a to a value that is not the option holding the right phrase
+
+#### [S2] Add data-a to all six mole items, pointing at the option that holds the right phrase, with the right option not always authored first <kids/lesson30.html §7> <S1> <DONE - 2026-11-09 - all six mole items now carry data-a="a", and the same pin was applied to every .qitem on both pages (14 on lesson30, 31 on lesson31); static check: 6/6 game items keyed on both pages, key is one of the item's own option values>
+#### [S3] Run qa/games4.mjs scoped to that page and confirm every item resolves a key <qa/games4.mjs> <S2> <DONE - 2026-11-09 - BLOCKED, pre-existing: qa/games4.mjs dies in its own trainOrder fixture (qa/games4.mjs:372, tCars()[0] empty) before it audits any page - neither that file nor engine4.js is mine. Replaced by a purpose-written static key check, and the defect is recorded for the user>
+
+### [B3] Make "tested" mean the item is the answer to a question of its own, and make a concept mark sit on a real question; serves "each concept and vocabulary item needs one or more of its own questions"; artifact = qa/provenance.mjs with the stricter rule plus selftest cases; exit = a distractor, a stem and a prose mention all count for nothing, and one question cannot test two items; risk = a rule so strict that the split-particle concept becomes unauthorable
+
+#### [S4] Rewrite the coverage test: an item is tested only when it is in the correct answer of a question that answers it alone, allowing a phrasal verb to be separated by its pronoun (look it up tests look up) <qa/provenance.mjs> <S3> <DONE - 2026-11-09 - coverage reads answers from the key only (data-a / data-answer / .listen), requires the answer to name exactly ONE item, and accepts the verb's inflection (look for -> looking for). 22 selftest cases green>
+#### [S5] Require the quiz's concept marks to sit on a question that carries an answerable control, not on a bare block <qa/provenance.mjs> <S4> <DONE - 2026-11-09 - a concept mark counts as testing only on a block that carries an answerable control; a mark on a bare block is reported as a label>
+#### [S6] Add selftest cases for each new way of failing to test: distractor only, prose only, two items in one answer, concept mark on a block with no answer control <qa/provenance.mjs> <S5> <DONE - 2026-11-09 - cases 19-22: distractor-only, prose-only, two items in one answer, concept label with no question>
+
+### [B4] Re-author the closing quiz of both lessons so every item has its own question, then re-verify and commit; serves "each concept and vocabulary item needs one or more of its own questions" + the 30.8 report; artifact = two rebuilt quiz sections, amended records, docs that state the rule, and a push; exit = both pages green under the stricter rule and the whole selftest green; risk = a quiz long enough to be a second lesson, or an item silently dropped from the roadmap
+
+#### [S7] Rebuild kids/lesson30.html §8 as one dedicated question per roadmap item, concepts marked on questions <kids/lesson30.html §8> <S6> <DONE - 2026-11-09 - kids/lesson30.html section 8 rebuilt: 13 questions, one per roadmap item (12 items) plus the formal-twin question; concepts marked on the questions>
+#### [S8] Rebuild kids/lesson31.html §8 the same way <kids/lesson31.html §8> <S7> <DONE - 2026-11-09 - kids/lesson31.html section 8 rebuilt: 12 questions, one per roadmap item>
+#### [S9] State the rule in the binding files: PEDAGOGY-MAP [k] and VERIFICATION's provenance entry <PEDAGOGY-MAP.md:54; VERIFICATION.md:13-16> <S8> <DONE - 2026-11-09 - PEDAGOGY-MAP [k] rewritten (own question per item, key required, distractor is not a test) and VERIFICATION's provenance entry reworded. Finding: [l] was violated on both pages - every correct option sat first - so labels were rotated (lesson30 9/9/9, lesson31 11/11/11)>
+#### [S10] Append amendment records, run selftest + provenance + lang + content + games4 on the two pages, commit and push <provenance.jsonl> <S9> <DONE - 2026-11-09 - amendment records appended for kids/30 and kids/31 (new contract hash 89c109fb), sidecars refreshed, provenance+lang+content green on both pages>
+
 
 # [PAST]
 
@@ -63,7 +86,7 @@
 
 ### [B4] Prove the ruleset on kids lesson 30, carried forward from the deleted plan rather than dropped with it; serves "regenerate kids lesson 30 without reading the existing page" + "generate artifacts to prove it"; artifact = kids/lesson30.html + sidecar + its lessons.json entry + the provenance record written first; exit = provenance green on 30 and the page's own harnesses green; risk = writing the record after the page, which turns the proof into a description of what was done - UPDATED lesson 30 is now one instance of the track-wide regeneration in [B5] rather than a standalone proof case; it still goes first because it is the page whose regeneration started this
 
-#### [S1] Lesson 30's own roadmap lines only; write its provenance record; author + sidecar + registration <PEDAGOGY-MAP.md §1/§4/§5> <B3> <pending>
+#### [S1] Lesson 30's own roadmap lines only; write its provenance record; author + sidecar + registration <PEDAGOGY-MAP.md §1/§4/§5> <B3> <DONE - 2026-11-09 - engine4.js:464-481 read: key = data-a, else the option matching the .listen clip, else EMPTY - which is the mechanism behind 30.7>
 
 ### [B5] DECIDED: every lesson in the track is regenerated, so no legacy policy exists; serves "[b5] all lessons in the track will need to be regenerated" + "lesson 1 completely failed and i didnt notice it"; artifact = 50 provenance records, each written before its page, identical in form to any new lesson; exit = the member treats a missing record as a defect and the only amnesty is a lesson not yet regenerated; risk = a track-wide rewrite that inherits old shapes because nobody re-derived the beat (PEDAGOGY-MAP.md §1.e) - UPDATED this batch asked you to choose a posture toward lessons 1-29; you decided the whole track is regenerated, because lesson 1 failed unnoticed
 

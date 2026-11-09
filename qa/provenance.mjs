@@ -2,10 +2,10 @@
  * qa/provenance.mjs — the record that a lesson was built from its own inputs, and the [k] floor.
  *
  * PEDAGOGY-MAP.md 5 requires one line in `provenance.jsonl` BEFORE the first line of a page is
- * written, and [k] requires every taught element to be trained and at least 70% of the lesson's new
- * items to be asked about in the closing quiz. Neither is visible in the page, so neither can be
- * audited by qa/content.mjs: a page can load perfectly and still be a lesson nobody can point at the
- * inputs for. This member is the only place those two claims are checked.
+ * written, and [k] requires every taught element to be trained and every new item to be TESTED. Neither
+ * is visible in the page, so neither can be audited by qa/content.mjs: a page can load perfectly and
+ * still be a lesson nobody can point at the inputs for. This member is the only place those two claims
+ * are checked.
  *
  *   node qa/provenance.mjs [--track=kids|business|adult] [lessonNumber ...] [--selftest]
  *
@@ -18,7 +18,12 @@
  *   shape     the page's h2+vehicle fingerprint equals the record's, and matches NO other lesson in
  *             the same track (an identical shape is a copied shape, not a coincidence)
  *   coverage  [k] read off the roadmap's own `- Vocabulary:` line: every item present in the page is
- *             trained outside the quiz, and >=70% of the present items are asked about in the last section
+ *             trained outside the quiz, and every present item is the ANSWER to a question of its own in
+ *             the closing quiz. Answers are read from the key (`data-a` on the `.qitem`, or the option's
+ *             value = the key), never from the block's prose: an item sitting in a distractor, a stem or
+ *             a paragraph was never tested, and one answer naming four items is one question about none
+ *             of them. Counting words anywhere in the quiz is what let a quiz look thorough while asking
+ *             nothing, so it is not done at all.
  *   concepts  [k] the harder half, and the reason a page has to declare itself: every pid on the
  *             roadmap's `teaches:` line is marked `data-teaches="<pid>"` on a block that TRAINS it and
  *             on a block in the quiz that TESTS it. Concepts outrank vocabulary — a lesson on a tense
@@ -49,7 +54,9 @@ import { JSDOM } from 'jsdom';
 import { ROOT, pickTracks, hasTrackFlag, pickNumbers, pickLessons, lessonsOnDisk, missingTargets, scopeLabel } from './track.mjs';
 
 const LEDGER = 'provenance.jsonl';
-const NEED = 0.7;
+/* NO percentage floor. The 70% floor this member used to carry is superseded: every new item must be
+   the answer to a question of its own, and an item that is merely present in the quiz - as a distractor,
+   in a stem, or in prose - is not tested at all (User, 2026-11-09). */
 
 /** first 8 hex of sha256 — the record's unit of "this file, this content" */
 const sha8 = file => crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex').slice(0, 8);
@@ -124,6 +131,57 @@ function itemPattern(item) {
 }
 
 /**
+ * the same item as it appears in an ANSWER. A phrasal verb splits when its object is a pronoun -
+ * `look it up`, `look them over` - and the split form is the harder half of the lesson, so an answer
+ * that separates the verb from its particle still counts as that phrase. Only the particle move is
+ * allowed: the words themselves must be there, in order, with an optional object pronoun between
+ * the last two.
+ */
+function answerPattern(item) {
+  const words = String(item).split(/\s+/).filter(Boolean);
+  if (words.length < 2) return itemPattern(item);
+  const esc = w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  /* the VERB may be inflected in the answer: the item is `look for`, and `looking for` is that phrase
+     in the sentence a student would actually write. Nothing else is loosened - the particle and every
+     later word stay literal and in order. */
+  const head = words.slice(0, -1)
+    .map((w, i) => esc(w) + (i === 0 ? '(?:s|es|ed|ing|d)?' : '')).join('\\s+');
+  const tail = esc(words[words.length - 1]);
+  return new RegExp((/^\w/.test(item) ? '\\b' : '') + head +
+    '\\s+(?:(?:it|them|him|her|me|us|you)\\s+)?' + tail + (/\w$/.test(item) ? '\\b' : ''), 'i');
+}
+
+/** an answerable control: something whose value the page can be right or wrong about */
+const ANSWERABLE = 'input.gap, input[type="radio"], .qitem[data-answer], textarea';
+
+/**
+ * the correct answers a subtree declares, one string per question. Three ways a page states one:
+ *   - a radio `.qitem` with `data-a` naming the right option (the games' own contract, engine4.js)
+ *   - a `.qitem` with `data-answer` (the crossword and bingo contract)
+ *   - any element with `data-answer` wrapping a `.gap` blank
+ * A question with no declared answer contributes nothing: a blank the page never keys cannot be the
+ * evidence that an item was tested, and a distractor is not an answer at all.
+ */
+function answersOf(el) {
+  const out = [];
+  for (const q of el.querySelectorAll('.qitem')) {
+    const key = q.getAttribute('data-a');
+    const own = q.getAttribute('data-answer');
+    if (own) { out.push(norm(own)); continue; }
+    if (!key) continue;
+    const r = [...q.querySelectorAll('input[type="radio"]')].find(x => x.value === key);
+    if (!r) continue;
+    const lab = r.closest('label');
+    out.push(norm((lab ? lab.textContent : '') || ''));
+  }
+  for (const g of el.querySelectorAll('input.gap')) {
+    const host = g.closest('[data-answer]');
+    if (host && !host.classList.contains('qitem')) out.push(norm(host.getAttribute('data-answer')));
+  }
+  return out.filter(Boolean);
+}
+
+/**
  * the concept ids an element declares, `data-teaches="pid pid"` — how a page says what it trains.
  * Checked on the element itself and on everything under it, so the mark can sit on a block, on a
  * section's wrapper, or on the h2 that heads it; a page's structure is its own decision (FORMAT.md),
@@ -186,14 +244,22 @@ function sectionsOf(html) {
   for (const el of area.children) {
     if (el.tagName === 'H2') {
       if (isFeedHeading(el)) { cur = null; continue; }
-      cur = { title: norm(el.textContent), tokens: [], text: norm(el.textContent), pids: new Set() };
+      cur = { title: norm(el.textContent), tokens: [], text: norm(el.textContent), pids: new Set(),
+        answers: [], askPids: new Set() };
       pidsOf(el).forEach(p => cur.pids.add(p));
       sections.push(cur);
       continue;
     }
     if (!cur) continue;
     walk(el);
-    pidsOf(el).forEach(p => cur.pids.add(p));
+    const ps = pidsOf(el);
+    ps.forEach(p => cur.pids.add(p));
+    /* a concept mark on a block that carries an answerable control is a question about it; the same
+       mark on a bare block is a label, and a label tests nothing */
+    if (el.querySelector(ANSWERABLE)) {
+      ps.forEach(p => cur.askPids.add(p));
+      cur.answers.push(...answersOf(el));
+    }
     cur.text = norm(cur.text + ' ' + proseOf(el));
   }
   /* the prose the page carries, assembled from its sections rather than from raw `textContent`:
@@ -303,18 +369,32 @@ function auditLesson({ root, track, n, record, peers, retired }) {
   if (span) {
     const items = roadmapVocabulary(span.body);
     const quiz = page.sections.length ? page.sections[page.sections.length - 1] : null;
-    const quizText = quiz ? quiz.text : '';
     const trainText = page.sections.slice(0, -1).map(s => s.text).join(' ');
-    const present = [], absent = [], untrained = [], unquizzed = [];
+    const present = [], absent = [], untrained = [];
     for (const it of items) {
       const re = itemPattern(it);
       if (!re.test(page.text)) { absent.push(it); continue; }
       present.push(it);
       if (!re.test(trainText)) untrained.push(it);
-      if (!re.test(quizText)) unquizzed.push(it);
+    }
+    /* a question TESTS an item only when that item is part of the question's correct answer, and the
+       answer is about that item alone. One answer naming four new words is not four questions, and an
+       item that appears only as a distractor, in a stem, or in prose was never tested at all - which is
+       how a quiz can look thorough while asking nothing. */
+    const asked = new Map(present.map(it => [it, 0]));
+    const crowded = [];
+    for (const ans of (quiz ? quiz.answers : [])) {
+      const hits = present.filter(it => answerPattern(it).test(ans));
+      if (hits.length === 1) asked.set(hits[0], asked.get(hits[0]) + 1);
+      else if (hits.length > 1) crowded.push('"' + ans + '" (' + hits.join(', ') + ')');
+    }
+    const unquizzed = present.filter(it => !asked.get(it));
+    if (crowded.length) {
+      warns.push(crowded.length + ' quiz answer(s) name more than one new item, so they test none of them' +
+        ' on its own (' + crowded.slice(0, 3).join('; ') + ') — give each item its own question');
     }
     if (!items.length) {
-      warns.push('the roadmap names no vocabulary for this lesson, so the 70% floor could not be measured');
+      warns.push('the roadmap names no vocabulary for this lesson, so coverage could not be measured');
     }
     if (absent.length) {
       warns.push(absent.length + ' of ' + items.length + ' roadmap item(s) do not appear on the page (' +
@@ -329,10 +409,10 @@ function auditLesson({ root, track, n, record, peers, retired }) {
         untrained.join(', ') + ') — every taught element is trained, [k]');
     }
     if (present.length) {
-      const asked = present.length - unquizzed.length;
-      if (asked < Math.ceil(present.length * NEED)) {
-        errors.push('the quiz asks about ' + asked + ' of ' + present.length + ' present item(s), under the 70% floor (' +
-          Math.ceil(present.length * NEED) + ') — never asked: ' + unquizzed.join(', '));
+      if (unquizzed.length) {
+        errors.push(unquizzed.length + ' of ' + present.length + ' present item(s) are never the answer to a' +
+          ' question of their own (' + unquizzed.join(', ') + ') — a distractor is not a test, [k]: each item' +
+          ' needs its own question');
       }
     }
 
@@ -344,8 +424,10 @@ function auditLesson({ root, track, n, record, peers, retired }) {
     const trainSecs = page.sections.slice(0, -1);
     const trainedPids = new Set();
     trainSecs.forEach(s => s.pids.forEach(p => trainedPids.add(p)));
-    const quizPids = quiz ? quiz.pids : new Set();
-    const declared = new Set([...trainedPids, ...quizPids]);
+    /* only a mark on a question counts as TESTING a concept; a mark on a bare block is a label */
+    const quizPids = quiz ? quiz.askPids : new Set();
+    const quizLabels = quiz ? [...quiz.pids].filter(p => !quiz.askPids.has(p)) : [];
+    const declared = new Set([...trainedPids, ...(quiz ? quiz.pids : new Set())]);
 
     if (!concepts.length) {
       warns.push('the roadmap names no teaches: concept for this lesson, so concept training could not be measured');
@@ -358,7 +440,11 @@ function auditLesson({ root, track, n, record, peers, retired }) {
     }
     if (notTested.length) {
       errors.push(notTested.length + ' concept(s) are absent from the quiz (' + notTested.join(', ') +
-        ') — the closing quiz tests all of it, [k]: mark the quiz block that asks about it');
+        ') — the closing quiz tests all of it, [k]: mark the question that asks about it');
+    }
+    if (quizLabels.length) {
+      warns.push('concept mark(s) in the quiz sit on a block with no answerable control (' +
+        quizLabels.join(', ') + ') — a label is not a question: mark the question that asks about it');
     }
     const stray = [...declared].filter(p => !concepts.includes(p));
     if (stray.length) {
@@ -451,8 +537,8 @@ for (const track of tracks) {
 }
 
 console.log('\n' + (failed ? '❌ ' + failed + ' of ' + checked + ' page(s) failed'
-  : '✅ ' + checked + ' page(s) green, each on its own: every concept trained and tested, 70%+ of the new items'
-    + ' quizzed' + (retired ? ', ledger retired so the record checks were skipped'
+  : '✅ ' + checked + ' page(s) green, each on its own: every concept trained and tested, every new item'
+    + ' the answer to a question of its own' + (retired ? ', ledger retired so the record checks were skipped'
       : ', recorded before writing with the inputs unchanged')
     + (warned ? '  (' + warned + ' warning(s) — recorded, not fatal)' : '')));
 process.exit(failed ? 1 : 0);
@@ -474,23 +560,34 @@ function selftest() {
   };
 
   const VOC = ['look at', 'look for', 'look up'];
+  /* one question per item, with that item as the CORRECT option: coverage counts ANSWERS, so a fixture
+     whose quiz is only prose would measure nothing at all */
+  const ask = items => items.map((it, i) =>
+    '<div class="qitem" data-a="a"><div class="qline"><span class="qnum">' + (i + 1) + '.</span>' +
+    '<span class="qstem">which phrase?</span></div><div class="qopts">' +
+    '<label><input type="radio" name="f' + i + '" value="a"> ' + it + '</label>' +
+    '<label><input type="radio" name="f' + i + '" value="b"> not this one</label></div></div>').join('');
   const SECS = [
     { t: '1. The family', v: ['panel'], x: 'look at it, look for it', p: 'tense/fixture' },
     { t: '2. Training', v: ['chart', 'game:catchBasket'], x: 'look up a word', p: 'tense/fixture' },
-    { t: '3. Quiz', v: ['panel'], x: 'look at it, look for it, look up it', p: 'tense/fixture' },
+    { t: '3. Quiz', v: ['panel'], x: ask(VOC), p: 'tense/fixture', in: true },
   ];
-  const block = v => v.startsWith('game:')
+  const block = (v, inner) => v.startsWith('game:')
     ? '<div class="game" data-game="' + v.slice(5) + '"><div class="stub">x</div></div>'
     : v === 'chart' ? '<table class="chart"><tbody><tr><td>a</td></tr></tbody></table>'
-      : '<div class="' + v + '"><div class="qgrid"><div>q</div></div></div>';
+      : '<div class="' + v + '">' + (inner || '<div class="qgrid"><div>q</div></div>') + '</div>';
   /* the concept mark sits on the block itself, which is how a real page declares it */
-  const blockAttr = (v, p) => {
-    const h = block(v);
+  const blockAttr = (v, p, inner) => {
+    const h = block(v, inner);
     return p ? h.replace('>', ' data-teaches="' + p + '">') : h;
   };
+  /* a section's `x` is its prose; `in: true` puts it INSIDE the first block instead, which is where a
+     question has to live for a concept mark on that block to be a question rather than a label */
   const pageHtml = secs => '<!doctype html><html><body><main><div class="page-container"><div class="content-area">'
     + '<h1>Fixture</h1>'
-    + secs.map(s => '<h2>' + s.t + '</h2>' + s.v.map(v => blockAttr(v, s.p)).join('') + '<p>' + s.x + '</p>').join('')
+    + secs.map(s => '<h2>' + s.t + '</h2>'
+      + s.v.map((v, i) => blockAttr(v, s.p, i === 0 && s.in ? s.x : '')).join('')
+      + (s.in ? '' : '<div>' + s.x + '</div>')).join('')
     + '<h2>\u{1F4D2} Caderno compartilhado</h2><textarea id="feed" rows="8"></textarea>'
     + '</div></div></main></body></html>';
   const roadmapOf = (vocab, raw) => [
@@ -517,7 +614,7 @@ function selftest() {
     fs.writeFileSync(path.join(root, 'kids', 'lesson2.html'),
       pageHtml(opts.secs2 || [
         { t: '1. Another beat', v: ['dialog'], x: 'other', p: 'sound/fixture' },
-        { t: '2. Its quiz', v: ['card'], x: 'other again', p: 'sound/fixture' },
+        { t: '2. Its quiz', v: ['card'], x: ask(['look at']), p: 'sound/fixture', in: true },
       ]));
     return root;
   };
@@ -576,12 +673,13 @@ function selftest() {
     say(/identical to kids\/lesson1/.test(r.errors.join(' ')),
       'a shape copied from a sibling fails', r.errors.join(' | '));
   }
-  // 7. a quiz that asks about under 70% of the items the page presents
+  // 7. an item the quiz never asks about in a question of its own
   {
-    const secs = SECS.map(s => (s.t === '3. Quiz' ? { ...s, x: 'look at it, look for it' } : s));
+    const secs = SECS.map(s => (s.t === '3. Quiz' ? { ...s, x: ask(['look at', 'look for']) } : s));
     const root = build({ secs });
     const r = audit(root, 1, recordFor(root, 1));
-    say(/under the 70% floor/.test(r.errors.join(' ')), 'a quiz under 70% fails', r.errors.join(' | '));
+    say(/never the answer to a question of their own/.test(r.errors.join(' ')),
+      'an item the quiz never asks about fails', r.errors.join(' | '));
   }
   // 8. an item that appears only in the quiz — presented, never trained
   {
@@ -671,6 +769,48 @@ function selftest() {
     const r = audit(root, 1, recordFor(root, 1));
     say(r.errors.length === 0 && !/do not appear on the page/.test(r.warns.join(' ')),
       'adjacent inline elements still read as separate words', r.errors.concat(r.warns).join(' | '));
+  }
+
+  // 19. an item that appears in the quiz ONLY as a distractor. This is the defect that made a quiz look
+  //     thorough while asking nothing: `re.test(quizText)` matched the wrong option and the item counted
+  //     as tested. A distractor is not an answer.
+  {
+    const trap = '<div class="qitem" data-a="a"><div class="qopts">' +
+      '<label><input type="radio" name="t" value="a"> nothing at all</label>' +
+      '<label><input type="radio" name="t" value="b"> look up</label></div></div>';
+    const secs = SECS.map(s => (s.t === '3. Quiz' ? { ...s, x: ask(['look at', 'look for']) + trap } : s));
+    const root = build({ secs });
+    const r = audit(root, 1, recordFor(root, 1));
+    say(/look up/.test(r.errors.join(' ')) && /never the answer to a question of their own/.test(r.errors.join(' ')),
+      'a distractor does not count as a test', r.errors.concat(r.warns).join(' | '));
+  }
+  // 20. an item mentioned in the quiz's prose, with no question about it at all
+  {
+    const secs = SECS.map(s => (s.t === '3. Quiz' ? { ...s, x: 'remember look at, look for and look up' } : s));
+    const root = build({ secs });
+    const r = audit(root, 1, recordFor(root, 1));
+    say(/3 of 3 present item\(s\) are never the answer/.test(r.errors.join(' ')),
+      'prose is not a question', r.errors.concat(r.warns).join(' | '));
+  }
+  // 21. one question whose answer names two items: it tests neither on its own
+  {
+    const both = '<div class="qitem" data-a="a"><div class="qopts">' +
+      '<label><input type="radio" name="b1" value="a"> look at and look for</label>' +
+      '<label><input type="radio" name="b1" value="b"> nothing at all</label></div></div>';
+    const secs = SECS.map(s => (s.t === '3. Quiz' ? { ...s, x: both + ask(['look up']) } : s));
+    const root = build({ secs });
+    const r = audit(root, 1, recordFor(root, 1));
+    say(/name more than one new item/.test(r.warns.join(' ')) &&
+      /look at, look for/.test(r.errors.join(' ')),
+      'one answer cannot test two items', r.errors.concat(r.warns).join(' | '));
+  }
+  // 22. a concept marked in the quiz on a block with no answerable control: a label, not a question
+  {
+    const secs = SECS.map(s => (s.t === '3. Quiz' ? { ...s, x: 'nothing to answer here', p: 'tense/fixture' } : s));
+    const root = build({ secs });
+    const r = audit(root, 1, recordFor(root, 1));
+    say(/sit on a block with no answerable control/.test(r.warns.join(' ')),
+      'a concept label with no question is reported', r.errors.concat(r.warns).join(' | '));
   }
 
   for (const d of dirs) { try { fs.rmSync(d, { recursive: true, force: true }); } catch { /* temp */ } }
