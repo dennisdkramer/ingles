@@ -62,7 +62,7 @@
 #### [S1] Roadmap lines 108-116; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B9> <DONE - 2026-11-08 - kids/lesson10.html + .edit.html (byte-identical), lessons.json + COUNTS.kids=10 - frequency slot, routine chain, in/on/at with catchBasket 3-pot sort and stackDrop quiz at data-retry="0">
 
 ### [B12] Lesson 11 — right now, be + -ing, and the text-speak code the register requires; same shape as [B2]
-#### [S1] Roadmap lines 118-126; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 118-126; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B11> <DONE - 2026-11-08 - kids/lesson11.html + .edit.html (byte-identical), lessons.json n=11, COUNTS.kids 10->11, PAST_BATCHES - 6 sections, 12/12 items, catchBasket three-pot -ing sort (replayable) + whackMole quiz at data-retry="0"; repaired the section-2 blanks/panel that the prior fragment left unclosed>
 
 ### [B13] Lesson 12 — fact against moment, side by side; same shape as [B2]
 #### [S1] Roadmap lines 128-136; author + sidecar + §5 lines + commit and push
