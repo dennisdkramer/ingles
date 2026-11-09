@@ -1,23 +1,34 @@
 # [GENERATION] PROCESS & DEFAULTS (binding) - DO NOT MODIFY WITHOUT USER SIGN-OFF
 - The page must run on the site: mechanical skeleton + deliverable state the engines can read (FORMAT.md, FUNCTION.md);
 - Every factual claim is true and defensible — never pad a section with an unverified assertion.
+- A page is judged against this document's floors, not against the page next door: precedent is not evidence, and "the other lessons do it this way" is not an input.
 1. MANDATORY Inputs:
-   - a) <TRACK>-ROADMAP.md [LESSON #] - read as its own line range, never the whole file.
+   - a) <TRACK>-ROADMAP.md [LESSON #] - read as its own line range, never the whole file, and never another lesson's range: the entry for lesson N is the only roadmap text a lesson may be built from.
    - b) FORMAT.md
    - c) FUNCTION.md [CONTENT] - Only within this section
    - d) <TRACK>-REGISTER.md - **<TRACK> is the PERSONA - guides context, voice, and vocabulary**
+   - e) **The list above is closed - a file added to it is a change to this document, not a generation decision.** **No lesson page is an input to any lesson:** not a neighbouring lesson, not another track's finished page, not the page being replaced (see 3). A lesson's shape is decided for its own beat and is never inherited; a page that reproduces a sibling's shape is a failed generation, not a variant of it.
 2. AS-NEEDED Inputs - Reference/Implementation:
    - a) style.css **implementation only** - ONLY IF defensibly necessary, read to answer an *implementation* question (eg. which class or knob does what).
    - b) CONTENT_EXAMPLES.md [HEADLINES] - the `###` heading lines only, each read as its own line range. A `####` heading is a draft, not a menu item: it is never read, chosen or implemented by a build.
    - c) _shell.html
    - d) engine4.js **implementation only** - the game-presentation engine (`window.GAMES4`). `_shell.html` does NOT load it, so a page that uses a game block must add `<script src="../engine4.js"></script>` itself, after engine2.js.
    - e) PAST_BATCHES.md
-3. Allow: Downloaded material, song, clip, article, document, photo, assets/. **Withhold all other files unless you have a strong defensible need to access them**
+3. Allow: Downloaded material, song, clip, article, document, photo, assets/. **Withhold all other files unless you have a strong defensible need to access them.** **No `*/*lesson<N>.html` is read while authoring any lesson** - a structural question is answered by 2.a-2.d, and continuity of concept or vocabulary comes from this lesson's own roadmap entry (`uses:`/`deepens:`), never from a prior page. `PEDAGOGY.md` is withheld outright: it governs roadmap generation, not lessons.
 4. Output = `<track>/lesson<N>.html`, **unpadded** (`lesson1.html`, never `lesson01.html` - the landing links are built as `track/lesson`+n+`.html`), plus a byte-identical `.edit.html` sidecar, built on `_shell.html`
 5. At the beginning of each Lesson generation
-   - Diff MANDATORY Inputs against the files in your memory. For each that does not return a zero, re-read its entry (a,b,c,and/or d)
+   - compare  MANDATORY Inputs  against the files in your memory. For each that does not return a zero, re-read its entry (a,b,c,and/or d)
+   - **Write the provenance record BEFORE the first line of the page is written.** A record appended after the page exists is a description of what was done, not proof of what was used. One line, appended to `provenance.jsonl` at the repo root - its own ledger, so no other file's clearing can erase it - with values computed at write time:
+     `{"lesson":"<track>/<N>","contract":"<sha8 of PEDAGOGY-MAP.md>","roadmap":"<sha8>","format":"<sha8>","function":"<sha8>","register":"<sha8>","shell":"<sha8>","range":"<start>-<end>","fingerprint":[["<h2 text>","<vehicle>"],...],"pagesRead":"none","date":"<YYYY-MM-DD>"}`
+     `range` is this lesson's own roadmap line span. `fingerprint` is the page's h2s in order, each with the vehicle it uses, recomputed from the finished page and compared; a fingerprint identical to another lesson in the same track is a failure, and so is a record whose hashes no longer match the inputs on disk. `pagesRead:"none"` declares rule 3. **The ledger is transient:** once the track is regenerated and verified it is deleted, and the check reads an absent ledger as retired, never as "no records" (`VERIFICATION.md`).
    - Append 2 lines to PAST_BATCHES.md: `<Lesson #>,  What is the social context of the lesson? What is the most difficult concept for the student?`
    - `<which files did I not re-read, and what was their diff>`
+   - **The build ends by measuring the page it just wrote.** When the page and its sidecar exist, and before the lesson is reported as done, run the two static checks on that one page and on nothing wider:
+     - `node qa/lang.mjs --track=<track> <N>` and `node qa/provenance.mjs --track=<track> <N>` - the page's own voice against the target range in [BUILD] HIGH PRIORITY, and the record written above: its six hashes against disk, this lesson's own roadmap span, the concept marks, and the quiz coverage.
+     - **Scope is that page.** A sweep (`--all`, or a bare `npm run qa`) is not a self-check: it puts other lessons' pages, bands and fingerprints in front of a build that may not read them ([GENERATION] 1.e and 3).
+     - **A verdict on finished work, never a dial.** A share met by adding Portuguese because the floor is near, or a concept met by marking a block that does not train it, satisfies the instrument instead of the student - the same defect as a copied shape, reached from the other side. A red is answered in the page.
+     - **The record leads the page.** If a check sends the build back to reshape the page, the fingerprint no longer matches and a new record is appended: the record never catches up to the page it describes.
+     - `qa/content.mjs`, `qa/overflow.mjs` and `qa/live.mjs` are not part of this step - each opens a server or a real browser, so they belong at the end of a batch, not at the end of every page (`VERIFICATION.md`).
 
 ## [BUILD] PROCESS
 - The build is a **synthesis, not obedience**
@@ -27,6 +38,11 @@
 - May change included Vocabulary, Examples, Context if defensible purpose arises naturally.
 - **HIGH PRIORITY**:
   - For any generated [[**Lesson introduction, explanatory text, tip, headline, or column header**], it is authored in Portuguese [only if [LESSON #] < ([CONTENT LEVEL] of the explanation)] ELSE [it is authored in English, and [CONTENT LEVEL] is authored to be as close as possible to [STUDENT LEVEL]]
+     - **The Portuguese share is a target range in figures, not a judgement call.** Take the elements this rule names - lesson introduction, explanatory text, tip, headline, column header - and the share of them authored in Portuguese must sit inside:
+       - **ceiling = 75 − (L − 5) × 1.8 %** - no more Portuguese than this, at any lesson number;
+       - **floor = 35 − (L − 5) × 1.8 %**, clamped at 0 - no less, because a lesson that stopped glossing has abandoned its reader.
+       - With L the lesson number, lesson 1 targets **42–82%**, lesson 5 **35–75%**, lesson 20 **8–48%**, lesson 30 **0–30%**, lesson 40 **0–12%**, and from lesson 47 the ceiling itself reaches 0 and is clamped there, so nothing above that level is glossed.
+       - A share is not a measurement: one element outside the range is allowed on a page, and a page carrying fewer than 12 such elements is not judged as a share at all. These are the exact figures `qa/lang.mjs` enforces, so the range a build is given and the range a page is judged by cannot drift apart.
   - For any generated content which is NOT [[**Lesson introduction, explanatory text, tip, headline, or column header**]], [it is synthesized with [[derived socio-linguistic context] and [its TRACK's [register details and persona priorities]]], [CONTENT LEVEL] is as close as possible to [STUDENT LEVEL], and [it is Portuguese ONLY when *defensibly optimal for teaching purposes*] ELSE it is authored in English.
 - Use your creativity to decide what type of content and in what order is optimal for the student to engage with and understand each lesson. Consider the following:
   - a) Can the concepts be grouped or categorized to optimize understanding?
@@ -46,7 +62,7 @@
 - h) Whenever feasible (sanity check the existence, relevance, appropriateness, and accessibility of each), teach the rule, the reasoning (the mental model), and its direct consequences (integrated with the lesson content or in its own section as appropriate); say plainly when [there is no clear or consistent] [rule and/or reasoning].
 - i) Each item carries the condition that decides it (a gloss that could go either way is not an item).
 - j) False cognates (eg. 'pretend' -X- 'pretender' -> 'intend') and words which [in one language cleanly map onto] [more than one word in the other] (eg. 'live' -> 'morar' / 'viver') are presented together with these characteristics [shown/explained/demonstrated as appropriate].
-- k) Practice trains the lesson's concepts in conceptually distinct blocks, inline with what they train and/or in a penultimate section. The last section is a quiz that tests all of it — it may echo the training, never copy it. A `.game` block inside that quiz carries `data-retry="0"` — one score, and it is final, because the radio the student answered once is the evidence; a `.game` in a training block leaves the default and stays replayable
+- k) Practice trains the lesson's concepts in conceptually distinct blocks, inline with what they train and/or in a penultimate section. The last section is a quiz that tests all of it — it may echo the training, never copy it. A `.game` block inside that quiz carries `data-retry="0"` — one score, and it is final, because the radio the student answered once is the evidence; a `.game` in a training block leaves the default and stays replayable. **Every taught element is trained, and the quiz thoroughly tests the student's understanding of at least 70% of the lesson's new items** - every concept and every new vocabulary item is exercised in practice, and no fewer than 70% of them are asked about in the closing quiz, each by a question that requires producing the item or choosing between conditions, never by recognising a definition. **A concept is declared, not implied:** each pid on this lesson's own roadmap `teaches:` line is written verbatim into `data-teaches="<pid>"` on every block that trains it and on the quiz block that tests it, because a page that only names a tense has not taught the tense and no check can tell the two apart. The practice for a concept is made of that lesson's new vocabulary - the tense is produced inside sentences built from the new words, never in bare conjugation rows beside them.
 - l) Multiple-choice options are shuffled so the right one is not always in the same slot.
 - m) Boilerplate & filler are last resorts.
 - n) All concepts that are meant to be trained in the Lesson must be appropriately explained and concepts demonstrated.

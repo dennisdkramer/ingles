@@ -24,162 +24,48 @@
 
 # [CURRENT] Prompt - (Active batches, newest first)
 
-## [1] Generate the kids track lessons 1-50, exams 25/45 as blank shells, one lesson per batch with a commit and push, QA only where a defect is detected
+# [PAST]
 
-### [B1] Fix the generation contract so 50 lessons are authored against one read rather than fifty guesses; serves "read PEDADOGY_MAP.md and go from there" + "generate the kids track"; artifact = the ten inputs read (PEDAGOGY-MAP.md whole, KIDS-ROADMAP.md Decisions/Shape + per-lesson ranges, FORMAT.md, FUNCTION.md §CONTENT, KIDS-REGISTER.md, _shell.html, CONTENT_EXAMPLES.md `###` headings, VERIFICATION.md, qa/run.mjs, one finished adult page as markup reference); exit = kids/ confirmed empty, exams 25/45 read, QA shape known (`npm run qa -- content --track=kids <N>`), plan in this file; risk = reading the roadmap whole instead of per-lesson line ranges (PEDAGOGY-MAP.md §1.a)
+## [3] The concept, not the word list, is what gets trained and tested; and a lesson is judged alone — two batches, both closed
+### [B6] Make the concept itself the trained-and-tested unit, because a tense that is only named has not been taught; serves "A lesson that teaches a verb tense needs to rigorously train and test the student on that verb tense ideally incorporating the new vocabulary in those training items" + "the concepts are MORE important than the vocabulary"; artifact = PEDAGOGY-MAP.md §k concept floor + the concept checks in qa/provenance.mjs + five new selftest cases; exit = a page whose concept is never trained, or never tested, exits non-zero, and a concept practised without the lesson's new vocabulary says so; risk = the check collapses back into vocabulary counting, because vocabulary is the only thing visible without the page declaring what it trains - CLOSED, the declaration is now part of §k
 
-#### [S1] Read the inputs named above, none whole where a range will do <PEDAGOGY-MAP.md §1/§2/§5> <nothing> <DONE - 2026-11-08 - read-only, no file modified>
+#### [S1] A page declares what each block trains, `data-teaches="<pid>"` taken verbatim from its own roadmap `teaches:` line, because no harness can infer "this trains the past perfect" from prose <PEDAGOGY-MAP.md §k> <B3> <DONE - 2026-11-09 - PEDAGOGY-MAP.md:54 gains the concept floor and the declaration rule; qa/provenance.mjs: roadmapTeaches() reads the entry's own teaches: line (100), pidsOf() reads the marks off a block, its wrapper or its h2 so the page's structure stays its own decision (121), sectionsOf() carries each section's pids (169-176), and the audit fails a concept with no training block or none in the quiz, warning when a concept is practised with none of the new vocabulary or marked for a pid the roadmap never named (319-352)>
 
-### [B2] Lesson 1 authored and shipped as its own batch; serves "lessons 1-50" + "each lesson is a batch, commit and push when a batch is done"; artifact = kids/lesson1.html + kids/lesson1.edit.html **+ the lesson's entry in lessons.json** (`{n,title}` — this file, not the commit, is what the live index reads; a batch that skips it ships a page no one can see) **+ COUNTS.kids in index.html raised to the new count**; exit = both files on origin/main in one commit AND the live `lessons.json` returning the new entry (fetch it after the Pages rebuild); risk = a page that misses the 10-vocabulary floor or the closing quiz (PEDAGOGY-MAP.md §q/§k), or a page that is correct but unlisted
+#### [S2] Prove the new floor can fail: a concept never trained, a concept never tested, a concept practised with no new vocabulary, a mark the roadmap never named, and a retired ledger that still checks concepts <VERIFICATION.md: every harness exits non-zero on a finding> <S1> <DONE - 2026-11-09 - node qa/provenance.mjs --selftest: 16 cases, exit 0 — the original 11 plus the five concept cases>
 
-#### [S1] Read KIDS-ROADMAP.md lines 18-26 as the lesson's own range, diff the other mandatory inputs, author on _shell.html, mirror to .edit.html, append the two §5 lines to PAST_BATCHES.md, commit and push <PEDAGOGY-MAP.md §1/§4/§5, FORMAT.md> <B1> <DONE - 2026-11-08 - kids/lesson1.html, kids/lesson1.edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 vocabulary items, closing skeetRange quiz at data-retry="0">>
+### [B7] Judge one lesson at a time and never the track; serves "i dont care about a full track green, theres no reason to have verification worried about the full track. every lesson is its own individual item to be green or red"; artifact = retired state as a note + page-side checks that outlive the ledger + a summary line that claims nothing track-wide; exit = no lesson's verdict depends on how many other lessons are recorded, and a retired ledger still returns a per-lesson verdict; risk = the shape-collision test, the one check that reads a sibling, turns a page red for what a neighbour did - kept deliberately, because it is the only mechanical trace of a copied shape (§1.e)
 
-### [B3] Lesson 2 — the silent e, the vowel pairs, the cognates that lie; same artifact/exit/risk shape as [B2]
-#### [S1] Roadmap lines 28-36; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B2> <DONE - 2026-11-08 - kids/lesson2.html + .edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 items, catchBasket training game (replayable) + whackMole quiz at data-retry="0">
+#### [S1] Retire the ledger as a note rather than an exit, and keep the page checks running after it is deleted <qa/provenance.mjs, VERIFICATION.md> <B6> <DONE - 2026-11-09 - the retired branch prints a note and sweeps on (378-384); record-only checks sit behind `if (record)` (236-279) while concepts and coverage run for every page (283-352); peers are read only when the ledger exists (397); the green summary is per page, "each on its own", and never reports a track state (433-437); run.mjs:40 and VERIFICATION.md:9-19 now lead with concepts and state that nothing is judged track-wide>
 
-### [B4] Lesson 3 — be, get and it; same shape as [B2]
-#### [S1] Roadmap lines 38-46; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B3> <DONE - 2026-11-08 - kids/lesson3.html + .edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 items, video from lesson 1 returns in a be sentence, stackDrop quiz at data-retry="0">
+## [2] Force sibling-independent generation into the binding document, back it with a provenance record and a qa member that fails, and prove it on kids lesson 30
 
-### [B5] Lesson 4 — have, do, make, go; same shape as [B2]
-#### [S1] Roadmap lines 48-56; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B4> <DONE - 2026-11-08 - kids/lesson4.html + .edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 items, catchBasket do/make sorting drill + whackMole quiz at data-retry="0">
+### [B1] Settle where the rule binds and what can be made to fail; serves "make a plan for updating pedagogy.md" + "generate artifacts to prove it"; artifact = this decision set - PEDAGOGY-MAP.md is the lesson-generation contract and the only file the ruleset lands in, PEDAGOGY.md is roadmap-generation only and out of scope, qa/run.mjs MEMBERS the registration point, build-lessons.mjs showing registration reads only the page's own `<h1>`; exit = both files read, registration understood, the proof artifacts named in [B3]; risk = editing PEDAGOGY.md alone because the prompt said "pedagogy.md", when §1/§3/§5 live in PEDAGOGY-MAP.md - UPDATED the plan read "updating pedagogy.md" as an edit to that file; its headline now reads "DO NOT READ for lesson generation - DOES NOT EFFECT PEDAGOGY-MAP.md TASKS", so the ruleset targets PEDAGOGY-MAP.md only and PEDAGOGY.md is named as out of scope
 
-### [B6] Lesson 5 — a, the and there is; same shape as [B2]
-#### [S1] Roadmap lines 58-66; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B5> <DONE - 2026-11-08 - kids/lesson5.html + .edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 items, catchBasket training game + skeetRange quiz at data-retry="0">
+#### [S1] Read PEDAGOGY.md, PEDAGOGY-MAP.md, VERIFICATION.md, qa/run.mjs, qa/NOTES.md, build-lessons.mjs <PEDAGOGY-MAP.md §1/§3/§5> <nothing> <DONE - 2026-11-09 - read-only, no file modified>
 
-### [B7] Lesson 6 — the sentence skeleton and the -s of he, she, it; same shape as [B2]
-#### [S1] Roadmap lines 68-76; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B6> <DONE - 2026-11-08 - kids/lesson6.html + .edit.html (byte-identical), PAST_BATCHES.md - 6 sections, 12/12 items, catchBasket subject-sort training + skeetRange quiz at data-retry="0", tags balanced 95/95 divs and 3/3 tables>
+### [B2] Write the ruleset where a generator cannot miss it, at the weight the file already carries; serves "force this ruleset on every lesson generation" + "keep the weight of these rule elements maxed out"; artifact = PEDAGOGY-MAP.md §1 closure line + §3 explicit lesson-page denial + §5 record-written-before-authoring, all inside PEDAGOGY-MAP.md's existing `DO NOT MODIFY WITHOUT USER SIGN-OFF` headers (this request is that sign-off); exit = the rule stated once in the MANDATORY section, phrased MUST/NEVER, paired with the check that enforces it, and §r + PEDAGOGY.md:35 recycling survives as roadmap-sourced; risk = it lands as a footnote or a "consider", or it forbids the recycling PEDAGOGY.md:35 requires - UPDATED this batch also edited PEDAGOGY.md beside "Keep training past lesson concepts and vocabulary"; that file is roadmap-generation only and its headline forbids reading it during a lesson build, so the recycling rule stays satisfied by the roadmap entry - UPDATED a second tweak joined this batch that the original plan did not have: "all the taught elements are trained and the quiz thoroughly tests the students understanding of 70+% of each new item in the lesson", landing in §k as [S4]
 
-### [B8] Lesson 7 — saying no, don't and doesn't; same shape as [B2]
-#### [S1] Roadmap lines 78-86; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B7> <DONE - 2026-11-08 - kids/lesson7.html + .edit.html (byte-identical), lessons.json n=7, COUNTS.kids=7, PAST_BATCHES.md - 6 sections, 12/12 items, catchBasket drill + whackMole quiz at data-retry="0">
+#### [S1] PEDAGOGY-MAP.md §1: the input list is closed; §1.a: never another lesson's range; §3: no `*/*lesson<N>.html` is an input - not a neighbouring lesson, not another track's page, not even the page being replaced - and PEDAGOGY.md is named as withheld, its own headline already saying it does not affect PEDAGOGY-MAP.md tasks <PEDAGOGY-MAP.md §1> <B1> <DONE - 2026-11-09 - PEDAGOGY-MAP.md: preamble weight bullet (line 4), §1.a extended to "never another lesson's range" (6), §1.e closed list + no lesson page is an input (10), §3 lesson-page denial + PEDAGOGY.md withheld (17)>
 
-### [B9] Lesson 8 — asking, do/does, wh-front, short answer; same shape as [B2]
-#### [S1] Roadmap lines 88-96; author + sidecar + §5 lines + commit and push
+#### [S2] PEDAGOGY-MAP.md §5: the record is written BEFORE authoring and carries six input hashes, the lesson's own roadmap range, and the shape fingerprint (ordered h2 + vehicle per section) <PEDAGOGY-MAP.md §5> <S1> <DONE - 2026-11-09 - PEDAGOGY-MAP.md §5 lines 21-23: the record precedes the page; six input hashes, the lesson's own range, the shape fingerprint, pages-read=none, and the two failure modes named (stale hashes, fingerprint identical to a sibling)> - UPDATED the record was to live in PAST_BATCHES.md; you directed it to its own ledger, so it is `provenance.jsonl` at the repo root, listed in FILESYSTEM.md, and transient - deleted once the track is verified, with absence reading as retired rather than as a missing record
 
-### [B10] Lesson 9 — the simple present is a fact, never right now; same shape as [B2]
-#### [S1] Roadmap lines 98-106; author + sidecar + §5 lines + commit and push
+#### [S3] DROPPED - no step touches PEDAGOGY.md. UPDATED this step added one reconciliation sentence beside "Keep training past lesson concepts and vocabulary"; that file is roadmap-generation only, and its headline now forbids reading it during a lesson build, so the recycling rule stays satisfied by the roadmap entry this lesson is generated from <PEDAGOGY.md line 1> <S1> <DONE - 2026-11-09 - no file edited>
 
-### [B11] Lesson 10 — frequency, routine order, in/on/at; same shape as [B2]
-#### [S1] Roadmap lines 108-116; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B9> <DONE - 2026-11-08 - kids/lesson10.html + .edit.html (byte-identical), lessons.json + COUNTS.kids=10 - frequency slot, routine chain, in/on/at with catchBasket 3-pot sort and stackDrop quiz at data-retry="0">
+#### [S4] PEDAGOGY-MAP.md §k: every taught element is trained, and the closing quiz thoroughly tests at least 70% of the lesson's new items - written from the user's words because no tracked version of this file ever carried the line (a pickaxe on "70" across all history returns nothing in it; the pre-consolidation copy had §k without the clause) <PEDAGOGY-MAP.md §k> <S1> <DONE - 2026-11-09 - PEDAGOGY-MAP.md line 54; my reading of "70+% of each new item" is ">=70% of the new items are asked about", stated in the line itself and open to your correction>
 
-### [B12] Lesson 11 — right now, be + -ing, and the text-speak code the register requires; same shape as [B2]
-#### [S1] Roadmap lines 118-126; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B11> <DONE - 2026-11-08 - kids/lesson11.html + .edit.html (byte-identical), lessons.json n=11, COUNTS.kids 10->11, PAST_BATCHES - 6 sections, 12/12 items, catchBasket three-pot -ing sort (replayable) + whackMole quiz at data-retry="0"; repaired the section-2 blanks/panel that the prior fragment left unclosed>
+### [B3] Make the rule fail-able, because a record nobody verifies is a description; serves "generate artifacts to prove it"; artifact = `qa/provenance.mjs` + a `provenance` member in qa/run.mjs (`scope: true`, pickTracks/hasTrackFlag/pickLessons from qa/track.mjs) + its line in VERIFICATION.md; exit = `npm run qa -- provenance --track=kids 30` exits 0 on a compliant lesson and non-zero on each of: no record, stale input hash, range not the roadmap's own span for that lesson, fingerprint not matching the page, fingerprint identical to another lesson in the same track; risk = a member that goes green when the record is absent, which is the one failure it exists to catch - UPDATED "lesson 1 completely failed and i didnt notice" adds a coverage check this member must also perform: every taught element carries a training exercise, and the closing quiz asks about at least 70% of the lesson's new items (§k) - so a failed lesson becomes a finding instead of an opinion - UPDATED the ledger is now `provenance.jsonl` on its own, so the member reads that file and must separate three states: ledger absent = retired, exit 0 with a notice; ledger present and a lesson has no record = defect; record present = verify hashes, range and fingerprint - UPDATED the coverage check needed no new record field: it reads the roadmap's own `- Vocabulary:` line for that lesson, which is the sanctioned own-range text, so the record schema frozen in §5 stands unchanged - UPDATED "present" is a word-boundary match over the page's section prose, so an item only counts as taught when the page actually writes it
 
-### [B13] Lesson 12 — fact against moment, side by side; same shape as [B2]
-#### [S1] Roadmap lines 128-136; author + sidecar + §5 lines + commit and push <DONE 600378c - registered n=12, COUNTS 12>
+#### [S1] Author qa/provenance.mjs: read provenance.jsonl, separate retired from no-record from record-with-mismatch, recompute the fingerprint from the page, and take its scope from qa/track.mjs <PEDAGOGY-MAP.md §5, VERIFICATION.md, qa/content.mjs for scope imports and exit conventions> <B2> <DONE - 2026-11-09 - qa/provenance.mjs, 468 lines: ledgerState() separates retired from present (165), readLedger() reports a malformed line rather than skipping it (147), auditLesson() checks the six input hashes + pagesRead + own-span range + record-vs-page fingerprint + sibling collision + [k] coverage (173), trackFingerprints() enumerates under a passed root so the selftest can point the member at a temp tree (279), and the run block prints the retired notice and exits 0 (290)>
 
-### [B14] Lesson 13 — the verbs that refuse -ing; same shape as [B2]
-#### [S1] Roadmap lines 138-146; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B2> <DONE - 2026-11-08 - kids/lesson13.html + .edit.html (byte-identical), lessons.json n=13, COUNTS.kids=13 - 7 sections, 12/12 items, 105/105 divs, catchBasket state-verb sort + whackMole quiz at data-retry="0">
+#### [S2] Register `provenance` in qa/run.mjs and give it a VERIFICATION.md line that states all three states, including that an absent ledger is retired and exits 0 <qa/run.mjs, VERIFICATION.md> <S1> <DONE - 2026-11-09 - qa/run.mjs:39-40 registers `provenance` as scope ✓ with its one-line purpose; VERIFICATION.md:3 now reads "Six checks, all narrow" and VERIFICATION.md:9-15 gives the member its entry, stating all three states, the retired exit 0, and the `--selftest`>
 
-### [B15] Lesson 14 — can: ability, permission and requests; same shape as [B2]
-#### [S1] Roadmap lines 148-156; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B2> <DONE - 2026-11-08 - kids/lesson14.html + .edit.html (byte-identical), lessons.json n=14, COUNTS.kids=14 - 7 sections, 12/12 items, 120/120 divs, 35 chips all voiced, catchBasket ability/permission/request sort + skeetRange quiz at data-retry="0">
+#### [S3] Self-test against five planted defects - no record for a lesson, a stale hash, a range that is not the roadmap's own span, a fingerprint that differs from the page, a fingerprint copied from another lesson - plus the retired case, where deleting the ledger must exit 0 and say so; a harness is trusted only once it has been seen to fail and its pass can be told from its silence <VERIFICATION.md: every harness exits non-zero on a finding> <S2> <DONE - 2026-11-09 - `node qa/provenance.mjs --selftest` exits 0, 11 cases: the five required defects (no record, stale hash, foreign range, fingerprint unlike the record, fingerprint copied from a sibling), the retired case, plus clean-pass, an item trained nowhere, a dropped roadmap item warning only, and a malformed ledger line - UPDATED the selftest earned its keep immediately: it caught a real defect in the member, which read page prose from raw `.content-area` textContent where adjacent elements leave no whitespace ("qlook at it"), so a word boundary defeated two of three items and the 70% case passed in silence; sectionsOf() now assembles the prose from the sections (140-143) and the case fires>
 
-### [B16] Lesson 15 — to and for, and the one para that splits; same shape as [B2]
-#### [S1] Roadmap lines 158-166; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B15> <DONE 2026-11-08 - kids/lesson15.html + .edit.html byte-identical; 102/102 divs, 4/4 tables, 8 sections, 34 chips all data-say, vocabulary 12/12; registered n=15, COUNTS.kids 15>
+### [B4] Prove the ruleset on kids lesson 30, carried forward from the deleted plan rather than dropped with it; serves "regenerate kids lesson 30 without reading the existing page" + "generate artifacts to prove it"; artifact = kids/lesson30.html + sidecar + its lessons.json entry + the provenance record written first; exit = provenance green on 30 and the page's own harnesses green; risk = writing the record after the page, which turns the proof into a description of what was done - UPDATED lesson 30 is now one instance of the track-wide regeneration in [B5] rather than a standalone proof case; it still goes first because it is the page whose regeneration started this
 
-### [B17] Lesson 16 — on, in, at: contact, container, point; same shape as [B2]
-#### [S1] Roadmap lines 168-176; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B16> <DONE 2026-11-08 - kids/lesson16.html + .edit.html byte-identical; 102/102 divs, 4/4 tables, 9 h2, 31 chips all data-say, vocabulary 12/12; registered n=16, COUNTS.kids 16>
+#### [S1] Lesson 30's own roadmap lines only; write its provenance record; author + sidecar + registration <PEDAGOGY-MAP.md §1/§4/§5> <B3> <pending>
 
-### [B18] Lesson 17 — verbs that carry their preposition; same shape as [B2]
-#### [S1] Roadmap lines 178-186; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B18> <DONE - 2026-11-08 - kids/lesson17.html + .edit.html (byte-identical), lessons.json n=17, COUNTS.kids 16->17, PAST_BATCHES.md - 7 sections, 12/12 items, catchBasket 4-pot drill + stackDrop quiz at data-retry="0">
+### [B5] DECIDED: every lesson in the track is regenerated, so no legacy policy exists; serves "[b5] all lessons in the track will need to be regenerated" + "lesson 1 completely failed and i didnt notice it"; artifact = 50 provenance records, each written before its page, identical in form to any new lesson; exit = the member treats a missing record as a defect and the only amnesty is a lesson not yet regenerated; risk = a track-wide rewrite that inherits old shapes because nobody re-derived the beat (PEDAGOGY-MAP.md §1.e) - UPDATED this batch asked you to choose a posture toward lessons 1-29; you decided the whole track is regenerated, because lesson 1 failed unnoticed
 
-### [B19] Lesson 18 — the past of be, and there was; same shape as [B2]
-#### [S1] Roadmap lines 188-196; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B2> <DONE - 2026-11-08 - kids/lesson18.html + .edit.html (Sidecar=True), lessons.json n=18, COUNTS kids=18, 7 sections, 86/86 divs, 31 chips 0 nosay, 12/12 vocabulary>
-
-### [B20] Lesson 19 — -ed, its three sounds, and the time words that force it; same shape as [B2]
-#### [S1] Roadmap lines 198-206; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B18> <DONE - 2026-11-08 - kids/lesson19.html + .edit.html (hash-identical), lessons.json n=19, COUNTS.kids=19, PAST_BATCHES.md - 8 sections, 12/12 vocab, catchBasket -ed-sound sort + whackMole quiz at data-retry="0">
-
-### [B21] Lesson 20 — the verbs that ignore -ed, and did; same shape as [B2]
-#### [S1] Roadmap lines 208-216; author + sidecar + §5 lines + commit and push
-
-### [B22] Lesson 21 — telling it in the past, in order; same shape as [B2]
-#### [S1] Roadmap lines 218-226; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B21> <DONE - 2026-11-08 - kids/lesson21.html + .edit.html (byte-identical), lessons.json n=21, COUNTS.kids 20 -> 21, PAST_BATCHES.md - 7 sections, 12/12 items, catchBasket order-vs-comment drill + skeetRange quiz at data-retry="0">
-
-### [B23] Lesson 22 — object pronouns, possessives, reflexive; same shape as [B2]
-#### [S1] Roadmap lines 228-236; author + sidecar + §5 lines + commit and push
-
-### [B24] Lesson 23 — commands, let's, the softeners, and the border where slang stops; same shape as [B2]
-#### [S1] Roadmap lines 238-246; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B23> <DONE - 2026-11-08 - kids/lesson23.html + .edit.html (byte-identical), lessons.json n=23, COUNTS.kids 23 - 8 sections, 12/12 vocabulary items, registerContrast panel for the chill/dip boundary, stackDrop quiz at data-retry="0">
-
-### [B25] Lesson 24 — how much, how many, some, any; same shape as [B2]
-#### [S1] Roadmap lines 248-256; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B24> <DONE - 2026-11-08 - kids/lesson24.html + .edit.html (byte-identical), lessons.json n=24, COUNTS kids=24, PAST_BATCHES.md - 6 sections, 12/12 vocab, catchBasket split drill + stackDrop quiz at data-retry="0". Defect repaired mid-batch: an anchor edit replaced the section 2 heading instead of appending, leaving section 3 before section 2; region rebuilt in TEMP and swapped, order verified 1-2-3>
-
-### [B26] Lesson 25 is an EXAM and stays a blank shell, per "Exam lessons left as blank shells"; artifact = kids/lesson25.html + sidecar carrying the shell, the roadmap title, and no authored section; exit = both files on origin/main with nothing between the shell's LESSON CONTENT markers; risk = inventing exam content the user asked to withhold
-#### [S1] Copy _shell.html, fill the five placeholders from roadmap lines 258-261, write the byte-identical sidecar, commit and push <PEDAGOGY-MAP.md §1/§4/§5, FORMAT.md> <B25> <DONE - 2026-11-08 - kids/lesson25.html + .edit.html, 40 lines, 0 unresolved placeholders, 8/8 divs, 1 #feed, no authored section between the LESSON CONTENT markers; lessons.json n=25, COUNTS kids=25. engine4.js deliberately omitted: a blank shell runs no game and the shell says that script belongs only where a game is used>
-
-### [B27] Lesson 26 — gonna, the spoken future; same shape as [B2]
-#### [S1] Roadmap lines 263-271; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP §1/§4/§5> <B26> <DONE - 2026-11-08 - kids/lesson26.html + .edit.html (byte-identical), 6 sections, 12/12 items, catchBasket drill (movement vs future) + skeetRange quiz at data-retry="0"; registered n=26, COUNTS.kids 25 -> 26>
-
-### [B28] Lesson 27 — will, the decision taken while you speak; same shape as [B2]
-#### [S1] Roadmap lines 273-281; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B27> <DONE - 2026-11-08 - kids/lesson27.html + .edit.html (byte-identical), 79/79 divs, 7 sections, 25/25 chips with data-say, 12/12 vocabulary, catchBasket will-vs-gonna drill + stackDrop quiz at data-retry="0", registered n=27, COUNTS.kids 26 -> 27>
-
-### [B29] Lesson 28 — the arranged future, be + -ing with a time; same shape as [B2]
-#### [S1] Roadmap lines 283-291; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B2> <DONE - 2026-11-08 - kids/lesson28.html + .edit.html (byte-identical), lessons.json n=28, COUNTS.kids=28 - 7 sections, 12/12 items, catchBasket next-vs-last drill + whackMole quiz at data-retry="0">
-
-### [B30] Lesson 29 — the get family, four particles; same shape as [B2]
-#### [S1] Roadmap lines 293-301; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B2> <DONE - 2026-11-08 - kids/lesson29.html + .edit.html (byte-identical), lessons.json n=29, COUNTS kids:29, PAST_BATCHES.md - 7 sections, 12/12 vocabulary, catchBasket particle drill + whackMole quiz at data-retry="0">
-
-### [B31] Lesson 30 — the look family and the particle that splits; same shape as [B2]
-#### [S1] Roadmap lines 303-311; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B30> <DONE - 2026-11-08 - kids/lesson30.html + .edit.html (byte-identical); 92/92 divs, 3/3 tables, 7 sections, 34/34 chips with data-say, 12/12 vocabulary, catchBasket particles + skeetRange quiz at data-retry="0"; registered n=30, COUNTS kids=30 ->
-
-### [B32] Lesson 31 — what English sounds like when it is fast; same shape as [B2]
-#### [S1] Roadmap lines 313-321; author + sidecar + §5 lines + commit and push
-
-### [B33] Lesson 32 — have + participle, and the participles you cannot guess; same shape as [B2]
-#### [S1] Roadmap lines 323-331; author + sidecar + §5 lines + commit and push
-
-### [B34] Lesson 33 — the perfect for duration, the trap Portuguese sets; same shape as [B2]
-#### [S1] Roadmap lines 333-341; author + sidecar + §5 lines + commit and push
-
-### [B35] Lesson 34 — ever, never, just, already, yet; same shape as [B2]
-#### [S1] Roadmap lines 343-351; author + sidecar + §5 lines + commit and push
-
-### [B36] Lesson 35 — since and for, starting point against length; same shape as [B2]
-#### [S1] Roadmap lines 353-361; author + sidecar + §5 lines + commit and push
-
-### [B37] Lesson 36 — -er or more, and the than that follows; same shape as [B2]
-#### [S1] Roadmap lines 363-371; author + sidecar + §5 lines + commit and push
-
-### [B38] Lesson 37 — the best out of all of them, and the slang that ranks; same shape as [B2]
-#### [S1] Roadmap lines 373-381; author + sidecar + §5 lines + commit and push
-
-### [B39] Lesson 38 — have to, don't have to, mustn't, should; same shape as [B2]
-#### [S1] Roadmap lines 383-391; author + sidecar + §5 lines + commit and push
-
-### [B40] Lesson 39 — if this happens, that follows; same shape as [B2]
-#### [S1] Roadmap lines 393-401; author + sidecar + §5 lines + commit and push
-
-### [B41] Lesson 40 — who, that, where, saying which one you mean; same shape as [B2]
-#### [S1] Roadmap lines 403-411; author + sidecar + §5 lines + commit and push
-
-### [B42] Lesson 41 — like doing against want to do; same shape as [B2]
-#### [S1] Roadmap lines 413-421; author + sidecar + §5 lines + commit and push
-
-### [B43] Lesson 42 — used to, the habits that are gone; same shape as [B2]
-#### [S1] Roadmap lines 423-431; author + sidecar + §5 lines + commit and push
-
-### [B44] Lesson 43 — the past continuous and the when or while that joins it; same shape as [B2]
-#### [S1] Roadmap lines 433-441; author + sidecar + §5 lines + commit and push
-
-### [B45] Lesson 44 — passing on what someone said; same shape as [B2]
-#### [S1] Roadmap lines 443-451; author + sidecar + §5 lines + commit and push
-
-### [B46] Lesson 45 is an EXAM and stays a blank shell; artifact = kids/lesson45.html + sidecar; exit = both files on origin/main with no authored section; risk = inventing exam content
-#### [S1] Copy _shell.html, fill the five placeholders from roadmap lines 453-456, write the byte-identical sidecar, commit and push
-
-### [B47] Lesson 46 — had + participle, the step before the story starts; same shape as [B2]
-#### [S1] Roadmap lines 458-466; author + sidecar + §5 lines + commit and push
-
-### [B48] Lesson 47 — if it were true, would and the were kept for I; same shape as [B2]
-#### [S1] Roadmap lines 468-476; author + sidecar + §5 lines + commit and push
-
-### [B49] Lesson 48 — when the doer does not matter; same shape as [B2]
-#### [S1] Roadmap lines 478-486; author + sidecar + §5 lines + commit and push
-
-### [B50] Lesson 49 — question tags and the answer that follows; same shape as [B2]
-#### [S1] Roadmap lines 488-496; author + sidecar + §5 lines + commit and push
-
-### [B51] Lesson 50 — the layer under the grammar, tone without a voice; same shape as [B2]
-#### [S1] Roadmap lines 498-506; author + sidecar + §5 lines + commit and push
-
-## [PAST]
+#### [S1] No legacy posture: a missing record is a defect everywhere in the track, and lesson 1 is regenerated rather than grandfathered <VERIFICATION.md> <B3> <DONE - 2026-11-09 - decision recorded, no file edited>
 

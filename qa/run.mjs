@@ -36,6 +36,8 @@ const MEMBERS = {
               what: 'CONTENT_EXAMPLES.md structure; every draft built in the preview page has an item' },
   content:  { file: 'qa/content.mjs',    scope: true,
               what: 'the page works: engines run, answers save, required blocks present' },
+  provenance: { file: 'qa/provenance.mjs', scope: true,
+              what: 'lesson by lesson: concepts trained and tested, 70%+ of new items quizzed; with the ledger: record, inputs, range, uncopied shape' },
   lang:     { file: 'qa/lang.mjs',       scope: true,
               what: 'voice: the language the page explains in' },
   register: { file: 'qa/register.mjs',   scope: true,

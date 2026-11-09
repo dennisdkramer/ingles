@@ -1,4 +1,4 @@
-# PEDAGOGY - DO NOT MODIFY WITHOUT USER SIGN-OFF
+# PEDAGOGY - DO NOT MODIFY WITHOUT USER SIGN-OFF - **DO NOT READ for lesson generation - DOES NOT EFFECT PEDAGOGY-MAP.md TASKS**
 	- This file contains underlying pedagogical ideas of the project and guides curriculum planning.
     - The curriculum leverages the platform designed by this project which includes features like highlighing, recorded voice notes, and a custom dictionary/pronunciation key for the student to visualize connected speech.
     - The target audience are Brazilian Portugues speakers who want to learn english. They often have taken classes or courses in the past but found it challenging.

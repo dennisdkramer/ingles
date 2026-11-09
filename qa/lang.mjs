@@ -1,7 +1,7 @@
 /**
  * qa/lang.mjs — is the page's own voice in the language its lesson number earns?
  *
- * PEDAGOGY-MAP §1 HIGH PRIORITY: an introduction, explanatory text, tip, headline or column header is
+ * PEDAGOGY-MAP [BUILD] HIGH PRIORITY: an introduction, explanatory text, tip, headline or column header is
  * Portuguese only while the lesson is below the content's level; above that it is English. This harness
  * cannot judge CONTENT LEVEL per sentence — that is the author's call — so it does not grade the middle.
  * It checks that the page sits inside the band its lesson number allows, in both directions:
@@ -17,10 +17,10 @@
  *
  * The band is a function of the lesson number, exactly as the project states it:
  *
- *   ceiling = 95 − (L − 5) × 1.8        floor = 35 − (L − 5) × 1.8
+ *   ceiling = 75 − (L − 5) × 1.8        floor = 35 − (L − 5) × 1.8
  *
- * so lesson 1 must be 42–102% Portuguese, lesson 20 is 8–68%, and by lesson 40 the floor is negative —
- * nothing left to gloss for, and only the ceiling binds. A page that leaves the band either way fails: a
+ * so lesson 1 must be 42–82% Portuguese, lesson 20 is 8–48%, lesson 30 is 0–30%, and by lesson 40 the floor
+ * has run out — only the ceiling binds, at 12%. A page that leaves the band either way fails: a
  * late page drowning in Portuguese and an early page that never glossed are the same defect, and the floor
  * is what makes the early lessons answerable.
  *
@@ -52,16 +52,17 @@ import { hasTrackFlag, hasAllFlag, pickNumbers, missingTargets, scopeLabel, touc
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-/* The band, exactly as stated for the project: ceiling 95 − (L−5)×1.8, floor 35 − (L−5)×1.8. Both move
+/* The band, exactly as stated for the project: ceiling 75 − (L−5)×1.8, floor 35 − (L−5)×1.8. Both move
    with the lesson, so the same page read at lesson 8 and at lesson 30 is judged differently — which is the
    point: what is correct glossing early is drowning late, and what is a readable page late is a page that
-   abandoned its reader early. Below a negative floor the direction cannot fire at all; it is clamped to 0
-   so the report reads honestly rather than showing −46%. */
-const CEIL_BASE = 95, FLOOR_BASE = 35, SLOPE = 1.8, PIVOT = 5;
+   abandoned its reader early. A negative floor or a negative ceiling cannot fire as a direction at all, so
+   each is clamped to 0 — the report reads honestly rather than showing −46%, and a lesson past the point
+   where the ceiling reaches 0 is still satisfiable by a page with no Portuguese at all. */
+const CEIL_BASE = 75, FLOOR_BASE = 35, SLOPE = 1.8, PIVOT = 5;
 function band(n) {
   const shift = (n - PIVOT) * SLOPE;
   return {
-    hi: (CEIL_BASE - shift) / 100,
+    hi: Math.max(0, CEIL_BASE - shift) / 100,
     lo: Math.max(0, FLOOR_BASE - shift) / 100,
   };
 }
