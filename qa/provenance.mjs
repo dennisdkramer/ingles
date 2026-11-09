@@ -86,14 +86,25 @@ function roadmapSpan(text, n) {
   return { start, end, body: lines.slice(start, end).join('\n') };
 }
 
-/** the `- Vocabulary:` line of one lesson entry — the lesson's own declared items, nothing else */
+/**
+ * the `- Vocabulary:` line of one lesson entry — the lesson's own declared items, nothing else.
+ * A line may quote some items (anything with a space needs quotes) and leave single words bare;
+ * reading only the quoted run silently drops the bare tail, so the line is split on commas and
+ * semicolons OUTSIDE quotes and every piece is kept.
+ */
 function roadmapVocabulary(body) {
   const line = String(body).split(/\r?\n/).find(l => /^\s*-\s*Vocabulary\s*:/i.test(l));
   if (!line) return [];
   const rest = line.replace(/^\s*-\s*Vocabulary\s*:/i, '').trim();
-  const quoted = [...rest.matchAll(/"([^"]+)"/g)].map(m => norm(m[1])).filter(Boolean);
-  if (quoted.length) return quoted;
-  return rest.split(/[,;]/).map(s => norm(s).replace(/^["']|["']$/g, '')).filter(Boolean);
+  const parts = [];
+  let cur = '', inQ = false;
+  for (const ch of rest) {
+    if (ch === '"') { inQ = !inQ; cur += ch; continue; }
+    if (!inQ && (ch === ',' || ch === ';')) { parts.push(cur); cur = ''; continue; }
+    cur += ch;
+  }
+  parts.push(cur);
+  return parts.map(s => norm(s).replace(/^["']|["']$/g, '')).filter(Boolean);
 }
 
 /** the `- teaches:` line of one lesson entry — the concept ids that lesson is held to */
@@ -163,6 +174,15 @@ function sectionsOf(html) {
     if (v) { if (cur) cur.tokens.push(v); return; }
     for (const c of el.children) walk(c);
   };
+  /* every text node under an element, joined with a space. Adjacent elements leave no whitespace
+     between them in the source, so `<td>yeah</td><td>yes</td>` arrives as `yeahyes` and defeats the
+     word boundary a reader never sees; joining text nodes keeps every word a word. */
+  const proseOf = el => {
+    const out = [];
+    const w = d.createTreeWalker(el, 4 /* NodeFilter.SHOW_TEXT */);
+    for (let n = w.nextNode(); n; n = w.nextNode()) out.push(n.nodeValue);
+    return norm(out.join(' '));
+  };
   for (const el of area.children) {
     if (el.tagName === 'H2') {
       if (isFeedHeading(el)) { cur = null; continue; }
@@ -174,7 +194,7 @@ function sectionsOf(html) {
     if (!cur) continue;
     walk(el);
     pidsOf(el).forEach(p => cur.pids.add(p));
-    cur.text = norm(cur.text + ' ' + (el.textContent || ''));
+    cur.text = norm(cur.text + ' ' + proseOf(el));
   }
   /* the prose the page carries, assembled from its sections rather than from raw `textContent`:
      adjacent elements leave no whitespace in the source, so `qlook` would defeat a word boundary
@@ -473,11 +493,11 @@ function selftest() {
     + secs.map(s => '<h2>' + s.t + '</h2>' + s.v.map(v => blockAttr(v, s.p)).join('') + '<p>' + s.x + '</p>').join('')
     + '<h2>\u{1F4D2} Caderno compartilhado</h2><textarea id="feed" rows="8"></textarea>'
     + '</div></div></main></body></html>';
-  const roadmapOf = vocab => [
+  const roadmapOf = (vocab, raw) => [
     '## Lesson 1: One', '',
     '   - Focus: fixture',
     '   - teaches: `tense/fixture`',
-    '   - Vocabulary: ' + vocab.map(v => '"' + v + '"').join(', '), '',
+    '   - Vocabulary: ' + (raw || vocab.map(v => '"' + v + '"').join(', ')), '',
     '## Lesson 2: Two', '',
     '   - Focus: fixture',
     '   - teaches: `sound/fixture`',
@@ -491,7 +511,7 @@ function selftest() {
     fs.writeFileSync(path.join(root, 'FUNCTION.md'), 'function\n');
     fs.writeFileSync(path.join(root, 'KIDS-REGISTER.md'), 'register\n');
     fs.writeFileSync(path.join(root, '_shell.html'), '<div class="content-area"></div>\n');
-    fs.writeFileSync(path.join(root, 'KIDS-ROADMAP.md'), roadmapOf(opts.vocab || VOC));
+    fs.writeFileSync(path.join(root, 'KIDS-ROADMAP.md'), roadmapOf(opts.vocab || VOC, opts.vocabRaw));
     fs.mkdirSync(path.join(root, 'kids'), { recursive: true });
     fs.writeFileSync(path.join(root, 'kids', 'lesson1.html'), pageHtml(opts.secs || SECS));
     fs.writeFileSync(path.join(root, 'kids', 'lesson2.html'),
@@ -629,6 +649,28 @@ function selftest() {
     const all = r.errors.join(' ');
     say(!/no provenance record/.test(all) && /carry no training block/.test(all),
       'a retired ledger skips the record but still checks concepts', all);
+  }
+
+  // 17. a vocabulary line that quotes some items and leaves others bare is read WHOLE. Reading only
+  //     the quoted run silently drops the bare tail, and that is not hypothetical: it made a real
+  //     lesson's 70% floor be computed over 7 of its 12 items. Here the bare item is trained nowhere,
+  //     so a parser that stops at the quotes reports nothing at all.
+  {
+    const secs = SECS.map(s => (s.t === '2. Training' ? { ...s, x: 'nothing here' } : s));
+    const root = build({ secs, vocabRaw: '"look at", "look for", look up' });
+    const r = audit(root, 1, recordFor(root, 1));
+    say(/trained nowhere/.test(r.errors.join(' ')),
+      'a bare (unquoted) vocabulary item is read too', r.errors.concat(r.warns).join(' | '));
+  }
+  // 18. text that runs across adjacent elements still yields whole words: `<td>yeah</td><td>yes</td>`
+  //     arrives as `yeahyes` through textContent and defeats a trailing word boundary, which is how
+  //     three items came to be reported as trained nowhere while sitting in a table.
+  {
+    const secs = SECS.map(s => (s.t === '2. Training' ? { ...s, x: '<b>look up</b><span>now</span>' } : s));
+    const root = build({ secs });
+    const r = audit(root, 1, recordFor(root, 1));
+    say(r.errors.length === 0 && !/do not appear on the page/.test(r.warns.join(' ')),
+      'adjacent inline elements still read as separate words', r.errors.concat(r.warns).join(' | '));
   }
 
   for (const d of dirs) { try { fs.rmSync(d, { recursive: true, force: true }); } catch { /* temp */ } }
