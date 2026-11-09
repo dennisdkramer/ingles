@@ -60,6 +60,23 @@ const contIdx = kidsOfCard.findIndex(el => el.classList.contains('contbtn'));
 const rowIdx = kidsOfCard.findIndex(el => el.classList.contains('row'));
 ok('continue button sits ABOVE the list', contIdx > 0 && rowIdx > contIdx, 'contbtn@' + contIdx + ' row@' + rowIdx);
 
+/* THE CONTINUE BUTTON READS THE SERVER, not a localStorage key no page writes (owner report 2026-11-09:
+   it always said "lição 1"). status.progress / status.done arrive WITH the track access list. */
+w.eval('LESSONS={business:[{n:1,title:"A"},{n:2,title:"B"},{n:3,title:"C"}],kids:[],adult:[],advanced:[]};'
+  + 'PROG={business:2};DONE={business:[1,2]};'
+  + 'profile={email:"a@b.c",name:"Ana"};renderStudent(["business"],"Ana");');
+const contBtn = d.querySelector('.contbtn');
+ok('continue resumes from the backend progress',
+  !!contBtn && /lição 3/.test(contBtn.textContent), contBtn ? contBtn.textContent : 'none');
+ok('the button jumps to that lesson',
+  !!contBtn && /go\('business',3\)/.test(contBtn.getAttribute('onclick') || ''),
+  contBtn ? contBtn.getAttribute('onclick') : 'none');
+ok('finished rows are teal from the backend list',
+  d.querySelectorAll('.tracks .row.done').length === 2, d.querySelectorAll('.tracks .row.done').length + '');
+/* a finished book shows no button — one pointing past the last lesson is worse than none */
+w.eval('PROG={business:3};DONE={business:[1,2,3]};renderStudent(["business"],"Ana");');
+ok('no continue button when the book is finished', !d.querySelector('.contbtn'));
+
 const hello = d.querySelector('.landing-hello');
 ok('intro card replaces the account card', !!hello && /English/.test(hello.querySelector('.hello-en').textContent));
 ok('intro has the PT line below', !!hello.querySelector('.hello-pt') && /Você já sabe/.test(hello.querySelector('.hello-pt').textContent));
@@ -167,6 +184,21 @@ ok('a signed-in refresh paints from cache before the network',
   /Alunos aprovados/.test(d.getElementById('app').innerHTML) && /Sol/.test(d.getElementById('app').innerHTML),
   d.getElementById('app').innerHTML.slice(0, 40));
 await booting;
+/* and the same for a student: the cached paint carries the lesson titles and the server's continue number */
+w.fetch = async (u) => ({ ok: true, json: async () => (/access\.json/.test(String(u))
+  ? { teachers: [] }
+  : { status: 'approved', tracks: ['business'], progress: { business: 2 }, done: { business: [1, 2] }, name: 'Ana' }) });
+w.eval('profile={email:"st@x.y",name:"Ana"};PROG=null;DONE=null;LESSONS=null;'
+  + 'localStorage.setItem("eod_role_st@x.y",JSON.stringify("student"));'
+  + 'localStorage.setItem("eod_lessons_st@x.y",JSON.stringify({business:[{n:1,title:"First Talk"},{n:2,title:"Second"},{n:3,title:"Third"}],kids:[],adult:[]}));'
+  + 'localStorage.setItem("eod_status_st@x.y",JSON.stringify({status:"approved",tracks:["business"],progress:{business:2},done:{business:[1,2]},name:"Ana"}));'
+  + 'document.getElementById("app").innerHTML="";');
+const boot2 = w.start();
+const cachedBtn = d.getElementById('app').querySelector('.contbtn');
+ok('cached student paint: titles come from the cached lessons', /First Talk/.test(d.getElementById('app').innerHTML));
+ok('cached student paint: continue from the cached progress',
+  !!cachedBtn && /lição 3/.test(cachedBtn.textContent), cachedBtn ? cachedBtn.textContent : 'none');
+await boot2;
 
 /* THE FUTURE TRACK CASE: "advanced" exists in no folder and no constant — it arrives only as tracks.json
    would deliver it, which is exactly how a track created next year will arrive. */

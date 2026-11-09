@@ -173,27 +173,65 @@ function isTeacher_(email) {
   for (var i = 0; i < TEACHERS.length; i++) if (TEACHERS[i].toLowerCase() === String(email).toLowerCase()) return true;
   return false;
 }
-/* last lesson a student tagged "complete" (type:"complete" rows in layer), for the teacher's jump button.
-   Matching mirrors the layer GET that drives the lesson page's "Completed" tag: keyed by the student
-   email (case-insensitive) + type "complete". The track is used only to disambiguate when BOTH the
-   student's track and the row's track are present; a row whose track is empty still counts (the tag
-   button itself keys on email+lesson+type and never requires a track match). */
-function lastCompleted_(email, track) {
-  var sh = getSheet_();
-  var all = rowsToObjs_(sh);
-  var max = 0;
-  var em = String(email || "").toLowerCase();
-  var tr = String(track || "").toLowerCase();
+/* every student's completed lessons in ONE sheet read. lastCompleted_ reads the whole layer sheet per call, and
+   `queue` called it once per student per book — N students × 3 books full reads for a single teacher page load,
+   which is a large part of why the teacher's page took seconds. Built once, read many times.
+   Shape: {email: {any: n, byTrack: {track: n}}} — `any` is the max over rows whose track is EMPTY. */
+function completedMap_() {
+  var all = rowsToObjs_(getSheet_());
+  var map = {};
   for (var i = 0; i < all.length; i++) {
     var r = all[i];
-    if (String(r.email || "").toLowerCase() !== em) continue;
     if (String(r.type) !== "complete") continue;
-    var rt = String(r.track || "").toLowerCase();
-    if (tr && rt && rt !== tr) continue;
     var n = parseInt(String(r.lesson), 10);
-    if (!isNaN(n) && n > max) max = n;
+    if (isNaN(n)) continue;
+    var em = String(r.email || "").toLowerCase();
+    if (!em) continue;
+    var e = map[em] || (map[em] = { any: 0, byTrack: {}, done: {}, doneAny: [] });
+    var tr = String(r.track || "").toLowerCase();
+    if (!tr) {
+      if (n > e.any) e.any = n;
+      if (e.doneAny.indexOf(n) < 0) e.doneAny.push(n);
+      continue;
+    }
+    if (n > (e.byTrack[tr] || 0)) e.byTrack[tr] = n;
+    var dl = e.done[tr] || (e.done[tr] = []);
+    if (dl.indexOf(n) < 0) dl.push(n);
   }
-  return max;
+  return map;
+}
+/* the answer lastCompleted_ gives, read off the map. A row with no track counts toward EVERY track and a row
+   with a track counts only toward that one (exactly the rule lastCompleted_ applied: `if (tr && rt && rt !== tr)`).
+   Track names are compared case-insensitively, as are emails. */
+function completedFor_(map, email, track) {
+  var e = map[String(email || "").toLowerCase()];
+  if (!e) return 0;
+  var tr = String(track || "").toLowerCase();
+  if (!tr) {
+    var m = e.any;
+    for (var k in e.byTrack) if (e.byTrack[k] > m) m = e.byTrack[k];
+    return m;
+  }
+  return Math.max(e.any, e.byTrack[tr] || 0);
+}
+/* every lesson number that is finished for one book, ascending — the landing page paints a finished row teal
+   from this, so the colour and the "continue" button read the SAME answer instead of two guesses. */
+function doneFor_(map, email, track) {
+  var e = map[String(email || "").toLowerCase()];
+  if (!e) return [];
+  var out = [];
+  var tr = String(track || "").toLowerCase();
+  if (tr && e.done[tr]) out = out.concat(e.done[tr]);
+  out = out.concat(e.doneAny);                 /* a row with no track counts toward every book */
+  var uniq = [];
+  for (var i = 0; i < out.length; i++) if (uniq.indexOf(out[i]) < 0) uniq.push(out[i]);
+  return uniq.sort(function (a, b) { return a - b; });
+}
+/* last lesson a student tagged "complete" (type:"complete" rows in layer), for the teacher's jump button.
+   Kept for a single lookup; a LOOP must use completedMap_ + completedFor_, never this, or it re-reads the
+   whole sheet once per iteration. */
+function lastCompleted_(email, track) {
+  return completedFor_(completedMap_(), email, track);
 }
 
 /* trash the Drive file a recording row points to (b64 column = "drive:<fileId>" for uploaded audio).
@@ -286,7 +324,17 @@ function doPost(e) {
       var tracks = accessTracks_(info.email);
       var nm = "";
       for (var mi = 0; mi < mine.length; mi++) if (mine[mi].name) { nm = mine[mi].name; break; }
-      if (tracks.length) return json_({ status: "approved", email: info.email, name: nm || info.name, track: tracks[0], tracks: tracks });
+      if (tracks.length) {
+        /* each book travels with the lesson the student reached, so the landing page's "continue" button
+           resumes from the server's own answer instead of a value no page ever writes any more (owner report
+           2026-11-09: the button always said "lição 1"). One sheet read for all books. */
+        var cpm = completedMap_(), prog = {}, dn = {};
+        for (var cpi = 0; cpi < tracks.length; cpi++) {
+          prog[tracks[cpi]] = completedFor_(cpm, info.email, tracks[cpi]);
+          dn[tracks[cpi]] = doneFor_(cpm, info.email, tracks[cpi]);
+        }
+        return json_({ status: "approved", email: info.email, name: nm || info.name, track: tracks[0], tracks: tracks, progress: prog, done: dn });
+      }
       if (mine.length && mine[0].status === "pending") return json_({ status: "pending", email: info.email, name: nm || info.name });
       return json_({ status: "unknown", email: info.email });
     }
@@ -364,6 +412,7 @@ function doPost(e) {
       var info4 = verifyToken_(o.token);
       if (!isTeacher_(info4.email)) return json_({ error: "not a teacher" });
       var rows4 = accessRows_();
+      var cm4 = completedMap_();                 /* ONE layer read for every student and book in the reply */
       var pending = [], byEmail = {}, order = [];
       for (var q = 0; q < rows4.length; q++) {
         var row4 = rows4[q];
@@ -371,7 +420,7 @@ function doPost(e) {
         if (row4.status !== "approved") continue;
         var key = row4.email.toLowerCase();
         if (!byEmail[key]) { byEmail[key] = { email: row4.email, name: row4.name, tracks: [] }; order.push(key); }
-        if (row4.track) byEmail[key].tracks.push({ track: row4.track, lastCompleted: lastCompleted_(row4.email, row4.track) });
+        if (row4.track) byEmail[key].tracks.push({ track: row4.track, lastCompleted: completedFor_(cm4, row4.email, row4.track) });
       }
       var approved = [];
       for (var oi = 0; oi < order.length; oi++) approved.push(byEmail[order[oi]]);

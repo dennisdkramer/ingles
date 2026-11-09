@@ -31,6 +31,11 @@ const log=m=>{debug.innerHTML+="› "+m+"<br>"};
 const h=s=>{let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x};
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let cred=null,profile=null,teacher=false,studentName="",LESSONS=null,MYTRACKS=[];
+/* progress as the SERVER reported it: PROG[track] = last lesson finished, DONE[track] = every lesson finished.
+   Both ride along with the track access list (status.progress / status.done), so the landing page no longer
+   depends on prog_<email>, a localStorage key nothing has written since engine2 was refactored — that is why
+   "continue" stuck on lesson 1 (owner report 2026-11-09). */
+let PROG=null,DONE=null;
 let TRACKSALL=["kids","business","adult"];   /* fallback only — applyTracks() replaces it from tracks.json */
 const SESSION_KEY="eod_session";
 async function api(action,obj){
@@ -164,6 +169,7 @@ async function start(){
     A demoted teacher can see an empty shell for one round trip — every teacher action stays authorised
     server-side (isTeacher_ in Code.gs), so nothing is exposed by painting early. */
  const role=readCache("role"),cq=readCache("queue"),cs=readCache("status");
+ const lsc=readCache("lessons");if(lsc&&!LESSONS)LESSONS=lsc;   /* titles for the cached paint, no request */
  let painted=false;
  if(role==="teacher"&&cq){paintQueue(cq);painted=true;}
  else if(cs&&cs.status==="approved"){paintStudent(cs);painted=true;}
@@ -176,7 +182,7 @@ async function start(){
  /* the session check is STARTED here and runs beside the two static fetches: it is the answer the page is
     waiting for, and it must not queue behind lessons.json and tracks.json. */
  const check=(teacher?api("queue",{token:cred}):api("status",{token:cred})).catch(e=>({error:String(e)}));
- try{const lr=await fetch("lessons.json",{cache:"no-cache"});if(lr.ok)LESSONS=await lr.json();}catch(e){}
+ try{const lr=await fetch("lessons.json",{cache:"no-cache"});if(lr.ok){LESSONS=await lr.json();writeCache("lessons",LESSONS)}}catch(e){}
  try{const tr=await fetch("tracks.json",{cache:"no-cache"});if(tr.ok)applyTracks(await tr.json());}catch(e){}
  const j=await check;
  if(tokenErr(j)){log("sessão expirada — entre novamente");bounce();return}
@@ -185,7 +191,8 @@ async function start(){
   const q={pending:j.pending||[],approved:j.approved||[]};writeCache("queue",q);paintQueue(q);return;
  }
  if(j.status==="approved"){
-  const st={status:"approved",tracks:j.tracks||[],name:j.name||""};writeCache("status",st);paintStudent(st);return;
+  const st={status:"approved",tracks:j.tracks||[],track:j.track||"",name:j.name||"",progress:j.progress||{},done:j.done||{}};
+  writeCache("status",st);paintStudent(st);return;
  }
  if(j.status==="pending"){showAcct();$("app").innerHTML=pendingCard(profile.email,"Seu pedido de acesso já foi enviado e está aguardando o professor aprovar.");return}
  showAcct();renderRequest();
@@ -195,7 +202,12 @@ function paintQueue(q){
  QUEUE=q;QUEUE.pending=QUEUE.pending||[];QUEUE.approved=QUEUE.approved||[];
  showAcct();$("app").innerHTML=teacherShell();$("tcols").innerHTML=pendingHTML()+approvedHTML();
 }
-function paintStudent(st){MYTRACKS=(st.tracks||[]).slice();showAcct();renderStudent(MYTRACKS,st.name);}
+function paintStudent(st){
+ PROG=(st&&st.progress)||null;
+ DONE=(st&&st.done)||null;
+ MYTRACKS=(st&&st.tracks&&st.tracks.length)?st.tracks.slice():((st&&st.track)?[st.track]:[]);
+ showAcct();renderStudent(MYTRACKS,st.name);
+}
 function pendingCard(email,msg){
  return '<div class="card"><h3>Aguardando aprovação</h3><p class="dim">'+esc(email)+'</p><p>'+msg+'</p></div>';
 }
@@ -242,8 +254,9 @@ function renderStudent(tracks,name){
  html+='<div class="tracks">';
  TRACKSALL.forEach(t=>{
   const has=MYTRACKS.indexOf(t)>=0;
+  const lss=trackLessons(t),dn=(DONE&&DONE[t])||null;
   let cont=null,rows="";
-  trackLessons(t).forEach(le=>{const n=le.n;const d=p[t+"_"+n];if(!d&&!cont)cont=n;
+  lss.forEach(le=>{const n=le.n;const d=(dn&&dn.indexOf(n)>=0)?1:p[t+"_"+n];if(!d&&!cont)cont=n;
    const num=(n<10?"0":"")+n;                      /* the row reads "NN. Lesson Name" */
    const txt=le.title?esc(le.title):'Lição '+n;
    const entry=num+". "+txt;
@@ -252,6 +265,10 @@ function renderStudent(tracks,name){
     : '<div class="row'+(d?' done':'')+'"><span class="dim" title="'+entry+'">'+entry+'</span></div>';
   });
   html+='<div class="card track-card'+(has?'':' locked')+'"><h3>'+TN[t]+'</h3>';
+  /* the "continue" number comes from the SERVER's last-completed (status.progress), which travels with the
+     track access list; the teal rows above use the exact finished list (status.done). No answer → fall back to
+     whatever the page can tell, so an older deployment still shows a button rather than none. */
+  if(PROG&&PROG[t]!=null){const last=Number(PROG[t])||0;cont=(last+1<=lss.length)?last+1:null;}
   if(!has)html+='<p class="dim">Sem acesso a esta trilha · no access to this book</p>';
   else if(cont)html+='<button class="contbtn" onclick="go(\''+t+'\','+cont+')">▶ Continuar da lição '+cont+'</button>';
   html+=rows+'</div>';
