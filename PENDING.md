@@ -74,7 +74,7 @@
 #### [S1] Roadmap lines 148-156; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B2> <DONE - 2026-11-08 - kids/lesson14.html + .edit.html (byte-identical), lessons.json n=14, COUNTS.kids=14 - 7 sections, 12/12 items, 120/120 divs, 35 chips all voiced, catchBasket ability/permission/request sort + skeetRange quiz at data-retry="0">
 
 ### [B16] Lesson 15 — to and for, and the one para that splits; same shape as [B2]
-#### [S1] Roadmap lines 158-166; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 158-166; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B15> <DONE 2026-11-08 - kids/lesson15.html + .edit.html byte-identical; 102/102 divs, 4/4 tables, 8 sections, 34 chips all data-say, vocabulary 12/12; registered n=15, COUNTS.kids 15>
 
 ### [B17] Lesson 16 — on, in, at: contact, container, point; same shape as [B2]
 #### [S1] Roadmap lines 168-176; author + sidecar + §5 lines + commit and push
