@@ -1,0 +1,20 @@
+[
+  {
+    "name": "kids",
+    "label": "Kids 🛹",
+    "order": 1,
+    "count": 31
+  },
+  {
+    "name": "business",
+    "label": "Business 💼",
+    "order": 2,
+    "count": 48
+  },
+  {
+    "name": "adult",
+    "label": "Adulto 🔞",
+    "order": 3,
+    "count": 22
+  }
+]

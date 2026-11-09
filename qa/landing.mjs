@@ -5,12 +5,14 @@
  * The landing page is behind Google sign-in, so the lesson harnesses cannot reach it. This one loads the
  * real page, stubs the network/Google, renders renderStudent() for a student holding ONE track, and asserts
  * the owner's layout rules (2026-11-03):
- *   - three track columns, one per book;
+ *   - one track column per track in tracks.json, whatever number that is — the page names no track;
  *   - the lesson TITLE is the link to the page (no per-lesson button);
  *   - "Continuar da lição N" sits at the TOP of a granted track's list;
  *   - a track the student was not granted is greyed and inert ("sem acesso", no links);
  *   - go() refuses a track the student does not hold;
  *   - the teacher list shows one jump + one per-track removal per held track, plus an add-book control.
+ * The last case is the one that matters for the future: a track that exists in NO file today must still get
+ * a column, its track.json label and a grantable option.
  */
 import { JSDOM, VirtualConsole } from 'jsdom';
 import fs from 'fs';
@@ -35,8 +37,9 @@ const ok = (name, cond, extra = '') => out.push({ name, pass: !!cond, extra });
 w.eval('LESSONS={business:[{n:1,title:"First Talk & the Sentence Skeleton"}],kids:[],adult:[]};'
   + 'profile={email:"a@b.c",name:"Ana"};renderStudent(["business"],"Ana");');
 
-const cards = [...d.querySelectorAll('.tracks3 .track-card')];
-ok('three track columns', cards.length === 3, cards.length + ' cards');
+const cards = [...d.querySelectorAll('.tracks .track-card')];
+ok('one column per track', cards.length === w.eval('TRACKSALL.length'),
+  cards.length + ' cards for ' + w.eval('TRACKSALL.join("+")'));
 const byTrack = t => cards.find(c => (c.querySelector('h3') || {}).textContent.includes(t));
 const biz = byTrack('Business'), kids = byTrack('Kids'), adult = byTrack('Adulto');
 ok('business card is active', biz && !biz.classList.contains('locked'));
@@ -77,6 +80,26 @@ const approved = d.getElementById('app');
 ok('teacher: one jump button per held track', approved.querySelectorAll('button.jumpbtn').length === 2, approved.querySelectorAll('button.jumpbtn').length + '');
 ok('teacher: one per-track remove', /× Kids/.test(approved.innerHTML) && /× Business/.test(approved.innerHTML));
 ok('teacher: can grant the remaining track', !!approved.querySelector('select') && /dar acesso/.test(approved.innerHTML));
+
+/* THE FUTURE TRACK CASE: "advanced" exists in no folder and no constant — it arrives only as tracks.json
+   would deliver it, which is exactly how a track created next year will arrive. */
+w.eval('LESSONS={business:[{n:1,title:"First Talk & the Sentence Skeleton"}],kids:[],adult:[],'
+  + 'advanced:[{n:1,title:"Advanced opener"},{n:2,title:"Advanced two"}]};'
+  + 'applyTracks([{name:"kids",label:"Kids 🛹",order:1},{name:"business",label:"Business 💼",order:2},'
+  + '{name:"adult",label:"Adulto 🔞",order:3},{name:"advanced",label:"Advanced 🚀",order:4}]);'
+  + 'renderStudent(["business","advanced"],"Ana");');
+const cards4 = [...d.querySelectorAll('.tracks .track-card')];
+ok('a fourth track gets its own column', cards4.length === 4, cards4.length + ' cards');
+const adv = cards4.find(c => /Advanced/.test((c.querySelector('h3') || {}).textContent || ''));
+ok('the new column uses its track.json label', !!adv && /Advanced 🚀/.test(adv.querySelector('h3').textContent));
+ok('a granted new track is live, not locked', !!adv && !adv.classList.contains('locked'));
+ok('its lessons are listed from lessons.json', !!adv && adv.querySelectorAll('a.lesson-link').length === 2);
+w.eval('teacher=true;QUEUE={pending:[],approved:[{email:"s@x.y",name:"Sol",'
+  + 'tracks:[{track:"business",lastCompleted:1}]}]};document.getElementById("app").innerHTML=approvedHTML();');
+const grantSelect = d.querySelector('#app select');
+ok('teacher: the new track can be granted', !!grantSelect &&
+  [...grantSelect.options].some(o => o.value === 'advanced'),
+  grantSelect ? [...grantSelect.options].map(o => o.value).join(',') : 'no select');
 
 console.log('\nstudent landing index — jsdom render');
 out.forEach(r => console.log('  ' + (r.pass ? '✅ ' : '❌ ') + r.name + (r.extra ? '  «' + r.extra + '»' : '')));

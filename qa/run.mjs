@@ -49,7 +49,7 @@ const MEMBERS = {
   games:    { file: 'qa/games4.mjs',     scope: false,
               what: 'engine4.js and every plugin state machine' },
   landing:  { file: 'qa/landing.mjs',    scope: false,
-              what: 'index.html: three tracks, titles as links, jump button' },
+              what: 'index.html: a column per track, titles as links, jump button' },
   live:     { file: 'qa/live.mjs',       scope: false,
               what: 'real-Chrome probe for what jsdom cannot reproduce (--only=<scenario>)' },
 };

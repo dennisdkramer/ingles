@@ -25,8 +25,10 @@ counts, spacing and class names are generation decisions, not defects.
   cell whose item does not fit), RESIZE (a draggable textarea). `--shot <file>` saves a picture of the page
   top — the fastest way to see a real defect; `--selftest` proves the harness still catches a broken page.
   A user instruction that asks about a "visual" or "space fill" issue is answered with this harness, never from jsdom.
-- `node qa/landing.mjs` — the student index (index.html) in jsdom: three tracks, title as the link,
-  continue above the list, locked tracks inert, the `go()` gate, the teacher's grant/remove controls.
+- `node qa/landing.mjs` — the student index (index.html) in jsdom: one column per track in the list, plus a
+  track that exists in no file (it must still get a column, its `track.json` label and a grant option),
+  title as the link, continue above the list, locked tracks inert, the `go()` gate, the teacher's
+  grant/remove controls.
 - `node qa/games4.mjs` — the engine4.js game runner and every plugin's state machine in jsdom.
 - `node qa/live.mjs` — real-Chrome probe for what jsdom cannot reproduce (timing, auto-repeat, real
   mouse/keyboard, on-screen position). Reach for it when a report mentions any of those.

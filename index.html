@@ -18,13 +18,16 @@ const CLIENT_ID="872457390510-jsk9pooj688ogvp6hs9ca4js3iqk5n69.apps.googleuserco
 const SECRET="abreportas2025";
 const BACKPACK="https://script.google.com/macros/s/AKfycbxSR8UmOwosLIgn1-AGKhgXJvdqOVkzMqrTwdlWNF9kOkt-256TqTacOsQlo6JyHplR/exec";
 const COUNTS={kids:31,business:48,adult:22};
-const TN={kids:"Kids 🛹",business:"Business 💼",adult:"Adulto 🔞"};
+/* TRACKS ARE DISCOVERED, NOT LISTED. tracks.json (written by build-lessons.mjs from each track folder's
+   track.json) replaces both values below at load, so a NEW TRACK NEEDS NO EDIT IN THIS FILE. The two lines
+   are only the fallback for when tracks.json cannot be fetched. */
+let TN={kids:"Kids 🛹",business:"Business 💼",adult:"Adulto 🔞"};
 const $=id=>document.getElementById(id);
 const log=m=>{debug.innerHTML+="› "+m+"<br>"};
 const h=s=>{let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x};
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let cred=null,profile=null,teacher=false,studentName="",LESSONS=null,MYTRACKS=[];
-const TRACKSALL=["kids","business","adult"];
+let TRACKSALL=["kids","business","adult"];   /* fallback only — applyTracks() replaces it from tracks.json */
 const SESSION_KEY="eod_session";
 async function api(action,obj){
  const body=Object.assign({action:action},obj||{});
@@ -73,6 +76,7 @@ async function start(){
  try{const r=await fetch("access.json?"+Date.now());if(!r.ok)throw new Error("access.json não encontrado (HTTP "+r.status+")");teacher=(await r.json()).teachers.includes(profile.email);}
  catch(e){$("app").innerHTML='<div class="card">⚠️ '+e.message+"</div>";return}
  try{const lr=await fetch("lessons.json?"+Date.now());if(lr.ok)LESSONS=await lr.json();}catch(e){}
+ try{const tr=await fetch("tracks.json?"+Date.now());if(tr.ok)applyTracks(await tr.json());}catch(e){}
  showAcct();
  if(teacher){renderTeacher();return}
  const st=await api("status",{token:cred});
@@ -94,12 +98,25 @@ function renderRequest(){
  };
 }
 function trackLessons(t){
- const ls=LESSONS&&LESSONS[t]&&LESSONS[t].length?LESSONS[t]:Array.from({length:COUNTS[t]},(_,k)=>({n:k+1,title:""}));
+ const ls=LESSONS&&LESSONS[t]&&LESSONS[t].length?LESSONS[t]:Array.from({length:COUNTS[t]||0},(_,k)=>({n:k+1,title:""}));
  return ls;
 }
-/* the student index (owner instruction 2026-11-03): three track columns; the lesson TITLE is the link
-   (no per-lesson button); the "continue" button sits at the TOP of each granted track's list; a track the
-   student was not granted is greyed out and inert. */
+/* tracks.json → the student columns and the "＋ dar acesso" options. A track known to COUNTS but missing
+   from a stale response keeps its column, so this can never hide a track that already exists. */
+function applyTracks(list){
+ const names=[],labels={};
+ (Array.isArray(list)?list:[]).forEach(x=>{
+  const n=x&&x.name?String(x.name):"";if(!n||names.indexOf(n)>=0)return;
+  names.push(n);labels[n]=String(x.label||(n.charAt(0).toUpperCase()+n.slice(1)));
+ });
+ Object.keys(COUNTS).forEach(n=>{if(names.indexOf(n)<0)names.push(n);});
+ Object.keys(TN).forEach(n=>{if(!labels[n])labels[n]=TN[n];});
+ names.forEach(n=>{if(!labels[n])labels[n]=n.charAt(0).toUpperCase()+n.slice(1);});
+ if(names.length){TRACKSALL=names;TN=labels;}
+}
+/* the student index (owner instruction 2026-11-03): ONE COLUMN PER TRACK, whatever tracks.json lists; the
+   lesson TITLE is the link (no per-lesson button); the "continue" button sits at the TOP of each granted
+   track's list; a track the student was not granted is greyed out and inert. */
 function renderStudent(tracks,name){
  studentName=name||"";
  persistSession();
@@ -107,7 +124,7 @@ function renderStudent(tracks,name){
  const p=prog();
  let html='<div class="card landing-hello"><div class="hello-en">You already know more English than you think — the job is to make it come out.</div>'
   +'<div class="hello-pt">Você já sabe mais inglês do que imagina — o trabalho é fazer isso sair.</div></div>';
- html+='<div class="tracks3">';
+ html+='<div class="tracks">';
  TRACKSALL.forEach(t=>{
   const has=MYTRACKS.indexOf(t)>=0;
   let cont=null,rows="";
@@ -129,7 +146,7 @@ function renderStudent(tracks,name){
 }
 let QUEUE={pending:[],approved:[]};
 function bookButton(t){
- const ls=LESSONS&&LESSONS[t]&&LESSONS[t].length?LESSONS[t]:Array.from({length:COUNTS[t]},(_,k)=>({n:k+1,title:""}));
+ const ls=LESSONS&&LESSONS[t]&&LESSONS[t].length?LESSONS[t]:Array.from({length:COUNTS[t]||0},(_,k)=>({n:k+1,title:""}));
  let items='';
  ls.forEach(le=>{const n=le.n;items+='<button type="button" onclick="go(\''+t+'\','+n+')">Lição '+n+(le.title?' · '+esc(le.title):'')+'</button>';});
  return '<div class="bookdrop"><button type="button" class="bookbtn" onclick="toggleBookMenu(\''+t+'\')">'+TN[t]+' ▾</button>'
@@ -172,7 +189,7 @@ function approvedHTML(){
 }
 async function renderTeacher(){
  $("app").innerHTML='<div class="card tadmin"><div class="tadmin-books">'
-  +bookButton("kids")+bookButton("business")+bookButton("adult")
+  +TRACKSALL.map(bookButton).join('')      /* one book dropdown per discovered track */
   +'</div></div><div class="tadmin-cols" id="tcols"><p class="dim">Carregando…</p></div>';
  const j=await api("queue",{token:cred});
  if(j.error){ if(/token/i.test(String(j.error))){clearSession();location.reload();return} $("tcols").innerHTML='<div class="card tadmin-col"><p class="todo">Não foi possível carregar os pedidos: '+esc(j.error)+'</p></div>';return }

@@ -16,8 +16,24 @@ import path from 'path';
 import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
 
-export const TRACKS = ['kids', 'business', 'adult'];
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+/** A TRACK IS A FOLDER: one holding at least one lesson page, or a track.json (so a track can exist — and
+ *  audit as an empty passing state — before its first lesson is written). Discovered, never listed: a track
+ *  created months from now is in scope, and `--track=<it>` is a valid narrowing, with no edit to this file. */
+function discoverTracks() {
+  const out = [];
+  let dirs = [];
+  try { dirs = fs.readdirSync(ROOT, { withFileTypes: true }); } catch (e) { return out; }
+  for (const d of dirs) {
+    if (!d.isDirectory() || d.name[0] === '.' || d.name === 'node_modules') continue;
+    let files = [];
+    try { files = fs.readdirSync(path.join(ROOT, d.name)); } catch (e) { continue; }
+    if (files.some(f => /^lesson\d+\.html$/.test(f)) || files.indexOf('track.json') >= 0) out.push(d.name);
+  }
+  return out.sort();
+}
+export const TRACKS = discoverTracks();
 
 /** was `--track` given at all? (a named page that is missing fails only when a track was named) */
 export function hasTrackFlag(argv = process.argv.slice(2)) {
@@ -98,8 +114,12 @@ export function hasAllFlag(argv = process.argv.slice(2)) {
 
 /** `kids/lesson3.edit.html` never matches; a rename line counts its destination. The leading class
  *  tolerates git's porcelain prefix (`?? adult/lesson22.html`) and quoted paths, so an untracked page —
- *  which is exactly what a page being written looks like — is in scope. */
-const PAGE_PATH = /(?:^|[\s"'\\/])(kids|business|adult)[\\/]lesson(\d+)\.html["']?$/;
+ *  which is exactly what a page being written looks like — is in scope. The track alternation is built from
+ *  the DISCOVERED tracks, so a page in a track that did not exist when this line was written still counts. */
+const PAGE_PATH = TRACKS.length
+  ? new RegExp('(?:^|[\\s"\'\\\\/])(' + TRACKS.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')
+      + ')[\\\\/]lesson(\\d+)\\.html["\']?$')
+  : /(?!)/;
 
 function gitPagePaths(args) {
   const r = spawnSync('git', args, { cwd: ROOT, encoding: 'utf8', windowsHide: true });
