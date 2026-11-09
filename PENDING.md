@@ -86,7 +86,7 @@
 #### [S1] Roadmap lines 188-196; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B2> <DONE - 2026-11-08 - kids/lesson18.html + .edit.html (Sidecar=True), lessons.json n=18, COUNTS kids=18, 7 sections, 86/86 divs, 31 chips 0 nosay, 12/12 vocabulary>
 
 ### [B20] Lesson 19 — -ed, its three sounds, and the time words that force it; same shape as [B2]
-#### [S1] Roadmap lines 198-206; author + sidecar + §5 lines + commit and push
+#### [S1] Roadmap lines 198-206; author + sidecar + §5 lines + commit and push <PEDAGOGY-MAP.md §1/§4/§5> <B18> <DONE - 2026-11-08 - kids/lesson19.html + .edit.html (hash-identical), lessons.json n=19, COUNTS.kids=19, PAST_BATCHES.md - 8 sections, 12/12 vocab, catchBasket -ed-sound sort + whackMole quiz at data-retry="0">
 
 ### [B21] Lesson 20 — the verbs that ignore -ed, and did; same shape as [B2]
 #### [S1] Roadmap lines 208-216; author + sidecar + §5 lines + commit and push
