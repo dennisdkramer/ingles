@@ -61,6 +61,15 @@ These fail `qa/lang.mjs` (exit 1) when that harness is pointed at them, but the 
 the task touched, so they do not hold `npm run qa` red on an untouched track. Fix when a page is next opened for
 another reason; for kids that is the regeneration itself. `node qa/lang.mjs --all` prints all 28 with each page's
 measured share and the band it was measured against.
+## qa/games4.mjs — crashes before it audits any page (pre-existing, not fixed)
+`node qa/games4.mjs` dies inside its own `trainOrder` fixture — `qa/games4.mjs:372` reads `tCars()[0]` when the
+list is empty — so no page is ever reached and the harness cannot currently prove anything about a `.game`
+block. Neither `qa/games4.mjs` nor `engine4.js` was touched by the kids 30/31 work, and the crash predates it.
+Until it is fixed, a game item's key is verified statically instead: every `.qitem` inside `.game-list` must
+carry `data-a` (or a `.listen` whose text matches the right option), because `engine4.js:476-481` resolves the
+key that way and an item with an empty key scores every correct answer as a miss — which is exactly the 30.7
+report. Worth fixing before the next track rebuild, since it is the only automated check on game scoring.
+
 
 ## adult/lesson2 — one unmasked "shit" (accepted, warn-only)
 `qa/register.mjs` no longer fails on an uncensored word in any form: it prints `⚠ unmasked: …` per page and that is
