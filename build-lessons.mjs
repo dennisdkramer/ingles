@@ -62,4 +62,23 @@ for (const track of TRACKS) {
 
 fs.writeFileSync(path.join(ROOT, 'lessons.json'), JSON.stringify(manifest, null, 2) + '\n', 'utf8');
 const summary = Object.fromEntries(Object.entries(manifest).map(([k, v]) => [k, v.length]));
+
+// index.html keeps a COUNTS fallback for the case where lessons.json cannot be fetched, and it is
+// hand-written, so it silently disagreed with the folders: kids said 30 while kids/lesson31.html
+// existed, and a student saw no lesson 31 at all. Derive it from the same walk that made the
+// manifest. A missing anchor is an error, not a quiet pass — the failure this prevents was quiet.
+const indexPath = path.join(ROOT, 'index.html');
+const indexHtml = fs.readFileSync(indexPath, 'utf8');
+const countsLine = /^const COUNTS=\{[^}]*\};$/m;
+if (!countsLine.test(indexHtml)) {
+  console.error('ERROR: index.html has no `const COUNTS={...};` line to keep in sync with the lesson folders.');
+  process.exitCode = 1;
+} else {
+  const wanted = 'const COUNTS={' + ['kids', 'business', 'adult'].map(t => t + ':' + (summary[t] || 0)).join(',') + '};';
+  const before = indexHtml.match(countsLine)[0];
+  if (before !== wanted) {
+    fs.writeFileSync(indexPath, indexHtml.replace(countsLine, wanted), 'utf8');
+    console.log('index.html COUNTS ' + before.slice(13, -1) + ' -> ' + wanted.slice(13, -1) + ' (fallback kept in step with the folders)');
+  }
+}
 console.log('lessons.json written: ' + JSON.stringify(summary));
