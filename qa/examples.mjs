@@ -4,8 +4,10 @@
  * The A–J scoring block was removed from the file, so this no longer asserts it: a harness that
  * keeps checking a deleted rule fails forever and trains everyone to ignore it. What is checked is
  * what still breaks silently:
- *   - the file has entries (`###`) and drafts (`####`), and every heading parses;
- *   - no name is used twice across entries and drafts;
+ *   - CONTENT_EXAMPLES.md has entries (`###`) and every heading parses;
+ *   - IN-BLOCK-VISUALS.md has the drafts (`####`) — the part of the menu that sits inside a block —
+ *     and every heading there parses too;
+ *   - no name is used twice across the two files;
  *   - every draft declares the five fields the drafts share
  *     (draws / built from / ends in / fits / the risk);
  *   - a draft that says it is built in `qa/preview-blocks.html` has a matching `id="item-NAME"`
@@ -27,8 +29,10 @@ import { fileURLToPath } from 'url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FILE = path.join(ROOT, 'CONTENT_EXAMPLES.md');
+const DRAFTS = path.join(ROOT, 'IN-BLOCK-VISUALS.md');
 const text = fs.readFileSync(FILE, 'utf8');
 const lines = text.split(/\r?\n/);
+const draftLines = fs.readFileSync(DRAFTS, 'utf8').split(/\r?\n/);
 
 let pass = 0, fail = 0;
 const ok = (name, cond, extra) => {
@@ -40,32 +44,38 @@ const ok = (name, cond, extra) => {
    a draft is               `#### `name` — one line about it``                              */
 const ENTRY_RE = /^### `([A-Za-z0-9]+) - \(/;
 const DRAFT_RE = /^#### `([A-Za-z0-9]+)`/;
+/* `### Build [Constraints]` is a sub-heading of [INSTRUCTIONS], not a vehicle: the one `###` in
+   the file that is scaffolding rather than an entry, so it is named here and skipped. */
+const SCAFFOLD = /^### Build \[Constraints\]/;
 const FIELDS = ['**draws**', '**built from**', '**ends in**', '**fits**', '**the risk**'];
 
 const entries = [], drafts = [], unparsed = [];
 lines.forEach((l, i) => {
-  if (l.startsWith('### ')) {
-    const m = l.match(ENTRY_RE);
-    if (m) entries.push({ n: i + 1, name: m[1] });
-    else unparsed.push((i + 1) + ': ' + l.slice(0, 80));
-    return;
-  }
+  if (!l.startsWith('### ')) return;
+  if (SCAFFOLD.test(l)) return;
+  const m = l.match(ENTRY_RE);
+  if (m) entries.push({ n: i + 1, name: m[1] });
+  else unparsed.push('CONTENT_EXAMPLES.md ' + (i + 1) + ': ' + l.slice(0, 80));
+});
+
+/* the drafts live in their own file: the figures that sit inside a block, not the blocks themselves */
+draftLines.forEach((l, i) => {
   if (l.startsWith('#### ')) {
     const m = l.match(DRAFT_RE);
     if (m) drafts.push({ n: i + 1, name: m[1], body: '' });
-    else unparsed.push((i + 1) + ': ' + l.slice(0, 80));
+    else unparsed.push('IN-BLOCK-VISUALS.md ' + (i + 1) + ': ' + l.slice(0, 80));
   }
 });
 
 /* a draft's body runs to the next heading of any level */
 for (const d of drafts) {
-  for (let i = d.n; i < lines.length && !/^#{1,4} /.test(lines[i]); i++) d.body += lines[i] + '\n';
+  for (let i = d.n; i < draftLines.length && !/^#{1,4} /.test(draftLines[i]); i++) d.body += draftLines[i] + '\n';
 }
 
 console.log('\nCONTENT_EXAMPLES structure\n');
 
 ok('the file has entries', entries.length > 50, entries.length + ' entries');
-ok('the file has drafts', drafts.length > 0, drafts.length + ' drafts');
+ok('IN-BLOCK-VISUALS.md has drafts', drafts.length > 0, drafts.length + ' drafts');
 ok('every ### and #### heading parses', unparsed.length === 0,
   unparsed.length ? unparsed.slice(0, 5).join(' | ') : 'all parse');
 
