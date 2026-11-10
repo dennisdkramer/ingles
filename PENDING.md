@@ -73,10 +73,11 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
    - [S2] - the deployment shape confirmed <which branch/folder Pages serves, any CNAME, the live base URL> DONE - public repo, default branch main, has_pages true, no CNAME, no .nojekyll; source = main root, built by the legacy "pages build and deployment" workflow
 ### [B2] - what the server actually returns <"the live site"> <the deployed lessons.json and index.html, compared with the local files> DONE
    - [S1] - the live lessons.json fetched and inspected for business n=40 <read-only> DONE - live is 8163 bytes with business 38 -> 41 (no 40); raw.githubusercontent main is 8233 bytes WITH n=40 "Sore Muscles, Sore Loser" - the push landed, the deploy did not
-   - [S2] - the live index.html checked for the same COUNTS/cache logic as local <read-only> DONE - live is 39152 bytes against 39727 locally; live business/lesson40.html is 404
+   - [S2] - the live index.html checked for the same COUNTS/cache logic as local <read-only> DONE - live is 39152 bytes against 39727 locally, and that gap is LINE ENDINGS, not a version gap: the local index.html carries 575 CRLF breaks over 575 lines, so the deployed LF copy is 575 bytes shorter plus 165 bytes of multibyte. The stale-deploy evidence is the 404 on business/lesson40.html and the deployment sha pinned at f65688f, never the size.
 ### [B3] - the verdict <a named cause, and a fix only where it serves the standing "make it accessible" instruction> DONE
    - [S1] - the failed deploy named <Actions run 42893167700 check runs; deployments pinned at f65688f> DONE - pages run 620 on 87723a6 and run 619 on 74136eb both concluded failure at step "Build with Jekyll"; the last good deployment is f65688f at 18:43
    - [S2] - the breaker found <the annotation log is truncated, so the whole md set was grepped for Liquid openers> DONE - PENDING.md line 95 carried a literal double-brace inside a code span; Liquid runs before Markdown, so Jekyll parsed it as an unterminated variable. Removed. FORMAT.md line 6 is not a breaker: its braces are terminated, so they render as empty strings.
+   - [S3] - the fix verified on the host itself <push 9a80b0b, Pages run 42893814399> DONE - build job succeeded at 20:17:47, deployment 7693186343 published sha 9a80b0b at 20:18:01; live lessons.json is now 8233 bytes carrying n=40 "Sore Muscles, Sore Loser" and live business/lesson40.html returns the page with that h1
 
 
 ## [20] - lesson 40 added to the lesson list and reachable from the landing (2026-11-10)
