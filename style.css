@@ -1142,7 +1142,7 @@ html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;
    front car's roof 186 · a correct block's top 286 · the deck's underside 289 · the girder to 340. */
 .game[data-game="trainOrder"] .g4-stage{height:340px}
 .g4-yard{position:absolute;inset:0;z-index:2;
-  --rail:140px;--car0:46px;--step:6px;--deck:289px;--tw:76%;
+  --rail:140px;--car0:46px;--step:6px;--deck:289px;--tw:76%;--shift:80px;
   --gap:calc((100% - var(--tw)) / 2)}
 /* the yard is a PLACE: sky above, two hazed ridges of hills on the horizon, and the ground the rails are
    laid on — not a flat beige field (qa/NOTES.md 89) */
@@ -1202,13 +1202,14 @@ html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;
    dressed, because the train is a plain one now (see the train block further down). */
 .g4-ttrain.in{animation:g4tarrive .62s cubic-bezier(.22,.9,.3,1)}
 @keyframes g4tarrive{from{transform:translateX(-128%)}to{transform:none}}
-/* away: the whole train runs out to the left until NOTHING of it is left on the stage. The distance is a
-   share of the train's OWN width, because that is what a translate percentage measures: the train stands
-   at --gap and is --tw wide, which on the yard's own numbers (12% gap, 76% train) leaves its right edge at
-   88% of the stage — so 130% of the train's width carries even the last flatbed clear of the picture, with
-   room to spare. The crew is NOT inside this box, so it stays where it stands and watches the train go. */
+/* away: the whole train runs out to the left until NOTHING of it is left on the stage. The distance is the
+   train's own width plus the 80px it stands to the right of the yard's gap (--shift), because a translate
+   percentage measures the train's OWN width, not the stage: at --tw of 76% the train stands from --shift
+   rightwards and 130% of its width clear of that carries even the last flatbed off the picture. The extra
+   --shift is what keeps it clearing on a narrow stage too, where the shift is a larger share of the width.
+   The crew is NOT inside this box, so it stays where it stands and watches the train go. */
 .g4-ttrain.run,.g4-ttrain.pull{animation:g4trun var(--runms,1750ms) cubic-bezier(.45,0,.78,1) forwards}
-@keyframes g4trun{to{transform:translateX(-130%)}}
+@keyframes g4trun{to{transform:translateX(calc(-130% - var(--shift)))}}
 .g4-ttrain.jolt{animation:g4tjolt .9s ease-out forwards}
 @keyframes g4tjolt{0%{transform:translateX(0)}16%{transform:translateX(-4.4%)}
   34%{transform:translateX(-1.1%)}52%{transform:translateX(-5.2%)}100%{transform:translateX(-4.7%)}}
@@ -1250,19 +1251,22 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
 /* the train: PLAIN. A locomotive and one flatbed wagon per adjective, all the same height, wheels on the
    rail — the drawn locomotive, the coal bowl and the hold box are gone with the rest of the train art
    while the game is rebuilt. The cars are spaced across --tw and the locomotive stands to their left at one
-   car pitch, so a wider stage moves engine, wagons and loaders together. */
-.g4-ttrain{position:absolute;left:calc(var(--gap) + 80px);width:var(--tw);bottom:var(--rail);height:96px;z-index:4;pointer-events:none}
+   car pitch, so a wider stage moves engine, wagons and loaders together. The train and the crew share ONE
+   offset (--shift) from the yard's own --gap, which is what keeps each man under his own wagon at the start. */
+.g4-ttrain{position:absolute;left:calc(var(--gap) + var(--shift));width:var(--tw);bottom:var(--rail);height:96px;z-index:4;pointer-events:none}
 /* the locomotive is one drawn side view (engine4.js → ART.engine). Its box is ONE CAR PITCH WIDE — a
    little wider than a flatbed — because at the old sliver of 8% of the train the picture was too small to
    read (qa/NOTES.md 94). Its wheels are bottom-aligned with the flatbeds' own, which hang 6px under the
    rail line, so the whole train stands on one line. */
 .g4-tloco{position:absolute;left:calc(100% / -8 * 1.2);bottom:-6px;width:calc(100% / 8 * 1.3);height:78px}
 .g4-tloco svg{display:block;width:100%;height:100%;overflow:visible}
-/* ONE LOADER PER CAR, in front of his own deck: the crew row shares the train's own left/width, and each man
-   is placed on his car's pitch from the engine, so a wider stage moves them with the cars. He stands on the
-   ground UNDER the rail with his arms up at the deck line, so he is in front of the wagon and his hands are
-   where the adjective arrives — and he is short enough that the load on the deck stays readable above him. */
-.g4-tcrew{position:absolute;left:var(--gap);width:var(--tw);bottom:calc(var(--rail) - 66px);height:36px;
+/* ONE LOADER PER CAR, in front of his own deck: the crew row carries the SAME left/width as the train — the
+   same --gap plus the same --shift — and each man is placed on his car's pitch, so at the start he stands
+   exactly under the wagon he serves. He is its own row in the yard, NOT a child of the train's box, so when
+   the train pulls out he stays where he stands and watches it go (qa/NOTES.md 99). He stands on the ground
+   UNDER the rail with his arms up at the deck line, so he is in front of the wagon and his hands are where
+   the adjective arrives — and he is short enough that the load on the deck stays readable above him. */
+.g4-tcrew{position:absolute;left:calc(var(--gap) + var(--shift));width:var(--tw);bottom:calc(var(--rail) - 66px);height:36px;
   z-index:3;pointer-events:none}
 .g4-tguy{position:absolute;bottom:0;height:36px;display:flex;align-items:flex-end;justify-content:center;
   pointer-events:auto;cursor:pointer}
@@ -1282,8 +1286,11 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
   border:2px solid var(--ink);border-radius:6px;box-shadow:2px 2px 0 var(--tan);color:var(--ink);
   font:700 11.5px/1.1 var(--ui-tight);white-space:nowrap}
 /* a car: one flat deck with a low kerb, wheels on the rail. Every car is the SAME height, so the train
-   reads as a train rather than as a staircase; what grows is the load on the deck. */
-.g4-tcar{position:absolute;bottom:0;height:var(--car0);display:flex;align-items:flex-end;justify-content:center;
+   reads as a train rather than as a staircase; what grows is the load on the deck. The 4px gutter comes off
+   the width and 2px of it goes back on the left, so a car is centred on its own pitch — the same pitch its
+   loader stands on — and the crew is coupled to the wagons to the pixel. */
+.g4-tcar{position:absolute;bottom:0;height:var(--car0);margin-left:2px;
+  display:flex;align-items:flex-end;justify-content:center;
   transition:left .45s cubic-bezier(.4,0,.7,1);cursor:pointer;pointer-events:auto}
 .g4-tbody{position:absolute;left:0;right:0;bottom:9px;height:16px;
   background:linear-gradient(#7f6b4e,#5b4a33);border:2px solid #3a2d1c;border-radius:3px;
