@@ -55,7 +55,7 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
    - [S3] - 19 deleted and its one unique fact (centring) merged into 44, so gloss placement is stated once <44 keeps its mechanism sentence word for word> DONE
 ### [B4] - recorded and pushed
    - [S1] - the owner's plan noted, no action taken: the syllable-count and emphasis vehicles are to be taken, because a stem of that kind can imply its own answer <a future batch, not this turn's> DONE
-   - [S2] - commit + push, then the Pages run read for that commit <[GUIDELINES]> NOT EXECUTED
+   - [S2] - commit + push, then the Pages run read for that commit <[GUIDELINES]> DONE - eaba5a9, Pages build concluded success
 
 
 ### [B1] - F4's recommendation, delivered and NOT applied <"f4 what do you recommend we do about that"> <one marking route, and the harness made to read that one> DONE - no edit; FORMAT.md line 2 requires sign-off
