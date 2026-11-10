@@ -89,7 +89,7 @@ make it always a 3x2 grid, min 2 max 6 options. improve the graphics so it looks
 ### trainOrder
 
 → CONTENT_EXAMPLES.md §`trainOrder`
-improve the train graphics, add a background that makes it look like the train is on some sort of ground and not just a beige flat background. Make it look like there are mountains off in the distance. The train caboose should be bigger than the cars, and the car wheels should all sit on the track. The platforms should start small like a flat bed, and get just a little bit bigger per car. The amount of cars should depend on the amount of adjectives, and the prompt should be "That's a ____________________ [word
+improve the train graphics, add a background that makes it look like the train is on some sort of ground and not just a beige flat background. Make it look like there are mountains off in the distance. The train caboose should be bigger than the cars, and the car wheels should all sit on the track. The platforms should start small like a flat bed, and get just a little bit bigger per car. The amount of cars should depend on the amount of adjectives, and the prompt should be "That's a ____________________ [word]"  and
 
 ## preview-blocks.html
 
