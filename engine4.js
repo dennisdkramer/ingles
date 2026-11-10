@@ -1740,8 +1740,11 @@ window.GAMES4 = (function () {
       train.appendChild(loco);
       for (var k = 0; k < 8; k++) {
         var car = el('div', 'g4-tcar');
-        car.style.height = (122 - 6 * k) + 'px';
-        car.style.marginBottom = (6 * k) + 'px';
+        /* the cars are absolutely positioned by the stylesheet, so the still lays them out on the same
+           pitch the live game uses — the old flex-era height/marginBottom pair left all eight stacked */
+        car.style.left = (k * 100 / 8) + '%';
+        car.style.width = 'calc(' + (100 / 8) + '% - 4px)';
+        car.style.setProperty('--k', String(k));
         car.appendChild(el('div', 'g4-tbed'));
         car.appendChild(el('i', 'g4-twheel a'));
         car.appendChild(el('i', 'g4-twheel b'));
