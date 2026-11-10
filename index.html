@@ -2,13 +2,20 @@
 <!-- build: 2026-10-20T00:00:00Z -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=8727a54344">
+<link rel="stylesheet" href="style.css?v=77783f5ff4">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head><body class="landing">
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>ENGLISH <span>OPENS DOORS</span></h1><p class="script">Let's go <span lang="pt">· Vamos lá</span></p></header>
+<!-- THE WELCOME LINE (owner instruction 2026-11-09): the whole index is visible without signing in, so the old
+     centred "Welcome" CARD became ONE horizontal line directly under the site header. It sits OUTSIDE the paper
+     panel at the header's own 1400px metric, and it carries the ONLY sign-in control on the page. The sign-in
+     button is rendered into #gbtn by Google's script; #needg is the fallback line for when that script cannot
+     load. This element is hidden while someone is signed in (showAcct) and shown otherwise (hideAcct). -->
+<div id="welcome" class="welcome-bar"><h2 class="landing-title">Welcome · <span lang="pt">Bem-vindo</span></h2><span class="wsep">—</span><span id="gtext">Sign in with your Google account</span><div id="gbtn"></div><div id="needg" hidden><p>Please navigate to <a href="https://accounts.google.com/" target="_blank" rel="noopener">accounts.google.com</a> manually, or click the button below — always double-check the exact URL in your browser for security. A logged-in Google account is strictly required to enter this site.</p><p lang="pt" class="pt">Navegue manualmente até <a href="https://accounts.google.com/" target="_blank" rel="noopener">accounts.google.com</a> ou clique no botão abaixo — confira sempre o endereço exato no seu navegador por segurança. É preciso estar conectado a uma conta Google para entrar neste site.</p><button type="button" onclick="window.open('https://accounts.google.com/','_blank')">Open accounts.google.com <span lang="pt">· Abrir</span></button><p class="dim">After you sign in to Google there, come back here and reload this page. · <span lang="pt">Depois de entrar no Google, volte aqui e recarregue a página.</span></p></div></div>
+
 <div id="controlbar" class="control-bar"><button id="logout" hidden title="Sign out">Logout</button></div>
 <main><div class="page-container"><div class="content-area">
- <div class="card center landing-card" id="gcard"><h2 class="landing-title">Welcome · <span lang="pt">Bem-vindo</span></h2><p class="dim" id="gtext">Sign in with your Google account · <span lang="pt">Entre com a sua conta Google</span></p><div id="gbtn"></div><div id="needg" hidden><p>Please navigate to <a href="https://accounts.google.com/" target="_blank" rel="noopener">accounts.google.com</a> manually, or click the button below — always double-check the exact URL in your browser for security. A logged-in Google account is strictly required to enter this site.</p><p lang="pt" class="pt">Navegue manualmente até <a href="https://accounts.google.com/" target="_blank" rel="noopener">accounts.google.com</a> ou clique no botão abaixo — confira sempre o endereço exato no seu navegador por segurança. É preciso estar conectado a uma conta Google para entrar neste site.</p><button type="button" onclick="window.open('https://accounts.google.com/','_blank')">Open accounts.google.com <span lang="pt">· Abrir</span></button><p class="dim">After you sign in to Google there, come back here and reload this page. · <span lang="pt">Depois de entrar no Google, volte aqui e recarregue a página.</span></p></div></div>
+ 
  <div id="app"></div><p id="debug" class="dim"></p>
 </div>
 <footer class="landing-footer"><span lang="pt">Materiais simples e inovadores · Inglês certo EUA</span> · Simple, innovative materials · American English, done right</footer>
@@ -38,6 +45,10 @@ let cred=null,profile=null,teacher=false,studentName="",LESSONS=null,MYTRACKS=[]
    depends on prog_<email>, a localStorage key nothing has written since engine2 was refactored — that is why
    "continue" stuck on lesson 1 (owner report 2026-11-09). */
 let PROG=null,DONE=null;
+/* PEND: the books this student has ASKED FOR and not yet been given (status.pendingTracks), so the column they
+   asked about says so instead of offering the same request again. GUEST: nobody is signed in — the whole index is
+   painted with every book locked, and a request sends the visitor to the sign-in line instead of the backend. */
+let PEND=[],GUEST=false,REQING={};
 let TRACKSALL=["kids","business","adult"];   /* fallback only — applyTracks() replaces it from tracks.json */
 const SESSION_KEY="eod_session";
 async function api(action,obj){
@@ -126,9 +137,23 @@ function eodConfirm(opt){
    script arrives; nothing on the signed-in path needs it. */
 document.addEventListener("DOMContentLoaded",()=>{
  const restored=restoreSession();
- if(restored)start();
+ if(restored)start();else guest();
  bootGoogle(!restored);
 });
+/* THE WHOLE INDEX WITHOUT SIGNING IN (owner instruction 2026-11-09): a visitor sees every book, every column and
+   every lesson name the index has, all locked — exactly what a student who holds nothing sees — so the site shows
+   itself before anyone commits an account to it. Nothing is clickable except "⛌ Denied - Request Access?", which
+   asks the visitor to sign in. The track list is applied BEFORE the first paint, so the grid is drawn once. */
+async function guest(){
+ hideAcct();GUEST=true;MYTRACKS=[];PEND=[];PROG=null;DONE=null;
+ const ct=readTracks();if(ct)applyTracks(ct);
+ if(ct)renderStudent([],"");else $("app").innerHTML=spinnerHTML();
+ const trp=fetchTracks();                                   /* refresh in parallel, always */
+ try{const lr=await fetch("lessons.json",{cache:"no-cache"});if(lr.ok)LESSONS=await lr.json();}catch(e){}
+ await trp;
+ renderStudent([],"");
+ log("índice público — entre para acessar as trilhas");
+}
 function bootGoogle(wantPrompt){let tries=0;
  (function ready(){
   if(!window.google){if(++tries<5){setTimeout(ready,800);return}log("ERRO: script Google não carregou.");if($("needg"))showNeedGoogle();return}
@@ -269,7 +294,9 @@ async function flushAccess(){
   }
  }finally{ACRUN=false;if(ACQ.size&&!ACTIMER)ACTIMER=setTimeout(()=>{ACTIMER=0;flushAccess()},0);}
 }
-function hideAcct(){const lo=$("controlbar").querySelector("#logout");if(lo)lo.hidden=true;const g=$("gcard");if(g)g.hidden=false;}
+/* THE WELCOME LINE is the only sign-in surface (owner instruction 2026-11-09): the whole index is visible
+   without it, so the bar is shown for a visitor and hidden the moment a session exists. */
+function hideAcct(){const lo=$("controlbar").querySelector("#logout");if(lo)lo.hidden=true;const wb=$("welcome");if(wb)wb.hidden=false;GUEST=true;}
 /* a rejected session ends on the login card, in place — a reload is what made it feel like being thrown out */
 function bounce(){clearSession();MYTRACKS=[];QUEUE={pending:[],approved:[]};$("app").innerHTML="";hideAcct();try{enableGoogleUI()}catch(e){}}
 /* the token is checked LOCALLY first: an expired Google credential cannot be honoured, so the page must never
@@ -291,7 +318,7 @@ async function start(){
  let painted=false;
  if(ct){
   if(role==="teacher"&&cq){paintQueue(cq);painted=true;}
-  else if(cs&&cs.status==="approved"){paintStudent(cs);painted=true;}
+  else if(cs&&cs.status){paintStudent(cs);painted=true;}   /* approved, none, pending — all paint the index */
  }
  if(!painted)$("app").innerHTML=spinnerHTML();
  try{const r=await fetch("access.json",{cache:"no-cache"});
@@ -311,11 +338,15 @@ async function start(){
   const q={pending:j.pending||[],approved:j.approved||[]};writeCache("queue",q);paintQueue(q);return;
  }
  if(j.status==="approved"){
-  const st={status:"approved",tracks:j.tracks||[],track:j.track||"",name:j.name||"",progress:j.progress||{},done:j.done||{}};
+  const st={status:"approved",tracks:j.tracks||[],track:j.track||"",name:j.name||"",progress:j.progress||{},done:j.done||{},pending:j.pendingTracks||[]};
   writeCache("status",st);paintStudent(st);return;
  }
- if(j.status==="pending"){showAcct();$("app").innerHTML=pendingCard(profile.email,"Seu pedido de acesso já foi enviado e está aguardando o professor aprovar.");return}
- showAcct();renderRequest();
+ /* HOLDING NO BOOKS IS NOT BEING UNKNOWN (owner instruction 2026-11-09). A student whose last book was removed, a
+    stranger, and one whose request is still pending all get the SAME page: the whole index, every book offering
+    "Denied - Request Access?", which is what makes a subscription sale possible later and what stops an account
+    being deleted for holding nothing. The state is cached like an approved one, so a return paints instantly. */
+ const noneState={status:(j.status||"unknown"),tracks:[],name:j.name||"",pending:j.pendingTracks||[]};
+ writeCache("status",noneState);paintStudent(noneState);
 }
 /* one paint path each, used both by the cached first paint and by the validated one */
 function paintQueue(q){
@@ -325,20 +356,9 @@ function paintQueue(q){
 function paintStudent(st){
  PROG=(st&&st.progress)||null;
  DONE=(st&&st.done)||null;
+ PEND=((st&&st.pending)||[]).slice();   /* the books this student has already asked for */
  MYTRACKS=(st&&st.tracks&&st.tracks.length)?st.tracks.slice():((st&&st.track)?[st.track]:[]);
  showAcct();renderStudent(MYTRACKS,st.name);
-}
-function pendingCard(email,msg){
- return '<div class="card"><h3>Aguardando aprovação</h3><p class="dim">'+esc(email)+'</p><p>'+msg+'</p></div>';
-}
-function renderRequest(){
- $("app").innerHTML='<div class="card"><h3>Solicitar acesso</h3><p class="dim">'+esc(profile.email)+'</p><p>Esta conta ainda não está cadastrada. Envie um pedido para o professor aprovar.</p><button id="reqBtn">Enviar pedido de acesso</button></div>';
- $("reqBtn").onclick=async()=>{
-  const b=$("reqBtn");b.disabled=true;b.textContent="Enviando…";
-  const j=await api("request",{token:cred});
-  if(j.status==="pending"){$("app").innerHTML=pendingCard(profile.email,"Pedido enviado! O professor vai aprovar seu acesso em breve.");}
-  else{b.disabled=false;b.textContent="Enviar pedido de acesso";log("ERRO: "+(j.error||"desconhecido"))}
- };
 }
 function trackLessons(t){
  const ls=LESSONS&&LESSONS[t]&&LESSONS[t].length?LESSONS[t]:Array.from({length:COUNTS[t]||0},(_,k)=>({n:k+1,title:""}));
@@ -383,12 +403,44 @@ function renderStudent(tracks,name){
      track access list; the selector's colouring uses the exact finished list (status.done). No answer → fall back
      to whatever the page can tell, so an older deployment still shows a button rather than none. */
   if(PROG&&PROG[t]!=null){const last=Number(PROG[t])||0;cont=(last+1<=lss.length)?last+1:null;}
-  if(!has)html+='<p class="dim">Sem acesso a esta trilha · no access to this book</p>';
+  if(!has)html+=deniedHTML(t);
   else if(cont)html+='<button class="contbtn" onclick="go(\''+t+'\','+cont+')">▶ Continuar da lição '+cont+'</button>';
   html+='</div>';
  });
  html+='</div>';
  $("app").innerHTML=html;log("índice pronto ✔");fitSoon();
+}
+/* THE LOCKED COLUMN ASKS FOR ITS OWN BOOK (owner instruction 2026-11-09): the "Denied" control names the book it
+   wants, so the teacher's queue says WHICH book was asked for instead of a blank row. A visitor has no account yet,
+   so the click points them at the sign-in line rather than the backend. A book already asked for stays marked and
+   is not asked twice. */
+function deniedHTML(t){
+ const asked=PEND.indexOf(t)>=0,busy=!!REQING[t];
+ return '<button type="button" class="denbtn"'+(asked||busy?' disabled':'')+' onclick="requestTrack(\''+t+'\')">'
+  +(asked?'⛌ Requested — awaiting approval':(busy?'⛌ Sending…':'⛌ Denied - Request Access?'))+'</button>';
+}
+function welcomeAttention(){
+ const wb=$("welcome");if(!wb)return;
+ wb.classList.add("attention");
+ try{if(wb.scrollIntoView)wb.scrollIntoView({block:"center"})}catch(e){}
+ setTimeout(()=>wb.classList.remove("attention"),1800);
+}
+async function requestTrack(t){
+ if(GUEST){welcomeAttention();log("entre para pedir acesso a "+TN[t]);return}
+ if(PEND.indexOf(t)>=0||REQING[t])return;
+ REQING[t]=true;renderStudent(MYTRACKS,studentName);
+ const j=await api("request",{token:cred,track:t});
+ delete REQING[t];
+ if(tokenErr(j)){log("sessão expirada — entre novamente");bounce();return}
+ if(j.status==="pending"||j.status==="approved"){
+  if(j.status==="approved")MYTRACKS=(j.tracks||[]).slice();
+  PEND=(j.pendingTracks||[]).slice();
+  renderStudent(MYTRACKS,studentName);
+  log("pedido enviado: "+TN[t]);
+ }else{
+  renderStudent(MYTRACKS,studentName);
+  log("ERRO ao pedir acesso: "+(j.error||"desconhecido"));
+ }
 }
 let QUEUE={pending:[],approved:[]};
 /* THE lesson selector — ONE component, used by the student index and the teacher panel, so the two lists are
@@ -416,7 +468,16 @@ function bookButton(t,locked){
   +'<button type="button" class="bookbtn" style="--sw:'+col+'" onclick="toggleBookMenu(\''+t+'\')">'+esc(trackName(t))+' ▾</button>'
   +'<div class="bookmenu" id="menu_'+t+'" hidden>'+items+'</div></div>';
 }
-window.toggleBookMenu=function(t){const m=$("menu_"+t);if(!m)return;const open=!m.hidden;document.querySelectorAll(".bookmenu").forEach(x=>x.hidden=true);if(!open)m.hidden=false;};
+/* a menu opens only when it has something to show and the book is held (owner instruction 2026-11-09): a greyed
+   trigger and a book with no lessons both do NOTHING, rather than flashing an empty panel. */
+window.toggleBookMenu=function(t){
+ const m=$("menu_"+t);if(!m)return;
+ const dd=m.closest?m.closest(".bookdrop"):null;
+ if((dd&&dd.classList.contains("locked"))||!m.children.length)return;
+ const open=!m.hidden;
+ document.querySelectorAll(".bookmenu").forEach(x=>x.hidden=true);
+ if(!open)m.hidden=false;
+};
 document.addEventListener("click",e=>{if(!e.target.closest(".bookdrop"))document.querySelectorAll(".bookmenu").forEach(x=>x.hidden=true);});
 function pendingHTML(){
  let h='<div class="card tadmin-col"><h4>Pedidos pendentes</h4>';
@@ -495,15 +556,20 @@ window.toggleTrack=function(el,email,track){
  log((on?"Concedendo ":"Removendo ")+TN[track]+"…");
  queueAccess(email);
 };
-const prog=()=>JSON.parse(localStorage.getItem("prog_"+profile.email)||"{}");
-function go(t,i){if(!teacher&&MYTRACKS.indexOf(t)<0){log("sem acesso a esta trilha");return}sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,teacherName:teacher?(profile.name||""):"",name:teacher?(profile.name||""):studentName,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
+/* localStorage progress is only a fallback for a deployment that does not report progress; a GUEST has no
+   profile and therefore no key, so this must answer {} rather than dereference a null profile. */
+const prog=()=>{try{const e=profile&&profile.email;return e?JSON.parse(localStorage.getItem("prog_"+e)||"{}"):{}}catch(x){return {}}};
+function go(t,i){
+ if(!profile){welcomeAttention();log("entre para abrir as lições");return}
+ if(!teacher&&MYTRACKS.indexOf(t)<0){log("sem acesso a esta trilha");return}
+ sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,teacherName:teacher?(profile.name||""):"",name:teacher?(profile.name||""):studentName,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
 /* the teacher's "open this student's next lesson" gate. Currently UNREFERENCED: the per-book ⏭ button it
    served was removed with the switches (2026-11-09), and it is kept so restoring that jump is one line. */
 function goStudent(t,i,email){const s=QUEUE.approved.find(x=>x.email===email);sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher:true,teacherName:profile.name||"",name:s?(s.name||""):"",student:email,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
 /* the bar carries NO identity any more (owner instruction 2026-11-09): the account is stated on the login card
    and nowhere else, so the bar is one Logout button. Keep the email as the button's tooltip so the information
    is not lost, only unprinted. */
-function showAcct(){const lo=$("controlbar").querySelector("#logout");if(!lo)return;lo.hidden=false;lo.title="Signed in: "+profile.email;lo.onclick=logout;const g=$("gcard");if(g)g.hidden=true;}
+function showAcct(){const lo=$("controlbar").querySelector("#logout");if(!lo)return;lo.hidden=false;lo.title="Signed in: "+profile.email;lo.onclick=logout;const wb=$("welcome");if(wb)wb.hidden=true;GUEST=false;}
 function logout(){clearSession();if(window.google&&google.accounts&&google.accounts.id)try{google.accounts.id.disableAutoSelect()}catch(e){}location.reload();}
 </script></body></html>
 

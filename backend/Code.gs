@@ -158,6 +158,24 @@ function accessRemove_(email, track) {
     sh.deleteRow(rows[i]._row);
   }
 }
+/* A KNOWN STUDENT WHO HOLDS NO BOOKS (owner instruction 2026-11-09): one track-less row with status "none".
+   Removing every book used to delete the account outright, so the student could not sign in to ask for a
+   different one. This row is what keeps them: status still answers for them ("none"), the teacher's list still
+   shows them, and the next grant upgrades this row instead of leaving a duplicate behind. */
+function accessKeep_(email, name) {
+  if (accessRowsFor_(email).length) return;
+  getAccessSheet_().appendRow([String(email), String(name || ""), "", "none", new Date().toISOString()]);
+}
+/* the books a student has ASKED FOR and not yet been given — what lets the page mark exactly the book that was
+   requested instead of re-offering every locked column (owner instruction 2026-11-09) */
+function accessPending_(email) {
+  var rows = accessRowsFor_(email), out = [];
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+    if (r.status === "pending" && r.track && out.indexOf(r.track) < 0) out.push(r.track);
+  }
+  return out;
+}
 /* verify a Google ID token server-side (tokeninfo) so an email is never trusted from the client. */
 function verifyToken_(token) {
   if (!token) throw new Error("missing token");
@@ -333,22 +351,36 @@ function doPost(e) {
           prog[tracks[cpi]] = completedFor_(cpm, info.email, tracks[cpi]);
           dn[tracks[cpi]] = doneFor_(cpm, info.email, tracks[cpi]);
         }
-        return json_({ status: "approved", email: info.email, name: nm || info.name, track: tracks[0], tracks: tracks, progress: prog, done: dn });
+        return json_({ status: "approved", email: info.email, name: nm || info.name, track: tracks[0], tracks: tracks, progress: prog, done: dn, pendingTracks: accessPending_(info.email) });
       }
-      if (mine.length && mine[0].status === "pending") return json_({ status: "pending", email: info.email, name: nm || info.name });
-      return json_({ status: "unknown", email: info.email });
+      /* A KNOWN STUDENT WITH NO BOOKS (owner instruction 2026-11-09): emptying their track set leaves one
+         track-less row behind (accessKeep_), so the account is never deleted — status answers "none" and the
+         page shows the whole index with every book offering to be requested. A pending request now travels with
+         the books it names, so the page can mark exactly that book rather than re-offering all of them. */
+      var pend1 = accessPending_(info.email), anyPend1 = false;
+      for (var pi1 = 0; pi1 < mine.length; pi1++) if (mine[pi1].status === "pending") { anyPend1 = true; break; }
+      if (anyPend1) return json_({ status: "pending", email: info.email, name: nm || info.name, tracks: [], pendingTracks: pend1 });
+      if (mine.length) return json_({ status: "none", email: info.email, name: nm || info.name, tracks: [], pendingTracks: pend1 });
+      return json_({ status: "unknown", email: info.email, tracks: [], pendingTracks: [] });
     }
 
+    /* ASK FOR ONE BOOK (owner instruction 2026-11-09): the locked column's "Denied - Request Access?" control
+       names the book it wants, so the teacher's queue says WHICH book was asked for instead of a blank row.
+       accessGrant_ is reused with status "pending": one row per EMAIL+TRACK, an existing row for that pair is
+       updated, and a legacy track-less row is upgraded rather than duplicated. A request with no track keeps
+       the old behaviour, so nothing that already calls this breaks. */
     if (action === "request") {
       var info2 = verifyToken_(o.token);
       var mine2 = accessRowsFor_(info2.email);
       var tracks2 = accessTracks_(info2.email);
       var nm2 = "";
       for (var m2 = 0; m2 < mine2.length; m2++) if (mine2[m2].name) { nm2 = mine2[m2].name; break; }
-      if (tracks2.length) return json_({ status: "approved", email: info2.email, name: nm2 || info2.name, track: tracks2[0], tracks: tracks2 });
-      if (mine2.length && mine2[0].status === "pending") return json_({ status: "pending", email: info2.email, name: nm2 || info2.name });
-      accessUpsert_(info2.email, info2.name || o.name || "", "", "pending");
-      return json_({ status: "pending", email: info2.email, name: info2.name || o.name || "" });
+      var nmF2 = nm2 || info2.name || o.name || "";
+      if (tracks2.length) return json_({ status: "approved", email: info2.email, name: nmF2, track: tracks2[0], tracks: tracks2, pendingTracks: accessPending_(info2.email) });
+      var asked2 = String(o.track || "").trim();
+      if (asked2) accessGrant_(info2.email, nmF2, asked2, "pending");
+      else if (!mine2.length) accessUpsert_(info2.email, nmF2, "", "pending");
+      return json_({ status: "pending", email: info2.email, name: nmF2, track: asked2, tracks: [], pendingTracks: accessPending_(info2.email) });
     }
 
     if (action === "approve" || action === "reject") {
@@ -404,7 +436,10 @@ function doPost(e) {
       for (var hi6 = 0; hi6 < have6.length; hi6++) {
         if (want.indexOf(have6[hi6]) < 0) accessRemove_(o.email, have6[hi6]);
       }
-      if (!want.length) accessRemove_(o.email, "");   /* emptied: the student leaves the approved list */
+      if (!want.length) {
+        accessRemove_(o.email, "");
+        accessKeep_(o.email, nm6 || o.name || o.email);
+      }
       return json_({ result: "ok", email: o.email, tracks: accessTracks_(o.email) });
     }
 
@@ -417,7 +452,7 @@ function doPost(e) {
       for (var q = 0; q < rows4.length; q++) {
         var row4 = rows4[q];
         if (row4.status === "pending") { pending.push({ email: row4.email, name: row4.name, ts: row4.ts }); continue; }
-        if (row4.status !== "approved") continue;
+        if (row4.status !== "approved" && row4.status !== "none") continue;
         var key = row4.email.toLowerCase();
         if (!byEmail[key]) { byEmail[key] = { email: row4.email, name: row4.name, tracks: [] }; order.push(key); }
         if (row4.track) byEmail[key].tracks.push({ track: row4.track, lastCompleted: completedFor_(cm4, row4.email, row4.track) });

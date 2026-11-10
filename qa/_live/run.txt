@@ -1,5 +1,5 @@
 · repo   C:\Users\denni\Documents\GitHub\ingles   (node v24.21.0)
-· page   http://127.0.0.1:52390/business/lesson1.html   as live.qa@ingles.test
+· page   http://127.0.0.1:50232/business/lesson1.html   as live.qa@ingles.test
 · chrome C:\Program Files\Google\Chrome\Application\chrome.exe   [headless=new]
 · runner landing
 
@@ -19,6 +19,10 @@
    ✅ every trigger keeps its label on one line
    ✅ the long names SHRANK rather than wrapping
       📷 C:\Users\denni\Documents\GitHub\ingles\qa\_live\landing-grid.png
+   · resize: 800px→3col/390px/3row   1280px→3col/390px/3row   2400px→3col/390px/3row
+   ✅ resizing the window never changes the column count
+   ✅ resizing the window never changes a card width
+   ✅ resizing the window never reflows a row
    · teacher: 593px 593px in 1200px, dropdowns 380/380/380/380/380/380/380/380/380, 3 row(s)
    ✅ the teacher dropdowns are a fixed 380px, three per row inside the card
    ✅ the teacher panel is two equal fixed columns filling 1200px
@@ -26,5 +30,5 @@
    · scenario landing finished in 3s
 
 ──────────────────────────────────────────────────────────────────────────────
-✅ live harness: 12 checks passed, 0 failed
+✅ live harness: 15 checks passed, 0 failed
    log  : C:\Users\denni\Documents\GitHub\ingles\qa\_live\run.txt

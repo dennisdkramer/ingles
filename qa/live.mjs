@@ -1398,6 +1398,39 @@ async function scenLanding(live, site) {
   check('the long names SHRANK rather than wrapping', shrunk.length > 0,
     shrunk.map(function (b) { return b.txt + '@' + b.fs + 'px' }));
   await live.shot('landing-grid', box(g.rect));
+  /* THE RESIZE REPORT (owner report 2026-11-09): "the cards still re-size and reflow into 1 per row vertical on
+     window resize. Just like the rest of the site, nothing should resize or move based on viewport." The document
+     is a fixed-width sheet, so the grid must measure IDENTICALLY at every viewport — this drives the real emulated
+     viewport narrow and wide and re-measures, which is the only way to answer a report about resizing. Must run
+     BEFORE the teacher block below, which re-paints #app and takes .tracks with it. */
+  const seen = [];
+  for (const w of [800, 1280, 2400]) {
+    await live.cdp.send('Emulation.setDeviceMetricsOverride',
+      { width: w, height: 900, deviceScaleFactor: 1, mobile: false });
+    await sleep(180);
+    const m = await live.ev('(function(){'
+      + 'var el=document.querySelector(".tracks");if(!el)return {err:"no .tracks grid"};'
+      + 'var cs=getComputedStyle(el),cards=[].slice.call(el.querySelectorAll(".track-card"));'
+      + 'var rows={};cards.forEach(function(c){rows[Math.round(c.getBoundingClientRect().top)]=1});'
+      + 'return {cols:cs.gridTemplateColumns.split(" ").filter(function(s){return s&&s!=="none"}).length,'
+      + ' colcss:cs.gridTemplateColumns,rows:Object.keys(rows).length,cards:cards.length,'
+      + ' cw:cards.map(function(c){return Math.round(c.getBoundingClientRect().width*100)/100})};})()');
+    seen.push({ w: w, m: m });
+  }
+  await live.cdp.send('Emulation.clearDeviceMetricsOverride').catch(() => { });
+  await sleep(120);
+  log('   · resize: ' + seen.map(function (s) {
+    return s.w + 'px→' + (s.m.cols || '?') + 'col/' + ((s.m.cw || [])[0] || '?') + 'px/' + (s.m.rows || '?') + 'row';
+  }).join('   '));
+  check('resizing the window never changes the column count',
+    seen.every(function (s) { return s.m.cols === 3 }),
+    seen.map(function (s) { return s.w + 'px:' + s.m.cols; }).join(' '));
+  check('resizing the window never changes a card width',
+    seen.every(function (s) { return (s.m.cw || []).length === NT && s.m.cw.every(function (x) { return x === 390 }) }),
+    seen.map(function (s) { return s.w + 'px:' + (s.m.cw || [])[0]; }).join(' '));
+  check('resizing the window never reflows a row',
+    seen.every(function (s) { return s.m.rows === 3 && s.m.cards === NT }),
+    seen.map(function (s) { return s.w + 'px:' + s.m.rows + 'r/' + s.m.cards + 'c'; }).join(' '));
   /* the teacher panel was fractional too, and the cards above are only half the answer: its dropdown row and
      its two columns must obey the same fixed metric, or the panel above the columns still resizes. */
   const t = await live.ev('(function(){'

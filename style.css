@@ -9,13 +9,18 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&display=swap');
 :root{--cream:#f4eddd;--paper:#fdfaf2;--ink:#182136;--tan:#b9854c;--rose:#d9c1ba;--ptw:#96601f;--blue:#1d4ed8;--dkblue:#1e3a8a;--bluebg:rgba(29,78,216,.16)}
-/* THE COLUMN METRIC (owner instruction 2026-11-09). The page is a FIXED-WIDTH document — .page-container is
-   position:absolute at 1400px and .content-area is always 1200px — so its grids are fixed pixels, never
-   fractional tracks. 390×3 + 15×2 = 1200 and 593×2 + 14 = 1200, both exact: no sub-pixel widths, no growth,
-   nothing that can reflow when data arrives or the window moves.
-   --colT/--gutT are the teacher dropdown row's own metric: it sits inside a .card (padding 18px + 2px border a
-   side), so its available width is 1160px, not 1200 — 380×3 + 10×2 = 1160 exactly, three per row. */
-:root{--col3:390px;--gut3:15px;--col2:593px;--colT:380px;--gutT:10px}
+/* FIXED COLUMNS (owner instruction 2026-11-09, third pass). The page is a FIXED-WIDTH document — body is
+   min-width:1415px, .page-container is position:absolute at 1400px, .content-area is always 1200px — so no
+   layout in it may be expressed as `fr`, `vw` or `auto-fit`. Those are decisions the browser RE-MAKES whenever
+   the viewport changes, which is exactly the reported fault: "the cards resize and reflow into one per row on
+   window resize". Every grid below therefore states its tracks in LITERAL pixels, and the numbers are chosen so
+   the arithmetic closes exactly: 390×3 + 15×2 = 1200 (student columns), 593×2 + 14 = 1200 (teacher columns),
+   380×3 + 10×2 = 1160 (teacher dropdown row, which sits inside a .card and so has 40px less than 1200).
+   THE NUMBERS ARE WRITTEN, NEVER A var(). `repeat(3,var(--col3))` reads better and is a trap: if the variable
+   fails to resolve — renamed, or a :root block a stray parse error swallowed — every declaration using it becomes
+   invalid at computed-value time, and `grid-template-columns` then computes to `none`, i.e. ONE COLUMN with every
+   card stacked vertically. That is precisely the fault this comment exists to prevent, so any change to a column
+   width is made in the three rules themselves, and nowhere else. */
 /* TYPOGRAPHY (owner instruction 2026-11-09): the site is SERIF, everywhere. --serif is the default every element
    inherits, and it is the only type stack a page/teacher view may use. Georgia leads it because it was drawn for
    screens, it ships on Windows and macOS, it carries the Portuguese accents and the IPA the dictionary uses
@@ -27,7 +32,7 @@
    grow. It is deliberately ONE custom property: set `--ui-tight:var(--serif)` to make the games serif too. */
 :root{--serif:Georgia,'Iowan Old Style','Palatino Linotype','Book Antiqua','Times New Roman',serif;
       --ui-tight:'Public Sans',system-ui,sans-serif}
-*{box-sizing:border-box}body{margin:0;font:17px/1.6 var(--serif);background:var(--cream);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0;min-width:1415px;font:17px/1.6 var(--serif);background:var(--cream);color:var(--ink)}
 /* form controls default to the UA's sans-serif in every engine, which is how sans reached the teacher page
    (the book dropdowns and their selects) while the text around them was serif */
 button,input,select,textarea{font-family:inherit}
@@ -270,15 +275,15 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 
 
 /* teacher admin area */
-.tadmin-books{display:flex;gap:var(--gutT);margin-top:2px;flex-wrap:wrap}
+.tadmin-books{display:flex;gap:10px;margin-top:2px;flex-wrap:wrap}
 /* one dropdown per track, at a FIXED width: the row wraps on a known count and no button grows into whatever
    space is left over (owner instruction 2026-11-09: fixed size, no fractional growth anywhere on this panel).
    380px is not the 390px of a landing column because this row lives inside a .card — 1160px of interior, so
    380×3 + 10×2 = 1160 exactly, three per row. A label too long for it is measured and shrunk by fitBookText(),
    which covers every .bookbtn — the teacher's dropdowns and the student's cards alike. */
-.tadmin-books .bookdrop{flex:0 0 var(--colT)}
+.tadmin-books .bookdrop{flex:0 0 380px}
 .tadmin-books button{margin:0;white-space:nowrap}
-.tadmin-cols{display:grid;grid-template-columns:repeat(2,var(--col2));gap:14px;margin:14px 0}
+.tadmin-cols{display:grid;grid-template-columns:repeat(2,593px);gap:14px;margin:14px 0}
 .tadmin-col{margin:0}
 .tadmin-col h4{margin:0 0 6px}
 .tadmin-item{padding:8px 0;border-bottom:2px dashed var(--tan)}
@@ -359,6 +364,19 @@ body.landing #needg{margin-top:10px;text-align:left}
 body.landing #needg p{font-size:15px;line-height:1.55;margin:10px 0}
 body.landing #needg button{margin:4px 0 8px}
 body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
+/* THE WELCOME LINE (owner instruction 2026-11-09): the site is fully visible without signing in, so the old
+   centred "Welcome" CARD became ONE horizontal line directly under the site header. It is outside the paper
+   panel, at the same 1400px metric as the header, and #needg drops to a full-width second line when Google's
+   script is unavailable — wrapping here is safe because this container is a FIXED width, so it never depends
+   on the viewport. */
+.welcome-bar{width:1400px;margin:6px 0 0 15px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;padding:8px 14px;font-size:15px}
+.welcome-bar .landing-title{font-size:16px;letter-spacing:0;margin:0;font-family:inherit;font-weight:700}
+.welcome-bar .wsep{color:#a99c88}
+.welcome-bar #gtext{margin:0;font-size:15px}
+.welcome-bar #gbtn{display:flex;align-items:center;justify-content:center;min-height:0;margin:0}
+.welcome-bar #needg{flex:1 1 100%;margin:6px 0 0;text-align:left}
+.welcome-bar #needg p{font-size:14px;line-height:1.5;margin:6px 0}
+.welcome-bar.attention{outline:3px solid var(--tan);outline-offset:2px;transition:outline-color .2s}
 
 /* landing page (index.html), not a lesson */
 .landing-hello{margin:14px 0;border-color:var(--ink);background:linear-gradient(100deg,rgba(217,193,186,.60),rgba(185,133,76,.30) 55%,rgba(29,78,216,.16))}
@@ -370,7 +388,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
    re-made on every resize. The document is fixed-width, so the columns are fixed pixels: 390 × 3 + 15 × 2 =
    1200 exactly. No fractional tracks, no phone breakpoint — a fixed-width document does not reflow, it
    scrolls — and the grid is decided once, by this rule, not by how many tracks have arrived. */
-.tracks{display:grid;grid-template-columns:repeat(3,var(--col3));gap:var(--gut3);align-items:start;margin:14px 0}
+.tracks{display:grid;grid-template-columns:repeat(3,390px);gap:15px;width:1200px;align-items:start;margin:14px 0}
 .track-card{margin:0}
 /* h3 is the block label everywhere in lesson content; the landing page keeps the browser default */
 #app h3{font-family:inherit;font-weight:700;font-size:1.17em;color:inherit;margin:1em 0;padding-left:0;border-left:0;letter-spacing:normal}
@@ -392,7 +410,14 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .bookitem a.ltitle:hover{text-decoration-thickness:2px}
 .bookitem.done .lnum,.bookitem.done a.ltitle{color:#0f766e}
 .bookitem.inert{opacity:.55}
-.track-card.locked{opacity:.5;filter:grayscale(1)}
+/* a LOCKED column greys only its selector, so the invitation below it can stay legible and clickable */
+.track-card.locked>.bookdrop{opacity:.5;filter:grayscale(1)}
+/* The locked column's invitation (owner instruction 2026-11-09): "⛌ Denied - Request Access?" replaces the old
+   "sem acesso" caption, and asking for THAT book is the one live control a locked column has. A signed-out
+   visitor gets the same control; it sends them to the sign-in line instead of the backend. */
+.denbtn{display:block;width:100%;margin:10px 0 0;background:var(--paper);color:#8a2b1f;border:2px dashed #8a2b1f;box-shadow:none;font-size:13px;font-weight:600;padding:6px 10px}
+.denbtn:hover:not(:disabled){background:#fbeae7;filter:none;transform:none}
+.denbtn[disabled]{opacity:.6;cursor:default;border-style:solid;color:#8a8072;background:var(--paper)}
 
 
 

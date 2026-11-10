@@ -48,7 +48,7 @@ ok('business card is active', biz && !biz.classList.contains('locked'));
 ok('kids card is locked', kids && kids.classList.contains('locked'));
 ok('adult card is locked', adult && adult.classList.contains('locked'));
 ok('locked cards have no links', kids.querySelectorAll('a').length === 0 && adult.querySelectorAll('a').length === 0);
-ok('locked cards say "sem acesso"', /sem acesso/i.test(kids.textContent));
+ok('a locked card offers to request that book', /Denied - Request Access\?/.test(kids.textContent));
 
 const drop = biz.querySelector('.bookdrop'), menu = drop && drop.querySelector('.bookmenu');
 ok('the card offers a lesson SELECTOR, not a standing list', !!menu && menu.hidden === true,
@@ -308,8 +308,8 @@ w.localStorage.setItem('eod_session',
 ok('an expired credential is refused before any paint',
   w.eval('restoreSession()') === false && !w.localStorage.getItem('eod_session'));
 w.eval('profile={email:"e@x.y"};cred="x";teacher=true;document.getElementById("app").innerHTML="protected";bounce();');
-ok('a rejected session shows the login card without a reload',
-  d.getElementById('logout').hidden === true && d.getElementById('gcard').hidden === false &&
+ok('a rejected session shows the sign-in line without a reload',
+  d.getElementById('logout').hidden === true && d.getElementById('welcome').hidden === false &&
   d.getElementById('app').innerHTML === '');
 
 /* FOCUS RINGS ARE OPT-IN (owner report 2026-11-09: pressing Shift put a border round the last-clicked button).
@@ -373,7 +373,11 @@ const popupCallers = siteFiles.filter(([, t]) => /(^|[^.\w'"])confirm\s*\(/.test
 ok('no site file calls the browser dialog', popupCallers.length === 0, popupCallers.join(',') || 'none');
 const sharedBlock = t => {
   const a = t.indexOf('/* == SHARED SOURCE: eodConfirm'), b = t.indexOf('/* == /SHARED SOURCE: eodConfirm == */');
-  return (a < 0 || b < 0) ? null : t.slice(a, b);
+  if (a < 0 || b < 0) return null;
+  /* line endings are normalised because index.html is CRLF and engine1.js is LF (a repo-wide inconsistency
+     git itself warns about); this check exists to catch the two copies' CODE drifting apart, and an EOL
+     difference is not drift. */
+  return t.slice(a, b).replace(/\r\n/g, '\n');
 };
 const blkEngine = sharedBlock(siteFiles[0][1]), blkIndex = sharedBlock(siteFiles[2][1]);
 ok('the dialog is one source, duplicated byte-identically',
@@ -411,6 +415,54 @@ ok('a replaced dialog settles false instead of hanging', (await p1) === false);
 d.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
 await p2;
 
+
+/* ---- owner instructions 2026-11-09 ----
+   ASK 2: a greyed trigger and a book with no lessons must open NOTHING.
+   ASK 3: a locked column carries "⛌ Denied - Request Access?" and the click asks for THAT book.
+   ASK 4: the whole index is painted with nobody signed in, every book locked. */
+w.eval('GUEST=false;MYTRACKS=["business"];PEND=[];REQING={};'
+  + 'LESSONS={business:[{n:1,title:"Only one"}],kids:[],adult:[]};renderStudent(["business"],"Ana");');
+const cardOf = t => [...d.querySelectorAll('.tracks .track-card')]
+  .find(c => ((c.querySelector('.bookbtn') || {}).textContent || '').includes(t));
+
+w.eval('toggleBookMenu("kids")');                       /* locked */
+const kidsMenuNow = cardOf('Kids').querySelector('.bookmenu');
+ok('a locked book\'s selector does not open', kidsMenuNow.hidden === true, 'hidden=' + kidsMenuNow.hidden);
+w.eval('toggleBookMenu("advanced-stem")');              /* held by nobody and has no lessons */
+const emptyMenu = d.getElementById('menu_advanced-stem');
+ok('a book with no lessons opens no dead panel',
+  !!emptyMenu && emptyMenu.hidden === true && emptyMenu.children.length === 0,
+  emptyMenu ? emptyMenu.children.length + ' item(s), hidden=' + emptyMenu.hidden : 'no menu');
+
+const den = cardOf('Kids').querySelector('.denbtn');
+ok('a locked column offers "⛌ Denied - Request Access?"',
+  !!den && /^⛌ Denied - Request Access\?$/.test(den.textContent.trim()), den ? den.textContent : 'none');
+const reqSent = [];
+w.fetch = async (u, o) => { const b = JSON.parse(o.body); reqSent.push(b);
+  return { ok: true, json: async () => ({ status: 'pending', track: b.track, tracks: [], pendingTracks: [b.track] }) }; };
+w.eval('requestTrack("kids")');
+await new Promise(r => setTimeout(r, 60));
+ok('the click asks the backend for THAT book only',
+  reqSent.length === 1 && reqSent[0].action === 'request' && reqSent[0].track === 'kids',
+  JSON.stringify(reqSent[0] || {}));
+const denAfter = cardOf('Kids').querySelector('.denbtn');
+ok('the asked-for book is marked and cannot be asked twice',
+  !!denAfter && denAfter.disabled === true && /Requested/.test(denAfter.textContent),
+  denAfter ? denAfter.textContent : 'none');
+
+w.eval('GUEST=true;MYTRACKS=[];PEND=[];renderStudent([],"")');
+const guestCards = [...d.querySelectorAll('.tracks .track-card')];
+ok('signed out, every book is painted and locked',
+  guestCards.length === w.eval('TRACKSALL.length') &&
+  guestCards.every(c => c.classList.contains('locked') && c.querySelector('.denbtn')),
+  guestCards.length + ' cards, ' + guestCards.filter(c => c.querySelector('.denbtn')).length + ' with a request button');
+ok('the guest index has no lesson link anywhere',
+  d.querySelectorAll('.tracks a.lesson-link').length === 0);
+const reqBefore = reqSent.length;
+w.eval('requestTrack("kids")');                        /* guest: must not reach the backend */
+await new Promise(r => setTimeout(r, 40));
+ok('a visitor\'s click signs in instead of requesting', reqSent.length === reqBefore &&
+  d.getElementById('welcome').classList.contains('attention'));
 
 console.log('\nstudent landing index — jsdom render');
 out.forEach(r => console.log('  ' + (r.pass ? '✅ ' : '❌ ') + r.name + (r.extra ? '  «' + r.extra + '»' : '')));
