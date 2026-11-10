@@ -59,15 +59,6 @@
   card with room it does not use.
 - **can't** — one card carries one rule. A card with three rules teaches none of them.
 
-### `annotatedExample - (best for: naming the working parts of a real sentence; three labels that carry meaning; showing what carries the tense · can't: label everything — labels on everything mark nothing, so three is the ceiling · purpose 8/10 · fun 3/10)`
-
-- **does** — One real sentence with its working parts named: what carries the tense, the chunk that can be
-  swapped, the piece that decides the meaning. Names sit beside or under the text.
-- **markup** — `.panel`; the target part in `<b>` with a caption line under it; `lang="pt"` only where a word
-  is genuinely new.
-- **fits** — full (a labelled sentence needs horizontal room) or half with two labels only.
-- **can't** — labels on everything mark nothing. Three labels maximum, or the student reads none of them.
-
 ### `formulaFrame - (best for: a pattern as a skeleton with named slots; filled versions beside the frame; patterns that really are fixed · can't: safely frame a pattern with moveable parts — the student then builds sentences that look like the frame and are wrong · purpose 8/10 · fun 3/10)`
 
 - **does** — A pattern as a skeleton with named slots (`<I'd rather> ___ <than> ___`), then two or three filled
@@ -88,27 +79,6 @@
 - **fits** — half, if the cues are short; full when examples are sentences.
 - **can't** — no cue is decisive on its own; a table that reads "always" when the language only mostly does this
   teaches a false rule.
-
-### `exceptionBench - (best for: exceptions grouped by why they behave that way; two or three items each carrying its reason; stopping a rule over-reaching · can't: help when the exceptions share no reason — then it is a list to memorise and should be cut · purpose 7/10 · fun 3/10)`
-
-- **does** — The exceptions, grouped **by why they behave that way**, not listed as a set of facts to memorise.
-  Two or three items, each `<form>` — because `<reason>`.
-- **markup** — `.panel` with a short heading per group; two groups maximum. No table: an exception has a reason,
-  and a table cell is too narrow to hold it.
-- **fits** — half; pair with the practice block that uses both the rule and its exception.
-- **can't** — if the exceptions have no shared reason, this block is a list of things to memorise and should be
-  cut in favour of teaching them as separate items.
-
-### `errorGallery - (best for: sentences that look right and are not; training the mistake rather than the correction; a striking opener · can't: produce anything, and it is heavy with negatives — more than five traps in one gallery and none are remembered · purpose 8/10 · fun 5/10)`
-
-- **does** — Four or five sentences that **look** correct and aren't, each with the reason it fails. The fixes
-  are not shown: the student meets those again in the practice that follows, so the gallery trains the mistake,
-  not the correction.
-- **markup** — `.panel`, one line per trap: the sentence in `<b>`, the reason under it in `lang="pt"` or plain
-  English, numbered. Nothing else — a gallery with fixes in it is an answer key.
-- **fits** — half, or full beside a `ruleCard`.
-- **can't** — no production, and it is heavy with negatives; more than five traps in one gallery and the student
-  remembers none of them.
 
 ### `beforeAfterStrip - (best for: naturalness rather than correctness; the version the student produces against a native one; one point per pair · can't: show an ungrammatical "before" (that teaches an error as the starting point), and three pairs in a row is a lecture · purpose 8/10 · fun 4/10)`
 
@@ -1031,3 +1001,4 @@
   never spelled out beyond its own words.
 - **needs** — nothing; `engine4.js` ships it. Author four to eight words per train, and put the ORDER on the page
   above the block (a chart or a one-line rule) — the game tests it, it never states it.
+

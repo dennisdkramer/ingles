@@ -21,23 +21,20 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 
 # [CURRENT] Prompt - (Active batches, newest first)
 
-## [10] - qa/preview-blocks.html: the menu's order, and no item the menu has dropped (2026-11-10)
-### [B1] - PRE-PROMPT RESEARCH <"preview-blocks.html"> <the item inventory, the target order, the orphan list>
-   - [S1] - every section inventoried in document order <qa/preview-blocks.html> <98 unique `id="item-*"`, no duplicate id> DONE - 98 sections, 95 note boxes; the boxes key on `data-item`, which rides inside the section, so a whole section moves intact
-   - [S2] - the page differenced against the menu <CONTENT_EXAMPLES.md 73 entries, IN-BLOCK-VISUALS.md 13 drafts> <the items with neither> DONE - 26: chunkBank (the page's old name for `contextFit`), connectedSpeech, dictation, shadowRecord, rubricCard, errorLog, choiceBoard, freeWrite, and the 18 deleted this turn
-   - [S3] - the check the removal could break identified <qa/examples.mjs "every draft built in the preview page has an item there"> <all 13 draft items kept>
-### [B2] - the page shows the menu and nothing else <"not to show items that are now deleted"> <25 sections gone, 73 remain> DONE - 2026-11-10 - qa/preview-blocks.html
-   - [S1] - remove the sections of the 18 vehicles deleted from the menu <cheatSheet … workedExample> <none of the 18 on the page> DONE - no id and no prose mention survives
-   - [S2] - remove the 7 further items with no menu entry <connectedSpeech, dictation, shadowRecord, rubricCard, errorLog, choiceBoard, freeWrite> <no section without an entry or a draft> DONE - 98 sections in, 73 out; the page's own intro never named any of them
-   - [S3] - keep `item-chunkBank`, the menu's `contextFit` under its old name <qa/NOTES.md `### chunkBank` still owns that box> <not renamed without instruction; offered in the turn> DONE - placed at contextFit's position in the order; renaming is left to the owner because it also renames a qa/NOTES.md section
-### [B3] - the page in the menu's order <"ordered according to content_examples"> <60 blocks in menu order, then the 13 drafts> DONE - 2026-11-10 - qa/preview-blocks.html
-   - [S1] - the 60 blocks: [TEACHING] 24, then [MIXED] 16, then [TRAINING] 20 <CONTENT_EXAMPLES.md [VEHICLES]> <same sequence as the file> DONE - lineRepair first, humourFlag last of the blocks; compared index by index against the menu, 0 mismatches
-   - [S2] - the 13 drafts in IN-BLOCK-VISUALS.md order <not the page's present order, which differs at massBasket/posMarks> <draft order matched> DONE - ruleTree … levelGauge
-   - [S3] - both TOC navs rebuilt from the new order <qa-toc counts and links> <no link to a removed id> DONE - "60 items" and "13 visual blocks", every href resolved
-### [B4] - verify and publish DONE - 2026-11-10 - qa/preview-blocks.html, PENDING.md, PAST_BATCHES.md
-   - [S1] - qa/examples.mjs green <the draft → item check> <6/6> DONE - 6 passed, 0 failed
-   - [S2] - the page parses and keeps every box <73 sections, 0 duplicate id, no dangling href> <counts check> DONE - 73/73 sections and 621/621 divs balanced; 70 note boxes, every one with its section
-   - [S3] - commit and push <PENDING.md [GUIDELINES]> <origin/main at local HEAD> DONE
+
+## [11] - the delete tags added after [10]: annotatedExample, exceptionBench, errorGallery (2026-11-10)
+### [B1] - PRE-PROMPT RESEARCH <"im still seeing entries on the preview page that I marked for deletion"> <the tags as they stand on disk now>
+   - [S1] - qa/NOTES.md re-read, not remembered <its LastWriteTime moved 14:19 -> 14:22 after [10]> <every section's text as it is now> DONE - the file now ends mid-word: `### beforeAfterStrip` holds a single `d`
+   - [S2] - the delete tags differenced against both preview pages <qa/preview-blocks.html 73 items, qa/preview-games4.html 13> <the three still live, and where> DONE - annotatedExample, exceptionBench and errorGallery are the only delete tags still on a page (blocks page lines 64/104/117); the games page carries no delete tag
+   - [S3] - cross-references to the three counted <CONTENT_EXAMPLES.md + IN-BLOCK-VISUALS.md> <none, so the deletion is clean> DONE - 0 references from any other entry or draft
+### [B2] - remove the three from both files <"im still seeing entries on the preview page that I marked for deletion"> <menu and page agree again: 70 items>
+   - [S1] - drop the three entries from CONTENT_EXAMPLES.md <[TEACHING] 24 -> 21> <no `### ` heading and no backticked name left>
+   - [S2] - drop the three sections from qa/preview-blocks.html <60 blocks -> 57> <no id, no href, both navs rebuilt>
+### [B3] - verify and publish
+   - [S1] - qa/examples.mjs green <the draft -> item check> <6/6>
+   - [S2] - page balanced and in menu order <sections, divs, ids, hrefs> <counts match>
+   - [S3] - commit and push <PENDING.md [GUIDELINES]> <origin/main at local HEAD>
+### [B4] - the open question, not acted on <"d" under `### beforeAfterStrip`> <asked, not assumed>
 
 ## [8] - the word-for-word rule, in the owner's wording (2026-11-10)
 ### [B1] - insert the rule after "Do not assume." <"__FOR ANY EDIT THAT REPLACES TEXT__ of a file in the repo root, if a message proposed it, the proposed new text must be shown accompanied by every word of the old text that is to be altered. (APENDING.md/PAST_BATCHES.md exempt)"> <ADHERENCE.md [UNDERSTANDING] carries it> DONE - their words kept word for word, with APENDING.md -> PENDING.md as the only correction; NO scope clause added (lesson pages are not in the repo root, so the phrase already excludes them) and NO "whole passage, not only the words that differ" clause added, since rule 16 forbids adding to proposed wording. Standing instruction noted: finished text in qa/NOTES.md is DELETED, never replaced, so that file is outside this rule by construction
