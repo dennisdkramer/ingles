@@ -21,40 +21,18 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 
 # [CURRENT] Prompt - (Active batches, newest first)
 
-## [24] - Raise the level floor, install register-over-every-string, add the authority order and a two-thirds slot, and make Complete reveal the keys
-### [B1] - Take [23] out of [CURRENT] "ok well the problem is that we are going to try to teach reduced speech very early on" PENDING.md [HANDLING] 13 DONE - 2026-10-11 - PENDING.md, PAST_BATCHES.md
-   - [S1] - Delete the finished [23] block; its summary is in PAST_BATCHES.md <PENDING.md> <[CURRENT] holds only [24]> DONE
-### [B2] - Raise the level floor and move difficulty into concepts and training "The lesson needs to be content level at LEAST = lesson level" <PEDAGOGY-MAP.md [LEVEL]> DONE - 2026-10-11 - PEDAGOGY-MAP.md
-   - [S1] - t) a floor not a +-5 band; v) the four demands; w) difficulty in concepts and training <PEDAGOGY-MAP.md 89-93> DONE
-### [B3] - Make the register govern every string "I want the whole content written in the correct register" <PEDAGOGY-MAP.md, ADULT-REGISTER.md> DONE - 2026-10-11 - PEDAGOGY-MAP.md, ADULT-REGISTER.md
-   - [S1] - x)/y)/z) under a new [Register] heading <PEDAGOGY-MAP.md 95-98> DONE
-   - [S2] - Every string, the per-string test, Portuguese is the teacher voice <ADULT-REGISTER.md 21-23> DONE
-### [B4] - Add the authority list "how do we express this in the file? we dont currently have an authority list" <PEDAGOGY-MAP.md 1-6> DONE - 2026-10-11 - PEDAGOGY-MAP.md
-   - [S1] - Precedence order plus reading-order-is-not-precedence <PEDAGOGY-MAP.md 5-6> DONE
-### [B5] - Add the two-thirds slot and rewrite e) "maybe we need a 2/3 width option too" <style.css, FORMAT.md> DONE - 2026-10-11 - style.css, FORMAT.md
-   - [S1] - .itemsize-twothird and the paired third <style.css 208-211> <a paired third is 395px, so 395+791+14 = 1200> DONE
-   - [S2] - (a) four widths; line 38 names the pairing <FORMAT.md 38, 47> DONE
-   - [S3] - e) as pair -> measure -> never pad <FORMAT.md 51-55> DONE
-### [B6] - Answer whether register.mjs is register-neutral "so it checks against whatever the register should have" <qa/register.mjs> DONE - 2026-10-11 - none
-   - [S1] - Read its mechanism <qa/register.mjs 37-54> <no: three hardcoded regexes and a track map whose comment was already false> DONE
-### [B7] - Take content-example sample text out of precedence "i dont think the content examples sample text needs to have ANY precedence" <PEDAGOGY-MAP.md 5, 57> DONE - 2026-10-11 - PEDAGOGY-MAP.md
-   - [S1] - Dropped from the order; the vehicle is borrowed, the content is written for this lesson <PEDAGOGY-MAP.md 5, 57> DONE
-### [B8] - Complete reveals the key and locks, Clear empties and unlocks "i want the revealed answers to be below the input fields" <engine2.js, style.css, FORMAT.md> DONE - 2026-10-11 - engine2.js, style.css, FORMAT.md
-   - [S1] - ansKeyText + applyCompleted, called from renderCompleteBtn; the wipe empties and unlocks <engine2.js 237-275, 337-341> DONE
-   - [S2] - .ans under the field, .has-ans wraps the row, label.correct greens <style.css 228-231> DONE
-   - [S3] - data-answer and the item-number convention documented <FORMAT.md 36-37> DONE
-   - [S4] - The real function exercised against a keyed DOM, 10/10 <qa/_reveal.tmp.mjs, deleted after the run> DONE
-### [B9] - Make register.mjs test the track own tells "2 tells the checker what exactly?" <qa/register.mjs, ADULT-REGISTER.md> DONE - 2026-10-11 - qa/register.mjs, ADULT-REGISTER.md
-   - [S1] - A Tells block in the register file <ADULT-REGISTER.md 26-31> DONE
-   - [S2] - The harness parses it; owes is true only when a block declares a floor <qa/register.mjs 49-72, 112-115> DONE
-   - [S3] - Ran it: adult/40 flagged mate flat queue lift; --all is 19 warnings 0 fails <qa/register.mjs> DONE
-### [B10] - Let a justified gloss leave the PT band "the register.mjs and lang.mjs changes" <qa/lang.mjs, FORMAT.md> DONE - 2026-10-11 - qa/lang.mjs, FORMAT.md
-   - [S1] - data-why removes an element from the share and the denominator <qa/lang.mjs 99-106, 129, 156> DONE
-   - [S2] - No page carries data-why yet, so the change is a no-op on the 102 existing pages <grep data-why = 0> DONE
-### [B11] - Make the tells a real vocabulary floor "i think we want a much longer list of swears and street words if we're gonna say the track needs them, and 'fricking' isnt taboo" <ADULT-REGISTER.md, qa/register.mjs> DONE - 2026-10-11 - ADULT-REGISTER.md, qa/register.mjs
-   - [S1] - Lists by domain: profanity, police, money, drugs, people, approval, violence, AAVE and reductions, bedroom, formal, locale <ADULT-REGISTER.md 26-42> <218 street items>
-   - [S2] - Euphemisms out of MASKED: freaking, fricking and shoot are a costume, not evidence <qa/register.mjs 46-49> DONE
-   - [S3] - A repeated key accumulates; sexual is a third presence category alongside taboo and street <qa/register.mjs 58-83, 115-127> DONE
-   - [S4] - False-positive audit over all 23 adult pages, then fixed the list: fam matched "familia", plus loud, broke, fly, twelve, bread, za, drank, cap, facts, beef, scrap, jumped <ADULT-REGISTER.md 31-36> <24 distinct markers remain and every one is genuine> DONE
-   - [S5] - Coverage measured, and it is the finding: adult is taboo 43%, colloquial 39%, bedroom 9% <qa/register.mjs --track=adult> <the corpus is the gap, not the list> DONE
 
+## [25] - Tier the register vocabulary by frequency, and stop the harness checking pages
+### [B1] - Take [24] out of [CURRENT] "STOP checking against existing pages" PENDING.md [HANDLING] 13 DONE - 2026-10-11 - PENDING.md, PAST_BATCHES.md
+   - [S1] - Delete [24]; summary appended to PAST_BATCHES.md <PENDING.md> <[CURRENT] holds only [25]> DONE
+### [B2] - Tier the tells and give the generator the order "I dont want the generator to treat those words as if theyre all equal" <ADULT-REGISTER.md> DONE - 2026-10-11 - ADULT-REGISTER.md
+   - [S1] - core/common/situational/rare, each stating what it licenses <ADULT-REGISTER.md 27-33> DONE
+   - [S2] - Ten tiered keys holding the vocabulary <ADULT-REGISTER.md 35-45> DONE
+   - [S3] - British profanity moved out of taboo into locale: bollocks tosser wanker arsehole twat shag <ADULT-REGISTER.md 45> DONE
+   - [S4] - loud pack dropped for loud; wet dream demoted to rare; fricking freaking shoot stay out <ADULT-REGISTER.md> DONE
+### [B3] - Delete the harness own word list and parse the tiers "register.mjs is register neutral right?" <qa/register.mjs> DONE - 2026-10-11 - qa/register.mjs
+   - [S1] - Family-tier keys, byFam accumulation, DEFAULTS gone <qa/register.mjs 51-78> DONE
+   - [S2] - --tells prints the parsed vocabulary and reads no page <qa/register.mjs 87-103> DONE
+   - [S3] - Verified by --tells alone: taboo 36 in 2 tiers, street 174 in 4, sexual 92 in 3, formal 15, locale 36 <qa/register.mjs --tells> DONE
+### [B4] - Point the author at the tiers "The words either need to be ordered or labeled as such with instructions to the generator" <PEDAGOGY-MAP.md 57> DONE - 2026-10-11 - PEDAGOGY-MAP.md
+   - [S1] - One clause in Precedence: taught items from core then common, situational only when the scene is that scene, rare never to hit a target <PEDAGOGY-MAP.md 57> DONE
