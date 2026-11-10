@@ -156,6 +156,7 @@
 - **vary** — reverse the direction (twin → everyday) before widening the vocabulary; then move the verb into a
   sentence with a subject that forces agreement. Rarer verbs make it *unfairer*, not harder.
 - **can't** — the pairing has to be genuinely interchangeable, or the chart teaches a false equation; and it is a
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   vocabulary lesson, not a meaning lesson — the student learns the register of a word they already understand.
 
 ### `contextFit - (best for: whole fixed expressions used in a stated situation; matching a chunk to what it answers; teaching a chunk as one piece with audio · can't: teach the grammar inside the chunk, and a chunk whose parts can be swapped is not a chunk · purpose 8/10 · fun 5/10)`
@@ -171,6 +172,7 @@
 - **vary** — start with the chunk fully given and gap only the situation; then invert. The real lever is *which*
   chunks are in the bank: same function, different politeness, is harder than more chunks of the same politeness.
 - **can't** — a chunk whose parts can be swapped is not a chunk, so check it is said as one piece; and it never
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   teaches the grammar inside it — that is the point, and also the limit.
 
 ### `registerContrast - (best for: choosing register for a named audience; showing stiff beside spoken; sharpening a choice the student half knows · can't: judge without a described audience, and it only ever chooses between wordings someone else wrote · purpose 7/10 · fun 4/10)`
@@ -185,6 +187,7 @@
 - **vary** — two clearly different audiences before two similar ones. The lever is how close the two audiences are
   (a teacher vs a head teacher vs a friend's parent), not how rude the options get.
 - **can't** — needs a described situation; with no audience both columns are defensible. And both wordings must be
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   ones people REALLY say or write: a softened form invented for a phrase that never needs softening (or a stiff form
   for a phrase that never has one) teaches a register the student will never meet, which is worse than teaching
   none. If one of the two forms is not genuinely in use, the contrast is not a contrast — pick another phrase.
@@ -203,6 +206,7 @@
 - **vary** — a contrast in isolation → the same contrast inside a word → the same inside a phrase. Adding a second
   contrast to the same lab is what destroys it.
 - **can't** — needs a real first-language error to be worth the space, so generic "pronunciation" pages teach nothing;
+- **load** — qty ×1.0 at 4 → ×2.0 at 8
   and it teaches *one* phoneme — never claim it fixes an accent.
 
 ### `wordFamily - (best for: one root's several jobs; showing that a family is not a set of synonyms; choosing a member by what the sentence needs; the second noun a family sometimes has · can't: run on a root with no distinct members in use — an invented member teaches a word nobody says · purpose 8/10 · fun 5/10)`
@@ -220,6 +224,7 @@
 - **vary** — give the family in the box → withhold it and give only the root → include a member the family does *not*
   have, so the student has to reject it. The last is the only version that tests the mental model rather than the list.
 - **can't** — only works on roots that really do have distinct members in use; inventing `<root>ness` to fill the grid
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   teaches a word nobody says, and the student will use it confidently.
 
 ### `politeLadder - (best for: politeness as a choice of form for a stated hearer; three correct versions of one request; tone with no new grammar · can't: teach grammar, and the rungs must mean the same or the student is choosing content rather than tone · purpose 8/10 · fun 5/10)`
@@ -233,6 +238,7 @@
 - **vary** — two rungs → three → four where the top rung is right for one hearer and *wrong* (oily) for another. The last
   is the item that turns the ladder into a rule.
 - **can't** — the rungs must be interchangeable in meaning, or the student is choosing content rather than tone; and it
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   teaches no grammar — only which of several known forms to reach for.
 
 ### `infoGap - (best for: writing the question that gets the missing piece; real asymmetry between two panels; question and answer as one pair · can't: be a speaking gap (everything must be answerable from the page), and a half holding the other half's answers kills it · purpose 8/10 · fun 6/10)`
@@ -250,6 +256,7 @@
 - **vary** — the fact needed is named in the prompt → only the category is named → both students must ask, and one item
   needs a follow-up question because the first answer is incomplete.
 - **can't** — everything has to be answerable from the page, so it is a written information gap and not a speaking one;
+- **load** — qty ×1.0 at 4 → ×2.0 at 8
   and a half that already contains the other half's answers kills it.
 
 ### `genreDoc - (best for: functional reading of a real artefact; questions only that table can answer; what it costs, excludes or requires · can't: test production, and an invented artefact teaches a convention that does not exist · purpose 8/10 · fun 4/10)`
@@ -264,6 +271,7 @@
 - **vary** — first a value that is printed on it; then a value that must be inferred (a total, an expiry); then what
   the artefact does *not* say — that third step is where real reading happens.
 - **can't** — cannot test production, and the authoring cost is the real one: an invented artefact teaches a
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   convention that does not exist. It also needs the lesson to name what the artefact is for, or the questions are
   guesswork.
 
@@ -276,6 +284,7 @@
 - **width** — half+half (notice left, force right; then the operative gap)
 - **vary** — from "what does it mean" to "which two notices conflict". Conflict is the difficulty, not longer notices.
 - **can't** — recognition only, and it must keep two axes apart: how hard a notice is and how polite it is are
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   different questions, and a block that asks both at once cannot be marked.
 
 ### `formFill - (best for: the conventions of a form; details into the right boxes; a language-light slot in a course of sentences · can't: carry a lesson (near-zero language load), and it is only honest when the lesson stated the convention rather than assuming it · purpose 8/10 · fun 3/10)`
@@ -290,6 +299,7 @@
 - **vary** — give the details in the boxes' order, then in a different order, then include one detail that belongs in
   no box.
 - **can't** — near-zero language load, so it cannot carry a lesson on its own, and it is only honest when the
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   convention was stated by the lesson rather than assumed by the author.
 
 ### `measureLocal - (best for: date, clock, money, distance and temperature conventions; converting both ways; spotting an ambiguous reading · can't: keep language in front — arithmetic crowds it out past five rows, and it teaches nothing about how anyone speaks · purpose 7/10 · fun 4/10)`
@@ -302,6 +312,7 @@
 - **width** — half-> (the pair plus the ambiguity row, and no further)
 - **vary** — a value to convert; then a value that is ambiguous; then a value where the ambiguity changes the answer.
 - **can't** — arithmetic crowds out language quickly — keep it to five rows — and it teaches nothing about how anyone
+- **load** — qty ×1.0 at 3 → ×2.5 at 6 · pace ×1.5 when data-time · risk ×1.6 at data-retry="0"
   actually speaks.
 
 ### `accentVariant - (best for: tolerance of variation; matching a form to the material it came from; killing the question "which one is correct" · can't: come from one voice — variants must be reproduced in writing, and it must never be phrased as a correctness question · purpose 7/10 · fun 5/10)`
@@ -316,6 +327,7 @@
 - **width** — half (a form beside the material it belongs to)
 - **vary** — start with spelling, then sound, then a form that is old rather than regional.
 - **can't** — cannot be built from the lesson's own voice: one speaker cannot carry variants, so the lesson must
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   reproduce them in writing. And it must never be phrased as "which is correct" — the block exists to kill that
   question, not to ask it.
 
@@ -329,6 +341,7 @@
 - **width** — third-> (three labelled lines and one gap)
 - **vary** — from producing the idiom to choosing between two that both look plausible.
 - **can't** — origins are frequently folk etymology. If the source is not certain the block must say "one story is" —
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   an invented origin is worse than none. It is also one lexical item at a time and never generalises.
 
 ## [TRAINING]
@@ -363,6 +376,7 @@
   teach turn-taking — a perfect question in the wrong place is still a failed exchange, and carrying a whole exchange
   is a different block's job (`dialog`).
 - **difficulty** — the item is harder than it looks: one answer can often be asked two or three correct ways, and a
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   context can be so open that the "right" question is a judgement the page never defined. So each item names ONE
   thing being asked (the tense, the question word, the subject) and accepts every form that fits that one thing, and
   the answer it is built from is specific enough that only one question really answers it. If two different questions
@@ -378,6 +392,7 @@
 - **vary** — the move alone, then the move inside a longer exchange. What actually makes it harder is *whose* fault
   the break is: repairing your own sentence is a different move from rescuing someone else's.
 - **can't** — teaches the move, not the conversation; needs a scene to mean anything, and a teacher to judge whether
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   the student could actually say it under pressure.
 
 ### `minimalPairs - (best for: separating two near-identical sounds; homophones from a flap T or a silent letter; a quick ear beat under a display · can't: show that the student can say it, and it uses words they already know, so it carries no new vocabulary · purpose 9/10 · fun 6/10)`
@@ -391,6 +406,7 @@
 - **vary** — two words → three → the pair inside a phrase at speed. Three options is the minimum for anything that
   matters, because two is a coin flip.
 - **can't** — recognition only; it never shows the student can say it, and it deliberately uses words the student
+- **load** — qty ×1.0 at 4 → ×2.0 at 8
   already knows, so it cannot carry new vocabulary.
 
 ### `listenIdentify - (best for: a ternary recognition beat (sound, ending, stress); the cheapest listening block; an ear check before production · can't: work on two options (a coin flip), and it proves a difference was heard, not that either word means anything · purpose 8/10 · fun 5/10)`
@@ -404,6 +420,7 @@
 - **vary** — three options, then the same three inside a phrase; then the same phrase at natural speed. More options
   beyond three adds guessing, not difficulty.
 - **can't** — two options invites a coin flip, so three minimum for anything that matters; and it tells you the
+- **load** — qty ×1.0 at 4 → ×2.0 at 8
   student heard *a difference*, not that they know what either word means.
 
 ### `errorCorrection - (best for: refusing the classic first-language error; distractors that each encode one real error; word-sized or sentence-sized granularity · can't: show production — it only shows the wrong form was refused, so pair it with a gap drill · purpose 8/10 · fun 5/10)`
@@ -417,6 +434,7 @@
 - **vary** — one distractor at a time before four; then the same error inside a longer sentence where the trigger is
   further away. Adding distractors that are merely odd (not wrong) is what makes it a trick question.
 - **can't** — distractors must be real errors, or it becomes a spot-the-typo; and it never shows the student can
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   *produce* the form, only refuse the wrong one — pair it with a gap drill in the same lesson.
 
 ### `syllableLab - (best for: counting syllables; locating the beat the stress lands on · can't: anything yet — this file states no mechanism, no art and no limit for it, so nothing here is claimed · purpose 3/10 · fun 3/10)`
@@ -438,6 +456,7 @@
 - **vary** — the count is the lever: an unstated count is a different, much harder task. Then make the errors the ones
   the rule predicts, rather than the ones that merely look odd.
 - **can't** — needs a self-contained text, so it is not a beat-sized vehicle; and a student who finds all the errors may
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   still not know why they were errors — the debrief is the teacher's.
 
 ### `oddOneOut - (best for: making a category decision that needs a reason; discrimination the student must justify; a discussion opener · can't: survive two defensible answers, so the justification is mandatory and the teacher must read it; it never produces the target form · purpose 7/10 · fun 6/10)`
@@ -450,6 +469,7 @@
 - **vary** — the odd one out by meaning, then by form, then by usage. Four items → five. What genuinely makes it harder
   is when the odd item is odd for a *subtler* reason, not when the vocabulary is rarer.
 - **can't** — if two items can be defended, the item is broken, so the justification is mandatory and the teacher reads
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   it; and it never produces the target form.
 
 ### `spotTheDiff - (best for: noticing what changed between two texts; close reading of a chat or a notice; finding the difference before naming the rule · can't: say which version is right, and it is wasted on differences that are only punctuation · purpose 7/10 · fun 6/10)`
@@ -474,6 +494,7 @@
 - **vary** — a stated number of sentences, then free length; then give the ending first and ask for the beginning. The
   lever is how much of the situation is withheld, not the length of the writing.
 - **can't** — no marking; it produces investment, not accuracy, so it must be followed by a block that does ask for a
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   right answer — otherwise the page has no evidence at all.
 
 ### `miniProject - (best for: free production toward a real artefact; a word bank and a textarea; end-of-lesson synthesis · can't: train a form under control or be auto-marked — the checklist is what the teacher marks against · purpose 8/10 · fun 7/10)`
@@ -487,6 +508,7 @@
 - **vary** — fewer required elements, then more; then a length limit, which is the harder constraint. Never raise the
   vocabulary as the difficulty lever — the point is producing with words they have.
 - **can't** — free production only, so nothing here trains a form under control and it needs a drill beside it; and it
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   cannot be auto-marked — the checklist is what the teacher marks against.
 
 ### `emphaticBeat - (best for: tying stress to intended meaning; showing one sentence has three readings; tone work beside a dialogue · can't: produce the sound (it marks a word), and it is genuinely hard where emphasis is marked by word order · purpose 7/10 · fun 6/10)`
@@ -502,6 +524,7 @@
 - **vary** — three candidate words → five → a two-clause sentence where the beat can fall in either clause. The lever
   is the number of *plausible* hosts, not the length of the sentence.
 - **can't** — only produces a marked word, never the sound; and it is genuinely hard for students whose first language
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   marks emphasis with word order instead — that difficulty is the lesson, not a defect.
 
 ### `mediaSnippet - (best for: reading a situation off one real line; one named concept shown twice; catching what is not said · can't: stay current or be owned — quote a line, never a verse, and cut any item that does not stand alone · purpose 7/10 · fun 7/10)`
@@ -521,6 +544,7 @@
 - **vary** — the second line of the same concept, so the student generalises across two rather than interpreting one; then
   a third from a different medium.
 - **can't** — it dates and it is somebody's property: quote a line, never a verse, and never build an item whose answer
+- **load** — qty ×1.0 at 4 → ×2.0 at 8
   needs the student to know the source. If it does not stand alone, cut it.
 
 ### `rhymeCoda - (best for: finding which lines rhyme; the same sound under different spellings; pattern-hunting in real text · can't: carry a sound the student cannot yet hear, and never rely on a rhyme that lives in a performance the page does not have · purpose 7/10 · fun 6/10)`
@@ -536,6 +560,7 @@
 - **vary** — move from "which two rhyme" to "which one does not rhyme although it is spelled the same". That
   reversal is the difficulty; rarer words are only unfairness.
 - **can't** — it needs lines whose rhyme is visible in the spelling, so it cannot carry a sound the student cannot
+- **load** — qty ×1.0 at 4 → ×2.0 at 8 · risk ×1.6 at data-retry="0"
   yet hear, and it must never be used with a lyric whose rhyme depends on a performance the page does not have.
 
 ### `songStructure - (best for: naming a lyric's parts by what they do; repetition as a decision rather than filler; the line that comes back changed · can't: be listening — there is no audio, so presenting it as listening is dishonest, and it assumes comprehension rather than teaching words · purpose 6/10 · fun 5/10)`
@@ -550,6 +575,7 @@
 - **vary** — first ask only what comes back; then what changed inside it; then why that line and not another. Three
   steps, same artefact.
 - **can't** — no audio and no song: this is the shape of a text, and presenting it as listening is dishonest. It also
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   cannot teach vocabulary — it assumes the student already understands the lines.
 
 ### `barCount - (best for: counting the beats a line lands on; turning rhythm into a number the student can check; where the count breaks · can't: measure anything — a page carries no metronome, so the count is the lesson's judgement, and it says nothing about meaning · purpose 6/10 · fun 3/10)`
@@ -563,6 +589,7 @@
 - **vary** — count beats, then move the count by one word, then keep the count identical and change the meaning. The
   third step is the whole point and it needs no new words.
 - **can't** — speech only: a page cannot carry a metronome, so the count is the lesson's judgement and the block must
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   not present itself as measuring anything. It teaches nothing about meaning.
 
 ### `moodTrack - (best for: justifying a mood in one written line; the vocabulary of how a track sounds; defending a judgement in language · can't: play anything — grading it as listening would be a lie, and it cannot teach genre names it never states · purpose 6/10 · fun 6/10)`
@@ -575,6 +602,7 @@
 - **width** — half-> (the scene, the description and the one gap)
 - **vary** — narrow the distance between the three descriptions until all are plausible. Never raise the vocabulary.
 - **can't** — nothing is played. It is vocabulary and justification, and grading it as a listening task would be a
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   lie; it also cannot teach genre names it never states.
 
 ### `tabooMap - (best for: which question is off-limits in a given situation; rewriting one so it becomes askable; pragmatics as a boundary · can't: keep itself safe — given a people instead of a place and a person it writes a stereotype into the page and signs it · purpose 6/10 · fun 5/10)`
@@ -588,6 +616,7 @@
 - **vary** — from "which is off-limits" to "which is fine here and not there". That second form needs two scenes, not
   stronger wording.
 - **can't** — **this is the most dangerous block in the file.** It asserts nothing itself, but if the lesson supplies a
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   scene as a national trait instead of a specific situation, the block writes a stereotype into a page and signs it.
   It is only usable when the scene is *a place and a person*, never a people.
 
@@ -600,6 +629,7 @@
 - **width** — third-> (the line, the mechanism and what the joke loses)
 - **vary** — from naming the mechanism to predicting whether a second line will land.
 - **can't** — funny is not a rule, and explaining a joke can kill it, so use it once per lesson at most. It must never
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
   be graded as though taste were accuracy.
 
 ## [GAMES]
@@ -621,6 +651,7 @@
   simply leaves the default and takes the slower range as it comes.
 - **can't** — no production, no spelling; one shot per item means a careless click can hide what the student knew.
 - **needs** — nothing; `engine4.js` ships it.
+- **load** — qty ×1.0 at 4 → ×2.0 at 8 · pace ×1.5 when data-time
 
 ### `whackMole - (best for: spotting which option fits among lookalikes; engagement in a restless class; exposing hesitation · can't: anything needing reflection — speed pressure is the whole mechanism; recognition only · purpose 9/10 · fun 8/10)`
 
@@ -635,6 +666,7 @@
 - **art** — inline SVG mole + radial-gradient hole with a dirt rim, rise via `translateY`, reduced-motion path.
 - **can't** — recognition only; speed pressure makes it a poor fit for anything needing reflection.
 - **needs** — nothing; `engine4.js` ships it.
+- **load** — qty ×1.0 at 3 → ×2.5 at 6 · pace ×1.5 when data-time
 
 ### `catchBasket - (best for: sorting a form into its category; making a rule decision a single physical gesture; showing hesitation in public · can't: more than two to four categories per row, and a seventh item swamps the pot · purpose 9/10 · fun 8/10)`
 
@@ -651,6 +683,7 @@
 - **art** — inline SVG terracotta pot, water drops over the rim on a right drop, a flower grows out of the soil and
   stays there (six to a pot); the word lifts and tilts while held, a wrong drop shakes.
 - **can't** — only two to four pots fit a row; fine distinctions don't fit, and a seventh flower would swamp the pot.
+- **load** — qty ×1.0 at 4 → ×2.0 at 8
 
 ### `stackDrop - (best for: giving a long drill a shape and an end; accumulate-and-complete motivation; the tower as progress bar · can't: run on a two-item block (nowhere to climb), and timing dominates, so one phrase per block · purpose 8/10 · fun 8/10)`
 
@@ -671,6 +704,7 @@
 - **can't** — one item per block, so a two-item block has nowhere to climb; timing dominates, so keep the language
   load to a phrase per block.
 - **needs** — nothing; `engine4.js` ships it.
+- **load** — qty ×1.0 at 4 → ×2.0 at 8
 
 ### `flapGate - (best for: recognition at speed; arcade engagement; a keyboard and reduced-motion path to answering · can't: anything beyond recognition at speed, and it is the most expensive of the arcade set · purpose 8/10 · fun 9/10)`
 
@@ -693,6 +727,7 @@
   as a flat fill. Fall is half what it was, lift unchanged.
 - **can't** — recognition at speed only, and it is the most expensive of the arcade set.
 - **needs** — shared runner + gravity loop.
+- **load** — qty ×1.0 at 4 → ×2.0 at 8
 
 ### `wordleBoard - (best for: spelling one word to a five-try limit; the deduction pleasure of letter feedback; repeated right-letter evidence · can't: run on phrases or on any word length but the fixed one; teaches no meaning and no listening · purpose 9/10 · fun 9/10)`
 
@@ -709,6 +744,7 @@
   word lands — a wrong length costs a message, not a row.
 - **can't** — only words of one fixed length; nothing for phrases, meaning or listening.
 - **needs** — nothing; `engine4.js` ships it.
+- **load** — qty ×1.0 at 3 → ×2.5 at 6 · risk ×1.6 at data-retry="0"
 
 ### `mineGrid - (best for: making a guess cost something; reading before moving; leaving blanks a teacher can read as evidence · can't: run on a lesson that writes two or three options — the street comes up short · purpose 8/10 · fun 7/10)`
 
@@ -729,6 +765,7 @@
 - **art** — a street and a boardwalk, a signed doorframe per word with a drawn batwing door that swings on its hinge,
   a drawn snake, and a figure with hurt and down states.
 - **can't** — one answer per door; a lesson that writes two or three options leaves the street short.
+- **load** — qty ×1.0 at 4 → ×2.0 at 8 · risk ×1.6 at data-retry="0"
 
 ### `crosswordBoard - (best for: spelling a word to its clue; showing that words share letters; a board where one shared cell solves two items · can't: handle long or unspellable words, and a vocabulary sharing no letter can only sit in separate rows · purpose 9/10 · fun 8/10)`
 
@@ -749,6 +786,7 @@
 - **can't** — the set must be spellable and the words short, or the grid gets fat; words with no shared letter can
   only sit in their own rows, so a lesson whose vocabulary shares nothing is a bad fit.
 - **needs** — nothing; `engine4.js` ships it. Authoring: `data-answer` on each `.qitem`, clue in `.qstem`.
+- **load** — qty ×1.0 at 3 → ×2.5 at 6 · pace ×1.5 when data-time · risk ×1.6 at data-retry="0"
 
 ### `echoPads - (best for: word order and collocation one word at a time; a constraint the student can see on the stage; planning a sentence end to end · can't: cover more than one sentence per block, and trains neither spelling nor listening · purpose 9/10 · fun 7/10)`
 
@@ -783,6 +821,7 @@
   the pad that also fits is the pad that teaches nothing and scores a coin flip. Generating the three options
   before the phrase is written, or from the whole sentence at once, is what produces them.
 - **needs** — nothing; `engine4.js` ships it (the voice is the built-in speech).
+- **load** — qty ×1.0 at 3 → ×2.5 at 6 · pace ×1.5 when data-time · risk ×1.6 at data-retry="0"
 
 ### `bingoCard - (best for: recognising the spoken form of a word; one-chance attention with no replay; hearing under a countdown · can't: hear anything longer than a word, and it needs several options across the block or the decoy pool runs dry (the two countdowns are the game's own) · purpose 8/10 · fun 9/10)`
 
@@ -805,6 +844,7 @@
 - **can't** — recognition of the spoken form only, one word per item; the card needs a few options across the block
   or the decoy pool runs dry, and a lesson block cannot set the two countdowns — they are the game's own clock.
 - **needs** — nothing; `engine4.js` ships it (uses the built-in voice). Leave `data-time` at 0.
+- **load** — qty ×1.0 at 4 → ×2.0 at 8 · pace ×1.5 when data-time · risk ×1.6 at data-retry="0"
 
 ### `ladderRun - (best for: the page's quiz rather than a drill; keeping what was safely earned; scaling one block from five items to a full test · can't: act as a mid-lesson beat — one continuous arc — and its fall to the safe rung is harsh, so items must be fair · purpose 9/10 · fun 8/10)`
 
@@ -824,6 +864,7 @@
   item: the student who reads carefully is the one who gets it wrong. Write the wrong option so it is wrong for a
   reason the lesson has taught, and read every item back as a picky teacher before shipping it.
 - **needs** — nothing; `engine4.js` ships it.
+- **load** — qty ×1.0 at 3 → ×2.5 at 6
 
 ### `bossRaid - (best for: a long drill with a visible cost; ritual stakes and a chosen fighter; an ending that belongs to the answers, not a timer · can't: rescue weak items — the stakes mask them, so every item must still be defensible on its own · purpose 8/10 · fun 10/10)`
 
@@ -843,6 +884,7 @@
 - **art** — a torch-lit arena, three drawn fighters with their own weapons, a fireball, an arrow and an acid drop as
   separate sprites, a drawn boss with bite/hurt states, a slash arc, an HP bar.
 - **can't** — ritual stakes can mask weak items; every item must still be defensible on its own.
+- **load** — qty ×1.0 at 3 → ×2.5 at 6 · pace ×1.5 when data-time
 
 ### `trainOrder - (best for: one fixed adjective order made physical; the two ways a sentence sounds wrong; a rule felt instead of memorised · can't: contrast two orders, teach a second rule, or produce anything — the sentence is built, never written or said · purpose 9/10 · fun 8/10)`
 
@@ -894,6 +936,7 @@
   the sentence is built, never written or said. Word-level vocabulary has to be known already, since the sentence is
   never spelled out beyond its own words.
 - **needs** — nothing; `engine4.js` ships it. Author four to eight words per train, and put the ORDER on the page
+- **load** — qty ×1.0 at 3 → ×2.5 at 6 · pace ×1.5 when data-time · risk ×1.6 at data-retry="0"
   above the block (a chart or a one-line rule) — the game tests it, it never states it.
 
 

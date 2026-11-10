@@ -2,6 +2,15 @@
 
 # [CURRENT] Prompt - (Active batches, newest first)
 
+## [38] - load curves authored onto every activity, replacing the beat and cost fields (2026-11-10)
+### [B1] - PRE-PROMPT RESEARCH <"delete the 'beat' and 'cost' values for the activities and put the load values there"> <the entry format, the `**load**` shape the file states, and every beat/cost line located> IN PROGRESS
+   - [S1] - `CONTENT_EXAMPLES.md [INSTRUCTIONS]` read for the exact `**load**` shape the file prescribes <the shape is the contract; inventing a second one is the defect> IN PROGRESS
+   - [S2] - every `**beat**` and `**cost**` line found and counted, and the activities that carry answers or fields counted separately <43 was the count from the last audit; it is re-derived, not remembered> IN PROGRESS
+### [B2] - the authoring <"put the load curves onto the activities … doesnt have to be accurate"> <one `**load**` line per activity, shaped for fast tweaking, with beat/cost removed> NOT EXECUTED
+   - [S1] - the numbers derived from each activity's own content shape (option count, item count, clock, one-chance) and stated as a baseline-to-ceiling multiplier <never from the lesson level> NOT EXECUTED
+### [B3] - verify <the file's own parser must still read every entry> NOT EXECUTED
+### [B4] - publish <commit-by-default; a push is not a publication> NOT EXECUTED
+
 ## [37] - PENDING.md cleared to the live work, with the casualties reported (2026-11-10)
 ### [B1] - what is deleted known before it is deleted <"clear everything else out of pending"> <every section read, not assumed from its heading> DONE - 300 lines, 19 sections, read whole
 ### [B2] - the clear done as an archive, not a deletion <the repo already has PAST_BATCHES.md for exactly this> DONE - 247 lines moved, one header line recording the instruction and the date; nothing lost, so a reminder can still be acted on
