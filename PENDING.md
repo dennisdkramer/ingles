@@ -67,6 +67,16 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 # [CURRENT] Prompt - (Active batches, newest first)
 
 
+## [20] - lesson 40 added to the lesson list and reachable from the landing (2026-11-10)
+### [B1] - PRE-PROMPT RESEARCH <"run the json that adds the new lesson to the lesson list and makes it accessible"> <which artifact owns the list, what writes it, what gates access> DONE
+   - [S1] - the generator read at source <build-lessons.mjs, and what it reads/writes> DONE - `build-lessons.mjs` walks every track folder's `lesson<N>.html`, takes the title from the `content-area` `<h1>`, and writes `lessons.json`, `tracks.json` (with each track's `count`), index.html's `COUNTS` fallback and the stylesheet stamp
+   - [S2] - the outputs and the gate confirmed <lessons.json shape, tracks.json count, access.json, how index.html builds each lesson link> DONE - `index.html` fetches `lessons.json` + `tracks.json`; `access.json` holds only the teacher list, so nothing else gates a track; the lesson link is built as `track/lesson<N>.html`
+### [B2] - run it <"run the json that adds the new lesson to the lesson list"> <the regenerated list carrying business/lesson40> DONE
+   - [S1] - the generator executed and its output checked for lesson 40 <the repo's own npm script> DONE - `node build-lessons.mjs` exit 0; lessons.json written {"business":49}; index.html COUNTS business 48 -> 49
+### [B3] - confirm reachable <"makes it accessible"> <evidence that the landing's data now includes lesson 40> DONE
+   - [S1] - the lesson's entry and the track count verified in the generated data <no lesson page is read> DONE - `lessons.json` business carries {"n":40,"title":"Sore Muscles, Sore Loser"}; `tracks.json` business count 49; index.html gained only the COUNTS line (stylesheet stamp unchanged)
+
+
 ## [19] - business lesson 40 authored from the owner's idea cloud alone, then committed and pushed (2026-11-10)
 ### [B1] - the page's own design <"author the page just from the reference material and creativity"> <a concept spine, a block plan and a vocabulary inventory, drawn from the idea cloud plus the docs already read> DONE
    - [S1] - the reference layer read at source for the markup and the answer paths <style.css as implementation (2.a); engine1/engine2's radio and `input.gap` handling; no lesson page, no CONTENT_EXAMPLES.md, no roadmap, no register> DONE - style.css 64-273, engine2 76-152 and its key lines; block = `.panel`/`.card`/`.dialog`/`.game` with h3 first, `.itemrow` + `itemsize-*`, `.qgrid` > `.qitem` > `.qline`+`.qopts`
