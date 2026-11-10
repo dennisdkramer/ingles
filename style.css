@@ -1142,7 +1142,15 @@ html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;
    front car's roof 186 · a correct block's top 286 · the deck's underside 289 · the girder to 340. */
 .game[data-game="trainOrder"] .g4-stage{height:340px}
 .g4-yard{position:absolute;inset:0;z-index:2;
-  --rail:140px;--car0:46px;--step:6px;--deck:289px;--tw:76%;--shift:80px;
+  --rail:140px;--car0:46px;--step:6px;--deck:289px;
+  /* the whole train is a fixed 76% of the yard whatever its length, so these are the values for a train of
+     EIGHT cars — the longest. `trainGeom()` in engine4.js overwrites every one of them from the block's own
+     count, and the still behind the start card calls it with 8. A pitch is 76/(n+1.2) of the yard; the
+     1.2 is the locomotive's share, and --shift is half of it, which is what centres engine-plus-wagons.
+     --gut is HALF the 4px gutter each wagon keeps on its right, added back once so the last wagon's right
+     edge lands where the geometry expects it: without it the assembly measured 2px left of centre. */
+  --tw:66.0870%;--shift:4.9565%;--locoOut:15%;--pitchBox:12.5%;--runx:-135.16%;
+  --gut:2px;
   --gap:calc((100% - var(--tw)) / 2)}
 /* the yard is a PLACE: sky above, two hazed ridges of hills on the horizon, and the ground the rails are
    laid on — not a flat beige field (qa/NOTES.md 89) */
@@ -1202,14 +1210,13 @@ html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;
    dressed, because the train is a plain one now (see the train block further down). */
 .g4-ttrain.in{animation:g4tarrive .62s cubic-bezier(.22,.9,.3,1)}
 @keyframes g4tarrive{from{transform:translateX(-128%)}to{transform:none}}
-/* away: the whole train runs out to the left until NOTHING of it is left on the stage. The distance is the
-   train's own width plus the 80px it stands to the right of the yard's gap (--shift), because a translate
-   percentage measures the train's OWN width, not the stage: at --tw of 76% the train stands from --shift
-   rightwards and 130% of its width clear of that carries even the last flatbed off the picture. The extra
-   --shift is what keeps it clearing on a narrow stage too, where the shift is a larger share of the width.
-   The crew is NOT inside this box, so it stays where it stands and watches the train go. */
+/* away: the whole train runs out to the left until NOTHING of it is left on the stage. The distance comes
+   from `trainGeom()`, which measures it against the train box's OWN width — because that is what a
+   translate percentage means — and adds the margin the box needs at that length: a fixed percentage would
+   leave a two-car train standing half on the stage while an eight-car one cleared it. The crew is NOT
+   inside this box, so it stays where it stands and watches the train go. */
 .g4-ttrain.run,.g4-ttrain.pull{animation:g4trun var(--runms,1750ms) cubic-bezier(.45,0,.78,1) forwards}
-@keyframes g4trun{to{transform:translateX(calc(-130% - var(--shift)))}}
+@keyframes g4trun{to{transform:translateX(var(--runx,-135.16%))}}
 .g4-ttrain.jolt{animation:g4tjolt .9s ease-out forwards}
 @keyframes g4tjolt{0%{transform:translateX(0)}16%{transform:translateX(-4.4%)}
   34%{transform:translateX(-1.1%)}52%{transform:translateX(-5.2%)}100%{transform:translateX(-4.7%)}}
@@ -1253,12 +1260,13 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
    while the game is rebuilt. The cars are spaced across --tw and the locomotive stands to their left at one
    car pitch, so a wider stage moves engine, wagons and loaders together. The train and the crew share ONE
    offset (--shift) from the yard's own --gap, which is what keeps each man under his own wagon at the start. */
-.g4-ttrain{position:absolute;left:calc(var(--gap) + var(--shift));width:var(--tw);bottom:var(--rail);height:96px;z-index:4;pointer-events:none}
-/* the locomotive is one drawn side view (engine4.js → ART.engine). Its box is ONE CAR PITCH WIDE — a
-   little wider than a flatbed — because at the old sliver of 8% of the train the picture was too small to
-   read (qa/NOTES.md 94). Its wheels are bottom-aligned with the flatbeds' own, which hang 6px under the
-   rail line, so the whole train stands on one line. */
-.g4-tloco{position:absolute;left:calc(100% / -8 * 1.2);bottom:-6px;width:calc(100% / 8 * 1.3);height:78px}
+.g4-ttrain{position:absolute;left:calc(var(--gap) + var(--shift) + var(--gut));width:var(--tw);bottom:var(--rail);height:96px;z-index:4;pointer-events:none}
+/* the locomotive is one drawn side view (engine4.js → ART.engine). It is ONE CAR PITCH WIDE and stands one
+   pitch to the left of the wagons, both read from the geometry the engine sets — so an eight-car train has
+   a small engine beside narrow wagons and a two-car train has a big engine beside wide ones, and the whole
+   assembly is the same share of the yard either way (qa/NOTES.md 94). Its wheels are bottom-aligned with
+   the flatbeds' own, which hang 6px under the rail line, so the whole train stands on one line. */
+.g4-tloco{position:absolute;left:calc(var(--locoOut) * -1);bottom:-6px;width:calc(var(--pitchBox) * 1.3);height:78px}
 .g4-tloco svg{display:block;width:100%;height:100%;overflow:visible}
 /* ONE LOADER PER CAR, in front of his own deck: the crew row carries the SAME left/width as the train — the
    same --gap plus the same --shift — and each man is placed on his car's pitch, so at the start he stands
@@ -1266,7 +1274,7 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
    the train pulls out he stays where he stands and watches it go (qa/NOTES.md 99). He stands on the ground
    UNDER the rail with his arms up at the deck line, so he is in front of the wagon and his hands are where
    the adjective arrives — and he is short enough that the load on the deck stays readable above him. */
-.g4-tcrew{position:absolute;left:calc(var(--gap) + var(--shift));width:var(--tw);bottom:calc(var(--rail) - 66px);height:36px;
+.g4-tcrew{position:absolute;left:calc(var(--gap) + var(--shift) + var(--gut));width:var(--tw);bottom:calc(var(--rail) - 66px);height:36px;
   z-index:3;pointer-events:none}
 .g4-tguy{position:absolute;bottom:0;height:36px;display:flex;align-items:flex-end;justify-content:center;
   pointer-events:auto;cursor:pointer}

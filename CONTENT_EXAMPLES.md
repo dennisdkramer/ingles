@@ -268,13 +268,15 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   though it still scores nothing, because the car it stands in was not its car.
 - **ADJECTIVES ONLY** — this game teaches the adjective order and nothing else. Every item is one adjective; a block
   must not use it for verb order, for tense, for word classes it cannot place, or for anything whose correct place
-  the eight slots do not name. **Difficulty is free**: generate at any level, because the order is the same rule at
-  every one of them, and the block's level never widens what the game can test.
+  the eight slots do not name. **Difficulty is free**, and **the number of adjectives is the level's lever**: two at the
+  lowest levels, rising to eight once the student is expected to hold the whole order in mind. The block's level never
+  widens what the game can test — a harder block is a longer train, not a different question.
 - **the question is the noun's frame** — the prompt card reads **`That's a _______ <noun>`**, taken from
-  `data-noun` on the block. So a lesson generation **picks one noun and one to eight adjectives to describe it** and
+  `data-noun` on the block. So a lesson generation **picks one noun and two to eight adjectives to describe it** and
   writes only the adjectives as items; the noun is never an item and never a load. Eight is the ceiling (there are
-  eight slots, and no two adjectives may share one), and **the train stands one car per adjective** — a train of
-  eight adjectives is an engine and eight flatbeds, a train of three is an engine and three.
+  eight slots, and no two adjectives may share one), two is the floor, and **the train stands one car per adjective** —
+  a train of eight adjectives is an engine and eight flatbeds, a train of two is an engine and two. **The train is
+  centred in the yard at every length**, so a short train is a bigger train rather than a short one stuck to the left.
 - **teaches** — a SEQUENCE, with a consequence for breaking it. Opinion → Size → Age → Shape → Color → Origin →
   Material → Purpose is the whole content; the train is what makes the order physical instead of a rule to memorise,
   and the two ways of being wrong (through the bridge / a gap with the load short of it) are the two ways a sentence
@@ -284,9 +286,11 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   belongs in, so the answer that saves is the ordinary radio of the car the student chose. **No car carries a
   label**: the slots are read as positions, not as names. Author the adjectives in order so the dock reads like the
   sentence. No `data-train` any more: one block is one train.
-- **opts** — **1 to 8 adjectives per block**, one per slot, and the options ARE the eight slots (one radio per slot).
-  Eight is the ceiling because there are eight slots and a second adjective in one slot has no place to stand; one is
-  the floor, though a lesson would rarely stop there.
+- **opts** — **2 to 8 adjectives per block**, one per slot, and the options ARE the eight slots (one radio per slot).
+  Eight is the ceiling because there are eight slots and a second adjective in one slot has no place to stand; two is
+  the floor, because one adjective is not an order — there is nothing for it to be before or after. **Where in the
+  range a block sits is a level decision**, not a template default: the game is unchanged by it, and the cars, the
+  crew, the dock and the drive all follow the count.
 - **levers** — `data-noun` (the noun the frame names, required in practice: without it the card shows the blank and
   nothing after it), `data-depart` (seconds the train waits on the dock before it leaves with whatever is loaded,
   default 30, `0` = wait for ever), `data-lives` (trains that may be wrecked before the run ends; absent = one per

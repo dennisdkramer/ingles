@@ -1656,6 +1656,29 @@ window.GAMES4 = (function () {
   /* ---------------- posters: one still per game, drawn behind the intro overlay ----------------
      Each uses the same classes the live game uses, so the picture is styled by the same CSS, and the
      labels are the lesson's own option words. Nothing here reads or writes an answer. */
+  /* ONE TRAIN GEOMETRY, shared by the live yard and by the start card's still, because the train is
+     CENTRED IN THE YARD and its length is the lesson's own (2 to 8 adjectives). The whole train — engine
+     plus wagons — is a fixed 76% of the yard whatever its length: the engine takes 1.2 car pitches and the
+     wagons n, so one pitch is 76/(n+1.2) of the yard and the wagons' box is n pitches wide. The box is
+     then pushed right by HALF the engine's overhang, which is exactly what centres the ASSEMBLY rather
+     than centring the wagons and letting the engine hang off the left edge.
+     `--runx` is the pull: the distance that carries the last wagon clear of the stage. It is a percentage
+     of the BOX, because that is what a translate percentage measures — and the box shrinks as the train
+     gets shorter, so a fixed -130% would stop a two-car train half on the stage. */
+  function trainGeom(host, n) {
+    n = Math.max(1, Math.min(8, n || 8));
+    var pitch = 76 / (n + 1.2);                     /* one car pitch, % of the yard */
+    var tw = pitch * n;                             /* the wagons' box, % of the yard */
+    var locoOut = pitch * 1.2;                      /* how far the engine stands left of the box, % of yard */
+    var gap = (100 - tw) / 2;
+    var runx = -(((gap + locoOut / 2 + tw) / tw) * 100 + 2);   /* % of the BOX, plus a 2% margin */
+    host.style.setProperty('--tw', tw.toFixed(4) + '%');
+    host.style.setProperty('--shift', (locoOut / 2).toFixed(4) + '%');
+    host.style.setProperty('--locoOut', (locoOut / tw * 100).toFixed(4) + '%');  /* of the BOX */
+    host.style.setProperty('--pitchBox', (100 / n).toFixed(4) + '%');            /* of the BOX */
+    host.style.setProperty('--runx', runx.toFixed(2) + '%');
+    return n;
+  }
   var POSTER = {
     catchBasket: function (box, items) {
       var row = el('div', 'g4-bit');
@@ -1843,29 +1866,37 @@ window.GAMES4 = (function () {
     });
     box.appendChild(abs(el('div', 'g4-cross g4-bit'), 'left:52%;top:56%;width:46px;height:46px;margin:-23px 0 0 -23px'));
   },
-    trainOrder: function (box) {
+    trainOrder: function (box, items) {
       /* the still is the yard it happens in: the girder, the grade, and a train of EMPTY flatbeds
          climbing it. Not one word of the lesson is on it — the words are what the run answers, so a
-         block nobody has started must not show its first answer on the start card. */
+         block nobody has started must not show its first answer on the start card.
+         THE STILL WEARS THE YARD'S OWN CLASS, because every part of it is laid out from the yard's
+         geometry (--rail, --deck, --gap, --tw, --gut): without them the bridge and the planks had no
+         coordinates and piled into the top-left corner, and the train had no width at all. */
+      box.className = 'g4-poster g4-yard';
       box.appendChild(el('div', 'g4-tgirder g4-bit'));
       box.appendChild(el('div', 'g4-tsign g4-bit', '⚠ LOW BRIDGE · 3px'));
       var deck = el('div', 'g4-tdeck g4-bit');
       deck.appendChild(el('div', 'g4-tdspace'));
-      for (var i = 0; i < 8; i++) deck.appendChild(el('div', 'g4-tplank'));
+      /* the still is THIS block's train: as many wagons and as many men as the lesson wrote (2 to 8), so
+         the start card promises the game the student is about to get rather than always eight cars */
+      var stillN = Math.max(2, Math.min(8, (items || []).length || 8));
+      for (var i = 0; i < stillN; i++) deck.appendChild(el('div', 'g4-tplank'));
       box.appendChild(deck);
       box.appendChild(el('div', 'g4-tbank g4-bit'));
       box.appendChild(el('div', 'g4-ttrack g4-bit'));
       var train = el('div', 'g4-ttrain g4-bit');
-      /* the still's locomotive is the same drawn engine the live game uses */
+      /* the still's locomotive is the same drawn engine the live game uses, on the same centred geometry */
+      trainGeom(box, stillN);
       var loco = el('div', 'g4-tloco');
       loco.innerHTML = ART.engine;
       train.appendChild(loco);
-      for (var k = 0; k < 8; k++) {
+      for (var k = 0; k < stillN; k++) {
         var car = el('div', 'g4-tcar');
         /* the cars are absolutely positioned by the stylesheet, so the still lays them out on the same
            pitch the live game uses — the old flex-era height/marginBottom pair left all eight stacked */
-        car.style.left = (k * 100 / 8) + '%';
-        car.style.width = 'calc(' + (100 / 8) + '% - 4px)';
+        car.style.left = (k * 100 / stillN) + '%';
+        car.style.width = 'calc(' + (100 / stillN) + '% - 4px)';
         car.style.setProperty('--k', String(k));
         car.appendChild(el('div', 'g4-tbody'));
         car.appendChild(el('i', 'g4-twheel a'));
@@ -1873,14 +1904,16 @@ window.GAMES4 = (function () {
         train.appendChild(car);
       }
       var crew = el('div', 'g4-tcrew');
-      for (var g = 0; g < 8; g++) {
+      for (var g = 0; g < stillN; g++) {
         var guy = el('div', 'g4-tguy');
         guy.innerHTML = ART.loader;
-        guy.style.left = (g * 100 / 8) + '%';
-        guy.style.width = (100 / 8) + '%';
+        guy.style.left = (g * 100 / stillN) + '%';
+        guy.style.width = (100 / stillN) + '%';
         crew.appendChild(guy);
       }
-      train.appendChild(crew);
+      /* the crew is the TRAIN'S SIBLING, not its child, exactly as in the live game: the geometry vars are
+         percentages of the yard, so a crew inside the train box would resolve them against the train */
+      box.appendChild(crew);
       box.appendChild(train);
     }
 
@@ -3838,15 +3871,17 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       var loco = tag('g4-tloco');
       loco.innerHTML = ART.engine;
       train.appendChild(loco);
-      /* THE CARS COME FROM THE ADJECTIVES (qa/NOTES.md 89): this train's own words decide how many wagons
-         it stands, capped at eight, and each car carries the slot of one of those words, in slot order —
-         so a skipped slot shows up as a gap in the order rather than being silently closed up. */
+      /* ONE CAR PER ADJECTIVE (qa/NOTES.md 89-108): the block's own word count decides the train's length,
+         two to eight, so a lesson at an early level runs a short train and a later one a long one. The
+         cars are ordered by the slot each word belongs to, so the front car is the earliest slot in this
+         train's own set — two words that share a slot get two cars, and either of them is the right place
+         for both. A word's `home` is therefore a SLOT, and `slotOf[k]` is the slot the k-th car stands for. */
       var list = trains[ti].items.slice(0, 8);
-      var slots = [];
-      list.forEach(function (w) { if (slots.indexOf(w.home) < 0) slots.push(w.home); });
-      slots.sort(function (a, b) { return a - b; });
-      slotOf = slots;
-      var n = Math.max(1, slots.length);
+      var order = list.slice().sort(function (a, b) { return a.home - b.home; });
+      slotOf = order.map(function (w) { return w.home; });
+      var n = Math.max(1, order.length);
+      /* the train is CENTRED and its length is the lesson's own: one geometry for however many adjectives */
+      trainGeom(yard, n);
       cars = [];
       for (var k = 0; k < n; k++) {
         var car = tag('g4-tcar');
