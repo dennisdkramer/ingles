@@ -3505,159 +3505,244 @@ function say(text, lang) {
     return window.__G4.length;
   }
 
-  /* ---------------- trainOrder: load every car in the order the steps happen ----------------
-     One car per item, and the car standing in front of you is the step you are being asked about. The
-     block you load stands on that car's ROOF, and its height is the room the step's OWN slot would leave
-     under the girder — so loading a step into the wrong car makes the block stand up through the deck,
-     and the crash is the verdict. Nothing is coloured while playing: the inquest colours only the cars
-     that were loaded out of place, and only once the run is over. `view.finale` keeps the stage until the
-     last train has run out from under the bridge, or wrecked against it. */
-  PLUGINS.trainOrder = function (r) {
-    var stage = r.stage;
-    var yard = el('div', 'g4-yard');
-    yard.appendChild(el('div', 'g4-tground'));
-    yard.appendChild(el('div', 'g4-tplat'));
-    yard.appendChild(el('div', 'g4-tsleep'));
-    yard.appendChild(el('div', 'g4-trail'));
-    var bridge = el('div', 'g4-tbridge');
-    bridge.appendChild(el('div', 'g4-tgirder'));
-    bridge.appendChild(el('div', 'g4-tdeck'));
-    bridge.appendChild(el('div', 'g4-tabut'));
-    bridge.appendChild(el('div', 'g4-tsignl', '⚠ LOW BRIDGE · 3px'));
-    bridge.appendChild(el('div', 'g4-tbrk'));
-    yard.appendChild(bridge);
-    var train = el('div', 'g4-ttrain');
-    yard.appendChild(train);
-    var depot = el('div', 'g4-tdepot');
-    var count = el('div', 'g4-tcount', '');
-    depot.appendChild(count);
-    yard.appendChild(depot);
-    var verdict = el('div', 'g4-tverdict', ''), fail = el('div', 'g4-tfail', 'FAIL');
-    yard.appendChild(verdict); yard.appendChild(fail);
-    stage.appendChild(yard);
+  /* ---------------- the yard: two orderings on the same rails ----------------
+     Eight adjective slots are fixed by the language, so trainOrder always stands eight cars on the
+     rails and the verdict is GEOMETRY: every roof is level (a car further back is 6px shorter and
+     lifted 6px, so its OPENING is 6px less room) while a word grows to the room its OWN slot leaves.
+     A word put a car too far back therefore stands up through the deck and bursts; a word put too
+     far forward leaves a gap — the crash is not symmetric, and only the back is fatal.
+     trainSteps is the same yard with nothing fixed by the language: one bed per step, and the verdict
+     is whether each step landed on its own bed. */
+  var SLOTS = ['opinion', 'size', 'age', 'shape', 'color', 'origin', 'material', 'purpose'];
+  var SLOT_LABEL = ['Opinion', 'Size', 'Age', 'Shape', 'Color', 'Origin', 'Material', 'Purpose'];
+  var CAR0 = 122, CAR_LIFT = 6, OPEN0 = 100;
 
-    var N = 0, cars = [], picks = [], wrongs = 0, row = null;
-    /* the heights come from the stylesheet, so the picture and the arithmetic cannot disagree: rail is
-       where the wheels stand, car0 + step·k is a car's own height, deck is the girder's underside, and
-       what is left between them is the room a step of slot k has. */
-    function metric(name) {
-      var v = parseFloat(getComputedStyle(yard).getPropertyValue(name));
-      return isNaN(v) ? 0 : v;
+  function yardGame(r, mode) {
+    var order = mode === 'order';
+    function tag(cls, text) { var n = el('div', cls); if (text != null) n.textContent = text; return n; }
+    /* THE LABELS ARE A LEVEL LEVER: a plaque naming the slot over the front car IS the answer, so it
+       shows while the student is still learning the order and goes when he is expected to know it.
+       `data-level` on the block wins; else the lesson page's own L; else an unknown student is no
+       expert, so the labels stay. */
+    function level() {
+      var d = parseInt(r.root.getAttribute('data-level'), 10);
+      if (!isNaN(d)) return d;
+      try { return typeof L === 'number' ? L : 0; } catch (e) { return 0; }
     }
-    function room(k) { return metric('--deck') - metric('--rail') - (metric('--car0') + metric('--step') * k); }
+    var lbl = r.root.getAttribute('data-labels');
+    var labels = lbl === '1' ? true : lbl === '0' ? false : level() <= 30;
+
+    var yard = tag('g4-yard');
+    ['g4-tground', 'g4-tplat', 'g4-tsleep', 'g4-trail'].forEach(function (c) { yard.appendChild(tag(c)); });
+    var bridge = tag('g4-tbridge');
+    ['g4-tgirder', 'g4-tdeck', 'g4-tabut'].forEach(function (c) { bridge.appendChild(tag(c)); });
+    bridge.appendChild(tag('g4-tsignl', '\u26a0 LOW BRIDGE'));
+    var planksBox = tag('g4-tplanks'), planks = [];
+    for (var p = 0; p < 3; p++) { var pl = tag('g4-tplank'); planksBox.appendChild(pl); planks.push(pl); }
+    bridge.appendChild(planksBox);
+    bridge.appendChild(tag('g4-tbrk'));
+    yard.appendChild(bridge);
+    var train = tag('g4-ttrain');
+    yard.appendChild(train);
+    var dock = tag('g4-tdock');
+    yard.appendChild(dock);
+    var stamp = tag('g4-tstamp');
+    yard.appendChild(stamp);
+    r.stage.appendChild(yard);
+
+    var cars = [], words = [], picked = null, wrongs = 0, burstCar = -1, placed = 0;
+    var lives = 2, done = false, busy = false, built = false;
+
+    /* THE TRAINS: `data-train` groups the words of one sentence, and its absence is the first train.
+       For steps there is nothing to group — the whole block is one run. */
+    var trains = [];
+    (function group() {
+      var cur = null;
+      r.items.forEach(function (it, i) {
+        var g = order ? (it.el.getAttribute('data-train') || '') : '';
+        if (!cur || cur.key !== g) { cur = { key: g, items: [] }; trains.push(cur); }
+        cur.items.push({ it: it, i: i, home: order ? SLOTS.indexOf(it.key) : cur.items.length });
+        if (cur.items[cur.items.length - 1].home < 0) cur.items[cur.items.length - 1].home = 0;
+      });
+      if (!trains.length) trains.push({ key: '', items: [] });
+    })();
+    var ti = 0;
 
     function build() {
       train.innerHTML = '';
-      var loco = el('div', 'g4-tloco');
+      var loco = tag('g4-tloco');
       loco.innerHTML = ART.loco;
       train.appendChild(loco);
-      cars = []; picks = []; wrongs = 0;
-      N = Math.max(1, Math.min(8, r.items.length));
-      for (var k = 0; k < N; k++) {
-        var car = el('div', 'g4-tcar');
-        car.style.left = (k * 100 / N) + '%';
-        car.style.width = 'calc(' + (100 / N) + '% - 4px)';
-        car.style.setProperty('--k', String(k));
-        car.appendChild(el('div', 'g4-tcouple'));
-        var body = el('div', 'g4-tbody');
-        body.appendChild(el('div', 'g4-thold'));
-        body.appendChild(el('div', 'g4-tstripe'));
+      var n = order ? SLOTS.length : Math.max(1, trains[ti].items.length);
+      cars = [];
+      for (var k = 0; k < n; k++) {
+        var car = tag('g4-tcar');
+        car.style.left = (k * 100 / n) + '%';
+        car.style.width = 'calc(' + (100 / n) + '% - 4px)';
+        car.style.height = (order ? CAR0 - CAR_LIFT * k : 80) + 'px';
+        car.style.marginBottom = (order ? CAR_LIFT * k : 0) + 'px';
+        var body = tag('g4-tbody');
+        body.appendChild(tag('g4-tbowl'));
+        body.appendChild(tag('g4-thold'));
         car.appendChild(body);
-        var wh = el('div', 'g4-twheels');
-        wh.appendChild(el('i', 'g4-twheel a'));
-        wh.appendChild(el('i', 'g4-twheel b'));
+        var wh = tag('g4-twheels');
+        wh.appendChild(tag('g4-twheel a'));
+        wh.appendChild(tag('g4-twheel b'));
         car.appendChild(wh);
+        if (order && labels) car.appendChild(tag('g4-tslot', SLOT_LABEL[k]));
+        car.addEventListener('click', function (k2) { return function () { place(k2); }; }(k));
         train.appendChild(car);
         cars.push(car);
       }
     }
 
+    /* THE DOCK: the words of THIS train, one card each, in the order they were authored. A tap picks
+       one up (the card stays up until it is placed), and the next tap on a car puts it there. */
+    function buildDock() {
+      dock.innerHTML = '';
+      words = [];
+      /* STEPS ARRIVE SHUFFLED — their sequence IS the content, so a dock already in the right order is
+         an answer sheet. Adjectives do not: a sentence's words are dressed in sentence order, and it is
+         the CAR each one stands on that has to be right. */
+      var list = trains[ti].items.slice();
+      if (!order) shuffle(list);
+      list.forEach(function (w) {
+        var c = tag('g4-tword g4-tcard', w.it.prompt);
+        c.addEventListener('pointerdown', function (e) {
+          if (e && e.preventDefault) e.preventDefault();
+          pick(w, c);
+        });
+        dock.appendChild(c);
+        words.push({ w: w, el: c });
+      });
+    }
+
+    function pick(w, card) {
+      if (busy || done) return;
+      words.forEach(function (o) { o.el.classList.remove('on'); });
+      picked = { w: w, card: card };
+      card.classList.add('on');
+    }
+
+    /* A DROP WRITES THE CAR'S SLOT INTO THE WORD'S OWN RADIOS: the answer sheet then records where the
+       student put it, which is what the inquest reads back — not whether he was right. */
+    function place(k) {
+      if (busy || done || !picked) return;
+      var w = picked.w, card = picked.card;
+      picked = null;
+      card.classList.remove('on');
+      var want = order ? SLOTS[k] : String(k + 1);
+      w.it.opts.forEach(function (o) {
+        if (String(o.value) === want && o.radio) o.radio.checked = true;
+      });
+      var hit = w.home === k;
+      var load = tag('g4-tload', w.it.prompt);
+      load.style.height = (order ? OPEN0 - CAR_LIFT * w.home : 46) + 'px';
+      cars[k].appendChild(load);
+      cars[k].classList.add('loaded');
+      cars[k].classList.add(hit ? 'ok' : 'no');
+      if (hit) r.score = (r.score || 0) + 1;
+      else {
+        wrongs++;
+        /* ONLY A WORD TOO FAR BACK IS FATAL: its own slot allows more room than the opening it landed
+           in, so it stands up through the deck and bursts where the growth ends. Too far forward leaves
+           a gap instead — the crash is not symmetric, and that asymmetry is the lesson. */
+        if (order && w.home < k) {
+          if (burstCar < 0) burstCar = k;
+          r.later(function () {
+            if (!cars[k] || cars[k].querySelector('.g4-tburst')) return;
+            cars[k].appendChild(tag('g4-tburst'));
+            if (r.sound) SFX.crash(r.sound);
+          }, r.reduced ? 60 : 260);
+        }
+      }
+      if (card.parentNode) card.parentNode.removeChild(card);
+      placed++;
+      if (r.sound) SFX.clank(r.sound);
+      if (placed >= trains[ti].items.length) {
+        busy = true;
+        r.later(depart, r.reduced ? 140 : 560);
+      }
+    }
+
+    function depart() {
+      var bad = wrongs > 0;
+      if (bad) {
+        train.classList.add('jolt');
+        bridge.classList.add('hit');
+        var which = burstCar >= 0 ? burstCar % planks.length : 0;
+        planks[which].classList.add('broken');
+        stamp.className = 'g4-tstamp showing bad';
+        stamp.textContent = 'DERAILED';
+        lives = Math.max(0, lives - 1);
+        if (r.drawLives) r.drawLives(lives);
+        if (r.sound) SFX.crash(r.sound);
+      } else {
+        train.classList.add('pull');
+        stamp.className = 'g4-tstamp showing ok';
+        stamp.textContent = 'CLEARED';
+        if (r.sound) { SFX.horn(r.sound); r.later(function () { SFX.chuff(r.sound); }, 280); }
+      }
+      burstCar = -1;
+      r.later(next, r.reduced ? 320 : 1500);
+    }
+
+    function next() {
+      ti++;
+      if (ti >= trains.length || lives <= 0) { finish(); return; }
+      reset();
+    }
+
     function reset() {
-      build();
       train.className = 'g4-ttrain';
       bridge.className = 'g4-tbridge';
-      verdict.className = 'g4-tverdict'; verdict.textContent = '';
-      fail.className = 'g4-tfail';
-      count.textContent = '0/' + N;
+      stamp.className = 'g4-tstamp';
+      stamp.textContent = '';
+      wrongs = 0; placed = 0; busy = false; picked = null; burstCar = -1;
+      planks.forEach(function (p) { p.classList.remove('broken'); });
+      build();
+      buildDock();
     }
 
-    function clear() {
-      if (row && row.parentNode) row.parentNode.removeChild(row);
-      row = null;
-      cars.forEach(function (car) { car.classList.remove('hot'); });
+    function finish() {
+      if (done) return;
+      done = true;
+      r.finish();
     }
 
-    function show(item) {
-      clear();
-      var k = Math.min(r.idx, N - 1), car = cars[k];
-      if (car) {
-        car.classList.add('hot');
-        car.appendChild(el('div', 'g4-tslot', esc(item.prompt || '')));
-      }
-      count.textContent = (k + 1) + '/' + N;
-      row = el('div', 'g4-tcards');
-      item.opts.forEach(function (o) {
-        var b = el('button', 'g4-tbtn', esc(o.text));
-        b.type = 'button';
-        b.setAttribute('data-v', o.value);
-        b.addEventListener('click', function () { if (r.phase === 'play') r.pick(o.value); });
-        row.appendChild(b);
-      });
-      depot.appendChild(row);
+    /* the ending is part of the game: the stage is held while the last train runs out or wrecks, and
+       only then handed back to the intro */
+    function finale(cb) {
+      setTimeout(function () { if (cb) cb(); }, r.reduced ? 320 : 1150);
     }
 
-    /* the block lands on the roof of the car being asked about, at the height the step's OWN slot would
-       leave under the girder: a step loaded one car too far back stands through the deck by 6px a car */
-    function mark(item, hit, value) {
-      var k = r.items.indexOf(item);
-      if (k < 0) k = r.idx;
-      k = Math.min(k, N - 1);
-      var j = -1;
-      item.opts.forEach(function (o, i) { if (String(o.value) === String(value)) j = i; });
-      var car = cars[k];
-      if (!car) return;
-      car.classList.remove('hot');
-      var load = el('div', 'g4-tload');
-      load.style.height = Math.max(12, Math.round(room(j < 0 ? k : j))) + 'px';
-      load.textContent = j < 0 ? '' : item.opts[j].text;
-      car.appendChild(load);
-      car.classList.add('loaded');
-      picks[k] = j < 0 ? k : j;
-      if (!hit) wrongs++;
-      SFX.clank(r.sound);
+    function show() {
+      if (built || busy || done) return;
+      built = true;
+      reset();
     }
 
-    /* the run: every car holding a step out of place blushes, and the train either clears the bridge or
-       wrecks against it. The stage stays until this picture is done — that is what `finale` is for. */
-    function finale(done) {
-      var once = false;
-      var finishUp = function () { if (once) return; once = true; if (done) done(); };
-      picks.forEach(function (j, k) { if (j !== k && cars[k]) cars[k].classList.add('no'); });
-      if (wrongs) {
-        bridge.classList.add('hit');
-        fail.classList.add('go');
-        verdict.className = 'g4-tverdict bad on';
-        verdict.textContent = 'WRONG ORDER';
-        SFX.crash(r.sound);
-        setTimeout(finishUp, r.reduced ? 700 : 1700);
-      } else {
-        verdict.className = 'g4-tverdict ok on';
-        verdict.textContent = 'ALL CLEAR';
-        SFX.horn(r.sound);
-        setTimeout(function () { SFX.chuff(r.sound); }, 280);
-        if (!r.reduced) train.classList.add('run');
-        setTimeout(finishUp, r.reduced ? 700 : 1900);
-      }
-    }
+    return {
+      show: show,
+      mark: function () { },
+      clear: function () { },
+      reset: reset,
+      finale: finale,
+      lives: function () { return lives; }
+    };
+  }
 
-    return { show: show, mark: mark, clear: clear, reset: reset, finale: finale };
-  };
-  /* the yard plays its own sounds — the coupling, the whistle, the wreck — so the runner's generic
+  PLUGINS.trainOrder = function (r) { return yardGame(r, 'order'); };
+  PLUGINS.trainSteps = function (r) { return yardGame(r, 'steps'); };
+  /* THE YARD PLAYS ITS OWN SOUNDS — the coupling, the whistle, the wreck — so the runner's generic
      right/wrong pair would be a second verdict over the picture */
   PLUGINS.trainOrder.ownSound = true;
-  /* THE ORDER IS THE CONTENT: car 1 is the first step, car 2 the second. A shuffled queue would ask the
-     student to place step 3 in car 1 and call it right, so this presentation never shuffles. */
+  PLUGINS.trainSteps.ownSound = true;
+  /* THE ORDER IS THE CONTENT: a shuffled dock would ask the student to put the third word in the
+     front car and call it right */
   PLUGINS.trainOrder.noShuffle = true;
+  PLUGINS.trainSteps.noShuffle = true;
+
 
   return { boot: boot, games: Object.keys(PLUGINS), version: 2 };
 
