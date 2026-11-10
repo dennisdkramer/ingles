@@ -41,6 +41,11 @@ counts, spacing and class names are generation decisions, not defects.
   as a blank (FORMAT.md:6 has five). A raw block is the escape when a token must be shown. `--selftest`
   proves the scanner still fails the exact line that caused it and still passes prose. Scope is
   `git ls-files` — the published set — and named paths replace it for a falsification run.
+  **The same check runs before a push** via `.githooks/pre-push`, which refuses to send objects that would
+  abort the build. That hook is opt-IN per clone, because `core.hooksPath` is local config and cannot be
+  committed: a fresh clone has no guard until someone runs `git config core.hooksPath .githooks`. Check it
+  with `git config --get core.hooksPath` — silence means unprotected. `--no-verify` skips it, and that flag
+  is how the guard was missed on 2026-11-10.
 
 Scope belongs to the harnesses, not the caller: with no lesson numbers every page in every track that has
 pages is swept, `--track=kids|business|adult` narrows it (qa/track.mjs), and a named lesson that does not
