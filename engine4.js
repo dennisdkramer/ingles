@@ -4127,10 +4127,28 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       r.promptEl.classList.add('in');
     }
 
+    /* A START RE-ARMS THE WHOLE YARD, and it is the runner that calls this (`view.reset`) before every
+       run — the first and the fifth alike. `reset()` below is a different job: it lays the NEXT train of a
+       run already in progress, so it cannot serve as the start hook. After a finished run `ti` stands past
+       the last train, and laying `trains[ti]` threw, which aborted start() itself — that is why Play again
+       never began a second round — while `done` was still set, so not even a card could have landed. */
+    function rearm() {
+      ti = 0;
+      lives = 2;
+      done = false;
+      busy = false;
+      picked = null;
+      built = true;
+      reset();                   /* lays the first train, its crew and its dock */
+    }
+
+    /* THE RUNNER WIPES THE PROMPT LINE BEFORE IT CALLS THIS (step(): setPrompt then view.show), so the noun's
+       frame is written HERE, on every item, not once per run — a frame written before the item would be
+       erased by the runner a moment later, which is exactly what happened when rearm() drew it. */
     function show() {
+      frame();
       if (built || busy || done) return;
       built = true;
-      frame();
       reset();
     }
 
@@ -4138,7 +4156,7 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       show: show,
       mark: function () { },
       clear: function () { },
-      reset: reset,
+      reset: rearm,
       finale: finale,
       ownsPrompt: true,
       lives: function () { return lives; }

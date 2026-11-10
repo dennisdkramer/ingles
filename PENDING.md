@@ -21,6 +21,15 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 
 # [CURRENT] Prompt - (Active batches, newest first)
 
+## [5] - trainOrder: Play again does not start the next round (2026-11-10)
+### [B1] - PRE-PROMPT RESEARCH <"the play again button doesnt work to start the next round"> <why a second run never begins>
+   - [S1] - read the button's handler and start()/finish() <engine4.js Runner> <what a restart resets and what it keeps>
+   - [S2] - read yardGame's show/reset/finale gates <engine4.js yardGame> <which flag blocks the second run>
+   - [S3] - clear [B1] and batch the fix <ADHERENCE [BATCHING] 1)> <one fix, one verification>
+### [B2] - the second run actually starts <"doesnt work to start the next round"> <the yard rebuilds and the run begins> DONE - view.reset is now `rearm()` (ti=0, lives=2, done=false, built) and `reset()` is left as the per-train layout that `next()` uses; the frame is written in show() because step() wipes the prompt line first
+### [B3] - verify a restart end to end <PENDING.md [GUIDELINES]> <a screenshot of the second run playing> DONE - headless Chrome: R1 8/8 → Play again → R2 laid 8 cards, 8 men, frame "That's a  car." → R2 played to 8/8, ERR=none
+### [B4] - commit and push <git> <origin/main at local HEAD> DONE
+
 ## [4] - trainOrder teardown: no train graphics, a normal train, the noun frame (2026-11-10)
 ### [B1] - PRE-PROMPT RESEARCH <"remove all the train graphics ... just a normal looking train with 8 flatbed cars behind it"> <what "train graphics" covers, and how a block declares its own words>
    - [S1] - read yardGame's train construction and ART.loco <engine4.js> <every element the train draws is enumerated>
