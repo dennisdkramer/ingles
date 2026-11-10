@@ -55,7 +55,7 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 ### [B4] - the prose that the fields replace <[17] [S5], the owner's own instruction> <widths stated once, in the field, not in `markup`/`fits`> NOT EXECUTED - and now measurable: the words to remove are the width claims inside `fits` on the 52 entries that just gained a field
 ### [B5] - verify and publish <[GUIDELINES]> <examples.mjs green, commit, push, Pages run read> IN PROGRESS
    - [S1] - `qa/examples.mjs` run because 52 lines were inserted into the file it parses <8 passed, 0 failed; "the file has entries 53 entries"; "every ### and #### heading parses"> DONE
-   - [S2] - commit + push + the Pages run for that commit NOT EXECUTED
+   - [S2] - commit + push + the Pages run for that commit DONE - 5fc1a16, build=success
 
 
 ### [B1] - F4's plan, implemented and NOT verified <"the plan is good but do not run verification on this"> <`qa/lang.mjs` reads the class markers as well as `lang`, and no harness was run> DONE - qa/lang.mjs
