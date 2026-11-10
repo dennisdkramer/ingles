@@ -472,13 +472,13 @@ wrong one and the boss answers back (a bite, or acid).</p>
 <section class="qa-item" id="item-trainOrder">
 <h2>trainOrder — order of adjectives</h2>
 <textarea data-item="trainOrder" aria-label="notes for trainOrder" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">section · cost C · evidence radio · eight cars = the eight slots, one word per item, and the words of one
-sentence ride together (<code>data-train</code> starts the next train). A word grows to the height its own slot is
-allowed, so a word put a car too far back comes through the bridge. Labels are <code>data-labels="auto"</code> — shown
-up to level 30, hidden above it — and <code>data-level</code> can state the level here; <code>data-depart</code> is the
-dock clock, and a wreck costs a heart.</p>
-<div class="game" data-game="trainOrder" data-depart="28" data-time="0">
-  <p class="game-how">Load every word into its own car and the train runs out under the bridge. Put one word a car too far back and it brings the bridge down.</p>
+<p class="dim">section · cost C · evidence radio · ADJECTIVES ONLY. The prompt card reads <code>That's a _______ &lt;noun&gt;</code>
+from <code>data-noun</code>, and the train stands one flatbed car per adjective — up to eight. Every <code>.qitem</code>
+is one adjective, its <code>data-a</code> the slot that adjective belongs in, and its radios the eight slots. The
+adjectives are authored in order here so the dock reads like the sentence; <code>data-depart</code> is the dock clock
+and a wreck costs a heart.</p>
+<div class="game" data-game="trainOrder" data-noun="car" data-depart="28" data-time="0">
+  <p class="game-how">Each adjective has a place in the order. Load it into the car that names its place and the train runs out under the bridge — put one a car too far back and it brings the bridge down.</p>
   <div class="game-list">
     <div class="qitem" data-a="opinion">
       <div class="qline"><span class="qnum">1.</span><span class="qstem">lovely</span></div>
@@ -501,36 +501,36 @@ dock clock, and a wreck costs a heart.</p>
         <label><input type="radio" name="p-trainOrder-3" value="color">Color</label><label><input type="radio" name="p-trainOrder-3" value="origin">Origin</label><label><input type="radio" name="p-trainOrder-3" value="material">Material</label><label><input type="radio" name="p-trainOrder-3" value="purpose">Purpose</label>
       </div>
     </div>
-    <div class="qitem" data-a="material">
-      <div class="qline"><span class="qnum">4.</span><span class="qstem">wooden</span></div>
+    <div class="qitem" data-a="shape">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">square</span></div>
       <div class="qopts">
         <label><input type="radio" name="p-trainOrder-4" value="opinion">Opinion</label><label><input type="radio" name="p-trainOrder-4" value="size">Size</label><label><input type="radio" name="p-trainOrder-4" value="age">Age</label><label><input type="radio" name="p-trainOrder-4" value="shape">Shape</label>
         <label><input type="radio" name="p-trainOrder-4" value="color">Color</label><label><input type="radio" name="p-trainOrder-4" value="origin">Origin</label><label><input type="radio" name="p-trainOrder-4" value="material">Material</label><label><input type="radio" name="p-trainOrder-4" value="purpose">Purpose</label>
       </div>
     </div>
-    <div class="qitem" data-a="origin" data-train="2">
-      <div class="qline"><span class="qnum">5.</span><span class="qstem">French</span></div>
+    <div class="qitem" data-a="color">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">red</span></div>
       <div class="qopts">
         <label><input type="radio" name="p-trainOrder-5" value="opinion">Opinion</label><label><input type="radio" name="p-trainOrder-5" value="size">Size</label><label><input type="radio" name="p-trainOrder-5" value="age">Age</label><label><input type="radio" name="p-trainOrder-5" value="shape">Shape</label>
         <label><input type="radio" name="p-trainOrder-5" value="color">Color</label><label><input type="radio" name="p-trainOrder-5" value="origin">Origin</label><label><input type="radio" name="p-trainOrder-5" value="material">Material</label><label><input type="radio" name="p-trainOrder-5" value="purpose">Purpose</label>
       </div>
     </div>
-    <div class="qitem" data-a="shape" data-train="2">
-      <div class="qline"><span class="qnum">6.</span><span class="qstem">round</span></div>
+    <div class="qitem" data-a="origin">
+      <div class="qline"><span class="qnum">6.</span><span class="qstem">French</span></div>
       <div class="qopts">
         <label><input type="radio" name="p-trainOrder-6" value="opinion">Opinion</label><label><input type="radio" name="p-trainOrder-6" value="size">Size</label><label><input type="radio" name="p-trainOrder-6" value="age">Age</label><label><input type="radio" name="p-trainOrder-6" value="shape">Shape</label>
         <label><input type="radio" name="p-trainOrder-6" value="color">Color</label><label><input type="radio" name="p-trainOrder-6" value="origin">Origin</label><label><input type="radio" name="p-trainOrder-6" value="material">Material</label><label><input type="radio" name="p-trainOrder-6" value="purpose">Purpose</label>
       </div>
     </div>
-    <div class="qitem" data-a="material" data-train="2">
-      <div class="qline"><span class="qnum">7.</span><span class="qstem">leather</span></div>
+    <div class="qitem" data-a="material">
+      <div class="qline"><span class="qnum">7.</span><span class="qstem">wooden</span></div>
       <div class="qopts">
         <label><input type="radio" name="p-trainOrder-7" value="opinion">Opinion</label><label><input type="radio" name="p-trainOrder-7" value="size">Size</label><label><input type="radio" name="p-trainOrder-7" value="age">Age</label><label><input type="radio" name="p-trainOrder-7" value="shape">Shape</label>
         <label><input type="radio" name="p-trainOrder-7" value="color">Color</label><label><input type="radio" name="p-trainOrder-7" value="origin">Origin</label><label><input type="radio" name="p-trainOrder-7" value="material">Material</label><label><input type="radio" name="p-trainOrder-7" value="purpose">Purpose</label>
       </div>
     </div>
-    <div class="qitem" data-a="purpose" data-train="2">
-      <div class="qline"><span class="qnum">8.</span><span class="qstem">running</span></div>
+    <div class="qitem" data-a="purpose">
+      <div class="qline"><span class="qnum">8.</span><span class="qstem">sleeping</span></div>
       <div class="qopts">
         <label><input type="radio" name="p-trainOrder-8" value="opinion">Opinion</label><label><input type="radio" name="p-trainOrder-8" value="size">Size</label><label><input type="radio" name="p-trainOrder-8" value="age">Age</label><label><input type="radio" name="p-trainOrder-8" value="shape">Shape</label>
         <label><input type="radio" name="p-trainOrder-8" value="color">Color</label><label><input type="radio" name="p-trainOrder-8" value="origin">Origin</label><label><input type="radio" name="p-trainOrder-8" value="material">Material</label><label><input type="radio" name="p-trainOrder-8" value="purpose">Purpose</label>

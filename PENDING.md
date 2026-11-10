@@ -21,6 +21,21 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 
 # [CURRENT] Prompt - (Active batches, newest first)
 
+## [4] - trainOrder teardown: no train graphics, a normal train, the noun frame (2026-11-10)
+### [B1] - PRE-PROMPT RESEARCH <"remove all the train graphics ... just a normal looking train with 8 flatbed cars behind it"> <what "train graphics" covers, and how a block declares its own words>
+   - [S1] - read yardGame's train construction and ART.loco <engine4.js> <every element the train draws is enumerated>
+   - [S2] - read the .g4-t* train rules <style.css> <which rules belong to the train and which to the yard/bridge>
+   - [S3] - read the preview-games4 trainOrder block and the engine's prompt card <qa/preview-games4.html, engine4.js Runner> <the prompt element and how a block carries data>
+   - [S4] - clear [B1] and batch the writes <ADHERENCE [BATCHING] 1)> <batches below>
+### [B2] - strip the train graphics and build a normal train <"remove all the train graphics ... just a normal looking train ... behind it"> <no drawn locomotive, plain flatbeds> DONE - ART.loco deleted, the ornamented car body deleted, the old flex train CSS + crew/depot/ram/boom/fail CSS deleted, plain cab-and-boiler engine and equal-height flatbeds, poster rebuilt to match
+### [B3] - the cars come from the adjectives <"The train will spawn with that many cars"> <N adjectives, N cars, 8 max> DONE - build() reads this train's items, one car per distinct slot in slot order, capped at 8; place()/depart() now speak in slots
+### [B4] - the prompt card is the noun's frame <"make the top prompt card ... say \"That's a _______ [noun]\""> <the card reads the frame once> DONE - `data-noun`, the game owns the prompt (ownsPrompt), the frame is written once per run
+### [B5] - a real test block <"generate a noun and 8 random adjectives in the html for our test run"> <noun + 8 adjectives in the page> DONE - data-noun="car", eight adjectives covering all eight slots, single train
+### [B6] - the description says adjectives only <"only for adjectives ... make sure that is in its description"> <CONTENT_EXAMPLES states it> DONE - ADJECTIVES ONLY bullet, the noun frame bullet, 1-8 adjectives, cars follow the adjectives, plain-train art
+### [B7] - publish
+   - [S1] - commit and push <git> <origin/main at local HEAD>
+   - [S2] - four re-implementation questions recorded in qa/NOTES.md §trainOrder <"if you have questions ... put the question in the notes and move to the next one"> <Q1 verdict, Q2 gesture, Q3 labels, Q4 wreck> AWAITING USER
+
 ## [3] - all game notes in qa/NOTES.md (2026-11-10)
 ### [B1] - notes inventoried against the code <"keep working on the games until all of the instructions in my notes are implemented"> <every section read, every clause mapped to a game> DONE
 ### [B2] - the small notes: skeetRange, whackMole, catchBasket DONE - engine4.js, style.css, qa/NOTES.md

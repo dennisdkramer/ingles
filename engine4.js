@@ -474,23 +474,8 @@ window.GAMES4 = (function () {
       + '</svg>',
     /* trainOrder's locomotive, drawn facing LEFT: the train runs out of the yard to the left, so the
        engine is at the front of it and the only way out is across the front of the bridge */
-    loco: '<svg viewBox="0 0 100 74" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false">'
-      + '<g stroke="#1a2127" stroke-width="2">'
-      + '<circle cx="24" cy="63" r="10" fill="#39434e"/><circle cx="24" cy="63" r="3.4" fill="#98a4b1"/>'
-      + '<circle cx="54" cy="63" r="10" fill="#39434e"/><circle cx="54" cy="63" r="3.4" fill="#98a4b1"/>'
-      + '<circle cx="82" cy="63" r="10" fill="#39434e"/><circle cx="82" cy="63" r="3.4" fill="#98a4b1"/>'
-      + '</g>'
-      + '<rect x="6" y="27" width="58" height="24" rx="5" fill="#4a5a6a" stroke="#28323c" stroke-width="2"/>'
-      + '<rect x="56" y="14" width="38" height="37" rx="3" fill="#3d4b59" stroke="#28323c" stroke-width="2"/>'
-      + '<rect x="62" y="20" width="18" height="13" rx="2" fill="#cfe9f5" opacity=".85"/>'
-      + '<path d="M52 14h46l-4-6H56z" fill="#2f3a45" stroke="#232c35" stroke-width="2"/>'
-      + '<path d="M56 51h42v5H56z" fill="#8a4d2c" stroke="#5c3018" stroke-width="2"/>'
-      + '<rect x="10" y="12" width="12" height="16" rx="2" fill="#2f3a45" stroke="#232c35" stroke-width="2"/>'
-      + '<rect x="7" y="8" width="18" height="5" rx="2" fill="#243039" stroke="#1a2127" stroke-width="1"/>'
-      + '<circle cx="38" cy="27" r="6" fill="#b9854c" stroke="#7d5527" stroke-width="2"/>'
-      + '<path d="M6 51l-5 8h12z" fill="#b9854c" stroke="#7d5527" stroke-width="2"/>'
-      + '<rect x="4" y="47" width="4" height="6" fill="#2f3a45"/>'
-      + '</svg>'
+    /* trainOrder draws its train from plain boxes and gradients now (the drawn locomotive that used to
+       live here was deleted with the rest of the train art, qa/NOTES.md 89) */
   };
 
   /* one item = one authored `.qitem`. The right answer is `data-a` when the author pinned it, else
@@ -1821,8 +1806,13 @@ window.GAMES4 = (function () {
       box.appendChild(el('div', 'g4-tbank g4-bit'));
       box.appendChild(el('div', 'g4-ttrack g4-bit'));
       var train = el('div', 'g4-ttrain g4-bit');
+      /* the still's locomotive is the same plain one the live game builds: cab, boiler, chimney, dome, wheels */
       var loco = el('div', 'g4-tloco');
-      loco.innerHTML = ART.loco;
+      ['g4-tcab', 'g4-tboiler', 'g4-tchimney', 'g4-tdome'].forEach(function (c) { loco.appendChild(el('div', c)); });
+      var lw = el('div', 'g4-twheels');
+      lw.appendChild(el('i', 'g4-twheel a'));
+      lw.appendChild(el('i', 'g4-twheel b'));
+      loco.appendChild(lw);
       train.appendChild(loco);
       for (var k = 0; k < 8; k++) {
         var car = el('div', 'g4-tcar');
@@ -1831,7 +1821,7 @@ window.GAMES4 = (function () {
         car.style.left = (k * 100 / 8) + '%';
         car.style.width = 'calc(' + (100 / 8) + '% - 4px)';
         car.style.setProperty('--k', String(k));
-        car.appendChild(el('div', 'g4-tbed'));
+        car.appendChild(el('div', 'g4-tbody'));
         car.appendChild(el('i', 'g4-twheel a'));
         car.appendChild(el('i', 'g4-twheel b'));
         train.appendChild(car);
@@ -3757,6 +3747,8 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
 
     var cars = [], words = [], picked = null, wrongs = 0, burstCar = -1, placed = 0;
     var lives = 2, done = false, busy = false, built = false;
+    /* the slot each car carries, in slot order — one entry per car (see build) */
+    var slotOf = [];
 
     /* THE TRAINS: `data-train` groups the words of one sentence, and its absence is the first train. */
     var trains = [];
@@ -3774,20 +3766,32 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
 
     function build() {
       train.innerHTML = '';
+      /* A NORMAL TRAIN: a plain locomotive, then one FLATBED wagon per adjective. All the drawn train art
+         is gone — the SVG locomotive, the coal bowl and the hold box with it — because the owner is
+         rebuilding this game and asked for a train that simply looks like a train. */
       var loco = tag('g4-tloco');
-      loco.innerHTML = ART.loco;
+      ['g4-tcab', 'g4-tboiler', 'g4-tchimney', 'g4-tdome'].forEach(function (c) { loco.appendChild(tag(c)); });
+      var lw = tag('g4-twheels');
+      lw.appendChild(tag('g4-twheel a'));
+      lw.appendChild(tag('g4-twheel b'));
+      loco.appendChild(lw);
       train.appendChild(loco);
-      var n = SLOTS.length;
+      /* THE CARS COME FROM THE ADJECTIVES (qa/NOTES.md 89): this train's own words decide how many wagons
+         it stands, capped at eight, and each car carries the slot of one of those words, in slot order —
+         so a skipped slot shows up as a gap in the order rather than being silently closed up. */
+      var list = trains[ti].items.slice(0, 8);
+      var slots = [];
+      list.forEach(function (w) { if (slots.indexOf(w.home) < 0) slots.push(w.home); });
+      slots.sort(function (a, b) { return a - b; });
+      slotOf = slots;
+      var n = Math.max(1, slots.length);
       cars = [];
       for (var k = 0; k < n; k++) {
         var car = tag('g4-tcar');
         car.style.left = (k * 100 / n) + '%';
         car.style.width = 'calc(' + (100 / n) + '% - 4px)';
-        car.style.height = (CAR0 - CAR_LIFT * k) + 'px';
-        car.style.marginBottom = (CAR_LIFT * k) + 'px';
         var body = tag('g4-tbody');
-        body.appendChild(tag('g4-tbowl'));
-        body.appendChild(tag('g4-thold'));
+        body.appendChild(tag('g4-tdeckbed'));
         car.appendChild(body);
         var wh = tag('g4-twheels');
         wh.appendChild(tag('g4-twheel a'));
@@ -3832,11 +3836,11 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       var w = picked.w, card = picked.card;
       picked = null;
       card.classList.remove('on');
-      var want = SLOTS[k];
+      var want = SLOTS[slotOf[k]];
       w.it.opts.forEach(function (o) {
         if (String(o.value) === want && o.radio) o.radio.checked = true;
       });
-      var hit = w.home === k;
+      var hit = w.home === slotOf[k];
       var load = tag('g4-tload', w.it.prompt);
       load.style.height = (OPEN0 - CAR_LIFT * w.home) + 'px';
       cars[k].appendChild(load);
@@ -3848,7 +3852,7 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
         /* ONLY A WORD TOO FAR BACK IS FATAL: its own slot allows more room than the opening it landed
            in, so it stands up through the deck and bursts where the growth ends. Too far forward leaves
            a gap instead — the crash is not symmetric, and that asymmetry is the lesson. */
-        if (w.home < k) {
+        if (w.home < slotOf[k]) {
           if (burstCar < 0) burstCar = k;
           r.later(function () {
             if (!cars[k] || cars[k].querySelector('.g4-tburst')) return;
@@ -3871,7 +3875,7 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       if (bad) {
         train.classList.add('jolt');
         bridge.classList.add('hit');
-        var which = burstCar >= 0 ? burstCar % planks.length : 0;
+        var which = burstCar >= 0 ? (slotOf[burstCar] || 0) % planks.length : 0;
         planks[which].classList.add('broken');
         stamp.className = 'g4-tstamp showing bad';
         stamp.textContent = 'DERAILED';
@@ -3917,9 +3921,24 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       setTimeout(function () { if (cb) cb(); }, r.reduced ? 320 : 1150);
     }
 
+    /* THE QUESTION IS THE NOUN'S FRAME (qa/NOTES.md 89): "That's a _______ [noun]", with the noun the
+       adjectives describe. `data-noun` on the block carries it; without one the frame still shows, with
+       the blank and nothing after it. The card belongs to the GAME, not to an item — every adjective on
+       the train fills the same sentence — so the runner is told not to rewrite it per item. */
+    function frame() {
+      if (!r.usePrompt || !r.promptEl) return;
+      var noun = (r.root.getAttribute('data-noun') || '').trim();
+      r.promptEl.innerHTML = '';
+      r.promptEl.appendChild(document.createTextNode("That's a "));
+      r.promptEl.appendChild(el('span', 'g4-tblank'));
+      if (noun) r.promptEl.appendChild(document.createTextNode(' ' + noun + '.'));
+      r.promptEl.classList.add('in');
+    }
+
     function show() {
       if (built || busy || done) return;
       built = true;
+      frame();
       reset();
     }
 
@@ -3929,6 +3948,7 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       clear: function () { },
       reset: reset,
       finale: finale,
+      ownsPrompt: true,
       lives: function () { return lives; }
     };
   }

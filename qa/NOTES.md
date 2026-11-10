@@ -42,9 +42,7 @@ Once the stack is built, have the player run across the top answer card on the s
 ### bingoCard
 
 → CONTENT_EXAMPLES.md §`bingoCard`
-[done] after game start,  the button that plays the audio should say "Next Round! - Listen to the Target Word"
-[done] increase the second timer (after the curtain opens) to 7 seconds
-↳ the label already read "Start Game - …" / "Next Round! - …" off the run's own progress; the card's countdown is 7·6·5·4·3·2·1 now.
+the current start game button is the old 'begin game' button, i want "Start Game - Listen to the Target Word" in its place, and then after that round (the first word),  the button that plays the audio should say "Next Round! - Listen to the Target Word"
 
 ### echoPads
 
@@ -64,9 +62,7 @@ Once the stack is built, have the player run across the top answer card on the s
 ### ladderRun
 
 → CONTENT_EXAMPLES.md §`ladderRun`
-[done] remove the graffiti animation, instead when the student gets all the answers correct, make the character climb on top of the prompt card, walk to the center, and start throwing money out which falls and lands on the option cards below. If the game ends and the user missed a point, instead make a dog run past and knock over the ladder and the ladder/character fall to the ground.
-[done] Change start game card text to "Get all the phrases right, climb to the top and get your Trump Ca$h!"
-↳ the graffiti art, its overlay, its CSS and its animation are deleted. Every answer right: he climbs onto the prompt card, walks along it to its centre, and throws banknotes that fall and settle on the answer cards. A point missed at the end of the run: a dog runs in, the ladder topples and the climber goes down with it. The start line is the game's own now (a `startText` on the plugin that the runner prints on the card).
+postpone the play again screen for 5 seconds so the animatin can play out
 
 ### crosswordBoard
 
@@ -95,12 +91,12 @@ Once the stack is built, have the player run across the top answer card on the s
 ### trainOrder
 
 → CONTENT_EXAMPLES.md §`trainOrder`
-[partly done] improve the train graphics, add a background that makes it look like the train is on some sort of ground and not just a beige flat background. Make it look like there are mountains off in the distance. The train caboose should be bigger than the cars, and the car wheels should all sit on the track. The platforms should start small like a flat bed, and get just a little bit bigger per car. The cars should not have labels. The amount of cars should depend on the amount of adjectives, and the prompt should be "That's a ____________________ [word]" . center the available adjectives on the bottom of the screen. the player will drag the adjectives to railway workers who at the beginning of each round will come and stand on platforms in front of each car. When the player has dragged all the words to the workers, they throw the words one by one onto the train cars. At that point the word cards grow in height according to their position. The total height of all given cars + their correct word is equal, and if all the words are used in order, the train will pass under the bridge without hitting it and the player gets a point. Each card's height is determined in that way regardless of where the player puts it, so if the player puts any of the words out of order, one will necessarily sit higher than it was supposed to and hit the bridge, causing a fail
-↳ done so far: the sky, two hazed ridges of hills on the horizon and the ground plane under the rails (the beige field is gone), and no car carries a label — the plaque, its level lever (`data-labels` / `data-label-max`) and its CSS are deleted. The rest of the note changes what the dropping IS (a word goes to a worker now, not onto a car), so it is held for answers:
-  ? 1) CARS FROM ADJECTIVES — when a sentence has five words, does the train stand the FIVE slots those words need (so a skipped slot shows up as a gap in the order, and the 6px-per-slot geometry stays honest), or five evenly-spaced cars with the same word→car map as today? I would build the five slots unless you say otherwise.
-  ? 2) THE WORD ON THE DOCK CARD — with the stem becoming "That's a ____ [word]", where does the card's own word come from: `data-word` on the `.qitem`, or the text after the blank in the stem? (I would read `data-word` first and fall back to the text after the blank.) And is the stem printed anywhere on the stage, or only authored?
-  ? 3) THE WORKERS — is each worker a drawn figure who stands on the platform in front of a car and is the drop target, with the platform only the stand? May a word be moved from one worker to another before the throwing starts?
-  ? 4) THE THROWS — do the workers throw one word each in dock order with a beat between (~300ms) and the cards grow as each lands, or do all the cards land first and grow together?
+redraw the
+
+### bossRaid
+
+→ CONTENT_EXAMPLES.md §`bossRaid`
+draw 3 different bosses that can be chosen or random, one is a chinese style dragon, one is a demon, and the other is an armored knight. make the graphics when its a dragon, the background is a cave, when its a demon, the background is a volcano with lava, when its a knight, its a castle. Make the graphics significantly better than they are now, or else pull outside assets
 
 ## preview-blocks.html
 
@@ -187,6 +183,16 @@ getting better, but work on something that can be applied to individual sentence
 
 → CONTENT_EXAMPLES.md §`voiceSeesaw`
 the idea is getting better, but its still basically its own block type. Try something that can take a normal sentence which is tagged as passive and put the subject behind a veil and then go from there
+
+### trainOrder (2026-11-10, teardown)
+
+→ CONTENT_EXAMPLES.md §`trainOrder (2026-11-10, teardown)`
+The train graphics, `ART.loco`, the coal bowl, the hold box, the crew, the depot, the ram, the fireball and the FAIL stamp are all deleted; the train is now a plain locomotive (cab, boiler, chimney, dome) and one flatbed per adjective, and the prompt card reads `That's a _______ <noun>` from `data-noun`. Four questions before this game can be re-implemented:
+
+1. **What carries the verdict now?** The old mechanism was geometry: every car was 6px taller than the one behind it, so an adjective in too late a car grew through the bridge. Flatbeds are all the same height, so that is gone. Should the height difference come back as a quieter ramp, or should a wrong placement be shown some other way (the load hanging over the end of the deck, a plank that visibly does not fit, the bridge checked at departure rather than at loading)?
+2. **How does a word get onto a car?** Today: tap a dock card, then tap a car. With a plain flatbed the natural gesture is dragging the adjective onto the deck. Drag, tap-tap, or both?
+3. **Do the cars ever say what they are?** The description now says no car carries a label, and the label art was deleted with the rest. Is the eight-slot order supposed to be on the page above the block (a chart the game never states), or should the slot names appear on the cars at low levels again?
+4. **What happens on a wreck?** The car tips and a heart goes. Does the train stop there with the wrecked car still loaded (and the run resumes on a fresh train), or does the whole train come off and the block restart at its first adjective?
 
 ### levelGauge
 

@@ -257,35 +257,46 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   separate sprites, a drawn boss with bite/hurt states, a slash arc, an HP bar.
 - **can't** — ritual stakes can mask weak items; every item must still be defensible on its own.
 
-### `trainOrder - (best for: one fixed adjective order made physical; the two ways a sentence sounds wrong; a rule felt instead of memorised · can't: contrast two orders, or produce anything — the sentence is built, never written or said · purpose 9/10 · fun 8/10)`
+### `trainOrder - (best for: one fixed adjective order made physical; the two ways a sentence sounds wrong; a rule felt instead of memorised · can't: contrast two orders, teach a second rule, or produce anything — the sentence is built, never written or said · purpose 9/10 · fun 8/10)`
 
-- **does** — The eight adjective slots are the eight cars of a train standing under a low bridge, and the student
-  **loads the sentence onto it**: every word of the sentence waits on the loading dock at one size, and dropping one
-  into a car makes it **grow to the height its own slot is allowed**. The track climbs to the right — the front car
-  stands lowest and takes the tallest load, every car behind it stands 6px higher and has 6px less headroom — so a
-  load in its own car tops out on one level line, **3px under the bridge**. A word put in a car further back than its
-  own grows through the deck. The train then leaves: a clean one runs out under the bridge and is stamped CLEARED; a
-  wrong one hits it, the plank over that car breaks, the car tips over and a heart goes with it. **An empty car is
-  fine** — a sentence need not use all eight slots — and a word placed too early only leaves a gap, though it still
-  scores nothing, because the car it stands in was not its car.
+- **does** — The adjective slots are the flatbed cars of a train standing under a low bridge, and the student
+  **loads the adjectives onto it**: every adjective waits on the loading dock at one size, and dropping one into a
+  car makes it **grow to the height its own slot is allowed**. The load in the right car tops out on one level line
+  just under the bridge; an adjective put a car too far back grows through the deck. The train then leaves: a clean
+  one runs out under the bridge and is stamped CLEARED; a wrong one hits it, the plank over that car breaks, the car
+  tips over and a heart goes with it. **An empty car is fine**, and an adjective placed too early only leaves a gap,
+  though it still scores nothing, because the car it stands in was not its car.
+- **ADJECTIVES ONLY** — this game teaches the adjective order and nothing else. Every item is one adjective; a block
+  must not use it for verb order, for tense, for word classes it cannot place, or for anything whose correct place
+  the eight slots do not name. **Difficulty is free**: generate at any level, because the order is the same rule at
+  every one of them, and the block's level never widens what the game can test.
+- **the question is the noun's frame** — the prompt card reads **`That's a _______ <noun>`**, taken from
+  `data-noun` on the block. So a lesson generation **picks one noun and one to eight adjectives to describe it** and
+  writes only the adjectives as items; the noun is never an item and never a load. Eight is the ceiling (there are
+  eight slots, and no two adjectives may share one), and **the train stands one car per adjective** — a train of
+  eight adjectives is an engine and eight flatbeds, a train of three is an engine and three.
 - **teaches** — a SEQUENCE, with a consequence for breaking it. Opinion → Size → Age → Shape → Color → Origin →
   Material → Purpose is the whole content; the train is what makes the order physical instead of a rule to memorise,
   and the two ways of being wrong (through the bridge / a gap with the load short of it) are the two ways a sentence
   can sound wrong.
-- **skins** — one `.qitem` per WORD: the stem is the word, and the options are the eight cars, one radio per car,
-  `value` naming the slot (`opinion`, `size`, … or `1`–`8`). `data-a` on the item is the slot the word belongs in, so
-  the answer that saves is the ordinary radio of the car the student chose. `data-train="2"` on an item puts it in the
-  second sentence's train; items with no `data-train` ride together, in authored order. **No car carries a label**:
-  the eight slots are read as positions, not as names.
-- **opts** — **4 to 8 words per train**, and the options ARE the eight cars (one radio per car). Eight is the ceiling because a car holds one word: a ninth word has no car to stand in, and under four there is too little sentence to show an order.
-- **levers** — `data-depart` (seconds the train waits on the dock before it leaves with whatever is loaded, default
-  30, `0` = wait for ever), `data-lives` (trains that may be wrecked before the run ends; absent = one per train, at
-  most three), `data-slots` (replace the eight slot names, pipe separated).
-- **art** — a drawn saddle-tank locomotive facing left, eight flatbeds on a ballasted grade, a lattice girder bridge
-  with a hazard-striped deck in eight planks (one per car, so the collision breaks the piece the wrong car hits),
-  splinters, steam, a slammed CLEARED / DERAILED stamp, and a departure clock that turns red and ticks in the last
-  six seconds. Behind the yard: a sky, two hazed ridges of hills with snow on the two high peaks, and the ground the
-  rails are laid on — the train is somewhere, not on a flat beige field.
+- **skins** — one `.qitem` per ADJECTIVE: the stem is the adjective, and the options are the eight slots, one radio
+  per slot, `value` naming it (`opinion`, `size`, … or `1`–`8`). `data-a` on the item is the slot its adjective
+  belongs in, so the answer that saves is the ordinary radio of the car the student chose. **No car carries a
+  label**: the slots are read as positions, not as names. Author the adjectives in order so the dock reads like the
+  sentence. No `data-train` any more: one block is one train.
+- **opts** — **1 to 8 adjectives per block**, one per slot, and the options ARE the eight slots (one radio per slot).
+  Eight is the ceiling because there are eight slots and a second adjective in one slot has no place to stand; one is
+  the floor, though a lesson would rarely stop there.
+- **levers** — `data-noun` (the noun the frame names, required in practice: without it the card shows the blank and
+  nothing after it), `data-depart` (seconds the train waits on the dock before it leaves with whatever is loaded,
+  default 30, `0` = wait for ever), `data-lives` (trains that may be wrecked before the run ends; absent = one per
+  train, at most three), `data-slots` (replace the eight slot names, pipe separated).
+- **art** — **a plain train**: a locomotive drawn from flat boxes (cab, boiler, chimney, dome) and one flatbed
+  wagon per adjective, every deck the same height, wheels on the rail. What grows is the load on the deck. A lattice
+  girder bridge in eight planks (one per car, so the collision breaks the piece the wrong car hits) and a
+  slammed CLEARED / DERAILED stamp. Behind
+  the yard: a sky, two hazed ridges of hills with snow on the two high peaks, and the ground the rails are laid on —
+  the train is somewhere, not on a flat beige field.
 - **fits** — full width only: eight cars cannot be read at a half.
 - **can't** — one order, so it trains one rule: it cannot contrast two orders, and it is not a production exercise —
   the sentence is built, never written or said. Word-level vocabulary has to be known already, since the sentence is
