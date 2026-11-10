@@ -52,6 +52,8 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 ### [B6] - the widths and the loads, opened as the next task <"lets do the widths and loads for content_examples next"> <CONTENT_EXAMPLES.md: a `- **width** —` ladder per vehicle and a `- **load** —` curve per activity> NOT EXECUTED - [17] [B5] carries the plan both must agree with
 
 
+## [17] - design A for block widths (narrow-first + structural measurement): the plan only (2026-11-10)
+
 ### [B1] - the decision recorded <"2. i said go with A" corrects "lets go with a", which had been read as the field question (a)> <design A is the chosen approach; whether the `**width**` field returns is [B2]'s question, not a settled removal> NOT EXECUTED - plan and question only, no edits
    - [S1] - A restated: a block starts at its narrowest allowed slot and grows one step only when a structural element does not fit; prose is excluded because it wraps <the three designs came from last turn's [B1]> NOT EXECUTED
 ### [B2] - the one new piece of data A needs: the width field <"im thinking we put a "width: #" field that appends to the markup line of each vehicles entry in CONTENT_EXAMPLES.md and corresponds to the AVAILABLE WIDTH OPTIONS for that vehicle">
