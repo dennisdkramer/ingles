@@ -254,3 +254,79 @@ make it a half-width block and include have and get
 
 → CONTENT_EXAMPLES.md §`falseFriendSplit`
 delete
+
+### audienceRow
+
+→ CONTENT_EXAMPLES.md §`audienceRow`
+delete
+
+### sceneCast
+
+→ CONTENT_EXAMPLES.md §`sceneCast`
+delete
+
+### dialogueMoves
+
+→ CONTENT_EXAMPLES.md §`dialogueMoves`
+delete
+
+### chatSample
+
+→ CONTENT_EXAMPLES.md §`chatSample`
+No — it uses the same `.dialog` container as any exchange, and that is the point: what makes it a chatSample is the
+contents, not the frame. A scripted exchange is written so that every line carries language the lesson is teaching; a
+chatSample is one form dropped into ordinary noise — a typo, an emoji, two messages in a row, a reply that ignores the
+question — and the block has to name what to look for. The entry's own `can't` draws the line: a thread whose every
+line is target language is a dialogue pretending to be a chat. So the shape is identical and the item is not; strip the
+noise and it stops being this block. With `dialogueMoves` now deleted, this is the only `.dialog` block left, so the
+entry now says this in `does`.
+
+### vocabField
+
+→ CONTENT_EXAMPLES.md §`vocabField`
+delete
+
+### storyStrip
+
+→ CONTENT_EXAMPLES.md §`storyStrip`
+delete
+
+### melodyContour
+
+→ CONTENT_EXAMPLES.md §`melodyContour`
+migrate this to IN-BLOCK-VISUALS.md
+
+### beatGrid
+
+→ CONTENT_EXAMPLES.md §`beatGrid`
+delete
+
+### stanceScale
+
+→ CONTENT_EXAMPLES.md §`stanceScale`
+delete
+
+### routineMap
+
+→ CONTENT_EXAMPLES.md §`routineMap`
+delete
+
+### twoWordVerb
+
+→ CONTENT_EXAMPLES.md §`twoWordVerb`
+make the blocks half-width and the second block into a matching exercise using the words from the 'everyday form' column in the first block. We may need to utiliize checkboxes so you can confer with me abou tthis
+
+### chunkBank
+
+→ CONTENT_EXAMPLES.md §`chunkBank`
+delete
+
+### pronLab
+
+→ CONTENT_EXAMPLES.md §`pronLab`
+This one is useful but I need to make some tweaks, leaving a note for myself to remember later
+
+### wordFamily
+
+→ CONTENT_EXAMPLES.md §`wordFamily`
+this one is good but we can add another column 'thing2'

@@ -87,102 +87,37 @@
 
 ### `soundGrid - (best for: one contrast in three positions; showing a contrast as a system rather than two words; listening and mouth work with audio on every example · can't: carry written form, and more than two sounds per row stops being a contrast and becomes a catalogue · purpose 8/10 · fun 4/10)`
 
-- **does** — One contrast, shown in three positions: the same pair of sounds at the start, in the middle and at the
-  end of a word, with a `.listen` chip on each example. Teaches that the contrast is a system, not two words.
-- **markup** — `.chart`: rows are the two sounds, columns are the positions; each cell holds `<word>` plus a
-  `.listen` chip. A `<tr class="note">` names the position where the student's own language interferes most.
+- **does** — One contrast, written three ways the student already reads: **X** and **TI**, the two Portuguese
+  substitutions (tagged *português*, in italic), and **TH**, the English one — each at the start, in the middle and at
+  the end of a word, with a `.listen` chip on every example. Teaches that the contrast is a system, not two words, and
+  it never hands the student a phonetic symbol this project does not use.
+- **markup** — `.chart`: rows are the three spellings, columns are the positions; the row header is `<b>X</b>
+  <i>(português)</i>`, `<b>TI</b> <i>(português)</i>` and `<b>TH</b>`, so the two the student says instead are labelled
+  as the first language and the target is not; each cell holds `<word>` plus a `.listen` chip. A `<tr class="note">`
+  names the position where the student's own language interferes most.
 - **fits** — full; it is three columns of examples plus labels.
 - **can't** — it is listening and mouth-work only; no written form, and a grid with more than two sounds per row
   stops being a contrast and becomes a catalogue.
-
-### `stressBar - (best for: the word's syllables with the stressed one marked; the rule that put the stress there; transfer to the next word · can't: promise a rule — English stress is only partly rule-governed, and a rule with more exceptions than cases is worse than "learn it by ear" · purpose 8/10 · fun 3/10)`
-
-- **does** — The word broken into syllables with the stressed one marked, and **the rule that put the stress
-  there** — which is what makes it transferable to the next word instead of a fact about this one.
-- **markup** — `.panel`; syllables separated by a raised dot, the stressed syllable in `<b>`; one `.listen` chip for
-  the whole word; the rule as one caption line under it.
-- **fits** — third; two or three of them in an `.itemrow`.
-- **can't** — English stress is only partly rule-governed, so a stress rule that has more exceptions than cases is
-  worse than saying plainly that this one must be learned by ear.
-
-### `spellingSoundMap - (best for: one sound and the several spellings that produce it; making reading predictable; the reverse direction of a sound grid · can't: promise rules — spelling is regular in patterns, and a claim that fails in the next paragraph is worse than "these four, no pattern" · purpose 8/10 · fun 3/10)`
-
-- **does** — The reverse direction of `soundGrid`: one sound, and the several spellings that produce it (or one
-  spelling and the sounds it makes), each with an example. Makes reading predictable instead of memorised.
-- **markup** — `.chart`, two columns (`<spelling>` · `<example word with a listen chip>`), grouped by position if
-  position changes the answer.
-- **fits** — half.
-- **can't** — English spelling is regular in patterns, not in rules; if the honest answer is "these four, and no
-  pattern", write that, or the block teaches a rule that will fail in the next paragraph the student reads.
-
-### `scaleAxis - (best for: placing the lesson's words on a named continuum; degree where a rule only gives two boxes; labelled ends · can't: be honest when two items could swap places — that axis is invented and must not ship · purpose 8/10 · fun 3/10)`
-
-- **does** — Items placed along a named continuum (`<weak>` ⟶ `<strong>`, `<formal>` ⟶ `<casual>`,
-  `<always>` ⟶ `<never>`), with the ends labelled. Teaches degree where a rule would only give two boxes.
-- **markup** — `.chart` used as a strip (one row, one cell per step) or a `.panel` with the items separated by arrow
-  characters and the two ends in `<b>`. Every item keeps its `lang="pt"` gloss if the word is new.
-- **fits** — full; a continuum needs the width to read as a line.
-- **can't** — it claims an order. If two items could swap places without changing meaning, the axis is invented and
-  must not ship.
 
 ### `collocationMatrix - (best for: what actually goes together; stopping translation-shaped errors; rows and columns as a map of the set · can't: explain a blocked combination — ticks are not reasons, and the reason belongs in a ruleCard beside it · purpose 9/10 · fun 3/10)`
 
 - **does** — Two sets of words as rows and columns, with ticks showing what actually goes together. This is the
   block that stops translation-shaped errors, because a pair that "means the same" in both languages lands in the
-  wrong cell here.
-- **markup** — `.chart`: `<set A>` down the side, `<set B>` across the top, `✓` and `✗` in the cells, and a
-  `<tr class="note">` naming the one cell students always get wrong.
-- **fits** — half if both sets are three items; full at four or more.
+  wrong cell here — the verbs that split one first-language word (`make` · `take` · `do` · `have` · `get` against
+  `a photo` · `a shower` · `a decision`) are the canonical set.
+- **markup** — `.chart` at **half width**: `<set A>` down the side, `<set B>` across the top, `✓` and `✗` in the cells,
+  and a `<tr class="note">` naming the one cell students always get wrong.
+- **fits** — half; three items in each set is what a half holds, and five rows still fit its height. Full only when
+  both sets go past four.
 - **can't** — ticks are not explanations; if a combination is blocked for a reason (not just by convention), a
   matrix hides it and the reason belongs in a `ruleCard` beside it.
-
-### `falseFriendSplit - (best for: one first-language word that splits into two in English; the test that decides which; errors that survive knowing both words · can't: help a word with one clean equivalent — presenting it here invents a difficulty the language does not have · purpose 8/10 · fun 4/10)`
-
-- **does** — One word in the student's language that splits into two in English (or one English word that covers
-  two things in the student's language), shown with **the test that decides which one** — a question the student can
-  ask themselves in the moment.
-- **markup** — `.panel`: the shared meaning on top, then each branch as `<English word> — <when it is the right one>`,
-  a short example line under each, the drawing question pinned at the bottom in `<b>`.
-- **fits** — half; pair with the drill that makes the student choose.
-- **can't** — only for genuine splits; a word with one clean equivalent presented here invents a difficulty the
-  language does not have.
-
-### `audienceRow - (best for: one message at three distances; register as a choice with a reason; setting up the exercise that makes the student pick · can't: walk the ladder — it presents the rungs, so on its own it is a poster about register · purpose 8/10 · fun 3/10)`
-
-- **does** — One message at three distances — a friend, an adult you know, an adult you don't — with **who you would
-  say it to** as the label on each version. Teaches register as a choice with a reason, not as politeness points.
-- **markup** — `.chart`: a `<when>` column naming the audience, a `<how it sounds>` column with the version. Two
-  `<tr class="note">` rows if a form is wrong for one audience rather than merely odd.
-- **fits** — full; three versions of one message do not fit across a half in readable type.
-- **can't** — it presents the ladder without walking it; the student still needs a block that makes them pick the
-  rung, or this is a poster about register.
-
-### `sceneCast - (best for: who, where, what has happened and what is at stake; letting a dialogue be one scene instead of four items; predicting which language the scene will use · can't: supply any language at all — worth nothing without the scene it sets, and a cast list that only names people predicts nothing · purpose 7/10 · fun 5/10)`
-
-- **does** — Who is talking, where, what has already happened between them, and what is at stake — the facts that
-  predict which language the scene will use. This is the block that lets a dialogue or a roleplay be one thing
-  instead of four disconnected items.
-- **markup** — `.card` with four labelled lines (`who` · `where` · `what just happened` · `what's at stake`). No
-  dialogue yet: this block sets the scene, the next one uses it.
-- **fits** — third or half; pair with a dialogue at the same width.
-- **can't** — no language at all, so it is worth nothing without the scene it sets; and a cast list that only names
-  people ("Ana, her brother") predicts nothing — the stakes have to be social.
-
-### `dialogueMoves - (best for: labelling each turn by what it does; showing that a conversation has parts; a phrase set per move · can't: produce a move — the labels are metalanguage, so a production drill must follow · purpose 8/10 · fun 4/10)`
-
-- **does** — A short exchange where each turn is labelled by **what it is doing** (`open` · `hedge` · `push back` ·
-  `concede` · `close`), so the student sees that a conversation has parts and that the parts have their own phrases.
-- **markup** — `.dialog` for the exchange (speaker, turn), and beside or under each turn its move label. The move
-  vocabulary must be named in the lesson before the labels appear.
-- **fits** — full; two columns of text plus labels.
-- **can't** — labels are metalanguage, not language; a student can label a hedge and still not produce one, so the
-  block must be followed by a drill that makes them produce a move.
 
 ### `chatSample - (best for: the target form inside ordinary noise; meeting a form in the wild first; real threads with typos, emoji and ignored questions · can't: stay current, and a thread where every line is target language is a dialogue pretending to be a chat · purpose 7/10 · fun 7/10)`
 
 - **does** — A short thread as it actually appears on a screen, with the target language in the middle of ordinary
   noise: a typo, an emoji, two messages in a row, a reply that ignores the question. The student meets the form in
-  the wild before they are asked to use it.
+  the wild before they are asked to use it. The container is the same `.dialog` any scripted exchange uses — what
+  makes it this block is the noise, and the fact that it exists to show one form rather than to model a conversation.
 - **markup** — `.dialog` with the thread (speaker bubble per line). A `<tr class="note">` or one caption line names
   what to look for — the block must say why it is on the page.
 - **fits** — full or half; a thread is narrow, so half-width is natural beside the practice.
@@ -190,80 +125,15 @@
   among several, never as the only presentation of a rule; and a thread whose every line is target language is a
   dialogue pretending to be a chat.
 
-### `vocabField - (best for: arranging new words by the job they do in the situation; retrieval by meaning instead of a numbered list; a map a later block can point back to · can't: drill anything, and arbitrary headings make it a list with extra lines · purpose 7/10 · fun 4/10)`
-
-- **does** — The lesson's new words arranged by **the job they do in the situation** (people · things · actions ·
-  what you say · how it went), not as a numbered list with translations. A field is easier to use than a list
-  because the student retrieves by meaning.
-- **markup** — `.chart` with a `<when you need it>` column and the items in the cell; `lang="pt"` glosses only where
-  the word is genuinely new. Ten items minimum across the clusters.
-- **fits** — full; the columns are the teaching.
-- **can't** — no drill, and a field with arbitrary headings is a list with extra lines; every cluster name has to be
-  a situation the student will actually be in.
-
-### `storyStrip - (best for: language carried inside a story; scenes that each teach something new; later blocks referring back by scene name · can't: use length as depth — if the scenes stop teaching, the strip is decoration that pushes practice below the fold · purpose 7/10 · fun 7/10)`
-
-- **does** — Three or four short scenes carrying one continuous situation, with the target language embedded in
-  each and getting slightly harder. The student learns the language *inside* a story instead of meeting it as
-  examples, and later blocks can refer back to the scenes by name.
-- **markup** — `.itemrow` of `.panel`s (or `.card`s), each with a scene number, two or three lines, and the target
-  form in `<b>`. Sequential, so the order must read left to right and stack on a narrow screen.
-- **fits** — full width, panels in an `.itemrow`; two or three per row.
-- **can't** — a story is long, and length is not depth: if the scenes do not each teach something the previous one
-  did not, it is decoration that pushes the practice below the fold.
-
-### `melodyContour - (best for: putting intonation on a printed page; a drawn line showing where the voice moves; one-word labels for the shape · can't: prove anything on its own, and without the clip it is an abstraction · purpose 7/10 · fun 4/10)`
-
-- **does** — One line of text with a **drawn line over it** showing where the voice rises and falls, and a one-word label
-  under the shape (`finished` · `waiting` · `asking` · `doubt`). It is the only way to put intonation on a printed page:
-  words describe a movement badly, a line describes it exactly.
-- **markup** — `.panel` with an inline `<svg>` path (no image file, no network) and the text beneath it, one glyph per
-  syllable so the line's turns line up with the words. One contour per block.
-- **fits** — half, beside `stressBar` or `listenIdentify`; third when it is only illustrating a single word.
-- **can't** — it shows the shape and proves nothing; and a contour over a line the student cannot hear is an abstraction —
-  the clip has to be there too, or this is decoration.
-
-### `beatGrid - (best for: even beats with syllables squeezed between them; the thing prose cannot make students believe; one line at a time · can't: stack two lines — they invite the reading that both are equal length, the opposite of the point · purpose 8/10 · fun 3/10)`
-
-- **does** — A sentence laid onto a row of even beats, unstressed syllables squeezed into the cells between them, with the
-  stressed syllable marked. Shows the thing students never believe from prose: the beats are evenly spaced and the words
-  are not.
-- **markup** — `.chart` where each column is one beat and each cell holds what falls in it; stressed cells in `<b>`. Real
-  columns, not aligned text, or the evenness is a claim rather than a picture.
-- **fits** — full; a beat row that wraps is no longer a beat row.
-- **can't** — one line per grid; two lines stacked invite the student to read them as equal length, which is the opposite
-  of the point.
-
-### `stanceScale - (best for: strength on one named axis; including the gaps where nothing sits; undoing a synonym assumption · can't: hold words that differ in kind rather than degree — the axis is then a lie and a matrix is the honest shape · purpose 8/10 · fun 3/10)`
-
-- **does** — An axis, and the lesson's words placed on it (`<weak>` — `<neutral>` — `<strong>`), including the gaps where
-  nothing sits. Position is the teaching: two words that looked like synonyms are shown to be neighbours or not.
-- **markup** — `.chart` row with the ends named and the members placed in order; a cell holding `—` where a slot is empty.
-  The empty slots are the useful part and must not be tidied away.
-- **fits** — full or half; the axis needs to look continuous, so never a bulleted list.
-- **can't** — an axis implies a single dimension; if two of the words differ in kind rather than degree, the axis is a lie
-  and a `collocationMatrix` is the honest shape.
-
-### `routineMap - (best for: a routine drawn as a path with branches; both routes and where each ends; the shape a script tests · can't: choose the route for the student — it shows the map, and the judgement belongs to the practice after it · purpose 8/10 · fun 4/10)`
-
-- **does** — A routine drawn as a **path with branches** rather than a list: the moves in order, and at the points where the
-  exchange can go two ways, both ways shown and where each ends. This is the shape `sentenceSurgery` tests on a chunked
-  exchange, and prose cannot hold.
-- **markup** — `.chart` or a `.panel` with an inline `<svg>` of boxes and connectors; labels are moves, not lines of
-  dialogue. Two branches maximum or the map stops being readable at a half-width.
-- **fits** — full; a branch diagram at a third is a scribble.
-- **can't** — it is a map of one routine in one setting; and it shows the route, never which route to take — that is the
-  judgement the practice block after it has to test.
-
-## [MIXED] TEACHING/training
-
 ### `twoWordVerb - (best for: the register of a word already understood; producing the everyday form; proving the one-word twin means the same · can't: teach meaning, and it teaches a false equation whenever the pair is not genuinely interchangeable · purpose 8/10 · fun 5/10)`
 
-- **does** — A chart puts the everyday two-word verb beside its one-word twin; the student then writes the everyday
-  form into the gap (`<everyday verb>` ↔ `<one-word twin>`). Production is always the everyday form: it is the one
-  they will be heard using, and the twin exists only to prove the meaning is unchanged.
-- **markup** — column pair: `.chart` with the twin in the left column and `input.gap` in the right, then three to
-  six item-list gaps that ask for the form from the other direction.
+- **does** — A chart puts the everyday two-word verb beside its one-word twin, then the student matches the everyday
+  column back to the twins it replaces. Production is always the everyday form: it is the one they will be heard
+  using, and the twin exists only to prove the meaning is unchanged.
+- **markup** — two **half-width** blocks. The first is a `.chart` with the twin in the left column and the everyday form
+  filled in the right — it is the source list. The second is a matching exercise built from that right column: the
+  everyday verbs numbered, an `input.gap` beside each, and the twins lettered in one line beneath, so every answer is a
+  single letter.
 - **fits** — HALF, by width fill: a two-column chart of short pairs plus a few gaps does not fill a full row, so
   it collapses to half width and is centred when it is alone (its lead-in and notes wrap to that width and never
   count as fill). Pair with `registerContrast` when the lesson also has a stiff/spoken axis, or with
@@ -291,8 +161,8 @@
   stated audience. The audience is always named, or the item is unjudgeable.
 - **markup** — column pair for the contrast (`<stiff wording>` ↔ `<spoken wording>`), then an item list where each
   `.qstem` names a person and a situation and the radios are the two wordings.
-- **fits** — full; it wants `audienceRow` (display) above it, because the student cannot choose a register for an
-  audience the page never described.
+- **fits** — full; the audience is named in every item, or in a display block above it, because the student cannot choose a
+  register for an audience the page never described.
 - **vary** — two clearly different audiences before two similar ones. The lever is how close the two audiences are
   (a teacher vs a head teacher vs a friend's parent), not how rude the options get.
 - **can't** — needs a described situation; with no audience both columns are defensible. And both wordings must be
@@ -347,7 +217,8 @@
   (`<weak>` … `<strong>`). Forces the realisation that words of a set are not interchangeable but ordered.
 - **markup** — item list: the stated intensity in the `.qstem`, the candidate words as radios. The scale itself is shown
   once above as a `.chart` line, not repeated per item.
-- **fits** — half, beside a `stanceScale` display block that draws the axis; full when the set has five or more members.
+- **fits** — half, with the scale line above the items doubling as the display; full when the set has five or more
+  members.
 - **vary** — two options far apart → two neighbours on the scale → three where two are defensible and the deciding
   factor is stated in the prompt (who is speaking, how serious it is).
 - **can't** — every item needs one defensible answer. Degree words blur under scrutiny, so the prompt must carry the
@@ -487,11 +358,12 @@
 - **does** — Given an answer, form the question; given a context, ask the follow-up.
 - **markup** — item list of `input.gap`s, one per answer. The prompt is the answer the student is talking to — never
   a grammar label, or they conjugate instead of ask.
-- **fits** — full, or half directly under a `dialogueMoves` block so the question has a conversation to land in.
+- **fits** — full, or half directly under a `chatSample` thread so the question has a conversation to land in.
 - **vary** — same tense with a stated word order before free order; then add the constraint that the question must
   begin with `<question word>`. Loading two new demands into one item is the standard way this drill becomes unfair.
 - **can't** — graded on form only, or free answers become unmarkable, so state what counts as right; and it does not
-  teach turn-taking — a perfect question in the wrong place is still a failed exchange, which is `dialogueMoves`'s job.
+  teach turn-taking — a perfect question in the wrong place is still a failed exchange, and carrying a whole exchange
+  is a different block's job (`chatSample`).
 - **difficulty** — the item is harder than it looks: one answer can often be asked two or three correct ways, and a
   context can be so open that the "right" question is a judgement the page never defined. So each item names ONE
   thing being asked (the tense, the question word, the subject) and accepts every form that fits that one thing, and
@@ -503,7 +375,7 @@
 - **does** — The fixed moves for when communication breaks: ask for a repeat, check a guess, restate.
 - **markup** — item list: a short exchange with the break marked, then one `input.gap` holding the move that repairs
   it. The `.listen` chip carries the move so the student hears the tone, not just the words.
-- **fits** — half, beside a `dialogueMoves` block — this is the emergency exit of the same conversation.
+- **fits** — half, beside a `chatSample` thread — this is the emergency exit of the same conversation.
 - **vary** — the move alone, then the move inside a longer exchange. What actually makes it harder is *whose* fault
   the break is: repairing your own sentence is a different move from rescuing someone else's.
 - **can't** — teaches the move, not the conversation; needs a scene to mean anything, and a teacher to judge whether
@@ -616,7 +488,7 @@
   marks which word has to carry the beat.
 - **markup** — item list: the meaning in the `.qstem`, the sentence printed once, and the student writes the stressed
   word into the gap. Radios per word would be tidier but would give away that exactly one word is marked.
-- **fits** — half. It belongs beside `audienceRow` or `dialogueMoves`, where tone already matters, and directly under
+- **fits** — half. It belongs beside `registerContrast`, where tone already matters, and directly under
   an explainer block that shows the pattern and a couple of examples of it (`ruleCard` or `formulaFrame`) — a student
   cannot mark a beat for a pattern the page never stated.
 - **vary** — three candidate words → five → a two-clause sentence where the beat can fall in either clause. The lever
@@ -675,7 +547,7 @@
   student can check, which is what "say it with stress" fails to give them.
 - **markup** — column pair: the line left, `input.gap` for the count right; a second row asks which word sits on the
   break.
-- **fits** — beat or half; pair with `beatGrid` — count the beats first, then lay the line onto them.
+- **fits** — beat or half; the count comes first, then the line is laid onto it.
 - **vary** — count beats, then move the count by one word, then keep the count identical and change the meaning. The
   third step is the whole point and it needs no new words.
 - **can't** — speech only: a page cannot carry a metronome, so the count is the lesson's judgement and the block must

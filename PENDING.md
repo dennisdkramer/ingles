@@ -22,6 +22,24 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 # [CURRENT] Prompt - (Active batches, newest first)
 
 
+## [13] - the tags added while [12] was running (2026-11-10)
+### [B1] - deletes: stressBar, spellingSoundMap, scaleAxis, falseFriendSplit, audienceRow, sceneCast, dialogueMoves, vocabField, storyStrip, beatGrid, stanceScale, routineMap
+   - [S1] - twelve entries removed from the menu and the page, navs rebuilt <[12] carried six, [13] eight more> DONE - menu 70 -> 56 entries, page 70 -> 57 sections (43 blocks + 14 drafts)
+   - [S2] - cross-references re-pointed rather than deleted: melodyContour->emphaticBeat, registerContrast's own fits line, emphaticBeat->registerContrast, questionBuilding and repairMoves->chatSample, literalSplit and ruleTree->no name, levelGauge->scaleChoice/politeLadder <the guard in the drop script refused to run while any backticked name survived> DONE
+### [B2] - the tags that were changes, not deletes
+   - [S1] - soundGrid: rows are X and TI (italic, português) and TH, no phonetic symbols; entry and page <"we dont use those other symbols in this project"> DONE
+   - [S2] - collocationMatrix: half width, have and get added as rows <"make it a half-width block and include have and get"> DONE
+   - [S3] - chatSample: the owner's question answered in its NOTES section, and the entry now says in `does` that it shares the `.dialog` container and differs by content <"isnt this just a normal dialog? answer by updating the text here"> DONE
+   - [S4] - twoWordVerb: two half-width blocks, the second a matching exercise fed by the first block's everyday column <"make the blocks half-width and the second block into a matching exercise"> DONE
+### [B3] - melodyContour migrated out of the block list
+   - [S1] - entry removed from CONTENT_EXAMPLES.md, written as a `####` draft in IN-BLOCK-VISUALS.md with the five fields <"migrate this to IN-BLOCK-VISUALS.md"> DONE - placed after levelGauge, before the Outside-art appendix
+   - [S2] - its page section moved from the blocks region to the drafts region, dim line restated as an in-block element, `.listen` chip and one gap added so the preview shows what the draft says it does <a draft with no item of its own> DONE
+### [B4] - verify and publish
+   - [S1] - order 57/57 with 0 mismatches, 57/57 sections, 606/606 divs, no stale names, examples.mjs 6/6 DONE
+### [B5] - refused on purpose
+   - [S1] - a `### chunkBank` section asking for `delete` appeared after the rename to `contextFit` was done <a name that no longer exists, contradicting the rename from 20 minutes earlier> AWAITING USER: delete the vehicle now called contextFit, or delete only the stale section
+   - [S2] - `wordFamily` ends mid-sentence ("this one is good but we can"), `pronLab` is a note-to-self, twoWordVerb adds "we may need to utilize checkboxes so you can confer with me" <nothing actionable yet>
+
 ## [12] - the remaining change tags in qa/NOTES.md, entry and preview (2026-11-10)
 ### [B1] - PRE-PROMPT RESEARCH <"keep working on any other items that ive requested changes for"> <every tag that is not a delete, and where its vehicle stands>
    - [S1] - NOTES.md re-read at its 14:39 state <beforeAfterStrip's `d` had become `delete`> <the tag list> DONE - 3 change tags outstanding: formulaFrame, signalTable, contextFit

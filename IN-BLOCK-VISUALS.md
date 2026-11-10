@@ -89,11 +89,11 @@ Authoring is one span at the point of the mark, empty where the mark is the whol
 
 - **draws** — a root question, three yes/no nodes, leaves that are choices (`who` · `which/that` · `whose` · no pronoun
   at all), and one leaf that is deliberately "either — and here is what changes".
-- **built from** — the `routineMap` shape at a larger scale: one `.panel`, one inline `<svg>` of boxes and connectors,
+- **built from** — one `.panel`, one inline `<svg>` of boxes and connectors,
   labels as HTML beside the nodes.
 - **ends in** — 3–5 `.qitem`s: a sentence pair as `.qstem`, the leaves as radios. The tree comes first, because FORMAT
   forbids asking for a judgement on an axis the page has not defined.
-- **fits** — full only; `routineMap` already records that a branch diagram at a third is a scribble. Three levels max.
+- **fits** — full only; a branch diagram at a third is a scribble. Three levels max.
 - **the risk** — a real `which`/`that` choice is register and rhythm, not logic. Any leaf that pretends it is binary
   teaches a rule that fails in the next paragraph the student reads.
 
@@ -311,18 +311,31 @@ Authoring is one span at the point of the mark, empty where the mark is the whol
 
 #### `levelGauge` — a filled gauge in front of an existing scale (draft)
 
-- **draws** — the same axis `scaleAxis` and `stanceScale` already draw, with a filled level or a marker instead of a bare row
+- **draws** — the same axis `scaleChoice` and `politeLadder` already draw, with a filled level or a marker instead of a bare row
   of cells: modal certainty, adverb frequency, or a register gradient from faint disagreement up to open contempt.
 - **built from** — an inline `<svg>` track plus one filled bar plus an optional marker; the fill is authored data. A real
   `input type="range"` cannot ship: only radios, `input.gap` and `textarea` save, so a slider would look interactive and score
   nothing.
-- **ends in** — radios ("which rung fits this hearer") with the hearer in the `.qstem`; that is `audienceRow`'s shape, so
-  the gauge is its display half.
-- **fits** — full; a continuum needs the width, as `scaleAxis` already says.
-- **the risk** — this is the idea on the list that is mostly already built (`scaleAxis`, `stanceScale`, `scaleChoice`, plus
-  `politeLadder`), so the honest version is a level field on `scaleAxis`, never a ninth scale block. And
+- **ends in** — radios ("which rung fits this hearer") with the hearer in the `.qstem`; the gauge is then the display half
+  of that choice.
+- **fits** — full; a continuum needs the width.
+- **the risk** — this is the idea on the list that is mostly already built (`scaleChoice`, plus
+  `politeLadder`), so the honest version is a level field on `scaleChoice`, never a ninth scale block. And
   a disagreement gradient's top rungs are register and risk, not vocabulary: they belong to a track whose persona allows them,
   and the block has to show *who you may say it to*, not how far up the scale it sits.
+
+#### `melodyContour` — the voice's movement drawn over the line (draft)
+
+- **draws** — one line of text with a line over it tracing where the voice rises and falls, and a one-word label under the
+  shape (`finished` · `waiting` · `asking` · `doubt`): words describe a movement badly, a line describes it exactly.
+- **built from** — an inline `<svg>` path (no image file, no network) and the text beneath it, one glyph per syllable so
+  the line's turns line up with the words. One contour at a time — two on one page are two different sentences.
+- **ends in** — a `.listen` chip on the line itself plus one `input.gap` per turn asking which way the voice went
+  (`up` · `down` · `up then down`), because a contour over a line the student cannot hear is an abstraction.
+- **fits** — third or half inside a host block; full only when the sentence is the page's material. It sits here rather
+  than in the block list because it has no item of its own — the host block asks the questions.
+- **the risk** — it shows the shape and proves nothing. Without the clip beside it this is decoration, and a contour drawn
+  for a pattern the lesson never named teaches a movement the student has no name for.
 
 ## Outside art — what exists, and the three conditions on it
 
