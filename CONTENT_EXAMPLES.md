@@ -6,6 +6,8 @@
 - **The content in the page.** Games drive authored `.qitem`s (stem + optional `.listen` + radios), `input.gap`, or a textarea — nothing else. Whatever the engine animates is presentation; the saved answer is always one of those controls. If a mechanism cannot end in one, it is not a vehicle, it is a decoration. 
 - **The tone of a lesson comes from the lesson's copy, never from here.** Every game below is track-neutral, *skins* layered on top — never baked in
 
+- **Every activity that carries answers or fields declares its own multiplier.** Its `###` entry carries `**load**`: the number a build multiplies the block's content level by for the work the block is given, in the shape `qty ×1.0 at <the count it is normally used at> → ×<N> at <its ceiling> · pace ×<N> when data-time · risk ×<N> at data-retry="0"`. The arithmetic is in `PEDAGOGY-MAP.md [LEVEL] x` — `load = clamp(L × M, 1, 50)` with `M = qty × pace × risk` — and the activity states the numbers, because only it knows what its own ceiling costs. A build reads that line and never estimates one; an entry with no `**load**` line can be authored at its baseline count and nowhere else.
+
 ## Build [Constraints] - Ignore this section for lesson generation
 
 There is **no house style**. Look, palette, motion and mood are chosen per game and per track — a kids page may be loud and a business page sober, and neither is more correct. Only these hold, because they are mechanical:

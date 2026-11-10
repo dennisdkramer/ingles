@@ -1,5 +1,10 @@
 
 
+## Cleared from PENDING [CURRENT] — 2026-11-10
+
+- `[6]` trainOrder: six adjectives in the test block; the crew coupled to its wagons at the start and left behind when the train pulls out → `df46dfe`, `b739fe3` (six items, opinion → origin; one `--shift` shared by `.g4-ttrain` and `.g4-tcrew`; each wagon centred on the pitch its loader stands on; `g4trun` clearing `-130% - var(--shift)` so the train still wholly leaves the stage; the crew a sibling row in the yard, never a child of the moving box). `[B1]`'s research carries no mark of its own: it is the reads that produced `[B3]` and `[B4]`.
+- `[5]` trainOrder: "Play again" did not start the next round → `0422aeb` (view.reset re-arms the yard; `reset()` left as the per-train layout `next()` uses; the noun frame written in `show()` because `step()` wipes the prompt line first).
+
 ## Cleared from PENDING [CURRENT] — 2026-11-09
 
 - `[11]` several access changes errored and a signed-in return waited seconds → `08b2fe5` (one `accessSet` carrying the desired set; the page paints before any request)

@@ -21,24 +21,13 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 
 # [CURRENT] Prompt - (Active batches, newest first)
 
-## [6] - trainOrder: six adjectives, and the crew coupled to the cars at the start (2026-11-10)
-### [B1] - PRE-PROMPT RESEARCH <"try changing the html to 6 adjectives"> <every HTML file that carries a trainOrder block, and the train/crew geometry>
-   - [S1] - find the data-game="trainOrder" blocks <kids/*.html, adult/*.html, business/*.html, qa/preview-games4.html> <which file the eight adjectives live in>
-   - [S2] - read the yard, train and crew rules <style.css .g4-yard/.g4-ttrain/.g4-tcrew> <why the men do not line up with the cars>
-   - [S3] - clear [B1] and batch the two edits <ADHERENCE [BATCHING] 1)> <one block edit, one geometry edit>
-### [B2] - six adjectives in the block <"try changing the html to 6 adjectives"> <six items in the test block> DONE - qa/preview-games4.html: lovely, little, old, square, red, French (opinion → origin), the two-train split gone, one train of six
-### [B3] - crew coupled at the start, decoupled on departure <"coupled and aligned with the train cars at the beginning, just not at the end when the train moves"> <men under their own cars until the train pulls out> DONE - one `--shift:80px` on `.g4-yard` used by BOTH `.g4-ttrain` and `.g4-tcrew` (the train's left was a hardcoded 80px the crew did not share, so the men sat 80px left of their wagons); `.g4-tcar` keeps its 4px gutter but puts 2px back on the left, so each wagon is centred on the same pitch its loader stands on; `g4trun` now clears `-130% - var(--shift)` so the train still wholly leaves the stage; the crew is a sibling row in the yard, never a child of the train box
-### [B4] - verify the coupling and the departure <PENDING.md [GUIDELINES]> <screenshots: aligned at the start, men still standing after the train has gone> DONE - measured in headless Chrome, not eyeballed: cars 6 / guys 6, per-car delta `[-0.01 ×6]`, worst 0.01px, trainRight 148 ≤ stageLeft 246 (fullyOff), guysBefore === guysAfter (decoupled); start screenshot shows six men standing under six wagons. The `body{min-width:1415px}` sideways scroll seen at 1000px is the site's own documented layout (style.css 13/35), not this game
-### [B5] - commit and push <git> <origin/main at local HEAD> DONE
-
-## [5] - trainOrder: Play again does not start the next round (2026-11-10)
-### [B1] - PRE-PROMPT RESEARCH <"the play again button doesnt work to start the next round"> <why a second run never begins>
-   - [S1] - read the button's handler and start()/finish() <engine4.js Runner> <what a restart resets and what it keeps>
-   - [S2] - read yardGame's show/reset/finale gates <engine4.js yardGame> <which flag blocks the second run>
-   - [S3] - clear [B1] and batch the fix <ADHERENCE [BATCHING] 1)> <one fix, one verification>
-### [B2] - the second run actually starts <"doesnt work to start the next round"> <the yard rebuilds and the run begins> DONE - view.reset is now `rearm()` (ti=0, lives=2, done=false, built) and `reset()` is left as the per-train layout that `next()` uses; the frame is written in show() because step() wipes the prompt line first
-### [B3] - verify a restart end to end <PENDING.md [GUIDELINES]> <a screenshot of the second run playing> DONE - headless Chrome: R1 8/8 → Play again → R2 laid 8 cards, 8 men, frame "That's a  car." → R2 played to 8/8, ERR=none
-### [B4] - commit and push <git> <origin/main at local HEAD> DONE
+## [7] - the load formula: an activity multiplier against the content level (2026-11-10)
+### [B1] - build the formula <"each 'activity' with answers or fields needs a multiplier ... multiplied by the content level that the generator chooses"> <load = clamp(L × M, 1, 50), M = qty × pace × risk>
+   - [S1] - state the formula and its guardrails beside the 1-50 scale it acts on <PEDAGOGY-MAP.md [LEVEL]> <x-ab added after w, before [Register]>
+   - [S2] - state the field every activity must carry <CONTENT_EXAMPLES.md [INSTRUCTIONS]> <the **load** line and its shape>
+   - [S3] - point the block option-count rule at it <FORMAT.md 15> <one clause, no second definition>
+### [B2] - the per-activity numbers <"then i will go into the blocks and define them for you to extract out of notes.md"> <every entry's **load** line filled> AWAITING USER - the 91 entries carry none yet; the numbers come out of qa/NOTES.md when the owner defines them
+### [B3] - commit and push <PENDING.md [GUIDELINES]> <origin/main at local HEAD>
 
 ## [4] - trainOrder teardown: no train graphics, a normal train, the noun frame (2026-11-10)
 ### [B1] - PRE-PROMPT RESEARCH <"remove all the train graphics ... just a normal looking train with 8 flatbed cars behind it"> <what "train graphics" covers, and how a block declares its own words>
