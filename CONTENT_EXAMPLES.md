@@ -216,12 +216,13 @@
 ### `infoGap - (best for: writing the question that gets the missing piece; real asymmetry between two panels; question and answer as one pair · can't: be a speaking gap (everything must be answerable from the page), and a half holding the other half's answers kills it · purpose 8/10 · fun 6/10)`
 
 - **does** — Two halves of one situation, each on its own panel, each missing what the other has. The student writes the
-  question that gets the missing piece, then the answer that gives it. The information asymmetry is what makes the
-  question genuine instead of an exercise.
-- **markup** — worked pair: two `.panel`s side by side, one headed `<you>` and one `<them>`, each carrying facts the other
-  lacks; then item-list gaps, one per missing fact, answered from the other panel.
-- **fits** — the worked pair sits at a **third**, with the items below it at full width; both halves stay in one view,
-  because a half you have to scroll to is no longer the other half's other half.
+  request that gets the missing pieces, in their own words. The information asymmetry is what makes the question genuine
+  instead of an exercise.
+- **markup** — worked pair: two `.panel`s, one headed `<you>` and one `<them>`, each carrying facts the other lacks, stacked
+  in a **third-width** column; then a **two-thirds** panel holding one prompt and one text field, so the answer is a
+  request the student writes rather than a set of one-word gaps.
+- **fits** — the pair is a **third** and the answer is **two thirds**, on one row; both halves stay in view, because a
+  half you have to scroll to is no longer the other half's other half.
 - **vary** — the fact needed is named in the prompt → only the category is named → both students must ask, and one item
   needs a follow-up question because the first answer is incomplete.
 - **can't** — everything has to be answerable from the page, so it is a written information gap and not a speaking one;
