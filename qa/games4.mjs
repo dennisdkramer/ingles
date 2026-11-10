@@ -647,6 +647,37 @@ async function run() {
     xr.querySelector('input[name="xw0"][value="a"]').checked === true &&
     xr.querySelector('input[name="xw1"][value="a"]').checked === true);
 
+  /* the crossword punishes nothing: a wrong word takes no point, ends no run, and leaves its radio
+     blank (qa/NOTES.md 71 — "wrong answers dont subtract points, there is no fail condition") */
+  const yItems = [['cat', 'a small pet'], ['are', 'you ___ ready']].map(([w, clue], i) => `
+    <div class="qitem" data-a="a" data-answer="${w}">
+      <div class="qline"><span class="qstem">${clue}</span></div>
+      <div class="qopts"><label><input type="radio" name="yw${i}" value="a">${w}</label><label><input type="radio" name="yw${i}" value="b">zzz</label></div>
+    </div>`).join('');
+  const yPage = mount(`<!doctype html><html><head><meta charset="utf-8"></head><body>
+    <div class="content-area">
+      <div class="game" id="yy" data-game="crosswordBoard" data-shuffle="0" data-time="0" data-sound="0">
+        <p class="game-how">Fill the grid.</p>
+        <div class="game-list">${yItems}</div>
+        <button class="game-start" type="button">▶ Play</button>
+      </div>
+    </div></body></html>`);
+  const yr = yPage.document.getElementById('yy');
+  const yg = (yPage.__G4 || [])[0];
+  yr.querySelector('.game-start').click();
+  [...yr.querySelectorAll('.g4-gap')].forEach(c => {
+    if ({ '0,0': 1, '0,1': 1, '0,2': 1 }[c.getAttribute('data-key')] && !c.value) {
+      c.value = 'z';
+      c.dispatchEvent(new yPage.Event('input', { bubbles: true }));
+    }
+  });
+  ok('crosswordBoard: a wrong word costs no point', yg.state().score === 0,
+    'score=' + yg.state().score);
+  ok('crosswordBoard: and there is no fail condition', yg.state().phase !== 'over',
+    'phase=' + yg.state().phase);
+  ok('crosswordBoard: the missed word leaves its radio blank',
+    yr.querySelector('input[name="yw0"][value="a"]').checked === false);
+
   /* ladderRun must actually climb, and a wrong answer must drop it back to the safe rung */
   const lItems = Array.from({ length: 8 }, (_, i) => `
     <div class="qitem" data-a="a">

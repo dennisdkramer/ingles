@@ -44,6 +44,7 @@ make grid items 15px less wide each
 
 The first round, make the button text "Start Game - Listen to the Target Word"
 the subsequent rounds make the text say "Next Round! - Listen to the Target Word"
+[done]
 
 ### echoPads
 
@@ -69,11 +70,13 @@ Change start game card text to "Get all the phrases right, climb to the top and 
 
 → CONTENT_EXAMPLES.md §`crosswordBoard`
 wrong answers dont subtract points, there is no fail condition.
+[done]
 
 ### mineGrid
 
 → CONTENT_EXAMPLES.md §`mineGrid`
 make the graphics not disappear and reappear at the beginning of each round
+[done]
 
 ### catchBasket
 
@@ -85,11 +88,12 @@ at the end of the game make a girl in a dress come and pick whichever flower is 
 
 → CONTENT_EXAMPLES.md §`whackMole`
 make it always a 3x2 grid, min 2 max 6 options. improve the graphics so it looks like the moles are coming out of holes that are just a little bit wider than they are
+[done]
 
 ### trainOrder
 
 → CONTENT_EXAMPLES.md §`trainOrder`
-improve the train graphics, add a background that makes it look like the train is on some sort of ground and not just a beige flat background. Make it look like there are mountains off in the distance. The train caboose should be bigger than the cars, and the car wheels should all sit on the track. The platforms should start small like a flat bed, and get just a little bit bigger per car. The amount of cars should depend on the amount of adjectives, and the prompt should be "That's a ____________________ [word]"  and
+improve the train graphics, add a background that makes it look like the train is on some sort of ground and not just a beige flat background. Make it look like there are mountains off in the distance. The train caboose should be bigger than the cars, and the car wheels should all sit on the track. The platforms should start small like a flat bed, and get just a little bit bigger per car. The cars should not have labels. The amount of cars should depend on the amount of adjectives, and the prompt should be "That's a ____________________ [word]" . center the available adjectives on the bottom of the screen. the player will drag the adjectives to railway workers who at the beginning of each round will come and stand on platforms in front of each car. When the player has dragged all the words to the workers, they throw the words one by one onto the train cars. At that point the word cards grow in height according to their position. The total height of all given cars + their correct word is equal, and if all the words are used in order, the train will pass under the bridge without hitting it and the player gets a point. Each card's height is determined in that way regardless of where the player puts it, so if the player puts any of the words out of order, one will necessarily sit higher than it was supposed to and hit the bridge, causing a fail
 
 ## preview-blocks.html
 

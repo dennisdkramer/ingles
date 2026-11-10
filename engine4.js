@@ -1213,7 +1213,9 @@ window.GAMES4 = (function () {
     function show(item) {
       clear();
       live = true;
-      var n = Math.max(6, Math.min(9, item.opts.length + 2)), holes = [], i;
+      /* ALWAYS A 3x2 GARDEN: six holes, always — the grid never reflows between items, and the content
+         contract is 2-6 options (CONTENT_EXAMPLES.md §`whackMole`), so one hole per option always fits. */
+      var n = 6, holes = [], i;
       for (i = 0; i < n; i++) {
         var h = el('div', 'g4-hole');
         h.innerHTML = '<span class="g4-dirt"></span>';
@@ -2448,13 +2450,13 @@ function say(text, lang) {
       hero.style.setProperty('--dx', dx + 'px');
     }
     /* he goes in: the step through the doorway and the fade are one movement, then the answer is taken
-       so the radio is written by the runner. The street is held for a beat longer than the step, so the
-       door is seen closing behind him rather than blinking out from under him */
+       so the radio is written by the runner. The street itself NEVER leaves the stage (qa/NOTES.md 76,
+       "make the graphics not disappear and reappear at the beginning of each round"): the held beat is
+       the door closing behind him, not the frontage fading out and back in. */
     function goIn(d, value) {
       d.classList.add('ok');
       SFX.clink(r.sound);
       hero.classList.add('enter');
-      r.later(function () { street.classList.add('away'); }, r.reduced ? 20 : 420);
       r.later(function () { if (r.phase === 'play') r.pick(value); }, r.reduced ? 80 : 640);
     }
     /* the snake: it comes out of the dark, he takes the bite, and the choice still counts as his.
@@ -2475,10 +2477,9 @@ function say(text, lang) {
     }
     function show(item) {
       clear();
-      /* the street fades back in under the new question, so one question never cuts to the next */
+      /* THE FRONTAGE DOES NOT BLINK BACK: the next question changes the doors under a street that never
+         left the stage, so no fade-in is played over it. */
       street.classList.remove('away', 'settle');
-      void street.offsetWidth;
-      street.classList.add('settle');
       /* the question is drawn by THIS game, on its board to the LEFT of the doors, so the runner leaves
          the HUD line empty (ownsPrompt): the same sentence in two places is the same sentence twice */
       if (r.usePrompt) { ask.textContent = item.prompt || ''; ask.classList.add('in'); }
@@ -3150,9 +3151,14 @@ function say(text, lang) {
         tiles.push(t);
       });
       placeRush();
-      /* the round is ARMED, not running: the word is said when Begin is pressed, and not before */
+      /* the round is ARMED, not running: the word is said when Begin is pressed, and not before.
+         The label names the round it starts (qa/NOTES.md 45-46), read off the run's own progress so a
+         restart begins again at the start label instead of counting on from the last attempt. */
       armed = 'ready';
       begin.disabled = false;
+      begin.textContent = r.answered
+        ? 'Next Round! - Listen to the Target Word'
+        : 'Start Game - Listen to the Target Word';
     }
     /* Begin: the word is said ONCE, the button goes quiet for the round, and 3 · 2 · 1 starts over the
        curtain. A second press cannot happen — the button is disabled for the rest of the item. */
@@ -3505,20 +3511,17 @@ function say(text, lang) {
     return window.__G4.length;
   }
 
-  /* ---------------- the yard: two orderings on the same rails ----------------
+  /* ---------------- the yard: adjective order on rails ----------------
      Eight adjective slots are fixed by the language, so trainOrder always stands eight cars on the
      rails and the verdict is GEOMETRY: every roof is level (a car further back is 6px shorter and
      lifted 6px, so its OPENING is 6px less room) while a word grows to the room its OWN slot leaves.
      A word put a car too far back therefore stands up through the deck and bursts; a word put too
-     far forward leaves a gap — the crash is not symmetric, and only the back is fatal.
-     trainSteps is the same yard with nothing fixed by the language: one bed per step, and the verdict
-     is whether each step landed on its own bed. */
+     far forward leaves a gap — the crash is not symmetric, and only the back is fatal. */
   var SLOTS = ['opinion', 'size', 'age', 'shape', 'color', 'origin', 'material', 'purpose'];
   var SLOT_LABEL = ['Opinion', 'Size', 'Age', 'Shape', 'Color', 'Origin', 'Material', 'Purpose'];
   var CAR0 = 122, CAR_LIFT = 6, OPEN0 = 100;
 
-  function yardGame(r, mode) {
-    var order = mode === 'order';
+  function yardGame(r) {
     function tag(cls, text) { var n = el('div', cls); if (text != null) n.textContent = text; return n; }
     /* THE LABELS ARE A LEVEL LEVER: a plaque naming the slot over the front car IS the answer, so it
        shows while the student is still learning the order and goes when he is expected to know it.
@@ -3553,15 +3556,14 @@ function say(text, lang) {
     var cars = [], words = [], picked = null, wrongs = 0, burstCar = -1, placed = 0;
     var lives = 2, done = false, busy = false, built = false;
 
-    /* THE TRAINS: `data-train` groups the words of one sentence, and its absence is the first train.
-       For steps there is nothing to group — the whole block is one run. */
+    /* THE TRAINS: `data-train` groups the words of one sentence, and its absence is the first train. */
     var trains = [];
     (function group() {
       var cur = null;
       r.items.forEach(function (it, i) {
-        var g = order ? (it.el.getAttribute('data-train') || '') : '';
+        var g = it.el.getAttribute('data-train') || '';
         if (!cur || cur.key !== g) { cur = { key: g, items: [] }; trains.push(cur); }
-        cur.items.push({ it: it, i: i, home: order ? SLOTS.indexOf(it.key) : cur.items.length });
+        cur.items.push({ it: it, i: i, home: SLOTS.indexOf(it.key) });
         if (cur.items[cur.items.length - 1].home < 0) cur.items[cur.items.length - 1].home = 0;
       });
       if (!trains.length) trains.push({ key: '', items: [] });
@@ -3573,14 +3575,14 @@ function say(text, lang) {
       var loco = tag('g4-tloco');
       loco.innerHTML = ART.loco;
       train.appendChild(loco);
-      var n = order ? SLOTS.length : Math.max(1, trains[ti].items.length);
+      var n = SLOTS.length;
       cars = [];
       for (var k = 0; k < n; k++) {
         var car = tag('g4-tcar');
         car.style.left = (k * 100 / n) + '%';
         car.style.width = 'calc(' + (100 / n) + '% - 4px)';
-        car.style.height = (order ? CAR0 - CAR_LIFT * k : 80) + 'px';
-        car.style.marginBottom = (order ? CAR_LIFT * k : 0) + 'px';
+        car.style.height = (CAR0 - CAR_LIFT * k) + 'px';
+        car.style.marginBottom = (CAR_LIFT * k) + 'px';
         var body = tag('g4-tbody');
         body.appendChild(tag('g4-tbowl'));
         body.appendChild(tag('g4-thold'));
@@ -3589,7 +3591,7 @@ function say(text, lang) {
         wh.appendChild(tag('g4-twheel a'));
         wh.appendChild(tag('g4-twheel b'));
         car.appendChild(wh);
-        if (order && labels) car.appendChild(tag('g4-tslot', SLOT_LABEL[k]));
+        if (labels) car.appendChild(tag('g4-tslot', SLOT_LABEL[k]));
         car.addEventListener('click', function (k2) { return function () { place(k2); }; }(k));
         train.appendChild(car);
         cars.push(car);
@@ -3601,11 +3603,9 @@ function say(text, lang) {
     function buildDock() {
       dock.innerHTML = '';
       words = [];
-      /* STEPS ARRIVE SHUFFLED — their sequence IS the content, so a dock already in the right order is
-         an answer sheet. Adjectives do not: a sentence's words are dressed in sentence order, and it is
-         the CAR each one stands on that has to be right. */
+      /* THE DOCK KEEPS THE AUTHORED ORDER: a sentence's words are dressed in sentence order, and it is
+         the CAR each one stands on that has to be right — a shuffled dock would only hide the words. */
       var list = trains[ti].items.slice();
-      if (!order) shuffle(list);
       list.forEach(function (w) {
         var c = tag('g4-tword g4-tcard', w.it.prompt);
         c.addEventListener('pointerdown', function (e) {
@@ -3631,13 +3631,13 @@ function say(text, lang) {
       var w = picked.w, card = picked.card;
       picked = null;
       card.classList.remove('on');
-      var want = order ? SLOTS[k] : String(k + 1);
+      var want = SLOTS[k];
       w.it.opts.forEach(function (o) {
         if (String(o.value) === want && o.radio) o.radio.checked = true;
       });
       var hit = w.home === k;
       var load = tag('g4-tload', w.it.prompt);
-      load.style.height = (order ? OPEN0 - CAR_LIFT * w.home : 46) + 'px';
+      load.style.height = (OPEN0 - CAR_LIFT * w.home) + 'px';
       cars[k].appendChild(load);
       cars[k].classList.add('loaded');
       cars[k].classList.add(hit ? 'ok' : 'no');
@@ -3647,7 +3647,7 @@ function say(text, lang) {
         /* ONLY A WORD TOO FAR BACK IS FATAL: its own slot allows more room than the opening it landed
            in, so it stands up through the deck and bursts where the growth ends. Too far forward leaves
            a gap instead — the crash is not symmetric, and that asymmetry is the lesson. */
-        if (order && w.home < k) {
+        if (w.home < k) {
           if (burstCar < 0) burstCar = k;
           r.later(function () {
             if (!cars[k] || cars[k].querySelector('.g4-tburst')) return;
@@ -3732,16 +3732,13 @@ function say(text, lang) {
     };
   }
 
-  PLUGINS.trainOrder = function (r) { return yardGame(r, 'order'); };
-  PLUGINS.trainSteps = function (r) { return yardGame(r, 'steps'); };
+  PLUGINS.trainOrder = function (r) { return yardGame(r); };
   /* THE YARD PLAYS ITS OWN SOUNDS — the coupling, the whistle, the wreck — so the runner's generic
      right/wrong pair would be a second verdict over the picture */
   PLUGINS.trainOrder.ownSound = true;
-  PLUGINS.trainSteps.ownSound = true;
   /* THE ORDER IS THE CONTENT: a shuffled dock would ask the student to put the third word in the
      front car and call it right */
   PLUGINS.trainOrder.noShuffle = true;
-  PLUGINS.trainSteps.noShuffle = true;
 
 
   return { boot: boot, games: Object.keys(PLUGINS), version: 2 };

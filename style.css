@@ -693,11 +693,9 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    top and readable from the start; what is hidden is what is behind each door — the saloon, or a
    snake. The door SWINGS open on the pick, so the answer is the thing behind it. */
 .g4-mines{position:absolute;left:10px;right:10px;top:8px;bottom:8px}
-/* the street fades out when he goes in, so the next question fades in on an empty street */
-.g4-street{position:absolute;inset:0;transition:opacity .34s ease}
-.g4-street.away{opacity:0}
-.g4-street.settle{animation:g4settle .38s ease both}
-@keyframes g4settle{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* the street stays on the stage for the whole run: a new question changes the doors under it, and the
+   frontage is never faded out and back in (qa/NOTES.md 76) */
+.g4-street{position:absolute;inset:0}
 /* the boardwalk: packed dust with a wheel track, so the doors stand ON something */
 .g4-road{position:absolute;left:-10px;right:-10px;bottom:0;height:74px;background:linear-gradient(#c79b62,#a97c45);border-top:3px solid #8a6537;box-shadow:inset 0 7px 10px rgba(0,0,0,.14)}
 .g4-road::after{content:'';position:absolute;left:0;right:0;top:30px;height:7px;border-radius:4px;background:repeating-linear-gradient(90deg,#e8cfa4 0 26px,rgba(232,207,164,0) 26px 54px);opacity:.75}
@@ -891,7 +889,7 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-card-wrap{position:relative;flex:1 1 auto;width:min(795px,100%);min-height:0;display:flex;overflow:hidden;border-radius:10px}
 /* equal thirds: a long word on one tile can never make its row taller than the others and shift the
    board between items */
-.g4-bcard{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:8px;width:100%;flex:1}
+.g4-bcard{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:8px;width:calc(100% - 45px);flex:1}
 /* the velvet: three passes — a dark-fold shadow, a lit fold and the base colour — under a pelmet with a
    scalloped hem, so it reads as a theatre curtain and not as red stripes. Everything is inside the
    curtain's own box (pseudo-elements), so the rise and the layout are exactly what they were. */
@@ -925,7 +923,7 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-btile{background:var(--paper);border:2px solid var(--ink);border-radius:10px;font:700 15px/1.15 var(--ui-tight);color:var(--ink);cursor:pointer;overflow:hidden;padding:4px 8px}
 /* the round's own start: nothing is said until the student asks to hear it, so the one chance at the
    word is a decision they made rather than a sound that arrived while they were reading the page */
-.g4-begin{flex:0 0 auto;padding:7px 16px;background:var(--ink);color:var(--cream);border:0;border-radius:10px;
+.g4-begin{flex:0 0 auto;padding:7px 16px;background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:10px;
   font:700 13px var(--ui-tight);box-shadow:3px 3px 0 var(--tan);cursor:pointer}
 .g4-begin:disabled{opacity:.45;cursor:default}
 .g4-btile.stamped{border-width:3px;border-style:double}
@@ -1072,7 +1070,7 @@ html.kbd .g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:
 .g4-grid{position:absolute;left:14px;right:14px;top:52px;bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:10px;z-index:2}
 .g4-hole{position:relative;border-radius:16px;background:radial-gradient(ellipse at 50% 88%,#5a3f22 0 42%,#7c5a33 43% 100%);overflow:hidden;box-shadow:inset 0 4px 10px rgba(0,0,0,.35)}
 .g4-dirt{position:absolute;left:0;right:0;bottom:0;height:34%;background:#4a3418;border-radius:50% 50% 0 0/60% 60% 0 0}
-.g4-mole{position:absolute;inset:4px 6px 8px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:pointer;transition:transform .24s cubic-bezier(.34,1.56,.64,1);transform:translateY(0)}
+.g4-mole{position:absolute;inset:4px 3px 8px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:pointer;transition:transform .24s cubic-bezier(.34,1.56,.64,1);transform:translateY(0)}
 .g4-mole .g4-art{height:74%;flex:0 0 auto}
 .g4-mole-t{display:block;max-width:100%;margin-top:-6px;padding:2px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 13px var(--ui-tight);line-height:1.18;overflow:hidden}
 .g4-mole:hover .g4-mole-t{border-color:#1d4ed8}
