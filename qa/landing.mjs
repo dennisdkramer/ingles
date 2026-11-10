@@ -134,10 +134,18 @@ w.fetch = async (u, o) => {
   return { ok: true, json: async () => ({ result: 'ok', tracks: body.tracks }) };
 };
 const adultInput = swOf(/Adulto/).querySelector('input');
-adultInput.checked = true; w.toggleTrack(adultInput, 's@x.y', 'adult');
-ok('a flip disables its row while the batch is out', adultInput.disabled === true);
 const kidsInput = swOf(/Kids/).querySelector('input');
+const bizInput = swOf(/Business/).querySelector('input');
+adultInput.checked = true; w.toggleTrack(adultInput, 's@x.y', 'adult');
+ok('a flip marks only THAT switch as pending',
+  swOf(/Adulto/).classList.contains('pending') && adultInput.disabled === true,
+  'adult pending=' + swOf(/Adulto/).classList.contains('pending'));
+ok('the books nobody touched stay live',
+  swOf(/Kids/).classList.contains('pending') === false && kidsInput.disabled === false &&
+  swOf(/Business/).classList.contains('pending') === false && bizInput.disabled === false);
 kidsInput.checked = false; w.toggleTrack(kidsInput, 's@x.y', 'kids');   /* same burst, second flip */
+ok('a second flip in the burst joins it, leaving the third book alone',
+  kidsInput.disabled === true && bizInput.disabled === false);
 await new Promise(r => setTimeout(r, 400));
 ok('a burst of flips becomes ONE request', sent.length === 1, sent.length + ' request(s)');
 ok('the request carries the whole desired set, not one delta',
@@ -145,7 +153,9 @@ ok('the request carries the whole desired set, not one delta',
   sent[0].tracks.indexOf('kids') < 0, JSON.stringify(sent[0] || {}));
 ok('both switches show what was flipped',
   swOf(/Adulto/).classList.contains('on') && !swOf(/Kids/).classList.contains('on'));
-ok('the row is re-enabled once saved', adultInput.disabled === false && kidsInput.disabled === false);
+ok('the row is re-enabled once saved',
+  adultInput.disabled === false && kidsInput.disabled === false &&
+  !swOf(/Adulto/).classList.contains('pending') && !swOf(/Kids/).classList.contains('pending'));
 /* two students flipped at once are still written one at a time — the backend holds one script lock */
 sent.length = 0; maxInFlight = 0;
 w.eval('DES.clear();ACQ.clear();'

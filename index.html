@@ -2,7 +2,7 @@
 <!-- build: 2026-10-20T00:00:00Z -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>English Opens Doors</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css" id="csslink">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head><body class="landing">
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>ENGLISH <span>OPENS DOORS</span></h1><p class="script">Let's go <span lang="pt">· Vamos lá</span></p></header>
@@ -27,6 +27,11 @@ let TN={kids:"Kids 🛹",business:"Business 💼",adult:"Adulto 🔞"};
 let TI={kids:"🛹",business:"💼",adult:"🔞"};
 let TC={kids:"#FFE082",business:"#90CAF9",adult:"#FFAB91"};
 const $=id=>document.getElementById(id);
+/* style.css is the ONE asset with no version stamp, so a redeployed stylesheet could be served from cache for
+   up to GitHub Pages' 10 minutes while the page that requests it was already fresh — which is why a visual
+   change could be invisible on a normal reload. Bucketing the URL by the minute keeps the cache useful and
+   caps staleness at 60s (owner report 2026-11-09: "i don't see the visual change"). */
+(function(){const l=$("csslink");if(l)l.href="style.css?v="+Math.round(Date.now()/60000);})();
 const log=m=>{debug.innerHTML+="› "+m+"<br>"};
 const h=s=>{let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x};
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -110,10 +115,17 @@ function confirmedTracks(email){
  return trs.map(x=>x.track).filter(Boolean);
 }
 function heldTracks(email){return DES.has(email)?DES.get(email).slice():confirmedTracks(email);}
-function markSwitches(email,busy){
+/* A switch shows "pending" only while the SERVER has not yet confirmed THAT switch, i.e. while its desired state
+   differs from the confirmed one. The books nobody touched are not in question and stay live (owner report
+   2026-11-09: toggling one track greyed out all of them, which implied the other books were being reconsidered). */
+function syncSwitches(email){
+ const conf=confirmedTracks(email),want=heldTracks(email);
  [].forEach.call(document.querySelectorAll(".tswitch"),x=>{
-  if(String(x.getAttribute("data-k")||"").indexOf(email+"|")!==0)return;
-  const i=x.querySelector("input");if(i)i.disabled=busy;
+  const k=String(x.getAttribute("data-k")||"");if(k.indexOf(email+"|")!==0)return;
+  const t=k.slice(email.length+1);
+  const pending=(want.indexOf(t)>=0)!==(conf.indexOf(t)>=0);
+  x.classList.toggle("pending",pending);
+  const i=x.querySelector("input");if(i)i.disabled=pending;
  });
 }
 function queueAccess(email){ACQ.add(email);if(!ACTIMER)ACTIMER=setTimeout(()=>{ACTIMER=0;flushAccess()},80);}
@@ -146,16 +158,16 @@ async function flushAccess(){
      if(trs.length)s.track=trs[0].track;else delete s.track;
      writeCache("queue",QUEUE);
     }
-    DES.delete(email);markSwitches(email,false);
+    DES.delete(email);syncSwitches(email);
     log("acesso salvo ✔");
    }else{
     /* the row goes back to the last state the server confirmed */
-    DES.delete(email);markSwitches(email,false);
+    DES.delete(email);syncSwitches(email);
     log("ERRO ao salvar o acesso: "+((j&&j.error)||"desconhecido"));
     if($("tcols"))$("tcols").innerHTML=pendingHTML()+approvedHTML();
    }
   }
- }finally{ACRUN=false}
+ }finally{ACRUN=false;if(ACQ.size&&!ACTIMER)ACTIMER=setTimeout(()=>{ACTIMER=0;flushAccess()},0);}
 }
 function hideAcct(){const c=$("controlbar").querySelector("#acct"),lo=$("controlbar").querySelector("#logout");c.hidden=true;lo.hidden=true;const g=$("gcard");if(g)g.hidden=false;}
 /* a rejected session ends on the login card, in place — a reload is what made it feel like being thrown out */
@@ -359,7 +371,7 @@ window.toggleTrack=function(el,email,track){
  const want=heldTracks(email).filter(t=>t!==track);
  if(on)want.push(track);
  DES.set(email,want);
- markSwitches(email,true);
+ syncSwitches(email);
  log((on?"Concedendo ":"Removendo ")+TN[track]+"…");
  queueAccess(email);
 };

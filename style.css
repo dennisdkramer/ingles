@@ -255,22 +255,25 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 .twho .tname{flex:0 1 auto;min-width:0}
 .twho .temail{flex:1 1 auto;min-width:0}
 .trow.tid .remstudent{margin-left:auto}
-/* one switch per track: ON = thumb the track's 200 swatch at 100%, track the same swatch at 50%;
-   OFF = thumb Grey 400 #BDBDBD 100%, track #FFFFFF 30%; DISABLED = thumb Grey 800 #424242 100%,
-   track #FFFFFF 10%. --sw is set per switch from track.json's "color".
-   The SWITCH AS A WHOLE then reads at 80% when off and 100% when on (owner instruction 2026-11-09), so a row
-   of switches shows at a glance which books are held. That is the component's own opacity, layered on the part
-   fills above; the parts keep their own values. */
-.tswitches{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.tswitch{position:relative;display:inline-flex;align-items:center;--sw:#90CAF9;opacity:.8;transition:opacity .16s}
-.tswitch.on{opacity:1}
-.tswitch input{position:absolute;width:0;height:0;margin:0;opacity:0}
-.tsw-track{display:flex;align-items:center;width:46px;height:26px;padding:0 3px;border-radius:13px;background:#FFFFFF;opacity:.3;transition:opacity .16s,background .16s}
-.tsw-thumb{display:flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#BDBDBD;font-size:12px;line-height:1;transition:transform .16s,background .16s}
-.tswitch.on .tsw-track{background:var(--sw);opacity:.5}
-.tswitch.on .tsw-thumb{background:var(--sw);transform:translateX(20px)}
-.tswitch input:disabled~.tsw-track{background:#FFFFFF;opacity:.1}
-.tswitch input:disabled~.tsw-track .tsw-thumb{background:#424242}
+/* one switch per book (owner instruction 2026-11-09). A Material-style toggle rather than two colour chips:
+   OFF is a soft grey groove with a white thumb; ON fills the groove with the track's own 200 swatch (--sw, from
+   track.json) so the row reads as a colour-coded picture of what the student holds. The book's icon rides the
+   white thumb in both states, so it never fights the fill for contrast; off it is desaturated, on it is full
+   colour. Travel is exact: 52 - 2*4 padding - 22 thumb = 22px. A switch whose change is still with the server
+   gets .pending — dimmed and non-interactive, that one switch only, never its neighbours. */
+.tswitches{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:2px 0 2px}
+.tswitch{position:relative;display:inline-flex;align-items:center;--sw:#90CAF9;cursor:pointer;border-radius:999px;-webkit-tap-highlight-color:transparent}
+.tswitch input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.tsw-track{display:flex;align-items:center;width:52px;height:28px;padding:0 4px;border-radius:14px;background:rgba(24,33,54,.16);box-shadow:inset 0 1px 2px rgba(24,33,54,.18);transition:background .22s cubic-bezier(.2,.7,.3,1),box-shadow .22s cubic-bezier(.2,.7,.3,1)}
+.tsw-thumb{display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(24,33,54,.3),0 0 0 .5px rgba(24,33,54,.06);font-size:12px;line-height:1;filter:saturate(.3);opacity:.85;transition:transform .22s cubic-bezier(.2,.7,.3,1),filter .22s,opacity .22s,box-shadow .22s}
+.tswitch:hover .tsw-track{box-shadow:inset 0 1px 2px rgba(24,33,54,.18),0 0 0 4px rgba(24,33,54,.05)}
+.tswitch:active .tsw-thumb{box-shadow:0 1px 6px rgba(24,33,54,.36),0 0 0 .5px rgba(24,33,54,.08)}
+.tswitch input:focus-visible~.tsw-track{outline:2px solid var(--tan);outline-offset:3px}
+.tswitch.on .tsw-track{background:var(--sw);box-shadow:inset 0 1px 2px rgba(24,33,54,.1)}
+.tswitch.on .tsw-thumb{transform:translateX(22px);filter:none;opacity:1}
+.tswitch.pending{opacity:.5}
+.tswitch.pending input{cursor:progress}
+@media (prefers-reduced-motion:reduce){.tsw-track,.tsw-thumb{transition-duration:.01ms}}
 /* the load spiral (owner instruction 2026-11-09): index.html shows this instead of a "Carregando" line */
 .loadwrap{display:flex;align-items:center;justify-content:center;grid-column:1/-1;width:100%;padding:46px 0}
 .spinner{width:38px;height:38px;border-radius:50%;border:4px solid rgba(24,33,54,.15);border-top-color:var(--tan);animation:spin .85s linear infinite}
