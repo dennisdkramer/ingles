@@ -131,7 +131,7 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
 - **does** — The options are planted as **pairs of batwing saloon doors along a street**, the word hung over the top
   where it can be read. Pick a door and **the figure walks to it**, which makes the choice a character's risk rather
   than a bare click; the door then swings open, because what is behind it IS the answer. **Right:** he goes in, a glass
-  clinks on the bar, the street fades out and the next question fades in on an empty street. **Wrong:** a snake comes
+  clinks on the bar, and the next question arrives on the same street, which never leaves the stage. **Wrong:** a snake comes
   out of the dark and bites him — one of three lives gone, and his drawing changes as they go. Three bites end the run.
 - **teaches** — commitment under stakes. Because he only gets three mistakes, a guess has a price, so the student
   reads before moving. Every wrong pick leaves its radio blank, so the blanks are the teacher's evidence.
