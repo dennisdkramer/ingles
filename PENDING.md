@@ -22,12 +22,12 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 # [CURRENT] Prompt - (Active batches, newest first)
 
 ## [7] - the load formula: an activity multiplier against the content level (2026-11-10)
-### [B1] - build the formula <"each 'activity' with answers or fields needs a multiplier ... multiplied by the content level that the generator chooses"> <load = clamp(L × M, 1, 50), M = qty × pace × risk>
-   - [S1] - state the formula and its guardrails beside the 1-50 scale it acts on <PEDAGOGY-MAP.md [LEVEL]> <x-ab added after w, before [Register]>
-   - [S2] - state the field every activity must carry <CONTENT_EXAMPLES.md [INSTRUCTIONS]> <the **load** line and its shape>
-   - [S3] - point the block option-count rule at it <FORMAT.md 15> <one clause, no second definition>
+### [B1] - build the formula <"each 'activity' with answers or fields needs a multiplier ... multiplied by the content level that the generator chooses"> <load = clamp(L × M, 1, 50), M = qty × pace × risk> DONE - 2026-11-10 - PEDAGOGY-MAP.md [LEVEL] x-aa, CONTENT_EXAMPLES.md [INSTRUCTIONS], FORMAT.md 15
+   - [S1] - state the formula and its guardrails beside the 1-50 scale it acts on <PEDAGOGY-MAP.md [LEVEL]> <x-ab added after w, before [Register]> DONE - four rules: the product, M declared by the activity, load-not-band plus upward-only, and above 50 is a split
+   - [S2] - state the field every activity must carry <CONTENT_EXAMPLES.md [INSTRUCTIONS]> <the **load** line and its shape> DONE - one bullet with the shape `qty ×1.0 at <baseline> → ×<N> at <ceiling> · pace ×<N> when data-time · risk ×<N> at data-retry="0"`
+   - [S3] - point the block option-count rule at it <FORMAT.md 15> <one clause, no second definition> DONE - the clause names the multiplier and points at x; no arithmetic restated
 ### [B2] - the per-activity numbers <"then i will go into the blocks and define them for you to extract out of notes.md"> <every entry's **load** line filled> AWAITING USER - the 91 entries carry none yet; the numbers come out of qa/NOTES.md when the owner defines them
-### [B3] - commit and push <PENDING.md [GUIDELINES]> <origin/main at local HEAD>
+### [B3] - commit and push <PENDING.md [GUIDELINES]> <origin/main at local HEAD> DONE - f32a04e (docs), 2d9ed45 (the engine work that was still uncommitted from [4])
 
 ## [4] - trainOrder teardown: no train graphics, a normal train, the noun frame (2026-11-10)
 ### [B1] - PRE-PROMPT RESEARCH <"remove all the train graphics ... just a normal looking train with 8 flatbed cars behind it"> <what "train graphics" covers, and how a block declares its own words>
