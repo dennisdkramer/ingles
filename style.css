@@ -1200,7 +1200,7 @@ html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;
 .g4-ttrain.in{animation:g4tarrive .62s cubic-bezier(.22,.9,.3,1)}
 @keyframes g4tarrive{from{transform:translateX(-128%)}to{transform:none}}
 .g4-ttrain.run,.g4-ttrain.pull{animation:g4trun var(--runms,1750ms) cubic-bezier(.45,0,.78,1) forwards}
-@keyframes g4trun{to{transform:translateX(calc(-1 * (var(--gap) + var(--tw) + 6%)))}}
+@keyframes g4trun{to{transform:translateX(calc(-1 * (var(--gap) + var(--tw) + 6% + 80px)))}}
 .g4-ttrain.jolt{animation:g4tjolt .9s ease-out forwards}
 @keyframes g4tjolt{0%{transform:translateX(0)}16%{transform:translateX(-4.4%)}
   34%{transform:translateX(-1.1%)}52%{transform:translateX(-5.2%)}100%{transform:translateX(-4.7%)}}
@@ -1243,7 +1243,7 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
    rail — the drawn locomotive, the coal bowl and the hold box are gone with the rest of the train art
    while the game is rebuilt. The cars are spaced across --tw and the locomotive stands to their left at one
    car pitch, so a wider stage moves engine, wagons and loaders together. */
-.g4-ttrain{position:absolute;left:var(--gap);width:var(--tw);bottom:var(--rail);height:96px;z-index:4;pointer-events:none}
+.g4-ttrain{position:absolute;left:calc(var(--gap) + 80px);width:var(--tw);bottom:var(--rail);height:96px;z-index:4;pointer-events:none}
 /* the locomotive is one drawn side view (engine4.js → ART.engine). Its box is ONE CAR PITCH WIDE — a
    little wider than a flatbed — because at the old sliver of 8% of the train the picture was too small to
    read (qa/NOTES.md 94). Its wheels are bottom-aligned with the flatbeds' own, which hang 6px under the
@@ -1254,7 +1254,7 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
    is placed on his car's pitch from the engine, so a wider stage moves them with the cars. He stands on the
    ground UNDER the rail with his arms up at the deck line, so he is in front of the wagon and his hands are
    where the adjective arrives — and he is short enough that the load on the deck stays readable above him. */
-.g4-tcrew{position:absolute;left:0;right:0;bottom:-16px;height:36px;z-index:3;pointer-events:none}
+.g4-tcrew{position:absolute;left:0;right:0;bottom:-66px;height:36px;z-index:3;pointer-events:none}
 .g4-tguy{position:absolute;bottom:0;height:36px;display:flex;align-items:flex-end;justify-content:center}
 .g4-tguy svg{display:block;width:24px;height:36px;overflow:visible}
 /* a car: one flat deck with a low kerb, wheels on the rail. Every car is the SAME height, so the train
@@ -1298,7 +1298,9 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
 /* THE YARD: the dock, the planks and the stamp. The words stand under the rails and are TAPPED (not
    dragged); the plank over the car that burst is the one that breaks; the verdict is stamped on the
    stage and stays until the next train is laid. */
-.g4-tdock{position:absolute;left:12px;right:12px;bottom:10px;display:flex;gap:10px;flex-wrap:wrap;z-index:5}
+/* the adjective dock: CENTRED along the bottom of the stage, one card per word, in authored order */
+.g4-tdock{position:absolute;left:12px;right:12px;bottom:10px;display:flex;gap:10px;flex-wrap:wrap;
+  justify-content:center;align-items:center;z-index:5}
 .g4-tword{cursor:pointer;user-select:none;padding:6px 12px;background:var(--paper,#fff);border:2px solid rgba(24,33,54,.28);border-radius:6px;font-weight:600;line-height:1.1;color:var(--ink,#182136)}
 .g4-tword.on{border-color:#1d4ed8;transform:translateY(-3px);box-shadow:0 4px 0 rgba(29,78,216,.25)}
 .g4-tword:active{transform:translateY(-1px)}
