@@ -67,6 +67,18 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 # [CURRENT] Prompt - (Active batches, newest first)
 
 
+## [21] - the owner still cannot see lesson 40 in the live site's list (2026-11-10)
+### [B1] - PRE-PROMPT RESEARCH <"i still dont see it in the list on the live site"> <what the deployed landing reads, and every filter between the file and the screen> DONE
+   - [S1] - the landing's list path read at source <index.html: LESSONS fetch, its cache, per-track rendering, any grant/progress cap> DONE - index.html:332 refetches lessons.json with cache:"no-cache" and overwrites the cached copy at index.html:311 before the validated paint, so a browser cache cannot hold a stale list for long; no count cap in the render path
+   - [S2] - the deployment shape confirmed <which branch/folder Pages serves, any CNAME, the live base URL> DONE - public repo, default branch main, has_pages true, no CNAME, no .nojekyll; source = main root, built by the legacy "pages build and deployment" workflow
+### [B2] - what the server actually returns <"the live site"> <the deployed lessons.json and index.html, compared with the local files> DONE
+   - [S1] - the live lessons.json fetched and inspected for business n=40 <read-only> DONE - live is 8163 bytes with business 38 -> 41 (no 40); raw.githubusercontent main is 8233 bytes WITH n=40 "Sore Muscles, Sore Loser" - the push landed, the deploy did not
+   - [S2] - the live index.html checked for the same COUNTS/cache logic as local <read-only> DONE - live is 39152 bytes against 39727 locally; live business/lesson40.html is 404
+### [B3] - the verdict <a named cause, and a fix only where it serves the standing "make it accessible" instruction> DONE
+   - [S1] - the failed deploy named <Actions run 42893167700 check runs; deployments pinned at f65688f> DONE - pages run 620 on 87723a6 and run 619 on 74136eb both concluded failure at step "Build with Jekyll"; the last good deployment is f65688f at 18:43
+   - [S2] - the breaker found <the annotation log is truncated, so the whole md set was grepped for Liquid openers> DONE - PENDING.md line 95 carried a literal double-brace inside a code span; Liquid runs before Markdown, so Jekyll parsed it as an unterminated variable. Removed. FORMAT.md line 6 is not a breaker: its braces are terminated, so they render as empty strings.
+
+
 ## [20] - lesson 40 added to the lesson list and reachable from the landing (2026-11-10)
 ### [B1] - PRE-PROMPT RESEARCH <"run the json that adds the new lesson to the lesson list and makes it accessible"> <which artifact owns the list, what writes it, what gates access> DONE
    - [S1] - the generator read at source <build-lessons.mjs, and what it reads/writes> DONE - `build-lessons.mjs` walks every track folder's `lesson<N>.html`, takes the title from the `content-area` `<h1>`, and writes `lessons.json`, `tracks.json` (with each track's `count`), index.html's `COUNTS` fallback and the stylesheet stamp
@@ -82,7 +94,7 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
    - [S1] - the reference layer read at source for the markup and the answer paths <style.css as implementation (2.a); engine1/engine2's radio and `input.gap` handling; no lesson page, no CONTENT_EXAMPLES.md, no roadmap, no register> DONE - style.css 64-273, engine2 76-152 and its key lines; block = `.panel`/`.card`/`.dialog`/`.game` with h3 first, `.itemrow` + `itemsize-*`, `.qgrid` > `.qitem` > `.qline`+`.qopts`
    - [S2] - the spine fixed: three concepts, the vocabulary inventory, one question per item, the band 0-12% Portuguese <PEDAGOGY-MAP [AUTHORING] k), s), t), u) and [LEVEL] x)> DONE - 10 sections, 22 blocks; concepts `duration-for-since`, `concession-even-though`, `quantity-shortfall`; 21 taught items, each its own quiz question; 4 graded elements Portuguese (justified glosses), inside the 0-12% band
 ### [B2] - the page <"overwrite the existing lesson (do not read it)"> <business/lesson40.html and its byte-identical .edit.html sidecar> DONE
-   - [S1] - business/lesson40.html written on _shell.html with the owner's placeholders, no lesson page read <FORMAT.md a)-n)> DONE - 40423 bytes, 11 h2 (10 sections + #feed), 22 h3, 125 radios, 31 gaps; div 205/205, table 6/6, no `{{` left
+   - [S1] - business/lesson40.html written on _shell.html with the owner's placeholders, no lesson page read <FORMAT.md a)-n)> DONE - 40423 bytes, 11 h2 (10 sections + #feed), 22 h3, 125 radios, 31 gaps; div 205/205, table 6/6, no double-brace placeholder left
    - [S2] - the sidecar copied byte-for-byte <FUNCTION [CONTENT]: every lesson ships a full-copy sidecar> DONE - SHA256 equal to the page
 ### [B3] - ship <"commit and push when done"> <a pushed commit carrying the page, the sidecar and this tracker> DONE
    - [S1] - `git add`, `git commit`, `git push` and the remote's answer recorded <the repo's own branch> DONE - main, origin github.com/dennisdkramer/ingles; only the page, its sidecar and this tracker staged
