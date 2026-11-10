@@ -1255,8 +1255,23 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
    ground UNDER the rail with his arms up at the deck line, so he is in front of the wagon and his hands are
    where the adjective arrives — and he is short enough that the load on the deck stays readable above him. */
 .g4-tcrew{position:absolute;left:0;right:0;bottom:-66px;height:36px;z-index:3;pointer-events:none}
-.g4-tguy{position:absolute;bottom:0;height:36px;display:flex;align-items:flex-end;justify-content:center}
+.g4-tguy{position:absolute;bottom:0;height:36px;display:flex;align-items:flex-end;justify-content:center;
+  pointer-events:auto;cursor:pointer}
 .g4-tguy svg{display:block;width:24px;height:36px;overflow:visible}
+/* the man under the pointer while a card is in the air, and the man who has taken one: his hands hold the
+   adjective up above his head until the whole crew is holding one and they all throw together */
+.g4-tguy.hot svg{filter:drop-shadow(0 0 5px rgba(29,78,216,.95))}
+.g4-tguy.holding svg{filter:drop-shadow(0 0 3px rgba(47,158,68,.75))}
+.g4-tagrip{position:absolute;left:50%;bottom:calc(100% - 4px);transform:translateX(-50%);z-index:4;
+  max-width:calc(100% - 4px);padding:3px 7px;background:var(--paper);border:2px solid var(--ink);
+  border-radius:6px;box-shadow:2px 2px 0 var(--tan);color:var(--ink);
+  font:700 11.5px/1.1 var(--ui-tight);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  animation:g4thand .22s ease-out}
+@keyframes g4thand{from{opacity:0;transform:translate(-50%,-9px) scale(.86)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+/* the card in flight, from a man's hands to the deck in front of him */
+.g4-tthrow{position:absolute;z-index:7;pointer-events:none;padding:3px 7px;background:var(--paper);
+  border:2px solid var(--ink);border-radius:6px;box-shadow:2px 2px 0 var(--tan);color:var(--ink);
+  font:700 11.5px/1.1 var(--ui-tight);white-space:nowrap}
 /* a car: one flat deck with a low kerb, wheels on the rail. Every car is the SAME height, so the train
    reads as a train rather than as a staircase; what grows is the load on the deck. */
 .g4-tcar{position:absolute;bottom:0;height:var(--car0);display:flex;align-items:flex-end;justify-content:center;
@@ -1304,6 +1319,8 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
 .g4-tword{cursor:pointer;user-select:none;padding:6px 12px;background:var(--paper,#fff);border:2px solid rgba(24,33,54,.28);border-radius:6px;font-weight:600;line-height:1.1;color:var(--ink,#182136)}
 .g4-tword.on{border-color:#1d4ed8;transform:translateY(-3px);box-shadow:0 4px 0 rgba(29,78,216,.25)}
 .g4-tword:active{transform:translateY(-1px)}
+/* the card in the middle of a drag: it stays where it was, faded, while its ghost follows the pointer */
+.g4-tword.lifting{opacity:.32}
 .g4-tplanks{position:absolute;left:0;right:0;bottom:0;display:flex;gap:2px;z-index:2}
 .g4-tplank{flex:1 1 0;height:9px;background:#8a6a3a;border-radius:1px}
 .g4-tplank.broken{background:#3b4653;animation:g4tbsnap .7s ease-out forwards}

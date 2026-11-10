@@ -3804,7 +3804,12 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
     yard.appendChild(stamp);
     r.stage.appendChild(yard);
 
-    var cars = [], words = [], picked = null, wrongs = 0, burstCar = -1, placed = 0;
+    var cars = [], guys = [], words = [], picked = null, wrongs = 0, burstCar = -1, placed = 0;
+    /* `given` is the cards the crew is holding: one entry per card already handed to a man, each waiting for
+       the toss onto the wagon in front of him. `placed` counts the cards that have LANDED on a deck. */
+    var given = [];
+    /* how many cards this train puts out (= its cars, capped at eight) */
+    var need = 0;
     var lives = 2, done = false, busy = false, built = false;
     /* the slot each car carries, in slot order — one entry per car (see build) */
     var slotOf = [];
@@ -3851,19 +3856,23 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
         wh.appendChild(tag('g4-twheel a'));
         wh.appendChild(tag('g4-twheel b'));
         car.appendChild(wh);
-        car.addEventListener('click', function (k2) { return function () { place(k2); }; }(k));
         train.appendChild(car);
         cars.push(car);
       }
-      /* ONE LOADER PER CAR, standing in front of his flatbed with his arms out to take the adjective off
-         the dock: each guy shares the pitch of the car he serves, so he is always in front of his own deck. */
+      /* ONE LOADER PER CAR, standing in front of his flatbed with his arms out to take the adjective off the
+         dock. He is the DROP TARGET (qa/NOTES.md 94-98): a card is given to a man, not to a wagon, and each
+         man is placed on the pitch of the car he serves, so "the man you gave it to" and "the car in front of
+         him" are the same answer — which is what he throws it onto once every card is out. */
       var crew = tag('g4-tcrew');
+      guys = [];
       for (var g = 0; g < n; g++) {
         var guy = tag('g4-tguy');
         guy.innerHTML = ART.loader;
         guy.style.left = (g * 100 / n) + '%';
         guy.style.width = (100 / n) + '%';
+        guy.addEventListener('click', function (k2) { return function () { handTo(k2); }; }(g));
         crew.appendChild(guy);
+        guys.push(guy);
       }
       train.appendChild(crew);
     }
@@ -3875,8 +3884,11 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       dock.innerHTML = '';
       words = [];
       /* THE DOCK KEEPS THE AUTHORED ORDER: a sentence's adjectives are dressed in sentence order, and it is
-         the CAR each one stands on that has to be right — a shuffled dock would only hide the words. */
-      var list = trains[ti].items.slice();
+         the CAR each one stands on that has to be right — a shuffled dock would only hide the words. It also
+         stops at eight, the same ceiling build() puts on the cars and the crew: a ninth adjective would have
+         no man to carry it and no wagon to land on. */
+      var list = trains[ti].items.slice(0, 8);
+      need = list.length;
       list.forEach(function (w) {
         var c = tag('g4-tword g4-tcard', w.it.prompt);
         c.addEventListener('pointerdown', function (e) { beginDrag(e, w, c); });
@@ -3892,8 +3904,9 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       card.classList.add('on');
     }
 
-    /* DRAGGING: the pointer takes the card off the dock, a ghost follows it, and the car under it lights
-       up. Releasing over a car loads that car; releasing anywhere else leaves the word in hand. */
+    /* DRAGGING: the pointer takes a card off the dock, a ghost follows it, and the man under it lights up.
+       Releasing over a man gives him the card; releasing anywhere else leaves the word in hand (a tap on a
+       card then a tap on a man is the same two steps without the drag). */
     var drag = null;
     function beginDrag(e, w, c) {
       if (busy || done) return;
@@ -3905,11 +3918,13 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       document.addEventListener('pointercancel', onDragUp, true);
     }
     function carAt(x, y) {
-      for (var i = 0; i < cars.length; i++) {
-        var b = cars[i].getBoundingClientRect();
-        if (x >= b.left && x <= b.right && y >= b.top - 10 && y <= b.bottom + 12) return cars[i];
+      /* THE MEN ARE THE TARGETS, and their hit box reaches a little above their heads so a drop near the deck
+         still lands on the man standing under it. Each man's box is a whole car pitch wide. */
+      for (var i = 0; i < guys.length; i++) {
+        var b = guys[i].getBoundingClientRect();
+        if (x >= b.left && x <= b.right && y >= b.top - 26 && y <= b.bottom + 10) return i;
       }
-      return null;
+      return -1;
     }
     function onDragMove(e) {
       if (!drag) return;
@@ -3925,7 +3940,7 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       drag.ghost.style.left = e.clientX + 'px';
       drag.ghost.style.top = e.clientY + 'px';
       var over = carAt(e.clientX, e.clientY);
-      cars.forEach(function (car) { car.classList.toggle('hot', car === over); });
+      guys.forEach(function (g, i) { g.classList.toggle('hot', i === over); });
     }
     function onDragUp(e) {
       document.removeEventListener('pointermove', onDragMove, true);
@@ -3934,21 +3949,70 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       if (!drag) return;
       var d = drag;
       drag = null;
-      cars.forEach(function (car) { car.classList.remove('hot'); });
+      guys.forEach(function (g) { g.classList.remove('hot'); });
       if (d.ghost && d.ghost.parentNode) d.ghost.parentNode.removeChild(d.ghost);
       d.card.classList.remove('lifting');
       if (!d.moved) return;                     /* a tap, not a drag: the word stays in hand */
       var over = carAt(e.clientX, e.clientY);
-      if (over) place(cars.indexOf(over));
+      if (over >= 0) handTo(over);
     }
 
-    /* A DROP WRITES THE CAR'S SLOT INTO THE WORD'S OWN RADIOS: the answer sheet then records where the
-       student put it, which is what the inquest reads back — not whether he was right. */
-    function place(k) {
-      if (busy || done || !picked) return;
+    /* A CARD IS GIVEN TO A MAN (qa/NOTES.md 94-98). He takes it, holds it up in his hands, and waits: the
+       wagons are only loaded once the whole crew has a card each, and then they throw them. One man holds one
+       card — a second drop on a man who already has one is refused, so every wagon gets exactly one word. */
+    function handTo(g) {
+      if (busy || done || !picked || !guys[g]) return;
+      if (guys[g].classList.contains('holding')) return;
       var w = picked.w, card = picked.card;
       picked = null;
       card.classList.remove('on');
+      if (card.parentNode) card.parentNode.removeChild(card);
+      var chip = tag('g4-tagrip', w.it.prompt);
+      guys[g].appendChild(chip);
+      guys[g].classList.add('holding');
+      given.push({ w: w, k: g, chip: chip });
+      if (r.sound) SFX.clank(r.sound);
+      if (given.length >= need) toss();
+    }
+
+    /* EVERY CARD IS OUT: the men throw what they hold onto the wagon in front of them, one after the other
+       down the line, and each card lands on its own deck where the verdict is read. */
+    function toss() {
+      busy = true;
+      given.forEach(function (a, i) {
+        r.later(function () { throwTo(a); }, r.reduced ? i * 40 : i * 140);
+      });
+    }
+    /* one card, out of a man's hands and onto the deck in front of him */
+    function throwTo(a) {
+      var car = cars[a.k];
+      if (!car || !a.chip.parentNode) return;
+      var yb = yard.getBoundingClientRect();
+      var cb = a.chip.getBoundingClientRect();
+      var deck = car.querySelector('.g4-tbody').getBoundingClientRect();
+      var cx = cb.left - yb.left + cb.width / 2, cy = cb.top - yb.top + cb.height / 2;
+      var dx = (deck.left - yb.left + deck.width / 2) - cx;
+      var dy = (deck.top - yb.top - 8) - cy;
+      var fly = tag('g4-tthrow g4-tcard', a.w.it.prompt);
+      fly.style.left = cx + 'px';
+      fly.style.top = cy + 'px';
+      fly.style.transform = 'translate(-50%,-50%)';
+      yard.appendChild(fly);
+      void fly.offsetWidth;
+      fly.style.transition = 'transform ' + (r.reduced ? 60 : 340) + 'ms cubic-bezier(.25,.8,.4,1)';
+      fly.style.transform = 'translate(-50%,-50%) translate(' + Math.round(dx) + 'px,' + Math.round(dy) + 'px) rotate(-7deg)';
+      r.later(function () {
+        if (fly.parentNode) fly.parentNode.removeChild(fly);
+        if (a.chip.parentNode) a.chip.parentNode.removeChild(a.chip);
+        if (guys[a.k]) guys[a.k].classList.remove('holding');
+        land(a.w, a.k);
+      }, r.reduced ? 90 : 350);
+    }
+
+    /* A CARD LANDS ON ITS DECK: the car's slot is written into the word's own radios, so the answer sheet
+       records where the student put it, which is what the inquest reads back — not whether he was right. */
+    function land(w, k) {
+      if (done) return;
       var want = SLOTS[slotOf[k]];
       w.it.opts.forEach(function (o) {
         if (String(o.value) === want && o.radio) o.radio.checked = true;
@@ -3962,6 +4026,9 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       cars[k].classList.add('loaded');
       cars[k].classList.add(hit ? 'ok' : 'no');
       if (hit) r.score = (r.score || 0) + 1;
+      /* the HUD is the live score and this game scores a card as it LANDS, not through the runner's own
+         answer path — without this the card would stand at whatever it read when the train pulled in */
+      if (r.hud) r.hud();
       else {
         wrongs++;
         /* ONLY A WORD TOO FAR BACK IS FATAL: its own slot allows more room than the opening it landed
@@ -3976,10 +4043,9 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
           }, r.reduced ? 60 : 260);
         }
       }
-      if (card.parentNode) card.parentNode.removeChild(card);
       placed++;
       if (r.sound) SFX.clank(r.sound);
-      if (placed >= trains[ti].items.length) {
+      if (placed >= need) {
         busy = true;
         r.later(depart, r.reduced ? 140 : 560);
       }
@@ -4019,6 +4085,12 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       stamp.className = 'g4-tstamp';
       stamp.textContent = '';
       wrongs = 0; placed = 0; busy = false; picked = null; burstCar = -1;
+      /* the crew starts each train empty-handed: the cards a man held belong to the train that just left */
+      given = [];
+      guys.forEach(function (g) {
+        g.className = 'g4-tguy';
+        [].slice.call(g.querySelectorAll('.g4-tagrip')).forEach(function (c) { g.removeChild(c); });
+      });
       planks.forEach(function (p) { p.classList.remove('broken'); });
       build();
       buildDock();
