@@ -1366,6 +1366,7 @@ async function scenLanding(live, site) {
     + 'return {cards:cards.length,'
     + ' cols:cs.gridTemplateColumns.split(" ").filter(function(s){return s&&s!=="none"}).length,'
     + ' colcss:cs.gridTemplateColumns,rows:Object.keys(rows).length,'
+    + ' cw:cards.map(function(c){return Math.round(c.getBoundingClientRect().width*100)/100}),'
     + ' rect:(function(){var r=el.getBoundingClientRect();return [Math.round(r.left),Math.round(r.top),Math.round(r.width),Math.round(r.height)]})(),'
     + ' btns:btns.map(function(b){var s=getComputedStyle(b),r=b.getBoundingClientRect();return {'
     + '  txt:(b.textContent||"").trim(),fs:Math.round(parseFloat(s.fontSize)*100)/100,'
@@ -1378,6 +1379,14 @@ async function scenLanding(live, site) {
   check('nothing is added after the network answers (no reflow)', g.cards === first.cards,
     { before: first.cards, after: g.cards });
   check('exactly three columns', g.cols === 3, g.colcss);
+  /* the owner's report, as a number: the page is a FIXED-WIDTH document, so a fractional track is a defect.
+     Every card must measure the same WHOLE number of pixels, and the grid must fill the 1200px area exactly. */
+  const cw = g.cw || [];
+  check('every card is the SAME whole-pixel width (no fractional tracks)',
+    cw.length === NT && cw.every(function (w) { return w === cw[0] }),
+    cw.join(', '));
+  check('a column is 390px and the grid fills the fixed 1200px content area exactly',
+    cw[0] === 390 && Math.round(g.rect[2]) === 1200, 'card=' + cw[0] + 'px grid=' + g.rect[2] + 'px');
   check('nine tracks sit in three rows of three', g.rows === 3, g.rows + ' row(s)');
   const over = g.btns.filter(function (b) { return b.sw > b.cw + 1 });
   check('no track name overflows its button (nothing wraps, nothing is cut off)',
@@ -1389,6 +1398,29 @@ async function scenLanding(live, site) {
   check('the long names SHRANK rather than wrapping', shrunk.length > 0,
     shrunk.map(function (b) { return b.txt + '@' + b.fs + 'px' }));
   await live.shot('landing-grid', box(g.rect));
+  /* the teacher panel was fractional too, and the cards above are only half the answer: its dropdown row and
+     its two columns must obey the same fixed metric, or the panel above the columns still resizes. */
+  const t = await live.ev('(function(){'
+    + 'teacher=true;paintQueue({pending:[],approved:[{email:"s@x.y",name:"Sol",'
+    + 'tracks:[{track:"kids",lastCompleted:0}]}]});'
+    + 'var cols=document.querySelector(".tadmin-cols"),books=document.querySelector(".tadmin-books");'
+    + 'if(!cols||!books)return {err:"no teacher panel"};'
+    + 'var drops=[].slice.call(books.querySelectorAll(".bookdrop"));'
+    + 'var rows={};drops.forEach(function(d){rows[Math.round(d.getBoundingClientRect().top)]=1});'
+    + 'return {cols:getComputedStyle(cols).gridTemplateColumns,'
+    + ' w:Math.round(cols.getBoundingClientRect().width),'
+    + ' drop:drops.map(function(d){return Math.round(d.getBoundingClientRect().width*100)/100}),'
+    + ' rows:Object.keys(rows).length};})()');
+  if (t.err) { check('the teacher panel renders', false, t.err); return }
+  const dw = t.drop || [];
+  log('   · teacher: ' + t.cols + ' in ' + t.w + 'px, dropdowns ' + dw.join('/') + ', ' + t.rows + ' row(s)');
+  check('the teacher dropdowns are a fixed 380px, three per row inside the card',
+    dw.length === NT && dw.every(function (w) { return w === 380 }), dw.join(', '));
+  check('the teacher panel is two equal fixed columns filling 1200px',
+    t.w === 1200 && t.cols.split(' ').filter(Boolean).length === 2 &&
+    t.cols.split(' ')[0] === t.cols.split(' ')[1],
+    t.cols + ' in ' + t.w + 'px');
+  check('nine dropdowns wrap on a fixed count, three per row', t.rows === 3, t.rows + ' row(s)');
 }
 
 

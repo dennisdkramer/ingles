@@ -1,5 +1,5 @@
 · repo   C:\Users\denni\Documents\GitHub\ingles   (node v24.21.0)
-· page   http://127.0.0.1:59929/business/lesson1.html   as live.qa@ingles.test
+· page   http://127.0.0.1:52390/business/lesson1.html   as live.qa@ingles.test
 · chrome C:\Program Files\Google\Chrome\Application\chrome.exe   [headless=new]
 · runner landing
 
@@ -7,18 +7,24 @@
 ################### scenario landing ###################
 
 ================ LANDING · three per row, no reflow, text fits ================
-   · columns: 390.656px 390.672px 390.656px   cards: 9   rows: 3
+   · columns: 390px 390px 390px   cards: 9   rows: 3
    · Kids 🛹 ▾=19.33px  Business 💼 ▾=19.33px  Adulto 🔞 ▾=19.33px  Advanced STEM 🔬 ▾=19.33px  Advanced AAVE 🎤 ▾=19.33px  Memelord Mogger 😎 ▾=19.33px  English → Basic Portuguese 🔁 ▾=18.83px  Gramática e Redação ✍️ ▾=19.33px  Linguagem Figurativa e Giria 🎭 ▾=17.83px
    ✅ the FIRST paint already shows every track (this is the reflow report)
    ✅ nothing is added after the network answers (no reflow)
    ✅ exactly three columns
+   ✅ every card is the SAME whole-pixel width (no fractional tracks)
+   ✅ a column is 390px and the grid fills the fixed 1200px content area exactly
    ✅ nine tracks sit in three rows of three
    ✅ no track name overflows its button (nothing wraps, nothing is cut off)
    ✅ every trigger keeps its label on one line
    ✅ the long names SHRANK rather than wrapping
       📷 C:\Users\denni\Documents\GitHub\ingles\qa\_live\landing-grid.png
+   · teacher: 593px 593px in 1200px, dropdowns 380/380/380/380/380/380/380/380/380, 3 row(s)
+   ✅ the teacher dropdowns are a fixed 380px, three per row inside the card
+   ✅ the teacher panel is two equal fixed columns filling 1200px
+   ✅ nine dropdowns wrap on a fixed count, three per row
    · scenario landing finished in 3s
 
 ──────────────────────────────────────────────────────────────────────────────
-✅ live harness: 7 checks passed, 0 failed
+✅ live harness: 12 checks passed, 0 failed
    log  : C:\Users\denni\Documents\GitHub\ingles\qa\_live\run.txt

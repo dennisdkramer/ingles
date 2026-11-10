@@ -9,6 +9,13 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&display=swap');
 :root{--cream:#f4eddd;--paper:#fdfaf2;--ink:#182136;--tan:#b9854c;--rose:#d9c1ba;--ptw:#96601f;--blue:#1d4ed8;--dkblue:#1e3a8a;--bluebg:rgba(29,78,216,.16)}
+/* THE COLUMN METRIC (owner instruction 2026-11-09). The page is a FIXED-WIDTH document — .page-container is
+   position:absolute at 1400px and .content-area is always 1200px — so its grids are fixed pixels, never
+   fractional tracks. 390×3 + 15×2 = 1200 and 593×2 + 14 = 1200, both exact: no sub-pixel widths, no growth,
+   nothing that can reflow when data arrives or the window moves.
+   --colT/--gutT are the teacher dropdown row's own metric: it sits inside a .card (padding 18px + 2px border a
+   side), so its available width is 1160px, not 1200 — 380×3 + 10×2 = 1160 exactly, three per row. */
+:root{--col3:390px;--gut3:15px;--col2:593px;--colT:380px;--gutT:10px}
 /* TYPOGRAPHY (owner instruction 2026-11-09): the site is SERIF, everywhere. --serif is the default every element
    inherits, and it is the only type stack a page/teacher view may use. Georgia leads it because it was drawn for
    screens, it ships on Windows and macOS, it carries the Portuguese accents and the IPA the dictionary uses
@@ -263,12 +270,15 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 
 
 /* teacher admin area */
-.tadmin-books{display:flex;gap:10px;margin-top:2px;flex-wrap:wrap}
-/* one dropdown per track: they wrap instead of squeezing when there are many, and a long label wraps inside its
-   own button rather than running over the next one */
-.tadmin-books .bookdrop{flex:1 1 200px}
-.tadmin-books button{flex:1 1 0;margin:0;white-space:normal}
-.tadmin-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}
+.tadmin-books{display:flex;gap:var(--gutT);margin-top:2px;flex-wrap:wrap}
+/* one dropdown per track, at a FIXED width: the row wraps on a known count and no button grows into whatever
+   space is left over (owner instruction 2026-11-09: fixed size, no fractional growth anywhere on this panel).
+   380px is not the 390px of a landing column because this row lives inside a .card — 1160px of interior, so
+   380×3 + 10×2 = 1160 exactly, three per row. A label too long for it is measured and shrunk by fitBookText(),
+   which covers every .bookbtn — the teacher's dropdowns and the student's cards alike. */
+.tadmin-books .bookdrop{flex:0 0 var(--colT)}
+.tadmin-books button{margin:0;white-space:nowrap}
+.tadmin-cols{display:grid;grid-template-columns:repeat(2,var(--col2));gap:14px;margin:14px 0}
 .tadmin-col{margin:0}
 .tadmin-col h4{margin:0 0 6px}
 .tadmin-item{padding:8px 0;border-bottom:2px dashed var(--tan)}
@@ -354,12 +364,13 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .landing-hello{margin:14px 0;border-color:var(--ink);background:linear-gradient(100deg,rgba(217,193,186,.60),rgba(185,133,76,.30) 55%,rgba(29,78,216,.16))}
 .hello-en{font-weight:600;font-size:18px;line-height:1.35}
 .hello-pt{margin-top:4px;font-style:italic;color:#5c5347}
-/* EXACTLY THREE PER ROW (owner instruction 2026-11-09). This was `repeat(auto-fit,minmax(240px,1fr))`, so the
-   column count moved with the viewport width AND with how many tracks had arrived — the page appeared to reflow
-   as tracks.json landed. A fixed count cannot do either. One deliberate exception: a phone-width screen gets a
-   single column, because three ~110px columns are unusable (a breakpoint, not autosizing). */
-.tracks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start;margin:14px 0}
-@media (max-width:640px){.tracks{grid-template-columns:minmax(0,1fr)}}
+/* THREE FIXED COLUMNS (owner instruction 2026-11-09, second pass). This began as `auto-fit`, then became
+   `repeat(3,minmax(0,1fr))` — which was still wrong: 1200px split into three FRACTIONAL tracks is 390.67px
+   each, so every card measured a slightly different width and the column count was a decision the browser
+   re-made on every resize. The document is fixed-width, so the columns are fixed pixels: 390 × 3 + 15 × 2 =
+   1200 exactly. No fractional tracks, no phone breakpoint — a fixed-width document does not reflow, it
+   scrolls — and the grid is decided once, by this rule, not by how many tracks have arrived. */
+.tracks{display:grid;grid-template-columns:repeat(3,var(--col3));gap:var(--gut3);align-items:start;margin:14px 0}
 .track-card{margin:0}
 /* h3 is the block label everywhere in lesson content; the landing page keeps the browser default */
 #app h3{font-family:inherit;font-weight:700;font-size:1.17em;color:inherit;margin:1em 0;padding-left:0;border-left:0;letter-spacing:normal}
