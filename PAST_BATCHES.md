@@ -22,6 +22,18 @@ All four had every `[Bn]` and `[Sn]` closed; they sat in `[CURRENT]` only becaus
 
 - `[16]` adult lesson 40: answered the six questions on the QA reds and pushed 3a571c8; `[B2]` no project file edited - the "tested" rule (this lesson's own - Vocabulary: list), roadmapSpan's formula, the absent 3000-char rule, .grid3 having no CSS rule, and input.gap's per-blank --gap-w were each named from the harness and style.css.
 
+## [22] migrated - 2026-10-11
+
+- `[22]` the level rubric, register checking and voice precedence: the doc hunt found two adult register files - `ADULT_REGISTER.md` (underscore, 2102 bytes) orphaned, `ADULT-REGISTER.md` the one `qa/provenance.mjs:70` resolves - so the owner's "American" and "raunchy internet content" edits landed where nothing reads them. The reworded Portuguese rule invalidated three records (adult/40, kids/30, kids/31). Answers given: the rubric's fourth axis was unobservable during generation, "no checker can judge register" was too strong (the author can, and that comparison is a generation step), precedence had no home, and QA is post-hoc by definition so guidance cannot live there.
+
 ## [17] migrated - 2026-10-11
 
 - `[17]` adult lesson 40 was live but unlinked: build-lessons.mjs regenerated lessons.json/tracks.json (adult 22->23) so the selector now offers it; roadmapSpan returns the span with no blank-line stripping (records amended - adult/40 388-397, kids/30 303-312, kids/31 313-322); FORMAT.md's unimplemented .grid3 replaced by .itemsize-half/.itemsize-third with a compare-contrast note; .clinerules gained the pre-split rule. Pushed 30c045a, 4356b59, 3b2d8eb. kids/30 and kids/31 stay red on pre-existing FORMAT.md/FUNCTION.md contract drift - found, reported, not touched.
+
+## [18] migrated - 2026-10-11
+
+- `[18]` .clinerules trimmed: eight TOOL DISCIPLINE bullets and one terminal bullet condensed to their instructions, the qa/overflow.mjs anecdote removed with its instruction kept, the heading's dangling dash dropped. All 13 rule groups, every threshold and every remedy survive the walk in `[B4]`; 5150 -> 4772 bytes (7.3%). Pushed 93f3fba.
+
+## [19] migrated - 2026-10-11
+
+- `[19]` adult lesson 40 reviewed block by block: 1A is A2 grammar carrying a B2 target and pre-explains its own joke; 1C keys nothing and saves by anchor text, not by input name; 3A's Portuguese card fails the only rule that governs it (CONTENT_EXAMPLES.md 831, lang=pt only where a word is genuinely new) and the page's term "booster" is invented; 3B is recognition-only; 4A is low-teens grammar in teen-meme register, not this track; 5B collapses three prompts to one unkeyed answer. Grade given C+, which the owner rejected as a fail - the grade was measured against the harnesses rather than the persona, which is the defect.

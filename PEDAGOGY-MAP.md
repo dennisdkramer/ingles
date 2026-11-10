@@ -52,11 +52,12 @@
   - e) If an item from among [GENERATION] 2.b headings is chosen, read only that heading's line range for implementation details.
 
 ### [AUTHORING]
+**Precedence —** Where this map's examples, the roadmap's example lines or vocabulary, or a content example's sample text conflicts with `<TRACK>-REGISTER.md`, the register wins: replace the item and record the swap.
 - a) Explanatory layer may live anywhere: lead, chart cell, an extra explanation column, a `tr.note` row. A chart is a teaching device, not a display device.
 - b) Every (word/new form) the student must understand is presented before it is used, else removed; if a block wants the student to *infer*, the page says so.
 - c) Coverage ≠ section plan: a roadmap item doesn't get its own h2 unless it earns one.
 - d) No budget ≠ no depth: length is not a proxy, and enumeration is not depth.
-- e) Never show the answer in a prompt; a hint may only be in the language the student is not producing.
+- e) Never show the answer in a prompt, and show portugues hints/ explainers only where NECESSARY — the English that would carry the point sits above this lesson's level — or OPTIMAL — the point is a contrast between the two languages that English cannot make. Test, in order: can the student act correctly without it? cut it. Could the same point be made in English at this level? write English. Otherwise the smallest Portuguese that unblocks it: the word, the clause — never a translation of English already on the page.
 - f) No copy-exercises: the student produces from memory or meaning, never transcribes the prompt.
 - g) Teach in context, in phrases, inside a scenario, dialogue or story — not isolated glosses.
 - h) Whenever feasible (sanity check the existence, relevance, appropriateness, and accessibility of each), teach the rule, the reasoning (the mental model), and its direct consequences (integrated with the lesson content or in its own section as appropriate); say plainly when [there is no clear or consistent] [rule and/or reasoning].

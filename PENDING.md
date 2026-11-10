@@ -21,19 +21,23 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 
 # [CURRENT] Prompt - (Active batches, newest first)
 
-## [18] - Trim TOOL DISCIPLINE prose without changing any rule's behaviour
-### [B1] - Close [17] and author this prompt's batches "look at the rest of .clinerules and see if there is any other prose you can trim" PENDING.md [HANDLING] 13,17-20 DONE - 2026-10-11 - PAST_BATCHES.md, PENDING.md
-   - [S1] - Migrate the finished [17] into PAST_BATCHES.md and clear it <PENDING [HANDLING] 13> <[CURRENT] holds only [18]> DONE
-### [B2] - Fix the reference set a trim is checked against "while maintaining the rule's function exactly the same" <.clinerules/.clinerules.md 1-24, ADHERENCE.md> DONE - 2026-10-11 - none
-   - [S1] - Enumerate every operative instruction, threshold and prohibition in the rules file <".clinerules/.clinerules.md" 1-24> <13 rule groups, walked one by one in [B4]> DONE
-   - [S2] - Find any file that quotes these bullets by wording <ADHERENCE.md, *.md> <none: ADHERENCE.md zero hits; the two CONTENT_EXAMPLES.md hits are the words "truncation"/"restate" in content guidance, not references> DONE
-### [B3] - Cut prose, keep behaviour <.clinerules/.clinerules.md 3-24> DONE - 2026-10-11 - .clinerules/.clinerules.md
-   - [S1] - Trim the TOOL DISCIPLINE bullets to their instruction <".clinerules/.clinerules.md" 3-15> <bullets 4,5,7,8,10,11,12,14 trimmed, plus the dangling " - " in the heading; 6,9,13 already one-clause and left untouched> DONE
-   - [S2] - Trim the TOOL / TERMINAL PARAMETERS bullets the same way <".clinerules/.clinerules.md" 16-24> <only bullet 21 carried slack; the other six are a single instruction each> DONE
-### [B4] - Prove no rule changed meaning <.clinerules/.clinerules.md 1-24> DONE - 2026-10-11 - none
-   - [S1] - Walk the [B2] list against the trimmed file <".clinerules/.clinerules.md" 1-24> <13/13 groups present with every trigger, threshold and remedy; only the qa/overflow.mjs anecdote was cut, its instruction kept> DONE
-### [B5] - Commit and push <PENDING [GUIDELINES] 1-2> DONE - 2026-10-11 - .clinerules/.clinerules.md, PENDING.md
-   - [S1] - Stage, commit, push <PENDING [GUIDELINES] 1-2> <pushed; 5150 -> 4772 bytes, a 7.3% cut> 
+## [23] - Score five live pages, make the register govern every string, and audit what QA has been enforcing
+### [B1] - Close [22] and author this prompt's batches "Apply that grading system to 5 random live pages" PENDING.md [HANDLING] 13,17-20 DONE - 2026-10-11 - PAST_BATCHES.md, PENDING.md
+   - [S1] - Migrate the finished [22] into PAST_BATCHES.md and clear it <PENDING [HANDLING] 13> <[CURRENT] holds only [23]> DONE
+### [B2] - Delete adult/40's stale records "just delete it now if youre gonna keep asking me about the rewrite" <provenance.jsonl> DONE - 2026-10-11 - provenance.jsonl
+   - [S1] - Drop every adult/40 line, then report what the harness says for that page <provenance.jsonl, qa/provenance.mjs> <16 lines -> 12, all JSON valid; the page is now "no provenance record ... before the first line"> DONE
+### [B3] - Put the precedence line into [AUTHORING] "5. good, put it in" <PEDAGOGY-MAP.md 54-55> DONE - 2026-10-11 - PEDAGOGY-MAP.md
+   - [S1] - Insert it as the section preamble, before a)-n) <PEDAGOGY-MAP.md> <line 55, register wins over roadmap items> DONE
+### [B4] - Score five random live pages "Apply that grading system to 5 random live pages and tell me what scores they get as a test" <PEDAGOGY-MAP.md [LEVEL] v, lessons.json> DONE - 2026-10-11 - none
+   - [S1] - Draw five pages at random and outline each <lessons.json, <track>/lesson<N>.html> <business/14, kids/23, business/12, business/38, adult/21> DONE
+   - [S2] - Score each against the four demands <PEDAGOGY-MAP.md [LEVEL] v> <30/10/17/41/23 against bands 9-19/18-28/7-17/33-43/16-26> DONE
+### [B5] - Make the register govern every string and be applied "I want the whole content written in the correct register" <ADULT-REGISTER.md, PEDAGOGY-MAP.md [AUTHORING]> DONE - 2026-10-11 - none
+   - [S1] - Draft the rule covering headings, explanations, stems, options, notes <PEDAGOGY-MAP.md> <two lines, register-neutral, awaiting sign-off> DONE
+   - [S2] - Split the mechanical floor from the author's applied comparison <ADULT-REGISTER.md> <tripwires floor it, the persona question decides it> DONE
+### [B6] - Answer the input-reordering question "roadmap adherence is... the LEAST important factor. What do you think about that?" <PEDAGOGY-MAP.md> DONE - 2026-10-11 - none
+   - [S1] - Give the order I would defend, and what breaks when roadmap items drop <PEDAGOGY-MAP.md> <read order and authority order are two different orders; items demote, position does not> DONE
+### [B7] - Audit QA for rules that belong in generation "i think there are other cases of this problem" <qa/*.mjs> DONE - 2026-10-11 - none
+   - [S1] - Read each harness's stated purpose and list what it enforces that is really guidance <qa/register.mjs, qa/lang.mjs, qa/content.mjs> <lang.mjs's PT band, register.mjs's presence count, content.mjs's disclaimed widths; also data-move/data-recalls are lesson-40-only> DONE
 
 
 
