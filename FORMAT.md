@@ -1,13 +1,13 @@
 # [FORMAT] - The Lesson Page structure & formatting contract -
 	- Changes to this file must follow [explicit user instructions] OR [explicit user sign-off] 
     - This file's guidelines are [Maximally generalised] to [apply to] but not [overly restrict the possibilities] of content generation. 
-    - This filel drives content-aware formatting/organization/separation lesson pages.
+    - This file drives content-aware formatting/organization/separation lesson pages.
     - Elements which exist because a FUNCTION creates them are styled by style.css and driven by FUNCTION.md guidelines.
 	- PAGE SHELL:`_shell.html` (repo root) is copied and its five placeholders filled: {% raw %}`{{TRACK_TITLE}}` (document title, e.g. `Adult`), `{{TRACK_UPPER}}` (h1 top line), `{{TRACK}}` (the `TRACK` constant), `{{L}}` (the lesson number), `{{LESSON_TITLE}}` (the content `<h1>`){% endraw %}. A finished page's shell is NOT a template.
 
 ## Standard [ELEMENT] formatting guidance
 - The lesson title (h1) must be written short enough to sit on ONE line -(fixed 38px size inside the 1200px content area).
-- When used, mark portugues text and make it italic with `lang="pt"` (CSS `:lang(pt){font-style:italic}`), `.pt`(explanations),`.ptw`(in exercises) or `<i>` as a fallback. 
+- When used, mark Portuguese text and make it italic with `lang="pt"` (CSS `:lang(pt){font-style:italic}`), `.pt`(explanations),`.ptw`(in exercises) or `<i>` as a fallback. 
 - Items within a block must not overflow the block or overlap/touch each other.
 - Lesson sections are numbered `1.`… (h2). 
 - Blocks are lettered inside-top with [`A. `(h3)] , restarting at A in every section. **The header is the block's first line and sits above the block's content in every block of every lesson** — nothing a vehicle, script or stylesheet draws into the block may take that place, so a game that inserts its own stage inserts it BELOW the header and never above it.
@@ -18,13 +18,13 @@
 - An item may never ask for a judgement on an axis the page never defined before the item asks for it. the item and its column headers may not be labelled with a word invented for the table.
 - Any fill-in hint/gloss sits below and center-aligned with the center of its respective input field.
 - Font sizes are fixed constants (no viewport-relative sizing).
-- **The type is SERIF, site-wide.** `style.css` sets `--serif` and every element inherits it — headings, body, buttons, form controls, tables, badges. No block, page or view may use a sans-serif face, and a new rule never names one. The single exception is `--ui-tight`, used only by the game chrome (`.g4-*`) at 9–13px in fixed-size tiles, where the text is an instrument panel rather than prose and a face swap would move metrics inside boxes that cannot grow; flipping that one property to `var(--serif)` makes even the games serif. A lesson author never reaches for a font: the face is the stylesheet's, alone.
+- **The type default is SERIF, site-wide.** An exception is `--ui-tight`, used only by the game chrome (`.g4-*`) at 9–13px in fixed-size tiles, where the text is an instrument panel rather than prose and a face swap would move metrics inside boxes that cannot grow. A lesson author never reaches for a font: the face is the stylesheet's, alone.
 - **A track folder's NAME is URL-, selector- and CLI-safe; its DISPLAY name is data.** The folder name is lowercase with hyphens or underscores (`advanced-stem`), never a space, because it travels as a URL path, a `--track=` argument, an `id` suffix and a `data-*` value. The name a person reads lives in that folder's `track.json` `label`, which is free to carry spaces, accents and an arrow (`English → Basic Portuguese`), so nothing about the display ever forces a rename. **A folder name is chosen once**: the teacher's access sheet stores the track name itself, so renaming a folder orphans every grant that mentions it (a hyphen is safe everywhere; a space is not).
 - Sizing philosophy: Minimum size an average person comfortably sees, clicks, reads.
 - **A focus ring is opt-in, never a consequence of holding a key.** No element may draw a focus outline unless `<html>` carries `.kbd`, which only a real NAVIGATION key sets (Tab, arrows, Home/End, PgUp/PgDn, Enter, Space, Escape) — the gate is duplicated at the top of `engine1.js` and in `index.html`, and a pointer press clears it. A bare modifier (Shift/Ctrl/Alt/Meta) is not navigation and must never draw a ring, which is why `style.css` also suppresses the browser's own UA ring while `.kbd` is absent. A new rule therefore never writes a bare `:focus` or `:focus-visible` selector: it is `html.kbd …` or nothing, and `qa/landing.mjs` fails if an ungated ring rule appears anywhere in the stylesheet.
 
 
-### Mechanical [LIMITS] (the only MUSTs — each prevents an answer or a line from being lost)
+### Mechanical [LIMITS]— each prevents an answer or a line from being lost
 - Every control that carries an answer (`input.gap`, radio, authored `textarea`) resolves exactly ONE anchor: an unanchored control is never saved, and two controls on the same anchor+place overwrite each other.
 - Question stems are unique within a block — a repeated stem gives two controls one saved answer.
 - A `textarea` inside `.content-area` is (`resize:none`). the page never reflows, no items are resizeable. 

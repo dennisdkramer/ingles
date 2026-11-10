@@ -42,7 +42,16 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 
 
 
-## [17] - design A for block widths (narrow-first + structural measurement): the plan only (2026-11-10)
+## [25] - the audit answered, the typos repaired, ADHERENCE.md committed (2026-11-10)
+### [B1] - F4's recommendation, delivered and NOT applied <"f4 what do you recommend we do about that"> <one marking route, and the harness made to read that one> DONE - no edit; FORMAT.md line 2 requires sign-off
+   - [S1] - the choice named: `lang="pt"` becomes the only semantic marker, `.pt`/`.ptw` stay as layout classes, `<i>` is dropped as a marker, and `qa/lang.mjs` reads exactly one thing <the measured Portuguese share can no longer move for a markup reason> DONE - reported
+### [B2] - F5 retracted, and the real conflict named <"arent those the same thing?"> <14 and 55 do agree; 14 disagrees with the DOM> DONE - yes: `.qopts` is flex-wrap (across, then down) and `.qgrid.stack` is `grid-auto-flow:column` (down, then across), and 14 states only the second
+### [B3] - F7 and F8 answered by rules that already exist <"check pedagogy-map.md, i thought there was a clause for that"> <no new rule needed: both are violations of existing ones> DONE - [AUTHORING] e) "Never show the answer in a prompt"; [LEVEL] w) "a phrase answer gets phrase distractors, never one-word ones". FORMAT.md restates neither and no harness reads either, which is why lesson 40 could break both
+### [B4] - the typos repaired <"you can freely repair typos"> DONE - FORMAT.md 4 (filel) and 10 (portugues)
+### [B5] - ADHERENCE.md committed <"commit adherence.md"> DONE - [8] [B3] closed by it
+### [B6] - the widths and the loads, opened as the next task <"lets do the widths and loads for content_examples next"> <CONTENT_EXAMPLES.md: a `- **width** —` ladder per vehicle and a `- **load** —` curve per activity> NOT EXECUTED - [17] [B5] carries the plan both must agree with
+
+
 ### [B1] - the decision recorded <"2. i said go with A" corrects "lets go with a", which had been read as the field question (a)> <design A is the chosen approach; whether the `**width**` field returns is [B2]'s question, not a settled removal> NOT EXECUTED - plan and question only, no edits
    - [S1] - A restated: a block starts at its narrowest allowed slot and grows one step only when a structural element does not fit; prose is excluded because it wraps <the three designs came from last turn's [B1]> NOT EXECUTED
 ### [B2] - the one new piece of data A needs: the width field <"im thinking we put a "width: #" field that appends to the markup line of each vehicles entry in CONTENT_EXAMPLES.md and corresponds to the AVAILABLE WIDTH OPTIONS for that vehicle">
@@ -68,6 +77,11 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
    - [S3] - published lesson pages, as a separate pass after the preview page is approved <8 lesson files, untouched so far> NOT EXECUTED
 
 
+### [B5] - the plan the files must agree with, and the values <"we recently changed our plans from default full-width blocks that get smaller depending on content to default small blocks that get bigger depending on content"> <every file states small-by-default and growth-by-content> NOT EXECUTED
+   - [S1] - every place that states a default, read and reconciled: FORMAT.md a)/b)/c)/e)/m), PEDAGOGY-MAP.md, the 53 CONTENT_EXAMPLES entries, qa/preview-blocks.html, qa/examples.mjs <one plan, no leftover of the full-width default> NOT EXECUTED
+   - [S2] - a `- **width** —` ladder authored on every block-bearing vehicle, and the width prose taken OUT of `markup`/`fits` once the field holds it <[S5]: the owner's own instruction for that removal> NOT EXECUTED
+   - [S3] - a `- **load** —` curve authored on every activity, in the shape [INSTRUCTIONS] states, so `load = L × M` can be read off the entry <[7] [B2], the same numbers from the other side> NOT EXECUTED
+
 ## [12] - the remaining change tags in qa/NOTES.md, entry and preview (2026-11-10)
 ### [B1] - PRE-PROMPT RESEARCH <"keep working on any other items that ive requested changes for"> <every tag that is not a delete, and where its vehicle stands>
    - [S1] - NOTES.md re-read at its 14:39 state <beforeAfterStrip's `d` had become `delete`> <the tag list> DONE - 3 change tags outstanding: formulaFrame, signalTable, contextFit
@@ -91,7 +105,7 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 ## [8] - the word-for-word rule, in the owner's wording (2026-11-10)
 ### [B1] - insert the rule after "Do not assume." <"__FOR ANY EDIT THAT REPLACES TEXT__ of a file in the repo root, if a message proposed it, the proposed new text must be shown accompanied by every word of the old text that is to be altered. (APENDING.md/PAST_BATCHES.md exempt)"> <ADHERENCE.md [UNDERSTANDING] carries it> DONE - their words kept word for word, with APENDING.md -> PENDING.md as the only correction; NO scope clause added (lesson pages are not in the repo root, so the phrase already excludes them) and NO "whole passage, not only the words that differ" clause added, since rule 16 forbids adding to proposed wording. Standing instruction noted: finished text in qa/NOTES.md is DELETED, never replaced, so that file is outside this rule by construction
 ### [B2] - the showing has a PLACE <"it doesnt specify that it must be shown IN the message that proposed it, and specifically accompanying the proposal"> <the proposing message is the grammatical subject, so where it is shown is fixed> DONE - three words for three: "the proposed new text must be shown" -> "that message shows the proposed new text". Same length, no words added. The stronger variant (delete "if a message proposed it, " so a proposing message is mandatory and a silent edit is impossible) was OFFERED and NOT applied, because it is a scope change. Recorded for the owner's answer
-### [B3] - commit and push <PENDING.md [GUIDELINES]> <origin/main at local HEAD>
+### [B3] - commit and push <PENDING.md [GUIDELINES]> <origin/main at local HEAD> DONE - 2026-11-10, at the owner's instruction ("commit adherence.md")
 
 
 ## [7] - the load formula: an activity multiplier against the content level (2026-11-10)
