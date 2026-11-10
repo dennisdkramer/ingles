@@ -22,17 +22,11 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 # [CURRENT] Prompt - (Active batches, newest first)
 
 
-## [25] - Tier the register vocabulary by frequency, and stop the harness checking pages
-### [B1] - Take [24] out of [CURRENT] "STOP checking against existing pages" PENDING.md [HANDLING] 13 DONE - 2026-10-11 - PENDING.md, PAST_BATCHES.md
-   - [S1] - Delete [24]; summary appended to PAST_BATCHES.md <PENDING.md> <[CURRENT] holds only [25]> DONE
-### [B2] - Tier the tells and give the generator the order "I dont want the generator to treat those words as if theyre all equal" <ADULT-REGISTER.md> DONE - 2026-10-11 - ADULT-REGISTER.md
-   - [S1] - core/common/situational/rare, each stating what it licenses <ADULT-REGISTER.md 27-33> DONE
-   - [S2] - Ten tiered keys holding the vocabulary <ADULT-REGISTER.md 35-45> DONE
-   - [S3] - British profanity moved out of taboo into locale: bollocks tosser wanker arsehole twat shag <ADULT-REGISTER.md 45> DONE
-   - [S4] - loud pack dropped for loud; wet dream demoted to rare; fricking freaking shoot stay out <ADULT-REGISTER.md> DONE
-### [B3] - Delete the harness own word list and parse the tiers "register.mjs is register neutral right?" <qa/register.mjs> DONE - 2026-10-11 - qa/register.mjs
-   - [S1] - Family-tier keys, byFam accumulation, DEFAULTS gone <qa/register.mjs 51-78> DONE
-   - [S2] - --tells prints the parsed vocabulary and reads no page <qa/register.mjs 87-103> DONE
-   - [S3] - Verified by --tells alone: taboo 36 in 2 tiers, street 174 in 4, sexual 92 in 3, formal 15, locale 36 <qa/register.mjs --tells> DONE
-### [B4] - Point the author at the tiers "The words either need to be ordered or labeled as such with instructions to the generator" <PEDAGOGY-MAP.md 57> DONE - 2026-10-11 - PEDAGOGY-MAP.md
-   - [S1] - One clause in Precedence: taught items from core then common, situational only when the scene is that scene, rare never to hit a target <PEDAGOGY-MAP.md 57> DONE
+
+## [26] - Give the kids track the same tiered tells, item by item against a 14-year-old American in 2026
+### [B1] - Take [25] out of [CURRENT] "ok so now that we have the track voice just about right" PENDING.md [HANDLING] 13 DONE - 2026-10-11 - PENDING.md, PAST_BATCHES.md
+   - [S1] - Delete [25]; summary appended to PAST_BATCHES.md <PENDING.md> <[CURRENT] holds only [26]> DONE
+### [B2] - Build the kids tells list "make the same kind of list for kids-register.md" <KIDS-REGISTER.md> DONE - 2026-10-11 - KIDS-REGISTER.md
+   - [S1] - Five tiers, including text as a medium, each stating what it licenses <KIDS-REGISTER.md 26-33> DONE
+   - [S2] - The lists, most-common-first inside every tier <KIDS-REGISTER.md 43-52> DONE
+   - [S3] - Verified by --tells alone: taboo 30 in 3 tiers, street 128 in 5, formal 18, locale 33, no item twice <qa/register.mjs --tells> DONE
