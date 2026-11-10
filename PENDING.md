@@ -1,6 +1,21 @@
 # PENDING — Adherence.md [BATCHING] for current task
 
 
+## [28] - FORMAT.md switched to small-by-default, cross-checked against PEDAGOGY-MAP, FUNCTION and style.css, and the load plan restated (2026-11-10)
+### [B1] - the width rule rewritten <"make the change to format"> <FORMAT.md e) 2 states small-first-and-grow, and the 50%/70% threshold is gone> DONE - one line, old and new both shown in the proposing message; the reflow tail ("numbers run down each column") kept verbatim, since [F5] confirmed it duplicates line 14 in direction and is not wrong
+### [B2] - the cross-file audit <"double check nothing in pedagogy-map.md or function.md or style.css conflicts or disagrees"> <every width statement in the other three files, checked against small-first> DONE - no conflict in any of the three
+   - [S1] - PEDAGOGY-MAP.md read for width, slot, fill and layout statements <it is the file that sets the content level the widths serve> DONE - ZERO width statements: the only "slot" is MC option shuffling (l). Its line 5 precedence puts structure (FORMAT.md) FIRST, so where the two could differ, FORMAT already wins
+   - [S2] - FUNCTION.md read for width and container statements <runtime, so a conflict here is a behaviour conflict> DONE - zero width statements; the four "fill" hits are highlight-fill (47) and the landing column layout (83)
+   - [S3] - style.css read for the slot classes and any full-width default <the arithmetic the rule refers to> DONE - four slot classes only (221-227), exactly the calc() arithmetic line 49 describes. **No full-width default is DECLARED** - but a block with no `itemsize-*` is a block-level div, so it fills its row: small-first is a decision rule that must be authored, never a CSS default (finding F1 below)
+### [B3] - the FORMAT re-audit <"do one more sanity check on format"> <the file whole, with the new e) 2 in it> DONE - 67 lines read whole (the read cap elided the middle; paged 19-42 and 42-59). Six findings, five need the owner's word, none repaired:
+   - [S1] - F1 `m)` cites `full+full` for registerContrast, but the value authored in [27] is `half+half` <a contract citing a value that is no longer real; `full+full` is genreDoc's> AWAITING USER - one-word fix, old/new in the report
+   - [S2] - F2 line 50 `b) Priority is minimizing dead space` CONTRADICTS e) 2 and a)'s own centring clause <it is the rule that pushed blocks to full width; small-first leaves dead space on purpose> AWAITING USER
+   - [S3] - F3 line 52 `d)` (add real content to extend the shorter block) sits against e) 3 NEVER PAD TO FILL <a generator can satisfy d) by inventing rows> AWAITING USER
+   - [S4] - F4 no MUST says a block carries its `itemsize-*` class <under full-first, omitting it was harmless; under small-first it silently produces a full block> AWAITING USER
+   - [S5] - F5 line 40 states `.itemsize-third (391px)` flatly; line 49 says it is 395 beside a two-thirds <minor, one clause> AWAITING USER - and `.todo` (line 31) has no CSS rule, so the "mark" renders as ordinary prose; style.css is not mine to extend
+### [B4] - readiness and the plan <"inform me when youre ready and remind me what the plan is for authoring loads and widths into all the vehicles"> <the two authoring jobs, their inputs and their order> DONE - reported; the loads are 43 entries, not 53
+
+
 ## [GUIDELINES]
 - Requested changes are committed and pushed when done by default. For any changes that are not pushed, the user must be notified at Turn completion.
 - Avoid rapid successive pushes when a single combined push would do — build markers, a live-site curl or a fixed sleep are tools reached for when the risk of an undetected deploy problem is real, not mandatory steps after every push.
