@@ -1,6 +1,6 @@
 # VERIFICATION — how to verify / QA
 
-Six checks, all narrow. None of them judges how a page is laid out: block widths, columns, option
+Seven checks, all narrow. None of them judges how a page is laid out: block widths, columns, option
 counts, spacing and class names are generation decisions, not defects.
 
 - `node qa/content.mjs [--track=…] [n …]` — the page still works: engine1/engine2 executed, exactly one
@@ -32,6 +32,15 @@ counts, spacing and class names are generation decisions, not defects.
 - `node qa/games4.mjs` — the engine4.js game runner and every plugin's state machine in jsdom.
 - `node qa/live.mjs` — real-Chrome probe for what jsdom cannot reproduce (timing, auto-repeat, real
   mouse/keyboard, on-screen position). Reach for it when a report mentions any of those.
+- `node qa/liquid.mjs` — the files GitHub renders as pages, checked before Liquid reads them. Every tracked
+  `.md` is a Jekyll page (GitHub Pages adds the front matter it lacks), and Jekyll parses it with Liquid
+  BEFORE Kramdown, so a code span protects nothing: an opener that never closes aborts the whole build, and
+  Pages then keeps serving the previous deployment while `git push` reports success. On 2026-11-10 one such
+  line in PENDING.md stopped two commits in a row and the live site silently kept the old lesson list. FAIL on
+  an unclosed opener or on a tag Liquid does not know; WARN on a closed token, which is legal but publishes
+  as a blank (FORMAT.md:6 has five). A raw block is the escape when a token must be shown. `--selftest`
+  proves the scanner still fails the exact line that caused it and still passes prose. Scope is
+  `git ls-files` — the published set — and named paths replace it for a falsification run.
 
 Scope belongs to the harnesses, not the caller: with no lesson numbers every page in every track that has
 pages is swept, `--track=kids|business|adult` narrows it (qa/track.mjs), and a named lesson that does not

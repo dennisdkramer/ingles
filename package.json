@@ -10,6 +10,7 @@
     "qa:games": "node qa/run.mjs games",
     "qa:layout": "node qa/run.mjs overflow --selftest && node qa/run.mjs overflow",
     "qa:live": "node qa/run.mjs live",
+    "qa:liquid": "node qa/run.mjs liquid",
     "build:dict": "node build-dictionary.mjs"
   },
   "devDependencies": {

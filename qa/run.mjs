@@ -52,6 +52,8 @@ const MEMBERS = {
               what: 'index.html: a column per track, titles as links, jump button' },
   live:     { file: 'qa/live.mjs',       scope: false,
               what: 'real-Chrome probe for what jsdom cannot reproduce (--only=<scenario>)' },
+  liquid:   { file: 'qa/liquid.mjs',     scope: false,
+              what: 'the .md GitHub renders as pages: a Liquid opener left unclosed kills the Pages build' },
 };
 
 /** an argument that narrows a run: a track, the full sweep spoken aloud, or a lesson number */

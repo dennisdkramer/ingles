@@ -1,0 +1,19 @@
+#!/bin/sh
+# .githooks/pre-push - the site is published by GitHub AFTER the push, so a defect in a .md is invisible
+# until the build dies and Pages quietly keeps the previous deployment. On 2026-11-10 that is what happened:
+# one unclosed Liquid opener in PENDING.md, two pushes that reported success, a live lesson list unchanged.
+# This runs the local half of that check before the objects leave the machine.
+#
+# Enabled with:  git config core.hooksPath .githooks
+# Skipped with:  git push --no-verify   (that flag is how the guard was skipped on 2026-11-10)
+if command -v node >/dev/null 2>&1; then
+  if ! node qa/liquid.mjs; then
+    echo ""
+    echo "pre-push refused: a .md file above would abort the GitHub Pages build."
+    echo "The push would have succeeded and the site would have kept serving the old deployment."
+    exit 1
+  fi
+else
+  echo "pre-push: node is not on PATH, so the .md Liquid check did not run."
+fi
+exit 0

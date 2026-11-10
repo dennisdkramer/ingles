@@ -1,6 +1,21 @@
 # PENDING — Adherence.md [BATCHING] for current task
 
 
+## [22] - why a literal double-brace reached a committed .md, and the guard against it (2026-11-10)
+### [B1] - PRE-PROMPT RESEARCH <"try to figure out why that happened and make sure it doesnt happen again"> <the render path that makes a .md fatal, and the QA surface a guard has to join> DONE
+   - [S1] - the render path read off the failing build's own log <the annotation text of Pages run 620> DONE - every .md is a Jekyll page there: the log shows "Rendering Markup: FORMAT.md", "Rendering Layout: FORMAT.md / Layout source: theme" and, for the file that carries Liquid, "Rendering Liquid" — Liquid reads the raw text and Kramdown converts afterwards
+   - [S2] - the QA surface read at source <qa/run.mjs MEMBERS, package.json scripts, VERIFICATION.md, PENDING.md [HANDLING]> DONE - a member is one file plus a scope flag plus a one-line description; 34 tracked .md and not one member opens them; no .github directory, core.hooksPath unset, so nothing ran before a push
+### [B2] - the cause <"try to figure out why that happened"> <the chain from one token in the shell to a dead build> DONE
+   - [S1] - where the token came from <the [19] line that carried it, against the vocabulary in _shell.html and FORMAT.md:6> DONE - the line recorded the placeholder sweep of business/lesson40.html, and the sweep was named with the shell's own opener, copied from the TRACK_TITLE-style names in `_shell.html` and FORMAT.md:6 and kept without its closing half. A token that is correct where it lives became a syntax error the moment its other half was dropped for brevity.
+   - [S2] - why nothing local caught it <what each harness reads, and what my own loop did that turn> DONE - content and overflow read .html, games4 and live read the engines, provenance reads the ledger, landing reads index.html: not one of them opens a .md, and the only process that parses .md is the GitHub build, which runs after the push. My loop pushed twice and never asked the API whether the build succeeded, so the first report of the failure came from the owner.
+   - [S3] - why the code span did not protect it <the order of the two passes> DONE - the backticks are Kramdown syntax applied AFTER Liquid: to Liquid they are ordinary characters wrapped around an opener. That is also why FORMAT.md:6 has survived five closed tokens in code spans while the single unclosed one killed the build.
+### [B3] - the guard <"make sure it doesnt happen again"> <a check that fails on this defect alone, wired where a build already looks> DONE
+   - [S1] - qa/liquid.mjs written <every .md Jekyll renders, scanned for a Liquid opener that no closer balances, naming file:line> DONE - FAIL on an unclosed opener, on an unclosed raw block and on a tag Liquid does not know; WARN on a closed token, which is legal but publishes as a blank; raw spans are jumped whole. Scope is `git ls-files`, the published set, and named paths replace it for a falsification run.
+   - [S2] - registered where this repo keeps checks <run.mjs MEMBERS, a package.json script, a VERIFICATION.md bullet and its count> DONE - a `liquid` member with scope ✗ in qa/run.mjs, `npm run qa:liquid` in package.json, and VERIFICATION.md reading "Seven checks" with its own bullet
+   - [S3] - falsified against the real breaker <the 74136eb text must fail, today's tree must pass> DONE - `--selftest` 6/6, including the verbatim 74136eb line as 1 fail; the committed PENDING.md of 74136eb read by name fails at its own line 75 (the entry sat higher then); today's 34 tracked .md give 33 clean and exit 0, with FORMAT.md's five closed tokens as warnings
+   - [S4] - the rule written where the token was written <PENDING.md [HANDLING] and the pre-push gate> DONE - a [HANDLING] bullet against unclosed openers with the raw-block escape, a [GUIDELINES] bullet saying a push is not a publication and naming the check-runs URL, and `.githooks/pre-push` in LF with the exec bit, enabled by `core.hooksPath`: proved to refuse a staged broken .md with exit 1 and to pass the clean tree with exit 0
+
+
 ## [15] - block kind, charts demoted to an in-block class, solid edges, a width default per entry (2026-11-10)
 ### [B1] - PRE-PROMPT RESEARCH <"does the 'dialog' vehicle have an .itemwidth attribute by default? …do all of these have pre-determined itemwidths?">
    - [S1] - `itemwidth` looked for across every .md/.css/.js/.mjs/.html <0 hits> <the real vocabulary is `.itemsize` / `-half` / `-third` / `-twothird`, styled at style.css:205-211>
@@ -48,6 +63,7 @@
 ## [GUIDELINES]
 - Requested changes are committed and pushed when done by default. For any changes that are not pushed, the user must be notified at Turn completion.
 - Avoid rapid successive pushes when a single combined push would do — build markers, a live-site curl or a fixed sleep are tools reached for when the risk of an undetected deploy problem is real, not mandatory steps after every push.
+- A push is not a publication: GitHub builds the site after it, and a build that fails leaves the PREVIOUS deployment serving while the push reports success. Before any push that touches a `.md`, run `node qa/liquid.mjs` (the pre-push hook runs it too, and `--no-verify` is how that guard was skipped on 2026-11-10). After any push that changes what the site serves, read the Pages run for that commit — `https://api.github.com/repos/dennisdkramer/ingles/commits/<sha>/check-runs` — and a `failure` at the step "Build with Jekyll" means the change is not live, whatever `git push` said.
 
 
 ## [HANDLING]
@@ -58,6 +74,7 @@
 - When all [Bn] within any [n] are [completed and/or marked `DONE` and/or `STALE`], all content within section [n] is cleared, and [n] is migrated and appended to PAST_BATCHES.md.
 - For any [change in plans] or [deviation from the batching/order in pending.md] You must - Update any relevant [[n] and/or [Bn] and/or [Sn]] to reflect the change(s) and add `- UPDATED <The user's original plan for that item><Why the change occurred>` to each of them.
 - Read only the active `### [Bn]` batch section unless [its completion] or [user instruction] mandates reading its siblings.
+- Never write an unclosed Liquid opener in this file or any other `.md` — two opening braces, or a brace plus a percent sign. Every `.md` here is rendered as a Jekyll page and Liquid parses it BEFORE Markdown, so a code span is no protection; [19] killed the Pages build exactly this way and the site kept serving the old list. To show a token, put it in a raw block or leave a character between the braces, and run `node qa/liquid.mjs` before the push that carries it.
 
 Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], format as follows:
 `## [n] - <1 line summary of user prompt>` 
