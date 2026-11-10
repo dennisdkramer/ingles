@@ -1,0 +1,4 @@
+# A shell script with a CRLF shebang is a script MSYS sh refuses to start ("bad interpreter: /bin/sh^M"),
+# so the pre-push gate that checks the .md set before a push would silently stop existing on any checkout
+# where core.autocrlf=true (which is every Windows clone of this repo). These files stay LF everywhere.
+.githooks/* text eol=lf
