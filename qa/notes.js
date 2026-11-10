@@ -245,9 +245,10 @@
     try { src = localStorage.getItem(BACKUP); } catch (e) { src = null; }
     if (!src) { say('no backup kept for this page', true); return; }
     if (!file) { say('not linked to ' + STORE + ' — click “link ' + STORE + '” once', true); return; }
-    if (!window.confirm('Write the last backed-up ' + STORE + ' back over the file?')) return;
-    write(function () { return src; }, true).then(function (out) {
-      try { localStorage.removeItem(BACKUP); } catch (e) { /* private mode */ }
+    var ask = (typeof window.eodConfirm === 'function') ? window.eodConfirm : function (o) { return Promise.resolve(window.confirm(o.title + ' ' + o.body)); };
+    var proceed = ask({title:'Restore the backup?',body:'Write the last backed-up ' + STORE + ' back over the file?',confirm:'Restore',cancel:'Cancel'});
+    proceed.then(function (yes) { return yes ? write(function () { return src; }, true) : null; }).then(function (out) {
+      if (out == null) return; try { localStorage.removeItem(BACKUP); } catch (e) { /* private mode */ }
       restoreLabel();
       adopt(out);
       say('backup restored in ' + STORE + ' · ' + time());

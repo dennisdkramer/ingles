@@ -30,7 +30,62 @@ const who=()=>gate.teacher?"prof":"aluno";
 let STUDENT=gate.student||gate.email, layer=[], sig="", editing=false;
 const audioCache={};
 let popXY={x:20,y:90};
-function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(t._x);t._x=setTimeout(()=>t.style.display="none",2600)}
+/* == SHARED SOURCE: eodConfirm — this block is IDENTICAL in engine1.js and index.html (the one page that
+   loads no engine), and qa/landing.mjs fails if the two copies differ by so much as a character. ==
+   THE SITE'S ONE CONFIRMATION DIALOG (owner instruction 2026-11-09): no browser popup anywhere. Every
+   confirm on the site — and every future one — calls this instead of window.confirm, because a browser
+   dialog cannot be styled, blocks the whole tab, cannot speak the page's own language or voice, and is
+   user-suppressible ("prevent this page from creating additional dialogs"), after which a destructive
+   action would run, or not run, with no prompt at all. Returns a Promise<boolean>: true = the confirm
+   button; false = cancel, Escape, a click on the backdrop, or a second dialog replacing this one. */
+let dlgLive=null;                                  /* the close() of the one dialog currently open */
+function eodConfirm(opt){
+ opt=opt||{};
+ const title=String(opt.title||"Please confirm"),body=String(opt.body||"");
+ const yesTxt=String(opt.confirm||"Yes"),noTxt=String(opt.cancel||"Cancel");
+ return new Promise(done=>{
+  const prev=document.activeElement;
+  let settled=false;
+  if(dlgLive)dlgLive(false);                       /* one at a time, so the two ids stay unique */
+  const wrap=document.createElement("div");
+  wrap.className="dlgwrap";
+  wrap.innerHTML='<div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dlgTitle" aria-describedby="dlgBody">'
+   +'<h3 class="dlgtitle" id="dlgTitle"></h3><p class="dlgbody" id="dlgBody"></p>'
+   +'<div class="dlgbtns"><button type="button" class="dlgcancel"></button>'
+   +'<button type="button" class="dlgyes"></button></div></div>';
+  const dlg=wrap.firstChild;
+  if(opt.danger)dlg.classList.add("danger");
+  const noBtn=dlg.querySelector(".dlgcancel"),yesBtn=dlg.querySelector(".dlgyes");
+  /* textContent, never innerHTML: a student's name and an email are passed in here and must never parse */
+  dlg.querySelector(".dlgtitle").textContent=title;
+  dlg.querySelector(".dlgbody").textContent=body;
+  noBtn.textContent=noTxt;yesBtn.textContent=yesTxt;
+  function close(v){
+   if(settled)return;
+   settled=true;dlgLive=null;
+   document.removeEventListener("keydown",onKey,true);
+   if(wrap.parentNode)wrap.parentNode.removeChild(wrap);
+   try{if(prev&&prev.focus&&document.contains(prev))prev.focus()}catch(e){}
+   done(!!v);
+  }
+  function onKey(e){
+   if(e.key==="Escape"||e.key==="Esc"){e.preventDefault();e.stopPropagation();close(false);return}
+   if(e.key==="Enter"){e.preventDefault();e.stopPropagation();close(true);return}
+   if(e.key==="Tab"){                              /* focus cannot leave the dialog */
+    const f=[noBtn,yesBtn],i=f.indexOf(document.activeElement);
+    e.preventDefault();f[(i+(e.shiftKey?-1:1)+f.length)%f.length].focus();
+   }
+  }
+  noBtn.onclick=()=>close(false);
+  yesBtn.onclick=()=>close(true);
+  wrap.addEventListener("mousedown",e=>{if(e.target===wrap)close(false)});  /* backdrop = cancel */
+  document.addEventListener("keydown",onKey,true);
+  document.body.appendChild(wrap);
+  dlgLive=close;
+  try{yesBtn.focus()}catch(e){}
+ });
+}
+/* == /SHARED SOURCE: eodConfirm == */
 /* ---- LESSON-CONTENT GATE (owner instruction 2026-11-03): Hear / Record / Note / Pronunciation Key and
    Highlight belong to the lesson, i.e. to `.content-area` ONLY. A selection that starts in the shell —
    the brand header, the #barhelp site-functions legend, the control bar, the footer — opens no popup,

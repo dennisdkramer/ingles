@@ -116,6 +116,24 @@ mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-positio
 .hlpal button[data-c="yellow"]{background:rgba(255,233,112,.85)}
 .hlpal button[data-c="red"]{background:rgba(255,64,64,.7)}
 .hlpal button[data-c="green"]{background:rgba(64,200,96,.7)}
+/* THE SITE'S ONE CONFIRMATION DIALOG (owner instruction 2026-11-09): a browser popup cannot be styled, blocks
+   the whole tab, cannot speak this page's own language or voice, and can be suppressed by the user —
+   after which a destructive action runs with no prompt at all. eodConfirm() (identical block in engine1.js
+   and index.html) draws this instead; this is the only styling it needs. z-index 1000 clears every overlay
+   the site has (#toast 99, game drag cards 80, game effects 10). */
+.dlgwrap{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;
+ padding:20px;background:rgba(24,33,54,.45)}
+.dlg{width:min(440px,100%);max-height:calc(100vh - 40px);overflow:auto;background:var(--paper);
+ border:2px solid var(--ink);border-radius:16px;box-shadow:6px 6px 0 var(--tan);padding:18px 22px 16px;
+ text-align:center}
+.dlgtitle{margin:0 0 8px;font:700 20px/1.25 var(--serif);color:var(--ink)}
+.dlgbody{margin:0 0 18px;font-size:15.5px;line-height:1.55;color:var(--ink)}
+.dlgbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.dlgbtns button{margin:0;min-height:38px;min-width:112px}
+.dlgcancel{background:var(--paper);color:var(--ink);border:2px solid var(--ink);box-shadow:3px 3px 0 var(--tan)}
+.dlgyes{background:var(--ink);color:var(--cream)}
+.dlg.danger .dlgyes{background:#a33327;box-shadow:3px 3px 0 var(--ink)}
+
 #toast{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:8px 16px;border-radius:10px;z-index:99;display:none;font-weight:600;box-shadow:3px 3px 0 var(--tan)}
 .recind{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:99}
 .spin{width:14px;height:14px;border:2px solid var(--ink);border-top-color:transparent;border-radius:50%;animation:sp 1s linear infinite;display:inline-block;vertical-align:-2px}

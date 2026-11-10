@@ -294,8 +294,9 @@ function renderCompleteBtn(){
  const pv=document.getElementById("prevlesson");if(pv&&L>1)pv.onclick=()=>location.href="lesson"+(L-1)+".html";
  const nx=document.getElementById("nextlesson");if(nx)nx.onclick=()=>location.href="lesson"+(L+1)+".html";
  const cp=document.createElement("button");cp.type="button";cp.id="clearpage";cp.textContent="\u{1F9F9} Clear page";
- if(cp)cp.onclick=()=>{
-  if(!confirm("Delete ALL highlights, notes and recordings on this page?"))return;
+ if(cp)cp.onclick=async()=>{
+  /* the site's own dialog, never the browser's (owner instruction 2026-11-09) */
+  if(!(await eodConfirm({title:"Clear this page?",danger:true,body:"Delete ALL highlights, notes and recordings on this page? This cannot be undone.",confirm:"Clear page",cancel:"Keep it"})))return;
   send({action:"wipe"});                      /* network-last, like every other write */
   layer=[];hlList=[];ntList=[];sig="";wipeGuard=Date.now()+12000;
   document.querySelectorAll("mark.nb").forEach(m=>m.remove());
@@ -310,7 +311,7 @@ function renderCompleteBtn(){
  bar.appendChild(cp);
  if(gate.teacher){
   const eb=document.createElement("button");eb.type="button";eb.id="editpage";eb.textContent="✏️ Edit";eb.onclick=()=>toggleEditMode();bar.appendChild(eb);
-  const rb=document.createElement("button");rb.type="button";rb.id="revertpage";rb.textContent="↩️ Revert";rb.onclick=()=>{if(!confirm("Discard your saved edits and restore the original content?"))return;send({action:"del",id:contentId()});toast("Reverting…");setTimeout(()=>location.reload(),900)};bar.appendChild(rb);
+  const rb=document.createElement("button");rb.type="button";rb.id="revertpage";rb.textContent="↩️ Revert";rb.onclick=async()=>{if(!(await eodConfirm({title:"Discard your edits?",danger:true,body:"Discard your saved edits and restore the original content?",confirm:"Revert",cancel:"Keep edits"})))return;send({action:"del",id:contentId()});toast("Reverting…");setTimeout(()=>location.reload(),900)};bar.appendChild(rb);
  }
  const selEl=document.getElementById("sel");
  if(gate.teacher&&selEl){selEl.onchange=()=>{

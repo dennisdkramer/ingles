@@ -308,6 +308,56 @@ ok('nothing rewrites the stylesheet href at load',
 ok('the control bar shows no email and carries no account span',
   !/id="acct"/.test(html) && !/Signed in: <b>/.test(html));
 
+/* THE CONFIRMATION DIALOG IS THE SITE'S OWN (owner instruction 2026-11-09: "Clear page" and every future
+   confirm must be site-generated, never a browser popup). Five distinct things could go wrong, so five
+   checks: a call site still reaching for the browser dialog; the two copies of eodConfirm drifting; a name
+   or email being parsed as HTML; a dialog that cannot be dismissed; a dialog that leaves its backdrop behind
+   or stacks a second one. The block-identity check is the one that keeps engine1.js (203 lesson pages) and
+   index.html (which loads no engine) from silently diverging. */
+const siteFiles = ['engine1.js', 'engine2.js', 'index.html'].map(f => [f, fs.readFileSync(f, 'utf8')]);
+const popupCallers = siteFiles.filter(([, t]) => /(^|[^.\w'"])confirm\s*\(/.test(t)).map(([f]) => f);
+ok('no site file calls the browser dialog', popupCallers.length === 0, popupCallers.join(',') || 'none');
+const sharedBlock = t => {
+  const a = t.indexOf('/* == SHARED SOURCE: eodConfirm'), b = t.indexOf('/* == /SHARED SOURCE: eodConfirm == */');
+  return (a < 0 || b < 0) ? null : t.slice(a, b);
+};
+const blkEngine = sharedBlock(siteFiles[0][1]), blkIndex = sharedBlock(siteFiles[2][1]);
+ok('the dialog is one source, duplicated byte-identically',
+  !!blkEngine && blkEngine === blkIndex,
+  blkEngine ? (blkEngine === blkIndex ? blkEngine.length + ' chars, identical' : 'the two copies DIFFER')
+    : 'no SHARED SOURCE block');
+ok('the dialog is drawn above every overlay the site has',
+  /\.dlgwrap\{[^}]*z-index:1000/.test(css));
+
+/* behaviour, driven for real: Enter accepts, Escape and a backdrop click refuse, nothing is left behind */
+const pYes = w.eval('eodConfirm({title:"Remove this student?",body:"Remover aluno <b>Ana</b>?",'
+  + 'confirm:"Remove",cancel:"Keep",danger:true})');
+const dlgEl = d.querySelector('.dlg');
+ok('eodConfirm draws a site dialog, not a browser popup',
+  !!d.querySelector('.dlgwrap') && !!dlgEl && dlgEl.getAttribute('role') === 'dialog'
+  && dlgEl.getAttribute('aria-modal') === 'true');
+ok('a name is rendered as text, never parsed as HTML',
+  d.querySelector('.dlgbody').textContent === 'Remover aluno <b>Ana</b>?'
+  && d.querySelector('.dlgbody').childElementCount === 0,
+  d.querySelector('.dlgbody').innerHTML);
+ok('a destructive confirm is marked danger', !!dlgEl && dlgEl.classList.contains('danger'));
+d.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+ok('Enter accepts', (await pYes) === true);
+ok('the dialog leaves nothing behind', !d.querySelector('.dlgwrap'));
+const pNo = w.eval('eodConfirm({title:"t",body:"b"})');
+d.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+ok('Escape refuses', (await pNo) === false);
+const pBg = w.eval('eodConfirm({title:"t",body:"b"})');
+d.querySelector('.dlgwrap').dispatchEvent(new w.MouseEvent('mousedown', { bubbles: true }));
+ok('a click on the backdrop refuses', (await pBg) === false);
+const p1 = w.eval('eodConfirm({title:"one",body:"1"})');
+const p2 = w.eval('eodConfirm({title:"two",body:"2"})');
+ok('only one dialog is ever on screen', d.querySelectorAll('.dlgwrap').length === 1);
+ok('a replaced dialog settles false instead of hanging', (await p1) === false);
+d.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+await p2;
+
+
 console.log('\nstudent landing index — jsdom render');
 out.forEach(r => console.log('  ' + (r.pass ? '✅ ' : '❌ ') + r.name + (r.extra ? '  «' + r.extra + '»' : '')));
 const fails = out.filter(r => !r.pass).length;
