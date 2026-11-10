@@ -3847,6 +3847,9 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
     /* how many cards this train puts out (= its cars, capped at eight) */
     var need = 0;
     var lives = 2, done = false, busy = false, built = false;
+    /* hits scored by the attempt in progress: a wrecked train is laid again, and this is what tells the
+       retry how much of the score belonged to the attempt being abandoned */
+    var attemptHits = 0;
     /* the slot each car carries, in slot order — one entry per car (see build) */
     var slotOf = [];
 
@@ -4065,16 +4068,16 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       cars[k].appendChild(load);
       cars[k].classList.add('loaded');
       cars[k].classList.add(hit ? 'ok' : 'no');
-      if (hit) r.score = (r.score || 0) + 1;
-      /* the HUD is the live score and this game scores a card as it LANDS, not through the runner's own
-         answer path — without this the card would stand at whatever it read when the train pulled in */
-      if (r.hud) r.hud();
-      else {
+      if (hit) {
+        r.score = (r.score || 0) + 1;
+        attemptHits++;
+      } else {
         wrongs++;
-        /* ONLY A WORD TOO FAR BACK IS FATAL: its own slot allows more room than the opening it landed
-           in, so it stands up through the deck and bursts where the growth ends. Too far forward leaves
-           a gap instead — the crash is not symmetric, and that asymmetry is the lesson. */
-        if (w.home < slotOf[k]) {
+        /* ONLY A WORD PUT IN A CAR FURTHER BACK THAN ITS OWN IS FATAL: its own slot allows more headroom
+           than the deck it landed on, so it stands up through the load beside it and bursts where the
+           growth ends. Too far FORWARD leaves a gap instead — the crash is not symmetric, and that
+           asymmetry is the lesson. */
+        if (slotOf[k] > w.home) {
           if (burstCar < 0) burstCar = k;
           r.later(function () {
             if (!cars[k] || cars[k].querySelector('.g4-tburst')) return;
@@ -4083,6 +4086,12 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
           }, r.reduced ? 60 : 260);
         }
       }
+      /* the HUD is the live score and this game scores a card as it LANDS, not through the runner's own
+         answer path — without this the card would stand at whatever it read when the train pulled in.
+         (This used to sit in an `else` branch of the `if (hit)` above, which meant a wrong card was only
+         ever counted when the runner had no HUD — so `wrongs` stayed at zero, every train was stamped
+         CLEARED, and no card could ever burst.) */
+      if (r.hud) r.hud();
       placed++;
       if (r.sound) SFX.clank(r.sound);
       if (placed >= need) {
@@ -4110,12 +4119,28 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
         if (r.sound) { SFX.horn(r.sound); r.later(function () { SFX.chuff(r.sound); }, 280); }
       }
       burstCar = -1;
-      r.later(next, r.reduced ? 320 : 1500);
+      /* A WRECK DOES NOT END THE BLOCK WHILE A HEART IS LEFT (qa/NOTES.md 199): the same train is laid
+         again with its cars empty and the words are handed out afresh. The hearts are the ATTEMPTS, so the
+         run ends when the last one is spent — otherwise "one train, two hearts" would have meant that a
+         single wrong adjective finished the block and the second heart was decoration. */
+      if (bad) r.later(lives > 0 ? retry : finish, r.reduced ? 320 : 1500);
+      else r.later(next, r.reduced ? 320 : 1500);
+    }
+
+    /* the same train again: the abandoned attempt's own hits come back off the score, because what a
+       finished block shows is the attempt that finished it, not the sum of every try */
+    function retry() {
+      if (done) return;
+      if (attemptHits) r.score = Math.max(0, (r.score || 0) - attemptHits);
+      attemptHits = 0;
+      if (r.hud) r.hud();
+      reset();
+      train.classList.add('in');        /* it comes back in from the left, the way a train arrives */
     }
 
     function next() {
       ti++;
-      if (ti >= trains.length || lives <= 0) { finish(); return; }
+      if (ti >= trains.length) { finish(); return; }
       reset();
     }
 
