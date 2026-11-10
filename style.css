@@ -9,7 +9,21 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&display=swap');
 :root{--cream:#f4eddd;--paper:#fdfaf2;--ink:#182136;--tan:#b9854c;--rose:#d9c1ba;--ptw:#96601f;--blue:#1d4ed8;--dkblue:#1e3a8a;--bluebg:rgba(29,78,216,.16)}
-*{box-sizing:border-box}body{margin:0;font:17px/1.6 serif;background:var(--cream);color:var(--ink)}
+/* TYPOGRAPHY (owner instruction 2026-11-09): the site is SERIF, everywhere. --serif is the default every element
+   inherits, and it is the only type stack a page/teacher view may use. Georgia leads it because it was drawn for
+   screens, it ships on Windows and macOS, it carries the Portuguese accents and the IPA the dictionary uses
+   (`#nbKey` already trusted it for exactly that), and where it is absent — Android — the generic `serif` resolves
+   to Noto Serif, which has full IPA coverage.
+   --ui-tight is the ONE exception and it exists for a stated reason: the game chrome (.g4-*) is 9-13px text in
+   fixed-size tiles and badges with `nowrap`+ellipsis (76px pick buttons, 14px-tall rungs), where it reads as an
+   instrument panel rather than as prose, and where a font swap would move every metric inside a box that cannot
+   grow. It is deliberately ONE custom property: set `--ui-tight:var(--serif)` to make the games serif too. */
+:root{--serif:Georgia,'Iowan Old Style','Palatino Linotype','Book Antiqua','Times New Roman',serif;
+      --ui-tight:'Public Sans',system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;font:17px/1.6 var(--serif);background:var(--cream);color:var(--ink)}
+/* form controls default to the UA's sans-serif in every engine, which is how sans reached the teacher page
+   (the book dropdowns and their selects) while the text around them was serif */
+button,input,select,textarea{font-family:inherit}
 header.brand{width:1400px;margin-left:15px;text-align:center;padding:20px 14px 0}
 .control-bar{width:1400px;margin:10px 0 0 15px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:8px 14px;font-size:13px;text-align:center}
 
@@ -37,7 +51,7 @@ main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
 .content-area input.gap,.content-area textarea{cursor:text}
 .card{background:var(--paper);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--tan);padding:14px 18px;margin:14px 0}
 .row{margin:6px 0}
-button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;margin:4px 4px 4px 0;font:600 14px 'Public Sans';cursor:pointer;box-shadow:3px 3px 0 var(--tan)}
+button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;margin:4px 4px 4px 0;font:600 14px var(--serif);cursor:pointer;box-shadow:3px 3px 0 var(--tan)}
 
 /* one shared hover/press for EVERY button */
 button{transition:transform .09s ease,filter .12s ease}
@@ -65,8 +79,8 @@ mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-positio
 .pop button{padding:4px 7px;margin:0;font-size:12.5px;border-radius:8px;box-shadow:2px 2px 0 var(--tan);height:24px;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
 .poprow{display:flex;justify-content:space-between;align-items:center;gap:4px;margin:3px 0}
 .poprow + .poprow{margin-top:5px}
-#nbNote{margin:2px 0 4px;white-space:pre-wrap;font-size:16px;text-align:center;font-style:italic;font-family:Georgia,'Times New Roman',serif}
-#nbKey{margin:2px 0 4px;white-space:pre-wrap;font-size:18px;text-align:center;font-family:Georgia,'Times New Roman',serif;color:var(--ptw)}
+#nbNote{margin:2px 0 4px;white-space:pre-wrap;font-size:16px;text-align:center;font-style:italic;font-family:var(--serif)}
+#nbKey{margin:2px 0 4px;white-space:pre-wrap;font-size:18px;text-align:center;font-family:var(--serif);color:var(--ptw)}
 
 /* a popup button that does not apply yet is greyed out (FUNCTION.md) */
 .pop button:disabled,.pop button.locked{opacity:.45;box-shadow:2px 2px 0 var(--tan);cursor:default}
@@ -115,7 +129,7 @@ footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#
 #printRoot{display:none}
 
 h2{border-bottom:2px solid var(--rose);padding-bottom:6px;margin-top:1.6em}
-h2 .h2sub{font-family:'Public Sans',sans-serif;font-size:.55em;font-weight:400;letter-spacing:.03em;color:#8a8072}
+h2 .h2sub{font-family:var(--serif);font-size:.55em;font-weight:400;letter-spacing:.03em;color:#8a8072}
 /* A CHART IS A BLOCK; its columns/rows are content-aware, never set here */
 .chart{border-collapse:collapse;width:100%;margin:14px 0;background:var(--paper);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--tan)}
 
@@ -328,7 +342,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .target{position:absolute;left:0;top:0;width:118px;height:104px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;cursor:crosshair;will-change:transform;z-index:2}
 .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;border-radius:8px}
 .target svg{display:block;width:118px;height:74px;color:#f3b23c}
-.target .plaque{display:block;margin:-4px auto 0;width:fit-content;max-width:118px;padding:2px 8px;background:#fff3d6;border:2px solid #8a5a1b;border-radius:6px;box-shadow:2px 2px 0 #8a5a1b;font:700 14px 'Public Sans',sans-serif;color:#4a2f0c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.target .plaque{display:block;margin:-4px auto 0;width:fit-content;max-width:118px;padding:2px 8px;background:#fff3d6;border:2px solid #8a5a1b;border-radius:6px;box-shadow:2px 2px 0 #8a5a1b;font:700 14px var(--serif);color:#4a2f0c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .target.ufo svg{color:#8fb7c9}
 .target.ufo .plaque{background:#e8f1ff;border-color:#2f5d86;box-shadow:2px 2px 0 #2f5d86;color:#153247}
 .target.hit svg{color:#2f9e44}
@@ -367,7 +381,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 
 
 .g4-intro .game-how{max-width:62ch;margin:0}
-.g4-intro-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:0;padding:0;list-style:none;font:600 13px 'Public Sans',sans-serif;color:var(--ink)}
+.g4-intro-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:0;padding:0;list-style:none;font:600 13px var(--ui-tight);color:var(--ink)}
 .g4-intro-meta li{padding:3px 11px;background:#fff8ea;border:2px solid var(--tan);border-radius:999px}
 .g4-intro-meta b{font-weight:800}
 .g4-intro .game-start{font-size:16px;padding:10px 22px}
@@ -405,20 +419,20 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
    on and go again with it, for every game. */
 .g4-hud,.g4-hearts{opacity:0;transition:opacity .25s ease}
 .game.g4-ready.is-on .g4-hud,.game.g4-ready.is-on .g4-hearts{opacity:1}
-.g4-hud{position:absolute;right:20px;top:20px;z-index:5;display:flex;flex-direction:row-reverse;align-items:flex-start;gap:10px;font:700 14px 'Public Sans',sans-serif;color:var(--ink)}
+.g4-hud{position:absolute;right:20px;top:20px;z-index:5;display:flex;flex-direction:row-reverse;align-items:flex-start;gap:10px;font:700 14px var(--ui-tight);color:var(--ink)}
 .g4-hud .score{min-width:2.6em;padding:3px 12px;text-align:center;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);font:700 22px/1.2 'Playfair Display',serif;letter-spacing:.14em}
 .g4-hud .clock{min-width:3.2em;text-align:right}
 /* the score of the run that has ENDED: the same corner the live score sits in, two lines — the word above
    the number, both centred — so on the intro screen after a run the block still answers "how did I do?"
    in the place the answer will be given while playing. It is the block's only final score: nothing is
    printed under the block. Hidden during a run, and until a run has finished. */
-.g4-prev{position:absolute;right:20px;top:20px;z-index:6;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:66px;padding:4px 12px 6px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);font:700 12px 'Public Sans',sans-serif;color:var(--ink);opacity:0;transition:opacity .25s ease;pointer-events:none}
+.g4-prev{position:absolute;right:20px;top:20px;z-index:6;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:66px;padding:4px 12px 6px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);font:700 12px var(--ui-tight);color:var(--ink);opacity:0;transition:opacity .25s ease;pointer-events:none}
 .g4-prev b{font:700 20px/1.15 'Playfair Display',Georgia,serif;letter-spacing:.1em}
 .game.g4-ready:not(.is-on) .g4-prev.on{opacity:1}
 /* hearts: a game that reports lives shows them in the stage's TOP-LEFT corner, 20px in, on the same
    card as the score. A spent life is a hollow heart rather than a missing one, so the row is the same
    width all run and a life lost reads as a heart going out. */
-.g4-hearts{position:absolute;left:20px;top:20px;z-index:5;display:flex;gap:2px;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);font:700 18px/1 system-ui,sans-serif;letter-spacing:1px;color:#d64545}
+.g4-hearts{position:absolute;left:20px;top:20px;z-index:5;display:flex;gap:2px;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);font:700 18px/1 var(--ui-tight);letter-spacing:1px;color:#d64545}
 .g4-heart{opacity:.26}
 .g4-heart.full{opacity:1}
 .g4-prompt{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:4;max-width:calc(100% - 240px);padding:5px 16px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);font-weight:700;font-size:15px;text-align:center;opacity:0;transition:opacity .28s ease}
@@ -428,7 +442,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-timebar i{display:block;height:100%;width:100%;background:#2f9e44;transition:width .1s linear,background .2s}
 .g4-timebar.low i{background:#c92a2a}
 /* ---- engine4.js games, part 2: each game styles itself; only the shared furniture is common ---- */
-.g4-again,.g4-lever{margin:8px auto 0;display:block;padding:6px 12px;background:var(--ink);color:var(--cream);border:0;border-radius:10px;font:700 13px 'Public Sans',sans-serif;box-shadow:3px 3px 0 var(--tan);cursor:pointer}
+.g4-again,.g4-lever{margin:8px auto 0;display:block;padding:6px 12px;background:var(--ink);color:var(--cream);border:0;border-radius:10px;font:700 13px var(--ui-tight);box-shadow:3px 3px 0 var(--tan);cursor:pointer}
 /* skeetRange */
 /* raceLane */
 /* stackDrop: a tower you build out of answers. There is no question on the stage — the task is telling
@@ -445,7 +459,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 /* the tower stands between the card and the middle of the stage: half the width the answer row has, so a
    block reads as a BLOCK and not as a banner, with the climber hanging off its left face. A block is
    exactly as tall as the tray's blocks (set in px from the engine, from the run's own length) */
-.g4-layer{position:absolute;left:var(--tw);width:var(--tww);height:26px;display:flex;align-items:center;justify-content:center;padding:1px 9px;overflow:hidden;text-align:center;border-radius:9px;font:700 12.5px 'Public Sans',sans-serif;line-height:1.1;box-shadow:3px 3px 0 var(--tan);background:#e6eef2;border:2px solid #8b98a8;color:#31404f;animation:g4land .3s cubic-bezier(.3,1.4,.6,1)}
+.g4-layer{position:absolute;left:var(--tw);width:var(--tww);height:26px;display:flex;align-items:center;justify-content:center;padding:1px 9px;overflow:hidden;text-align:center;border-radius:9px;font:700 12.5px var(--ui-tight);line-height:1.1;box-shadow:3px 3px 0 var(--tan);background:#e6eef2;border:2px solid #8b98a8;color:#31404f;animation:g4land .3s cubic-bezier(.3,1.4,.6,1)}
 .g4-layer.mark-ok{background:#e8f7ee;border-color:#2f9e44;color:#1d5c2c}
 .g4-layer.mark-no{background:#fdeaea;border-color:#c92a2a;color:#7d1f1f}
 .g4-layer.mark-no.fall{animation:g4tumble .52s ease-in forwards}
@@ -481,7 +495,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-bossart.down{animation:g4bossdown .9s ease-in forwards}
 @keyframes g4bossdown{to{transform:translateX(-50%) translateY(22px) rotate(-6deg);opacity:.28}}
 /* the answer block in flight, from the tray to the top of the tower */
-.g4-flyblk{position:absolute;z-index:8;min-width:46px;max-width:72%;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:9px;color:var(--ink);font:700 12.5px 'Public Sans',sans-serif;text-align:center;pointer-events:none;box-shadow:3px 3px 0 var(--tan);transition:transform .3s cubic-bezier(.4,1,.5,1),opacity .3s ease}
+.g4-flyblk{position:absolute;z-index:8;min-width:46px;max-width:72%;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:9px;color:var(--ink);font:700 12.5px var(--ui-tight);text-align:center;pointer-events:none;box-shadow:3px 3px 0 var(--tan);transition:transform .3s cubic-bezier(.4,1,.5,1),opacity .3s ease}
 .g4-flyblk.go{opacity:.85}
 .g4-padbtn.lifted{box-shadow:6px 6px 0 var(--ink);cursor:grabbing;pointer-events:none}
 .g4-towerpads{position:absolute;right:10px;bottom:10px;display:flex;flex-direction:column;gap:30px;width:150px;height:auto}
@@ -489,13 +503,13 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-towerpads .g4-padbtn{flex:0 0 auto;min-height:44px}
 /* the answer row shared by ladderRun and bossRaid, plus their poster stills */
 .g4-raceopts{display:flex;gap:8px;position:absolute;left:10px;right:10px;bottom:10px}
-.g4-raceopt{flex:1 1 0;min-width:0;padding:8px 10px;margin:0;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);font:700 13.5px 'Public Sans',sans-serif;color:var(--ink);cursor:pointer}
+.g4-raceopt{flex:1 1 0;min-width:0;padding:8px 10px;margin:0;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);font:700 13.5px var(--ui-tight);color:var(--ink);cursor:pointer}
 .g4-raceopt.ok{border-color:#2f9e44;background:#e8f7ee}
 .g4-raceopt.no{border-color:#c92a2a;background:#fdeaea}
 .g4-raceopt.reveal{border-style:dashed;border-color:#2f9e44}
 .g4-marker{position:absolute;left:68px;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:11px solid var(--ink);transition:bottom .3s ease}
 .g4-slot,.g4-car{border-radius:6px;background:var(--ink);border:2px solid var(--tan)}
-.g4-padbtn{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;padding:0 8px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);color:var(--ink);font:700 13px 'Public Sans',sans-serif;line-height:1.1;cursor:pointer;overflow:hidden}
+.g4-padbtn{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;padding:0 8px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);color:var(--ink);font:700 13px var(--ui-tight);line-height:1.1;cursor:pointer;overflow:hidden}
 .g4-padbtn.ok{border-color:#2f9e44;background:#e8f7ee}
 .g4-padbtn.no{border-color:#c92a2a;background:#fdeaea}
 .g4-padbtn.reveal{border-style:dashed;border-color:#2f9e44}
@@ -512,7 +526,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-walls{position:absolute;top:0;bottom:0;left:0;width:100px;will-change:transform}
 .g4-seg{position:absolute;left:0;right:0;background:linear-gradient(#9aa9b6,#7f8f9e);border-top:2px solid #61707d;border-bottom:2px solid #61707d;box-shadow:inset 0 0 0 2px rgba(255,255,255,.16)}
 .g4-gapg{position:absolute;left:0;right:0;display:flex;align-items:center;justify-content:center;padding:0 4px;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:inherit;pointer-events:none}
-.g4-gapg-t{display:block;padding:2px 8px;background:var(--paper);border-radius:6px;font:700 18px 'Public Sans',sans-serif;line-height:1.1;text-align:center;white-space:nowrap;color:#3a3f47;opacity:1}
+.g4-gapg-t{display:block;padding:2px 8px;background:var(--paper);border-radius:6px;font:700 18px var(--ui-tight);line-height:1.1;text-align:center;white-space:nowrap;color:#3a3f47;opacity:1}
 .g4-gapg.ok .g4-gapg-t{background:#e8f7ee;color:#1d5c2c;opacity:1}
 .g4-gapg.no .g4-gapg-t{background:#fdeaea;color:#7d1f1f;opacity:1}
 .g4-gapg.reveal .g4-gapg-t{background:#e8f7ee;color:#1d5c2c;outline:2px dashed #2f9e44;opacity:1}
@@ -534,7 +548,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-discs{position:absolute;inset:0}
 .g4-target{position:absolute;left:0;top:0;width:112px;height:58px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:crosshair;transform:translate(0,0);will-change:transform}
 .g4-ring{position:absolute;left:50%;top:0;width:58px;height:58px;margin-left:-29px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#fff8ea 0 30%,var(--tan) 31% 42%,#fff8ea 43% 58%,var(--ink) 59% 66%,#fff8ea 67%);box-shadow:2px 2px 0 rgba(24,33,54,.22)}
-.g4-target-t{position:absolute;left:50%;top:29px;transform:translate(-50%,-50%);max-width:104px;padding:2px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 13px 'Public Sans',sans-serif;line-height:1.18;white-space:nowrap;overflow:hidden}
+.g4-target-t{position:absolute;left:50%;top:29px;transform:translate(-50%,-50%);max-width:104px;padding:2px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 13px var(--ui-tight);line-height:1.18;white-space:nowrap;overflow:hidden}
 .g4-target:hover .g4-target-t{border-color:#1d4ed8}
 .g4-target.ok .g4-target-t{border-color:#2f9e44;background:#e8f7ee}
 .g4-target.ok .g4-ring{background:radial-gradient(circle at 50% 50%,#e8f7ee 0 30%,#2f9e44 31% 42%,#e8f7ee 43% 58%,#2f9e44 59% 66%,#e8f7ee 67%)}
@@ -630,7 +644,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-mprompt{position:absolute;left:0;top:calc(30% + 60px);bottom:54px;width:calc(12.5% + 148px);z-index:3;display:flex;
   align-items:center;justify-content:center;padding:8px 10px;overflow:hidden;background:var(--paper);
   border:2px solid var(--ink);border-radius:11px;box-shadow:3px 3px 0 var(--tan);
-  font:700 13px/1.28 'Public Sans',sans-serif;text-align:center;opacity:0;transition:opacity .2s ease}
+  font:700 13px/1.28 var(--ui-tight);text-align:center;opacity:0;transition:opacity .2s ease}
 .g4-mprompt.in{opacity:1}
 .g4-door{position:relative;flex:1 1 0;min-width:0;max-width:124px;height:100%;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;overflow:visible}
 /* the word's BOTTOM edge is pinned to the doorway's TOP edge: it hangs off the door it belongs to,
@@ -638,7 +652,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 /* the answer card is a FIXED width — the doorway's own width plus 30px — so every word hangs over its
    door in the same sized card whatever it says, and the row of cards never comes out ragged. It is a
    child of the doorway, so `100%` IS the door's width and the card follows the door if the doors shrink. */
-.g4-doorsign{position:absolute;left:50%;bottom:100%;z-index:3;width:calc(100% + 30px);margin-bottom:4px;padding:4px 9px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 12.5px 'Public Sans',sans-serif;line-height:1.15;text-align:center;overflow-wrap:break-word;transition:border-color .15s ease,background .15s ease,transform .15s ease;transform:translateX(-50%)}
+.g4-doorsign{position:absolute;left:50%;bottom:100%;z-index:3;width:calc(100% + 30px);margin-bottom:4px;padding:4px 9px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 12.5px var(--ui-tight);line-height:1.15;text-align:center;overflow-wrap:break-word;transition:border-color .15s ease,background .15s ease,transform .15s ease;transform:translateX(-50%)}
 .g4-door:hover .g4-doorsign{border-color:#1d4ed8;transform:translateX(-50%) translateY(-2px)}
 /* the doorway: a dark opening, the two leaves hung on the OUTER jambs so the door SPLITS down the
    middle, and the snake waiting inside. The jamb ring is drawn over the leaves, so the boards sit
@@ -695,17 +709,17 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-wordle{position:absolute;left:12px;right:12px;top:44px;bottom:8px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;column-gap:12px}
 .g4-wmain{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
 .g4-wclue{justify-self:end;align-self:center;max-width:26ch;text-align:right}
-.g4-wclue-t{display:block;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:2px 2px 0 var(--tan);font:700 12.5px 'Public Sans',sans-serif;line-height:1.25}
-.g4-wmsg{justify-self:start;align-self:center;max-width:26ch;opacity:0;padding:5px 11px;background:var(--paper);border:2px solid #c92a2a;border-radius:10px;box-shadow:2px 2px 0 rgba(201,42,42,.42);font:700 12.5px 'Public Sans',sans-serif;line-height:1.25;color:var(--ink)}
+.g4-wclue-t{display:block;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:2px 2px 0 var(--tan);font:700 12.5px var(--ui-tight);line-height:1.25}
+.g4-wmsg{justify-self:start;align-self:center;max-width:26ch;opacity:0;padding:5px 11px;background:var(--paper);border:2px solid #c92a2a;border-radius:10px;box-shadow:2px 2px 0 rgba(201,42,42,.42);font:700 12.5px var(--ui-tight);line-height:1.25;color:var(--ink)}
 .g4-wmsg.show{animation:g4msg 3s ease forwards}
 @keyframes g4msg{0%{opacity:0}17%{opacity:1}83%{opacity:1}100%{opacity:0}}
 .g4-wgrid{display:flex;flex-direction:column;gap:4px}
 .g4-wrow{display:flex;gap:4px;justify-content:center}
-.g4-tile{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:2px solid var(--tan);border-radius:6px;font:800 15px 'Public Sans',sans-serif;background:var(--paper)}
+.g4-tile{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:2px solid var(--tan);border-radius:6px;font:800 15px var(--ui-tight);background:var(--paper)}
 .g4-tile.ok{background:#2f9e44;border-color:#2f9e44;color:#fff}
 .g4-tile.near{background:#d9a13c;border-color:#d9a13c;color:#fff}
 .g4-tile.no{background:#9aa4b2;border-color:#9aa4b2;color:#fff}
-.g4-wtype{width:200px;padding:7px 10px;border:2px solid var(--ink);border-radius:8px;font:700 14px 'Public Sans',sans-serif;text-align:center}
+.g4-wtype{width:200px;padding:7px 10px;border:2px solid var(--ink);border-radius:8px;font:700 14px var(--ui-tight);text-align:center}
 .g4-wbg{position:absolute;inset:0;color:var(--ink);opacity:.55;pointer-events:none}
 .g4-wbg svg{display:block;width:100%;height:100%}
 
@@ -716,8 +730,8 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-xcell{position:relative;width:100%;height:100%}
 .g4-xcell.small{font-size:12px}
 .g4-xblock{width:100%;height:100%;border-radius:3px;background:rgba(24,33,54,.10)}
-.g4-xnum{position:absolute;left:3px;top:1px;font:700 calc(14px + 1pt) 'Public Sans',sans-serif;line-height:1;color:#444;text-shadow:0 1px 0 rgba(255,255,255,.9);pointer-events:none}
-.g4-xclue{flex:0 1 32%;min-width:104px;max-width:34%;padding:8px 12px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:2px 2px 0 var(--tan);font:700 calc(13px + 1pt) 'Public Sans',sans-serif;line-height:1.35;text-align:center;opacity:0;transition:opacity .2s ease}
+.g4-xnum{position:absolute;left:3px;top:1px;font:700 calc(14px + 1pt) var(--ui-tight);line-height:1;color:#444;text-shadow:0 1px 0 rgba(255,255,255,.9);pointer-events:none}
+.g4-xclue{flex:0 1 32%;min-width:104px;max-width:34%;padding:8px 12px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:2px 2px 0 var(--tan);font:700 calc(13px + 1pt) var(--ui-tight);line-height:1.35;text-align:center;opacity:0;transition:opacity .2s ease}
 .g4-xclue.on{opacity:1}
 /* ladderRun: a full-height rail, a climber, and the PROMPT waiting at the top of the climb */
 .g4-ltrack{position:absolute;left:0;right:0;top:0;bottom:64px;outline:none}
@@ -728,30 +742,30 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-lclimber.slip{animation:g4shake .34s ease}
 .g4-lclimber.at-top{animation:g4cheer .5s ease 2}
 /* the prompt IS the top of the ladder: the question he climbs to, hung off the top rung beside the rail */
-.g4-lprompt{position:absolute;left:74px;right:2px;top:0;min-height:54px;display:flex;align-items:center;justify-content:center;padding:8px 10px;overflow:hidden;background:var(--paper);border:2px solid var(--ink);border-radius:11px;box-shadow:3px 3px 0 var(--tan);font:700 13px/1.25 'Public Sans',sans-serif;text-align:center;transition:transform .3s ease}
+.g4-lprompt{position:absolute;left:74px;right:2px;top:0;min-height:54px;display:flex;align-items:center;justify-content:center;padding:8px 10px;overflow:hidden;background:var(--paper);border:2px solid var(--ink);border-radius:11px;box-shadow:3px 3px 0 var(--tan);font:700 13px/1.25 var(--ui-tight);text-align:center;transition:transform .3s ease}
 .g4-lprompt-t{position:relative;z-index:1}
 /* the paint goes ON the board, over the words: opaque enough to cover the prompt it was thrown at */
 .g4-lpaint{position:absolute;inset:-8px;z-index:2;opacity:0;pointer-events:none;transition:opacity .35s ease}
 .g4-lpaint .g4-art{display:block;width:100%;height:100%}
 .g4-lprompt.painted{transform:rotate(-1.6deg) scale(1.04)}
 .g4-lprompt.painted .g4-lpaint{opacity:1}
-.g4-gap{width:100%;height:100%;text-align:center;text-transform:uppercase;border:2px solid var(--ink);border-radius:6px;font:800 15px 'Public Sans',sans-serif;background:var(--paper)}
+.g4-gap{width:100%;height:100%;text-align:center;text-transform:uppercase;border:2px solid var(--ink);border-radius:6px;font:800 15px var(--ui-tight);background:var(--paper)}
 .g4-gap.from{background:#fff8ea;border-color:var(--tan)}
 .g4-gap.ok{border-color:#2f9e44;background:#e8f7ee}
 .g4-gap.no{border-color:#c92a2a;background:#fdeaea}
 /* echoPads / bingoCard */
 /* echoPads: the sentence being built, the pad row that says which word comes next */
 .g4-echo{position:absolute;left:12px;right:12px;top:44px;bottom:10px;display:flex;flex-direction:column;justify-content:center;gap:10px}
-.g4-echo-say{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:7px 12px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);font:700 15px 'Public Sans',sans-serif;line-height:1.25}
+.g4-echo-say{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:7px 12px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);font:700 15px var(--ui-tight);line-height:1.25}
 .g4-echo-w{padding:1px 7px;background:#e8f7ee;border:2px solid #2f9e44;border-radius:7px;animation:g4land2 .28s ease}
 .g4-echo-w.given{background:#fff8ea;border-style:dashed;border-color:var(--tan)}
 .g4-echo-cursor{color:var(--tan);animation:g4blink 1s steps(2) infinite}
 .g4-echo-blank{color:var(--tan)}
-.g4-echo-hint{min-height:1.5em;text-align:center;font:700 12.5px 'Public Sans',sans-serif;line-height:1.3;color:#fff}
+.g4-echo-hint{min-height:1.5em;text-align:center;font:700 12.5px var(--ui-tight);line-height:1.3;color:#fff}
 @keyframes g4blink{50%{opacity:.15}}
 @keyframes g4land2{from{transform:scale(.72);opacity:0}to{transform:none;opacity:1}}
 .g4-pads{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.g4-pad{min-height:56px;padding:8px;background:var(--paper);border:3px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--tan);color:var(--ink);font:700 14px 'Public Sans',sans-serif;cursor:pointer;transition:transform .12s ease,background .15s ease}
+.g4-pad{min-height:56px;padding:8px;background:var(--paper);border:3px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--tan);color:var(--ink);font:700 14px var(--ui-tight);cursor:pointer;transition:transform .12s ease,background .15s ease}
 .g4-pad:hover{border-color:#1d4ed8}
 .g4-pad.ok{border-color:#2f9e44;background:#e8f7ee}
 .g4-pad.no{border-color:#c92a2a;background:#fdeaea;animation:g4shake .34s ease}
@@ -807,11 +821,11 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-bingo.open .g4-count-rush{visibility:visible}
 @keyframes g4count{0%{opacity:0;transform:scale(.45)}22%{opacity:1;transform:scale(1.12)}
   60%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.9)}}
-.g4-btile{background:var(--paper);border:2px solid var(--ink);border-radius:10px;font:700 15px/1.15 'Public Sans',sans-serif;color:var(--ink);cursor:pointer;overflow:hidden;padding:4px 8px}
+.g4-btile{background:var(--paper);border:2px solid var(--ink);border-radius:10px;font:700 15px/1.15 var(--ui-tight);color:var(--ink);cursor:pointer;overflow:hidden;padding:4px 8px}
 /* the round's own start: nothing is said until the student asks to hear it, so the one chance at the
    word is a decision they made rather than a sound that arrived while they were reading the page */
 .g4-begin{flex:0 0 auto;padding:7px 16px;background:var(--ink);color:var(--cream);border:0;border-radius:10px;
-  font:700 13px 'Public Sans',sans-serif;box-shadow:3px 3px 0 var(--tan);cursor:pointer}
+  font:700 13px var(--ui-tight);box-shadow:3px 3px 0 var(--tan);cursor:pointer}
 .g4-begin:disabled{opacity:.45;cursor:default}
 .g4-btile.stamped{border-width:3px;border-style:double}
 .g4-btile.ok{border-color:#2f9e44;background:#e8f7ee}
@@ -825,7 +839,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
    the signpost only.) */
 .g4-ladder,.g4-boss{position:absolute;left:12px;right:12px;top:44px;bottom:8px}
 .g4-rungs{position:absolute;left:0;top:0;bottom:64px;width:66px;display:flex;flex-direction:column-reverse;gap:2px;overflow:hidden}
-.g4-rung{height:14px;border-radius:4px;background:#e6eef2;font:700 9px 'Public Sans',sans-serif;text-align:center;line-height:14px;color:#5a6474}
+.g4-rung{height:14px;border-radius:4px;background:#e6eef2;font:700 9px var(--ui-tight);text-align:center;line-height:14px;color:#5a6474}
 .g4-rung.safe{background:#ffe9b8;color:#7a5210}
 .g4-rung.on{background:var(--ink);color:var(--cream)}
 .g4-rung.kept{outline:2px solid #2f9e44}
@@ -886,9 +900,9 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
   100%{opacity:0;transform:rotate(30deg) scale(1.3)}}
 /* the fighter picker on the intro card: three drawings, and the one you pick is the one that fights */
 .g4-pick-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
-.g4-pick-lead{margin:0;font:700 12px 'Public Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6b7280}
+.g4-pick-lead{margin:0;font:700 12px var(--ui-tight);letter-spacing:.08em;text-transform:uppercase;color:#6b7280}
 .g4-pick{display:flex;gap:8px;justify-content:center}
-.g4-pick-btn{display:flex;flex-direction:column;align-items:center;gap:2px;width:76px;padding:5px 4px 3px;background:var(--paper);border:2px solid var(--tan);border-radius:12px;box-shadow:2px 2px 0 rgba(185,133,76,.5);color:var(--ink);font:700 11px 'Public Sans',sans-serif;cursor:pointer}
+.g4-pick-btn{display:flex;flex-direction:column;align-items:center;gap:2px;width:76px;padding:5px 4px 3px;background:var(--paper);border:2px solid var(--tan);border-radius:12px;box-shadow:2px 2px 0 rgba(185,133,76,.5);color:var(--ink);font:700 11px var(--ui-tight);cursor:pointer}
 .g4-pick-btn .g4-art{width:38px;height:46px}
 .g4-pick-t{display:block}
 .g4-pick-btn:hover{border-color:#1d4ed8}
@@ -904,7 +918,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-art{display:block;width:100%;height:100%}
 /* catchBasket — a card you drag into a basket */
 .g4-words{position:absolute;left:10px;right:10px;top:44px;bottom:132px;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;justify-content:center;align-content:flex-start;z-index:4;overflow:auto}
-.g4-chip{max-width:46%;padding:7px 14px;background:var(--paper);border:2px solid var(--ink);border-radius:999px;box-shadow:3px 3px 0 var(--tan);color:var(--ink);font:700 15px 'Public Sans',sans-serif;line-height:1.2;cursor:grab;touch-action:none;will-change:transform}
+.g4-chip{max-width:46%;padding:7px 14px;background:var(--paper);border:2px solid var(--ink);border-radius:999px;box-shadow:3px 3px 0 var(--tan);color:var(--ink);font:700 15px var(--ui-tight);line-height:1.2;cursor:grab;touch-action:none;will-change:transform}
 .g4-chip.active{border-color:var(--tan);box-shadow:3px 3px 0 var(--ink)}
 .g4-chip.dragging{cursor:grabbing;box-shadow:6px 6px 0 var(--ink);transform:scale(1.06)}
 .g4-chip.caught{border-color:#2f9e44;background:#e8f7ee}
@@ -915,7 +929,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 /* catchBasket: the options are POTS. A right answer waters the pot it belongs in and grows one flower
    there; the flowers are the run's garden, so a pot keeps every bloom it earned. Each pot's word is its
    LABEL UNDER THE POT, and the pots themselves are lifted clear of it. */
-.g4-bucket{position:relative;flex:1 1 0;min-width:0;height:134px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);font:700 14px 'Public Sans',sans-serif;line-height:1.15;text-align:center;cursor:pointer;overflow:visible}
+.g4-bucket{position:relative;flex:1 1 0;min-width:0;height:134px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);font:700 14px var(--ui-tight);line-height:1.15;text-align:center;cursor:pointer;overflow:visible}
 .g4-bucket .g4-art{position:absolute;left:0;right:0;bottom:32px;height:56px;width:100%;transition:transform .18s ease}
 .g4-bucket-t{position:absolute;left:50%;bottom:0;transform:translateX(-50%);z-index:2;display:block;max-width:100%;padding:2px 7px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);white-space:nowrap;overflow:hidden}
 /* the flowers: grown in the soil, one per right answer, side by side as the pot fills */
@@ -959,7 +973,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-dirt{position:absolute;left:0;right:0;bottom:0;height:34%;background:#4a3418;border-radius:50% 50% 0 0/60% 60% 0 0}
 .g4-mole{position:absolute;inset:4px 6px 8px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:pointer;transition:transform .24s cubic-bezier(.34,1.56,.64,1);transform:translateY(0)}
 .g4-mole .g4-art{height:74%;flex:0 0 auto}
-.g4-mole-t{display:block;max-width:100%;margin-top:-6px;padding:2px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 13px 'Public Sans',sans-serif;line-height:1.18;overflow:hidden}
+.g4-mole-t{display:block;max-width:100%;margin-top:-6px;padding:2px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 13px var(--ui-tight);line-height:1.18;overflow:hidden}
 .g4-mole:hover .g4-mole-t{border-color:#1d4ed8}
 .g4-mole.ok{transform:translateY(-4px)}
 .g4-mole.ok .g4-mole-t{border-color:#2f9e44;background:#e8f7ee}
@@ -1022,7 +1036,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
   background:repeating-linear-gradient(#8d8578 0 7px,#7a7165 7px 9px);
   border-right:2px solid #57503f}
 .g4-tsignl{position:absolute;left:12%;bottom:11px;padding:1px 7px;background:#f2c53d;
-  border:2px solid #2b3540;border-radius:5px;font:800 10px 'Public Sans',sans-serif;
+  border:2px solid #2b3540;border-radius:5px;font:800 10px var(--ui-tight);
   letter-spacing:.07em;color:#2b3540;white-space:nowrap;transform:rotate(-1.5deg)}
 /* the deck going down: the girder first, the slab a frame later, the sign after that */
 .g4-tbridge.hit .g4-tgirder{animation:g4tbfall .85s ease-in forwards}
@@ -1072,7 +1086,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 /* the slot name, on the EMPTY car only: once a block is in, the block is the car's content */
 .g4-tnum{position:absolute;left:50%;bottom:2px;transform:translateX(-50%);z-index:1;
   pointer-events:none;padding:0 4px;background:var(--paper);border:1.5px solid var(--ink);
-  border-radius:4px;font:700 9.5px/1.35 'Public Sans',sans-serif;color:var(--ink);white-space:nowrap;
+  border-radius:4px;font:700 9.5px/1.35 var(--ui-tight);color:var(--ink);white-space:nowrap;
   transition:opacity .18s ease}
 .g4-tcar.loaded .g4-tnum{opacity:0}
 .g4-tcouple{position:absolute;left:-3px;bottom:10px;width:7px;height:9px;border-radius:2px;background:#39434e}
@@ -1089,7 +1103,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-tload{position:absolute;left:5px;right:5px;bottom:100%;z-index:2;display:flex;align-items:center;
   justify-content:center;padding:2px 5px;overflow:hidden;text-align:center;
   background:var(--paper);border:2px solid var(--ink);border-radius:5px;color:var(--ink);
-  box-shadow:2px 2px 0 var(--tan);font:700 12.5px/1.12 'Public Sans',sans-serif;
+  box-shadow:2px 2px 0 var(--tan);font:700 12.5px/1.12 var(--ui-tight);
   transition:height .34s cubic-bezier(.3,1.4,.6,1)}
 /* the card arriving: it was thrown up off a man's hand, so it lands on the deck from above */
 .g4-tload.fly{animation:g4tland .4s cubic-bezier(.3,1.3,.55,1)}
@@ -1110,7 +1124,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
    sound, no score. The verdict is announced when the train has had its moment */
 .g4-tverdict{position:absolute;left:calc(var(--gap) / 2);top:34px;transform:translate(-50%,-50%);
   z-index:7;pointer-events:none;opacity:0;padding:2px 12px;border:3px solid;border-radius:9px;
-  background:rgba(253,250,242,.95);font:800 13px/1.2 'Public Sans',sans-serif;letter-spacing:.09em;
+  background:rgba(253,250,242,.95);font:800 13px/1.2 var(--ui-tight);letter-spacing:.09em;
   white-space:nowrap}
 .g4-tverdict.ok{border-color:#2f9e44;color:#1d5c2c}
 .g4-tverdict.bad{border-color:#c92a2a;color:#7d1f1f}
@@ -1122,15 +1136,15 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
   display:flex;align-items:center;gap:8px;padding:3px 7px;background:rgba(253,250,242,.92);
   border:2px solid var(--ink);border-radius:11px;box-shadow:3px 3px 0 rgba(185,133,76,.7)}
 .g4-tclock{flex:0 0 auto;min-width:64px;height:100%;padding:0 6px;background:var(--ink);border-radius:7px;
-  color:var(--cream);font:700 9px/1.1 'Public Sans',sans-serif;letter-spacing:.09em;text-align:center;
+  color:var(--cream);font:700 9px/1.1 var(--ui-tight);letter-spacing:.09em;text-align:center;
   display:flex;flex-direction:column;align-items:center;justify-content:center}
 .g4-tclock b{display:block;font:700 20px/1 'Playfair Display',Georgia,serif;letter-spacing:.03em}
 .g4-tclock.low{background:#c92a2a;animation:g4ttick .5s ease-in-out infinite alternate}
 @keyframes g4ttick{from{transform:scale(1)}to{transform:scale(1.06)}}
 .g4-tcount{flex:0 0 auto;padding:2px 9px;background:var(--paper);border:2px solid var(--ink);
-  border-radius:999px;font:700 10.5px/1.4 'Public Sans',sans-serif;letter-spacing:.05em;
+  border-radius:999px;font:700 10.5px/1.4 var(--ui-tight);letter-spacing:.05em;
   color:var(--ink);white-space:nowrap}
-.g4-tsay{flex:1 1 auto;min-width:0;text-align:center;padding:2px 8px;font:700 12.5px/1.25 'Public Sans',sans-serif;
+.g4-tsay{flex:1 1 auto;min-width:0;text-align:center;padding:2px 8px;font:700 12.5px/1.25 var(--ui-tight);
   color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;
   transition:opacity .2s ease}
 .g4-tsay.on{opacity:1}
@@ -1152,13 +1166,13 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 /* the card he holds: handed to him from the dock, thrown from this spot into the car */
 .g4-tagrip{position:relative;z-index:2;max-width:calc(100% - 2px);padding:3px 7px;background:var(--paper);
   border:2px solid var(--ink);border-radius:6px;box-shadow:2px 2px 0 var(--tan);color:var(--ink);
-  font:700 11.5px/1.1 'Public Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font:700 11.5px/1.1 var(--ui-tight);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   animation:g4thand .24s ease-out}
 @keyframes g4thand{from{opacity:0;transform:translateY(-10px) scale(.9)}to{transform:none}}
 /* the card in the dock, before it is given to anyone */
 .g4-tcard{flex:0 1 auto;min-width:0;max-width:150px;padding:5px 11px;background:var(--paper);
   border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);color:var(--ink);
-  font:700 13px/1.15 'Public Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font:700 13px/1.15 var(--ui-tight);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   cursor:grab;touch-action:none;user-select:none;transition:transform .16s ease,box-shadow .16s ease,
   border-color .16s ease}
 .g4-tcard:hover{border-color:#1d4ed8}
@@ -1253,7 +1267,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-tstripe{position:absolute;left:0;right:0;bottom:19px;height:3px;background:#d9a441;opacity:.9}
 .g4-tslot{position:absolute;left:50%;top:15px;transform:translateX(-50%);z-index:3;pointer-events:none;
   max-width:calc(100% - 8px);padding:0 5px;background:var(--paper);border:2px solid var(--ink);
-  border-radius:4px;font:700 10px/1.5 'Public Sans',sans-serif;color:var(--ink);
+  border-radius:4px;font:700 10px/1.5 var(--ui-tight);color:var(--ink);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .g4-twheel{position:absolute;bottom:-7px;width:14px;height:14px;border-radius:50%;z-index:2;
   background:radial-gradient(circle,#8b97a4 0 34%,#3a434d 36% 100%);border:2px solid #1c232a}
@@ -1270,7 +1284,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-tload{position:relative;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
   padding:1px 4px;overflow:hidden;text-align:center;background:#fff8ea;border:2px solid #6b4e26;
   border-radius:4px;box-shadow:0 2px 0 rgba(40,30,15,.22);
-  font:700 12px/1.1 'Public Sans',sans-serif;color:var(--ink);
+  font:700 12px/1.1 var(--ui-tight);color:var(--ink);
   transition:height .18s cubic-bezier(.3,1.4,.6,1)}
 .g4-tload.tall{background:#ffe8c6;border-color:#1d4ed8}
 

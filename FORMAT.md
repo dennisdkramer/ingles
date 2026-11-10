@@ -18,6 +18,7 @@
 - An item may never ask for a judgement on an axis the page never defined before the item asks for it. the item and its column headers may not be labelled with a word invented for the table.
 - Any fill-in hint/gloss sits below and center-aligned with the center of its respective input field.
 - Font sizes are fixed constants (no viewport-relative sizing).
+- **The type is SERIF, site-wide.** `style.css` sets `--serif` and every element inherits it — headings, body, buttons, form controls, tables, badges. No block, page or view may use a sans-serif face, and a new rule never names one. The single exception is `--ui-tight`, used only by the game chrome (`.g4-*`) at 9–13px in fixed-size tiles, where the text is an instrument panel rather than prose and a face swap would move metrics inside boxes that cannot grow; flipping that one property to `var(--serif)` makes even the games serif. A lesson author never reaches for a font: the face is the stylesheet's, alone.
 - Sizing philosophy: Minimum size an average person comfortably sees, clicks, reads.
 
 
