@@ -1139,7 +1139,7 @@ html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;
    front car's roof 186 · a correct block's top 286 · the deck's underside 289 · the girder to 340. */
 .game[data-game="trainOrder"] .g4-stage{height:340px}
 .g4-yard{position:absolute;inset:0;z-index:2;
-  --rail:140px;--car0:46px;--step:6px;--deck:289px;--tw:76%;--loco:8%;
+  --rail:140px;--car0:46px;--step:6px;--deck:289px;--tw:76%;
   --gap:calc((100% - var(--tw)) / 2)}
 /* the yard is a PLACE: sky above, two hazed ridges of hills on the horizon, and the ground the rails are
    laid on — not a flat beige field (qa/NOTES.md 89) */
@@ -1199,7 +1199,7 @@ html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;
    dressed, because the train is a plain one now (see the train block further down). */
 .g4-ttrain.in{animation:g4tarrive .62s cubic-bezier(.22,.9,.3,1)}
 @keyframes g4tarrive{from{transform:translateX(-128%)}to{transform:none}}
-.g4-ttrain.run{animation:g4trun var(--runms,1750ms) cubic-bezier(.45,0,.78,1) forwards}
+.g4-ttrain.run,.g4-ttrain.pull{animation:g4trun var(--runms,1750ms) cubic-bezier(.45,0,.78,1) forwards}
 @keyframes g4trun{to{transform:translateX(calc(-1 * (var(--gap) + var(--tw) + 6%)))}}
 .g4-ttrain.jolt{animation:g4tjolt .9s ease-out forwards}
 @keyframes g4tjolt{0%{transform:translateX(0)}16%{transform:translateX(-4.4%)}
@@ -1232,7 +1232,7 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
   animation:g4tfade .5s ease forwards}
 @keyframes g4tfade{to{opacity:0}}
 @media (prefers-reduced-motion:reduce){
-  .g4-ttrain.in,.g4-ttrain.run,.g4-ttrain.jolt,.g4-tcar.tilt,.g4-tburst,
+  .g4-ttrain.in,.g4-ttrain.run,.g4-ttrain.pull,.g4-ttrain.jolt,.g4-tcar.tilt,.g4-tburst,
   .g4-tbridge.hit .g4-tgirder,.g4-tbridge.hit .g4-tdeck,
   .g4-tbridge.hit .g4-tsignl,.g4-tyard.fade .g4-ttrain{animation:none}
   .g4-tload,.g4-tcard{transition:none}
@@ -1241,20 +1241,22 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
 
 /* the train: PLAIN. A locomotive and one flatbed wagon per adjective, all the same height, wheels on the
    rail — the drawn locomotive, the coal bowl and the hold box are gone with the rest of the train art
-   while the game is rebuilt. The cars are spaced across --tw and the locomotive rides in the --loco slot
-   to their left. */
+   while the game is rebuilt. The cars are spaced across --tw and the locomotive stands to their left at one
+   car pitch, so a wider stage moves engine, wagons and loaders together. */
 .g4-ttrain{position:absolute;left:var(--gap);width:var(--tw);bottom:var(--rail);height:96px;z-index:4;pointer-events:none}
-.g4-tloco{position:absolute;left:calc(var(--loco) * -1.08);bottom:0;width:calc(var(--loco) * 1.06);height:78px}
-.g4-tcab{position:absolute;left:0;bottom:12px;width:40%;height:66px;
-  background:linear-gradient(#33526c,#1e3143);border:2px solid #16232f;border-radius:6px 6px 2px 2px}
-.g4-tcab::before{content:'';position:absolute;left:16%;top:20%;width:66%;height:32%;
-  background:#cfe6f5;border:2px solid #16232f;border-radius:2px}
-.g4-tboiler{position:absolute;left:34%;bottom:18px;width:66%;height:32px;
-  background:linear-gradient(#3d5f7d,#22374a);border:2px solid #16232f;border-radius:15px 4px 4px 15px}
-.g4-tchimney{position:absolute;left:76%;bottom:50px;width:15%;height:16px;
-  background:#22374a;border:2px solid #16232f;border-radius:3px 3px 0 0}
-.g4-tdome{position:absolute;left:46%;bottom:50px;width:16%;height:12px;
-  background:#c9a227;border:2px solid #16232f;border-radius:8px 8px 0 0}
+/* the locomotive is one drawn side view (engine4.js → ART.engine). Its box is ONE CAR PITCH WIDE — a
+   little wider than a flatbed — because at the old sliver of 8% of the train the picture was too small to
+   read (qa/NOTES.md 94). Its wheels are bottom-aligned with the flatbeds' own, which hang 6px under the
+   rail line, so the whole train stands on one line. */
+.g4-tloco{position:absolute;left:calc(100% / -8 * 1.2);bottom:-6px;width:calc(100% / 8 * 1.3);height:78px}
+.g4-tloco svg{display:block;width:100%;height:100%;overflow:visible}
+/* ONE LOADER PER CAR, in front of his own deck: the crew row shares the train's own left/width, and each man
+   is placed on his car's pitch from the engine, so a wider stage moves them with the cars. He stands on the
+   ground UNDER the rail with his arms up at the deck line, so he is in front of the wagon and his hands are
+   where the adjective arrives — and he is short enough that the load on the deck stays readable above him. */
+.g4-tcrew{position:absolute;left:0;right:0;bottom:-16px;height:36px;z-index:3;pointer-events:none}
+.g4-tguy{position:absolute;bottom:0;height:36px;display:flex;align-items:flex-end;justify-content:center}
+.g4-tguy svg{display:block;width:24px;height:36px;overflow:visible}
 /* a car: one flat deck with a low kerb, wheels on the rail. Every car is the SAME height, so the train
    reads as a train rather than as a staircase; what grows is the load on the deck. */
 .g4-tcar{position:absolute;bottom:0;height:var(--car0);display:flex;align-items:flex-end;justify-content:center;
@@ -1272,17 +1274,23 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
 .g4-tcar.loaded .g4-tbody{border-color:#29313a}
 .g4-tcar.ok .g4-tbody{background:linear-gradient(#3f7d52,#2b5c3a);border-color:#1d4b2c}
 .g4-tcar.no .g4-tbody{background:linear-gradient(#8d3f3f,#6b2b2b);border-color:#4d1d1d}
-/* the block in the car: it stands ON the deck and grows to the height its own slot allows, so a word in
-   a car too far back is visibly taller than the deck it was put on */
+/* the block in the car: it stands ON the deck, above the loader (z-index 5 against the crew's 3), grows to the
+   height its slot allows, and only grows tall when the car is further back than the adjective may go */
 .g4-tbin{position:absolute;left:0;right:0;bottom:20px;
   height:calc(var(--car0) + var(--step) * var(--k) - 22px);
   display:flex;flex-direction:column-reverse}
-.g4-tload{position:relative;flex:0 0 auto;display:flex;align-items:center;justify-content:center;margin-bottom:20px;
-  padding:1px 4px;overflow:hidden;text-align:center;background:#fff8ea;border:2px solid #6b4e26;
-  border-radius:4px;box-shadow:0 2px 0 rgba(40,30,15,.22);
+.g4-tload{position:absolute;left:4px;right:4px;bottom:22px;z-index:5;display:flex;align-items:center;
+  justify-content:center;padding:1px 4px;overflow:hidden;text-align:center;background:#fff8ea;
+  border:2px solid #6b4e26;border-radius:4px;box-shadow:0 2px 0 rgba(40,30,15,.22);
   font:700 12px/1.1 var(--ui-tight);color:var(--ink);
   transition:height .18s cubic-bezier(.3,1.4,.6,1)}
 .g4-tload.tall{background:#ffe8c6;border-color:#1d4ed8}
+/* the card a drag carries, and the deck it is over */
+.g4-tghost{position:fixed;z-index:90;margin:0;pointer-events:none;cursor:grabbing;
+  transform:translate(-50%,-50%) rotate(-4deg) scale(1.06);box-shadow:7px 7px 0 rgba(24,33,54,.35)}
+.g4-tcard.lifting{opacity:.4}
+.g4-tcar.hot .g4-tbody{background:linear-gradient(#a8c6e2,#7fa2c4);border-color:#1d4ed8;
+  box-shadow:inset 0 0 0 2px rgba(29,78,216,.55),0 0 0 3px rgba(29,78,216,.22)}
 /* the blank in the prompt card: "That's a _______ car." */
 .g4-tblank{display:inline-block;min-width:92px;height:1em;margin:0 3px;border-bottom:2px solid currentColor;vertical-align:-2px}
 

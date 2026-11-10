@@ -472,10 +472,60 @@ window.GAMES4 = (function () {
       + '<rect x="25" y="24" width="10" height="12" rx="2" fill="#ffd05a" stroke="#6b4520" stroke-width="2.2"/>'
       + '<path d="M6 30h48" stroke="#6b4520" stroke-width="2"/>'
       + '</svg>',
-    /* trainOrder's locomotive, drawn facing LEFT: the train runs out of the yard to the left, so the
-       engine is at the front of it and the only way out is across the front of the bridge */
-    /* trainOrder draws its train from plain boxes and gradients now (the drawn locomotive that used to
-       live here was deleted with the rest of the train art, qa/NOTES.md 89) */
+    /* trainOrder's LOCOMOTIVE, drawn facing LEFT (the train runs out to the left, so the engine leads).
+       Redrawn AGAIN after seeing it on screen (qa/NOTES.md 94): the first redraw was still a dark blue
+       smudge against blue-grey hills with wheels smaller than the flatbeds'. This one is a BRICK-RED
+       engine with a black smokebox, brass fittings and driving wheels as big as the wagons' own — six
+       fat shapes, thick dark outlines, and nothing inside them that has to be resolved at 90px wide. */
+    engine: '<svg class="g4-art" viewBox="0 0 108 72" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false">'
+      /* the coupling rod, behind the wheels */
+      + '<rect x="22" y="55" width="72" height="4" rx="2" fill="#b9c2cc" stroke="#17181c" stroke-width="1.6"/>'
+      /* three big driving wheels, sitting exactly on the rail */
+      + '<g stroke="#17181c" stroke-width="2.6">'
+      + '<circle cx="22" cy="57" r="15" fill="#2f353c"/><circle cx="22" cy="57" r="5.4" fill="#e8eef4"/>'
+      + '<circle cx="58" cy="57" r="15" fill="#2f353c"/><circle cx="58" cy="57" r="5.4" fill="#e8eef4"/>'
+      + '<circle cx="94" cy="57" r="15" fill="#2f353c"/><circle cx="94" cy="57" r="5.4" fill="#e8eef4"/>'
+      + '</g>'
+      /* cowcatcher at the front, and the brass buffer beam above it */
+      + '<path d="M1 72l9-26h9l-6 26z" fill="#4a5a6a" stroke="#17181c" stroke-width="2" stroke-linejoin="round"/>'
+      + '<rect x="3" y="30" width="11" height="17" rx="1" fill="#e0b23a" stroke="#17181c" stroke-width="2"/>'
+      /* the boiler: a fat red cylinder with a black smokebox door at its front */
+      + '<rect x="13" y="16" width="58" height="30" rx="13" fill="#b23c33" stroke="#17181c" stroke-width="2.4"/>'
+      + '<circle cx="24" cy="31" r="16" fill="#2b2b30" stroke="#17181c" stroke-width="2.4"/>'
+      + '<circle cx="24" cy="31" r="7" fill="#d9d2c4" stroke="#17181c" stroke-width="1.6"/>'
+      + '<rect x="48" y="16" width="4" height="30" fill="#e0b23a"/>'
+      /* the funnel: a flared top on a short stack */
+      + '<rect x="15" y="3" width="15" height="15" fill="#2b2b30" stroke="#17181c" stroke-width="2"/>'
+      + '<path d="M10 3h25l-3-3H13z" fill="#2b2b30" stroke="#17181c" stroke-width="2" stroke-linejoin="round"/>'
+      /* the brass dome, as wide as it is tall so it still reads at 20px */
+      + '<path d="M54 16q6-16 19 0z" fill="#e0b23a" stroke="#17181c" stroke-width="2" stroke-linejoin="round"/>'
+      /* the cab at the back: a tall maroon box, a wide cream window, an overhanging black roof */
+      + '<rect x="70" y="6" width="36" height="40" rx="2" fill="#7d2b26" stroke="#17181c" stroke-width="2.4"/>'
+      + '<rect x="76" y="12" width="19" height="15" rx="1.5" fill="#dff0f7" stroke="#17181c" stroke-width="1.8"/>'
+      + '<path d="M67 6h41l-3-6H70z" fill="#2b2b30" stroke="#17181c" stroke-width="2" stroke-linejoin="round"/>'
+      /* the running board the wheels sit under, the headlamp on the front, the drawbar at the back */
+      + '<rect x="8" y="46" width="97" height="6" rx="2" fill="#2b2b30" stroke="#17181c" stroke-width="1.8"/>'
+      + '<circle cx="12" cy="21" r="4" fill="#ffd05a" stroke="#17181c" stroke-width="1.6"/>'
+      + '<rect x="104" y="38" width="4" height="7" rx="1" fill="#2b2b30" stroke="#17181c" stroke-width="1.4"/>'
+      + '</svg>',
+    /* trainOrder's LOADER: one stands in front of every flatbed with his arms out to take the adjective off
+       the dock, so the drop has somewhere to happen. Cap, overalls, boots, both palms up. */
+    loader: '<svg class="g4-art" viewBox="0 0 44 60" aria-hidden="true" focusable="false">'
+      + '<path d="M6 26q2-9 16-9t16 9" fill="none" stroke="#22374a" stroke-width="4.6" stroke-linecap="round"/>'
+      + '<circle cx="5" cy="25" r="3.4" fill="#f4c79b" stroke="#8a5a2b" stroke-width="1.6"/>'
+      + '<circle cx="39" cy="25" r="3.4" fill="#f4c79b" stroke="#8a5a2b" stroke-width="1.6"/>'
+      + '<rect x="16" y="36" width="5" height="15" rx="2" fill="#3f6f9a" stroke="#22374a" stroke-width="1.6"/>'
+      + '<rect x="23" y="36" width="5" height="15" rx="2" fill="#3f6f9a" stroke="#22374a" stroke-width="1.6"/>'
+      + '<rect x="14" y="50" width="9" height="5" rx="2" fill="#3a2d1c" stroke="#22374a" stroke-width="1.4"/>'
+      + '<rect x="22" y="50" width="9" height="5" rx="2" fill="#3a2d1c" stroke="#22374a" stroke-width="1.4"/>'
+      + '<rect x="13" y="20" width="18" height="19" rx="4" fill="#3f6f9a" stroke="#22374a" stroke-width="2"/>'
+      + '<path d="M17 21v17M27 21v17" stroke="#d9c48f" stroke-width="1.6"/>'
+      + '<circle cx="22" cy="12" r="7.5" fill="#f4c79b" stroke="#8a5a2b" stroke-width="1.8"/>'
+      + '<path d="M14 9q3-6 8-6t8 6z" fill="#22374a"/>'
+      + '<path d="M12 9h21" stroke="#22374a" stroke-width="3" stroke-linecap="round"/>'
+      + '<circle cx="19" cy="12" r="1.3" fill="#2a1c10"/><circle cx="25" cy="12" r="1.3" fill="#2a1c10"/>'
+      + '<path d="M20 16q2 1.6 4 0" stroke="#8a5a2b" stroke-width="1.5" fill="none" stroke-linecap="round"/>'
+      + '</svg>',
   };
 
   /* one item = one authored `.qitem`. The right answer is `data-a` when the author pinned it, else
@@ -1806,13 +1856,9 @@ window.GAMES4 = (function () {
       box.appendChild(el('div', 'g4-tbank g4-bit'));
       box.appendChild(el('div', 'g4-ttrack g4-bit'));
       var train = el('div', 'g4-ttrain g4-bit');
-      /* the still's locomotive is the same plain one the live game builds: cab, boiler, chimney, dome, wheels */
+      /* the still's locomotive is the same drawn engine the live game uses */
       var loco = el('div', 'g4-tloco');
-      ['g4-tcab', 'g4-tboiler', 'g4-tchimney', 'g4-tdome'].forEach(function (c) { loco.appendChild(el('div', c)); });
-      var lw = el('div', 'g4-twheels');
-      lw.appendChild(el('i', 'g4-twheel a'));
-      lw.appendChild(el('i', 'g4-twheel b'));
-      loco.appendChild(lw);
+      loco.innerHTML = ART.engine;
       train.appendChild(loco);
       for (var k = 0; k < 8; k++) {
         var car = el('div', 'g4-tcar');
@@ -1826,6 +1872,15 @@ window.GAMES4 = (function () {
         car.appendChild(el('i', 'g4-twheel b'));
         train.appendChild(car);
       }
+      var crew = el('div', 'g4-tcrew');
+      for (var g = 0; g < 8; g++) {
+        var guy = el('div', 'g4-tguy');
+        guy.innerHTML = ART.loader;
+        guy.style.left = (g * 100 / 8) + '%';
+        guy.style.width = (100 / 8) + '%';
+        crew.appendChild(guy);
+      }
+      train.appendChild(crew);
       box.appendChild(train);
     }
 
@@ -3718,6 +3773,10 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
      far forward leaves a gap — the crash is not symmetric, and only the back is fatal. */
   var SLOTS = ['opinion', 'size', 'age', 'shape', 'color', 'origin', 'material', 'purpose'];
   var CAR0 = 122, CAR_LIFT = 6, OPEN0 = 100;
+  /* the height an adjective stands at on its OWN car. It only grows when the car is further back than its
+     slot allows: a load needing more room than the deck gives is visibly too tall for the car it stands in,
+     and the taller it is the later the car — the error, made visible at the moment of loading. */
+  var CARDH = 26, CARD_RISE = 9;
 
   function yardGame(r) {
     function tag(cls, text) { var n = el('div', cls); if (text != null) n.textContent = text; return n; }
@@ -3766,15 +3825,10 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
 
     function build() {
       train.innerHTML = '';
-      /* A NORMAL TRAIN: a plain locomotive, then one FLATBED wagon per adjective. All the drawn train art
-         is gone — the SVG locomotive, the coal bowl and the hold box with it — because the owner is
-         rebuilding this game and asked for a train that simply looks like a train. */
+      /* THE LOCOMOTIVE: a drawn side view (ART.engine) rather than a stack of boxes — the boxes were what
+         the owner read as a terrible caboose. */
       var loco = tag('g4-tloco');
-      ['g4-tcab', 'g4-tboiler', 'g4-tchimney', 'g4-tdome'].forEach(function (c) { loco.appendChild(tag(c)); });
-      var lw = tag('g4-twheels');
-      lw.appendChild(tag('g4-twheel a'));
-      lw.appendChild(tag('g4-twheel b'));
-      loco.appendChild(lw);
+      loco.innerHTML = ART.engine;
       train.appendChild(loco);
       /* THE CARS COME FROM THE ADJECTIVES (qa/NOTES.md 89): this train's own words decide how many wagons
          it stands, capped at eight, and each car carries the slot of one of those words, in slot order —
@@ -3801,22 +3855,31 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
         train.appendChild(car);
         cars.push(car);
       }
+      /* ONE LOADER PER CAR, standing in front of his flatbed with his arms out to take the adjective off
+         the dock: each guy shares the pitch of the car he serves, so he is always in front of his own deck. */
+      var crew = tag('g4-tcrew');
+      for (var g = 0; g < n; g++) {
+        var guy = tag('g4-tguy');
+        guy.innerHTML = ART.loader;
+        guy.style.left = (g * 100 / n) + '%';
+        guy.style.width = (100 / n) + '%';
+        crew.appendChild(guy);
+      }
+      train.appendChild(crew);
     }
 
-    /* THE DOCK: the words of THIS train, one card each, in the order they were authored. A tap picks
-       one up (the card stays up until it is placed), and the next tap on a car puts it there. */
+    /* THE DOCK: the adjectives of THIS train, one card each, in the order they were authored. A card is
+       DRAGGED onto a car and the drop loads it; a tap still picks it up (the card stays up until it is
+       placed), and the next tap on a car puts it there — so a mouse, a finger and a keyboard all work. */
     function buildDock() {
       dock.innerHTML = '';
       words = [];
-      /* THE DOCK KEEPS THE AUTHORED ORDER: a sentence's words are dressed in sentence order, and it is
+      /* THE DOCK KEEPS THE AUTHORED ORDER: a sentence's adjectives are dressed in sentence order, and it is
          the CAR each one stands on that has to be right — a shuffled dock would only hide the words. */
       var list = trains[ti].items.slice();
       list.forEach(function (w) {
         var c = tag('g4-tword g4-tcard', w.it.prompt);
-        c.addEventListener('pointerdown', function (e) {
-          if (e && e.preventDefault) e.preventDefault();
-          pick(w, c);
-        });
+        c.addEventListener('pointerdown', function (e) { beginDrag(e, w, c); });
         dock.appendChild(c);
         words.push({ w: w, el: c });
       });
@@ -3827,6 +3890,56 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       words.forEach(function (o) { o.el.classList.remove('on'); });
       picked = { w: w, card: card };
       card.classList.add('on');
+    }
+
+    /* DRAGGING: the pointer takes the card off the dock, a ghost follows it, and the car under it lights
+       up. Releasing over a car loads that car; releasing anywhere else leaves the word in hand. */
+    var drag = null;
+    function beginDrag(e, w, c) {
+      if (busy || done) return;
+      if (e && e.preventDefault) e.preventDefault();
+      pick(w, c);
+      drag = { w: w, card: c, x0: (e && e.clientX) || 0, y0: (e && e.clientY) || 0, ghost: null, moved: false };
+      document.addEventListener('pointermove', onDragMove, true);
+      document.addEventListener('pointerup', onDragUp, true);
+      document.addEventListener('pointercancel', onDragUp, true);
+    }
+    function carAt(x, y) {
+      for (var i = 0; i < cars.length; i++) {
+        var b = cars[i].getBoundingClientRect();
+        if (x >= b.left && x <= b.right && y >= b.top - 10 && y <= b.bottom + 12) return cars[i];
+      }
+      return null;
+    }
+    function onDragMove(e) {
+      if (!drag) return;
+      if (!drag.moved && Math.abs(e.clientX - drag.x0) + Math.abs(e.clientY - drag.y0) < 6) return;
+      if (!drag.moved) {
+        drag.moved = true;
+        drag.ghost = drag.card.cloneNode(true);
+        drag.ghost.className = 'g4-tcard g4-tghost';
+        drag.ghost.style.width = (drag.card.offsetWidth || 90) + 'px';
+        document.body.appendChild(drag.ghost);
+        drag.card.classList.add('lifting');
+      }
+      drag.ghost.style.left = e.clientX + 'px';
+      drag.ghost.style.top = e.clientY + 'px';
+      var over = carAt(e.clientX, e.clientY);
+      cars.forEach(function (car) { car.classList.toggle('hot', car === over); });
+    }
+    function onDragUp(e) {
+      document.removeEventListener('pointermove', onDragMove, true);
+      document.removeEventListener('pointerup', onDragUp, true);
+      document.removeEventListener('pointercancel', onDragUp, true);
+      if (!drag) return;
+      var d = drag;
+      drag = null;
+      cars.forEach(function (car) { car.classList.remove('hot'); });
+      if (d.ghost && d.ghost.parentNode) d.ghost.parentNode.removeChild(d.ghost);
+      d.card.classList.remove('lifting');
+      if (!d.moved) return;                     /* a tap, not a drag: the word stays in hand */
+      var over = carAt(e.clientX, e.clientY);
+      if (over) place(cars.indexOf(over));
     }
 
     /* A DROP WRITES THE CAR'S SLOT INTO THE WORD'S OWN RADIOS: the answer sheet then records where the
@@ -3841,8 +3954,10 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
         if (String(o.value) === want && o.radio) o.radio.checked = true;
       });
       var hit = w.home === slotOf[k];
+      /* further back than its slot allows = the load needs more headroom than the deck it landed on */
+      var late = slotOf[k] - w.home;
       var load = tag('g4-tload', w.it.prompt);
-      load.style.height = (OPEN0 - CAR_LIFT * w.home) + 'px';
+      load.style.height = (CARDH + (late > 0 ? Math.min(54, late * CARD_RISE) : 0)) + 'px';
       cars[k].appendChild(load);
       cars[k].classList.add('loaded');
       cars[k].classList.add(hit ? 'ok' : 'no');

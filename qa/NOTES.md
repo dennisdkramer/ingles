@@ -56,13 +56,12 @@ the current start game button is the old 'begin game' button, i want "Start Game
 ### flapGate
 
 → CONTENT_EXAMPLES.md §`flapGate`
-[done] must be possible for wall to continue, second wall to come, game target is continuous flight through all the gates in one 'run'
-↳ a wall is an object in flight now, not a state of the stage: each one is cut once, flies past the left edge and is retired, and the next question is cut into a wall behind it. Answering no longer stops the flight, so the wall he flew through keeps going and the next is already on its way.
+its better now, but make it one continuous flight, the bird jumps back to the middle when it hits a wrong answer and zooms forward then resets when it hits a correct answer
 
 ### ladderRun
 
 → CONTENT_EXAMPLES.md §`ladderRun`
-postpone the play again screen for 5 seconds so the animatin can play out
+postpone the play again screen for 5 seconds so the animation can play out
 
 ### crosswordBoard
 
@@ -91,7 +90,12 @@ postpone the play again screen for 5 seconds so the animatin can play out
 ### trainOrder
 
 → CONTENT_EXAMPLES.md §`trainOrder`
-redraw the front of the train (the caboose) significantly better
+[done] redraw the front of the train (the caboose) significantly better
+↳ THIRD drawing, and the first one looked at on screen before shipping (headless Chrome, 1x and 3x): brick-red boiler, black smokebox and funnel, brass dome and buffer beam, maroon cab with a cream window, three driving wheels on the rail, cowcatcher, headlamp. Its box is one car pitch wide instead of the old 8% sliver — that sliver is why the first two drawings read as a smudge — and its wheels now stand on the same line as the wagons'.
+[done] one guy per traincar, standing in front of the car with his arms out to receive the adjectives
+↳ `ART.loader` on a `g4-tcrew` row: cap, overalls, boots, both palms up; one per flatbed, each on his own car's pitch, standing on the ground in front of the deck with his hands at deck level and short enough that the load stays readable above him.
+[done] make the adjectives draggable
+↳ `pointerdown` on a dock card starts a drag: a ghost follows the pointer, the deck under it lights, and releasing over a car loads it. A tap still picks a card up and a tap on a car still places it, so mouse, finger and keyboard all work.
 
 ### bossRaid
 
