@@ -269,6 +269,29 @@ ok('a rejected session shows the login card without a reload',
   d.getElementById('acct').hidden === true && d.getElementById('gcard').hidden === false &&
   d.getElementById('app').innerHTML === '');
 
+/* FOCUS RINGS ARE OPT-IN (owner report 2026-11-09: pressing Shift put a border round the last-clicked button).
+   Two halves, asserted separately: the KEY gate must ignore modifiers and only accept navigation, and the CSS
+   must have no ring rule that can fire without html.kbd — including the browser's own UA ring. */
+const key = (k) => d.body.dispatchEvent(new w.KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true }));
+w.eval('document.documentElement.classList.remove("kbd")');
+key('Shift');
+ok('Shift alone does not turn focus rings on', !d.documentElement.classList.contains('kbd'));
+key('Control'); key('Alt'); key('Meta');
+ok('no modifier key turns focus rings on', !d.documentElement.classList.contains('kbd'));
+key('a');
+ok('a printable key does not turn focus rings on', !d.documentElement.classList.contains('kbd'));
+key('Tab');
+ok('Tab turns focus rings on', d.documentElement.classList.contains('kbd'));
+d.body.dispatchEvent(new w.MouseEvent('mousedown', { bubbles: true }));
+ok('a pointer press turns focus rings off again', !d.documentElement.classList.contains('kbd'));
+const cssFocus = fs.readFileSync('style.css', 'utf8');
+const ringRules = [...cssFocus.matchAll(/(?:^|\n)([^\n{}]*:focus-visible[^\n{}]*)\{/g)].map(m => m[1].trim());
+ok('every focus-ring rule in style.css is gated by html.kbd',
+  ringRules.length >= 6 && ringRules.every(r => /^html\.kbd\b/.test(r)),
+  ringRules.length + ' rule(s)' + (ringRules.find(r => !/^html\.kbd\b/.test(r)) ? ', ungated: ' + ringRules.find(r => !/^html\.kbd\b/.test(r)) : ''));
+ok('the browser default ring is suppressed without .kbd',
+  /html:not\(\.kbd\) :focus\{outline:none\}/.test(cssFocus));
+
 console.log('\nstudent landing index — jsdom render');
 out.forEach(r => console.log('  ' + (r.pass ? '✅ ' : '❌ ') + r.name + (r.extra ? '  «' + r.extra + '»' : '')));
 const fails = out.filter(r => !r.pass).length;

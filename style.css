@@ -57,7 +57,13 @@ button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padd
 button{transition:transform .09s ease,filter .12s ease}
 button:hover:not(:disabled):not(.locked){filter:brightness(1.14);transform:translateY(-1px)}
 button:active:not(:disabled):not(.locked){filter:brightness(1.04);transform:translate(2px,2px);transition-duration:.04s}
-button:focus-visible{outline:3px solid var(--tan);outline-offset:2px}
+/* FOCUS RINGS ARE OPT-IN. A ring is drawn only while <html> carries .kbd, which only a real NAVIGATION key
+   sets (Tab, arrows, Home/End, PgUp/PgDn, Enter, Space, Escape — see the gate at the top of engine1.js and in
+   index.html). A modifier key alone (Shift/Ctrl/Alt/Meta) is not navigation, so pressing it cannot ring the
+   button that happens to hold focus. The first rule removes the outline outright while .kbd is absent, so the
+   browser's own UA ring is suppressed too: NOTHING on any page can draw a focus outline without that class. */
+html:not(.kbd) :focus{outline:none}
+html.kbd button:focus-visible{outline:3px solid var(--tan);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){
  button{transition:none}
  button:hover:not(:disabled):not(.locked),button:active:not(:disabled):not(.locked){transform:none}
@@ -286,7 +292,7 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 .tsw-thumb{display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(24,33,54,.3),0 0 0 .5px rgba(24,33,54,.06);font-size:12px;line-height:1;filter:saturate(.3);opacity:.85;transition:transform .22s cubic-bezier(.2,.7,.3,1),filter .22s,opacity .22s,box-shadow .22s}
 .tswitch:hover .tsw-track{box-shadow:inset 0 1px 2px rgba(24,33,54,.18),0 0 0 4px rgba(24,33,54,.05)}
 .tswitch:active .tsw-thumb{box-shadow:0 1px 6px rgba(24,33,54,.36),0 0 0 .5px rgba(24,33,54,.08)}
-.tswitch input:focus-visible~.tsw-track{outline:2px solid var(--tan);outline-offset:3px}
+html.kbd .tswitch input:focus-visible~.tsw-track{outline:2px solid var(--tan);outline-offset:3px}
 .tswitch.on .tsw-track{background:var(--sw);box-shadow:inset 0 1px 2px rgba(24,33,54,.1)}
 .tswitch.on .tsw-thumb{transform:translateX(22px);filter:none;opacity:1}
 .tswitch.pending{opacity:.5}
@@ -347,7 +353,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .game-fade{position:absolute;inset:0;z-index:4;background:var(--paper);opacity:0;pointer-events:none;transition:opacity .5s ease}
 .game-fade.on{opacity:1}
 .target{position:absolute;left:0;top:0;width:118px;height:104px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;cursor:crosshair;will-change:transform;z-index:2}
-.target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;border-radius:8px}
+html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;border-radius:8px}
 .target svg{display:block;width:118px;height:74px;color:#f3b23c}
 .target .plaque{display:block;margin:-4px auto 0;width:fit-content;max-width:118px;padding:2px 8px;background:#fff3d6;border:2px solid #8a5a1b;border-radius:6px;box-shadow:2px 2px 0 #8a5a1b;font:700 14px var(--serif);color:#4a2f0c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .target.ufo svg{color:#8fb7c9}
@@ -914,7 +920,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-pick-t{display:block}
 .g4-pick-btn:hover{border-color:#1d4ed8}
 .g4-pick-btn.on{border-color:var(--ink);background:#fff8ea;box-shadow:3px 3px 0 var(--ink)}
-.g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:2px}
+html.kbd .g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){
   .g4-hp-fill,.g4-pad{transition:none}
   .g4-bossart.hurt,.g4-proj,.g4-proj.fire .g4-art,.g4-slash,.g4-acid-drop,.g4-hero.charge{animation:none;transition:none}
@@ -986,7 +992,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-mole.ok .g4-mole-t{border-color:#2f9e44;background:#e8f7ee}
 .g4-mole.no .g4-mole-t{border-color:#c92a2a;background:#fdeaea;animation:g4shake .34s ease-in-out}
 .g4-mole.reveal .g4-mole-t{border-style:dashed;border-color:#2f9e44;animation:g4pulse .7s ease-in-out 2}
-.g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;border-radius:10px}
+html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;border-radius:10px}
 @keyframes g4shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
 @keyframes g4pulse{0%,100%{box-shadow:2px 2px 0 var(--tan)}50%{box-shadow:0 0 0 4px rgba(47,158,68,.35)}}
 @media (prefers-reduced-motion:reduce){
@@ -1185,7 +1191,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .g4-tcard:hover{border-color:#1d4ed8}
 .g4-tcard.picked{transform:translateY(-3px) scale(1.05);border-color:#1d4ed8;
   box-shadow:3px 3px 0 #1d4ed8;cursor:grabbing}
-.g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px}
+html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px}
 .g4-tcard.ghost{position:fixed;z-index:80;margin:0;pointer-events:none;cursor:grabbing;
   box-shadow:7px 7px 0 var(--ink);transform:translate(-50%,-50%) scale(1.06)}
 .g4-tcard.thrown{position:fixed;z-index:80;margin:0;pointer-events:none;

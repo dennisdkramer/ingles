@@ -20,6 +20,7 @@
 - Font sizes are fixed constants (no viewport-relative sizing).
 - **The type is SERIF, site-wide.** `style.css` sets `--serif` and every element inherits it — headings, body, buttons, form controls, tables, badges. No block, page or view may use a sans-serif face, and a new rule never names one. The single exception is `--ui-tight`, used only by the game chrome (`.g4-*`) at 9–13px in fixed-size tiles, where the text is an instrument panel rather than prose and a face swap would move metrics inside boxes that cannot grow; flipping that one property to `var(--serif)` makes even the games serif. A lesson author never reaches for a font: the face is the stylesheet's, alone.
 - Sizing philosophy: Minimum size an average person comfortably sees, clicks, reads.
+- **A focus ring is opt-in, never a consequence of holding a key.** No element may draw a focus outline unless `<html>` carries `.kbd`, which only a real NAVIGATION key sets (Tab, arrows, Home/End, PgUp/PgDn, Enter, Space, Escape) — the gate is duplicated at the top of `engine1.js` and in `index.html`, and a pointer press clears it. A bare modifier (Shift/Ctrl/Alt/Meta) is not navigation and must never draw a ring, which is why `style.css` also suppresses the browser's own UA ring while `.kbd` is absent. A new rule therefore never writes a bare `:focus` or `:focus-visible` selector: it is `html.kbd …` or nothing, and `qa/landing.mjs` fails if an ungated ring rule appears anywhere in the stylesheet.
 
 
 ### Mechanical [LIMITS] (the only MUSTs — each prevents an answer or a line from being lost)

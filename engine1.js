@@ -1,5 +1,19 @@
 /* MOTOR 1 — popup, gravação, caderno, realce por trecho (Ctrl), âncoras robustas, seleção */
 /* Behaviour contract: FUNCTION.md - read it before changing anything here. */
+/* FOCUS RINGS ARE OPT-IN (owner report 2026-11-09: pressing Shift ringed the last-clicked button). The browser
+   flips itself into "keyboard" mode on ANY keydown — including a bare modifier — which made the still-focused
+   button match :focus-visible. Here only a real NAVIGATION key sets .kbd, style.css draws no outline at all
+   without it, and a pointer press clears it again. Shift/Ctrl/Alt/Meta are ignored outright.
+   DUPLICATED in index.html (the one page that does not load this file) — keep the two blocks in step. */
+(function(){
+ var NAV={Tab:1,Enter:1,Escape:1,Esc:1," ":1,Space:1,Spacebar:1,ArrowUp:1,ArrowDown:1,ArrowLeft:1,
+  ArrowRight:1,Home:1,End:1,PageUp:1,PageDown:1};
+ document.addEventListener("keydown",function(e){if(NAV[e.key])document.documentElement.classList.add("kbd");},true);
+ ["pointerdown","mousedown"].forEach(function(t){
+  document.addEventListener(t,function(){document.documentElement.classList.remove("kbd");},true);
+ });
+})();
+
 window.addEventListener("error",e=>{let b=document.getElementById("errb");
  if(!b){b=document.createElement("div");b.id="errb";b.style.cssText="background:#a33327;color:#fff;padding:8px 12px;font:14px Georgia,'Times New Roman',serif;text-align:center";document.body.prepend(b);}
  b.innerHTML="⚠ ERRO: "+e.message;});
