@@ -1,5 +1,27 @@
 # PENDING — Adherence.md [BATCHING] for current task
 
+
+## [14] - block letters and horizontal pairing on preview-blocks.html, and the notes that landed after [13] (2026-11-10)
+### [B1] - PRE-PROMPT RESEARCH <"blocks in the same vehicle pair together horizontally if they are smaller widths. Make sure all these blocks get a letter header"> <the corpus convention, then the page's own block inventory>
+   - [S1] - the lettered-block rule read at source <FORMAT.md:13> <how a block header is written and where it sits> DONE - `A. ` + title in an `<h3>`, inside-top, restarting at A in every section
+   - [S2] - a built lesson read for the pairing markup <adult/lesson1.html:50-60, style.css:204-214> <`.itemrow[data-cols]` with `itemsize-*` children> DONE - third+twothird and half+half both already have CSS
+### [B2] - letter and pair every block <the ask> <54 sections: 40 vehicles + 14 drafts>
+   - [S1] - 65 letter headers on 40 vehicles, restarting at A per vehicle <a block with its own `<h3>` keeps that title and gains only the letter> <no block carries two headers>
+   - [S2] - six vehicles paired on one row: twoWordVerb, contextFit, wordFamily, signScan, measureLocal, barCount <the sub-full blocks of a vehicle sit side by side>
+   - [S3] - chart blocks wrapped in a `chartblock` div so the header has somewhere to sit <a `.chart` cannot hold an `<h3>`> <15 charts lettered, table width class moved to the wrapper>
+   - [S4] - drafts left alone <their `dim` lines already annotate each panel with its width> <no clash with A./B.>
+### [B3] - the notes written after [13]
+   - [S1] - contextFit: both blocks half width <note> <bank + situations on one row; entry's `fits` rewritten>
+   - [S2] - lineRepair: the dropped/blended block deleted <note> <the pair is the whole display; `best for` / `does` / `markup` rewritten>
+   - [S3] - ruleCard: the three lines +4pt <note> <22px on each; entry's `markup` states it>
+   - [S4] - formulaFrame: the frame becomes the header <note> <`<h3>A. I'd rather ___ than ___ .</h3>`; the duplicate line removed; entry rewritten>
+   - [S5] - soundGrid: X and TI tagged Portuguese, no parenthesis <note> <`<b><i lang="pt">X</i></b>`; `:lang(pt)` italicises it; no colour, because that would recolour every Portuguese gloss in the corpus>
+   - [S6] - chatSample renamed to `dialog` <note> <6 hits in CONTENT_EXAMPLES.md, 2 in qa/NOTES.md, 6 in the page, all counted before and after>
+   - [S7] - infoGap: the `them` facts block deleted, the ask panel takes the `them` header <note> <A. you + B. them; entry rewritten>
+   - [S8] - the stale `chunkBank → delete` note dropped <it named a vehicle that was renamed to contextFit, which this same batch asks to change, not delete> <reported, not silently applied>
+### [B4] - verify
+   - [S1] - order, balance, links <54/54 sections, divs 591/591, 0 dangling jump-links, 0 order mismatches> <qa/examples.mjs 6/6>
+
 ## [GUIDELINES]
 - Requested changes are committed and pushed when done by default. For any changes that are not pushed, the user must be notified at Turn completion.
 - Avoid rapid successive pushes when a single combined push would do — build markers, a live-site curl or a fixed sleep are tools reached for when the risk of an undetected deploy problem is real, not mandatory steps after every push.

@@ -30,21 +30,20 @@
 
 ## [TEACHING]
 
-### `lineRepair - (best for: naming what a performer changed; the written form beside the performed one; teaching a small label vocabulary · can't: run without a genuinely performed clip, and it produces no evidence — the labels are taught here, so a practice block has to use them · purpose 7/10 · fun 6/10)`
+### `lineRepair - (best for: the written form beside the performed one; hearing exactly what a performer changed; a pair that needs no exercise to make its point · can't: run without a genuinely performed clip, and it produces no evidence of its own — it is a presentation, so the practice has to live in another block · purpose 7/10 · fun 6/10)`
 
-- **does** — Two versions of one line side by side: the written form and the performed form, with the change named beside
-  it — dropped, blended, moved the stress, added a word. Naming the change is the skill the student is being shown;
-  knowing the line is not.
-- **markup** — worked pair (`.itemrow` of two `.panel`s, `<written>` and `<heard>`), then one label line per change naming
-  the operation (`dropped` / `blended` / `moved` / `added`) rather than the word. **Teaching only**: there is no gap and
-  no marked item, because the labels are a small vocabulary of their own, and a label the student has to guess at teaches
-  nothing.
+- **does** — Two versions of one line side by side: the written form and the performed form. What changed between them
+  is the thing the student is being shown — dropped, blended, moved the stress, added a word — and hearing the pair is
+  what names it.
+- **markup** — `.itemrow` of two `.panel`s, `<written>` and `<heard>`, the heard one carrying a `.listen` chip. Nothing
+  else in the block. **Teaching only**: there is no gap and no marked item, and no label list either — the pair is the
+  whole display, because a label the student has to guess at teaches nothing.
 - **fits** — full; the two panels must be read against each other. Pair it with the block that makes the student produce
-  these labels — this one states them.
+  the same reduction — this one shows it.
 - **vary** — one change per line → three → a line performed twice, differently, so the pair itself shows what is stable
   and what was the performer's choice.
 - **can't** — the lesson has to supply a genuinely performed clip; and it produces no evidence on its own, so a lesson
-  that teaches these labels and never asks for one has taught a vocabulary nobody used.
+  that only shows the pair has asked the student for nothing.
 
 ### `ruleCard - (best for: the rule in three labelled lines — the pattern, what it means, the situation it is for; stopping a rule from over-generalising; a model the student can hold · can't: carry more than one rule — a card with three teaches none · purpose 9/10 · fun 2/10)`
 
@@ -54,7 +53,9 @@
   the situation named there; that line is what stops the pattern over-generalising, and what a prose paragraph loses.
 - **markup** — `.card` at **one third width**, its content **centred**: three categories as `<b>Pattern:</b>`,
   `<b>Means:</b>`, `<b>Use when:</b>`, each followed by its explainer as ordinary text on the next line, so a label and
-  its sentence never share a line. No table; a card with a table in it is a `signalTable` wearing the wrong clothes.
+  its sentence never share a line. The category and explainer lines are set **4pt larger than body text** — the card is
+  read at arm's length, and a rule nobody has to lean in for is the point of the card. No table; a card with a table in
+  it is a `signalTable` wearing the wrong clothes.
 - **fits** — third only; it is built for a third, and pairs with a practice block of the same width. At a half it is a
   card with room it does not use.
 - **can't** — one card carries one rule. A card with three rules teaches none of them.
@@ -63,9 +64,11 @@
 
 - **does** — A pattern as a skeleton with named slots (`<I'd rather> ___ <than> ___`), then two or three filled
   versions. Teaches a shape to reuse rather than a conjugation table to stare at.
-- **markup** — `.panel` at **one third width**; the skeleton in `<b>` with `___` for slots; the filled versions
-  below, slot content marked so the student sees which part moved. The skeleton and the filled versions are the
-  whole display — no line saying that the frame holds, because the filled versions say it.
+- **markup** — `.panel` at **one third width**. The skeleton **is the block's header** — `<h3>` reading
+  `I'd rather ___ than ___ .` — not a line inside the block: the frame is the title, so the header names the shape
+  the block teaches. The filled versions sit below it, slot content in `<b>` so the student sees which part moved.
+  The skeleton and the filled versions are the whole display — no line saying that the frame holds, because the
+  filled versions say it.
 - **fits** — third; it is built for a third, and pairs with the drill that makes them fill the slots at the same
   width. At a half it is a frame with room it does not use.
 - **can't** — only for patterns that are actually fixed. A frame with moveable parts teaches a false shape, and
@@ -88,12 +91,13 @@
 ### `soundGrid - (best for: one contrast in three positions; showing a contrast as a system rather than two words; listening and mouth work with audio on every example · can't: carry written form, and more than two sounds per row stops being a contrast and becomes a catalogue · purpose 8/10 · fun 4/10)`
 
 - **does** — One contrast, written three ways the student already reads: **X** and **TI**, the two Portuguese
-  substitutions (tagged *português*, in italic), and **TH**, the English one — each at the start, in the middle and at
+  substitutions, and **TH**, the English one — each at the start, in the middle and at
   the end of a word, with a `.listen` chip on every example. Teaches that the contrast is a system, not two words, and
   it never hands the student a phonetic symbol this project does not use.
-- **markup** — `.chart`: rows are the three spellings, columns are the positions; the row header is `<b>X</b>
-  <i>(português)</i>`, `<b>TI</b> <i>(português)</i>` and `<b>TH</b>`, so the two the student says instead are labelled
-  as the first language and the target is not; each cell holds `<word>` plus a `.listen` chip. A `<tr class="note">`
+- **markup** — `.chart`: rows are the three spellings, columns are the positions; the row header is
+  `<b><i lang="pt">X</i></b>`, `<b><i lang="pt">TI</i></b>` and `<b>TH</b>`, so the two the student says instead carry
+  `lang="pt"` — the stylesheet italicises Portuguese, so the first language is marked without the block ever saying
+  "português" in words, and the target is not marked; each cell holds `<word>` plus a `.listen` chip. A `<tr class="note">`
   names the position where the student's own language interferes most.
 - **fits** — full; it is three columns of examples plus labels.
 - **can't** — it is listening and mouth-work only; no written form, and a grid with more than two sounds per row
@@ -112,12 +116,13 @@
 - **can't** — ticks are not explanations; if a combination is blocked for a reason (not just by convention), a
   matrix hides it and the reason belongs in a `ruleCard` beside it.
 
-### `chatSample - (best for: the target form inside ordinary noise; meeting a form in the wild first; real threads with typos, emoji and ignored questions · can't: stay current, and a thread where every line is target language is a dialogue pretending to be a chat · purpose 7/10 · fun 7/10)`
+### `dialog - (best for: the target form inside ordinary noise; meeting a form in the wild first; real threads with typos, emoji and ignored questions · can't: stay current, and a thread where every line is target language is a dialogue pretending to be a chat · purpose 7/10 · fun 7/10)`
 
 - **does** — A short thread as it actually appears on a screen, with the target language in the middle of ordinary
   noise: a typo, an emoji, two messages in a row, a reply that ignores the question. The student meets the form in
-  the wild before they are asked to use it. The container is the same `.dialog` any scripted exchange uses — what
-  makes it this block is the noise, and the fact that it exists to show one form rather than to model a conversation.
+  the wild before they are asked to use it. The container is a plain `.dialog`, the frame any scripted exchange uses —
+  what makes it this block is the noise, and the fact that it exists to show one form rather than to model a
+  conversation.
 - **markup** — `.dialog` with the thread (speaker bubble per line). A `<tr class="note">` or one caption line names
   what to look for — the block must say why it is on the page.
 - **fits** — full or half; a thread is narrow, so half-width is natural beside the practice.
@@ -149,7 +154,9 @@
   a stated situation into the gap, or matches the chunk to what it answers.
 - **markup** — column pair for the bank itself (chunk ↔ what it does), then an item list of situations with one
   `input.gap` each. The `.listen` chip carries the chunk, so the student hears it as one piece.
-- **fits** — full only when its content fills the row; the bank plus its situations is usually a HALF, and it collapses to half width on width fill alone (its note and lead-in text do not count toward that fill). Best beside a `chatSample` that shows the chunks in their natural habitat.
+- **fits** — **two halves on one row**: the bank is `.itemsize-half` and the situations are `.itemsize-half`, because
+  the student reads the chunk and writes it without looking away, and neither half fills a full row on its own. A
+  `dialog` that shows the chunks in their natural habitat is the other natural neighbour, above or below the row.
 - **vary** — start with the chunk fully given and gap only the situation; then invert. The real lever is *which*
   chunks are in the bank: same function, different politeness, is harder than more chunks of the same politeness.
 - **can't** — a chunk whose parts can be swapped is not a chunk, so check it is said as one piece; and it never
@@ -215,14 +222,15 @@
 
 ### `infoGap - (best for: writing the question that gets the missing piece; real asymmetry between two panels; question and answer as one pair · can't: be a speaking gap (everything must be answerable from the page), and a half holding the other half's answers kills it · purpose 8/10 · fun 6/10)`
 
-- **does** — Two halves of one situation, each on its own panel, each missing what the other has. The student writes the
-  request that gets the missing pieces, in their own words. The information asymmetry is what makes the question genuine
-  instead of an exercise.
-- **markup** — worked pair: two `.panel`s, one headed `<you>` and one `<them>`, each carrying facts the other lacks, stacked
-  in a **third-width** column; then a **two-thirds** panel holding one prompt and **one text field per unknown**, so the
-  answer is a set of requests the student writes rather than one-word gaps.
-- **fits** — the pair is a **third** and the answer is **two thirds**, on one row; both halves stay in view, because a
-  half you have to scroll to is no longer the other half's other half.
+- **does** — One half of a situation on a panel, holding the facts and naming what it does not have. The student writes
+  the request that gets the missing pieces, in their own words, into the panel marked `<them>`. The information
+  asymmetry is what makes the question genuine instead of an exercise.
+- **markup** — one `.panel` headed `<you>` carrying one fact set with its unknowns marked; then a panel headed
+  `<them>` holding one prompt and **one text field per unknown**, so the answer is a set of requests the student writes
+  rather than one-word gaps. There is no second fact panel: the other half is the questions, and a `them` list of facts
+  beside a `them` list of questions is two panels saying one thing.
+- **fits** — the facts are a **third** and the questions are **two thirds**, on one row, so the unknowns and the fields
+  that answer them stay in view together.
 - **vary** — the fact needed is named in the prompt → only the category is named → both students must ask, and one item
   needs a follow-up question because the first answer is incomplete.
 - **can't** — everything has to be answerable from the page, so it is a written information gap and not a speaking one;
@@ -324,12 +332,12 @@
 - **does** — Given an answer, form the question; given a context, ask the follow-up.
 - **markup** — item list of `input.gap`s, one per answer. The prompt is the answer the student is talking to — never
   a grammar label, or they conjugate instead of ask.
-- **fits** — full, or half directly under a `chatSample` thread so the question has a conversation to land in.
+- **fits** — full, or half directly under a `dialog` thread so the question has a conversation to land in.
 - **vary** — same tense with a stated word order before free order; then add the constraint that the question must
   begin with `<question word>`. Loading two new demands into one item is the standard way this drill becomes unfair.
 - **can't** — graded on form only, or free answers become unmarkable, so state what counts as right; and it does not
   teach turn-taking — a perfect question in the wrong place is still a failed exchange, and carrying a whole exchange
-  is a different block's job (`chatSample`).
+  is a different block's job (`dialog`).
 - **difficulty** — the item is harder than it looks: one answer can often be asked two or three correct ways, and a
   context can be so open that the "right" question is a judgement the page never defined. So each item names ONE
   thing being asked (the tense, the question word, the subject) and accepts every form that fits that one thing, and
@@ -341,7 +349,7 @@
 - **does** — The fixed moves for when communication breaks: ask for a repeat, check a guess, restate.
 - **markup** — item list: a short exchange with the break marked, then one `input.gap` holding the move that repairs
   it. The `.listen` chip carries the move so the student hears the tone, not just the words.
-- **fits** — half, beside a `chatSample` thread — this is the emergency exit of the same conversation.
+- **fits** — half, beside a `dialog` thread — this is the emergency exit of the same conversation.
 - **vary** — the move alone, then the move inside a longer exchange. What actually makes it harder is *whose* fault
   the break is: repairing your own sentence is a different move from rescuing someone else's.
 - **can't** — teaches the move, not the conversation; needs a scene to mean anything, and a teacher to judge whether
@@ -473,7 +481,7 @@
   concept is what turns it into a pattern rather than an anecdote.
 - **markup** — two `.card`s, each holding one line quoted (attributed, inside `<blockquote>`), then item-list radios on
   the speaker's situation — the same two questions for both lines. Each line is short enough to sit whole on one line; a
-  paragraph of it is `chatSample`.
+  paragraph of it is `dialog`.
 - **fits** — half beside the rule it illustrates; full when it is the page's material.
 - **vary** — the second line of the same concept, so the student generalises across two rather than interpreting one; then
   a third from a different medium.

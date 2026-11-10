@@ -58,7 +58,7 @@ must be possible for wall to continue, second wall to come, game target is conti
 ### contextFit
 
 → CONTENT_EXAMPLES.md §`contextFit`
-call this vehicle 'contextFit' — done: heading, preview id and this section all read `contextFit` now.
+make both blocks half width
 
 ### connectedSpeech
 
@@ -153,7 +153,7 @@ delete
 ### lineRepair
 
 → CONTENT_EXAMPLES.md §`lineRepair`
-delete the secont part and make this a teaching-only block
+delete the bottom block with 'dropped' 'blended'
 
 ### contourMatch
 
@@ -188,7 +188,7 @@ delete
 ### ruleCard
 
 → CONTENT_EXAMPLES.md §`ruleCard`
-make a 1/3 width block, make the categories 'Pattern:' , 'Means:' and 'Use when:' and centered, the explainer text a line below its category
+increase Pattern, Means, Use when text by 4pt
 
 ### workedExample
 
@@ -203,7 +203,7 @@ delete
 ### formulaFrame
 
 → CONTENT_EXAMPLES.md §`formulaFrame`
-remove 'the frame holds' line and make 1/3 width block
+put the example text "id rather.." (in this case) as the header text
 
 ### signalTable
 
@@ -228,7 +228,7 @@ delete
 ### soundGrid
 
 → CONTENT_EXAMPLES.md §`soundGrid`
-change the first sound to a X and the second to TI both tagged portuguese (italicized) and the third one make TH, we dont use those other symbols in this project
+tag the 'X' and 'TI' as portugues so they are italicized, dont say it outright in parenthesis. if you want to use a different color for portuguese text too thats cool
 
 ### stressBar
 
@@ -270,16 +270,10 @@ delete
 → CONTENT_EXAMPLES.md §`dialogueMoves`
 delete
 
-### chatSample
+### dialog
 
-→ CONTENT_EXAMPLES.md §`chatSample`
-No — it uses the same `.dialog` container as any exchange, and that is the point: what makes it a chatSample is the
-contents, not the frame. A scripted exchange is written so that every line carries language the lesson is teaching; a
-chatSample is one form dropped into ordinary noise — a typo, an emoji, two messages in a row, a reply that ignores the
-question — and the block has to name what to look for. The entry's own `can't` draws the line: a thread whose every
-line is target language is a dialogue pretending to be a chat. So the shape is identical and the item is not; strip the
-noise and it stops being this block. With `dialogueMoves` now deleted, this is the only `.dialog` block left, so the
-entry now says this in `does`.
+→ CONTENT_EXAMPLES.md §`dialog`
+change name to dialog
 
 ### vocabField
 
@@ -314,12 +308,7 @@ delete
 ### twoWordVerb
 
 → CONTENT_EXAMPLES.md §`twoWordVerb`
-make the blocks half-width and the second block into a matching exercise using the words from the 'everyday form' column in the first block. We may need to utiliize checkboxes so you can confer with me abou tthis
-
-### chunkBank
-
-→ CONTENT_EXAMPLES.md §`chunkBank`
-delete
+make the second block into a matching exercise using the words from the 'everyday form' column in the first block. We may need to utiliize checkboxes so you can confer with me abou tthis
 
 ### pronLab
 
@@ -349,4 +338,9 @@ delete
 ### infoGap
 
 → CONTENT_EXAMPLES.md §`infoGap`
-make the first block 1/3 width, make the second 2/3 width, leave the header but put in the prompt text "Ask for the missing information so that you know the plan:" 1 text entry field per 'unknown' in the first block. Delete the third block
+'ask for the missing information' should have the them header, delete the current 'them' block
+
+### genreDoc
+
+→ CONTENT_EXAMPLES.md §`genreDoc`
+good beginner lesson for talking about times and plans
