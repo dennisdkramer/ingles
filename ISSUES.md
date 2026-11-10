@@ -12,6 +12,15 @@ It was in the `qa` chain, which made every `npm run qa` red for reasons a page c
 suite is how a real page failure gets read as noise. It now runs as its own script. **Fix baseline, then put it
 back in `qa`.** Untouched by the lesson-generation work.
 
+## qa/provenance.mjs — every page fails the FORMAT.md input hash (102 of 102)
+`node qa/provenance.mjs` → **102 of 102 pages failed** (2026-11-10), each on the same line: `input FORMAT.md changed
+after this page was built (record 120eb47a, disk a34375bd)`. No page is at fault: the committed `FORMAT.md` blob
+hashes `73d7d037`, already different from `120eb47a`, so FORMAT.md was edited after those records were built
+(549074e, 9f60cf7 and 30c045a all touched it). The mismatch predates the 2026-11-10 wording fix and reads the same
+for all 102 pages, so the residue is one contract file, not 102 pages. **Resolve by re-baselining the `format` input
+of the records (or regenerating), never by editing pages** — until then the check cannot report a real drift,
+because it reports this one for everything.
+
 ## adult/lesson22 — exists, is not a lesson page
 `qa/content.mjs --track=adult 22` → engine1.js and engine2.js did not execute, `#feed` missing, `.content-area`
 has 5 explanatory elements. A stub written to disk as if complete. Either finish it from the roadmap or delete it;

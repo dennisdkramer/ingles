@@ -32,8 +32,9 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
 
 - **does** — One flying target per option. Player aims with the cursor and takes **one shot**; a hit scores, a
   miss is spent. No spray, no endless retry — the constraint is what makes it feel like skill.
+- **opts** — **2 to 6 discs per item**, one disc per option. Two is the least that is a choice at all; six is what the range's own lanes hold when they are spread over its full height — a seventh crowds the arc into a pile of plaques.
 - **skins** — `.game > .game-list` of `.qitem`; the stem is the prompt line, the options are the targets — one
-  disc each, so the item's own options (two to four) decide how many fly.
+  disc each, so the item's own options (two to six) decide how many fly.
 - **art** — one flat ring per option, the word on a plaque over the disc; a thin crosshair that is the cursor; a
   single puff on impact. Every disc takes the SAME line — one arc, one speed, no wobble, no sine wave — and the
   lanes are spread over the full height of the range, so the four words read as one rack, not a scatter.
@@ -49,7 +50,7 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
 - **does** — One drawn mole per option surfaces from a hole, stamped in stagger; the player hits the one that
   fits before the runner's timer bar empties. The rest duck away the instant an answer lands.
 - **skins** — same `.qitem` list; the prompt sits on the HUD line, options become the moles' labels.
-- **opts** — **3 to 6 per run**, one mole per option (the grid lays 6–9 holes, so the count changes the crowd, never the layout). Below 3 there is nothing to spot among; above 6 the moles stop reading as separate targets.
+- **opts** — **2 to 6 per item**, one mole per option. The garden is **always six holes in a 3×2 grid**, so six options fill it exactly and the layout never reflows between items; below 2 there is nothing to spot among, above 6 there is no hole left for the seventh.
 - **authoring the stem** — the prompt is the thing to FIND, so it is written as that thing and nothing more:
   `past`, `a place you sleep`, `sorry, say that again?` — never `which one is past`, because the moles are
   already the candidates and the sentence only restates the game.
@@ -66,6 +67,7 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   so the block becomes a garden the class has grown rather than a score.
 - **teaches** — sorting a form into a category: past vs now, one ending vs another, which pattern a word belongs
   to. The decision is made in one gesture, so hesitation is visible.
+- **opts** — **2 to 4 pots per item**, one pot per option. Two is the smallest sort; four pots is one row at a size the words still read at, and a fifth has no soil left — the same ceiling the `can't` below names.
 - **skins** — one word per item (`.qstem`), one pot per option (the radio labels); a correct drop checks that
   option's radio. The word card IS the prompt, so the stage does not print the same words again on the HUD line.
 - **art** — inline SVG terracotta pot, water drops over the rim on a right drop, a flower grows out of the soil and
@@ -80,6 +82,7 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   climbs the tower itself to the chest at the top.
 - **teaches** — accumulate-and-complete: the reward is the finished tower, so a long drill has a shape and an end.
   Every answer placed is one item answered, so the tower is the progress bar.
+- **opts** — **2 to 4 options per item**, and **6 to 10 items per block**. One item is one block of the tower, so the item count IS the height it climbs: under six there is nothing to climb, and past ten each block is too short to hold its own word.
 - **skins** — one `.qitem` per block; the question block is the stem, the buttons are the options. Six to ten items
   makes a climb: the tower is half the stage's width and each block's HEIGHT comes from the run's own length, so the
   whole stack stands inside the stage up to ten blocks (the most that keeps a word readable) and a longer run keeps
@@ -100,6 +103,7 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   wrong word costs nothing: the flight continues. Flying into the **brick** costs one of three hearts *and the run* —
   the block starts again at its first question, in the same order, with what was already answered left as it was
   written. A restart is a second attempt, so the score a finished block shows is the **best attempt**, not the last.
+- **opts** — **2 to 4 gaps per wall**, one gap per option. The wall is a fixed height and a gap is 65px, so four fill it; a fifth would have to be cut narrower than the word standing in it.
 - **skins** — gaps are options; the prompt is fixed on the HUD.
 - **art** — a drawn bird that flaps its wings on every lift, including the one automatic flap as the round opens, so
   it is never falling before the student has touched anything; a brick wall with the words sitting in its gaps; sky
@@ -112,6 +116,7 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
 - **does** — The student guesses the word and presses Enter; the board marks right letter/right place and right
   letter/wrong place. Five rows and the run is over. Hangman is the same engine with a different face (a revealed
   blank row instead of coloured tiles).
+- **opts** — **one target word per item**, the same length in every item of a block (the board is built from the answers, so the block must hold to one length), and **2 to 4 options** — the options only carry the evidence radio, because the word itself is typed. Five tries per word and two lives per run.
 - **skins** — one target word per item, typed into a `gap` at the end, so the evidence is spelling the student
   produced rather than letters guessed. The stem is the clue, so it is not printed a second time on the HUD line.
 - **art** — the stage reads left to right: the **clue on the left**, the tile grid and the box you type into as the
@@ -130,6 +135,7 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   out of the dark and bites him — one of three lives gone, and his drawing changes as they go. Three bites end the run.
 - **teaches** — commitment under stakes. Because he only gets three mistakes, a guess has a price, so the student
   reads before moving. Every wrong pick leaves its radio blank, so the blanks are the teacher's evidence.
+- **opts** — **exactly 4 per item**, one door per option: the street holds four doors, so four is both the floor and the ceiling — a lesson that writes two or three options leaves the street short.
 - **skins** — four options is what the street holds: one door per option. The lives belong to the RUN, not to the item,
   so they are set on the way in and never between items — a life that came back with the next question would mean a
   miss cost nothing. The count is the HUD's, and the stage draws no second copy of it.
@@ -148,6 +154,7 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   board, not a drill. A full word typed wrongly is **answered**: it clears, shakes, and its item goes down as a
   miss with its radio left blank — one chance per word, because this board keeps no lives to pay for a second
   one. Its cells stay typeable, so a crossing word can still use those letters.
+- **opts** — **2 to 6 words per block**, and **2 or more options per item**. Each item's `data-answer` is the word (letters only, at least two of them) and its `.qstem` is the clue; every answer has to be spellable or the board refuses the run, and six short words is the ceiling — the grid sizes its cells to fill the stage down to an 18px floor, and a seventh word drops below it.
 - **art** — the site's own grid: a flat block per gap, a small number in the corner of each word's first cell.
   The cells are sized to **fill the stage** (10px of margin all round, height and width each get a say), and the
   clue for the word you are typing sits in its own panel **beside the grid** — one clue on the stage, never the
@@ -166,6 +173,7 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   again. At zero points the run is over.
 - **teaches** — word order and collocation under a constraint the student can see: the sentence on the stage IS
   the question, so every choice is judged against the words already placed rather than against a rule recalled.
+- **opts** — **exactly 4 pads per item**: the word that fits plus **three near misses**, and one item per word AFTER `data-first`, so the sentence's own word count is the item count. One sentence per block — a second sentence is a second block, not a longer run.
 - **skins** — one `.qitem` per word of the sentence, `data-a` the word that fits, three near misses as the other
   pads. `data-first` the given opening, `data-lives` the countdown of points (default 10) — the HUD pair counts
   `left/start` down, one point per wrong pad. `data-time` does not apply: a board you fill at your own pace. The
@@ -192,6 +200,7 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   card at the grid's left edge runs while the caller speaks; at zero the curtain rises, and a **5·4·3·2·1 countdown**
   in a card at the right edge starts. Stamp the tile you heard and the item is answered. Let the second countdown
   reach zero and the curtain **falls on the item**: it is marked wrong and the point it was worth is gone.
+- **opts** — **2 to 9 options per item**. The card is nine tiles: the item's own options first, then decoys drawn from the rest of the block to fill it — so a two-option item is padded to nine, a nine-option item has no room for decoys, and more than nine cannot be shown at all.
 - **skins** — tiles are options, so the words on the card are the lesson's words. The instruction is the block's own
   `.game-how` and nothing else — nothing inside the stage prints "listen" as a second heading.
 - **marking** — exact: the tile the student stamped turns green or red, and nothing else on the card reacts. The right
@@ -209,6 +218,7 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   five**, and the height is **heard** as well as seen (a rising motif as you climb). A wrong answer slides the climber
   back to the last safe rung — so what was safely earned is kept, which is what makes a ladder a ladder and not a
   list. Longer lists make a taller climb, so the same block scales from a five-item drill to a full quiz.
+- **opts** — **2 to 4 options per item**, and **5 or more items per block**. One right answer is one rung and the safe rung is every fifth, so under five items there is no fall to catch; above five the length is free, the climber simply climbs further.
 - **skins** — the `.qitem` list is the ladder; the options are the buttons under it.
 - **art** — the ladder is drawn to the run's length, the climber steps up on a right answer and slips on a wrong one,
   the chest lights when he reaches the top.
@@ -231,6 +241,7 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   Three hits taken and the fighter goes down, so a long drill has an ending that belongs to the answers, not a timer.
 - **teaches** — a long drill with a visible cost. The HP bar is the boss's health and it only moves when answers are
   right; the fighter's three hits are the only thing that shortens the run.
+- **opts** — **2 to 4 options per item**. The fighter's three hits are the run's only brake and the boss's HP is the item count, so length is free but the answer row is not: at five buttons the arena is all buttons.
 - **skins** — the `.qitem` list is the attack sequence; the options are the answer buttons. Nothing about the fighter
   is authored — the game offers its own three — so a lesson block is just a list of items.
 - **art** — a torch-lit arena, three drawn fighters with their own weapons, a fireball, an arrow and an acid drop as
@@ -256,6 +267,7 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   `value` naming the slot (`opinion`, `size`, … or `1`–`8`). `data-a` on the item is the slot the word belongs in, so
   the answer that saves is the ordinary radio of the car the student chose. `data-train="2"` on an item puts it in the
   second sentence's train; items with no `data-train` ride together, in authored order.
+- **opts** — **4 to 8 words per train**, and the options ARE the eight cars (one radio per car). Eight is the ceiling because a car holds one word: a ninth word has no car to stand in, and under four there is too little sentence to show an order.
 - **levers** — `data-depart` (seconds the train waits on the dock before it leaves with whatever is loaded, default
   30, `0` = wait for ever), `data-lives` (trains that may be wrecked before the run ends; absent = one per train, at
   most three), `data-slots` (replace the eight slot names, pipe separated), `data-labels` (`auto` / `1` / `0`) with
