@@ -308,7 +308,7 @@
   money, distance, size, temperature. The student converts both ways and then marks which reading is ambiguous.
 - **markup** — column pair: `<as written>` left, `input.gap` right for the converted form; one extra row asking what
   the same notation could also mean.
-- **fits** — beat; pair with `genreDoc`, which supplies the artefact that made it matter.
+- **fits** — pair with `genreDoc`, which supplies the artefact that made it matter.
 - **width** — half-> (the pair plus the ambiguity row, and no further)
 - **vary** — a value to convert; then a value that is ambiguous; then a value where the ambiguity changes the answer.
 - **can't** — arithmetic crowds out language quickly — keep it to five rows — and it teaches nothing about how anyone
@@ -337,7 +337,7 @@
   literal reading would be wrong. The origin is what makes the literal trap stick, which is why this is not
   `contextFit` with extra words.
 - **markup** — `.card` with three labelled lines, then one `input.gap` sentence that has to use the idiom.
-- **fits** — beat or third; pair with `contextFit` — origin first, then the bank that files it under what it does.
+- **fits** — pair with `contextFit` — origin first, then the bank that files it under what it does.
 - **width** — third-> (three labelled lines and one gap)
 - **vary** — from producing the idiom to choosing between two that both look plausible.
 - **can't** — origins are frequently folk etymology. If the source is not certain the block must say "one story is" —
@@ -401,7 +401,7 @@
   minimal difference. Also covers homophones from a flap T or a silent letter.
 - **markup** — item list of radios where the `.qstem` is silence and the answers are the words: the clip *is* the
   question, so `data-say` on the chip supplies the key and no answer is written into the page.
-- **fits** — third or half; it is a beat, and it should sit immediately under whatever displays the pair.
+- **fits** — it should sit immediately under whatever displays the pair.
 - **width** — third-> (the clip is the stem and the answers are single words)
 - **vary** — two words → three → the pair inside a phrase at speed. Three options is the minimum for anything that
   matters, because two is a coin flip.
@@ -584,7 +584,7 @@
   student can check, which is what "say it with stress" fails to give them.
 - **markup** — column pair: the line left, `input.gap` for the count right; a second row asks which word sits on the
   break.
-- **fits** — beat or half; the count comes first, then the line is laid onto it.
+- **fits** — the count comes first, then the line is laid onto it.
 - **width** — half (the line and the count it is laid onto)
 - **vary** — count beats, then move the count by one word, then keep the count identical and change the meaning. The
   third step is the whole point and it needs no new words.
@@ -625,7 +625,7 @@
 - **does** — A line that is meant to be funny, and the student marks what is doing the work — a pun, an
   understatement, a reversal, a pause — then names what it would lose if translated.
 - **markup** — `.qitem` with the line as `.qstem` and the mechanisms as radios, then an `input.gap` for what it loses.
-- **fits** — beat; pair with `registerContrast` when two mechanisms have to be told apart.
+- **fits** — pair with `registerContrast` when two mechanisms have to be told apart.
 - **width** — third-> (the line, the mechanism and what the joke loses)
 - **vary** — from naming the mechanism to predicting whether a second line will land.
 - **can't** — funny is not a rule, and explaining a joke can kill it, so use it once per lesson at most. It must never
