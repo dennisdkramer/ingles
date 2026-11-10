@@ -8,6 +8,7 @@
 // A track whose folder is GITIGNORED is skipped (nothing is gitignored today); without git, every existing
 // folder is included. Generating into a deleted track's folder brings it back automatically.
 import fs from 'fs';
+import { createHash } from 'crypto';
 import path from 'path';
 import { execFileSync } from 'child_process';
 import { fileURLToPath } from 'url';
@@ -123,6 +124,26 @@ if (!countsLine.test(indexHtml)) {
   if (before !== wanted) {
     fs.writeFileSync(indexPath, indexHtml.replace(countsLine, wanted), 'utf8');
     console.log('index.html COUNTS ' + before.slice(13, -1) + ' -> ' + wanted.slice(13, -1) + ' (fallback kept in step with the folders)');
+  }
+}
+// The stylesheet's version stamp is BAKED INTO index.html by this build, never applied at runtime. It used to be
+// swapped in by JS at load, which changed <link>.href while the first fetch was still in flight: the browser
+// aborted and restarted the fetch, painted the document unstyled, then repainted — the page "decomposed", the
+// logo flashed left, and it redrew centred (owner report 2026-11-09). A href present in the HTML is
+// render-blocking, so there is nothing to paint early. The stamp is the file's own hash, so it changes exactly
+// when style.css changes, and a stale stamp is a harness failure rather than an invisible cache miss.
+const cssUrl = 'style.css?v=' + createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'style.css'))).digest('hex').slice(0, 10);
+const linkRe = /<link rel="stylesheet" href="style\.css(?:\?v=[0-9a-f]*)?"/;
+const htmlNow = fs.readFileSync(indexPath, 'utf8');       // re-read: COUNTS may have been written above
+if (!linkRe.test(htmlNow)) {
+  console.error('ERROR: index.html has no <link rel="stylesheet" href="style.css"> for the build to stamp.');
+  process.exitCode = 1;
+} else {
+  const before = htmlNow.match(linkRe)[0];
+  const wanted = '<link rel="stylesheet" href="' + cssUrl + '"';
+  if (before !== wanted) {
+    fs.writeFileSync(indexPath, htmlNow.replace(linkRe, wanted), 'utf8');
+    console.log('index.html stylesheet stamped -> ' + cssUrl);
   }
 }
 console.log('lessons.json written: ' + JSON.stringify(summary));

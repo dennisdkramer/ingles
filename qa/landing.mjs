@@ -17,6 +17,7 @@
  */
 import { JSDOM, VirtualConsole } from 'jsdom';
 import fs from 'fs';
+import crypto from 'crypto';
 
 const html = fs.readFileSync('index.html', 'utf8');
 const vc = new VirtualConsole();            /* swallow jsdom's "navigation not implemented" noise */
@@ -266,7 +267,7 @@ ok('an expired credential is refused before any paint',
   w.eval('restoreSession()') === false && !w.localStorage.getItem('eod_session'));
 w.eval('profile={email:"e@x.y"};cred="x";teacher=true;document.getElementById("app").innerHTML="protected";bounce();');
 ok('a rejected session shows the login card without a reload',
-  d.getElementById('acct').hidden === true && d.getElementById('gcard').hidden === false &&
+  d.getElementById('logout').hidden === true && d.getElementById('gcard').hidden === false &&
   d.getElementById('app').innerHTML === '');
 
 /* FOCUS RINGS ARE OPT-IN (owner report 2026-11-09: pressing Shift put a border round the last-clicked button).
@@ -291,6 +292,21 @@ ok('every focus-ring rule in style.css is gated by html.kbd',
   ringRules.length + ' rule(s)' + (ringRules.find(r => !/^html\.kbd\b/.test(r)) ? ', ungated: ' + ringRules.find(r => !/^html\.kbd\b/.test(r)) : ''));
 ok('the browser default ring is suppressed without .kbd',
   /html:not\(\.kbd\) :focus\{outline:none\}/.test(cssFocus));
+
+/* THE STYLESHEET STAMP IS STATIC (owner report 2026-11-09: a hard refresh "decomposed" the page — the logo
+   flashed on the left, then redrew centred). The stamp used to be applied by JS at load, which swapped
+   <link>.href while the first fetch was still in flight: the browser aborted it, painted the document
+   unstyled, then repainted. A href baked into the HTML is render-blocking, so there is nothing to paint early
+   — and keying it to the file's own hash keeps it from going stale in silence. */
+const cssHash = crypto.createHash('sha256').update(fs.readFileSync('style.css')).digest('hex').slice(0, 10);
+const linkTag = (html.match(/<link rel="stylesheet" href="style\.css[^"]*"/) || [''])[0];
+ok('the stylesheet stamp is in the HTML, not applied by JS',
+  linkTag === '<link rel="stylesheet" href="style.css?v=' + cssHash + '"', linkTag);
+ok('nothing rewrites the stylesheet href at load',
+  !/csslink/.test(html) && !/Math\.round\(Date\.now\(\)\/60000\)/.test(html));
+/* the control bar carries no identity (owner instruction 2026-11-09: email and track name out of the bar) */
+ok('the control bar shows no email and carries no account span',
+  !/id="acct"/.test(html) && !/Signed in: <b>/.test(html));
 
 console.log('\nstudent landing index — jsdom render');
 out.forEach(r => console.log('  ' + (r.pass ? '✅ ' : '❌ ') + r.name + (r.extra ? '  «' + r.extra + '»' : '')));

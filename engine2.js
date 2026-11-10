@@ -246,7 +246,51 @@ function renderCompleteBtn(){
  const bar=document.getElementById("controlbar");
  let extra="";
  if(gate.teacher){extra=' <select id="sel"><option value="'+gate.email+'">'+(gate.teacherName||gate.email)+'</option></select>';}
- bar.innerHTML="🦺 "+gate.email+" · <b>"+TRACK+"</b> · <a href=\"../index.html\">Index</a>"+extra+' · <button type="button" id="clearpage">🧹 Clear page</button>' + ' <button type="button" id="prevlesson"'+(L>1?'':' disabled')+' title="Lição '+(L-1)+'">← Last</button>' + ' <button type="button" id="nextlesson" title="Lição '+(L+1)+'">Next →</button>';
+ const folder=String(TRACK),cap=folder.charAt(0).toUpperCase()+folder.slice(1);
+ /* The bar (owner instruction 2026-11-09): Index is a BUTTON and comes FIRST; the current book gets its own
+    lesson selector beside it, rendering the same .bookitem list the Index page does, with the number as plain
+    text and the name as the only link; the identity and the book's name are gone from the bar. Glyphs are
+    written as HTML entities so this file stays pure ASCII. */
+ bar.innerHTML='<button type="button" id="idxbtn" title="Back to the index">&#8962; Index</button>'
+  +'<div class="bookdrop barsel"><button type="button" class="bookbtn" id="barselbtn">'+cap+' &#9662;</button>'
+  +'<div class="bookmenu" id="barselmenu" hidden></div></div>'
+  +extra+' <button type="button" id="clearpage">&#129529; Clear page</button>'
+  +' <button type="button" id="prevlesson"'+(L>1?'':' disabled')+' title="Lesson '+(L-1)+'">&#8592; Last</button>'
+  +' <button type="button" id="nextlesson" title="Lesson '+(L+1)+'">Next &#8594;</button>';
+ const ib=document.getElementById("idxbtn");if(ib)ib.onclick=()=>location.href="../index.html";
+ /* the book's lessons, built on FIRST OPEN so a lesson page pays nothing for a list it may never open; the
+    label and the swatch come from tracks.json and the items from lessons.json — the same two sources the
+    Index page reads, so the two lists cannot drift apart. */
+ const sb=document.getElementById("barselbtn"),sm=document.getElementById("barselmenu");
+ const escT=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ let selLoaded=false;
+ if(sb&&sm){
+  fetch("../tracks.json").then(r=>r.ok?r.json():null).then(list=>{
+   const m=(Array.isArray(list)?list:[]).find(x=>x&&x.name===folder);if(!m)return;
+   if(m.label)sb.textContent=m.label+" \u25BE";
+   if(/^#[0-9a-f]{3,8}$/i.test(String(m.color||"")))sb.style.setProperty("--sw",m.color);
+  }).catch(()=>{});
+  sb.onclick=async e=>{
+   e.stopPropagation();
+   const wasOpen=!sm.hidden;sm.hidden=true;if(wasOpen)return;
+   if(!selLoaded){
+    let ls=[];
+    try{const r=await fetch("../lessons.json");if(r.ok){const j=await r.json();ls=(j&&j[folder])||[];}}catch(err){}
+    if(!ls.length){
+     sm.innerHTML='<div class="bookitem"><span class="lnum">&mdash;</span><span class="ltitle dim">no lessons</span></div>';
+    }else{
+     selLoaded=true;
+     sm.innerHTML=ls.map(le=>{
+      const n=le.n,num=(n<10?"0":"")+n,t=le.title?escT(le.title):"&mdash;";
+      return '<div class="bookitem'+(n===L?' cur':'')+'"><span class="lnum">'+num+'</span>'
+       +'<a class="ltitle" href="lesson'+n+'.html" title="'+num+'. '+t+'"'+(n===L?' aria-current="page"':'')+'>'+t+'</a></div>';
+     }).join("");
+    }
+   }
+   sm.hidden=false;
+  };
+  document.addEventListener("click",e=>{if(!e.target.closest(".barsel"))sm.hidden=true;});
+ }
  const pv=document.getElementById("prevlesson");if(pv&&L>1)pv.onclick=()=>location.href="lesson"+(L-1)+".html";
  const nx=document.getElementById("nextlesson");if(nx)nx.onclick=()=>location.href="lesson"+(L+1)+".html";
  const cp=document.getElementById("clearpage");
