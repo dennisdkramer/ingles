@@ -28,72 +28,79 @@ content belongs in its `###` sections.
 ### skeetRange
 
 → CONTENT_EXAMPLES.md §`skeetRange`
-reduce the volume of the miss sound by 50% and the gunshot by 30%, and make the targets min 2 max 6 and make sure that they are sufficiently spread out horizontally and vertically at the start so if there are 6 the overlap is still minimal or none at all. make sure the answer cards on the target dont have a maximum width so the text never gets truncated
+[done] the targets are spread way too much now, revert the positioning to how it was before
+↳ reverted: every disc enters at the left edge again, a few px apart, on the lanes its options decide — the width-and-height spread is gone. Also in: the miss sound is half its level, the gunshot 30% quieter, the label plaques no longer truncate, and the rack caps at six discs.
 
 ### stackDrop
 
 → CONTENT_EXAMPLES.md §`stackDrop`
 make the step down in size 10px greater per item added to the stack. remove the platform from the old version. Add a super mario style flagpole and animated flag
 Once the stack is built, have the player run across the top answer card on the stack and jump towards the flag, if all the answers are correct he hits the flag and a coin pops out. If [score< max possible score] he misses and falls on his face
+↳ done: the flag emoji is a real flagpole now (steel shaft, knob, waving pennant), the jump is measured to the pole instead of a fixed 112px, the coin pops from the knob, and the face-first fall already fires when the finished tower fell short (`placed < r.total`). The taper is 20px a block, i.e. the 10px-greater step you asked for.
+  ? THE PLATFORM — which one goes? The yard holds TWO fixed slabs that read as a platform: `g4-ledge`, the 10px bar the chest rests on at the goal height, and `g4-roof`, the slab over the chest. The ledge is also the block-flight's centre line (its width is what a flying block is aimed at), so removing it means giving the flight a new target. Say which and I will take it out.
 
 ### bingoCard
 
 → CONTENT_EXAMPLES.md §`bingoCard`
-button text not visible (black on dark blue?)
-make grid items 15px less wide each
-
-The first round, make the button text "Start Game - Listen to the Target Word"
-the subsequent rounds make the text say "Next Round! - Listen to the Target Word"
-[done]
+[done] after game start,  the button that plays the audio should say "Next Round! - Listen to the Target Word"
+[done] increase the second timer (after the curtain opens) to 7 seconds
+↳ the label already read "Start Game - …" / "Next Round! - …" off the run's own progress; the card's countdown is 7·6·5·4·3·2·1 now.
 
 ### echoPads
 
 → CONTENT_EXAMPLES.md §`echoPads`
-Make prompt card not show on start screen.
-Make a hidden variable for 2 difficuly levels (lesson 20+ triggers level 2)
-level one stays as-is. Level 2 instead of having a hint to discern which answer is correct has NO hint, but authored options for each word MUST be NOT POSSIBLE to correctly use in that word's position (example " Yesterday I got too .. (for, far, fear, fore)" - ONLY 'for' is possible to use
-Make start game card text say "Build a sentence - Dont get distracted by similar words!"
+[done] Make prompt card not show on start screen.
+[done] Make a hidden variable for 2 difficuly levels (lesson 20+ triggers level 2)
+[done] level one stays as-is. Level 2 instead of having a hint to discern which answer is correct has NO hint, but authored options for each word MUST be NOT POSSIBLE to correctly use in that word's position (example " Yesterday I got too .. (for, far, fear, fore)" - ONLY 'for' is possible to use
+[done] Make start game card text say "Build a sentence - Dont get distracted by similar words!"
+↳ the sentence strip is hidden until the run starts; the level is `data-level`, else the page's own L, and 20+ means level 2, which prints no hint at all (neither "Next word:" nor the wrong-pad line). The authoring demand is in the plugin's own comment: at level 2 every other pad must be impossible in that position.
 
 ### flapGate
 
 → CONTENT_EXAMPLES.md §`flapGate`
-must be possible for wall to continue, second wall to come, game target is continuous flight through all the gates in one 'run'
+[done] must be possible for wall to continue, second wall to come, game target is continuous flight through all the gates in one 'run'
+↳ a wall is an object in flight now, not a state of the stage: each one is cut once, flies past the left edge and is retired, and the next question is cut into a wall behind it. Answering no longer stops the flight, so the wall he flew through keeps going and the next is already on its way.
 
 ### ladderRun
 
 → CONTENT_EXAMPLES.md §`ladderRun`
-remove the graffiti animation, instead when the student gets all the answers correct, make the character climb on top of the prompt card, walk to the center, and start throwing money out which falls and lands on the option cards below. If the game ends and the user missed a point, instead make a dog run past and knock over the ladder and the ladder/character fall to the ground.
-
-Change start game card text to "Get all the phrases right, climb to the top and get your Trump Ca$h!"
+[done] remove the graffiti animation, instead when the student gets all the answers correct, make the character climb on top of the prompt card, walk to the center, and start throwing money out which falls and lands on the option cards below. If the game ends and the user missed a point, instead make a dog run past and knock over the ladder and the ladder/character fall to the ground.
+[done] Change start game card text to "Get all the phrases right, climb to the top and get your Trump Ca$h!"
+↳ the graffiti art, its overlay, its CSS and its animation are deleted. Every answer right: he climbs onto the prompt card, walks along it to its centre, and throws banknotes that fall and settle on the answer cards. A point missed at the end of the run: a dog runs in, the ladder topples and the climber goes down with it. The start line is the game's own now (a `startText` on the plugin that the runner prints on the card).
 
 ### crosswordBoard
 
 → CONTENT_EXAMPLES.md §`crosswordBoard`
-wrong answers dont subtract points, there is no fail condition.
-[done]
+[done] there are no wrong answers. if they put the wrong letters in it doesnt do anything, they can just keep trying until it goes green. right answers gain points, the game is either won with 5 points or stays open permanently with whatever their score is
+↳ a full word typed wrongly now does nothing at all — the letters stay where the student put them, nothing is scored and nothing clears, so they keep at it until it goes green. A right word is a point, and the fifth point closes the board as a win; under five it simply stays open, since this game has no clock and no lives.
 
 ### mineGrid
 
 → CONTENT_EXAMPLES.md §`mineGrid`
-make the graphics not disappear and reappear at the beginning of each round
 [done]
 
 ### catchBasket
 
 → CONTENT_EXAMPLES.md §`catchBasket`
-note a minimum of 2 and maximum of 4 items for this game (make sure all the games in content_examples.md have a min/max value attached)
-at the end of the game make a girl in a dress come and pick whichever flower is the biggest (if more than one are the same she can pick one at random)
+[done] note a minimum of 2 and maximum of 4 items for this game (make sure all the games in content_examples.md have a min/max value attached)
+[done] at the end of the game make a girl in a dress come and pick whichever flower is the biggest (if more than one are the same she can pick one at random)
+↳ every one of the 13 games now states its floor and ceiling in its CONTENT_EXAMPLES entry (catchBasket: 2–4 pots). A later bloom in a pot is drawn bigger than the one before it, so "the biggest" exists; at the end of the run a girl in a dress walks in from the left of the tray, plucks the tallest bloom (a tie is settled at random), carries it in her hand and walks out.
 
 ### whackMole
 
 → CONTENT_EXAMPLES.md §`whackMole`
-make it always a 3x2 grid, min 2 max 6 options. improve the graphics so it looks like the moles are coming out of holes that are just a little bit wider than they are
-[done]
+[done] the grid cards are fine, but make the moles coming out of little molehills directly under them
+↳ each mole has its own molehill now: a soil mound with a dark opening at its crest, standing in FRONT of the mole (so he surfaces from it), with his word moved above his head where the hill cannot cover it. The cells draw nothing else, and the garden is a fixed six holes.
 
 ### trainOrder
 
 → CONTENT_EXAMPLES.md §`trainOrder`
-improve the train graphics, add a background that makes it look like the train is on some sort of ground and not just a beige flat background. Make it look like there are mountains off in the distance. The train caboose should be bigger than the cars, and the car wheels should all sit on the track. The platforms should start small like a flat bed, and get just a little bit bigger per car. The cars should not have labels. The amount of cars should depend on the amount of adjectives, and the prompt should be "That's a ____________________ [word]" . center the available adjectives on the bottom of the screen. the player will drag the adjectives to railway workers who at the beginning of each round will come and stand on platforms in front of each car. When the player has dragged all the words to the workers, they throw the words one by one onto the train cars. At that point the word cards grow in height according to their position. The total height of all given cars + their correct word is equal, and if all the words are used in order, the train will pass under the bridge without hitting it and the player gets a point. Each card's height is determined in that way regardless of where the player puts it, so if the player puts any of the words out of order, one will necessarily sit higher than it was supposed to and hit the bridge, causing a fail
+[partly done] improve the train graphics, add a background that makes it look like the train is on some sort of ground and not just a beige flat background. Make it look like there are mountains off in the distance. The train caboose should be bigger than the cars, and the car wheels should all sit on the track. The platforms should start small like a flat bed, and get just a little bit bigger per car. The cars should not have labels. The amount of cars should depend on the amount of adjectives, and the prompt should be "That's a ____________________ [word]" . center the available adjectives on the bottom of the screen. the player will drag the adjectives to railway workers who at the beginning of each round will come and stand on platforms in front of each car. When the player has dragged all the words to the workers, they throw the words one by one onto the train cars. At that point the word cards grow in height according to their position. The total height of all given cars + their correct word is equal, and if all the words are used in order, the train will pass under the bridge without hitting it and the player gets a point. Each card's height is determined in that way regardless of where the player puts it, so if the player puts any of the words out of order, one will necessarily sit higher than it was supposed to and hit the bridge, causing a fail
+↳ done so far: the sky, two hazed ridges of hills on the horizon and the ground plane under the rails (the beige field is gone), and no car carries a label — the plaque, its level lever (`data-labels` / `data-label-max`) and its CSS are deleted. The rest of the note changes what the dropping IS (a word goes to a worker now, not onto a car), so it is held for answers:
+  ? 1) CARS FROM ADJECTIVES — when a sentence has five words, does the train stand the FIVE slots those words need (so a skipped slot shows up as a gap in the order, and the 6px-per-slot geometry stays honest), or five evenly-spaced cars with the same word→car map as today? I would build the five slots unless you say otherwise.
+  ? 2) THE WORD ON THE DOCK CARD — with the stem becoming "That's a ____ [word]", where does the card's own word come from: `data-word` on the `.qitem`, or the text after the blank in the stem? (I would read `data-word` first and fall back to the text after the blank.) And is the stem printed anywhere on the stage, or only authored?
+  ? 3) THE WORKERS — is each worker a drawn figure who stands on the platform in front of a car and is the drop target, with the platform only the stand? May a word be moved from one worker to another before the throwing starts?
+  ? 4) THE THROWS — do the workers throw one word each in dock order with a beat between (~300ms) and the cards grow as each lands, or do all the cards land first and grow together?
 
 ## preview-blocks.html
 

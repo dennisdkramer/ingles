@@ -99,6 +99,9 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   per option, and the gap the bird is inside when the wall arrives is the answer. A click on a gap answers at once
   (the honest "I know it" path, and the only one a keyboard or reduced-motion student has); a click anywhere else
   flaps.
+- **the stream** — walls are things in flight, not a state of the stage: each one is cut once, flies from the right
+  edge to past the left one, and is retired while the next is already behind it. Answering does not stop the flight,
+  so a run is **one continuous flight through every gate in it** — only the bricks end it.
 - **the wall is the stake** — a right gap is a point and the flight carries on through it into the next question. A
   wrong word costs nothing: the flight continues. Flying into the **brick** costs one of three hearts *and the run* —
   the block starts again at its first question, in the same order, with what was already answered left as it was
@@ -151,9 +154,10 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   clue. The engine lays the whole set out at once: the first word across, every later word placed so it **crosses**
   an existing letter, anything that cannot cross dropped into its own row below. A shared letter is one cell, so
   typing it once fills both words and **solves both items** — that is the point of a crossword and why this is a
-  board, not a drill. A full word typed wrongly is **answered**: it clears, shakes, and its item goes down as a
-  miss with its radio left blank — one chance per word, because this board keeps no lives to pay for a second
-  one. Its cells stay typeable, so a crossing word can still use those letters.
+  board, not a drill. A full word typed wrongly costs **nothing**: nothing clears, nothing is scored and its cells
+  stay as they were typed, so the student keeps at it until the word goes green. A right word is **a point**, and
+  **five points wins the board**; under five it simply stays open with whatever it has, because there is no clock and
+  no lives here.
 - **opts** — **2 to 6 words per block**, and **2 or more options per item**. Each item's `data-answer` is the word (letters only, at least two of them) and its `.qstem` is the clue; every answer has to be spellable or the board refuses the run, and six short words is the ceiling — the grid sizes its cells to fill the stage down to an 18px floor, and a seventh word drops below it.
 - **art** — the site's own grid: a flat block per gap, a small number in the corner of each word's first cell.
   The cells are sized to **fill the stage** (10px of margin all round, height and width each get a say), and the
@@ -181,6 +185,11 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
 - **art** — a paper sentence strip that fills in as words land: the given words in a dashed tan chip, the placed
   words in green, a caret holding the next place; four word pads on the neon arcade scene; "Say the sentence"
   reads out the sentence as it stands.
+- **levels** — **two of them, and neither is shown.** `data-level` on the block decides, else the lesson page's own
+  `L`, and a lesson numbered 20 or above is level 2. Level 1 prints the hint line. **Level 2 prints no hint at all** —
+  not "Next word:", not even the wrong-pad line — so the reading has to come off the sentence; every other pad in an
+  item must then be **impossible** in that position, not merely unlikely, which is an authoring rule the engine cannot
+  test. The start card is the game's own line: "Build a sentence - Dont get distracted by similar words!"
 - **can't** — one sentence per block and one word per item, so the wording has to be planned end to end; nothing
   here trains spelling or listening.
 - **guardrail** — the sentence comes FIRST and the pads are generated second, one word at a time, LEFT TO
@@ -197,9 +206,9 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
   card is never trivially small. The card arrives shut behind a velvet curtain and the voice **calls the correct
   answer's word exactly once** (the clip when the item has one, else the right option's text — never the question).
   There is no replay button: paying attention to the one chance IS the activity. A **3·2·1 countdown** in its own
-  card at the grid's left edge runs while the caller speaks; at zero the curtain rises, and a **5·4·3·2·1 countdown**
-  in a card at the right edge starts. Stamp the tile you heard and the item is answered. Let the second countdown
-  reach zero and the curtain **falls on the item**: it is marked wrong and the point it was worth is gone.
+  card at the grid's left edge runs while the caller speaks; at zero the curtain rises, and a **7·6·5·4·3·2·1
+  countdown** in a card at the right edge starts. Stamp the tile you heard and the item is answered. Let the second
+  countdown reach zero and the curtain **falls on the item**: it is marked wrong and the point it was worth is gone.
 - **opts** — **2 to 9 options per item**. The card is nine tiles: the item's own options first, then decoys drawn from the rest of the block to fill it — so a two-option item is padded to nine, a nine-option item has no room for decoys, and more than nine cannot be shown at all.
 - **skins** — tiles are options, so the words on the card are the lesson's words. The instruction is the block's own
   `.game-how` and nothing else — nothing inside the stage prints "listen" as a second heading.
@@ -266,18 +275,17 @@ There is **no house style**. Look, palette, motion and mood are chosen per game 
 - **skins** — one `.qitem` per WORD: the stem is the word, and the options are the eight cars, one radio per car,
   `value` naming the slot (`opinion`, `size`, … or `1`–`8`). `data-a` on the item is the slot the word belongs in, so
   the answer that saves is the ordinary radio of the car the student chose. `data-train="2"` on an item puts it in the
-  second sentence's train; items with no `data-train` ride together, in authored order.
+  second sentence's train; items with no `data-train` ride together, in authored order. **No car carries a label**:
+  the eight slots are read as positions, not as names.
 - **opts** — **4 to 8 words per train**, and the options ARE the eight cars (one radio per car). Eight is the ceiling because a car holds one word: a ninth word has no car to stand in, and under four there is too little sentence to show an order.
 - **levers** — `data-depart` (seconds the train waits on the dock before it leaves with whatever is loaded, default
   30, `0` = wait for ever), `data-lives` (trains that may be wrecked before the run ends; absent = one per train, at
-  most three), `data-slots` (replace the eight slot names, pipe separated), `data-labels` (`auto` / `1` / `0`) with
-  `data-label-max` — at `auto` the car labels are **shown up to level 30 and hidden above it**, read from the lesson's
-  own `L` (or `data-level` on the block), because naming the category is the training wheel and the level-30 student
-  is meant to read the cars as positions only.
+  most three), `data-slots` (replace the eight slot names, pipe separated).
 - **art** — a drawn saddle-tank locomotive facing left, eight flatbeds on a ballasted grade, a lattice girder bridge
   with a hazard-striped deck in eight planks (one per car, so the collision breaks the piece the wrong car hits),
   splinters, steam, a slammed CLEARED / DERAILED stamp, and a departure clock that turns red and ticks in the last
-  six seconds.
+  six seconds. Behind the yard: a sky, two hazed ridges of hills with snow on the two high peaks, and the ground the
+  rails are laid on — the train is somewhere, not on a flat beige field.
 - **fits** — full width only: eight cars cannot be read at a half.
 - **can't** — one order, so it trains one rule: it cannot contrast two orders, and it is not a production exercise —
   the sentence is built, never written or said. Word-level vocabulary has to be known already, since the sentence is

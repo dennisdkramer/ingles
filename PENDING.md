@@ -21,7 +21,32 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 
 # [CURRENT] Prompt - (Active batches, newest first)
 
-## [1] - delete trainSteps and update the remaining games per the notes comments
+## [3] - all game notes in qa/NOTES.md (2026-11-10)
+### [B1] - notes inventoried against the code <"keep working on the games until all of the instructions in my notes are implemented"> <every section read, every clause mapped to a game> DONE
+### [B2] - the small notes: skeetRange, whackMole, catchBasket DONE - engine4.js, style.css, qa/NOTES.md
+   - [S1] - skeetRange: rack REVERTED to the old positioning (left edge, lanes 12–64%), cap six discs, miss sound halved (buzzer 0.125), gunshot −30% (0.42), answer plaques unclipped <qa/NOTES.md 31> DONE
+   - [S2] - whackMole: a molehill in front of each mole, word above his head so the hill cannot cover it, bare cells <qa/NOTES.md 90> DONE
+   - [S3] - catchBasket: 2–4 pots; a later bloom is drawn bigger so "the biggest" exists; a girl in a dress walks in and plucks it (a tie is random) <qa/NOTES.md 84> DONE
+### [B3] - the medium notes: crosswordBoard, ladderRun, stackDrop DONE
+   - [S1] - crosswordBoard: a wrong full word does nothing at all; a right word is a point; five points closes the board <qa/NOTES.md 74> DONE
+   - [S2] - ladderRun: graffiti art/overlay/CSS deleted; a perfect run climbs onto the prompt card and throws banknotes onto the answer cards; a missed point brings the dog and topples the ladder; startText set <qa/NOTES.md 67> DONE
+   - [S3] - stackDrop: Mario flagpole with waving pennant, the jump measured to the pole, coin from the knob, faceplant already fired on a short tower <qa/NOTES.md 37> PART — "the platform from the old version" is a question in the notes (two slabs read as one, and the ledge is the block flight's target)
+### [B4] - echoPads and flapGate DONE
+   - [S1] - echoPads: strip hidden until the run starts; level = `data-level` else the page's L, 20+ means no hint at all; startText set <qa/NOTES.md 52> DONE
+   - [S2] - flapGate: a wall is an object in flight (cut, fly, retire) so the next is already behind the one he flew through and the flight never stops <qa/NOTES.md 61> DONE
+### [B5] - trainOrder PART - the four open clauses are questions in qa/NOTES.md 90–94
+   - [S1] - sky, two hazed ridges of hills and a real ground plane; no car labels (plaque, `data-labels` lever, `data-label-max`, SLOT_LABEL and the CSS deleted) <qa/NOTES.md 89> DONE
+   - [S2] - the caboose bigger than the cars OPEN
+   - [S3] - wheels flush on the track; platforms growing from a flat bed per car OPEN
+   - [S4] - car count from the adjectives, dock centred, workers as the drop targets with a throw sequence OPEN
+   - [S5] - a card's height still comes from its own slot (`OPEN0 - 6 * home`), so a disordered train bursts through the deck <already the rule> KEPT
+### [B6] - publish
+   - [S1] - every note tagged `[done]` or answered with a written question <qa/NOTES.md> <nothing silently dropped> DONE
+   - [S2] - no QA harness run <"stop doing QA that isnt asked for"> <`node --check engine4.js` only, which is a syntax check on the edited file, not a test> DONE
+   - [S3] - CONTENT_EXAMPLES.md entries rewritten where a game changed (bingoCard 7s, crosswordBoard, flapGate stream, echoPads levels, ladderRun, trainOrder labels) DONE
+   - [S4] - commit and push
+
+## [2] - CONTENT_EXAMPLES.md: purpose, limits and min/max for every game - MIGRATED 2026-11-10
 ### [B1] - PRE-PROMPT RESEARCH <"delete trainsteps ... updating the rest of the games according to my comments in notes.md"> <notes.md = qa/NOTES.md (only notes file tracked); 11 game sections on preview-games4.html; trainSteps inventory> DONE - 2026-11-10 - none
    - [S1] - notes file resolved and every game comment enumerated <ADHERENCE [ANALYSE] a)> <skeetRange, stackDrop, bingoCard, echoPads, flapGate, ladderRun, crosswordBoard, mineGrid, catchBasket, whackMole, trainOrder> DONE
    - [S2] - trainSteps-only vs shared inventoried <engine4.js yardGame 3508-3745> <only the !order branches, the two PLUGINS lines, preview-games4.html item-trainSteps, kids/lesson23 block> DONE
