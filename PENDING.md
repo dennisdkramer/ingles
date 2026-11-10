@@ -1,6 +1,28 @@
 # PENDING — Adherence.md [BATCHING] for current task
 
 
+## [15] - block kind, charts demoted to an in-block class, solid edges, a width default per entry (2026-11-10)
+### [B1] - PRE-PROMPT RESEARCH <"does the 'dialog' vehicle have an .itemwidth attribute by default? …do all of these have pre-determined itemwidths?">
+   - [S1] - `itemwidth` looked for across every .md/.css/.js/.mjs/.html <0 hits> <the real vocabulary is `.itemsize` / `-half` / `-third` / `-twothird`, styled at style.css:205-211>
+   - [S2] - how a width is decided today, read at source <FORMAT.md [GENERATION] a-e, and the entries' `fits` prose> <no entry carried a machine-readable slot, so no vehicle had a default; `dialog` included>
+   - [S3] - `## [MIXED]` found MISSING while reading the categories <it had been swallowed by the drop script in [13], which rebuilt the menu from entry bodies and so deleted a heading that sat between two entries> <restored verbatim (`## [MIXED] TEACHING/training`) before `twoWordVerb`; TEACHING 7 · MIXED 13 · TRAINING 20 · GAMES 13 = 53>
+### [B2] - the stylesheet <"change the dashed line outline on the activity blocks to solid … add a shadow">
+   - [S1] - `.panel` dashed → solid, same colour, `4px 4px 0` hard shadow added <`--edge` carries the colour so a kind can override it>
+   - [S2] - block kind: `data-kind="teaching"` → ink edge, `"mixed"`/`"training"` → the new `--orange`, untagged → the neutral tan <`.card`, `.game`, `.dialog` moved onto `--edge` too, so the tag works on every block container>
+   - [S3] - `.chart` demoted: inside a block it drops its own frame and shadow; a chart standing alone (older lessons) keeps both <the comment that read "A CHART IS A BLOCK" rewritten>
+### [B3] - the page
+   - [S1] - 15 chart wrappers (`div.chartblock`) turned into real blocks (`.panel`), header + chart inside <"demote charts to an in-block class and wrap it with the same outline as the other blocks">
+   - [S2] - 65 blocks tagged with their vehicle's kind <8 teaching · 25 mixed · 32 training — the tag is the menu's `## [...]` category, never a second opinion>
+   - [S3] - a bare `itemsize` removed from 14 blocks that are children of an `.itemrow`, where the row decides the width <it claimed full width inside a half>
+### [B4] - the entries and the docs <"whats the best option for giving them a default, but making sure that generation knows to resize them based on the lengths of the phrases">
+   - [S1] - 53 `**width**` lines, each derived from its own entry's `fits` line (the slots it allows) plus the width its block actually has on the page (the slot it starts at) <full 36 · half 10 · third 3 · twothird 4>
+   - [S2] - FORMAT.md: [GENERATION] l) the kind tag, m) width = default + MEASUREMENT, n) solid edge and shadow; i) and the `.chart` class line rewritten <the rule a build reads>
+   - [S3] - CONTENT_EXAMPLES.md [INSTRUCTIONS]: one bullet for the `**width**` field
+   - [S4] - five `markup` lines that still described a bare `.chart` as the block <signalTable, soundGrid, collocationMatrix, genreDoc, formFill>
+### [B5] - verify
+   - [S1] - qa/examples.mjs gained three invariants — every entry names a width slot, every block carries its vehicle's kind, no chart stands where a block belongs <9/9>
+   - [S2] - the stylesheet stamp bumped in index.html (77783f5ff4 → 0b82c6b681) <qa/landing.mjs fails on a stale stamp; all landing checks pass>
+
 ## [14] - block letters and horizontal pairing on preview-blocks.html, and the notes that landed after [13] (2026-11-10)
 ### [B1] - PRE-PROMPT RESEARCH <"blocks in the same vehicle pair together horizontally if they are smaller widths. Make sure all these blocks get a letter header"> <the corpus convention, then the page's own block inventory>
    - [S1] - the lettered-block rule read at source <FORMAT.md:13> <how a block header is written and where it sits> DONE - `A. ` + title in an `<h3>`, inside-top, restarting at A in every section

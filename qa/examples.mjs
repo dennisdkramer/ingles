@@ -93,5 +93,58 @@ const orphans = claimed.filter(d => preview.indexOf('id="item-' + d.name + '"') 
 ok('every draft built in the preview page has an item there',
   orphans.length === 0, orphans.join(', ') || (claimed.length + ' draft(s) linked'));
 
+/* --- the generation contract the blocks are read through ---------------------
+   A vehicle's entry tells a build where the block starts (`**width**`), and the built page must agree
+   with it: the block declares the vehicle's KIND, and a chart is inside a block rather than beside it.
+   These are the three facts that break silently — a missing width, an untagged block, a chart that
+   became a sibling of the panels again — so each is checked against the artefact, not the prose. */
+const SLOT_NAMES = ['full', 'half', 'third', 'twothird'];
+const bodyOf = name => {
+  const start = lines.findIndex(l => l.startsWith('### `' + name + ' - ('));
+  let body = '';
+  for (let i = start + 1; i < lines.length && !lines[i].startsWith('### '); i++) body += lines[i] + '\n';
+  return body;
+};
+const noWidth = entries.filter(e => {
+  const m = bodyOf(e.name).match(/^- \*\*width\*\* — default \*\*([a-z]+)\*\*/m);
+  return !m || SLOT_NAMES.indexOf(m[1]) === -1;
+}).map(e => e.name);
+ok('every entry declares its width slot', noWidth.length === 0, noWidth.join(', ') || (entries.length + ' entries'));
+
+/* the vehicle's category, read off the menu's own ## [SECTION] headings */
+const kindOf = {};
+let section = null;
+for (const l of lines) {
+  const h = l.match(/^## \[(TEACHING|MIXED|TRAINING|GAMES)\]/);
+  if (h) { section = h[1].toLowerCase(); continue; }
+  const e = l.match(ENTRY_RE);
+  if (e && section) kindOf[e[1]] = section;
+}
+/* every block in a vehicle's section on the page, with the kind it carries */
+const blocksOn = name => {
+  const at = preview.indexOf('<h2>' + name + '</h2>');
+  if (at === -1) return [];
+  const end = preview.indexOf('</section>', at);
+  const chunk = preview.slice(at, end === -1 ? preview.length : end);
+  return [...chunk.matchAll(/<div class="([^"]*\b(?:panel|card|dialog|game)\b[^"]*)"([^>]*)>/g)]
+    .map(m => ({ cls: m[1], kind: (/data-kind="([a-z]+)"/.exec(m[2]) || [])[1] }));
+};
+const wrongKind = [];
+const withBlocks = entries.filter(e => blocksOn(e.name).length);
+for (const e of withBlocks) {
+  for (const b of blocksOn(e.name)) if (b.kind !== kindOf[e.name]) wrongKind.push(e.name + ':' + (b.kind || 'none'));
+}
+ok('every block carries its vehicle\'s kind', wrongKind.length === 0,
+  wrongKind.join(', ') || (withBlocks.length + ' vehicles tagged'));
+
+/* a chart is an in-block class: it is never the thing that a `###` section opens with */
+const bareCharts = withBlocks.filter(e => {
+  const at = preview.indexOf('<h2>' + e.name + '</h2>');
+  const firstBlock = preview.slice(at).indexOf('<div class="');
+  const firstChart = preview.slice(at).indexOf('<table class="chart"');
+  return firstChart !== -1 && firstChart < firstBlock;
+}).map(e => e.name);
+ok('no chart stands where a block belongs', bareCharts.length === 0, bareCharts.join(', ') || 'all charts are inside a block');
+
 console.log('\n' + (fail ? 'FAILED: ' : 'OK: ') + pass + ' passed, ' + fail + ' failed\n');
 process.exitCode = fail ? 1 : 0;
