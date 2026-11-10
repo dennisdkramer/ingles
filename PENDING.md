@@ -67,6 +67,26 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 # [CURRENT] Prompt - (Active batches, newest first)
 
 
+## [16] - "lets go with a": the width field removed entirely, flex equal heights, games purple (2026-11-10)
+### [B1] - PRE-PROMPT RESEARCH <"lets go with a"> <verified anchors for every revert site, and the cause of the unequal heights named> DONE - measured in headless Chrome, not guessed
+   - [S1] - the 53 `**width**` lines, the `[INSTRUCTIONS]` bullet and `FORMAT.md m)` located and counted <CONTENT_EXAMPLES.md:44+, :8; FORMAT.md:65> DONE - 53 / 1 / 1, no anchor from memory
+   - [S2] - the 14 `itemsize` classes removed last turn re-located <qa/preview-blocks.html> DONE - and the count was wrong: 23 tokens differed from 13ca844, because the 15 demoted charts also moved a token, so the restore matched PER SECTION and skipped the sections whose block count changed (the demotion itself)
+   - [S3] - every `.itemrow` and its direct children dumped, then measured <qa/preview-blocks.html in headless Chrome via CDP, the launcher shape qa/live.mjs uses> DONE - 26 rows, 25 all-block, ONE wrapper (`infoGap`: row stretched the `itemsize-third` wrapper, the panel inside it stayed 54px short); 0 rows with unequal children; 19 block-to-block adjacencies that are STACKED, not paired
+### [B2] - the field removed and the widths back where they were before the change <"make the widths that i had them before this change the default widths" answered by "lets go with a" = remove the field entirely> DONE
+   - [S1] - 53 `**width**` lines and the `[INSTRUCTIONS]` bullet deleted <CONTENT_EXAMPLES.md [INSTRUCTIONS]> DONE - 0 width lines, 0 bullet, entries 53 -> 53
+   - [S2] - `FORMAT.md m)` rewritten, and a new `n2)` written from today's measured defect <[GENERATION]> DONE - m) says no file stores a default and names the open question; n2) says a row's children ARE the blocks, with the 50px gap recorded as the reason
+   - [S3] - the width tokens restored to the 13ca844 values <qa/preview-blocks.html> DONE - 23 restored per section; the 15 chart sections skipped because the demotion is what changed their count, and their token came across with the wrapper
+### [B3] - adjacent blocks keep the same height <"i want flex to keep adjascent blocks the same height … they arent on the test page"> DONE
+   - [S1] - the cause fixed at its source, per [B1 S3] <qa/preview-blocks.html infoGap: wrapper dropped, `itemsize-third` moved onto the panel, `data-cols="2"` added to the row> DONE - re-measured: 0 unequal children, 0 blocks short of their wrapper, 0 rows whose children fail to fill them
+### [B4] - games get their own colour, purple <"give games their own color, maybe purple"> DONE
+   - [S1] - `--purple:#5b2a86` and `[data-kind="games"]` beside the other kinds <style.css> DONE - teaching ink, mixed/training orange, games purple, untagged keeps its container's edge
+   - [S2] - `FORMAT.md l)` extended <the kind list names games and its colour> DONE
+### [B5] - verify and publish <[GUIDELINES]> DONE
+   - [S1] - qa/examples.mjs (the width invariant removed with the field) 8/8; landing all pass after the stamp bump (4a205367bd -> 3d83dce539); order 54/54 with 0 mismatches, sections 54/54, divs 592/592 DONE
+   - [S2] - commit + push DONE
+### [B6] - NOT DONE, deliberately <the width design question from [B1] of the previous turn> <still open: narrow-first + structural measurement, or let CSS size itself, or authored slot + a check> <recorded, no code written>
+
+
 ## [13] - the tags added while [12] was running (2026-11-10)
 ### [B1] - deletes: stressBar, spellingSoundMap, scaleAxis, falseFriendSplit, audienceRow, sceneCast, dialogueMoves, vocabField, storyStrip, beatGrid, stanceScale, routineMap
    - [S1] - twelve entries removed from the menu and the page, navs rebuilt <[12] carried six, [13] eight more> DONE - menu 70 -> 56 entries, page 70 -> 57 sections (43 blocks + 14 drafts)

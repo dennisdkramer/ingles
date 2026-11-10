@@ -94,22 +94,11 @@ ok('every draft built in the preview page has an item there',
   orphans.length === 0, orphans.join(', ') || (claimed.length + ' draft(s) linked'));
 
 /* --- the generation contract the blocks are read through ---------------------
-   A vehicle's entry tells a build where the block starts (`**width**`), and the built page must agree
-   with it: the block declares the vehicle's KIND, and a chart is inside a block rather than beside it.
-   These are the three facts that break silently — a missing width, an untagged block, a chart that
-   became a sibling of the panels again — so each is checked against the artefact, not the prose. */
-const SLOT_NAMES = ['full', 'half', 'third', 'twothird'];
-const bodyOf = name => {
-  const start = lines.findIndex(l => l.startsWith('### `' + name + ' - ('));
-  let body = '';
-  for (let i = start + 1; i < lines.length && !lines[i].startsWith('### '); i++) body += lines[i] + '\n';
-  return body;
-};
-const noWidth = entries.filter(e => {
-  const m = bodyOf(e.name).match(/^- \*\*width\*\* — default \*\*([a-z]+)\*\*/m);
-  return !m || SLOT_NAMES.indexOf(m[1]) === -1;
-}).map(e => e.name);
-ok('every entry declares its width slot', noWidth.length === 0, noWidth.join(', ') || (entries.length + ' entries'));
+   A built block must declare the vehicle's KIND, and a chart is inside a block rather than beside it. These
+   are the facts that break silently — an untagged block, a chart that became a sibling of the panels
+   again — so each is checked against the artefact, not the prose. A width invariant used to live here; it
+   was withdrawn with the `**width**` field at the owner's instruction (PENDING.md [16]), because a harness
+   that keeps checking a deleted rule fails forever and trains everyone to ignore it. */
 
 /* the vehicle's category, read off the menu's own ## [SECTION] headings */
 const kindOf = {};

@@ -5,7 +5,6 @@
 - **A menu, not a checklist.** Nothing here is required to be in any lesson or in any order.
 - **The content in the page.** Games drive authored `.qitem`s (stem + optional `.listen` + radios), `input.gap`, or a textarea — nothing else. Whatever the engine animates is presentation; the saved answer is always one of those controls. If a mechanism cannot end in one, it is not a vehicle, it is a decoration. 
 - **The tone of a lesson comes from the lesson's copy, never from here.** Every game below is track-neutral, *skins* layered on top — never baked in
-- **Every block states the slot it starts at.** Its `###` entry carries `**width**`: the slot a build begins from — `full` / `half` / `third` / `twothird` — and the slots its own `fits` line allows. It is a default, never a fixed size: `FORMAT.md [GENERATION] m` makes the build MEASURE the block's longest line at the block's own font size and keep the narrowest allowed slot that holds it, so the number here is where the block starts and its `fits` line is how far it may go. No block inherits a width from a neighbour, a template or the block before it.
 - **Every activity that carries answers or fields declares its own multiplier.** Its `###` entry carries `**load**`: the number a build multiplies the block's content level by for the work the block is given, in the shape `qty ×1.0 at <the count it is normally used at> → ×<N> at <its ceiling> · pace ×<N> when data-time · risk ×<N> at data-retry="0"`. **That is a curve across two points, not a ceiling:** the stated baseline is where the activity is ×1.0, the ceiling is where it is ×N, and a block authored *below* the baseline sits *below* ×1.0 — four items is ×1.0 and two is less, because two is half the searching. The arithmetic is in `PEDAGOGY-MAP.md [LEVEL] x` — `load = L × M` with `M = qty × pace × risk`; L is the block's content level on the 1–50 scale and the product is **not** capped, so a deliberately hard block is just a high load — and the activity states the numbers, because only it knows what its own ceiling costs. A build reads that line and never estimates one; an entry with no `**load**` line can be authored at its baseline count and nowhere else.
 
 ### Build [Constraints] - Ignore this section for lesson generation
@@ -41,7 +40,6 @@
   whole display, because a label the student has to guess at teaches nothing.
 - **fits** — full; the two panels must be read against each other. Pair it with the block that makes the student produce
   the same reduction — this one shows it.
-- **width** — default **half** · may move within half, full · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — one change per line → three → a line performed twice, differently, so the pair itself shows what is stable
   and what was the performer's choice.
 - **can't** — the lesson has to supply a genuinely performed clip; and it produces no evidence on its own, so a lesson
@@ -60,7 +58,6 @@
   it is a `signalTable` wearing the wrong clothes.
 - **fits** — third only; it is built for a third, and pairs with a practice block of the same width. At a half it is a
   card with room it does not use.
-- **width** — default **third** · may move within third, half · the build measures the longest line the block holds and moves one slot at a time.
 - **can't** — one card carries one rule. A card with three rules teaches none of them.
 
 ### `formulaFrame - (best for: a pattern as a skeleton with named slots; filled versions beside the frame; patterns that really are fixed · can't: safely frame a pattern with moveable parts — the student then builds sentences that look like the frame and are wrong · purpose 8/10 · fun 3/10)`
@@ -74,7 +71,6 @@
   filled versions say it.
 - **fits** — third; it is built for a third, and pairs with the drill that makes them fill the slots at the same
   width. At a half it is a frame with room it does not use.
-- **width** — default **third** · may move within third, half · the build measures the longest line the block holds and moves one slot at a time.
 - **can't** — only for patterns that are actually fixed. A frame with moveable parts teaches a false shape, and
   the student will build sentences that look like the frame and are wrong.
 
@@ -89,7 +85,6 @@
   then be full sentences at a half width. A `<tr class="note">` under it names the one cue that is a trap.
 - **fits** — half, even when the examples are sentences, because column one no longer eats the row; full only
   when the examples have to be read against each other line by line.
-- **width** — default **full** · may move within full, half · the build measures the longest line the block holds and moves one slot at a time.
 - **can't** — no cue is decisive on its own; a table that reads "always" when the language only mostly does this
   teaches a false rule.
 
@@ -105,7 +100,6 @@
   "português" in words, and the target is not marked; each cell holds `<word>` plus a `.listen` chip. A `<tr class="note">`
   names the position where the student's own language interferes most.
 - **fits** — full; it is three columns of examples plus labels.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 - **can't** — it is listening and mouth-work only; no written form, and a grid with more than two sounds per row
   stops being a contrast and becomes a catalogue.
 
@@ -119,7 +113,6 @@
   and a `<tr class="note">` naming the one cell students always get wrong.
 - **fits** — half; three items in each set is what a half holds, and five rows still fit its height. Full only when
   both sets go past four.
-- **width** — default **half** · may move within half, full · the build measures the longest line the block holds and moves one slot at a time.
 - **can't** — ticks are not explanations; if a combination is blocked for a reason (not just by convention), a
   matrix hides it and the reason belongs in a `ruleCard` beside it.
 
@@ -133,7 +126,6 @@
 - **markup** — `.dialog` with the thread (speaker bubble per line). A `<tr class="note">` or one caption line names
   what to look for — the block must say why it is on the page.
 - **fits** — full or half; a thread is narrow, so half-width is natural beside the practice.
-- **width** — default **full** · may move within full, half · the build measures the longest line the block holds and moves one slot at a time.
 - **can't** — real material dates. If the lesson would break when the slang in it ages, use it as one example
   among several, never as the only presentation of a rule; and a thread whose every line is target language is a
   dialogue pretending to be a chat.
@@ -153,7 +145,6 @@
   it collapses to half width and is centred when it is alone (its lead-in and notes wrap to that width and never
   count as fill). Pair with `registerContrast` when the lesson also has a stiff/spoken axis, or with
   `sentenceSurgery` when the pair changes the order of a whole sentence.
-- **width** — default **half** · may move within half, full · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — reverse the direction (twin → everyday) before widening the vocabulary; then move the verb into a
   sentence with a subject that forces agreement. Rarer verbs make it *unfairer*, not harder.
 - **can't** — the pairing has to be genuinely interchangeable, or the chart teaches a false equation; and it is a
@@ -168,7 +159,6 @@
 - **fits** — **two halves on one row**: the bank is `.itemsize-half` and the situations are `.itemsize-half`, because
   the student reads the chunk and writes it without looking away, and neither half fills a full row on its own. A
   `dialog` that shows the chunks in their natural habitat is the other natural neighbour, above or below the row.
-- **width** — default **half** · may move within half, full · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — start with the chunk fully given and gap only the situation; then invert. The real lever is *which*
   chunks are in the bank: same function, different politeness, is harder than more chunks of the same politeness.
 - **can't** — a chunk whose parts can be swapped is not a chunk, so check it is said as one piece; and it never
@@ -182,7 +172,6 @@
   `.qstem` names a person and a situation and the radios are the two wordings.
 - **fits** — full; the audience is named in every item, or in a display block above it, because the student cannot choose a
   register for an audience the page never described.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 - **vary** — two clearly different audiences before two similar ones. The lever is how close the two audiences are
   (a teacher vs a head teacher vs a friend's parent), not how rude the options get.
 - **can't** — needs a described situation; with no audience both columns are defensible. And both wordings must be
@@ -200,7 +189,6 @@
   an item list of radios (which word was heard) or gaps (which spelling carries it).
 - **fits** — full width — it is the most space-hungry block here, which is why it earns its place only once or twice
   in a course.
-- **width** — default **half** · may move within half, full · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — a contrast in isolation → the same contrast inside a word → the same inside a phrase. Adding a second
   contrast to the same lab is what destroys it.
 - **can't** — needs a real first-language error to be worth the space, so generic "pronunciation" pages teach nothing;
@@ -217,7 +205,6 @@
   a person land (`production`, `explainer`), and leaving it out pushes them into a cell that is already wrong.
 - **fits** — half, beside `collocationMatrix` at the same width; the family and the company it keeps are the whole story
   of a new word.
-- **width** — default **twothird** · may move within twothird, half · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — give the family in the box → withhold it and give only the root → include a member the family does *not*
   have, so the student has to reject it. The last is the only version that tests the mental model rather than the list.
 - **can't** — only works on roots that really do have distinct members in use; inventing `<root>ness` to fill the grid
@@ -230,7 +217,6 @@
 - **markup** — column pair with three rungs as columns and the hearer as the row label, then item-list gaps: a hearer in
   the `.qstem`, one `input.gap` for the rung.
 - **fits** — full; three rungs plus a hearer column does not fit a half.
-- **width** — default **full** · may move within full, half · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — two rungs → three → four where the top rung is right for one hearer and *wrong* (oily) for another. The last
   is the item that turns the ladder into a rule.
 - **can't** — the rungs must be interchangeable in meaning, or the student is choosing content rather than tone; and it
@@ -247,7 +233,6 @@
   beside a `them` list of questions is two panels saying one thing.
 - **fits** — the facts are a **third** and the questions are **two thirds**, on one row, so the unknowns and the fields
   that answer them stay in view together.
-- **width** — default **twothird** · may move within twothird, third · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — the fact needed is named in the prompt → only the category is named → both students must ask, and one item
   needs a follow-up question because the first answer is incomplete.
 - **can't** — everything has to be answerable from the page, so it is a written information gap and not a speaking one;
@@ -261,7 +246,6 @@
 - **markup** — a `.panel` holding one `.chart` for the artefact itself, then a `.qgrid` of `.qitem`s whose stems ask where in it / what it
   means / what you do next.
 - **fits** — full width, and it is a spine candidate (`material-led`) rather than a mid-lesson beat.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 - **vary** — first a value that is printed on it; then a value that must be inferred (a total, an expiry); then what
   the artefact does *not* say — that third step is where real reading happens.
 - **can't** — cannot test production, and the authoring cost is the real one: an invented artefact teaches a
@@ -274,7 +258,6 @@
   to them — forbids, permits, warns, requests — and then names the word doing the work.
 - **markup** — column pair: notice left, radios for the force right; then one `input.gap` for the operative word.
 - **fits** — half; pair with `registerContrast` when the lesson also has a soft/hard axis.
-- **width** — default **twothird** · may move within twothird, half · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — from "what does it mean" to "which two notices conflict". Conflict is the difficulty, not longer notices.
 - **can't** — recognition only, and it must keep two axes apart: how hard a notice is and how polite it is are
   different questions, and a block that asks both at once cannot be marked.
@@ -287,7 +270,6 @@
 - **markup** — a `.panel` holding one `.chart` with the artefact's labels and an `input.gap` per field, plus one note row naming the
   convention the artefact uses.
 - **fits** — half to full; must follow `genreDoc` or `measureLocal`, so the student has read what they now write.
-- **width** — default **full** · may move within full, half · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — give the details in the boxes' order, then in a different order, then include one detail that belongs in
   no box.
 - **can't** — near-zero language load, so it cannot carry a lesson on its own, and it is only honest when the
@@ -300,7 +282,6 @@
 - **markup** — column pair: `<as written>` left, `input.gap` right for the converted form; one extra row asking what
   the same notation could also mean.
 - **fits** — beat; pair with `genreDoc`, which supplies the artefact that made it matter.
-- **width** — default **twothird** · the only slot this block's `fits` line allows.
 - **vary** — a value to convert; then a value that is ambiguous; then a value where the ambiguity changes the answer.
 - **can't** — arithmetic crowds out language quickly — keep it to five rows — and it teaches nothing about how anyone
   actually speaks.
@@ -314,7 +295,6 @@
   differences are regional and not ranked.
 - **fits** — half; it must come *before* `minimalPairs` in a lesson, so the student knows which differences carry
   meaning and which do not.
-- **width** — default **full** · may move within full, half · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — start with spelling, then sound, then a form that is old rather than regional.
 - **can't** — cannot be built from the lesson's own voice: one speaker cannot carry variants, so the lesson must
   reproduce them in writing. And it must never be phrased as "which is correct" — the block exists to kill that
@@ -327,7 +307,6 @@
   `contextFit` with extra words.
 - **markup** — `.card` with three labelled lines, then one `input.gap` sentence that has to use the idiom.
 - **fits** — beat or third; pair with `contextFit` — origin first, then the bank that files it under what it does.
-- **width** — default **full** · may move within full, third · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — from producing the idiom to choosing between two that both look plausible.
 - **can't** — origins are frequently folk etymology. If the source is not certain the block must say "one story is" —
   an invented origin is worse than none. It is also one lexical item at a time and never generalises.
@@ -345,7 +324,6 @@
   other way: the sentence arrives with EXTRA words in it and the student removes the ones that do not belong.
 - **fits** — full, or half; a bank of short chunks and the order line still read at half, and holding the whole
   sentence in memory is the load at either width.
-- **width** — default **full** · may move within full, half · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — more chunks before longer chunks; then remove the numbered scaffold so the whole sentence must be typed.
   A sentence with two defensible orders is not a harder item, it is a broken one.
 - **can't** — only sequences with one defensible order; and it tests assembly, not meaning — a student can rebuild a
@@ -357,7 +335,6 @@
 - **markup** — item list of `input.gap`s, one per answer. The prompt is the answer the student is talking to — never
   a grammar label, or they conjugate instead of ask.
 - **fits** — full, or half directly under a `dialog` thread so the question has a conversation to land in.
-- **width** — default **full** · may move within full, half · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — same tense with a stated word order before free order; then add the constraint that the question must
   begin with `<question word>`. Loading two new demands into one item is the standard way this drill becomes unfair.
 - **can't** — graded on form only, or free answers become unmarkable, so state what counts as right; and it does not
@@ -375,7 +352,6 @@
 - **markup** — item list: a short exchange with the break marked, then one `input.gap` holding the move that repairs
   it. The `.listen` chip carries the move so the student hears the tone, not just the words.
 - **fits** — half, beside a `dialog` thread — this is the emergency exit of the same conversation.
-- **width** — default **full** · may move within full, half · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — the move alone, then the move inside a longer exchange. What actually makes it harder is *whose* fault
   the break is: repairing your own sentence is a different move from rescuing someone else's.
 - **can't** — teaches the move, not the conversation; needs a scene to mean anything, and a teacher to judge whether
@@ -388,7 +364,6 @@
 - **markup** — item list of radios where the `.qstem` is silence and the answers are the words: the clip *is* the
   question, so `data-say` on the chip supplies the key and no answer is written into the page.
 - **fits** — third or half; it is a beat, and it should sit immediately under whatever displays the pair.
-- **width** — default **full** · may move within full, third, half · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — two words → three → the pair inside a phrase at speed. Three options is the minimum for anything that
   matters, because two is a coin flip.
 - **can't** — recognition only; it never shows the student can say it, and it deliberately uses words the student
@@ -401,7 +376,6 @@
   because a prompt containing the answer makes the clip decoration.
 - **fits** — third, or half. It is the cheapest listening block there is, which is also why two of them in a row is
   visible laziness.
-- **width** — default **full** · may move within full, third, half · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — three options, then the same three inside a phrase; then the same phrase at natural speed. More options
   beyond three adds guessing, not difficulty.
 - **can't** — two options invites a coin flip, so three minimum for anything that matters; and it tells you the
@@ -414,7 +388,6 @@
 - **markup** — item list of radios. Every wrong option is a *real* error a Portuguese speaker makes, so the wrong
   answers are informative rather than random.
 - **fits** — third, or half. Cheapest form check there is; it belongs right after the rule is displayed.
-- **width** — default **full** · may move within full, third, half · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — one distractor at a time before four; then the same error inside a longer sentence where the trigger is
   further away. Adding distractors that are merely odd (not wrong) is what makes it a trick question.
 - **can't** — distractors must be real errors, or it becomes a spot-the-typo; and it never shows the student can
@@ -425,7 +398,6 @@
 - **does** — 
 - **markup** —
 - **fits** — 
-- **width** — default **full** · the only slot this block's `fits` line allows.
 - **vary** — 
 - **can't** 
 
@@ -436,7 +408,6 @@
 - **markup** — the text as prose, then a short item list of `input.gap`s — one per error, in no required order — with
   the stated count in the instruction line.
 - **fits** — full width; it is a section, and it works best immediately after `ruleCard` has stated the rule it hunts.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 - **vary** — the count is the lever: an unstated count is a different, much harder task. Then make the errors the ones
   the rule predicts, rather than the ones that merely look odd.
 - **can't** — needs a self-contained text, so it is not a beat-sized vehicle; and a student who finds all the errors may
@@ -448,7 +419,6 @@
 - **markup** — item list of radios for the pick, plus **one block-level `<textarea>`** for the reasons. The textarea is
   deliberately shared, not per item: it is unmarked evidence, and a per-item textarea would break the one-control rule.
 - **fits** — third or half; it opens a section well because the reason becomes the next block's subject.
-- **width** — default **full** · may move within full, third, half · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — the odd one out by meaning, then by form, then by usage. Four items → five. What genuinely makes it harder
   is when the odd item is odd for a *subtler* reason, not when the vocabulary is rarer.
 - **can't** — if two items can be defended, the item is broken, so the justification is mandatory and the teacher reads
@@ -460,7 +430,6 @@
 - **markup** — worked pair: `.itemrow` of two `.panel`s side by side, then one gap per stated difference number. The two
   panels must be the same length, or the layout gives away where the changes are.
 - **fits** — full width — two texts side by side is the whole mechanism, so it cannot be squeezed into a third.
-- **width** — default **half** · may move within half, full, third · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — the count stated (like `errorHunt`), then unstated; then a version where the difference is one of *tone*
   rather than of content, which is the interesting one.
 - **can't** — the differences must be meaningful, not punctuation; and it does not say which version is right — that is
@@ -472,7 +441,6 @@
 - **markup** — open response: the scene as prose, one `<textarea>`, then the real ending inside `<details>` so the page
   hides it until the student has committed.
 - **fits** — half or full. It is the cheapest way to make a student care about the next block's vocabulary.
-- **width** — default **full** · may move within full, half · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — a stated number of sentences, then free length; then give the ending first and ask for the beginning. The
   lever is how much of the situation is withheld, not the length of the writing.
 - **can't** — no marking; it produces investment, not accuracy, so it must be followed by a block that does ask for a
@@ -485,7 +453,6 @@
   thing must contain, so "done" is visible.
 - **fits** — full width, and it wants the page's spine (section 8) built around it — a project in the middle of a quiz
   strand is a detour.
-- **width** — default **half** · may move within half, full · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — fewer required elements, then more; then a length limit, which is the harder constraint. Never raise the
   vocabulary as the difficulty lever — the point is producing with words they have.
 - **can't** — free production only, so nothing here trains a form under control and it needs a drill beside it; and it
@@ -500,7 +467,6 @@
   word written into the gap. The explainer is not optional: a student cannot mark a beat for a pattern the page never
   stated. Radios per word would be tidier but would give away that exactly one word is marked.
 - **fits** — half, beside its explainer on one row. It belongs near `registerContrast`, where tone already matters.
-- **width** — default **half** · the only slot this block's `fits` line allows.
 - **vary** — three candidate words → five → a two-clause sentence where the beat can fall in either clause. The lever
   is the number of *plausible* hosts, not the length of the sentence.
 - **can't** — only produces a marked word, never the sound; and it is genuinely hard for students whose first language
@@ -519,7 +485,6 @@
   the speaker's situation — the same two questions for both lines. Each line is short enough to sit whole on one line; a
   paragraph of it is `dialog`.
 - **fits** — half beside the rule it illustrates; full when it is the page's material.
-- **width** — default **half** · may move within half, full · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — the second line of the same concept, so the student generalises across two rather than interpreting one; then
   a third from a different medium.
 - **can't** — it dates and it is somebody's property: quote a line, never a verse, and never build an item whose answer
@@ -534,7 +499,6 @@
   asking for the spelling of the rhyme's coda.
 - **fits** — full width (lines are long); pair with `barCount` when the lesson is rhythm-led, or `pronLab` when the
   sound needs drilling *after* it has been noticed.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 - **vary** — move from "which two rhyme" to "which one does not rhyme although it is spelled the same". That
   reversal is the difficulty; rarer words are only unfairness.
 - **can't** — it needs lines whose rhyme is visible in the spelling, so it cannot carry a sound the student cannot
@@ -548,7 +512,6 @@
 - **markup** — `.panel` per stanza with an `input.gap` for the part name, plus one `.chart` comparing the first and
   last appearance of the repeated line.
 - **fits** — full width; pair with `moodTrack` when the lesson is about effect.
-- **width** — default **third** · may move within third, full · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — first ask only what comes back; then what changed inside it; then why that line and not another. Three
   steps, same artefact.
 - **can't** — no audio and no song: this is the shape of a text, and presenting it as listening is dishonest. It also
@@ -561,7 +524,6 @@
 - **markup** — column pair: the line left, `input.gap` for the count right; a second row asks which word sits on the
   break.
 - **fits** — beat or half; the count comes first, then the line is laid onto it.
-- **width** — default **half** · the only slot this block's `fits` line allows.
 - **vary** — count beats, then move the count by one word, then keep the count identical and change the meaning. The
   third step is the whole point and it needs no new words.
 - **can't** — speech only: a page cannot carry a metronome, so the count is the lesson's judgement and the block must
@@ -574,7 +536,6 @@
 - **markup** — `.qitem` with the scene as `.qstem` and the descriptions as `.opts` radios, then one `input.gap` for
   the "because…" clause.
 - **fits** — half or full; pair with a production block (`freeWrite`) so the words are actually used.
-- **width** — default **full** · may move within full, half · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — narrow the distance between the three descriptions until all are plausible. Never raise the vocabulary.
 - **can't** — nothing is played. It is vocabulary and justification, and grading it as a listening task would be a
   lie; it also cannot teach genre names it never states.
@@ -586,7 +547,6 @@
 - **markup** — one `.qitem` per situation with the candidate questions as radios, then one `input.gap` for the
   rewrite.
 - **fits** — half; it must follow the scene block that made the situation concrete. On its own it is abstract.
-- **width** — default **full** · may move within full, half · the build measures the longest line the block holds and moves one slot at a time.
 - **vary** — from "which is off-limits" to "which is fine here and not there". That second form needs two scenes, not
   stronger wording.
 - **can't** — **this is the most dangerous block in the file.** It asserts nothing itself, but if the lesson supplies a
@@ -599,7 +559,6 @@
   understatement, a reversal, a pause — then names what it would lose if translated.
 - **markup** — `.qitem` with the line as `.qstem` and the mechanisms as radios, then an `input.gap` for what it loses.
 - **fits** — beat; pair with `registerContrast` when two mechanisms have to be told apart.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 - **vary** — from naming the mechanism to predicting whether a second line will land.
 - **can't** — funny is not a rule, and explaining a joke can kill it, so use it once per lesson at most. It must never
   be graded as though taste were accuracy.
@@ -622,7 +581,6 @@
   simply leaves the default and takes the slower range as it comes.
 - **can't** — no production, no spelling; one shot per item means a careless click can hide what the student knew.
 - **needs** — nothing; `engine4.js` ships it.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 
 ### `whackMole - (best for: spotting which option fits among lookalikes; engagement in a restless class; exposing hesitation · can't: anything needing reflection — speed pressure is the whole mechanism; recognition only · purpose 9/10 · fun 8/10)`
 
@@ -636,7 +594,6 @@
 - **art** — inline SVG mole + radial-gradient hole with a dirt rim, rise via `translateY`, reduced-motion path.
 - **can't** — recognition only; speed pressure makes it a poor fit for anything needing reflection.
 - **needs** — nothing; `engine4.js` ships it.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 
 ### `catchBasket - (best for: sorting a form into its category; making a rule decision a single physical gesture; showing hesitation in public · can't: more than two to four categories per row, and a seventh item swamps the pot · purpose 9/10 · fun 8/10)`
 
@@ -652,7 +609,6 @@
 - **art** — inline SVG terracotta pot, water drops over the rim on a right drop, a flower grows out of the soil and
   stays there (six to a pot); the word lifts and tilts while held, a wrong drop shakes.
 - **can't** — only two to four pots fit a row; fine distinctions don't fit, and a seventh flower would swamp the pot.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 
 ### `stackDrop - (best for: giving a long drill a shape and an end; accumulate-and-complete motivation; the tower as progress bar · can't: run on a two-item block (nowhere to climb), and timing dominates, so one phrase per block · purpose 8/10 · fun 8/10)`
 
@@ -672,7 +628,6 @@
 - **can't** — one item per block, so a two-item block has nowhere to climb; timing dominates, so keep the language
   load to a phrase per block.
 - **needs** — nothing; `engine4.js` ships it.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 
 ### `flapGate - (best for: recognition at speed; arcade engagement; a keyboard and reduced-motion path to answering · can't: anything beyond recognition at speed, and it is the most expensive of the arcade set · purpose 8/10 · fun 9/10)`
 
@@ -694,7 +649,6 @@
   as a flat fill. Fall is half what it was, lift unchanged.
 - **can't** — recognition at speed only, and it is the most expensive of the arcade set.
 - **needs** — shared runner + gravity loop.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 
 ### `wordleBoard - (best for: spelling one word to a five-try limit; the deduction pleasure of letter feedback; repeated right-letter evidence · can't: run on phrases or on any word length but the fixed one; teaches no meaning and no listening · purpose 9/10 · fun 9/10)`
 
@@ -710,7 +664,6 @@
   word lands — a wrong length costs a message, not a row.
 - **can't** — only words of one fixed length; nothing for phrases, meaning or listening.
 - **needs** — nothing; `engine4.js` ships it.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 
 ### `mineGrid - (best for: making a guess cost something; reading before moving; leaving blanks a teacher can read as evidence · can't: run on a lesson that writes two or three options — the street comes up short · purpose 8/10 · fun 7/10)`
 
@@ -730,7 +683,6 @@
 - **art** — a street and a boardwalk, a signed doorframe per word with a drawn batwing door that swings on its hinge,
   a drawn snake, and a figure with hurt and down states.
 - **can't** — one answer per door; a lesson that writes two or three options leaves the street short.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 
 ### `crosswordBoard - (best for: spelling a word to its clue; showing that words share letters; a board where one shared cell solves two items · can't: handle long or unspellable words, and a vocabulary sharing no letter can only sit in separate rows · purpose 9/10 · fun 8/10)`
 
@@ -750,7 +702,6 @@
 - **can't** — the set must be spellable and the words short, or the grid gets fat; words with no shared letter can
   only sit in their own rows, so a lesson whose vocabulary shares nothing is a bad fit.
 - **needs** — nothing; `engine4.js` ships it. Authoring: `data-answer` on each `.qitem`, clue in `.qstem`.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 
 ### `echoPads - (best for: word order and collocation one word at a time; a constraint the student can see on the stage; planning a sentence end to end · can't: cover more than one sentence per block, and trains neither spelling nor listening · purpose 9/10 · fun 7/10)`
 
@@ -784,7 +735,6 @@
   the pad that also fits is the pad that teaches nothing and scores a coin flip. Generating the three options
   before the phrase is written, or from the whole sentence at once, is what produces them.
 - **needs** — nothing; `engine4.js` ships it (the voice is the built-in speech).
-- **width** — default **full** · the only slot this block's `fits` line allows.
 
 ### `bingoCard - (best for: recognising the spoken form of a word; one-chance attention with no replay; hearing under a countdown · can't: hear anything longer than a word, and it needs several options across the block or the decoy pool runs dry (the two countdowns are the game's own) · purpose 8/10 · fun 9/10)`
 
@@ -806,7 +756,6 @@
 - **can't** — recognition of the spoken form only, one word per item; the card needs a few options across the block
   or the decoy pool runs dry, and a lesson block cannot set the two countdowns — they are the game's own clock.
 - **needs** — nothing; `engine4.js` ships it (uses the built-in voice). Leave `data-time` at 0.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 
 ### `ladderRun - (best for: the page's quiz rather than a drill; keeping what was safely earned; scaling one block from five items to a full test · can't: act as a mid-lesson beat — one continuous arc — and its fall to the safe rung is harsh, so items must be fair · purpose 9/10 · fun 8/10)`
 
@@ -825,7 +774,6 @@
   item: the student who reads carefully is the one who gets it wrong. Write the wrong option so it is wrong for a
   reason the lesson has taught, and read every item back as a picky teacher before shipping it.
 - **needs** — nothing; `engine4.js` ships it.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 
 ### `bossRaid - (best for: a long drill with a visible cost; ritual stakes and a chosen fighter; an ending that belongs to the answers, not a timer · can't: rescue weak items — the stakes mask them, so every item must still be defensible on its own · purpose 8/10 · fun 10/10)`
 
@@ -844,7 +792,6 @@
 - **art** — a torch-lit arena, three drawn fighters with their own weapons, a fireball, an arrow and an acid drop as
   separate sprites, a drawn boss with bite/hurt states, a slash arc, an HP bar.
 - **can't** — ritual stakes can mask weak items; every item must still be defensible on its own.
-- **width** — default **full** · the only slot this block's `fits` line allows.
 
 ### `trainOrder - (best for: one fixed adjective order made physical; the two ways a sentence sounds wrong; a rule felt instead of memorised · can't: contrast two orders, teach a second rule, or produce anything — the sentence is built, never written or said · purpose 9/10 · fun 8/10)`
 
@@ -891,12 +838,12 @@
   the yard: a sky, two hazed ridges of hills with snow on the two high peaks, and the ground the rails are laid on —
   the train is somewhere, not on a flat beige field.
 - **fits** — full width only: eight cars cannot be read at a half.
-- **width** — default **full** · may move within full, half · the build measures the longest line the block holds and moves one slot at a time.
 - **can't** — one order, so it trains one rule: it cannot contrast two orders, and it is not a production exercise —
   the sentence is built, never written or said. Word-level vocabulary has to be known already, since the sentence is
   never spelled out beyond its own words.
 - **needs** — nothing; `engine4.js` ships it. Author four to eight words per train, and put the ORDER on the page
   above the block (a chart or a one-line rule) — the game tests it, it never states it.
+
 
 
 

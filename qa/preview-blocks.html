@@ -127,7 +127,7 @@ palette, and every figure prints.</p>
 <h2>dialog</h2>
 <textarea data-item="dialog" aria-label="notes for dialog" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">section · cost A · evidence none · fits model+register — the target language sits in ordinary noise, and one caption says why the thread is on the page.</p>
-<div class="dialog itemsize" data-kind="teaching">
+<div class="dialog" data-kind="teaching">
 <h3 style="margin-top:0">A. The thread</h3>
   <p><b>rafa:</b> you around later</p>
   <p><b>you:</b> maybe, why</p>
@@ -343,17 +343,15 @@ palette, and every figure prints.</p>
 <h2>infoGap</h2>
 <textarea data-item="infoGap" aria-label="notes for infoGap" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">section · cost A · evidence gap · fits interaction+meaning — one half holds the facts, the other holds the questions the student writes to get what is missing, so the request has a real answer and not a key. The facts are a third, the questions two thirds, on one row; one field per unknown.</p>
-<div class="itemrow">
-  <div class="itemsize-third">
-    <div class="panel" data-kind="mixed">
-      <h3>A. you</h3>
-      <p>Weekend plan, so far:</p>
-      <ul>
-        <li>Saturday: film, seven o'clock</li>
-        <li>Sunday: <i>unknown</i></li>
-        <li>meeting point: <i>unknown</i></li>
-      </ul>
-    </div>
+<div class="itemrow" data-cols="2">
+  <div class="panel itemsize-third" data-kind="mixed">
+    <h3>A. you</h3>
+    <p>Weekend plan, so far:</p>
+    <ul>
+      <li>Saturday: film, seven o'clock</li>
+      <li>Sunday: <i>unknown</i></li>
+      <li>meeting point: <i>unknown</i></li>
+    </ul>
   </div>
   <div class="panel itemsize-twothird" data-kind="mixed">
 <h3>B. them</h3>
@@ -495,13 +493,13 @@ palette, and every figure prints.</p>
 <h2>idiomOrigin</h2>
 <textarea data-item="idiomOrigin" aria-label="notes for idiomOrigin" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">beat · cost A · evidence gap · fits culture+lexis — the idiom, its literal reading and its origin on three labelled lines, then one sentence that would go wrong if read literally.</p>
-<div class="card itemsize" data-kind="mixed">
+<div class="card" data-kind="mixed">
 <h3 style="margin-top:0">A. The idiom in three lines</h3>
   <p><b>the idiom:</b> to let the cat out of the bag</p>
   <p><b>literally:</b> to open a bag and let an animal leave it</p>
   <p><b>where it comes from:</b> one story is that a market seller would swap a pig for a cat, and the buyer found out when the bag was opened</p>
 </div>
-<div class="panel itemsize" data-kind="mixed">
+<div class="panel" data-kind="mixed">
 <h3>B. One sentence</h3>
   <p>Use it in a sentence where the literal reading would be nonsense.</p>
   <p><input class="gap" style="--gap-w:34em"></p>
@@ -511,7 +509,7 @@ palette, and every figure prints.</p>
 <h2>sentenceSurgery</h2>
 <textarea data-item="sentenceSurgery" aria-label="notes for sentenceSurgery" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">section · cost B · evidence gap · fits order+form — the chunks are the bank, the rebuilt order goes into numbered gaps, so the sequence survives a reload.</p>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>A. Chunks out of order</h3>
   <p>The chunks, out of order. Write the number of each chunk in the order the sentence needs.</p>
   <p class="chips"><b>1</b> she <b>2</b> that <b>3</b> anyone <b>4</b> has <b>5</b> told <b>6</b> never</p>
@@ -529,7 +527,7 @@ palette, and every figure prints.</p>
 <h2>questionBuilding</h2>
 <textarea data-item="questionBuilding" aria-label="notes for questionBuilding" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">beat · cost A · evidence gap · fits order+interaction — the stem is the answer being talked to, never a grammar label, so the student asks instead of conjugating.</p>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>A. Answer first</h3>
   <p>Each line is what someone answered. Write the question that got that answer.</p>
   <div class="blanks sent" style="--rows:2">
@@ -544,10 +542,10 @@ palette, and every figure prints.</p>
 <h2>repairMoves</h2>
 <textarea data-item="repairMoves" aria-label="notes for repairMoves" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">beat · cost A · evidence gap · fits interaction+register — an exchange with the break marked, and one gap holding the move that repairs it.</p>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>A. An exchange that came apart</h3>
   <p>The conversation has come apart. Write the move that gets it going again.</p>
-  <div class="dialog itemsize" data-kind="training">
+  <div class="dialog" data-kind="training">
     <p><b>Ana:</b> so anyway I was like, whatever, and then he went and —</p>
     <p><b>You:</b> <input class="gap" style="--gap-w:12em"> <button class="listen" data-say="sorry, could you say that again a bit slower" type="button">▶</button></p>
     <p><b>Ana:</b> he left without saying anything.</p>
@@ -564,7 +562,7 @@ palette, and every figure prints.</p>
 <h2>minimalPairs</h2>
 <textarea data-item="minimalPairs" aria-label="notes for minimalPairs" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">beat · cost A · evidence radio · fits sound+meaning — the chip is the question, so no answer is written into the page.</p>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>A. One phoneme apart</h3>
   <p>Three words, one phoneme apart. Listen and pick the one that was said.</p>
   <div class="qgrid stack" style="--rows:2">
@@ -591,7 +589,7 @@ palette, and every figure prints.</p>
 <h2>listenIdentify</h2>
 <textarea data-item="listenIdentify" aria-label="notes for listenIdentify" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">beat · cost A · evidence radio · fits listening+lexis — the chip asks; the prompt only says what to listen for, because a prompt holding the answer makes the clip decoration.</p>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>A. Listen for the ending</h3>
   <p>Listen for the ending. Three options, one of them was said.</p>
   <div class="qgrid stack" style="--rows:2">
@@ -618,7 +616,7 @@ palette, and every figure prints.</p>
 <h2>errorCorrection</h2>
 <textarea data-item="errorCorrection" aria-label="notes for errorCorrection" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">beat · cost A · evidence radio · fits error+form — every wrong option is a real error a Portuguese speaker makes, so the wrong answers inform.</p>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>A. Every wrong option is a real mistake</h3>
   <div class="qgrid stack" style="--rows:2">
     <div class="qitem">
@@ -644,7 +642,7 @@ palette, and every figure prints.</p>
 <h2>syllableLab</h2>
 <textarea data-item="syllableLab" aria-label="notes for syllableLab" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">beat · cost A · evidence gap · fits sound+form — three pillars, three lists, so a wrong answer says which pillar failed.</p>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>A. Three jobs on one word</h3>
   <p><b>1. Count the beats.</b></p>
   <div class="blanks" style="--rows:1">
@@ -670,7 +668,7 @@ palette, and every figure prints.</p>
 <h2>errorHunt</h2>
 <textarea data-item="errorHunt" aria-label="notes for errorHunt" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">beat · cost A · evidence gap · fits error+text — the errors stay inside real prose and the count is stated, so the student can tell when to stop.</p>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>A. Three errors in a paragraph</h3>
   <p>There are <b>three</b> errors in this paragraph. Write the correction for each in the gaps below.</p>
   <p>Last week I go to my cousin's house and we was watching a series about a chef who lose his restaurant. My cousin don't like that kind of show but she stayed until the end anyway.</p>
@@ -685,7 +683,7 @@ palette, and every figure prints.</p>
 <h2>oddOneOut</h2>
 <textarea data-item="oddOneOut" aria-label="notes for oddOneOut" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">beat · cost A · evidence radio · fits meaning+lexis — the odd one out is a category error, not a hard word; one box asks why.</p>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>A. Three belong together</h3>
   <p>Three belong together. Pick the one that does not, then say what the other three share.</p>
   <div class="qgrid stack" style="--rows:2">
@@ -720,7 +718,7 @@ palette, and every figure prints.</p>
     <p>She had sent me the file on Thursday night. I only read it the next morning and answered two days later.</p>
   </div>
 </div>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>C. What changed</h3>
   <p>Same file, different story. Complete what actually changed.</p>
   <div class="blanks sent" style="--rows:1">
@@ -734,7 +732,7 @@ palette, and every figure prints.</p>
 <h2>predictReveal</h2>
 <textarea data-item="predictReveal" aria-label="notes for predictReveal" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">beat · cost A · evidence textarea · fits meaning+review — the guess is written before the reveal, and the reveal is one line, not a rule.</p>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>A. Two lines, no context</h3>
   <p>Read the two lines. Before anything is explained: what do you think happened next, and what made you think it?</p>
   <p>— did you get the message?<br>— what message?</p>
@@ -764,7 +762,7 @@ palette, and every figure prints.</p>
     <p class="dim">Tick each one off before you send it.</p>
   </div>
 </div>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>C. The phrases</h3>
   <p class="chips"><b>any chance we could</b> <b>I'd still rather</b> <b>what about</b> <b>does that work for you</b></p>
   <textarea rows="4" aria-label="The message you would send" style="width:100%"></textarea>
@@ -809,7 +807,7 @@ palette, and every figure prints.</p>
     <p class="dim">— a parent, two days after being told the truth <button class="listen" data-say="I'm not angry. I'm just disappointed." type="button">▶</button></p>
   </div>
 </div>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>C. What both mean</h3>
   <div class="qgrid stack" style="--rows:2">
     <div class="qitem">
@@ -827,7 +825,7 @@ palette, and every figure prints.</p>
 <h2>rhymeCoda</h2>
 <textarea data-item="rhymeCoda" aria-label="notes for rhymeCoda" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">section · cost A · evidence radio · fits music+sound — the lines are the material and the radios pick the pair; the second job is the spelling of the shared sound.</p>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>A. Four lines of one verse</h3>
   <p>Four lines from one verse. Which two rhyme?</p>
   <div class="qgrid stack" style="--rows:2">
@@ -867,7 +865,7 @@ palette, and every figure prints.</p>
     <p>this part <input class="gap" style="--gap-w:7em"></p>
   </div>
 </div>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>D. One line, changed</h3>
   <p>One line comes back changed. Write the word that changed it: <input class="gap" style="--gap-w:8em"></p>
 </div>
@@ -899,7 +897,7 @@ palette, and every figure prints.</p>
 <h2>moodTrack</h2>
 <textarea data-item="moodTrack" aria-label="notes for moodTrack" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">section · cost A · evidence radio · fits music+culture — the scene is the stem, the three descriptions are the radios, and the “because” clause is a gap so the defence gets written.</p>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>A. The scene</h3>
   <p>Scene: a car at night, one person driving, the radio on low, a long straight road.</p>
   <div class="qgrid stack" style="--rows:2">
@@ -915,7 +913,7 @@ palette, and every figure prints.</p>
 <h2>tabooMap</h2>
 <textarea data-item="tabooMap" aria-label="notes for tabooMap" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">section · cost A · evidence radio · fits culture+register — one situation, the candidate questions as radios, then one gap for the rewrite that makes it askable.</p>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>A. The situation</h3>
   <p>Situation: you have known this person for ten minutes at a friend's birthday. They have just said they moved here last month.</p>
   <div class="qgrid stack" style="--rows:2">
@@ -935,7 +933,7 @@ palette, and every figure prints.</p>
 <h2>humourFlag</h2>
 <textarea data-item="humourFlag" aria-label="notes for humourFlag" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">beat · cost A · evidence radio · fits culture+meaning — the line is the stem, the mechanisms are the radios, and the gap asks what survives translation.</p>
-<div class="panel itemsize" data-kind="training">
+<div class="panel" data-kind="training">
 <h3>A. Two lines, two devices</h3>
   <div class="qgrid stack" style="--rows:2">
     <div class="qitem">

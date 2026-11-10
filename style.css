@@ -8,7 +8,7 @@
    ================================================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&display=swap');
-:root{--cream:#f4eddd;--paper:#fdfaf2;--ink:#182136;--tan:#b9854c;--rose:#d9c1ba;--ptw:#96601f;--blue:#1d4ed8;--dkblue:#1e3a8a;--bluebg:rgba(29,78,216,.16);--orange:#c2601a}
+:root{--cream:#f4eddd;--paper:#fdfaf2;--ink:#182136;--tan:#b9854c;--rose:#d9c1ba;--ptw:#96601f;--blue:#1d4ed8;--dkblue:#1e3a8a;--bluebg:rgba(29,78,216,.16);--orange:#c2601a;--purple:#5b2a86}
 /* FIXED COLUMNS (owner instruction 2026-11-09, third pass). The page is a FIXED-WIDTH document — body is
    min-width:1415px, .page-container is position:absolute at 1400px, .content-area is always 1200px — so no
    layout in it may be expressed as `fr`, `vw` or `auto-fit`. Those are decisions the browser RE-MAKES whenever
@@ -202,13 +202,14 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
    The dashed line survives only as `.game-stage`, which is a field of play inside a game, not a block. */
 .panel{--edge:var(--tan);border:2px solid var(--edge);border-radius:12px;padding:12px 16px;background:var(--paper);box-shadow:4px 4px 0 var(--tan)}
 
-/* BLOCK KIND, TAGGED ON THE BLOCK ITSELF: `data-kind="teaching|mixed|training"`, read off the vehicle's
-   category in CONTENT_EXAMPLES.md. Teaching keeps the ink outline; mixed and training take the orange one.
-   Untagged keeps the edge the container always had — a panel's tan, a card's or a game's ink, a dialog's
-   rose — so a page generated before this rule looks exactly as it did. */
+/* BLOCK KIND, TAGGED ON THE BLOCK ITSELF: `data-kind="teaching|mixed|training|games"`, read off the vehicle's
+   category in CONTENT_EXAMPLES.md. Teaching keeps the ink outline, mixed and training take orange, games take
+   purple. Untagged keeps the edge the container always had — a panel's tan, a card's or a game's ink, a
+   dialog's rose — so a page generated before this rule looks exactly as it did. */
 .panel[data-kind="teaching"],.card[data-kind="teaching"],.game[data-kind="teaching"],.dialog[data-kind="teaching"]{--edge:var(--ink)}
 .panel[data-kind="mixed"],.card[data-kind="mixed"],.game[data-kind="mixed"],.dialog[data-kind="mixed"],
 .panel[data-kind="training"],.card[data-kind="training"],.game[data-kind="training"],.dialog[data-kind="training"]{--edge:var(--orange)}
+.panel[data-kind="games"],.card[data-kind="games"],.game[data-kind="games"],.dialog[data-kind="games"]{--edge:var(--purple)}
 
 /* vertical rhythm: a block never touches the block above or below it */
 .content-area > .panel{margin:14px 0}
