@@ -204,7 +204,8 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 
 /* BLOCK KIND, TAGGED ON THE BLOCK ITSELF: `data-kind="teaching|mixed|training"`, read off the vehicle's
    category in CONTENT_EXAMPLES.md. Teaching keeps the ink outline; mixed and training take the orange one.
-   Untagged falls back to the neutral tan edge, so a page generated before this rule looks as it did. */
+   Untagged keeps the edge the container always had — a panel's tan, a card's or a game's ink, a dialog's
+   rose — so a page generated before this rule looks exactly as it did. */
 .panel[data-kind="teaching"],.card[data-kind="teaching"],.game[data-kind="teaching"],.dialog[data-kind="teaching"]{--edge:var(--ink)}
 .panel[data-kind="mixed"],.card[data-kind="mixed"],.game[data-kind="mixed"],.dialog[data-kind="mixed"],
 .panel[data-kind="training"],.card[data-kind="training"],.game[data-kind="training"],.dialog[data-kind="training"]{--edge:var(--orange)}
