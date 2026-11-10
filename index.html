@@ -253,9 +253,10 @@ function applyTracks(list){
  names.forEach(n=>{if(!labels[n])labels[n]=n.charAt(0).toUpperCase()+n.slice(1);});
  if(names.length){TRACKSALL=names;TN=labels;TI=icons;TC=colors;}
 }
-/* the student index (owner instruction 2026-11-03): ONE COLUMN PER TRACK, whatever tracks.json lists; the
-   lesson TITLE is the link (no per-lesson button); the "continue" button sits at the TOP of each granted
-   track's list; a track the student was not granted is greyed out and inert. */
+/* the student index (owner instruction 2026-11-03, selector 2026-11-09): ONE COLUMN PER TRACK, whatever
+   tracks.json lists. Each card is the book's name, then its "continue" button, then the lesson SELECTOR — the
+   same bookButton() the teacher panel renders, so both lists are identical. A track the student was not granted
+   keeps its selector, greyed and inert. */
 function renderStudent(tracks,name){
  studentName=name||"";
  persistSession();
@@ -267,33 +268,41 @@ function renderStudent(tracks,name){
  TRACKSALL.forEach(t=>{
   const has=MYTRACKS.indexOf(t)>=0;
   const lss=trackLessons(t),dn=(DONE&&DONE[t])||null;
-  let cont=null,rows="";
-  lss.forEach(le=>{const n=le.n;const d=(dn&&dn.indexOf(n)>=0)?1:p[t+"_"+n];if(!d&&!cont)cont=n;
-   const num=(n<10?"0":"")+n;                      /* the row reads "NN. Lesson Name" */
-   const txt=le.title?esc(le.title):'Lição '+n;
-   const entry=num+". "+txt;
-   rows+=has
-    ? '<div class="row'+(d?' done':'')+'"><a class="lesson-link" href="'+t+'/lesson'+n+'.html" title="'+entry+'" onclick="go(\''+t+'\','+n+');return false">'+entry+'</a></div>'
-    : '<div class="row'+(d?' done':'')+'"><span class="dim" title="'+entry+'">'+entry+'</span></div>';
-  });
+  let cont=null;
+  lss.forEach(le=>{const n=le.n;const d=(dn&&dn.indexOf(n)>=0)?1:p[t+"_"+n];if(!d&&!cont)cont=n;});
   html+='<div class="card track-card'+(has?'':' locked')+'"><h3>'+TN[t]+'</h3>';
   /* the "continue" number comes from the SERVER's last-completed (status.progress), which travels with the
-     track access list; the teal rows above use the exact finished list (status.done). No answer → fall back to
-     whatever the page can tell, so an older deployment still shows a button rather than none. */
+     track access list; the selector's colouring uses the exact finished list (status.done). No answer → fall back
+     to whatever the page can tell, so an older deployment still shows a button rather than none. */
   if(PROG&&PROG[t]!=null){const last=Number(PROG[t])||0;cont=(last+1<=lss.length)?last+1:null;}
   if(!has)html+='<p class="dim">Sem acesso a esta trilha · no access to this book</p>';
   else if(cont)html+='<button class="contbtn" onclick="go(\''+t+'\','+cont+')">▶ Continuar da lição '+cont+'</button>';
-  html+=rows+'</div>';
+  html+=bookButton(t,!has)+'</div>';
  });
  html+='</div>';
  $("app").innerHTML=html;log("índice pronto ✔");
 }
 let QUEUE={pending:[],approved:[]};
-function bookButton(t){
- const ls=LESSONS&&LESSONS[t]&&LESSONS[t].length?LESSONS[t]:Array.from({length:COUNTS[t]||0},(_,k)=>({n:k+1,title:""}));
- let items='';
- ls.forEach(le=>{const n=le.n;items+='<button type="button" onclick="go(\''+t+'\','+n+')">Lição '+n+(le.title?' · '+esc(le.title):'')+'</button>';});
- return '<div class="bookdrop"><button type="button" class="bookbtn" onclick="toggleBookMenu(\''+t+'\')">'+TN[t]+' ▾</button>'
+/* THE lesson selector — ONE component, used by the student index and the teacher panel, so the two lists are
+   identical by construction (owner instruction 2026-11-09). It sits under the continue button instead of a list
+   that was always on screen, and it is painted with the track's own 200 swatch. Each item is the number plus the
+   lesson name: the number is plain text — never part of the link, and 2pt larger than the name via CSS — while
+   the name is the only link. `locked` renders the same items inert, so a book the student does not hold still
+   shows what it contains. */
+function bookButton(t,locked){
+ const col=/^#[0-9a-f]{3,8}$/i.test(String(TC[t]||""))?TC[t]:"#90CAF9";
+ const dn=(DONE&&DONE[t])||[];
+ const items=trackLessons(t).map(le=>{
+  const n=le.n,num=(n<10?"0":"")+n,txt=le.title?esc(le.title):"—";
+  return '<div class="bookitem'+(dn.indexOf(n)>=0?' done':'')+(locked?' inert':'')+'">'
+   +'<span class="lnum">'+num+'</span>'
+   +(locked
+     ?'<span class="ltitle dim" title="'+txt+'">'+txt+'</span>'
+     :'<a class="ltitle" href="'+t+'/lesson'+n+'.html" title="'+num+'. '+txt+'" onclick="go(\''+t+'\','+n+');return false">'+txt+'</a>')
+   +'</div>';
+ }).join('');
+ return '<div class="bookdrop'+(locked?' locked':'')+'">'
+  +'<button type="button" class="bookbtn" style="--sw:'+col+'" onclick="toggleBookMenu(\''+t+'\')">'+TN[t]+' ▾</button>'
   +'<div class="bookmenu" id="menu_'+t+'" hidden>'+items+'</div></div>';
 }
 window.toggleBookMenu=function(t){const m=$("menu_"+t);if(!m)return;const open=!m.hidden;document.querySelectorAll(".bookmenu").forEach(x=>x.hidden=true);if(!open)m.hidden=false;};
@@ -336,7 +345,7 @@ function approvedHTML(){
 }
 function teacherShell(){
  return '<div class="card tadmin"><div class="tadmin-books">'
-  +TRACKSALL.map(bookButton).join('')      /* one book dropdown per discovered track */
+  +TRACKSALL.map(t=>bookButton(t)).join('')   /* one book dropdown per discovered track */
   +'</div></div><div class="tadmin-cols" id="tcols"></div>';
 }
 async function renderTeacher(){

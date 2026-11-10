@@ -249,8 +249,12 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 .bookdrop{position:relative;flex:1 1 0;min-width:0}
 .bookdrop>.bookbtn{width:100%;margin:0;white-space:nowrap}
 .bookmenu{position:absolute;top:100%;left:0;right:0;z-index:30;margin-top:4px;max-height:320px;overflow-y:auto;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:5px 5px 0 var(--tan);padding:4px}
-.bookmenu button{display:block;width:100%;margin:0;text-align:left;background:var(--paper);color:var(--ink);border:0;border-radius:6px;box-shadow:none;padding:6px 10px;font-size:14px}
-.bookmenu button:hover{background:var(--bluebg)}
+/* the trigger is painted with the track's own 200 swatch (track.json "color", passed in as --sw) */
+.bookdrop>.bookbtn{background:var(--sw,#90CAF9);color:var(--ink)}
+.bookdrop>.bookbtn:hover{filter:brightness(1.05)}
+/* a book the student does not hold keeps its selector — greyed, with inert items: advertising, never a way in */
+.bookdrop.locked>.bookbtn{cursor:default}
+.bookdrop.locked .bookitem{pointer-events:none}
 .complete-btn{display:block;margin:14px auto;width:fit-content;font-weight:700}
 .complete-btn:not(.is-done){background:#5b6b84;box-shadow:3px 3px 0 var(--tan)}
 .complete-btn.is-done{background:#0f766e;box-shadow:3px 3px 0 var(--tan)}
@@ -316,15 +320,18 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 #app h3{font-family:inherit;font-weight:700;font-size:1.17em;color:inherit;margin:1em 0;padding-left:0;border-left:0;letter-spacing:normal}
 #app .track-card h3{margin:0 0 8px}
 .track-card .contbtn{display:block;width:100%;margin:0 0 10px;background:#0f766e}
-.track-card .row a.lesson-link{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
-.track-card .row a.lesson-link:hover{text-decoration-thickness:2px}
-
-/* one-line entries: the title truncates, the tooltip keeps the full text */
-.track-card .row{display:flex;align-items:baseline;gap:6px;white-space:nowrap;overflow:hidden}
-.track-card .row a.lesson-link,.track-card .row .dim{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.track-card .row.done a.lesson-link,.track-card .row.done .dim{color:#0f766e}
-.track-card.locked{opacity:.45;filter:grayscale(1)}
-.track-card.locked .row,.track-card.locked h3{pointer-events:none}
+/* one-line selector entries: the title truncates and keeps the full text as a tooltip; the number is plain
+   text and always exactly 2pt larger than the name beside it, whatever the item's font-size becomes */
+.bookitem{display:flex;align-items:baseline;gap:8px;padding:6px 10px;border-radius:6px;font-size:14px;white-space:nowrap}
+.bookitem+.bookitem{border-top:1px dashed rgba(185,133,76,.35)}
+.bookitem:hover{background:var(--bluebg)}
+.lnum{flex:0 0 auto;font-weight:700;font-size:calc(1em + 2pt);font-variant-numeric:tabular-nums;color:var(--ink)}
+.ltitle{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+.bookitem a.ltitle{font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.bookitem a.ltitle:hover{text-decoration-thickness:2px}
+.bookitem.done .lnum,.bookitem.done a.ltitle{color:#0f766e}
+.bookitem.inert{opacity:.55}
+.track-card.locked{opacity:.5;filter:grayscale(1)}
 
 
 

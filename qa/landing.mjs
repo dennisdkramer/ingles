@@ -49,16 +49,35 @@ ok('adult card is locked', adult && adult.classList.contains('locked'));
 ok('locked cards have no links', kids.querySelectorAll('a').length === 0 && adult.querySelectorAll('a').length === 0);
 ok('locked cards say "sem acesso"', /sem acesso/i.test(kids.textContent));
 
-const link = biz.querySelector('a.lesson-link');
-ok('lesson title is the link', !!link && /First Talk/.test(link.textContent), link ? link.getAttribute('href') : 'none');
-ok('row reads "NN. Lesson Name"', !!link && /^01\. /.test(link.textContent.trim()), link ? link.textContent.trim().slice(0, 24) : 'none');
+const drop = biz.querySelector('.bookdrop'), menu = drop && drop.querySelector('.bookmenu');
+ok('the card offers a lesson SELECTOR, not a standing list', !!menu && menu.hidden === true,
+  menu ? 'menu hidden=' + menu.hidden : 'none');
+ok('a book the student does not hold keeps its selector, greyed',
+  !!kids.querySelector('.bookdrop.locked .bookbtn'));
+const items = [...biz.querySelectorAll('.bookitem')];
+ok('every lesson is an item in the selector', items.length === 1, items.length + ' items');
+const first = items[0] || {}, numEl = first.querySelector ? first.querySelector('.lnum') : null;
+ok('the number is its own plain-text element', !!numEl && numEl.tagName === 'SPAN' &&
+  !numEl.querySelector('a') && numEl.textContent.trim() === '01', numEl ? numEl.textContent.trim() : 'none');
+const link = first.querySelector ? first.querySelector('a.ltitle') : null;
+ok('only the lesson NAME is the link', !!link && /First Talk/.test(link.textContent), link ? link.getAttribute('href') : 'none');
+ok('the number is never inside the link', !!link && !/^01/.test(link.textContent.trim()), link ? link.textContent.trim().slice(0, 16) : 'none');
+ok('no "lição" word in the selector', !!menu && !/li[çc][ãa]o/i.test(menu.textContent));
 ok('full text kept as a tooltip', !!link && (link.getAttribute('title') || '').indexOf('First Talk') >= 0);
 ok('link href points at the page', !!link && link.getAttribute('href') === 'business/lesson1.html');
-ok('no per-lesson button remains', biz.querySelectorAll('button:not(.contbtn)').length === 0);
 const kidsOfCard = [...biz.children];
 const contIdx = kidsOfCard.findIndex(el => el.classList.contains('contbtn'));
-const rowIdx = kidsOfCard.findIndex(el => el.classList.contains('row'));
-ok('continue button sits ABOVE the list', contIdx > 0 && rowIdx > contIdx, 'contbtn@' + contIdx + ' row@' + rowIdx);
+const dropIdx = kidsOfCard.findIndex(el => el.classList.contains('bookdrop'));
+ok('the selector sits BELOW the continue button', contIdx >= 0 && dropIdx > contIdx, 'contbtn@' + contIdx + ' bookdrop@' + dropIdx);
+/* the teacher panel and the student card are the SAME component, so their lists cannot drift apart */
+w.eval('teacher=true;QUEUE={pending:[],approved:[]};PROG={};DONE={};'
+  + 'document.getElementById("app").innerHTML=teacherShell();');
+const teacherMenu = d.getElementById('app').querySelector('#menu_business');
+w.eval('teacher=false;renderStudent(["business"],"Ana");');
+const studentMenu = d.querySelector('#menu_business');
+ok('teacher and student lesson lists are identical',
+  !!teacherMenu && !!studentMenu && teacherMenu.innerHTML === studentMenu.innerHTML,
+  teacherMenu && studentMenu ? teacherMenu.innerHTML.length + ' vs ' + studentMenu.innerHTML.length + ' chars' : 'missing');
 
 /* THE CONTINUE BUTTON READS THE SERVER, not a localStorage key no page writes (owner report 2026-11-09:
    it always said "lição 1"). status.progress / status.done arrive WITH the track access list. */
@@ -71,8 +90,8 @@ ok('continue resumes from the backend progress',
 ok('the button jumps to that lesson',
   !!contBtn && /go\('business',3\)/.test(contBtn.getAttribute('onclick') || ''),
   contBtn ? contBtn.getAttribute('onclick') : 'none');
-ok('finished rows are teal from the backend list',
-  d.querySelectorAll('.tracks .row.done').length === 2, d.querySelectorAll('.tracks .row.done').length + '');
+ok('finished lessons are teal from the backend list',
+  d.querySelectorAll('.tracks .bookitem.done').length === 2, d.querySelectorAll('.tracks .bookitem.done').length + '');
 /* a finished book shows no button — one pointing past the last lesson is worse than none */
 w.eval('PROG={business:3};DONE={business:[1,2,3]};renderStudent(["business"],"Ana");');
 ok('no continue button when the book is finished', !d.querySelector('.contbtn'));
@@ -222,7 +241,7 @@ ok('a fourth track gets its own column', cards4.length === 4, cards4.length + ' 
 const adv = cards4.find(c => /Advanced/.test((c.querySelector('h3') || {}).textContent || ''));
 ok('the new column uses its track.json label', !!adv && /Advanced 🚀/.test(adv.querySelector('h3').textContent));
 ok('a granted new track is live, not locked', !!adv && !adv.classList.contains('locked'));
-ok('its lessons are listed from lessons.json', !!adv && adv.querySelectorAll('a.lesson-link').length === 2);
+ok('its lessons are listed from lessons.json', !!adv && adv.querySelectorAll('a.ltitle').length === 2);
 w.eval('teacher=true;QUEUE={pending:[],approved:[{email:"s@x.y",name:"Sol",'
   + 'tracks:[{track:"business",lastCompleted:1}]}]};document.getElementById("app").innerHTML=approvedHTML();');
 const advSw = [...d.querySelectorAll('#app .tswitch')].find(x => /Advanced/.test(x.getAttribute('title') || ''));
