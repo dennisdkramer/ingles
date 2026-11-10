@@ -8,7 +8,7 @@
  * broke in the browser. This harness closes that hole:
  *
  *   node qa/live.mjs                  run every scenario
- *   node qa/live.mjs --only=diag       run one (diag | geo | bf2 | bf2b | bf3 | bf4 | all)
+ *   node qa/live.mjs --only=diag       run one (diag | geo | bar | landing | bf2 | bf2b | bf3 | bf4 | all)
  *   node qa/live.mjs --headful        show the browser (default: headless=new)
  *   node qa/live.mjs --keep           keep the temp Chrome profile + the screenshots
  *   $env:CHROME="C:\path\to\chrome.exe"   override the browser
@@ -1327,10 +1327,75 @@ async function scenBar(live, site) {
   await live.shot('bar-1-controls', box(info.rect));
 }
 
+/* The LANDING page (index.html) — the owner's two reports live here and neither can be answered by jsdom, which
+   lays nothing out: "on reload it only shows the first 3 tracks and populates the rest after a couple seconds"
+   and "auto-resizing on the text so it doesn't wrap within the button". This measures the real grid and the real
+   fitted text. It does NOT use live.nav(): boot() asserts the lesson gate (__A/__B and a lesson URL), and this
+   page is not one. */
+async function scenLanding(live, site) {
+  log('\n================ LANDING · three per row, no reflow, text fits ================');
+  const idx = 'http://127.0.0.1:' + site.port + '/index.html';
+  const tracksRaw = fs.readFileSync(path.join(ROOT, 'tracks.json'), 'utf8');
+  const NT = JSON.parse(tracksRaw).length;
+  await live.cdp.send('Page.navigate', { url: idx });
+  await live.wait('document.readyState==="complete"', 20000, 'document load');
+  await live.wait('typeof start==="function" && typeof applyTracks==="function"', 9000, 'the index script');
+  /* a returning visitor's state — the three caches a previous successful load leaves behind: the track list
+     (written by writeTracks), the role, and the last status/queue. Miss any of them and the page is not in the
+     state this scenario is about. */
+  await live.ev('(function(){'
+    + 'localStorage.setItem("eod_tracks",' + JSON.stringify(tracksRaw) + ');'
+    + 'localStorage.setItem("eod_role_qa-landing@example.com",JSON.stringify("student"));'
+    + 'localStorage.setItem("eod_status_qa-landing@example.com",JSON.stringify('
+    + '{status:"approved",tracks:["kids","business"],track:"kids",progress:{},done:{},name:"QA"}));'
+    + 'cred="qa";profile={email:"qa-landing@example.com",name:"QA",exp:9999999999};'
+    + 'window.api=function(a){return Promise.resolve(a==="status"?'
+    + '{status:"approved",tracks:["kids","business"],track:"kids",name:"QA",progress:{},done:{}}'
+    + ':a==="queue"?{pending:[],approved:[]}:{result:"ok"})};'
+    + 'document.getElementById("app").innerHTML="";return 1})()');
+  /* start() paints synchronously before its first await, so this count IS the first paint */
+  const first = await live.ev('(function(){start();return {'
+    + 'cards:document.querySelectorAll(".tracks .track-card").length,'
+    + 'spinner:!!document.querySelector("#app .spinner")};})()');
+  await sleep(1800);                                  /* let the validated paint land on top of it */
+  const g = await live.ev('(function(){'
+    + 'var el=document.querySelector(".tracks");if(!el)return {err:"no .tracks grid"};'
+    + 'var cs=getComputedStyle(el),cards=[].slice.call(el.querySelectorAll(".track-card"));'
+    + 'var rows={};cards.forEach(function(c){rows[Math.round(c.getBoundingClientRect().top)]=1});'
+    + 'var btns=[].slice.call(el.querySelectorAll(".bookbtn"));'
+    + 'return {cards:cards.length,'
+    + ' cols:cs.gridTemplateColumns.split(" ").filter(function(s){return s&&s!=="none"}).length,'
+    + ' colcss:cs.gridTemplateColumns,rows:Object.keys(rows).length,'
+    + ' rect:(function(){var r=el.getBoundingClientRect();return [Math.round(r.left),Math.round(r.top),Math.round(r.width),Math.round(r.height)]})(),'
+    + ' btns:btns.map(function(b){var s=getComputedStyle(b),r=b.getBoundingClientRect();return {'
+    + '  txt:(b.textContent||"").trim(),fs:Math.round(parseFloat(s.fontSize)*100)/100,'
+    + '  ws:s.whiteSpace,sw:b.scrollWidth,cw:b.clientWidth,w:Math.round(r.width)};})};})()');
+  if (g.err) { check('the landing grid renders at all', false, g.err); return }
+  log('   · columns: ' + g.colcss + '   cards: ' + g.cards + '   rows: ' + g.rows);
+  log('   · ' + g.btns.map(function (b) { return b.txt + '=' + b.fs + 'px' }).join('  '));
+  check('the FIRST paint already shows every track (this is the reflow report)',
+    first.cards === NT, { firstPaint: first.cards, tracks: NT, spinner: first.spinner });
+  check('nothing is added after the network answers (no reflow)', g.cards === first.cards,
+    { before: first.cards, after: g.cards });
+  check('exactly three columns', g.cols === 3, g.colcss);
+  check('nine tracks sit in three rows of three', g.rows === 3, g.rows + ' row(s)');
+  const over = g.btns.filter(function (b) { return b.sw > b.cw + 1 });
+  check('no track name overflows its button (nothing wraps, nothing is cut off)',
+    g.btns.length === NT && over.length === 0,
+    over.length ? over.map(function (b) { return b.txt + ' ' + b.sw + '>' + b.cw }) : 'all ' + g.btns.length + ' fit');
+  check('every trigger keeps its label on one line', g.btns.every(function (b) { return b.ws === 'nowrap' }),
+    g.btns.map(function (b) { return b.ws }).join(','));
+  const shrunk = g.btns.filter(function (b) { return b.fs < 19 });
+  check('the long names SHRANK rather than wrapping', shrunk.length > 0,
+    shrunk.map(function (b) { return b.txt + '@' + b.fs + 'px' }));
+  await live.shot('landing-grid', box(g.rect));
+}
+
+
 /* ---------------------------------------------------------------------------------------------
    12. THE RUNNER — one browser, one fake sheet, the scenarios that were asked for
    --------------------------------------------------------------------------------------------- */
-const SCEN = { diag: scenDiag, geo: scenGeo, bar: scenBar, bf2: scenBF2, bf2b: scenBF2b, bf3: scenBF3, bf4: scenBF4 };
+const SCEN = { diag: scenDiag, geo: scenGeo, bar: scenBar, landing: scenLanding, bf2: scenBF2, bf2b: scenBF2b, bf3: scenBF3, bf4: scenBF4 };
 
 /* a page-scoped view of the connection: every command/event carries the page's session id */
 function session(cdp, id) {

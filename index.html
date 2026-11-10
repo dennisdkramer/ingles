@@ -2,7 +2,7 @@
 <!-- build: 2026-10-20T00:00:00Z -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=3bdf8764a0">
+<link rel="stylesheet" href="style.css?v=a45f305088">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head><body class="landing">
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>ENGLISH <span>OPENS DOORS</span></h1><p class="script">Let's go <span lang="pt">· Vamos lá</span></p></header>
@@ -168,6 +168,38 @@ function tokenErr(j){return !!(j&&j.error&&/token/i.test(String(j.error)));}
 /* the last queue/status read is kept so a refresh paints at once and revalidates behind it */
 function readCache(k){try{return JSON.parse(localStorage.getItem("eod_"+k+"_"+profile.email)||"null")}catch(e){return null}}
 function writeCache(k,v){try{localStorage.setItem("eod_"+k+"_"+profile.email,JSON.stringify(v))}catch(e){}}
+/* ---- the track list, and the reason the page stopped reflowing ----------------------------------------
+   The list is cached OUTSIDE the per-email cache because it is the same for everyone — and it has to be known
+   BEFORE the first paint. The first paint used to run on the 3-track fallback and be redrawn when tracks.json
+   landed, which is the owner's report: "only shows the first 3 tracks and populates the rest after a couple
+   seconds". With this cache the first paint already knows every track, so nothing moves afterwards. */
+function readTracks(){try{return JSON.parse(localStorage.getItem("eod_tracks")||"null")}catch(e){return null}}
+function writeTracks(v){try{localStorage.setItem("eod_tracks",JSON.stringify(v))}catch(e){}}
+async function fetchTracks(){
+ try{const tr=await fetch("tracks.json",{cache:"no-cache"});if(tr.ok){const l=await tr.json();applyTracks(l);writeTracks(l);return true}}catch(e){}
+ return false;
+}
+/* ---- the book trigger shrinks its text instead of wrapping it (owner instruction 2026-11-09) -----------
+   CSS cannot shrink text to fit a box, so this measures and steps the size down in half-points until the label
+   fits, with a floor of 11px and the ellipsis in style.css as the last resort. The base size is read ONCE per
+   element from the stylesheet (calc(14px + 4pt)) and kept in data-fs, so a wider window restores it. jsdom
+   reports every box as 0 wide, so this no-ops there — the harness asserts the contract, never the pixels. */
+function fitBookText(){
+ [].forEach.call(document.querySelectorAll(".bookbtn"),b=>{
+  if(!b.clientWidth)return;
+  if(!b.getAttribute("data-fs")){
+   const fs=parseFloat(getComputedStyle(b).fontSize);
+   b.setAttribute("data-fs",String(Number.isFinite(fs)&&fs>0?fs:19.33));
+  }
+  const base=parseFloat(b.getAttribute("data-fs"));
+  let fs=base,n=0;
+  b.style.fontSize=base+"px";
+  while(b.scrollWidth>b.clientWidth+1&&fs>11&&n++<80){fs-=0.5;b.style.fontSize=fs+"px"}
+ });
+}
+let FITT=0;
+function fitSoon(){if(FITT)return;FITT=setTimeout(()=>{FITT=0;fitBookText()},0);}
+window.addEventListener("resize",fitSoon);
 /* ---- access writes: one call per student, coalesced, and never two in flight -------------------------
    Owner report 2026-11-09: changing access several times in a short period returned errors. Every POST holds
    the Apps Script script lock for its whole duration AND does a tokeninfo round trip (~2.5s measured), so
@@ -250,9 +282,17 @@ async function start(){
     server-side (isTeacher_ in Code.gs), so nothing is exposed by painting early. */
  const role=readCache("role"),cq=readCache("queue"),cs=readCache("status");
  const lsc=readCache("lessons");if(lsc&&!LESSONS)LESSONS=lsc;   /* titles for the cached paint, no request */
+ const ct=readTracks();if(ct)applyTracks(ct);                   /* the FULL list before anything is painted */
+ const tracksP=fetchTracks();                                   /* refresh in parallel, always */
+ /* A cached list lets the first paint be synchronous AND complete. With no cached list there is no honest way to
+    draw the columns — the 3-track fallback above is the wrong answer, and painting it is exactly the reflow this
+    fixes — so a cold visit waits on ONE small static fetch behind the spiral instead of drawing a grid that is
+    about to change. Returns, which are the common case, never wait at all. */
  let painted=false;
- if(role==="teacher"&&cq){paintQueue(cq);painted=true;}
- else if(cs&&cs.status==="approved"){paintStudent(cs);painted=true;}
+ if(ct){
+  if(role==="teacher"&&cq){paintQueue(cq);painted=true;}
+  else if(cs&&cs.status==="approved"){paintStudent(cs);painted=true;}
+ }
  if(!painted)$("app").innerHTML=spinnerHTML();
  try{const r=await fetch("access.json",{cache:"no-cache"});
   if(!r.ok)throw new Error("access.json não encontrado (HTTP "+r.status+")");
@@ -263,7 +303,7 @@ async function start(){
     waiting for, and it must not queue behind lessons.json and tracks.json. */
  const check=(teacher?api("queue",{token:cred}):api("status",{token:cred})).catch(e=>({error:String(e)}));
  try{const lr=await fetch("lessons.json",{cache:"no-cache"});if(lr.ok){LESSONS=await lr.json();writeCache("lessons",LESSONS)}}catch(e){}
- try{const tr=await fetch("tracks.json",{cache:"no-cache"});if(tr.ok)applyTracks(await tr.json());}catch(e){}
+ await tracksP;   /* started above; awaited here so the validated paint is drawn from the freshest list */
  const j=await check;
  if(tokenErr(j)){log("sessão expirada — entre novamente");bounce();return}
  if(teacher){
@@ -280,7 +320,7 @@ async function start(){
 /* one paint path each, used both by the cached first paint and by the validated one */
 function paintQueue(q){
  QUEUE=q;QUEUE.pending=QUEUE.pending||[];QUEUE.approved=QUEUE.approved||[];
- showAcct();$("app").innerHTML=teacherShell();$("tcols").innerHTML=pendingHTML()+approvedHTML();
+ showAcct();$("app").innerHTML=teacherShell();$("tcols").innerHTML=pendingHTML()+approvedHTML();fitSoon();
 }
 function paintStudent(st){
  PROG=(st&&st.progress)||null;
@@ -348,7 +388,7 @@ function renderStudent(tracks,name){
   html+='</div>';
  });
  html+='</div>';
- $("app").innerHTML=html;log("índice pronto ✔");
+ $("app").innerHTML=html;log("índice pronto ✔");fitSoon();
 }
 let QUEUE={pending:[],approved:[]};
 /* THE lesson selector — ONE component, used by the student index and the teacher panel, so the two lists are
@@ -425,7 +465,7 @@ async function renderTeacher(){
  if(tokenErr(j)){log("sessão expirada — entre novamente");bounce();return}
  if(j.error){$("tcols").innerHTML='<div class="card tadmin-col"><p class="todo">Não foi possível carregar os pedidos: '+esc(j.error)+'</p></div>';return}
  QUEUE={pending:j.pending||[],approved:j.approved||[]};writeCache("queue",QUEUE);
- $("tcols").innerHTML=pendingHTML()+approvedHTML();
+ $("tcols").innerHTML=pendingHTML()+approvedHTML();fitSoon();
 }
 window.decide=async function(email,action){
  const q=QUEUE.pending.find(x=>x.email===email);if(!q)return;

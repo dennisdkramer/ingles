@@ -212,6 +212,7 @@ ok('an older deployment falls back to per-track calls',
 w.fetch = async (u) => ({ ok: true, json: async () => (/access\.json/.test(String(u)) ? { teachers: ['t@x.y'] } : { pending: [], approved: [] }) });
 w.eval('profile={email:"t@x.y",name:"Tee"};'
   + 'localStorage.setItem("eod_role_t@x.y",JSON.stringify("teacher"));'
+  + 'localStorage.setItem("eod_tracks",JSON.stringify([{name:"kids",label:"Kids",icon:"🛹",order:1},{name:"business",label:"Business",icon:"💼",order:2},{name:"adult",label:"Adulto",icon:"🔞",order:3}]));'
   + 'localStorage.setItem("eod_queue_t@x.y",JSON.stringify({pending:[],approved:[{email:"s@x.y",name:"Sol",tracks:[{track:"kids"}]}]}));'
   + 'document.getElementById("app").innerHTML="";');
 const booting = w.start();
@@ -235,8 +236,40 @@ ok('cached student paint: continue from the cached progress',
   !!cachedBtn && /lição 3/.test(cachedBtn.textContent), cachedBtn ? cachedBtn.textContent : 'none');
 await boot2;
 
-/* THE FUTURE TRACK CASE: "advanced" exists in no folder and no constant — it arrives only as tracks.json
-   would deliver it, which is exactly how a track created next year will arrive. */
+/* THE REFLOW CASE (owner report 2026-11-09): "on reload it only shows the first 3 tracks and populates the rest
+   after a couple seconds". The first paint must already know every track, and it can only do that from the cached
+   list — the three-track fallback in index.html is what used to be painted first and then corrected. */
+const NINE = JSON.parse(fs.readFileSync('tracks.json', 'utf8'));
+w.fetch = async (u) => ({ ok: true, json: async () => (/access\.json/.test(String(u))
+  ? { teachers: [] }
+  : { status: 'approved', tracks: ['kids'], progress: {}, done: {}, name: 'Rafa' }) });
+w.eval('profile={email:"rf@x.y",name:"Rafa"};PROG=null;DONE=null;'
+  + 'localStorage.setItem("eod_role_rf@x.y",JSON.stringify("student"));'
+  + 'localStorage.setItem("eod_tracks",JSON.stringify(' + JSON.stringify(NINE) + '));'
+  + 'localStorage.setItem("eod_status_rf@x.y",JSON.stringify({status:"approved",tracks:["kids"],progress:{},done:{},name:"Rafa"}));'
+  + 'document.getElementById("app").innerHTML="";');
+const reflow = w.start();
+const paintedNow = d.querySelectorAll('.tracks .track-card').length;
+ok('the FIRST paint already has every track (no reflow)', paintedNow === NINE.length,
+  paintedNow + ' card(s) for ' + NINE.length + ' tracks');
+await reflow;
+ok('and no column is added after the network answers',
+  d.querySelectorAll('.tracks .track-card').length === NINE.length,
+  d.querySelectorAll('.tracks .track-card').length + ' card(s)');
+
+/* A COLD visit has no track list to paint, and must therefore draw NO columns at all rather than the 3-track
+   fallback — a partial grid corrected a moment later is the reflow, so the spiral is the honest first paint. */
+w.eval('profile={email:"cold@x.y",name:"Cold"};'
+  + 'localStorage.removeItem("eod_tracks");'
+  + 'localStorage.setItem("eod_status_cold@x.y",JSON.stringify({status:"approved",tracks:["kids"],progress:{},done:{},name:"Cold"}));'
+  + 'document.getElementById("app").innerHTML="";');
+const cold = w.start();
+ok('a cold visit paints the spiral, never a partial grid',
+  d.querySelectorAll('.tracks .track-card').length === 0 && !!d.querySelector('#app .spinner'),
+  d.querySelectorAll('.tracks .track-card').length + ' card(s) before the list arrives');
+await cold;
+/* A TRACK THAT EXISTS IN NO FOLDER: "advanced" arrives only as tracks.json would deliver it, which is exactly
+   how a track created next year will arrive. */
 w.eval('LESSONS={business:[{n:1,title:"First Talk & the Sentence Skeleton"}],kids:[],adult:[],'
   + 'advanced:[{n:1,title:"Advanced opener"},{n:2,title:"Advanced two"}]};'
   + 'applyTracks([{name:"kids",label:"Kids",icon:"🛹",order:1},{name:"business",label:"Business",icon:"💼",order:2},'
@@ -307,8 +340,18 @@ ok('the browser default ring is suppressed without .kbd',
    <link>.href while the first fetch was still in flight: the browser aborted it, painted the document
    unstyled, then repainted. A href baked into the HTML is render-blocking, so there is nothing to paint early
    — and keying it to the file's own hash keeps it from going stale in silence. */
-ok('the card trigger is 4pt larger than a button, and wraps instead of spilling',
-  /\.track-card>\.bookdrop>\.bookbtn\{[^}]*calc\(14px \+ 4pt\)[^}]*white-space:normal/.test(css), 'style.css');
+/* the trigger no longer WRAPS: it shrinks to fit (owner instruction 2026-11-09, second pass). CSS alone cannot
+   size text to a box, so the rule stays nowrap and index.html carries the fitter — both halves are asserted,
+   because either one alone leaves a long label wrapped or clipped. */
+ok('the card trigger is 4pt larger than a button, and never wraps',
+  /\.track-card>\.bookdrop>\.bookbtn\{[^}]*calc\(14px \+ 4pt\)[^}]*white-space:nowrap/.test(css), 'style.css');
+ok('a too-long label is SHRUNK to fit, never wrapped or clipped',
+  /function fitBookText\(\)/.test(html) && /scrollWidth>b\.clientWidth/.test(html) && /fs>11/.test(html),
+  'index.html');
+/* EXACTLY THREE per row: a fixed count cannot reflow when tracks.json lands or the window moves */
+ok('the track grid is a fixed three columns, not auto-fit',
+  /\.tracks\{[^}]*grid-template-columns:repeat\(3,/.test(css) && !/\.tracks\{[^}]*repeat\(auto-fit/.test(css),
+  (css.match(/\.tracks\{[^}]*/) || [''])[0]);
 const cssHash = crypto.createHash('sha256').update(fs.readFileSync('style.css')).digest('hex').slice(0, 10);
 const linkTag = (html.match(/<link rel="stylesheet" href="style\.css[^"]*"/) || [''])[0];
 ok('the stylesheet stamp is in the HTML, not applied by JS',

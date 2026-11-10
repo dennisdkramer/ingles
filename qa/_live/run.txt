@@ -1,23 +1,24 @@
 · repo   C:\Users\denni\Documents\GitHub\ingles   (node v24.21.0)
-· page   http://127.0.0.1:54571/business/lesson1.html   as live.qa@ingles.test
+· page   http://127.0.0.1:59929/business/lesson1.html   as live.qa@ingles.test
 · chrome C:\Program Files\Google\Chrome\Application\chrome.exe   [headless=new]
-· runner bar
+· runner landing
 
 
-################### scenario bar ###################
+################### scenario landing ###################
 
-================ BAR · one height, one order ================
-   · order: idxbtn · bookdrop barsel · prevlesson · nextlesson · printpage · clearpage
-   · idxbtn=32px  prevlesson=32px  nextlesson=32px  printpage=32px  clearpage=32px
-   ✅ the bar has a Clear page button (it once disappeared unbuilt)
-   ✅ every bar button is exactly the Next → height
-   ✅ every control sits on ONE line (no row stepping up/down)
-   ✅ Index is the FIRST control
-   ✅ the book selector follows Index
-   ✅ Clear page is to the RIGHT of Print
-      📷 C:\Users\denni\Documents\GitHub\ingles\qa\_live\bar-1-controls.png
-   · scenario bar finished in 1s
+================ LANDING · three per row, no reflow, text fits ================
+   · columns: 390.656px 390.672px 390.656px   cards: 9   rows: 3
+   · Kids 🛹 ▾=19.33px  Business 💼 ▾=19.33px  Adulto 🔞 ▾=19.33px  Advanced STEM 🔬 ▾=19.33px  Advanced AAVE 🎤 ▾=19.33px  Memelord Mogger 😎 ▾=19.33px  English → Basic Portuguese 🔁 ▾=18.83px  Gramática e Redação ✍️ ▾=19.33px  Linguagem Figurativa e Giria 🎭 ▾=17.83px
+   ✅ the FIRST paint already shows every track (this is the reflow report)
+   ✅ nothing is added after the network answers (no reflow)
+   ✅ exactly three columns
+   ✅ nine tracks sit in three rows of three
+   ✅ no track name overflows its button (nothing wraps, nothing is cut off)
+   ✅ every trigger keeps its label on one line
+   ✅ the long names SHRANK rather than wrapping
+      📷 C:\Users\denni\Documents\GitHub\ingles\qa\_live\landing-grid.png
+   · scenario landing finished in 3s
 
 ──────────────────────────────────────────────────────────────────────────────
-✅ live harness: 6 checks passed, 0 failed
+✅ live harness: 7 checks passed, 0 failed
    log  : C:\Users\denni\Documents\GitHub\ingles\qa\_live\run.txt

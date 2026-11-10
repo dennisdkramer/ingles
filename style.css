@@ -354,14 +354,21 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .landing-hello{margin:14px 0;border-color:var(--ink);background:linear-gradient(100deg,rgba(217,193,186,.60),rgba(185,133,76,.30) 55%,rgba(29,78,216,.16))}
 .hello-en{font-weight:600;font-size:18px;line-height:1.35}
 .hello-pt{margin-top:4px;font-style:italic;color:#5c5347}
-.tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;align-items:start;margin:14px 0}
+/* EXACTLY THREE PER ROW (owner instruction 2026-11-09). This was `repeat(auto-fit,minmax(240px,1fr))`, so the
+   column count moved with the viewport width AND with how many tracks had arrived — the page appeared to reflow
+   as tracks.json landed. A fixed count cannot do either. One deliberate exception: a phone-width screen gets a
+   single column, because three ~110px columns are unusable (a breakpoint, not autosizing). */
+.tracks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start;margin:14px 0}
+@media (max-width:640px){.tracks{grid-template-columns:minmax(0,1fr)}}
 .track-card{margin:0}
 /* h3 is the block label everywhere in lesson content; the landing page keeps the browser default */
 #app h3{font-family:inherit;font-weight:700;font-size:1.17em;color:inherit;margin:1em 0;padding-left:0;border-left:0;letter-spacing:normal}
 /* the trigger carries the book's NAME and ICON, so the card needs no heading of its own — and the name is set
-   4pt larger than a button's 14px (owner instruction 2026-11-09). It wraps rather than spilling, because track
-   labels can be long ("Linguagem Figurativa e Giria") and a column is only 240px wide. */
-.track-card>.bookdrop>.bookbtn{font-size:calc(14px + 4pt);line-height:1.15;white-space:normal}
+   4pt larger than a button's 14px (owner instruction 2026-11-09). It does NOT wrap (owner instruction
+   2026-11-09, second pass): a long label ("Linguagem Figurativa e Giria") SHRINKS to fit instead, measured and
+   applied by fitBookText() in index.html, which steps the size down in half-points to a floor of 11px. The base
+   is a custom property so the fitter reads the same number this rule declares. */
+.track-card>.bookdrop>.bookbtn{--bookfs:calc(14px + 4pt);font-size:var(--bookfs);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .track-card .contbtn{display:block;width:100%;margin:10px 0 0;background:#0f766e}
 /* one-line selector entries: the title truncates and keeps the full text as a tooltip; the number is plain
    text and always exactly 2pt larger than the name beside it, whatever the item's font-size becomes */
