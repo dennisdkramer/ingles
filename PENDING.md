@@ -31,9 +31,7 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
    - [S2] - remove the kids/lesson23 game block from both the page and its .edit twin <"Delete the game block from kids/lesson23"> <no data-game="trainSteps" in either file> DONE
    - [S3] - remove the trainSteps section from the games preview <qa/preview-games4.html item-trainSteps> <its note box is gone> DONE
    - [S4] - harnesses green after the removal <qa/content.mjs, qa/games4.mjs, qa/overflow.mjs> <games4 147/15 - the same pre-existing 15; kids/lesson23 loads; nothing overflows> DONE
-### [B3] - CONTENT_EXAMPLES.md: every game states purpose, limits and min/max <user answer to the lesson23 question> <one line per game with a deduced min/max> - UPDATED runs after [B5] <the min/max of each game is read off its implementation, and [B5] changes four of those implementations, so the numbers are written once, after>
-   - [S1] - read every game `###` heading in CONTENT_EXAMPLES.md and record what each already says <CONTENT_EXAMPLES.md game sections 31-240, the 13 games; each heading already carries best-for/can't/purpose/fun> <gap list: min/max only>
-   - [S2] - write the missing limits and min/max, deduced from the implementation and the pedagogy doc <CONTENT_EXAMPLES.md> <every game has purpose, can't, min/max>
+### [B3] - CONTENT_EXAMPLES.md answer ranges <carried out as [2]> DONE - 2026-11-10 - CONTENT_EXAMPLES.md, FORMAT.md, ISSUES.md
 ### [B4] - trainOrder per its notes <"the rest of the games according to my comments in notes.md"> <the new yard presentation>
    - [S1] - ground and distant mountains behind the rails <qa/NOTES.md 92> <no flat beige background>
    - [S2] - caboose larger than the cars; every wheel flush on the track <qa/NOTES.md 92> <geometry checks>
