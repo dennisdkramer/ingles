@@ -21,24 +21,20 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 
 # [CURRENT] Prompt - (Active batches, newest first)
 
-## [23] - Score five live pages, make the register govern every string, and audit what QA has been enforcing
-### [B1] - Close [22] and author this prompt's batches "Apply that grading system to 5 random live pages" PENDING.md [HANDLING] 13,17-20 DONE - 2026-10-11 - PAST_BATCHES.md, PENDING.md
-   - [S1] - Migrate the finished [22] into PAST_BATCHES.md and clear it <PENDING [HANDLING] 13> <[CURRENT] holds only [23]> DONE
-### [B2] - Delete adult/40's stale records "just delete it now if youre gonna keep asking me about the rewrite" <provenance.jsonl> DONE - 2026-10-11 - provenance.jsonl
-   - [S1] - Drop every adult/40 line, then report what the harness says for that page <provenance.jsonl, qa/provenance.mjs> <16 lines -> 12, all JSON valid; the page is now "no provenance record ... before the first line"> DONE
-### [B3] - Put the precedence line into [AUTHORING] "5. good, put it in" <PEDAGOGY-MAP.md 54-55> DONE - 2026-10-11 - PEDAGOGY-MAP.md
-   - [S1] - Insert it as the section preamble, before a)-n) <PEDAGOGY-MAP.md> <line 55, register wins over roadmap items> DONE
-### [B4] - Score five random live pages "Apply that grading system to 5 random live pages and tell me what scores they get as a test" <PEDAGOGY-MAP.md [LEVEL] v, lessons.json> DONE - 2026-10-11 - none
-   - [S1] - Draw five pages at random and outline each <lessons.json, <track>/lesson<N>.html> <business/14, kids/23, business/12, business/38, adult/21> DONE
-   - [S2] - Score each against the four demands <PEDAGOGY-MAP.md [LEVEL] v> <30/10/17/41/23 against bands 9-19/18-28/7-17/33-43/16-26> DONE
-### [B5] - Make the register govern every string and be applied "I want the whole content written in the correct register" <ADULT-REGISTER.md, PEDAGOGY-MAP.md [AUTHORING]> DONE - 2026-10-11 - none
-   - [S1] - Draft the rule covering headings, explanations, stems, options, notes <PEDAGOGY-MAP.md> <two lines, register-neutral, awaiting sign-off> DONE
-   - [S2] - Split the mechanical floor from the author's applied comparison <ADULT-REGISTER.md> <tripwires floor it, the persona question decides it> DONE
-### [B6] - Answer the input-reordering question "roadmap adherence is... the LEAST important factor. What do you think about that?" <PEDAGOGY-MAP.md> DONE - 2026-10-11 - none
-   - [S1] - Give the order I would defend, and what breaks when roadmap items drop <PEDAGOGY-MAP.md> <read order and authority order are two different orders; items demote, position does not> DONE
-### [B7] - Audit QA for rules that belong in generation "i think there are other cases of this problem" <qa/*.mjs> DONE - 2026-10-11 - none
-   - [S1] - Read each harness's stated purpose and list what it enforces that is really guidance <qa/register.mjs, qa/lang.mjs, qa/content.mjs> <lang.mjs's PT band, register.mjs's presence count, content.mjs's disclaimed widths; also data-move/data-recalls are lesson-40-only> DONE
-
-
-
+## [24] - Raise the level floor, install register-governs-every-string, and give the widths a two-thirds slot
+### [B1] - Take [23] out of [CURRENT] "ok well the problem is that we are going to try to teach reduced speech very early on" PENDING.md [HANDLING] 13
+   - [S1] - Delete the finished [23] block; its summary is already in PAST_BATCHES.md <PENDING.md, PAST_BATCHES.md> <[CURRENT] holds only [24]>
+### [B2] - Raise the level floor and move difficulty into concepts and training "The lesson needs to be content level at LEAST = lesson level" <PEDAGOGY-MAP.md [LEVEL] 87-93>
+   - [S1] - t) becomes a floor, not a +-5 band; v) scores the four demands; w) puts the difficulty in concepts and training, never in prose or one-word options <PEDAGOGY-MAP.md> <installed>
+### [B3] - Make the register govern every string "I want the whole content written in the correct register" <PEDAGOGY-MAP.md [AUTHORING], ADULT-REGISTER.md>
+   - [S1] - x)/y)/z) under a new [Register] heading <PEDAGOGY-MAP.md 95-98> <installed>
+   - [S2] - Three bullets: every string, the per-string test, Portuguese is the teacher's voice <ADULT-REGISTER.md 21-23> <installed>
+### [B4] - Add the authority list "how do we express this in the file? we dont currently have an authority list" <PEDAGOGY-MAP.md 1-6>
+   - [S1] - Precedence order plus the reading-order-is-not-precedence clause, at the top of the Contract <PEDAGOGY-MAP.md 5-6> <installed>
+### [B5] - Add the two-thirds slot and rewrite e) "maybe we need a 2/3 width option too" <style.css, FORMAT.md>
+   - [S1] - .itemsize-twothird and the paired third <style.css 208-211> <a paired third is 395px, so 395+791+14 = 1200; the lone third stays 391>
+   - [S2] - (a) now four widths; line 38 names the third+two-thirds pairing <FORMAT.md 38, 47> <installed>
+   - [S3] - e) rewritten as pair -> measure -> never pad <FORMAT.md 51> <installed>
+### [B6] - Answer whether register.mjs is register-neutral "so it checks against whatever the register should have" <qa/register.mjs>
+   - [S1] - Read its mechanism <qa/register.mjs 39-48> <no: three hardcoded regexes and a hardcoded track map whose comment is already false>
 

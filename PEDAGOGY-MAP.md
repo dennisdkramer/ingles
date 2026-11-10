@@ -2,6 +2,8 @@
 - The page must run on the site: mechanical skeleton + deliverable state the engines can read (FORMAT.md, FUNCTION.md);
 - Every factual claim is true and defensible — never pad a section with an unverified assertion.
 - A page is judged against this document's floors, not against the page next door: precedent is not evidence, and "the other lessons do it this way" is not an input.
+- **Precedence, when two inputs disagree:** structure (FORMAT.md, FUNCTION.md, the engines) · LEVEL · register · the roadmap's position (`teaches:`, `deepens:`, the concept) · the roadmap's example lines and `- Vocabulary:` · a content example's sample text. It orders conflicts only — it never licenses skipping an input.
+- **Reading order is not precedence.** The roadmap is read first because a subject must exist before its fit can be judged, and it ranks fifth when it quarrels. Demoting its *items* is deliberate; demoting its *position* is not — a page in the right voice at the right level that teaches what the student already had is still a failed page.
 1. MANDATORY Inputs:
    - a) <TRACK>-ROADMAP.md [LESSON #] - read as its own line range, never the whole file, and never another lesson's range: the entry for lesson N is the only roadmap text a lesson may be built from.
    - b) FORMAT.md
@@ -85,8 +87,15 @@
 
 #### [LEVEL] -
 - s) "STUDENT LEVEL" = [Current Lesson #] = "LESSON DIFFICULTY".
-- t) "LEVEL APPROPRIATE" = [STUDENT LEVEL ± 5]
+- t) "LEVEL APPROPRIATE" = at or above [STUDENT LEVEL]. Content easier than the lesson number is a defect; there is no upper bound worth defending — no page has come back too hard and many too easy. A lesson that quietly drops its difficulty is the failure this scale exists to catch.
 - u) "CONTENT LEVEL" is judged by "how much this piece of content asks of this student", on the same 1-50 scale as the lesson #.
+- v) CONTENT LEVEL is read from four demands, all visible on the page: how many elements must be held at once · stated vs inferred · fixed answer vs chosen · presented on the page vs assumed. Each band adds one: 10 one stated fact · 20 two elements joined, still stated · 30 the meaning sits in the form, one demand left to the student · 40 words and meaning disagree · 50 nothing is stated and the page's own answer is not one key — the student must pick a reading and defend it (such a block cannot be auto-marked: that is a property of the content, not of the grader).
+- w) **The difficulty lives in the CONCEPTS and the TRAINING, never in the prose or the options.** An explanation may sit at whatever level clarity needs — it is an auxiliary tool, and density there is reading load, not difficulty. What is graded is what the student must infer, choose and produce: a page whose hardest part is a sentence to read and whose answers are single words is too easy however dense its explanations. Options match the answer in kind and length — a phrase answer gets phrase distractors, never one-word ones.
+
+#### [Register] - the voice reaches every string
+- x) The register governs every string the student reads — headline, explanation, stem, option, note, table cell — not only dialogue and vocabulary. Each is compared against `<TRACK>-REGISTER.md` before it ships: would this persona write this, in this situation, in this country? An explanation in textbook English beside slang options teaches the student to answer in the wrong voice.
+- y) That comparison is the author's, applied string by string; no harness can make it. A checker holds the floor (no uncontracted auxiliary in speech, no formal connective, no British word in an American scene) but cannot certify the ceiling. A section is finished only when every register-carrying string has been read back against the register file and rewritten until it passes.
+- z) The test governs **English** — the language the student is learning to say. A Portuguese gloss is the teacher's voice, judged by e): informal, spoken, the way a friend explains it, never academic ("observa-se que", "é importante notar"). Do not run the street persona over a gloss, and do not let a gloss fall into lecture register either.
 
 ### [Vehicles]
 - **A standing priority of every build — after correctness — is variety and engagement.** the student should be curious what comes next. Pitch that engagement at the *track's personality*, not a generic one: read `<TRACK>-REGISTER.md` and choose every vehicle and its tone for that persona (what a kids page finds fun, a business page may find unserious). Variety is a goal, never a checklist — a shape is still chosen because the beat needs it, not to tick a box.

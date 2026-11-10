@@ -205,6 +205,10 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .itemsize{width:100%}
 .itemsize-half{width:calc(50% - 7px)}
 .itemsize-third{width:calc(33.3333% - 9.3333px)}
+/* a two-thirds block, alone on its row or paired with a third: the same 14px gap budget */
+.itemsize-twothird{width:calc(66.6667% - 9.3333px)}
+.itemrow[data-cols="2"]>.itemsize-third{width:calc(33.3333% - 4.6667px)}
+.itemrow[data-cols="2"]>.itemsize-twothird{width:calc(66.6667% - 9.3333px)}
 .itemrow{display:flex;gap:14px;margin:14px 0;align-items:stretch}
 .itemrow>*{min-width:0;margin:0}
 .itemrow[data-cols="2"]>*{width:calc(50% - 7px)}
