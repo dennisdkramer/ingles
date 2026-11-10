@@ -2,7 +2,7 @@
 <!-- build: 2026-10-20T00:00:00Z -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=e212b621ce">
+<link rel="stylesheet" href="style.css?v=3bdf8764a0">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head><body class="landing">
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>ENGLISH <span>OPENS DOORS</span></h1><p class="script">Let's go <span lang="pt">· Vamos lá</span></p></header>
@@ -17,11 +17,11 @@
 const CLIENT_ID="872457390510-jsk9pooj688ogvp6hs9ca4js3iqk5n69.apps.googleusercontent.com";
 const SECRET="abreportas2025";
 const BACKPACK="https://script.google.com/macros/s/AKfycbxSR8UmOwosLIgn1-AGKhgXJvdqOVkzMqrTwdlWNF9kOkt-256TqTacOsQlo6JyHplR/exec";
-const COUNTS={kids:31,business:48,adult:22};
+const COUNTS={"kids":31,"business":48,"adult":22,"advanced-stem":0,"advanced-aave":0,"memelord-mogger":0,"english-basic-portuguese":0,"gramatica-redacao":0,"linguagem-figurativa-giria":0};
 /* TRACKS ARE DISCOVERED, NOT LISTED. tracks.json (written by build-lessons.mjs from each track folder's
    track.json) replaces both values below at load, so a NEW TRACK NEEDS NO EDIT IN THIS FILE. The two lines
    are only the fallback for when tracks.json cannot be fetched. */
-let TN={kids:"Kids 🛹",business:"Business 💼",adult:"Adulto 🔞"};
+let TN={kids:"Kids",business:"Business",adult:"Adulto"};
 /* per-track icon and 200 swatch, both read from track.json through tracks.json, so a track created later
    carries its own and no code holds a track's colour. These two are the fallback when tracks.json cannot load. */
 let TI={kids:"🛹",business:"💼",adult:"🔞"};
@@ -338,14 +338,14 @@ function renderStudent(tracks,name){
   const lss=trackLessons(t),dn=(DONE&&DONE[t])||null;
   let cont=null;
   lss.forEach(le=>{const n=le.n;const d=(dn&&dn.indexOf(n)>=0)?1:p[t+"_"+n];if(!d&&!cont)cont=n;});
-  html+='<div class="card track-card'+(has?'':' locked')+'"><h3>'+TN[t]+'</h3>';
+  html+='<div class="card track-card'+(has?'':' locked')+'">'+bookButton(t,!has);
   /* the "continue" number comes from the SERVER's last-completed (status.progress), which travels with the
      track access list; the selector's colouring uses the exact finished list (status.done). No answer → fall back
      to whatever the page can tell, so an older deployment still shows a button rather than none. */
   if(PROG&&PROG[t]!=null){const last=Number(PROG[t])||0;cont=(last+1<=lss.length)?last+1:null;}
   if(!has)html+='<p class="dim">Sem acesso a esta trilha · no access to this book</p>';
   else if(cont)html+='<button class="contbtn" onclick="go(\''+t+'\','+cont+')">▶ Continuar da lição '+cont+'</button>';
-  html+=bookButton(t,!has)+'</div>';
+  html+='</div>';
  });
  html+='</div>';
  $("app").innerHTML=html;log("índice pronto ✔");
@@ -357,6 +357,9 @@ let QUEUE={pending:[],approved:[]};
    lesson name: the number is plain text — never part of the link, and 2pt larger than the name via CSS — while
    the name is the only link. `locked` renders the same items inert, so a book the student does not hold still
    shows what it contains. */
+/* the book's NAME and ICON are separate fields (track.json "label" and "icon"), so the trigger can print
+   "Name Icon ▾" without the icon showing twice when a label happens to carry one. */
+function trackName(t){const n=String(TN[t]||t),i=String(TI[t]||"");return i?n+" "+i:n;}
 function bookButton(t,locked){
  const col=/^#[0-9a-f]{3,8}$/i.test(String(TC[t]||""))?TC[t]:"#90CAF9";
  const dn=(DONE&&DONE[t])||[];
@@ -370,7 +373,7 @@ function bookButton(t,locked){
    +'</div>';
  }).join('');
  return '<div class="bookdrop'+(locked?' locked':'')+'">'
-  +'<button type="button" class="bookbtn" style="--sw:'+col+'" onclick="toggleBookMenu(\''+t+'\')">'+TN[t]+' ▾</button>'
+  +'<button type="button" class="bookbtn" style="--sw:'+col+'" onclick="toggleBookMenu(\''+t+'\')">'+esc(trackName(t))+' ▾</button>'
   +'<div class="bookmenu" id="menu_'+t+'" hidden>'+items+'</div></div>';
 }
 window.toggleBookMenu=function(t){const m=$("menu_"+t);if(!m)return;const open=!m.hidden;document.querySelectorAll(".bookmenu").forEach(x=>x.hidden=true);if(!open)m.hidden=false;};

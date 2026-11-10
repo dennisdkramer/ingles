@@ -42,7 +42,7 @@ w.eval('LESSONS={business:[{n:1,title:"First Talk & the Sentence Skeleton"}],kid
 const cards = [...d.querySelectorAll('.tracks .track-card')];
 ok('one column per track', cards.length === w.eval('TRACKSALL.length'),
   cards.length + ' cards for ' + w.eval('TRACKSALL.join("+")'));
-const byTrack = t => cards.find(c => (c.querySelector('h3') || {}).textContent.includes(t));
+const byTrack = t => cards.find(c => ((c.querySelector('.bookbtn') || {}).textContent || '').includes(t));
 const biz = byTrack('Business'), kids = byTrack('Kids'), adult = byTrack('Adulto');
 ok('business card is active', biz && !biz.classList.contains('locked'));
 ok('kids card is locked', kids && kids.classList.contains('locked'));
@@ -69,7 +69,12 @@ ok('link href points at the page', !!link && link.getAttribute('href') === 'busi
 const kidsOfCard = [...biz.children];
 const contIdx = kidsOfCard.findIndex(el => el.classList.contains('contbtn'));
 const dropIdx = kidsOfCard.findIndex(el => el.classList.contains('bookdrop'));
-ok('the selector sits BELOW the continue button', contIdx >= 0 && dropIdx > contIdx, 'contbtn@' + contIdx + ' bookdrop@' + dropIdx);
+ok('the selector LEADS the card (no header above it)',
+  contIdx >= 0 && dropIdx < contIdx && !biz.querySelector('h3'),
+  'bookdrop@' + dropIdx + ' contbtn@' + contIdx);
+/* the trigger says "Name Icon ▾" — the name and icon are separate track.json fields, so neither doubles */
+const trig = (biz.querySelector('.bookbtn') || {}).textContent || '';
+ok('the trigger reads "Name Icon ▾"', /^Business\s+💼\s+▾$/.test(trig.trim()), JSON.stringify(trig.trim()));
 /* the teacher panel and the student card are the SAME component, so their lists cannot drift apart */
 w.eval('teacher=true;QUEUE={pending:[],approved:[]};PROG={};DONE={};'
   + 'document.getElementById("app").innerHTML=teacherShell();');
@@ -234,13 +239,17 @@ await boot2;
    would deliver it, which is exactly how a track created next year will arrive. */
 w.eval('LESSONS={business:[{n:1,title:"First Talk & the Sentence Skeleton"}],kids:[],adult:[],'
   + 'advanced:[{n:1,title:"Advanced opener"},{n:2,title:"Advanced two"}]};'
-  + 'applyTracks([{name:"kids",label:"Kids 🛹",order:1},{name:"business",label:"Business 💼",order:2},'
-  + '{name:"adult",label:"Adulto 🔞",order:3},{name:"advanced",label:"Advanced 🚀",order:4}]);'
+  + 'applyTracks([{name:"kids",label:"Kids",icon:"🛹",order:1},{name:"business",label:"Business",icon:"💼",order:2},'
+  + '{name:"adult",label:"Adulto",icon:"🔞",order:3},{name:"advanced",label:"Advanced",icon:"🚀",order:4}]);'
   + 'renderStudent(["business","advanced"],"Ana");');
 const cards4 = [...d.querySelectorAll('.tracks .track-card')];
-ok('a fourth track gets its own column', cards4.length === 4, cards4.length + ' cards');
-const adv = cards4.find(c => /Advanced/.test((c.querySelector('h3') || {}).textContent || ''));
-ok('the new column uses its track.json label', !!adv && /Advanced 🚀/.test(adv.querySelector('h3').textContent));
+ok('a track that exists in no folder gets its own column',
+  !!cards4.find(c => /Advanced/.test(((c.querySelector('.bookbtn') || {}).textContent) || '')) &&
+  cards4.length === w.eval('TRACKSALL.length'), cards4.length + ' cards');
+const adv = cards4.find(c => /Advanced/.test((((c.querySelector('.bookbtn') || {}).textContent) || '')));
+ok('the new column shows its track.json label and icon',
+  !!adv && /Advanced\s+🚀/.test(adv.querySelector('.bookbtn').textContent),
+  adv ? JSON.stringify(adv.querySelector('.bookbtn').textContent.trim()) : 'none');
 ok('a granted new track is live, not locked', !!adv && !adv.classList.contains('locked'));
 ok('its lessons are listed from lessons.json', !!adv && adv.querySelectorAll('a.ltitle').length === 2);
 w.eval('teacher=true;QUEUE={pending:[],approved:[{email:"s@x.y",name:"Sol",'
@@ -298,6 +307,8 @@ ok('the browser default ring is suppressed without .kbd',
    <link>.href while the first fetch was still in flight: the browser aborted it, painted the document
    unstyled, then repainted. A href baked into the HTML is render-blocking, so there is nothing to paint early
    — and keying it to the file's own hash keeps it from going stale in silence. */
+ok('the card trigger is 4pt larger than a button, and wraps instead of spilling',
+  /\.track-card>\.bookdrop>\.bookbtn\{[^}]*calc\(14px \+ 4pt\)[^}]*white-space:normal/.test(css), 'style.css');
 const cssHash = crypto.createHash('sha256').update(fs.readFileSync('style.css')).digest('hex').slice(0, 10);
 const linkTag = (html.match(/<link rel="stylesheet" href="style\.css[^"]*"/) || [''])[0];
 ok('the stylesheet stamp is in the HTML, not applied by JS',

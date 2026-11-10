@@ -267,7 +267,7 @@ function renderCompleteBtn(){
  if(sb&&sm){
   fetch("../tracks.json").then(r=>r.ok?r.json():null).then(list=>{
    const m=(Array.isArray(list)?list:[]).find(x=>x&&x.name===folder);if(!m)return;
-   if(m.label)sb.textContent=m.label+" \u25BE";
+   if(m.label)sb.textContent=m.label+(m.icon?" "+m.icon:"")+" \u25BE";
    if(/^#[0-9a-f]{3,8}$/i.test(String(m.color||"")))sb.style.setProperty("--sw",m.color);
   }).catch(()=>{});
   sb.onclick=async e=>{

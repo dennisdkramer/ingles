@@ -119,9 +119,16 @@ if (!countsLine.test(indexHtml)) {
   console.error('ERROR: index.html has no `const COUNTS={...};` line to keep in sync with the lesson folders.');
   process.exitCode = 1;
 } else {
-  const wanted = 'const COUNTS={' + META.map(m => m.name + ':' + (summary[m.name] || 0)).join(',') + '};';
+  /* Keys are QUOTED. A track is a folder name, and a folder name may contain a hyphen ("advanced-stem"), which
+     is not a legal identifier: the unquoted form wrote `{advanced-stem:0}` into the page and the whole inline
+     script failed to parse, so the index rendered nothing at all. The guard below refuses to write a line that
+     does not parse, so this class of defect cannot reach the page again. */
+  const wanted = 'const COUNTS={' + META.map(m => JSON.stringify(m.name) + ':' + (summary[m.name] || 0)).join(',') + '};';
   const before = indexHtml.match(countsLine)[0];
-  if (before !== wanted) {
+  let parses = true;
+  try { new Function(wanted + ' return 1;'); }
+  catch (e) { parses = false; console.error('ERROR: the generated COUNTS line is not valid JS (' + e.message + ') — refusing to write it into index.html: ' + wanted); process.exitCode = 1; }
+  if (parses && before !== wanted) {
     fs.writeFileSync(indexPath, indexHtml.replace(countsLine, wanted), 'utf8');
     console.log('index.html COUNTS ' + before.slice(13, -1) + ' -> ' + wanted.slice(13, -1) + ' (fallback kept in step with the folders)');
   }

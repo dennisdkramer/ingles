@@ -1,7 +1,7 @@
 [
   {
     "name": "kids",
-    "label": "Kids 🛹",
+    "label": "Kids",
     "icon": "🛹",
     "color": "#FFE082",
     "order": 1,
@@ -9,7 +9,7 @@
   },
   {
     "name": "business",
-    "label": "Business 💼",
+    "label": "Business",
     "icon": "💼",
     "color": "#90CAF9",
     "order": 2,
@@ -17,10 +17,58 @@
   },
   {
     "name": "adult",
-    "label": "Adulto 🔞",
+    "label": "Adulto",
     "icon": "🔞",
     "color": "#FFAB91",
     "order": 3,
     "count": 22
+  },
+  {
+    "name": "advanced-stem",
+    "label": "Advanced STEM",
+    "icon": "🔬",
+    "color": "#80CBC4",
+    "order": 4,
+    "count": 0
+  },
+  {
+    "name": "advanced-aave",
+    "label": "Advanced AAVE",
+    "icon": "🎤",
+    "color": "#B39DDB",
+    "order": 5,
+    "count": 0
+  },
+  {
+    "name": "memelord-mogger",
+    "label": "Memelord Mogger",
+    "icon": "😎",
+    "color": "#E6EE9C",
+    "order": 6,
+    "count": 0
+  },
+  {
+    "name": "english-basic-portuguese",
+    "label": "English → Basic Portuguese",
+    "icon": "🔁",
+    "color": "#80DEEA",
+    "order": 7,
+    "count": 0
+  },
+  {
+    "name": "gramatica-redacao",
+    "label": "Gramática e Redação",
+    "icon": "✍️",
+    "color": "#F48FB1",
+    "order": 8,
+    "count": 0
+  },
+  {
+    "name": "linguagem-figurativa-giria",
+    "label": "Linguagem Figurativa e Giria",
+    "icon": "🎭",
+    "color": "#9FA8DA",
+    "order": 9,
+    "count": 0
   }
 ]
