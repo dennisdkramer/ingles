@@ -460,11 +460,11 @@
 
 - **does** — The same sentence stressed three ways, three meanings. The student is given the *intended meaning* and
   marks which word has to carry the beat.
-- **markup** — item list: the meaning in the `.qstem`, the sentence printed once, and the student writes the stressed
-  word into the gap. Radios per word would be tidier but would give away that exactly one word is marked.
-- **fits** — half. It belongs beside `registerContrast`, where tone already matters, and directly under
-  an explainer block that shows the pattern and a couple of examples of it (`ruleCard` or `formulaFrame`) — a student
-  cannot mark a beat for a pattern the page never stated.
+- **markup** — worked pair, a **half** each: an explainer `.card` that states the pattern and shows the sentence twice
+  with the beat marked in `<b>` on each reading, then the item list — the intended meaning in the stem, the stressed
+  word written into the gap. The explainer is not optional: a student cannot mark a beat for a pattern the page never
+  stated. Radios per word would be tidier but would give away that exactly one word is marked.
+- **fits** — half, beside its explainer on one row. It belongs near `registerContrast`, where tone already matters.
 - **vary** — three candidate words → five → a two-clause sentence where the beat can fall in either clause. The lever
   is the number of *plausible* hosts, not the length of the sentence.
 - **can't** — only produces a marked word, never the sound; and it is genuinely hard for students whose first language

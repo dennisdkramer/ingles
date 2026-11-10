@@ -19,6 +19,7 @@
    - [S6] - chatSample renamed to `dialog` <note> <6 hits in CONTENT_EXAMPLES.md, 2 in qa/NOTES.md, 6 in the page, all counted before and after>
    - [S7] - infoGap: the `them` facts block deleted, the ask panel takes the `them` header <note> <A. you + B. them; entry rewritten>
    - [S8] - the stale `chunkBank → delete` note dropped <it named a vehicle that was renamed to contextFit, which this same batch asks to change, not delete> <reported, not silently applied>
+   - [S9] - emphaticBeat: the explainer its own `fits` demands <a request left from [9] that the page never showed> <a `.card` stating the pattern with two marked readings, half width, beside the items; entry rewritten>
 ### [B4] - verify
    - [S1] - order, balance, links <54/54 sections, divs 591/591, 0 dangling jump-links, 0 order mismatches> <qa/examples.mjs 6/6>
 
