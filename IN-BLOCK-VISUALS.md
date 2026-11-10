@@ -101,7 +101,7 @@ Authoring is one span at the point of the mark, empty where the mark is the whol
 
 - **draws** — one row, two halves: the absurd literal reading on the left, what it actually means plus one real usage on
   the right.
-- **built from** — `.itemrow` of two `.panel`s (`beforeAfterStrip` already pairs panels this way) plus one small inline
+- **built from** — `.itemrow` of two `.panel`s plus one small inline
   `<svg>` on the left; the literal reading is also written as a sentence, so the block still teaches if the drawing is cut.
 - **ends in** — one `input.gap` per idiom, used correctly in a stated situation; or radios — which of two situations a
   speaker would say this in.
@@ -301,8 +301,8 @@ Authoring is one span at the point of the mark, empty where the mark is the whol
   Passive row: the object has moved to the left, a `be + V3` helper has appeared over the verb, and the actor sits at the far
   right behind a translucent `by` screen.
 - **built from** — two stacked `.panel`s with the changed element drawn in both rows and a dashed leader between its two
-  positions (or one inline `<svg>`). `beforeAfterStrip` is the pair without the movement, so the leader line is the whole
-  difference between them.
+  positions (or one inline `<svg>`). Two panels alone would be two states; the leader line between them is the whole
+  difference.
 - **ends in** — `input.gap`s converting a given sentence, plus one item where the passive is the *wrong* choice — that
   judgement is the lesson, not the transformation.
 - **fits** — full; three positions plus a helper need the width.

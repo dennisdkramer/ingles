@@ -5,200 +5,252 @@ preview pages read and write this file directly (Chrome or Edge, click "link qa/
 this file is the whole record and editing it here edits the boxes.
 
 Every section opens with a pointer to the item's `###` heading in `CONTENT_EXAMPLES.md` — that
-heading is the contract the request argues with, and reading the two against each other is the whole
-job. The request stays here and is never copied into CONTENT_EXAMPLES.md. A section holding finished
-text and new text together loses only the finished part — execute what remains.
-
-Only this file deletes a request: emptying a box leaves its section and its text untouched, and the
-section reappears in the box on the next refresh. Delete a section here and its box empties within
-2 s. Delete it only once it is tagged `[done]` — the tag marks work that is committed, and the record
-of work done is the commit.
-
-Two ways in. Best: `node qa/serve.mjs` (or double-click `qa/serve.cmd`) — it serves the repo on
-127.0.0.1 and opens the preview page with `?notes=server`, and the boxes then read and write this file
-through that server: nothing to pick, nothing to grant, nothing to re-grant. Double-clicking the page on
-its own still works — one click on "link qa/NOTES.md" grants the page file-system access — but that grant
-lapses between sessions, so the server is the reliable way in. Either way the page re-reads this file
-every 2 s.
-Text sitting directly under a `##` page heading is dropped the next time any box writes, so a block's
-content belongs in its `###` sections.
+heading is the contract the request argues with. The request stays here and is never copied into
+CONTENT_EXAMPLES.md. Emptying a box, or deleting a section here, removes the request; the record of
+work done is the commit.
 
 ## preview-games4.html
 
 ### skeetRange
 
 → CONTENT_EXAMPLES.md §`skeetRange`
-[done] the targets are spread way too much now, revert the positioning to how it was before
-↳ reverted: every disc enters at the left edge again, a few px apart, on the lanes its options decide — the width-and-height spread is gone. Also in: the miss sound is half its level, the gunshot 30% quieter, the label plaques no longer truncate, and the rack caps at six discs.
-
-### stackDrop
-
-→ CONTENT_EXAMPLES.md §`stackDrop`
-make the step down in size 10px greater per item added to the stack. remove the platform from the old version. Add a super mario style flagpole and animated flag
-Once the stack is built, have the player run across the top answer card on the stack and jump towards the flag, if all the answers are correct he hits the flag and a coin pops out. If [score< max possible score] he misses and falls on his face
-↳ done: the flag emoji is a real flagpole now (steel shaft, knob, waving pennant), the jump is measured to the pole instead of a fixed 112px, the coin pops from the knob, and the face-first fall already fires when the finished tower fell short (`placed < r.total`). The taper is 20px a block, i.e. the 10px-greater step you asked for.
-  ? THE PLATFORM — which one goes? The yard holds TWO fixed slabs that read as a platform: `g4-ledge`, the 10px bar the chest rests on at the goal height, and `g4-roof`, the slab over the chest. The ledge is also the block-flight's centre line (its width is what a flying block is aimed at), so removing it means giving the flight a new target. Say which and I will take it out.
+delete the crowd sound. halve the volume of the buzzer sound. On miss AND on wrong target, play the gunshot and buzzer sounds together
 
 ### bingoCard
 
 → CONTENT_EXAMPLES.md §`bingoCard`
-the current start game button is the old 'begin game' button, i want "Start Game - Listen to the Target Word" in its place, and then after that round (the first word),  the button that plays the audio should say "Next Round! - Listen to the Target Word"
-
-### echoPads
-
-→ CONTENT_EXAMPLES.md §`echoPads`
-[done] Make prompt card not show on start screen.
-[done] Make a hidden variable for 2 difficuly levels (lesson 20+ triggers level 2)
-[done] level one stays as-is. Level 2 instead of having a hint to discern which answer is correct has NO hint, but authored options for each word MUST be NOT POSSIBLE to correctly use in that word's position (example " Yesterday I got too .. (for, far, fear, fore)" - ONLY 'for' is possible to use
-[done] Make start game card text say "Build a sentence - Dont get distracted by similar words!"
-↳ the sentence strip is hidden until the run starts; the level is `data-level`, else the page's own L, and 20+ means level 2, which prints no hint at all (neither "Next word:" nor the wrong-pad line). The authoring demand is in the plugin's own comment: at level 2 every other pad must be impossible in that position.
-
-### flapGate
-
-→ CONTENT_EXAMPLES.md §`flapGate`
-its better now, but make it one continuous flight, the bird jumps back to the middle when it hits a wrong answer and zooms forward then resets when it hits a correct answer
-
-### ladderRun
-
-→ CONTENT_EXAMPLES.md §`ladderRun`
-postpone the play again screen for 5 seconds so the animation can play out
-
-### crosswordBoard
-
-→ CONTENT_EXAMPLES.md §`crosswordBoard`
-[done] there are no wrong answers. if they put the wrong letters in it doesnt do anything, they can just keep trying until it goes green. right answers gain points, the game is either won with 5 points or stays open permanently with whatever their score is
-↳ a full word typed wrongly now does nothing at all — the letters stay where the student put them, nothing is scored and nothing clears, so they keep at it until it goes green. A right word is a point, and the fifth point closes the board as a win; under five it simply stays open, since this game has no clock and no lives.
-
-### mineGrid
-
-→ CONTENT_EXAMPLES.md §`mineGrid`
-[done]
-
-### catchBasket
-
-→ CONTENT_EXAMPLES.md §`catchBasket`
-[done] note a minimum of 2 and maximum of 4 items for this game (make sure all the games in content_examples.md have a min/max value attached)
-[done] at the end of the game make a girl in a dress come and pick whichever flower is the biggest (if more than one are the same she can pick one at random)
-↳ every one of the 13 games now states its floor and ceiling in its CONTENT_EXAMPLES entry (catchBasket: 2–4 pots). A later bloom in a pot is drawn bigger than the one before it, so "the biggest" exists; at the end of the run a girl in a dress walks in from the left of the tray, plucks the tallest bloom (a tie is settled at random), carries it in her hand and walks out.
-
-### whackMole
-
-→ CONTENT_EXAMPLES.md §`whackMole`
-[done] the grid cards are fine, but make the moles coming out of little molehills directly under them
-↳ each mole has its own molehill now: a soil mound with a dark opening at its crest, standing in FRONT of the mole (so he surfaces from it), with his word moved above his head where the hill cannot cover it. The cells draw nothing else, and the garden is a fixed six holes.
-
-### trainOrder
-
-→ CONTENT_EXAMPLES.md §`trainOrder`
-[done] redraw the front of the train (the caboose) significantly better
-↳ THIRD drawing, and the first one looked at on screen before shipping (headless Chrome, 1x and 3x): brick-red boiler, black smokebox and funnel, brass dome and buffer beam, maroon cab with a cream window, three driving wheels on the rail, cowcatcher, headlamp. Its box is one car pitch wide instead of the old 8% sliver — that sliver is why the first two drawings read as a smudge — and its wheels now stand on the same line as the wagons'.
-[done] one guy per traincar, standing in front of the car with his arms out to receive the adjectives
-↳ `ART.loader` on a `g4-tcrew` row: cap, overalls, boots, both palms up; one per flatbed, each on his own car's pitch, standing on the ground in front of the deck with his hands at deck level and short enough that the load stays readable above him.
-[done] make the adjectives draggable
-↳ `pointerdown` on a dock card starts a drag: a ghost follows the pointer, the deck under it lights, and releasing over a car loads it. A tap still picks a card up and a tap on a car still places it, so mouse, finger and keyboard all work.
+make each word card twice as big. grid anchored to center, never moves. 321 countdown centered over grid/curtain. 54321 countdown card 30px right of grid, vertically centered. improve curtain graphics is possible without affecting anything else.
+add *Begin Round - Hear Word* button 15px below the grid which initiates each round and starts the 321 countdown
 
 ### bossRaid
 
 → CONTENT_EXAMPLES.md §`bossRaid`
-draw 3 different bosses that can be chosen or random, one is a chinese style dragon, one is a demon, and the other is an armored knight. make the graphics when its a dragon, the background is a cave, when its a demon, the background is a volcano with lava, when its a knight, its a castle. Make the graphics significantly better than they are now, or else pull outside assets
+score is countdown, hidden during play
+each heart lost subtracts 1 from score, boss should take [total # questions]-2 hits to kill
+
+### stackDrop
+
+→ CONTENT_EXAMPLES.md §`stackDrop`
+put the two answer choices on the right bottom, stacked vertically, 30px between.
+move the correct answer stack items down 35px. Make each item in the stack consecutively 20px thinner, make the stack right-justify.
+Once the stack is built, have the player do a mario-style run and jump to a flag, if all the answers are correct he hits the flag and a coin pops out. If score<max-score> he misses and falls on his face
+
+### bingoCard
+
+→ CONTENT_EXAMPLES.md §`bingoCard`
+button text not visible (black on dark blue?)
+make grid items 15px less wide each
+
+### echoPads
+
+→ CONTENT_EXAMPLES.md §`echoPads`
+is showing prompt card on game start screen
+make hint text white
+(answer must have three distractors per word that never fit the words already placed)
+
+### flapGate
+
+→ CONTENT_EXAMPLES.md §`flapGate`
+must be possible for wall to continue, second wall to come, game target is continuous flight through all the gates in one 'run'
 
 ## preview-blocks.html
 
-### chunkBank
+### contextFit
 
-→ CONTENT_EXAMPLES.md §`chunkBank`
-call this vehicle 'contextFit'
+→ CONTENT_EXAMPLES.md §`contextFit`
+call this vehicle 'contextFit' — done: heading, preview id and this section all read `contextFit` now.
 
 ### connectedSpeech
 
 → CONTENT_EXAMPLES.md §`connectedSpeech`
 delete this vehicle
 
+### dictation
+
+→ CONTENT_EXAMPLES.md §`dictation`
+this should be restricted t lvl 15-20+
+
 ### sentenceSurgery
 
 → CONTENT_EXAMPLES.md §`sentenceSurgery`
-instead of having fields with the words position,  we can have a line below the chunks to which they can be dragged an put in order. make an alternate form of this which is a sentence with extranneos words to be cut out
+instead of having fields with the words position,  we can have a line below the chunks to which they can be dragged an put in order. We can make an alternate form of this which is a sentence with extranneos words to be cut out
 
 ### registerContrast
 
 → CONTENT_EXAMPLES.md §`registerContrast`
-use only if both forms of the phrase are *really* used/common. We dont need to teach softening languge for a phrase that doesnt need to be softened, nor vice versa
+this one is good but only if both forms of the phrase are really used/common. We dont need to teach softening languge for a phrase that doesnt need to be softened, nor vice versa
 
 ### questionBuilding
 
 → CONTENT_EXAMPLES.md §`questionBuilding`
-lvl 10+, used during a lesson that touches questions
+need to be careful with difficulty on these, they might be more challenging/open/vague than they seem
 
-### dictation
+### cheatSheet
 
-→ CONTENT_EXAMPLES.md §`dictation`
-simple transcription doesnt need a special activity for one item. delete vehicle
-
-### repairMoves
-
-→ CONTENT_EXAMPLES.md §`repairMoves`
-very useful for low-intermediate lesson about realistic day-to-day conversation. rephrase 'repair' and 'come apart'  to  'interjecting'
-
-### shadowRecord
-
-→ CONTENT_EXAMPLES.md §`shadowRecord`
+→ CONTENT_EXAMPLES.md §`cheatSheet`
 delete
 
-### ruleTree
+### connectedFlow
 
-→ CONTENT_EXAMPLES.md §`ruleTree`
+→ CONTENT_EXAMPLES.md §`connectedFlow`
+delete
 
-### literalSplit
+### stressShift
 
-→ CONTENT_EXAMPLES.md §`literalSplit`
+→ CONTENT_EXAMPLES.md §`stressShift`
+delete
 
-### timelineBridge
+### emphaticBeat
 
-→ CONTENT_EXAMPLES.md §`timelineBridge`
-↳ rebuilt: one `--now`-driven axis, three sizes, and the size decides the job. Full = three shapes on one film (`have seen` open into now, `saw` closed bar, `saw` with no time = closed bar plus a gap to now). Half = a dot inside a bar (`was cooking`/`rang`) and a bar that reaches a deadline wall (`will have sent`). Third = the timelines move inside the answer options, so the option is a shape and the tense name is the label. Nothing in it is a control: the radio beside it saves.
+→ CONTENT_EXAMPLES.md §`emphaticBeat`
+Pair with an explainer block that shows the pattern and a couple examples.
 
-### inlineTimeline
+### falseFix
 
-→ CONTENT_EXAMPLES.md §`inlineTimeline`
-↳ new: the same axis as an IN-BLOCK element rather than a block — no frame, no heading, no width of its own, so it drops under one sentence inside a panel / dialog / chart note / question stem and takes whatever slot it is given. Two shapes carry the two meanings that trip pt-BR speakers: `recent` (bar fades into the past — "have been sick lately") and `field` (hatched band above the line + a dot inside it — "have been to Disney World in my life"). Words link to marks by `data-k` letter, drawn as a superscript on the word and again at the head of its mark, so the pairing survives greyscale and print. Two interactive modes: pick the WORD that carries the claim (`.tlx-pick`), or place the timeline yourself (`.tlx-build`, three candidate axes, one radio each). Both save through real radios.
+→ CONTENT_EXAMPLES.md §`falseFix`
+delete
 
-### spaceScene
+### dictogloss
 
-→ CONTENT_EXAMPLES.md §`spaceScene`
-this one is good for now
+→ CONTENT_EXAMPLES.md §`dictogloss`
+delete
 
-### mouthCut
+### summarySqueeze
 
-→ CONTENT_EXAMPLES.md §`mouthCut`
-this one is terrible. we need to pull in an existing image and ideally be able to mark on top of images
-↳ rebuilt that way. Two vendored public-domain plates in `assets/` (provenance table in `assets/README.md`): the head-and-neck plate with four numbered pins and a key, then the mouth alone twice — one instruction drawn per version, in the image's own pixel space, so a mark lands on a feature. pt-BR = arrow from tongue body up to the soft roof + air forced through the slit; English = a measurement across the gap at the tip. Still one control: radios on where the sound happens, two gaps.
+→ CONTENT_EXAMPLES.md §`summarySqueeze`
+delete
 
-### massBasket
+### sentenceCombine
 
-→ CONTENT_EXAMPLES.md §`massBasket`
-improve and generalize visuals so they arent showing individual items but concepts
+→ CONTENT_EXAMPLES.md §`sentenceCombine`
+delete
 
-### slotBlocks
+### expandCompress
 
-→ CONTENT_EXAMPLES.md §`slotBlocks`
-getting better, but work on something that can be applied to individual sentences within their blocks without seeming like its own exercise. remember these are supposed to be tools and elements that implement INSIDE existing content blocks
+→ CONTENT_EXAMPLES.md §`expandCompress`
+delete
 
-### voiceSeesaw
+### roleCard
 
-→ CONTENT_EXAMPLES.md §`voiceSeesaw`
-the idea is getting better, but its still basically its own block type. Try something that can take a normal sentence which is tagged as passive and put the subject behind a veil and then go from there
+→ CONTENT_EXAMPLES.md §`roleCard`
+delete
 
-### trainOrder (2026-11-10, teardown)
+### audienceShift
 
-→ CONTENT_EXAMPLES.md §`trainOrder (2026-11-10, teardown)`
-The train graphics, `ART.loco`, the coal bowl, the hold box, the crew, the depot, the ram, the fireball and the FAIL stamp are all deleted; the train is now a plain locomotive (cab, boiler, chimney, dome) and one flatbed per adjective, and the prompt card reads `That's a _______ <noun>` from `data-noun`. Four questions before this game can be re-implemented:
+→ CONTENT_EXAMPLES.md §`audienceShift`
+delete
 
-1. **What carries the verdict now?** The old mechanism was geometry: every car was 6px taller than the one behind it, so an adjective in too late a car grew through the bridge. Flatbeds are all the same height, so that is gone. Should the height difference come back as a quieter ramp, or should a wrong placement be shown some other way (the load hanging over the end of the deck, a plank that visibly does not fit, the bridge checked at departure rather than at loading)?
-2. **How does a word get onto a car?** Today: tap a dock card, then tap a car. With a plain flatbed the natural gesture is dragging the adjective onto the deck. Drag, tap-tap, or both?
-3. **Do the cars ever say what they are?** The description now says no car carries a label, and the label art was deleted with the rest. Is the eight-slot order supposed to be on the page above the block (a chart the game never states), or should the slot names appear on the cars at low levels again?
-4. **What happens on a wreck?** The car tips and a heart goes. Does the train stop there with the wrecked car still loaded (and the run resumes on a fresh train), or does the whole train come off and the block restart at its first adjective?
+### pulseStress
 
-### levelGauge
+→ CONTENT_EXAMPLES.md §`pulseStress`
+delete
 
-→ CONTENT_EXAMPLES.md §`levelGauge`
-the third block is terrible and in general i want some kind of marker that can go below individual words or phrases, since having a vertical thermometer next to a clumn of words doesnt really add anything that just puitting them in order wouldnt be able to explain
+### lyricGap
+
+→ CONTENT_EXAMPLES.md §`lyricGap`
+delete
+
+### lineRepair
+
+→ CONTENT_EXAMPLES.md §`lineRepair`
+delete the secont part and make this a teaching-only block
+
+### contourMatch
+
+→ CONTENT_EXAMPLES.md §`contourMatch`
+delete
+
+### placeScript
+
+→ CONTENT_EXAMPLES.md §`placeScript`
+delete
+
+### directnessDial
+
+→ CONTENT_EXAMPLES.md §`directnessDial`
+delete
+
+### generationGap
+
+→ CONTENT_EXAMPLES.md §`generationGap`
+delete
+
+### mediaSnippet
+
+→ CONTENT_EXAMPLES.md §`mediaSnippet`
+tag this block as a specific concept, add a second example of the same concept and delete question #2
+
+### contrastTable
+
+→ CONTENT_EXAMPLES.md §`contrastTable`
+delete
+
+### ruleCard
+
+→ CONTENT_EXAMPLES.md §`ruleCard`
+make a 1/3 width block, make the categories 'Pattern:' , 'Means:' and 'Use when:' and centered, the explainer text a line below its category
+
+### workedExample
+
+→ CONTENT_EXAMPLES.md §`workedExample`
+delete
+
+### annotatedExample
+
+→ CONTENT_EXAMPLES.md §`annotatedExample`
+delete
+
+### formulaFrame
+
+→ CONTENT_EXAMPLES.md §`formulaFrame`
+remove 'the frame holds' line and make 1/3 width block
+
+### signalTable
+
+→ CONTENT_EXAMPLES.md §`signalTable`
+make the first column thinner to leave more room for longer examples. the header of the first column can be 'The Cue'
+
+### exceptionBench
+
+→ CONTENT_EXAMPLES.md §`exceptionBench`
+delete
+
+### errorGallery
+
+→ CONTENT_EXAMPLES.md §`errorGallery`
+delete
+
+### beforeAfterStrip
+
+→ CONTENT_EXAMPLES.md §`beforeAfterStrip`
+delete
+
+### soundGrid
+
+→ CONTENT_EXAMPLES.md §`soundGrid`
+change the first sound to a X and the second to TI both tagged portuguese (italicized) and the third one make TH, we dont use those other symbols in this project
+
+### stressBar
+
+→ CONTENT_EXAMPLES.md §`stressBar`
+delete
+
+### spellingSoundMap
+
+→ CONTENT_EXAMPLES.md §`spellingSoundMap`
+delete
+
+### scaleAxis
+
+→ CONTENT_EXAMPLES.md §`scaleAxis`
+delete
+
+### collocationMatrix
+
+→ CONTENT_EXAMPLES.md §`collocationMatrix`
+make it a half-width block and include have and get
+
+### falseFriendSplit
+
+→ CONTENT_EXAMPLES.md §`falseFriendSplit`
+delete

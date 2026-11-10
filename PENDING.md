@@ -22,6 +22,25 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 # [CURRENT] Prompt - (Active batches, newest first)
 
 
+## [12] - the remaining change tags in qa/NOTES.md, entry and preview (2026-11-10)
+### [B1] - PRE-PROMPT RESEARCH <"keep working on any other items that ive requested changes for"> <every tag that is not a delete, and where its vehicle stands>
+   - [S1] - NOTES.md re-read at its 14:39 state <beforeAfterStrip's `d` had become `delete`> <the tag list> DONE - 3 change tags outstanding: formulaFrame, signalTable, contextFit
+   - [S2] - the preview checked against the entries <ruleCard, lineRepair and mediaSnippet were rewritten in [9] but their page markup never was> <which pages disagree> DONE - 3 more items whose preview still showed the old shape
+### [B2] - the entries and their previews brought back into agreement
+   - [S1] - formulaFrame: `**markup**` one third width, `**fits**` third; page `itemsize-third`, "The frame holds" line gone <"remove 'the frame holds' line and make 1/3 width block"> DONE
+   - [S2] - signalTable: `<colgroup>` at 16%, first column headed `The Cue`, `**fits**` half even with sentence examples <"make the first column thinner ... the header ... can be 'The Cue'"> DONE
+   - [S3] - ruleCard preview: `Pattern:` / `Means:` / `Use when:`, centred, one third, explainer on the line below each <the entry change landed in [9]; the preview still showed the old card> DONE
+   - [S4] - lineRepair preview: the two gap items removed for the label lines, dim line to `evidence none` <the entry was made teaching-only in [9], the preview kept the exercise> DONE
+   - [S5] - mediaSnippet preview: a named concept, a second line showing it, the same two questions asked of both <the preview still showed one line and three questions> DONE
+   - [S6] - `chunkBank` renamed `contextFit` on the page, in the nav, and in the NOTES section that keys on `data-item` <"call this vehicle 'contextFit'"> DONE
+### [B3] - beforeAfterStrip deleted <its tag now reads `delete`>
+   - [S1] - entry, page section and nav link removed; `humourFlag` re-pointed at `registerContrast`, two IN-BLOCK-VISUALS asides rewritten <no reference survives> DONE
+### [B4] - verify and publish
+   - [S1] - menu 70 -> 69 entries, page 70 -> 69 sections (56 blocks + 13 drafts), navs rebuilt <order index-by-index, balance, hrefs> DONE - 0 mismatches, 69/69 sections, 611/611 divs, 0 dangling links, examples.mjs 6/6
+### [B5] - not done, reported
+   - [S1] - `dictation`: its tag asks for a 15-20+ restriction, but no vehicle of that name exists in CONTENT_EXAMPLES.md, IN-BLOCK-VISUALS.md or any preview page <AWAITING USER: rebuild the entry, or drop the request>
+   - [S2] - the seven preview-games4 tags (skeetRange, bingoCard, bossRaid, stackDrop, echoPads, flapGate) are engine4.js work, not entry text <untouched here>
+
 ## [11] - the delete tags added after [10]: annotatedExample, exceptionBench, errorGallery (2026-11-10)
 ### [B1] - PRE-PROMPT RESEARCH <"im still seeing entries on the preview page that I marked for deletion"> <the tags as they stand on disk now>
    - [S1] - qa/NOTES.md re-read, not remembered <its LastWriteTime moved 14:19 -> 14:22 after [10]> <every section's text as it is now> DONE - the file now ends mid-word: `### beforeAfterStrip` holds a single `d`

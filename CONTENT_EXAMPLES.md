@@ -63,9 +63,11 @@
 
 - **does** — A pattern as a skeleton with named slots (`<I'd rather> ___ <than> ___`), then two or three filled
   versions. Teaches a shape to reuse rather than a conjugation table to stare at.
-- **markup** — `.panel`; the skeleton in `<b>` with `___` for slots; the filled versions below, slot content
-  marked so the student sees which part moved.
-- **fits** — half; pair with the drill that makes them fill the slots.
+- **markup** — `.panel` at **one third width**; the skeleton in `<b>` with `___` for slots; the filled versions
+  below, slot content marked so the student sees which part moved. The skeleton and the filled versions are the
+  whole display — no line saying that the frame holds, because the filled versions say it.
+- **fits** — third; it is built for a third, and pairs with the drill that makes them fill the slots at the same
+  width. At a half it is a frame with room it does not use.
 - **can't** — only for patterns that are actually fixed. A frame with moveable parts teaches a false shape, and
   the student will build sentences that look like the frame and are wrong.
 
@@ -74,22 +76,14 @@
 - **does** — The cue in the sentence, the choice it forces, one example each: `<cue>` → `<form it demands>`. This
   is the display form of the condition that decides the item, and it is what makes a rule usable without
   remembering a list of cases.
-- **markup** — `.chart`, three columns (`<cue>` · `<what it forces>` · `<example>`), four to six rows. A
-  `<tr class="note">` under it names the one cue that is a trap.
-- **fits** — half, if the cues are short; full when examples are sentences.
+- **markup** — `.chart`, three columns (`<cue>` · `<what it forces>` · `<example>`), four to six rows, with
+  column one pinned narrow — a `<colgroup>` at about 16% — and headed **`The Cue`**. The cue is always the
+  shortest cell in its row, so every pixel it does not take is a pixel the example gets, and the examples can
+  then be full sentences at a half width. A `<tr class="note">` under it names the one cue that is a trap.
+- **fits** — half, even when the examples are sentences, because column one no longer eats the row; full only
+  when the examples have to be read against each other line by line.
 - **can't** — no cue is decisive on its own; a table that reads "always" when the language only mostly does this
   teaches a false rule.
-
-### `beforeAfterStrip - (best for: naturalness rather than correctness; the version the student produces against a native one; one point per pair · can't: show an ungrammatical "before" (that teaches an error as the starting point), and three pairs in a row is a lecture · purpose 8/10 · fun 4/10)`
-
-- **does** — One meaning written twice: the version a student at this level actually produces, then the version a
-  native speaker would. Both are grammatical — the difference is naturalness, not correctness — and that is the
-  whole point of the pair.
-- **markup** — two stacked `.panel`s with `<before>` / `<after>` labels, or `.itemrow` with the two half-width.
-  The natural version carries the changed chunk in `<b>`.
-- **fits** — half each, side by side.
-- **can't** — must never show an ungrammatical "before", or it teaches an error as the starting point; and one pair
-  makes one point — three pairs in a row is a lecture.
 
 ### `soundGrid - (best for: one contrast in three positions; showing a contrast as a system rather than two words; listening and mouth work with audio on every example · can't: carry written form, and more than two sounds per row stops being a contrast and becomes a catalogue · purpose 8/10 · fun 4/10)`
 
@@ -716,7 +710,7 @@
 - **does** — A line that is meant to be funny, and the student marks what is doing the work — a pun, an
   understatement, a reversal, a pause — then names what it would lose if translated.
 - **markup** — `.qitem` with the line as `.qstem` and the mechanisms as radios, then an `input.gap` for what it loses.
-- **fits** — beat; pair with `beforeAfterStrip` when two mechanisms have to be told apart.
+- **fits** — beat; pair with `registerContrast` when two mechanisms have to be told apart.
 - **vary** — from naming the mechanism to predicting whether a second line will land.
 - **can't** — funny is not a rule, and explaining a joke can kill it, so use it once per lesson at most. It must never
   be graded as though taste were accuracy.
