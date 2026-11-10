@@ -1,5 +1,14 @@
 # PENDING — Adherence.md [BATCHING] for current task
 
+
+## [39] - the FORMAT.md migration categorisation judged (2026-11-10)
+### [B1] - PRE-PROMPT RESEARCH <"tell me what you think of this categorization for migration and merge"> <the file as it stands after the owner's own cleanup, and everything that reads it> DONE
+   - [S1] - FORMAT.md read whole at its current state <60 lines: 2 policy, 7-17 element guidance, 20-24 mechanical limits, 26-39 class glossary, 41-59 generation a)-n)> DONE - the owner's cleanup removed the raw block I added at :6 and the two authoring cross-references at :19, and renamed the [LIMITS] heading
+   - [S2] - every reader of FORMAT.md counted, because a migration that orphans a reader is the defect it is meant to cure <59 references across docs + 3 harnesses> DONE - PEDAGOGY-MAP x4, FUNCTION x2, FILESYSTEM x1, VERIFICATION x1, ISSUES x4, PAST_BATCHES x33, PENDING x4; qa/provenance.mjs x7, qa/liquid.mjs x2, qa/content.mjs x1
+   - [S3] - whether a harness PARSES it, which decides if content can leave <provenance.mjs:66-73 hashes six files into every record; :140 names a moves vocabulary> DONE - FORMAT.md is one of the six hashed CONTRACT inputs, so **deleting the file breaks provenance.mjs at readFileSync**; the `MOVES` array at :141 is hardcoded, not parsed, so moving the vocabulary leaves a stale comment and a second copy rather than a crash
+### [B2] - the opinion <the four buckets judged, the gaps named, an order proposed> DONE - answered in the reply: the axis is right, three destinations are missing or wrong (page structure, engine contracts, and the fact that FORMAT cannot be deleted), and the migration is only safe if PEDAGOGY-MAP's reading list changes in the same commit
+### [B3] - the migration itself <not started: the owner is still editing FORMAT.md> NOT EXECUTED - awaiting the owner's word on the order
+
 # [CURRENT] Prompt - (Active batches, newest first)
 
 ## [38] - load curves authored onto every activity, replacing the beat and cost fields (2026-11-10)
