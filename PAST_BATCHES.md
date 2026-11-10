@@ -21,3 +21,7 @@ All four had every `[Bn]` and `[Sn]` closed; they sat in `[CURRENT]` only becaus
 ## [16] migrated - 2026-10-11
 
 - `[16]` adult lesson 40: answered the six questions on the QA reds and pushed 3a571c8; `[B2]` no project file edited - the "tested" rule (this lesson's own - Vocabulary: list), roadmapSpan's formula, the absent 3000-char rule, .grid3 having no CSS rule, and input.gap's per-blank --gap-w were each named from the harness and style.css.
+
+## [17] migrated - 2026-10-11
+
+- `[17]` adult lesson 40 was live but unlinked: build-lessons.mjs regenerated lessons.json/tracks.json (adult 22->23) so the selector now offers it; roadmapSpan returns the span with no blank-line stripping (records amended - adult/40 388-397, kids/30 303-312, kids/31 313-322); FORMAT.md's unimplemented .grid3 replaced by .itemsize-half/.itemsize-third with a compare-contrast note; .clinerules gained the pre-split rule. Pushed 30c045a, 4356b59, 3b2d8eb. kids/30 and kids/31 stay red on pre-existing FORMAT.md/FUNCTION.md contract drift - found, reported, not touched.
