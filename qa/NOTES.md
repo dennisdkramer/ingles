@@ -349,4 +349,4 @@ delete
 ### infoGap
 
 → CONTENT_EXAMPLES.md §`infoGap`
-make the first block 1/3 width, make the second 2/3 width, leave the header but put in the prompt text "Ask for the missing information so that you know the plan:" 1 text entry field per 'unknown' in the first block. Delete the third b
+make the first block 1/3 width, make the second 2/3 width, leave the header but put in the prompt text "Ask for the missing information so that you know the plan:" 1 text entry field per 'unknown' in the first block. Delete the third block

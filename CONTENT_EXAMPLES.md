@@ -219,8 +219,8 @@
   request that gets the missing pieces, in their own words. The information asymmetry is what makes the question genuine
   instead of an exercise.
 - **markup** — worked pair: two `.panel`s, one headed `<you>` and one `<them>`, each carrying facts the other lacks, stacked
-  in a **third-width** column; then a **two-thirds** panel holding one prompt and one text field, so the answer is a
-  request the student writes rather than a set of one-word gaps.
+  in a **third-width** column; then a **two-thirds** panel holding one prompt and **one text field per unknown**, so the
+  answer is a set of requests the student writes rather than one-word gaps.
 - **fits** — the pair is a **third** and the answer is **two thirds**, on one row; both halves stay in view, because a
   half you have to scroll to is no longer the other half's other half.
 - **vary** — the fact needed is named in the prompt → only the category is named → both students must ask, and one item
