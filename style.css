@@ -266,6 +266,12 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 .control-bar .barsel{flex:0 0 auto}
 .control-bar .barsel>.bookbtn{width:auto;min-width:132px}
 .control-bar .barsel>.bookmenu{left:0;right:auto;min-width:280px;text-align:left}
+/* EVERY control in the bar is ONE height — the height of ← Last / Next → (8px padding + the 14px line + 8px).
+   A button whose label carries an emoji (🖨 🧹 ✏️ ↩️) otherwise gets a TALLER line box than a text-only
+   button, so the row used to step up and down (owner instruction 2026-11-09). A fixed height with centred
+   content makes the glyph unable to change the box; the teacher's student <select> matches it too. */
+.control-bar>button,.control-bar .barsel>.bookbtn{box-sizing:border-box;height:32px;min-height:32px;padding-top:0;padding-bottom:0;display:inline-flex;align-items:center;justify-content:center;line-height:1}
+.control-bar>select{box-sizing:border-box;height:32px;min-height:32px;padding-top:0;padding-bottom:0}
 .bookitem.cur{background:rgba(185,133,76,.14);border-radius:6px}
 .bookitem.cur a.ltitle{font-weight:700}
 .complete-btn{display:block;margin:14px auto;width:fit-content;font-weight:700}

@@ -1284,9 +1284,53 @@ async function scenDiag(live, site) {
 }
 
 /* ---------------------------------------------------------------------------------------------
+   11c. SCENARIO BAR — the control bar: every control ONE height, and the buttons in one order.
+   jsdom computes no layout at all, so this is the only place a bar height can actually be measured.
+   The defect it is built around: 🧹 Clear page was created and wired but never appended, so the
+   button vanished from every lesson page and no harness noticed. Presence is therefore checked
+   explicitly, alongside the height and the order (owner instruction 2026-11-09).
+   --------------------------------------------------------------------------------------------- */
+async function scenBar(live, site) {
+  log('\n================ BAR · one height, one order ================');
+  await live.nav();
+  await live.wait('document.querySelectorAll("#controlbar>button").length>=4', 9000, 'the bar to build');
+  const info = await live.ev('(function(){'
+    + 'var bar=document.getElementById("controlbar");'
+    + 'var kids=[].slice.call(bar.children);'
+    + 'function h(el){var r=el.getBoundingClientRect();return Math.round(r.height*100)/100}'
+    + 'function ti(el){var r=el.getBoundingClientRect();return Math.round(r.top*100)/100}'
+    + 'return {'
+    + ' order:kids.map(function(el){return el.id||el.className||el.tagName}),'
+    + ' btns:kids.filter(function(el){return el.tagName==="BUTTON"}).map(function(b){'
+    + '  return {id:b.id,h:h(b),top:ti(b),txt:(b.textContent||"").trim().slice(0,16)}}),'
+    + ' sel:(function(){var s=bar.querySelector("select");return s?{h:h(s),top:ti(s)}:null})(),'
+    + ' rect:(function(){var r=bar.getBoundingClientRect();return [Math.round(r.left),Math.round(r.top),Math.round(r.width),Math.round(r.height)]})()'
+    + '};})()');
+  log('   · order: ' + info.order.join(' · '));
+  log('   · ' + info.btns.map(function (b) { return b.id + '=' + b.h + 'px' }).join('  '));
+
+  const LAST = (info.btns.find(function (b) { return b.id === 'nextlesson' }) || {}).h;
+  check('the bar has a Clear page button (it once disappeared unbuilt)',
+    info.btns.some(function (b) { return b.id === 'clearpage' }), info.btns.map(function (b) { return b.id }));
+  check('every bar button is exactly the Next → height',
+    info.btns.length >= 4 && info.btns.every(function (b) { return b.h === LAST }), { next: LAST, seen: info.btns.map(function (b) { return b.id + ':' + b.h }) });
+  if (info.sel) check('the teacher/student selector matches too', info.sel.h === LAST, { select: info.sel.h, next: LAST });
+  check('every control sits on ONE line (no row stepping up/down)',
+    info.btns.every(function (b) { return b.top === info.btns[0].top }) && (!info.sel || info.sel.top === info.btns[0].top),
+    { tops: info.btns.map(function (b) { return b.id + ':' + b.top }) });
+
+  const at = function (id) { return info.order.indexOf(id) };
+  check('Index is the FIRST control', info.order[0] === 'idxbtn', info.order);
+  check('the book selector follows Index', String(info.order[1]).indexOf('bookdrop') >= 0, info.order);
+  check('Clear page is to the RIGHT of Print', at('clearpage') > at('printpage') && at('printpage') > 0,
+    { print: at('printpage'), clear: at('clearpage'), order: info.order });
+  await live.shot('bar-1-controls', box(info.rect));
+}
+
+/* ---------------------------------------------------------------------------------------------
    12. THE RUNNER — one browser, one fake sheet, the scenarios that were asked for
    --------------------------------------------------------------------------------------------- */
-const SCEN = { diag: scenDiag, geo: scenGeo, bf2: scenBF2, bf2b: scenBF2b, bf3: scenBF3, bf4: scenBF4 };
+const SCEN = { diag: scenDiag, geo: scenGeo, bar: scenBar, bf2: scenBF2, bf2b: scenBF2b, bf3: scenBF3, bf4: scenBF4 };
 
 /* a page-scoped view of the connection: every command/event carries the page's session id */
 function session(cdp, id) {

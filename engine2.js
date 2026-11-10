@@ -254,7 +254,7 @@ function renderCompleteBtn(){
  bar.innerHTML='<button type="button" id="idxbtn" title="Back to the index">&#8962; Index</button>'
   +'<div class="bookdrop barsel"><button type="button" class="bookbtn" id="barselbtn">'+cap+' &#9662;</button>'
   +'<div class="bookmenu" id="barselmenu" hidden></div></div>'
-  +extra+' <button type="button" id="clearpage">&#129529; Clear page</button>'
+  +extra
   +' <button type="button" id="prevlesson"'+(L>1?'':' disabled')+' title="Lesson '+(L-1)+'">&#8592; Last</button>'
   +' <button type="button" id="nextlesson" title="Lesson '+(L+1)+'">Next &#8594;</button>';
  const ib=document.getElementById("idxbtn");if(ib)ib.onclick=()=>location.href="../index.html";
@@ -293,7 +293,7 @@ function renderCompleteBtn(){
  }
  const pv=document.getElementById("prevlesson");if(pv&&L>1)pv.onclick=()=>location.href="lesson"+(L-1)+".html";
  const nx=document.getElementById("nextlesson");if(nx)nx.onclick=()=>location.href="lesson"+(L+1)+".html";
- const cp=document.getElementById("clearpage");
+ const cp=document.createElement("button");cp.type="button";cp.id="clearpage";cp.textContent="\u{1F9F9} Clear page";
  if(cp)cp.onclick=()=>{
   if(!confirm("Delete ALL highlights, notes and recordings on this page?"))return;
   send({action:"wipe"});                      /* network-last, like every other write */
@@ -304,6 +304,10 @@ function renderCompleteBtn(){
  const ppb=document.createElement("button");ppb.type="button";ppb.id="printpage";ppb.textContent="🖨 Print";
  ppb.onclick=()=>{if(typeof printLesson==="function")printLesson();else toast("Print unavailable.")};
  bar.appendChild(ppb);
+ /* Clear page sits to the RIGHT of Print (owner instruction 2026-11-09). It is created here rather than
+    written into the innerHTML above because the bar's order is Index · book selector · [extra] · Last ·
+    Next · Print · Clear page — a node appended after Print is what puts it in that place. */
+ bar.appendChild(cp);
  if(gate.teacher){
   const eb=document.createElement("button");eb.type="button";eb.id="editpage";eb.textContent="✏️ Edit";eb.onclick=()=>toggleEditMode();bar.appendChild(eb);
   const rb=document.createElement("button");rb.type="button";rb.id="revertpage";rb.textContent="↩️ Revert";rb.onclick=()=>{if(!confirm("Discard your saved edits and restore the original content?"))return;send({action:"del",id:contentId()});toast("Reverting…");setTimeout(()=>location.reload(),900)};bar.appendChild(rb);
