@@ -51,3 +51,10 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 ### [B10] - Let a justified gloss leave the PT band "the register.mjs and lang.mjs changes" <qa/lang.mjs, FORMAT.md> DONE - 2026-10-11 - qa/lang.mjs, FORMAT.md
    - [S1] - data-why removes an element from the share and the denominator <qa/lang.mjs 99-106, 129, 156> DONE
    - [S2] - No page carries data-why yet, so the change is a no-op on the 102 existing pages <grep data-why = 0> DONE
+### [B11] - Make the tells a real vocabulary floor "i think we want a much longer list of swears and street words if we're gonna say the track needs them, and 'fricking' isnt taboo" <ADULT-REGISTER.md, qa/register.mjs> DONE - 2026-10-11 - ADULT-REGISTER.md, qa/register.mjs
+   - [S1] - Lists by domain: profanity, police, money, drugs, people, approval, violence, AAVE and reductions, bedroom, formal, locale <ADULT-REGISTER.md 26-42> <218 street items>
+   - [S2] - Euphemisms out of MASKED: freaking, fricking and shoot are a costume, not evidence <qa/register.mjs 46-49> DONE
+   - [S3] - A repeated key accumulates; sexual is a third presence category alongside taboo and street <qa/register.mjs 58-83, 115-127> DONE
+   - [S4] - False-positive audit over all 23 adult pages, then fixed the list: fam matched "familia", plus loud, broke, fly, twelve, bread, za, drank, cap, facts, beef, scrap, jumped <ADULT-REGISTER.md 31-36> <24 distinct markers remain and every one is genuine> DONE
+   - [S5] - Coverage measured, and it is the finding: adult is taboo 43%, colloquial 39%, bedroom 9% <qa/register.mjs --track=adult> <the corpus is the gap, not the list> DONE
+

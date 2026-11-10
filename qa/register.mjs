@@ -43,36 +43,50 @@ const ROOT = path.resolve(__dirname, '..');
 /* the three words the register file mandates masking — spelled out is worth a look, not a verdict: a
    sheet/shit/shoot listening pair has to print the spelling to be a pair, so this only ever warns. */
 const UNCENSORED = /\b(?:fuck(?:s|ed|ing|er|ers)?|shit(?:s|ty|ting)?|cunt(?:s)?)\b/gi;
-/* the masked forms carry the register too, and they are not words a tells list can hold */
-const MASKED = /\bf---|\bshi-|\bc---|\bfrickin|\bfreakin/gi;
+/* the masked forms carry the register too, and they are not words a tells list can hold. Euphemisms are
+   NOT here: "freaking", "fricking" and "shoot" are the opposite evidence — a softened word is a costume,
+   and counting it would let a page pass by wearing one. */
+const MASKED = /\bf---|\bshi-|\bc---/gi;
 
 /* The marker lists are NOT this file's. They are read from the track's own register file, in its
    "Tells, for the checker" block — so the vocabulary lives where the policy lives, and this harness tests
    what that track says its voice is. A register file with no block falls back to these defaults and says
-   so in the report: a silent pass would be this harness inventing a register. */
+   so in the report: a silent pass would be this harness inventing a register.
+   `taboo`, `street` and `sexual` are presence; `formal` and `locale` are negative tells. A key may repeat
+   — the adult file groups its street vocabulary by domain (police, money, drugs, AAVE) and the lines
+   accumulate into one list. */
 const DEFAULTS = {
-  taboo: 'damn, hell, ass, asshole, bitch, bastard, piss, screwed, freaking',
+  taboo: 'damn, hell, ass, asshole, bitch, bastard, piss, screwed',
   street: "ain't, gonna, wanna, gotta, y'all, finna, lowkey, highkey, dude, my bad, no way, for sure",
+  sexual: '',
   formal: 'however, therefore, furthermore, moreover, in addition, regarding, please be advised',
   locale: 'mate, cheers, bloody, loo, flat, lift, queue, rubbish',
 };
 const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
-const listRe = list => new RegExp('\\b(?:'
-  + list.split(',').map(s => escRe(s.trim())).filter(Boolean).join('|') + ')\\b', 'gi');
+const listRe = list => {
+  const w = String(list || '').split(',').map(s => escRe(s.trim())).filter(Boolean);
+  return w.length ? new RegExp('\\b(?:' + w.join('|') + ')\\b', 'gi') : null;
+};
 function tellsOf(track) {
   const f = path.join(ROOT, track.toUpperCase() + '-REGISTER.md');
   const out = Object.assign({ owes: false, own: false }, DEFAULTS);
   if (!fs.existsSync(f)) return out;
   out.owes = true;
+  const seen = new Set();
   for (const line of fs.readFileSync(f, 'utf8').split(/\r?\n/)) {
-    const m = line.match(/^\s*[-*]\s*(taboo|street|formal|locale)\s*:\s*(.+?)\s*$/i);
-    if (m) { out[m[1].toLowerCase()] = m[2]; out.own = true; }
+    const m = line.match(/^\s*[-*]\s*([a-z]+)\s*:\s*(.+?)\s*$/i);
+    if (!m) continue;
+    const k = m[1].toLowerCase();
+    if (!Object.prototype.hasOwnProperty.call(DEFAULTS, k)) continue;
+    out[k] = seen.has(k) ? out[k] + ', ' + m[2] : m[2];
+    seen.add(k); out.own = true;
   }
   return out;
 }
 
-const count = (html, re) => (html.match(re) || []).length;
-const distinct = (html, re) => new Set((html.match(re) || []).map(s => s.toLowerCase())).size;
+const hits = (html, re) => (re ? (html.match(re) || []) : []);
+const count = (html, re) => hits(html, re).length;
+const distinct = (html, re) => new Set(hits(html, re).map(s => s.toLowerCase())).size;
 const uniq = a => [...new Set((a || []).map(s => s.toLowerCase()))];
 
 const scope = hasTrackFlag() || hasAllFlag() ? null : touchedScope();
@@ -98,16 +112,19 @@ for (const TRACK of tracks) {
   /* the coverage verdict is a property of the whole track, so it is measured over every page on disk even
      when only some pages are being reported: a sample of three new pages must not conclude "dead track". */
   const T = tellsOf(TRACK);
-  const RE_T = listRe(T.taboo), RE_S = listRe(T.street), RE_F = listRe(T.formal), RE_L = listRe(T.locale);
+  const RE_T = listRe(T.taboo), RE_S = listRe(T.street), RE_X = listRe(T.sexual),
+    RE_F = listRe(T.formal), RE_L = listRe(T.locale);
   const lines = allNums.map(n => {
     const raw = fs.readFileSync(path.join(ROOT, TRACK, 'lesson' + n + '.html'), 'utf8');
     const leaks = (raw.match(UNCENSORED) || []).map(s => s.toLowerCase());
-    return { n, t: count(raw, RE_T) + count(raw, MASKED), s: distinct(raw, RE_S),
-      formal: T.own ? uniq(raw.match(RE_F)) : [], locale: T.own ? uniq(raw.match(RE_L)) : [],
+    return { n, t: count(raw, RE_T) + count(raw, MASKED), s: distinct(raw, RE_S), x: distinct(raw, RE_X),
+      formal: T.own ? uniq(hits(raw, RE_F)) : [], locale: T.own ? uniq(hits(raw, RE_L)) : [],
       leaks: [...new Set(leaks)], leakCount: leaks.length };
   });
+  const hasVoice = l => !!(l.t || l.s >= 2 || l.x);
   const witTaboo = lines.filter(l => l.t).length;
   const witSlang = lines.filter(l => l.s >= 2).length;
+  const witBed = lines.filter(l => l.x).length;
 
   /* A track owes the voice only when its own file says what that voice is: a register file with no tells
      block has not declared a floor, and judging it against these defaults would report every one of its
@@ -115,7 +132,8 @@ for (const TRACK of tracks) {
   const owes = T.owes && T.own;
   console.log('— ' + TRACK + ' · ' + sample.size + (sample.size === allNums.length ? '' : ' of ' + allNums.length)
     + ' page(s) · track taboo ' + witTaboo + ' (' + Math.round((witTaboo / allNums.length) * 100) + '%)'
-    + ' · track colloquial ' + witSlang + ' (' + Math.round((witSlang / allNums.length) * 100) + '%)');
+    + ' · track colloquial ' + witSlang + ' (' + Math.round((witSlang / allNums.length) * 100) + '%)'
+    + ' · track bedroom ' + witBed + ' (' + Math.round((witBed / allNums.length) * 100) + '%)');
   if (T.owes && !T.own) {
     warned++;
     console.log('⚠  ' + TRACK + ': ' + TRACK.toUpperCase()
@@ -139,8 +157,8 @@ for (const TRACK of tracks) {
         + ' — read it: the register masks as f--- / shi- / c---, but a minimal pair needs the spelling'
         + '  (taboo ' + l.t + ' · colloquial ' + l.s + ')');
     }
-    else if (l.t || l.s >= 2) console.log('✅ ' + id + '  taboo ' + l.t + ' · colloquial ' + l.s);
-    else if (owes) { warned++; console.log('⚠  ' + id + '  register-neutral page (no taboo, no colloquial marker)'); }
+    else if (hasVoice(l)) console.log('✅ ' + id + '  taboo ' + l.t + ' · colloquial ' + l.s + ' · bedroom ' + l.x);
+    else if (owes) { warned++; console.log('⚠  ' + id + '  register-neutral page (no taboo, no street, no bedroom marker)'); }
   }
 
   if (owes) {
