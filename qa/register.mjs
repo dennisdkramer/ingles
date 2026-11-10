@@ -65,7 +65,7 @@ const listRe = list => {
 };
 function tellsOf(track) {
   const f = path.join(ROOT, track.toUpperCase() + '-REGISTER.md');
-  const out = { owes: false, own: false, byFam: {}, byTier: {} };
+  const out = { owes: false, own: false, byFam: {}, byTier: {}, byKey: {} };
   if (!fs.existsSync(f)) return out;
   out.owes = true;
   for (const line of fs.readFileSync(f, 'utf8').split(/\r?\n/)) {
@@ -74,7 +74,9 @@ function tellsOf(track) {
     const k = m[1].toLowerCase(), fam = k.split('-')[0];
     if (!FAMILIES.includes(fam)) continue;
     out.byFam[fam] = out.byFam[fam] ? out.byFam[fam] + ', ' + m[2] : m[2];
-    out.byTier[k] = (out.byTier[k] || 0) + m[2].split(',').filter(s => s.trim()).length;
+    const items = m[2].split(',').map(s => s.trim().toLowerCase().replace(/^["']|["']$/g, '')).filter(Boolean);
+    out.byTier[k] = (out.byTier[k] || 0) + items.length;
+    out.byKey[k] = (out.byKey[k] || []).concat(items);
     out.own = true;
   }
   return out;
@@ -99,6 +101,15 @@ if (process.argv.includes('--tells')) {
       const items = T.byFam[fam].split(',').filter(s => s.trim()).length;
       console.log('   ' + fam + ': ' + items + ' items · ' + tiers.map(k => k + ' ' + T.byTier[k]).join(' · '));
     }
+    /* one item, one key: a word listed twice is counted twice and, worse, makes the tier meaningless —
+       "5-0" in common and "five-o" in rare is the same word wearing two labels. Spelling variants cannot be
+       caught here, so the register file carries that rule in prose. */
+    const where = {};
+    for (const k of Object.keys(T.byKey)) for (const w of T.byKey[k]) (where[w] = where[w] || []).push(k);
+    const dups = Object.keys(where).filter(w => where[w].length > 1);
+    console.log(dups.length
+      ? '   ⚠ listed twice: ' + dups.map(w => w + ' (' + where[w].join(', ') + ')').join(' · ')
+      : '   ✅ no item listed twice');
   }
   process.exit(0);
 }
