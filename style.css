@@ -1249,6 +1249,12 @@ html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;
   color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;
   transition:opacity .2s ease}
 .g4-tsay.on{opacity:1}
+/* the depot's option buttons: one tap loads a step into the car standing in front of you */
+.g4-tcards{flex:1 1 auto;min-width:0;display:flex;justify-content:center;gap:6px;overflow:hidden}
+.g4-tbtn{flex:0 1 auto;min-width:0;padding:4px 9px;background:var(--paper);border:2px solid var(--ink);
+  border-radius:7px;box-shadow:2px 2px 0 var(--tan);font:700 12px/1.15 var(--ui-tight);color:var(--ink);
+  cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g4-tbtn:hover{background:#fff6e2}
 
 /* ---- the men who load the train ----------------------------------------------------------------
    One man in front of each car, his feet on the platform and his head just under the rail, so he

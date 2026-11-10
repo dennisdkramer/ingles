@@ -3502,7 +3502,162 @@ function say(text, lang) {
     return window.__G4.length;
   }
 
+  /* ---------------- trainOrder: load every car in the order the steps happen ----------------
+     One car per item, and the car standing in front of you is the step you are being asked about. The
+     block you load stands on that car's ROOF, and its height is the room the step's OWN slot would leave
+     under the girder — so loading a step into the wrong car makes the block stand up through the deck,
+     and the crash is the verdict. Nothing is coloured while playing: the inquest colours only the cars
+     that were loaded out of place, and only once the run is over. `view.finale` keeps the stage until the
+     last train has run out from under the bridge, or wrecked against it. */
+  PLUGINS.trainOrder = function (r) {
+    var stage = r.stage;
+    var yard = el('div', 'g4-yard');
+    yard.appendChild(el('div', 'g4-tground'));
+    yard.appendChild(el('div', 'g4-tplat'));
+    yard.appendChild(el('div', 'g4-tsleep'));
+    yard.appendChild(el('div', 'g4-trail'));
+    var bridge = el('div', 'g4-tbridge');
+    bridge.appendChild(el('div', 'g4-tgirder'));
+    bridge.appendChild(el('div', 'g4-tdeck'));
+    bridge.appendChild(el('div', 'g4-tabut'));
+    bridge.appendChild(el('div', 'g4-tsignl', '⚠ LOW BRIDGE · 3px'));
+    bridge.appendChild(el('div', 'g4-tbrk'));
+    yard.appendChild(bridge);
+    var train = el('div', 'g4-ttrain');
+    yard.appendChild(train);
+    var depot = el('div', 'g4-tdepot');
+    var count = el('div', 'g4-tcount', '');
+    depot.appendChild(count);
+    yard.appendChild(depot);
+    var verdict = el('div', 'g4-tverdict', ''), fail = el('div', 'g4-tfail', 'FAIL');
+    yard.appendChild(verdict); yard.appendChild(fail);
+    stage.appendChild(yard);
+
+    var N = 0, cars = [], picks = [], wrongs = 0, row = null;
+    /* the heights come from the stylesheet, so the picture and the arithmetic cannot disagree: rail is
+       where the wheels stand, car0 + step·k is a car's own height, deck is the girder's underside, and
+       what is left between them is the room a step of slot k has. */
+    function metric(name) {
+      var v = parseFloat(getComputedStyle(yard).getPropertyValue(name));
+      return isNaN(v) ? 0 : v;
+    }
+    function room(k) { return metric('--deck') - metric('--rail') - (metric('--car0') + metric('--step') * k); }
+
+    function build() {
+      train.innerHTML = '';
+      var loco = el('div', 'g4-tloco');
+      loco.innerHTML = ART.loco;
+      train.appendChild(loco);
+      cars = []; picks = []; wrongs = 0;
+      N = Math.max(1, Math.min(8, r.items.length));
+      for (var k = 0; k < N; k++) {
+        var car = el('div', 'g4-tcar');
+        car.style.left = (k * 100 / N) + '%';
+        car.style.width = 'calc(' + (100 / N) + '% - 4px)';
+        car.style.setProperty('--k', String(k));
+        car.appendChild(el('div', 'g4-tcouple'));
+        var body = el('div', 'g4-tbody');
+        body.appendChild(el('div', 'g4-thold'));
+        body.appendChild(el('div', 'g4-tstripe'));
+        car.appendChild(body);
+        var wh = el('div', 'g4-twheels');
+        wh.appendChild(el('i', 'g4-twheel a'));
+        wh.appendChild(el('i', 'g4-twheel b'));
+        car.appendChild(wh);
+        train.appendChild(car);
+        cars.push(car);
+      }
+    }
+
+    function reset() {
+      build();
+      train.className = 'g4-ttrain';
+      bridge.className = 'g4-tbridge';
+      verdict.className = 'g4-tverdict'; verdict.textContent = '';
+      fail.className = 'g4-tfail';
+      count.textContent = '0/' + N;
+    }
+
+    function clear() {
+      if (row && row.parentNode) row.parentNode.removeChild(row);
+      row = null;
+      cars.forEach(function (car) { car.classList.remove('hot'); });
+    }
+
+    function show(item) {
+      clear();
+      var k = Math.min(r.idx, N - 1), car = cars[k];
+      if (car) {
+        car.classList.add('hot');
+        car.appendChild(el('div', 'g4-tslot', esc(item.prompt || '')));
+      }
+      count.textContent = (k + 1) + '/' + N;
+      row = el('div', 'g4-tcards');
+      item.opts.forEach(function (o) {
+        var b = el('button', 'g4-tbtn', esc(o.text));
+        b.type = 'button';
+        b.setAttribute('data-v', o.value);
+        b.addEventListener('click', function () { if (r.phase === 'play') r.pick(o.value); });
+        row.appendChild(b);
+      });
+      depot.appendChild(row);
+    }
+
+    /* the block lands on the roof of the car being asked about, at the height the step's OWN slot would
+       leave under the girder: a step loaded one car too far back stands through the deck by 6px a car */
+    function mark(item, hit, value) {
+      var k = r.items.indexOf(item);
+      if (k < 0) k = r.idx;
+      k = Math.min(k, N - 1);
+      var j = -1;
+      item.opts.forEach(function (o, i) { if (String(o.value) === String(value)) j = i; });
+      var car = cars[k];
+      if (!car) return;
+      car.classList.remove('hot');
+      var load = el('div', 'g4-tload');
+      load.style.height = Math.max(12, Math.round(room(j < 0 ? k : j))) + 'px';
+      load.textContent = j < 0 ? '' : item.opts[j].text;
+      car.appendChild(load);
+      car.classList.add('loaded');
+      picks[k] = j < 0 ? k : j;
+      if (!hit) wrongs++;
+      SFX.clank(r.sound);
+    }
+
+    /* the run: every car holding a step out of place blushes, and the train either clears the bridge or
+       wrecks against it. The stage stays until this picture is done — that is what `finale` is for. */
+    function finale(done) {
+      var once = false;
+      var finishUp = function () { if (once) return; once = true; if (done) done(); };
+      picks.forEach(function (j, k) { if (j !== k && cars[k]) cars[k].classList.add('no'); });
+      if (wrongs) {
+        bridge.classList.add('hit');
+        fail.classList.add('go');
+        verdict.className = 'g4-tverdict bad on';
+        verdict.textContent = 'WRONG ORDER';
+        SFX.crash(r.sound);
+        setTimeout(finishUp, r.reduced ? 700 : 1700);
+      } else {
+        verdict.className = 'g4-tverdict ok on';
+        verdict.textContent = 'ALL CLEAR';
+        SFX.horn(r.sound);
+        setTimeout(function () { SFX.chuff(r.sound); }, 280);
+        if (!r.reduced) train.classList.add('run');
+        setTimeout(finishUp, r.reduced ? 700 : 1900);
+      }
+    }
+
+    return { show: show, mark: mark, clear: clear, reset: reset, finale: finale };
+  };
+  /* the yard plays its own sounds — the coupling, the whistle, the wreck — so the runner's generic
+     right/wrong pair would be a second verdict over the picture */
+  PLUGINS.trainOrder.ownSound = true;
+  /* THE ORDER IS THE CONTENT: car 1 is the first step, car 2 the second. A shuffled queue would ask the
+     student to place step 3 in car 1 and call it right, so this presentation never shuffles. */
+  PLUGINS.trainOrder.noShuffle = true;
+
   return { boot: boot, games: Object.keys(PLUGINS), version: 2 };
+
 })();
 
 if (document.readyState === 'loading') {

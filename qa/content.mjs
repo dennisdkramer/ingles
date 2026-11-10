@@ -104,6 +104,14 @@ async function check(base, track, n) {
     if (unanchored) errors.push(unanchored + ' answer control(s) resolve no anchor (their answers are never saved)');
   }
 
+  /* A block that names a game engine4 does not have is SILENT: boot() skips it, `g4-ready` hides the
+     start button, and the student gets a dead drill that no geometry check can see (games are clipped
+     frames, so overflow is not looking either). The Runner stamps `g4-ready` on every block it wires, so
+     the stamp's absence is the whole evidence. */
+  const dead = [...d.querySelectorAll('.game[data-game]')].filter(g => !g.classList.contains('g4-ready'));
+  if (dead.length) errors.push(dead.length + ' game block(s) never wired — engine4 has no plugin named '
+    + [...new Set(dead.map(g => g.getAttribute('data-game')))].join(', '));
+
   consoleErrors.forEach(e => errors.push('console error: ' + e));
   return { errors, warns };
 }

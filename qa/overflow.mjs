@@ -110,14 +110,33 @@ const MEASURE = `(function(){
     if (over > 8) findings.push({ kind: 'OVERFLOW', w: Math.round(r.width),
       extra: 'content is ' + over + 'px wider than the block', ex: label(el) });
   });
-  /* anything crossing the fixed canvas frame */
+  /* anything crossing the fixed canvas frame. One exemption, because the student cannot see the crossing:
+     an element with a clipping ancestor never reaches the page edge, and a game's stage clips by design
+     (.g4-stage, .game-stage). A stage that does NOT clip still gets its contents flagged. */
+  function clipBy(el){
+    for (var p = el.parentElement; p && p !== ca; p = p.parentElement){
+      var cs = getComputedStyle(p);
+      if (cs.overflow !== 'visible' || cs.overflowX !== 'visible') return p;
+    }
+    return null;
+  }
+  /* what the element IS, readable: an SVG element's className is an SVGAnimatedString, so the old label
+     printed "[object SVGAnimatedString]" and named nothing */
+  function desc(el){
+    var g = function(n){ return (n.getAttribute && n.getAttribute('class')) || ''; };
+    var s = el.tagName.toLowerCase() + (g(el) ? '.' + g(el).split(/\\s+/).slice(0, 2).join('.') : '');
+    var p = el.parentElement;
+    if (p && p !== ca) s += ' in ' + p.tagName.toLowerCase() + (g(p) ? '.' + g(p).split(/\\s+/)[0] : '');
+    return s;
+  }
   [].slice.call(document.querySelectorAll('.content-area *')).forEach(function(el){
     var r = el.getBoundingClientRect();
-    if (r.width > 0 && (r.right > cr.right + 1 || r.left < cr.left - 1) && escape.length < 12) {
-      escape.push({ kind: 'ESCAPE', w: Math.round(r.width),
-        extra: (el.className || el.tagName).toString().slice(0, 34) + ' at ' + Math.round(r.left) + '..' + Math.round(r.right),
-        ex: 'canvas ' + Math.round(cr.left) + '..' + Math.round(cr.right) });
-    }
+    if (!r.width || escape.length >= 12) return;
+    if (r.right <= cr.right + 1 && r.left >= cr.left - 1) return;
+    if (clipBy(el)) return;
+    escape.push({ kind: 'ESCAPE', w: Math.round(r.width),
+      extra: desc(el) + ' at ' + Math.round(r.left) + '..' + Math.round(r.right),
+      ex: 'canvas ' + Math.round(cr.left) + '..' + Math.round(cr.right) });
   });
   /* a .blanks cell whose content does not fit its cell */
   [].slice.call(document.querySelectorAll('.blanks > div')).forEach(function(c){
