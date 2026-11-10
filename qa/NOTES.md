@@ -329,4 +329,24 @@ This one is useful but I need to make some tweaks, leaving a note for myself to 
 ### wordFamily
 
 → CONTENT_EXAMPLES.md §`wordFamily`
-this one is good but we can add another column 'thing2'
+this one is good but we can add another column 'thing2'  because 'explainer' and 'decider' exist
+
+### collocationGap
+
+→ CONTENT_EXAMPLES.md §`collocationGap`
+delete
+
+### scaleChoice
+
+→ CONTENT_EXAMPLES.md §`scaleChoice`
+delete
+
+### prepositionScene
+
+→ CONTENT_EXAMPLES.md §`prepositionScene`
+delete
+
+### infoGap
+
+→ CONTENT_EXAMPLES.md §`infoGap`
+make the first block 1/3 width, make the second 2/3 width, leave the header but

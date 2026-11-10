@@ -185,57 +185,21 @@
 - **can't** — needs a real first-language error to be worth the space, so generic "pronunciation" pages teach nothing;
   and it teaches *one* phoneme — never claim it fixes an accent.
 
-### `wordFamily - (best for: one root's four jobs; showing that a family is not a set of synonyms; choosing a member by what the sentence needs · can't: run on a root with no distinct members in use — an invented member teaches a word nobody says · purpose 8/10 · fun 5/10)`
+### `wordFamily - (best for: one root's several jobs; showing that a family is not a set of synonyms; choosing a member by what the sentence needs; the second noun a family sometimes has · can't: run on a root with no distinct members in use — an invented member teaches a word nobody says · purpose 8/10 · fun 5/10)`
 
-- **does** — One root, four jobs: the student takes `<root>` and puts the right member into each gap by what the sentence
-  needs (the doer, the thing, the doing, the how). The lesson is that a family is not a set of synonyms — each member
-  fills one slot and only one.
-- **markup** — column pair for the family itself (member ↔ the job it does), then an item list of sentences with one
-  `input.gap` each, deliberately including one sentence where the student's first instinct is the wrong member.
-- **fits** — half, beside `collocationGap` at the same width; the two together are the whole story of a new word.
+- **does** — One root, its jobs: the student takes `<root>` and puts the right member into each gap by what the sentence
+  needs (the doer, the thing, the second noun where the language has one, the how). The lesson is that a family is not a
+  set of synonyms — each member fills one slot and only one.
+- **markup** — a five-column `.chart` for the family itself (verb · person · thing · **thing2** · description), then an
+  item list of sentences with one `input.gap` each, deliberately including one sentence where the student's first
+  instinct is the wrong member. `thing2` earns its column because it is where the words that are neither the object nor
+  a person land (`production`, `explainer`), and leaving it out pushes them into a cell that is already wrong.
+- **fits** — half, beside `collocationMatrix` at the same width; the family and the company it keeps are the whole story
+  of a new word.
 - **vary** — give the family in the box → withhold it and give only the root → include a member the family does *not*
   have, so the student has to reject it. The last is the only version that tests the mental model rather than the list.
 - **can't** — only works on roots that really do have distinct members in use; inventing `<root>ness` to fill the grid
   teaches a word nobody says, and the student will use it confidently.
-
-### `collocationGap - (best for: the partner word a noun or adjective takes; the pairing rather than the meaning; errors that survive knowing both words · can't: carry an answer that is not genuinely predictable — two natural partners make the item unfair · purpose 8/10 · fun 4/10)`
-
-- **does** — The student writes the partner word: which verb goes with `<noun>`, which noun goes with `<adjective>`. What is
-  tested is the pairing, not the meaning of either word — a student can know both words and still not know they go
-  together, and that is the gap this block exists for.
-- **markup** — column pair (the fixed word ↔ the partner that goes with it), then item-list gaps that ask for the partner
-  from a stated meaning. Keep one gap per item.
-- **fits** — half; full width only when the pairs are long phrases.
-- **vary** — pairs that are near-synonyms → pairs whose partners are almost but not quite interchangeable → one item
-  where the obvious partner is wrong for a reason the lesson has taught.
-- **can't** — the answer has to be genuinely predictable; if two partners are natural, the item has no single answer and
-  is unfair. Check by asking whether a native speaker would hesitate.
-
-### `scaleChoice - (best for: ordering the words of one set by strength; matching a degree to a stated meaning; undoing the synonym assumption · can't: settle a blurred degree word — without deciding context in the prompt the item is an argument, not an exercise · purpose 7/10 · fun 5/10)`
-
-- **does** — A meaning is given and the student picks which of the lesson's words sits at that point on a strength scale
-  (`<weak>` … `<strong>`). Forces the realisation that words of a set are not interchangeable but ordered.
-- **markup** — item list: the stated intensity in the `.qstem`, the candidate words as radios. The scale itself is shown
-  once above as a `.chart` line, not repeated per item.
-- **fits** — half, with the scale line above the items doubling as the display; full when the set has five or more
-  members.
-- **vary** — two options far apart → two neighbours on the scale → three where two are defensible and the deciding
-  factor is stated in the prompt (who is speaking, how serious it is).
-- **can't** — every item needs one defensible answer. Degree words blur under scrutiny, so the prompt must carry the
-  deciding context or the item is an argument, not an exercise.
-
-### `prepositionScene - (best for: function words learned by scene; the in/on/at cases a translation table gets wrong; writing the word a described picture needs · can't: get past the cases in the lesson's own set, and the general rule behind them is bigger than any block · purpose 8/10 · fun 5/10)`
-
-- **does** — The same small set of function words placed against **pictures described in words**: the student writes
-  which one the scene needs (in/on/at, to/for/with). Function words are learned by scene, not by translation, and a
-  translation table gets `<in>` and `<on>` wrong for exactly the cases that matter.
-- **markup** — column pair of scenes (a described place or moment ↔ the function word it takes), then item-list gaps
-  that describe a *new* scene of the same type.
-- **fits** — full; the scene column needs to be readable as a scene, not a list of nouns.
-- **vary** — the scene given and one gap → two gaps in one scene → a scene where two function words are both possible
-  and the difference is what changes the meaning.
-- **can't** — it can only teach the cases in the lesson's own set; the general rule behind them is bigger than any block,
-  so resist stating one.
 
 ### `politeLadder - (best for: politeness as a choice of form for a stated hearer; three correct versions of one request; tone with no new grammar · can't: teach grammar, and the rungs must mean the same or the student is choosing content rather than tone · purpose 8/10 · fun 5/10)`
 
@@ -256,7 +220,8 @@
   question genuine instead of an exercise.
 - **markup** — worked pair: two `.panel`s side by side, one headed `<you>` and one `<them>`, each carrying facts the other
   lacks; then item-list gaps, one per missing fact, answered from the other panel.
-- **fits** — full; the two halves must be visible at once or the gap is not a gap.
+- **fits** — the worked pair sits at a **third**, with the items below it at full width; both halves stay in one view,
+  because a half you have to scroll to is no longer the other half's other half.
 - **vary** — the fact needed is named in the prompt → only the category is named → both students must ask, and one item
   needs a follow-up question because the first answer is incomplete.
 - **can't** — everything has to be answerable from the page, so it is a written information gap and not a speaking one;

@@ -168,7 +168,7 @@ Authoring is one span at the point of the mark, empty where the mark is the whol
 - **ends in** — radios pairing a sentence with the picture that matches it, then one `input.gap` per new scene of the
   same type.
 - **fits** — three thirds, then the motion pair as two halves.
-- **the risk** — `prepositionScene` covers this in words and warns that a translation table gets `in`/`on` wrong; the drawn
+- **the risk** — a translation table gets `in`/`on` wrong; the drawn
   version must show the concrete scene and never state at/on/in as a universal rule (at the corner / on the corner /
   in the corner all exist).
 
@@ -311,7 +311,7 @@ Authoring is one span at the point of the mark, empty where the mark is the whol
 
 #### `levelGauge` — a filled gauge in front of an existing scale (draft)
 
-- **draws** — the same axis `scaleChoice` and `politeLadder` already draw, with a filled level or a marker instead of a bare row
+- **draws** — the same axis `politeLadder` already draws, with a filled level or a marker instead of a bare row
   of cells: modal certainty, adverb frequency, or a register gradient from faint disagreement up to open contempt.
 - **built from** — an inline `<svg>` track plus one filled bar plus an optional marker; the fill is authored data. A real
   `input type="range"` cannot ship: only radios, `input.gap` and `textarea` save, so a slider would look interactive and score
@@ -319,8 +319,8 @@ Authoring is one span at the point of the mark, empty where the mark is the whol
 - **ends in** — radios ("which rung fits this hearer") with the hearer in the `.qstem`; the gauge is then the display half
   of that choice.
 - **fits** — full; a continuum needs the width.
-- **the risk** — this is the idea on the list that is mostly already built (`scaleChoice`, plus
-  `politeLadder`), so the honest version is a level field on `scaleChoice`, never a ninth scale block. And
+- **the risk** — this is the idea on the list that is mostly already built (`politeLadder`, plus the register pair in
+  `registerContrast`), so the honest version is a level field on `politeLadder`, never a ninth scale block. And
   a disagreement gradient's top rungs are register and risk, not vocabulary: they belong to a track whose persona allows them,
   and the block has to show *who you may say it to*, not how far up the scale it sits.
 
