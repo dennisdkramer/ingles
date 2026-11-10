@@ -2,7 +2,7 @@
 - The page must run on the site: mechanical skeleton + deliverable state the engines can read (FORMAT.md, FUNCTION.md);
 - Every factual claim is true and defensible — never pad a section with an unverified assertion.
 - A page is judged against this document's floors, not against the page next door: precedent is not evidence, and "the other lessons do it this way" is not an input.
-- **Precedence, when two inputs disagree:** structure (FORMAT.md, FUNCTION.md, the engines) · LEVEL · register · the roadmap's position (`teaches:`, `deepens:`, the concept) · the roadmap's example lines and `- Vocabulary:` · a content example's sample text. It orders conflicts only — it never licenses skipping an input.
+- **Precedence, when two inputs disagree:** structure (FORMAT.md, FUNCTION.md, the engines) · LEVEL · register · the roadmap's position (`teaches:`, `deepens:`, the concept) · the roadmap's example lines and `- Vocabulary:`. It orders conflicts only — it never licenses skipping an input, and a content example's sample text carries no authority at all: the vehicle is borrowed, the content is written for this lesson.
 - **Reading order is not precedence.** The roadmap is read first because a subject must exist before its fit can be judged, and it ranks fifth when it quarrels. Demoting its *items* is deliberate; demoting its *position* is not — a page in the right voice at the right level that teaches what the student already had is still a failed page.
 1. MANDATORY Inputs:
    - a) <TRACK>-ROADMAP.md [LESSON #] - read as its own line range, never the whole file, and never another lesson's range: the entry for lesson N is the only roadmap text a lesson may be built from.
@@ -54,7 +54,7 @@
   - e) If an item from among [GENERATION] 2.b headings is chosen, read only that heading's line range for implementation details.
 
 ### [AUTHORING]
-**Precedence —** Where this map's examples, the roadmap's example lines or vocabulary, or a content example's sample text conflicts with `<TRACK>-REGISTER.md`, the register wins: replace the item and record the swap.
+**Precedence —** Where this map's examples or the roadmap's example lines or vocabulary conflict with `<TRACK>-REGISTER.md`, the register wins: replace the item and record the swap. A content example's sample text is never an input to judge against — a vehicle is borrowed, its content is written for this lesson.
 - a) Explanatory layer may live anywhere: lead, chart cell, an extra explanation column, a `tr.note` row. A chart is a teaching device, not a display device.
 - b) Every (word/new form) the student must understand is presented before it is used, else removed; if a block wants the student to *infer*, the page says so.
 - c) Coverage ≠ section plan: a roadmap item doesn't get its own h2 unless it earns one.

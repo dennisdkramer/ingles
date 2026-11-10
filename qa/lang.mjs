@@ -96,8 +96,13 @@ function page(track, n) {
   const h1 = ca.querySelector('h1');
   const h1Text = h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : '';
 
-  const ex = [...ca.querySelectorAll('h1, h2, h3, p.card, p.lead, th, tr.note td')]
+  /* A gloss carrying data-why has already answered e)'s test — necessary, or optimal — so it is not
+     Portuguese the band has to defend: it leaves the share AND the denominator. The ceiling then binds
+     exactly the glosses nobody justified, which is the failure the ceiling was written for. */
+  const exAll = [...ca.querySelectorAll('h1, h2, h3, p.card, p.lead, th, tr.note td')]
     .filter(el => !el.closest('.game-list'));
+  const exWhy = exAll.filter(el => el.hasAttribute('data-why'));
+  const ex = exAll.filter(el => !el.hasAttribute('data-why'));
   const exPt = ex.filter(el => isPT(el.textContent) || el.getAttribute('lang') === 'pt');
 
   const th = [...ca.querySelectorAll('th')];
@@ -121,7 +126,7 @@ function page(track, n) {
       + ') — under the ' + asPct(lo) + ' floor: it stopped glossing for its reader');
   }
 
-  return { fails, warns, edge, ex: ex.length, exPt: exPt.length, th: th.length, thPt: thPt.length };
+  return { fails, warns, edge, ex: ex.length, exPt: exPt.length, why: exWhy.length, th: th.length, thPt: thPt.length };
 }
 
 
@@ -148,7 +153,7 @@ for (const TRACK of tracks) {
     if (!r) { if (strict) { console.log('❌ ' + id + ' page not found'); bad++; pages++; } continue; }
     pages++;
     if (r.missing) { console.log('❌ ' + id + '  no .content-area'); bad++; continue; }
-    const stat = '  ex ' + r.ex + ' · PT ' + r.exPt + ' (' + pct(r.exPt, r.ex) + ') · th '
+    const stat = '  ex ' + r.ex + ' · PT ' + r.exPt + ' (' + pct(r.exPt, r.ex) + ')' + (r.why ? ' · ' + r.why + ' justified' : '') + ' · th '
       + r.thPt + '/' + r.th + ' · band ' + r.edge;
     if (r.fails.length) { bad++; console.log('❌ ' + id + stat); r.fails.forEach(f => console.log('     - ' + f)); }
     else if (r.warns.length) { warned++; console.log('⚠  ' + id + stat); r.warns.forEach(f => console.log('     - ' + f)); }

@@ -225,6 +225,10 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .blanks>div{display:flex;align-items:center;gap:6px}
 .blanks.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
 .blanks>div input.gap{flex:0 0 auto}
+/* Complete reveals each key on its own line under the field and greens the right option; Clear takes it back */
+.blanks>div.has-ans{flex-wrap:wrap}
+.ans{display:block;flex:1 1 100%;width:100%;margin:2px 0 0;font-size:13px;line-height:1.35;font-weight:700;color:#2f7d32;text-align:left}
+.qopts label.correct{background:#e6f4e7;border-radius:8px;padding:1px 6px;color:#1f5d22}
 
 /* gloss placement is a per-block opt-in (.glossdrop), used when the page asks for it - never imposed */
 .blanks.glossdrop>div{flex-wrap:wrap}

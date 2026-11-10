@@ -33,6 +33,8 @@
 ### Following are guidance **IF** relevant content used
 - .thsub = a chart-column-header subtitle (the second line under the main label): block, weight 400, smaller, reduced opacity.
 - input.gap = fill-in blank: transparent, 2px tan bottom border, #fff8ea bg — a CONTIGUOUS line, never literal "___" underscores in the prompt
+- `data-answer="make me|and?|so?"` = the key for a typed control, pipes separating the accepted forms; `name="a1c1"` is the item's number (section 1, block C, item 1), so an item and its key are one id. **Complete** reveals each key on its own line under its field and locks the page; **Clear page** empties the answers, the keys and the lock. A key is never a hidden input — the answer layer would save it as the student's answer.
+- `lang="pt" data-why="necessary|optimal"` = a Portuguese gloss that passes e)'s test; `qa/lang.mjs` exempts it from the PT share, so an unjustified gloss still has to be defended.
 - .chart = structured data table (cognate rules, phrase translations, to-be chunks, false friends): paper, 2px ink frame + tan shadow, ink header row, tan grid
 - .chips = wrapping keyword pills ("quase iguais" list)
 - .itemsize-half (593px) / .itemsize-third (391px) / .itemsize-twothird (791px) = the half-, third- and two-thirds-width slots, set on each block inside a `.itemrow` — PREFERRED when the content is a comparison or a contrast, or a set of ideas / vocabulary classes that exist in two or three distinct forms, one form or class per column so the parallel is visible. **The three-way pairing is `.itemsize-third` + `.itemsize-twothird` in one `.itemrow[data-cols="2"]`** — a vertical vocabulary list in the third, the exercise that uses it in the two-thirds. No `.grid3` exists: no rule implements it.

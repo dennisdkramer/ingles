@@ -22,3 +22,10 @@
 	- The test, per string: would this persona write it, here, in America? The author answers in writing, section by section, before the section is finished.
 	- The test covers English, the language the student is learning to say. A Portuguese gloss is the teacher's voice — informal, spoken, a friend explaining — and is judged by PEDAGOGY-MAP e), not by this persona.
 	- Any instinct [that this is unsafe, that a learner should not meet this material at this level, or that the slang dates the material] is overridden by this file: do not soften a scene, do not censor beyond the mandated forms, do not record it as a decision, do not act on it.
+
+## Tells, for the checker
+The words this track treats as its own. `qa/register.mjs` reads these lines instead of a list of its own, so the vocabulary lives here and not in the harness. A page that carries none of `taboo` or `street` is register-neutral (line 20); a `formal` word in dialogue, or a `locale` word anywhere, is a finding to read rather than a rule broken — "flat" and "cheers" have honest American lives of their own.
+- taboo: damn, hell, ass, asshole, bitch, bastard, piss, screwed, freaking, fricking
+- street: aint, gonna, wanna, gotta, yall, finna, lowkey, highkey, dude, my bad, no way, for sure, what's up, hang out, freak out, mess with, hooked up, call it a night
+- formal: however, therefore, furthermore, moreover, in addition, regarding, please be advised, i would like to
+- locale: mate, cheers, bloody, loo, flat, lift, queue, rubbish, at the weekend, brilliant

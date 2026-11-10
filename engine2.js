@@ -234,6 +234,37 @@ function ensureCompleteBtn(){
  };
  return btn;
 }
+/* ---- reveal & lock: Complete shows each key and freezes the page, Clear takes both back ----
+   The key lives in the page: data-answer on a typed control (pipes separate accepted forms), data-a on
+   the .qitem for a radio group. Nothing here touches the backend, and the student's own answer stays an
+   ordinary answer row - this only reads the page and marks it. */
+function ansKeyText(el){
+ const raw=el.getAttribute("data-answer")||"";
+ return raw.split("|").map(s=>s.trim()).filter(Boolean).join(" / ");
+}
+function applyCompleted(on){
+ document.body.classList.toggle("is-completed",!!on);
+ document.querySelectorAll("[data-answer]").forEach(el=>{
+  const host=el.parentElement;if(!host)return;
+  let sp=[].slice.call(host.children).filter(c=>c.classList&&c.classList.contains("ans"))[0];
+  if(!on){if(sp)sp.remove();host.classList.remove("has-ans");return;}
+  if(!sp){sp=document.createElement("span");sp.className="ans";host.appendChild(sp);}
+  host.classList.add("has-ans");
+  const v=ansKeyText(el);if(sp.textContent!==v)sp.textContent=v;
+ });
+ document.querySelectorAll(".qitem[data-a]").forEach(q=>{
+  const right=q.getAttribute("data-a");
+  q.querySelectorAll(".qopts label").forEach(lab=>{
+   const inp=lab.querySelector('input[type="radio"]');
+   lab.classList.toggle("correct",!!on&&!!inp&&inp.value===right);
+  });
+ });
+ document.querySelectorAll("input.gap, textarea").forEach(el=>{
+  if(el.tagName==="TEXTAREA"&&el.id==="feed")return;
+  if(on)el.setAttribute("readonly","readonly");else el.removeAttribute("readonly");
+ });
+ document.querySelectorAll('input[type="radio"]').forEach(el=>{el.disabled=!!on});
+}
 function renderCompleteBtn(){
  const pid=completeId();
  const row=layer.find(r=>r.type==="complete");
@@ -241,6 +272,7 @@ function renderCompleteBtn(){
  const btn=ensureCompleteBtn();
  btn.textContent=completeNow?"Completed":"Complete?";
  btn.classList.toggle("is-done",completeNow);
+ applyCompleted(completeNow);
 }
 (async()=>{try{
  const bar=document.getElementById("controlbar");
@@ -301,6 +333,11 @@ function renderCompleteBtn(){
   layer=[];hlList=[];ntList=[];sig="";wipeGuard=Date.now()+12000;
   document.querySelectorAll("mark.nb").forEach(m=>m.remove());
   hlReflow();ntReflow();
+  /* Clear empties the page as well as the records: the typed answers, the reveal and the lock are this
+     page's own state, and the wipe row has just deleted every answer row they were rendered from. */
+  document.querySelectorAll("input.gap, textarea").forEach(el=>{if(el.tagName==="TEXTAREA"&&el.id==="feed")return;el.value=""});
+  document.querySelectorAll('input[type="radio"]').forEach(el=>{el.checked=false});
+  completeNow=false;renderCompleteBtn();
  };
  const ppb=document.createElement("button");ppb.type="button";ppb.id="printpage";ppb.textContent="🖨 Print";
  ppb.onclick=()=>{if(typeof printLesson==="function")printLesson();else toast("Print unavailable.")};
