@@ -38,11 +38,10 @@ Three rules the lists are built on, because breaking them is how a list stops me
 
 This is American English. A word only a British kid would use is not in these lists at all — it lives in `locale` below, where the checker reads it as a mistake.
 
-Swearing is tiered, not banned and not spread evenly: `taboo-core` is what a 14-year-old says in front of a teacher, and `taboo-strong` is what he says when no adult is in the room. Those strong words are what a kid hears all day, so the tier exists — but the adult track is where they are normal, and a page here reaches for them only when the lesson's subject is register itself.
+Swearing is tiered by who is in the room, not by how hard the word is: `taboo-core` is what a 14-year-old says in front of a teacher, `taboo-common` is what he says among friends. Anything harder than these belongs to the adult track, not this one.
 
 - taboo-core: damn, hell, crap, freaking, sucks, shut up, heck, fricking, dang, screwed, blows, darn, pissed
 - taboo-common: ass, dumbass, jackass, asshole, bastard, bitch, bitchy, screw you, pain in the ass
-- taboo-strong: fuck, fucking, shit, bullshit, motherfucker, dickhead, prick, cunt
 - street-core: bro, bruh, dude, gonna, wanna, gotta, ain't, nah, my bad, no way, for real, kinda, y'all, finna, tryna, sup, what's up, dunno, lemme, gimme, outta, sorta, gon, that's crazy, that's wild, I'm dead, gang
 - street-common: W, L, bet, sus, mid, cooked, rizz, rizzed, fire, slaps, bussin, goated, the goat, no cap, cap, lowkey, highkey, deadass, clutch, cracked, sweaty, tryhard, noob, bot, npc, sigma, delulu, glazing, glaze, aura, locked in, let him cook, ate, flex, salty, pressed, cringe, cringey, vibes, hype, hella, sheesh, skill issue, based, ghosted, ratio, carry
 - street-situational: respawn, camping, rage quit, speedrun, nerf, buff, lag, 1v1, chat, caught in 4k, clip that, screen record, pfp, sub, gyatt
