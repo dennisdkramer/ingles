@@ -28,14 +28,13 @@ content belongs in its `###` sections.
 ### skeetRange
 
 → CONTENT_EXAMPLES.md §`skeetRange`
-delete the crowd sound. halve the volume of the buzzer sound. On miss AND on wrong target, play the gunshot and buzzer sounds together
+reduce the volume of the miss sound by 50% and the gunshot by 30%, and make the targets min 2 max 6 and make sure that they are sufficiently spread out horizontally and vertically at the start so if there are 6 the overlap is still minimal or none at all. make sure the answer cards on the target dont have a maximum width so the text never gets truncated
 
 ### stackDrop
 
 → CONTENT_EXAMPLES.md §`stackDrop`
-put the two answer choices on the right bottom, stacked vertically, 30px between.
-move the correct answer stack items down 35px. Make each item in the stack consecutively 20px thinner, make the stack right-justify.
-Once the stack is built, have the player do a mario-style run and jump to a flag, if all the answers are correct he hits the flag and a coin pops out. If score<max-score> he misses and falls on his face
+make the step down in size 10px greater per item added to the stack. remove the platform from the old version. Add a super mario style flagpole and animated flag
+Once the stack is built, have the player run across the top answer card on the stack and jump towards the flag, if all the answers are correct he hits the flag and a coin pops out. If [score< max possible score] he misses and falls on his face
 
 ### bingoCard
 
@@ -65,6 +64,32 @@ must be possible for wall to continue, second wall to come, game target is conti
 remove the graffiti animation, instead when the student gets all the answers correct, make the character climb on top of the prompt card, walk to the center, and start throwing money out which falls and lands on the option cards below. If the game ends and the user missed a point, instead make a dog run past and knock over the ladder and the ladder/character fall to the ground.
 
 Change start game card text to "Get all the phrases right, climb to the top and get your Trump Ca$h!"
+
+### crosswordBoard
+
+→ CONTENT_EXAMPLES.md §`crosswordBoard`
+wrong answers dont subtract points, there is no fail condition.
+
+### mineGrid
+
+→ CONTENT_EXAMPLES.md §`mineGrid`
+make the graphics not disappear and reappear at the beginning of each round
+
+### catchBasket
+
+→ CONTENT_EXAMPLES.md §`catchBasket`
+note a minimum of 2 and maximum of 4 items for this game (make sure all the games in content_examples.md have a min/max value attached)
+at the end of the game make a girl in a dress come and pick whichever flower is the biggest (if more than one are the same she can pick one at random)
+
+### whackMole
+
+→ CONTENT_EXAMPLES.md §`whackMole`
+make it always a 3x2 grid, min 2 max 6 options. improve the graphics so it looks like the moles are coming out of holes that are just a little bit wider than they are
+
+### trainOrder
+
+→ CONTENT_EXAMPLES.md §`trainOrder`
+improve the train graphics, add a background that makes it look like the train is on some sort of ground and not just a beige flat background. Make it look like there are mountains off in the distance.
 
 ## preview-blocks.html
 
