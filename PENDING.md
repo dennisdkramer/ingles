@@ -21,6 +21,10 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 
 # [CURRENT] Prompt - (Active batches, newest first)
 
+## [8] - the word-for-word rule, in the owner's wording (2026-11-10)
+### [B1] - insert the rule after "Do not assume." <"__FOR ANY EDIT THAT REPLACES TEXT__ of a file in the repo root, if a message proposed it, the proposed new text must be shown accompanied by every word of the old text that is to be altered. (APENDING.md/PAST_BATCHES.md exempt)"> <ADHERENCE.md [UNDERSTANDING] carries it> DONE - their words kept word for word, with APENDING.md -> PENDING.md as the only correction; NO scope clause added (lesson pages are not in the repo root, so the phrase already excludes them) and NO "whole passage, not only the words that differ" clause added, since rule 16 forbids adding to proposed wording. Standing instruction noted: finished text in qa/NOTES.md is DELETED, never replaced, so that file is outside this rule by construction
+### [B2] - commit and push <PENDING.md [GUIDELINES]> <origin/main at local HEAD>
+
 ## [7] - the load formula: an activity multiplier against the content level (2026-11-10)
 ### [B1] - build the formula <"each 'activity' with answers or fields needs a multiplier ... multiplied by the content level that the generator chooses"> <load = L × M, M = qty × pace × risk> DONE - 2026-11-10 - PEDAGOGY-MAP.md [LEVEL] x-aa, CONTENT_EXAMPLES.md [INSTRUCTIONS], FORMAT.md 15
    - [S1] - state the formula and its guardrails beside the 1-50 content scale it acts on <PEDAGOGY-MAP.md [LEVEL]> <x-aa added after v, before [Register]> DONE - four rules: the product, M declared by the activity, load-not-kind plus both directions, and a LENGTH guard (not a cap) at ~70
