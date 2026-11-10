@@ -67,6 +67,63 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 # [CURRENT] Prompt - (Active batches, newest first)
 
 
+## [19] - business lesson 40 authored from the owner's idea cloud alone, then committed and pushed (2026-11-10)
+### [B1] - the page's own design <"author the page just from the reference material and creativity"> <a concept spine, a block plan and a vocabulary inventory, drawn from the idea cloud plus the docs already read> DONE
+   - [S1] - the reference layer read at source for the markup and the answer paths <style.css as implementation (2.a); engine1/engine2's radio and `input.gap` handling; no lesson page, no CONTENT_EXAMPLES.md, no roadmap, no register> DONE - style.css 64-273, engine2 76-152 and its key lines; block = `.panel`/`.card`/`.dialog`/`.game` with h3 first, `.itemrow` + `itemsize-*`, `.qgrid` > `.qitem` > `.qline`+`.qopts`
+   - [S2] - the spine fixed: three concepts, the vocabulary inventory, one question per item, the band 0-12% Portuguese <PEDAGOGY-MAP [AUTHORING] k), s), t), u) and [LEVEL] x)> DONE - 10 sections, 22 blocks; concepts `duration-for-since`, `concession-even-though`, `quantity-shortfall`; 21 taught items, each its own quiz question; 4 graded elements Portuguese (justified glosses), inside the 0-12% band
+### [B2] - the page <"overwrite the existing lesson (do not read it)"> <business/lesson40.html and its byte-identical .edit.html sidecar> DONE
+   - [S1] - business/lesson40.html written on _shell.html with the owner's placeholders, no lesson page read <FORMAT.md a)-n)> DONE - 40423 bytes, 11 h2 (10 sections + #feed), 22 h3, 125 radios, 31 gaps; div 205/205, table 6/6, no `{{` left
+   - [S2] - the sidecar copied byte-for-byte <FUNCTION [CONTENT]: every lesson ships a full-copy sidecar> DONE - SHA256 equal to the page
+### [B3] - ship <"commit and push when done"> <a pushed commit carrying the page, the sidecar and this tracker> DONE
+   - [S1] - `git add`, `git commit`, `git push` and the remote's answer recorded <the repo's own branch> DONE - main, origin github.com/dennisdkramer/ingles; only the page, its sidecar and this tracker staged
+
+
+## [18] - business lesson 40 authored from the owner's idea cloud, with BUSINESS-ROADMAP.md and BUSINESS-REGISTER.md EXCLUDED by instruction (2026-11-10)
+- STALE (2026-11-10) - the owner made the exclusion absolute, added CONTENT_EXAMPLES.md to it and disabled QA; superseded by [19]. [B1]-[B3] here are not executed and are not to be executed.
+### [B1] - PRE-PROMPT RESEARCH <"open pedagogy_map.md and author lesson 40 in the business track but EXCLUDE BUSINESS-ROADMAP.md and BUSINESS-REGISTER.md from the inputs"> <the build contract verified from its own source, not from memory> IN PROGRESS
+   - [S1] - PEDAGOGY-MAP.md read whole <[GENERATION] 1-5, [BUILD] HIGH PRIORITY, [AUTHORING] e)-k), [Claims/practice/budget], [Vehicles], [LEVEL] x)-aa)> DONE - 107 lines; the lesson-40 band is 0-12% Portuguese, floor clamped at 0
+   - [S2] - FORMAT.md read whole <skeleton and placeholders, block lettering, slot widths a)-e), `data-kind` l), `data-move`, the mechanical MUSTs> DONE - 67 lines
+   - [S3] - FUNCTION.md [CONTENT] read <answers persist only on `input.gap`, radio and a non-feed textarea; `data-retry`; `data-say`> DONE - lines 4-10, rest of the file is runtime and not read
+   - [S4] - _shell.html placeholders confirmed <TRACK= business, L=40, TRACK_TITLE, TRACK_UPPER, LESSON_TITLE> DONE - 37 lines
+   - [S5] - CONTENT_EXAMPLES.md `###` headings listed, then only the chosen vehicles' own line ranges read <2.b: the menu, never a `####` draft> IN PROGRESS
+   - [S6] - qa/lang.mjs and qa/provenance.mjs read at their own definitions <the two self-checks the build must run on this one page, and what each actually reads> IN PROGRESS
+   - [S7] - CONFLICT TO THE OWNER: provenance.mjs takes this lesson's `range`, its concept pids and its `- Vocabulary:` coverage from BUSINESS-ROADMAP.md, so a build forbidden to read that file cannot write a record that passes <the exclusion is the owner's instruction, so the record's form is the owner's call, not the build's> AWAITING USER
+### [B2] - the lesson page <"author lesson 40 in the business track", voice = a 30-year-old male athlete who likes science, content = the owner's idea cloud> <business/lesson40.html + byte-identical business/lesson40.edit.html> NOT EXECUTED
+   - [S1] - the design fixed before markup: the concept spine drawn from the cloud, each block assigned a vehicle, a slot and a move <PEDAGOGY-MAP [BUILD] b)-d), [AUTHORING] k), s), u); FORMAT e) 1-3> NOT EXECUTED
+   - [S2] - the page written on the shell, every string in the athlete's voice, band 0-12% Portuguese <PEDAGOGY-MAP [AUTHORING] e), x)-z); FORMAT a)-n)> NOT EXECUTED
+   - [S3] - the sidecar written as a byte-identical copy <FUNCTION [CONTENT]> NOT EXECUTED
+### [B3] - verify this one page <VERIFICATION.md: a build runs two checks on itself> <green `lang` + the provenance verdict reported> NOT EXECUTED
+   - [S1] - `node qa/lang.mjs --track=business 40` <the page's own voice against the band> NOT EXECUTED
+   - [S2] - `node qa/provenance.mjs --track=business 40` <the record, its hashes, the span, the concept marks, the quiz coverage> NOT EXECUTED
+   - [S3] - `node qa/content.mjs --track=business 40` <engine load, one #feed, `.listen` `data-say`, anchored controls, no console errors> NOT EXECUTED
+
+
+## [17] - design A for block widths (narrow-first + structural measurement): the plan only (2026-11-10)
+### [B1] - the decision recorded <"2. i said go with A" corrects "lets go with a", which had been read as the field question (a)> <design A is the chosen approach; whether the `**width**` field returns is [B2]'s question, not a settled removal> NOT EXECUTED - plan and question only, no edits
+   - [S1] - A restated: a block starts at its narrowest allowed slot and grows one step only when a structural element does not fit; prose is excluded because it wraps <the three designs came from last turn's [B1]> NOT EXECUTED
+### [B2] - the one new piece of data A needs: the width field <"im thinking we put a "width: #" field that appends to the markup line of each vehicles entry in CONTENT_EXAMPLES.md and corresponds to the AVAILABLE WIDTH OPTIONS for that vehicle">
+   - [S1] - a `**width**` field on the `markup` line, per the owner <it belongs to the block, not to the vehicle> NOT EXECUTED
+   - [S2] - the multi-block case: one vehicle may own 1..n blocks, so the value has to express a slot per block AND which blocks share a row <the owner's question "a lot of the vehicles are more than one block, how do you think we should deal with that?"> DONE - 40 vehicles, 65 blocks, 9 distinct shapes: `full` 18 · `half+half` 5 · `full | full` 5 · `half+half | full` 4 · `twothird+third` 3 · `third` 2 · `half` 1 · `third+twothird` 1 · `third+third+third | full` 1 (26 of 40 vehicles have no row at all, so the common value is one token)
+   - [S4] - THE OWNER'S GRAMMAR: `+` joins the vehicle's blocks in order; a single slot or `<slot>->` per block; no per-row token <"twowordverb Im going to mark the vehicle as half+half. registercontrast full+full. pronlab half+half+full. infogap third+twothird. Formfill Im gonna mark half->">
+   - [S4a] - WHY ONE OPERATOR SUFFICES: a row's slots must sum to the row (FORMAT [GENERATION] e), so the row breaks fall OUT of the arithmetic - a row is closed the moment its slots reach 100% <checked against the owner's five examples and against the page: `half+half` = one row (twoWordVerb) · `full+full` = two rows (registerContrast) · `half+half+full` = [half half][full] (pronLab) · `third+twothird` = one row (infoGap) · `third+third+third+full` = [third third third][full] (songStructure). All five parse correctly with no separator, which is the evidence the rule is right.> CONFIRMED BY OWNER
+   - [S4b] - `<slot>->` = the default the page uses, and the block may grow in steps as far as full (100%) <"yeah the arrow means up to 100% in steps"> CONFIRMED BY OWNER
+   - [S4c] - THE GRAMMAR IS WRITTEN DOWN in FORMAT.md [GENERATION] m), so the owner authors values against a spec and not against a chat message <text only; no entry carries a field yet> DONE
+   - [S5] - the prose widths come OUT of the `markup` line once the field exists <"if its already in the markup, once i define it according to this plan, you take that part out"> CONFIRMED BY OWNER - not yet executed
+   - [S6] - the pairing is BINDING and a lesson may NOT break a single block out; a lone block uses a single-block vehicle or a primitive <"i think its better if the lessons CANT break single blocks out. we will make sure to include single block vehicle primatives."> RESOLVED BY OWNER
+   - [S6b] - primitives do not exist yet: the only single-block vehicles are the 21 that own one block by design, so a lesson needing a lone chart or a lone item list has no vehicle to call <needs a decision when the first lesson wants one> AWAITING USER
+   - [S7] - awaiting the owner: the `**width**` value for each of the 40 block-bearing vehicles <the owner is authoring them; nothing is generated until they land> AWAITING USER
+   - [S6a] - correction of record: 21 of the 40 vehicles own ONE block (not 22 multi-block) - `full` 18, `third` 2, `half` 1 - and 19 own more than one, so the field is authored per vehicle, never derived from block count <"They are conceptually different, which also allows them to default to completely different sizes"> 
+   - [S3] - option ii (parse `fits`) and option iii (a ladder per category) retired <the owner has chosen the field> NOT EXECUTED
+   - UPDATED the earlier "allowed slot range, source undecided (i/ii/iii)" → a field appended to the markup line, because the owner chose it and because a vehicle-level range cannot say what its second and third blocks are
+### [B3] - the measurement A's growth rule uses <"the rest of the content is tiny" is the case a line-based measure gets wrong> <NOT EXECUTED>
+   - [S1] - structural content defined per vehicle kind (table cells, longest option, longest label, input count) and prose explicitly excluded <FORMAT.md [GENERATION] e already states the exclusion; A is what enforces it> NOT EXECUTED
+   - [S2] - the measuring tool: headless Chrome over CDP, proven on this page in [16 B1 S3], not a Node character-width table <the build calls it; the same call becomes the harness> NOT EXECUTED
+### [B4] - apply, then enforce <NARROWED by [B2 S4]-[S6]: the ladder fixes every slot, so A is no longer a chooser - it may only grow a block the entry marks `->`, and only as far as 100%>
+   - [S1] - preview-blocks.html rebuilt from the ladder in each entry, with a per-vehicle report of every block whose width moved <the 21 single-block vehicles and the 19 paired ones, each checked against its own value> NOT EXECUTED
+   - [S2] - a harness that fails when the page disagrees with the ladder (a missing row, a block outside its stated slot, a row that does not sum to 100%), and that reports any `->` block whose content overflows its default <it no longer judges a width, it compares one against the authored value> NOT EXECUTED
+   - [S3] - published lesson pages, as a separate pass after the preview page is approved <8 lesson files, untouched so far> NOT EXECUTED
+
+
 ## [16] - "lets go with a": the width field removed entirely, flex equal heights, games purple (2026-11-10)
 ### [B1] - PRE-PROMPT RESEARCH <"lets go with a"> <verified anchors for every revert site, and the cause of the unequal heights named> DONE - measured in headless Chrome, not guessed
    - [S1] - the 53 `**width**` lines, the `[INSTRUCTIONS]` bullet and `FORMAT.md m)` located and counted <CONTENT_EXAMPLES.md:44+, :8; FORMAT.md:65> DONE - 53 / 1 / 1, no anchor from memory
