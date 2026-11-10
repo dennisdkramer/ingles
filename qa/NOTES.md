@@ -91,7 +91,7 @@ postpone the play again screen for 5 seconds so the animatin can play out
 ### trainOrder
 
 → CONTENT_EXAMPLES.md §`trainOrder`
-redraw the
+redraw the front of the train (the caboose) significantly better
 
 ### bossRaid
 
