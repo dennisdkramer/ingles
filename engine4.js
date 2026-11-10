@@ -3798,6 +3798,9 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
     yard.appendChild(bridge);
     var train = tag('g4-ttrain');
     yard.appendChild(train);
+    /* the crew's own row in the yard, OUTSIDE the train's box, so the train can leave without them */
+    var crew = tag('g4-tcrew');
+    yard.appendChild(crew);
     var dock = tag('g4-tdock');
     yard.appendChild(dock);
     var stamp = tag('g4-tstamp');
@@ -3862,8 +3865,11 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       /* ONE LOADER PER CAR, standing in front of his flatbed with his arms out to take the adjective off the
          dock. He is the DROP TARGET (qa/NOTES.md 94-98): a card is given to a man, not to a wagon, and each
          man is placed on the pitch of the car he serves, so "the man you gave it to" and "the car in front of
-         him" are the same answer — which is what he throws it onto once every card is out. */
-      var crew = tag('g4-tcrew');
+         him" are the same answer — which is what he throws it onto once every card is out.
+         THE CREW IS NOT PART OF THE TRAIN: it is its own row in the YARD, on the train's own left/width so the
+         men stand under their cars to the pixel, but outside the train's box — so when the train pulls out
+         they stay where they are, on the ground, and watch it go (qa/NOTES.md 99). */
+      crew.innerHTML = '';
       guys = [];
       for (var g = 0; g < n; g++) {
         var guy = tag('g4-tguy');
@@ -3874,7 +3880,6 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
         crew.appendChild(guy);
         guys.push(guy);
       }
-      train.appendChild(crew);
     }
 
     /* THE DOCK: the adjectives of THIS train, one card each, in the order they were authored. A card is

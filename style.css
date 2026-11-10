@@ -485,7 +485,10 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-intro-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:0;padding:0;list-style:none;font:600 13px var(--ui-tight);color:var(--ink)}
 .g4-intro-meta li{padding:3px 11px;background:#fff8ea;border:2px solid var(--tan);border-radius:999px}
 .g4-intro-meta b{font-weight:800}
-.g4-intro .game-start{font-size:16px;padding:10px 22px}
+/* the intro's Play button is a button like every other, but it lives INSIDE `.g4-stage`, and the stage's own
+   rule paints stage buttons in ink — which is the button's background too, so the label vanished. It is
+   cream on ink here, as `button` says (qa/NOTES.md 99). */
+.g4-intro .game-start{font-size:16px;padding:10px 22px;color:var(--cream)}
 .game.g4 .g4-stage{position:relative;margin:10px 0 0;height:280px;overflow:hidden;background:linear-gradient(#eaf3f8,#dce9f2);border:2px solid var(--ink);border-radius:14px}
 /* the scene: a finished picture of the place the game happens in; it sits under everything, for the
    whole run, so play never happens on a bare colour */
@@ -1199,8 +1202,13 @@ html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;
    dressed, because the train is a plain one now (see the train block further down). */
 .g4-ttrain.in{animation:g4tarrive .62s cubic-bezier(.22,.9,.3,1)}
 @keyframes g4tarrive{from{transform:translateX(-128%)}to{transform:none}}
+/* away: the whole train runs out to the left until NOTHING of it is left on the stage. The distance is a
+   share of the train's OWN width, because that is what a translate percentage measures: the train stands
+   at --gap and is --tw wide, which on the yard's own numbers (12% gap, 76% train) leaves its right edge at
+   88% of the stage — so 130% of the train's width carries even the last flatbed clear of the picture, with
+   room to spare. The crew is NOT inside this box, so it stays where it stands and watches the train go. */
 .g4-ttrain.run,.g4-ttrain.pull{animation:g4trun var(--runms,1750ms) cubic-bezier(.45,0,.78,1) forwards}
-@keyframes g4trun{to{transform:translateX(calc(-1 * (var(--gap) + var(--tw) + 6% + 80px)))}}
+@keyframes g4trun{to{transform:translateX(-130%)}}
 .g4-ttrain.jolt{animation:g4tjolt .9s ease-out forwards}
 @keyframes g4tjolt{0%{transform:translateX(0)}16%{transform:translateX(-4.4%)}
   34%{transform:translateX(-1.1%)}52%{transform:translateX(-5.2%)}100%{transform:translateX(-4.7%)}}
@@ -1254,7 +1262,8 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
    is placed on his car's pitch from the engine, so a wider stage moves them with the cars. He stands on the
    ground UNDER the rail with his arms up at the deck line, so he is in front of the wagon and his hands are
    where the adjective arrives — and he is short enough that the load on the deck stays readable above him. */
-.g4-tcrew{position:absolute;left:0;right:0;bottom:-66px;height:36px;z-index:3;pointer-events:none}
+.g4-tcrew{position:absolute;left:var(--gap);width:var(--tw);bottom:calc(var(--rail) - 66px);height:36px;
+  z-index:3;pointer-events:none}
 .g4-tguy{position:absolute;bottom:0;height:36px;display:flex;align-items:flex-end;justify-content:center;
   pointer-events:auto;cursor:pointer}
 .g4-tguy svg{display:block;width:24px;height:36px;overflow:visible}
