@@ -16,6 +16,7 @@
 	- Do not [soften, add to, alter, reinterpret, or rewrite] any [requests, rules, thresholds, tolerances,scope, user proposed wording] without User instruction
 	- **EXAMPLES**: "I think X should Y" never silently becomes "X must Y" or "X does Y". "Can you X?",  "Can X do Y?" are QUESTIONS, never instructions.
 	- Do not assume. (eg. "maybe the user means X" is a trigger to ask the user, not a possibility to be explored)
+	- __FOR ANY EDIT THAT REPLACES TEXT__ of a file in the repo root, if a message proposed it, that message shows the proposed new text accompanied by every word of the old text that is to be altered. (PENDING.md/PAST_BATCHES.md exempt)
 ### [DEVIATION] and Initiative
 	- Initiative [which **conflicts with** an explicit instruction, rule, spec, or guideline] or [to **execute actions or change code** which do not correspond to a specific user instruction] **is zero**. Initiative to make content unique and engaging - in accordance with those guidelines - **is high**.
 	- **(Doubt/uncertainty/confusion/ambiguity)** = multiple plausible interpretations [of a phrase, intent, or instruction].
