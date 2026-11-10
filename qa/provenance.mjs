@@ -74,9 +74,14 @@ const CONTRACT = track => [
 const norm = s => String(s || '').replace(/\s+/g, ' ').trim();
 
 /**
- * this lesson's own line span in the roadmap: the `## Lesson N:` heading line through the last
- * non-blank line before the next heading. Returned 1-based and inclusive, which is the form the
- * record's `range` is written in.
+ * this lesson's own line span in the roadmap: the `## Lesson N:` heading line through the line
+ * BEFORE the next heading. Returned 1-based and inclusive, which is the form the record's `range`
+ * is written in.
+ *
+ * The end is the next heading's index, never "the last non-blank line before it": stripping trailing
+ * blanks made the answer depend on how many blank lines an author happened to leave after an entry,
+ * so the same entry in the same file reported a different span after a cosmetic edit. The span is
+ * the span, blank lines and all (owner instruction 2026-10-11).
  */
 function roadmapSpan(text, n) {
   const lines = String(text).split(/\r?\n/);
@@ -88,8 +93,7 @@ function roadmapSpan(text, n) {
   const at = heads.findIndex(h => h.n === n);
   if (at < 0) return null;
   const start = heads[at].i + 1;
-  let end = at + 1 < heads.length ? heads[at + 1].i : lines.length;
-  while (end > start && !norm(lines[end - 1])) end--;
+  const end = at + 1 < heads.length ? heads[at + 1].i : lines.length;
   return { start, end, body: lines.slice(start, end).join('\n') };
 }
 

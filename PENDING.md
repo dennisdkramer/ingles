@@ -21,18 +21,26 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 
 # [CURRENT] Prompt - (Active batches, newest first)
 
-## [16] - Answer the six questions on lesson 40's QA reds and push the page
-### [B1] - Close [15] and author this prompt's batches "commit and push what you have for lesson 40" PENDING.md [HANDLING] 13,17-20
-   - [S1] - Append the two PAST_BATCHES.md lines for lesson 40 and migrate [15] into that ledger <PEDAGOGY-MAP [GENERATION] 5 (24-25), PENDING [HANDLING] 13> <the ledger holds lesson 40 and [15]>
-   - [S2] - Clear [15] out of [CURRENT] <PENDING [HANDLING] 13> <[CURRENT] holds only [16]>
-### [B2] - Answer (a),(c),(d),(e),(f) "isnt 'not even' a simple vocabulary item... range corrections... output chars... 1/3 itemwidth block... why input.gap fixed" six answers, no project file edited
-   - [S1] - Q1: what makes an item "tested" in the coverage check <qa/provenance.mjs 102-115, 417-466> <the rule named and whose mistake it was>
-   - [S2] - Q7: roadmapSpan's actual formula against PEDAGOGY-MAP 5's wording <qa/provenance.mjs 76-94> <the durable correction offered, sign-off gated>
-   - [S3] - Q12: search the rules files for a 3000-character split <ADHERENCE.md, .clinerules> <present or absent, stated plainly>
-   - [S4] - Q13: .grid3 against the third-width implementation <FORMAT.md 38, style.css itemsize> <which block it actually was>
-   - [S5] - Q14: how input.gap gets its width <style.css 155, 249> <the knob, its default, and what I did with it>
-### [B3] - Commit and push lesson 40 "commit and push what you have for lesson 40" <PENDING [GUIDELINES] 1>
-   - [S1] - Stage lesson, sidecar and ledgers; commit; push <PENDING [GUIDELINES] 1-2> <pushed, hash reported>
+## [17] - Make lesson 40 reachable, fix roadmapSpan, rewrite the pre-split rule, correct FORMAT.md's width classes
+Open, not instructed, no step: "yeah we probably need to do a roadmap edit" - names no item and no target lesson, so it is asked in the reply, not acted on.
+### [B1] - Close [16] and author this prompt's batches "im not seeing lesson 40 on the live site" PENDING.md [HANDLING] 13,17-20
+   - [S1] - Migrate the finished [16] into PAST_BATCHES.md and clear it <PENDING [HANDLING] 13> <[CURRENT] holds only [17]>
+### [B2] - Lesson 40 is not on the live site "im not seeing lesson 40 on the live site" index.html, tracks.json, <track>/track.json
+   - [S1] - Find what the landing reads to decide which lessons to link <index.html, tracks.json, adult/track.json> <the count or list named, and why 40 is outside it>
+   - [S2] - Apply the smallest correct fix and prove it locally <pedagogy-map 4: links are track/lesson<n>.html> <adult lesson 40 reachable from the nav>
+### [B3] - roadmapSpan returns the span without blank stripping "change roadmapspan to just say the span" <qa/provenance.mjs 76-94>
+   - [S1] - End the span at the line before the next heading, with no blank-line stripping <qa/provenance.mjs 76-94> <lesson 40 spans 388-397, independent of blank lines>
+   - [S2] - Check the change cannot orphan the kids records already in the ledger <KIDS-ROADMAP.md 30, 31 spans> <each either unchanged or named as now stale>
+   - [S3] - Run the harness selftest if one exists <qa/provenance.mjs --selftest> <green, or the exact red>
+### [B4] - Re-record adult/40 against the new span <PEDAGOGY-MAP [GENERATION] 5 (26-31)>
+   - [S1] - Append the record with range 388-397, then re-run lang and provenance for adult 40 <PEDAGOGY-MAP [GENERATION] 5> <both green>
+### [B5] - Rewrite the pre-split rule in TOOL DISCIPLINE "lets update .clinerules rule 5" <.clinerules/.clinerules.md 3-13>
+   - [S1] - Check no other file refers to these bullets by number, since the list is unnumbered <*.md, .clinerules> <no numbered reference exists to break>
+   - [S2] - Write the pre-split bullet beside the command-output bullet <".clinerules/.clinerules.md" 5> <a large write is split before the first send, not after a refusal>
+### [B6] - Name the half and third widths in FORMAT.md and drop .grid3 "correct it and name the 1/3 and 1/2 width options with a concise note" <FORMAT.md 38>
+   - [S1] - Replace .grid3 with .itemsize-third and .itemsize-half plus the compare/contrast note <FORMAT.md 38> <no class is named that style.css does not implement>
+### [B7] - Commit and push, then confirm the live page "im not seeing lesson 40 on the live site" <PENDING [GUIDELINES] 1-2>
+   - [S1] - Stage, commit, push, and check what the deploy serves for lesson 40 <PENDING [GUIDELINES] 5> <live page reachable, or the build state reported> 
 
 
 

@@ -17,3 +17,7 @@ All four had every `[Bn]` and `[Sn]` closed; they sat in `[CURRENT]` only becaus
 ## [15] migrated - 2026-10-11
 
 - `[15]` adult lesson 40: page plus byte-identical sidecar, two provenance records (the second amends the fingerprint after the game beat was re-cast), lang / provenance / content all green; `[B7] [S3]` the two overflow ESCAPE findings on the game stage art carried to the games turn on the user instruction.
+
+## [16] migrated - 2026-10-11
+
+- `[16]` adult lesson 40: answered the six questions on the QA reds and pushed 3a571c8; `[B2]` no project file edited - the "tested" rule (this lesson's own - Vocabulary: list), roadmapSpan's formula, the absent 3000-char rule, .grid3 having no CSS rule, and input.gap's per-blank --gap-w were each named from the harness and style.css.

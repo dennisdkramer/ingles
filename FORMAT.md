@@ -35,7 +35,7 @@
 - input.gap = fill-in blank: transparent, 2px tan bottom border, #fff8ea bg — a CONTIGUOUS line, never literal "___" underscores in the prompt
 - .chart = structured data table (cognate rules, phrase translations, to-be chunks, false friends): paper, 2px ink frame + tan shadow, ink header row, tan grid
 - .chips = wrapping keyword pills ("quase iguais" list)
-- .grid3 = an available 3-column row of cards
+- .itemsize-half (593px) / .itemsize-third (391px) = the half- and third-width slots, set on each block inside a `.itemrow` — PREFERRED when the content is a comparison or a contrast, or a set of ideas / vocabulary classes that exist in two or three distinct forms, one form or class per column so the parallel is visible. No `.grid3` exists: no rule implements it.
 - .blanks = wrapping row of fill-in pairs (word + input.gap)
 - .dialog = dialogue block: #fff8ea fill, rose frame, bold speaker labels. **Speaker names are English given names** (Josh, Maya, Leo, Sam, Ash, Dee) — never Portuguese or Brazilian ones (Téo, Guh, Thiago, Luiz, Bia), whatever the scene is about: the student is learning English in an English world, so a name that only exists in Portuguese makes the scene Portuguese again.
 - .listen = compact ▶ audio chip placed inline beside what it speaks
