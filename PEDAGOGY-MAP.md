@@ -54,7 +54,7 @@
   - e) If an item from among [GENERATION] 2.b headings is chosen, read only that heading's line range for implementation details.
 
 ### [AUTHORING]
-**Precedence —** Where this map's examples or the roadmap's example lines or vocabulary conflict with `<TRACK>-REGISTER.md`, the register wins: replace the item and record the swap. A content example's sample text is never an input to judge against — a vehicle is borrowed, its content is written for this lesson.
+**Precedence —** Where this map's examples or the roadmap's example lines or vocabulary conflict with `<TRACK>-REGISTER.md`, the register wins: replace the item and record the swap. A content example's sample text is never an input to judge against — a vehicle is borrowed, its content is written for this lesson. The register's vocabulary is tiered by how often its speakers use it (`core` → `common` → `situational` → `rare`, in its tells block), and the tier is instruction: taught items come from `core` then `common`, a `situational` word appears only when the scene *is* that scene, and a `rare` word is never inserted to hit a vocabulary target.
 - a) Explanatory layer may live anywhere: lead, chart cell, an extra explanation column, a `tr.note` row. A chart is a teaching device, not a display device.
 - b) Every (word/new form) the student must understand is presented before it is used, else removed; if a block wants the student to *infer*, the page says so.
 - c) Coverage ≠ section plan: a roadmap item doesn't get its own h2 unless it earns one.

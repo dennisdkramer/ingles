@@ -15,8 +15,8 @@
  *         American scene) — quoted, because "flat" and "cheers" have honest American lives of their own
  *
  * The marker lists are NOT this file's. It reads the "Tells, for the checker" block out of the track's
- * register file, so a track's vocabulary lives where its policy lives; with no block it falls back to the
- * defaults and says so, rather than inventing a register or silently passing.
+ * register file, so a track's vocabulary lives where its policy lives; with no block it says so in one line
+ * and judges nothing, rather than inventing a register or silently passing.
  *
  * Deliberately NOT checked: whether a specific swear sits next to advice, whether the scene is register
  * (a), whether the slang has dated, and whether an unmasked word is a mistake or a minimal pair. That is
@@ -30,6 +30,7 @@
  * never conclude "dead track".
  *
  * Run: node qa/register.mjs [--track=kids|business|adult] [--all] [lessonNumber ...]
+ *      node qa/register.mjs --tells    prints the parsed vocabulary and the tier sizes, reads no page
  */
 import fs from 'fs';
 import path from 'path';
@@ -50,18 +51,13 @@ const MASKED = /\bf---|\bshi-|\bc---/gi;
 
 /* The marker lists are NOT this file's. They are read from the track's own register file, in its
    "Tells, for the checker" block — so the vocabulary lives where the policy lives, and this harness tests
-   what that track says its voice is. A register file with no block falls back to these defaults and says
-   so in the report: a silent pass would be this harness inventing a register.
-   `taboo`, `street` and `sexual` are presence; `formal` and `locale` are negative tells. A key may repeat
-   — the adult file groups its street vocabulary by domain (police, money, drugs, AAVE) and the lines
-   accumulate into one list. */
-const DEFAULTS = {
-  taboo: 'damn, hell, ass, asshole, bitch, bastard, piss, screwed',
-  street: "ain't, gonna, wanna, gotta, y'all, finna, lowkey, highkey, dude, my bad, no way, for sure",
-  sexual: '',
-  formal: 'however, therefore, furthermore, moreover, in addition, regarding, please be advised',
-  locale: 'mate, cheers, bloody, loo, flat, lift, queue, rubbish',
-};
+   what that track says its voice is. There are no defaults: a track that has declared nothing has no floor,
+   and the report says so. Supplying words of our own would be this harness inventing a register.
+   Keys are family and tier (`street-core`, `sexual-situational`); `taboo`, `street` and `sexual` are presence,
+   `formal` and `locale` are negative tells. The tiers are the register's instruction to the AUTHOR — where a
+   word belongs between "any lesson" and "only this scene" — and are reported, never scored: no harness can
+   know whether a scene earned "catch a body". */
+const FAMILIES = ['taboo', 'street', 'sexual', 'formal', 'locale'];
 const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
 const listRe = list => {
   const w = String(list || '').split(',').map(s => escRe(s.trim())).filter(Boolean);
@@ -69,17 +65,17 @@ const listRe = list => {
 };
 function tellsOf(track) {
   const f = path.join(ROOT, track.toUpperCase() + '-REGISTER.md');
-  const out = Object.assign({ owes: false, own: false }, DEFAULTS);
+  const out = { owes: false, own: false, byFam: {}, byTier: {} };
   if (!fs.existsSync(f)) return out;
   out.owes = true;
-  const seen = new Set();
   for (const line of fs.readFileSync(f, 'utf8').split(/\r?\n/)) {
-    const m = line.match(/^\s*[-*]\s*([a-z]+)\s*:\s*(.+?)\s*$/i);
+    const m = line.match(/^\s*[-*]\s*([a-z]+(?:-[a-z]+)?)\s*:\s*(.+?)\s*$/i);
     if (!m) continue;
-    const k = m[1].toLowerCase();
-    if (!Object.prototype.hasOwnProperty.call(DEFAULTS, k)) continue;
-    out[k] = seen.has(k) ? out[k] + ', ' + m[2] : m[2];
-    seen.add(k); out.own = true;
+    const k = m[1].toLowerCase(), fam = k.split('-')[0];
+    if (!FAMILIES.includes(fam)) continue;
+    out.byFam[fam] = out.byFam[fam] ? out.byFam[fam] + ', ' + m[2] : m[2];
+    out.byTier[k] = (out.byTier[k] || 0) + m[2].split(',').filter(s => s.trim()).length;
+    out.own = true;
   }
   return out;
 }
@@ -88,6 +84,24 @@ const hits = (html, re) => (re ? (html.match(re) || []) : []);
 const count = (html, re) => hits(html, re).length;
 const distinct = (html, re) => new Set(hits(html, re).map(s => s.toLowerCase())).size;
 const uniq = a => [...new Set((a || []).map(s => s.toLowerCase()))];
+
+/* `--tells` prints the parsed vocabulary and exits: it is a self-test of the register file's block and the
+   tiers in it, and it reads no page. */
+if (process.argv.includes('--tells')) {
+  for (const t of ['adult', 'business', 'kids']) {
+    const T = tellsOf(t);
+    if (!T.owes) { console.log('— ' + t + ': no register file'); continue; }
+    if (!T.own) { console.log('— ' + t + ': no "Tells, for the checker" block'); continue; }
+    console.log('— ' + t);
+    for (const fam of FAMILIES) {
+      const tiers = Object.keys(T.byTier).filter(k => k.split('-')[0] === fam);
+      if (!tiers.length) continue;
+      const items = T.byFam[fam].split(',').filter(s => s.trim()).length;
+      console.log('   ' + fam + ': ' + items + ' items · ' + tiers.map(k => k + ' ' + T.byTier[k]).join(' · '));
+    }
+  }
+  process.exit(0);
+}
 
 const scope = hasTrackFlag() || hasAllFlag() ? null : touchedScope();
 const tracks = pickVoiceTracks();
@@ -112,8 +126,8 @@ for (const TRACK of tracks) {
   /* the coverage verdict is a property of the whole track, so it is measured over every page on disk even
      when only some pages are being reported: a sample of three new pages must not conclude "dead track". */
   const T = tellsOf(TRACK);
-  const RE_T = listRe(T.taboo), RE_S = listRe(T.street), RE_X = listRe(T.sexual),
-    RE_F = listRe(T.formal), RE_L = listRe(T.locale);
+  const RE_T = listRe(T.byFam.taboo), RE_S = listRe(T.byFam.street), RE_X = listRe(T.byFam.sexual),
+    RE_F = listRe(T.byFam.formal), RE_L = listRe(T.byFam.locale);
   const lines = allNums.map(n => {
     const raw = fs.readFileSync(path.join(ROOT, TRACK, 'lesson' + n + '.html'), 'utf8');
     const leaks = (raw.match(UNCENSORED) || []).map(s => s.toLowerCase());
@@ -127,7 +141,7 @@ for (const TRACK of tracks) {
   const witBed = lines.filter(l => l.x).length;
 
   /* A track owes the voice only when its own file says what that voice is: a register file with no tells
-     block has not declared a floor, and judging it against these defaults would report every one of its
+     block has not declared a floor, and judging it against words of our own would report every one of its
      pages as neutral — 107 warnings on a green run, which is how a report stops being read. */
   const owes = T.owes && T.own;
   console.log('— ' + TRACK + ' · ' + sample.size + (sample.size === allNums.length ? '' : ' of ' + allNums.length)
