@@ -14,9 +14,9 @@
 - Exercise/activity/quiz items are numbered `1..n`, top to bottom then left to right, restarting in every block.
 - **An item's option count is set by what it has to discriminate, never by habit.** Two or more options, always: 3–4 is the baseline, 2 is right when the pair is genuinely binary, and 5–6 belong to an item whose content supplies that many plausible candidates (a family of ten look-phrases, six tense forms). The vehicle's own maximum binds and is stated in its CONTENT_EXAMPLES entry (`whackMole` draws one mole per option: 2–6). Difficulty is the other limit — the count rises with the discrimination the lesson intends, not with the wish to fill a grid. **That entry also carries the activity's `load` multiplier** — what the count, the clock and the one-chance rule each add — which a build multiplies by the block's content level to read the block's total load (`PEDAGOGY-MAP.md [LEVEL] x`). The activity states the number; a build never estimates one.
 - **Every training block declares its move**, `data-move` on the block element, one value: `spot` (find the right one among decoys), `choose` (pick the form that fits a stated situation), `produce` (write the language yourself), `correct` (find and fix what is wrong), `contrast` (decide between two forms that are confused), `recall` (retrieve something taught in an earlier lesson, marked `data-recalls="<pid>"`). A `produce` block carries an `input.gap` inside a sentence or a `textarea` other than `#feed` — a radio-only block cannot be `produce`. A block that trains nothing (a chart of reference, a dialogue, a scenario) declares no move.
-- For any section and/or block, a concise text below the header [[explains its contents] or [instructs the student what to do]] ONLY IF [[defensibly helpful to the student] AND [doesnt re-state anything else in the lesson]]. 
+- For any section and/or block, a concise text below the header [[explains its contents] or [instructs the student what to do]] ONLY IF [[it names what the student must do with the block, or what the block contains] AND [it repeats no header, option, gloss or sentence already on the page]]. 
 - An item may never ask for a judgement on an axis the page never defined before the item asks for it. the item and its column headers may not be labelled with a word invented for the table.
-- Any fill-in hint/gloss sits below and center-aligned with the center of its respective input field.
+- **Two authoring rules bind every item and are not restated here:** the answer never appears in its own prompt (`PEDAGOGY-MAP.md [AUTHORING] e)`), and options match the answer in kind and length — a phrase answer gets phrase distractors, never one-word ones (`PEDAGOGY-MAP.md [LEVEL] w)`).
 - Font sizes are fixed constants (no viewport-relative sizing).
 - **The type default is SERIF, site-wide.** An exception is `--ui-tight`, used only by the game chrome (`.g4-*`) at 9–13px in fixed-size tiles, where the text is an instrument panel rather than prose and a face swap would move metrics inside boxes that cannot grow. A lesson author never reaches for a font: the face is the stylesheet's, alone.
 - **A track folder's NAME is URL-, selector- and CLI-safe; its DISPLAY name is data.** The folder name is lowercase with hyphens or underscores (`advanced-stem`), never a space, because it travels as a URL path, a `--track=` argument, an `id` suffix and a `data-*` value. The name a person reads lives in that folder's `track.json` `label`, which is free to carry spaces, accents and an arrow (`English → Basic Portuguese`), so nothing about the display ever forces a rename. **A folder name is chosen once**: the teacher's access sheet stores the track name itself, so renaming a folder orphans every grant that mentions it (a hyphen is safe everywhere; a space is not).
@@ -28,7 +28,7 @@
 - Every control that carries an answer (`input.gap`, radio, authored `textarea`) resolves exactly ONE anchor: an unanchored control is never saved, and two controls on the same anchor+place overwrite each other.
 - Question stems are unique within a block — a repeated stem gives two controls one saved answer.
 - A `textarea` inside `.content-area` is (`resize:none`). the page never reflows, no items are resizeable. 
-- If unbuilt work occurs, it is marked, never faked.
+- If unbuilt work occurs, it is marked, never faked: marked with a `<p class="todo">` inside the block (the class `index.html` already carries), never with invented content that reads as finished.
 
 ### Following are guidance **IF** relevant content used
 - .thsub = a chart-column-header subtitle (the second line under the main label): block, weight 400, smaller, reduced opacity.
@@ -41,7 +41,7 @@
 - .blanks = wrapping row of fill-in pairs (word + input.gap)
 - .dialog = dialogue block: #fff8ea fill, rose frame, bold speaker labels. **Speaker names are English given names** (Josh, Maya, Leo, Sam, Ash, Dee) — never Portuguese or Brazilian ones (Téo, Guh, Thiago, Luiz, Bia), whatever the scene is about: the student is learning English in an English world, so a name that only exists in Portuguese makes the scene Portuguese again.
 - .listen = compact ▶ audio chip placed inline beside what it speaks
-- A fill-in hint/gloss (Portuguese, italic) sits on its own line BELOW the input. Author it with the block fill-in layout (`.blanks.sent` / `.blanks.sent.cols`) so the line break actually renders — a `<br>` inside the default flex `.blanks` row is ignored.
+- A fill-in hint/gloss (Portuguese, italic) sits on its own line BELOW its input, centred on that input. Author it with the block fill-in layout (`.blanks.sent` / `.blanks.sent.cols`) so the line break actually renders — a `<br>` inside the default flex `.blanks` row is ignored.
 - @media print: hides header/#controlbar/#feed/footer, strips container border/shadow
 - .card: paper bg, 2px ink border, 16px radius, 5px 5px 0 tan hard shadow
 

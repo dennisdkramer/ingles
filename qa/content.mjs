@@ -97,6 +97,28 @@ async function check(base, track, n) {
   if (noSay >= 3) errors.push(noSay + ' listen chip(s) without data-say');
   else if (noSay) warns.push(noSay + ' listen chip(s) without data-say — dead button, tag it in ISSUES.md');
 
+  /* THE ANSWER IN ITS OWN PROMPT (PEDAGOGY-MAP [AUTHORING] e: "Never show the answer in a prompt").
+     When the stem already spells out the option that is keyed right, the item can be answered without
+     choosing between anything, and it stops testing the concept. Only the LITERAL case is
+     machine-checkable — a stem that merely implies its answer (a dash marking the stressed syllable, a
+     numbered blank under a three-item list) stays the author's to catch, which is why this is a warning
+     and never an error. The key is the option LETTER: engine2 marks `correct` on the label whose radio
+     value equals `data-a`, so the answer's text is that label's. */
+  const leaked = [];
+  for (const q of d.querySelectorAll('.qitem[data-a]')) {
+    const right = (q.getAttribute('data-a') || '').trim();
+    const stem = q.querySelector('.qstem');
+    if (!right || !stem) continue;
+    const lab = [...q.querySelectorAll('.qopts label')]
+      .find(l => { const i = l.querySelector('input[type="radio"]'); return i && i.value === right; });
+    const text = lab ? lab.textContent.replace(/\s+/g, ' ').trim() : '';
+    if (text.length < 4) continue;                       /* a short function word matches any sentence */
+    const re = new RegExp('(^|[^\\p{L}])' + text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '($|[^\\p{L}])', 'iu');
+    if (re.test(stem.textContent.replace(/\s+/g, ' '))) leaked.push(text);
+  }
+  if (leaked.length) warns.push(leaked.length + ' stem(s) contain their own answer — '
+    + [...new Set(leaked)].join(' · ') + ' (PEDAGOGY-MAP e)');
+
   if (w.ansOf) {
     const unanchored = [...d.querySelectorAll('input.gap, input[type="radio"], textarea')]
       .filter(el => el.id !== 'feed')

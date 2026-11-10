@@ -42,7 +42,22 @@ Author ([n]=(Prompt], [Bn]=(Batch),[Sn]=(Step)) two lines below [CURRENT], forma
 
 
 
-## [25] - the audit answered, the typos repaired, ADHERENCE.md committed (2026-11-10)
+## [26] - the approved fixes executed: the marker set, the leak warning, and four FORMAT.md decisions (2026-11-10)
+### [B1] - F4's plan, implemented and NOT verified <"the plan is good but do not run verification on this"> <`qa/lang.mjs` reads the class markers as well as `lang`, and no harness was run> DONE - qa/lang.mjs
+   - [S1] - `isMarked(el)` added — `lang="pt"` or `.pt` or `.ptw` — and used at both counting sites, the explanation set and the table headers <the band stops depending on which marker an author reached for> DONE - `node --check` exit 0; no run, per instruction
+   - [S2] - the limit recorded instead of silently changed: a classed span inside an English sentence is still judged by `isPT` alone, because the element measured is the sentence, not the span <this widens the marker set; it does not reclassify mixed prose> DONE
+### [B2] - F7's two approved items <"I approve your 1 and 2"> <the rule restated where a build reads it, and the literal case warned> DONE - FORMAT.md 19, qa/content.mjs
+   - [S1] - FORMAT.md: one cross-reference bullet naming `PEDAGOGY-MAP.md [AUTHORING] e)` and `[LEVEL] w)`, in the slot the deleted 19 vacated <no rule duplicated, no wording drift> DONE
+   - [S2] - qa/content.mjs warns when a stem contains its own keyed option: `data-a` -> the radio whose value matches -> that label's text, with a 4-character floor and a word boundary <only the literal case is checkable, so it is a warning; the implying case stays the author's> DONE - `node --check` exit 0, not run
+### [B3] - the three approved wordings <"17. approved" "31. approved" "19. approved"> DONE - FORMAT.md 17, 19, 31, 44
+   - [S1] - 17: "defensibly helpful to the student" replaced by the two checkable tests, exactly as proposed <the old text is in [25] [B3]> DONE
+   - [S2] - 31: the mark named — but as `index.html` only, because `style.css` carries no `.todo` rule and the approved text said it did <DEVIATION, reported to the owner in the turn's message> DONE
+   - [S3] - 19 deleted and its one unique fact (centring) merged into 44, so gloss placement is stated once <44 keeps its mechanism sentence word for word> DONE
+### [B4] - recorded and pushed
+   - [S1] - the owner's plan noted, no action taken: the syllable-count and emphasis vehicles are to be taken, because a stem of that kind can imply its own answer <a future batch, not this turn's> DONE
+   - [S2] - commit + push, then the Pages run read for that commit <[GUIDELINES]> NOT EXECUTED
+
+
 ### [B1] - F4's recommendation, delivered and NOT applied <"f4 what do you recommend we do about that"> <one marking route, and the harness made to read that one> DONE - no edit; FORMAT.md line 2 requires sign-off
    - [S1] - the choice named: `lang="pt"` becomes the only semantic marker, `.pt`/`.ptw` stay as layout classes, `<i>` is dropped as a marker, and `qa/lang.mjs` reads exactly one thing <the measured Portuguese share can no longer move for a markup reason> DONE - reported
 ### [B2] - F5 retracted, and the real conflict named <"arent those the same thing?"> <14 and 55 do agree; 14 disagrees with the DOM> DONE - yes: `.qopts` is flex-wrap (across, then down) and `.qgrid.stack` is `grid-auto-flow:column` (down, then across), and 14 states only the second

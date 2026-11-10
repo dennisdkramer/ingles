@@ -83,6 +83,14 @@ function isPT(text) {
   return !!(hits && new Set(hits.map(x => x.trim().toLowerCase())).size >= 2);
 }
 
+/* The layout classes are the marker most of the corpus was written with — `.pt` on an explanation,
+   `.ptw` on a word inside one — and they predate `lang="pt"`, so a page may carry either. Reading both
+   keeps the band a property of the CONTENT rather than of which marker an author reached for. A classed
+   span inside an English sentence is still judged by isPT alone, because the element counted here is the
+   sentence, not the span; this widens the marker set, it does not reclassify mixed prose. */
+const isMarked = el => el.getAttribute('lang') === 'pt'
+  || el.classList.contains('pt') || el.classList.contains('ptw');
+
 const asPct = v => Math.round(v * 100) + '%';
 const pct = (a, b) => asPct(b ? a / b : 0);
 
@@ -103,10 +111,10 @@ function page(track, n) {
     .filter(el => !el.closest('.game-list'));
   const exWhy = exAll.filter(el => el.hasAttribute('data-why'));
   const ex = exAll.filter(el => !el.hasAttribute('data-why'));
-  const exPt = ex.filter(el => isPT(el.textContent) || el.getAttribute('lang') === 'pt');
+  const exPt = ex.filter(el => isPT(el.textContent) || isMarked(el));
 
   const th = [...ca.querySelectorAll('th')];
-  const thPt = th.filter(el => isPT(el.textContent) || el.getAttribute('lang') === 'pt');
+  const thPt = th.filter(el => isPT(el.textContent) || isMarked(el));
 
   const fails = [], warns = [];
   const { hi, lo } = band(n);
