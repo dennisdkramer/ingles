@@ -28,5 +28,5 @@ Author ([n]=(Prompt), [Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], form
    - [S1] - drop "a stack is ONE column unless the page asks to tile it (.cols / .sent / .stack)" because `.stack` IS the tiling and `.stack.wide` is the one column; drop "it tiles to fill its block, because dead space is the priority to avoid" because it contradicts "the page decides, not the CSS" in the same sentence and restates the priority retired by the small-first width rule <style.css:395-396> <three forms and the numbering order stated, no false claim left>
 ### [B3] DONE - 2026-11-11 - no file changed - prove it was prose <"fix it"> <unchanged render>
    - [S1] - `QA_ON=1 node qa/cssdiff.mjs` identical on all three pages, and `node qa/liquid.mjs` clean <qa/cssdiff.mjs, qa/liquid.mjs> <0 differences, 33 clean>
-### [B4] - publish <nothing ships on an unread run> <Pages build read>
-   - [S1] - commit, push, then the Pages run for that sha <VERIFICATION.md> <build success stated only after reading the run>
+### [B4] DONE - 2026-11-11 - PENDING.md, commit b06ed3d - publish <nothing ships on an unread run> <Pages build read>
+   - [S1] DONE - commit, push, then the Pages run for that sha. No run appeared for b06ed3d in the API, but the served style.css carries the new sentence and no longer carries the old claim, so publication was verified by content rather than by the run list <VERIFICATION.md> <build success stated only after reading the run>
