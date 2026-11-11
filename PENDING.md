@@ -11,7 +11,7 @@
 ### [B3] - the readers exercised against kids <prose.mjs and provenance.mjs both read field labels, so the same silent shrinkage is possible here> DONE - identical allowances and identical word counts on all 30 kid pages, before vs after; provenance returns 12 items for lesson 1 (3 heading + 9 field) and 12 for lesson 50, i.e. the pre-move totals
    - [S1] - prose.mjs A/B on the whole kids track <the count must not shrink by 3 items per lesson> DONE - 30 pages, `Compare-Object` found no difference
    - [S2] - provenance's real extractors lifted out and run on 1/25/45/50 <25 and 45 never carried the fields, so 0 is right there> DONE - as above; `--selftest` green
-### [B4] - publish <commit-by-default; a push is not a publication> IN PROGRESS
+### [B4] - publish <commit-by-default; a push is not a publication> DONE - 121ade5, and its Pages run `completed/success`
 
 
 ## [41] - ADULT-ROADMAP headings rewritten as the digest, and the two readers taught to read it (2026-11-10)
