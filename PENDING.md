@@ -35,6 +35,11 @@ Author ([n]=(Prompt), [Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], form
 <"but why is QA touching in-block-visuals.md or the preview page?">
 ## [53] - qa/brief.mjs: the generation brief that puts PEDAGOGY-MAP.md in front of the build twice, and ends on a 12-rule gate
 <"build the brief+reassert + 12 rule gate (only reassert pedagogy-map.md, maybe try just one extra copy for now)" + "i dont like the idea of emitting 40 items, maybe we emit 1 in every 10, so about 4 per page">
+## [54] - show the gate text as printed
+<"show me the full text of the gate">
+### [B1] DONE - 2026-11-11 - PRINT THE GATE <the twelve lines, as emitted> <nothing changed>
+   - [S1] DONE - `node qa/brief.mjs --track=business --lesson=41` tail, quoted verbatim in the reply <qa/brief.mjs> <no edit made>
+
 ### [B1] - BUILD THE BRIEF <one command prints the input set, then the map again, then the gate> <the build can start from this and nothing else>
    - [S1] DONE - 2026-11-11 - `qa/brief.mjs` (commit 512158d) prints: `PEDAGOGY-MAP.md` (copy 1, 21.4 KB), the lesson's own roadmap block (`## [n]` or `## Lesson n:`, 1.2 KB), `<TRACK>-REGISTER.md` (1.1 KB), **6 of 54 `CONTENT_EXAMPLES` exemplars, 1 in 10 (10.3 KB)**, the 10 `style.css` `##` headers (3.4 KB), `_shell.html` (2.4 KB), then the gate (0.9 KB). **Total 40.8 KB, measured** <qa/brief.mjs> <every section present, sizes printed on each so a run is auditable>
    - [S2] DONE - `--reassert` prints copy 2 of the map and nothing else (21.4 KB, verified: no gate, no roadmap); `--every=N` sets the stride and `--exemplars=N` converts a wanted count into one. No file written, no page opened, no verdict emitted. KEPT: two bugs of mine were caught by running it — the stride had been `round(54/10)=5`, i.e. 1 in 5 and 11 exemplars (17.8 KB) instead of your 1-in-10; and the map bullet's "~28 KB / ONE entry" was left behind by the change, now corrected to ~40 KB / one in ten <qa/brief.mjs, PEDAGOGY-MAP.md> <reassert costs exactly one map copy>
