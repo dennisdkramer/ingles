@@ -1,5 +1,3 @@
-# BUSINESS-ROADMAP - DO NOT MODIFY WITHOUT USER SIGN-OFF
-
 ## Lesson 1: Welcome - how this track works
 
    - Focus: The track, the method, and the two ideas the whole course stands on.
@@ -202,23 +200,25 @@
 
 ## Lesson 21: Introducing yourself and your work
 
-   - Focus: The first two minutes of any call: who you are, what you do, and the question back.
-   - teaches: `social/self-intro`, `social/return-question`, `social/role-description`
-   - Deepens: -
-   - Uses: `present-simple/facts-not-now`, `pronoun/possessive`, `question/wh-order`, `prep/verb-unit`
-   - Vocabulary: position, department, colleague, industry, background, experience, "work with", "in charge of", "nice to meet you", "how's it going", "what do you do", "these days"
-   - Examples: "I'm Ana, I'm an analyst at Klarx, I work on pricing." / "I'm in charge of the tests." / "What do you do?" / "Nice to meet you, how's it going?"
-   - Real-world relevance: The first two minutes decide the rest of the call, and an introduction that stalls sets the tone for everything after it.
+   - Focus: A role is a noun phrase - a head word and what hangs off it - and the apposition that names you is what makes the first minute land.
+   - teaches: `noun-phrase/post-modifier`, `apposition/role-statement`, `discourse/question-return`
+   - Deepens: `clause/skeleton` - the skeleton now grows inside one slot: the subject is a phrase with its own internal order, so what sits after the noun matters as much as the order of the clause.
+   - Uses: `clause/skeleton`, `pronoun/possessive`, `question/wh-order`, `article/a-the-zero`, `prep/verb-unit`
+   - Vocabulary: "in charge of", "part of", "responsible for", "the one who", "on the X side", "I run", "I look after", "report into", "these days", "same as always", "keeping busy", "living the dream"
+   - Examples: "I'm Ana - I'm the analyst who owns pricing." / "I look after the models, so I'm on the revenue side." / "I'm in charge of the two APIs nobody wants to touch." / "What do you do?" with "same as always - spreadsheets and coffee" as the informal note under "nothing has changed"
+   - Real-world relevance: The first minute decides the rest of the call, and the sentence that stalls is usually a missing "who" or a noun phrase left in Portuguese order.
 
-## Lesson 22: Inside a meeting - open, check, close
 
-   - Focus: The three frames that make a meeting usable: purpose, clarification, next step.
-   - teaches: `meeting/open-frame`, `meeting/check-and-clarify`, `meeting/close-next-step`
-   - Deepens: -
-   - Uses: `question/wh-order`, `modal/request-ladder`, `future/gonna-plan`, `future/will-now-decision`
-   - Vocabulary: agenda, minutes, decision, attendee, "next step", "action item", "take notes", "on track", "at risk", "run late", attend, reschedule
-   - Examples: "We're here to decide the launch date; it should take twenty minutes." / "Sorry, could you say that again?" / "So I'll send the draft by Thursday." / "The project is on track."
-   - Real-world relevance: A meeting where nobody names the next step is the most common waste in this persona's week, and it is the move a non-native speaker is least likely to make.
+## Lesson 22: It, that, and the one - what a conversation points at
+
+   - Focus: Talk is held together by pointing: it and that refer back, one and do so replace a whole noun, and an echo question asks about a single word you missed.
+   - teaches: `reference/anaphora`, `substitution/one-and-do-so`, `question/echo-clarify`
+   - Deepens: `clause/dummy-subject` - the same little words now point at something already said instead of filling an empty subject slot, so the student chooses between the two jobs.
+   - Uses: `clause/dummy-subject`, `clause/skeleton`, `question/wh-order`, `noun/count-uncountable`
+   - Vocabulary: "that one", "the other one", "so do I", "neither did I", "I thought so", "the same thing", "sorry, the what?", "who did what?", "back to that", "as I said", "long story", "no way"
+   - Examples: "The new one is faster; the old one still works." / "I've already sent it." - "So have I." / "Sorry, the what now?" / "They moved the date." - "Wait, who moved what?" with "no way" as the informal note under "that is surprising"
+   - Real-world relevance: A meeting is mostly pronouns, and the student who loses track of "it" loses the thread even when every word is known.
+
 
 ## Lesson 23: Until, by, ago - the words deadlines live on
 
@@ -245,7 +245,7 @@
    - Focus: Test whether the student can run a simple workday unaided: say who they are, describe a routine and a current task, ask for something politely, put something in the past, and commit to a date.
    - teaches: -
    - Deepens: -
-   - Uses: `clause/skeleton`, `be/linking-verb`, `clause/dummy-subject`, `present-simple/facts-not-now`, `present-simple/third-person-s`, `mode/slot`, `mode/negation`, `prep/location-in-on-at`, `prep/time-in-on-at`, `prep/to-vs-for`, `reduction/gonna-future-mode`, `get/wildcard`, `question/yes-no-order`, `question/wh-order`, `present-continuous/now`, `present-continuous/vs-simple`, `number/read-and-group`, `number/figure-comparison`, `noun/count-uncountable`, `article/a-the-zero`, `past-simple/was-were`, `past-simple/irregular`, `prep/verb-unit`, `prep/contrast-pairs`, `future/gonna-plan`, `future/present-arrangement`, `modal/request-ladder`, `connector/cause-result`, `compare/er-more-forms`, `phrase-verb/default-form`, `modal/must-have-to`, `modal/no-obligation`, `axis/direct-vs-indirect`, `axis/hedge`, `social/self-intro`, `meeting/open-frame`, `meeting/close-next-step`, `prep/until-vs-by`, `question/embedded-order`
+   - Uses: `clause/skeleton`, `be/linking-verb`, `clause/dummy-subject`, `present-simple/facts-not-now`, `present-simple/third-person-s`, `mode/slot`, `mode/negation`, `prep/location-in-on-at`, `prep/time-in-on-at`, `prep/to-vs-for`, `reduction/gonna-future-mode`, `get/wildcard`, `question/yes-no-order`, `question/wh-order`, `present-continuous/now`, `present-continuous/vs-simple`, `number/read-and-group`, `number/figure-comparison`, `noun/count-uncountable`, `article/a-the-zero`, `past-simple/was-were`, `past-simple/irregular`, `prep/verb-unit`, `prep/contrast-pairs`, `future/gonna-plan`, `future/present-arrangement`, `modal/request-ladder`, `connector/cause-result`, `compare/er-more-forms`, `phrase-verb/default-form`, `modal/must-have-to`, `modal/no-obligation`, `axis/direct-vs-indirect`, `axis/hedge`, `noun-phrase/post-modifier`, `reference/anaphora`, `question/echo-clarify`, `prep/until-vs-by`, `question/embedded-order`
    - Vocabulary: -
    - Examples: -
    - Real-world relevance: The pass mark is not accuracy on isolated items but whether the student can hold a short exchange without switching back to Portuguese.
@@ -300,25 +300,27 @@
    - Examples: "Revenue grew by 8 percent to 2.4 million." / "Costs peaked in March and then plateaued." / "We expect the share to double by Q4." / "Sales dropped slightly last quarter."
    - Real-world relevance: Describing a chart without a script is precisely this persona's output, and it is the honest test of whether block 1's numbers became usable.
 
-## Lesson 31: Email in English - the frame and the force
+## Lesson 31: Email - why writing sounds colder than you do
 
-   - Focus: The four parts of an email, the formulas at each end, and the one step softer that writing adds.
-   - teaches: `email/frame`, `email/opening-closing`, `email/direct-vs-indirect`
-   - Deepens: `axis/direct-vs-indirect` - the same ladder now runs in writing, and writing pushes every request one step softer than the spoken version would be.
+   - Focus: Writing gains its distance from three forms: the verb turned into a noun, the subject dropped, and the request moved one step softer.
+   - teaches: `nominalisation/verb-to-noun`, `ellipsis/written-answer`, `modal/request-softening`
+   - Deepens: `axis/direct-vs-indirect` - the ladder now runs in writing, where the same request is one step softer and a nominalisation hides who is doing the acting.
    - Uses: `axis/direct-vs-indirect`, `axis/contraction`, `question/embedded-order`, `connector/cause-result`
-   - Vocabulary: subject, "dear", "best regards", "kind regards", "I'm writing to", "please find", attach, "looking forward to", "as discussed", "thanks in advance", cc, forward
-   - Examples: "Dear Ana, I'm writing to confirm the date." / "Please find the report attached." / "As discussed, I'll send the numbers by Friday." / "Best regards."
-   - Real-world relevance: Written messages are where this persona is judged most often, and the missing first-line reason is what leaves an email unanswered.
+   - Vocabulary: confirm, confirmation, approve, approval, "sign off", "heads-up", "circling back", "as discussed", "just checking", "no rush", "will do", "sounds good"
+   - Examples: "Could you confirm the date?" next to "Confirmation of the date would help." / "We'll send it Friday." next to "Sending Friday." / "Just checking - did the invoice land?" with "did you get it or what" as the informal note
+   - Real-world relevance: Written messages are where this persona is judged, and the coldest emails are the ones with no human subject and no reason on the first line.
 
-## Lesson 32: Inside a meeting - interrupt, clarify, disagree
 
-   - Focus: Getting the floor, keeping it, and disagreeing without losing the point.
-   - teaches: `meeting/interrupt-and-add`, `meeting/disagree-soften`, `meeting/paraphrase-back`
-   - Deepens: `meeting/check-and-clarify` - the need to understand is now met by restating what the other person said, which is the harder move than asking them to repeat.
-   - Uses: `meeting/check-and-clarify`, `axis/direct-vs-indirect`, `axis/hedge`, `modal/request-ladder`
-   - Vocabulary: "could you repeat", "just to confirm", "do you mean", "I see your point", "can I add", "to be clear", "in short", consensus, summarize, "come back to", "raise a point", "note that"
-   - Examples: "Sorry, can I just add something here?" / "So what you're saying is the date can't move." / "I see your point, but the timing doesn't work." / "Just to confirm, we're doing the first option."
-   - Real-world relevance: Disagreeing without losing the room is what decides whether this persona is heard at all, and the safe frames have to arrive before the thought does.
+## Lesson 32: Holding your turn - paraphrase, concession, half-agreement
+
+   - Focus: Taking the floor, proving you heard the last speaker, and disagreeing with only the part you actually disagree with.
+   - teaches: `discourse/turn-marker`, `report/paraphrase-summary`, `concession/partial-agreement`
+   - Deepens: `question/echo-clarify` - asking about one word becomes restating the whole point, which proves understanding instead of requesting a repeat.
+   - Uses: `question/echo-clarify`, `axis/direct-vs-indirect`, `axis/hedge`, `modal/request-ladder`
+   - Vocabulary: "can I jump in", "just to build on that", "so what you're saying is", "if I've got that right", "I see your point, but", "fair enough, though", "the only thing is", "in short", "to be clear", "come back to that", "hold on", "let me finish"
+   - Examples: "Can I jump in? So what you're saying is the date can't move." / "Fair enough on the cost - the only thing is the timing." / "Just to build on that: same problem, different team." with "yeah, no, but" as the informal note under "I partly agree"
+   - Real-world relevance: Disagreeing without losing the room decides whether this persona is heard at all, and the safe frames have to arrive before the thought does.
+
 
 ## Lesson 33: What was done, by whom - the passive
 
@@ -385,67 +387,73 @@
    - Focus: One meaning has a spoken form, a written form and an informal note, and the setting picks the form.
    - teaches: `axis/phrasal-vs-latinate`, `axis/written-vs-spoken`, `informal/sidenote-pairing`
    - Deepens: `axis/contraction`, `axis/direct-vs-indirect` - the axis now runs between two complete ways of saying the same thing, not only between levels of force on one wording.
-   - Uses: `phrase-verb/default-form`, `axis/contraction`, `axis/direct-vs-indirect`, `email/opening-closing`
-   - Vocabulary: "in writing", formal, casual, polite, direct, professional, appropriate, prefer, instead, sound, tone, suitable
-   - Examples: "Let's set up a call" (speech) against "We will arrange a call" (formal writing) / "I'll send it over" against "I will forward it" / "Fine, that works" with "Yeah, whatever" as the informal note under it
+   - Uses: `phrase-verb/default-form`, `axis/contraction`, `axis/direct-vs-indirect`, `nominalisation/verb-to-noun`
+   - Vocabulary: "set up" next to arrange, "go over" next to review, "sort out" next to resolve, "get back to" next to respond, "in writing", casual, tone, "too formal", "too much", "whatever works", "appreciate it", "no worries"
+   - Examples: "Let's set up a call" (speech) against "We will arrange a call" (writing) / "I'll send it over" against "I will forward it" / "Fine, that works" with "yeah, whatever" as the informal note under it
    - Real-world relevance: This is the lesson that lets the persona move between a client email, a team chat and a call without changing personality or committing an offence.
+
 
 ## Lesson 40: Pushing back without a fight
 
-   - Focus: The objection that ends in an agreement: accept a point, name the risk, offer a trade.
-   - teaches: `meeting/pushback-hedged`, `meeting/counter-offer`, `meeting/find-middle`
-   - Deepens: `meeting/disagree-soften` - the objection now arrives with a trade attached, so the same move ends in a decision instead of a pause.
-   - Uses: `meeting/disagree-soften`, `condition/first-will`, `condition/second-would`, `axis/hedge`, `meeting/close-next-step`
-   - Vocabulary: "I hear you", "on the other hand", "push back", compromise, "middle ground", concede, counter, "trade-off", "what if", "either way", "meet halfway", "not sure that works"
-   - Examples: "I hear you on cost, but the timeline is the real risk." / "If you can move the date, we can deliver the full scope." / "What if we start with the first phase?" / "So we agree on scope; I'll confirm the date by Friday."
+   - Focus: The objection that ends in an agreement: concede a clause, name the risk, trade one variable for another.
+   - teaches: `concession/even-though-despite`, `condition/trade-off`, `discourse/counter-move`
+   - Deepens: `concession/partial-agreement` - agreeing with part of a point now becomes a clause of its own, so the concession and the objection share one sentence instead of taking two turns.
+   - Uses: `concession/partial-agreement`, `condition/first-will`, `condition/second-would`, `axis/hedge`, `discourse/turn-marker`
+   - Vocabulary: "I hear you", "even though", "despite", "the catch is", "on the other hand", "trade-off", "what if", "either way", "meet halfway", "not sure that works", "that's a fair point", deal
+   - Examples: "Even though the cost works, the timeline is the risk." / "If you move the date, we can deliver the full scope." / "What if we start with phase one and review in March?" / "So we agree on scope; I'll confirm the date by Friday." with "yeah, that's not gonna fly" as the informal note under "that won't work"
    - Real-world relevance: Scope, date and budget are the three variables of every project conversation, and a professional who cannot trade them is only a messenger.
 
-## Lesson 41: Signposting a presentation
 
-   - Focus: The talk announces its map, points at its data, and closes on one point.
-   - teaches: `talk/roadmap-signpost`, `talk/refer-to-slide`, `talk/close-and-qa`
-   - Deepens: -
-   - Uses: `connector/sequence`, `data/trend-verb`, `meeting/open-frame`, `connector/contrast`
-   - Vocabulary: "let's start", "move on to", "as you can see", "this chart shows", "the key point", "to sum up", "any questions", "back to", highlight, overview, "thank you for your time", "we'll cover"
-   - Examples: "First I'll cover the numbers, then the risks, and I'll finish with the plan." / "As you can see, costs peaked in March." / "The key point is the delay, not the price." / "To sum up, we need two more weeks."
-   - Real-world relevance: This persona presents findings to a team or a university group, and a talk with no signposts loses the room inside the first minute.
+## Lesson 41: What the data does not say - hedging a claim
 
-## Lesson 42: Bad news, said well
+   - Focus: A claim can be made stronger or weaker without changing its content, and the honest version names the limit of the evidence.
+   - teaches: `hedge/claim-strength`, `hedge/data-limitation`, `discourse/framing-marker`
+   - Deepens: `axis/hedge` - the hedge stops being a softener for politeness and becomes a measurement: it now says how much the numbers support, so a page that overstates is wrong rather than rude.
+   - Uses: `axis/hedge`, `data/trend-verb`, `data/forecast`, `compare/degree-adverbs`, `connector/contrast`
+   - Vocabulary: suggests, "points to", "consistent with", "on this sample", "too early to say", roughly, "up to", "at most", "the trend is", "we can't tell yet", ballpark, noise
+   - Examples: "The numbers suggest a plateau, not a peak." / "On twelve responses, that's noise." / "It's up roughly 8 percent - too early to call it a trend." / "The key point is the delay, not the price" with "we're guessing, honestly" as the informal note under "the evidence is thin"
+   - Real-world relevance: Signposting a talk is a handful of set phrases; the hard part is saying how much a figure proves, which is what a manager is actually listening for.
 
-   - Focus: The fact, then the cause, then the plan - and the recovery carries a new date.
-   - teaches: `update/bad-news-frame`, `update/delay-language`, `update/recovery-commitment`
-   - Deepens: -
-   - Uses: `present-perfect/experience-vs-news`, `passive/reporting`, `condition/first-will`, `meeting/close-next-step`
-   - Vocabulary: delay, "behind schedule", "I'm afraid", "let me explain", "we're working on", "as soon as possible", "keep you posted", impact, priority, "plan B", "under control", fix
-   - Examples: "I'm afraid the release slipped to March." / "We're two weeks behind, and the cause is the migration." / "It's under control; I'll keep you posted on Friday." / "The impact is on the second phase only."
-   - Real-world relevance: A delay delivered badly does more damage than the delay, and this persona reports to managers and clients every week.
 
-## Lesson 43: Client and customer interactions
+## Lesson 42: Saying less than you mean - mitigation and the recovery
 
-   - Focus: Apologising for something, offering a resolution, and lowering the temperature.
-   - teaches: `service/complaint-apology`, `service/resolution-frame`, `service/de-escalate`
-   - Deepens: -
-   - Uses: `axis/hedge`, `modal/request-ladder`, `email/frame`, `update/recovery-commitment`
-   - Vocabulary: complaint, apologize, apology, "I'm sorry", "look into", resolve, solution, refund, replace, escalate, "your patience", goodwill
-   - Examples: "I'm sorry about this; I'll look into it today." / "I can refund it today or replace it by Friday." / "I understand this is frustrating, and I'll keep you updated." / "Let me escalate this to the team."
-   - Real-world relevance: This persona handles clients and service situations, and the apology that opens with an internal explanation is exactly what makes a client escalate.
+   - Focus: Bad news arrives in three moves - the fact, the cause, the new date - and each move is softened by a different form.
+   - teaches: `mitigation/downgrade`, `pragmatics/understatement`, `discourse/bad-news-order`
+   - Deepens: `hedge/claim-strength` - the hedge that measured evidence now measures blame, so the same form carries certainty in one lesson and responsibility in the other.
+   - Uses: `hedge/claim-strength`, `passive/reporting`, `condition/first-will`, `discourse/turn-marker`
+   - Vocabulary: "I'm afraid", "a slight delay", "we're looking at", "it slipped", "not quite where we wanted", "two weeks behind", "the cause is", "it's under control", "keep you posted", "plan B", "worst case", "my bad"
+   - Examples: "I'm afraid the release slipped a little - two weeks." / "We're not quite where we wanted to be on phase two." / "It's under control; I'll keep you posted Friday." / "Not bad, considering" with "yeah, we screwed up" as the informal note under "we made a mistake"
+   - Real-world relevance: A delay delivered badly costs more than the delay, and the understatement is what keeps a client calm long enough to hear the new date.
 
-## Lesson 44: Interviews and performance conversations
 
-   - Focus: Answering about yourself with evidence, and asking the question that ends the interview well.
-   - teaches: `career/evidence-answer`, `career/growth-answer`, `career/question-back`
-   - Deepens: -
-   - Uses: `present-perfect/duration-for-since`, `past-simple/irregular`, `connector/sequence`, `social/self-intro`
-   - Vocabulary: strength, weakness, achievement, "track record", evidence, outcome, develop, "team player", leadership, goal, "tell me about", "a good fit"
-   - Examples: "In my last role I rebuilt the reporting process, and it cut the review time in half." / "I'm working on presenting to bigger groups; I've started running the weekly review." / "What does success look like in this role after six months?"
-   - Real-world relevance: This persona wants a more professional-sounding English for their career, and the interview is where the whole course gets audited.
+## Lesson 43: Have it fixed - causatives, and must when it is not an order
+
+   - Focus: Two forms this persona does not own yet: have/get something done, which keeps the actor out of the subject slot, and must/might/can't doing the work of reasoning rather than of commanding.
+   - teaches: `causative/have-get-done`, `modal/deduction-must-might`, `politeness/downgrade-adverb`
+   - Deepens: `passive/reporting` - the passive took the actor out of the clause entirely; the causative keeps it, in an agent phrase at the end, so the same fact can be told with the person more or less visible.
+   - Uses: `passive/reporting`, `modal/should-advice`, `axis/hedge`, `axis/direct-vs-indirect`
+   - Vocabulary: "have it fixed", "get it sorted", "have someone look at it", "the tracker says", "must have", "might be", "can't be", "a bit", "slightly", "at all", "honestly", "no worries"
+   - Examples: "I'll have the team look at it and get back to you." / "The tracker says delivered, so someone must have signed for it." / "It's a bit tight, honestly." / "Not ideal" with "yeah, that's rough" as the informal note under "that is a problem"
+   - Real-world relevance: The person who handles a complaint well is not the one who apologises more - it is the one who can say who did what without naming them, and how sure they are without claiming certainty.
+
+
+## Lesson 44: What I have been doing - the perfect continuous, and how sure you sound
+
+   - Focus: A duration that runs up to now needs have been + -ing, and the same claim gets stronger or weaker with one adverb in front of it.
+   - teaches: `aspect/perfect-continuous`, `stance/booster-vs-hedge`, `discourse/evidence-then-result`
+   - Deepens: `present-perfect/duration-for-since` - the same for/since span now takes a verb that was already running when it started and has not stopped, which is the difference between what you have done and what you have been doing.
+   - Uses: `present-perfect/duration-for-since`, `present-perfect/vs-past-simple`, `past-simple/regular-ed`, `compare/degree-adverbs`
+   - Vocabulary: "I've been running", "I've been dealing with", "since then", "up to now", "I'd say", fairly, pretty, "no doubt", arguably, "to be fair", "hands down", "kind of"
+   - Examples: "I've been running the pricing models since 2022." / "I'd say it's fairly close, honestly." / "Hands down the hardest part was the migration." / "I've been doing this a while" with "yeah, I've been at it for ages" as the informal note under "I have a lot of experience"
+   - Real-world relevance: The answer that lands in an interview names what is still true rather than what was once true, and the booster is what turns a list of duties into a claim.
+
 
 ## Lesson 45: EXAM - block 2
 
    - Focus: Test whether the student can handle time depth, unreality, reported words and multi-clause output in a work exchange: report what someone said, deliver a delay, negotiate a change, and describe a trend.
    - teaches: -
    - Deepens: -
-   - Uses: `present-perfect/duration-for-since`, `present-perfect/vs-past-simple`, `pattern/verb-ing`, `pattern/verb-to-infinitive`, `condition/first-will`, `condition/second-would`, `condition/third-would-have`, `modal/should-have`, `data/trend-verb`, `data/change-rate`, `data/forecast`, `email/frame`, `email/direct-vs-indirect`, `meeting/interrupt-and-add`, `meeting/disagree-soften`, `meeting/paraphrase-back`, `passive/be-participle`, `passive/reporting`, `relative/who-which-that`, `relative/omitting-object`, `report/say-vs-tell`, `report/backshift`, `report/question-shift`, `report/ask-request`, `axis/phrasal-vs-latinate`, `axis/written-vs-spoken`, `informal/sidenote-pairing`, `meeting/pushback-hedged`, `meeting/counter-offer`, `meeting/find-middle`, `talk/roadmap-signpost`, `talk/refer-to-slide`, `update/bad-news-frame`, `update/recovery-commitment`, `service/complaint-apology`, `service/resolution-frame`, `career/evidence-answer`, `question/embedded-order`, `modal/request-ladder`, `prep/until-vs-by`, `meeting/close-next-step`, `axis/hedge`, `phrase-verb/default-form`, `compare/er-more-forms`, `connector/contrast`
+   - Uses: `present-perfect/duration-for-since`, `present-perfect/vs-past-simple`, `pattern/verb-ing`, `pattern/verb-to-infinitive`, `condition/first-will`, `condition/second-would`, `condition/third-would-have`, `modal/should-have`, `data/trend-verb`, `data/change-rate`, `data/forecast`, `nominalisation/verb-to-noun`, `modal/request-softening`, `discourse/turn-marker`, `concession/partial-agreement`, `report/paraphrase-summary`, `passive/be-participle`, `passive/reporting`, `relative/who-which-that`, `relative/omitting-object`, `report/say-vs-tell`, `report/backshift`, `report/question-shift`, `report/ask-request`, `axis/phrasal-vs-latinate`, `axis/written-vs-spoken`, `informal/sidenote-pairing`, `concession/even-though-despite`, `condition/trade-off`, `discourse/counter-move`, `hedge/claim-strength`, `hedge/data-limitation`, `mitigation/downgrade`, `discourse/bad-news-order`, `causative/have-get-done`, `politeness/downgrade-adverb`, `aspect/perfect-continuous`, `question/embedded-order`, `modal/request-ladder`, `prep/until-vs-by`, `question/echo-clarify`, `axis/hedge`, `phrase-verb/default-form`, `compare/er-more-forms`, `connector/contrast`
    - Vocabulary: -
    - Examples: -
    - Real-world relevance: This is the exam that matches the persona's real week: a client call and an internal review, both of which need the whole of block 1 as a floor.
@@ -480,22 +488,24 @@
    - Examples: "Could you say that again a bit slower?" / "It sounds like gonna but it's written going to." / "The stressed word carries the new information." / "I can hear the words separately now."
    - Real-world relevance: This persona sits in calls with fast native speech and misses content not because of vocabulary but because unstressed words are the ones that vanish.
 
-## Lesson 49: Fixed workplace idioms
+## Lesson 49: Idioms - what is frozen, what bends, and where it is allowed
 
-   - Focus: The set phrases a team says in the first five minutes, each tied to the move it performs.
-   - teaches: `idiom/work-fixed`, `idiom/meeting-fixed`, `idiom/risk-and-plain`
-   - Deepens: -
-   - Uses: `phrase-verb/default-form`, `meeting/open-frame`, `meeting/interrupt-and-add`, `talk/roadmap-signpost`
-   - Vocabulary: "touch base", "on the same page", "in the loop", "circle back", "deep dive", "big picture", "ballpark figure", "low-hanging fruit", "game changer", "move the needle", "pain point", "quick win"
-   - Examples: "Let's touch base on Thursday." / "I want to make sure we're on the same page." / "That's a ballpark figure, not a commitment." / "Could we take a deep dive into the numbers?"
-   - Real-world relevance: These are what a native team says while the real content is still being decided, and a professional who does not recognise them is always half a beat behind the room.
+   - Focus: Some blocks cannot change a word, some change one, and the register of the room decides whether the idiom is charm or a mistake.
+   - teaches: `idiom/frozen-form`, `idiom/idiom-vs-phrasal`, `idiom/register-split`
+   - Deepens: `phrase-verb/particle-meaning` - the particle that used to change a verb now appears in a block where no part may change at all, so the student draws the line between a verb they can bend and a block they cannot.
+   - Uses: `phrase-verb/default-form`, `phrase-verb/particle-meaning`, `axis/phrasal-vs-latinate`, `informal/sidenote-pairing`
+   - Vocabulary: "cut corners", "on the same page", "ballpark figure", "in the loop", "touch base", "bite the bullet", "under the radar", "back to square one", "swing by", "low-hanging fruit", "circle back", "drop the ball"
+   - Examples: "We're on the same page" / "we're aligned" / "we're reading the same book" - and only the first one is safe in a client email. / "Let's touch base Friday." spoken, against "Let's speak on Friday." written. / "I dropped the ball on that one" with "my bad, that's on me" as the informal note under "I made the mistake".
+   - Real-world relevance: The idiom is the fastest way into a room and the fastest way out of it, so the persona needs the ones that survive a client email apart from the ones that only work at the coffee machine.
 
-## Lesson 50: Reading the room - slang, sarcasm and text-speak
 
-   - Focus: The informal layer, always attached to the neutral phrase it replaces.
-   - teaches: `informal/slang-work`, `informal/sarcasm-markers`, `informal/text-speak`
-   - Deepens: `informal/sidenote-pairing` - the pairing mechanism is now used to build the informal layer itself, one neutral phrase and one informal note at a time.
-   - Uses: `informal/sidenote-pairing`, `axis/written-vs-spoken`, `sound/intonation-politeness`, `axis/phrasal-vs-latinate`
-   - Vocabulary: ain't, "that's cooked", "wtf", "lol", "yeah, whatever", "no way", "my bad", "screw up", "freak out", lowkey, vibe, "you're kidding"
-   - Examples: "It ain't ready" as the informal note under "It isn't ready" / "That's cooked" under "That plan won't work" / "Yeah, whatever" under "I don't have a strong view" / "My bad" under "That was my mistake"
-   - Real-world relevance: This persona has friends, family and a group chat, and recognising the tone is how they know which of the two forms a sentence belongs to before using it.
+## Lesson 50: Sarcasm, hype and text-speak - reading what was not said
+
+   - Focus: Sarcasm is carried by pitch and by the mismatch between the words and the fact, exaggeration has a scale of its own, and chat drops the vowels the sound can do without.
+   - teaches: `sarcasm/markers`, `hyperbole/exaggeration`, `reduction/text-speak`
+   - Deepens: `sound/intonation-politeness` - intonation now reverses the meaning instead of softening it, so the same rising contour is either a polite question or a flat contradiction.
+   - Uses: `sound/intonation-politeness`, `sound/weak-form`, `informal/sidenote-pairing`, `idiom/frozen-form`
+   - Vocabulary: "oh great", "sure, yeah right", "I'm dead", literally, "no way", "as if", "not even", lowkey, "nvm", "brb", "tbh", "stop"
+   - Examples: "Oh great, another meeting." - the words say good, the pitch says the opposite. / "I've told you a million times." - the number is the exaggeration, not the count. / "nvm", "tbh", "brb" in a chat against the full form in an email. / "That went well" with "well, that was a disaster" as the informal note under "it went badly"
+   - Real-world relevance: A persona who cannot hear the joke takes every sentence literally, and one who cannot tell chat from email sounds either cold or careless in exactly the wrong room.
+

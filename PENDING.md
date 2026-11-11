@@ -1,6 +1,27 @@
 # PENDING — Adherence.md [BATCHING] for current task
 
 
+## [43] - the business roadmap re-levelled: linguistic teaches items, real-world examples, nothing vague (2026-11-10)
+### [B1] - PRE-PROMPT RESEARCH <"update all lessons ... that are 'too easy' for their place in the roadmap"> <the roadmap read whole, the track's register, the rules that set a level, and every consumer of a pid> DONE with one premise corrected
+   - [S1] - `BUSINESS-ROADMAP.md` read whole, all 501 lines <a partial read would re-write the lessons I happened to open> DONE - 50 lessons; 48 carry `teaches`/`Vocabulary`/`Examples`; the two EXAMs (25, 45) carry `-`
+   - [S2] - `BUSINESS-REGISTER.md` read: what this track's register actually permits, since "too businessy" is a complaint against it <14 lines> DONE
+   - [S3] - `PEDAGOGY-MAP.md` read at the sections that define level, authoring and claims <a re-levelling that ignores the level scale is a guess> DONE
+   - [S4] - every consumer of a `teaches:` pid found <a renamed pid must be re-pointed in the same commit> DONE - **the premise was wrong**: there are no `data-pid` attributes anywhere. The attribute is `data-teaches=` (11 in business/lesson40.html) and nothing parses it. What does reference pids is the FILE ITSELF: `Uses:` (253 refs) and `Deepens:` (31 refs), plus the two EXAMs, which enumerate their whole block
+### [B2] - the difficulty audit <"that are 'too easy' ... for their place in the roadmap"> DONE
+   - [S1] - each lesson judged against what its number should carry, and against the situational pids <"Make the majority of the 'teaches:' items linguistic, not situational"> DONE - 12 lessons rebuilt: 21, 22, 31, 32, 39, 40, 41, 42, 43, 44, 49, 50. The rest were already linguistic and are byte-identical
+   - [S2] - the vague ones named individually with a replacement <"Re-think any items which are vague (eg. 'service/complaint-apology')"> DONE - 35 situational pids mapped one-to-one to a form or mechanism; `service/complaint-apology` -> `causative/have-get-done`, `service/de-escalate` -> `modal/deduction-must-might`, `talk/refer-to-slide` -> `hedge/data-limitation`, etc.
+### [B3] - the rebuild <"update all lessons ... add in more slang and realistic examples ... You can shuffle items"> DONE - 502 -> 512 lines; 12 blocks replaced whole, each with a new title, focus, 3 linguistic pids, a real `Deepens`, `Uses`, 12 real-speech items, 3-4 examples and a relevance line
+   - [S1] - the `teaches:` lines rewritten as linguistic concepts <the majority must be linguistic; a situational label teaches a setting, not a form> DONE - 36/36 new pids are `namespace/form`; the two new namespaces introduced are `causative/` and `sarcasm/`
+   - [S2] - Vocabulary and Examples refreshed toward real speech, with slang where the level earns it <"right now the track is WAY too businessy"> DONE - each entry keeps an informal note under the formal one ("yeah, that's not gonna fly", "my bad, that's on me", "well, that was a disaster", "hands down", "lowkey", "tbh")
+   - [S3] - the two EXAMs re-pointed, because they list their whole block <a rename that misses them leaves a reference to nothing> DONE - 19 pid references renamed in L25/L45
+### [B4] - verify <the file is read by two harnesses and referenced by itself> DONE
+   - [S1] - `qa/prose.mjs --track=business`: the A/B against the pre-change file <the word budget is derived from items and pids> DONE - output identical, line for line: same 52 rows, same allowances, the same 3 pre-existing failures (lesson7, lesson13, lesson45 520/300). No allowance shrank
+   - [S2] - `qa/provenance.mjs --selftest`, `qa/examples.mjs`, `qa/liquid.mjs` <the three that can see this file> DONE - selftest green, 8/8, 34 clean
+   - [S3] - the file's own references checked, since nothing else reads it <144 pids are only useful if `Uses`/`Deepens` still resolve> DONE - 144 pids, none taught twice, `Uses` 253 refs and `Deepens` 31 refs, **0 dangling either way**
+### [B5] - publish <commit-by-default; a push is not a publication> DONE - 0721ec0
+### [B6] - the one mismatch this exposes and does not fix <"no silent losses"> AWAITING USER - `business/lesson40.html` marks `data-teaches="duration-for-since"`, `"quantity-shortfall"`, `"concession-even-though"`, none of which is a pid in this roadmap (lesson 40 now teaches `concession/even-though-despite`, `condition/trade-off`, `discourse/counter-move`). Nothing reads the attribute, so nothing broke; the page and its plan disagree, and fixing it means re-authoring the page or re-pointing three strings
+
+
 ## [42] - the same heading rewrite applied to KIDS-ROADMAP.md (2026-11-10)
 ### [B1] - PRE-PROMPT RESEARCH <"do the same for KIDS-ROADMAP.md"> <whether the kids file has the same shape as adult, or a shape that breaks the digest> DONE - same field template and the same 50 lessons, but a DIFFERENT example separator, which is what "the same" had to be translated against
    - [S1] - the kids entries counted and their heading form read <a different template would make "the same" mean something else> DONE - 507 lines, 50 `## Lesson N: title` headings, 48 with `teaches`/`Vocabulary`/`Examples`; the 2 without are 25 and 45, the EXAMs, exactly as in adult
