@@ -18,7 +18,7 @@
    - [S1] - `qa/prose.mjs --track=business`: the A/B against the pre-change file <the word budget is derived from items and pids> DONE - output identical, line for line: same 52 rows, same allowances, the same 3 pre-existing failures (lesson7, lesson13, lesson45 520/300). No allowance shrank
    - [S2] - `qa/provenance.mjs --selftest`, `qa/examples.mjs`, `qa/liquid.mjs` <the three that can see this file> DONE - selftest green, 8/8, 34 clean
    - [S3] - the file's own references checked, since nothing else reads it <144 pids are only useful if `Uses`/`Deepens` still resolve> DONE - 144 pids, none taught twice, `Uses` 253 refs and `Deepens` 31 refs, **0 dangling either way**
-### [B5] - publish <commit-by-default; a push is not a publication> DONE - 0721ec0
+### [B5] - publish <commit-by-default; a push is not a publication> DONE - a957cca
 ### [B6] - the one mismatch this exposes and does not fix <"no silent losses"> AWAITING USER - `business/lesson40.html` marks `data-teaches="duration-for-since"`, `"quantity-shortfall"`, `"concession-even-though"`, none of which is a pid in this roadmap (lesson 40 now teaches `concession/even-though-despite`, `condition/trade-off`, `discourse/counter-move`). Nothing reads the attribute, so nothing broke; the page and its plan disagree, and fixing it means re-authoring the page or re-pointing three strings
 
 
