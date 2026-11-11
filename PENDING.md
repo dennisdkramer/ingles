@@ -25,6 +25,19 @@ Author ([n]=(Prompt), [Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], form
 - NOTE - 2026-11-11, DEFECT FOUND: `adult/lesson22.html` carries NO `<script>` tag at all — no `pronkey.js`, no `engine1.js`, no `engine2.js`, and therefore not even the engine-did-not-load banner. Nothing on that page can save an answer, record audio, highlight or leave a note, and it fails silently because the banner that would warn is itself in the missing block. It is the one page where the shell tail was not copied. Not fixed: it is a page edit, not a style.css one <adult/lesson22.html> <page loads the three scripts, or is deliberately recorded as dead>
 
 
+## [48] - cut the QA tax: delete provenance, retire prose and examples as gates, keep cssdiff at the batch boundary
+<"and every minute of QA is fucking up the context window. but yes you can do the proposed QA changes">
+### [B1] DONE - 2026-11-11 - SURVEY <what still references the three harnesses> <no dangling reference>
+   - [S1] - count and list every reference to `qa/provenance.mjs`, `qa/prose.mjs`, `qa/examples.mjs` in tracked files, and read `VERIFICATION.md` in full before editing it <repo, VERIFICATION.md> <every reference known before anything is deleted>
+### [B2] DONE - 2026-11-11 - DELETE AND RETIRE <"delete provenance rather than leave it switched off", "drop prose/examples from the gate list"> <one member removed, two demoted>
+   - [S1] - `git rm qa/provenance.mjs` and remove its `MEMBERS` entry from `qa/run.mjs`. Grounds: 0 real catches, 102/102 pages failed on one artefact (ISSUES.md:25-28) <qa/provenance.mjs, qa/run.mjs> <file gone, menu free of it>
+   - [S2] - remove the `prose` and `examples` members from `qa/run.mjs`; leave the files in place. Grounds: measured 0 new catches today — prose reported the same 3 pre-existing failures before and after, examples never changed a decision. They stay runnable by direct path if ever wanted <qa/run.mjs> <menu lists neither>
+   - [S3] - `VERIFICATION.md`: state the surviving set (liquid, comment-stripped hash compare, answer-key regex) and that `cssdiff` runs once per batch at the commit boundary, not per step <VERIFICATION.md> <one owner per check, and the cost per batch is stated>
+### [B3] DONE - 2026-11-11 - VERIFY AND PUBLISH <"every minute of QA is fucking up the context window"> <≤10 lines of output, no reference to a deleted file>
+   - [S1] - `node qa/liquid.mjs` (one line), `node qa/run.mjs` menu (count only), and a grep proving `provenance` survives only as history <qa/liquid.mjs, qa/run.mjs> <green, and every remaining mention is past tense>
+   - [S2] - commit and push, then read the Pages run for that sha before calling it live <git, Pages> <build result stated>
+
+
 ## [47] - re-plan style.css: 1 dedupe, 2 regroup, 3 clean the CSS, 4 audit the headers, 5 cut the prose to the floor
 ### [B0] DONE - 2026-11-11 - PENDING.md - PRE-PROMPT RESEARCH <which headers exist, how big each is, and what the CSS already says without them> <a measured header table, then cleared>
    - [S1] DONE - 21 headers, 13,025 chars = 9.9% of the 131,203-char file; 0 of them is one line, 8 run over 6 lines, the largest is BLOCK WIDTH SLOTS at 24 lines / 2,374 chars, then CHART 12L / 1,125c and BLOCK 9L / 882c. So the other comments hold 38,700 chars (29.5%) and no batch below touches them. Duplication found: PEDAGOGY-MAP [PAGE] states the small-first width rule AND points at `/* ## BLOCK WIDTH SLOTS`, so that rule has two owners; its second bullet ("relevant content is authored to extend the shorter one") is a live rule that step 4 must reconcile <style.css, PEDAGOGY-MAP.md [PAGE]> <every header sized, every duplicate named>

@@ -21,7 +21,7 @@ It was in the `qa` chain, which made every `npm run qa` red for reasons a page c
 suite is how a real page failure gets read as noise. It now runs as its own script. **Fix baseline, then put it
 back in `qa`.** Untouched by the lesson-generation work.
 
-## qa/provenance.mjs — DISABLED (2026-11-10): the `format` input it hashed was retired
+## qa/provenance.mjs — REMOVED (2026-11-11), was DISABLED (2026-11-10): the `format` input it hashed was retired
 `node qa/provenance.mjs` → **102 of 102 pages failed** (2026-11-10), each on the same line: `input FORMAT.md changed
 after this page was built (record 120eb47a, disk a34375bd)`. No page was at fault: the committed `FORMAT.md` blob
 hashed `73d7d037`, already different from `120eb47a`, so FORMAT.md had been edited after those records were built
@@ -32,6 +32,12 @@ point and exits 2** (`qa/run.mjs` labels it so) — not 0, because a skip that p
 **To re-enable: decide what `format` now hashes (the style.css `## ` headers, or nothing), change `CONTRACT` plus the
 `format` stub in `selftest()`, re-record the ledger, delete the banner.** Until then no member reports record drift,
 and a red from this one is the disable talking, not a page.
+
+**RESOLVED BY DELETION (2026-11-11, owner instruction):** the harness and its `qa/run.mjs` member are gone, so the
+"To re-enable" paragraph above no longer applies. Grounds, measured: 0 real catches, and its one visible result was
+102 of 102 pages failing on the same retired-input artefact. The ledger `provenance.jsonl` and the record format are
+unchanged — only the checker was removed. `prose` and `examples` were also retired as gates for the same reason
+(0 decisions changed), but their files remain runnable by direct path.
 
 ## adult/lesson22 — exists, is not a lesson page
 `qa/content.mjs --track=adult 22` → engine1.js and engine2.js did not execute, `#feed` missing, `.content-area`

@@ -21,7 +21,7 @@
  *
  * `scope` below was read off each file's import block, never assumed: content and overflow import
  * pickTracks/hasTrackFlag/pickLessons (structural), lang and register import pickVoiceTracks/
- * hasAllFlag/touchedScope (voice), and examples, games4, landing, live and build import none.
+ * hasAllFlag/touchedScope (voice), and games4, landing, live and build import none.
  */
 import { qaOff } from './off.mjs'; qaOff('run'); /* QA OFF - see qa/off.mjs */
 import path from 'path';
@@ -33,14 +33,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MEMBERS = {
   build:    { file: 'build-lessons.mjs', scope: false,
               what: 'derive lessons.json from every page h1 — writes a file, audits nothing' },
-  examples: { file: 'qa/examples.mjs',   scope: false,
-              what: 'CONTENT_EXAMPLES.md structure; every draft built in the preview page has an item' },
   content:  { file: 'qa/content.mjs',    scope: true,
               what: 'the page works: engines run, answers save, required blocks present' },
-  provenance: { file: 'qa/provenance.mjs', scope: true,
-              what: 'DISABLED (exits 2): FORMAT.md was retired and this member hashed it — repoint the `format` hash, then re-enable (ISSUES.md)' },
-  prose:    { file: 'qa/prose.mjs',      scope: true,
-              what: "the page's sentences: every claim checkable, every explanation inside its budget" },
   lang:     { file: 'qa/lang.mjs',       scope: true,
               what: 'voice: the language the page explains in' },
   register: { file: 'qa/register.mjs',   scope: true,
