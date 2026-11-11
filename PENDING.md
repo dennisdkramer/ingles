@@ -35,6 +35,12 @@ Author ([n]=(Prompt), [Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], form
 <"but why is QA touching in-block-visuals.md or the preview page?">
 ## [53] - qa/brief.mjs: the generation brief that puts PEDAGOGY-MAP.md in front of the build twice, and ends on a gate (twelve asked for, eight after owner review)
 <"build the brief+reassert + 12 rule gate (only reassert pedagogy-map.md, maybe try just one extra copy for now)" + "i dont like the idea of emitting 40 items, maybe we emit 1 in every 10, so about 4 per page">
+## [55] - G2 becomes the challenge question, not a shape rule; and a duplicated rule line deleted
+<"g2 no. stop making overly limiting rules. make g2 work with our 'is it challenging to the student?' concept, of content level. can that be a mechanical check?">
+### [B1] BREACH NOTED - the gate edit and the dedup ran before this entry existed <adherence:9>
+   - [S1] DONE - `qa/brief.mjs` [G2] is now "Is every item CHALLENGING for this level — its load at or above the lesson number, and nothing a level-N student would answer without thinking". The old form-choice and length wording is gone. The old standalone load line folded into it, so the gate is **seven** questions, not eight. The comment above the array says why: this system already quantifies "challenging" as `load = L x M` against the lesson number, so the two lines were one question <qa/brief.mjs> <seven lines>
+   - [S2] DONE - and it deleted a real defect found while quoting the load rules: `PEDAGOGY-MAP.md:52` and `:53` were **byte-identical**, both 1,120 chars (`52 == 53 -> True`). One copy removed by exact-duplicate match, 88 -> 87 lines. The file is still uncommitted with owner edits, so this deletion is part of the working tree, not a commit of mine <PEDAGOGY-MAP.md> <no duplicate long line remains>
+
 ## [54] - show the gate text as printed
 <"show me the full text of the gate">
 ### [B1] DONE - 2026-11-11 - PRINT THE GATE <the twelve lines, as emitted> <nothing changed>
