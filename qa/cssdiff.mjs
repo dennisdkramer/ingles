@@ -174,9 +174,9 @@ async function main() {
   await ses.send('Runtime.enable');
   /* An activity that places art or shuffles options with Math.random() lays out differently on every
      load, and a page whose DOM grows after a fixed sleep is measured mid-build. Both read as "the
-     cascade changed" when nothing changed, so the run is pinned before any page script executes. */
+     cascade changed" when nothing changed. The pin is a CONSTANT, not a seeded sequence: a seeded generator only reproduces a shuffle while its CALL ORDER is stable, and an async load reorders the calls. */
   await ses.send('Page.addScriptToEvaluateOnNewDocument', {
-    source: '(function(){var s=12345;Math.random=function(){s=(s*1103515245+12345)&0x7fffffff;return s/0x7fffffff}})()'
+    source: '(function(){Math.random=function(){return 0.5}})()'
   });
 
   const count = async () => {
@@ -185,15 +185,15 @@ async function main() {
   };
 
   /* wait for the DOM to stop growing rather than for a guessed number of milliseconds: three
-     identical counts in a row means the page has finished building itself */
+     identical counts over 2s means the page has finished building itself (three samples is not enough: lesson40 inserts nodes about a second in) */
   const settle = async () => {
     let last = -1, same = 0;
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 40; i++) {
       const n = await count();
       same = n === last ? same + 1 : 0;
       last = n;
-      if (same >= 2) return n;
-      await sleep(200);
+      if (same >= 8) return n;
+      await sleep(250);
     }
     return last;
   };

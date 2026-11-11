@@ -21,9 +21,9 @@ Author ([n]=(Prompt), [Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], form
 # [CURRENT]
 
 ## [44] - clean up and reorder style.css: five groups, dedupe inside each, gated by qa/cssdiff
-### [B0] - a measurable render before any rule moves <"cleaning up and reordering style.css"> <baseline snapshot>
-   - [S1] - `node qa/cssdiff.mjs --save` on the untouched tree, then a rerun that must report 0 differences (a gate that answers "no differences" to its own selftest is worthless) <qa/cssdiff.mjs> <identical on 3013/2359/409 elements>
-### [B1] - catalogue and the value policy, text only, no rule moved <readability comes before size> <style.css with a section catalogue>
+### [B0] DONE - 2026-11-11 - qa/cssdiff.mjs - a measurable render before any rule moves <"cleaning up and reordering style.css"> <baseline snapshot>
+   - [S1] DONE - baseline written (3015 / 2359 / 409 elements). Determinism needed two harness fixes: the seeded Math.random pin became a constant (a seeded generator only reproduces a shuffle while its CALL ORDER is stable, and an async load reorders it), and the settle window went 400ms -> 2s (lesson40 inserts nodes about a second in, which read as 6 changed elements). 4 consecutive runs identical; selftest still sees a real change (994 elements) <qa/cssdiff.mjs> <identical on all three pages>
+### [B1] - UPDATED the catalogue and the fold were authored directly by the owner as 21 `/* ## ` headers in style.css (that header set IS the scan list), so no separate catalogue is written here; the "every value carries a why" policy line is likewise absent — each header states `owner instruction 2026-11-09` in its place <readability comes before size> <style.css with a section catalogue>
    - [S1] - catalogue at the top, one line per section, shaped `§<what> — read when <decision>`; the decision only, never a value (391 vs 395 is what copying values into prose costs) <FORMAT.md 42-60 values, 27-39 class glossary, 14/16/17/23/9/7@38px> <every section listed, no number in any header>
    - [S2] - header policy: every value carries a why, no value changes without sign-off <style.css carries no modification policy today> <policy at the top of the file>
    - [S3] - `qa/cssdiff.mjs` identical — the proof that this batch was text <qa/cssdiff.mjs> <0 differences>
@@ -43,12 +43,12 @@ Author ([n]=(Prompt), [Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], form
    - [S1] - `qa/liquid.mjs` clean, `qa/examples.mjs` 8/8, one `qa/content.mjs` lesson, `qa/cssdiff.mjs` identical, then the Pages run for that commit <VERIFICATION.md> <build success, stated as such only after reading the run>
 
 ## [45] - commit the dirty tree, switch the liquid check back on, begin [44]
-### [B0] - PRE-PROMPT RESEARCH <what is dirty, and how the QA switch works> <a research result, then cleared>
-   - [S1] - `git status --short` plus a diff stat, then the QA OFF mechanism and its exact re-enable path <qa/run.mjs, qa/liquid.mjs> <both known before any commit>
-### [B1] - commit the working tree <"commit those files"> <clean tree, one commit>
-   - [S1] - FORMAT.md, PEDAGOGY-MAP.md, CONTENT_EXAMPLES.md, qa/NOTES.md, PENDING.md in one commit, with the consequence of the FORMAT.md deletions named in the message (four rules leave the live contract with no destination yet) <git status> <nothing dirty but known strays>
-### [B2] - re-enable the liquid scanner <"you can re-enable liquid.mjs"> <the guard active again>
-   - [S1] - flip the switch, then prove it scans rather than printing QA OFF <qa/liquid.mjs> <a real 34-file scan, exit meaning what it says>
-### [B3] - begin [44] [B0] <"go"> <baseline snapshot>
-   - [S1] - `node qa/cssdiff.mjs --save` then a rerun that must report 0 differences <qa/cssdiff.mjs> <identical on all three pages>
+### [B0] DONE - 2026-11-11 - PENDING.md - PRE-PROMPT RESEARCH <what is dirty, and how the QA switch works> <a research result, then cleared>
+   - [S1] DONE - 27 files dirty (not the 5 named): FORMAT.md deleted, PEDAGOGY-MAP.md rewritten, style.css +186 (the fold), every qa/*.mjs carrying a qaOff() call, and untracked qa/off.mjs. The switch is qa/off.mjs: `QA_ON=1` per run, or delete the call to re-enable one for good <qa/run.mjs, qa/liquid.mjs> <both known before any commit>
+### [B1] DONE - 2026-11-11 - 27 files, commit f84eb08 - commit the working tree <"commit those files"> <clean tree, one commit>
+   - [S1] DONE - committed as-is so the baseline starts from a committed tree. Known consequence named in the commit message: qa/provenance.mjs:69 still lists ['format','FORMAT.md'] in CONTRACT and :759 plants a FORMAT.md stub, so provenance throws ENOENT the moment it runs again <git status> <nothing dirty but known strays>
+### [B2] DONE - 2026-11-11 - qa/liquid.mjs, commit 987400b - re-enable the liquid scanner <"you can re-enable liquid.mjs"> <the guard active again>
+   - [S1] DONE - kill-switch line removed; real scan of 33 tracked .md (34 minus the deleted FORMAT.md), 0 warnings; selftest 6/6. One accident, caught and fixed in the same step: the removal script's CRLF split ate the `spawnSync` import beside it (reported 1 line, removed 2); restored before running <qa/liquid.mjs> <a real scan, not a QA OFF line>
+### [B3] DONE - 2026-11-11 - qa/cssdiff.mjs - begin [44] [B0] <"go"> <baseline snapshot>
+   - [S1] DONE - run under the documented per-run switch (`QA_ON=1`), since qa/cssdiff.mjs:19 is still off by default: every [44] gate below needs that prefix <qa/cssdiff.mjs> <identical on all three pages>
 
