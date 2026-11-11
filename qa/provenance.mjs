@@ -87,14 +87,24 @@ function roadmapSpan(text, n) {
   const lines = String(text).split(/\r?\n/);
   const heads = [];
   lines.forEach((l, i) => {
-    const m = l.match(/^##\s+Lesson\s+(\d+)\s*:/);
-    if (m) heads.push({ n: Number(m[1]), i });
+    const m = l.match(/^##\s+(?:Lesson\s+(\d+)\s*:|\[(\d+)\])/);
+    if (m) heads.push({ n: Number(m[1] || m[2]), i });
   });
   const at = heads.findIndex(h => h.n === n);
   if (at < 0) return null;
   const start = heads[at].i + 1;
   const end = at + 1 < heads.length ? heads[at + 1].i : lines.length;
-  return { start, end, body: lines.slice(start, end).join('\n') };
+  return { head: lines[heads[at].i], start, end, body: lines.slice(start, end).join('\n') };
+}
+
+/**
+ * an entry's heading, in either form: `## Lesson 12: title` or `## [12] - teaches · vocabulary · example`.
+ * The second form carries what the fields below it no longer repeat, so it is read WITH them and the
+ * counts do not shrink when an item moves up into the heading.
+ */
+function headingSegs(text) {
+  const line = String(text).split(/\r?\n/).find(l => /^##\s+\[\d+\]/.test(l));
+  return line ? line.replace(/^##\s+\[\d+\]\s*-\s*/, '').split(/\s+·\s+/) : [];
 }
 
 /**
@@ -105,8 +115,9 @@ function roadmapSpan(text, n) {
  */
 function roadmapVocabulary(body) {
   const line = String(body).split(/\r?\n/).find(l => /^\s*-\s*Vocabulary\s*:/i.test(l));
-  if (!line) return [];
-  const rest = line.replace(/^\s*-\s*Vocabulary\s*:/i, '').trim();
+  const fromHead = headingSegs(body)[1] || '';
+  const rest = [fromHead, line ? line.replace(/^\s*-\s*Vocabulary\s*:/i, '').trim() : ''].filter(Boolean).join(', ');
+  if (!rest) return [];
   const parts = [];
   let cur = '', inQ = false;
   for (const ch of rest) {
@@ -121,7 +132,8 @@ function roadmapVocabulary(body) {
 /** the `- teaches:` line of one lesson entry — the concept ids that lesson is held to */
 function roadmapTeaches(body) {
   const line = String(body).split(/\r?\n/).find(l => /^\s*-\s*teaches\s*:/i.test(l));
-  if (!line) return [];
+  const head = headingSegs(body)[0];
+  if (!line) return head ? [...head.matchAll(/`([^`]+)`/g)].map(m => norm(m[1])).filter(Boolean) : [];
   const rest = line.replace(/^\s*-\s*teaches\s*:/i, '').trim();
   const backticked = [...rest.matchAll(/`([^`]+)`/g)].map(m => norm(m[1])).filter(Boolean);
   if (backticked.length) return backticked;
@@ -369,7 +381,7 @@ function auditLesson({ root, track, n, record, peers, retired }) {
   const rmFile = path.join(root, track.toUpperCase() + '-ROADMAP.md');
   const span = fs.existsSync(rmFile) ? roadmapSpan(fs.readFileSync(rmFile, 'utf8'), n) : null;
   if (!span) {
-    errors.push('the roadmap has no `## Lesson ' + n + ':` heading — nothing this lesson is held to can be located');
+    errors.push('the roadmap has no `## [' + n + ']` heading (or `## Lesson ' + n + ':`) — nothing this lesson is held to can be located');
   }
 
   /* ---- what only the ledger can vouch for; skipped once it is retired ---- */
@@ -420,7 +432,7 @@ function auditLesson({ root, track, n, record, peers, retired }) {
 
   // coverage — [k], measured against the roadmap's own vocabulary line
   if (span) {
-    const items = roadmapVocabulary(span.body);
+    const items = roadmapVocabulary(span.head + '\n' + span.body);
     const quiz = page.sections.length ? page.sections[page.sections.length - 1] : null;
     const trainText = page.sections.slice(0, -1).map(s => s.text).join(' ');
     const present = [], absent = [], untrained = [];
@@ -473,7 +485,7 @@ function auditLesson({ root, track, n, record, peers, retired }) {
        student produce that tense, in practice and again in the quiz. The page declares which block
        trains which concept with `data-teaches="<pid>"`; without that declaration nothing can tell a
        page that trains the tense from a page that only names it. */
-    const concepts = roadmapTeaches(span.body);
+    const concepts = roadmapTeaches(span.head + '\n' + span.body);
     const trainSecs = page.sections.slice(0, -1);
     const trainedPids = new Set();
     trainSecs.forEach(s => s.pids.forEach(p => trainedPids.add(p)));

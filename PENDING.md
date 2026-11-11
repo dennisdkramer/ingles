@@ -1,6 +1,22 @@
 # PENDING — Adherence.md [BATCHING] for current task
 
 
+## [41] - ADULT-ROADMAP headings rewritten as the digest, and the two readers taught to read it (2026-11-10)
+### [B1] - PRE-PROMPT RESEARCH <"should we make pedagogy-map.md scan all the headings to understand the broader context"> <what the roadmap's headings carry today, and who parses them> DONE
+   - [S1] - the roadmap's shape counted, not assumed <50 entries, 509 lines, one entry per ~10 lines; 48 carry `teaches`/`Vocabulary`/`Examples`, 2 do not (25 and 45, the two EXAMs)>
+   - [S2] - every consumer of the heading found <qa/prose.mjs:lessonBlock (regex `^##\s+Lesson\s+N\s*:`) and qa/provenance.mjs:roadmapSpan (the same regex, and `range` is written from it). Both also read `- teaches:` and `- Vocabulary:` by field label, so moving those items changes every allowance they compute>
+   - [S3] - is ` · ` safe as the segment separator? <the Examples line already uses it as its own separator> DONE - 48 middle dots in the file, ALL on `Examples:` lines and none on a `Vocabulary:` line, and the first example is derived by splitting on it, so no segment can contain one
+### [B2] - the rewrite <"rewrite the header for all of the lessons in ADULT-ROADMAP.md like this: '## [#] - <teaches> <first 3 Vocabulary> <first Example>'"> DONE
+   - [S1] - 50 headings rewritten to `## [N] - <teaches> · <first 3 vocabulary> · <first example>` <script-applied, so no entry can be half-converted> DONE - 340 lines changed; 509 lines -> 461
+   - [S2] - the `- teaches:` line deleted from all 48, and the 3 vocab items and the first example removed from the fields they moved out of <"Delete the '- teaches:' line and the items from vocabulary and examples that were moved"> DONE - line counts now teach 0 · Vocab 48 · Examples 48 · Focus 50 · Uses 50 · relevance 48
+   - [S3] - the two EXAMs keep their own titles, because they carry none of the three fields <25 and 45> DONE - `## [25] - EXAM — can the student hold a casual night out…`, same for 45
+### [B3] - the readers taught both forms, so the measurement does not shrink <the heading now carries 3 items and 4 pids that used to be fields> DONE
+   - [S1] - `qa/prose.mjs`: `lessonBlock` matches `## Lesson N:` or `## [N]`, returns the heading with the body, and `itemsOf`/`pidsOf` read the heading's segments <otherwise 3 items vanish per lesson and every budget shrinks by 180 words> DONE - A/B on the whole adult track, old roadmap vs new: identical allowances and identical word counts on all 23 pages, including the 2 pre-existing failures (lesson7 1156/1080, lesson13 1249/1080)
+   - [S2] - `qa/provenance.mjs`: `roadmapSpan` accepts both forms and returns `head`; `roadmapVocabulary`/`roadmapTeaches` read the heading with the fields <it keeps its own duplicate extractors> DONE - the real functions lifted out of the file and run on lesson 40 return the 3 heading items + the 7 field items; `--selftest` green; business (still old form) resolves its span
+### [B4] - what this does NOT yet do <the point of the rewrite is a scan, and a scan needs permission> NOT EXECUTED - PEDAGOGY-MAP's reading list still says `a) <TRACK>-ROADMAP.md [LESSON #] - read as its own line range`, so no build is told to read every heading yet. That is one line in the owner's file, and [40] Phase 3 is where it belongs
+### [B5] - consequences to report, not to fix <no silent losses> DONE - (i) the human title is gone from the 48, replaced by pids+vocab+example; offer to append `— <title>` if the owner wants it back. (ii) deleting 48 `teaches` lines moves every adult `range` down, by 1 per entry, so an existing record's `range` claim no longer matches - moot while provenance has no records for these pages. (iii) BUSINESS and KIDS roadmaps are untouched and still parse, by design
+
+
 ## [40] - the migrate/merge plan for emptying FORMAT.md, with PEDAGOGY-MAP given full authority (2026-11-10)
 ### [B1] - the owner's rulings assimilated <the four buckets, plus: structure to PEDAGOGY-MAP, 21/29/30 to FUNCTION [CONTENT], provenance to be weakened, only h) and l) of [GENERATION] to PEDAGOGY-MAP, m) to [INSTRUCTIONS] "maybe", trim everything false or conflicting> DONE - restated as destinations below
 ### [B2] - the destination table, line by line, against the file as it stands (60 lines)

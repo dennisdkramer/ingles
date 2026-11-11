@@ -104,20 +104,28 @@ function proseOf(sec) {
 
 const lessonBlock = (text, n) => {
   const lines = text.split(/\r?\n/);
-  const at = lines.findIndex(l => new RegExp('^##\\s+Lesson\\s+' + n + '\\s*:').test(l));
+  const at = lines.findIndex(l => new RegExp('^##\\s+(?:Lesson\\s+' + n + '\\s*:|\\[' + n + '\\])').test(l));
   if (at < 0) return '';
-  const out = [];
+  const out = [lines[at]];
   for (let i = at + 1; i < lines.length && !/^##\s/.test(lines[i]); i++) out.push(lines[i]);
   return out.join('\n');
 };
+/* an entry's heading carries what its fields no longer repeat: teaches · vocabulary · example */
+const headingSegs = block => {
+  const line = String(block).split(/\r?\n/).find(l => /^##\s+\[\d+\]/.test(l));
+  return line ? line.replace(/^##\s+\[\d+\]\s*-\s*/, '').split(/\s+·\s+/) : [];
+};
+const splitItems = s => String(s).split(/,\s*(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(x => x.replace(/^["']|["']$/g, '').trim()).filter(Boolean);
 const itemsOf = block => {
   const m = block.match(/^\s*-\s*Vocabulary:\s*(.*)$/m);
-  if (!m) return [];
-  return m[1].split(/,\s*(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(s => s.replace(/^["']|["']$/g, '').trim()).filter(Boolean);
+  const segs = headingSegs(block);
+  return [...new Set([...(segs[1] ? splitItems(segs[1]) : []), ...(m ? splitItems(m[1]) : [])])];
 };
 const pidsOf = block => {
   const m = block.match(/^\s*-\s*teaches:\s*(.*)$/m);
-  return m ? [...m[1].matchAll(/`([^`]+)`/g)].map(x => x[1]) : [];
+  if (m) return [...m[1].matchAll(/`([^`]+)`/g)].map(x => x[1]);
+  const segs = headingSegs(block);
+  return segs[0] ? [...segs[0].matchAll(/`([^`]+)`/g)].map(x => x[1]) : [];
 };
 
 /** the whole verdict for one page, given its html and its own lesson's roadmap text */
