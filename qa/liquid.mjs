@@ -31,7 +31,6 @@
  *
  * Run: node qa/liquid.mjs [path …] [--selftest]
  */
-import { qaOff } from './off.mjs'; qaOff('liquid'); /* QA OFF - see qa/off.mjs */
 import { spawnSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
