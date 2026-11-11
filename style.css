@@ -52,9 +52,6 @@ header.brand{width:1400px;margin-left:15px;text-align:center;padding:20px 14px 0
 /* the shell is not text to work with */
 header.brand,.control-bar,.barhelp,footer{user-select:none;-webkit-user-select:none}
 .barhelp .hlk{padding:0 4px;border-radius:4px}
-.barhelp .hlk-y{background:rgba(255,233,112,.85)}
-.barhelp .hlk-g{background:rgba(64,200,96,.7)}
-.barhelp .hlk-r{background:rgba(255,64,64,.7)}
 header.brand img{width:120px;filter:drop-shadow(3px 4px 0 var(--rose))}
 /* ## LESSON TITLE — h1
    One line at a FIXED 38px, centred in the 1200px content area: the title is WRITTEN short enough to sit
@@ -83,7 +80,6 @@ main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
    it through `--edge`), 16px radius, a 5px 5px 0 tan hard shadow, 14px/18px padding and a 14px rhythm.
    `.center` centres its text. It is also the landing page's column card — one look, two jobs. */
 .card{--edge:var(--ink);background:var(--paper);border:2px solid var(--edge);border-radius:16px;box-shadow:5px 5px 0 var(--tan);padding:14px 18px;margin:14px 0}
-.row{margin:6px 0}
 button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;margin:4px 4px 4px 0;font:600 14px var(--serif);cursor:pointer;box-shadow:3px 3px 0 var(--tan)}
 
 /* one shared hover/press for EVERY button */
@@ -152,9 +148,9 @@ mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-positio
 .pop.hlpalpop{padding:4px;border-radius:12px;box-shadow:3px 3px 0 var(--tan)}
 .hlpal{display:flex;align-items:center;gap:4px}
 .hlpal button{width:14px;height:14px;min-width:14px;padding:0;margin:0;border:2px solid var(--ink);border-radius:6px;box-shadow:none;cursor:pointer}
-.hlpal button[data-c="yellow"]{background:rgba(255,233,112,.85)}
-.hlpal button[data-c="red"]{background:rgba(255,64,64,.7)}
-.hlpal button[data-c="green"]{background:rgba(64,200,96,.7)}
+.barhelp .hlk-y,.hlpal button[data-c="yellow"]{background:rgba(255,233,112,.85)}
+.barhelp .hlk-r,.hlpal button[data-c="red"]{background:rgba(255,64,64,.7)}
+.barhelp .hlk-g,.hlpal button[data-c="green"]{background:rgba(64,200,96,.7)}
 /* THE SITE'S ONE CONFIRMATION DIALOG (owner instruction 2026-11-09): a browser popup cannot be styled, blocks
    the whole tab, cannot speak this page's own language or voice, and can be suppressed by the user —
    after which a destructive action runs with no prompt at all. eodConfirm() (identical block in engine1.js
@@ -255,8 +251,7 @@ h3{font-family:'Playfair Display',serif;font-weight:700;font-size:19px;color:var
    Bia), whatever the scene is about: the student is learning English in an English world, so a name that
    only exists in Portuguese makes the scene Portuguese again. */
 .dialog{--edge:var(--rose);margin:14px 0;padding:12px 16px;background:#fff8ea;border:2px solid var(--edge);border-radius:12px}
-.dialog p{margin:6px 0}
-.dialog-title{font-weight:700}
+.row,.dialog p{margin:6px 0}
 
 /* ## LISTEN CHIP — .listen
    A compact ▶ audio chip placed INLINE beside the words it speaks: the tan/ink button skin, 14px,
@@ -306,7 +301,6 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 /* the 14px rhythm between a block and its neighbours, and the 10px inset inside a panel's frame */
 .content-area > .panel{margin:14px 0}
 .panel h3{margin-top:0}
-.panel > :not(h3){margin-left:10px;margin-right:10px}
 .panel .chart{width:calc(100% - 20px)}
 
 /* ## BLOCK WIDTH SLOTS — .itemsize / -half / -third / -twothird / .itemrow
@@ -334,7 +328,6 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
    that should match ends 50px apart (measured, on infoGap). Put `itemsize-*`, `data-kind` and `data-move`
    on the block itself. */
 .itemsize{width:100%}
-.itemsize-half{width:calc(50% - 7px)}
 .itemsize-third{width:calc(33.3333% - 9.3333px)}
 /* a two-thirds block, alone on its row or paired with a third: the same 14px gap budget */
 .itemsize-twothird{width:calc(66.6667% - 9.3333px)}
@@ -342,9 +335,9 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .itemrow[data-cols="2"]>.itemsize-twothird{width:calc(66.6667% - 9.3333px)}
 .itemrow{display:flex;gap:14px;margin:14px 0;align-items:stretch}
 .itemrow>*{min-width:0;margin:0}
-.itemrow[data-cols="2"]>*{width:calc(50% - 7px)}
+.itemsize-half,.itemrow[data-cols="2"]>*{width:calc(50% - 7px)}
 .itemrow[data-cols="3"]>*{width:calc(33.3333% - 9.3333px)}
-.content-area > h2, .content-area > p{margin-left:10px;margin-right:10px}
+.panel > :not(h3),.content-area > h2, .content-area > p{margin-left:10px;margin-right:10px}
 /* ## QUESTION GRID & ITEM NUMBERING — .qgrid / .qitem / .qnum / .qstem / .qopts
    The template is qnum | stem in two columns with the options under the stem, and `.qgrid`, `.panel` and
    `.qopts` cap NOTHING — no option count, no item count, no block size: an item's option count is its
@@ -356,7 +349,6 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .qgrid{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;column-gap:14px;row-gap:12px;min-width:0}
 
 .qgrid .qopts,.qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 30px}
-.qgrid .qnum,.qgrid .qstem{font-weight:700}
 /* ## FILL-IN ROWS — .blanks / .blanks.cols / .blanks.sent / .ans
    `.blanks` is a wrapping row of word + blank pairs (`<div><span class="ptw">word</span><input class="gap">
    </div>`); the block's own markup decides the arrangement, and nothing here aligns the gaps, columns the
@@ -371,14 +363,13 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .blanks>div input.gap{flex:0 0 auto}
 /* Complete and Clear: Complete puts each key on its own line under its field and greens the right option;
    Clear takes back the answers, the keys and the page lock (FUNCTION.md [CONTENT]) */
-.blanks>div.has-ans{flex-wrap:wrap}
 .ans{display:block;flex:1 1 100%;width:100%;margin:2px 0 0;font-size:13px;line-height:1.35;font-weight:700;color:#2f7d32;text-align:left}
 .qopts label.correct{background:#e6f4e7;border-radius:8px;padding:1px 6px;color:#1f5d22}
 
 /* ## GLOSS DROP — .glossdrop (a per-block opt-in, used when the page asks for it, never imposed)
    Drops a pair's gloss onto its own line: `.blanks.glossdrop` wraps the pair and right-aligns the `.ptw`,
    and `.chart.glossdrop .ptw` becomes a block of its own under the cell. */
-.blanks.glossdrop>div{flex-wrap:wrap}
+.blanks>div.has-ans,.blanks.glossdrop>div{flex-wrap:wrap}
 .blanks.glossdrop>div .ptw{flex:1 1 100%;text-align:right}
 .chart.glossdrop .ptw{display:block}
 
@@ -469,7 +460,7 @@ body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 .control-bar>button,.control-bar .barsel>.bookbtn{box-sizing:border-box;height:32px;min-height:32px;padding-top:0;padding-bottom:0;display:inline-flex;align-items:center;justify-content:center;line-height:1}
 .control-bar>select{box-sizing:border-box;height:32px;min-height:32px;padding-top:0;padding-bottom:0}
 .bookitem.cur{background:rgba(185,133,76,.14);border-radius:6px}
-.bookitem.cur a.ltitle{font-weight:700}
+.dialog-title,.qgrid .qnum,.qgrid .qstem,.bookitem.cur a.ltitle{font-weight:700}
 .complete-btn{display:block;margin:14px auto;width:fit-content;font-weight:700}
 .complete-btn:not(.is-done){background:#5b6b84;box-shadow:3px 3px 0 var(--tan)}
 .complete-btn.is-done{background:#0f766e;box-shadow:3px 3px 0 var(--tan)}
@@ -587,11 +578,9 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
 .game:not(.is-on) .game-stage{display:none}
 .game.is-on .game-list{display:none}
 .game-prompt{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:3;background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:4px 14px;font-weight:700;font-size:15px;white-space:nowrap;opacity:0;transition:opacity .45s ease}
-.game-prompt.in{opacity:1}
 .game-hud{position:absolute;right:10px;top:8px;z-index:3;display:flex;gap:12px;font-weight:700;font-size:14px;color:var(--ink)}
 .game-hud .clock{min-width:3.4em;text-align:right}
 .game-fade{position:absolute;inset:0;z-index:4;background:var(--paper);opacity:0;pointer-events:none;transition:opacity .5s ease}
-.game-fade.on{opacity:1}
 .target{position:absolute;left:0;top:0;width:118px;height:104px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;cursor:crosshair;will-change:transform;z-index:2}
 html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;border-radius:8px}
 .target svg{display:block;width:118px;height:74px;color:#f3b23c}
@@ -627,10 +616,9 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    never the furniture of the first item (ladderRun's prompt board, bossRaid's health bar), because that
    is the question printed on a block nobody has started. */
 .g4-poster{position:absolute;inset:0;pointer-events:none;opacity:.95}
-.g4-poster .g4-bit{position:absolute}
 .g4-poster .g4-bucket,.g4-poster .g4-mole,.g4-poster .g4-gate,
 .g4-poster .g4-mine,.g4-poster .g4-btile,.g4-poster .g4-pad,.g4-poster .g4-rung,
-.g4-poster .g4-hole,.g4-poster .g4-tile,.g4-poster .g4-gap{position:absolute}
+.g4-poster .g4-bit,.g4-poster .g4-hole,.g4-poster .g4-tile,.g4-poster .g4-gap{position:absolute}
 
 
 .g4-intro .game-how{max-width:62ch;margin:0}
@@ -674,7 +662,6 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    been played, so the score and the hearts are not on it at all. They appear when Play puts the game
    on and go again with it, for every game. */
 .g4-hud,.g4-hearts{opacity:0;transition:opacity .25s ease}
-.game.g4-ready.is-on .g4-hud,.game.g4-ready.is-on .g4-hearts{opacity:1}
 .g4-hud{position:absolute;right:20px;top:20px;z-index:5;display:flex;flex-direction:row-reverse;align-items:flex-start;gap:10px;font:700 14px var(--ui-tight);color:var(--ink)}
 .g4-hud .score{min-width:2.6em;padding:3px 12px;text-align:center;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);font:700 22px/1.2 'Playfair Display',serif;letter-spacing:.14em}
 .g4-hud .clock{min-width:3.2em;text-align:right}
@@ -684,15 +671,12 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    printed under the block. Hidden during a run, and until a run has finished. */
 .g4-prev{position:absolute;right:20px;top:20px;z-index:6;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:66px;padding:4px 12px 6px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);font:700 12px var(--ui-tight);color:var(--ink);opacity:0;transition:opacity .25s ease;pointer-events:none}
 .g4-prev b{font:700 20px/1.15 'Playfair Display',Georgia,serif;letter-spacing:.1em}
-.game.g4-ready:not(.is-on) .g4-prev.on{opacity:1}
 /* hearts: a game that reports lives shows them in the stage's TOP-LEFT corner, 20px in, on the same
    card as the score. A spent life is a hollow heart rather than a missing one, so the row is the same
    width all run and a life lost reads as a heart going out. */
 .g4-hearts{position:absolute;left:20px;top:20px;z-index:5;display:flex;gap:2px;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);font:700 18px/1 var(--ui-tight);letter-spacing:1px;color:#d64545}
 .g4-heart{opacity:.26}
-.g4-heart.full{opacity:1}
 .g4-prompt{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:4;max-width:calc(100% - 240px);padding:5px 16px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);font-weight:700;font-size:15px;text-align:center;opacity:0;transition:opacity .28s ease}
-.g4-prompt.in{opacity:1}
 /* the deadline is a bar you can watch empty */
 .g4-timebar{position:absolute;left:0;right:0;bottom:0;z-index:6;height:8px;background:rgba(24,33,54,.12)}
 .g4-timebar i{display:block;height:100%;width:100%;background:var(--green);transition:width .1s linear,background .2s}
@@ -722,8 +706,6 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 @keyframes g4land{from{transform:translateY(-26px);opacity:0}to{transform:none;opacity:1}}
 @keyframes g4tumble{to{transform:translate(46px,26px) rotate(16deg);opacity:0}}
 .g4-climber{position:absolute;left:var(--tw);width:30px;height:44px;margin-left:-8px;transition:bottom .34s cubic-bezier(.3,1.3,.6,1)}
-.g4-climber .g4-art{width:100%;height:100%}
-.g4-climber.cheer{animation:g4cheer .5s ease 2}
 /* the ledge the treasure rests on, and the roof over it: the one part of the tower that does NOT move
    with the stack. It is set from the first block at the height the finished tower reaches, so every block
    placed is visibly one block closer to the chest instead of the chest running away from him. */
@@ -732,14 +714,12 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
   background:linear-gradient(#8a6537,#5c3417);border:2px solid #432508;box-shadow:3px 3px 0 rgba(60,32,10,.3);
   transition:bottom .3s ease}
 .g4-prize{position:absolute;left:calc(var(--tw) + (var(--tww) - 38px) / 2);width:38px;height:34px;opacity:.4;transition:opacity .3s ease,bottom .3s ease}
-.g4-prize .g4-art{width:100%;height:100%}
 .g4-prize.won{opacity:1;animation:g4spin 1s ease-in-out 2}
 @keyframes g4spin{50%{transform:rotate(180deg) scale(1.12)}100%{transform:rotate(360deg)}}
 /* stackDrop — the finish: the flagpole he runs and jumps to, the coin it knocks out, the run-and-jump, and
    the face-first fall when the tower never reached the roof. The pole is a pole: a steel shaft with a knob
    on top and a pennant that waves while it stands (qa/NOTES.md 36). */
 .g4-flag{position:absolute;width:26px;height:78px;opacity:0;transition:opacity .18s ease;pointer-events:none;z-index:3}
-.g4-flag.on{opacity:1}
 .g4-pole{position:absolute;left:0;bottom:0;width:4px;height:78px;border-radius:2px;background:linear-gradient(#c9ced6,#8b949f);box-shadow:1px 0 0 rgba(24,33,54,.35)}
 .g4-pole::before{content:'';position:absolute;left:-5px;top:-6px;width:14px;height:14px;border-radius:50%;background:#ffd05a;border:2px solid #b9854c}
 .g4-pennant{position:absolute;left:4px;top:8px;width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent;border-left:20px solid #e4557f;transform-origin:0 50%;animation:g4flagwave 1.1s ease-in-out infinite}
@@ -766,14 +746,11 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-raceopts{display:flex;gap:8px;position:absolute;left:10px;right:10px;bottom:10px}
 .g4-raceopt{flex:1 1 0;min-width:0;padding:8px 10px;margin:0;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);font:700 13.5px var(--ui-tight);color:var(--ink);cursor:pointer}
 .g4-raceopt.ok{border-color:var(--green);background:var(--greenbg)}
-.g4-raceopt.no{border-color:#c92a2a;background:#fdeaea}
-.g4-raceopt.reveal{border-style:dashed;border-color:var(--green)}
 .g4-marker{position:absolute;left:68px;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:11px solid var(--ink);transition:bottom .3s ease}
 .g4-slot,.g4-car{border-radius:6px;background:var(--ink);border:2px solid var(--tan)}
 .g4-padbtn{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;padding:0 8px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);color:var(--ink);font:700 13px var(--ui-tight);line-height:1.1;cursor:pointer;overflow:hidden}
 .g4-padbtn.ok{border-color:var(--green);background:var(--greenbg)}
-.g4-padbtn.no{border-color:#c92a2a;background:#fdeaea}
-.g4-padbtn.reveal{border-style:dashed;border-color:var(--green)}
+.g4-raceopt.reveal,.g4-padbtn.reveal{border-style:dashed;border-color:var(--green)}
 @keyframes g4lean-l{from{transform:translate(-50%,0)}to{transform:translate(calc(-50% - 26px),0)}}
 @keyframes g4lean-r{from{transform:translate(-50%,0)}to{transform:translate(calc(-50% + 26px),0)}}
 @keyframes g4drop-in{from{transform:translateY(-16px);opacity:0}to{transform:none;opacity:1}}
@@ -792,7 +769,6 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-gapg.no .g4-gapg-t{background:#fdeaea;color:#7d1f1f;opacity:1}
 .g4-gapg.reveal .g4-gapg-t{background:var(--greenbg);color:#1d5c2c;outline:2px dashed var(--green);opacity:1}
 .g4-bird{position:absolute;left:64px;width:46px;height:34px;z-index:3;pointer-events:none}
-.g4-bird .g4-art{width:100%;height:100%}
 .g4-bird.ok{filter:drop-shadow(0 0 5px rgba(47,158,68,.95))}
 .g4-bird.no{filter:drop-shadow(0 0 5px rgba(201,42,42,.95))}
 /* the right gap: he does not stop in the doorway he chose — he flies on out the far side of it, and the
@@ -806,7 +782,6 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    ring is drawn with a radial gradient so it needs no art file, and the option's plaque sits ON the
    disc, not under it: the disc is what the student aims at, so the word has to fly with it. */
 .g4-range{position:absolute;inset:0;cursor:crosshair;touch-action:manipulation}
-.g4-discs{position:absolute;inset:0}
 .g4-target{position:absolute;left:0;top:0;width:112px;height:58px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:crosshair;transform:translate(0,0);will-change:transform}
 .g4-ring{position:absolute;left:50%;top:0;width:58px;height:58px;margin-left:-29px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#fff8ea 0 30%,var(--tan) 31% 42%,#fff8ea 43% 58%,var(--ink) 59% 66%,#fff8ea 67%);box-shadow:2px 2px 0 rgba(24,33,54,.22)}
 .g4-target-t{position:absolute;left:50%;top:29px;transform:translate(-50%,-50%);padding:2px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 13px var(--ui-tight);line-height:1.18;white-space:nowrap}
@@ -827,11 +802,9 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    It is a card of a RUN, like the score and the hearts: it is not on the block before anything has been
    played, so it appears with the game and goes again with it. */
 .g4-ammo{position:absolute;left:20px;top:20px;z-index:5;display:flex;align-items:flex-end;gap:4px;padding:5px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--tan);opacity:0;transition:opacity .25s ease}
-.game.g4-ready.is-on .g4-ammo{opacity:1}
 /* one shot = one cartridge: a copper tip over a brass case, so the count is read as ammunition and
    not as a row of dots. A spent shot stays in the row, faded, so the row never changes width. */
 .g4-shot{display:block;width:8px;height:15px;border-radius:4px 4px 2px 2px;background:linear-gradient(to bottom,#b9854c 0 36%,#c9a227 36% 100%);box-shadow:inset 0 0 0 1px rgba(24,33,54,.5);opacity:.26}
-.g4-shot.full{opacity:1}
 .g4-ammo.empty{border-color:#c92a2a;box-shadow:3px 3px 0 rgba(201,42,42,.45)}
 @keyframes g4puff{0%{transform:scale(1)}45%{transform:scale(1.16)}100%{transform:scale(1)}}
 @keyframes g4flash{0%{opacity:1}50%{opacity:.25}100%{opacity:1}}
@@ -855,7 +828,7 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-mines{position:absolute;left:10px;right:10px;top:8px;bottom:8px}
 /* the street stays on the stage for the whole run: a new question changes the doors under it, and the
    frontage is never faded out and back in (qa/NOTES.md 76) */
-.g4-street{position:absolute;inset:0}
+.g4-discs,.g4-street{position:absolute;inset:0}
 /* the boardwalk: packed dust with a wheel track, so the doors stand ON something */
 .g4-road{position:absolute;left:-10px;right:-10px;bottom:0;height:74px;background:linear-gradient(#c79b62,#a97c45);border-top:3px solid #8a6537;box-shadow:inset 0 7px 10px rgba(0,0,0,.14)}
 .g4-road::after{content:'';position:absolute;left:0;right:0;top:30px;height:7px;border-radius:4px;background:repeating-linear-gradient(90deg,#e8cfa4 0 26px,rgba(232,207,164,0) 26px 54px);opacity:.75}
@@ -904,7 +877,6 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
   align-items:center;justify-content:center;padding:8px 10px;overflow:hidden;background:var(--paper);
   border:2px solid var(--ink);border-radius:11px;box-shadow:3px 3px 0 var(--tan);
   font:700 13px/1.28 var(--ui-tight);text-align:center;opacity:0;transition:opacity .2s ease}
-.g4-mprompt.in{opacity:1}
 .g4-door{position:relative;flex:1 1 0;min-width:0;max-width:124px;height:100%;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;overflow:visible}
 /* the word's BOTTOM edge is pinned to the doorway's TOP edge: it hangs off the door it belongs to,
    whatever the door's height turns out to be */
@@ -946,7 +918,6 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    a plain translateX shake would slide the word off its door for the length of the animation */
 @keyframes g4shake-x{0%,100%{transform:translateX(-50%)}25%{transform:translateX(calc(-50% - 5px))}50%{transform:translateX(calc(-50% + 5px))}75%{transform:translateX(calc(-50% - 3px))}}
 .g4-runner{position:absolute;left:50%;bottom:4px;width:30px;height:46px;margin-left:-15px;z-index:4;transition:transform .42s cubic-bezier(.3,1.1,.6,1),opacity .3s ease;pointer-events:none}
-.g4-runner .g4-art{width:100%;height:100%}
 /* he goes in: the step through the doorway and the fade are ONE movement — he walks up and INTO the
    opening, shrinking because he is going away from us, and the fade is the LAST thing that happens to
    him rather than the whole of it */
@@ -991,15 +962,13 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-xblock{width:100%;height:100%;border-radius:3px;background:rgba(24,33,54,.10)}
 .g4-xnum{position:absolute;left:3px;top:1px;font:700 calc(14px + 1pt) var(--ui-tight);line-height:1;color:#444;text-shadow:0 1px 0 rgba(255,255,255,.9);pointer-events:none}
 .g4-xclue{flex:0 1 32%;min-width:104px;max-width:34%;padding:8px 12px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:2px 2px 0 var(--tan);font:700 calc(13px + 1pt) var(--ui-tight);line-height:1.35;text-align:center;opacity:0;transition:opacity .2s ease}
-.g4-xclue.on{opacity:1}
 /* ladderRun: a full-height rail, a climber, and the PROMPT waiting at the top of the climb */
 .g4-ltrack{position:absolute;left:0;right:0;top:0;bottom:64px;outline:none}
 .g4-rail{position:absolute;left:26px;top:0;bottom:0;width:44px}
 .g4-rail svg{display:block;width:44px;height:100%}
 .g4-lclimber{position:absolute;left:30px;bottom:0;width:34px;height:48px;transition:bottom .42s cubic-bezier(.3,1.25,.6,1)}
-.g4-lclimber .g4-art{width:100%;height:100%}
 .g4-lclimber.slip{animation:g4shake .34s ease}
-.g4-lclimber.at-top{animation:g4cheer .5s ease 2}
+.g4-climber.cheer,.g4-lclimber.at-top{animation:g4cheer .5s ease 2}
 /* the prompt IS the top of the ladder: the question he climbs to, hung off the top rung beside the rail */
 .g4-lprompt{position:absolute;left:74px;right:2px;top:0;min-height:54px;display:flex;align-items:center;justify-content:center;padding:8px 10px;overflow:hidden;background:var(--paper);border:2px solid var(--ink);border-radius:11px;box-shadow:3px 3px 0 var(--tan);font:700 13px/1.25 var(--ui-tight);text-align:center;transition:transform .3s ease}
 .g4-lprompt-t{position:relative;z-index:1}
@@ -1024,7 +993,6 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-gap{width:100%;height:100%;text-align:center;text-transform:uppercase;border:2px solid var(--ink);border-radius:6px;font:800 15px var(--ui-tight);background:var(--paper)}
 .g4-gap.from{background:#fff8ea;border-color:var(--tan)}
 .g4-gap.ok{border-color:var(--green);background:var(--greenbg)}
-.g4-gap.no{border-color:#c92a2a;background:#fdeaea}
 /* echoPads / bingoCard */
 /* echoPads: the sentence being built, the pad row that says which word comes next */
 .g4-echo{position:absolute;left:12px;right:12px;top:44px;bottom:10px;display:flex;flex-direction:column;justify-content:center;gap:10px}
@@ -1103,7 +1071,6 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-begin:disabled{opacity:.45;cursor:default}
 .g4-btile.stamped{border-width:3px;border-style:double}
 .g4-btile.ok{border-color:var(--green);background:var(--greenbg)}
-.g4-btile.no{border-color:#c92a2a;background:#fdeaea}
 /* no `.g4-btile.reveal`: the right tile is never shown, because what the caller said must not be readable off
    the card afterwards. The only trace of an item is the tile the student actually stamped. */
 /* spinPick */
@@ -1118,7 +1085,6 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-rung.on{background:var(--ink);color:var(--cream)}
 .g4-rung.kept{outline:2px solid var(--green)}
 .g4-bossart{position:absolute;left:50%;top:4px;width:104px;height:104px;transform:translateX(-50%);transition:transform .2s ease}
-.g4-bossart svg{width:100%;height:100%}
 .g4-bossart.hurt{animation:g4hurt .34s ease}
 @keyframes g4hurt{0%,100%{transform:translateX(-50%)}40%{transform:translateX(-50%) scale(1.08);filter:brightness(1.9) saturate(.5)}}
 /* the boss does not lunge: its whole turn is the spit, so there is no bite animation to keep here
@@ -1130,13 +1096,11 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    asks nothing. Both appear when Play puts the game on. */
 .g4-hp{opacity:0;transition:opacity .25s ease}
 .g4-lprompt{opacity:0;transition:opacity .25s ease,transform .3s ease}
-.game.g4-ready.is-on .g4-hp,.game.g4-ready.is-on .g4-lprompt{opacity:1}
 /* bossRaid: the arena — the fighter stands at the left, the boss over the middle, and one projectile
    layer carries whatever travels between them. The HP bar is the boss's health; the lives are the HUD's
    count, so the arena draws no second copy of it. */
 .g4-arena{position:absolute;left:0;right:0;top:0;bottom:56px;overflow:hidden}
 .g4-hero{position:absolute;left:14px;bottom:2px;width:52px;height:76px;transition:transform .22s cubic-bezier(.3,1.4,.6,1)}
-.g4-hero .g4-art{width:100%;height:100%}
 /* the sword's run: he crosses to the boss, cuts at close range, and comes back — the distance is set
    in --run from where the two of them actually stand */
 .g4-hero.charge{transform:translateX(var(--run,120px)) rotate(-3deg);transition:transform .3s cubic-bezier(.4,1.2,.5,1)}
@@ -1158,7 +1122,7 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 /* the projectile itself is `g4-proj`, not `g4-shot`: skeetRange's `g4-shot` is an ammo pip that sits in
    the flow of the ammo row, so sharing the name would position a pip out of the row and onto the stage */
 .g4-proj{position:absolute;width:32px;height:32px;margin:-16px 0 0 -16px;transition:transform .44s linear}
-.g4-proj .g4-art{width:100%;height:100%}
+.g4-climber .g4-art,.g4-prize .g4-art,.g4-bird .g4-art,.g4-runner .g4-art,.g4-lclimber .g4-art,.g4-bossart svg,.g4-hero .g4-art,.g4-proj .g4-art{width:100%;height:100%}
 /* the spin rides the ART, not the projectile: `transform` is how the projectile travels, and a CSS
    animation on that same property wins over the inline transform the engine sets — the fireball then
    spins in place at the thrower's hand and never reaches the boss. So the shell moves, the drawing turns. */
@@ -1170,7 +1134,6 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 /* the sword's cut: a white crescent that opens and dies where it landed */
 .g4-slash{position:absolute;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;border:5px solid rgba(255,255,255,.95);border-left-color:transparent;border-bottom-color:transparent;animation:g4slash .42s ease-out forwards}
 @keyframes g4slash{0%{opacity:0;transform:rotate(-40deg) scale(.55)}
-  35%{opacity:1}
   100%{opacity:0;transform:rotate(30deg) scale(1.3)}}
 /* the fighter picker on the intro card: three drawings, and the one you pick is the one that fights */
 .g4-pick-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
@@ -1233,7 +1196,7 @@ html.kbd .g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:
 .g4-bucket.hot .g4-art{transform:translateY(-6px) scale(1.04)}
 .g4-bucket.hot .g4-bucket-t{border-color:var(--blue)}
 .g4-bucket.ok .g4-bucket-t{border-color:var(--green);background:var(--greenbg)}
-.g4-bucket.no .g4-bucket-t{border-color:#c92a2a;background:#fdeaea}
+.g4-raceopt.no,.g4-padbtn.no,.g4-gap.no,.g4-btile.no,.g4-bucket.no .g4-bucket-t{border-color:#c92a2a;background:#fdeaea}
 .g4-bucket.reveal .g4-bucket-t{border-style:dashed;border-color:var(--green);animation:g4pulse .7s ease-in-out 2}
 @keyframes g4grow{0%{transform:scaleY(.15) scaleX(.6);opacity:0}60%{transform:scaleY(1.08)}100%{opacity:1}}
 @keyframes g4splash{0%{opacity:0;transform:translateY(-10px) scaleY(.7)}
@@ -1353,7 +1316,6 @@ html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;
 .g4-tbrk{position:absolute;left:0;right:0;bottom:0;height:12px;background:#3b4653;opacity:0;
   clip-path:polygon(0 0,100% 0,100% 100%,88% 52%,76% 100%,62% 44%,48% 96%,34% 40%,20% 92%,8% 48%,0 88%);
   transition:opacity .2s ease}
-.g4-tbridge.hit .g4-tbrk{opacity:1}
 
 /* ---- the train's movements ----------------------------------------------------------------------
    The train arrives from the left, runs out to the left through the bridge, and lurches back when it
@@ -1502,5 +1464,5 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
 .g4-tplank.broken{background:#3b4653;animation:g4tbsnap .7s ease-out forwards}
 @keyframes g4tbsnap{0%{transform:none}30%{transform:translateY(4px) rotate(-6deg)}100%{transform:translateY(26px) rotate(-22deg);opacity:.25}}
 .g4-tstamp{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%) rotate(-8deg);z-index:9;pointer-events:none;opacity:0;padding:6px 18px;border:3px solid #c92a2a;color:#c92a2a;font-weight:800;letter-spacing:2px;background:rgba(255,255,255,.85)}
-.g4-tstamp.showing{opacity:1}
+.game-prompt.in,.game-fade.on,.game.g4-ready.is-on .g4-hud,.game.g4-ready.is-on .g4-hearts,.game.g4-ready:not(.is-on) .g4-prev.on,.g4-heart.full,.g4-prompt.in,.g4-flag.on,.game.g4-ready.is-on .g4-ammo,.g4-shot.full,.g4-mprompt.in,.g4-xclue.on,.game.g4-ready.is-on .g4-hp,.game.g4-ready.is-on .g4-lprompt,35%,.g4-tbridge.hit .g4-tbrk,.g4-tstamp.showing{opacity:1}
 .g4-tstamp.ok{border-color:var(--green);color:var(--green)}
