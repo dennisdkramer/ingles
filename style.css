@@ -50,11 +50,6 @@ header.brand{width:1400px;margin-left:15px;text-align:center;padding:20px 14px 0
 /* site-functions legend: ONE baked-in line of static HTML in the shell (index.html / _shell.html). It is
    shell furniture, never a lesson element: nothing a page generates writes it. */
 .barhelp{width:1400px;margin:2px 0 8px 15px;padding:0 14px;text-align:center;font-size:14px;line-height:1.55;color:var(--ink)}
-/* ## LESSON TITLE — h1
-   One line at a FIXED 38px, centred in the 1200px content area: the title is WRITTEN short enough to sit
-   on that one line — the page never shrinks the type to fit it, and no rule here does. `<h1>Title
-   <span>subtitle</span></h1>` puts the small letter-spaced line under the title. The face is the
-   stylesheet's alone; an author never sets a font. */
 .logoFallback{font-size:52px}h1{font-family:'Playfair Display',serif;letter-spacing:.14em;font-size:38px;margin:8px 0 0}
 h1 span{display:block;font-size:.42em;letter-spacing:.5em}
 .content-area h1{text-align:center}
@@ -64,12 +59,6 @@ h1 span{display:block;font-size:.42em;letter-spacing:.5em}
 header.brand img{width:120px;filter:drop-shadow(3px 4px 0 var(--rose))}
 main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
 .page-container{margin:0;background:var(--paper);border:2px solid var(--ink);border-radius:0;box-shadow:none;padding:0;position:absolute;left:15px;width:1400px}
-/* ## PAGE SKELETON — .content-area (fixed 1200px)
-   The page is a FIXED-WIDTH document: a 1400px page container and a 1200px content area, and every
-   width on a lesson page is arithmetic inside those 1200px — never a share of the window, never `vw`,
-   never `auto-fit`. Type is fixed constants at the minimum size an average person comfortably sees,
-   clicks and reads; nothing on a page is viewport-relative. Sections are the only direct children that
-   carry their own left/right inset (10px), so a block's width is the slot, not the inset. */
 .content-area{width:1200px;margin:0 auto;padding:16px 0}
 
 .content-area{cursor:default}
@@ -82,10 +71,6 @@ main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
    browser's own UA ring is suppressed too: NOTHING on any page can draw a focus outline without that class. */
 html:not(.kbd) :focus{outline:none}
 html.kbd button:focus-visible{outline:3px solid var(--tan);outline-offset:2px}
-/* ## CARD — .card
-   The other framed container a lettered block may be: paper fill, 2px ink edge (a block's kind recolours
-   it through `--edge`), 16px radius, a 5px 5px 0 tan hard shadow, 14px/18px padding and a 14px rhythm.
-   `.center` centres its text. It is also the landing page's column card — one look, two jobs. */
 .card{--edge:var(--ink);background:var(--paper);border:2px solid var(--edge);border-radius:16px;box-shadow:5px 5px 0 var(--tan);padding:14px 18px;margin:14px 0}
 button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;margin:4px 4px 4px 0;font:600 14px var(--serif);cursor:pointer;box-shadow:3px 3px 0 var(--tan)}
 
@@ -98,19 +83,11 @@ button:active:not(:disabled):not(.locked){filter:brightness(1.04);transform:tran
  button:hover:not(:disabled):not(.locked),button:active:not(:disabled):not(.locked){transform:none}
 }
 
-/* ## FREE TEXT — .content-area textarea
-   A textarea inside the content area is `resize:none`: the page never reflows and no item is resizeable.
-   `#feed` is the shared notebook in the shell, not an exercise control, and is not part of this. */
 .content-area textarea{resize:none}
 a{color:var(--ink);font-weight:600}h2{font-family:'Playfair Display',serif;margin:.9em 0 .3em}
 @keyframes pu{50%{opacity:.25}}
+/* ## TEXT AND COLOURS — never write a hex in a lesson; use a token or a class. Tokens on :root: --cream --paper --ink --tan --rose --ptw --blue --dkblue --bluebg --orange --purple --green --greenbg; faces --serif (the default) --sans --playfair --caveat. Classes that set colour: `.pt` / `.ptw` for Portuguese, italic, plus `lang="pt"` so a screen reader says so; `.dim` muted; `.lead` larger intro; `.h2sub` a section subtitle; `.todo` the unbuilt marker; `.chips`; `.listen`. */
 .dim{color:#8a8072;font-size:13px}
-/* ## PORTUGUESE TEXT — lang="pt" / .pt / .ptw / :lang(pt)
-   Every Portuguese string is MARKED `lang="pt"` and renders italic (the `:lang(pt)` rule sits with the
-   chart rules below). `.pt` is an explanation's gloss (#5c5347), `.ptw` is an exercise's gloss (--ptw,
-   bolder, inline in a `.blanks` pair); `<i>` is the fallback for a page that predates the rule, never the
-   first choice. A `<b>` inside either stays upright. A gloss authored into a lesson page also carries
-   `data-why="necessary|optimal"`, the test that justifies it. */
 .pt{color:#5c5347;font-style:italic}.ptw{font-style:italic;color:var(--ptw);font-weight:600}
 .listen{background:var(--tan);box-shadow:3px 3px 0 var(--ink)}
 details{background:#fff8ea;border:2px dashed var(--tan);border-radius:12px;padding:8px 12px;margin:10px 0}
@@ -152,6 +129,7 @@ mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-positio
 @keyframes sp{to{transform:rotate(360deg)}}
 
 /* colour palette, single source of truth */
+/* ## CONTROLS — NOT LESSON-FACING. Toolbars, the site popup, confirm dialogs, highlight and note layers, toast, `.loadwrap`. `.dlg*` is UI chrome; `.dialog` is a lesson conversation. Read this span only to confirm it is not what you want. */
 .pop.hlpalpop{padding:4px;border-radius:12px;box-shadow:3px 3px 0 var(--tan)}
 .hlpal{display:flex;align-items:center;gap:4px}
 .hlpal button{width:14px;height:14px;min-width:14px;padding:0;margin:0;border:2px solid var(--ink);border-radius:6px;box-shadow:none;cursor:pointer}
@@ -179,20 +157,8 @@ mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-positio
 #toast{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:8px 16px;border-radius:10px;z-index:99;display:none;font-weight:600;box-shadow:3px 3px 0 var(--tan)}
 .recind{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:99}
 .spin{width:14px;height:14px;border:2px solid var(--ink);border-top-color:transparent;border-radius:50%;animation:sp 1s linear infinite;display:inline-block;vertical-align:-2px}
-/* ## FILL-IN BLANK — input.gap
-   A blank is a CONTIGUOUS line, never literal `___` underscores typed into the prompt: a transparent
-   field over a 2px tan bottom border with a #fff8ea fill, font inherited, 9em wide by default
-   (`--gap-w` overrides the width for one field). It sits inside a `.blanks` pair or inside a sentence.
-   `.blank` is the display-only underline where nothing is typed; `.pr-gap` is its print twin.
-   What makes it SAVE is its number in `name` and its accepted forms in `data-answer` — the key, one
-   entry per form, pipes between (FUNCTION.md [CONTENT]). */
 input.gap{border:0;border-bottom:2px solid var(--tan);background:#fff8ea;font:inherit;width:var(--gap-w,9em)}
 
-/* ## UNBUILT WORK MARKER — p.todo
-   If unbuilt work occurs it is MARKED, never faked: a `<p class="todo">` inside the block, holding what
-   is missing (the class index.html already carries) — never invented content that reads as finished.
-   Quiet by design: a tan rule at its left, italic, slightly reduced opacity, no frame and no shadow,
-   and never dashed — nothing that reads as a block is dashed. */
 .todo{font-style:italic;color:#5c5347;opacity:.92;border-left:3px solid var(--tan);padding:2px 10px;margin:8px 10px}
 .pulse{animation:pu 1s infinite;display:inline-block}
 
@@ -203,28 +169,12 @@ label{margin-right:10px;cursor:pointer}
 footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#8a8072}
 #printRoot{display:none}
 
-/* ## SECTION — h2, numbered `1.` in page order
-   A lesson's sections are `<h2>1. …` numbered from 1 in the order the page presents them, on the display
-   face over a rose underline; `<span class="h2sub">` is the small line under the heading. A section holds
-   no columns of its own: a reflowed block states its own `--rows` (see REFLOW), so a section can never be
-   split into columns. */
 h2{border-bottom:2px solid var(--rose);padding-bottom:6px;margin-top:1.6em}
 h2 .h2sub{font-family:var(--serif);font-size:.55em;font-weight:400;letter-spacing:.03em;color:#8a8072}
-/* ## CHART — table.chart (an IN-BLOCK class, NEVER a block)
-   Structured data: cognate rules, phrase translations, to-be chunks, false friends — paper fill, ink
-   header row, tan grid, `.center` for centred cells, even rows washed #fff8ea. `.thsub` is a
-   chart-column-header subtitle — the second line under the main label: block, weight 400, smaller,
-   reduced opacity. `tr.note` is a note that applies to one chart row: a MERGED row directly under it,
-   `<tr class="note"><td colspan="N">…</td></tr>`, because a bare row spliced into <tbody> will not span.
-   Column count and row shapes are content-aware, never fixed by CSS.
-   A chart is NEVER a block: it is a child inside .panel / .card / .game / .dialog, and THE BLOCK carries
-   the width, the edge and the shadow — so inside a block the chart drops its own frame and its own
-   shadow, keeps only its grid, and measures the block's width minus its 20px side margin. A generated
-   lesson never writes a .chart straight into a section. A chart standing alone (older lessons) keeps the
-   frame it was built with, so nothing already published changes shape. */
 .chart{border-collapse:collapse;width:100%;margin:14px 0;background:var(--paper);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--tan)}
 .panel .chart,.card .chart,.game .chart,.dialog .chart{border:0;box-shadow:none;margin:0}
 
+/* ## TEACHING DISPLAYS — the two non-answer teaching vehicles: `table.chart` (th/td, `.thsub`, tr.note) for a table of reference, and `.dialog` for a conversation (`p > b` names the speaker). A chart sits IN a block, never as a block. */
 .chart th,.chart td{border:1px solid var(--tan);padding:8px 12px;text-align:left}
 .chart thead th{background:var(--ink);color:var(--cream);font-weight:700;letter-spacing:.02em}
 .chart.center th,.chart.center td{text-align:center}
@@ -232,37 +182,13 @@ h2 .h2sub{font-family:var(--serif);font-size:.55em;font-weight:400;letter-spacin
 .chart tbody tr:nth-child(even) td{background:#fff8ea}
 /* the Portuguese marking itself: :lang(pt) is italic wherever it lands — see ## PORTUGUESE TEXT */
 :lang(pt){font-style:italic;font-weight:400}
-/* ## KEYWORD CHIPS — .chips > b
-   Wrapping keyword pills for a short set the student should hold together (a "quase iguais" list): paper
-   fill, 2px ink edge, fully rounded, inline and wrapping. One `<b>` per chip, and a chip holds a word,
-   never a sentence. */
 .chips b{display:inline-block;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:2px 12px;margin:2px 6px 2px 0;font-weight:600}
-/* ## BLOCK HEADER — h3, lettered `A. ` inside the block
-   Blocks are LETTERED at the inside top of the block: `<h3>A. …</h3>`, restarting at A in every section.
-   The header is the block's FIRST line and sits ABOVE the block's content in every block of every
-   lesson — nothing a vehicle, a script or a stylesheet draws into the block may take that place, so a
-   game that inserts its own stage inserts it BELOW the header and never above it. */
 h3{font-family:'Playfair Display',serif;font-weight:700;font-size:19px;color:var(--dkblue);margin:22px 0 8px;padding-left:10px;border-left:4px solid var(--tan);letter-spacing:.02em}
-/* ## PRINT — @media print
-   Printing hides the shell — the brand header, the control bar (#controlbar), the bar's legend (#barhelp),
-   the shared notebook (#feed) and the footer — and strips the page container's border and shadow. A panel,
-   chart or card never breaks across a page. The custom print button's own path prints #printRoot alone. */
 @media print{#printRoot .listen{display:none}#barhelp{display:none}}
 .blanks>div .ptw{flex:0 0 auto}
-/* ## DIALOGUE — .dialog
-   A spoken exchange: #fff8ea fill, rose edge, 12px radius, one `<p>` per turn, `.dialog-title` for the
-   bold speaker label (or a bold inline label at the start of the turn). Speaker names are ENGLISH given
-   names — Josh, Maya, Leo, Sam, Ash, Dee — never Portuguese or Brazilian ones (Téo, Guh, Thiago, Luiz,
-   Bia), whatever the scene is about: the student is learning English in an English world, so a name that
-   only exists in Portuguese makes the scene Portuguese again. */
 .dialog{--edge:var(--rose);margin:14px 0;padding:12px 16px;background:#fff8ea;border:2px solid var(--edge);border-radius:12px}
 .row,.dialog p{margin:6px 0}
 
-/* ## LISTEN CHIP — .listen
-   A compact ▶ audio chip placed INLINE beside the words it speaks: the tan/ink button skin, 14px,
-   nowrap, 5px by 10px padding so it reads as a chip and never as a block. It speaks the button's
-   `data-say` text (FUNCTION.md [CONTENT]) — how the line is SAID, not how it is written — and an
-   optional `data-rate` is that utterance's rate. The chip is judged on its `data-say` text alone. */
 .listen{display:inline-flex;align-items:center;justify-content:center;padding:5px 10px;margin:2px 6px 2px 0;font-size:14px;white-space:nowrap}
 fieldset .qnum{margin-right:6px}
 fieldset label{margin-right:14px}
@@ -278,55 +204,16 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .content-area > .panel{margin:14px 0}
 .panel h3{margin-top:0}
 
-/* ## BLOCK — .panel / .card / .game / .dialog (a lettered block is a VISIBLE block)
-   A block's content sits inside a FRAMED container: `.panel` (or `.card`) when the inside is `.qgrid` /
-   `.blanks` / `.chips`, or the block IS `.game` / `.dialog` / `.card`. `.qgrid` and `.blanks` carry no
-   frame of their own, so unwrapped they read as loose page text instead of a block.
-   The frame is a 2px SOLID edge — the colour is `--edge`, which the block's KIND sets — plus a 4px
-   offset hard shadow (a card carries the same edge and a 5px shadow). Nothing that reads as a block may
-   use a dashed border: the only dashed line left in the sheet is `.game-stage`, a field of play INSIDE a
-   game. A block never touches the block above or below it (a 14px rhythm), its header is its first line
-   (see ## BLOCK HEADER), and its content is inset 10px from the frame on each side. */
+/* ## BLOCK FRAME — a block is `.panel` or `.card`, never a bare div. `data-kind="teaching|mixed|training|games"` on the block element is the only shape label a build writes. Unbuilt work is `p.todo`, which renders as a visible marker. */
 .panel{--edge:var(--tan);border:2px solid var(--edge);border-radius:12px;padding:12px 16px;background:var(--paper);box-shadow:4px 4px 0 var(--tan)}
 
-/* ## BLOCK KIND — data-kind="teaching|mixed|training|games", on the block element itself
-   EVERY block declares its kind, written on the block beside `class` and `style`, exactly like
-   `itemsize` and `data-move`, and copied from the `## [...]` category its vehicle sits in on
-   CONTENT_EXAMPLES.md — the tag is the category, never a second opinion about the page. The kind decides
-   the OUTLINE ONLY: teaching keeps the ink edge, mixed and training take the orange one, games take the
-   purple one (`--orange`, `--purple`). An untagged block keeps the edge its container always had — a
-   panel's tan, a card's or a game's ink, a dialog's rose — so nothing generated before this rule
-   changes shape. */
 .panel[data-kind="teaching"],.card[data-kind="teaching"],.game[data-kind="teaching"],.dialog[data-kind="teaching"]{--edge:var(--ink)}
 .panel[data-kind="mixed"],.card[data-kind="mixed"],.game[data-kind="mixed"],.dialog[data-kind="mixed"],
 .panel[data-kind="training"],.card[data-kind="training"],.game[data-kind="training"],.dialog[data-kind="training"]{--edge:var(--orange)}
 .panel[data-kind="games"],.card[data-kind="games"],.game[data-kind="games"],.dialog[data-kind="games"]{--edge:var(--purple)}
 .panel .chart{width:calc(100% - 20px)}
 
-/* ## BLOCK WIDTH SLOTS — .itemsize / -half / -third / -twothird / .itemrow
-   A block takes ONE of FOUR slot widths inside the fixed 1200px content area, with a 14px row gap:
-   full 1200 · half (1200-14)/2 = 593 · third (1200-2x14)/3 = 391 · two-thirds (1200-14)x2/3 = 791,
-   and a third that shares its row with a two-thirds is (1200-14)/3 = 395. Siblings in one `.itemrow` are
-   equal unless they are a third beside a two-thirds. A block MAY sit beside another block that shares its
-   row; `.itemsize` is a full-width block. A row's slots must sum to its width — two halves, a third beside
-   a two-thirds, or three thirds, and never a half beside a third. The sizing decision is tagged on the
-   block and CSS only displays it: nothing here chooses a width.
-   WHICH SLOT A BLOCK TAKES IS AUTHORED ON THE VEHICLE, NOT INVENTED IN THE PAGE. The vehicle's entry in
-   CONTENT_EXAMPLES.md states its blocks' allowed size range in a `**width**` field, as that vehicle's own
-   ladder: its blocks in page order joined by `+`, one slot each, or `<slot>->` when that slot is the
-   default and the block may grow IN STEPS, as far as full. A row closes by itself the moment its slots sum
-   to 100%, so there is no per-row token and no separator. Real values: `half+half` (twoWordVerb, one row) ·
-   `full+full` (registerContrast, two rows) · `half+half+full` (pronLab: [half half] then [full]) ·
-   `third+twothird` (infoGap, one row) · `third+third+third+full` (songStructure) · `half->` (formFill, one
-   block that may grow). Three consequences bind a page: the ladder is the VEHICLE's, so it is authored per
-   vehicle and never derived from its block count (two vehicles with two blocks each may differ entirely);
-   the pairing is BINDING, so a lesson never breaks a single block out of a pair — a lone block uses a
-   single-block vehicle or a primitive; and the entry's prose states the SHAPE, not the widths ("a chart
-   block beside the matching exercise"), because this field is the only place a width is written.
-   A row's children ARE the blocks: never a wrapper div carrying the width class with the block inside it —
-   `.itemrow` stretches its children, so the wrapper grows and the block inside it stays short, and a pair
-   that should match ends 50px apart (measured, on infoGap). Put `itemsize-*`, `data-kind` and `data-move`
-   on the block itself. */
+/* ## BLOCK WIDTHS — one of four slots, as a class on a DIRECT CHILD of `.itemrow`: `.itemsize` (full) `.itemsize-half` `.itemsize-third` `.itemsize-twothird`. A ROW MUST TOTAL 100%: full alone, half+half, third+twothird, third+third+third — a half beside a third never closes a row. Pair before widening; a lone block sits centred at its own width; the slot follows the content and prose never widens a block. `data-cols="2"` on the row gives each column 14px less, already inside the calc. */
 .itemsize{width:100%}
 .itemsize-third{width:calc(33.3333% - 9.3333px)}
 /* a two-thirds block, alone on its row or paired with a third: the same 14px gap budget */
@@ -338,25 +225,9 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .panel > :not(h3),.content-area > h2, .content-area > p{margin-left:10px;margin-right:10px}
 .itemsize-half,.itemrow[data-cols="2"]>*{width:calc(50% - 7px)}
 .itemrow[data-cols="3"]>*{width:calc(33.3333% - 9.3333px)}
-/* ## QUESTION GRID & ITEM NUMBERING — .qgrid / .qitem / .qnum / .qstem / .qopts
-   The template is qnum | stem in two columns with the options under the stem, and `.qgrid`, `.panel` and
-   `.qopts` cap NOTHING — no option count, no item count, no block size: an item's option count is its
-   content's decision. Exercise, activity and quiz items are numbered `1..n` in the order the LAYOUT DRAWS
-   them — across a row then down for `.qopts`, down a column for `.qgrid.stack` — restarting at 1 in every
-   block, and a reflowed list continues at the top of the next column (see ## REFLOW). Consecutive questions
-   are separated by one consistent vertical gap: a 12px row gap in the grid, 16px under a stacked item.
-   Items never overflow the block and never overlap or touch each other. */
 .qgrid{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;column-gap:14px;row-gap:12px;min-width:0}
 
 .qgrid .qopts,.qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 30px}
-/* ## FILL-IN ROWS — .blanks / .blanks.cols / .blanks.sent / .ans
-   `.blanks` is a wrapping row of word + blank pairs (`<div><span class="ptw">word</span><input class="gap">
-   </div>`); the block's own markup decides the arrangement, and nothing here aligns the gaps, columns the
-   items or right-justifies the pair. `.cols` tiles the pairs down a grid.
-   `.blanks.sent` is the SENTENCE layout — one pair per line — and it is what makes a fill-in hint or gloss
-   (Portuguese, italic) sit on its OWN line BELOW its input, centred on that input: author it with
-   `.blanks.sent` (or `.blanks.sent.cols`), because a `<br>` inside the default flex `.blanks` row is
-   IGNORED. `.ans` is a revealed key: its own line under its field, green and bold. */
 .blanks{display:flex;flex-wrap:wrap;gap:14px 24px;margin:10px 0}
 .blanks>div{display:flex;align-items:center;gap:6px}
 .blanks.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
@@ -366,9 +237,6 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .ans{display:block;flex:1 1 100%;width:100%;margin:2px 0 0;font-size:13px;line-height:1.35;font-weight:700;color:#2f7d32;text-align:left}
 .qopts label.correct{background:#e6f4e7;border-radius:8px;padding:1px 6px;color:#1f5d22}
 
-/* ## GLOSS DROP — .glossdrop (a per-block opt-in, used when the page asks for it, never imposed)
-   Drops a pair's gloss onto its own line: `.blanks.glossdrop` wraps the pair and right-aligns the `.ptw`,
-   and `.chart.glossdrop .ptw` becomes a block of its own under the cell. */
 .blanks>div.has-ans,.blanks.glossdrop>div{flex-wrap:wrap}
 .blanks.glossdrop>div .ptw{flex:1 1 100%;text-align:right}
 .chart.glossdrop .ptw{display:block}
@@ -376,15 +244,10 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .lead{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#5c5347;margin:.2em 0 .7em;line-height:1.5}
 .prep{color:var(--tan);font-weight:700}
 .pr-g{color:grey}
+/* ## REFLOW — a reflowed block states `--rows` (items per column, e.g. style="--rows:2") ON ITSELF, never on a section or a wrapper. `.qgrid.stack` and `.blanks.sent` are the two containers that tile: items run DOWN a column and continue at the top of the next; `.wide` returns to one full-width column. */
+/* ## ANSWERS — three shapes and no others: a radio item (`.qgrid > .qitem > .qnum/.qstem/.qopts`), a gap inside a sentence (`.blanks.sent > input.gap`), a `textarea` other than #feed. HOW AN ANSWER IS SAVED: the engine keys on `name`, so every control carries one matching `a<sec><block><item>` — `a1c1` for the item, `a1c1g1` for its first gap. The number is the identity; the prompt text is not, so a reworded stem keeps its answer. #feed is never saved. No checkbox exists in any page: never author one. A block that must `produce` needs the gap or the textarea, never radios alone. */
 .blank{display:inline-block;width:3.2em;border-bottom:2px solid var(--tan)}
 
-/* ## REFLOW — --rows, stated on the block's own style attribute
-   A reflowed block states `--rows` (items per column, e.g. `style="--rows:2"`) ON ITSELF — never on a
-   section or a wrapper, so a section can never be split into columns; the column count follows from the
-   item count. `.qgrid.stack` and `.blanks.sent` are the two containers that tile: items run DOWN a
-   column and continue at the top of the next, never across — which is why the numbering follows the
-   column. `.wide` overrides the tiling back to one full-width column. A container tiles only because
-   the page gave it one of those classes; the CSS never tiles a container that did not ask. */
 .qgrid.stack,.blanks.sent{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(var(--rows,2),auto);grid-auto-columns:minmax(0,1fr);column-gap:28px}
 .qgrid.stack{align-items:start}
 .qgrid.stack.wide{display:block}
@@ -401,6 +264,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 body.editing #hlLayer,body.editing #noteLayer{display:none}
 .pt b,.lead b{font-style:normal}
 .chart tr.note td{background:#fff8ea;font-style:italic;color:#5c5347;border-top:0;padding:10px 14px}
+/* ## PAGE SCAFFOLD — the three headings and the fixed page. h1 is the lesson title, ONE line; h2 is a numbered section `1.`; h3 is a lettered block `A.`; nothing a vehicle uses may take their place. .page-container is 1400px and .content-area 1200px, both FIXED: no lesson element may size itself in `fr`, `vw` or `auto-fit`, because those make the browser re-decide the layout on resize. A plain link is `a`; the print copy lives in #printRoot. */
 body.editing mark.nb.has-rec{background-image:none}
 body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 
@@ -520,6 +384,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
  panel, at the same 1400px metric as the header, and #needg drops to a full-width second line when Google's
  script is unavailable — wrapping here is safe because this container is a FIXED width, so it never depends
  on the viewport. */
+/* ## LANDING AND TEACHER — NOT LESSON-FACING. The index.html shell, `.welcome-bar`, `.hello-*`, `.lnum` / `.ltitle`, `.tadmin-*`, `.twho`, `.denbtn`. Same rule: confirm and stop. */
 .welcome-bar{width:1400px;margin:6px 0 0 15px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;padding:8px 14px;font-size:15px}
 .welcome-bar .landing-title{font-size:16px;letter-spacing:0;margin:0;font-family:inherit;font-weight:700}
 .welcome-bar .wsep{color:#a99c88}
@@ -916,6 +781,8 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 /* the bite reels him where he STANDS: the shake has to carry his own x (`--dx`), because a bare
    translateX keyframe drops the inline transform the walk put on him and he snaps back to the middle
    of the road for the length of the animation — the one moment he must not move. */
+/* ## GAMES — ENGINE-OWNED. A build adds <script src="../engine4.js"> after engine2.js and a `.game` block; the art is drawn by the engine, so NEVER author or restyle a `.g4-*` element. Content is identical for every skin, so `data-game` is a presentation choice, never a content choice. */
+/* KNOBS, all optional on the `.game` element, and what happens when each is ABSENT: data-game (one of 13 skins) · data-time ms per item, 0 = no deadline (0) — this is the difficulty · data-limit seconds for the run, 0 = off (0) · data-retry 0|1 (1: a TRAINING game leaves it, the block that IS the page's quiz writes 0) · data-shuffle (1) · data-rounds 0 = all authored (0) · data-prompt show the stem on the HUD (1) · data-sound (1) · data-skin free-form, CSS may theme, the engine never reads it. */
 .g4-runner.bitten{animation:g4reel .42s ease}
 /* the bite always ends the same way: he goes down where he stands — the `down` state is built on his own
    --dx, so the fall happens at the door he chose — and then he is gone, until the street comes back
