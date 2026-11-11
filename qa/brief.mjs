@@ -93,22 +93,23 @@ emit('style.css - ' + heads2.length + ' `## ` HEADERS ONLY', heads2.join('\n\n')
 /* 6. the shell the page is built on */
 emit('_shell.html - THE PAGE THIS IS BUILT ON', read('_shell.html'));
 
-/* 7. the gate: twelve questions, answered after writing, in English, one line each */
+/* 7. the gate: one question per line, answered AS EACH SECTION IS FINISHED — from what was just
+      written, never by re-reading the finished page. Eight questions, not twelve: [G2] used to ask
+      whether options matched the answer's length, which never fails (a level that is being ignored
+      fails as one- or two-word answers, not as a long option beside three short ones); questions
+      about literal ___, produce blocks and section-shape variety were withdrawn by the owner —
+      produce is authored by hand, and two sections may share a shape when each reached it on its own. */
 const GATE = [
-  '[G1]  Does any answer appear in its own prompt? (it must not, in any form)',
-  '[G2]  Do the options match the answer in kind and length? (a phrase answer gets phrase distractors)',
-  '[G3]  Is every concept taught, then trained, then asked? (three moves, none skipped)',
-  '[G4]  Does every produce block carry a gap inside a sentence or a textarea, never radio-only?',
-  '[G5]  Does every row of blocks close to 100%? (full alone · half+half · third+twothird · third x3)',
-  '[G6]  Is Portuguese only where marked, and inside the budget?',
-  '[G7]  Are items numbered in the order the layout draws them? (across for .qopts, down for .qgrid.stack)',
-  '[G8]  Is there a literal ___ anywhere? (there must not be)',
-  '[G9]  Is any item load under the lesson number?',
-  '[G10] Does every example use the register voice?',
-  '[G11] Do two sections share a shape? (they must not)',
-  '[G12] Is anything not marked Portuguese in another language?',
+  '[G1] Does any answer appear in its own prompt? (it must not, in any form)',
+  '[G2] Does each item require choosing a FORM — a tense, a connector, an order, a wording — rather than recalling a word\'s meaning? (items that only test vocabulary are what makes a high-level lesson easy)',
+  '[G3] Is every concept taught, then trained, then asked? (three moves, none skipped)',
+  '[G4] Does every row of blocks close to 100%? (full alone · half+half · third+twothird · third x3)',
+  '[G5] Is Portuguese only where marked, and inside the budget?',
+  '[G6] Are items numbered in the order the layout draws them? (across for .qopts, down for .qgrid.stack)',
+  '[G7] Is any item\'s load under the lesson number?',
+  '[G8] Does every example use the register voice?',
 ];
-emit('THE GATE - answer all twelve after writing, one line each: [Gn] yes/no + the evidence',
-  GATE.map(g => g).join('\n'));
+emit('THE GATE - eight questions, answered as each section is finished, from what you just wrote (never by re-reading the page)',
+  GATE.join('\n'));
 
 process.stderr.write('\nbrief total: ' + kb('x'.repeat(total)) + '   (run with --reassert for copy 2 of the map)\n');
