@@ -104,7 +104,7 @@ emit('_shell.html - THE PAGE THIS IS BUILT ON', read('_shell.html'));
       what the activity declares, and the markup can supply it — not L. */
 const GATE = [
   '[G1] Does any answer appear in its own prompt? (it must not, in any form)',
-  '[G2] Which band is this block\'s HARDEST demand in — 10 one stated fact · 20 two elements joined · 30 the meaning sits in the form · 40 words and meaning disagree · 50 nothing stated? It must be at or above the lesson number.',
+  '[G2] Does every block carry `data-level` set to the band of its hardest demand (10/20/30/40/50), at or above the lesson number, and can you name which of the four demands set it?',
   '[G3] Is every concept taught, then trained, then asked? (three moves, none skipped)',
   '[G4] Does every row of blocks close to 100%? (full alone · half+half · third+twothird · third x3)',
   '[G5] Is Portuguese only where marked, and inside the budget?',

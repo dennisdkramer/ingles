@@ -35,6 +35,15 @@ Author ([n]=(Prompt), [Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], form
 <"but why is QA touching in-block-visuals.md or the preview page?">
 ## [53] - qa/brief.mjs: the generation brief that puts PEDAGOGY-MAP.md in front of the build twice, and ends on a gate (twelve asked for, eight after owner review)
 <"build the brief+reassert + 12 rule gate (only reassert pedagogy-map.md, maybe try just one extra copy for now)" + "i dont like the idea of emitting 40 items, maybe we emit 1 in every 10, so about 4 per page">
+## [56] - the author marks each block's band, and the gate compares two integers
+<"why cant the generator make an assessment of the difficulty as compared to the student level - maybe it could ALSO mark based on that grading scale.... and then we use the gate just to double check that it spit out a number thats right around or a little higher than the lesson #">
+### [B1] BREACH NOTED - the first research grep ran before this entry existed <adherence:9>
+   - [S1] DONE - `data-kind` is declared in exactly one place outside the pages: the `/* ## BLOCK FRAME` header in `style.css:207`. The map never mentions it, so the block-attribute vocabulary lives in the CSS header a build reads <PEDAGOGY-MAP.md, style.css> <one owner named>
+### [B2] - THE MARK AND THE COMPARISON <assessment is the author's; the check is arithmetic>
+   - [S1] DONE - `PEDAGOGY-MAP.md:52` gains the rule: every block marks `data-level="10|20|30|40|50"`, the band of its hardest demand, assessed at authoring, never by reading a page back; **the number must be at or above the lesson number**, and **a block marked 50 never carries a keyed answer** (50 means the page's own answer is not one key, per `[LEVEL]:49`); a mark that cannot name which of the four demands set it is not a mark <PEDAGOGY-MAP.md> <one owner, and a structural cross-check that cannot inflate>
+   - [S2] DONE - `style.css:207` BLOCK FRAME now names `data-level` beside `data-kind`, so a build reading headers-only learns the attribute exists <style.css> <one sentence, no new rule>
+   - [S3] DONE - gate `[G2]` is now "does every block carry `data-level` at or above the lesson number, and can you name which of the four demands set it?" <qa/brief.mjs> <seven lines still>
+
 ## [55] - G2 becomes the challenge question, not a shape rule; and a duplicated rule line deleted
 <"g2 no. stop making overly limiting rules. make g2 work with our 'is it challenging to the student?' concept, of content level. can that be a mechanical check?">
 ### [B1] BREACH NOTED - the gate edit and the dedup ran before this entry existed <adherence:9>
