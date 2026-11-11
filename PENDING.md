@@ -1,6 +1,19 @@
 # PENDING — Adherence.md [BATCHING] for current task
 
 
+## [42] - the same heading rewrite applied to KIDS-ROADMAP.md (2026-11-10)
+### [B1] - PRE-PROMPT RESEARCH <"do the same for KIDS-ROADMAP.md"> <whether the kids file has the same shape as adult, or a shape that breaks the digest> DONE - same field template and the same 50 lessons, but a DIFFERENT example separator, which is what "the same" had to be translated against
+   - [S1] - the kids entries counted and their heading form read <a different template would make "the same" mean something else> DONE - 507 lines, 50 `## Lesson N: title` headings, 48 with `teaches`/`Vocabulary`/`Examples`; the 2 without are 25 and 45, the EXAMs, exactly as in adult
+   - [S2] - the separator checked on THIS file, not inherited from adult <a middle dot inside a Vocabulary line would split a word in two> DONE - kids separates examples by `"; ` (all 48 Examples lines start with a quote and contain `"; `), **not** adult's ` · `. Zero middle dots in any Examples or Vocabulary line (the file's 11 are all in the `## Shape` prose), so ` · ` is safe as the digest separator and the first example is taken as the leading quoted segment by regex, not by splitting on a character the file does not use
+### [B2] - the rewrite <the adult batch's [B2], one file over> DONE - 507 lines -> 459; assertions passed before the swap: 50 rewritten, 48 teaches dropped, 48 examples moved, 48 vocabularies moved, 48 three-segment headings, 0 old-form headings left, 0 teaches lines left
+   - [S1] - 50 headings rewritten to `## [N] - <teaches> · <first 3 vocabulary> · <first example>` <script-applied, so no entry can be half-converted> DONE - e.g. `## [40] - `relative/who-for-people`, `relative/that-for-things`, `relative/where-for-places`, `relative/dropped-object` · guy, gamer, sigma · "the guy who beat me"`
+   - [S2] - the `- teaches:` line deleted from all 48, and the 3 vocab items and the first example removed from the fields they moved out of <"Delete the '- teaches:' line and the items from vocabulary and examples that were moved"> DONE - counts now teach 0 · Vocabulary 48 · Examples 48; the two EXAMs keep their own titles
+### [B3] - the readers exercised against kids <prose.mjs and provenance.mjs both read field labels, so the same silent shrinkage is possible here> DONE - identical allowances and identical word counts on all 30 kid pages, before vs after; provenance returns 12 items for lesson 1 (3 heading + 9 field) and 12 for lesson 50, i.e. the pre-move totals
+   - [S1] - prose.mjs A/B on the whole kids track <the count must not shrink by 3 items per lesson> DONE - 30 pages, `Compare-Object` found no difference
+   - [S2] - provenance's real extractors lifted out and run on 1/25/45/50 <25 and 45 never carried the fields, so 0 is right there> DONE - as above; `--selftest` green
+### [B4] - publish <commit-by-default; a push is not a publication> IN PROGRESS
+
+
 ## [41] - ADULT-ROADMAP headings rewritten as the digest, and the two readers taught to read it (2026-11-10)
 ### [B1] - PRE-PROMPT RESEARCH <"should we make pedagogy-map.md scan all the headings to understand the broader context"> <what the roadmap's headings carry today, and who parses them> DONE
    - [S1] - the roadmap's shape counted, not assumed <50 entries, 509 lines, one entry per ~10 lines; 48 carry `teaches`/`Vocabulary`/`Examples`, 2 do not (25 and 45, the two EXAMs)>
