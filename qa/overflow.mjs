@@ -11,6 +11,7 @@
  *      node qa/overflow.mjs --selftest            (fixtures/overflow-ok.html clean, overflow-bad.html not)
  *      node qa/overflow.mjs 1 --shot out.png [--shot-h <px>] [--shot-y <px>]   (a picture of the page)
  */
+import { qaOff } from './off.mjs'; qaOff('overflow'); /* QA OFF - see qa/off.mjs */
 import http from 'http';
 import fs from 'fs';
 import path from 'path';

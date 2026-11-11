@@ -23,6 +23,7 @@
  * pickTracks/hasTrackFlag/pickLessons (structural), lang and register import pickVoiceTracks/
  * hasAllFlag/touchedScope (voice), and examples, games4, landing, live and build import none.
  */
+import { qaOff } from './off.mjs'; qaOff('run'); /* QA OFF - see qa/off.mjs */
 import path from 'path';
 import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
@@ -37,7 +38,7 @@ const MEMBERS = {
   content:  { file: 'qa/content.mjs',    scope: true,
               what: 'the page works: engines run, answers save, required blocks present' },
   provenance: { file: 'qa/provenance.mjs', scope: true,
-              what: 'lesson by lesson: concepts trained and tested, 70%+ of new items quizzed; with the ledger: record, inputs, range, uncopied shape' },
+              what: 'DISABLED (exits 2): FORMAT.md was retired and this member hashed it — repoint the `format` hash, then re-enable (ISSUES.md)' },
   prose:    { file: 'qa/prose.mjs',      scope: true,
               what: "the page's sentences: every claim checkable, every explanation inside its budget" },
   lang:     { file: 'qa/lang.mjs',       scope: true,

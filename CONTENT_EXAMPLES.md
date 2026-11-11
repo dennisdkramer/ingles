@@ -1,14 +1,6 @@
 # CONTENT_EXAMPLES — A menu of **mechanisms** and skins for content authored in the page's HTML
 
-## [INSTRUCTIONS]
-
-- **A menu, not a checklist.** Nothing here is required to be in any lesson or in any order.
-- **The content in the page.** Games drive authored `.qitem`s (stem + optional `.listen` + radios), `input.gap`, or a textarea — nothing else. Whatever the engine animates is presentation; the saved answer is always one of those controls. If a mechanism cannot end in one, it is not a vehicle, it is a decoration. 
-- **The tone of a lesson comes from the lesson's copy, never from here.** Every game below is track-neutral, *skins* layered on top — never baked in
-- **Every activity that carries answers or fields declares its own multiplier.** Its `###` entry carries `**load**`: the number a build multiplies the block's content level by for the work the block is given, in the shape `qty ×1.0 at <the count it is normally used at> → ×<N> at <its ceiling> · pace ×<N> when data-time · risk ×<N> at data-retry="0"`. **That is a curve across two points, not a ceiling:** the stated baseline is where the activity is ×1.0, the ceiling is where it is ×N, and a block authored *below* the baseline sits *below* ×1.0 — four items is ×1.0 and two is less, because two is half the searching. The arithmetic is in `PEDAGOGY-MAP.md [LEVEL] x` — `load = L × M` with `M = qty × pace × risk`; L is the block's content level on the 1–50 scale and the product is **not** capped, so a deliberately hard block is just a high load — and the activity states the numbers, because only it knows what its own ceiling costs. A build reads that line and never estimates one; an entry with no `**load**` line can be authored at its baseline count and nowhere else.
-
 ### Build [Constraints] - Ignore this section for lesson generation
-
 1. There is **no house style**. Look, palette, motion and mood are chosen per game and per track — a kids page may be loud and a business page sober, and neither is more correct. Only these hold, because they are mechanical:
 2. **The page must still work if the engine never loads.** The authored `.qitem`s are ordinary radios: they render, save and print with no JS. That fallback is not optional.
 3. **No network at run time.** Art is CSS, inline SVG, or a local file. Nothing fetched from another host, so a
@@ -21,12 +13,15 @@
    laptop.
 7. **Difficulty and content are data.** Every game reads its items from the page and its knobs from `data-*`
    attributes, so a teacher can add items or change difficulty without editing an engine.
+   
+   
+## [INSTRUCTIONS]
+- **A menu, not a checklist.** Nothing here is required to be in any lesson or in any order.
+- **The content in the page.** Games drive authored `.qitem`s (stem + optional `.listen` + radios), `input.gap`, or a textarea — nothing else. Whatever the engine animates is presentation; the saved answer is always one of those controls. If a mechanism cannot end in one, it is not a vehicle, it is a decoration. 
+- **The tone of a lesson comes from the lesson's copy, never from here.** Every game below is track-neutral, *skins* layered on top — never baked in
+- **Every activity that carries answers or fields declares its own multiplier.** Its `###` entry carries `**load**`: the number a build multiplies the block's content level by for the work the block is given, in the shape `qty ×1.0 at <the count it is normally used at> → ×<N> at <its ceiling> · pace ×<N> when data-time · risk ×<N> at data-retry="0"`. **That is a curve across two points, not a ceiling:** the stated baseline is where the activity is ×1.0, the ceiling is where it is ×N, and a block authored *below* the baseline sits *below* ×1.0 — four items is ×1.0 and two is less, because two is half the searching. The arithmetic is in `PEDAGOGY-MAP.md [LEVEL] x` — `load = L × M` with `M = qty × pace × risk`; L is the block's content level on the 1–50 scale and the product is **not** capped, so a deliberately hard block is just a high load — and the activity states the numbers, because only it knows what its own ceiling costs. A build reads that line and never estimates one; an entry with no `**load**` line can be authored at its baseline count and nowhere else.
 
-- - - 
 
-
-# [VEHICLES] 
-**Step 1 — browse the headings, nothing else.** 
 
 ## [TEACHING]
 

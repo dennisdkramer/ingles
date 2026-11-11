@@ -320,3 +320,12 @@ All four had every `[Bn]` and `[Sn]` closed; they sat in `[CURRENT]` only becaus
    - [S2] - no QA harness run <"stop doing QA that isnt asked for"> <`node --check engine4.js` only, which is a syntax check on the edited file, not a test> DONE
    - [S3] - CONTENT_EXAMPLES.md entries rewritten where a game changed (bingoCard 7s, crosswordBoard, flapGate stream, echoPads levels, ladderRun, trainOrder labels) DONE
    - [S4] - commit and push
+## [1] - migrate every rule in FORMAT.md into the style.css `## ` headers, PEDAGOGY-MAP.md [PAGE] and FILESYSTEM.md, then retire FORMAT.md
+### [B1]- DONE - the three files carry every rule FORMAT.md held, FORMAT.md is deleted, and nothing points at it
+   - [S1] DONE - style.css: 21 `## ` headers, one per lesson-facing contract, each above the CSS it governs and carrying the rule itself for a scan; `.todo` rule added; "FORMAT §2c", the stale "centred" clause and the PENDING [17] pointer removed <style.css>
+   - [S2] DONE - PEDAGOGY-MAP.md: [PAGE] MECHANICS ([ORDER] / [BLOCK] / [TEXT]) stating what a build must DO and naming the header for each; [I/O] 7 now names the `## ` headers; L45 kept, L49 deleted and its sense folded into L45's cleanup step <PEDAGOGY-MAP.md>
+   - [S3] DONE - FILESYSTEM.md: a folder's NAME is URL-/selector-/CLI-safe and chosen once, its display name is track.json `label`; FORMAT.md delisted <FILESYSTEM.md>
+   - [S4] DONE - FORMAT.md deleted; references repaired in FUNCTION.md (2), VERIFICATION.md, engine2.js (2), engine4.js (2), qa/content.mjs, qa/liquid.mjs (2), qa/preview-blocks.html, _shell.html <those files>
+   - [S5] DONE - qa/provenance.mjs DISABLED at its entry point (banner states what to repoint, exits 2), labelled in qa/run.mjs, recorded in ISSUES.md, [PROOF] no longer requires it and the record's `format` is empty <the four files>
+   - [S6] DONE - style.css with comments stripped is identical to HEAD except the added `.todo` rule; `node --check` green on engine2/engine4/provenance/run/liquid; reference sweep clean but for the retirement notes; qa/liquid.mjs reds only on the deleted file still being in `git ls-files` until the deletion is committed
+

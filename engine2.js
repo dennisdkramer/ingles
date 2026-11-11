@@ -74,7 +74,7 @@ function nbSave(){const fd=document.getElementById("feed");if(!fd)return;send({a
 document.addEventListener("input",e=>{if(e.target&&e.target.id==="feed"){clearTimeout(nbTimer);nbTimer=setTimeout(nbSave,800);}});
 /* ---- exercise answers (input.gap / radio / translation textareas) — type "answer" ------------
    THE NUMBER IS THE IDENTITY. A control carrying a number in `name` — `a1c1` for an item, `a1c1g1`
-   for its first gap (FORMAT.md [LIMITS]) — is keyed by that name alone: the number is unique on the
+   for its first gap (FUNCTION.md [CONTENT]) — is keyed by that name alone: the number is unique on the
    page, so no ruler and no ordinal are needed, and rewording or reordering leaves every answer where
    it was. A control with no such name is keyed the LEGACY way, unchanged: anchor = the text the field
    answers (a gap's prompt, a question's stem, a translation box's prompt), with {b,o} (the highlight
@@ -114,7 +114,7 @@ function ansGap(el,w){
 function ansPosOf(o){return(o&&o.pos)?o.pos:ansPos(o&&o.posEl)}
 function ansOf(el){
  /* a numbered control is its own identity — see the header comment above. The shape is the one
-    FORMAT.md documents, `a<section>c<block letter><item>` with an optional `g<n>` for a gap, so a
+    FUNCTION.md [CONTENT] documents, `a<section>c<block letter><item>` with an optional `g<n>` for a gap, so a
     page that never adopted the convention keeps the legacy text anchor and nothing it saved moves. */
  const num=(typeof el.name==="string"&&/^a\d+[a-z]\d+(g\d+)?$/.test(el.name))?el.name:null;
  if(num)return{anchor:num,posEl:null,pos:null};

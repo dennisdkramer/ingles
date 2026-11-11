@@ -12,7 +12,7 @@
  *   - no console errors
  *
  * It does NOT check classes, counts, block widths, option counts, spacing or structure: those are
- * generation decisions (FORMAT.md + model judgement), not defects a harness can adjudicate.
+ * generation decisions (the style.css `## ` headers + PEDAGOGY-MAP.md [PAGE] + model judgement), not defects a harness can adjudicate.
  *
  * Tiering policy (same as qa/lang.mjs and qa/register.mjs): FAIL only what makes the page wrong or
  * lossy for a student; WARN everything a reader could still use, and record it in ISSUES.md. A suite
@@ -20,6 +20,7 @@
  *
  * Run: node qa/content.mjs [--track=kids|business|adult] [lessonNumber ...]
  */
+import { qaOff } from './off.mjs'; qaOff('content'); /* QA OFF - see qa/off.mjs */
 import { JSDOM } from 'jsdom';
 import http from 'http';
 import fs from 'fs';

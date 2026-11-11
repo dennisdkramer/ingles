@@ -19,6 +19,7 @@
  *     call or inside an innerHTML string — has a rule in style.css, and no two games own one name
  * Run with: node qa/games4.mjs
  */
+import { qaOff } from './off.mjs'; qaOff('games4'); /* QA OFF - see qa/off.mjs */
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';

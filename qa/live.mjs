@@ -34,6 +34,7 @@
  * The scenarios reproduce the three pending bugs from FUNCTION.md and print a state dump at every
  * step, so a failure shows WHY (rows written, pending windows, mark pieces, painted rectangles).
  */
+import { qaOff } from './off.mjs'; qaOff('live'); /* QA OFF - see qa/off.mjs */
 import http from 'http';
 import fs from 'fs';
 import path from 'path';

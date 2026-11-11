@@ -1,6 +1,15 @@
 # ISSUES — bugs & problems (only bugs/problems live here)
 Bugs and problems only. Parked plans, to-do items and features live in PARKED.md; handoffs in HANDOFF.md; current state & shared parameter values in STATUS.md.
 
+## ALL QA IS OFF (2026-11-10, owner instruction) — every harness exits 0 without reading a page
+`qa/off.mjs` holds the switch; each of the twelve harnesses calls `qaOff('…')` as its first statement, so a run
+prints one line and exits 0. Reason: lesson generation is being judged on the page it produces, with nothing
+between the prompt and the page — a harness that reds on a style choice is a second author, and its verdict
+arrives before the page exists. **Nothing below is fixed, withdrawn or re-measured: it is invisible until QA is
+back.** Re-enable everything for one run with `QA_ON=1` (PowerShell `$env:QA_ON='1'; node qa/run.mjs content`);
+re-enable one harness for good by deleting its single `qaOff('…')` line. `qa/provenance.mjs`'s own `format`
+problem (the entry below) is untouched underneath and still needs its repoint before that member means anything.
+
 ## qa/games4.mjs — 15 failing engine tests, moved out of `npm run qa`
 `npm run qa:games` → **116 passed, 15 failed** (2026-11-07). The failures are engine/plugin behaviour and CSS
 coverage, not lesson-page adherence: `bingoCard` (6 — lead countdown position, the two counts stacked, the
@@ -12,14 +21,17 @@ It was in the `qa` chain, which made every `npm run qa` red for reasons a page c
 suite is how a real page failure gets read as noise. It now runs as its own script. **Fix baseline, then put it
 back in `qa`.** Untouched by the lesson-generation work.
 
-## qa/provenance.mjs — every page fails the FORMAT.md input hash (102 of 102)
+## qa/provenance.mjs — DISABLED (2026-11-10): the `format` input it hashed was retired
 `node qa/provenance.mjs` → **102 of 102 pages failed** (2026-11-10), each on the same line: `input FORMAT.md changed
-after this page was built (record 120eb47a, disk a34375bd)`. No page is at fault: the committed `FORMAT.md` blob
-hashes `73d7d037`, already different from `120eb47a`, so FORMAT.md was edited after those records were built
-(549074e, 9f60cf7 and 30c045a all touched it). The mismatch predates the 2026-11-10 wording fix and reads the same
-for all 102 pages, so the residue is one contract file, not 102 pages. **Resolve by re-baselining the `format` input
-of the records (or regenerating), never by editing pages** — until then the check cannot report a real drift,
-because it reports this one for everything.
+after this page was built (record 120eb47a, disk a34375bd)`. No page was at fault: the committed `FORMAT.md` blob
+hashed `73d7d037`, already different from `120eb47a`, so FORMAT.md had been edited after those records were built
+(549074e, 9f60cf7 and 30c045a all touched it) — one contract file's residue, not 102 pages.
+**FORMAT.md was then retired** (its rules now live in the style.css `## ` headers, PEDAGOGY-MAP.md [PAGE] and
+FILESYSTEM.md), so the record key `format` no longer names a file at all. **The member is DISABLED at its own entry
+point and exits 2** (`qa/run.mjs` labels it so) — not 0, because a skip that prints green is worse than no green.
+**To re-enable: decide what `format` now hashes (the style.css `## ` headers, or nothing), change `CONTRACT` plus the
+`format` stub in `selftest()`, re-record the ledger, delete the banner.** Until then no member reports record drift,
+and a red from this one is the disable talking, not a page.
 
 ## adult/lesson22 — exists, is not a lesson page
 `qa/content.mjs --track=adult 22` → engine1.js and engine2.js did not execute, `#feed` missing, `.content-area`

@@ -15,6 +15,7 @@
  * The last case is the one that matters for the future: a track that exists in NO file today must still get
  * a column, its track.json label and a grantable option.
  */
+import { qaOff } from './off.mjs'; qaOff('landing'); /* QA OFF - see qa/off.mjs */
 import { JSDOM, VirtualConsole } from 'jsdom';
 import fs from 'fs';
 import crypto from 'crypto';

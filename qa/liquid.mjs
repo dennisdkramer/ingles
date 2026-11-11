@@ -16,13 +16,13 @@
  *   FAIL  an unclosed `{{` or `{%` — Liquid's own syntax error, and the whole build dies with it
  *   FAIL  a `{%` tag name Liquid does not know — the same syntax error, spelled differently
  *   WARN  a closed `{{…}}` — legal and evaluated, so the published page shows a BLANK where the name was:
- *         FORMAT.md:6 has five, and a reader of that page sees "its five placeholders filled: ` `, ` `…".
+ *         "its five placeholders filled: ` `, ` `…" where five names were expected, and the reader sees gaps.
  *         A warning, because the site still builds.
  *   SAFE  `{% raw %}` … `{% endraw %}` — Liquid copies that span through untouched, so an opener inside it
  *         is a text token, not a delimiter. This is the escape to reach for when a token must be shown.
  *
- * Presence is not the defect — balance is. FORMAT.md has carried five closed tokens for as long as the site
- * has built; the incident was one that never closed. A harness that redded on presence would be red on a
+ * Presence is not the defect — balance is. The repo has carried closed tokens for as long as the site has
+ * built; the incident was one that never closed. A harness that redded on presence would be red on a
  * healthy repo and would be turned off within a week.
  *
  * SCOPE: the tracked `.md` set, because that is what GitHub builds (`git ls-files`). A file git does not
@@ -31,6 +31,7 @@
  *
  * Run: node qa/liquid.mjs [path …] [--selftest]
  */
+import { qaOff } from './off.mjs'; qaOff('liquid'); /* QA OFF - see qa/off.mjs */
 import { spawnSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';

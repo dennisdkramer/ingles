@@ -1,5 +1,5 @@
 /* ---- engine4.js — Tier-1 games: ONE runner, games as presentations ----------------------------
-   Contract (FUNCTION.md owns behaviour, FORMAT.md the block):
+   Contract (FUNCTION.md owns behaviour, the style.css `## ` headers own the block):
    - The PAGE carries the real answers: `.game > .game-list > .qitem` (a `.qstem` prompt, optional
      `.listen` chip, `input[type=radio]` options). That markup persists, prints, and is what a
      student sees if this file never runs.
@@ -633,7 +633,7 @@ window.GAMES4 = (function () {
     if (this.itemTime) stage.appendChild(bar);
     this.bar = bar; this.barFill = bar.querySelector('i');
     this.stage = stage; this.hudEl = hud;
-    /* the stage goes BELOW the block's lettered header, never above it: FORMAT.md requires the h3 to be
+    /* the stage goes BELOW the block's lettered header, never above it: the `## BLOCK HEADER` contract requires the h3 to be
        the block's first line, so a block that opens with one keeps it on top and the stage lands directly
        under it. A block whose markup has no heading is inserted at the top exactly as before. */
     var head = root.firstElementChild;

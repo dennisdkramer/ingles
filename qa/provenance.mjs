@@ -46,6 +46,7 @@
  * could still use and a rule elsewhere permits — a roadmap vocabulary item the build dropped is a
  * WARN because PEDAGOGY-MAP.md [BUILD] allows changing included vocabulary where purpose justifies it.
  */
+import { qaOff } from './off.mjs'; qaOff('provenance'); /* QA OFF - see qa/off.mjs */
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
@@ -603,6 +604,22 @@ function trackFingerprints(root, track) {
       fp: fingerprintOf(sectionsOf(fs.readFileSync(path.join(dir, 'lesson' + n + '.html'), 'utf8'))),
     }));
 }
+
+/* ================================================================================================
+   ⚠ DISABLED — 2026-11-10 — REPOINT BEFORE IT RUNS AGAIN ⚠
+   FORMAT.md was RETIRED on 2026-11-10: the rules it held now live in the `## ` headers of style.css,
+   in PEDAGOGY-MAP.md [PAGE], and in FILESYSTEM.md. This member HASHED FORMAT.md on every lesson record
+   (`['format','FORMAT.md']` in CONTRACT above) and its self-test plants a stub FORMAT.md, so it cannot
+   run truthfully against the tree as it now stands: every record would fail on a file that no longer
+   exists, which is the same 102-of-102 red ISSUES.md already carries from the last time FORMAT.md moved.
+   TO RE-ENABLE: decide what the record's `format` hash now covers (the style.css `## ` headers, or no
+   file at all), change CONTRACT and the `format` stub in selftest() to match it, re-record the ledger,
+   then delete this block. Nothing else in the file assumes FORMAT.md.
+   THE EXIT CODE IS 2, NOT 0: a skip that prints green is the failure qa/run.mjs exists to prevent — a
+   green that means something other than what it says is worse than no green.
+   ================================================================================================ */
+console.log('⚠ qa/provenance.mjs is DISABLED (FORMAT.md retired 2026-11-10) — see the banner above the run section.');
+process.exit(2);
 
 if (process.argv.slice(2).includes('--selftest')) selftest();
 

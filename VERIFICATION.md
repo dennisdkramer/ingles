@@ -38,7 +38,7 @@ counts, spacing and class names are generation decisions, not defects.
   Pages then keeps serving the previous deployment while `git push` reports success. On 2026-11-10 one such
   line in PENDING.md stopped two commits in a row and the live site silently kept the old lesson list. FAIL on
   an unclosed opener or on a tag Liquid does not know; WARN on a closed token, which is legal but publishes
-  as a blank (FORMAT.md:6 has five). A raw block is the escape when a token must be shown. `--selftest`
+  as a blank ("its five placeholders filled: ` `, ` `…" where five names were expected). A raw block is the escape when a token must be shown. `--selftest`
   proves the scanner still fails the exact line that caused it and still passes prose. Scope is
   `git ls-files` — the published set — and named paths replace it for a falsification run.
   **The same check runs before a push** via `.githooks/pre-push`, which refuses to send objects that would

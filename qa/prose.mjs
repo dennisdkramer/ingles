@@ -30,6 +30,7 @@
  *
  * Run: node qa/prose.mjs [--track=kids|business|adult] [lessonNumber ...] [--selftest]
  */
+import { qaOff } from './off.mjs'; qaOff('prose'); /* QA OFF - see qa/off.mjs */
 import { JSDOM } from 'jsdom';
 import fs from 'fs';
 import path from 'path';

@@ -73,12 +73,12 @@ this should be restricted t lvl 15-20+
 ### sentenceSurgery
 
 → CONTENT_EXAMPLES.md §`sentenceSurgery`
-instead of having fields with the words position,  we can have a line below the chunks to which they can be dragged an put in order. We can make an alternate form of this which is a sentence with extranneos words to be cut out
+change the subheader to "Unscramble the sentence:" make the circles around the numbers smaller, spread the number/word items out (20px between each), center them, and replace all the 'position' question/fields with a single centered text input field
 
 ### registerContrast
 
 → CONTENT_EXAMPLES.md §`registerContrast`
-this one is good but only if both forms of the phrase are really used/common. We dont need to teach softening languge for a phrase that doesnt need to be softened, nor vice versa
+The merged row item here is an example and should NOT be included by default.
 
 ### questionBuilding
 
@@ -188,7 +188,7 @@ delete
 ### ruleCard
 
 → CONTENT_EXAMPLES.md §`ruleCard`
-increase Pattern, Means, Use when text by 4pt
+reduce the text under the labels back to normal size. heading left justified, only the content under the heading is centered
 
 ### workedExample
 
@@ -248,7 +248,7 @@ delete
 ### collocationMatrix
 
 → CONTENT_EXAMPLES.md §`collocationMatrix`
-make it a half-width block and include have and get
+put the 'a' from the column headerrs into the first column with the verb, then reduce the column header text by 2pt and center the whole chart contents
 
 ### falseFriendSplit
 
@@ -273,7 +273,7 @@ delete
 ### dialog
 
 → CONTENT_EXAMPLES.md §`dialog`
-change name to dialog
+add a sub-header that says "Read out-loud with a friend or teacher." thats baked in to the vehicle
 
 ### vocabField
 
@@ -338,9 +338,29 @@ delete
 ### infoGap
 
 → CONTENT_EXAMPLES.md §`infoGap`
-'ask for the missing information' should have the them header, delete the current 'them' block
+Make "Ask for the missing information from A. :" the header of B
 
 ### genreDoc
 
 → CONTENT_EXAMPLES.md §`genreDoc`
-good beginner lesson for talking about times and plans
+make just columns 1 and 3 auto resize to their contents if possible, try to
+
+### politeLadder
+
+→ CONTENT_EXAMPLES.md §`politeLadder`
+change the headers to "Casual", "Polite", "Gentle". Change block B to an activity that asks the student to reword phrases from one tone to another. remove the word 'rung', let the headers be generated based on the content. Maybe we need a classifier that we can use in this way in any of the vehicles we wat, where we dont give examples and let a given text be generated 100% freely
+
+### signScan
+
+→ CONTENT_EXAMPLES.md §`signScan`
+delete block B, order the block A column 2 items in the same order for all rows
+
+### formFill
+
+→ CONTENT_EXAMPLES.md §`formFill`
+chart header text: "Library Card Application", remove 'the details given' row, make block half-width
+
+### measureLocal
+
+→ CONTENT_EXAMPLES.md §`measureLocal`
+Change the concept of block A to 'expressing numbers/measurements', column 1 header "Info" column 2 "Write a phrase for each:". remove the explainer row at the bottom of A,  delete block B

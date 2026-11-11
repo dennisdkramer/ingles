@@ -43,6 +43,7 @@
  *
  * Run: node qa/lang.mjs [--track=kids|business|adult] [--all] [lessonNumber ...]
  */
+import { qaOff } from './off.mjs'; qaOff('lang'); /* QA OFF - see qa/off.mjs */
 import { JSDOM } from 'jsdom';
 import fs from 'fs';
 import path from 'path';

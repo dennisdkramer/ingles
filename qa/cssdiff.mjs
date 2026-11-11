@@ -16,6 +16,7 @@
  * The baseline (qa/.css-baseline.json) is deliberately NOT committed: it is only meaningful against
  * the working tree it was taken from. Record before an edit, compare after it.
  */
+import { qaOff } from './off.mjs'; qaOff('cssdiff'); /* QA OFF - see qa/off.mjs */
 import http from 'http';
 import fs from 'fs';
 import path from 'path';

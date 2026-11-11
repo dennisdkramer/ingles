@@ -32,6 +32,7 @@
  * Run: node qa/register.mjs [--track=kids|business|adult] [--all] [lessonNumber ...]
  *      node qa/register.mjs --tells    prints the parsed vocabulary and the tier sizes, reads no page
  */
+import { qaOff } from './off.mjs'; qaOff('register'); /* QA OFF - see qa/off.mjs */
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
