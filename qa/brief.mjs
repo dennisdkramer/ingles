@@ -95,13 +95,16 @@ emit('_shell.html - THE PAGE THIS IS BUILT ON', read('_shell.html'));
 
 /* 7. the gate: one question per line, answered AS EACH SECTION IS FINISHED — from what was just
       written, never by re-reading the finished page. Seven questions.
-      [G2] is the content-level question, not a shape rule: "is it challenging for THIS level".
-      The system already quantifies that as load = L x M against the lesson number ([LEVEL] t), so
-      [G2] and the old load line are one question, and [G2] is the only one of the seven that can be
-      computed rather than judged — once the load curves exist. */
+      [G2] is the content-level question, and it is answered by NAMING the band, not by arithmetic:
+      [LEVEL] gives the five bands and the four demands that set them, so the question is "which band
+      is this block's hardest demand in", and the answer must be at or above the lesson number.
+      The load product (L x M) is deliberately NOT the gate: [LEVEL] itself says a multiplier cannot
+      turn one kind of demand into another ("x2 on 10-level content is the same stated fact twice"),
+      so a page can reach a passing load by asking easy things often. Only L is the question; M is
+      what the activity declares, and the markup can supply it — not L. */
 const GATE = [
   '[G1] Does any answer appear in its own prompt? (it must not, in any form)',
-  '[G2] Is every item CHALLENGING for this level — its load at or above the lesson number, and nothing a level-N student would answer without thinking?',
+  '[G2] Which band is this block\'s HARDEST demand in — 10 one stated fact · 20 two elements joined · 30 the meaning sits in the form · 40 words and meaning disagree · 50 nothing stated? It must be at or above the lesson number.',
   '[G3] Is every concept taught, then trained, then asked? (three moves, none skipped)',
   '[G4] Does every row of blocks close to 100%? (full alone · half+half · third+twothird · third x3)',
   '[G5] Is Portuguese only where marked, and inside the budget?',
