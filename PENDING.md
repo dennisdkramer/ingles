@@ -1,7 +1,31 @@
 # PENDING — Adherence.md [BATCHING] for current task
 
 
-## [39] - the FORMAT.md migration categorisation judged (2026-11-10)
+## [40] - the migrate/merge plan for emptying FORMAT.md, with PEDAGOGY-MAP given full authority (2026-11-10)
+### [B1] - the owner's rulings assimilated <the four buckets, plus: structure to PEDAGOGY-MAP, 21/29/30 to FUNCTION [CONTENT], provenance to be weakened, only h) and l) of [GENERATION] to PEDAGOGY-MAP, m) to [INSTRUCTIONS] "maybe", trim everything false or conflicting> DONE - restated as destinations below
+### [B2] - the destination table, line by line, against the file as it stands (60 lines)
+   - PEDAGOGY-MAP `### [STRUCTURE]` (new) - 10 sections numbered · 11 blocks lettered, header is the first line, nothing may take its place · 12 items numbered 1..n, in the order the layout draws them (`across a row then down` for `.qopts`, `down a column` for `.qgrid.stack`) · 7's "short enough to sit on one line" · 57 l) `data-kind` · 53 h) contrasts visually distinct · 24 unbuilt work marked, never faked · 28b never a literal "___" in a prompt · 35b speaker names are English given names
+   - PEDAGOGY-MAP `:5`/`:2` rewritten - full authority: what the page DOES and HAS, and the choices (blocks, difficulty, language, register) it makes, grabbing the other files. The precedence list is inverted, not amended
+   - PEDAGOGY-MAP reading list `:14` - b) FORMAT.md becomes: structure lives here, mechanisms in `style.css §INDEX`, contracts in FUNCTION.md, folder names in FILESYSTEM.md, the `**width**`/`**load**` grammar in `CONTENT_EXAMPLES.md [INSTRUCTIONS]`
+   - style.css - 42a's values (1200/14px/593/391/791) and its "ONE of FOUR" · 43 b) DELETED (conflicts with e) 2) · 44 c) · 45 d) · 46-50 e) 1-3 + the row-sum rule · 51 f) · 52 g) · 54 i) · 55 j) · 56 k) · 59 n2) · 60 n) · 23 · 14 · 16 · 17a · 27 · 28a · 31 · 32 · 33 · 34 · 35a · 36 · 37 · 38 · 39 · 9 · 7's 38px · plus the header policy (every value has a why, no change without sign-off)
+   - FUNCTION.md `[CONTENT]` - 21 one anchor per control · 29 `data-answer` + `name="a1c1"` · 30 `data-why` and the `lang.mjs` exemption · 17b who sets `.kbd` · 8c what the PT classes mean to the harness
+   - FILESYSTEM.md - 15 the track folder naming rule
+   - CONTENT_EXAMPLES.md `[INSTRUCTIONS]` - 58 m) the `**width**` grammar, beside the `**load**` grammar, **conditional on that section being in the reading list**
+   - DELETED - 13 (stray empty bullet) · 22 (false) · 43 b) (conflicting)
+   - FORMAT.md - becomes a stub: title, the authority pointer, and a table of where each thing now lives. Ten lines
+### [B3] - the phases, each its own commit
+   - [S1] - Phase 0: land the owner's uncommitted FORMAT.md and PEDAGOGY-MAP.md edits first, so the migration edits a known state NOT EXECUTED
+   - [S2] - Phase 1: weaken provenance - drop `['format','FORMAT.md']` from CONTRACT with a TODO, and withdraw the inputs-vs-record half of the check (record-vs-disk is the half that catches a stale page; the other half is red for every page whenever any contract file is edited - ISSUES.md:15-18 records 102 of 102 failing on exactly this) NOT EXECUTED
+   - [S3] - Phase 2: style.css gains its catalogue and the header policy. Comments only, no rule moves, so `qa/cssdiff.mjs` must report an identical render NOT EXECUTED
+   - [S4] - Phase 3: PEDAGOGY-MAP gains `### [STRUCTURE]`, the inverted precedence and the new reading list NOT EXECUTED
+   - [S5] - Phase 4: FUNCTION `[CONTENT]` gains its five NOT EXECUTED
+   - [S6] - Phase 5: FILESYSTEM gains the folder-naming rule NOT EXECUTED
+   - [S7] - Phase 6: CONTENT_EXAMPLES gains m), and `[INSTRUCTIONS]` is named in the reading list NOT EXECUTED
+   - [S8] - Phase 7: FORMAT.md reduced to the stub; every citation re-pointed (PEDAGOGY-MAP:2/5/14, FUNCTION.md:2, FILESYSTEM.md:3, VERIFICATION.md:41, ISSUES.md:15-18) NOT EXECUTED
+   - [S9] - Phase 8: liquid, examples, content on one lesson, provenance without the FORMAT row, cssdiff identical, and a grep proving no doc cites a FORMAT.md line that moved NOT EXECUTED
+### [B4] - the roadmap index and adjacency, judged <"should we do the same indexing for headings in the roadmap and give the build access to the high-level understanding of adjascent items?"> <whether it is the same problem as style.css> DONE - **the goal yes, the mechanism no**. The roadmap is already an index: 501 lines, 51 `## Lesson N: title` headings, one lesson per ~10 lines, and `qa/prose.mjs:225` already extracts a lesson block by number. A hand-written header index on top would be a second copy of something derivable - the same drift class as `full+full` cited for a `half+half` vehicle and the 391/395 pair. What the roadmap lacks is not an index but an AGENDA, so the three parts recommended are: (1) a GENERATED per-track spine, one line per lesson (`qa/roadmap-index.mjs` -> `ROADMAP-INDEX-<TRACK>.md`, regenerated like `build-lessons.mjs`, checked by heading-count = line-count and lesson numbers 1..N unbroken); (2) the two NEIGHBOURS read as their full blocks, which requires inverting `PEDAGOGY-MAP.md:13` ("never another lesson's range"); (3) three flags per neighbour (already covered / reserved for later / budget) or a build that sees lesson 41 pre-teaches it. Cost ~72 lines against the current ~11, for the one input that decides what the lesson is about. Ride it inside [40]: the reading list is being renumbered there anyway, and the same generator gives the style.css catalogue its anti-drift check
+
+
 ### [B1] - PRE-PROMPT RESEARCH <"tell me what you think of this categorization for migration and merge"> <the file as it stands after the owner's own cleanup, and everything that reads it> DONE
    - [S1] - FORMAT.md read whole at its current state <60 lines: 2 policy, 7-17 element guidance, 20-24 mechanical limits, 26-39 class glossary, 41-59 generation a)-n)> DONE - the owner's cleanup removed the raw block I added at :6 and the two authoring cross-references at :19, and renamed the [LIMITS] heading
    - [S2] - every reader of FORMAT.md counted, because a migration that orphans a reader is the defect it is meant to cure <59 references across docs + 3 harnesses> DONE - PEDAGOGY-MAP x4, FUNCTION x2, FILESYSTEM x1, VERIFICATION x1, ISSUES x4, PAST_BATCHES x33, PENDING x4; qa/provenance.mjs x7, qa/liquid.mjs x2, qa/content.mjs x1
