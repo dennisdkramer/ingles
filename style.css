@@ -392,10 +392,10 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 /* ## REFLOW — --rows, stated on the block's own style attribute
    A reflowed block states `--rows` (items per column, e.g. `style="--rows:2"`) ON ITSELF — never on a
    section or a wrapper, so a section can never be split into columns; the column count follows from the
-   item count. A stack is ONE column unless the page asks to tile it (.cols / .sent / .stack) — the page
-   decides, not the CSS — and it tiles to fill its block, because dead space is the priority to avoid;
-   `.wide` forces one full-width column. Reflowed items are numbered DOWN each column and continue at the
-   top of the next, never across. */
+   item count. `.qgrid.stack` and `.blanks.sent` are the two containers that tile: items run DOWN a
+   column and continue at the top of the next, never across — which is why the numbering follows the
+   column. `.wide` overrides the tiling back to one full-width column. A container tiles only because
+   the page gave it one of those classes; the CSS never tiles a container that did not ask. */
 .qgrid.stack,.blanks.sent{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(var(--rows,2),auto);grid-auto-columns:minmax(0,1fr);column-gap:28px}
 .qgrid.stack{align-items:start}
 .qgrid.stack.wide{display:block}

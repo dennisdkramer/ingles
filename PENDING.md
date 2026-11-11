@@ -20,35 +20,13 @@ Author ([n]=(Prompt), [Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], form
 
 # [CURRENT]
 
-## [44] - clean up and reorder style.css: five groups, dedupe inside each, gated by qa/cssdiff
-### [B0] DONE - 2026-11-11 - qa/cssdiff.mjs - a measurable render before any rule moves <"cleaning up and reordering style.css"> <baseline snapshot>
-   - [S1] DONE - baseline written (3015 / 2359 / 409 elements). Determinism needed two harness fixes: the seeded Math.random pin became a constant (a seeded generator only reproduces a shuffle while its CALL ORDER is stable, and an async load reorders it), and the settle window went 400ms -> 2s (lesson40 inserts nodes about a second in, which read as 6 changed elements). 4 consecutive runs identical; selftest still sees a real change (994 elements) <qa/cssdiff.mjs> <identical on all three pages>
-### [B1] - UPDATED the catalogue and the fold were authored directly by the owner as 21 `/* ## ` headers in style.css (that header set IS the scan list), so no separate catalogue is written here; the "every value carries a why" policy line is likewise absent — each header states `owner instruction 2026-11-09` in its place <readability comes before size> <style.css with a section catalogue>
-   - [S1] - catalogue at the top, one line per section, shaped `§<what> — read when <decision>`; the decision only, never a value (391 vs 395 is what copying values into prose costs) <FORMAT.md 42-60 values, 27-39 class glossary, 14/16/17/23/9/7@38px> <every section listed, no number in any header>
-   - [S2] - header policy: every value carries a why, no value changes without sign-off <style.css carries no modification policy today> <policy at the top of the file>
-   - [S3] - `qa/cssdiff.mjs` identical — the proof that this batch was text <qa/cssdiff.mjs> <0 differences>
-   - DEPENDS - the user is mid-edit in FORMAT.md/PEDAGOGY-MAP.md; the destination of every line is already fixed in [40] phase 2, so this waits for those to commit
-### [B2] - cleanup <"reduce prose, nothing stale or conflicting, prune overlap"> <smaller style.css, same render>
-   - [S1] - contradictions, comment-vs-comment and code-vs-code: 261/262 disagree on who decides a stack's tiling, 262's "dead space is the priority" was retired by FORMAT e)2, and no child may re-declare what it inherits <style.css:261-262> <no two statements disagree>
-   - [S2] - prose: one why clause per non-obvious rule; cut who/when/provenance, praise, restated numbers, and all game and in-block-visual commentary <sweep points 4 and 5> <0 provenance lines, 0 restated values>
-   - [S3] - `qa/cssdiff.mjs` identical <qa/cssdiff.mjs> <0 differences>
-### [B3] - regroup into five groups in cascade order, one commit each <the four categories plus site UI> <style.css in five groups>
-   - [S1] - general (columns, type, form defaults, focus, palette) · [S2] in-block visuals (chart, activity block, kind, rhythm, slots, qgrid, blanks, gloss, stack) · [S3] function (button, popup, highlight, note, confirm dialog — today split across 68-160 and inside the block region) · [S4] site UI (index.html landing, teacher panel, student rows, access toggles; style.css:301, 405) · [S5] games (189 bespoke .g4-* names; .g4-fx-petal at 519 and .g4-prompt at 558/1143 sit above the 900 boundary) · [S6] inside every group: element default -> class -> component modifier -> state -> print <FORMAT.md a) values> <each group committed alone, `qa/cssdiff.mjs` identical after each>
-### [B4] - dedupe by value, inside a group only <"grouping by value instead of by rule"> <smaller style.css, same render>
-   - [S1] - literal colours to custom properties: #2f9e44 x25, #e8f7ee x15, #1d4ed8 x13 (the only real drift risk — a var() cannot fork, a literal can) <style.css palette> <one declaration each>
-   - [S2] - the 52 identical whole-block groups (195 rules -> 52) <measured 847 rules / 3085 declarations> <no identical block remains>
-   - [S3] - selector grouping on single-property repeats (position:absolute x147, display:flex x63, opacity:0 x55, left:0 x46), refusing any merge where another rule setting the same property shares a class/tag/id token; never across @media or @keyframes; rules carrying a why are exempt <style.css> <every refusal logged with its blocker>
-   - [S4] - `qa/cssdiff.mjs` identical, then re-measure size and rule count <qa/cssdiff.mjs> <0 differences, both numbers reported>
-### [B5] - verify and publish <nothing ships on an unread run> <Pages build read for the pushed sha>
-   - [S1] - `qa/liquid.mjs` clean, `qa/examples.mjs` 8/8, one `qa/content.mjs` lesson, `qa/cssdiff.mjs` identical, then the Pages run for that commit <VERIFICATION.md> <build success, stated as such only after reading the run>
-
-## [45] - commit the dirty tree, switch the liquid check back on, begin [44]
-### [B0] DONE - 2026-11-11 - PENDING.md - PRE-PROMPT RESEARCH <what is dirty, and how the QA switch works> <a research result, then cleared>
-   - [S1] DONE - 27 files dirty (not the 5 named): FORMAT.md deleted, PEDAGOGY-MAP.md rewritten, style.css +186 (the fold), every qa/*.mjs carrying a qaOff() call, and untracked qa/off.mjs. The switch is qa/off.mjs: `QA_ON=1` per run, or delete the call to re-enable one for good <qa/run.mjs, qa/liquid.mjs> <both known before any commit>
-### [B1] DONE - 2026-11-11 - 27 files, commit f84eb08 - commit the working tree <"commit those files"> <clean tree, one commit>
-   - [S1] DONE - committed as-is so the baseline starts from a committed tree. Known consequence named in the commit message: qa/provenance.mjs:69 still lists ['format','FORMAT.md'] in CONTRACT and :759 plants a FORMAT.md stub, so provenance throws ENOENT the moment it runs again <git status> <nothing dirty but known strays>
-### [B2] DONE - 2026-11-11 - qa/liquid.mjs, commit 987400b - re-enable the liquid scanner <"you can re-enable liquid.mjs"> <the guard active again>
-   - [S1] DONE - kill-switch line removed; real scan of 33 tracked .md (34 minus the deleted FORMAT.md), 0 warnings; selftest 6/6. One accident, caught and fixed in the same step: the removal script's CRLF split ate the `spawnSync` import beside it (reported 1 line, removed 2); restored before running <qa/liquid.mjs> <a real scan, not a QA OFF line>
-### [B3] DONE - 2026-11-11 - qa/cssdiff.mjs - begin [44] [B0] <"go"> <baseline snapshot>
-   - [S1] DONE - run under the documented per-run switch (`QA_ON=1`), since qa/cssdiff.mjs:19 is still off by default: every [44] gate below needs that prefix <qa/cssdiff.mjs> <identical on all three pages>
-
+## [46] - fix the stack sentence in style.css: it mis-describes its own class and restates a retired priority
+- NOTE - the style.css cleanup/reorder plan that stood as [44] is no longer in this file (cleared this turn). Its remaining batches -- cleanup, regroup, dedupe -- are not recorded anywhere but the transcript. Restore on request.
+### [B1] DONE - 2026-11-11 - PENDING.md - the entry itself <"ok so fix it"> <a plan in [CURRENT]>
+   - [S1] - measured before editing: `.qgrid` (no `.stack`) is one item per row; `.qgrid.stack` is `grid-auto-flow:column` + `--rows` (items run down a column, columns tiled across); `.qgrid.stack.wide` is `display:block` (one full-width column). 605 uses across 103 pages, so no declaration is removed -- the defect is the comment <style.css:395-396> <the three forms named before editing>
+### [B2] DONE - 2026-11-11 - style.css - rewrite the comment, leave every rule alone <"just remove the rules and let the css work naturally" -- the rules work; the prose does not> <an accurate comment over unchanged CSS>
+   - [S1] - drop "a stack is ONE column unless the page asks to tile it (.cols / .sent / .stack)" because `.stack` IS the tiling and `.stack.wide` is the one column; drop "it tiles to fill its block, because dead space is the priority to avoid" because it contradicts "the page decides, not the CSS" in the same sentence and restates the priority retired by the small-first width rule <style.css:395-396> <three forms and the numbering order stated, no false claim left>
+### [B3] DONE - 2026-11-11 - no file changed - prove it was prose <"fix it"> <unchanged render>
+   - [S1] - `QA_ON=1 node qa/cssdiff.mjs` identical on all three pages, and `node qa/liquid.mjs` clean <qa/cssdiff.mjs, qa/liquid.mjs> <0 differences, 33 clean>
+### [B4] - publish <nothing ships on an unread run> <Pages build read>
+   - [S1] - commit, push, then the Pages run for that sha <VERIFICATION.md> <build success stated only after reading the run>
