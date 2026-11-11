@@ -26,6 +26,35 @@ Author ([n]=(Prompt), [Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], form
 
 
 ## [48] - cut the QA tax: delete provenance, retire prose and examples as gates, keep cssdiff at the batch boundary
+## [49] - preview-blocks: delete the text of items already marked done, and make a text deletable when a change is cancelled
+## [50] - the generator must not look at the site: no finished page, and no QA output that prints one
+<"its that it dumps the whole finished page right into the context, sometimes multiple times, before the next page starts generating ... the generator task really needs to NOT LOOK AT the site">
+### [B1] DONE - 2026-11-11 - PRE-PROMPT RESEARCH <which QA scripts print page content, and which files a build is told to read> <every dumper named, then cleared>
+   - [S1] DONE - the harnesses are NOT the dumper: no `console.log` in any `qa/*.mjs` prints `textContent`/`innerHTML`/`outerHTML` (0 matches); `content`, `prose`, `lang` print verdicts and counts. The prohibition already exists at `PEDAGOGY-MAP.md:21` ("Withhold all other files, all other file reads require user sign-off"). KEPT <qa/*.mjs, PEDAGOGY-MAP.md> <measured, not assumed>
+   - [S2] DONE - and the real dump, measured in bytes: `qa/preview-blocks.html` is **144,978 B / 2,005 lines / 40 built blocks** — larger than `style.css` (118,826 B) and 1.6x `CONTENT_EXAMPLES.md` (89,792 B). `IN-BLOCK-VISUALS.md` names it 13 times. And the file a build IS told to read is clean: `CONTENT_EXAMPLES.md`'s 40 `**markup**` fields are prose, and **0** entries contain a literal `<div class="panel">` / `class="qgrid"` / `<input class="gap">`. So the leak is not a rule and not the examples — it is that QA opens a finished page inside the same context that then writes the next lesson <CONTENT_EXAMPLES.md, qa/preview-blocks.html, IN-BLOCK-VISUALS.md> <the number, and the mechanism>
+   - [S3] DONE - the fix, one bullet at `PEDAGOGY-MAP.md:23`: the context holds those inputs and nothing else, about **28 KB**, name the preview page and forbid it, and move page-opening QA outside a generation run. KEPT, and left **uncommitted** because the file also carries 3+/3- of owner edits <PEDAGOGY-MAP.md> <a number a build can check itself against>
+### [B2] - THE BUDGET IS STATED ONCE, AND IT IS A NUMBER <a soft rule could not be checked> <28 KB named, the 145 KB page banned by name>
+   - [S1] - DONE - the bullet above; it also explains the symptom, so a later reader knows WHY the ban exists rather than treating it as arbitrary <PEDAGOGY-MAP.md> <one owner>
+
+### [B3] DONE - 2026-11-11 - STATE THE PROHIBITION WHERE A BUILD WILL READ IT <a build reads its inputs and nothing else> <one owner for the rule>
+   - [S1] DONE - done as `PEDAGOGY-MAP.md:23`, folded into the same bullet as the budget so the ban and the number cannot drift apart <PEDAGOGY-MAP.md> <stated once, in the file that owns reading>
+### [B4] - VERIFY AND PUBLISH <no rule added without a check behind it> <green, and the tree honest about what is uncommitted>
+   - [S1] - `node --check` each edited harness, `node qa/liquid.mjs`, and a grep proving no `console.log` in `qa/` prints a page's text <qa/*.mjs> <syntax green, liquid green, grep clean>
+   - [S2] - commit the `qa/` and doc edits; if `PEDAGOGY-MAP.md` is still carrying owner edits, commit everything except that file and say so <git> <pushed, and the exception named>
+
+
+<"look at the wiring we have between notes.md and the preview pages - specifically preview-blocks. I want you to DELETE the words of text that were the item that you marked done, and I want to be able to delete the text too if i change my mind and decide not to change something">
+### [B1] DONE - 2026-11-11 - PRE-PROMPT RESEARCH <which item text is rendered from qa/NOTES.md, and what marks one done> <the wiring known, then this batch cleared>
+   - [S1] DONE - `qa/notes.js` (30,872 bytes) reads and writes `qa/NOTES.md` for each `textarea.qa-note[data-item]`. File shape: `## <preview page>`, then `### <item>`, then a `→ CONTENT_EXAMPLES.md §<item>` pointer, then the request lines. `qa/NOTES.md` is 366 lines: `preview-games4.html` 13-55, `preview-blocks.html` 56-366 with **57 sections**. KEPT: every rendered string comes from the file body, never from the page <qa/NOTES.md, qa/notes.js, qa/preview-blocks.html> <wiring known>
+   - [S2] DONE - and the decisive finding: **an empty box CANNOT delete a section, by design.** `notes.js:37` "NO BOX DELETES A SECTION: an empty box changes nothing", `:176` `if (!body) return src;`, `:79-82` "Only this file deletes a request ... Delete it only once it is tagged `[done]`". So the `[done]` tag is the intended marker and **zero sections carry it today**. The user's second request is therefore a real missing affordance, not a bug <qa/notes.js> <the constraint stated, not worked around>
+### [B2] - A DELETE CONTROL FOR ONE SECTION <"I want to be able to delete the text too if i change my mind and decide not to change something"> <a box can remove its own section on demand, and nothing else>
+   - [S1] - an explicit per-item delete on the preview page that removes ONLY that `### item` section from `qa/NOTES.md`, keeping every safety the file already states: it refuses unless the box was read (the adopted-value guard), it is one section wide, and it offers the same undo `notes.js` already keeps for a write that removed sections <qa/notes.js, qa/preview-blocks.html> <emptying still deletes nothing; the button deletes exactly one section>
+   - [S2] - the button and its label on `preview-blocks.html` only (the ask names that page), and `qa/NOTES.md`'s own line 9-10 amended so it stops claiming "emptying a box ... removes the request" while the code refuses to <qa/preview-blocks.html, qa/NOTES.md> <file and code agree>
+### [B3] - DELETE THE TEXT OF THE ITEM MARKED DONE <"DELETE the words of text that were the item that you marked done"> <that section's request text gone, nothing else touched>
+   - [S1] - BLOCKED ON AN ANSWER: which section is "the item that you marked done". No `[done]` tag exists in the file, and I have not edited `qa/NOTES.md` in any commit this session, so I cannot identify it from evidence. Deleting the wrong one destroys a live request <qa/NOTES.md> <named section deleted>
+
+
+
 <"and every minute of QA is fucking up the context window. but yes you can do the proposed QA changes">
 ### [B1] DONE - 2026-11-11 - SURVEY <what still references the three harnesses> <no dangling reference>
    - [S1] - count and list every reference to `qa/provenance.mjs`, `qa/prose.mjs`, `qa/examples.mjs` in tracked files, and read `VERIFICATION.md` in full before editing it <repo, VERIFICATION.md> <every reference known before anything is deleted>
