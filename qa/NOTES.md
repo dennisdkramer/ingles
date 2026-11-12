@@ -5,9 +5,33 @@ preview pages read and write this file directly (Chrome or Edge, click "link qa/
 this file is the whole record and editing it here edits the boxes.
 
 Every section opens with a pointer to the item's `###` heading in `CONTENT_EXAMPLES.md` — that
-heading is the contract the request argues with. The request stays here and is never copied into
-CONTENT_EXAMPLES.md. Emptying a box, or deleting a section here, removes the request; the record of
-work done is the commit.
+heading is the contract the request argues with, and reading the two against each other is the whole
+job. The request stays here and is never copied into CONTENT_EXAMPLES.md. A section holding finished
+text and new text together loses only the finished part — execute what remains.
+
+How a request is worked, in the agent's own hand. When work on one starts, its text is tagged by
+prefixing it with `(IN PROGRESS)` — `(IN PROGRESS) make both blocks half width` — so a box shows at a
+glance what is under way and what is still untouched. The tag goes at the front of the line it applies
+to, which also makes it findable as `^(IN PROGRESS)`. When the request is met — the shape changed, the
+harness read — that text is deleted from this file: the section keeps its heading and its pointer and
+is simply empty, ready for the next request, and the record of work done is the commit. A section
+holding several requests is tagged and cleared one request at a time, never all at once, so the
+untagged lines are the ones still owed.
+
+The tag is the agent's to write, and only ever on work it has actually begun, so it never reads as a
+promise. A request it cannot meet as written — a question waiting on an answer, a note to self, a line
+that contradicts another in the same file — keeps its text, untagged, and the reply says what it waits
+for: nothing is deleted that was not done. Emptying a box deletes nothing either. Only this file
+removes a request: delete a `###` section here and its box empties within 2 s, so a request's text is
+deleted only once it is met.
+
+Two ways in. Best: `node qa/serve.mjs` (or double-click `qa/serve.cmd`) — it serves the repo on
+127.0.0.1 and opens the preview page with `?notes=server`, and the boxes then read and write this file
+through that server: nothing to pick, nothing to grant. Double-clicking the page on its own still
+works — one click on "link qa/NOTES.md" grants the page file-system access — but that grant lapses
+between sessions, so the server is the reliable way in. Either way the page re-reads this file every 2 s.
+Text sitting directly under a `##` page heading is dropped the next time any box writes, so a block's
+content belongs in its `###` sections.
 
 ## preview-games4.html
 
@@ -55,10 +79,127 @@ must be possible for wall to continue, second wall to come, game target is conti
 
 ## preview-blocks.html
 
+### musicPlayer
+
+→ CONTENT_EXAMPLES.md §`musicPlayer`
+
+### lyricSheet
+
+→ CONTENT_EXAMPLES.md §`lyricSheet`
+
+### [03]
+
+→ CONTENT_EXAMPLES.md §`[03]`
+
+
+### rubyLine
+
+→ CONTENT_EXAMPLES.md §`rubyLine`
+
+### backChain
+
+→ CONTENT_EXAMPLES.md §`backChain`
+
+### etymologyTrail
+
+→ CONTENT_EXAMPLES.md §`etymologyTrail`
+
+### comicStrip
+
+→ CONTENT_EXAMPLES.md §`comicStrip`
+
+### dataBar
+
+→ CONTENT_EXAMPLES.md §`dataBar`
+
+### mapRoute
+
+→ CONTENT_EXAMPLES.md §`mapRoute`
+
+### hintLadder
+
+→ CONTENT_EXAMPLES.md §`hintLadder`
+
+### memoryHook
+
+→ CONTENT_EXAMPLES.md §`memoryHook`
+
+### falseFriend
+
+→ CONTENT_EXAMPLES.md §`falseFriend`
+
+### errorLog
+
+→ CONTENT_EXAMPLES.md §`errorLog`
+
+### exitTicket
+
+→ CONTENT_EXAMPLES.md §`exitTicket`
+
+### findSomeoneWho
+
+→ CONTENT_EXAMPLES.md §`findSomeoneWho`
+
+### classVote
+
+→ CONTENT_EXAMPLES.md §`classVote`
+
+### translateBack
+
+→ CONTENT_EXAMPLES.md §`translateBack`
+
+### spacedRecall
+
+→ CONTENT_EXAMPLES.md §`spacedRecall`
+
+### noticeCard
+
+→ CONTENT_EXAMPLES.md §`noticeCard`
+
+### lexiconEntry
+
+→ CONTENT_EXAMPLES.md §`lexiconEntry`
+
+### correctionPlate
+
+→ CONTENT_EXAMPLES.md §`correctionPlate`
+what is the purpose of this, other than just to show that something is wrong? if nothing else, delete
+
+### figurePlate
+
+→ CONTENT_EXAMPLES.md §`figurePlate`
+
+### rubricGrid
+
+→ CONTENT_EXAMPLES.md §`rubricGrid`
+
+### refTable
+
+→ CONTENT_EXAMPLES.md §`refTable`
+
+### readText
+
+→ CONTENT_EXAMPLES.md §`readText`
+
+### workedItem
+
+→ CONTENT_EXAMPLES.md §`workedItem`
+
+### itemList
+
+→ CONTENT_EXAMPLES.md §`itemList`
+
+### gapList
+
+→ CONTENT_EXAMPLES.md §`gapList`
+
+### writeBox
+
+→ CONTENT_EXAMPLES.md §`writeBox`
+
 ### contextFit
 
 → CONTENT_EXAMPLES.md §`contextFit`
-make both blocks half width
 
 ### connectedSpeech
 
@@ -73,17 +214,14 @@ this should be restricted t lvl 15-20+
 ### sentenceSurgery
 
 → CONTENT_EXAMPLES.md §`sentenceSurgery`
-change the subheader to "Unscramble the sentence:" make the circles around the numbers smaller, spread the number/word items out (20px between each), center them, and replace all the 'position' question/fields with a single centered text input field
 
 ### registerContrast
 
 → CONTENT_EXAMPLES.md §`registerContrast`
-The merged row item here is an example and should NOT be included by default.
 
 ### questionBuilding
 
 → CONTENT_EXAMPLES.md §`questionBuilding`
-need to be careful with difficulty on these, they might be more challenging/open/vague than they seem
 
 ### cheatSheet
 
@@ -103,16 +241,10 @@ delete
 ### emphaticBeat
 
 → CONTENT_EXAMPLES.md §`emphaticBeat`
-Pair with an explainer block that shows the pattern and a couple examples.
 
 ### falseFix
 
 → CONTENT_EXAMPLES.md §`falseFix`
-delete
-
-### dictogloss
-
-→ CONTENT_EXAMPLES.md §`dictogloss`
 delete
 
 ### summarySqueeze
@@ -153,7 +285,6 @@ delete
 ### lineRepair
 
 → CONTENT_EXAMPLES.md §`lineRepair`
-delete the bottom block with 'dropped' 'blended'
 
 ### contourMatch
 
@@ -178,7 +309,6 @@ delete
 ### mediaSnippet
 
 → CONTENT_EXAMPLES.md §`mediaSnippet`
-tag this block as a specific concept, add a second example of the same concept and delete question #2
 
 ### contrastTable
 
@@ -188,7 +318,6 @@ delete
 ### ruleCard
 
 → CONTENT_EXAMPLES.md §`ruleCard`
-reduce the text under the labels back to normal size. heading left justified, only the content under the heading is centered
 
 ### workedExample
 
@@ -203,12 +332,10 @@ delete
 ### formulaFrame
 
 → CONTENT_EXAMPLES.md §`formulaFrame`
-put the example text "id rather.." (in this case) as the header text
 
 ### signalTable
 
 → CONTENT_EXAMPLES.md §`signalTable`
-make the first column thinner to leave more room for longer examples. the header of the first column can be 'The Cue'
 
 ### exceptionBench
 
@@ -228,7 +355,6 @@ delete
 ### soundGrid
 
 → CONTENT_EXAMPLES.md §`soundGrid`
-tag the 'X' and 'TI' as portugues so they are italicized, dont say it outright in parenthesis. if you want to use a different color for portuguese text too thats cool
 
 ### stressBar
 
@@ -248,7 +374,6 @@ delete
 ### collocationMatrix
 
 → CONTENT_EXAMPLES.md §`collocationMatrix`
-put the 'a' from the column headerrs into the first column with the verb, then reduce the column header text by 2pt and center the whole chart contents
 
 ### falseFriendSplit
 
@@ -273,7 +398,6 @@ delete
 ### dialog
 
 → CONTENT_EXAMPLES.md §`dialog`
-add a sub-header that says "Read out-loud with a friend or teacher." thats baked in to the vehicle
 
 ### vocabField
 
@@ -288,7 +412,6 @@ delete
 ### melodyContour
 
 → CONTENT_EXAMPLES.md §`melodyContour`
-migrate this to IN-BLOCK-VISUALS.md
 
 ### beatGrid
 
@@ -308,7 +431,6 @@ delete
 ### twoWordVerb
 
 → CONTENT_EXAMPLES.md §`twoWordVerb`
-make the second block into a matching exercise using the words from the 'everyday form' column in the first block. We may need to utiliize checkboxes so you can confer with me abou tthis
 
 ### pronLab
 
@@ -318,7 +440,6 @@ This one is useful but I need to make some tweaks, leaving a note for myself to 
 ### wordFamily
 
 → CONTENT_EXAMPLES.md §`wordFamily`
-this one is good but we can add another column 'thing2'  because 'explainer' and 'decider' exist
 
 ### collocationGap
 
@@ -338,29 +459,33 @@ delete
 ### infoGap
 
 → CONTENT_EXAMPLES.md §`infoGap`
-Make "Ask for the missing information from A. :" the header of B
 
 ### genreDoc
 
 → CONTENT_EXAMPLES.md §`genreDoc`
-make just columns 1 and 3 auto resize to their contents if possible, try to
 
 ### politeLadder
 
 → CONTENT_EXAMPLES.md §`politeLadder`
-change the headers to "Casual", "Polite", "Gentle". Change block B to an activity that asks the student to reword phrases from one tone to another. remove the word 'rung', let the headers be generated based on the content. Maybe we need a classifier that we can use in this way in any of the vehicles we wat, where we dont give examples and let a given text be generated 100% freely
 
 ### signScan
 
 → CONTENT_EXAMPLES.md §`signScan`
-delete block B, order the block A column 2 items in the same order for all rows
 
 ### formFill
 
 → CONTENT_EXAMPLES.md §`formFill`
-chart header text: "Library Card Application", remove 'the details given' row, make block half-width
 
 ### measureLocal
 
 → CONTENT_EXAMPLES.md §`measureLocal`
-Change the concept of block A to 'expressing numbers/measurements', column 1 header "Info" column 2 "Write a phrase for each:". remove the explainer row at the bottom of A,  delete block B
+
+### dictogloss
+
+→ CONTENT_EXAMPLES.md §`dictogloss`
+fix the margins on the text entry box
+
+### blackoutLine
+
+→ CONTENT_EXAMPLES.md §`blackoutLine`
+what is the purpose of this

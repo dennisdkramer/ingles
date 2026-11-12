@@ -264,7 +264,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 body.editing #hlLayer,body.editing #noteLayer{display:none}
 .pt b,.lead b{font-style:normal}
 .chart tr.note td{background:#fff8ea;font-style:italic;color:#5c5347;border-top:0;padding:10px 14px}
-/* ## PAGE SCAFFOLD — the three headings and the fixed page. h1 is the lesson title, ONE line; h2 is a numbered section `1.`; h3 is a lettered block `A.`; nothing a vehicle uses may take their place. .page-container is 1400px and .content-area 1200px, both FIXED: no lesson element may size itself in `fr`, `vw` or `auto-fit`, because those make the browser re-decide the layout on resize. A plain link is `a`; the print copy lives in #printRoot. */
+/* ## PAGE SCAFFOLD — the three headings and the fixed page. h1 is the lesson title, ONE line; h2 is a numbered section `1.`; h3 is a lettered block `A.`; nothing a vehicle uses may take their place; any [h2 or h3] [defined by a vehicle or generated] must follow the number/letter. .page-container is 1400px and .content-area 1200px, both FIXED: no lesson element may size itself in `fr`, `vw` or `auto-fit`, because those make the browser re-decide the layout on resize. A plain link is `a`; the print copy lives in #printRoot. */
 body.editing mark.nb.has-rec{background-image:none}
 body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 

@@ -1,20 +1,5 @@
 # KIDS-ROADMAP
 
-## Decisions
-   · Item budget: 10 to 12 items in every teaching lesson, 576 across the 48 of them and twelve in every one after the slang pass - the floor because a lesson that cannot fill ten has not met its concept yet, the ceiling because a longer list stops being a drill and turns into a dictionary page, and the slang layer is spread two or three items per lesson so it fills the ceiling evenly instead of piling into the lessons that are about slang.
-   · Label budget: 3 to 6 labels under each `teaches:`, 184 labels in total over 27 areas - one label is one thing told once and then drilled, so fewer is a chapter and more is a drill sheet.
-   · Exam-uses budget: 25 and 45 name exactly 10 labels each, the ten where a failure means the block has not landed. It is a diagnosis, not an inventory.
-   · Repeated vocabulary: an item belongs to one lesson; a repeat is legal only where the later lesson names it in its `deepens:` line, and the checker reports one such reference in the whole course.
-   · Tail policy: 46-50 carries only what nothing later depends on - the past perfect, the imaginary conditional, the passive, tags, and the tone of a word that has gone stale - so no exam waits on them.
-   · Tone: register a) in KIDS-REGISTER.md (close friends, casual, online chat, silly stakes) is the default voice of every scene, carrier and vocabulary list, with b) wherever the language needs a peer group and c) wherever an adult has to be in the room. The register's own required language is taught in the course rather than parked in the tail: the text-speak code at 11, the border where slang stops being allowed at 23, the slang map at 37 - all three finished before the last exam, and the tail only goes past them. Every other teaching lesson carries two or three slang items chosen for the scene its own grammar already builds, so the register is met by the whole course rather than demonstrated three times. No lesson is told which register it is in.
-
-## Shape
-   · Blocks: 1-24 the sentence and its tenses, inside the student's own chat and school day · 25 EXAM · 26-44 plans, phrasal families, the perfect, comparison, conditions and reporting · 45 EXAM · 46-50 the tail
-   · Block 1 (1-24): by its end the student holds a real conversation about themselves and their day with nothing but facts, right-now actions, the past, a modal or two and a command, asking and answering without translating first. It owns register a)'s everyday scenes and register c)'s first requests to an adult, and it carries the text-speak code and the border where slang stops being allowed. Slang runs through all of it, two or three items per lesson.
-   · Block 2 (26-44): assumes block 1 and adds what makes plans, stories and opinions sound native - gonna, will, arrangements, the two phrasal families, the perfect, comparison, duty, conditions, relatives, gerund against infinitive, and reporting. It owns the peer scenes that need them (group chat, rankings, arguments) and lands the slang map where the ranking is taught. Its slang runs at two or three items per lesson as well, and it holds the last live slang before exam 45.
-   · Tail (46-50): assumes both blocks and goes past them - the past perfect, the imaginary conditional, the passive, tags, and how a message carries tone once the slang itself has gone stale. Nothing here is a prerequisite for anything. It carries two or three slang items per lesson like the blocks before it, and 50 is the only lesson whose items are chosen because they are dead.
-   · Spine: 28 families - kept in `ROADMAP GENERATION/work/kids-spine.md` (not shipped)
-
 ## [1] - `sound/vowel-no-fixed`, `cognate/suffix-codes`, `method/one-rule-then-drill` · video, computer, music · "video is vii-dee-oh, not vee-dee-oh"
 
    - Focus: What this track is and the two codes that make English readable: letters are not sounds, and a cognate's ending tells you how to say it.

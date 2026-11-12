@@ -13,6 +13,10 @@
  *   - a draft that says it is built in `qa/preview-blocks.html` has a matching `id="item-NAME"`
  *     there — so "chosen, then implemented" cannot rot into a pointer at nothing. This is the
  *     check that keeps a draft reachable from a lesson build.
+ *   - every block in `qa/preview-blocks.html` carries the kind of the vehicle it renders. A
+ *     `## [PRIMITIVES]` entry holds both kinds, so it cannot take its kind from the section name: the
+ *     entry declares its own in the markup bullet (`data-kind="teaching"` / `"training"`) and the tag
+ *     is checked against that, which is also the tag a lesson build will emit.
  *
  * STANDING INSTRUCTION TO THE ASSISTANT — a task that names text in a preview page's note box is a
  * task against that box (`textarea.qa-note` in qa/preview-games4.html, qa/preview-blocks.html), and
@@ -40,9 +44,9 @@ const ok = (name, cond, extra) => {
   else { fail++; console.log('  FAIL ' + name + (extra ? '  «' + extra + '»' : '')); }
 };
 
-/* an entry is              `### `name - (best for: …)``
+/* an entry is              `### `name — what shape it is (teaching|training|mixed|games)``
    a draft is               `#### `name` — one line about it``                              */
-const ENTRY_RE = /^### `([A-Za-z0-9]+) - \(/;
+const ENTRY_RE = /^### `([A-Za-z0-9]+) — /;
 const DRAFT_RE = /^#### `([A-Za-z0-9]+)`/;
 /* `### Build [Constraints]` is a sub-heading of [INSTRUCTIONS], not a vehicle: the one `###` in
    the file that is scaffolding rather than an entry, so it is named here and skipped. */
@@ -100,14 +104,20 @@ ok('every draft built in the preview page has an item there',
    was withdrawn with the `**width**` field at the owner's instruction (PENDING.md [16]), because a harness
    that keeps checking a deleted rule fails forever and trains everyone to ignore it. */
 
-/* the vehicle's category, read off the menu's own ## [SECTION] headings */
+/* the shape's category, read off the entry's own heading — `### `name — what it is (training)``.
+   It used to be inferred from the `## [SECTION]` heading, which cannot work for `## [PRIMITIVES]`
+   (that section holds both kinds) and went stale the moment a shape was reclassified without moving.
+   The heading is exactly what the index prints, so the index and this check read the same word. */
 const kindOf = {};
 let section = null;
 for (const l of lines) {
-  const h = l.match(/^## \[(TEACHING|MIXED|TRAINING|GAMES)\]/);
+  const h = l.match(/^## \[(TEACHING|MIXED|TRAINING|GAMES|PRIMITIVES)\]/);
   if (h) { section = h[1].toLowerCase(); continue; }
   const e = l.match(ENTRY_RE);
-  if (e && section) kindOf[e[1]] = section;
+  if (!e) continue;
+  const k = /\((teaching|training|mixed|games)\)`\s*$/.exec(l);
+  if (k) kindOf[e[1]] = k[1];
+  else if (section && section !== 'primitives') kindOf[e[1]] = section;
 }
 /* every block in a vehicle's section on the page, with the kind it carries */
 const blocksOn = name => {

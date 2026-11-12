@@ -1,4 +1,4 @@
-# PEDAGOGY - DO NOT MODIFY WITHOUT USER SIGN-OFF - **DO NOT READ for lesson generation - DOES NOT EFFECT PEDAGOGY-MAP.md TASKS**
+# PEDAGOGY - DO NOT MODIFY WITHOUT USER SIGN-OFF - **DO NOT READ for lesson generation 
 	- This file contains underlying pedagogical ideas of the project and guides curriculum planning.
     - The curriculum leverages the platform designed by this project which includes features like highlighing, recorded voice notes, and a custom dictionary/pronunciation key for the student to visualize connected speech.
     - The target audience are Brazilian Portugues speakers who want to learn english. They often have taken classes or courses in the past but found it challenging.
@@ -10,23 +10,32 @@
     - The curriculum is modified into 'Tracks' depending on the student's age, personality, and goals (`<TRACK>-REGISTER.md`). 
 	- Each track covers the same core concepts with heavily modified vocabulary, context, and activities)
 
---------------
---------------
-
-## Curriculum, Planning, and Course structure
-
+### [CURRICULUM] Structure
 1. Order is derived from this book's own difficulty model — not from any external grammar syllabus. 
 2. Concepts and vocabulary items are assessed by how far they sit from Portuguese (transparent / partial / opaque) times how important they are for understanding and producing spoken english  (core / common / marginal). 
 3. Balance between concept(s) presentation/explanation and training time is flexible based on model reasoning.
 
-### The difficulty model
 
-- **Distance from Portuguese (transfer).** Transparent = a direct anchor exists (a cognate, or a structure whose meaning maps cleanly). Partial = an anchor exists but misleads (the form maps, the meaning does not — or vice-versa). Opaque = no anchor; it must be built from nothing.
-- **Utility in TRACK-appropriate context** Core = the sentence cannot be formed without it (word order, do-support, the dummy subject, the top workhorse verbs). Common = frequent and useful but not sentence-blocking. Marginal = rare, formal, or replaceable.
-- **Placement = the two axes combined by judgment.** Transparent + Core → earliest (fast wins). Opaque + Core → early, taught as a structural rule. Partial + Core → middle, taught as a meaning trap. Transparent + Marginal → a deliberate choice (early-with-its-kin OR late as "formal only"), recorded with a reason. Opaque + Common → mid-to-late, sized to importance. Opaque + Marginal → late or optional.
-- **Vocabulary is concept → context → mapping.**
+PERSONALITY - NECESSITY - UTILITY - TRANSFERABILITY
+- **Distance from Portuguese (transfer)**
+Transparent = a direct anchor exists (a cognate, or a structure whose meaning maps cleanly). 
+Partial = an anchor exists but misleads (the form maps, the meaning does not — or vice-versa). 
+Opaque = no anchor; it must be built from nothing.
+- **Utility in TRACK-appropriate context** 
+Core = cannot communicate without it (word order, do-support, the dummy subject, the top workhorse verbs). 
+Common = frequent and useful but not sentence-blocking. 
+Marginal = rare, formal, or replaceable.
 
-### Pedagogy principles
+- **Placement = the two axes combined by judgment.**
+
+ Transparent + Core → earliest (fast wins). 
+ Opaque + Core → early, taught as a structural rule. 
+ Partial + Core → middle, taught as a meaning trap. 
+ Transparent + Marginal → a deliberate choice (early-with-its-kin OR late as "formal only"), recorded with a reason. 
+ Opaque + Common → mid-to-late, sized to importance. Opaque + Marginal → late or optional.
+
+
+### [PRINICIPLES] of the Pedagogy
 - **Unique ideas** Creatively synthesize teaching possibilities.. but dont throw the baby out with the bathwater: When appropriate, research several outside sources on the lesson's topic to brainstorm ideas, not to copy. 
 - **Contrast with Portuguese** The highest-value content is where English does NOT behave like Portuguese. The simple present is the flagship example:
   - EN Simple present = FACTS and IN-GENERAL statements only. It never touches the past, and touches the future only as a scheduled FACT. (vs Portuguese "trabalho aqui há 5 anos" = "I HAVE worked here for 5 years" ,never "I work here for 5 years").

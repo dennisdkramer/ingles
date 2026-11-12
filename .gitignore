@@ -6,3 +6,5 @@ progress.log
 IMPLEMENTATION.md
 ARCHIVED/
 qa/.css-baseline.json
+qa/_audio-analysis*.tmp.html
+assets/_audio-src-*.mp3

@@ -67,16 +67,29 @@ emit(ROADMAP + ' - lesson ' + lesson + ' ONLY', R.slice(start, end).join('\n'));
 const REG = TR + '-REGISTER.md';
 if (fs.existsSync(path.join(ROOT, REG))) emit(REG, read(REG));
 
-/* 4. exemplars: ONE IN EVERY TEN, never all of them. Within one lesson the items sit at
-      similar levels, so four representative shapes tell a build more than forty do. */
+/* 4. the menu: [INSTRUCTIONS] once, then ONE LINE PER SHAPE — never the bodies.
+      [I/O] 5 says the build gets `[INSTRUCTIONS]` and **ONLY `###`-level headings after it**; [BUILD] 3(e)
+      then has it read one chosen shape's section on its own. This used to send whole sections, one in ten:
+      nine shapes of eighty-one, at 23 KB, and `[INSTRUCTIONS]` arrived only because it happened to be glued
+      into the first section. `### Build [Constraints]` is scaffolding, not a shape, and is skipped.
+      --exemplars=N samples the INDEX (one line in N) for a deliberately narrow read; --section=NAME prints
+      one entry whole, which is what a build does once it has picked that shape. */
 const CE = read('CONTENT_EXAMPLES.md');
-const parts = CE.split(/\n(?=### )/);
-const heads = parts.filter(p => /^### /.test(p));
-const every = Math.max(1, Number(arg('every', '0'))
-  || (Number(arg('exemplars', '0')) ? Math.max(1, Math.floor(heads.length / Number(arg('exemplars')))) : 10));
+const iIns = CE.indexOf('## [INSTRUCTIONS]');
+const iPri = CE.indexOf('## [PRIMITIVES]');
+if (iIns >= 0 && iPri > iIns) emit('CONTENT_EXAMPLES.md - [INSTRUCTIONS] (the field grammar)', CE.slice(iIns, iPri).trimEnd());
+const heads = CE.split(/\n(?=### )/).map(s => s.split('\n')[0].trimEnd()).filter(l => /^### `/.test(l));
+const every = Math.max(1, Number(arg('exemplars', '0')) || 1);
 const picked = heads.filter((_, i) => i % every === 0);
-emit('CONTENT_EXAMPLES.md - ' + picked.length + ' of ' + heads.length + ' exemplars (1 in ' + every + ')',
-  picked.map(p => p.trimEnd()).join('\n\n'));
+emit('CONTENT_EXAMPLES.md - ' + picked.length + ' of ' + heads.length + ' SHAPES, one line each'
+  + (every > 1 ? ' (1 in ' + every + ')' : ''),
+  picked.join('\n'));
+const want = arg('section', '');
+if (want) {
+  const part = CE.split(/\n(?=### )/).find(s => s.startsWith('### `' + want + ' ') || s.startsWith('### `' + want + ' -'));
+  if (part) emit('CONTENT_EXAMPLES.md - `' + want + '` IN FULL', part.trimEnd());
+  else console.error('brief: no such shape: ' + want);
+}
 
 /* 5. the stylesheet, headers only: the ten contracts, not the mechanism */
 const CSS = lines('style.css');
