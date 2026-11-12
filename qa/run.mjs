@@ -49,6 +49,8 @@ const MEMBERS = {
               what: 'real-Chrome probe for what jsdom cannot reproduce (--only=<scenario>)' },
   liquid:   { file: 'qa/liquid.mjs',     scope: false,
               what: 'the .md GitHub renders as pages: a Liquid opener left unclosed kills the Pages build' },
+  pending:  { file: 'qa/pending.mjs',    scope: false,
+              what: 'PENDING.md still has its authoring spine: [HANDLING], [CURRENT], a step under every batch' },
 };
 
 /** an argument that narrows a run: a track, the full sweep spoken aloud, or a lesson number */
