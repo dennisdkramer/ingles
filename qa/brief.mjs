@@ -14,6 +14,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readMenu } from './menu.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => {
@@ -22,10 +23,24 @@ const arg = (k, d) => {
 };
 const has = k => process.argv.includes('--' + k);
 
+/* the menu's index, machine-readable, with no track and no lesson in hand: this is what the preview
+   page's nav is a readout of (`qa/serve.mjs` serves the same call to `qa/readout.js`), so the nav and
+   the brief cannot list different shapes — one grammar, one parser (`qa/menu.mjs`).
+     node qa/brief.mjs --index        the whole parse, as JSON (what the page receives)
+     node qa/brief.mjs --index=raw    the `###` lines, one per shape, exactly as the brief prints them */
+const indexArg = process.argv.find(a => a === '--index' || a.startsWith('--index='));
+if (indexArg) {
+  const menu = readMenu();
+  if (indexArg === '--index=raw') menu.shapes.forEach(s => process.stdout.write(s.raw + '\n'));
+  else process.stdout.write(JSON.stringify(menu, null, 2) + '\n');
+  process.exit(0);
+}
+
 const track = (arg('track', '')).toLowerCase();
 const lesson = Number(arg('lesson', '0'));
 if (!track || !lesson) {
   console.error('usage: node qa/brief.mjs --track=<business|adult|kids> --lesson=<n> [--reassert] [--exemplars=N]');
+  console.error('       node qa/brief.mjs --index        the menu read as an index (JSON; the preview nav\'s source)');
   process.exit(2);
 }
 const TR = track.toUpperCase();
@@ -72,13 +87,19 @@ if (fs.existsSync(path.join(ROOT, REG))) emit(REG, read(REG));
       then has it read one chosen shape's section on its own. This used to send whole sections, one in ten:
       nine shapes of eighty-one, at 23 KB, and `[INSTRUCTIONS]` arrived only because it happened to be glued
       into the first section. `### Build [Constraints]` is scaffolding, not a shape, and is skipped.
-      --exemplars=N samples the INDEX (one line in N) for a deliberately narrow read; --section=NAME prints
-      one entry whole, which is what a build does once it has picked that shape. */
+      --exemplars=N samples the INDEX (one line in N) for a deliberately narrow read; --section=<NN|name>
+      prints one entry whole, which is what a build does once it has picked that shape — by its number
+      (`### [03] <…>`) in the numbered form, or by its backticked name while an entry still carries one. */
 const CE = read('CONTENT_EXAMPLES.md');
 const iIns = CE.indexOf('## [INSTRUCTIONS]');
-const iPri = CE.indexOf('## [PRIMITIVES]');
-if (iIns >= 0 && iPri > iIns) emit('CONTENT_EXAMPLES.md - [INSTRUCTIONS] (the field grammar)', CE.slice(iIns, iPri).trimEnd());
-const heads = CE.split(/\n(?=### )/).map(s => s.split('\n')[0].trimEnd()).filter(l => /^### `/.test(l));
+/* the grammar runs from `## [INSTRUCTIONS]` to the first vehicle entry (`### [NN] …`), not to the next
+   `##` section: with the old `## [TEACHING]`/`[MIXED]`/`[TRAINING]`/`[GAMES]` headings deleted, a
+   `##`-only bound ran on to `## [ITEMS]` and delivered all 96 entries in full — 78 KB for a 20 KB grammar. */
+const relEntry = iIns < 0 ? -1 : CE.slice(iIns).search(/\n### \[\d+\] /);
+const iEnd = iIns < 0 ? 0 : (relEntry > 0 ? iIns + relEntry : CE.length);
+if (iIns >= 0) emit('CONTENT_EXAMPLES.md - [INSTRUCTIONS] (the field grammar)',
+  CE.slice(iIns, iEnd).trimEnd());
+const heads = readMenu().shapes.map(s => s.raw);
 const every = Math.max(1, Number(arg('exemplars', '0')) || 1);
 const picked = heads.filter((_, i) => i % every === 0);
 emit('CONTENT_EXAMPLES.md - ' + picked.length + ' of ' + heads.length + ' SHAPES, one line each'
@@ -86,8 +107,11 @@ emit('CONTENT_EXAMPLES.md - ' + picked.length + ' of ' + heads.length + ' SHAPES
   picked.join('\n'));
 const want = arg('section', '');
 if (want) {
-  const part = CE.split(/\n(?=### )/).find(s => s.startsWith('### `' + want + ' ') || s.startsWith('### `' + want + ' -'));
-  if (part) emit('CONTENT_EXAMPLES.md - `' + want + '` IN FULL', part.trimEnd());
+  const num = /^\d+$/.test(want) ? String(Number(want)) : null;
+  const numRe = num && new RegExp('^### \\[0*' + num + '\\] ');
+  const part = CE.split(/\n(?=### )/).find(s =>
+    s.startsWith('### `' + want + ' ') || s.startsWith('### `' + want + ' -') || (numRe && numRe.test(s)));
+  if (part) emit('CONTENT_EXAMPLES.md - ' + want + ' IN FULL', part.trimEnd());
   else console.error('brief: no such shape: ' + want);
 }
 

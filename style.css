@@ -184,6 +184,11 @@ h2 .h2sub{font-family:var(--serif);font-size:.55em;font-weight:400;letter-spacin
 :lang(pt){font-style:italic;font-weight:400}
 .chips b{display:inline-block;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:2px 12px;margin:2px 6px 2px 0;font-weight:600}
 h3{font-family:'Playfair Display',serif;font-weight:700;font-size:19px;color:var(--dkblue);margin:22px 0 8px;padding-left:10px;border-left:4px solid var(--tan);letter-spacing:.02em}
+/* the block's sub-header: the introduction/explainer that sits under `h3`. It is ALWAYS an `h4` and
+   never a `p` — `p` is reserved for the block's own content, so a paragraph inside a block always
+   means "this is the material", and nothing has to be read to tell an intro from content. */
+h4{font-family:var(--serif);font-weight:600;font-size:15px;color:var(--dkblue);margin:0 0 8px;padding-left:2em}
+.panel>h4,.card>h4{margin-top:-2px}
 @media print{#printRoot .listen{display:none}#barhelp{display:none}}
 .blanks>div .ptw{flex:0 0 auto}
 .dialog{--edge:var(--rose);margin:14px 0;padding:12px 16px;background:#fff8ea;border:2px solid var(--edge);border-radius:12px}
@@ -204,13 +209,63 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .content-area > .panel{margin:14px 0}
 .panel h3{margin-top:0}
 
-/* ## BLOCK FRAME — a block is `.panel` or `.card`, never a bare div. `data-kind="teaching|mixed|training|games"` on the block element is the only shape label a build writes; `data-level="10|20|30|40|50"` beside it is the block's own difficulty band, and it must be at or above the lesson number. Unbuilt work is `p.todo`, which renders as a visible marker. */
+/* ## AUDIO PLAYER — the recording block, `[02]`/`[03]` in CONTENT_EXAMPLES.md; nothing else uses these classes. Build it:
+   .panel > h3 (the song's own title) + h4 (who performs it, and nothing else)
+     > figure.vz-play > figcaption (the credit: `Performed by …`, licence, excerpt length)
+       > audio.vz-audio[src][controls][preload=metadata][data-duration] (the measured length)
+       > .vz-controls > button.vz-btn + span.vz-time[data-now] + .vz-bar[role=slider][aria-valuenow]
+         > .vz-fill + .vz-knob + span.vz-time[data-dur]
+       > ol.vz-lyrics > li[data-t] (seconds, on any line whose time is known)
+   `[03]` wraps the lyrics and one <p> beside them in `.vz-sheet`, and is the reason that block is full width.
+   The native `controls` attribute is the floor and always ships: `qa/player.js` deletes it only after
+   adding `.is-enhanced` to figure.vz-play and wiring the bar, the keys and the lyric highlight, so a page
+   whose script did not load still plays, pauses and scrubs. */
+.vz-play{display:block;margin:0}
+.vz-play figcaption{font-size:13px;color:#5c5347;margin:0 0 8px;line-height:1.45}
+.vz-audio{display:block;width:100%}
+.vz-controls{display:none;align-items:center;gap:10px;margin:8px 0 10px}
+.vz-play.is-enhanced .vz-controls{display:flex}
+.vz-btn{flex:0 0 auto;width:38px;height:38px;border:2px solid var(--ink);border-radius:50%;background:var(--paper);
+  color:var(--ink);font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.vz-btn:hover{background:var(--tan)}
+.vz-btn:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}
+.vz-time{flex:0 0 auto;font:600 12px var(--serif);color:#5c5347;min-width:3.2em;text-align:center;
+  font-variant-numeric:tabular-nums}
+.vz-bar{position:relative;flex:1 1 auto;height:14px;background:#e8e0cf;border-radius:7px;cursor:pointer}
+.vz-bar:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}
+.vz-fill{position:absolute;top:0;bottom:0;left:0;width:0;background:#b9854c;border-radius:7px;pointer-events:none}
+.vz-knob{position:absolute;top:50%;left:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;
+  background:var(--ink);pointer-events:none}
+.vz-lyrics{margin:0;padding:0;list-style:none;font-size:14px;line-height:1.55}
+.vz-lyrics li{padding:3px 7px;border-radius:5px}
+.vz-lyrics li[data-t]{cursor:pointer}
+.vz-lyrics li[data-t]:hover{background:#f3ece0}
+.vz-lyrics li.is-now{background:#fff8ea;color:var(--ink);font-weight:700;box-shadow:inset 0 0 0 1px #b9854c}
+/* `[03]` only: the columns are why that block is full width — the highlight is honest while one lyric
+   line and one row are the same thing, and a long line in a narrow column wraps under the mark */
+.vz-sheet{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 30px;align-items:start}
+.vz-sheet .vz-lyrics,.vz-sheet .vz-lyrics li{white-space:nowrap}
+.vz-sheet>p{margin:0;font-size:13.5px;line-height:1.5;padding-top:3px}
+/* the second column is dropped before either the lines or the text is allowed to break */
+@media (max-width:860px){
+  .vz-sheet{grid-template-columns:1fr}
+  .vz-sheet .vz-lyrics li{white-space:normal}
+}
+@media print{
+  .vz-play.is-enhanced .vz-controls{display:none}
+  .vz-lyrics li.is-now{background:none}
+  .vz-sheet{grid-template-columns:1fr}
+  .vz-sheet .vz-lyrics li{white-space:normal}
+}
+
+/* ## BLOCK FRAME — a block is `.panel` or `.card`, never a bare div. `data-kind="teach|train"` on the block element is the only shape label a build writes: the lowercase atoms of the block's shape, with `|` where one block both explains and asks; `data-level="10|20|30|40|50"` beside it is the block's own difficulty band, and it must be at or above the lesson number. Unbuilt work is `p.todo`, which renders as a visible marker. */
 .panel{--edge:var(--tan);border:2px solid var(--edge);border-radius:12px;padding:12px 16px;background:var(--paper);box-shadow:4px 4px 0 var(--tan)}
 
-.panel[data-kind="teaching"],.card[data-kind="teaching"],.game[data-kind="teaching"],.dialog[data-kind="teaching"]{--edge:var(--ink)}
-.panel[data-kind="mixed"],.card[data-kind="mixed"],.game[data-kind="mixed"],.dialog[data-kind="mixed"],
-.panel[data-kind="training"],.card[data-kind="training"],.game[data-kind="training"],.dialog[data-kind="training"]{--edge:var(--orange)}
-.panel[data-kind="games"],.card[data-kind="games"],.game[data-kind="games"],.dialog[data-kind="games"]{--edge:var(--purple)}
+.panel[data-kind="teach"],.card[data-kind="teach"],.game[data-kind="teach"],.dialog[data-kind="teach"]{--edge:var(--ink)}
+.panel[data-kind="train"],.card[data-kind="train"],.game[data-kind="train"],.dialog[data-kind="train"],
+.panel[data-kind="teach|train"],.card[data-kind="teach|train"],.game[data-kind="teach|train"],.dialog[data-kind="teach|train"]{--edge:var(--orange)}
+/* a game keeps its purple edge: the shape value no longer names games — "Games are TRAIN" — so the element does */
+.game[data-kind="train"],.game[data-kind="teach|train"]{--edge:var(--purple)}
 .panel .chart{width:calc(100% - 20px)}
 
 /* ## BLOCK WIDTHS — one of four slots, as a class on a DIRECT CHILD of `.itemrow`: `.itemsize` (full) `.itemsize-half` `.itemsize-third` `.itemsize-twothird`. A ROW MUST TOTAL 100%: full alone, half+half, third+twothird, third+third+third — a half beside a third never closes a row. Pair before widening; a lone block sits centred at its own width; the slot follows the content and prose never widens a block. `data-cols="2"` on the row gives each column 14px less, already inside the calc. */

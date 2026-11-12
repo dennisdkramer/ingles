@@ -667,7 +667,7 @@ const sheet = [
 ];
 const fig = full
   ? [
-      '<div class="panel itemsize" data-kind="mixed">',
+      '<div class="panel itemsize" data-kind="teach">',
       '<h3>' + esc(songName) + '</h3>',
       '<figure class="vz-play">',
       performer ? '  <h4>Performed by <b>' + esc(performer) + '</b></h4>'
@@ -690,7 +690,7 @@ const fig = full
       '<!-- OPTION slot: a second .panel below, holding whatever the lesson adds to this block -->',
     ].join('\n')
   : [
-      '<div class="panel itemsize-half" data-kind="mixed">',
+      '<div class="panel itemsize-half" data-kind="teach">',
       '<h3>' + esc(songName) + '</h3>',
       '<figure class="vz-play">',
       '  <figcaption>' + (compound || !performer ? (attribution || '') : 'Performed by <b>' + esc(String(credit)) + '</b>') +

@@ -35,171 +35,172 @@ content belongs in its `###` sections.
 
 ## preview-games4.html
 
-### skeetRange
+### [71]
 
-→ CONTENT_EXAMPLES.md §`skeetRange`
+→ CONTENT_EXAMPLES.md §`[71]`
 delete the crowd sound. halve the volume of the buzzer sound. On miss AND on wrong target, play the gunshot and buzzer sounds together
 
-### bingoCard
+### [80]
 
-→ CONTENT_EXAMPLES.md §`bingoCard`
+→ CONTENT_EXAMPLES.md §`[80]`
 make each word card twice as big. grid anchored to center, never moves. 321 countdown centered over grid/curtain. 54321 countdown card 30px right of grid, vertically centered. improve curtain graphics is possible without affecting anything else.
 add *Begin Round - Hear Word* button 15px below the grid which initiates each round and starts the 321 countdown
 
-### bossRaid
+### [82]
 
-→ CONTENT_EXAMPLES.md §`bossRaid`
+→ CONTENT_EXAMPLES.md §`[82]`
 score is countdown, hidden during play
 each heart lost subtracts 1 from score, boss should take [total # questions]-2 hits to kill
 
-### stackDrop
+### [74]
 
-→ CONTENT_EXAMPLES.md §`stackDrop`
+→ CONTENT_EXAMPLES.md §`[74]`
 put the two answer choices on the right bottom, stacked vertically, 30px between.
 move the correct answer stack items down 35px. Make each item in the stack consecutively 20px thinner, make the stack right-justify.
 Once the stack is built, have the player do a mario-style run and jump to a flag, if all the answers are correct he hits the flag and a coin pops out. If score<max-score> he misses and falls on his face
 
-### bingoCard
+### [80]
 
-→ CONTENT_EXAMPLES.md §`bingoCard`
+→ CONTENT_EXAMPLES.md §`[80]`
 button text not visible (black on dark blue?)
 make grid items 15px less wide each
 
-### echoPads
+### [79]
 
-→ CONTENT_EXAMPLES.md §`echoPads`
+→ CONTENT_EXAMPLES.md §`[79]`
 is showing prompt card on game start screen
 make hint text white
 (answer must have three distractors per word that never fit the words already placed)
 
-### flapGate
+### [75]
 
-→ CONTENT_EXAMPLES.md §`flapGate`
+→ CONTENT_EXAMPLES.md §`[75]`
 must be possible for wall to continue, second wall to come, game target is continuous flight through all the gates in one 'run'
 
 ## preview-blocks.html
 
-### musicPlayer
+### [02]
 
-→ CONTENT_EXAMPLES.md §`musicPlayer`
-
-### lyricSheet
-
-→ CONTENT_EXAMPLES.md §`lyricSheet`
+→ CONTENT_EXAMPLES.md §`[02]`
+make 1/3 width
 
 ### [03]
 
 → CONTENT_EXAMPLES.md §`[03]`
 
+### [03]
 
-### rubyLine
+→ CONTENT_EXAMPLES.md §`[03]`
+delete the first exm
 
-→ CONTENT_EXAMPLES.md §`rubyLine`
+### [15]
 
-### backChain
+→ CONTENT_EXAMPLES.md §`[15]`
 
-→ CONTENT_EXAMPLES.md §`backChain`
+### [16]
 
-### etymologyTrail
+→ CONTENT_EXAMPLES.md §`[16]`
 
-→ CONTENT_EXAMPLES.md §`etymologyTrail`
+### [17]
 
-### comicStrip
+→ CONTENT_EXAMPLES.md §`[17]`
 
-→ CONTENT_EXAMPLES.md §`comicStrip`
+### [28]
 
-### dataBar
+→ CONTENT_EXAMPLES.md §`[28]`
 
-→ CONTENT_EXAMPLES.md §`dataBar`
+### [29]
 
-### mapRoute
+→ CONTENT_EXAMPLES.md §`[29]`
 
-→ CONTENT_EXAMPLES.md §`mapRoute`
+### [30]
 
-### hintLadder
+→ CONTENT_EXAMPLES.md §`[30]`
 
-→ CONTENT_EXAMPLES.md §`hintLadder`
+### [11]
 
-### memoryHook
+→ CONTENT_EXAMPLES.md §`[11]`
 
-→ CONTENT_EXAMPLES.md §`memoryHook`
+### [12]
 
-### falseFriend
+→ CONTENT_EXAMPLES.md §`[12]`
 
-→ CONTENT_EXAMPLES.md §`falseFriend`
+### [13]
 
-### errorLog
+→ CONTENT_EXAMPLES.md §`[13]`
 
-→ CONTENT_EXAMPLES.md §`errorLog`
+### [21]
 
-### exitTicket
+→ CONTENT_EXAMPLES.md §`[21]`
 
-→ CONTENT_EXAMPLES.md §`exitTicket`
+### [22]
 
-### findSomeoneWho
+→ CONTENT_EXAMPLES.md §`[22]`
 
-→ CONTENT_EXAMPLES.md §`findSomeoneWho`
+### [23]
 
-### classVote
+→ CONTENT_EXAMPLES.md §`[23]`
 
-→ CONTENT_EXAMPLES.md §`classVote`
+### [24]
 
-### translateBack
+→ CONTENT_EXAMPLES.md §`[24]`
 
-→ CONTENT_EXAMPLES.md §`translateBack`
+### [25]
 
-### spacedRecall
+→ CONTENT_EXAMPLES.md §`[25]`
 
-→ CONTENT_EXAMPLES.md §`spacedRecall`
+### [26]
 
-### noticeCard
+→ CONTENT_EXAMPLES.md §`[26]`
 
-→ CONTENT_EXAMPLES.md §`noticeCard`
+### [27]
 
-### lexiconEntry
+→ CONTENT_EXAMPLES.md §`[27]`
 
-→ CONTENT_EXAMPLES.md §`lexiconEntry`
+### [04]
 
-### correctionPlate
+→ CONTENT_EXAMPLES.md §`[04]`
 
-→ CONTENT_EXAMPLES.md §`correctionPlate`
+### [05]
+
+→ CONTENT_EXAMPLES.md §`[05]`
 what is the purpose of this, other than just to show that something is wrong? if nothing else, delete
 
-### figurePlate
+### [06]
 
-→ CONTENT_EXAMPLES.md §`figurePlate`
+→ CONTENT_EXAMPLES.md §`[06]`
 
-### rubricGrid
+### [07]
 
-→ CONTENT_EXAMPLES.md §`rubricGrid`
+→ CONTENT_EXAMPLES.md §`[07]`
 
-### refTable
+### [08]
 
-→ CONTENT_EXAMPLES.md §`refTable`
+→ CONTENT_EXAMPLES.md §`[08]`
 
-### readText
+### [09]
 
-→ CONTENT_EXAMPLES.md §`readText`
+→ CONTENT_EXAMPLES.md §`[09]`
 
-### workedItem
+### [10]
 
-→ CONTENT_EXAMPLES.md §`workedItem`
+→ CONTENT_EXAMPLES.md §`[10]`
 
-### itemList
+### [18]
 
-→ CONTENT_EXAMPLES.md §`itemList`
+→ CONTENT_EXAMPLES.md §`[18]`
 
-### gapList
+### [19]
 
-→ CONTENT_EXAMPLES.md §`gapList`
+→ CONTENT_EXAMPLES.md §`[19]`
 
-### writeBox
+### [20]
 
-→ CONTENT_EXAMPLES.md §`writeBox`
+→ CONTENT_EXAMPLES.md §`[20]`
 
-### contextFit
+### [39]
 
-→ CONTENT_EXAMPLES.md §`contextFit`
+→ CONTENT_EXAMPLES.md §`[39]`
 
 ### connectedSpeech
 
@@ -211,17 +212,17 @@ delete this vehicle
 → CONTENT_EXAMPLES.md §`dictation`
 this should be restricted t lvl 15-20+
 
-### sentenceSurgery
+### [51]
 
-→ CONTENT_EXAMPLES.md §`sentenceSurgery`
+→ CONTENT_EXAMPLES.md §`[51]`
 
-### registerContrast
+### [40]
 
-→ CONTENT_EXAMPLES.md §`registerContrast`
+→ CONTENT_EXAMPLES.md §`[40]`
 
-### questionBuilding
+### [52]
 
-→ CONTENT_EXAMPLES.md §`questionBuilding`
+→ CONTENT_EXAMPLES.md §`[52]`
 
 ### cheatSheet
 
@@ -238,9 +239,9 @@ delete
 → CONTENT_EXAMPLES.md §`stressShift`
 delete
 
-### emphaticBeat
+### [63]
 
-→ CONTENT_EXAMPLES.md §`emphaticBeat`
+→ CONTENT_EXAMPLES.md §`[63]`
 
 ### falseFix
 
@@ -282,9 +283,9 @@ delete
 → CONTENT_EXAMPLES.md §`lyricGap`
 delete
 
-### lineRepair
+### [31]
 
-→ CONTENT_EXAMPLES.md §`lineRepair`
+→ CONTENT_EXAMPLES.md §`[31]`
 
 ### contourMatch
 
@@ -306,18 +307,18 @@ delete
 → CONTENT_EXAMPLES.md §`generationGap`
 delete
 
-### mediaSnippet
+### [64]
 
-→ CONTENT_EXAMPLES.md §`mediaSnippet`
+→ CONTENT_EXAMPLES.md §`[64]`
 
 ### contrastTable
 
 → CONTENT_EXAMPLES.md §`contrastTable`
 delete
 
-### ruleCard
+### [32]
 
-→ CONTENT_EXAMPLES.md §`ruleCard`
+→ CONTENT_EXAMPLES.md §`[32]`
 
 ### workedExample
 
@@ -329,13 +330,13 @@ delete
 → CONTENT_EXAMPLES.md §`annotatedExample`
 delete
 
-### formulaFrame
+### [33]
 
-→ CONTENT_EXAMPLES.md §`formulaFrame`
+→ CONTENT_EXAMPLES.md §`[33]`
 
-### signalTable
+### [34]
 
-→ CONTENT_EXAMPLES.md §`signalTable`
+→ CONTENT_EXAMPLES.md §`[34]`
 
 ### exceptionBench
 
@@ -352,9 +353,9 @@ delete
 → CONTENT_EXAMPLES.md §`beforeAfterStrip`
 delete
 
-### soundGrid
+### [35]
 
-→ CONTENT_EXAMPLES.md §`soundGrid`
+→ CONTENT_EXAMPLES.md §`[35]`
 
 ### stressBar
 
@@ -371,9 +372,9 @@ delete
 → CONTENT_EXAMPLES.md §`scaleAxis`
 delete
 
-### collocationMatrix
+### [36]
 
-→ CONTENT_EXAMPLES.md §`collocationMatrix`
+→ CONTENT_EXAMPLES.md §`[36]`
 
 ### falseFriendSplit
 
@@ -395,9 +396,9 @@ delete
 → CONTENT_EXAMPLES.md §`dialogueMoves`
 delete
 
-### dialog
+### [37]
 
-→ CONTENT_EXAMPLES.md §`dialog`
+→ CONTENT_EXAMPLES.md §`[37]`
 
 ### vocabField
 
@@ -428,18 +429,18 @@ delete
 → CONTENT_EXAMPLES.md §`routineMap`
 delete
 
-### twoWordVerb
+### [38]
 
-→ CONTENT_EXAMPLES.md §`twoWordVerb`
+→ CONTENT_EXAMPLES.md §`[38]`
 
-### pronLab
+### [41]
 
-→ CONTENT_EXAMPLES.md §`pronLab`
+→ CONTENT_EXAMPLES.md §`[41]`
 This one is useful but I need to make some tweaks, leaving a note for myself to remember later
 
-### wordFamily
+### [42]
 
-→ CONTENT_EXAMPLES.md §`wordFamily`
+→ CONTENT_EXAMPLES.md §`[42]`
 
 ### collocationGap
 
@@ -456,29 +457,29 @@ delete
 → CONTENT_EXAMPLES.md §`prepositionScene`
 delete
 
-### infoGap
+### [44]
 
-→ CONTENT_EXAMPLES.md §`infoGap`
+→ CONTENT_EXAMPLES.md §`[44]`
 
-### genreDoc
+### [45]
 
-→ CONTENT_EXAMPLES.md §`genreDoc`
+→ CONTENT_EXAMPLES.md §`[45]`
 
-### politeLadder
+### [43]
 
-→ CONTENT_EXAMPLES.md §`politeLadder`
+→ CONTENT_EXAMPLES.md §`[43]`
 
-### signScan
+### [46]
 
-→ CONTENT_EXAMPLES.md §`signScan`
+→ CONTENT_EXAMPLES.md §`[46]`
 
-### formFill
+### [47]
 
-→ CONTENT_EXAMPLES.md §`formFill`
+→ CONTENT_EXAMPLES.md §`[47]`
 
-### measureLocal
+### [48]
 
-→ CONTENT_EXAMPLES.md §`measureLocal`
+→ CONTENT_EXAMPLES.md §`[48]`
 
 ### dictogloss
 

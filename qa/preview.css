@@ -21,6 +21,17 @@
 .qa-toc a{color:inherit;text-decoration:none;border-bottom:2px solid var(--tan);padding:0 2px;white-space:nowrap}
 .qa-toc a:hover{border-bottom-color:var(--ink)}
 
+/* The nav is a readout of qa/brief.mjs's index (qa/readout.js), not a hand-kept list: an entry line is
+   longer than a name, so it wraps, and an entry with no block here is dimmed rather than linked. */
+.qa-toc-readout{font-size:13px;line-height:1.85}
+.qa-toc-readout a{white-space:normal}
+.qa-toc-g{margin:10px 0 0;font-size:13px;letter-spacing:.02em}
+.qa-toc-g:first-child{margin-top:2px}
+.qa-toc-n{font-weight:400;opacity:.6}
+.qa-toc-miss{color:#8c2f39;border-bottom:2px dotted var(--tan);padding:0 2px}
+.qa-toc-state{display:block;margin-top:10px;font-size:12px;opacity:.7}
+.qa-toc-bad{color:#8c2f39;opacity:1}
+
 .qa-status{position:fixed;right:14px;bottom:14px;z-index:120;max-width:44ch;padding:6px 12px;font-size:13px;
   color:var(--cream);background:var(--ink);border-radius:999px;opacity:.9;pointer-events:none}
 .qa-status-bad{background:#8c2f39}

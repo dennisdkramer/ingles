@@ -48,11 +48,15 @@ trustworthy. A per-step run buys nothing a per-batch run does not, and the artef
 cost more attention than the defects it found.
 
 **A build runs one of these on itself.** Before a lesson is reported as done, the page it just wrote is checked
-with `node qa/lang.mjs --track=<track> <N>` (its own voice against the target range in PEDAGOGY-MAP.md [BUILD]
-HIGH PRIORITY). That page and no others: a sweep is not a self-check, and it
+with `node qa/lang.mjs --track=<track> <N>` (its own voice against the target range in PEDAGOGY-MAP.md
+[PORTUGUESE] HIGH PRIORITY). That page and no others: a sweep is not a self-check, and it
 shows a build the bands and shapes of pages it may not read. A red is fixed in the page, never in the threshold,
 and a page reshaped after the check is recorded again. `content`, `overflow` and `live` are not in that loop —
 each opens a server or a real browser and belongs to the end of a batch (PEDAGOGY-MAP.md §5).
+**Every check above except `qa/liquid.mjs` prints one line and exits 0 unread unless `QA_ON=1` is in the
+environment** (`qa/off.mjs`, owner instruction 2026-11-10, ISSUES.md) — so a green from any of them without that
+variable is the switch reporting, not the page. Run the self-check as `QA_ON=1 node qa/lang.mjs --track=<t> <N>`
+or it proves nothing.
 
 Which of those to run, and how deep, is the caller's decision, not the harness's: when scope is most or
 all live pages, pick a few with defensible relevance to test/verify. Request user sign-off before

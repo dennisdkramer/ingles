@@ -1,4 +1,4 @@
-# PEDAGOGY - DO NOT MODIFY WITHOUT USER SIGN-OFF - **DO NOT READ for lesson generation 
+# PEDAGOGY - DO NOT MODIFY WITHOUT USER SIGN-OFF - **DO NOT READ for lesson generation**
 	- This file contains underlying pedagogical ideas of the project and guides curriculum planning.
     - The curriculum leverages the platform designed by this project which includes features like highlighing, recorded voice notes, and a custom dictionary/pronunciation key for the student to visualize connected speech.
     - The target audience are Brazilian Portugues speakers who want to learn english. They often have taken classes or courses in the past but found it challenging.
@@ -15,7 +15,8 @@
 2. Concepts and vocabulary items are assessed by how far they sit from Portuguese (transparent / partial / opaque) times how important they are for understanding and producing spoken english  (core / common / marginal). 
 3. Balance between concept(s) presentation/explanation and training time is flexible based on model reasoning.
 
-
+**************************************************************
+TO-DO: UPDATE 'CONTENT LEVEL' AND DIFFICULTY LANGUAGE
 PERSONALITY - NECESSITY - UTILITY - TRANSFERABILITY
 - **Distance from Portuguese (transfer)**
 Transparent = a direct anchor exists (a cognate, or a structure whose meaning maps cleanly). 
@@ -34,6 +35,11 @@ Marginal = rare, formal, or replaceable.
  Transparent + Marginal → a deliberate choice (early-with-its-kin OR late as "formal only"), recorded with a reason. 
  Opaque + Common → mid-to-late, sized to importance. Opaque + Marginal → late or optional.
 
+Vocabulary complexity (e.g., jargon, abstract vs. concrete words)
+
+Sentence structure (e.g., simple clauses vs. dense subordinate clauses)
+
+Domain knowledge required (e.g., layperson, undergraduate, PhD specialist)
 
 ### [PRINICIPLES] of the Pedagogy
 - **Unique ideas** Creatively synthesize teaching possibilities.. but dont throw the baby out with the bathwater: When appropriate, research several outside sources on the lesson's topic to brainstorm ideas, not to copy. 

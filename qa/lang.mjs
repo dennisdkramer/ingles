@@ -1,7 +1,7 @@
 /**
  * qa/lang.mjs — is the page's own voice in the language its lesson number earns?
  *
- * PEDAGOGY-MAP [BUILD] HIGH PRIORITY: an introduction, explanatory text, tip, headline or column header is
+ * PEDAGOGY-MAP [PORTUGUESE] HIGH PRIORITY: an introduction, explanatory text, tip, headline or column header is
  * Portuguese only while the lesson is below the content's level; above that it is English. This harness
  * cannot judge CONTENT LEVEL per sentence — that is the author's call — so it does not grade the middle.
  * It checks that the page sits inside the band its lesson number allows, in both directions:

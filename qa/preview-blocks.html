@@ -11,40 +11,40 @@
 <body>
 <main class="page-container"><div class="content-area">
 <h1>Blocks — preview</h1>
-<p>Not a lesson and not marked up as one. One block per <code>###</code> entry in CONTENT_EXAMPLES.md from
-<b>§2 Blocks</b> to <b>§8 Self-management</b> — eighty-five shapes, each on its own heading, in the file's own
-order. The words are filler; the point is the structure: which container carries the block, how many columns
-the content forces, what the control is, and whether the shape reads as a block at all.</p>
-<p class="dim">Two scripts run on this page. <code>notes.js</code> reads and writes
+<p>Not a lesson and not marked up as one. One block per <code>###</code> entry in CONTENT_EXAMPLES.md,
+each on its own heading, in the file's own order. The words are filler; the point is the structure: which container
+carries the block, how many columns the content forces, what the control is, and whether the shape reads as a block
+at all.</p>
+<p class="dim">Three scripts run on this page. <code>notes.js</code> reads and writes
 <code>qa/NOTES.md</code> for the note box under each item heading; <code>player.js</code> upgrades the music block
 below from its native <code>&lt;audio controls&gt;</code> to the drawn bar and the lit lyric line, and does nothing at
-all if it is missing. Every other class used here already exists in <code>style.css</code> and every
+all if it is missing; <code>readout.js</code> builds the nav and the line under each note box from the menu itself.
+Every other class used here already exists in <code>style.css</code> and every
 block follows the <code>## </code> headers in <code>style.css</code>: <code>.panel</code> / <code>.card</code> / <code>.chart</code> / <code>.dialog</code>
 for the frame, <code>.qgrid stack</code> with <code>--rows</code> for radios, <code>.blanks sent</code> with
 <code>--rows</code> for gaps, <code>.itemrow</code> with <code>data-cols</code> for paired halves.
-The line directly under each note box <b>is that shape's headline from CONTENT_EXAMPLES.md, minus the name</b>: the
-name is the frame's own <code>&lt;h3&gt;</code> — each block is headed <code>soundGrid</code>, <code>gapList</code> —
-and the line above it carries the rest of that <code>###</code> line. Nothing else is printed about a block: there is
-no caption at its foot, because a sentence that is not in the menu would be this page arguing its own case. The
-fourteen <code>####</code> drafts have no frame header, so their line is their own line from IN-BLOCK-VISUALS.md.</p>
-<p>At the end, <b>thirteen visual blocks</b> — the <code>####</code> drafts in CONTENT_EXAMPLES.md <b>§4 Visual</b>. Each
-carries an inline <code>&lt;svg&gt;</code> (or CSS-drawn) figure plus the control that makes it a block rather than a
-picture: a radio, a gap, or a textarea. Their CSS is <code>qa/preview-visual.css</code>, all of it <code>.vz-*</code>,
-so it can move into <code>style.css</code> as one piece if a shape is kept. No network, no font above the page's own
-palette, and every figure prints.</p>
-<p>The twenty-eight <b>[PRIMITIVES]</b> entries come first, in the order they hold in the file: each is one block with no
-mechanism round it, so the shape under each heading is the whole of what the entry claims. Eight of them are not a table,
-a radio and a box: one keys a line with <code>ruby</code>, one lays out a corpus, one builds a sentence backwards from
-its end, one is a word's history, one is four wordless pictures, one draws a statistic, one draws a map, and one plays
-a song with the words lit as they are sung — <code>musicPlayer</code> appears twice, at half width and at full, because
-the width is what decides whether a lyric line stays one line or wraps under the highlight.</p>
-<nav class="qa-toc"><b>30 primitives (§[PRIMITIVES]) — jump to one:</b> <a href="#item-musicPlayer">musicPlayer</a> · <a href="#item-lyricSheet">lyricSheet</a> · <a href="#item-03">[03]</a> · <a href="#item-concordance">concordance</a> · <a href="#item-rubyLine">rubyLine</a> · <a href="#item-backChain">backChain</a> · <a href="#item-etymologyTrail">etymologyTrail</a> · <a href="#item-comicStrip">comicStrip</a> · <a href="#item-dataBar">dataBar</a> · <a href="#item-mapRoute">mapRoute</a> · <a href="#item-lexiconEntry">lexiconEntry</a> · <a href="#item-correctionPlate">correctionPlate</a> · <a href="#item-figurePlate">figurePlate</a> · <a href="#item-rubricGrid">rubricGrid</a> · <a href="#item-refTable">refTable</a> · <a href="#item-readText">readText</a> · <a href="#item-workedItem">workedItem</a> · <a href="#item-hintLadder">hintLadder</a> · <a href="#item-memoryHook">memoryHook</a> · <a href="#item-falseFriend">falseFriend</a> · <a href="#item-itemList">itemList</a> · <a href="#item-gapList">gapList</a> · <a href="#item-writeBox">writeBox</a> · <a href="#item-errorLog">errorLog</a> · <a href="#item-exitTicket">exitTicket</a> · <a href="#item-findSomeoneWho">findSomeoneWho</a> · <a href="#item-classVote">classVote</a> · <a href="#item-translateBack">translateBack</a> · <a href="#item-spacedRecall">spacedRecall</a> · <a href="#item-noticeCard">noticeCard</a></nav>
-<section class="qa-item" id="item-musicPlayer">
-<h2>musicPlayer</h2>
-<textarea data-item="musicPlayer" aria-label="notes for musicPlayer" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a track, a scrub bar, and the words lit as they are sung (mixed)</p>
-<div class="panel itemsize-half" data-kind="mixed">
+The line directly under each note box <b>is that shape's headline from CONTENT_EXAMPLES.md, minus the identity</b> —
+the identity is the frame's own heading, and the line above the block carries the rest of that <code>###</code> line,
+with the shape atoms and the item and option counts. Nothing about it is stored here: the page reads the menu when it
+loads and again every 2 s, so a heading rewritten in the file appears under its block without a reload, and an entry
+with no block on this page is named in the nav rather than quietly missing. Nothing else is printed about a block:
+there is no caption at its foot, because a sentence that is not in the menu would be this page arguing its own case.
+Every block on the page answers for a numbered entry, so nothing here can be out of date against the file: the nav and the line over each block are read from CONTENT_EXAMPLES.md, and a heading rewritten there appears here on the next poll.</p>
+<p>The <b>[ITEMS]</b> figures sit at the end — they are numbered entries too, from <code>[84]</code> up. Each carries an inline
+<code>&lt;svg&gt;</code> (or CSS-drawn) figure plus the control that makes it a block rather than a picture: a radio, a gap,
+or a textarea. The player's own CSS (`[02]`/`[03]`) lives in <code>style.css</code> under
+<code>## AUDIO PLAYER</code>, because a kept shape is lesson-facing; every other draft figure here is
+<code>.vz-*</code> in <code>qa/preview-visual.css</code>, so it stays out of the lesson stylesheet until the shape
+is kept. No network, no font above the page's own palette, and every figure
+prints.</p>
+<nav class="qa-toc" id="qa-toc"><span class="qa-toc-state">reading qa/brief.mjs…</span></nav>
+<section class="qa-item" id="item-02">
+<h2>[02]</h2>
+<textarea data-item="[02]" aria-label="notes for [02]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|OPTION&gt; &lt;THIRD-&gt; Plays a recording with lyrics and shows which line is being sung &lt;,&gt; &lt;,&gt;</p>
+<div class="panel itemsize-third" data-kind="teach">
 <h3>Twinkle, Twinkle, Little Star</h3>
+<h4>Dcoetzee</h4>
 <figure class="vz-play">
   <figcaption>Performed by <b>Dcoetzee</b> — <b>CC0</b>, Wikimedia Commons. The first four lines only: 0:18 of the song.</figcaption>
   <audio class="vz-audio" src="../assets/twinkle-stanza1.mp3" data-duration="18.5" controls preload="metadata"></audio>
@@ -63,38 +63,13 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </figure>
 </div>
 </section>
-<section class="qa-item" id="item-lyricSheet">
-<h2>lyricSheet</h2>
-<textarea data-item="lyricSheet" aria-label="notes for lyricSheet" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">the same player full width, where a lyric line is too long to sit in a column, and one clause under the words says what they do (mixed)</p>
-<div class="panel itemsize" data-kind="mixed">
-<h3>It Came Upon the Midnight Clear</h3>
-<figure class="vz-play">
-  <figcaption>Performed by <b>A Cappella Singers of the United States Air Force Band of the Rockies</b> — <b>public domain</b>, Wikimedia Commons. The first four lines only: 0:39 of the carol.</figcaption>
-  <audio class="vz-audio" src="../assets/midnight-clear.mp3" data-duration="39.08" controls preload="metadata"></audio>
-  <div class="vz-controls">
-    <button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>
-    <span class="vz-time" data-now>0:00</span>
-    <div class="vz-bar" role="slider" tabindex="0" aria-label="Play position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="vz-fill"></span><span class="vz-knob"></span></div>
-    <span class="vz-time" data-dur>0:00</span>
-  </div>
-  <ol class="vz-lyrics">
-    <li data-t="0.64">It came upon the midnight clear,</li>
-    <li data-t="9.7">that glorious song of old,</li>
-    <li data-t="17.72">from angels bending near the earth</li>
-    <li data-t="28.98">to touch their harps of gold.</li>
-  </ol>
-  <p class="dim">Three of these four lines put the phrase after the noun it describes — <i>the midnight clear</i>, <i>a song of old</i>, <i>harps of gold</i> — because the rhyme wants them there. <b>Of old</b> means <i>from long ago</i>, and it survives today only in fixed phrases like this one.</p>
-</figure>
-</div>
-</section>
 <section class="qa-item" id="item-03">
 <h2>[03]</h2>
 <textarea data-item="[03]" aria-label="notes for [03]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;|TEACH|OPTION&gt; &lt;FULL&gt; Music Player with 4 lines of lyrics and a paragraph of explainer</p>
-<div class="panel itemsize" data-kind="mixed">
+<p class="dim">&lt;TEACH|OPTION&gt; &lt;FULL&gt; Plays a recording full width with one paragraph explaining its words &lt;,&gt; &lt;,&gt;</p>
+<div class="panel itemsize" data-kind="teach">
 <h3>I Love You, California</h3>
-<h4>Knickerbocker Quartet and Elizabeth Spencer · words by Francis Beatty Silverwood, 1913</h4>
+<h4>Knickerbocker Quartet and Elizabeth Spencer</h4>
 <figure class="vz-play">
   <figcaption>Words: <b>Francis Beatty Silverwood</b>; music: <b>Abraham Franklin Frankenstein</b> — <b>public domain</b>, Wikimedia Commons. The first four lines, 0:36. Every line time here is the one this file’s own <b>timed transcript</b> gives, and the words are that transcript’s words, so the clip and the text cannot disagree.</figcaption>
   <audio class="vz-audio" src="../assets/california.mp3" data-duration="35.87" controls preload="metadata"></audio>
@@ -114,9 +89,7 @@ the width is what decides whether a lyric line stays one line or wraps under the
     <p>The song speaks <b>to</b> California as if the state were a person — <i>I love you</i>, said to a place. Each couplet piles up things rather than arguing for them: winter and summer, valleys and mountains, ocean and shore. The pairs rhyme (<b>all</b> / <b>fall</b>, <b>adore</b> / <b>shore</b>), so the verse stands still while the tune moves — which is why the last word of each pair is the one you hear land.</p>
   </div>
 </figure>
-</div>
-<div class="panel itemsize" data-kind="mixed">
-<h3>What the four lines do with words</h3>
+<h4>What the four lines do with words</h4>
 <table class="chart">
   <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
   <thead><tr><th>word</th><th>what it is doing here</th></tr></thead>
@@ -131,11 +104,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </div>
 </section>
 
-<section class="qa-item" id="item-concordance">
-<h2>concordance</h2>
-<textarea data-item="concordance" aria-label="notes for concordance" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">six real lines with one word down the middle (teaching)</p>
-<div class="panel itemsize-half" data-kind="teaching">
+<section class="qa-item" id="item-14">
+<h2>[14]</h2>
+<textarea data-item="[14]" aria-label="notes for [14]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TEACH&gt; &lt;HALF-&gt; Six real lines with one word down the middle &lt;3|8&gt; &lt;,&gt;</p>
+<div class="panel itemsize-half" data-kind="teach">
 <h3>concordance</h3>
 <table class="chart">
   <colgroup><col style="width:30%"><col style="width:14%"><col style="width:56%"></colgroup>
@@ -151,21 +124,21 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </table>
 </div>
 </section>
-<section class="qa-item" id="item-rubyLine">
-<h2>rubyLine</h2>
-<textarea data-item="rubyLine" aria-label="notes for rubyLine" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a line with a key set above each word (teaching)</p>
-<div class="panel itemsize-half" data-kind="teaching">
+<section class="qa-item" id="item-15">
+<h2>[15]</h2>
+<textarea data-item="[15]" aria-label="notes for [15]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;HALF-&gt; A line with a key set above each word &lt;1|1&gt; &lt;1|&gt;</p>
+<div class="panel itemsize-half" data-kind="teach">
 <h3>rubyLine</h3>
   <p style="line-height:2.4">I <ruby>thought<rp>(</rp><rt style="font-size:.8em"><b>thou</b><span class="pr-g">gh</span><span class="pr-g">t</span></rt><rp>)</rp></ruby> I'd have <ruby>finished<rp>(</rp><rt style="font-size:.8em"><b>fi</b>·<b>ni</b><span class="pr-g">sh</span><span class="pr-g">e</span><b>d</b></rt><rp>)</rp></ruby> it by <ruby>Friday<rp>(</rp><rt style="font-size:.8em"><b>fri</b>·<b>day</b></rt><rp>)</rp></ruby>.</p>
   <p class="dim">Three words carry a key because those are the three nobody guesses. Every word would read the same way, with a key over each.</p>
 </div>
 </section>
-<section class="qa-item" id="item-backChain">
-<h2>backChain</h2>
-<textarea data-item="backChain" aria-label="notes for backChain" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">the tail of a line, then longer tails, then the whole line (teaching)</p>
-<div class="panel itemsize-third" data-kind="teaching">
+<section class="qa-item" id="item-16">
+<h2>[16]</h2>
+<textarea data-item="[16]" aria-label="notes for [16]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;THIRD-&gt; The tail of a line, then longer tails, then the whole line &lt;3|6&gt; &lt;,&gt;</p>
+<div class="panel itemsize-third" data-kind="teach">
 <h3>backChain</h3>
   <p>Say each rung twice, then move down.</p>
   <div style="text-align:right;line-height:1.35">
@@ -178,11 +151,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-etymologyTrail">
-<h2>etymologyTrail</h2>
-<textarea data-item="etymologyTrail" aria-label="notes for etymologyTrail" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a word's stops: language, form, date, meaning then; used only once the lesson has made the word strange (teaching)</p>
-<div class="panel itemsize-third" data-kind="teaching">
+<section class="qa-item" id="item-17">
+<h2>[17]</h2>
+<textarea data-item="[17]" aria-label="notes for [17]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;THIRD-&gt; A word's stops: language, form, date, meaning then &lt;2|4&gt; &lt;,&gt;</p>
+<div class="panel itemsize-third" data-kind="teach">
 <h3>etymologyTrail</h3>
 <dl>
   <dt><b>c. 1300 — Latin</b> <i>nescius</i></dt>
@@ -197,11 +170,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   <p class="dim">Nothing was added to this word. The meaning walked from <i>ignorant</i> to <i>kind</i> in six hundred years, which is why <i>nice</i> is the vaguest compliment in English.</p>
 </div>
 </section>
-<section class="qa-item" id="item-comicStrip">
-<h2>comicStrip</h2>
-<textarea data-item="comicStrip" aria-label="notes for comicStrip" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">wordless panels with a line under each (training)</p>
-<div class="panel itemsize-half" data-kind="training">
+<section class="qa-item" id="item-28">
+<h2>[28]</h2>
+<textarea data-item="[28]" aria-label="notes for [28]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; Wordless panels with a line under each &lt;4|6&gt; &lt;1|1&gt;</p>
+<div class="panel itemsize-half" data-kind="train">
 <h3>comicStrip</h3>
   <p>Describe what is happening in each picture, using the <b>past simple</b>.</p>
 <table class="chart">
@@ -219,11 +192,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   <p class="dim">One line per panel, past simple. Panels are inline SVG here; a real block takes four frames from <code>assets/</code> or the same SVG, and the caption names the source.</p>
 </div>
 </section>
-<section class="qa-item" id="item-dataBar">
-<h2>dataBar</h2>
-<textarea data-item="dataBar" aria-label="notes for dataBar" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">bars whose length is the value, then the sentence about them (training)</p>
-<div class="panel itemsize-half" data-kind="training">
+<section class="qa-item" id="item-29">
+<h2>[29]</h2>
+<textarea data-item="[29]" aria-label="notes for [29]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; Bars whose length is the value, then the sentence about them &lt;2|4&gt; &lt;1|1&gt;</p>
+<div class="panel itemsize-half" data-kind="train">
 <h3>dataBar</h3>
   <p><b>United Kingdom</b> — 45%</p>
   <p style="width:45%;height:14px;background:var(--blue);margin:0 0 .8em 15px"></p>
@@ -238,11 +211,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   <p class="dim">Figures: placeholder for the preview — a real block names its source here, and never rounds a bar away from its own label.</p>
 </div>
 </section>
-<section class="qa-item" id="item-mapRoute">
-<h2>mapRoute</h2>
-<textarea data-item="mapRoute" aria-label="notes for mapRoute" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a drawn map, numbered places, one checkbox each (training)</p>
-<div class="panel itemsize-half" data-kind="training">
+<section class="qa-item" id="item-30">
+<h2>[30]</h2>
+<textarea data-item="[30]" aria-label="notes for [30]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; A drawn street map with numbered places to route through &lt;4|5&gt; &lt;2|4&gt;</p>
+<div class="panel itemsize-half" data-kind="train">
 <h3>mapRoute</h3>
   <p>Write the route from <b>1</b> to <b>6</b>, then from <b>6</b> to <b>8</b>. Tick every place you go past.</p>
   <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: two high streets crossed by two side streets, with eight numbered places — station, café, park, bank, library, post office, bus stop, market — and a car park">
@@ -297,11 +270,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   <p class="dim">Use the place names and street names on the map and nothing else. Two turns is enough for each leg.</p>
 </div>
 </section>
-<section class="qa-item" id="item-lexiconEntry">
-<h2>lexiconEntry</h2>
-<textarea data-item="lexiconEntry" aria-label="notes for lexiconEntry" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">one word's record: headword, key above it, labels, one sense, one example (teaching)</p>
-<div class="panel itemsize-third" data-kind="teaching">
+<section class="qa-item" id="item-04">
+<h2>[04]</h2>
+<textarea data-item="[04]" aria-label="notes for [04]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;THIRD-&gt; One word: its sound, labels, one sense, one example &lt;1|1&gt; &lt;1|3&gt;</p>
+<div class="panel itemsize-third" data-kind="teach">
 <h3>lexiconEntry</h3>
   <p><b>c</b><span class="pr-g">ə</span>·<b>mmu</b><span class="pr-g">t</span><b>e</b></p>
   <p class="chips"><b>formal</b><b>mostly written</b></p>
@@ -309,22 +282,22 @@ the width is what decides whether a lyric line stays one line or wraps under the
   <p>I <b>commute</b> forty minutes each way. <button class="listen" data-say="commute" type="button">▶</button></p>
 </div>
 </section>
-<section class="qa-item" id="item-correctionPlate">
-<h2>correctionPlate</h2>
-<textarea data-item="correctionPlate" aria-label="notes for correctionPlate" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a wrong line struck, the right line under it, the change bold in both (teaching)</p>
-<div class="panel itemsize-half" data-kind="teaching">
+<section class="qa-item" id="item-05">
+<h2>[05]</h2>
+<textarea data-item="[05]" aria-label="notes for [05]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;HALF-&gt; Pairs a common error with its correct form and names the rule &lt;1|1&gt; &lt;,&gt;</p>
+<div class="panel itemsize-half" data-kind="teach">
 <h3>correctionPlate</h3>
   <p><s>The company <b>have</b> decided to move the meeting.</s> <span class="dim">✗</span></p>
   <p>The company <b>has</b> decided to move the meeting. <span class="dim">✓</span></p>
   <p class="dim">A company is one thing, so it takes a singular verb.</p>
 </div>
 </section>
-<section class="qa-item" id="item-figurePlate">
-<h2>figurePlate</h2>
-<textarea data-item="figurePlate" aria-label="notes for figurePlate" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">one drawing and one caption naming what to look at (teaching)</p>
-<div class="panel itemsize-half" data-kind="teaching">
+<section class="qa-item" id="item-06">
+<h2>[06]</h2>
+<textarea data-item="[06]" aria-label="notes for [06]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TEACH&gt; &lt;HALF-&gt; One drawing and one caption naming what to look at &lt;1|1&gt; &lt;,&gt;</p>
+<div class="panel itemsize-half" data-kind="teach">
 <h3>figurePlate</h3>
   <svg viewBox="0 0 320 160" width="100%" height="160" role="img" aria-label="A table seen from the side: one set of keys on top of it, one set below">
     <rect x="30" y="66" width="260" height="12" style="fill:var(--tan);stroke:var(--ink);stroke-width:2"></rect>
@@ -338,11 +311,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   <p class="dim">Look at the two sets of keys: 1 is on the table, 2 is under it. Nothing else in the drawing matters.</p>
 </div>
 </section>
-<section class="qa-item" id="item-rubricGrid">
-<h2>rubricGrid</h2>
-<textarea data-item="rubricGrid" aria-label="notes for rubricGrid" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">criteria down the side, bands across, what to look for in each cell (teaching)</p>
-<div class="panel itemsize" data-kind="teaching">
+<section class="qa-item" id="item-07">
+<h2>[07]</h2>
+<textarea data-item="[07]" aria-label="notes for [07]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TEACH&gt; &lt;HALF-&gt; Criteria down the side, bands across, what to look for in each cell &lt;1|&gt; &lt;2|4&gt;</p>
+<div class="panel itemsize" data-kind="teach">
 <h3>rubricGrid</h3>
 <table class="chart">
   <colgroup><col style="width:16%"><col style="width:28%"><col style="width:28%"><col style="width:28%"></colgroup>
@@ -356,11 +329,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </table>
 </div>
 </section>
-<section class="qa-item" id="item-refTable">
-<h2>refTable</h2>
-<textarea data-item="refTable" aria-label="notes for refTable" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">the lesson's facts as rows, the exception carried in a note row (teaching)</p>
-<div class="panel itemsize-half" data-kind="teaching">
+<section class="qa-item" id="item-08">
+<h2>[08]</h2>
+<textarea data-item="[08]" aria-label="notes for [08]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;HALF-&gt; The lesson's facts as rows, the exception in a note row &lt;2|&gt; &lt;2|4&gt;</p>
+<div class="panel itemsize-half" data-kind="teach">
 <h3>refTable</h3>
 <p class="dim">Read the position, then the example.</p>
 <table class="chart">
@@ -375,33 +348,33 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </table>
 </div>
 </section>
-<section class="qa-item" id="item-readText">
-<h2>readText</h2>
-<textarea data-item="readText" aria-label="notes for readText" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a passage in one voice with nothing asked of it (teaching)</p>
-<div class="panel itemsize-half" data-kind="teaching">
+<section class="qa-item" id="item-09">
+<h2>[09]</h2>
+<textarea data-item="[09]" aria-label="notes for [09]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;HALF-&gt; A passage in one voice with nothing asked of it &lt;1|&gt; &lt;,&gt;</p>
+<div class="panel itemsize-half" data-kind="teach">
 <h3>readText</h3>
 <p class="dim">Read it once for the point. Nothing is asked here.</p>
 <p>In Britain you queue, and a queue is not a suggestion. <b>Someone who joins at the front has broken something that nobody wrote down.</b></p>
 <p>Nobody says anything. The queue itself says it.</p>
 </div>
 </section>
-<section class="qa-item" id="item-workedItem">
-<h2>workedItem</h2>
-<textarea data-item="workedItem" aria-label="notes for workedItem" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">one item of the exercise below, solved, with the reason under it (teaching)</p>
-<div class="panel itemsize-third" data-kind="teaching">
+<section class="qa-item" id="item-10">
+<h2>[10]</h2>
+<textarea data-item="[10]" aria-label="notes for [10]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TEACH&gt; &lt;THIRD-&gt; One item of the exercise below, solved, with the reason under it &lt;1|1&gt; &lt;,&gt;</p>
+<div class="panel itemsize-third" data-kind="teach">
 <h3>workedItem</h3>
   <div class="qline"><span class="qnum">1.</span><span class="qstem">you are writing to a teacher about a deadline</span></div>
   <div class="qopts"><b>could I have a bit more time?</b> <span class="dim">·</span> gimme a bit more time?</div>
   <p class="dim">Chosen because the hearer is the person who can grant it.</p>
 </div>
 </section>
-<section class="qa-item" id="item-hintLadder">
-<h2>hintLadder</h2>
-<textarea data-item="hintLadder" aria-label="notes for hintLadder" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">three folds of help over one item, the answer inside the last (teaching)</p>
-<div class="panel itemsize-half" data-kind="teaching">
+<section class="qa-item" id="item-11">
+<h2>[11]</h2>
+<textarea data-item="[11]" aria-label="notes for [11]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;HALF-&gt; Three folds of help over one item, the answer inside the last &lt;2|3&gt; &lt;,&gt;</p>
+<div class="panel itemsize-half" data-kind="teach">
 <h3>hintLadder</h3>
 <p class="dim">Three steps, and the answer is inside the last one. Open as far as you need.</p>
 <details><summary>step 1 · look at what follows the gap</summary><p>A length of time, or a moment in time. Decide which one the sentence gives you.</p></details>
@@ -409,11 +382,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 <details><summary>step 3 · the worked item</summary><p>She has been waiting <b>for</b> two hours. <b>Two hours</b> is the length, so the gap takes <b>for</b>.</p></details>
 </div>
 </section>
-<section class="qa-item" id="item-memoryHook">
-<h2>memoryHook</h2>
-<textarea data-item="memoryHook" aria-label="notes for memoryHook" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">letters down the page and the word they spell (teaching)</p>
-<div class="panel itemsize-third" data-kind="teaching">
+<section class="qa-item" id="item-12">
+<h2>[12]</h2>
+<textarea data-item="[12]" aria-label="notes for [12]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;THIRD-&gt; Letters down the page and the word they spell &lt;2|&gt; &lt;1|2&gt;</p>
+<div class="panel itemsize-third" data-kind="teach">
 <h3>memoryHook</h3>
 <p><b>R</b> — the result matters now</p>
 <p><b>U</b> — until now, with <b>since</b> or <b>for</b></p>
@@ -422,11 +395,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 <p class="dim">where it fails: it says nothing about the past perfect, which is a different "before".</p>
 </div>
 </section>
-<section class="qa-item" id="item-falseFriend">
-<h2>falseFriend</h2>
-<textarea data-item="falseFriend" aria-label="notes for falseFriend" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">the Portuguese instinct, the English meaning, the sentence it ruins (teaching)</p>
-<div class="panel itemsize-half" data-kind="teaching">
+<section class="qa-item" id="item-13">
+<h2>[13]</h2>
+<textarea data-item="[13]" aria-label="notes for [13]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;HALF-&gt; The Portuguese instinct, the English meaning, the sentence it ruins &lt;1|1&gt; &lt;,&gt;</p>
+<div class="panel itemsize-half" data-kind="teach">
 <h3>falseFriend</h3>
 <p class="dim">the instinct</p>
 <p><span class="pt" lang="pt">pretender</span> — to intend, to plan to do something</p>
@@ -436,11 +409,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 <p class="dim">Both come from <i>praetendere</i>, to stretch out in front. Portuguese kept the sense of aiming at something; English kept the sense of putting a front up.</p>
 </div>
 </section>
-<section class="qa-item" id="item-itemList">
-<h2>itemList</h2>
-<textarea data-item="itemList" aria-label="notes for itemList" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">numbered items, one option set each, nothing else (training)</p>
-<div class="panel itemsize-third" data-kind="training">
+<section class="qa-item" id="item-18">
+<h2>[18]</h2>
+<textarea data-item="[18]" aria-label="notes for [18]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;THIRD-&gt; Numbered items, one option set each, nothing else &lt;2|&gt; &lt;2|6&gt;</p>
+<div class="panel itemsize-third" data-kind="train">
 <h3>itemList</h3>
   <div class="qgrid stack" style="--rows:2">
     <div class="qitem">
@@ -462,11 +435,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-gapList">
-<h2>gapList</h2>
-<textarea data-item="gapList" aria-label="notes for gapList" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">whole sentences with one word missing from each (training)</p>
-<div class="panel itemsize-half" data-kind="training">
+<section class="qa-item" id="item-19">
+<h2>[19]</h2>
+<textarea data-item="[19]" aria-label="notes for [19]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; Whole sentences with one word missing from each &lt;2|&gt; &lt;1|2&gt;</p>
+<div class="panel itemsize-half" data-kind="train">
 <h3>gapList</h3>
   <p>Write the form the sentence needs.</p>
   <div class="blanks sent" style="--rows:2">
@@ -477,21 +450,21 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-writeBox">
-<h2>writeBox</h2>
-<textarea data-item="writeBox" aria-label="notes for writeBox" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">one prompt and a box the size of the answer asked for (training)</p>
-<div class="panel itemsize-half" data-kind="training">
+<section class="qa-item" id="item-20">
+<h2>[20]</h2>
+<textarea data-item="[20]" aria-label="notes for [20]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; One prompt and a box the size of the answer asked for &lt;1|1&gt; &lt;1|1&gt;</p>
+<div class="panel itemsize-half" data-kind="train">
 <h3>writeBox</h3>
   <p>Write <b>three sentences</b> about your week, one of them using <b>yet</b>.</p>
   <textarea name="t-writebox-1" rows="3" aria-label="your three sentences" style="width:100%"></textarea>
 </div>
 </section>
-<section class="qa-item" id="item-errorLog">
-<h2>errorLog</h2>
-<textarea data-item="errorLog" aria-label="notes for errorLog" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">the student's own repeated error as a chart they fill in (training)</p>
-<div class="panel itemsize-half" data-kind="training">
+<section class="qa-item" id="item-21">
+<h2>[21]</h2>
+<textarea data-item="[21]" aria-label="notes for [21]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; The student's own repeated error as a chart they fill in &lt;3|6&gt; &lt;3|3&gt;</p>
+<div class="panel itemsize-half" data-kind="train">
 <h3>errorLog</h3>
 <table class="chart">
   <thead><tr><th>what I wrote</th><th>the fix</th><th>the rule</th></tr></thead>
@@ -504,11 +477,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </table>
 </div>
 </section>
-<section class="qa-item" id="item-exitTicket">
-<h2>exitTicket</h2>
-<textarea data-item="exitTicket" aria-label="notes for exitTicket" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">two stems at the end: what I can do, what I still cannot (training)</p>
-<div class="panel itemsize-half" data-kind="training">
+<section class="qa-item" id="item-22">
+<h2>[22]</h2>
+<textarea data-item="[22]" aria-label="notes for [22]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF&gt; Two stems at the end: what I can do, what I still cannot &lt;2|3&gt; &lt;1|1&gt;</p>
+<div class="panel itemsize-half" data-kind="train">
 <h3>exitTicket</h3>
 <p>one thing I can do now</p>
 <textarea name="t-exitticket-1" rows="2" aria-label="one thing I can do now" style="width:100%"></textarea>
@@ -517,11 +490,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 <p class="dim">The second line is where the next lesson starts, so write it as something you would say out loud.</p>
 </div>
 </section>
-<section class="qa-item" id="item-findSomeoneWho">
-<h2>findSomeoneWho</h2>
-<textarea data-item="findSomeoneWho" aria-label="notes for findSomeoneWho" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a trait, who has it, what they said - a room-wide survey (training)</p>
-<div class="panel itemsize" data-kind="training">
+<section class="qa-item" id="item-23">
+<h2>[23]</h2>
+<textarea data-item="[23]" aria-label="notes for [23]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; A trait, who has it, what they said — a room-wide survey &lt;4|8&gt; &lt;3|3&gt;</p>
+<div class="panel itemsize" data-kind="train">
 <h3>findSomeoneWho</h3>
 <table class="chart">
   <colgroup><col style="width:52%"><col style="width:14%"><col style="width:34%"></colgroup>
@@ -536,11 +509,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </table>
 </div>
 </section>
-<section class="qa-item" id="item-classVote">
-<h2>classVote</h2>
-<textarea data-item="classVote" aria-label="notes for classVote" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">one item, its options, the truth behind a fold (training)</p>
-<div class="panel itemsize-half" data-kind="training">
+<section class="qa-item" id="item-24">
+<h2>[24]</h2>
+<textarea data-item="[24]" aria-label="notes for [24]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF&gt; One item, its options, the truth behind a fold &lt;1|1&gt; &lt;3|5&gt;</p>
+<div class="panel itemsize-half" data-kind="train">
 <h3>classVote</h3>
 <div class="qgrid stack" style="--rows:3">
   <div class="qitem">
@@ -551,11 +524,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 <details><summary>the answer</summary><p>It takes <b>since</b>: Tuesday is the moment the waiting starts. <span class="dim">Most classes pick <i>for</i>, because Tuesday looks like a distance and not a date.</span></p></details>
 </div>
 </section>
-<section class="qa-item" id="item-translateBack">
-<h2>translateBack</h2>
-<textarea data-item="translateBack" aria-label="notes for translateBack" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">the line, then Portuguese, then the line again in a box (training)</p>
-<div class="panel itemsize-half" data-kind="training">
+<section class="qa-item" id="item-25">
+<h2>[25]</h2>
+<textarea data-item="[25]" aria-label="notes for [25]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; Shows the line and its Portuguese, then asks for the line back in a box &lt;1|3&gt; &lt;2|2&gt;</p>
+<div class="panel itemsize-half" data-kind="train">
 <h3>translateBack</h3>
 <p>1. <b>I've been meaning to call you since Tuesday.</b></p>
 <p>2. in Portuguese, however you'd say it</p>
@@ -565,11 +538,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 <p class="dim">Compare 1 and 3. What you lost on the way is what the lesson still has to do.</p>
 </div>
 </section>
-<section class="qa-item" id="item-spacedRecall">
-<h2>spacedRecall</h2>
-<textarea data-item="spacedRecall" aria-label="notes for spacedRecall" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">cold prompts from an earlier lesson, answers behind a fold (training)</p>
-<div class="panel itemsize-half" data-kind="training">
+<section class="qa-item" id="item-26">
+<h2>[26]</h2>
+<textarea data-item="[26]" aria-label="notes for [26]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; Cold prompts from an earlier lesson, answers behind a fold &lt;3|5&gt; &lt;1|1&gt;</p>
+<div class="panel itemsize-half" data-kind="train">
 <h3>spacedRecall</h3>
 <p>1. the past of <i>take</i>, in a sentence about last night <input class="gap" style="--gap-w:12em"></p>
 <p>2. one word for a shop that sells books <input class="gap" style="--gap-w:8em"></p>
@@ -577,11 +550,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 <details><summary>the answers</summary><p><b>took</b> · <b>bookshop</b> · since names the moment something started, and the verb tells you it is still true.</p></details>
 </div>
 </section>
-<section class="qa-item" id="item-noticeCard">
-<h2>noticeCard</h2>
-<textarea data-item="noticeCard" aria-label="notes for noticeCard" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">three places outside the page, one gap each (training)</p>
-<div class="panel itemsize-half" data-kind="training">
+<section class="qa-item" id="item-27">
+<h2>[27]</h2>
+<textarea data-item="[27]" aria-label="notes for [27]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF&gt; Three places outside the page, one gap each &lt;3|5&gt; &lt;1|1&gt;</p>
+<div class="panel itemsize-half" data-kind="train">
 <h3>noticeCard</h3>
 <p>on a bus, at the front <input class="gap" style="--gap-w:12em"></p>
 <p>a shop sign in the centre <input class="gap" style="--gap-w:12em"></p>
@@ -589,39 +562,37 @@ the width is what decides whether a lyric line stays one line or wraps under the
 <p class="dim">Bring one line back, say it as you heard it, and say where it came from.</p>
 </div>
 </section>
-<nav class="qa-toc"><b>40 items — jump to one:</b> <a href="#item-lineRepair">lineRepair</a> · <a href="#item-ruleCard">ruleCard</a> · <a href="#item-formulaFrame">formulaFrame</a> · <a href="#item-signalTable">signalTable</a> · <a href="#item-soundGrid">soundGrid</a> · <a href="#item-collocationMatrix">collocationMatrix</a> · <a href="#item-dialog">dialog</a> · <a href="#item-twoWordVerb">twoWordVerb</a> · <a href="#item-contextFit">contextFit</a> · <a href="#item-registerContrast">registerContrast</a> · <a href="#item-pronLab">pronLab</a> · <a href="#item-wordFamily">wordFamily</a> · <a href="#item-politeLadder">politeLadder</a> · <a href="#item-infoGap">infoGap</a> · <a href="#item-genreDoc">genreDoc</a> · <a href="#item-signScan">signScan</a> · <a href="#item-formFill">formFill</a> · <a href="#item-measureLocal">measureLocal</a> · <a href="#item-accentVariant">accentVariant</a> · <a href="#item-idiomOrigin">idiomOrigin</a> · <a href="#item-sentenceSurgery">sentenceSurgery</a> · <a href="#item-questionBuilding">questionBuilding</a> · <a href="#item-repairMoves">repairMoves</a> · <a href="#item-minimalPairs">minimalPairs</a> · <a href="#item-listenIdentify">listenIdentify</a> · <a href="#item-errorCorrection">errorCorrection</a> · <a href="#item-syllableLab">syllableLab</a> · <a href="#item-errorHunt">errorHunt</a> · <a href="#item-oddOneOut">oddOneOut</a> · <a href="#item-spotTheDiff">spotTheDiff</a> · <a href="#item-predictReveal">predictReveal</a> · <a href="#item-miniProject">miniProject</a> · <a href="#item-emphaticBeat">emphaticBeat</a> · <a href="#item-mediaSnippet">mediaSnippet</a> · <a href="#item-rhymeCoda">rhymeCoda</a> · <a href="#item-songStructure">songStructure</a> · <a href="#item-barCount">barCount</a> · <a href="#item-moodTrack">moodTrack</a> · <a href="#item-tabooMap">tabooMap</a> · <a href="#item-humourFlag">humourFlag</a></nav>
-<nav class="qa-toc"><b>14 visual blocks (§4 Visual) — jump to one:</b> <a href="#item-ruleTree">ruleTree</a> · <a href="#item-literalSplit">literalSplit</a> · <a href="#item-timelineBridge">timelineBridge</a> · <a href="#item-inlineTimeline">inlineTimeline</a> · <a href="#item-spaceScene">spaceScene</a> · <a href="#item-mouthCut">mouthCut</a> · <a href="#item-tonguePath">tonguePath</a> · <a href="#item-inlineMarks">inlineMarks</a> · <a href="#item-posMarks">posMarks</a> · <a href="#item-massBasket">massBasket</a> · <a href="#item-slotBlocks">slotBlocks</a> · <a href="#item-voiceSeesaw">voiceSeesaw</a> · <a href="#item-levelGauge">levelGauge</a> · <a href="#item-melodyContour">melodyContour</a></nav>
-<section class="qa-item" id="item-lineRepair">
-<h2>lineRepair</h2>
-<textarea data-item="lineRepair" aria-label="notes for lineRepair" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">the written line beside the heard line, the difference unmarked (teaching)</p>
+<section class="qa-item" id="item-31">
+<h2>[31]</h2>
+<textarea data-item="[31]" aria-label="notes for [31]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;FULL&gt; The written line beside the heard line, the difference unmarked &lt;1|3&gt; &lt;2|2&gt;</p>
 <div class="itemrow" data-cols="2">
-  <div class="panel" data-kind="teaching">
+  <div class="panel" data-kind="teach">
     <h3>lineRepair</h3>
     <p>I would have told you if I had known.</p>
   </div>
-  <div class="panel" data-kind="teaching">
+  <div class="panel" data-kind="teach">
     <h3>lineRepair</h3>
     <p>I'd've told you if I'd known. <button class="listen" data-say="I would have told you if I had known" type="button">▶</button></p>
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-ruleCard">
-<h2>ruleCard</h2>
-<textarea data-item="ruleCard" aria-label="notes for ruleCard" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">one rule in three labelled lines: pattern, meaning, use when (teaching)</p>
-<div class="card itemsize-third center" data-kind="teaching">
+<section class="qa-item" id="item-32">
+<h2>[32]</h2>
+<textarea data-item="[32]" aria-label="notes for [32]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;THIRD&gt; One rule in three labelled lines: pattern, meaning, use when &lt;1|1&gt; &lt;3|3&gt;</p>
+<div class="card itemsize-third center" data-kind="teach">
 <h3 style="margin-top:0;text-align:left">ruleCard</h3>
   <p><b>Pattern:</b><br>have / has + past participle</p>
   <p><b>Means:</b><br>the thing is finished, and it still matters now</p>
   <p><b>Use when:</b><br>the time is not named, or the result is the point</p>
 </div>
 </section>
-<section class="qa-item" id="item-formulaFrame">
-<h2>formulaFrame</h2>
-<textarea data-item="formulaFrame" aria-label="notes for formulaFrame" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a skeleton with named slots, filled versions under it (teaching)</p>
-<div class="panel itemsize-third" data-kind="teaching">
+<section class="qa-item" id="item-33">
+<h2>[33]</h2>
+<textarea data-item="[33]" aria-label="notes for [33]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;THIRD&gt; A skeleton with named slots, filled versions under it &lt;1|1&gt; &lt;2|3&gt;</p>
+<div class="panel itemsize-third" data-kind="teach">
 <h3>formulaFrame</h3>
   <p>I'd rather <b>walk</b> than <b>wait for the bus</b>.</p>
   <p>I'd rather <b>stay in tonight</b> than <b>go out in this</b>.</p>
@@ -629,11 +600,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   <p class="dim">Slot 1 and slot 2 both take the bare verb. Nothing else in the sentence moves.</p>
 </div>
 </section>
-<section class="qa-item" id="item-signalTable">
-<h2>signalTable</h2>
-<textarea data-item="signalTable" aria-label="notes for signalTable" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">cue, the form it forces, an example, then the one trap row (teaching)</p>
-<div class="panel itemsize" data-kind="teaching">
+<section class="qa-item" id="item-34">
+<h2>[34]</h2>
+<textarea data-item="[34]" aria-label="notes for [34]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;HALF-&gt; Cue, the form it forces, an example, then the one trap row &lt;4|6&gt; &lt;3|3&gt;</p>
+<div class="panel itemsize" data-kind="teach">
 <h3>signalTable</h3>
 <table class="chart">
   <colgroup><col style="width:12%"><col style="width:24%"></colgroup>
@@ -649,11 +620,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </table>
 </div>
 </section>
-<section class="qa-item" id="item-soundGrid">
-<h2>soundGrid</h2>
-<textarea data-item="soundGrid" aria-label="notes for soundGrid" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">one contrast across three word positions (teaching)</p>
-<div class="panel itemsize" data-kind="teaching">
+<section class="qa-item" id="item-35">
+<h2>[35]</h2>
+<textarea data-item="[35]" aria-label="notes for [35]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;FULL&gt; One contrast across three word positions &lt;2|4&gt; &lt;3|3&gt;</p>
+<div class="panel itemsize" data-kind="teach">
 <h3>soundGrid</h3>
 <table class="chart">
   <thead><tr><th>written</th><th>at the start</th><th>in the middle</th><th>at the end</th></tr></thead>
@@ -666,11 +637,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </table>
 </div>
 </section>
-<section class="qa-item" id="item-collocationMatrix">
-<h2>collocationMatrix</h2>
-<textarea data-item="collocationMatrix" aria-label="notes for collocationMatrix" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">two word sets as rows and columns, ticks where they combine (teaching)</p>
-<div class="panel itemsize-half" data-kind="teaching">
+<section class="qa-item" id="item-36">
+<h2>[36]</h2>
+<textarea data-item="[36]" aria-label="notes for [36]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;HALF-&gt; Two word sets as rows and columns, ticks where they combine &lt;3|5&gt; &lt;3|4&gt;</p>
+<div class="panel itemsize-half" data-kind="teach">
 <h3>collocationMatrix</h3>
 <table class="chart center">
   <thead><tr><th></th><th style="font-size:.82em">photo</th><th style="font-size:.82em">shower</th><th style="font-size:.82em">decision</th></tr></thead>
@@ -685,11 +656,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </table>
 </div>
 </section>
-<section class="qa-item" id="item-dialog">
-<h2>dialog</h2>
-<textarea data-item="dialog" aria-label="notes for dialog" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a scripted exchange with the target form inside the noise (teaching)</p>
-<div class="dialog" data-kind="teaching">
+<section class="qa-item" id="item-37">
+<h2>[37]</h2>
+<textarea data-item="[37]" aria-label="notes for [37]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;HALF-&gt; A scripted exchange with the target form inside the noise &lt;3|&gt; &lt;1|1&gt;</p>
+<div class="dialog" data-kind="teach">
 <h3 style="margin-top:0">dialog</h3>
   <p><b>Read out-loud with a friend or teacher.</b></p>
   <p><b>rafa:</b> you around later</p>
@@ -701,12 +672,12 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </div>
 <p class="dim">Look at lines 3 and 4: <b>wanna</b> is the reduced form of <b>want to</b>, and the message that follows is not adding information — it is doing politeness. Two messages in a row is normal here.</p>
 </section>
-<section class="qa-item" id="item-twoWordVerb">
-<h2>twoWordVerb</h2>
-<textarea data-item="twoWordVerb" aria-label="notes for twoWordVerb" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">everyday verb beside its one-word twin, then the twins matched (mixed)</p>
+<section class="qa-item" id="item-38">
+<h2>[38]</h2>
+<textarea data-item="[38]" aria-label="notes for [38]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; Pairs an everyday verb with its one-word twin, then asks which twin fits &lt;3|6&gt; &lt;1|1&gt;</p>
 <div class="itemrow" data-cols="2">
-<div class="panel itemsize-half" data-kind="mixed">
+<div class="panel itemsize-half" data-kind="teach">
 <h3>twoWordVerb</h3>
 <table class="chart">
   <thead><tr><th>one-word twin</th><th>everyday form</th></tr></thead>
@@ -719,7 +690,7 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </tbody>
 </table>
 </div>
-<div class="panel itemsize-half" data-kind="mixed">
+<div class="panel itemsize-half" data-kind="train">
 <h3>twoWordVerb</h3>
   <p>Match each everyday verb to the word it replaces. One letter per gap.</p>
   <div class="blanks sent" style="--rows:2">
@@ -732,12 +703,12 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </div>
 </div>
 </section>
-<section class="qa-item" id="item-contextFit">
-<h2>contextFit</h2>
-<textarea data-item="contextFit" aria-label="notes for contextFit" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">fixed chunks and what each does, then one situation per gap (mixed)</p>
+<section class="qa-item" id="item-39">
+<h2>[39]</h2>
+<textarea data-item="[39]" aria-label="notes for [39]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; Fixed chunks and what each does, then a situation the student writes each into &lt;3|6&gt; &lt;1|1&gt;</p>
 <div class="itemrow" data-cols="2">
-<div class="panel itemsize-half" data-kind="mixed">
+<div class="panel itemsize-half" data-kind="teach">
 <h3>contextFit</h3>
 <table class="chart">
   <thead><tr><th>chunk</th><th>what it does</th></tr></thead>
@@ -749,7 +720,7 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </tbody>
 </table>
 </div>
-<div class="panel itemsize-half" data-kind="mixed">
+<div class="panel itemsize-half" data-kind="train">
 <h3>contextFit</h3>
   <p>Write the chunk that fits the moment.</p>
   <div class="blanks sent" style="--rows:2">
@@ -761,11 +732,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </div>
 </div>
 </section>
-<section class="qa-item" id="item-registerContrast">
-<h2>registerContrast</h2>
-<textarea data-item="registerContrast" aria-label="notes for registerContrast" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">two correct versions of one message for a named hearer (mixed)</p>
-<div class="panel itemsize" data-kind="mixed">
+<section class="qa-item" id="item-40">
+<h2>[40]</h2>
+<textarea data-item="[40]" aria-label="notes for [40]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; Two correct versions of one message for a named hearer &lt;3|6&gt; &lt;2|4&gt;</p>
+<div class="panel itemsize" data-kind="teach">
 <h3>registerContrast</h3>
 <table class="chart">
   <thead><tr><th>stiff</th><th>spoken, everyday</th></tr></thead>
@@ -777,7 +748,7 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </tbody>
 </table>
 </div>
-<div class="panel itemsize" data-kind="mixed">
+<div class="panel itemsize" data-kind="train">
 <h3>registerContrast</h3>
   <p>Who is being spoken to is in the stem. Pick the wording that survives that audience.</p>
   <div class="qgrid stack" style="--rows:2">
@@ -800,12 +771,12 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-pronLab">
-<h2>pronLab</h2>
-<textarea data-item="pronLab" aria-label="notes for pronLab" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a phoneme beside a mouth position and a contrast table (mixed)</p>
+<section class="qa-item" id="item-41">
+<h2>[41]</h2>
+<textarea data-item="[41]" aria-label="notes for [41]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;FULL&gt; A phoneme beside a mouth position and a contrast table &lt;1|1&gt; &lt;4|8&gt;</p>
 <div class="itemrow" data-cols="2">
-<div class="panel" data-kind="mixed">
+<div class="panel" data-kind="teach">
 <h3>pronLab</h3>
   <table class="chart">
     <thead><tr><th>Portuguese</th><th>English target</th></tr></thead>
@@ -816,7 +787,7 @@ the width is what decides whether a lyric line stays one line or wraps under the
     </tbody>
   </table>
 </div>
-  <div class="panel" data-kind="mixed">
+  <div class="panel" data-kind="teach">
 <h3>pronLab</h3>
     <p>Where the mouth goes:</p>
     <p><b>/s/</b> — tongue tip near the top teeth, lips relaxed, air hisses thin.<br>
@@ -824,7 +795,7 @@ the width is what decides whether a lyric line stays one line or wraps under the
     <p class="dim">Say both five times without moving anything else. Then listen.</p>
   </div>
 </div>
-<div class="panel itemsize" data-kind="mixed">
+<div class="panel itemsize" data-kind="train">
 <h3>pronLab</h3>
   <p>Which one did you hear?</p>
   <div class="qgrid stack" style="--rows:2">
@@ -847,12 +818,12 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-wordFamily">
-<h2>wordFamily</h2>
-<textarea data-item="wordFamily" aria-label="notes for wordFamily" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">one root's forms in columns by the job each does (mixed)</p>
+<section class="qa-item" id="item-42">
+<h2>[42]</h2>
+<textarea data-item="[42]" aria-label="notes for [42]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; One root's forms in columns by the job each does &lt;5|5&gt; &lt;3|6&gt;</p>
 <div class="itemrow" data-cols="2">
-<div class="panel itemsize-twothird" data-kind="mixed">
+<div class="panel itemsize-twothird" data-kind="teach">
 <h3>wordFamily</h3>
 <table class="chart">
   <thead><tr><th>verb</th><th>person</th><th>thing</th><th>thing2</th><th>description</th></tr></thead>
@@ -864,7 +835,7 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </tbody>
 </table>
 </div>
-<div class="panel itemsize-third" data-kind="mixed">
+<div class="panel itemsize-third" data-kind="train">
 <h3>wordFamily</h3>
   <p>Use one member of the family in each sentence.</p>
   <div class="blanks sent" style="--rows:2">
@@ -876,11 +847,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </div>
 </div>
 </section>
-<section class="qa-item" id="item-politeLadder">
-<h2>politeLadder</h2>
-<textarea data-item="politeLadder" aria-label="notes for politeLadder" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">one request at three degrees of distance for a stated hearer (mixed)</p>
-<div class="panel itemsize" data-kind="mixed">
+<section class="qa-item" id="item-43">
+<h2>[43]</h2>
+<textarea data-item="[43]" aria-label="notes for [43]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;TWOTHIRD&gt; One request at three degrees of distance for a stated hearer &lt;2|4&gt; &lt;1|1&gt;</p>
+<div class="panel itemsize" data-kind="teach">
 <h3>politeLadder</h3>
 <table class="chart">
   <thead><tr><th>Casual</th><th>Polite</th><th>Gentle</th></tr></thead>
@@ -891,7 +862,7 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </tbody>
 </table>
 </div>
-<div class="panel itemsize" data-kind="mixed">
+<div class="panel itemsize" data-kind="train">
 <h3>politeLadder</h3>
   <p>Rewrite each phrase for the tone named.</p>
   <div class="blanks sent" style="--rows:2">
@@ -902,12 +873,12 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-infoGap">
-<h2>infoGap</h2>
-<textarea data-item="infoGap" aria-label="notes for infoGap" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a table with holes and the questions that fill them (mixed)</p>
+<section class="qa-item" id="item-44">
+<h2>[44]</h2>
+<textarea data-item="[44]" aria-label="notes for [44]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;FULL&gt; A table with holes and the questions that fill them &lt;1|1&gt; &lt;4|8&gt;</p>
 <div class="itemrow" data-cols="2">
-  <div class="panel itemsize-third" data-kind="mixed">
+  <div class="panel itemsize-third" data-kind="teach">
     <h3>infoGap</h3>
     <p>Weekend plan, so far:</p>
     <ul>
@@ -916,7 +887,7 @@ the width is what decides whether a lyric line stays one line or wraps under the
       <li>meeting point: <i>unknown</i></li>
     </ul>
   </div>
-  <div class="panel itemsize-twothird" data-kind="mixed">
+  <div class="panel itemsize-twothird" data-kind="train">
 <h3>infoGap</h3>
     <textarea rows="2" style="width:100%" aria-label="First question"></textarea>
     <textarea rows="2" style="width:100%;margin-top:10px" aria-label="Second question"></textarea>
@@ -924,11 +895,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-genreDoc">
-<h2>genreDoc</h2>
-<textarea data-item="genreDoc" aria-label="notes for genreDoc" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a real document read for what its parts do (mixed)</p>
-<div class="panel itemsize" data-kind="mixed">
+<section class="qa-item" id="item-45">
+<h2>[45]</h2>
+<textarea data-item="[45]" aria-label="notes for [45]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;FULL&gt; A real document read for what its parts do &lt;1|1&gt; &lt;3|&gt;</p>
+<div class="panel itemsize" data-kind="teach">
 <h3>genreDoc</h3>
 <table class="chart">
   <colgroup><col style="width:1%"><col style="width:49%"><col style="width:1%"><col style="width:49%"></colgroup>
@@ -941,7 +912,7 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </tbody>
 </table>
 </div>
-<div class="panel itemsize" data-kind="mixed">
+<div class="panel itemsize" data-kind="train">
 <h3>genreDoc</h3>
   <div class="qgrid stack" style="--rows:2">
     <div class="qitem">
@@ -963,11 +934,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-signScan">
-<h2>signScan</h2>
-<textarea data-item="signScan" aria-label="notes for signScan" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">notices, the options each offers, the word doing the work (mixed)</p>
-<div class="panel itemsize" data-kind="mixed">
+<section class="qa-item" id="item-46">
+<h2>[46]</h2>
+<textarea data-item="[46]" aria-label="notes for [46]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; Notices, the options each offers, the word doing the work &lt;4|8&gt; &lt;4|4&gt;</p>
+<div class="panel itemsize" data-kind="teach|train">
 <h3>signScan</h3>
 <table class="chart">
   <thead><tr><th>the notice</th><th>what it does to you</th></tr></thead>
@@ -980,11 +951,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </table>
 </div>
 </section>
-<section class="qa-item" id="item-formFill">
-<h2>formFill</h2>
-<textarea data-item="formFill" aria-label="notes for formFill" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a form's fields, one item in each (mixed)</p>
-<div class="panel itemsize-half" data-kind="mixed">
+<section class="qa-item" id="item-47">
+<h2>[47]</h2>
+<textarea data-item="[47]" aria-label="notes for [47]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF-&gt; A form's fields, one item in each &lt;3|&gt; &lt;1|1&gt;</p>
+<div class="panel itemsize-half" data-kind="teach|train">
 <h3>formFill</h3>
 <table class="chart">
   <thead><tr><th colspan="2">Library Card Application</th></tr></thead>
@@ -998,11 +969,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   <p class="dim">The details given: Ana Ferreira · 3 April 2009 · SW1A 2AA · and one detail that belongs in no box at all.</p>
 </div>
 </section>
-<section class="qa-item" id="item-measureLocal">
-<h2>measureLocal</h2>
-<textarea data-item="measureLocal" aria-label="notes for measureLocal" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">local conventions of number, date, money and measure, both ways (mixed)</p>
-<div class="panel itemsize" data-kind="mixed">
+<section class="qa-item" id="item-48">
+<h2>[48]</h2>
+<textarea data-item="[48]" aria-label="notes for [48]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF-&gt; Local conventions of number, date, money and measure, both ways &lt;3|5&gt; &lt;1|1&gt;</p>
+<div class="panel itemsize" data-kind="teach|train">
 <h3>measureLocal</h3>
 <table class="chart">
   <thead><tr><th>Info</th><th>Write a phrase for each:</th></tr></thead>
@@ -1015,11 +986,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </table>
 </div>
 </section>
-<section class="qa-item" id="item-accentVariant">
-<h2>accentVariant</h2>
-<textarea data-item="accentVariant" aria-label="notes for accentVariant" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a form beside the region it comes from, none of them ranked (mixed)</p>
-<div class="panel itemsize" data-kind="mixed">
+<section class="qa-item" id="item-49">
+<h2>[49]</h2>
+<textarea data-item="[49]" aria-label="notes for [49]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; A form beside the region it comes from, none of them ranked &lt;3|6&gt; &lt;3|6&gt;</p>
+<div class="panel itemsize" data-kind="teach|train">
 <h3>accentVariant</h3>
 <table class="chart">
   <thead><tr><th>the form</th><th>where this material comes from</th></tr></thead>
@@ -1032,27 +1003,27 @@ the width is what decides whether a lyric line stays one line or wraps under the
 </table>
 </div>
 </section>
-<section class="qa-item" id="item-idiomOrigin">
-<h2>idiomOrigin</h2>
-<textarea data-item="idiomOrigin" aria-label="notes for idiomOrigin" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">the idiom, its literal reading, its source (mixed)</p>
-<div class="card" data-kind="mixed">
+<section class="qa-item" id="item-50">
+<h2>[50]</h2>
+<textarea data-item="[50]" aria-label="notes for [50]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;THIRD-&gt; The idiom, its literal reading, its source &lt;1|1&gt; &lt;1|1&gt;</p>
+<div class="card" data-kind="teach">
 <h3 style="margin-top:0">idiomOrigin</h3>
   <p><b>the idiom:</b> to let the cat out of the bag</p>
   <p><b>literally:</b> to open a bag and let an animal leave it</p>
   <p><b>where it comes from:</b> one story is that a market seller would swap a pig for a cat, and the buyer found out when the bag was opened</p>
 </div>
-<div class="panel" data-kind="mixed">
+<div class="panel" data-kind="train">
 <h3>idiomOrigin</h3>
   <p>Use it in a sentence where the literal reading would be nonsense.</p>
   <p><input class="gap" style="--gap-w:34em"></p>
 </div>
 </section>
-<section class="qa-item" id="item-sentenceSurgery">
-<h2>sentenceSurgery</h2>
-<textarea data-item="sentenceSurgery" aria-label="notes for sentenceSurgery" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">chunks in the wrong order, one box for the sentence (training)</p>
-<div class="panel" data-kind="training">
+<section class="qa-item" id="item-51">
+<h2>[51]</h2>
+<textarea data-item="[51]" aria-label="notes for [51]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; Chunks in the wrong order, and one box the student rebuilds the sentence in &lt;3|8&gt; &lt;1|1&gt;</p>
+<div class="panel" data-kind="train">
 <h3>sentenceSurgery</h3>
   <p>Unscramble the sentence:</p>
   <p class="chips" style="display:flex;gap:20px;justify-content:center;align-items:center">
@@ -1066,11 +1037,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   <p style="text-align:center"><input class="gap" style="--gap-w:100%" aria-label="the whole sentence"></p>
 </div>
 </section>
-<section class="qa-item" id="item-questionBuilding">
-<h2>questionBuilding</h2>
-<textarea data-item="questionBuilding" aria-label="notes for questionBuilding" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">the answer given, the question to write (training)</p>
-<div class="panel" data-kind="training">
+<section class="qa-item" id="item-52">
+<h2>[52]</h2>
+<textarea data-item="[52]" aria-label="notes for [52]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; The answer given, the question to write &lt;3|6&gt; &lt;1|1&gt;</p>
+<div class="panel" data-kind="train">
 <h3>questionBuilding</h3>
   <p>Each line is what someone answered. Write the question that got that answer.</p>
   <div class="blanks sent" style="--rows:2">
@@ -1081,14 +1052,14 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-repairMoves">
-<h2>repairMoves</h2>
-<textarea data-item="repairMoves" aria-label="notes for repairMoves" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">the moves that repair a breakdown, with the tone of each (training)</p>
-<div class="panel" data-kind="training">
+<section class="qa-item" id="item-53">
+<h2>[53]</h2>
+<textarea data-item="[53]" aria-label="notes for [53]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF&gt; The moves that repair a breakdown, with the tone of each &lt;3|6&gt; &lt;1|1&gt;</p>
+<div class="panel" data-kind="train">
 <h3>repairMoves</h3>
   <p>The conversation has come apart. Write the move that gets it going again.</p>
-  <div class="dialog" data-kind="training">
+  <div class="dialog" data-kind="train">
     <p><b>Ana:</b> so anyway I was like, whatever, and then he went and —</p>
     <p><b>You:</b> <input class="gap" style="--gap-w:12em"> <button class="listen" data-say="sorry, could you say that again a bit slower" type="button">▶</button></p>
     <p><b>Ana:</b> he left without saying anything.</p>
@@ -1101,11 +1072,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-minimalPairs">
-<h2>minimalPairs</h2>
-<textarea data-item="minimalPairs" aria-label="notes for minimalPairs" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">two near-identical sounds and a forced choice (training)</p>
-<div class="panel" data-kind="training">
+<section class="qa-item" id="item-54">
+<h2>[54]</h2>
+<textarea data-item="[54]" aria-label="notes for [54]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;THIRD-&gt; Two near-identical sounds and a forced choice &lt;4|8&gt; &lt;3|4&gt;</p>
+<div class="panel" data-kind="train">
 <h3>minimalPairs</h3>
   <p>Three words, one phoneme apart. Listen and pick the one that was said.</p>
   <div class="qgrid stack" style="--rows:2">
@@ -1128,11 +1099,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-listenIdentify">
-<h2>listenIdentify</h2>
-<textarea data-item="listenIdentify" aria-label="notes for listenIdentify" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">one clip, three ternary decisions (training)</p>
-<div class="panel" data-kind="training">
+<section class="qa-item" id="item-55">
+<h2>[55]</h2>
+<textarea data-item="[55]" aria-label="notes for [55]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;THIRD-&gt; One clip, three ternary decisions &lt;4|8&gt; &lt;3|4&gt;</p>
+<div class="panel" data-kind="train">
 <h3>listenIdentify</h3>
   <p>Listen for the ending. Three options, one of them was said.</p>
   <div class="qgrid stack" style="--rows:2">
@@ -1155,11 +1126,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-errorCorrection">
-<h2>errorCorrection</h2>
-<textarea data-item="errorCorrection" aria-label="notes for errorCorrection" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a line carrying the classic error, the fix in a box (training)</p>
-<div class="panel" data-kind="training">
+<section class="qa-item" id="item-56">
+<h2>[56]</h2>
+<textarea data-item="[56]" aria-label="notes for [56]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;THIRD-&gt; Presents the correct item among distractors that each encode the classic error &lt;3|6&gt; &lt;2|4&gt;</p>
+<div class="panel" data-kind="train">
 <h3>errorCorrection</h3>
   <div class="qgrid stack" style="--rows:2">
     <div class="qitem">
@@ -1181,11 +1152,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-syllableLab">
-<h2>syllableLab</h2>
-<textarea data-item="syllableLab" aria-label="notes for syllableLab" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a word's beats counted, then the stressed one marked (training)</p>
-<div class="panel" data-kind="training">
+<section class="qa-item" id="item-57">
+<h2>[57]</h2>
+<textarea data-item="[57]" aria-label="notes for [57]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; Splits a word into its beats and marks the stressed one &lt;3|&gt; &lt;,&gt;</p>
+<div class="panel" data-kind="train">
 <h3>syllableLab</h3>
   <p><b>1. Count the beats.</b></p>
   <div class="blanks" style="--rows:1">
@@ -1207,11 +1178,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-errorHunt">
-<h2>errorHunt</h2>
-<textarea data-item="errorHunt" aria-label="notes for errorHunt" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a short text and a stated number of errors to find (training)</p>
-<div class="panel" data-kind="training">
+<section class="qa-item" id="item-58">
+<h2>[58]</h2>
+<textarea data-item="[58]" aria-label="notes for [58]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A short text and a stated number of errors to find &lt;3|8&gt; &lt;1|1&gt;</p>
+<div class="panel" data-kind="train">
 <h3>errorHunt</h3>
   <p>There are <b>three</b> errors in this paragraph. Write the correction for each in the gaps below.</p>
   <p>Last week I go to my cousin's house and we was watching a series about a chef who lose his restaurant. My cousin don't like that kind of show but she stayed until the end anyway.</p>
@@ -1222,11 +1193,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-oddOneOut">
-<h2>oddOneOut</h2>
-<textarea data-item="oddOneOut" aria-label="notes for oddOneOut" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">four items, one from another category, with the reason (training)</p>
-<div class="panel" data-kind="training">
+<section class="qa-item" id="item-59">
+<h2>[59]</h2>
+<textarea data-item="[59]" aria-label="notes for [59]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;THIRD-&gt; Four items, one from another category, with the reason &lt;4|5&gt; &lt;4|5&gt;</p>
+<div class="panel" data-kind="train">
 <h3>oddOneOut</h3>
   <p>Three belong together. Pick the one that does not, then say what the other three share.</p>
   <div class="qgrid stack" style="--rows:2">
@@ -1247,21 +1218,21 @@ the width is what decides whether a lyric line stays one line or wraps under the
   <textarea rows="2" aria-label="Why the odd one out does not fit" style="width:100%"></textarea>
 </div>
 </section>
-<section class="qa-item" id="item-spotTheDiff">
-<h2>spotTheDiff</h2>
-<textarea data-item="spotTheDiff" aria-label="notes for spotTheDiff" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">two versions of one text, and what changed (training)</p>
+<section class="qa-item" id="item-60">
+<h2>[60]</h2>
+<textarea data-item="[60]" aria-label="notes for [60]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Two versions of one text, and what changed &lt;2|2&gt; &lt;2|6&gt;</p>
 <div class="itemrow" data-cols="2">
-  <div class="panel" data-kind="training">
+  <div class="panel" data-kind="train">
     <h3>spotTheDiff</h3>
     <p>She sent me the file at nine. I read it on the bus and answered straight away.</p>
   </div>
-  <div class="panel" data-kind="training">
+  <div class="panel" data-kind="train">
     <h3>spotTheDiff</h3>
     <p>She had sent me the file on Thursday night. I only read it the next morning and answered two days later.</p>
   </div>
 </div>
-<div class="panel" data-kind="training">
+<div class="panel" data-kind="train">
 <h3>spotTheDiff</h3>
   <p>Same file, different story. Complete what actually changed.</p>
   <div class="blanks sent" style="--rows:1">
@@ -1271,11 +1242,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-predictReveal">
-<h2>predictReveal</h2>
-<textarea data-item="predictReveal" aria-label="notes for predictReveal" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">the setup, a written guess, then the end behind a fold (training)</p>
-<div class="panel" data-kind="training">
+<section class="qa-item" id="item-61">
+<h2>[61]</h2>
+<textarea data-item="[61]" aria-label="notes for [61]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; The setup, a written guess, then the end behind a fold &lt;1|1&gt; &lt;1|1&gt;</p>
+<div class="panel" data-kind="train">
 <h3>predictReveal</h3>
   <p>Read the two lines. Before anything is explained: what do you think happened next, and what made you think it?</p>
   <p>— did you get the message?<br>— what message?</p>
@@ -1286,16 +1257,16 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </details>
 </div>
 </section>
-<section class="qa-item" id="item-miniProject">
-<h2>miniProject</h2>
-<textarea data-item="miniProject" aria-label="notes for miniProject" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a brief, a word bank and a box: one artefact to make (training)</p>
+<section class="qa-item" id="item-62">
+<h2>[62]</h2>
+<textarea data-item="[62]" aria-label="notes for [62]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A brief, a word bank and a box: one artefact to make &lt;1|1&gt; &lt;3|8&gt;</p>
 <div class="itemrow" data-cols="2">
-  <div class="card" data-kind="training">
+  <div class="card" data-kind="train">
     <h3>miniProject</h3>
     <p>Write the message that gets your group to change a plan you have already agreed. Three sentences maximum.</p>
   </div>
-  <div class="card" data-kind="training">
+  <div class="card" data-kind="train">
     <h3>miniProject</h3>
     <ul>
       <li>name the change, not the reason first</li>
@@ -1305,24 +1276,24 @@ the width is what decides whether a lyric line stays one line or wraps under the
     <p class="dim">Tick each one off before you send it.</p>
   </div>
 </div>
-<div class="panel" data-kind="training">
+<div class="panel" data-kind="train">
 <h3>miniProject</h3>
   <p class="chips"><b>any chance we could</b> <b>I'd still rather</b> <b>what about</b> <b>does that work for you</b></p>
   <textarea rows="4" aria-label="The message you would send" style="width:100%"></textarea>
 </div>
 </section>
-<section class="qa-item" id="item-emphaticBeat">
-<h2>emphaticBeat</h2>
-<textarea data-item="emphaticBeat" aria-label="notes for emphaticBeat" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">one sentence and the three readings its stress creates (training)</p>
+<section class="qa-item" id="item-63">
+<h2>[63]</h2>
+<textarea data-item="[63]" aria-label="notes for [63]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; One sentence and the three readings its stress creates &lt;2|&gt; &lt;3|5&gt;</p>
 <div class="itemrow" data-cols="2">
-  <div class="card itemsize-half" data-kind="training">
+  <div class="card itemsize-half" data-kind="train">
     <h3 style="margin-top:0">emphaticBeat</h3>
     <p><b>Pattern:</b><br>the beat lands on the word that answers the doubt, and every other word stays flat.</p>
     <p><b>I</b> never said he took it. — it wasn't me who said it.</p>
     <p>I never <b>said</b> he took it. — I wrote it, maybe, but I didn't say it.</p>
   </div>
-  <div class="panel itemsize-half" data-kind="training">
+  <div class="panel itemsize-half" data-kind="train">
 <h3>emphaticBeat</h3>
   <p>Someone has just accused you of something each time. Write the one word of the sentence you would stress.</p>
   <div class="blanks sent" style="--rows:2">
@@ -1334,23 +1305,23 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-mediaSnippet">
-<h2>mediaSnippet</h2>
-<textarea data-item="mediaSnippet" aria-label="notes for mediaSnippet" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">one real line, one named concept, and its questions (training)</p>
+<section class="qa-item" id="item-64">
+<h2>[64]</h2>
+<textarea data-item="[64]" aria-label="notes for [64]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;HALF-&gt; One real line, one named concept, and its questions &lt;2|3&gt; &lt;1|1&gt;</p>
 <div class="itemrow" data-cols="2">
-  <div class="card" data-kind="training">
+  <div class="card" data-kind="train">
 <h3 style="margin-top:0">mediaSnippet</h3>
     <blockquote>“We're not lost. We're just taking the long way.”</blockquote>
     <p class="dim">— a character, three minutes into walking in the wrong direction <button class="listen" data-say="We're not lost. We're just taking the long way." type="button">▶</button></p>
   </div>
-  <div class="card" data-kind="training">
+  <div class="card" data-kind="train">
 <h3 style="margin-top:0">mediaSnippet</h3>
     <blockquote>“I'm not angry. I'm just disappointed.”</blockquote>
     <p class="dim">— a parent, two days after being told the truth <button class="listen" data-say="I'm not angry. I'm just disappointed." type="button">▶</button></p>
   </div>
 </div>
-<div class="panel" data-kind="training">
+<div class="panel" data-kind="train">
 <h3>mediaSnippet</h3>
   <div class="qgrid stack" style="--rows:2">
     <div class="qitem">
@@ -1360,11 +1331,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-rhymeCoda">
-<h2>rhymeCoda</h2>
-<textarea data-item="rhymeCoda" aria-label="notes for rhymeCoda" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">lines whose endings rhyme, marked and named (training)</p>
-<div class="panel" data-kind="training">
+<section class="qa-item" id="item-65">
+<h2>[65]</h2>
+<textarea data-item="[65]" aria-label="notes for [65]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; Lines whose endings rhyme, marked and named &lt;2|4&gt; &lt;2|4&gt;</p>
+<div class="panel" data-kind="train">
 <h3>rhymeCoda</h3>
   <p>Four lines from one verse. Which two rhyme?</p>
   <div class="qgrid stack" style="--rows:2">
@@ -1383,38 +1354,38 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-songStructure">
-<h2>songStructure</h2>
-<textarea data-item="songStructure" aria-label="notes for songStructure" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a lyric's parts named by what each does (training)</p>
+<section class="qa-item" id="item-66">
+<h2>[66]</h2>
+<textarea data-item="[66]" aria-label="notes for [66]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A lyric's parts named by what each does &lt;3|4&gt; &lt;1|1&gt;</p>
 <div class="itemrow" data-cols="3">
-  <div class="panel" data-kind="training">
+  <div class="panel" data-kind="train">
     <h3>songStructure</h3>
     <p>I took the long way home<br>and told myself it helped.</p>
     <p>this part is the <input class="gap" style="--gap-w:7em"></p>
   </div>
-  <div class="panel" data-kind="training">
+  <div class="panel" data-kind="train">
     <h3>songStructure</h3>
     <p>I took the long way home<br>and told myself it helped.<br>I took the long way home.</p>
     <p>this part <input class="gap" style="--gap-w:7em"></p>
   </div>
-  <div class="panel" data-kind="training">
+  <div class="panel" data-kind="train">
     <h3>songStructure</h3>
     <p>I <b>still</b> take the long way home,<br>but I don't tell myself anything.</p>
     <p>this part <input class="gap" style="--gap-w:7em"></p>
   </div>
 </div>
-<div class="panel" data-kind="training">
+<div class="panel" data-kind="train">
 <h3>songStructure</h3>
   <p>One line comes back changed. Write the word that changed it: <input class="gap" style="--gap-w:8em"></p>
 </div>
 </section>
-<section class="qa-item" id="item-barCount">
-<h2>barCount</h2>
-<textarea data-item="barCount" aria-label="notes for barCount" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">the beats a line lands on, as a number (training)</p>
+<section class="qa-item" id="item-67">
+<h2>[67]</h2>
+<textarea data-item="[67]" aria-label="notes for [67]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF&gt; The beats a line lands on, as a number &lt;2|&gt; &lt;1|1&gt;</p>
 <div class="itemrow" data-cols="2">
-<div class="panel itemsize-half" data-kind="training">
+<div class="panel itemsize-half" data-kind="train">
 <h3>barCount</h3>
 <table class="chart">
   <thead><tr><th>the line</th><th>how many beats it lands on</th></tr></thead>
@@ -1426,17 +1397,17 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </tbody>
 </table>
 </div>
-<div class="panel itemsize-half" data-kind="training">
+<div class="panel itemsize-half" data-kind="train">
 <h3>barCount</h3>
   <p>One of these lines breaks its count. Write the word that sits on the break: <input class="gap" style="--gap-w:9em"></p>
 </div>
 </div>
 </section>
-<section class="qa-item" id="item-moodTrack">
-<h2>moodTrack</h2>
-<textarea data-item="moodTrack" aria-label="notes for moodTrack" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a clip and the one line that justifies its mood (training)</p>
-<div class="panel" data-kind="training">
+<section class="qa-item" id="item-68">
+<h2>[68]</h2>
+<textarea data-item="[68]" aria-label="notes for [68]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; A clip and the one line that justifies its mood &lt;1|&gt; &lt;3|3&gt;</p>
+<div class="panel" data-kind="train">
 <h3>moodTrack</h3>
   <p>Scene: a car at night, one person driving, the radio on low, a long straight road.</p>
   <div class="qgrid stack" style="--rows:2">
@@ -1448,11 +1419,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   <p>Because <input class="gap" style="--gap-w:22em"></p>
 </div>
 </section>
-<section class="qa-item" id="item-tabooMap">
-<h2>tabooMap</h2>
-<textarea data-item="tabooMap" aria-label="notes for tabooMap" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">questions ranked by where they are off-limits, then rewritten (training)</p>
-<div class="panel" data-kind="training">
+<section class="qa-item" id="item-69">
+<h2>[69]</h2>
+<textarea data-item="[69]" aria-label="notes for [69]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF&gt; Questions ranked by where they are off-limits, then the student rewrites them &lt;2|&gt; &lt;2|4&gt;</p>
+<div class="panel" data-kind="train">
 <h3>tabooMap</h3>
   <p>Situation: you have known this person for ten minutes at a friend's birthday. They have just said they moved here last month.</p>
   <div class="qgrid stack" style="--rows:2">
@@ -1468,11 +1439,11 @@ the width is what decides whether a lyric line stays one line or wraps under the
   <p>Rewrite the off-limits one so it becomes askable: <input class="gap" style="--gap-w:20em"></p>
 </div>
 </section>
-<section class="qa-item" id="item-humourFlag">
-<h2>humourFlag</h2>
-<textarea data-item="humourFlag" aria-label="notes for humourFlag" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a funny line and the flag on what makes it work (training)</p>
-<div class="panel" data-kind="training">
+<section class="qa-item" id="item-70">
+<h2>[70]</h2>
+<textarea data-item="[70]" aria-label="notes for [70]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;THIRD-&gt; A funny line and the flag on what makes it work &lt;1|&gt; &lt;2|4&gt;</p>
+<div class="panel" data-kind="train">
 <h3>humourFlag</h3>
   <div class="qgrid stack" style="--rows:2">
     <div class="qitem">
@@ -1487,10 +1458,10 @@ the width is what decides whether a lyric line stays one line or wraps under the
   <p>What would line 1 lose if it were translated word for word? <input class="gap" style="--gap-w:20em"></p>
 </div>
 </section>
-<section class="qa-item" id="item-ruleTree">
-<h2>ruleTree</h2>
+<section class="qa-item" id="item-84">
+<h2>[84]</h2>
 <textarea data-item="ruleTree" aria-label="notes for ruleTree" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">the relative-pronoun decision tree (draft)</p>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; The relative-pronoun decision tree &lt;,&gt; &lt;,&gt;</p>
 <div class="panel">
   <p><b>Walk the tree out loud before you answer.</b> It only asks one question about the noun you are adding to.</p>
   <div class="vz-tree">
@@ -1541,10 +1512,10 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-literalSplit">
-<h2>literalSplit</h2>
+<section class="qa-item" id="item-85">
+<h2>[85]</h2>
 <textarea data-item="literalSplit" aria-label="notes for literalSplit" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">an idiom as literal scene vs figurative meaning (draft)</p>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;HALF-&gt; An idiom as literal scene vs figurative meaning &lt;,&gt; &lt;,&gt;</p>
 <div class="itemrow" data-cols="2">
   <div class="panel">
     <p class="vz-tag">ao pé da letra</p>
@@ -1638,10 +1609,10 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-timelineBridge">
-<h2>timelineBridge</h2>
+<section class="qa-item" id="item-86">
+<h2>[86]</h2>
 <textarea data-item="timelineBridge" aria-label="notes for timelineBridge" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">one axis, three sizes (draft)</p>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; One axis, three sizes &lt;,&gt; &lt;,&gt;</p>
 <div class="card">
   <p>A finished past and a past that still reaches you are the <b>same list of events</b>. Nothing differs
   except where the shape stops. So draw the stopping point, name the claim it makes, and then ask for the
@@ -1743,10 +1714,10 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-inlineTimeline">
-<h2>inlineTimeline</h2>
+<section class="qa-item" id="item-87">
+<h2>[87]</h2>
 <textarea data-item="inlineTimeline" aria-label="notes for inlineTimeline" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">the same axis as an IN-BLOCK element (draft)</p>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; A timeline drawn as one element inside another block &lt;,&gt; &lt;,&gt;</p>
 <div class="card">
   <p>It is not a picture next to a sentence: it belongs to a sentence. Under the sentence, an axis
   says <b>where</b> the claim reaches and <b>where it stops</b>, and each marked word carries a
@@ -1917,10 +1888,10 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-spaceScene">
-<h2>spaceScene</h2>
+<section class="qa-item" id="item-88">
+<h2>[88]</h2>
 <textarea data-item="spaceScene" aria-label="notes for spaceScene" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">at / on / in as a point, a surface, an enclosure (draft)</p>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; At / on / in as a point, a surface, an enclosure &lt;,&gt; &lt;,&gt;</p>
 <div class="card">
   <p>One tin, drawn from above the front. Cover the phrase under each picture and say what you see first.</p>
   <div class="itemrow" data-cols="3">
@@ -2016,10 +1987,10 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-mouthCut">
-<h2>mouthCut</h2>
+<section class="qa-item" id="item-89">
+<h2>[89]</h2>
 <textarea data-item="mouthCut" aria-label="notes for mouthCut" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a real plate, marked on (draft)</p>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; A real engraving with the teaching drawn on top of it &lt;,&gt; &lt;,&gt;</p>
 <div class="card">
   <p>One mouth, two languages: there is no new anatomy to learn. The whole lesson is <b>which part moves</b> — and every part can be found with your own tongue in about ten seconds.</p>
   <div class="itemrow" data-cols="2">
@@ -2128,9 +2099,9 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-tonguePath">
-<h2>tonguePath</h2>
-<p class="dim">the tongue travelling between two sounds (draft)</p>
+<section class="qa-item" id="item-90">
+<h2>[90]</h2>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; The tongue travelling between two sounds &lt;,&gt; &lt;,&gt;</p>
 <div class="panel">
   <p class="vz-tag">the tongue TRAVELLING between two sounds — watch the distance, not the dots</p>
   <p>Side view, schematic: lips and teeth at the left, the hard roof curving above, the tongue lying
@@ -2191,9 +2162,9 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-inlineMarks">
-<h2>inlineMarks</h2>
-<p class="dim">the phrase is the figure (draft)</p>
+<section class="qa-item" id="item-91">
+<h2>[91]</h2>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; One sentence carrying seven phrase-level marks &lt;,&gt; &lt;,&gt;</p>
 <div class="panel">
   <p class="vz-tag">the phrase is the figure — every mark below is a span, not a drawing</p>
   <p>Seven classes, no container. Each rides on the word it marks, so the same sentence works at full width and at a
@@ -2224,9 +2195,9 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-posMarks">
-<h2>posMarks</h2>
-<p class="dim">parts of speech as an underline, generated (draft)</p>
+<section class="qa-item" id="item-92">
+<h2>[92]</h2>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Parts of speech as an underline, generated &lt;,&gt; &lt;,&gt;</p>
 <div class="panel">
   <p class="vz-tag">parts of speech as an underline — no column, no baseline shift, zero layout cost</p>
   <p>Every label is a class on the word, so a long sentence is as cheap as a short one. The <b>line style</b>
@@ -2260,10 +2231,10 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-massBasket">
-<h2>massBasket</h2>
+<section class="qa-item" id="item-93">
+<h2>[93]</h2>
 <textarea data-item="massBasket" aria-label="notes for massBasket" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">countable against mass, as objects you can see (draft)</p>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Countable against mass, as objects you can see &lt;,&gt; &lt;,&gt;</p>
 <div class="card">
   <p>English gives you two shapes for a noun, and the picture is the difference: units you can count, or one
   mass you have to divide.</p>
@@ -2333,10 +2304,10 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-slotBlocks">
-<h2>slotBlocks</h2>
+<section class="qa-item" id="item-94">
+<h2>[94]</h2>
 <textarea data-item="slotBlocks" aria-label="notes for slotBlocks" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a clause as colour-coded bricks (draft)</p>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; A clause as colour-coded bricks &lt;,&gt; &lt;,&gt;</p>
 <div class="panel">
   <p>Read down the blue column. English fills it every single time — even when there is nothing and nobody to talk about.</p>
   <div class="vz-wall">
@@ -2387,10 +2358,10 @@ the width is what decides whether a lyric line stays one line or wraps under the
   </div>
 </div>
 </section>
-<section class="qa-item" id="item-voiceSeesaw">
-<h2>voiceSeesaw</h2>
+<section class="qa-item" id="item-95">
+<h2>[95]</h2>
 <textarea data-item="voiceSeesaw" aria-label="notes for voiceSeesaw" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">active to passive as positions, not as two sentences (draft)</p>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Active to passive as positions, not as two sentences &lt;,&gt; &lt;,&gt;</p>
 <div class="panel">
   <p>Watch one full loop with the labels covered. Then read the letters.</p>
   <div class="vz-stage">
@@ -2431,10 +2402,10 @@ the width is what decides whether a lyric line stays one line or wraps under the
   leave it out; if it is worth naming, the active sentence is shorter.</p>
 </div>
 </section>
-<section class="qa-item" id="item-levelGauge">
-<h2>levelGauge</h2>
+<section class="qa-item" id="item-96">
+<h2>[96]</h2>
 <textarea data-item="levelGauge" aria-label="notes for levelGauge" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">a filled gauge in front of an existing scale (draft)</p>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; A scale of degrees with the level filled in &lt;,&gt; &lt;,&gt;</p>
 <div class="panel">
   <p>Five words for one feeling. Portuguese has about two of them, so the dictionary puts them all in the same
   place — the tube is the only place their order is visible.</p>
@@ -2522,10 +2493,10 @@ the width is what decides whether a lyric line stays one line or wraps under the
   ladder is taught; the items only point at it.</p>
 </div>
 </section>
-<section class="qa-item" id="item-melodyContour">
-<h2>melodyContour</h2>
+<section class="qa-item" id="item-97">
+<h2>[97]</h2>
 <textarea data-item="melodyContour" aria-label="notes for melodyContour" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">the voice's movement drawn over the line (draft)</p>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; The voice's movement drawn over the line &lt;,&gt; &lt;,&gt;</p>
 <div class="panel">
   <p class="dim">‾‾‾‾‾‾‾‾‾╲___╱‾‾‾‾‾‾‾‾‾‾‾‾╲</p>
   <p>you're <b>coming</b> on Friday, aren't you <button class="listen" data-say="you're coming on Friday, aren't you" type="button">▶</button></p>
@@ -2542,6 +2513,7 @@ the width is what decides whether a lyric line stays one line or wraps under the
 <div id="qa-status" class="qa-status">notes: nothing typed yet</div>
 <script src="player.js"></script>
 <script src="notes.js"></script>
+<script src="readout.js"></script>
 </body>
 </html>
 
