@@ -30,6 +30,9 @@ const who=()=>gate.teacher?"prof":"aluno";
 let STUDENT=gate.student||gate.email, layer=[], sig="", editing=false;
 const audioCache={};
 let popXY={x:20,y:90};
+/* the site's one transient message bar: writes #toast for 2.6s. Deleted by a8356f3 when the eodConfirm
+   block was inserted in its place; both engines call it, so it is a global, not part of any block. */
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(t._x);t._x=setTimeout(()=>t.style.display="none",2600)}
 /* == SHARED SOURCE: eodConfirm — this block is IDENTICAL in engine1.js and index.html (the one page that
    loads no engine), and qa/landing.mjs fails if the two copies differ by so much as a character. ==
    THE SITE'S ONE CONFIRMATION DIALOG (owner instruction 2026-11-09): no browser popup anywhere. Every
