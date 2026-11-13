@@ -16,7 +16,7 @@
  *
  * `### Build [Constraints]` is scaffolding under [INSTRUCTIONS], not a shape, and is skipped. What
  * sits inside a block — the figures and the inline marks — is not a second file either: it is
- * `[BUILD]`'s construction rules and the numbered `[ITEMS]` entries at the bottom of this file, so
+ * `[BUILD]`'s construction rules and the numbered `[INSIDE]` entries at the bottom of this file, so
  * the preview page has a block for each numbered entry and nothing else to be stale against.
  */
 import fs from 'fs';
@@ -71,7 +71,8 @@ export function readMenu() {
   const lines = text.split(/\r?\n/);
   const sections = [], shapes = [], unparsed = [];
   /* `## [INSTRUCTIONS]` and `## [BUILD]` are scaffolding, not groups: the entries that follow them are
-     the menu itself, not members of an instructions section. `[ITEMS]` is a real group. */
+     the menu itself, not members of an instructions section. `[INSIDE]` is the only real group — the
+     four figures a host block draws inside itself, which are never chosen on their own. */
   const NOT_A_GROUP = /^(INSTRUCTIONS|BUILD)$/;
   let section = null, group = null;
   for (let i = 0; i < lines.length; i++) {

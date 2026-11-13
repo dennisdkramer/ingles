@@ -16,9 +16,9 @@
  *     legacy word (`teaching`, `training`, `mixed`, `games`) is a failure wherever it survives.
  *
  * STANDING INSTRUCTION TO THE ASSISTANT — a task that names text in a preview page's note box is a
- * task against that box (`textarea.qa-note` in qa/preview-games4.html, qa/preview-blocks.html), and
- * every box mirrors its `###` section in qa/NOTES.md. There is no server: the page writes the file
- * itself through the browser's file-system access. So the request is in qa/NOTES.md — read it there.
+ * task against that box (`textarea.qa-note` in qa/preview-blocks.html), and every box mirrors its
+ * `###` section in qa/NOTES.md. `node qa/serve.mjs` is the reliable way in: it serves the file, so the
+ * boxes read and write it with nothing to pick. So the request is in qa/NOTES.md — read it there.
  * An empty box means the section is not in the file either, and never a reason to substitute a
  * request of your own.
  *

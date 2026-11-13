@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>blocks — preview (CONTENT_EXAMPLES §2–§8)</title>
+<title>blocks — preview (every entry in CONTENT_EXAMPLES.md)</title>
 <link rel="stylesheet" href="../style.css">
 <link rel="stylesheet" href="preview.css">
 <link rel="stylesheet" href="preview-visual.css">
@@ -15,10 +15,10 @@
 each on its own heading, in the file's own order. The words are filler; the point is the structure: which container
 carries the block, how many columns the content forces, what the control is, and whether the shape reads as a block
 at all.</p>
-<p class="dim">Three scripts run on this page. <code>notes.js</code> reads and writes
+<p class="dim">Four scripts run on this page. <code>notes.js</code> reads and writes
 <code>qa/NOTES.md</code> for the note box under each item heading; <code>player.js</code> upgrades the music block
 below from its native <code>&lt;audio controls&gt;</code> to the drawn bar and the lit lyric line, and does nothing at
-all if it is missing; <code>readout.js</code> builds the nav and the line under each note box from the menu itself.
+all if it is missing; <code>readout.js</code> builds the nav and the line under each note box from the menu itself; <code>engine4.js</code> presents the thirteen game blocks, <code>[71]</code>–<code>[83]</code>, and does nothing if it is missing.
 Every other class used here already exists in <code>style.css</code> and every
 block follows the <code>## </code> headers in <code>style.css</code>: <code>.panel</code> / <code>.card</code> / <code>.chart</code> / <code>.dialog</code>
 for the frame, <code>.qgrid stack</code> with <code>--rows</code> for radios, <code>.blanks sent</code> with
@@ -30,9 +30,7 @@ loads and again every 2 s, so a heading rewritten in the file appears under its 
 with no block on this page is named in the nav rather than quietly missing. Nothing else is printed about a block:
 there is no caption at its foot, because a sentence that is not in the menu would be this page arguing its own case.
 Every block on the page answers for a numbered entry, so nothing here can be out of date against the file: the nav and the line over each block are read from CONTENT_EXAMPLES.md, and a heading rewritten there appears here on the next poll.</p>
-<p>The <b>[ITEMS]</b> figures sit at the end — they are numbered entries too, from <code>[84]</code> up. Each carries an inline
-<code>&lt;svg&gt;</code> (or CSS-drawn) figure plus the control that makes it a block rather than a picture: a radio, a gap,
-or a textarea. The player's own CSS (`[02]`/`[03]`) lives in <code>style.css</code> under
+<p>The figures drawn <em>inside</em> a block are the last four entries, under <b>[INSIDE]</b>: <code>[87]</code> the timeline, <code>[91]</code> the phrase marks, <code>[92]</code> the parts of speech, <code>[97]</code> the voice contour. None of them owns a container or a control — the block that hosts one owns the <code>.panel</code> and supplies the radio, gap or textarea that saves, which is why they are listed apart from the vehicles. The ten from <code>[84]</code> up are ordinary vehicles and carry an inline <code>&lt;svg&gt;</code> (or CSS-drawn) figure <em>plus</em> the control that makes it a block rather than a picture; they sit at the end of <b>[VEHICLES]</b> with their numbers unchanged. The player's own CSS (`[02]`/`[03]`) lives in <code>style.css</code> under
 <code>## AUDIO PLAYER</code>, because a kept shape is lesson-facing; every other draft figure here is
 <code>.vz-*</code> in <code>qa/preview-visual.css</code>, so it stays out of the lesson stylesheet until the shape
 is kept. No network, no font above the page's own palette, and every figure
@@ -104,172 +102,6 @@ prints.</p>
 </div>
 </section>
 
-<section class="qa-item" id="item-14">
-<h2>[14]</h2>
-<textarea data-item="[14]" aria-label="notes for [14]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TEACH&gt; &lt;HALF-&gt; Six real lines with one word down the middle &lt;3|8&gt; &lt;,&gt;</p>
-<div class="panel itemsize-half" data-kind="teach">
-<h3>concordance</h3>
-<table class="chart">
-  <colgroup><col style="width:30%"><col style="width:14%"><col style="width:56%"></colgroup>
-  <thead><tr><th>before</th><th>the word</th><th>after</th></tr></thead>
-  <tbody>
-    <tr><td>I've been thinking</td><td><b>about</b></td><td>it all week.</td></tr>
-    <tr><td>Don't worry</td><td><b>about</b></td><td>the money.</td></tr>
-    <tr><td>There's something odd</td><td><b>about</b></td><td>this form.</td></tr>
-    <tr><td>It's</td><td><b>about</b></td><td>ten minutes from here.</td></tr>
-    <tr><td>What's this book</td><td><b>about</b></td><td>?</td></tr>
-    <tr class="note"><td colspan="3">The last row is <b>about to</b>, which is a different pattern wearing the same word. It is here on purpose.</td></tr>
-  </tbody>
-</table>
-</div>
-</section>
-<section class="qa-item" id="item-15">
-<h2>[15]</h2>
-<textarea data-item="[15]" aria-label="notes for [15]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;TEACH&gt; &lt;HALF-&gt; A line with a key set above each word &lt;1|1&gt; &lt;1|&gt;</p>
-<div class="panel itemsize-half" data-kind="teach">
-<h3>rubyLine</h3>
-  <p style="line-height:2.4">I <ruby>thought<rp>(</rp><rt style="font-size:.8em"><b>thou</b><span class="pr-g">gh</span><span class="pr-g">t</span></rt><rp>)</rp></ruby> I'd have <ruby>finished<rp>(</rp><rt style="font-size:.8em"><b>fi</b>·<b>ni</b><span class="pr-g">sh</span><span class="pr-g">e</span><b>d</b></rt><rp>)</rp></ruby> it by <ruby>Friday<rp>(</rp><rt style="font-size:.8em"><b>fri</b>·<b>day</b></rt><rp>)</rp></ruby>.</p>
-  <p class="dim">Three words carry a key because those are the three nobody guesses. Every word would read the same way, with a key over each.</p>
-</div>
-</section>
-<section class="qa-item" id="item-16">
-<h2>[16]</h2>
-<textarea data-item="[16]" aria-label="notes for [16]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;TEACH&gt; &lt;THIRD-&gt; The tail of a line, then longer tails, then the whole line &lt;3|6&gt; &lt;,&gt;</p>
-<div class="panel itemsize-third" data-kind="teach">
-<h3>backChain</h3>
-  <p>Say each rung twice, then move down.</p>
-  <div style="text-align:right;line-height:1.35">
-    <p style="margin:0"><b>before</b> <button class="listen" data-say="before" type="button">▶</button></p>
-    <p style="margin:0">you <b>before</b> <button class="listen" data-say="you before" type="button">▶</button></p>
-    <p style="margin:0">told you <b>before</b> <button class="listen" data-say="told you before" type="button">▶</button></p>
-    <p style="margin:0">have told you <b>before</b> <button class="listen" data-say="have told you before" type="button">▶</button></p>
-    <p style="margin:0">should have told you <b>before</b> <button class="listen" data-say="should have told you before" type="button">▶</button></p>
-    <p style="margin:0">I <b>should have told you before</b>. <button class="listen" data-say="I should have told you before" type="button">▶</button></p>
-  </div>
-</div>
-</section>
-<section class="qa-item" id="item-17">
-<h2>[17]</h2>
-<textarea data-item="[17]" aria-label="notes for [17]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;TEACH&gt; &lt;THIRD-&gt; A word's stops: language, form, date, meaning then &lt;2|4&gt; &lt;,&gt;</p>
-<div class="panel itemsize-third" data-kind="teach">
-<h3>etymologyTrail</h3>
-<dl>
-  <dt><b>c. 1300 — Latin</b> <i>nescius</i></dt>
-  <dd>"not knowing" — the word enters meaning <i>foolish</i></dd>
-  <dt><b>1300s — Old French</b> <i>nice</i></dt>
-  <dd>"careless, clumsy"</dd>
-  <dt><b>1500s — English</b></dt>
-  <dd>"precise, careful" — the sense turns inward</dd>
-  <dt><b>1800s — English</b></dt>
-  <dd>"pleasant, kind" — the sense in use now</dd>
-</dl>
-  <p class="dim">Nothing was added to this word. The meaning walked from <i>ignorant</i> to <i>kind</i> in six hundred years, which is why <i>nice</i> is the vaguest compliment in English.</p>
-</div>
-</section>
-<section class="qa-item" id="item-28">
-<h2>[28]</h2>
-<textarea data-item="[28]" aria-label="notes for [28]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; Wordless panels with a line under each &lt;4|6&gt; &lt;1|1&gt;</p>
-<div class="panel itemsize-half" data-kind="train">
-<h3>comicStrip</h3>
-  <p>Describe what is happening in each picture, using the <b>past simple</b>.</p>
-<table class="chart">
-  <tbody>
-    <tr>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%"></td>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%"></td>
-    </tr>
-    <tr>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><input class="gap" style="--gap-w:100%"></td>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%"></td>
-    </tr>
-  </tbody>
-</table>
-  <p class="dim">One line per panel, past simple. Panels are inline SVG here; a real block takes four frames from <code>assets/</code> or the same SVG, and the caption names the source.</p>
-</div>
-</section>
-<section class="qa-item" id="item-29">
-<h2>[29]</h2>
-<textarea data-item="[29]" aria-label="notes for [29]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; Bars whose length is the value, then the sentence about them &lt;2|4&gt; &lt;1|1&gt;</p>
-<div class="panel itemsize-half" data-kind="train">
-<h3>dataBar</h3>
-  <p><b>United Kingdom</b> — 45%</p>
-  <p style="width:45%;height:14px;background:var(--blue);margin:0 0 .8em 15px"></p>
-  <p><b>Portugal</b> — 38%</p>
-  <p style="width:38%;height:14px;background:var(--blue);margin:0 0 .8em 15px"></p>
-  <p><b>Brazil</b> — 26%</p>
-  <p style="width:26%;height:14px;background:var(--blue);margin:0 0 1em 15px"></p>
-  <div class="blanks sent" style="--rows:2">
-    <div>1. About <input class="gap" style="--gap-w:9em"> as many adults in Brazil read for pleasure as in the UK.</div>
-    <div>2. Portugal sits <input class="gap" style="--gap-w:9em"> the UK and Brazil.</div>
-  </div>
-  <p class="dim">Figures: placeholder for the preview — a real block names its source here, and never rounds a bar away from its own label.</p>
-</div>
-</section>
-<section class="qa-item" id="item-30">
-<h2>[30]</h2>
-<textarea data-item="[30]" aria-label="notes for [30]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; A drawn street map with numbered places to route through &lt;4|5&gt; &lt;2|4&gt;</p>
-<div class="panel itemsize-half" data-kind="train">
-<h3>mapRoute</h3>
-  <p>Write the route from <b>1</b> to <b>6</b>, then from <b>6</b> to <b>8</b>. Tick every place you go past.</p>
-  <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: two high streets crossed by two side streets, with eight numbered places — station, café, park, bank, library, post office, bus stop, market — and a car park">
-    <rect x="0" y="0" width="360" height="240" style="fill:var(--paper)"></rect>
-    <g style="fill:var(--tan);opacity:.45">
-      <rect x="0" y="78" width="360" height="16"></rect>
-      <rect x="0" y="160" width="360" height="16"></rect>
-      <rect x="104" y="0" width="16" height="240"></rect>
-      <rect x="258" y="0" width="16" height="240"></rect>
-    </g>
-    <g style="fill:none;stroke:var(--ink);stroke-width:2">
-      <rect x="14" y="26" width="76" height="40"></rect>
-      <rect x="130" y="26" width="116" height="40"></rect>
-      <rect x="282" y="26" width="64" height="40"></rect>
-      <rect x="14" y="100" width="76" height="52"></rect>
-      <rect x="130" y="100" width="116" height="52"></rect>
-      <rect x="282" y="100" width="64" height="52"></rect>
-      <rect x="14" y="182" width="76" height="44"></rect>
-      <rect x="130" y="182" width="116" height="44"></rect>
-    </g>
-    <rect x="282" y="182" width="64" height="44" style="fill:none;stroke:var(--ink);stroke-width:1;stroke-dasharray:4 3"></rect>
-    <text x="286" y="206" style="font-size:8px;fill:var(--ink)">car park</text>
-    <text x="300" y="90" style="font-size:8px;fill:var(--ink)">High Street</text>
-    <text x="300" y="172" style="font-size:8px;fill:var(--ink)">Low Street</text>
-    <text transform="translate(117,232) rotate(-90)" style="font-size:8px;fill:var(--ink)">Mill Lane</text>
-    <g style="fill:var(--ink)">
-      <circle cx="28" cy="40" r="8"></circle><circle cx="144" cy="40" r="8"></circle><circle cx="296" cy="40" r="8"></circle>
-      <circle cx="28" cy="114" r="8"></circle><circle cx="144" cy="114" r="8"></circle><circle cx="296" cy="114" r="8"></circle>
-      <circle cx="28" cy="196" r="8"></circle><circle cx="144" cy="196" r="8"></circle>
-    </g>
-    <g style="fill:var(--paper);font-size:9px;text-anchor:middle">
-      <text x="28" y="43">1</text><text x="144" y="43">2</text><text x="296" y="43">3</text>
-      <text x="28" y="117">4</text><text x="144" y="117">5</text><text x="296" y="117">6</text>
-      <text x="28" y="199">7</text><text x="144" y="199">8</text>
-    </g>
-    <g style="fill:var(--ink);font-size:10px">
-      <text x="42" y="60">Station</text>
-      <text x="158" y="60">Café</text>
-      <text x="286" y="60">Park</text>
-      <text x="42" y="144">Bank</text>
-      <text x="158" y="144">Library</text>
-      <text x="286" y="144">Post Office</text>
-      <text x="42" y="218">Bus stop</text>
-      <text x="158" y="218">Market</text>
-    </g>
-  </svg>
-  <p><label><input type="checkbox"> 1 Station</label> · <label><input type="checkbox"> 2 Café</label> · <label><input type="checkbox"> 3 Park</label> · <label><input type="checkbox"> 4 Bank</label> · <label><input type="checkbox"> 5 Library</label> · <label><input type="checkbox"> 6 Post Office</label> · <label><input type="checkbox"> 7 Bus stop</label> · <label><input type="checkbox"> 8 Market</label></p>
-  <div class="blanks sent" style="--rows:2">
-    <div>1. From the station to the post office: <input class="gap" style="--gap-w:100%"></div>
-    <div>2. From the post office to the market: <input class="gap" style="--gap-w:100%"></div>
-  </div>
-  <p class="dim">Use the place names and street names on the map and nothing else. Two turns is enough for each leg.</p>
-</div>
-</section>
 <section class="qa-item" id="item-04">
 <h2>[04]</h2>
 <textarea data-item="[04]" aria-label="notes for [04]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
@@ -407,6 +239,72 @@ prints.</p>
 <p>to act as if something is true when it is not</p>
 <p>the trap: <b>I pretend to study medicine next year.</b> <span class="dim">· what is meant is <i>I intend to</i></span></p>
 <p class="dim">Both come from <i>praetendere</i>, to stretch out in front. Portuguese kept the sense of aiming at something; English kept the sense of putting a front up.</p>
+</div>
+</section>
+<section class="qa-item" id="item-14">
+<h2>[14]</h2>
+<textarea data-item="[14]" aria-label="notes for [14]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TEACH&gt; &lt;HALF-&gt; Six real lines with one word down the middle &lt;3|8&gt; &lt;,&gt;</p>
+<div class="panel itemsize-half" data-kind="teach">
+<h3>concordance</h3>
+<table class="chart">
+  <colgroup><col style="width:30%"><col style="width:14%"><col style="width:56%"></colgroup>
+  <thead><tr><th>before</th><th>the word</th><th>after</th></tr></thead>
+  <tbody>
+    <tr><td>I've been thinking</td><td><b>about</b></td><td>it all week.</td></tr>
+    <tr><td>Don't worry</td><td><b>about</b></td><td>the money.</td></tr>
+    <tr><td>There's something odd</td><td><b>about</b></td><td>this form.</td></tr>
+    <tr><td>It's</td><td><b>about</b></td><td>ten minutes from here.</td></tr>
+    <tr><td>What's this book</td><td><b>about</b></td><td>?</td></tr>
+    <tr class="note"><td colspan="3">The last row is <b>about to</b>, which is a different pattern wearing the same word. It is here on purpose.</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+<section class="qa-item" id="item-15">
+<h2>[15]</h2>
+<textarea data-item="[15]" aria-label="notes for [15]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;HALF-&gt; A line with a key set above each word &lt;1|1&gt; &lt;1|&gt;</p>
+<div class="panel itemsize-half" data-kind="teach">
+<h3>rubyLine</h3>
+  <p style="line-height:2.4">I <ruby>thought<rp>(</rp><rt style="font-size:.8em"><b>thou</b><span class="pr-g">gh</span><span class="pr-g">t</span></rt><rp>)</rp></ruby> I'd have <ruby>finished<rp>(</rp><rt style="font-size:.8em"><b>fi</b>·<b>ni</b><span class="pr-g">sh</span><span class="pr-g">e</span><b>d</b></rt><rp>)</rp></ruby> it by <ruby>Friday<rp>(</rp><rt style="font-size:.8em"><b>fri</b>·<b>day</b></rt><rp>)</rp></ruby>.</p>
+  <p class="dim">Three words carry a key because those are the three nobody guesses. Every word would read the same way, with a key over each.</p>
+</div>
+</section>
+<section class="qa-item" id="item-16">
+<h2>[16]</h2>
+<textarea data-item="[16]" aria-label="notes for [16]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;THIRD-&gt; The tail of a line, then longer tails, then the whole line &lt;3|6&gt; &lt;,&gt;</p>
+<div class="panel itemsize-third" data-kind="teach">
+<h3>backChain</h3>
+  <p>Say each rung twice, then move down.</p>
+  <div style="text-align:right;line-height:1.35">
+    <p style="margin:0"><b>before</b> <button class="listen" data-say="before" type="button">▶</button></p>
+    <p style="margin:0">you <b>before</b> <button class="listen" data-say="you before" type="button">▶</button></p>
+    <p style="margin:0">told you <b>before</b> <button class="listen" data-say="told you before" type="button">▶</button></p>
+    <p style="margin:0">have told you <b>before</b> <button class="listen" data-say="have told you before" type="button">▶</button></p>
+    <p style="margin:0">should have told you <b>before</b> <button class="listen" data-say="should have told you before" type="button">▶</button></p>
+    <p style="margin:0">I <b>should have told you before</b>. <button class="listen" data-say="I should have told you before" type="button">▶</button></p>
+  </div>
+</div>
+</section>
+<section class="qa-item" id="item-17">
+<h2>[17]</h2>
+<textarea data-item="[17]" aria-label="notes for [17]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;THIRD-&gt; A word's stops: language, form, date, meaning then &lt;2|4&gt; &lt;,&gt;</p>
+<div class="panel itemsize-third" data-kind="teach">
+<h3>etymologyTrail</h3>
+<dl>
+  <dt><b>c. 1300 — Latin</b> <i>nescius</i></dt>
+  <dd>"not knowing" — the word enters meaning <i>foolish</i></dd>
+  <dt><b>1300s — Old French</b> <i>nice</i></dt>
+  <dd>"careless, clumsy"</dd>
+  <dt><b>1500s — English</b></dt>
+  <dd>"precise, careful" — the sense turns inward</dd>
+  <dt><b>1800s — English</b></dt>
+  <dd>"pleasant, kind" — the sense in use now</dd>
+</dl>
+  <p class="dim">Nothing was added to this word. The meaning walked from <i>ignorant</i> to <i>kind</i> in six hundred years, which is why <i>nice</i> is the vaguest compliment in English.</p>
 </div>
 </section>
 <section class="qa-item" id="item-18">
@@ -560,6 +458,106 @@ prints.</p>
 <p>a shop sign in the centre <input class="gap" style="--gap-w:12em"></p>
 <p>the subtitles on one song <input class="gap" style="--gap-w:12em"></p>
 <p class="dim">Bring one line back, say it as you heard it, and say where it came from.</p>
+</div>
+</section>
+<section class="qa-item" id="item-28">
+<h2>[28]</h2>
+<textarea data-item="[28]" aria-label="notes for [28]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; Wordless panels with a line under each &lt;4|6&gt; &lt;1|1&gt;</p>
+<div class="panel itemsize-half" data-kind="train">
+<h3>comicStrip</h3>
+  <p>Describe what is happening in each picture, using the <b>past simple</b>.</p>
+<table class="chart">
+  <tbody>
+    <tr>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%"></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%"></td>
+    </tr>
+    <tr>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><input class="gap" style="--gap-w:100%"></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%"></td>
+    </tr>
+  </tbody>
+</table>
+  <p class="dim">One line per panel, past simple. Panels are inline SVG here; a real block takes four frames from <code>assets/</code> or the same SVG, and the caption names the source.</p>
+</div>
+</section>
+<section class="qa-item" id="item-29">
+<h2>[29]</h2>
+<textarea data-item="[29]" aria-label="notes for [29]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; Bars whose length is the value, then the sentence about them &lt;2|4&gt; &lt;1|1&gt;</p>
+<div class="panel itemsize-half" data-kind="train">
+<h3>dataBar</h3>
+  <p><b>United Kingdom</b> — 45%</p>
+  <p style="width:45%;height:14px;background:var(--blue);margin:0 0 .8em 15px"></p>
+  <p><b>Portugal</b> — 38%</p>
+  <p style="width:38%;height:14px;background:var(--blue);margin:0 0 .8em 15px"></p>
+  <p><b>Brazil</b> — 26%</p>
+  <p style="width:26%;height:14px;background:var(--blue);margin:0 0 1em 15px"></p>
+  <div class="blanks sent" style="--rows:2">
+    <div>1. About <input class="gap" style="--gap-w:9em"> as many adults in Brazil read for pleasure as in the UK.</div>
+    <div>2. Portugal sits <input class="gap" style="--gap-w:9em"> the UK and Brazil.</div>
+  </div>
+  <p class="dim">Figures: placeholder for the preview — a real block names its source here, and never rounds a bar away from its own label.</p>
+</div>
+</section>
+<section class="qa-item" id="item-30">
+<h2>[30]</h2>
+<textarea data-item="[30]" aria-label="notes for [30]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; A drawn street map with numbered places to route through &lt;4|5&gt; &lt;2|4&gt;</p>
+<div class="panel itemsize-half" data-kind="train">
+<h3>mapRoute</h3>
+  <p>Write the route from <b>1</b> to <b>6</b>, then from <b>6</b> to <b>8</b>. Tick every place you go past.</p>
+  <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: two high streets crossed by two side streets, with eight numbered places — station, café, park, bank, library, post office, bus stop, market — and a car park">
+    <rect x="0" y="0" width="360" height="240" style="fill:var(--paper)"></rect>
+    <g style="fill:var(--tan);opacity:.45">
+      <rect x="0" y="78" width="360" height="16"></rect>
+      <rect x="0" y="160" width="360" height="16"></rect>
+      <rect x="104" y="0" width="16" height="240"></rect>
+      <rect x="258" y="0" width="16" height="240"></rect>
+    </g>
+    <g style="fill:none;stroke:var(--ink);stroke-width:2">
+      <rect x="14" y="26" width="76" height="40"></rect>
+      <rect x="130" y="26" width="116" height="40"></rect>
+      <rect x="282" y="26" width="64" height="40"></rect>
+      <rect x="14" y="100" width="76" height="52"></rect>
+      <rect x="130" y="100" width="116" height="52"></rect>
+      <rect x="282" y="100" width="64" height="52"></rect>
+      <rect x="14" y="182" width="76" height="44"></rect>
+      <rect x="130" y="182" width="116" height="44"></rect>
+    </g>
+    <rect x="282" y="182" width="64" height="44" style="fill:none;stroke:var(--ink);stroke-width:1;stroke-dasharray:4 3"></rect>
+    <text x="286" y="206" style="font-size:8px;fill:var(--ink)">car park</text>
+    <text x="300" y="90" style="font-size:8px;fill:var(--ink)">High Street</text>
+    <text x="300" y="172" style="font-size:8px;fill:var(--ink)">Low Street</text>
+    <text transform="translate(117,232) rotate(-90)" style="font-size:8px;fill:var(--ink)">Mill Lane</text>
+    <g style="fill:var(--ink)">
+      <circle cx="28" cy="40" r="8"></circle><circle cx="144" cy="40" r="8"></circle><circle cx="296" cy="40" r="8"></circle>
+      <circle cx="28" cy="114" r="8"></circle><circle cx="144" cy="114" r="8"></circle><circle cx="296" cy="114" r="8"></circle>
+      <circle cx="28" cy="196" r="8"></circle><circle cx="144" cy="196" r="8"></circle>
+    </g>
+    <g style="fill:var(--paper);font-size:9px;text-anchor:middle">
+      <text x="28" y="43">1</text><text x="144" y="43">2</text><text x="296" y="43">3</text>
+      <text x="28" y="117">4</text><text x="144" y="117">5</text><text x="296" y="117">6</text>
+      <text x="28" y="199">7</text><text x="144" y="199">8</text>
+    </g>
+    <g style="fill:var(--ink);font-size:10px">
+      <text x="42" y="60">Station</text>
+      <text x="158" y="60">Café</text>
+      <text x="286" y="60">Park</text>
+      <text x="42" y="144">Bank</text>
+      <text x="158" y="144">Library</text>
+      <text x="286" y="144">Post Office</text>
+      <text x="42" y="218">Bus stop</text>
+      <text x="158" y="218">Market</text>
+    </g>
+  </svg>
+  <p><label><input type="checkbox"> 1 Station</label> · <label><input type="checkbox"> 2 Café</label> · <label><input type="checkbox"> 3 Park</label> · <label><input type="checkbox"> 4 Bank</label> · <label><input type="checkbox"> 5 Library</label> · <label><input type="checkbox"> 6 Post Office</label> · <label><input type="checkbox"> 7 Bus stop</label> · <label><input type="checkbox"> 8 Market</label></p>
+  <div class="blanks sent" style="--rows:2">
+    <div>1. From the station to the post office: <input class="gap" style="--gap-w:100%"></div>
+    <div>2. From the post office to the market: <input class="gap" style="--gap-w:100%"></div>
+  </div>
+  <p class="dim">Use the place names and street names on the map and nothing else. Two turns is enough for each leg.</p>
 </div>
 </section>
 <section class="qa-item" id="item-31">
@@ -1458,10 +1456,518 @@ prints.</p>
   <p>What would line 1 lose if it were translated word for word? <input class="gap" style="--gap-w:20em"></p>
 </div>
 </section>
+<p class="dim">The blocks below are the games, <code>[71]</code>–<code>[83]</code>: each is a <code>&lt;div class="game" data-game="…"&gt;</code> over the same plain <code>.qitem</code>s as every other block — a <code>.qstem</code> prompt, an optional <code>.listen</code> chip, radios — and <code>data-a</code> on the item is the right option's value, with <code>data-answer</code> carrying the word itself only where a board needs it. The authored <code>.game-list</code> is what a student sees before Start, what prints and what is saved; everything around it is presentation from <code>engine4.js</code>. The section after them is not a vehicle: it is the same authored list with the engine missing, the fallback every game block has to survive.</p>
+<!-- ▼▼ GAMES ▼▼ every block is <div class="game" data-game="…"> over plain .qitem's: a .qstem
+     prompt, an optional .listen chip, radios. data-a on the item is the right option's value;
+     data-answer carries the word itself only where a board needs it (wordleBoard, crosswordBoard,
+     the bingo caller). ▼▼ -->
+<section class="qa-item" id="item-71">
+<h2>[71]</h2>
+<textarea data-item="[71]" aria-label="notes for [71]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; Words crossing the screen, shot inside a clock &lt;1|&gt; &lt;2|6&gt;</p>
+<div class="game" data-game="skeetRange" data-time="6000" data-kind="train">
+  <p class="game-how">One shot per round. Hit the disc that fits before it flies off the range.</p>
+  <div class="game-list">
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">which one begins with the sound in <b>she</b></span></div>
+      <div class="qopts"><label><input type="radio" name="p-skeetRange-1" value="a">see</label><label><input type="radio" name="p-skeetRange-1" value="b">cheap</label><label><input type="radio" name="p-skeetRange-1" value="c">sip</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">which one ends with the sound in <b>wanted</b></span></div>
+      <div class="qopts"><label><input type="radio" name="p-skeetRange-2" value="a">needed</label><label><input type="radio" name="p-skeetRange-2" value="b">walked</label><label><input type="radio" name="p-skeetRange-2" value="c">talked</label></div>
+    </div>
+    <div class="qitem" data-a="c">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">which one has a long <b>i</b></span></div>
+      <div class="qopts"><label><input type="radio" name="p-skeetRange-3" value="a">ship</label><label><input type="radio" name="p-skeetRange-3" value="b">sick</label><label><input type="radio" name="p-skeetRange-3" value="c">seat</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">which one is said with the stress on the first beat</span></div>
+      <div class="qopts"><label><input type="radio" name="p-skeetRange-4" value="a">re-CORD it now</label><label><input type="radio" name="p-skeetRange-4" value="b">RE-cord the song</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">which one has four beats, not three</span></div>
+      <div class="qopts"><label><input type="radio" name="p-skeetRange-5" value="a">comfortable</label><label><input type="radio" name="p-skeetRange-5" value="b">comfy</label><label><input type="radio" name="p-skeetRange-5" value="c">comfy chair</label></div>
+    </div>
+  </div>
+  <button class="game-start" type="button">▶ Play</button>
+</div>
+</section>
+<section class="qa-item" id="item-72">
+<h2>[72]</h2>
+<textarea data-item="[72]" aria-label="notes for [72]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; Lookalike options surfacing, the fitting one struck &lt;1|&gt; &lt;2|6&gt;</p>
+<div class="game" data-game="whackMole" data-time="6500" data-kind="train">
+  <p class="game-how">Hit the mole that fits before it ducks.</p>
+  <div class="game-list">
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">a greeting</span></div>
+      <div class="qopts"><label><input type="radio" name="p-whackMole-1" value="a">thanks</label><label><input type="radio" name="p-whackMole-1" value="b">hey</label><label><input type="radio" name="p-whackMole-1" value="c">sorry</label></div>
+    </div>
+    <div class="qitem" data-a="c">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">very tired</span></div>
+      <div class="qopts"><label><input type="radio" name="p-whackMole-2" value="a">bored</label><label><input type="radio" name="p-whackMole-2" value="b">late</label><label><input type="radio" name="p-whackMole-2" value="c">wiped out</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">asks someone to repeat</span></div>
+      <div class="qopts"><label><input type="radio" name="p-whackMole-3" value="a">sorry, say that again?</label><label><input type="radio" name="p-whackMole-3" value="b">nice to meet you</label><label><input type="radio" name="p-whackMole-3" value="c">no worries</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">a place you sleep</span></div>
+      <div class="qopts"><label><input type="radio" name="p-whackMole-4" value="a">kitchen</label><label><input type="radio" name="p-whackMole-4" value="b">bedroom</label><label><input type="radio" name="p-whackMole-4" value="c">corridor</label></div>
+    </div>
+    <div class="qitem" data-a="c">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">past</span></div>
+      <div class="qopts"><label><input type="radio" name="p-whackMole-5" value="a">she walks</label><label><input type="radio" name="p-whackMole-5" value="b">she is walking</label><label><input type="radio" name="p-whackMole-5" value="c">she walked</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">6.</span><span class="qstem">turning a request down politely</span></div>
+      <div class="qopts"><label><input type="radio" name="p-whackMole-6" value="a">I'd love to, but I can't</label><label><input type="radio" name="p-whackMole-6" value="b">see you tomorrow</label><label><input type="radio" name="p-whackMole-6" value="c">that's mine</label></div>
+    </div>
+  </div>
+  <button class="game-start" type="button">▶ Play</button>
+</div>
+</section>
+<section class="qa-item" id="item-73">
+<h2>[73]</h2>
+<textarea data-item="[73]" aria-label="notes for [73]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; Items falling, sorted into two to four baskets &lt;1|&gt; &lt;2|4&gt;</p>
+<div class="game" data-game="catchBasket" data-time="9000" data-kind="train">
+  <p class="game-how">Drag the card into the pot where the word fits. Every right answer grows a flower in that pot.</p>
+  <div class="game-list">
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">she ___ here every day</span></div>
+      <div class="qopts"><label><input type="radio" name="p-catchBasket-1" value="a">walks</label><label><input type="radio" name="p-catchBasket-1" value="b">walk</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">they ___ here every day</span></div>
+      <div class="qopts"><label><input type="radio" name="p-catchBasket-2" value="a">walks</label><label><input type="radio" name="p-catchBasket-2" value="b">walk</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">it ___ a lot in June</span></div>
+      <div class="qopts"><label><input type="radio" name="p-catchBasket-3" value="a">rains</label><label><input type="radio" name="p-catchBasket-3" value="b">rain</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">you and I ___ the same class</span></div>
+      <div class="qopts"><label><input type="radio" name="p-catchBasket-4" value="a">takes</label><label><input type="radio" name="p-catchBasket-4" value="b">take</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">the bus ___ at seven</span></div>
+      <div class="qopts"><label><input type="radio" name="p-catchBasket-5" value="a">leaves</label><label><input type="radio" name="p-catchBasket-5" value="b">leave</label></div>
+    </div>
+  </div>
+  <button class="game-start" type="button">▶ Play</button>
+</div>
+</section>
+<section class="qa-item" id="item-74">
+<h2>[74]</h2>
+<textarea data-item="[74]" aria-label="notes for [74]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A drill answered item by item, the stack built as it is earned &lt;6|10&gt; &lt;2|4&gt;</p>
+<div class="game" data-game="stackDrop" data-time="10000" data-kind="train">
+  <p class="game-how">Tap the answer that fits the question block. A right answer stays in the tower and the climber climbs; a wrong one tumbles off. Build it all and he reaches the chest.</p>
+  <div class="game-list">
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">how long have you lived here</span></div>
+      <div class="qopts"><label><input type="radio" name="p-stackDrop-1" value="a">How long you have lived here?</label><label><input type="radio" name="p-stackDrop-1" value="b">How long have you lived here?</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">what time does it start</span></div>
+      <div class="qopts"><label><input type="radio" name="p-stackDrop-2" value="a">What time does it start?</label><label><input type="radio" name="p-stackDrop-2" value="b">What time it does start?</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">where did she go</span></div>
+      <div class="qopts"><label><input type="radio" name="p-stackDrop-3" value="a">Where she did go?</label><label><input type="radio" name="p-stackDrop-3" value="b">Where did she go?</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">never / I / have / there / been</span></div>
+      <div class="qopts"><label><input type="radio" name="p-stackDrop-4" value="a">I have never been there.</label><label><input type="radio" name="p-stackDrop-4" value="b">I never have been there.</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">he / usually / doesn't / early / arrive</span></div>
+      <div class="qopts"><label><input type="radio" name="p-stackDrop-5" value="a">He usually doesn't arrives early.</label><label><input type="radio" name="p-stackDrop-5" value="b">He doesn't usually arrive early.</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">6.</span><span class="qstem">why / you / are / so / late</span></div>
+      <div class="qopts"><label><input type="radio" name="p-stackDrop-6" value="a">Why are you so late?</label><label><input type="radio" name="p-stackDrop-6" value="b">Why you are so late?</label></div>
+    </div>
+  </div>
+  <button class="game-start" type="button">▶ Play</button>
+</div>
+</section>
+<section class="qa-item" id="item-75">
+<h2>[75]</h2>
+<textarea data-item="[75]" aria-label="notes for [75]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; Recognition at speed, one gate per right answer &lt;1|&gt; &lt;2|4&gt;</p>
+<div class="game" data-game="flapGate" data-time="9000" data-kind="train">
+  <p class="game-how">Click (or Space) to flap. Fly through the gap whose meaning fits the clue — the wall is coming whether you flap or not.</p>
+  <div class="game-list">
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">to cancel something</span></div>
+      <div class="qopts"><label><input type="radio" name="p-flapGate-1" value="a">call it off</label><label><input type="radio" name="p-flapGate-1" value="b">call it up</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">to invent an excuse</span></div>
+      <div class="qopts"><label><input type="radio" name="p-flapGate-2" value="a">make it out</label><label><input type="radio" name="p-flapGate-2" value="b">make it up</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">to tolerate something</span></div>
+      <div class="qopts"><label><input type="radio" name="p-flapGate-3" value="a">put up with it</label><label><input type="radio" name="p-flapGate-3" value="b">put it off</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">to find something by accident</span></div>
+      <div class="qopts"><label><input type="radio" name="p-flapGate-4" value="a">look after it</label><label><input type="radio" name="p-flapGate-4" value="b">come across it</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">to stop trying</span></div>
+      <div class="qopts"><label><input type="radio" name="p-flapGate-5" value="a">give up</label><label><input type="radio" name="p-flapGate-5" value="b">give out</label></div>
+    </div>
+  </div>
+  <button class="game-start" type="button">▶ Play</button>
+</div>
+</section>
+<section class="qa-item" id="item-76">
+<h2>[76]</h2>
+<textarea data-item="[76]" aria-label="notes for [76]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A word guessed to a five-try limit, letter feedback each try &lt;1|&gt; &lt;2|4&gt;</p>
+<div class="game" data-game="wordleBoard" data-time="0" data-kind="train">
+  <p class="game-how">Type the five letters and press Enter. Green is right, yellow is right letter, wrong place.</p>
+  <div class="game-list">
+    <div class="qitem" data-a="a" data-answer="table">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">you eat your dinner on it</span></div>
+      <div class="qopts"><label><input type="radio" name="p-wordleBoard-1" value="a">table</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="water">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">you drink it every day</span></div>
+      <div class="qopts"><label><input type="radio" name="p-wordleBoard-2" value="a">water</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="money">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">what you pay with</span></div>
+      <div class="qopts"><label><input type="radio" name="p-wordleBoard-3" value="a">money</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="green">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">the colour of grass</span></div>
+      <div class="qopts"><label><input type="radio" name="p-wordleBoard-4" value="a">green</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="house">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">the building you live in</span></div>
+      <div class="qopts"><label><input type="radio" name="p-wordleBoard-5" value="a">house</label></div>
+    </div>
+  </div>
+  <button class="game-start" type="button">▶ Play</button>
+</div>
+</section>
+<section class="qa-item" id="item-77">
+<h2>[77]</h2>
+<textarea data-item="[77]" aria-label="notes for [77]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A grid where a wrong move costs a mark &lt;1|&gt; &lt;4|4&gt;</p>
+<div class="game" data-game="mineGrid" data-time="9000" data-kind="train">
+  <p class="game-how">Open the door whose sign answers the clue. Behind a wrong one there is a snake, and three bites finish you.</p>
+  <div class="game-list">
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">the room where you cook</span></div>
+      <div class="qopts"><label><input type="radio" name="p-mineGrid-1" value="a">hall</label><label><input type="radio" name="p-mineGrid-1" value="b">kitchen</label><label><input type="radio" name="p-mineGrid-1" value="c">garage</label><label><input type="radio" name="p-mineGrid-1" value="d">cellar</label></div>
+    </div>
+    <div class="qitem" data-a="c">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">the person who fixes a car</span></div>
+      <div class="qopts"><label><input type="radio" name="p-mineGrid-2" value="a">baker</label><label><input type="radio" name="p-mineGrid-2" value="b">driver</label><label><input type="radio" name="p-mineGrid-2" value="c">mechanic</label><label><input type="radio" name="p-mineGrid-2" value="d">plumber</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">something you borrow from a library</span></div>
+      <div class="qopts"><label><input type="radio" name="p-mineGrid-3" value="a">a book</label><label><input type="radio" name="p-mineGrid-3" value="b">a ticket</label><label><input type="radio" name="p-mineGrid-3" value="c">a receipt</label><label><input type="radio" name="p-mineGrid-3" value="d">a fridge</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">what you do to a light</span></div>
+      <div class="qopts"><label><input type="radio" name="p-mineGrid-4" value="a">open it</label><label><input type="radio" name="p-mineGrid-4" value="b">switch it on</label><label><input type="radio" name="p-mineGrid-4" value="c">fill it in</label><label><input type="radio" name="p-mineGrid-4" value="d">sign it</label></div>
+    </div>
+    <div class="qitem" data-a="c">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">the opposite of "expensive"</span></div>
+      <div class="qopts"><label><input type="radio" name="p-mineGrid-5" value="a">crowded</label><label><input type="radio" name="p-mineGrid-5" value="b">quiet</label><label><input type="radio" name="p-mineGrid-5" value="c">cheap</label><label><input type="radio" name="p-mineGrid-5" value="d">tidy</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">6.</span><span class="qstem">what "I'd rather" does</span></div>
+      <div class="qopts"><label><input type="radio" name="p-mineGrid-6" value="a">states a preference</label><label><input type="radio" name="p-mineGrid-6" value="b">asks permission</label><label><input type="radio" name="p-mineGrid-6" value="c">makes a promise</label><label><input type="radio" name="p-mineGrid-6" value="d">gives advice</label></div>
+    </div>
+  </div>
+  <button class="game-start" type="button">▶ Play</button>
+</div>
+</section>
+<section class="qa-item" id="item-78">
+<h2>[78]</h2>
+<textarea data-item="[78]" aria-label="notes for [78]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A board of crossing words, one clue per word &lt;2|6&gt; &lt;2|&gt;</p>
+<div class="game" data-game="crosswordBoard" data-time="0" data-kind="train">
+  <p class="game-how">Type into the grid. Two words that cross share one letter — type it once.</p>
+  <div class="game-list">
+    <div class="qitem" data-a="a" data-answer="money">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">what you pay with</span></div>
+      <div class="qopts"><label><input type="radio" name="p-crosswordBoard-1" value="a">money</label><label><input type="radio" name="p-crosswordBoard-1" value="b">monkey</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="note">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">a short written message</span></div>
+      <div class="qopts"><label><input type="radio" name="p-crosswordBoard-2" value="a">note</label><label><input type="radio" name="p-crosswordBoard-2" value="b">node</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="tone">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">the colour of a voice</span></div>
+      <div class="qopts"><label><input type="radio" name="p-crosswordBoard-3" value="a">tone</label><label><input type="radio" name="p-crosswordBoard-3" value="b">tune</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="nose">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">you smell with it</span></div>
+      <div class="qopts"><label><input type="radio" name="p-crosswordBoard-4" value="a">nose</label><label><input type="radio" name="p-crosswordBoard-4" value="b">rose</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="east">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">the way the sun comes up</span></div>
+      <div class="qopts"><label><input type="radio" name="p-crosswordBoard-5" value="a">east</label><label><input type="radio" name="p-crosswordBoard-5" value="b">easy</label></div>
+    </div>
+  </div>
+  <button class="game-start" type="button">▶ Play</button>
+</div>
+</section>
+<section class="qa-item" id="item-79">
+<h2>[79]</h2>
+<textarea data-item="[79]" aria-label="notes for [79]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A sentence built one word at a time from pads &lt;2|&gt; &lt;4|4&gt;</p>
+<div class="game" data-game="echoPads" data-time="0" data-first="Yesterday I" data-lives="3" data-kind="train">
+  <p class="game-how">One word at a time. The words already placed are on the board and the first word is given — pick the word that fits after them. A wrong pad costs a life and the sentence waits.</p>
+  <div class="game-list">
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">the action, past simple</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-1" value="a">walks</label><label><input type="radio" name="p-echoPads-1" value="b">walked</label><label><input type="radio" name="p-echoPads-1" value="c">walking</label><label><input type="radio" name="p-echoPads-1" value="d">will walk</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">from here to there</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-2" value="a">to</label><label><input type="radio" name="p-echoPads-2" value="b">too</label><label><input type="radio" name="p-echoPads-2" value="c">two</label><label><input type="radio" name="p-echoPads-2" value="d">of</label></div>
+    </div>
+    <div class="qitem" data-a="c">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">one shop we both know</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-3" value="a">these</label><label><input type="radio" name="p-echoPads-3" value="b">many</label><label><input type="radio" name="p-echoPads-3" value="c">the</label><label><input type="radio" name="p-echoPads-3" value="d">several</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">the place he walked into, not the activity and not the person</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-4" value="a">shop</label><label><input type="radio" name="p-echoPads-4" value="b">shopping</label><label><input type="radio" name="p-echoPads-4" value="c">shopped</label><label><input type="radio" name="p-echoPads-4" value="d">shop's</label></div>
+    </div>
+    <div class="qitem" data-a="d">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">the reason</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-5" value="a">because of</label><label><input type="radio" name="p-echoPads-5" value="b">despite</label><label><input type="radio" name="p-echoPads-5" value="c">during</label><label><input type="radio" name="p-echoPads-5" value="d">because</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">6.</span><span class="qstem">the person who needed it — the one speaking</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-6" value="a">I</label><label><input type="radio" name="p-echoPads-6" value="b">me</label><label><input type="radio" name="p-echoPads-6" value="c">my</label><label><input type="radio" name="p-echoPads-6" value="d">myself</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">7.</span><span class="qstem">the action again, past simple</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-7" value="a">needs</label><label><input type="radio" name="p-echoPads-7" value="b">needed</label><label><input type="radio" name="p-echoPads-7" value="c">needing</label><label><input type="radio" name="p-echoPads-7" value="d">to need</label></div>
+    </div>
+    <div class="qitem" data-a="d">
+      <div class="qline"><span class="qnum">8.</span><span class="qstem">a small amount</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-8" value="a">many</label><label><input type="radio" name="p-echoPads-8" value="b">several</label><label><input type="radio" name="p-echoPads-8" value="c">a</label><label><input type="radio" name="p-echoPads-8" value="d">some</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">9.</span><span class="qstem">what you buy in a shop</span></div>
+      <div class="qopts"><label><input type="radio" name="p-echoPads-9" value="a">bread</label><label><input type="radio" name="p-echoPads-9" value="b">breads</label><label><input type="radio" name="p-echoPads-9" value="c">bake</label><label><input type="radio" name="p-echoPads-9" value="d">baked</label></div>
+    </div>
+  </div>
+  <button class="game-start" type="button">▶ Play</button>
+</div>
+</section>
+<section class="qa-item" id="item-80">
+<h2>[80]</h2>
+<textarea data-item="[80]" aria-label="notes for [80]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A card of words with the spoken form called &lt;1|&gt; &lt;2|9&gt;</p>
+<div class="game" data-game="bingoCard" data-time="0" data-kind="train">
+  <p class="game-how">The caller says a word. Tap it on your card — a line wins.</p>
+  <div class="game-list">
+    <div class="qitem" data-a="a" data-answer="walked">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">listen</span></div>
+      <div class="qopts"><label><input type="radio" name="p-bingoCard-1" value="a">walked</label><label><input type="radio" name="p-bingoCard-1" value="b">worked</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="jumped">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">listen</span></div>
+      <div class="qopts"><label><input type="radio" name="p-bingoCard-2" value="a">jumped</label><label><input type="radio" name="p-bingoCard-2" value="b">jumps</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="cooked">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">listen</span></div>
+      <div class="qopts"><label><input type="radio" name="p-bingoCard-3" value="a">cooked</label><label><input type="radio" name="p-bingoCard-3" value="b">looked</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="painted">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">listen</span></div>
+      <div class="qopts"><label><input type="radio" name="p-bingoCard-4" value="a">painted</label><label><input type="radio" name="p-bingoCard-4" value="b">planted</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="called">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">listen</span></div>
+      <div class="qopts"><label><input type="radio" name="p-bingoCard-5" value="a">called</label><label><input type="radio" name="p-bingoCard-5" value="b">cold</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="opened">
+      <div class="qline"><span class="qnum">6.</span><span class="qstem">listen</span></div>
+      <div class="qopts"><label><input type="radio" name="p-bingoCard-6" value="a">opened</label><label><input type="radio" name="p-bingoCard-6" value="b">opening</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="closed">
+      <div class="qline"><span class="qnum">7.</span><span class="qstem">listen</span></div>
+      <div class="qopts"><label><input type="radio" name="p-bingoCard-7" value="a">closed</label><label><input type="radio" name="p-bingoCard-7" value="b">clothes</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="played">
+      <div class="qline"><span class="qnum">8.</span><span class="qstem">listen</span></div>
+      <div class="qopts"><label><input type="radio" name="p-bingoCard-8" value="a">played</label><label><input type="radio" name="p-bingoCard-8" value="b">plate</label></div>
+    </div>
+    <div class="qitem" data-a="a" data-answer="cleaned">
+      <div class="qline"><span class="qnum">9.</span><span class="qstem">listen</span></div>
+      <div class="qopts"><label><input type="radio" name="p-bingoCard-9" value="a">cleaned</label><label><input type="radio" name="p-bingoCard-9" value="b">climbed</label></div>
+    </div>
+  </div>
+  <button class="game-start" type="button">▶ Play</button>
+</div>
+</section>
+<section class="qa-item" id="item-81">
+<h2>[81]</h2>
+<textarea data-item="[81]" aria-label="notes for [81]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A quiz run that carries the score already earned &lt;5|&gt; &lt;2|4&gt;</p>
+<div class="game" data-game="ladderRun" data-time="0" data-kind="train">
+  <p class="game-how">Every rung is a question. A wrong answer drops you to the last safe rung.</p>
+  <div class="game-list">
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">she ___ to school by bus</span></div>
+      <div class="qopts"><label><input type="radio" name="p-ladderRun-1" value="a">go</label><label><input type="radio" name="p-ladderRun-1" value="b">goes</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">we ___ there last night</span></div>
+      <div class="qopts"><label><input type="radio" name="p-ladderRun-2" value="a">went</label><label><input type="radio" name="p-ladderRun-2" value="b">gone</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">I have ___ that film twice</span></div>
+      <div class="qopts"><label><input type="radio" name="p-ladderRun-3" value="a">saw</label><label><input type="radio" name="p-ladderRun-3" value="b">seen</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">there ___ two shops on this street</span></div>
+      <div class="qopts"><label><input type="radio" name="p-ladderRun-4" value="a">are</label><label><input type="radio" name="p-ladderRun-4" value="b">is</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">he doesn't ___ coffee</span></div>
+      <div class="qopts"><label><input type="radio" name="p-ladderRun-5" value="a">likes</label><label><input type="radio" name="p-ladderRun-5" value="b">like</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">6.</span><span class="qstem">he ___ to the party yesterday</span></div>
+      <div class="qopts"><label><input type="radio" name="p-ladderRun-6" value="a">didn't come</label><label><input type="radio" name="p-ladderRun-6" value="b">doesn't come</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">7.</span><span class="qstem">I'd rather ___ at home tonight</span></div>
+      <div class="qopts"><label><input type="radio" name="p-ladderRun-7" value="a">to stay</label><label><input type="radio" name="p-ladderRun-7" value="b">stay</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">8.</span><span class="qstem">how long ___ you worked here</span></div>
+      <div class="qopts"><label><input type="radio" name="p-ladderRun-8" value="a">have</label><label><input type="radio" name="p-ladderRun-8" value="b">do</label></div>
+    </div>
+  </div>
+  <button class="game-start" type="button">▶ Play</button>
+</div>
+</section>
+<section class="qa-item" id="item-82">
+<h2>[82]</h2>
+<textarea data-item="[82]" aria-label="notes for [82]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A drill with a visible cost for every miss &lt;3|&gt; &lt;2|4&gt;</p>
+<div class="game" data-game="bossRaid" data-time="12000" data-kind="train">
+  <p class="game-how">Pick your fighter, then answer. A right answer lands a hit with your own weapon; a wrong one and the boss hits back.</p>
+  <div class="game-list">
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">"it's up to you" means…</span></div>
+      <div class="qopts"><label><input type="radio" name="p-bossRaid-1" value="a">it is above you</label><label><input type="radio" name="p-bossRaid-1" value="b">you decide</label><label><input type="radio" name="p-bossRaid-1" value="c">it is broken</label></div>
+    </div>
+    <div class="qitem" data-a="c">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">"I'm in" means…</span></div>
+      <div class="qopts"><label><input type="radio" name="p-bossRaid-2" value="a">I am at home</label><label><input type="radio" name="p-bossRaid-2" value="b">I am late</label><label><input type="radio" name="p-bossRaid-2" value="c">count me in</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">which one refuses politely</span></div>
+      <div class="qopts"><label><input type="radio" name="p-bossRaid-3" value="a">I'd rather not, if that's OK</label><label><input type="radio" name="p-bossRaid-3" value="b">no</label><label><input type="radio" name="p-bossRaid-3" value="c">whatever</label></div>
+    </div>
+    <div class="qitem" data-a="c">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">"never mind" is said when…</span></div>
+      <div class="qopts"><label><input type="radio" name="p-bossRaid-4" value="a">you agree</label><label><input type="radio" name="p-bossRaid-4" value="b">you apologise</label><label><input type="radio" name="p-bossRaid-4" value="c">you drop the point</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">"what's it like" asks about…</span></div>
+      <div class="qopts"><label><input type="radio" name="p-bossRaid-5" value="a">a preference</label><label><input type="radio" name="p-bossRaid-5" value="b">a description</label><label><input type="radio" name="p-bossRaid-5" value="c">a price</label></div>
+    </div>
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">6.</span><span class="qstem">"I'd better go" means…</span></div>
+      <div class="qopts"><label><input type="radio" name="p-bossRaid-6" value="a">I should leave now</label><label><input type="radio" name="p-bossRaid-6" value="b">I prefer it here</label><label><input type="radio" name="p-bossRaid-6" value="c">I already left</label></div>
+    </div>
+  </div>
+  <button class="game-start" type="button">▶ Play</button>
+</div>
+</section>
+<section class="qa-item" id="item-83">
+<h2>[83]</h2>
+<textarea data-item="[83]" aria-label="notes for [83]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; Adjective order made physical in one sentence &lt;2|8&gt; &lt;8|8&gt;</p>
+<div class="game" data-game="trainOrder" data-noun="car" data-depart="28" data-time="0" data-kind="train">
+  <p class="game-how">Each adjective has a place in the order. Load it into the car that names its place and the train runs out under the bridge — put one a car too far back and it brings the bridge down.</p>
+  <div class="game-list">
+    <div class="qitem" data-a="opinion">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">lovely</span></div>
+      <div class="qopts">
+        <label><input type="radio" name="p-trainOrder-1" value="opinion">Opinion</label><label><input type="radio" name="p-trainOrder-1" value="size">Size</label><label><input type="radio" name="p-trainOrder-1" value="age">Age</label><label><input type="radio" name="p-trainOrder-1" value="shape">Shape</label>
+        <label><input type="radio" name="p-trainOrder-1" value="color">Color</label><label><input type="radio" name="p-trainOrder-1" value="origin">Origin</label><label><input type="radio" name="p-trainOrder-1" value="material">Material</label><label><input type="radio" name="p-trainOrder-1" value="purpose">Purpose</label>
+      </div>
+    </div>
+    <div class="qitem" data-a="size">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">little</span></div>
+      <div class="qopts">
+        <label><input type="radio" name="p-trainOrder-2" value="opinion">Opinion</label><label><input type="radio" name="p-trainOrder-2" value="size">Size</label><label><input type="radio" name="p-trainOrder-2" value="age">Age</label><label><input type="radio" name="p-trainOrder-2" value="shape">Shape</label>
+        <label><input type="radio" name="p-trainOrder-2" value="color">Color</label><label><input type="radio" name="p-trainOrder-2" value="origin">Origin</label><label><input type="radio" name="p-trainOrder-2" value="material">Material</label><label><input type="radio" name="p-trainOrder-2" value="purpose">Purpose</label>
+      </div>
+    </div>
+    <div class="qitem" data-a="age">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">old</span></div>
+      <div class="qopts">
+        <label><input type="radio" name="p-trainOrder-3" value="opinion">Opinion</label><label><input type="radio" name="p-trainOrder-3" value="size">Size</label><label><input type="radio" name="p-trainOrder-3" value="age">Age</label><label><input type="radio" name="p-trainOrder-3" value="shape">Shape</label>
+        <label><input type="radio" name="p-trainOrder-3" value="color">Color</label><label><input type="radio" name="p-trainOrder-3" value="origin">Origin</label><label><input type="radio" name="p-trainOrder-3" value="material">Material</label><label><input type="radio" name="p-trainOrder-3" value="purpose">Purpose</label>
+      </div>
+    </div>
+    <div class="qitem" data-a="shape">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">square</span></div>
+      <div class="qopts">
+        <label><input type="radio" name="p-trainOrder-4" value="opinion">Opinion</label><label><input type="radio" name="p-trainOrder-4" value="size">Size</label><label><input type="radio" name="p-trainOrder-4" value="age">Age</label><label><input type="radio" name="p-trainOrder-4" value="shape">Shape</label>
+        <label><input type="radio" name="p-trainOrder-4" value="color">Color</label><label><input type="radio" name="p-trainOrder-4" value="origin">Origin</label><label><input type="radio" name="p-trainOrder-4" value="material">Material</label><label><input type="radio" name="p-trainOrder-4" value="purpose">Purpose</label>
+      </div>
+    </div>
+    <div class="qitem" data-a="color">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">red</span></div>
+      <div class="qopts">
+        <label><input type="radio" name="p-trainOrder-5" value="opinion">Opinion</label><label><input type="radio" name="p-trainOrder-5" value="size">Size</label><label><input type="radio" name="p-trainOrder-5" value="age">Age</label><label><input type="radio" name="p-trainOrder-5" value="shape">Shape</label>
+        <label><input type="radio" name="p-trainOrder-5" value="color">Color</label><label><input type="radio" name="p-trainOrder-5" value="origin">Origin</label><label><input type="radio" name="p-trainOrder-5" value="material">Material</label><label><input type="radio" name="p-trainOrder-5" value="purpose">Purpose</label>
+      </div>
+    </div>
+    <div class="qitem" data-a="origin">
+      <div class="qline"><span class="qnum">6.</span><span class="qstem">French</span></div>
+      <div class="qopts">
+        <label><input type="radio" name="p-trainOrder-6" value="opinion">Opinion</label><label><input type="radio" name="p-trainOrder-6" value="size">Size</label><label><input type="radio" name="p-trainOrder-6" value="age">Age</label><label><input type="radio" name="p-trainOrder-6" value="shape">Shape</label>
+        <label><input type="radio" name="p-trainOrder-6" value="color">Color</label><label><input type="radio" name="p-trainOrder-6" value="origin">Origin</label><label><input type="radio" name="p-trainOrder-6" value="material">Material</label><label><input type="radio" name="p-trainOrder-6" value="purpose">Purpose</label>
+      </div>
+    </div>
+  </div>
+  <button class="game-start" type="button">▶ Play</button>
+</div>
+</section>
+<section class="qa-demo" id="qa-fallback">
+<h2>the fallback — not a vehicle: the same authored list with the engine missing</h2>
+<p class="dim">the same authored list, untouched: a plain form that prints and can be answered by hand.</p>
+<div class="game" data-game="notAGameYet" data-kind="train">
+  <p class="game-how">If the engine never loads — or the name is unknown — the block stays a plain form.</p>
+  <div class="game-list">
+    <div class="qitem" data-a="a">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">a finished thing</span></div>
+      <div class="qopts"><label><input type="radio" name="p-fallback-1" value="a">past</label><label><input type="radio" name="p-fallback-1" value="b">now</label></div>
+    </div>
+    <div class="qitem" data-a="b">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">a thing happening right now</span></div>
+      <div class="qopts"><label><input type="radio" name="p-fallback-2" value="a">past</label><label><input type="radio" name="p-fallback-2" value="b">now</label></div>
+    </div>
+  </div>
+  <button class="game-start" type="button">▶ Play</button>
+</div>
+</section>
 <section class="qa-item" id="item-84">
 <h2>[84]</h2>
-<textarea data-item="ruleTree" aria-label="notes for ruleTree" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; The relative-pronoun decision tree &lt;,&gt; &lt;,&gt;</p>
+<textarea data-item="[84]" aria-label="notes for [84]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Draws a relative-pronoun decision tree the student answers from &lt;3|5&gt; &lt;4|5&gt;</p>
 <div class="panel">
   <p><b>Walk the tree out loud before you answer.</b> It only asks one question about the noun you are adding to.</p>
   <div class="vz-tree">
@@ -1514,8 +2020,8 @@ prints.</p>
 </section>
 <section class="qa-item" id="item-85">
 <h2>[85]</h2>
-<textarea data-item="literalSplit" aria-label="notes for literalSplit" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;HALF-&gt; An idiom as literal scene vs figurative meaning &lt;,&gt; &lt;,&gt;</p>
+<textarea data-item="[85]" aria-label="notes for [85]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;HALF-&gt; Shows an idiom as an absurd literal scene beside what it means &lt;3|5&gt; &lt;|2&gt;</p>
 <div class="itemrow" data-cols="2">
   <div class="panel">
     <p class="vz-tag">ao pé da letra</p>
@@ -1611,8 +2117,8 @@ prints.</p>
 </section>
 <section class="qa-item" id="item-86">
 <h2>[86]</h2>
-<textarea data-item="timelineBridge" aria-label="notes for timelineBridge" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; One axis, three sizes &lt;,&gt; &lt;,&gt;</p>
+<textarea data-item="[86]" aria-label="notes for [86]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Places a form on one time axis at three sizes &lt;,&gt; &lt;,&gt;</p>
 <div class="card">
   <p>A finished past and a past that still reaches you are the <b>same list of events</b>. Nothing differs
   except where the shape stops. So draw the stopping point, name the claim it makes, and then ask for the
@@ -1716,8 +2222,8 @@ prints.</p>
 </section>
 <section class="qa-item" id="item-87">
 <h2>[87]</h2>
-<textarea data-item="inlineTimeline" aria-label="notes for inlineTimeline" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; A timeline drawn as one element inside another block &lt;,&gt; &lt;,&gt;</p>
+<textarea data-item="[87]" aria-label="notes for [87]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Draws a linked timeline inside a host block's container &lt;,&gt; &lt;,&gt;</p>
 <div class="card">
   <p>It is not a picture next to a sentence: it belongs to a sentence. Under the sentence, an axis
   says <b>where</b> the claim reaches and <b>where it stops</b>, and each marked word carries a
@@ -1890,8 +2396,8 @@ prints.</p>
 </section>
 <section class="qa-item" id="item-88">
 <h2>[88]</h2>
-<textarea data-item="spaceScene" aria-label="notes for spaceScene" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; At / on / in as a point, a surface, an enclosure &lt;,&gt; &lt;,&gt;</p>
+<textarea data-item="[88]" aria-label="notes for [88]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Shows at/on/in as a point, a surface, an enclosure &lt;3|5&gt; &lt;3|5&gt;</p>
 <div class="card">
   <p>One tin, drawn from above the front. Cover the phrase under each picture and say what you see first.</p>
   <div class="itemrow" data-cols="3">
@@ -1989,8 +2495,8 @@ prints.</p>
 </section>
 <section class="qa-item" id="item-89">
 <h2>[89]</h2>
-<textarea data-item="mouthCut" aria-label="notes for mouthCut" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; A real engraving with the teaching drawn on top of it &lt;,&gt; &lt;,&gt;</p>
+<textarea data-item="[89]" aria-label="notes for [89]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Draws the teaching on top of a real engraving &lt;4|6&gt; &lt;4|4&gt;</p>
 <div class="card">
   <p>One mouth, two languages: there is no new anatomy to learn. The whole lesson is <b>which part moves</b> — and every part can be found with your own tongue in about ten seconds.</p>
   <div class="itemrow" data-cols="2">
@@ -2101,7 +2607,8 @@ prints.</p>
 </section>
 <section class="qa-item" id="item-90">
 <h2>[90]</h2>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; The tongue travelling between two sounds &lt;,&gt; &lt;,&gt;</p>
+<textarea data-item="[90]" aria-label="notes for [90]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Moves the tongue between two sounds &lt;2|4&gt; &lt;2|4&gt;</p>
 <div class="panel">
   <p class="vz-tag">the tongue TRAVELLING between two sounds — watch the distance, not the dots</p>
   <p>Side view, schematic: lips and teeth at the left, the hard roof curving above, the tongue lying
@@ -2164,7 +2671,8 @@ prints.</p>
 </section>
 <section class="qa-item" id="item-91">
 <h2>[91]</h2>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; One sentence carrying seven phrase-level marks &lt;,&gt; &lt;,&gt;</p>
+<textarea data-item="[91]" aria-label="notes for [91]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Marks up to seven phrase-level features on one sentence &lt;,&gt; &lt;,&gt;</p>
 <div class="panel">
   <p class="vz-tag">the phrase is the figure — every mark below is a span, not a drawing</p>
   <p>Seven classes, no container. Each rides on the word it marks, so the same sentence works at full width and at a
@@ -2197,7 +2705,8 @@ prints.</p>
 </section>
 <section class="qa-item" id="item-92">
 <h2>[92]</h2>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Parts of speech as an underline, generated &lt;,&gt; &lt;,&gt;</p>
+<textarea data-item="[92]" aria-label="notes for [92]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Underlines each word's part of speech, generated from the sentence &lt;,&gt; &lt;,&gt;</p>
 <div class="panel">
   <p class="vz-tag">parts of speech as an underline — no column, no baseline shift, zero layout cost</p>
   <p>Every label is a class on the word, so a long sentence is as cheap as a short one. The <b>line style</b>
@@ -2233,8 +2742,8 @@ prints.</p>
 </section>
 <section class="qa-item" id="item-93">
 <h2>[93]</h2>
-<textarea data-item="massBasket" aria-label="notes for massBasket" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Countable against mass, as objects you can see &lt;,&gt; &lt;,&gt;</p>
+<textarea data-item="[93]" aria-label="notes for [93]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Shows countable against mass as objects you can see &lt;3|6&gt; &lt;1|2&gt;</p>
 <div class="card">
   <p>English gives you two shapes for a noun, and the picture is the difference: units you can count, or one
   mass you have to divide.</p>
@@ -2306,8 +2815,8 @@ prints.</p>
 </section>
 <section class="qa-item" id="item-94">
 <h2>[94]</h2>
-<textarea data-item="slotBlocks" aria-label="notes for slotBlocks" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; A clause as colour-coded bricks &lt;,&gt; &lt;,&gt;</p>
+<textarea data-item="[94]" aria-label="notes for [94]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Colour-codes each clause function as a brick &lt;2|5&gt; &lt;3|6&gt;</p>
 <div class="panel">
   <p>Read down the blue column. English fills it every single time — even when there is nothing and nobody to talk about.</p>
   <div class="vz-wall">
@@ -2360,8 +2869,8 @@ prints.</p>
 </section>
 <section class="qa-item" id="item-95">
 <h2>[95]</h2>
-<textarea data-item="voiceSeesaw" aria-label="notes for voiceSeesaw" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Active to passive as positions, not as two sentences &lt;,&gt; &lt;,&gt;</p>
+<textarea data-item="[95]" aria-label="notes for [95]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Moves active to passive as positions, not as two sentences &lt;3|6&gt; &lt;1|1&gt;</p>
 <div class="panel">
   <p>Watch one full loop with the labels covered. Then read the letters.</p>
   <div class="vz-stage">
@@ -2404,8 +2913,8 @@ prints.</p>
 </section>
 <section class="qa-item" id="item-96">
 <h2>[96]</h2>
-<textarea data-item="levelGauge" aria-label="notes for levelGauge" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; A scale of degrees with the level filled in &lt;,&gt; &lt;,&gt;</p>
+<textarea data-item="[96]" aria-label="notes for [96]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Fills a level on a scale of degrees &lt;3|5&gt; &lt;3|5&gt;</p>
 <div class="panel">
   <p>Five words for one feeling. Portuguese has about two of them, so the dictionary puts them all in the same
   place — the tube is the only place their order is visible.</p>
@@ -2495,8 +3004,8 @@ prints.</p>
 </section>
 <section class="qa-item" id="item-97">
 <h2>[97]</h2>
-<textarea data-item="melodyContour" aria-label="notes for melodyContour" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; The voice's movement drawn over the line &lt;,&gt; &lt;,&gt;</p>
+<textarea data-item="[97]" aria-label="notes for [97]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Draws the voice's rise and fall over the line it belongs to &lt;,&gt; &lt;,&gt;</p>
 <div class="panel">
   <p class="dim">‾‾‾‾‾‾‾‾‾╲___╱‾‾‾‾‾‾‾‾‾‾‾‾╲</p>
   <p>you're <b>coming</b> on Friday, aren't you <button class="listen" data-say="you're coming on Friday, aren't you" type="button">▶</button></p>
@@ -2511,6 +3020,9 @@ prints.</p>
 </section>
 </div></main>
 <div id="qa-status" class="qa-status">notes: nothing typed yet</div>
+<!-- engine1.js and engine2.js are deliberately NOT loaded here: engine1's first act is a login gate,
+     and this page is a preview, not a lesson. engine4.js is the only script the games need. -->
+<script src="../engine4.js"></script>
 <script src="player.js"></script>
 <script src="notes.js"></script>
 <script src="readout.js"></script>

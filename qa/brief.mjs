@@ -94,7 +94,7 @@ const CE = read('CONTENT_EXAMPLES.md');
 const iIns = CE.indexOf('## [INSTRUCTIONS]');
 /* the grammar runs from `## [INSTRUCTIONS]` to the first vehicle entry (`### [NN] …`), not to the next
    `##` section: with the old `## [TEACHING]`/`[MIXED]`/`[TRAINING]`/`[GAMES]` headings deleted, a
-   `##`-only bound ran on to `## [ITEMS]` and delivered all 96 entries in full — 78 KB for a 20 KB grammar. */
+   `##`-only bound ran on to the next `##` section and delivered all 96 entries in full — 78 KB for a 20 KB grammar. */
 const relEntry = iIns < 0 ? -1 : CE.slice(iIns).search(/\n### \[\d+\] /);
 const iEnd = iIns < 0 ? 0 : (relEntry > 0 ? iIns + relEntry : CE.length);
 if (iIns >= 0) emit('CONTENT_EXAMPLES.md - [INSTRUCTIONS] (the field grammar)',

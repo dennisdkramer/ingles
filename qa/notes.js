@@ -1,5 +1,5 @@
 /**
- * qa/notes.js — the note boxes on the two preview pages.
+ * qa/notes.js — the note boxes on qa/preview-blocks.html.
  *
  * This is authoring chrome, not lesson code: it touches no answer, no radio and no engine.
  *   - every `textarea.qa-note` fills its block and grows with its own text;

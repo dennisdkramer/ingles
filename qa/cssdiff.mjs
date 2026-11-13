@@ -30,8 +30,8 @@ const CHROME = process.env.CHROME || 'C:\\Program Files\\Google\\Chrome\\Applica
 const BASELINE = path.join(__dirname, '.css-baseline.json');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-/* three pages cover the sheet's three consumers: the block catalogue, the game art, and a real lesson */
-const DEFAULT_PAGES = ['qa/preview-blocks.html', 'qa/preview-games4.html', 'business/lesson40.html'];
+/* two pages cover the sheet's consumers: the block catalogue, games included, and a real lesson */
+const DEFAULT_PAGES = ['qa/preview-blocks.html', 'business/lesson40.html'];
 
 function server() {
   return new Promise(resolve => {

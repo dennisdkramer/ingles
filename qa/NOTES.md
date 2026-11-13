@@ -33,60 +33,12 @@ between sessions, so the server is the reliable way in. Either way the page re-r
 Text sitting directly under a `##` page heading is dropped the next time any box writes, so a block's
 content belongs in its `###` sections.
 
-## preview-games4.html
-
-### [71]
-
-→ CONTENT_EXAMPLES.md §`[71]`
-delete the crowd sound. halve the volume of the buzzer sound. On miss AND on wrong target, play the gunshot and buzzer sounds together
-
-### [80]
-
-→ CONTENT_EXAMPLES.md §`[80]`
-make each word card twice as big. grid anchored to center, never moves. 321 countdown centered over grid/curtain. 54321 countdown card 30px right of grid, vertically centered. improve curtain graphics is possible without affecting anything else.
-add *Begin Round - Hear Word* button 15px below the grid which initiates each round and starts the 321 countdown
-
-### [82]
-
-→ CONTENT_EXAMPLES.md §`[82]`
-score is countdown, hidden during play
-each heart lost subtracts 1 from score, boss should take [total # questions]-2 hits to kill
-
-### [74]
-
-→ CONTENT_EXAMPLES.md §`[74]`
-put the two answer choices on the right bottom, stacked vertically, 30px between.
-move the correct answer stack items down 35px. Make each item in the stack consecutively 20px thinner, make the stack right-justify.
-Once the stack is built, have the player do a mario-style run and jump to a flag, if all the answers are correct he hits the flag and a coin pops out. If score<max-score> he misses and falls on his face
-
-### [80]
-
-→ CONTENT_EXAMPLES.md §`[80]`
-button text not visible (black on dark blue?)
-make grid items 15px less wide each
-
-### [79]
-
-→ CONTENT_EXAMPLES.md §`[79]`
-is showing prompt card on game start screen
-make hint text white
-(answer must have three distractors per word that never fit the words already placed)
-
-### [75]
-
-→ CONTENT_EXAMPLES.md §`[75]`
-must be possible for wall to continue, second wall to come, game target is continuous flight through all the gates in one 'run'
-
 ## preview-blocks.html
 
 ### [02]
 
 → CONTENT_EXAMPLES.md §`[02]`
 make 1/3 width
-
-### [03]
-
-→ CONTENT_EXAMPLES.md §`[03]`
 
 ### [03]
 
@@ -202,11 +154,6 @@ what is the purpose of this, other than just to show that something is wrong? if
 
 → CONTENT_EXAMPLES.md §`[39]`
 
-### connectedSpeech
-
-→ CONTENT_EXAMPLES.md §`connectedSpeech`
-delete this vehicle
-
 ### dictation
 
 → CONTENT_EXAMPLES.md §`dictation`
@@ -224,111 +171,21 @@ this should be restricted t lvl 15-20+
 
 → CONTENT_EXAMPLES.md §`[52]`
 
-### cheatSheet
-
-→ CONTENT_EXAMPLES.md §`cheatSheet`
-delete
-
-### connectedFlow
-
-→ CONTENT_EXAMPLES.md §`connectedFlow`
-delete
-
-### stressShift
-
-→ CONTENT_EXAMPLES.md §`stressShift`
-delete
-
 ### [63]
 
 → CONTENT_EXAMPLES.md §`[63]`
-
-### falseFix
-
-→ CONTENT_EXAMPLES.md §`falseFix`
-delete
-
-### summarySqueeze
-
-→ CONTENT_EXAMPLES.md §`summarySqueeze`
-delete
-
-### sentenceCombine
-
-→ CONTENT_EXAMPLES.md §`sentenceCombine`
-delete
-
-### expandCompress
-
-→ CONTENT_EXAMPLES.md §`expandCompress`
-delete
-
-### roleCard
-
-→ CONTENT_EXAMPLES.md §`roleCard`
-delete
-
-### audienceShift
-
-→ CONTENT_EXAMPLES.md §`audienceShift`
-delete
-
-### pulseStress
-
-→ CONTENT_EXAMPLES.md §`pulseStress`
-delete
-
-### lyricGap
-
-→ CONTENT_EXAMPLES.md §`lyricGap`
-delete
 
 ### [31]
 
 → CONTENT_EXAMPLES.md §`[31]`
 
-### contourMatch
-
-→ CONTENT_EXAMPLES.md §`contourMatch`
-delete
-
-### placeScript
-
-→ CONTENT_EXAMPLES.md §`placeScript`
-delete
-
-### directnessDial
-
-→ CONTENT_EXAMPLES.md §`directnessDial`
-delete
-
-### generationGap
-
-→ CONTENT_EXAMPLES.md §`generationGap`
-delete
-
 ### [64]
 
 → CONTENT_EXAMPLES.md §`[64]`
 
-### contrastTable
-
-→ CONTENT_EXAMPLES.md §`contrastTable`
-delete
-
 ### [32]
 
 → CONTENT_EXAMPLES.md §`[32]`
-
-### workedExample
-
-→ CONTENT_EXAMPLES.md §`workedExample`
-delete
-
-### annotatedExample
-
-→ CONTENT_EXAMPLES.md §`annotatedExample`
-delete
 
 ### [33]
 
@@ -338,96 +195,17 @@ delete
 
 → CONTENT_EXAMPLES.md §`[34]`
 
-### exceptionBench
-
-→ CONTENT_EXAMPLES.md §`exceptionBench`
-delete
-
-### errorGallery
-
-→ CONTENT_EXAMPLES.md §`errorGallery`
-delete
-
-### beforeAfterStrip
-
-→ CONTENT_EXAMPLES.md §`beforeAfterStrip`
-delete
-
 ### [35]
 
 → CONTENT_EXAMPLES.md §`[35]`
-
-### stressBar
-
-→ CONTENT_EXAMPLES.md §`stressBar`
-delete
-
-### spellingSoundMap
-
-→ CONTENT_EXAMPLES.md §`spellingSoundMap`
-delete
-
-### scaleAxis
-
-→ CONTENT_EXAMPLES.md §`scaleAxis`
-delete
 
 ### [36]
 
 → CONTENT_EXAMPLES.md §`[36]`
 
-### falseFriendSplit
-
-→ CONTENT_EXAMPLES.md §`falseFriendSplit`
-delete
-
-### audienceRow
-
-→ CONTENT_EXAMPLES.md §`audienceRow`
-delete
-
-### sceneCast
-
-→ CONTENT_EXAMPLES.md §`sceneCast`
-delete
-
-### dialogueMoves
-
-→ CONTENT_EXAMPLES.md §`dialogueMoves`
-delete
-
 ### [37]
 
 → CONTENT_EXAMPLES.md §`[37]`
-
-### vocabField
-
-→ CONTENT_EXAMPLES.md §`vocabField`
-delete
-
-### storyStrip
-
-→ CONTENT_EXAMPLES.md §`storyStrip`
-delete
-
-### melodyContour
-
-→ CONTENT_EXAMPLES.md §`melodyContour`
-
-### beatGrid
-
-→ CONTENT_EXAMPLES.md §`beatGrid`
-delete
-
-### stanceScale
-
-→ CONTENT_EXAMPLES.md §`stanceScale`
-delete
-
-### routineMap
-
-→ CONTENT_EXAMPLES.md §`routineMap`
-delete
 
 ### [38]
 
@@ -441,21 +219,6 @@ This one is useful but I need to make some tweaks, leaving a note for myself to 
 ### [42]
 
 → CONTENT_EXAMPLES.md §`[42]`
-
-### collocationGap
-
-→ CONTENT_EXAMPLES.md §`collocationGap`
-delete
-
-### scaleChoice
-
-→ CONTENT_EXAMPLES.md §`scaleChoice`
-delete
-
-### prepositionScene
-
-→ CONTENT_EXAMPLES.md §`prepositionScene`
-delete
 
 ### [44]
 
@@ -490,3 +253,41 @@ fix the margins on the text entry box
 
 → CONTENT_EXAMPLES.md §`blackoutLine`
 what is the purpose of this
+
+### [71]
+
+→ CONTENT_EXAMPLES.md §`[71]`
+delete the crowd sound. halve the volume of the buzzer sound. On miss AND on wrong target, play the gunshot and buzzer sounds together
+
+### [80]
+
+→ CONTENT_EXAMPLES.md §`[80]`
+make each word card twice as big. grid anchored to center, never moves. 321 countdown centered over grid/curtain. 54321 countdown card 30px right of grid, vertically centered. improve curtain graphics is possible without affecting anything else.
+add *Begin Round - Hear Word* button 15px below the grid which initiates each round and starts the 321 countdown
+button text not visible (black on dark blue?)
+make grid items 15px less wide each
+
+### [82]
+
+→ CONTENT_EXAMPLES.md §`[82]`
+score is countdown, hidden during play
+each heart lost subtracts 1 from score, boss should take [total # questions]-2 hits to kill
+
+### [74]
+
+→ CONTENT_EXAMPLES.md §`[74]`
+put the two answer choices on the right bottom, stacked vertically, 30px between.
+move the correct answer stack items down 35px. Make each item in the stack consecutively 20px thinner, make the stack right-justify.
+Once the stack is built, have the player do a mario-style run and jump to a flag, if all the answers are correct he hits the flag and a coin pops out. If score<max-score> he misses and falls on his face
+
+### [79]
+
+→ CONTENT_EXAMPLES.md §`[79]`
+is showing prompt card on game start screen
+make hint text white
+(answer must have three distractors per word that never fit the words already placed)
+
+### [75]
+
+→ CONTENT_EXAMPLES.md §`[75]`
+must be possible for wall to continue, second wall to come, game target is continuous flight through all the gates in one 'run'
