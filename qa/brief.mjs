@@ -124,18 +124,16 @@ const REG = TR + '-REGISTER.md';
 if (fs.existsSync(path.join(ROOT, REG))) emit(REG, read(REG));
 
 /* 4. the menu: [INSTRUCTIONS] once, then ONE LINE PER SHAPE — never the bodies.
-      [I/O] 5 says the build gets `[INSTRUCTIONS]` and **ONLY `###`-level headings after it**; [BUILD] 3(e)
-      then has it read one chosen shape's section on its own. This used to send whole sections, one in ten:
-      nine shapes of eighty-one, at 23 KB, and `[INSTRUCTIONS]` arrived only because it happened to be glued
-      into the first section. `### Build [Constraints]` is scaffolding, not a shape, and is skipped.
+      [I/O] 5 is `[INSTRUCTIONS] SECTION ONLY` plus `--index=raw`, so this prints the grammar and then the
+      headings; [BUILD] 3(e) then has the build read one chosen shape's section on its own. `### Build
+      [Constraints]` is scaffolding, not a shape, and is skipped.
       --exemplars=N samples the INDEX (one line in N) for a deliberately narrow read; --section=<NN|name>
       prints one entry whole, which is what a build does once it has picked that shape — by its number
       (`### [03] <…>`) in the numbered form, or by its backticked name while an entry still carries one. */
 const CE = read('CONTENT_EXAMPLES.md');
 const iIns = CE.indexOf('## [INSTRUCTIONS]');
-/* the grammar runs from `## [INSTRUCTIONS]` to the first vehicle entry (`### [NN] …`), not to the next
-   `##` section: with the old `## [TEACHING]`/`[MIXED]`/`[TRAINING]`/`[GAMES]` headings deleted, a
-   `##`-only bound ran on to the next `##` section and delivered all 96 entries in full — 78 KB for a 20 KB grammar. */
+/* the grammar runs from `## [INSTRUCTIONS]` to the first numbered entry (`### [NN] …`), not to the next
+   `##` section: a `##`-only bound runs on into the entries and delivers every one of them in full. */
 const relEntry = iIns < 0 ? -1 : CE.slice(iIns).search(/\n### \[\d+\] /);
 const iEnd = iIns < 0 ? 0 : (relEntry > 0 ? iIns + relEntry : CE.length);
 if (iIns >= 0) emit('CONTENT_EXAMPLES.md - [INSTRUCTIONS] (the field grammar)',
@@ -172,15 +170,12 @@ emit('_shell.html - THE PAGE THIS IS BUILT ON', read('_shell.html'));
 /* 7. the gate: one question per line, answered AS EACH SECTION IS FINISHED — from what was just
       written, never by re-reading the finished page. Seven questions.
       [G2] is the content-level question, and it is answered by NAMING the band, not by arithmetic:
-      [LEVEL] gives the five bands and the four demands that set them, so the question is "which band
-      is this block's hardest demand in", and the answer must be at or above the lesson number.
-      The load product (L x M) is deliberately NOT the gate: [LEVEL] itself says a multiplier cannot
-      turn one kind of demand into another ("x2 on 10-level content is the same stated fact twice"),
-      so a page can reach a passing load by asking easy things often. Only L is the question; M is
-      what the activity declares, and the markup can supply it — not L. */
+      `data-level` and its five values, at or above the lesson number, are stated in the `## BLOCK
+      FRAME` header, and [LEVEL] measures the difficulty by the concepts and the training required to
+      master them — never by the prose or the options. */
 const GATE = [
   '[G1] Does any answer appear in its own prompt? (it must not, in any form)',
-  '[G2] Does every block carry `data-level` set to the band of its hardest demand (10/20/30/40/50), at or above the lesson number, and can you name which of the four demands set it?',
+  '[G2] Does every block carry `data-level` set to the band of its hardest demand (10/20/30/40/50), at or above the lesson number, and can you name the concept or the training that set it?',
   '[G3] Is every concept taught, then trained, then asked? (three moves, none skipped)',
   '[G4] Does every row of blocks close to 100%? (full alone · half+half · third+twothird · third x3)',
   '[G5] Is Portuguese only where marked, and inside the budget?',
