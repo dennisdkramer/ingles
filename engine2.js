@@ -16,7 +16,7 @@ function sayVoice(){
 }
 function saySpeak(t,rate){
   try{
-    const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=rate||0.95;
+    const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=rate||1;
     const v=sayVoice();if(v)u.voice=v;
     speechSynthesis.cancel();speechSynthesis.speak(u);
   }catch(e){}
@@ -28,11 +28,11 @@ function sayStop(){
 async function playSay(t,rate){
   if(!t)return;
   sayStop();
-  saySpeak(t,rate||0.95);
+  saySpeak(t,rate||1);
 }
 window.playSay=playSay;window.saySpeak=saySpeak;
 try{speechSynthesis.onvoiceschanged=()=>{};}catch(e){}
-function wireListen(){document.querySelectorAll(".listen").forEach(b=>{b.onclick=()=>{if(editing)return;const r=Number(b.dataset.rate)||0;playSay(b.dataset.say,r)}})}
+function wireListen(){document.querySelectorAll(".listen").forEach(b=>{b.onclick=()=>{if(editing)return;playSay(b.dataset.say)}})}
 wireListen();
 document.querySelectorAll("[contenteditable]").forEach(function(n){n.removeAttribute("contenteditable");});
 /* ---- content edit mode (teacher): a separate editable copy; live page + marks stay untouched ---- */

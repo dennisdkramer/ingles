@@ -513,7 +513,7 @@ function nbWirePopup(t,r,x,y){
  if(!pop)return;
  nbFixButtons();
  const H=pop.querySelector("#pH");
- if(H)H.onclick=()=>{if(typeof playSay==="function"){playSay(t)}else{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)}};
+ if(H)H.onclick=()=>{if(typeof playSay==="function"){playSay(t)}else{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=1;speechSynthesis.cancel();speechSynthesis.speak(u)}};
  const P=pop.querySelector("#pP");
  /* ▶ Play shows the processing SPIRAL for the whole playback (owner spec 2026-10-12). ON at the
     click, BEFORE the Drive/?action=file fetch, so even a first-ever fetch shows it; OFF when playback

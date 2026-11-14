@@ -162,9 +162,6 @@ input.gap{border:0;border-bottom:2px solid var(--tan);background:#fff8ea;font:in
 
 .todo{font-style:italic;color:#5c5347;opacity:.92;border-left:3px solid var(--tan);padding:2px 10px;margin:8px 10px}
 .pulse{animation:pu 1s infinite;display:inline-block}
-
-/* fieldset is a BLOCK; min-width:0 so it shrinks into a slot */
-fieldset{border:2px dashed var(--tan);border-radius:12px;margin:10px 0;padding:8px 12px}
 label{margin-right:10px;cursor:pointer}
 #feed{display:block;width:100%;min-height:9em;font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:12px 14px;box-shadow:5px 5px 0 var(--tan);field-sizing:content}
 footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#8a8072}
@@ -183,7 +180,7 @@ h2 .h2sub{font-family:var(--serif);font-size:.55em;font-weight:400;letter-spacin
 .chart tbody tr:nth-child(even) td{background:#fff8ea}
 /* the Portuguese marking itself: :lang(pt) is italic wherever it lands — see ## PORTUGUESE TEXT */
 :lang(pt){font-style:italic;font-weight:400}
-.chips b{display:inline-block;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:2px 12px;margin:2px 6px 2px 0;font-weight:600}
+.chips > b{display:inline-block;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:2px 12px;margin:2px 6px 2px 0;font-weight:600}
 h3{font-family:'Playfair Display',serif;font-weight:700;font-size:19px;color:var(--dkblue);margin:22px 0 8px;padding-left:10px;border-left:4px solid var(--tan);letter-spacing:.02em}
 /* the block's sub-header: the introduction/explainer that sits under `h3`. It is ALWAYS an `h4` and
    never a `p` — `p` is reserved for the block's own content, so a paragraph inside a block always
@@ -198,8 +195,6 @@ h4{font-family:var(--serif);font-style:italic;font-weight:600;font-size:15px;col
 .row,.dialog p{margin:6px 0}
 
 .listen{display:inline-flex;align-items:center;justify-content:center;padding:5px 10px;margin:2px 6px 2px 0;font-size:14px;white-space:nowrap}
-fieldset .qnum{margin-right:6px}
-fieldset label{margin-right:14px}
 button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 
 @media print{
@@ -250,7 +245,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
   .vz-sheet .vz-lyrics li{white-space:normal}
 }
 
-/* ## BLOCK FRAME — a block is `.panel` or `.card`, never a bare div. `data-kind="teach|train"` on the block element carries the block's shape: its lowercase atoms, with `|` where one block both explains and asks; `data-level="10|20|30|40|50"` beside it is the block's own difficulty band, and it must be at or above the lesson number. Unbuilt work is `p.todo`, which renders as a visible marker. */
+/* ## BLOCK FRAME — a block is `.panel` or `.card`, never a bare div and never `fieldset`. `data-kind="teach|train"` on the block element carries the block's shape: its lowercase atoms, with `|` where one block both explains and asks; `data-level="10|20|30|40|50"` beside it is the block's own difficulty band, and it must be at or above the lesson number. Unbuilt work is `p.todo`, which renders as a visible marker. */
 .panel{--edge:var(--tan);border:2px solid var(--edge);border-radius:12px;padding:12px 16px;background:var(--paper);box-shadow:4px 4px 0 var(--tan)}
 
 .panel[data-kind="teach"],.card[data-kind="teach"],.game[data-kind="teach"],.dialog[data-kind="teach"]{--edge:var(--ink)}
