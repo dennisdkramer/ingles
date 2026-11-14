@@ -310,7 +310,9 @@ async function start(){
     A demoted teacher can see an empty shell for one round trip — every teacher action stays authorised
     server-side (isTeacher_ in Code.gs), so nothing is exposed by painting early. */
  const role=readCache("role"),cq=readCache("queue"),cs=readCache("status");
- const lsc=readCache("lessons");if(lsc&&!LESSONS)LESSONS=lsc;   /* titles for the cached paint, no request */
+ const lsc=readCache("lessons2");if(lsc&&!LESSONS)LESSONS=lsc;   /* titles for the cached paint, no request. The
+    key is versioned because a cached list from before the rename carries no `file`, and a link cannot be built
+    from a number any more. */
  const ct=readTracks();if(ct)applyTracks(ct);                   /* the FULL list before anything is painted */
  const tracksP=fetchTracks();                                   /* refresh in parallel, always */
  /* A cached list lets the first paint be synchronous AND complete. With no cached list there is no honest way to
@@ -331,7 +333,7 @@ async function start(){
  /* the session check is STARTED here and runs beside the two static fetches: it is the answer the page is
     waiting for, and it must not queue behind lessons.json and tracks.json. */
  const check=(teacher?api("queue",{token:cred}):api("status",{token:cred})).catch(e=>({error:String(e)}));
- try{const lr=await fetch("lessons.json",{cache:"no-cache"});if(lr.ok){LESSONS=await lr.json();writeCache("lessons",LESSONS)}}catch(e){}
+ try{const lr=await fetch("lessons.json",{cache:"no-cache"});if(lr.ok){LESSONS=await lr.json();writeCache("lessons2",LESSONS)}}catch(e){}
  await tracksP;   /* started above; awaited here so the validated paint is drawn from the freshest list */
  const j=await check;
  if(tokenErr(j)){log("sessão expirada — entre novamente");bounce();return}
@@ -458,11 +460,13 @@ function bookButton(t,locked){
  const dn=(DONE&&DONE[t])||[];
  const items=trackLessons(t).map(le=>{
   const n=le.n,num=(n<10?"0":"")+n,txt=le.title?esc(le.title):"—";
-  /* the page's address is its FILENAME, and the title is in it: it comes from lessons.json, never from n */
-  const href=t+'/'+encodeURIComponent(le.file||('lesson'+n+'.html'));
+  /* the page's address is its FILENAME, and the title is in it: it comes from lessons.json, never from n.
+     An entry with no `file` is a stale cached list from before the rename — it is shown, never linked: the
+     path it used to imply (`lesson<n>.html`) does not exist any more. */
+  const href=le.file?t+'/'+encodeURIComponent(le.file):'';
   return '<div class="bookitem'+(dn.indexOf(n)>=0?' done':'')+(locked?' inert':'')+'">'
    +'<span class="lnum">'+num+'</span>'
-   +(locked
+   +(locked||!href
      ?'<span class="ltitle dim" title="'+txt+'">'+txt+'</span>'
      :'<a class="ltitle" href="'+href+'" title="'+num+'. '+txt+'" onclick="go(\''+t+'\','+n+');return false">'+txt+'</a>')
    +'</div>';

@@ -8,7 +8,7 @@ let completeNow=false; /* optimistic state of the "Complete?" tag button */
 /* THE LESSON'S TITLE IS IN ITS FILENAME, so a neighbour's address cannot be built from a number alone:
    lessons.json is read once, and every link in this file asks it. */
 let LSN=null;
-function lessonHref(n){const hit=(LSN||[]).find(x=>x.n===n);return hit?encodeURIComponent(hit.file||("lesson"+n+".html")):null;}
+function lessonHref(n){const hit=(LSN||[]).find(x=>x.n===n);return hit&&hit.file?encodeURIComponent(hit.file):null;}
 async function goLesson(n){
  if(!LSN){try{const r=await fetch("../lessons.json");if(r.ok){const j=await r.json();LSN=(j&&j[TRACK])||null;}}catch(e){}}
  const h=lessonHref(n);if(h)location.href=h;
@@ -330,8 +330,11 @@ function renderCompleteBtn(){
      selLoaded=true;
      sm.innerHTML=ls.map(le=>{
       const n=le.n,num=(n<10?"0":"")+n,t=le.title?escT(le.title):"&mdash;";
+      /* the entry carries its FILENAME; an entry without one is a stale list and is not linked */
+      const h=le.file?encodeURIComponent(le.file):"";
       return '<div class="bookitem'+(n===L?' cur':'')+'"><span class="lnum">'+num+'</span>'
-       +'<a class="ltitle" href="'+encodeURIComponent(le.file||("lesson"+n+".html"))+'" title="'+num+'. '+t+'"'+(n===L?' aria-current="page"':'')+'>'+t+'</a></div>';
+       +(h?'<a class="ltitle" href="'+h+'" title="'+num+'. '+t+'"'+(n===L?' aria-current="page"':'')+'>'+t+'</a>'
+           :'<span class="ltitle dim" title="'+t+'">'+t+'</span>')+'</div>';
      }).join("");
     }
    }

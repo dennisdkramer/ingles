@@ -37,7 +37,7 @@ const out = [];
 const ok = (name, cond, extra = '') => out.push({ name, pass: !!cond, extra });
 
 /* render as a student granted ONLY business */
-w.eval('LESSONS={business:[{n:1,title:"First Talk & the Sentence Skeleton"}],kids:[],adult:[]};'
+w.eval('LESSONS={business:[{n:1,title:"First Talk & the Sentence Skeleton",file:"lesson1-First Talk & the Sentence Skeleton.html"}],kids:[],adult:[]};'
   + 'profile={email:"a@b.c",name:"Ana"};renderStudent(["business"],"Ana");');
 
 const cards = [...d.querySelectorAll('.tracks .track-card')];
@@ -66,7 +66,7 @@ ok('only the lesson NAME is the link', !!link && /First Talk/.test(link.textCont
 ok('the number is never inside the link', !!link && !/^01/.test(link.textContent.trim()), link ? link.textContent.trim().slice(0, 16) : 'none');
 ok('no "lição" word in the selector', !!menu && !/li[çc][ãa]o/i.test(menu.textContent));
 ok('full text kept as a tooltip', !!link && (link.getAttribute('title') || '').indexOf('First Talk') >= 0);
-ok('link href points at the page', !!link && link.getAttribute('href') === 'business/lesson1.html');
+ok('link href points at the page', !!link && link.getAttribute('href') === 'business/' + encodeURIComponent('lesson1-First Talk & the Sentence Skeleton.html'));
 const kidsOfCard = [...biz.children];
 const contIdx = kidsOfCard.findIndex(el => el.classList.contains('contbtn'));
 const dropIdx = kidsOfCard.findIndex(el => el.classList.contains('bookdrop'));
@@ -88,7 +88,7 @@ ok('teacher and student lesson lists are identical',
 
 /* THE CONTINUE BUTTON READS THE SERVER, not a localStorage key no page writes (owner report 2026-11-09:
    it always said "lição 1"). status.progress / status.done arrive WITH the track access list. */
-w.eval('LESSONS={business:[{n:1,title:"A"},{n:2,title:"B"},{n:3,title:"C"}],kids:[],adult:[],advanced:[]};'
+w.eval('LESSONS={business:[{n:1,title:"A",file:"lesson1-A.html"},{n:2,title:"B",file:"lesson2-B.html"},{n:3,title:"C",file:"lesson3-C.html"}],kids:[],adult:[],advanced:[]};'
   + 'PROG={business:2};DONE={business:[1,2]};'
   + 'profile={email:"a@b.c",name:"Ana"};renderStudent(["business"],"Ana");');
 const contBtn = d.querySelector('.contbtn');
@@ -227,7 +227,7 @@ w.fetch = async (u) => ({ ok: true, json: async () => (/access\.json/.test(Strin
   : { status: 'approved', tracks: ['business'], progress: { business: 2 }, done: { business: [1, 2] }, name: 'Ana' }) });
 w.eval('profile={email:"st@x.y",name:"Ana"};PROG=null;DONE=null;LESSONS=null;'
   + 'localStorage.setItem("eod_role_st@x.y",JSON.stringify("student"));'
-  + 'localStorage.setItem("eod_lessons_st@x.y",JSON.stringify({business:[{n:1,title:"First Talk"},{n:2,title:"Second"},{n:3,title:"Third"}],kids:[],adult:[]}));'
+  + 'localStorage.setItem("eod_lessons2_st@x.y",JSON.stringify({business:[{n:1,title:"First Talk",file:"lesson1-First Talk.html"},{n:2,title:"Second",file:"lesson2-Second.html"},{n:3,title:"Third",file:"lesson3-Third.html"}],kids:[],adult:[]}));'
   + 'localStorage.setItem("eod_status_st@x.y",JSON.stringify({status:"approved",tracks:["business"],progress:{business:2},done:{business:[1,2]},name:"Ana"}));'
   + 'document.getElementById("app").innerHTML="";');
 const boot2 = w.start();
@@ -271,8 +271,8 @@ ok('a cold visit paints the spiral, never a partial grid',
 await cold;
 /* A TRACK THAT EXISTS IN NO FOLDER: "advanced" arrives only as tracks.json would deliver it, which is exactly
    how a track created next year will arrive. */
-w.eval('LESSONS={business:[{n:1,title:"First Talk & the Sentence Skeleton"}],kids:[],adult:[],'
-  + 'advanced:[{n:1,title:"Advanced opener"},{n:2,title:"Advanced two"}]};'
+w.eval('LESSONS={business:[{n:1,title:"First Talk & the Sentence Skeleton",file:"lesson1-First Talk & the Sentence Skeleton.html"}],kids:[],adult:[],'
+  + 'advanced:[{n:1,title:"Advanced opener",file:"lesson1-Advanced opener.html"},{n:2,title:"Advanced two",file:"lesson2-Advanced two.html"}]};'
   + 'applyTracks([{name:"kids",label:"Kids",icon:"🛹",order:1},{name:"business",label:"Business",icon:"💼",order:2},'
   + '{name:"adult",label:"Adulto",icon:"🔞",order:3},{name:"advanced",label:"Advanced",icon:"🚀",order:4}]);'
   + 'renderStudent(["business","advanced"],"Ana");');
@@ -422,7 +422,7 @@ await p2;
    ASK 3: a locked column carries "⛌ Denied - Request Access?" and the click asks for THAT book.
    ASK 4: the whole index is painted with nobody signed in, every book locked. */
 w.eval('GUEST=false;MYTRACKS=["business"];PEND=[];REQING={};'
-  + 'LESSONS={business:[{n:1,title:"Only one"}],kids:[],adult:[]};renderStudent(["business"],"Ana");');
+  + 'LESSONS={business:[{n:1,title:"Only one",file:"lesson1-Only one.html"}],kids:[],adult:[]};renderStudent(["business"],"Ana");');
 const cardOf = t => [...d.querySelectorAll('.tracks .track-card')]
   .find(c => ((c.querySelector('.bookbtn') || {}).textContent || '').includes(t));
 
