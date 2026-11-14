@@ -76,3 +76,60 @@ What changed, and where the roadmap's own lines now sit:
 
 The voice is authored, not measured: it is written to the register file the track declares, not to a checker's count. Drills carry it too (`:84`-`:89`, `:126`-`:133`, `:170`-`:173`, `:206`-`:211`, `:250`-`:292`), because the register's claim is about how the student will speak, not about how the page looks.
 
+
+## ADULT lesson 27 — "Cooked — the Mistake You Can Still See"
+
+Page: `adult/lesson27-Cooked — the Mistake You Can Still See.html` · roadmap range `ADULT-ROADMAP.md:260-267` · 13 blocks.
+
+Inputs read for this batch: `PEDAGOGY-MAP.md` in full, the `## [27]` block of `ADULT-ROADMAP.md` only, `ADULT-ROADMAP.md:1-29` (the track-vocabulary rules and the taboo / street / formal / locale lists), `ADULT-ROADMAP.md` `##` headers only, `ADULT-REGISTER.md` in full, `FUNCTION.md:4-8` (§[CONTENT]), `node qa/brief.mjs --css` output, the `##` headers and the block / blanks / answers rules in `style.css:87-304`, and `_shell.html`. One lesson page was opened — lesson 26, authored in this same session — and it was opened for the one purpose rule 1 allows: so that no vehicle, width or ordering on this page could be inherited from it. Every block below therefore differs from 26's vehicle in kind, not only in content.
+
+Voice: `ADULT-REGISTER.md:10-12` — register (a), uninhibited, the track's default. Sixteen masked taboo forms across eleven of the thirteen blocks, twelve street-core markers (`ain't`, `bro`, `dude`, `nah`, `gonna`, `kinda`, `lemme`, `shut up`, `for real`, `my bad`, `pissed`, `gotta`), and the roadmap's three example lines verbatim at `:182`, `:200`, `:235`.
+
+### Opener — `h3` "A. Six hours later, and still true" (page line 17)
+
+- **Shape chosen independently:** a bare `ul` of six present-tense facts (line 19), then two paragraphs that name what the list is (lines 27-28). No conversation, no chart, no vocabulary table.
+- **Does not copy the prior section or any lesson:** it is the page's first block. Against lesson 26's opener — a two-person message thread — this one has no speaker at all: it is a list of consequences, and the only voice is the narrator's.
+- **Why this is the best shape for the content:** the lesson is result-now, so the honest way in is the results themselves, before the grammar that names them. Six present-tense lines make the *effect* the subject and leave the student holding the question the grammar answers. The `h4` (line 18) declares both inferences — the shape arrives in section 1, the word in the title in section 4 — which is what [AUTHORING] requires of a block that asks the reader to infer.
+
+### Section 1 — "The result is the point" (line 32)
+
+- **Block A (line 35), shape chosen independently:** a taught contrast (report vs state) carried by a three-column `table.chart` (lines 39-47) whose third column is the same event said as what is true now, plus one `tr.note` carrying the test.
+- **Block B (line 52), shape chosen independently:** eight one-gap items in `.blanks.cols` (lines 54-63) — a grid of at least 240px columns, a container lesson 26 never used — where four lines are held open by *for* / *since* and four are closed by a date.
+- **Does not copy the prior section or any lesson:** the opener shows effects with no verb teaching at all; this section opens with a chart of sentence pairs and ends with a grid, not with the tiled two-column `.blanks.sent` that 26 used three times.
+- **Why this is the best shape for the content:** the distinction is invisible in one sentence and obvious in two, so the chart's job is to put the pair side by side under one event. The drill then forces the choice with the two things that actually decide it — a duration that keeps the door open, a date that shuts it — which is also how the roadmap's "deepens `duration-for-since`" is cashed out: the same helper, now measuring a result instead of a span.
+
+### Section 2 — "One line in, two doors out" (line 69)
+
+- **Block A (line 72), shape chosen independently:** prose only, built on one Portuguese sentence (`:74`) that is then read two ways (`:77`, `:78`), followed by the two traps Portuguese sets — `já` (`:80`) and `tenho` (`:81`).
+- **Block B (line 85), shape chosen independently:** six radio items in `.qgrid.stack` at `--rows:3` (lines 87-136) — two columns of items with options beneath the stem — each stem a Portuguese line plus the situation that decides the door.
+- **Does not copy the prior section or any lesson:** section 1 taught in English and trained with typed gaps; this section teaches *from* Portuguese and trains with picked lines. Lesson 26 also had a Portuguese ladder, but that ladder was one line made wrong then right; this one is one line opened two ways, and the training is a choice between whole sentences rather than a form to type.
+- **Why this is the best shape for the content:** the divide cannot be shown in English, because in English there are two sentences and no problem; it can only be shown by putting one Portuguese line in front of both doors. The radio item is the right vehicle because the student's error here is a *choice*, not a conjugation — and the two wrong options are the two things that go wrong (helper on a date, base form after the helper), which is the roadmap's "uses `vs-past-simple`" doing its work.
+
+### Section 3 — "Been there, gone there" (line 142)
+
+- **Block A (line 145), shape chosen independently:** the page's only `.dialog` (lines 147-153) — the teaching vehicle the CSS reserves for a conversation — unpacked by four paragraphs (`:154`-`:157`) and closed by a listening pair (`:158`).
+- **Block B (line 162), shape chosen independently:** six one-gap items in plain `.blanks` (lines 164-171), the flex-rows container, with the clue carried by the sentence rather than the bracket.
+- **Does not copy the prior section or any lesson:** section 2's teaching was monologue prose and its training was whole-line radios; here a conversation carries the item and the training is typed at the smallest width on the page. Lesson 26 used a dialog only for its opener and its production box, never to teach a contrast.
+- **Why this is the best shape for the content:** been vs gone is ambiguous only in isolation and resolves the moment you know where the person is, so a conversation that asks *where's Diego* and answers twice does the whole job in five lines, and the listening pair makes the one-syllable difference audible. The drill then hands the clue back to the student inside the sentence.
+
+
+
+### Section 4 — "The act, the state, and the way out" (line 177)
+
+- **Block A (line 180), shape chosen independently:** prose that grades three near-synonyms by temperature (soft / self-directed / loud) and then takes the roadmap's headword line apart into its two halves (`:183`), ending on the trap pair `I've messed it up` / `I'm messed up` (`:184`).
+- **Blocks B and C (lines 188 and 195), shape chosen independently:** two half-width blocks in one `.itemrow` (`:187`) — the page's only side-by-side row — one for the three states, one for the four repair verbs, each with its own `h4`.
+- **Block D (line 206), shape chosen independently:** six single-word gaps in `.blanks.sent` at `--rows:3` (lines 208-215), with no word bank.
+- **Does not copy the prior section or any lesson:** the two halves of the row are the first blocks on the page that sit beside each other, and the section runs prose, prose, prose, gaps — no chart, no radios, no dialog. Lesson 26 put its ten vocabulary items in a ten-row table and its drills in a single column; here the ten items are taught in three registers of voice and never grouped into a table at all.
+- **Why this is the best shape for the content:** the ten items are not one list — three are the damage, three are the state you are left in, four are the way out — and a row of two halves is the one structure that shows the split without inventing a category. The states and repairs sit beside each other because the student chooses between them under pressure: *I'm screwed* is not a plan, and *I'll sort it out* is. The drill asks for one word because the difficulty is choosing the verb, not building the form.
+
+### Section 5 — "Send it" (line 221)
+
+- **Block A (line 224), shape chosen independently:** one textarea (`:228`) under two paragraphs that state the message's three required parts and the panic line, plus a self-check paragraph after the field (`:229`).
+- **Block B (line 233), shape chosen independently:** a closing teaching block that turns the same machinery onto a win and then states the three tests as running prose questions (`:236`).
+- **Does not copy the prior section or any lesson:** the section is one open field and one closing block, with no keyless frame list and no numbered procedure — the two vehicles lesson 26 used to close. The self-check sits *after* the field here, so the student writes before being told how it will be read.
+- **Why this is the best shape for the content:** the roadmap's real-world relevance names the excuse, the panic and the "I'm cooked" text, and none of those is a gap item — they are one message, composed. A single box is the only honest vehicle for that, and a key would be a lie about a personal message. The closing block earns its place because the page has been all disaster; the good ending is the same grammar, and saying so is what stops the student from filing the perfect under *bad news*.
+
+### Repetition I am defending rather than denying
+
+Sections 1 to 4 each run a teaching block into a training block, which is the same macro-rhythm lesson 26 has — and that rhythm is the build's three-move rule (`qa/brief.mjs`, "taught, then trained, then asked") applied to four items, not a vehicle borrowed from a page. Inside it, each block uses a container the page has not used before it: `.blanks.cols` (`:54`), `.qgrid.stack` (`:87`), plain `.blanks` (`:164`), `.itemrow` halves (`:187`), `.blanks.sent` (`:208`), a textarea (`:228`). The overlap with lesson 26 is one container — `.blanks.sent` — and it is there because a vocabulary round has to be produced somewhere, and the tiled grid is the only width that holds six one-word answers without a bank.
+
