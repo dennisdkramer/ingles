@@ -133,3 +133,53 @@ Voice: `ADULT-REGISTER.md:10-12` — register (a), uninhibited, the track's defa
 
 Sections 1 to 4 each run a teaching block into a training block, which is the same macro-rhythm lesson 26 has — and that rhythm is the build's three-move rule (`qa/brief.mjs`, "taught, then trained, then asked") applied to four items, not a vehicle borrowed from a page. Inside it, each block uses a container the page has not used before it: `.blanks.cols` (`:54`), `.qgrid.stack` (`:87`), plain `.blanks` (`:164`), `.itemrow` halves (`:187`), `.blanks.sent` (`:208`), a textarea (`:228`). The overlap with lesson 26 is one container — `.blanks.sent` — and it is there because a vocabulary round has to be produced somewhere, and the tiled grid is the only width that holds six one-word answers without a bank.
 
+
+## ADULT lesson 28 — "I Was Standing There When He Went Off"
+
+Page: `adult/lesson28-I Was Standing There When He Went Off.html` · roadmap range `ADULT-ROADMAP.md:269-276` · 13 blocks, 6 sections.
+
+Inputs read for this batch: `PEDAGOGY-MAP.md` in full (29 lines, as cut by the user), the `## [28]` block of `ADULT-ROADMAP.md` only, `ADULT-ROADMAP.md` `##` headers only, `ADULT-REGISTER.md` in full, `node qa/brief.mjs --css` headers only, and lesson 27's head and tail only (`:1-13`, `:240-256`) for the page skeleton and the script slot.
+
+Voice: `ADULT-REGISTER.md:10-12` and the rule the user added at `PEDAGOGY-MAP.md:10` — the same voice for the prose of every part of the lesson. This page is written in it from line 14: contractions throughout the narration, `ain't` / `'em` / `dude` / `bro` / `damn` in the teaching prose, not only in the examples. The roadmap's three example lines appear verbatim at `:204` (two of them) and `:217`.
+
+### Opener — `h3` "A. Rewind two minutes" (line 17)
+
+- **Purpose and shape:** hand over the night before any grammar. A four-line list with clock times (`:19-24`), then two prose paragraphs that name what the list shows (`:25-26`), opened by an `h4` (`:18`) declaring that the shape arrives in section 1.
+- **Why this shape, and no repeat:** the times are the content — two of the four lines were already running, and the clock is what proves it, which is why the `-ing` sits on the long line before the page has taught it. Lesson 27's opener was six present-tense consequences with no times and no order; this one is a sequence with a spine.
+
+### Section 1 — "What was already running" (line 29)
+
+- **Purpose and shape:** the frame. Two paragraphs build the form from two pieces the student owns, then a four-pair `ul` (`:36-41`) says the same two events twice with the `-ing` moved, then the rule and its two consequences in prose (`:42-43`). The drill is six form gaps in plain `.blanks` (`:49-56`).
+- **Why this shape, and no repeat:** pairs on their own lines are the only presentation where the student reads one event, then the same event inverted, and sees the meaning move — a chart's columns separate the versions too far. 27's first drill was a `.blanks.cols` grid split four ways by *for*/*since*; here every line is decided by the time inside it, and three lines are scenes against three that came in.
+
+### Section 2 — "while, when, as" (line 61)
+
+- **Purpose and shape:** the joiner already tells you what follows it, including the `when` + `-ing` case that means *during*. The page's only `table.chart`: four rows and a `tr.note` (`:66-75`), then the Portuguese mapping and the last-row argument in prose (`:76-77`). The drill is six joiner gaps with a three-word `.chips` bank (`:83-90`).
+- **Why this shape, and no repeat:** four joiners against four behaviours is a reference surface, which is what a chart is for, and the note row carries the refusal that no single row can hold. 27's chart compared two ways of saying one event and its drill was whole-line radios; here every answer is one function word, and the bank is the only one on the page with three items.
+
+### Section 3 — "Scene or report" (line 96)
+
+- **Purpose and shape:** the Portuguese mapping — free in two places, expensive in the third — plus the state-verb and habit traps. Three prose paragraphs of contrast carrying five `lang="pt"` spans (`:101-103`), then five whole-line radio items whose options are *repairs* (`:110-149`), one of them already correct.
+- **Why this shape, and no repeat:** judging a line that is given is a different task from choosing between three lines, and it is the task the student actually faces mid-conversation. 27's Portuguese items offered three sentences and asked which one the situation wanted; these give one sentence and ask whether it survives, with an exit option that rewards reading.
+
+
+### Section 4 — "She kept doing it" (line 155)
+
+- **Purpose and shape:** `kept` + `-ing` as repetition with the speaker's patience attached, and `kept on` / `wouldn't stop` / `used to` ranked by heat and by neutrality. Three prose paragraphs, then six single-word gaps from a four-item `.chips` bank (`:168-175`).
+- **Why this shape, and no repeat:** all four words in the bank describe the same regularity, so the only thing that can separate them is how the line feels, and a bank is the one container that puts the four candidates in front of the student at once. 27's 4D had no bank and asked for a verb named in a bracket; this asks for a word that is never named.
+
+### Section 5 — "Seven verbs for one blow-up" (line 181)
+
+- **Purpose and shape:** the seven roadmap items, taught as one night retold by two people who were there. A six-line `.dialog` (`:186-193`) where Sofia corrects Ray about one verb, then a seven-item `ul` defining one verb per line (`:195-203`), a paragraph placing two roadmap lines (`:204`), then seven gaps whose bracket states the *meaning* instead of the word (`:210-218`).
+- **Why this shape, and no repeat:** the dialog is the only place on the page where two speakers disagree about what happened, and that disagreement is the teaching device — the same two seconds read as *blacked out* by one and *lost it* by the other, which is exactly the distinction the seven words carry. 27 taught its vocabulary in three half-width prose blocks and its drill printed the verb in the bracket, which is a copy exercise; here the bracket prints the meaning and the verb has to come from memory.
+
+### Section 6 — "Tell it" (line 223)
+
+- **Purpose and shape:** the student produces the whole shape, then receives the test as three questions they can run in speech. One textarea (`:229`) with the four required lines stated before the field and the self-check after it (`:230`), then a closing teaching block that states the three questions as an `ol` (`:236-240`) and hands off to lesson 29.
+- **Why this shape, and no repeat:** four ordered lines force every piece of the page into one message — scene, cut, repetition, ending — and the order is the difficulty, not the register. 27's production block asked for two messages to two readers, which tested who you are talking to; 26 closed with a keyless answer list, not a numbered test, and the `ol` is the page's only numbered vehicle.
+
+### Repetition I am defending rather than denying
+
+- Sections 1 to 5 each run a teaching block into a training block, which is the same macro-rhythm as 26 and 27 — that is the build's taught-then-trained move applied to four items, not a vehicle taken from a page. Inside it the containers differ from 27 at every step: plain `.blanks` (`:49`), `.chips` + `.blanks` (`:83`), `.qgrid.stack` (`:109`), `.chips` + `.blanks` (`:169`), `.dialog` + `.blanks.sent` (`:186`, `:210`), textarea (`:229`).
+- The one container this page shares with 27 is `.blanks.sent`, and it earns the overlap: 27 used it for past-participle gaps the bracket named, this page uses it for seven verbs the bracket only describes. The `table.chart` and the `.qgrid.stack` also appear in both pages, and neither is doing the same job — 27's chart put two tenses against one event, this one puts four joiners against four behaviours; 27's radios offered three sentences and asked which the situation wanted, these offer three repairs and ask whether the given line survives.
+
