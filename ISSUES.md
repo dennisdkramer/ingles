@@ -83,8 +83,18 @@ key that way and an item with an empty key scores every correct answer as a miss
 report. Worth fixing before the next track rebuild, since it is the only automated check on game scoring.
 
 
+## qa/register.mjs — the adult marker lists moved, so adult colloquial coverage reads 0%
+`ADULT-REGISTER.md` is 13 lines and carries no "Tells, for the checker" block any more: the ordered taboo, street,
+sexual, formal and locale lists now live at `ADULT-ROADMAP.md:18-28`. The harness takes its marker lists only from
+that block — `qa/register.mjs:53-60` says so, and `qa/register.mjs:72-82` parses its `- family-tier: …` lines — so
+for adult it builds no taboo and no street regex at all. The only taboo evidence still counted is the harness's own
+`MASKED` literal (`qa/register.mjs:51`), which is why `node qa/register.mjs --track=adult 26` reports "track
+colloquial 0 (0%)" for a track whose pages carry `bro`, `for real`, `ain't` and the rest of the street-core list.
+Page-level verdicts are unaffected (the harness prints that the track "has declared no floor, so its pages are
+counted and not judged"), but the track coverage line is meaningless for adult until `tellsOf` reads the roadmap
+block or the register gets its block back.
+
 ## adult/lesson2 — one unmasked "shit" (accepted, warn-only)
 `qa/register.mjs` no longer fails on an uncensored word in any form: it prints `⚠ unmasked: …` per page and that is
 all it does with it. This one is a `sheet` / `shit` minimal pair in a listening item, where the spelling IS the
 item, so the warning is correct and the page is correct. Read the warning, do not "fix" it.
-
