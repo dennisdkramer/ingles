@@ -253,7 +253,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .game[data-kind="train"],.game[data-kind="teach|train"]{--edge:var(--purple)}
 .panel .chart,.card .chart{width:calc(100% - 20px)}
 
-/* ## BLOCK WIDTHS — one of four slots, as a class on a DIRECT CHILD of `.itemrow`: `.itemsize` (full) `.itemsize-half` `.itemsize-third` `.itemsize-twothird`. A ROW MUST TOTAL 100%: full alone, half+half, third+twothird, third+third+third — a half beside a third never closes a row. Pair before widening; a lone block sits centred at its own width; the slot follows the content and prose never widens a block. `data-cols="2"` on the row gives each column 14px less, already inside the calc. */
+/* ## BLOCK WIDTHS — one of four slots, as a class on a DIRECT CHILD of `.itemrow`: `.itemsize-third` (default), `.itemsize-half`, `.itemsize-twothird`, `.itemsize`. A ROW MUST TOTAL 100%: full alone, half+half, third+twothird, third+third+third — a half beside a third never closes a row. The width follows the needs of the content and prose wraps and doesnt widen a block alone. `data-cols="2"` on the row gives each column 14px less, already inside the calc. */
 .itemsize{width:100%}
 .itemsize-third{width:calc(33.3333% - 9.3333px)}
 /* a two-thirds block, alone on its row or paired with a third: the same 14px gap budget */
@@ -280,7 +280,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .prep{color:var(--tan);font-weight:700}
 .pr-g{color:grey}
 /* ## REFLOW — a reflowed block states `--rows` (items per column, e.g. style="--rows:2") ON ITSELF, never on a section or a wrapper. `.qgrid.stack` and `.blanks.sent` are the two containers that tile: items run DOWN a column and continue at the top of the next; `.wide` returns to one full-width column. */
-/* ## ANSWERS — three shapes and no others: a radio item (`.qgrid > .qitem > .qline` holding `.qnum` and `.qstem`, then `.qopts`), a gap inside a sentence (`.blanks.sent input.gap`), a `textarea` other than #feed. Every control carries a `name` of `a<sec><block><item>` — `a1c1` for the item, `a1c1g1` for its first gap — so the number is the identity in the saved answer and a reworded stem keeps it. #feed is never saved. No checkbox exists in any page. A block that must `produce` needs the gap or the textarea, never radios alone. */
+/* ## ANSWERS — blocks may be authored with creativity, include or reference other content, etc.. but all answer options must be a radio item (`.qgrid > .qitem > .qline` holding `.qnum` and `.qstem`, then `.qopts`), a gap inside a sentence (`.blanks.sent input.gap`), or a `textarea` other than #feed. Every control carries a `name` of `a<sec><block><item>` — `a1c1` for the item, `a1c1g1` for its first gap — so the number is the identity in the saved answer and a reworded stem keeps it. #feed is never saved. No checkbox exists in any page. A block that must `produce` needs the gap or the textarea, never radios alone. */
 /* ## ANSWER KEY — the key lives in the page, not with the server: a radio item carries `data-a` = the `value` of its right option, and a typed control (`input.gap`, a textarea other than #feed) carries `data-answer`, with `|` between accepted forms. Complete prints the typed key as a `.ans` line under its field and marks the right option `.correct`; Clear takes both back. An item with no key is an item Complete cannot reveal. */
 
 .blank{display:inline-block;width:3.2em;border-bottom:2px solid var(--tan)}
