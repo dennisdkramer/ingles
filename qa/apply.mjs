@@ -35,6 +35,7 @@ import os from 'os';
 import { execFileSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { JSDOM } from 'jsdom';
+import { lessonFile } from './track.mjs';
 
 const BACKPACK = 'https://script.google.com/macros/s/AKfycbxSR8UmOwosLIgn1-AGKhgXJvdqOVkzMqrTwdlWNF9kOkt-256TqTacOsQlo6JyHplR/exec';
 const arg = (n, d) => { const m = process.argv.find(a => a.startsWith('--' + n + '=')); return m ? m.slice(n.length + 3) : d; };
@@ -46,7 +47,7 @@ if (!track || !lesson) die('--track and --lesson are required');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const teacher = arg('email') || (JSON.parse(fs.readFileSync(path.join(ROOT, 'access.json'), 'utf8')).teachers || [])[0];
 if (!teacher) die('no --email and no teacher in access.json');
-const file = path.join(ROOT, track, 'lesson' + lesson + '.html');
+const file = lessonFile(track, Number(lesson)) || path.join(ROOT, track, 'lesson' + lesson + '.html');
 const rel = path.relative(ROOT, file).replace(/\\/g, '/');
 if (!fs.existsSync(file)) die('no such lesson file: ' + file);
 

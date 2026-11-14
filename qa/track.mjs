@@ -29,7 +29,7 @@ function discoverTracks() {
     if (!d.isDirectory() || d.name[0] === '.' || d.name === 'node_modules') continue;
     let files = [];
     try { files = fs.readdirSync(path.join(ROOT, d.name)); } catch (e) { continue; }
-    if (files.some(f => /^lesson\d+\.html$/.test(f)) || files.indexOf('track.json') >= 0) out.push(d.name);
+    if (files.some(f => /^lesson\d+.*\.html$/.test(f)) || files.indexOf('track.json') >= 0) out.push(d.name);
   }
   return out.sort();
 }
@@ -84,8 +84,17 @@ export function lessonsOnDisk(track) {
   const dir = path.join(ROOT, track);
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir)
-    .map(f => (f.match(/^lesson(\d+)\.html$/) || [])[1])
+    .map(f => (f.match(/^lesson(\d+)(?:-.*)?\.html$/) || [])[1])
     .filter(Boolean).map(Number).sort((a, b) => a - b);
+}
+
+/** THE FILE a lesson number names: `lesson7-<Title>.html`. The title lives in the filename — no page is
+ *  read to find it — so a number is looked up, never concatenated into a path. */
+export function lessonFile(track, n) {
+  const dir = path.join(ROOT, track);
+  if (!fs.existsSync(dir)) return null;
+  const hit = fs.readdirSync(dir).find(f => new RegExp('^lesson' + n + '(?:-.*)?\\.html$').test(f));
+  return hit ? path.join(dir, hit) : null;
 }
 
 /** `4 7 --track=kids` → [4, 7]; no numbers → every page on disk for the track */
@@ -113,12 +122,12 @@ export function hasAllFlag(argv = process.argv.slice(2)) {
 }
 
 /** A rename line counts its destination. The leading class
- *  tolerates git's porcelain prefix (`?? adult/lesson22.html`) and quoted paths, so an untracked page —
+ *  tolerates git's porcelain prefix (`?? adult/lesson22-The Clock.html`) and quoted paths, so an untracked page —
  *  which is exactly what a page being written looks like — is in scope. The track alternation is built from
  *  the DISCOVERED tracks, so a page in a track that did not exist when this line was written still counts. */
 const PAGE_PATH = TRACKS.length
   ? new RegExp('(?:^|[\\s"\'\\\\/])(' + TRACKS.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')
-      + ')[\\\\/]lesson(\\d+)\\.html["\']?$')
+      + ')[\\\\/]lesson(\\d+)(?:-[^"]*)?\\.html["\']?$')
   : /(?!)/;
 
 function gitPagePaths(args) {

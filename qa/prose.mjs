@@ -35,7 +35,7 @@ import { JSDOM } from 'jsdom';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { pickTracks, hasTrackFlag, pickNumbers, pickLessons, missingTargets, scopeLabel } from './track.mjs';
+import { pickTracks, hasTrackFlag, pickNumbers, pickLessons, missingTargets, scopeLabel, lessonFile } from './track.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const roadmapFile = t => t.toUpperCase() + '-ROADMAP.md';
@@ -227,9 +227,9 @@ for (const TRACK of tracks) {
   const roadmap = fs.existsSync(rmPath) ? fs.readFileSync(rmPath, 'utf8') : '';
   console.log('— ' + TRACK + ' lesson' + (lessons.length === 1 ? '' : 's') + ' ' + lessons.join(', '));
   for (const n of lessons) {
-    const page = TRACK + '/lesson' + n + '.html';
-    const abs = path.join(ROOT, page);
-    if (!fs.existsSync(abs)) { if (strict) { console.log('❌ ' + page + ' page not found'); failed++; } continue; }
+    const abs = lessonFile(TRACK, n);
+    const page = abs ? path.relative(ROOT, abs).split(path.sep).join('/') : TRACK + '/lesson' + n + '.html';
+    if (!abs) { if (strict) { console.log('❌ ' + page + ' page not found'); failed++; } continue; }
     let r;
     try { r = auditPage(fs.readFileSync(abs, 'utf8'), lessonBlock(roadmap, n), n); }
     catch (e) { r = { errors: ['threw: ' + e.message], warns: [], total: 0, allowance: 0 }; }

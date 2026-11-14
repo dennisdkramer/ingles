@@ -19,7 +19,7 @@
 
 - Allow: Downloaded materials, assets/. - **Withhold all other files, all other file reads require user sign-off**.
 
-- **Output ONLY** = `<track>/lesson<N>.html`, **unpadded** (`lesson1.html`, never `lesson01.html` - the landing links are built as `track/lesson`+n+`.html`), built on `_shell.html`. **artifact creation, do not read**: PAST_BATCHES.md
+- **Output ONLY** = `<track>/lesson<N>-<Title>.html`, **unpadded** (`lesson1-First Talk &amp; the Sentence Skeleton.html`, never `lesson01-…`): the title in the filename IS the lesson's name, so no page is ever read to learn a title, and the landing links are read from `lessons.json`. The title is written exactly as it should read, spaces and all. Built on `_shell.html`. **artifact creation, do not read**: PAST_BATCHES.md
 
 ## [BUILD] SHAPE
 1. The build is a **synthesis according to [I/O] Precedence and the model to make outstanding teaching material**

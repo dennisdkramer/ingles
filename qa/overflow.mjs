@@ -18,7 +18,7 @@ import path from 'path';
 import os from 'os';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
-import { pickTracks, hasTrackFlag, missingTargets, scopeLabel } from './track.mjs';
+import { pickTracks, hasTrackFlag, missingTargets, scopeLabel, lessonFile } from './track.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -170,7 +170,7 @@ function discover(track) {
   const dir = path.join(ROOT, track);
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir)
-    .map(f => (f.match(/^lesson(\d+)\.html$/) || [])[1])
+    .map(f => (f.match(/^lesson(\d+)(?:-.*)?\.html$/) || [])[1])
     .filter(Boolean).map(Number).sort((a, b) => a - b);
 }
 
@@ -308,8 +308,9 @@ async function main() {
     if (!lessons.length) { console.log('✅ no ' + TRACK + ' lesson pages to check'); continue; }
     let trackFails = 0;
     for (const L of lessons) {
-      const rel = TRACK + '/lesson' + L + '.html';
-      if (!fs.existsSync(path.join(ROOT, rel))) {
+      const abs = lessonFile(TRACK, L);
+      const rel = abs ? path.relative(ROOT, abs).split(path.sep).join('/') : TRACK + '/lesson' + L + '.html';
+      if (!abs) {
         if (strict) { console.log(rel + ': ❌ page not found'); trackFails++; }
         else console.log(rel + ': (page missing, skipped)');
         continue;

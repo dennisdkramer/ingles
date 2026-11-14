@@ -26,7 +26,7 @@ import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { pickTracks, hasTrackFlag, pickNumbers, pickLessons, missingTargets, scopeLabel } from './track.mjs';
+import { pickTracks, hasTrackFlag, pickNumbers, pickLessons, missingTargets, scopeLabel, lessonFile } from './track.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -53,7 +53,8 @@ function mockFetch() {
 }
 
 async function check(base, track, n) {
-  const page = track + '/lesson' + n + '.html';
+  const abs = lessonFile(track, n);
+  const page = path.relative(ROOT, abs).split(path.sep).join('/');
   let html = fs.readFileSync(path.join(ROOT, page), 'utf8');
   if (html.includes('<!-- MORE -->')) return { errors: ['leftover <!-- MORE --> build sentinel'], warns: [] };
 
@@ -156,7 +157,7 @@ for (const TRACK of tracks) {
   if (!lessons.length) { console.log('✅ no ' + TRACK + ' lesson pages'); continue; }
   console.log('— ' + TRACK + ' lesson' + (lessons.length === 1 ? '' : 's') + ' ' + lessons.join(', '));
   for (const n of lessons) {
-    if (!fs.existsSync(path.join(ROOT, TRACK, 'lesson' + n + '.html'))) {
+    if (!lessonFile(TRACK, n)) {
       if (strict) { console.log('❌ ' + TRACK + '/lesson' + n + ' page not found'); failed++; }
       continue;
     }

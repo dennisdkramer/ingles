@@ -5,6 +5,14 @@ let wipeGuard=0; /* a Clear-page wipe in flight: the poll must not resurrect the
 let lastPollChange=Date.now(); /* last time the poll saw a change — keeps the poll fast while the student watches */
 let lastFull=""; /* the layer content signature used to detect that change */
 let completeNow=false; /* optimistic state of the "Complete?" tag button */
+/* THE LESSON'S TITLE IS IN ITS FILENAME, so a neighbour's address cannot be built from a number alone:
+   lessons.json is read once, and every link in this file asks it. */
+let LSN=null;
+function lessonHref(n){const hit=(LSN||[]).find(x=>x.n===n);return hit?encodeURIComponent(hit.file||("lesson"+n+".html")):null;}
+async function goLesson(n){
+ if(!LSN){try{const r=await fetch("../lessons.json");if(r.ok){const j=await r.json();LSN=(j&&j[TRACK])||null;}}catch(e){}}
+ const h=lessonHref(n);if(h)location.href=h;
+}
 
 /* ---- audio: the built-in voice (speechSynthesis) is the delivery — no clips, no manifest ---- */
 const SAY_VOICE_WANT=[/aria.*online/i,/jenny.*online/i,/michelle.*online/i,/samantha/i,/allison/i,/ava/i,/susan/i,/google us english/i,/zira/i];
@@ -223,12 +231,12 @@ function ensureCompleteBtn(){
   if(prevEl&&prevEl.tagName==="H2")anchor=prevEl;
   const pb=document.createElement("button");
   pb.type="button";pb.textContent="← Last";pb.disabled=L<=1;
-  pb.onclick=()=>{if(L>1)location.href="lesson"+(L-1)+".html"};
+  pb.onclick=()=>{if(L>1)goLesson(L-1)};
   const btn=document.createElement("button");
   btn.type="button";btn.id="completebtn";btn.className="complete-btn";
   const nb=document.createElement("button");
   nb.type="button";nb.textContent="Next →";
-  nb.onclick=()=>{location.href="lesson"+(L+1)+".html"};
+  nb.onclick=()=>goLesson(L+1);
   row.appendChild(pb);row.appendChild(btn);row.appendChild(nb);
   if(anchor)anchor.parentNode.insertBefore(row,anchor);
   else{const ca=document.querySelector(".content-area");if(ca)ca.appendChild(row);}
@@ -323,7 +331,7 @@ function renderCompleteBtn(){
      sm.innerHTML=ls.map(le=>{
       const n=le.n,num=(n<10?"0":"")+n,t=le.title?escT(le.title):"&mdash;";
       return '<div class="bookitem'+(n===L?' cur':'')+'"><span class="lnum">'+num+'</span>'
-       +'<a class="ltitle" href="lesson'+n+'.html" title="'+num+'. '+t+'"'+(n===L?' aria-current="page"':'')+'>'+t+'</a></div>';
+       +'<a class="ltitle" href="'+encodeURIComponent(le.file||("lesson"+n+".html"))+'" title="'+num+'. '+t+'"'+(n===L?' aria-current="page"':'')+'>'+t+'</a></div>';
      }).join("");
     }
    }
@@ -331,8 +339,8 @@ function renderCompleteBtn(){
   };
   document.addEventListener("click",e=>{if(!e.target.closest(".barsel"))sm.hidden=true;});
  }
- const pv=document.getElementById("prevlesson");if(pv&&L>1)pv.onclick=()=>location.href="lesson"+(L-1)+".html";
- const nx=document.getElementById("nextlesson");if(nx)nx.onclick=()=>location.href="lesson"+(L+1)+".html";
+ const pv=document.getElementById("prevlesson");if(pv&&L>1)pv.onclick=()=>goLesson(L-1);
+ const nx=document.getElementById("nextlesson");if(nx)nx.onclick=()=>goLesson(L+1);
  const cp=document.createElement("button");cp.type="button";cp.id="clearpage";cp.textContent="\u{1F9F9} Clear page";
  if(cp)cp.onclick=async()=>{
   /* the site's own dialog, never the browser's (owner instruction 2026-11-09) */

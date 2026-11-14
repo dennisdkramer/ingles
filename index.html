@@ -457,11 +457,13 @@ function bookButton(t,locked){
  const dn=(DONE&&DONE[t])||[];
  const items=trackLessons(t).map(le=>{
   const n=le.n,num=(n<10?"0":"")+n,txt=le.title?esc(le.title):"—";
+  /* the page's address is its FILENAME, and the title is in it: it comes from lessons.json, never from n */
+  const href=t+'/'+encodeURIComponent(le.file||('lesson'+n+'.html'));
   return '<div class="bookitem'+(dn.indexOf(n)>=0?' done':'')+(locked?' inert':'')+'">'
    +'<span class="lnum">'+num+'</span>'
    +(locked
      ?'<span class="ltitle dim" title="'+txt+'">'+txt+'</span>'
-     :'<a class="ltitle" href="'+t+'/lesson'+n+'.html" title="'+num+'. '+txt+'" onclick="go(\''+t+'\','+n+');return false">'+txt+'</a>')
+     :'<a class="ltitle" href="'+href+'" title="'+num+'. '+txt+'" onclick="go(\''+t+'\','+n+');return false">'+txt+'</a>')
    +'</div>';
  }).join('');
  return '<div class="bookdrop'+(locked?' locked':'')+'">'

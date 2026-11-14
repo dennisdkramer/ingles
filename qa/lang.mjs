@@ -48,7 +48,7 @@ import { JSDOM } from 'jsdom';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { hasTrackFlag, hasAllFlag, pickNumbers, missingTargets, scopeLabel, touchedScope, pickVoiceTracks, pickVoiceLessons } from './track.mjs';
+import { hasTrackFlag, hasAllFlag, pickNumbers, missingTargets, scopeLabel, touchedScope, pickVoiceTracks, pickVoiceLessons, lessonFile } from './track.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -96,7 +96,7 @@ const asPct = v => Math.round(v * 100) + '%';
 const pct = (a, b) => asPct(b ? a / b : 0);
 
 function page(track, n) {
-  const file = path.join(ROOT, track, 'lesson' + n + '.html');
+  const file = lessonFile(track, n);
   if (!fs.existsSync(file)) return null;
   const doc = new JSDOM(fs.readFileSync(file, 'utf8')).window.document;
   const ca = doc.querySelector('.content-area');

@@ -7,6 +7,15 @@ _(Cleared 2026-11-04 at the owner's request.)_
 ## 2 Active Handoff 
 
 
+### E. A lesson's filename is its number and its title (2026-11-14) — done, one ask left
+- All 103 pages renamed `lesson<N>.html` → `lesson<N>-<Title>.html` (title verbatim, spaces kept; illegal Windows chars replaced by a space). `git mv`, no page content touched.
+- `build-lessons.mjs` no longer reads a page: the title comes from the filename and `lessons.json` entries are now `{n, title, file}`. `extractTitle`/`decodeEntities` deleted.
+- Every link is built from `file`: `index.html:461` (book menu, `encodeURIComponent`), `engine2.js:11-15` (`lessonHref`/`goLesson`, used by the ← Last / Next → buttons at `engine2.js:234`, `:239`, `:342-343` and the book selector at `engine2.js:334`).
+- Every harness resolves a number to a file instead of concatenating: `qa/track.mjs:93` (`lessonFile`), used by `qa/content.mjs:56,160`, `qa/register.mjs:135,144`, `qa/lang.mjs:99`, `qa/overflow.mjs:311`, `qa/prose.mjs:230`, `qa/apply.mjs:49`, `qa/cssdiff.mjs:34`, `qa/live.mjs:63` (`PAGE_REL`); the discovery/rename regexes accept the new form (`qa/track.mjs:32`, `:87`, `:130`, `qa/overflow.mjs:173`).
+- `PEDAGOGY-MAP.md:22` and `FILESYSTEM.md:11` state the new name. `touchedScope()` sees 23/49/31 renamed pages (it failed on 4 titles containing an apostrophe until `PAGE_PATH` stopped excluding `'`).
+- Verified: `QA_ON=1` content/register/lang/overflow on business 1 exit 0 and print the new filename; `qa/landing.mjs` passes except its pre-existing `.vz-btn:focus-visible` ungated focus-ring check; `qa/examples.mjs` 8/8, `qa/liquid.mjs` 32/32, `qa/pending.mjs` 6/6.
+- **Ask left**: `build-lessons.mjs` still discovers track folders, reads `track.json`, writes `tracks.json` with a per-track `count` no code reads, and rewrites the `COUNTS` fallback in `index.html`. The owner's instruction was to pare it to the bare minimum (tracks told to it by hand, no count). Needs one decision: whether `tracks.json` keeps being written (index.html:204 and engine2.js:308 fetch it for label/icon/colour) and whether `COUNTS` stays as the no-network fallback.
+
 ### B. Open thread — let lesson generation print a pronunciation key - IGNORE - PARKED FOR NOW
 
 **Facts.** `pronkey.js:80-85` exports `words`, `lookup`, `render`, `ready`. `load(obj)` exists at `pronkey.js:59` and is not exported. `render()` (`pronkey.js:34`) splits a key on `-` (syllables joined with `·`), wraps letters in `<b>` and elided letters in `<span class="pr-g">`, and returns the display HTML. `dictionary.json` holds 28,075 entries; **0** contain a space. The page's own lookup (`engine1.js:420-423`) takes a multi-word selection, loops its words, and uses the **first** word that has a key.

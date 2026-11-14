@@ -60,26 +60,6 @@ function readTrackMeta(track) {
   return { name: name, label: label, icon: icon, color: color, order: order };
 }
 
-function decodeEntities(s) {
-  return String(s)
-    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
-    .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)))
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;|&apos;/g, "'")
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&');
-}
-
-function extractTitle(html) {
-  const at = html.indexOf('class="content-area"');
-  const region = at >= 0 ? html.slice(at) : html;
-  const m = region.match(/<h1[^>]*>([\s\S]*?)<\/h1>/);
-  if (!m) return null;
-  return decodeEntities(m[1].replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim());
-}
-
 const manifest = {};
 for (const meta of META) {
   const track = meta.name;
@@ -87,13 +67,12 @@ for (const meta of META) {
   const entries = [];
   if (fs.existsSync(dir)) {
     for (const name of fs.readdirSync(dir)) {
-      const m = name.match(/^lesson(\d+)\.html$/);
+      /* THE FILENAME IS THE TITLE: `lesson<N>-<Title>.html`. No page is read — a build that reads a page
+         to learn its own name is reading content it has no business in. */
+      const m = name.match(/^lesson(\d+)(?:-(.*))?\.html$/);
       if (!m) continue;
       const n = Number(m[1]);
-      const html = fs.readFileSync(path.join(dir, name), 'utf8');
-      const title = extractTitle(html);
-      if (title == null) { console.warn(`WARN: no content <h1> in ${track}/${name}`); continue; }
-      entries.push({ n, title });
+      entries.push({ n, title: m[2] ? m[2] : 'Lesson ' + n, file: name });
     }
   }
   entries.sort((a, b) => a.n - b.n);

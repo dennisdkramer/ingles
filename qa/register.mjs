@@ -37,7 +37,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { lessonsOnDisk, hasTrackFlag, hasAllFlag, pickNumbers, missingTargets, scopeLabel,
-  touchedScope, pickVoiceTracks, pickVoiceLessons } from './track.mjs';
+  touchedScope, pickVoiceTracks, pickVoiceLessons, lessonFile } from './track.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -132,7 +132,7 @@ for (const TRACK of tracks) {
   const allNums = lessonsOnDisk(TRACK);
   if (!allNums.length) { if (strict) { console.log('✅ no ' + TRACK + ' lesson pages'); } continue; }
   const sample = new Set(pickVoiceLessons(TRACK, scope)
-    .filter(n => fs.existsSync(path.join(ROOT, TRACK, 'lesson' + n + '.html'))));
+    .filter(n => !!lessonFile(TRACK, n)));
   if (!sample.size) { if (strict) { console.log('✅ nothing touched in ' + TRACK); } continue; }
 
   /* the coverage verdict is a property of the whole track, so it is measured over every page on disk even
@@ -141,7 +141,7 @@ for (const TRACK of tracks) {
   const RE_T = listRe(T.byFam.taboo), RE_S = listRe(T.byFam.street), RE_X = listRe(T.byFam.sexual),
     RE_F = listRe(T.byFam.formal), RE_L = listRe(T.byFam.locale);
   const lines = allNums.map(n => {
-    const raw = fs.readFileSync(path.join(ROOT, TRACK, 'lesson' + n + '.html'), 'utf8');
+    const raw = fs.readFileSync(lessonFile(TRACK, n), 'utf8');
     const leaks = (raw.match(UNCENSORED) || []).map(s => s.toLowerCase());
     return { n, t: count(raw, RE_T) + count(raw, MASKED), s: distinct(raw, RE_S), x: distinct(raw, RE_X),
       formal: T.own ? uniq(hits(raw, RE_F)) : [], locale: T.own ? uniq(hits(raw, RE_L)) : [],
