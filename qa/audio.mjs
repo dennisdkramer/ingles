@@ -1,12 +1,13 @@
 /**
- * qa/audio.mjs — source → check the licence → cut → rewrite the header → measure → place.
+ * qa/audio.mjs — source → record the licence → cut → rewrite the header → measure → place.
  *
  * WHY THIS EXISTS. `[Constraints] 2` forbids a fetch at RUN TIME: the page must open with no network.
  * It says nothing about authoring time, and I had wrongly extended it to mean a build may not touch
  * audio at all. The three facts a build cannot invent are all machine-checkable, so they are checked
  * here instead of being left to a human with headphones:
  *
- *   - the licence  — the Commons API states it; a file that is not PD/CC0 is refused, not credited;
+ *   - the licence  — the Commons API states it, and it is RECORDED, never judged: any audio is usable
+ *                    (owner instruction — a block is a short teaching excerpt used as fair use);
  *   - the cut point — MPEG frame headers are self-describing, so the cut lands on a frame boundary;
  *   - the line times — decoded RMS windows give the silences, and the number of sung segments must
  *                      equal the number of lyric lines. That last check exists because a mismatch
@@ -19,6 +20,14 @@
  *        (times taken verbatim from the file's own timed transcript — TimedText/`.srt` — for a
  *         recording whose pauses cannot be segmented; each is still proved to land on sound)
  *   node qa/audio.mjs --url=https://…/x.mp3 --out=x --seconds=24
+ *   node qa/audio.mjs --in=C:/music/song.mp3 --out=x --lrc="artist title"    (audition the records)
+ *   node qa/audio.mjs --in=C:/music/song.mp3 --out=x --lrc-id=9567200 --lines=17,4
+ *        (the words AND the times come from that record's own LRC; the clip opens --lead=2 s before
+ *         line 17; the record's duration must agree with the decoded file within 2 s)
+ *   node qa/audio.mjs --search="artist title" --out=x --lines=17,4
+ *        (no audio on hand: the site is searched, the audio is downloaded and converted to mp3, and
+ *         it is paired with the LRCLIB record whose duration agrees within 2 s — the whole chain,
+ *         unattended. Without --out it prints the pairing and writes nothing)
  *
  * The cut is made at the silence after the last lyric line, so the audio carries exactly the lines
  * the block shows. Nothing is re-encoded: the frames are copied, so the audio is bit-identical.
@@ -68,17 +77,229 @@ if (measureOnly) {
   process.exit(0);
 }
 
+/* ---- -1. THE AUDIO AND THE SHEET, FOUND BY NAME (--search) ---------------------------------
+   A lesson that decides music is the right vehicle should not need a human to pick a recording.
+   `--search="artist title"` does the three lookups a person would do: ask LRCLIB for synced records,
+   ask the site for candidate audio WITH their durations, and pair them — a record and a video only
+   match when their lengths agree within 2 s, the same tolerance /api/get itself uses and the only
+   cheap evidence that this sheet times this audio. The paired audio is downloaded and converted to
+   mp3 by the ffmpeg npm installed, and the rest of the run is the existing one. Nothing is cut
+   without `--out`: without it the pairing is printed and the run stops. */
+const search = arg('search', '');
+let searchedFile = null, searchedRecordId = '', searchedUrl = '';
+if (search) {
+  if (arg('in') || arg('url') || arg('file')) die('--search fetches the audio itself — drop --in / --url / --file');
+  if (arg('lrc') || arg('lrc-id') || arg('lrc-file')) die('--search finds the sheet too — drop --lrc / --lrc-id / --lrc-file');
+  const H = { 'User-Agent': 'ingles-site/1.0 (teaching material)' };
+  const json = async (u) => {
+    let r = null;
+    for (let i = 0; i < 2 && !r; i++) {
+      try { r = await fetch(u, { headers: H, signal: AbortSignal.timeout(12000) }); }
+      catch (e) { if (i === 0) await sleep(800); }
+    }
+    if (!r || !r.ok) return [];
+    return r.json();
+  };
+  const found = await json('https://lrclib.net/api/search?q=' + encodeURIComponent(search));
+  const records = (found || []).filter(x => x.syncedLyrics && Number(x.duration) > 0)
+    .map(x => ({ id: x.id, artist: x.artistName, track: x.trackName, dur: Number(x.duration) }));
+  if (!records.length) die('LRCLIB has no synced record for "' + search + '" — nothing to time against');
+  console.log('LRCLIB: ' + records.length + ' synced records for "' + search + '"');
+
+  let ytDlp, ffmpegPath;
+  try {
+    ytDlp = (await import('youtube-dl-exec')).default;
+    ffmpegPath = (await import('ffmpeg-static')).default;
+  } catch (e) {
+    die('the downloader is not installed (' + e.message + ') — run: npm install');
+  }
+
+  let table = '';
+  try {
+    table = await ytDlp('ytsearch8:' + search, {
+      flatPlaylist: true, skipDownload: true, noWarnings: true, noUpdate: true,
+      socketTimeout: 20, print: '%(id)s\t%(duration)s\t%(title)s',
+    });
+  } catch (e) {
+    const why = String((e && (e.stderr || e.message)) || e).split('\n').filter(Boolean).slice(-2).join(' ');
+    die('the search failed: ' + why);
+  }
+  const vids = String(table || '').split('\n').map(l => l.split('\t'))
+    .filter(c => c.length >= 3 && c[0] && c[0] !== 'NA')
+    .map(c => ({ id: c[0], dur: Number(c[1]), title: c[2] }));
+  if (!vids.length) die('the search returned no video with a duration');
+  console.log('  site: ' + vids.length + ' candidates');
+
+  const pairs = [];
+  for (const v of vids) {
+    if (!Number.isFinite(v.dur)) continue;
+    for (const r of records) {
+      const d = Math.abs(v.dur - r.dur);
+      if (d <= 2) pairs.push({ v, r, d });
+    }
+  }
+  pairs.sort((a, b) => a.d - b.d);
+  if (!pairs.length) {
+    console.log('  records: ' + records.slice(0, 4).map(r => r.artist + ' ' + r.dur.toFixed(0) + ' s').join(' · '));
+    console.log('  videos:  ' + vids.slice(0, 4).map(v => v.dur + ' s').join(' · '));
+    die('no audio candidate matches a synced record within 2 s');
+  }
+  const best = pairs[0];
+  console.log('  pair: "' + best.v.title + '" (' + best.v.dur + ' s) ↔ LRCLIB ' + best.r.id + ' · ' +
+    best.r.artist + ' (' + best.r.dur.toFixed(2) + ' s) · ' + best.d.toFixed(1) + ' s apart');
+
+  const dest = path.join(TMP, 'search-' + Date.now() + '.mp3');
+  fs.mkdirSync(TMP, { recursive: true });
+  try {
+    await ytDlp('https://www.youtube.com/watch?v=' + best.v.id, {
+      extractAudio: true, audioFormat: 'mp3', audioQuality: '0', noPlaylist: true,
+      ffmpegLocation: ffmpegPath, output: dest, noWarnings: true, noUpdate: true,
+    });
+  } catch (e) {
+    const why = String((e && (e.stderr || e.message)) || e).split('\n').filter(Boolean).slice(-3).join(' ');
+    die('the download failed: ' + why);
+  }
+  if (!fs.existsSync(dest)) die('the download wrote no file at ' + dest);
+  searchedFile = dest;
+  searchedRecordId = String(best.r.id);
+  searchedUrl = 'https://www.youtube.com/watch?v=' + best.v.id;
+  console.log('  downloaded: ' + (fs.statSync(dest).size / 1048576).toFixed(1) + ' MB -> ' + dest);
+  if (!arg('out')) {
+    console.log('nothing cut — add --out=<name> --lines=<first>,<count> to build the block');
+    process.exit(0);
+  }
+}
+
+/* ---- 0. THE TIMES, FROM AN OUTSIDE TIMED LYRIC SHEET (LRCLIB) ------------------------------
+   A line's time belongs to ONE MASTER: an LRC is written by someone listening to a particular
+   release, so it times that release and no other. Given that master's file (--in), the record is
+   fetched by id, a run of consecutive lines is taken out of it, and the timing problem becomes a
+   lookup — no segmentation, no dip test, no guessing which silence is a line break:
+     node qa/audio.mjs --in=song.mp3 --out=x --lrc-id=9567200 --lines=17,4
+   The words and the `data-t`s both come from the record, the clip opens --lead=2 s before the first
+   line so the student hears it arrive, and the record's own duration must agree with the decoded
+   file within 2 s — the tolerance /api/get itself matches on, and the one check that catches a wrong
+   master (another mix or edit) before a student sees a highlight on the wrong words.
+   `--lrc="<query>"` without --lrc-id only auditions the records and writes nothing, like --scan. */
+const lead = Math.max(0, Number(arg('lead', '2')) || 0);
+let lrcSel = null;
+const lrcQuery = arg('lrc', '');
+const lrcId = arg('lrc-id', '') || searchedRecordId;
+const lrcFile = arg('lrc-file', '');
+
+function parseLrc(text) {
+  const rows = [];
+  for (const raw of String(text || '').split(/\r?\n/)) {
+    const tags = raw.match(/\[(\d+):(\d+(?:[.:]\d+)?)\]/g) || [];
+    /* the words are what survives once the tags are cut out; a cue with no words under it is an
+       instrumental gap and is dropped, so `--lines` counts the lines a reader counts */
+    const words = raw.replace(/\[[^\]]*\]/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!words) continue;
+    for (const tag of tags) {
+      const m = /\[(\d+):(\d+(?:[.:]\d+)?)\]/.exec(tag);
+      if (!m) continue;
+      const t = Number(m[1]) * 60 + Number(String(m[2]).replace(':', '.'));
+      if (Number.isFinite(t)) rows.push({ t: Math.round(t * 1000) / 1000, text: words });
+    }
+  }
+  return rows.sort((a, b) => a.t - b.t);
+}
+
+if (lrcQuery || lrcId || lrcFile) {
+  const H = { 'User-Agent': 'ingles-site/1.0 (teaching material)' };
+  const getJson = async (u) => {
+    /* a lookup tool must not hang: LRCLIB is fast usually and slow or silent occasionally, so every
+       request carries a deadline and one retry */
+    let r = null, err = null;
+    for (let i = 0; i < 2 && !r; i++) {
+      try {
+        r = await fetch(u, { headers: H, signal: AbortSignal.timeout(12000) });
+      } catch (e) {
+        err = e;
+        if (i === 0) await sleep(800);
+      }
+    }
+    if (!r) die('LRCLIB did not answer (' + (err && err.name || 'no response') + ') — try again in a moment');
+    if (r.status === 429 || r.status === 503) {
+      die('LRCLIB answered ' + r.status + ' — honour Retry-After (' +
+        (r.headers.get('retry-after') || '?') + ' s) and run again');
+    }
+    if (!r.ok) return null;
+    return r.json();
+  };
+  let rec = null, rows = null, dur = Number(arg('lrc-duration', '')) || null, where = '';
+  if (lrcFile) {
+    /* AN LRC ALREADY SAVED. The same sheet read off the disk: LRCLIB is the usual source, not the
+       only one, and this keeps the route working when the host is slow, down, or the sheet was
+       written by someone else. `--lrc-duration` states the length of the master it times, which is
+       what the guard below needs when there is no record to read it from. */
+    const p = path.resolve(ROOT, lrcFile);
+    if (!fs.existsSync(p)) die('no such LRC file: ' + p);
+    rows = parseLrc(fs.readFileSync(p, 'utf8'));
+    where = 'LRC file ' + lrcFile;
+  } else if (lrcId) {
+    rec = await getJson('https://lrclib.net/api/get/' + encodeURIComponent(lrcId));
+    if (!rec) die('no LRCLIB record with id ' + lrcId);
+    if (!rec.syncedLyrics) die('LRCLIB record ' + lrcId + ' carries no synced lyrics — pick another record');
+    rows = parseLrc(rec.syncedLyrics);
+    dur = rec.duration;
+    where = 'LRCLIB ' + rec.id + ': ' + rec.artistName + ' — ' + rec.trackName;
+  } else {
+    const list = (await getJson('https://lrclib.net/api/search?q=' + encodeURIComponent(lrcQuery))) || [];
+    console.log('LRCLIB "' + lrcQuery + '": ' + list.length + ' records');
+    for (const x of list) {
+      const n = parseLrc(x.syncedLyrics).length;
+      console.log('  id ' + x.id + ' · ' + x.artistName + ' · ' + x.albumName + ' · ' +
+        (x.duration == null ? 'no duration' : x.duration.toFixed(1) + ' s') + ' · ' +
+        (n ? n + ' timed lines' : 'NO synced lyrics') + (x.hasWordSync ? ' · word timings' : ''));
+    }
+    console.log('nothing written — re-run with --lrc-id=<id> from that list');
+    process.exit(0);
+  }
+  if (!rows || !rows.length) die('that sheet holds no timed lines');
+  const sel = String(arg('lines', '')).split(',').filter(s => s.trim() !== '').map(Number);
+  const first = sel.length ? Math.max(1, Math.floor(sel[0])) : 1;
+  const count = sel.length > 1 ? Math.max(1, Math.floor(sel[1])) : rows.length - first + 1;
+  if (first > rows.length) die('--lines=' + first + ' is past the end of that record (' + rows.length + ' timed lines)');
+  const take = rows.slice(first - 1, first - 1 + count);
+  if (arg('lyrics', '')) die('--lrc-id brings the words too — drop --lyrics');
+  if (arg('times', '')) die('--lrc-id brings the times too — drop --times');
+  if (arg('from', '')) die('--lrc-id sets the start (' + lead + ' s before line ' + first + ') — drop --from or raise --lead');
+  lrcSel = {
+    record: rec, first, where, dur,
+    lines: take.map(r => r.text),
+    times: take.map(r => r.t),
+    next: rows[first - 1 + take.length] ? rows[first - 1 + take.length].t : null,
+  };
+  console.log(where + ' (' + (dur == null ? 'NO duration to check' : dur.toFixed(2) + ' s') + ')');
+  console.log('  lines ' + first + '–' + (first + take.length - 1) + ' of ' + rows.length + ' (' +
+    (lrcSel.next == null ? 'none after them' : 'line ' + (first + take.length) + ' at ' + lrcSel.next.toFixed(2) + ' s') +
+    '): ' + take.map((r, i) => (first + i) + ' @ ' + r.t.toFixed(2)).join(' · '));
+}
+
 const outName = arg('out') || die('--out=<name> is required (it becomes assets/<name>.mp3)');
-const lyrics = (arg('lyrics', '') || '').split('|').map(s => s.trim()).filter(Boolean);
+const lyrics = lrcSel ? lrcSel.lines.slice()
+  : (arg('lyrics', '') || '').split('|').map(s => s.trim()).filter(Boolean);
 const wantSeconds = Number(arg('seconds', '0'));
 const pageUrl = arg('file');
 const directUrl = arg('url');
-if (!pageUrl && !directUrl) die('give --file="File:…" (Commons) or --url=<mp3>');
+const localIn = arg('in') || searchedFile;
+if (!pageUrl && !directUrl && !localIn) die('give --file="File:…" (Commons), --url=<mp3> or --in=<path to an mp3>');
 
 /* ---- 1. the source, and its licence ------------------------------------------------------- */
 let src = directUrl, credit = null, licence = null, sourcePage = null, title = null;
 
-if (pageUrl) {
+if (localIn) {
+  /* ANY FILE THE OWNER HAS. A master is often on no public host — a purchase, a rip, a recording a
+     lesson already uses. --in takes the path; the licence and the credit are recorded as given
+     because nothing is fetched, so there is nothing to read them from. No licence is refused. */
+  src = path.resolve(ROOT, localIn);
+  licence = arg('licence') || 'not stated';
+  credit = arg('credit') || ((lrcSel && lrcSel.record) ? lrcSel.record.artistName : 'unknown');
+  title = (lrcSel && lrcSel.record) ? lrcSel.record.trackName : null;
+  sourcePage = searchedUrl || localIn;
+  console.log('source: ' + src + '\n  licence: ' + licence + ' (as given) · credit: ' + credit);
+} else if (pageUrl) {
   const api = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&prop=videoinfo'
     + '&viprop=url|derivatives|extmetadata&titles=' + encodeURIComponent(pageUrl);
   const r = await fetch(api, { headers: { 'User-Agent': 'ingles-site/1.0 (teaching material)' } });
@@ -95,14 +316,12 @@ if (pageUrl) {
   title = p.title;
   sourcePage = vi.descriptionurl;
   credit = arg('credit', '') || artist || 'unknown';
-  licence = short;
+  licence = short || 'not stated on Commons';
 
-  /* a licence that is merely *stated* is not a licence to ship: only PD / CC0 pass, and CC BY
-     passes only because this tool writes the credit line into the figcaption. Anything else is
-     refused here rather than argued about later. */
-  if (!/^(CC0|Public domain|PD)/i.test(short) && !/^CC BY/i.test(short)) {
-    die('licence "' + short + '" is not PD/CC0/CC-BY — refusing to place it. Pick another recording.');
-  }
+  /* NO LICENCE GATE (owner instruction). Every recording is usable: a block plays a few lines of a
+     teaching excerpt, which the owner uses as fair use, so the licence is RECORDED and never judged.
+     The block prints no credit line — its italic <h4> names the performer and nothing else — so the
+     provenance row this tool prints is the record of who made the file and under what licence. */
 
   /* THE VOICE GATE. A tool that measures phrase boundaries cannot tell singing from a guitar — an
      instrumental of "Salley Gardens" cut perfectly into eight whistle phrases and every check passed.
@@ -122,7 +341,7 @@ if (pageUrl) {
      Knickerbocker Quartet was refused for being one, on a file that ships its own transcript. They
      count as instruments only when an instrument names them ("string quartet", "jazz trio"). */
   const INSTRUMENT = /\b(instrumental|whistle|fiddle|violin|piano|guitar|harp|flute|orchestra|band|karaoke|backing)\b|\b(string|brass|wind|sax|jazz|piano)\s+(quartet|trio|ensemble)\b/i;
-  const hasTranscript = !!arg('times', '');
+  const hasTranscript = !!arg('times', '') || !!lrcSel;
   if (VOICE.test(hay)) {
     console.log('  voice: found in the description — "' + desc.slice(0, 110) + '"');
   } else if (INSTRUMENT.test(hay) && !arg('allow-instrumental', '')) {
@@ -145,21 +364,25 @@ if (pageUrl) {
   src = derivs.length ? derivs[derivs.length - 1].src : vi.url;
   console.log('source: ' + title + '\n  licence: ' + short + ' · credit: ' + credit + '\n  audio: ' + src);
 } else {
-  // a direct URL carries no licence metadata, so the caller states it, and it is recorded verbatim
-  licence = arg('licence') || 'UNKNOWN';
+  /* a direct URL carries no licence metadata, so the caller states what it knows and it is recorded
+     verbatim; neither field is required, because no licence is refused */
+  licence = arg('licence') || 'not stated';
   credit = arg('credit') || 'unknown';
-  if (licence === 'UNKNOWN') die('with --url you must also give --licence="CC0" and --credit="who made it"');
   console.log('source: ' + src + '\n  licence: ' + licence + ' (as given) · credit: ' + credit);
 }
 
 fs.mkdirSync(TMP, { recursive: true });
 const origPath = path.join(TMP, outName + '-original.mp3');
 {
-  const r = await fetch(src, { headers: { 'User-Agent': 'ingles-site/1.0 (teaching material)' } });
-  if (!r.ok) die('download failed: ' + r.status);
-  const buf = Buffer.from(await r.arrayBuffer());
+  const buf = localIn
+    ? (fs.existsSync(src) ? fs.readFileSync(src) : die('no such file: ' + src))
+    : await (async () => {
+        const r = await fetch(src, { headers: { 'User-Agent': 'ingles-site/1.0 (teaching material)' } });
+        if (!r.ok) die('download failed: ' + r.status);
+        return Buffer.from(await r.arrayBuffer());
+      })();
   fs.writeFileSync(origPath, buf);
-  console.log('  downloaded: ' + buf.length + ' bytes -> ' + origPath);
+  console.log('  ' + (localIn ? 'read' : 'downloaded') + ': ' + buf.length + ' bytes -> ' + origPath);
 }
 
 /* ---- 2. the frames: parse, cut, and rewrite the VBR header -------------------------------- */
@@ -466,8 +689,20 @@ const relTmp = tempPath(outName);
 fs.copyFileSync(origPath, path.join(ROOT, relTmp));
 /* read --from before measuring: the singing-or-speech gate grades the window that SHIPS, and a
    cylinder's spoken announcement would otherwise be graded instead of the verse */
-const fromAt = Math.max(0, Number(arg('from', '0')) || 0);
+/* with an outside lyric sheet the clip opens `--lead` seconds before the first line, so the student
+   hears the line arrive instead of landing on its first syllable */
+const fromAt = Math.max(0, arg('from', '') !== '' ? (Number(arg('from')) || 0)
+  : (lrcSel ? Math.round((lrcSel.times[0] - lead) * 1000) / 1000 : 0));
 const orig = await measure(relTmp, null, fromAt);
+/* THE ONE CHECK THAT CATCHES THE WRONG MASTER. An LRC times the release it was written against, so a
+   different mix, edit or upload passes every acoustic test and still carries the wrong times. The
+   record's own duration is compared with the DECODED length before anything is cut, at the 2 s
+   tolerance LRCLIB's /api/get matches on. */
+if (lrcSel && lrcSel.dur != null && Math.abs(orig.duration - lrcSel.dur) > 2) {
+  die('this file decodes to ' + orig.duration.toFixed(2) + ' s but ' + lrcSel.where +
+    ' is ' + Number(lrcSel.dur).toFixed(2) + ' s — that sheet times its own master, not this file, ' +
+    'so no timing here would be honest. Use the release the record describes, or pick another record.');
+}
 const segs = segmentsOf(orig);
 console.log('  original: ' + orig.duration.toFixed(2) + ' s, ' + orig.gaps.length + ' silences, ' +
   segs.length + ' sung phrases');
@@ -513,7 +748,7 @@ if (lyrics.length && orig.longestHoldSec != null && orig.longestHoldSec < 0.5) {
     ' s (voiced ' + Math.round((orig.voicedFrac || 0) * 100) + '% of loud frames). A spoken intro or an ' +
     'instrumental passes the phrase test and the energy test and still has no held note — this is how a ' +
     'spoken verse shipped once. Choose a recording where a voice actually sings.';
-  if (!arg('times', '')) die(why);
+  if (!arg('times', '') && !lrcSel) die(why);
   console.log('  voice gate: ' + why);
   console.log('  voice gate: NOT refusing — this file ships a timed transcript, which is direct evidence of');
   console.log('              the words. Verify with: node qa/hear.mjs --file=assets/<out>.mp3 --mode=line --lyrics="…"');
@@ -526,8 +761,9 @@ if (lyrics.length && orig.longestHoldSec != null && orig.longestHoldSec < 0.5) {
    timed transcript (a Wikimedia TimedText/`.srt` track, a subtitle file), those times ARE the
    ground truth: someone wrote the words down while listening to THIS file. The tool takes them
    verbatim, refuses to invent any, and still proves each one lands on sound. */
-const givenTimes = (arg('times', '') || '').split(',')
-  .map(s => Number(s.trim())).filter(n => Number.isFinite(n) && n > 0);
+const givenTimes = lrcSel ? lrcSel.times.slice()
+  : (arg('times', '') || '').split(',')
+      .map(s => Number(s.trim())).filter(n => Number.isFinite(n) && n > 0);
 if (givenTimes.length) {
   if (!lyrics.length) die('--times needs --lyrics as well: the times and the words ship together');
   if (givenTimes.length !== lyrics.length) {
@@ -539,7 +775,8 @@ if (givenTimes.length) {
   }
   const lastT = givenTimes[givenTimes.length - 1];
   if (lastT >= orig.duration) die('a --times value (' + lastT + ') is past the end of the file');
-  console.log('  times: ' + givenTimes.join(' · ') + ' s — taken verbatim from the file\'s own timed transcript');
+  console.log('  times: ' + givenTimes.join(' · ') + ' s — taken verbatim from ' +
+    (lrcSel ? lrcSel.where : 'the file\'s own timed transcript'));
 }
 
 let cutAt = wantSeconds;
@@ -578,7 +815,8 @@ if (lyrics.length && !givenTimes.length) {
 } else if (givenTimes.length) {
   /* the cut runs to the start of the line AFTER the last one shown, so the clip ends where the next
      line would begin; past the end of the transcript there is no such time, so --seconds or the end */
-  const next = givenTimes[lyrics.length];
+  /* an outside sheet also says where the line AFTER the excerpt starts, so the clip ends there */
+  const next = (lrcSel && lrcSel.next != null) ? lrcSel.next : givenTimes[lyrics.length];
   cutAt = wantSeconds || (next ? next - 0.05 : Math.min(orig.duration, givenTimes[lyrics.length - 1] + 7));
 } else if (!cutAt) {
   die('give --lyrics="…|…" (the cut follows the last line) or --seconds=<n>');
@@ -630,35 +868,28 @@ if (cutM.probes && cutM.probes.length) {
 }
 
 /* ---- 5. what a build pastes --------------------------------------------------------------- */
-const mmss = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const songName = arg('title', '') ||
   (title ? title.replace(/^File:/, '').replace(/\.\w+$/, '').replace(/_/g, ' ') : outName);
 
-/* THE FIGCAPTION IS A CREDIT LINE, NOT A BUILD LOG. assets/README.md requires the credit on the
-   page because a printed page travels without that file — so the page carries who sang it, under
-   what licence, and (if the clip is shorter than the song) that it is an excerpt and how long it
-   lasts. How the file was cut, at what second, by what method, is maintenance detail: it belongs in
-   the README row and nowhere the student reads. */
-/* "Performed by" is only right when the credit IS a performer. Commons credits are sometimes a list
-   (Words: …; Music: …; Performance: …), and prefixing that with "Performed by" produces a sentence
-   that describes a composer as a singer. So the performance clause is lifted out for the <h4>, and a
-   compound credit stays whole in the figcaption, where the full attribution belongs. */
+/* NO CREDIT LINE ABOVE THE PLAYER. The block's <h4> is its credit — who performs it, and nothing
+   else, italicised by the `h4` rule in `style.css` rather than by an `<i>` here — and the figure
+   prints nothing above the <audio>. The licence, the source and
+   the excerpt length stay in the provenance row printed below, and THAT ROW IS THE RECORD of
+   attribution: every licence is allowed (owner instruction), and the row carries it with the source
+   and the credit in place of a printed line. */
+/* "Performed by" is not printed: the <h4> is the performer's name alone. Commons credits are
+   sometimes a list (Words: …; Music: …; Performance: …), so the performance clause is lifted out for
+   the <h4>; a list with no performance clause is carried whole, because a name is better than none. */
 const creditParts = String(credit).split(/;\s*/).map(s => s.trim()).filter(Boolean);
 const perfClause = (creditParts.find(p => /^Performance:/i.test(p)) || '').replace(/^Performance:\s*/i, '');
-const compound = /[:;]/.test(credit);
-const performer = perfClause || (compound ? '' : String(credit));
-const attribution = compound ? '<b>' + esc(credit) + '</b>' : '';
-const licenceLine = '<b>' + esc(licence) + '</b>' + (sourcePage ? ', Wikimedia Commons' : '') + '. ' +
-  (lyrics.length ? 'The first ' + lyrics.length + ' lines only: ' : '') +
-  mmss(cutM.duration) + ' of the song.';
+const performer = perfClause || String(credit);
 
-/* TWO SHAPES, ONE PIPELINE. `--width=half` is `musicPlayer`: the caption opens the figure and the
-   lines sit in a single list. `--width=full` is `lyricSheet` per [03]: the <h3> is the title, an
-   <h4> carries the performer, and the lines and the explainer sit in two columns — because the
+/* TWO SHAPES, ONE PIPELINE. `--width=half` is `musicPlayer`: the lines sit in a single list under the
+   player. `--width=full` is `lyricSheet` per [03]: the <h3> is the title, the h4 carries the
+   performer, and the lines and the explainer sit in two columns — because the
    highlight is honest only while a line and a row are the same thing, and a long line in a narrow
-   column wraps into three rows under a mark that is supposed to be singing one. The figcaption comes
-   after the sheet in the full shape (HTML requires it first or last) and carries the attribution. */
+   column wraps into three rows under a mark that is supposed to be singing one. */
 const full = /^full/i.test(arg('width', 'half'));
 const sheet = [
   '  <ol class="vz-lyrics">',
@@ -669,9 +900,8 @@ const fig = full
   ? [
       '<div class="panel itemsize" data-kind="teach">',
       '<h3>' + esc(songName) + '</h3>',
+      '<h4>' + esc(performer) + '</h4>',
       '<figure class="vz-play">',
-      performer ? '  <h4>Performed by <b>' + esc(performer) + '</b></h4>'
-                : '  <h4>' + esc(String(credit)) + '</h4>',
       '  <audio class="vz-audio" src="../' + destRel + '" data-duration="' + cutM.duration.toFixed(2) +
         '" controls preload="metadata"></audio>',
       '  <div class="vz-controls">',
@@ -684,7 +914,6 @@ const fig = full
       ...sheet.map(l => '  ' + l),
       '    <p class="dim">ONE PARAGRAPH: what these words are doing (never what the block is)</p>',
       '  </div>',
-      '  <figcaption>' + (attribution ? attribution + ' — ' : '') + licenceLine + '</figcaption>',
       '</figure>',
       '</div>',
       '<!-- OPTION slot: a second .panel below, holding whatever the lesson adds to this block -->',
@@ -692,9 +921,8 @@ const fig = full
   : [
       '<div class="panel itemsize-half" data-kind="teach">',
       '<h3>' + esc(songName) + '</h3>',
+      '<h4>' + esc(performer) + '</h4>',
       '<figure class="vz-play">',
-      '  <figcaption>' + (compound || !performer ? (attribution || '') : 'Performed by <b>' + esc(String(credit)) + '</b>') +
-        (attribution ? ' — ' : (performer ? ' — ' : '')) + licenceLine + '</figcaption>',
       '  <audio class="vz-audio" src="../' + destRel + '" data-duration="' + cutM.duration.toFixed(2) +
         '" controls preload="metadata"></audio>',
       '  <div class="vz-controls">',
