@@ -272,6 +272,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .qgrid{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;column-gap:14px;row-gap:12px;min-width:0}
 
 .qgrid .qopts,.qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 30px}
+/* ## BLANKS — an item holds one phrase and its `input.gap`; `.blanks` wraps items as rows, `.blanks.sent` tiles them in columns at `--rows`, `.blanks.cols` fills grid columns of at least 240px; in all three the field follows the text and a `<br>` before it puts it on its own line; a gap is as long as the answer it asks for (`--gap-w`, 9em unset) and never wider than its item. */
 .blanks{display:flex;flex-wrap:wrap;gap:14px 24px;margin:10px 0}
 .blanks.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
 /* Complete and Clear: Complete puts each key on its own line under its field and greens the right option;
@@ -297,8 +298,8 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .qgrid.stack .qopts{margin-top:4px}
 .blanks.sent{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(var(--rows,2),auto);grid-auto-columns:minmax(0,1fr);column-gap:28px}
 .blanks.sent.wide{display:block}
-.blanks.sent>div{display:block;margin:8px 0}
-.blanks.sent>div input.gap{display:inline-block;margin:0 .2em}
+.blanks.sent>*{display:block;margin:8px 0}
+.blanks.sent>* input.gap{display:inline-block;margin:0 .2em}
 
 
 body.editing #hlLayer,body.editing #noteLayer{display:none}
