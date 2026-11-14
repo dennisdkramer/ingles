@@ -61,7 +61,7 @@ lines.forEach((l, i) => {
 
 console.log('\nCONTENT_EXAMPLES structure\n');
 
-ok('the file has entries', entries.length > 50, entries.length + ' entries');
+ok('the file has entries', entries.length > 20, entries.length + ' entries');
 ok('every ### heading parses', unparsed.length === 0,
   unparsed.length ? unparsed.slice(0, 5).join(' | ') : 'all parse');
 

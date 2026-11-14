@@ -633,7 +633,7 @@ window.GAMES4 = (function () {
     if (this.itemTime) stage.appendChild(bar);
     this.bar = bar; this.barFill = bar.querySelector('i');
     this.stage = stage; this.hudEl = hud;
-    /* the stage goes BELOW the block's lettered header, never above it: the `## BLOCK HEADER` contract requires the h3 to be
+    /* the stage goes BELOW the block's lettered header, never above it: the `## PAGE SCAFFOLD` contract requires the h3 to be
        the block's first line, so a block that opens with one keeps it on top and the stage lands directly
        under it. A block whose markup has no heading is inserted at the top exactly as before. */
     var head = root.firstElementChild;
@@ -3758,6 +3758,13 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
         /* a hit costs a LIFE, never a point: the score only ever counts the hits that landed, so a wrong
            answer takes a heart and leaves the score exactly where it was. */
         lives = Math.max(0, lives - 1);
+        /* EXCEPT IN THIS FIGHT (owner note on [51]): every heart lost costs a POINT as well, so the
+           number the run ends on is the hits that landed minus the hearts spent. `best` is dragged
+           down with it, because `finalScore` hands back the HIGHEST a run reached and would otherwise
+           return the point on the end card. Nothing else reads `best` here — bossRaid never restarts
+           a run, which is the only other thing that keeps it. */
+        r.score = Math.max(0, r.score - 1);
+        r.best = Math.min(r.best || 0, r.score);
         bossTurn();
         if (!lives) {
           hero.classList.add('down');

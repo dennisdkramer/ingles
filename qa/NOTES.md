@@ -38,76 +38,10 @@ content belongs in its `###` sections.
 ### [02]
 
 → CONTENT_EXAMPLES.md §`[02]`
-make 1/3 width
 
 ### [03]
 
 → CONTENT_EXAMPLES.md §`[03]`
-delete the first exm
-
-### [15]
-
-→ CONTENT_EXAMPLES.md §`[15]`
-
-### [16]
-
-→ CONTENT_EXAMPLES.md §`[16]`
-
-### [17]
-
-→ CONTENT_EXAMPLES.md §`[17]`
-
-### [28]
-
-→ CONTENT_EXAMPLES.md §`[28]`
-
-### [29]
-
-→ CONTENT_EXAMPLES.md §`[29]`
-
-### [30]
-
-→ CONTENT_EXAMPLES.md §`[30]`
-
-### [11]
-
-→ CONTENT_EXAMPLES.md §`[11]`
-
-### [12]
-
-→ CONTENT_EXAMPLES.md §`[12]`
-
-### [13]
-
-→ CONTENT_EXAMPLES.md §`[13]`
-
-### [21]
-
-→ CONTENT_EXAMPLES.md §`[21]`
-
-### [22]
-
-→ CONTENT_EXAMPLES.md §`[22]`
-
-### [23]
-
-→ CONTENT_EXAMPLES.md §`[23]`
-
-### [24]
-
-→ CONTENT_EXAMPLES.md §`[24]`
-
-### [25]
-
-→ CONTENT_EXAMPLES.md §`[25]`
-
-### [26]
-
-→ CONTENT_EXAMPLES.md §`[26]`
-
-### [27]
-
-→ CONTENT_EXAMPLES.md §`[27]`
 
 ### [04]
 
@@ -116,7 +50,25 @@ delete the first exm
 ### [05]
 
 → CONTENT_EXAMPLES.md §`[05]`
-what is the purpose of this, other than just to show that something is wrong? if nothing else, delete
+improve the drawings for each location so they are either obviously recognizable OR a building with a sign that indicates what it is ($ BANK, for example) as part of the drawing. Remove the normal text names. put the check boxes centered at the bottom of each location (above the street). Put street names in italic on the streets - vertical streets get names running vertically.  Remove the questions portion below the map. Change the heading to "Street map for directions and relative locations"  and clear the min/max numbers
+
+### [10]
+
+→ CONTENT_EXAMPLES.md §`[10]`
+
+### [17]
+
+→ CONTENT_EXAMPLES.md §`[17]`
+delete the contents of the second block and move the explainer below the chart in block 1 into the second block
+
+### [19]
+
+→ CONTENT_EXAMPLES.md §`[19]`
+change the headline to "A chart with information about an event and questions about it". change the min/max numbers to <2|6><2|4>
+
+### [20]
+
+→ CONTENT_EXAMPLES.md §`[20]`
 
 ### [06]
 
@@ -133,92 +85,72 @@ what is the purpose of this, other than just to show that something is wrong? if
 ### [09]
 
 → CONTENT_EXAMPLES.md §`[09]`
+delete
 
-### [10]
+### [11]
 
-→ CONTENT_EXAMPLES.md §`[10]`
+→ CONTENT_EXAMPLES.md §`[11]`
 
-### [18]
+### [12]
 
-→ CONTENT_EXAMPLES.md §`[18]`
+→ CONTENT_EXAMPLES.md §`[12]`
 
-### [19]
+### [13]
 
-→ CONTENT_EXAMPLES.md §`[19]`
+→ CONTENT_EXAMPLES.md §`[13]`
+make it half width, <h3> is a line about the context, <h4> is instruction text if applicable. Make the lines alternate between speakers :: rafa has two lines in a row, should be separated by '-' not separate lines. Header text is "Standard dialog block"
 
-### [20]
+### [14]
 
-→ CONTENT_EXAMPLES.md §`[20]`
+→ CONTENT_EXAMPLES.md §`[14]`
 
-### [39]
+### [15]
 
-→ CONTENT_EXAMPLES.md §`[39]`
+→ CONTENT_EXAMPLES.md §`[15]`
 
-### dictation
+### [27]
 
-→ CONTENT_EXAMPLES.md §`dictation`
-this should be restricted t lvl 15-20+
-
-### [51]
-
-→ CONTENT_EXAMPLES.md §`[51]`
-
-### [40]
-
-→ CONTENT_EXAMPLES.md §`[40]`
-
-### [52]
-
-→ CONTENT_EXAMPLES.md §`[52]`
-
-### [63]
-
-→ CONTENT_EXAMPLES.md §`[63]`
-
-### [31]
-
-→ CONTENT_EXAMPLES.md §`[31]`
-
-### [64]
-
-→ CONTENT_EXAMPLES.md §`[64]`
-
-### [32]
-
-→ CONTENT_EXAMPLES.md §`[32]`
-
-### [33]
-
-→ CONTENT_EXAMPLES.md §`[33]`
-
-### [34]
-
-→ CONTENT_EXAMPLES.md §`[34]`
-
-### [35]
-
-→ CONTENT_EXAMPLES.md §`[35]`
+→ CONTENT_EXAMPLES.md §`[27]`
 
 ### [36]
 
 → CONTENT_EXAMPLES.md §`[36]`
 
-### [37]
-
-→ CONTENT_EXAMPLES.md §`[37]`
-
 ### [38]
 
 → CONTENT_EXAMPLES.md §`[38]`
 
+### [30]
+
+→ CONTENT_EXAMPLES.md §`[30]`
+
+### [35]
+
+→ CONTENT_EXAMPLES.md §`[35]`
+
+### [31]
+
+→ CONTENT_EXAMPLES.md §`[31]`
+
+### [16]
+
+→ CONTENT_EXAMPLES.md §`[16]`
+
+### [37]
+
+→ CONTENT_EXAMPLES.md §`[37]`
+
 ### [41]
 
 → CONTENT_EXAMPLES.md §`[41]`
-This one is useful but I need to make some tweaks, leaving a note for myself to remember later
 
 ### [42]
 
 → CONTENT_EXAMPLES.md §`[42]`
+
+### [43]
+
+→ CONTENT_EXAMPLES.md §`[43]`
 
 ### [44]
 
@@ -227,10 +159,6 @@ This one is useful but I need to make some tweaks, leaving a note for myself to 
 ### [45]
 
 → CONTENT_EXAMPLES.md §`[45]`
-
-### [43]
-
-→ CONTENT_EXAMPLES.md §`[43]`
 
 ### [46]
 
@@ -244,50 +172,78 @@ This one is useful but I need to make some tweaks, leaving a note for myself to 
 
 → CONTENT_EXAMPLES.md §`[48]`
 
-### dictogloss
+### [49]
 
-→ CONTENT_EXAMPLES.md §`dictogloss`
-fix the margins on the text entry box
+→ CONTENT_EXAMPLES.md §`[49]`
 
-### blackoutLine
+### [50]
 
-→ CONTENT_EXAMPLES.md §`blackoutLine`
-what is the purpose of this
+→ CONTENT_EXAMPLES.md §`[50]`
 
-### [71]
+### [51]
 
-→ CONTENT_EXAMPLES.md §`[71]`
-delete the crowd sound. halve the volume of the buzzer sound. On miss AND on wrong target, play the gunshot and buzzer sounds together
+→ CONTENT_EXAMPLES.md §`[51]`
 
-### [80]
+### [52]
 
-→ CONTENT_EXAMPLES.md §`[80]`
-make each word card twice as big. grid anchored to center, never moves. 321 countdown centered over grid/curtain. 54321 countdown card 30px right of grid, vertically centered. improve curtain graphics is possible without affecting anything else.
-add *Begin Round - Hear Word* button 15px below the grid which initiates each round and starts the 321 countdown
-button text not visible (black on dark blue?)
-make grid items 15px less wide each
+→ CONTENT_EXAMPLES.md §`[52]`
 
-### [82]
+### [53]
 
-→ CONTENT_EXAMPLES.md §`[82]`
-score is countdown, hidden during play
-each heart lost subtracts 1 from score, boss should take [total # questions]-2 hits to kill
+→ CONTENT_EXAMPLES.md §`[53]`
 
-### [74]
+### [54]
 
-→ CONTENT_EXAMPLES.md §`[74]`
-put the two answer choices on the right bottom, stacked vertically, 30px between.
-move the correct answer stack items down 35px. Make each item in the stack consecutively 20px thinner, make the stack right-justify.
-Once the stack is built, have the player do a mario-style run and jump to a flag, if all the answers are correct he hits the flag and a coin pops out. If score<max-score> he misses and falls on his face
+→ CONTENT_EXAMPLES.md §`[54]`
 
-### [79]
+### [55]
 
-→ CONTENT_EXAMPLES.md §`[79]`
-is showing prompt card on game start screen
-make hint text white
-(answer must have three distractors per word that never fit the words already placed)
+→ CONTENT_EXAMPLES.md §`[55]`
 
-### [75]
+### [56]
 
-→ CONTENT_EXAMPLES.md §`[75]`
-must be possible for wall to continue, second wall to come, game target is continuous flight through all the gates in one 'run'
+→ CONTENT_EXAMPLES.md §`[56]`
+
+### [57]
+
+→ CONTENT_EXAMPLES.md §`[57]`
+
+### [58]
+
+→ CONTENT_EXAMPLES.md §`[58]`
+
+### [59]
+
+→ CONTENT_EXAMPLES.md §`[59]`
+
+### [60]
+
+→ CONTENT_EXAMPLES.md §`[60]`
+
+### [61]
+
+→ CONTENT_EXAMPLES.md §`[61]`
+
+### [62]
+
+→ CONTENT_EXAMPLES.md §`[62]`
+
+### [63]
+
+→ CONTENT_EXAMPLES.md §`[63]`
+
+### [64]
+
+→ CONTENT_EXAMPLES.md §`[64]`
+
+### [65]
+
+→ CONTENT_EXAMPLES.md §`[65]`
+
+### [66]
+
+→ CONTENT_EXAMPLES.md §`[66]`
+
+### [67]
+
+→ CONTENT_EXAMPLES.md §`[67]`

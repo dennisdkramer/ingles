@@ -7,8 +7,8 @@
  * that: a bigger target, a bar you can drag, a time readout, and the lyric line lit while sung.
  *
  * THE MARKUP IT EXPECTS (all of it in the page, nothing generated here):
+ *   <h4>…who performs it…</h4>               (the block's credit line — italic by the `h4` rule)
  *   <figure class="vz-play">
- *     <figcaption>…credit…</figcaption>
  *     <audio class="vz-audio" src="../assets/<name>.mp3" controls preload="metadata"></audio>
  *     <div class="vz-controls"><button class="vz-btn">▶</button>
  *       <span class="vz-time" data-now>0:00</span>

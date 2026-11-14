@@ -1,6 +1,6 @@
 // build-lessons.mjs — derive lessons.json from each lesson page's content <h1>.
 // Run: node build-lessons.mjs  (or `npm run build:lessons` / `npm run qa`)
-// Reads EVERY TRACK FOLDER's lesson*.html (the PUBLISHED copies, not the .edit.html sidecars), takes the
+// Reads EVERY TRACK FOLDER's lesson*.html (the published lesson pages), takes the
 // lesson number from the filename and the title from the content-area <h1>, and writes root lessons.json
 // plus root tracks.json (each track's label and order, read from that folder's track.json).
 // A TRACK IS A FOLDER: discovery replaced the hardcoded ['kids','business','adult'], so a track created

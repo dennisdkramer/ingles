@@ -112,7 +112,7 @@ export function hasAllFlag(argv = process.argv.slice(2)) {
   return argv.includes('--all');
 }
 
-/** `kids/lesson3.edit.html` never matches; a rename line counts its destination. The leading class
+/** A rename line counts its destination. The leading class
  *  tolerates git's porcelain prefix (`?? adult/lesson22.html`) and quoted paths, so an untracked page —
  *  which is exactly what a page being written looks like — is in scope. The track alternation is built from
  *  the DISCOVERED tracks, so a page in a track that did not exist when this line was written still counts. */
