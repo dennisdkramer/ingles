@@ -316,3 +316,8 @@ delete
 
 → CONTENT_EXAMPLES.md §`[62]`
 delete
+
+### [39]
+
+→ CONTENT_EXAMPLES.md §`[39]`
+scramble the word order of the prompt
