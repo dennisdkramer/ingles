@@ -10,11 +10,12 @@
 	6) (<TRACK>-ROADMAP.md '##' HEADERS ONLY) - Reference **only to reduce redundancy with other lessons**.
 	3) FUNCTION.md [CONTENT] - Only within this section
 	2) <TRACK>-REGISTER.md - **<TRACK> is the PERSONA - guides**: context, voice, and vocabulary (tiered by real-life frequency (`core` → `common` → `situational` → `rare`, in its tells block))
-	5) `node qa/brief.mjs --index` - the **ONLY `###`-level** headings that follow CONTENT_EXAMPLES.md `[INSTRUCTIONS]` (the grammar block itself comes with the full run; one entry whole is `--section=NN`; `--indexes` prints this index and item 7's in one run). **CARRIES NO AUTHORITY AT ALL** — vehicle may be chosen by [BUILD] 3(d), content is written for the lesson. An entry whose heading carries `IGNORE - pending updates` is withheld (`--index=raw` omits the line; the JSON flags it `ignore`), because the shape is still waiting for its update, and is not available.
-	7) `node qa/brief.mjs --css` - style.css `/* ## ` Headers ONLY, each with its line number; no stored copy exists (`--indexes` prints it with item 5's index). Styling, formatting implementation (eg. which class or knob does what).
+	5) [((CONTENT_EXAMPLES.md [INSTRUCTIONS]) SECTION ONLY) + `node qa/brief.mjs --index=raw`] - **CARRIES NO AUTHORITY AT ALL** — vehicle may be chosen by [BUILD] 3(d), content is written for the lesson.
+	7) `node qa/brief.mjs --css` - Headers ONLY, each with its line number for Styling & formatting implementation only (eg. which class or knob does what).
 
-- As-Needed Inputs — **read only the section that answers the question, never the whole file.** The engines are implementation, not pedagogy: engine1.js, engine2.js, engine4.js (`window.GAMES4`; a page that uses a game block must add `<script src="../engine4.js"></script>` itself, after engine2.js). CONTENT_EXAMPLES.md `### ` section content for each header chosen by ([BUILD] 3(d)) during the current step - that section only. The contents of a specific (style.css `/* ## `) **ONLY WHEN** that span is mandatory to correct authoring of specific HTML for the lesson being generated.
-When the lesson wants to include music/audio: qa/AUDIO.md
+- As-Needed Inputs:
+	- qa/AUDIO.md - When the lesson wants to include music/audio.
+	- CONTENT_EXAMPLES.md `### ` section content for each header chosen by ([BUILD] 3(d)) during the current step - that section only.
 
 - Allow: Downloaded materials, assets/. - **Withhold all other files, all other file reads require user sign-off**.
 
