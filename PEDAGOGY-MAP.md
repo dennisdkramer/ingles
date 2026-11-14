@@ -1,71 +1,45 @@
 # [GENERATION] PROCESS & DEFAULTS (binding) - DO NOT MODIFY WITHOUT USER SIGN-OFF
-1. No lesson page or content vehicle is an input, and **No shape is inherited from one** - not a neighbouring lesson, not another track's page, not a page being replaced. A page that references, copies, or reproduces a sibling's shape is a failed generation, not a variant.
-2. The page must run on the site: mechanical skeleton + deliverable state the engines can read;
-3. Every factual claim is true and defensible — never pad a section with an unverified assertion.
+1. No lesson page or content vehicle from **this or any other page** may be inherited, referenced, or copied. - 
+2. For each section of every page in a lesson generation task, after its content is generated, when its shape is chosen - append into PAST_BATCHES.md an affirmation that you chose the shape independently, that it does NOT copy or repeat the prior section or lesson's shape (if it does, you must defend why), and your reasoning for why it is the best way to present that part of the lesson's content.
 
 ## [I/O]
-- MANDATORY Inputs - **Reading order is the sequence printed below; PRECEDENCE IS NUMERICAL ORDER**:
-	1) THIS FILE
-	4) (<TRACK>-ROADMAP.md [#]) section and its contents, never the whole file, and never another lesson's range: this entry is the roadmap that the lesson's contents will be built from. Coverage ≠ section plan: a roadmap item doesn't get its own h2 unless it earns one.
-	6) (<TRACK>-ROADMAP.md '##' HEADERS ONLY) - Reference **only to reduce redundancy with other lessons**.
-	3) FUNCTION.md [CONTENT] - Only within this section
-	2) <TRACK>-REGISTER.md contains the [PERSONA] of the STUDENT we are teaching to and details of how the track is built to meet their specific goals and needs. **This file - guides: context, voice, and vocabulary (tiered by real-life frequency (`core` → `common` → `situational` → `rare`, in its tells block))
-	5) [((CONTENT_EXAMPLES.md [INSTRUCTIONS]) SECTION ONLY) + `node qa/brief.mjs --index=raw`] - **CARRIES NO AUTHORITY AT ALL** — vehicle may be chosen by [BUILD] 3(d), content is written for the lesson.
-	7) `node qa/brief.mjs --css` - Headers ONLY, each with its line number for Styling & formatting implementation only (eg. which class or knob does what).
-
-- As-Needed Inputs:
+- MANDATORY Inputs - **Reading order is the sequence printed below; PRECEDENCE IS NUMERICAL ORDER, this file is #3 in that order**:
+	
+	1) (<TRACK>-ROADMAP.md [#]) section and its contents, never the whole file, and never another lesson's range: this entry is the roadmap that the lesson's contents will be built from. Coverage ≠ section plan: a roadmap item doesn't get its own h2 unless it earns one.
+	5) (<TRACK>-ROADMAP.md '##' HEADERS ONLY) - Reference **only to reduce redundancy with other lessons**.
+	4) FUNCTION.md [CONTENT] - Only within this section if needed 
+	2) <TRACK>-REGISTER.md contains the [PERSONA] of the STUDENT and guides the content and tone of the lessons along with the roadmap.
+	6) `node qa/brief.mjs --css` - Headers ONLY, each with its line number for Styling & formatting implementation only (eg. which class or knob does what).
+	
+- As-Needed Inputs (**Withhold all other files**):
 	- qa/AUDIO.md - When the lesson wants to include music/audio.
-	- CONTENT_EXAMPLES.md `### ` section content for each header chosen by ([BUILD] 3(d)) during the current step - that section only.
 
-- Allow: Downloaded materials, assets/. - **Withhold all other files, all other file reads require user sign-off**.
-
-- **Output ONLY** = `<track>/lesson<N>-<Title>.html`, **unpadded** (`lesson1-First Talk &amp; the Sentence Skeleton.html`, never `lesson01-…`): the title in the filename IS the lesson's name, so no page is ever read to learn a title, and the landing links are read from `lessons.json`. The title is written exactly as it should read, spaces and all. Built on `_shell.html`. **artifact creation, do not read**: PAST_BATCHES.md
+- **Output** = `<track>/lesson<N>-<Title>.html`, 
 
 ## [BUILD] SHAPE
-1. The build is a **synthesis according to [I/O] Precedence and the model to make outstanding teaching material**
-2. Track register, [LEVEL] and model intuition may supercede the ROADMAP's items, but never silently - the purpose for the deviation must be authored below the <h2> of the affected content.
-3. Use your creativity to decide what [[type of content] and [in what order]] is optimal for the student to learn from, and enjoy each lesson. **The order is always** Pedagogical shape -> Lesson Content -> THEN vehicles are imagined or selected which best present that content in that shape. **Consider the following**:
-  - a) Can the concepts be grouped or categorized to optimize understanding?
-  - b) To what extent and in what combination does student success depend on [understanding [a concept] or [translation mapping]], [training and getting accustomed to its use], or [memorization]?
-  - c) Is this lesson/section/block a good opportunity to [introduce, compare, or make note of] any [synonyms, antonyms, homophones, homographs, false cognates, relevant idioms/expressions, etc.]?
-  - d) Considering (a), (b), and (c), is the given content well suited to a particular display element, vehicle, or game from [I/O] 5 or from an outside source?
-  - e) If an item from among [I/O] #5 `###` headings is chosen, read only that heading's entry for implementation details (`node qa/brief.mjs --section=NN` prints one whole). The heading is the shape, the itemsize and what it does; the `markup` and `info` lines under it are how it is built. Any shape and vehicle you imagine is equally valid and may be used for any part of any lesson - examples are mere possibilities.
+Consider:
+  a) Can the concepts be grouped or categorized to optimize understanding?
+  b) To what extent and in what combination does student success depend on [understanding [a concept] or [translation mapping]], [training and getting accustomed to its use], or [memorization]?
+  c) Is this lesson/section/block a good opportunity to [introduce, compare, or make note of] any [synonyms, antonyms, homophones, homographs, false cognates, relevant idioms/expressions, etc.]?
+  d) Considering (a), (b), and (c), what is the best way to organize, display, and teach these items?
 
 ## [PORTUGUESE] Quantity decreases as student english level increases **HIGH PRIORITY**
-- Portuguese may be used in [**Lesson introduction, explanatory, tip, headline, or column header**] text ONLY IF the necessary information in english would not be understood by the student at the level of the lesson that contains it. 
-- For any generated content which is NOT [[**Lesson introduction, explanatory text, tip, headline, or column header**]], [it is Portuguese ONLY when *defensibly optimal for teaching purposes*] ELSE it is authored in English].
-- Use your judgement, but the lesson is flagged for review if target share of these texts authored in Portuguese falls outside this range: 
-       - **ceiling = 75 − (L − 5) × 1.8 %** - no more Portuguese than this, at any lesson number;
-       - **floor = 35 − (L − 5) × 1.8 %**, clamped at 0 - no less, because a lesson that stopped glossing has abandoned its reader.
+- Portuguese is used to explain content or give translations when the necessary information in english would not be well understood by the student at the level of the lesson that contains it. 
 
-## [LEVEL]
-- "STUDENT LEVEL" = [Current Lesson #].
-- "STUDENT LEVEL APPROPRIATE" = at or above [STUDENT LEVEL]. Nothing about this is recorded on the page — it decides what gets written.
-- **Ability grows with the lesson number, and it grows through the page's language rather than through simpler content.** Across the course, earlier lessons are assumed more or less known, inferred only from the roadmap's `##` headers, never from a page. Explanations move into English as their language becomes accessible to the student, and functional fluency is expected by the end of the course.
-- **Before authoring a block, ask of the student this track describes, at this number: how hard is this for them to understand?** The register says who they are, the number says where they are, and no general learner stands in for either.
-- **Judge that by distance, not by feeling.** What maps directly onto Portuguese is cheap; what maps onto it and misleads is expensive; what has no counterpart is built from nothing. Frequency says nothing here: "descend" is cheaper than "go down" although it is the rarer word. This is why the present perfect costs this student more than the past perfect although it costs a native speaker less — the mapping breaks in one and holds in the other.
-- **Sentence complexity is what the sentence asks the reader to hold at once**: a clause inside a clause, a tense that changes mid-sentence, a reference the reader carries to the end, a form whose Portuguese counterpart does not match. Length alone says nothing — long parallel sentences are easier than a short one that nests.
-- **The prose is never evidence.** A page in short sentences is not an easy lesson of its number; prose is judged for clarity by [AUTHORING] and never stands in for the student's difficulty.
+
+## [LEVEL] - Prosem teaching, and training - activities, prompts, quizzes, etc.. are authored at a difficulty level which is accessible but mildly challenging for the student who has arrived to that lesson.
+- "STUDENT LEVEL" is assumed and relative to [Current Lesson #] and the english concepts and vocabulary they have learned in the course up to that point.
+- **Ability grows with the lesson number** Lesson 1 assumes the student knows no english. By lesson 50 the student should have achieved functional fluency.
+- **What maps directly onto Portuguese is cheap; what maps onto it and misleads is expensive; what has no counterpart is built from nothing. Frequency says nothing here: "descend" is cheaper than "go down" although it is the rarer word. Present perfect costs this student more than the past perfect although it costs a native speaker less — the mapping breaks in one and holds in the other.
+- **Sentence complexity is what the sentence asks the reader to hold at once**: a clause inside a clause, a tense that changes mid-sentence, a reference the reader carries to the end, a form whose Portuguese counterpart does not match.
 - **Importance can outrank level.** A concept the track cannot do without belongs in the lesson that needs it even when it is expensive, and then the support around it grows — more teaching before the item, more training after it — the item is not lowered and the level is not moved.
 
 ## [AUTHORING]
-- `<TRACK>-REGISTER.md>` governs every string the student reads — headline, explanation, stem, option, note, table cell — not only dialogue and vocabulary. Would this persona write this, in this situation, in this country? An explanation in textbook English beside slang options teaches the student to answer in the wrong voice. That comparison is the author's, applied string by string
-- Explanatory prose may live anywhere: lead, chart cell, an extra explanation column, a `tr.note` row - it must be clear and directly aid student understanding - There is no cap on sections, examples, exercises, or any other element, and no page-length limit. Never cut useful tips and explanations - avoid filler and metaphor.
 - Every (new word/form/concept) the student must understand is presented before it is used; if a block wants the student to *infer*, the page says so. An item never requests a judgement on an axis the page didn't define prior to the item, and no 'terminology' is used to categorize or describe linguistic concepts or classes if it is not verifiably in real-world use.
-- Never show the answer in a prompt, and show Portuguese hints/explainers only where NECESSARY — the English that would carry the point sits above this lesson's level — or OPTIMAL — the point is a contrast between the two languages that English cannot make. Test, in order: can the student act correctly without it? cut it. Could the same point be made in English at this level? write English. Otherwise the smallest Portuguese that unblocks it: the word, the clause — never a translation of English already on the page.
 - No copy-exercises: the student produces from memory or meaning, never transcribes the prompt.
-- Whenever student level appropriate, teach the rule, the reasoning (the mental model), and its direct consequences (integrated with the lesson content or in its own section as appropriate); say plainly when [there is no clear or consistent] [rule and/or reasoning].
-- False cognates (eg. 'pretend' -X- 'pretender' -> 'intend') and words which [in one language cleanly map onto] [more than one word in the other] (eg. 'live' -> 'morar' / 'viver') are presented together when possible and explained/demonstrated as appropriate.
-- Practice trains the lesson's concepts, inline following what they train and/or in a penultimate section. The last section is a quiz that tests all of it — it may echo the training, never copy it.  **Every new item and/or concept is thoroughly taught and/or demonstrated, confirmed with training, subsequently TESTED - each by its own question.** A vocabulary item or a concept is tested only when it is the correct answer to a question that is about it: one question per new item, at least one question per concept (difficult concepts like present perfect tense require MANY questions). Additional questions with trained content as distractors may be authored as appropriate but do not count towards training/testing requirements. 
+- Teach the rule, the reasoning (the mental model), and its direct consequences.
 - Multiple-choice options are shuffled so the right one is not always in the same slot.
-- **An item's option count is set by what it has to discriminate, never by habit.** 2 is right only when the pair is genuinely binary, and 5–6 belong to an item whose content supplies that many plausible candidates (a family of ten look-phrases, six tense forms). If a vehicle has a maximum option count, it is stated in its entry in the vehicles index.
-- Per ([BUILD] 3), content must be authored first, and vehicles which are appropriate **may** be chosen to hold it. The build may choose to place its content directly into the section as it sees fit - choosing no pre-existing vehicle - or may or choose one which is an optimal fit for the authored content.
-- A block that asks the student to write carries an `input.gap` or a `textarea` other than `#feed` — a radio-only block cannot ask for writing. A block that trains nothing on its own is a **teaching** block tagged by the <TEACH> atom in vehicle headers.
-- For any section and/or block, a concise <h4> or <p> text may be included below the header to explain its contents or direct the student only if it does not repeat any other content on the page.
-- Each item carries the condition that decides it (a gloss that could go either way is not an item).
-- Activity answer options match the lesson in concept and the [LEVEL] in length and linguistic complexity — a phrase answer gets phrase distractors, never one-word ones.
+- Activity answer options match the lesson in concept and the [LEVEL] in length and linguistic complexity.
 - For any adjascent columns or containers, their contents should be authored with similar heights, adding more to the shorter and never subtracting from the taller.
-
-## [PAGE] MECHANICS — the order a page is decided
-- The generation order is always content-first: the lesson's shape, then the student-facing strings, then content and concept-based organization — parallel elements sit beside each other in matching block sizes (three things to compare are three thirds in one row, a pair is two halves) so the comparison reads as one set. Then the vehicle ([BUILD] 3) is chosen and applied. A block's size follows the content it has been chosen for, never anticipates it. The block takes the narrowest slot the content fills — its width steps up one slot only when a structural element stops fitting — prose wraps, so prose never widens a block. → (style.css `/* ## BLOCK WIDTHS`)
+- A block's size follows the content it has been chosen for, never anticipates it. The block takes the narrowest slot the content fills — its width steps up one slot only when a structural element stops fitting — prose wraps, so prose never widens a block. → (style.css `/* ## BLOCK WIDTHS`)
 
