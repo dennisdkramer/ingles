@@ -82,8 +82,6 @@ carry `data-a` (or a `.listen` whose text matches the right option), because `en
 key that way and an item with an empty key scores every correct answer as a miss — which is exactly the 30.7
 report. Worth fixing before the next track rebuild, since it is the only automated check on game scoring.
 
-
-
 ## adult/lesson2 — one unmasked "shit" (accepted, warn-only)
 `qa/register.mjs` no longer fails on an uncensored word in any form: it prints `⚠ unmasked: …` per page and that is
 all it does with it. This one is a `sheet` / `shit` minimal pair in a listening item, where the spelling IS the
