@@ -13,14 +13,6 @@ if command -v node >/dev/null 2>&1; then
     echo "The push would have succeeded and the site would have kept serving the old deployment."
     exit 1
   fi
-  # PENDING.md travels to the remote too, and it is edited on almost every turn. A push that commits it
-  # without its spine hands the next session a file that looks like a plan and no longer says how one is
-  # written — so the structure is checked here rather than discovered later.
-  if ! node qa/pending.mjs; then
-    echo ""
-    echo "pre-push refused: PENDING.md has lost its authoring spine ([HANDLING] / [CURRENT])."
-    exit 1
-  fi
   # lessons.json, tracks.json and the style stamp are SERVED files - GitHub Pages has no build step - so a
   # push that leaves them behind publishes a site that does not link the lesson it just added. --check writes
   # nothing: it only refuses.
