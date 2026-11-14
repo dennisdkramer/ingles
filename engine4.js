@@ -3123,15 +3123,13 @@ function say(text, lang) {
     stage.appendChild(box);
 
     var queue = [], at = 0, parts = [], given = '', lives = 3, top = 3, busy = false;
-    /* TWO DIFFICULTY LEVELS, decided by the lesson the block is on and never shown to the student
-       (qa/NOTES.md 53): `data-level` on the block wins, else the page's own L, and a lesson numbered 20
-       or above is level 2. LEVEL 1 is the game as it always was. LEVEL 2 HAS NO HINT AT ALL — the word
-       that fits has to be read off the sentence, not off a card — and its items must then hold nothing
-       that could be put there: every other pad is impossible in that position, not merely unlikely
-       (qa/NOTES.md 54, an authoring rule this engine cannot test). */
+    /* TWO DIFFICULTY LEVELS, decided by the lesson the page declares and never shown to the student
+       (qa/NOTES.md 53): a lesson numbered 20 or above is level 2. LEVEL 1 is the game as it always
+       was. LEVEL 2 HAS NO HINT AT ALL — the word that fits has to be read off the sentence, not off a
+       card — and its items must then hold nothing that could be put there: every other pad is
+       impossible in that position, not merely unlikely (qa/NOTES.md 54, an authoring rule this engine
+       cannot test). */
     function level() {
-      var d = parseInt(r.root.getAttribute('data-level'), 10);
-      if (!isNaN(d)) return d;
       try { return typeof L === 'number' ? L : 0; } catch (e) { return 0; }
     }
     function hard() { return level() >= 20; }

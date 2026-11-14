@@ -42,8 +42,7 @@
 
      LEVERS. `data-slots` (a `|` list, defaulting to the block's own options) · `data-depart` (seconds on
      the dock, 0 = no clock) · `data-labels` (`auto` | `1` | `0`: the car-name plaques) · `data-label-max`
-     (the level the plaques stop helping, 30) · `data-level` (this block's level, when the page has no
-     lesson number of its own). The labels are HIDDEN above `data-label-max`: by then the student is
+     (the level the plaques stop helping, 30). The labels are HIDDEN above `data-label-max`: by then the student is
      expected to know the order, and a plaque saying "Opinion" over the front car is the answer written
      on the page. */
   PLUGINS.trainOrder = function (r) {
@@ -93,11 +92,9 @@
       if (isFinite(n) && n >= 1 && n <= N) return Math.round(n) - 1;
       return -1;
     }
-    /* the student's level. A lesson page declares `L`; a preview page does not, and a block may always
-       state its own with `data-level`. No level known reads as a beginner: the plaques stay up. */
+    /* the student's level is the lesson number the page declares. A page with none reads as a
+       beginner: the plaques stay up. */
     function levelNow() {
-      var own = num(r.root, 'data-level', 0);
-      if (own > 0) return own;
       try { if (typeof L === 'number' && isFinite(L)) return L; } catch (e) { /* no lesson number */ }
       return null;
     }

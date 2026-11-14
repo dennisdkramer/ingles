@@ -34,8 +34,8 @@
      LEVERS. `data-depart` (seconds on the dock before the train behind rams it, default 30, `0` = no
      clock) · `data-slots` (the slot names, pipe separated) · `data-labels` (`auto` | `1` | `0`) with
      `data-label-max` — at `auto` the car names are SHOWN up to level 30 and HIDDEN above it, read from
-     the lesson's own `L` (or `data-level` on the block), because naming the category is the training
-     wheel and a level-30 student is meant to read the cars as positions only · `data-level` · `data-pace`
+     the lesson's own `L`, because naming the category is the training wheel and a level-30 student is
+     meant to read the cars as positions only · `data-pace`
      (a multiplier on the yard's own theatre, 1 by default — the preview page runs it quick).
 
      ENDING. The last train is still running at the bridge (or lying wrecked) when the run ends, so the
@@ -119,11 +119,9 @@
       if (isFinite(n) && n >= 1 && n <= SLOTS.length) return Math.round(n) - 1;
       return -1;
     }
-    /* the student's level. A lesson page declares `L`; a preview page does not, and a block may always
-       state its own with `data-level`. No level known reads as a beginner: the names stay up. */
+    /* the student's level is the lesson number the page declares. A page with none reads as a
+       beginner: the names stay up. */
     function levelNow() {
-      var own = num(r.root, 'data-level', 0);
-      if (own > 0) return own;
       try { if (typeof L === 'number' && isFinite(L)) return L; } catch (e) { /* no lesson number */ }
       return null;
     }

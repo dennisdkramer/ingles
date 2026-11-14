@@ -435,42 +435,25 @@ async function run() {
   ok('trainOrder: the score is the words that were fitted right (3 of 5)', tk.state().score === 3,
     'score=' + tk.state().score + '/' + tk.state().total);
 
-  /* the labels are a LEVEL lever: a plaque saying "Opinion" over the front car is the answer */
-  const lvPage = mount(`<!doctype html><html><head><meta charset="utf-8"></head><body>
+  /* the labels are a LEVEL lever: a plaque saying "Opinion" over the front car is the answer.
+     The level is the lesson number the page declares; a block cannot claim one of its own. */
+  const LVL = (id, level, attrs) => mount(`<!doctype html><html><head><meta charset="utf-8"></head><body>
     <div class="content-area">
-      <div class="game" id="l31" data-game="trainOrder" data-level="31" data-shuffle="0" data-depart="0">
+      <div class="game" id="${id}" data-game="trainOrder" ${attrs || ''} data-shuffle="0" data-depart="0">
         <p class="game-how">a</p><div class="game-list">${word(1, 'lovely', 'opinion')}</div>
         <button class="game-start" type="button">▶</button></div>
-      <div class="game" id="l31on" data-game="trainOrder" data-level="31" data-labels="1" data-shuffle="0" data-depart="0">
-        <p class="game-how">b</p><div class="game-list">${word(2, 'lovely', 'opinion')}</div>
-        <button class="game-start" type="button">▶</button></div>
-      <div class="game" id="l20" data-game="trainOrder" data-level="20" data-shuffle="0" data-depart="0">
-        <p class="game-how">c</p><div class="game-list">${word(3, 'lovely', 'opinion')}</div>
-        <button class="game-start" type="button">▶</button></div>
-    </div></body></html>`);
-  ['l31', 'l31on', 'l20'].forEach(id =>
-    lvPage.document.getElementById(id).querySelector('.game-start').click());
-  const plaques = id => lvPage.document.querySelectorAll('#' + id + ' .g4-tslot').length;
-  ok('trainOrder: level 31 hides the car labels by default', plaques('l31') === 0, plaques('l31') + ' plaque(s)');
-  ok('trainOrder: data-labels="1" puts them back', plaques('l31on') === 8, plaques('l31on') + ' plaque(s)');
-  ok('trainOrder: level 20 keeps them', plaques('l20') === 8, plaques('l20') + ' plaque(s)');
-  /* a lesson page declares its own L; a page with no level at all reads as a beginner */
-  const LBL = (id, level) => mount(`<!doctype html><html><head><meta charset="utf-8"></head><body>
-    <div class="content-area">
-      <div class="game" id="${id}" data-game="trainOrder" data-shuffle="0" data-depart="0">
-        <p class="game-how">d</p><div class="game-list">${word(1, 'lovely', 'opinion')}</div>
-        <button class="game-start" type="button">▶</button></div>
     </div>${level ? '<script>const L = ' + level + ';</script>' : ''}</body></html>`);
-  const lL = LBL('lL', 34);
-  lL.document.getElementById('lL').querySelector('.game-start').click();
+  const l31 = LVL('l31', 31), l31on = LVL('l31on', 31, 'data-labels="1"'), l20 = LVL('l20', 20),
+        l34 = LVL('l34', 34), lNo = LVL('lNo', 0);
+  [l31, l31on, l20, l34, lNo].forEach(p => p.document.querySelector('.game-start').click());
+  const plaques = (p, id) => p.document.querySelectorAll('#' + id + ' .g4-tslot').length;
+  ok('trainOrder: level 31 hides the car labels by default', plaques(l31, 'l31') === 0, plaques(l31, 'l31') + ' plaque(s)');
+  ok('trainOrder: data-labels="1" puts them back', plaques(l31on, 'l31on') === 8, plaques(l31on, 'l31on') + ' plaque(s)');
+  ok('trainOrder: level 20 keeps them', plaques(l20, 'l20') === 8, plaques(l20, 'l20') + ' plaque(s)');
   ok('trainOrder: the lesson page\'s own L is the level (L=34 hides the labels)',
-    lL.document.querySelectorAll('#lL .g4-tslot').length === 0,
-    lL.document.querySelectorAll('#lL .g4-tslot').length + ' plaque(s)');
-  const lNo = LBL('lNo', 0);
-  lNo.document.getElementById('lNo').querySelector('.game-start').click();
+    plaques(l34, 'l34') === 0, plaques(l34, 'l34') + ' plaque(s)');
   ok('trainOrder: a page with no level keeps the labels (an unknown student is no expert)',
-    lNo.document.querySelectorAll('#lNo .g4-tslot').length === 8,
-    lNo.document.querySelectorAll('#lNo .g4-tslot').length + ' plaque(s)');
+    plaques(lNo, 'lNo') === 8, plaques(lNo, 'lNo') + ' plaque(s)');
 
 
   /* ---- structural guards: the two bug classes we kept hitting ----
