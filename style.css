@@ -180,7 +180,9 @@ h2 .h2sub{font-family:var(--serif);font-size:.55em;font-weight:400;letter-spacin
 .chart tbody tr:nth-child(even) td{background:#fff8ea}
 /* the Portuguese marking itself: :lang(pt) is italic wherever it lands — see ## PORTUGUESE TEXT */
 :lang(pt){font-style:italic;font-weight:400}
+/* ## WORD BANK — `.chips` is the vocabulary a TRAIN gap item chooses from: each `<b>` is one option, anything else is text. */
 .chips > b{display:inline-block;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:2px 12px;margin:2px 6px 2px 0;font-weight:600}
+.chips > span{font-style:italic}
 h3{font-family:'Playfair Display',serif;font-weight:700;font-size:19px;color:var(--dkblue);margin:22px 0 8px;padding-left:10px;border-left:4px solid var(--tan);letter-spacing:.02em}
 /* the block's sub-header: the introduction/explainer that sits under `h3`. It is ALWAYS an `h4` and
    never a `p` — `p` is reserved for the block's own content, so a paragraph inside a block always
@@ -194,6 +196,7 @@ h4{font-family:var(--serif);font-style:italic;font-weight:600;font-size:15px;col
 .dialog{--edge:var(--rose);margin:14px 0;padding:12px 16px;background:#fff8ea;border:2px solid var(--edge);border-radius:12px}
 .row,.dialog p{margin:6px 0}
 
+/* ## LISTENING CHIP —  speaks its `data-say`: the spoken form. For teaching/training listening, not a default - aligned with each other, not appended on strings of different lengths. */
 .listen{display:inline-flex;align-items:center;justify-content:center;padding:5px 10px;margin:2px 6px 2px 0;font-size:14px;white-space:nowrap}
 button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 
