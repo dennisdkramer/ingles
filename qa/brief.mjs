@@ -12,6 +12,11 @@
  * is read after it, when the drift has already happened.
  *
  * Nothing here judges anything. No page is opened, no lesson page is read, and no file is written.
+ *
+ * WHAT IT PRINTS, in PEDAGOGY-MAP [I/O] order: the lesson's own roadmap block · that roadmap's `##` headers
+ * (reference only) · FUNCTION.md [CONTENT] · <TRACK>-REGISTER.md · the CONTENT_EXAMPLES.md [INSTRUCTIONS]
+ * grammar and one line per shape, with `--section=NN|name` for one entry whole · style.css `##` headers ·
+ * _shell.html · the seven-question gate. PEDAGOGY-MAP.md itself is printed first, and again on `--reassert`.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -119,6 +124,22 @@ let end = R.length;
 for (let i = start + 1; i < R.length; i++) if (/^## /.test(R[i])) { end = i; break; }
 emit(ROADMAP + ' - lesson ' + lesson + ' ONLY', R.slice(start, end).join('\n'));
 
+/* 2b. the roadmap's `##` headers, one line each — PEDAGOGY-MAP [I/O] 5: REFERENCE ONLY, so this lesson
+       does not repeat another one. Never a source of shapes, order or wording. */
+const RH = R.map((l, i) => ({ l, i })).filter(x => /^## /.test(x.l));
+emit(ROADMAP + ' - ' + RH.length + ' `## ` HEADERS ONLY (reference: redundancy with other lessons, nothing else)',
+  RH.map(x => ROADMAP + ':' + (x.i + 1) + '  ' + x.l.trim()).join('\n'));
+
+/* 2c. FUNCTION.md [CONTENT] and nothing else from that file — PEDAGOGY-MAP [I/O] 4. Its own heading says a
+       lesson reads this section and nothing else; the rest is runtime behaviour. */
+const FN = lines('FUNCTION.md');
+const fAt = FN.findIndex(l => /^## \[CONTENT\]/.test(l));
+if (fAt >= 0) {
+  let fEnd = FN.length;
+  for (let i = fAt + 1; i < FN.length; i++) if (/^## /.test(FN[i])) { fEnd = i; break; }
+  emit('FUNCTION.md - [CONTENT] ONLY', FN.slice(fAt, fEnd).join('\n'));
+}
+
 /* 3. the register: voice, and how formal the track is */
 const REG = TR + '-REGISTER.md';
 if (fs.existsSync(path.join(ROOT, REG))) emit(REG, read(REG));
@@ -146,7 +167,7 @@ const heads = shapes.filter(s => !s.ignore).map(s => s.raw);
 const withheld = shapes.length - heads.length;
 const every = Math.max(1, Number(arg('exemplars', '0')) || 1);
 const picked = heads.filter((_, i) => i % every === 0);
-emit('CONTENT_EXAMPLES.md - ' + picked.length + ' of ' + heads.length + ' SHAPES, one line each'
+emit('CONTENT_EXAMPLES.md - ' + picked.length + ' of ' + shapes.length + ' SHAPES, one line each'
   + (every > 1 ? ' (1 in ' + every + ')' : '')
   + (withheld ? ', ' + withheld + ' withheld: marked IGNORE - pending updates' : ''),
   picked.join('\n'));
