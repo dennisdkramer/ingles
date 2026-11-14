@@ -31,6 +31,8 @@
  *        --early=<s> places every sheet line that far before its cue and accepts a NEGATIVE value
  *        (--early=-2 = two seconds later, for a sheet that runs early against its own upload);
  *        --tail=<s> (default 2) ends the clip past the next cue instead of on it
+ *        --cue-shift=<s> moves every data-t by that many seconds and touches no audio (the clip is
+ *        right and only the highlight is off; -1 = every line fires a second earlier)
  *
  * The cut is made at the silence after the last lyric line, so the audio carries exactly the lines
  * the block shows. The frames are copied out of the master, so no second encode is paid — unless a
@@ -220,6 +222,11 @@ const fade = Math.max(0, Number(arg('fade', '0.5')) || 0);
    teaching; two seconds of the next line costs nothing and means a sync error of a second still
    leaves the last line whole inside the clip. */
 const tail = Math.max(0, Number(arg('tail', '2')) || 0);
+/* A CUE SHIFT MOVES ONLY THE `data-t`s. Some reports are about the placement and not about the sound:
+   the clip is right and every highlight fires a second early. `--early` cannot fix that on its own,
+   because it moves the clip's head by the same second. `--cue-shift=-1` subtracts a second from every
+   `data-t` and leaves the audio byte-identical, so one command still reproduces the page. */
+const cueShift = Number(arg('cue-shift', '0')) || 0;
 let lrcSel = null;
 const lrcQuery = arg('lrc', '');
 const lrcId = arg('lrc-id', '') || searchedRecordId;
@@ -904,7 +911,7 @@ console.log('  cut ' + (fromAt ? info.start.toFixed(2) + '–' + cutAt.toFixed(2
    refused a correct recording for an artefact of its own measurement. */
 const starts = (givenTimes.length ? sheetStarts
   : (lyrics.length && !noTiming ? segs.slice(0, lyrics.length).map(s => s.start) : []))
-  .map(t => Math.max(0, Math.round((t - info.start) * 1000) / 1000));
+  .map(t => Math.max(0, Math.round((t - info.start + cueShift) * 1000) / 1000));
 
 /* AND THE TIMES ARE PROVED BY ENERGY. A line start must have sound after it and a dip before it: that
    is what distinguishes singing from accompaniment, and it is what the instrumental demo got wrong. */
@@ -1019,6 +1026,7 @@ console.log('| `' + outName + '.mp3` | ' +
     : 'frames copied not re-encoded, and the VBR header rewritten for the cut (frame count, byte count, seek table)') +
   (givenTimes.length && early ? ', every line placed ' + Math.abs(early) + ' s ' +
     (early > 0 ? 'before' : 'after') + ' its sheet time' : '') +
+  (cueShift ? ', every `data-t` moved ' + cueShift + ' s (--cue-shift)' : '') +
   ' | ' + (sourcePage || src) + ' | ' + credit + ' | **' + licence + '** |');
 console.log('\n--- before it ships ---');
 console.log('1. the page must load the player, `qa/player.js`: it draws the bar and the highlight. Without');

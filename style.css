@@ -212,7 +212,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .content-area > .panel{margin:14px 0}
 .panel h3{margin-top:0}
 
-/* ## AUDIO PLAYER — the recording block, `[02]`/`[03]` in CONTENT_EXAMPLES.md, cut by `qa/AUDIO.md`; nothing else uses these classes. A page that carries a `figure.vz-play` also carries `<script src="../qa/player.js"></script>` in the `_shell.html` script slot, after `../engine2.js`. Build it:
+/* ## AUDIO PLAYER — A page that carries a `figure.vz-play` also carries `<script src="../qa/player.js"></script>` in the `_shell.html` script slot, after `../engine2.js`
    .panel > h3 (the song's own title) + h4 (the block's credit: who performs it, and nothing else —
         the `h4` rule italicises it, so no `<i>` is written)
      > figure.vz-play, and NO figcaption — nothing is printed above the player

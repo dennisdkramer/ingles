@@ -9,6 +9,7 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 
 # [CURRENT]
 
-## [B3] - the transcript is the real cost and 68% of it is tool output <"the context should NOT include all your file edits and prose"> <a habit that shrinks each remembered result at its source>
-   - [S1] - shrink results before they are remembered: 298,398 of 437,296 live chars are `tool_result`, and a result is now remembered whole up to 50,000 chars (`CLINE_MESSAGE_BUILDER_MAX_TOOL_RESULT_CHARS` raised from its 8,000 default, so what is shown and what is remembered no longer diverge), which makes the volume breadth — unfiltered greps, whole-file dumps, re-runs after a torn read; filter inside the command and print the count when the list is not needed <the live transcript in `~/.cline/data/sessions/<id>/<id>.messages.json`> <a later long task measures below 68% on its session file>
-   - [S2] - keep state on disk rather than in context: `PENDING.md` already carries the plan across resets, which is why a finished batch can be deleted — extend that to any fact re-derivable by reading a file <`PENDING.md` [HANDLING] item 5> <no fact is carried in conversation that a file can be re-read for>
+## [B1] - The audio pipeline closed out: the CSS header says only what the owner wrote, a cue shift can be rebuilt from a command, and the remaining pipeline gaps are named «"you can build the --cue-shift" · "tell me if there is anything else missing"» qa/AUDIO.md + qa/audio.mjs + the audit below
+   - [S1] - `## AUDIO PLAYER` carries the owner sentence and names no vehicle .clinerules 9 (wording unsoftened) the header reads the owner line and no `[02]`/`[03]` appears in it
+   - [S2] - `--cue-shift=<s>` moves every `data-t` and touches no audio; Wrecking Ball rebuilt from the local master so the page matches one command rule 8 (tight QA) 1.012/5.362/8.992/13.012 printed at 18.85 s, and the demo and the provenance row carry the flag
+   - [S3] - audit the generation pipeline minus pronkey and say what is missing .clinerules 15 (what the user must know or decide) a list, every item with path:line, nothing executed

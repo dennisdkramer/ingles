@@ -39,6 +39,7 @@ node qa/audio.mjs --in=<path> --out=<name> --lrc-id=<id> --lines=<first>,<count>
 | `--early=<s>` | 1 | places every sheet line that many seconds before its cue; **negative places them later** (`--early=-2`); clamped ±10 |
 | `--tail=<s>` | 2 | the clip ends this far past the sheet's next cue, not 0.05 s before it |
 | `--fade=<s>` | 0.5 | fade at each end, done by one ffmpeg re-encode; `--fade=0` keeps the pure frame copy |
+| `--cue-shift=<s>` | 0 | moves every `data-t` by that many seconds and touches no audio |
 | `--width=full` | off | prints the full-width shape |
 
 ## The steps, in order
@@ -64,13 +65,20 @@ node qa/audio.mjs --in=<path> --out=<name> --lrc-id=<id> --lines=<first>,<count>
 
 ## When the sync is off
 
-`--early` is the only control, and it is a constant per song. "The lines fire N seconds early" means the
-highlight must move **later**: subtract N from the current `--early` (1 → -2 for three seconds). "N
-seconds late" means add N. A recut overwrites `assets/<name>.mp3` and reprints the markup, and `data-t` is
-unchanged by `--early` — only the clip's head moves.
+Two reports, two flags, and the difference is whether the **audio** is wrong or only the **highlight**:
 
-Editing the page's `data-t` values instead touches no audio and is legitimate for a one-off. Record the
-shift in the provenance row: a rebuild prints the tool's own numbers, not the hand edit.
+- **the highlight fires N seconds early or late, and the clip itself is right** → `--cue-shift=-N` (later)
+  or `--cue-shift=N` (earlier). It moves nothing but the `data-t` values, adds or removes no audio, and
+  the clip is not rewritten, so the same command still reproduces the page. The provenance row records
+  it as `every data-t moved N s (--cue-shift)`.
+- **the whole excerpt sits wrong inside the recording** → `--early` is a constant per song. "The lines
+  fire N seconds early" means subtract N from the current `--early` (1 → -2 for three seconds). "N
+  seconds late" means add N. A recut overwrites `assets/<name>.mp3` and reprints the markup, and
+  `data-t` is unchanged by `--early` — only the clip's head moves, by the same second.
+
+Editing the page's `data-t` values by hand reaches the same result as `--cue-shift` and is the only
+thing to do when the audio cannot be rebuilt, but then the page and the command disagree: record the
+shift in the provenance row, or it is lost.
 
 ## What ships
 
