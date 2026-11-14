@@ -5,6 +5,7 @@
  *   node qa/brief.mjs --track=business --lesson=41        the input set, then the gate
  *   node qa/brief.mjs --track=business --lesson=41 --reassert   PEDAGOGY-MAP.md again, nothing else
  *   node qa/brief.mjs --css            the style.css `## ` headers, one line each, with their line numbers
+ *   node qa/brief.mjs --indexes        both indexes: the menu index, then the style.css headers
  *
  * Why the map appears twice: it is the file that decides what the lesson contains and at what
  * level, and it has been the file least obeyed. Copy 1 is read before the shape is chosen; copy 2
@@ -63,12 +64,26 @@ if (indexArg) {
   process.exit(0);
 }
 
+/* both indexes in one run, for a prompt that says "print the indexes": the menu's index in the same JSON
+   `--index` prints, then the stylesheet's headers in the same one-line form `--css` prints.
+     node qa/brief.mjs --indexes */
+if (has('indexes')) {
+  const menu = readMenu();
+  const css = cssHeaders();
+  process.stdout.write('CONTENT_EXAMPLES.md - ' + menu.shapes.length + ' SHAPES (the menu index)\n'
+    + JSON.stringify(menu, null, 2) + '\n\n');
+  process.stdout.write('style.css - ' + css.length + ' `## ` HEADERS\n');
+  css.forEach(h => process.stdout.write('style.css:' + h.line + '  ' + h.text + '\n'));
+  process.exit(0);
+}
+
 const track = (arg('track', '')).toLowerCase();
 const lesson = Number(arg('lesson', '0'));
 if (!track || !lesson) {
   console.error('usage: node qa/brief.mjs --track=<business|adult|kids> --lesson=<n> [--reassert] [--exemplars=N]');
   console.error('       node qa/brief.mjs --index        the menu read as an index (JSON; the preview nav\'s source)');
   console.error('       node qa/brief.mjs --css          the style.css `## ` headers, with their line numbers');
+  console.error('       node qa/brief.mjs --indexes      both indexes: the menu, then the style.css headers');
   process.exit(2);
 }
 const TR = track.toUpperCase();

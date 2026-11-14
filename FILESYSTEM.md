@@ -1,6 +1,6 @@
 # FILESYSTEM — repository map
 
-- SPEC/RULE FILES: .clinerules/.clinerules.md · FUNCTION.md (behaviour + backend + edit mode) · style.css `## ` headers (the lesson-facing contract in words: page order, classes, markup, appearance) · STATUS.md (state & shared parameters) · VERIFICATION.md (how to QA) · FILESYSTEM.md (this map)
+- SPEC/RULE FILES: .clinerules/.clinerules.md · FUNCTION.md (behaviour + backend + edit mode) · style.css `## ` headers (the lesson-facing contract in words: page order, blocks, classes, markup — `node qa/brief.mjs --css` prints the index) · STATUS.md (state & shared parameters) · VERIFICATION.md (how to QA) · FILESYSTEM.md (this map)
 
 - WORKING PLAN: PENDING.md (the active subtask batch plan, HANDOFF.md (new task handoffs (when requested)
 

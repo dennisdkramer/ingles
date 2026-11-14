@@ -1,8 +1,6 @@
 /* ==================================================================================================
    ⛔ STOP — DO NOT READ, INFER, REFERENCE OR USE THIS FILE FOR LESSON CONTENT CREATION ⛔
    This stylesheet is IMPLEMENTATION ONLY. A LESSON'S SHAPE IS FREELY IMAGINED. 
-   The authority for WHAT a page contains, and the vocabulary of blocks/classes an author may use, is
-   PEDAGOGY-MAP.md. This file only paints what those produce.
    HOW TO READ THIS FILE: every lesson-facing contract is a `## ` HEADER — one line opening `/* ## `,
    carrying the rule in words directly above the CSS it governs. Those headers are the SCAN LIST: read
    them in file order (page skeleton -> section -> block -> block interior -> reflow), take the key rule
@@ -71,7 +69,6 @@ main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
    browser's own UA ring is suppressed too: NOTHING on any page can draw a focus outline without that class. */
 html:not(.kbd) :focus{outline:none}
 html.kbd button:focus-visible{outline:3px solid var(--tan);outline-offset:2px}
-.card{--edge:var(--ink);background:var(--paper);border:2px solid var(--edge);border-radius:16px;box-shadow:5px 5px 0 var(--tan);padding:14px 18px;margin:14px 0}
 button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;margin:4px 4px 4px 0;font:600 14px var(--serif);cursor:pointer;box-shadow:3px 3px 0 var(--tan)}
 
 /* one shared hover/press for EVERY button */
@@ -87,7 +84,7 @@ button:active:not(:disabled):not(.locked){filter:brightness(1.04);transform:tran
 .content-area textarea:not(#feed){display:block;width:100%;margin:8px 0}
 a{color:var(--ink);font-weight:600}h2{font-family:'Playfair Display',serif;margin:.9em 0 .3em}
 @keyframes pu{50%{opacity:.25}}
-/* ## TEXT AND COLOURS — never write a hex in a lesson; use a token or a class. Tokens on :root: --cream --paper --ink --tan --rose --ptw --blue --dkblue --bluebg --orange --purple --green --greenbg; faces --serif (the default) --sans --playfair --caveat. Classes that set colour: `.pt` / `.ptw` for Portuguese, italic, plus `lang="pt"` so a screen reader says so; `.dim` muted; `.lead` larger intro; `.h2sub` a section subtitle; `.todo` the unbuilt marker; `.chips`; `.listen`. */
+/* ## TEXT AND COLOURS — never write a hex in a lesson; use a token or a class. Tokens on :root: --cream --paper --ink --tan --rose --ptw --blue --dkblue --bluebg --orange --purple --green --greenbg; faces --serif (the default) --sans --playfair --caveat. Classes that set colour: `.pt` / `.ptw` for Portuguese, italic, plus `lang="pt"` so a screen reader says so; `.dim` muted; `.lead` larger intro; `.h2sub` a section subtitle; `.todo` the unbuilt marker; `.prep` a word in tan bold. */
 .dim{color:#8a8072;font-size:13px}
 .pt{color:#5c5347;font-style:italic}.ptw{font-style:italic;color:var(--ptw);font-weight:600}
 .listen{background:var(--tan);box-shadow:3px 3px 0 var(--ink)}
@@ -205,9 +202,8 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
  .panel,.chart,.card{break-inside:avoid}
 }
 
-/* the 14px rhythm between a block and its neighbours, and the 10px inset inside a panel's frame */
-.content-area > .panel{margin:14px 0}
-.panel h3{margin-top:0}
+/* a block's h3 opens its frame */
+.panel h3,.card h3{margin-top:0}
 
 /* ## AUDIO PLAYER — a page that carries a `figure.vz-play` also carries `<script src="../qa/player.js"></script>` in the `_shell.html` script slot, after `../engine2.js`. */
 .vz-play{display:block;margin:0}
@@ -247,15 +243,15 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
   .vz-sheet .vz-lyrics li{white-space:normal}
 }
 
-/* ## BLOCK FRAME — a block is `.panel` or `.card`, never a bare div and never `fieldset`. `data-kind="teach|train"` on the block element carries the block's shape: its lowercase atoms, with `|` where one block both explains and asks; `data-level="10|20|30|40|50"` beside it is the block's own difficulty band, and it must be at or above the lesson number. Unbuilt work is `p.todo`, which renders as a visible marker. */
-.panel{--edge:var(--tan);border:2px solid var(--edge);border-radius:12px;padding:12px 16px;background:var(--paper);box-shadow:4px 4px 0 var(--tan)}
+/* ## BLOCK FRAME — a block is `.panel` or `.card`: one frame, two names, never a bare div and never `fieldset`. `data-kind="teach|train"` on the block element carries the block's shape and sets the frame's edge: its lowercase atoms, with `|` where one block both explains and asks; `data-level="10|20|30|40|50"` beside it is the block's own difficulty band, and it must be at or above the lesson number. Unbuilt work is `p.todo`, which renders as a visible marker. */
+.panel,.card{--edge:var(--tan);border:2px solid var(--edge);border-radius:12px;padding:12px 16px;background:var(--paper);box-shadow:4px 4px 0 var(--tan);margin:14px 0}
 
 .panel[data-kind="teach"],.card[data-kind="teach"],.game[data-kind="teach"],.dialog[data-kind="teach"]{--edge:var(--ink)}
 .panel[data-kind="train"],.card[data-kind="train"],.game[data-kind="train"],.dialog[data-kind="train"],
 .panel[data-kind="teach|train"],.card[data-kind="teach|train"],.game[data-kind="teach|train"],.dialog[data-kind="teach|train"]{--edge:var(--orange)}
 /* a game keeps its purple edge: the shape value no longer names games — "Games are TRAIN" — so the element does */
 .game[data-kind="train"],.game[data-kind="teach|train"]{--edge:var(--purple)}
-.panel .chart{width:calc(100% - 20px)}
+.panel .chart,.card .chart{width:calc(100% - 20px)}
 
 /* ## BLOCK WIDTHS — one of four slots, as a class on a DIRECT CHILD of `.itemrow`: `.itemsize` (full) `.itemsize-half` `.itemsize-third` `.itemsize-twothird`. A ROW MUST TOTAL 100%: full alone, half+half, third+twothird, third+third+third — a half beside a third never closes a row. Pair before widening; a lone block sits centred at its own width; the slot follows the content and prose never widens a block. `data-cols="2"` on the row gives each column 14px less, already inside the calc. */
 .itemsize{width:100%}
@@ -266,13 +262,13 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .itemrow[data-cols="2"]>.itemsize-twothird{width:calc(66.6667% - 9.3333px)}
 .itemrow{display:flex;gap:14px;margin:14px 0;align-items:stretch}
 .itemrow>*{min-width:0;margin:0}
-.panel > :not(h3),.content-area > h2, .content-area > p{margin-left:10px;margin-right:10px}
+.panel > :not(h3),.card > :not(h3),.content-area > h2, .content-area > p{margin-left:10px;margin-right:10px}
 .itemsize-half,.itemrow[data-cols="2"]>*{width:calc(50% - 7px)}
 .itemrow[data-cols="3"]>*{width:calc(33.3333% - 9.3333px)}
 .qgrid{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;column-gap:14px;row-gap:12px;min-width:0}
 
 .qgrid .qopts,.qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 30px}
-/* ## BLANKS — an item holds one phrase and its `input.gap`; `.blanks` wraps items as rows, `.blanks.sent` tiles them in columns at `--rows`, `.blanks.cols` fills grid columns of at least 240px; in all three the field follows the text and a `<br>` before it puts it on its own line; a gap is as long as the answer it asks for (`--gap-w`, 9em unset) and never wider than its item. */
+/* ## BLANKS — an item holds one phrase and its `input.gap`; `.blanks` wraps items as rows, `.blanks.sent` tiles them in columns at `--rows`, `.blanks.cols` fills grid columns of at least 240px; in all three the field follows the text and a `<br>` before it puts it on its own line; `.blank` is that same underline with no field; a gap is as long as the answer it asks for (`--gap-w`, 9em unset) and never wider than its item. */
 .blanks{display:flex;flex-wrap:wrap;gap:14px 24px;margin:10px 0}
 .blanks.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
 /* Complete and Clear: Complete puts each key on its own line under its field and greens the right option;
@@ -364,7 +360,7 @@ html.kbd .tswitch input:focus-visible~.tsw-track{outline:2px solid var(--tan);ou
 .control-bar .barsel>.bookmenu{left:0;right:auto;min-width:280px;text-align:left}
 
 /* small half-full blocks centre their text */
-.card.center{text-align:center}
+.panel.center,.card.center{text-align:center}
 /* EVERY control in the bar is ONE height — the height of ← Last / Next → (8px padding + the 14px line + 8px).
  A button whose label carries an emoji (🖨 🧹 ✏️ ↩️) otherwise gets a TALLER line box than a text-only
  button, so the row used to step up and down. A fixed height with centred
