@@ -7,8 +7,7 @@ prints one line and exits 0. Reason: lesson generation is being judged on the pa
 between the prompt and the page — a harness that reds on a style choice is a second author, and its verdict
 arrives before the page exists. **Nothing below is fixed, withdrawn or re-measured: it is invisible until QA is
 back.** Re-enable everything for one run with `QA_ON=1` (PowerShell `$env:QA_ON='1'; node qa/run.mjs content`);
-re-enable one harness for good by deleting its single `qaOff('…')` line. `qa/provenance.mjs`'s own `format`
-problem (the entry below) is untouched underneath and still needs its repoint before that member means anything.
+re-enable one harness for good by deleting its single `qaOff('…')` line.
 
 ## qa/games4.mjs — 15 failing engine tests, moved out of `npm run qa`
 `npm run qa:games` → **116 passed, 15 failed** (2026-11-07). The failures are engine/plugin behaviour and CSS
@@ -21,23 +20,9 @@ It was in the `qa` chain, which made every `npm run qa` red for reasons a page c
 suite is how a real page failure gets read as noise. It now runs as its own script. **Fix baseline, then put it
 back in `qa`.** Untouched by the lesson-generation work.
 
-## qa/provenance.mjs — REMOVED (2026-11-11), was DISABLED (2026-11-10): the `format` input it hashed was retired
-`node qa/provenance.mjs` → **102 of 102 pages failed** (2026-11-10), each on the same line: `input FORMAT.md changed
-after this page was built (record 120eb47a, disk a34375bd)`. No page was at fault: the committed `FORMAT.md` blob
-hashed `73d7d037`, already different from `120eb47a`, so FORMAT.md had been edited after those records were built
-(549074e, 9f60cf7 and 30c045a all touched it) — one contract file's residue, not 102 pages.
-**FORMAT.md was then retired** (its rules now live in the style.css `## ` headers, PEDAGOGY-MAP.md [PAGE] and
-FILESYSTEM.md), so the record key `format` no longer names a file at all. **The member is DISABLED at its own entry
-point and exits 2** (`qa/run.mjs` labels it so) — not 0, because a skip that prints green is worse than no green.
-**To re-enable: decide what `format` now hashes (the style.css `## ` headers, or nothing), change `CONTRACT` plus the
-`format` stub in `selftest()`, re-record the ledger, delete the banner.** Until then no member reports record drift,
-and a red from this one is the disable talking, not a page.
-
-**RESOLVED BY DELETION (2026-11-11, owner instruction):** the harness and its `qa/run.mjs` member are gone, so the
-"To re-enable" paragraph above no longer applies. Grounds, measured: 0 real catches, and its one visible result was
-102 of 102 pages failing on the same retired-input artefact. The ledger `provenance.jsonl` and the record format are
-unchanged — only the checker was removed. `prose` and `examples` were also retired as gates for the same reason
-(0 decisions changed), but their files remain runnable by direct path.
+## qa/prose.mjs and qa/examples.mjs — retired as gates (2026-11-11)
+0 decisions changed while they gated a build, so neither is a member of `npm run qa`; their files remain
+runnable by direct path.
 
 ## adult/lesson22 — exists, is not a lesson page
 `qa/content.mjs --track=adult 22` → engine1.js and engine2.js did not execute, `#feed` missing, `.content-area`

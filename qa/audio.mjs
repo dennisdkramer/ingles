@@ -785,8 +785,8 @@ if (arg('scan', '')) {
    evidence of singing than held pitch — and the one class it misjudges is exactly the class that
    carries transcripts: acoustic-era recordings, band-limited and noisy, where the pitch tracker
    jitters past the 3% stability window on every frame while the singer holds the note perfectly.
-   So with --times the gate reports and does not refuse; the guard moves to qa/hear.mjs, which reads
-   the words back out of the clip after it is cut. */
+   So with a timed transcript the gate reports and does not refuse: the transcript is someone reading the
+   words off this file, which is better evidence of singing than held pitch. */
 if (lyrics.length && orig.longestHoldSec != null && orig.longestHoldSec < 0.5) {
   const where = (fromAt ? fromAt.toFixed(1) + '–' + (fromAt + 12).toFixed(1) + ' s' : 'the first 12 s');
   const why = 'NO SINGING: the longest held note in ' + where + ' is ' + orig.longestHoldSec +
@@ -796,7 +796,7 @@ if (lyrics.length && orig.longestHoldSec != null && orig.longestHoldSec < 0.5) {
   if (!arg('times', '') && !lrcSel) die(why);
   console.log('  voice gate: ' + why);
   console.log('  voice gate: NOT refusing — this file ships a timed transcript, which is direct evidence of');
-  console.log('              the words. Verify with: node qa/hear.mjs --file=assets/<out>.mp3 --mode=line --lyrics="…"');
+  console.log('              the words');
 }
 
 /* ---- TIMES FROM AN AUTHORITATIVE TRANSCRIPT (--times=a,b,c) ------------------------------
