@@ -50,7 +50,6 @@ content belongs in its `###` sections.
 ### [05]
 
 → CONTENT_EXAMPLES.md §`[05]`
-improve the drawings for each location so they are either obviously recognizable OR a building with a sign that indicates what it is ($ BANK, for example) as part of the drawing. Remove the normal text names. put the check boxes centered at the bottom of each location (above the street). Put street names in italic on the streets - vertical streets get names running vertically.  Remove the questions portion below the map. Change the heading to "Street map for directions and relative locations"  and clear the min/max numbers
 
 ### [07]
 

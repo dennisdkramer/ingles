@@ -30,7 +30,7 @@ loads and again every 2 s, so a heading rewritten in the file appears under its 
 with no block on this page is named in the nav rather than quietly missing. Nothing else is printed about a block:
 there is no caption at its foot, because a sentence that is not in the menu would be this page arguing its own case.
 Every block on the page answers for a numbered entry, so nothing here can be out of date against the file: the nav and the line over each block are read from CONTENT_EXAMPLES.md, and a heading rewritten there appears here on the next poll.</p>
-<p>The figures drawn <em>inside</em> a block are the last five entries, under <b>[INSIDE]</b>: <code>[63]</code> the timeline, <code>[64]</code> the phrase marks, <code>[65]</code> the parts of speech, <code>[66]</code> the voice contour and <code>[67]</code> the pronunciation key. None of them owns a container or a control — the block that hosts one owns the <code>.panel</code> and supplies the radio, gap or textarea that saves, which is why they are listed apart from the vehicles. The ordinary vehicles that carry a drawn figure <em>plus</em> the control that makes it a block are <code>[40]</code>, <code>[41]</code> and <code>[55]</code>–<code>[62]</code>. The player's own CSS (`[02]`/`[03]`) lives in <code>style.css</code> under
+<p>The figures drawn <em>inside</em> a block are the six entries under <b>[INSIDE]</b>: <code>[05]</code> the street map, <code>[63]</code> the timeline, <code>[64]</code> the phrase marks, <code>[65]</code> the parts of speech, <code>[66]</code> the voice contour and <code>[67]</code> the pronunciation key. None of them owns a container or a control — the block that hosts one owns the <code>.panel</code> and supplies the radio, gap or textarea that saves, which is why they are listed apart from the vehicles. The ordinary vehicles that carry a drawn figure <em>plus</em> the control that makes it a block are <code>[40]</code>, <code>[41]</code> and <code>[55]</code>–<code>[62]</code>. The player's own CSS (`[02]`/`[03]`) lives in <code>style.css</code> under
 <code>## AUDIO PLAYER</code>, because a kept shape is lesson-facing; every other draft figure here is
 <code>.vz-*</code> in <code>qa/preview-visual.css</code>, so it stays out of the lesson stylesheet until the shape
 is kept. No network, no font above the page's own palette, and every figure
@@ -170,12 +170,12 @@ prints.</p>
 <section class="qa-item" id="item-05">
 <h2>[05]</h2>
 <textarea data-item="[05]" aria-label="notes for [05]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; A drawn street map with numbered places to route through &lt;4|5&gt; &lt;2|4&gt;</p>
-<div class="panel itemsize-half" data-kind="train">
-<h3>mapRoute</h3>
-  <p>Write the route from <b>1</b> to <b>6</b>, then from <b>6</b> to <b>8</b>. Tick each place as you pass it — the boxes are on the map.</p>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;HALF-&gt; Street map for directions and relative locations &lt; , &gt; &lt; , &gt;</p>
+<div class="panel" data-kind="train">
+<h3>Street map for directions and relative locations</h3>
+  <p>Look at the map, then write the route in the field below it.</p>
   <div style="position:relative">
-  <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: two high streets crossed by two side streets and eight places, each one drawn — a station under a canopy with a clock on the wall, a café with a striped awning, a park with trees, a bank with columns, a library wall of books, a post office with a postbox, a bus shelter, and two market stalls">
+  <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, eight places each drawn with its name on a sign — a station under a canopy with a clock, a café with a striped awning, a park with trees, a bank under a dollar sign, a library wall of books, a post office with a postbox, a bus shelter, and two market awnings">
     <rect x="0" y="0" width="360" height="240" style="fill:var(--paper)"></rect>
     <g style="fill:var(--tan);opacity:.45">
       <rect x="0" y="78" width="360" height="16"></rect>
@@ -183,73 +183,72 @@ prints.</p>
       <rect x="104" y="0" width="16" height="240"></rect>
       <rect x="258" y="0" width="16" height="240"></rect>
     </g>
-    <!-- EVERY PLACE IS DRAWN, one identifying feature each: a grid of identical rectangles is a diagram of
-         the list under it, not a street to walk. The numbered badges are HTML labels over the drawing (see
-         the block below the <svg>), so a tick is made on the map itself. -->
+    <!-- EVERY PLACE IS DRAWN, one identifying feature each, and its NAME IS ON A SIGN IN THE DRAWING: a name
+         written beside a rectangle leaves the drawing unread, and a name inside it is part of the place. -->
     <g style="stroke:var(--ink);stroke-width:2;fill:var(--paper)">
-      <rect x="16" y="42" width="74" height="18"></rect>
-      <rect x="58" y="48" width="18" height="12"></rect>
-      <rect x="132" y="40" width="114" height="8"></rect>
-      <rect x="140" y="48" width="98" height="12"></rect>
-      <path d="M16 122h76v10H16z"></path>
-      <rect x="132" y="112" width="114" height="20"></rect>
-      <rect x="284" y="112" width="62" height="20"></rect>
-      <rect x="292" y="114" width="15" height="12"></rect>
-      <path d="M16 184h74v4H16z"></path>
-      <rect x="132" y="188" width="48" height="16"></rect>
-      <rect x="188" y="188" width="58" height="16"></rect>
-    </g>
-    <g style="fill:var(--green);opacity:.25">
-      <rect x="284" y="40" width="62" height="20"></rect>
+      <rect x="14" y="20" width="80" height="52"></rect>
+      <rect x="130" y="24" width="118" height="48"></rect>
+      <rect x="282" y="22" width="66" height="50"></rect>
+      <rect x="14" y="100" width="80" height="54"></rect>
+      <rect x="130" y="100" width="118" height="54"></rect>
+      <rect x="282" y="100" width="66" height="54"></rect>
+      <rect x="14" y="180" width="80" height="54"></rect>
+      <rect x="130" y="180" width="118" height="54"></rect>
     </g>
     <g style="stroke:var(--ink);stroke-width:1.5;fill:none">
-      <path d="M8 40h90"></path>
-      <circle cx="82" cy="46" r="5"></circle>
-      <path d="M82 46v-3M82 46h2"></path>
-      <path d="M132 40v8M148 40v8M164 40v8M180 40v8M196 40v8M212 40v8M228 40v8M244 40v8"></path>
-      <path d="M204 50h9a4 4 0 0 1 0 8h-9z"></path>
-      <path d="M213 52a3 3 0 0 1 0 4"></path>
-      <path d="M54 104L16 116h76z"></path>
-      <path d="M24 116v16M40 116v16M56 116v16M72 116v16M16 132h76"></path>
-      <path d="M140 116v16M148 116v16M156 116v16M164 116v16M172 116v16M180 116v16M188 116v16M196 116v16M204 116v16M212 116v16M220 116v16M228 116v16"></path>
-      <path d="M284 132h62"></path>
-      <path d="M304 118h26v12h-26zM304 118l13 7 13-7"></path>
-      <path d="M20 188v14M86 188v14"></path>
-      <path d="M30 196h40v4H30z"></path>
-      <path d="M60 184v-4"></path>
-      <path d="M132 188v6M144 188v6M156 188v6M168 188v6M188 188v6M200 188v6M212 188v6M224 188v6M236 188v6"></path>
-      <path d="M294 58c3-7 7-7 10 0M308 58c3-7 7-7 10 0M322 58c3-7 7-7 10 0"></path>
+      <path d="M14 20h80"></path>
+      <circle cx="76" cy="28" r="5"></circle>
+      <path d="M76 28v-3M76 28h2"></path>
+      <path d="M14 66h80"></path>
+      <path d="M14 28h66v6H14z"></path>
+      <path d="M130 60h118"></path>
+      <path d="M134 40h40v8h-40z"></path>
+      <path d="M174 42a4 4 0 0 1 0 4"></path>
+      <path d="M300 46c4-9 9-9 13 0M316 46c4-9 9-9 13 0"></path>
+      <path d="M290 64h50"></path>
+      <path d="M14 100l40-18 40 18"></path>
+      <path d="M24 100v20M36 100v20M48 100v20M60 100v20M72 100v20M14 120h80"></path>
+      <path d="M134 108v18M142 108v18M150 108v18M158 108v18M166 108v18M174 108v18M182 108v18M190 108v18M198 108v18M206 108v18M214 108v18M222 108v18M230 108v18M238 108v18"></path>
+      <path d="M282 108h66"></path>
+      <path d="M290 132h34v14h-34zM290 132l17 8 17-8"></path>
+      <path d="M290 118v-10h10v10"></path>
+      <path d="M300 182v18M312 182v18"></path>
+      <path d="M294 200h24v4h-24z"></path>
+      <path d="M134 186h106"></path>
+      <path d="M138 186h20v10h-20zM162 186h20v10h-20zM186 186h20v10h-20zM210 186h20v10h-20z"></path>
     </g>
-    <text x="300" y="90" style="font-size:8px;fill:var(--ink)">High Street</text>
-    <text x="300" y="172" style="font-size:8px;fill:var(--ink)">Low Street</text>
-    <text transform="translate(117,232) rotate(-90)" style="font-size:8px;fill:var(--ink)">Mill Lane</text>
-    <g style="fill:var(--ink);font-size:10px">
-      <text x="38" y="32">Station</text>
-      <text x="154" y="32">Café</text>
-      <text x="306" y="32">Park</text>
-      <text x="38" y="104">Bank</text>
-      <text x="154" y="104">Library</text>
-      <text x="306" y="104">Post Office</text>
-      <text x="38" y="176">Bus stop</text>
-      <text x="154" y="176">Market</text>
+    <g style="fill:var(--green);opacity:.25">
+      <rect x="282" y="22" width="66" height="50"></rect>
+    </g>
+    <g style="fill:var(--ink);font-size:7px">
+      <text x="18" y="38">STATION</text>
+      <text x="134" y="36">CAFÉ</text>
+      <text x="288" y="36">PARK</text>
+      <text x="20" y="116">$ BANK</text>
+      <text x="136" y="122">LIBRARY</text>
+      <text x="296" y="128">POST OFFICE</text>
+      <text x="20" y="212">BUS STOP</text>
+      <text x="136" y="212">MARKET</text>
+    </g>
+    <g style="fill:var(--ink);font-size:8px;font-style:italic">
+      <text x="180" y="90">High Street</text>
+      <text x="180" y="172">Low Street</text>
+      <text transform="translate(116,236) rotate(-90)">Mill Lane</text>
+      <text transform="translate(270,236) rotate(-90)">Park Lane</text>
     </g>
   </svg>
-    <!-- the numbering IS the checklist: each badge is a label at its place's own corner, positioned over the
-         drawing, so ticking a place is done on the map and there is no list of boxes under it to read twice -->
-    <label style="position:absolute;left:4.4%;top:9.2%"><input type="checkbox" aria-label="the station"> 1</label>
-    <label style="position:absolute;left:36.7%;top:9.2%"><input type="checkbox" aria-label="the café"> 2</label>
-    <label style="position:absolute;left:78.9%;top:9.2%"><input type="checkbox" aria-label="the park"> 3</label>
-    <label style="position:absolute;left:4.4%;top:39.2%"><input type="checkbox" aria-label="the bank"> 4</label>
-    <label style="position:absolute;left:36.7%;top:39.2%"><input type="checkbox" aria-label="the library"> 5</label>
-    <label style="position:absolute;left:78.9%;top:39.2%"><input type="checkbox" aria-label="the post office"> 6</label>
-    <label style="position:absolute;left:4.4%;top:73.3%"><input type="checkbox" aria-label="the bus stop"> 7</label>
-    <label style="position:absolute;left:36.7%;top:73.3%"><input type="checkbox" aria-label="the market"> 8</label>
+    <!-- THE TICK IS THE CHECKLIST, and it sits centred under its own place, on the street that place faces.
+         It marks the route as the student walks it and is not saved; the host's gap is what saves. -->
+    <label style="position:absolute;left:15%;top:25.8%;transform:translateX(-50%)"><input type="checkbox" aria-label="the station"> 1</label>
+    <label style="position:absolute;left:52.5%;top:25.8%;transform:translateX(-50%)"><input type="checkbox" aria-label="the café"> 2</label>
+    <label style="position:absolute;left:87.5%;top:25.8%;transform:translateX(-50%)"><input type="checkbox" aria-label="the park"> 3</label>
+    <label style="position:absolute;left:15%;top:59.2%;transform:translateX(-50%)"><input type="checkbox" aria-label="the bank"> 4</label>
+    <label style="position:absolute;left:52.5%;top:59.2%;transform:translateX(-50%)"><input type="checkbox" aria-label="the library"> 5</label>
+    <label style="position:absolute;left:87.5%;top:59.2%;transform:translateX(-50%)"><input type="checkbox" aria-label="the post office"> 6</label>
+    <label style="position:absolute;left:15%;top:92.2%;transform:translateX(-50%)"><input type="checkbox" aria-label="the bus stop"> 7</label>
+    <label style="position:absolute;left:52.5%;top:92.2%;transform:translateX(-50%)"><input type="checkbox" aria-label="the market"> 8</label>
   </div>
-  <div class="blanks sent" style="--rows:2">
-    <div>1. From the station to the post office: <input class="gap" style="--gap-w:100%"></div>
-    <div>2. From the post office to the market: <input class="gap" style="--gap-w:100%"></div>
-  </div>
-  <p class="dim">Use the place names and street names on the map and nothing else. Two turns is enough for each leg.</p>
+  <p>The route, in the places you pass: <input class="gap" style="--gap-w:100%" aria-label="the route"></p>
 </div>
 </section>
 <section class="qa-item" id="item-06">
