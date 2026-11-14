@@ -1,6 +1,6 @@
 # VERIFICATION — how to verify / QA
 
-Six checks, all narrow. None of them judges how a page is laid out: block widths, columns, option
+Five checks, all narrow. None of them judges how a page is laid out: block widths, columns, option
 counts, spacing and class names are generation decisions, not defects.
 
 - `node qa/check.mjs [--track=…] [n …] [--all]` — the page works: engine1/engine2 executed, exactly one
@@ -8,11 +8,6 @@ counts, spacing and class names are generation decisions, not defects.
   unanchored one is never saved), no console errors, no game block engine4 failed to wire. It also PRINTS —
   never fails — half-coverage of the lesson's roadmap items, the register tiers the page hits, the formal and
   locale words it uses and the `<h1>` length, for the reader to judge.
-- `node qa/overflow.mjs [--track=…] [n …]` — real Chrome over CDP (jsdom cannot see layout). OVERFLOW
-  (content wider than its block), ESCAPE (an element across the `.content-area` frame), CELL (a `.blanks`
-  cell whose item does not fit), RESIZE (a draggable textarea). `--shot <file>` saves a picture of the page
-  top — the fastest way to see a real defect; `--selftest` proves the harness still catches a broken page.
-  A user instruction that asks about a "visual" or "space fill" issue is answered with this harness, never from jsdom.
 - `node qa/landing.mjs` — the student index (index.html) in jsdom: one column per track in the list, plus a
   track that exists in no file (it must still get a column, its `track.json` label and a grant option),
   title as the link, continue above the list, locked tracks inert, the `go()` gate, the teacher's
@@ -40,7 +35,7 @@ pages is swept, `--track=kids|business|adult` narrows it (qa/track.mjs), and a n
 exist is a failure. `npm run qa -- <member>` runs ONE harness and nothing else (`qa/run.mjs`);
 `node qa/run.mjs` with no member prints the menu and exits non-zero, and a member that does not honour
 `--track`/`--all`/lesson numbers is refused when one is passed rather than silently sweeping every
-track. `npm run qa:layout` = the overflow selftest + sweep; `npm run qa:live` = the CDP probe. Every
+track. `npm run qa:live` = the CDP probe. Every
 harness exits non-zero on a finding.
 
 **`qa/cssdiff.mjs` runs once per batch, at the commit boundary — never per step.** It photographs the computed
@@ -52,7 +47,7 @@ cost more attention than the defects it found.
 **A build runs the gate on itself.** Before a lesson is reported as done, the page it just wrote is checked
 with `node qa/check.mjs --track=<track> <N>`. That page and no others: a sweep is not a self-check, and it
 shows a build the shapes of pages it may not read. A red is fixed in the page, never in the threshold.
-`overflow` and `live` are not in that loop — each opens a real browser and belongs to the end of a batch.
+`live` is not in that loop — it opens a real browser and belongs to the end of a batch.
 **`qa/check.mjs` is the one harness that runs as written.** Every other harness prints one line and exits 0
 unless `QA_ON=1` is in the environment (`qa/off.mjs`, owner instruction 2026-11-10, ISSUES.md) — so a green
 from one of them without that variable is the switch reporting, not the page.

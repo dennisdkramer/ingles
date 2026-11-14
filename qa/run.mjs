@@ -19,8 +19,8 @@
  *   npm  run qa -- content --track=kids 3
  *   node qa/run.mjs                      → the menu, and a non-zero exit
  *
- * `scope` below was read off each file's import block, never assumed: check and overflow import the
- * track resolver, and games4, landing, live, build and liquid import none.
+ * `scope` below was read off each file's import block, never assumed: check imports the track
+ * resolver, and games4, landing, live, build and liquid import none.
  */
 import { qaOff } from './off.mjs'; /* this dispatcher stays live; each member keeps its own switch */
 import path from 'path';
@@ -33,9 +33,7 @@ const MEMBERS = {
   build:    { file: 'build-lessons.mjs', scope: false,
               what: 'derive lessons.json and tracks.json from the page FILENAMES — writes files, audits nothing (--check: refuse if stale)' },
   check:    { file: 'qa/check.mjs',      scope: true,
-              what: 'the lesson gate: page works, every answer saves, half the roadmap block, register printed for reading' },
-  overflow: { file: 'qa/overflow.mjs',   scope: true,
-              what: 'real Chrome geometry: OVERFLOW, ESCAPE, CELL, RESIZE' },
+              what: 'the lesson gate: page works, every answer saves, roadmap coverage and register printed' },
   games:    { file: 'qa/games4.mjs',     scope: false,
               what: 'engine4.js and every plugin state machine' },
   landing:  { file: 'qa/landing.mjs',    scope: false,

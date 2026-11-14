@@ -114,7 +114,7 @@ export function pickLessons(track, argv = process.argv.slice(2)) {
      --track=adult 7 8     those pages
      --all                 every track, every page, the full sweep
 
-   The structural harnesses (content, overflow, games) are deliberately NOT scoped this way: a page can be
+   The structural harnesses (games) are deliberately NOT scoped this way: a page can be
    broken without anyone touching it, so pickTracks/pickLessons keep their full sweep for them.
 */
 export function hasAllFlag(argv = process.argv.slice(2)) {
