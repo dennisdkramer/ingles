@@ -6,33 +6,14 @@ _(Cleared 2026-11-04 at the owner's request.)_
 
 ## 2 Active Handoff 
 
-_2026-11-13, mid-planning. Owner has updated `.clinerules/.clinerules.md` and is restarting VS Code before the next task. Three threads: A is the next task, B is planning only, C is resolved._
 
-### A. Next task — strip vehicle-specific instructions out of `style.css`
+### A. `style.css` headers — the strip and the index are done (2026-11-14); two pointers left for the owner
+- Stripped: AUDIO PLAYER keeps only the owner sentence (tag tree, the `qa/player.js` runtime sentence and the `[03]` line gone); BLOCK FRAME drops "the only shape label a build writes"; ANSWERS drops the "HOW AN ANSWER IS SAVED" narrative and keeps the `a<sec><block><item>` contract; PAGE SCAFFOLD keeps the heading rule with no vehicle clause; LANDING AND TEACHER and CONTROLS drop "confirm and stop" / "read this span only to confirm"; GAMES keeps the `engine4.js` include and drops the KNOBS line, which duplicates `engine4.js:16-27`.
+- `node qa/brief.mjs --css` prints `style.css:LINE  ## text` read from the file (11 headers, one line each); the brief's step 5 prints the same scan; `PEDAGOGY-MAP.md:14` ([I/O] 7) names the command.
+- Open, owner's call: `FILESYSTEM.md:3` still calls these headers "the lesson-facing contract in words: page order, classes, markup, appearance".
+- Open, stale pointer found while confirming the names: `PEDAGOGY-MAP.md:66` cites `/* ## BLOCK WIDTH SLOTS`, a header that does not exist (the file has `## BLOCK WIDTHS`, `style.css:263`).
 
-**Owner's words:** "getting to the task of stripping specific vehicle instructions out of style.css and putting them into their vehicle or just deleting them if theyre redundant to whatever will naturally be executed by applying the markup. Then clean up inputs in pedagogy-map.md - reference js brief for style.css and content_example headers instead of file inputs?"
-
-**Headers present at handoff** (`Select-String -Path style.css -Pattern '^/\* ## '`):
-- `style.css:90` TEXT AND COLOURS
-- `style.css:133` CONTROLS — NOT LESSON-FACING
-- `style.css:178` TEACHING DISPLAYS
-- `style.css:215` AUDIO PLAYER — line 1 is the owner's own sentence (`figure.vz-play` → `<script src="../qa/player.js">` in the `_shell.html` slot) and names no vehicle; `Build it:` is gone. Still to strip: the tag tree at 216-223, which duplicates the markup in `CONTENT_EXAMPLES.md` `[02]`/`[03]`; the `.is-enhanced` / `qa/player.js` runtime sentence at 224-226, which describes engine behaviour rather than the block; and the `[03]` sentence at 223.
-- `style.css:265` BLOCK FRAME — "the only shape label a build writes"
-- `style.css:275` BLOCK WIDTHS
-- `style.css:306` REFLOW
-- `style.css:307` ANSWERS — "HOW AN ANSWER IS SAVED … never author one": the save contract is engine behaviour plus the entry
-- `style.css:326` PAGE SCAFFOLD
-- `style.css:446` LANDING AND TEACHER — NOT LESSON-FACING
-- `style.css:843` GAMES — keep the `<script src="../engine4.js">` include (that is the mandate); the KNOBS line describes `engine4.js` behaviour
-
-**Open decisions this task must resolve:**
-- Header index: a contiguous block at the top of `style.css`, or `brief.mjs --css` printing `style.css:LINE  ## text` read from the file. A stored index with line numbers is wrong after the next insert; the printer holds no stored copy.
-- A check (`qa/css.mjs`) asserting that no `## ` header line names an entry `[NN]` or addresses a build. Proposed, not approved.
-- `FILESYSTEM.md:3` still describes these headers as "the lesson-facing contract in words: page order, classes, markup, appearance". That sentence is the permission the strip removes; change it in the same batch.
-
-**Verification available:** `style.css` braces 914/914; 1368 CRLF, 0 LF-only; `node qa/examples.mjs` 8/8 (66 entries, `[02]`–`[67]`). No CSS check exists.
-
-### B. Open thread — let lesson generation print a pronunciation key
+### B. Open thread — let lesson generation print a pronunciation key - IGNORE - PARKED FOR NOW
 
 **Facts.** `pronkey.js:80-85` exports `words`, `lookup`, `render`, `ready`. `load(obj)` exists at `pronkey.js:59` and is not exported. `render()` (`pronkey.js:34`) splits a key on `-` (syllables joined with `·`), wraps letters in `<b>` and elided letters in `<span class="pr-g">`, and returns the display HTML. `dictionary.json` holds 28,075 entries; **0** contain a space. The page's own lookup (`engine1.js:420-423`) takes a multi-word selection, loops its words, and uses the **first** word that has a key.
 

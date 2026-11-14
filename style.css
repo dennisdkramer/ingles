@@ -130,7 +130,7 @@ mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-positio
 @keyframes sp{to{transform:rotate(360deg)}}
 
 /* colour palette, single source of truth */
-/* ## CONTROLS — NOT LESSON-FACING. Toolbars, the site popup, confirm dialogs, highlight and note layers, toast, `.loadwrap`. `.dlg*` is UI chrome; `.dialog` is a lesson conversation. Read this span only to confirm it is not what you want. */
+/* ## CONTROLS — NOT LESSON-FACING. Toolbars, the site popup, confirm dialogs, highlight and note layers, toast, `.loadwrap`. `.dlg*` is UI chrome; `.dialog` is a lesson conversation. */
 .pop.hlpalpop{padding:4px;border-radius:12px;box-shadow:3px 3px 0 var(--tan)}
 .hlpal{display:flex;align-items:center;gap:4px}
 .hlpal button{width:14px;height:14px;min-width:14px;padding:0;margin:0;border:2px solid var(--ink);border-radius:6px;box-shadow:none;cursor:pointer}
@@ -212,18 +212,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .content-area > .panel{margin:14px 0}
 .panel h3{margin-top:0}
 
-/* ## AUDIO PLAYER — A page that carries a `figure.vz-play` also carries `<script src="../qa/player.js"></script>` in the `_shell.html` script slot, after `../engine2.js`
-   .panel > h3 (the song's own title) + h4 (the block's credit: who performs it, and nothing else —
-        the `h4` rule italicises it, so no `<i>` is written)
-     > figure.vz-play, and NO figcaption — nothing is printed above the player
-       > audio.vz-audio[src][controls][preload=metadata][data-duration] (the measured length)
-       > .vz-controls > button.vz-btn + span.vz-time[data-now] + .vz-bar[role=slider][aria-valuenow]
-         > .vz-fill + .vz-knob + span.vz-time[data-dur]
-       > ol.vz-lyrics > li[data-t] (seconds, on any line whose time is known)
-   `[03]` wraps the lyrics and one <p> beside them in `.vz-sheet`, and is the reason that block is full width.
-   The native `controls` attribute is the floor and always ships: `qa/player.js` deletes it only after adding
-   `.is-enhanced` to figure.vz-play and wiring the bar, the keys and the lyric highlight, so a page whose script
-   did not load still plays, pauses and scrubs. */
+/* ## AUDIO PLAYER — a page that carries a `figure.vz-play` also carries `<script src="../qa/player.js"></script>` in the `_shell.html` script slot, after `../engine2.js`. */
 .vz-play{display:block;margin:0}
 .vz-audio{display:block;width:100%}
 .vz-controls{display:none;align-items:center;gap:10px;margin:8px 0 10px}
@@ -261,7 +250,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
   .vz-sheet .vz-lyrics li{white-space:normal}
 }
 
-/* ## BLOCK FRAME — a block is `.panel` or `.card`, never a bare div. `data-kind="teach|train"` on the block element is the only shape label a build writes: the lowercase atoms of the block's shape, with `|` where one block both explains and asks; `data-level="10|20|30|40|50"` beside it is the block's own difficulty band, and it must be at or above the lesson number. Unbuilt work is `p.todo`, which renders as a visible marker. */
+/* ## BLOCK FRAME — a block is `.panel` or `.card`, never a bare div. `data-kind="teach|train"` on the block element carries the block's shape: its lowercase atoms, with `|` where one block both explains and asks; `data-level="10|20|30|40|50"` beside it is the block's own difficulty band, and it must be at or above the lesson number. Unbuilt work is `p.todo`, which renders as a visible marker. */
 .panel{--edge:var(--tan);border:2px solid var(--edge);border-radius:12px;padding:12px 16px;background:var(--paper);box-shadow:4px 4px 0 var(--tan)}
 
 .panel[data-kind="teach"],.card[data-kind="teach"],.game[data-kind="teach"],.dialog[data-kind="teach"]{--edge:var(--ink)}
@@ -303,7 +292,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .prep{color:var(--tan);font-weight:700}
 .pr-g{color:grey}
 /* ## REFLOW — a reflowed block states `--rows` (items per column, e.g. style="--rows:2") ON ITSELF, never on a section or a wrapper. `.qgrid.stack` and `.blanks.sent` are the two containers that tile: items run DOWN a column and continue at the top of the next; `.wide` returns to one full-width column. */
-/* ## ANSWERS — three shapes and no others: a radio item (`.qgrid > .qitem > .qnum/.qstem/.qopts`), a gap inside a sentence (`.blanks.sent > input.gap`), a `textarea` other than #feed. HOW AN ANSWER IS SAVED: the engine keys on `name`, so every control carries one matching `a<sec><block><item>` — `a1c1` for the item, `a1c1g1` for its first gap. The number is the identity; the prompt text is not, so a reworded stem keeps its answer. #feed is never saved. No checkbox exists in any page: never author one. A block that must `produce` needs the gap or the textarea, never radios alone. */
+/* ## ANSWERS — three shapes and no others: a radio item (`.qgrid > .qitem > .qnum/.qstem/.qopts`), a gap inside a sentence (`.blanks.sent > input.gap`), a `textarea` other than #feed. Every control carries a `name` of `a<sec><block><item>` — `a1c1` for the item, `a1c1g1` for its first gap — so the number is the identity in the saved answer and a reworded stem keeps it. #feed is never saved. No checkbox exists in any page. A block that must `produce` needs the gap or the textarea, never radios alone. */
 .blank{display:inline-block;width:3.2em;border-bottom:2px solid var(--tan)}
 
 .qgrid.stack,.blanks.sent{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(var(--rows,2),auto);grid-auto-columns:minmax(0,1fr);column-gap:28px}
@@ -322,7 +311,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 body.editing #hlLayer,body.editing #noteLayer{display:none}
 .pt b,.lead b{font-style:normal}
 .chart tr.note td{background:#fff8ea;font-style:italic;color:#5c5347;border-top:0;padding:10px 14px}
-/* ## PAGE SCAFFOLD — the three headings and the fixed page. h1 is the lesson title, ONE line; h2 is a numbered section `1.`; h3 is a lettered block `A.`; nothing a vehicle uses may take their place; any [h2 or h3] [defined by a vehicle or generated] must follow the number/letter. .page-container is 1400px and .content-area 1200px, both FIXED: no lesson element may size itself in `fr`, `vw` or `auto-fit`, because those make the browser re-decide the layout on resize. A plain link is `a`; the print copy lives in #printRoot. */
+/* ## PAGE SCAFFOLD — the three headings and the fixed page. h1 is the lesson title, ONE line; h2 is a numbered section `1.`; h3 is a lettered block `A.`; no vehicle's heading takes their place, and one follows the number or letter. .page-container is 1400px and .content-area 1200px, both FIXED: no lesson element may size itself in `fr`, `vw` or `auto-fit`, because those make the browser re-decide the layout on resize. A plain link is `a`; the print copy lives in #printRoot. */
 body.editing mark.nb.has-rec{background-image:none}
 body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 
@@ -442,7 +431,7 @@ body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
  panel, at the same 1400px metric as the header, and #needg drops to a full-width second line when Google's
  script is unavailable — wrapping here is safe because this container is a FIXED width, so it never depends
  on the viewport. */
-/* ## LANDING AND TEACHER — NOT LESSON-FACING. The index.html shell, `.welcome-bar`, `.hello-*`, `.lnum` / `.ltitle`, `.tadmin-*`, `.twho`, `.denbtn`. Same rule: confirm and stop. */
+/* ## LANDING AND TEACHER — NOT LESSON-FACING. The index.html shell, `.welcome-bar`, `.hello-*`, `.lnum` / `.ltitle`, `.tadmin-*`, `.twho`, `.denbtn`. */
 .welcome-bar{width:1400px;margin:6px 0 0 15px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;padding:8px 14px;font-size:15px}
 .welcome-bar .landing-title{font-size:16px;letter-spacing:0;margin:0;font-family:inherit;font-weight:700}
 .welcome-bar .wsep{color:#a99c88}
@@ -840,7 +829,6 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    translateX keyframe drops the inline transform the walk put on him and he snaps back to the middle
    of the road for the length of the animation — the one moment he must not move. */
 /* ## GAMES — ENGINE-OWNED. A page that carries a `.game` block also carries <script src="../engine4.js"></script> after ../engine2.js; the art is drawn by the engine, so NEVER author or restyle a `.g4-*` element. Content is identical for every skin, so `data-game` is a presentation choice, never a content choice. */
-/* KNOBS, all optional on the `.game` element, and what happens when each is ABSENT: data-game (one of 13 skins) · data-time ms per item, 0 = no deadline (0) — this is the difficulty · data-limit seconds for the run, 0 = off (0) · data-retry 0|1 (1: a TRAINING game leaves it, the block that IS the page's quiz writes 0) · data-shuffle (1) · data-rounds 0 = all authored (0) · data-prompt show the stem on the HUD (1) · data-sound (1) · data-skin free-form, CSS may theme, the engine never reads it. */
 .g4-runner.bitten{animation:g4reel .42s ease}
 /* the bite always ends the same way: he goes down where he stands — the `down` state is built on his own
    --dx, so the fall happens at the door he chose — and then he is gone, until the street comes back

@@ -4,6 +4,7 @@
  *
  *   node qa/brief.mjs --track=business --lesson=41        the input set, then the gate
  *   node qa/brief.mjs --track=business --lesson=41 --reassert   PEDAGOGY-MAP.md again, nothing else
+ *   node qa/brief.mjs --css            the style.css `## ` headers, one line each, with their line numbers
  *
  * Why the map appears twice: it is the file that decides what the lesson contains and at what
  * level, and it has been the file least obeyed. Copy 1 is read before the shape is chosen; copy 2
@@ -22,6 +23,32 @@ const arg = (k, d) => {
   return hit ? hit.slice(k.length + 3) : d;
 };
 const has = k => process.argv.includes('--' + k);
+const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
+const lines = f => read(f).split(/\r?\n/);
+
+/* the stylesheet's `## ` headers, ONE scan: --css prints the index and step 5 prints these same headers,
+   so the two cannot list different ones. `line` is the line the header starts on, in the file as it stands. */
+function cssHeaders() {
+  const src = lines('style.css');
+  const out = [];
+  for (let i = 0; i < src.length; i++) {
+    if (!/^\s*\/\*\s##\s/.test(src[i])) continue;
+    const buf = [src[i]];
+    let j = i;
+    while (j < src.length - 1 && !/\*\//.test(src[j])) { j++; buf.push(src[j]); }
+    out.push({ line: i + 1, text: src[i].trim(), block: buf.join('\n') });
+    i = j;
+  }
+  return out;
+}
+
+/* the stylesheet read as an index, at print time. A stored index is wrong after the next insert, so this
+   printer holds no copy of the file:
+     node qa/brief.mjs --css        style.css:LINE  ## text, one line per header */
+if (has('css')) {
+  cssHeaders().forEach(h => process.stdout.write('style.css:' + h.line + '  ' + h.text + '\n'));
+  process.exit(0);
+}
 
 /* the menu's index, machine-readable, with no track and no lesson in hand: this is what the preview
    page's nav is a readout of (`qa/serve.mjs` serves the same call to `qa/readout.js`), so the nav and
@@ -41,11 +68,10 @@ const lesson = Number(arg('lesson', '0'));
 if (!track || !lesson) {
   console.error('usage: node qa/brief.mjs --track=<business|adult|kids> --lesson=<n> [--reassert] [--exemplars=N]');
   console.error('       node qa/brief.mjs --index        the menu read as an index (JSON; the preview nav\'s source)');
+  console.error('       node qa/brief.mjs --css          the style.css `## ` headers, with their line numbers');
   process.exit(2);
 }
 const TR = track.toUpperCase();
-const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
-const lines = f => read(f).split(/\r?\n/);
 
 const bar = t => '\n' + '='.repeat(78) + '\n' + t + '\n' + '='.repeat(78);
 const kb = s => (s.length / 1024).toFixed(1) + ' KB';
@@ -115,17 +141,9 @@ if (want) {
   else console.error('brief: no such shape: ' + want);
 }
 
-/* 5. the stylesheet, headers only: the ten contracts, not the mechanism */
-const CSS = lines('style.css');
-const heads2 = [];
-for (let i = 0; i < CSS.length; i++) {
-  if (!/^\s*\/\*\s##\s/.test(CSS[i])) continue;
-  const buf = [CSS[i]];
-  let j = i;
-  while (j < CSS.length - 1 && !/\*\//.test(CSS[j])) { j++; buf.push(CSS[j]); }
-  heads2.push(buf.join('\n'));
-}
-emit('style.css - ' + heads2.length + ' `## ` HEADERS ONLY', heads2.join('\n\n'));
+/* 5. the stylesheet, headers only: the contracts, not the mechanism — the scan --css prints */
+const heads2 = cssHeaders();
+emit('style.css - ' + heads2.length + ' `## ` HEADERS ONLY', heads2.map(h => h.block).join('\n\n'));
 
 /* 6. the shell the page is built on */
 emit('_shell.html - THE PAGE THIS IS BUILT ON', read('_shell.html'));
