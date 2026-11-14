@@ -32,10 +32,11 @@
   - e) If an item from among [I/O] #5 `###` headings is chosen, read only that heading's entry for implementation details (`node qa/brief.mjs --section=NN` prints one whole). The heading is the shape, the itemsize and what it does; the `markup` and `info` lines under it are how it is built. Any shape and vehicle you imagine is equally valid and may be used for any part of any lesson - examples are mere possibilities.
 
 ## [PORTUGUESE] Quantity decreases as student english level increases **HIGH PRIORITY**
-- Portuguese may be used in [**Lesson introduction, explanatory, tip, headline, or column header**] text ONLY IF the necessary information in english would not be understood by the student at the level of the lesson that contains it. The share of these texts authored in Portuguese must sit inside **a target range - in figures, not a judgement call**:
+- Portuguese may be used in [**Lesson introduction, explanatory, tip, headline, or column header**] text ONLY IF the necessary information in english would not be understood by the student at the level of the lesson that contains it. 
+- For any generated content which is NOT [[**Lesson introduction, explanatory text, tip, headline, or column header**]], [it is Portuguese ONLY when *defensibly optimal for teaching purposes*] ELSE it is authored in English].
+- Use your judgement, but the lesson is flagged for review if target share of these texts authored in Portuguese falls outside this range: 
        - **ceiling = 75 − (L − 5) × 1.8 %** - no more Portuguese than this, at any lesson number;
        - **floor = 35 − (L − 5) × 1.8 %**, clamped at 0 - no less, because a lesson that stopped glossing has abandoned its reader.
-- For any generated content which is NOT [[**Lesson introduction, explanatory text, tip, headline, or column header**]], [it is synthesized with [[derived socio-linguistic context] and [its TRACK's [register details and persona priorities]]], [CONTENT LEVEL] is as close as possible to [STUDENT LEVEL], and [it is Portuguese ONLY when *defensibly optimal for teaching purposes*] ELSE it is authored in English].
 
 ## [LEVEL]
 - "STUDENT LEVEL" = [Current Lesson #].
