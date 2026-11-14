@@ -113,6 +113,21 @@ function tells(track) {
 
 /* ---- one page: does it work, what does it carry, what does it sound like ---- */
 
+/* ---- the shapes of a claim nothing on the page can check ----
+   The truth of a sentence is the author's job; what a machine can see is a claim that is unfalsifiable by
+   construction. Printed, never failed: a hyperbole in a street voice is a real teaching defect, and the
+   reader still decides. The bare `always`/`never` scan prose.mjs used is gone: it fired on ordinary prose. */
+const CLAIM = [
+  [/\b(no|not one|never a)\s+(human|person|one|word|sentence|student)\b[^.!?]{0,60}\b(has|have) ever\b|\bnobody has ever\b|\bno one has ever\b/i,
+    'an absolute about all of history'],
+  [/\b(every|all|no)\s+(single\s+)?phrasal verbs?\b/i, 'a claim about a whole class'],
+  [/\b(the|this|that|a)\s+word\s+[^.!?]{0,40}\b(comes?|came|derives?|originates?|roots?)\b|\betymolog/i,
+    'a history claim — name the source'],
+  [/\btwins?\b/i, '"twin" is a label this repo does not use'],
+  [/\b(helper|glue|little|small|function)\s+words?\b/i, 'a coined class name — say which word'],
+  [/\bfamily unit\b/i, 'a coined class name — the roadmap says family'],
+];
+
 /** the real page with a stubbed login gate, so the engines run exactly as a signed-in student sees them */
 function gate(html, track) {
   const email = 'qa@test.com', s = sig(email + track + SECRET);
@@ -178,7 +193,20 @@ async function inspect(base, track, n) {
     });
     text = norm(clone.textContent);
   }
-  const out = { fails, text, h1: h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : '' };
+  /* claims: prose the student reads as fact, dialogue excluded because a character may be wrong on purpose */
+  const hits = [];
+  if (area) {
+    for (const el of area.querySelectorAll('p, td, th, li, .lead')) {
+      if (el.querySelector('p, td, th, li')) continue;
+      if (el.closest('.dialog')) continue;
+      const t = el.textContent.replace(/\s+/g, ' ').trim();
+      for (const [re, why] of CLAIM) {
+        const m = t.match(re);
+        if (m) hits.push('"' + m[0].trim() + '" (' + why + ')');
+      }
+    }
+  }
+  const out = { fails, text, claims: hits, h1: h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : '' };
   w.close();
   return out;
 }
@@ -242,6 +270,7 @@ for (const track of tracks) {
 
     const line = (cover + ' · register ' + (reg.join(' · ') || 'neutral')
       + (neg.length ? ' · tells ' + neg.join(' · ') : '')
+      + (r.claims.length ? ' · claims ' + r.claims.length + ': ' + r.claims.slice(0, 2).join(' · ') : '')
       + (r.h1 ? ' · h1 ' + r.h1.length : '')).trim();
     if (fails.length) { failed++; console.log('❌ ' + track + '/lesson' + n + '\n     ' + line); fails.forEach(f => console.log('     - ' + f)); }
     else console.log('✅ ' + track + '/lesson' + n + '\n     ' + line);

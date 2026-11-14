@@ -27,8 +27,9 @@ suite is how a real page failure gets read as noise. It now runs as its own scri
 back in `qa`.** Untouched by the lesson-generation work.
 
 ## qa/prose.mjs and qa/examples.mjs — retired as gates (2026-11-11)
-0 decisions changed while they gated a build, so neither is a member of `npm run qa`; their files remain
-runnable by direct path.
+0 decisions changed while they gated a build, so neither is a member of `npm run qa`. `qa/prose.mjs` is now
+deleted: its claim-shape scan moved into `qa/check.mjs` (printed, never failed) and its 60-word prose budget was
+dropped with the PEDAGOGY-MAP section that stated it. `qa/examples.mjs` remains runnable by direct path.
 
 ## adult/lesson22 — exists, is not a lesson page
 `qa/content.mjs --track=adult 22` → engine1.js and engine2.js did not execute, `#feed` missing, `.content-area`
