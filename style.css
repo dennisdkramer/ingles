@@ -293,6 +293,8 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .pr-g{color:grey}
 /* ## REFLOW — a reflowed block states `--rows` (items per column, e.g. style="--rows:2") ON ITSELF, never on a section or a wrapper. `.qgrid.stack` and `.blanks.sent` are the two containers that tile: items run DOWN a column and continue at the top of the next; `.wide` returns to one full-width column. */
 /* ## ANSWERS — three shapes and no others: a radio item (`.qgrid > .qitem > .qnum/.qstem/.qopts`), a gap inside a sentence (`.blanks.sent > input.gap`), a `textarea` other than #feed. Every control carries a `name` of `a<sec><block><item>` — `a1c1` for the item, `a1c1g1` for its first gap — so the number is the identity in the saved answer and a reworded stem keeps it. #feed is never saved. No checkbox exists in any page. A block that must `produce` needs the gap or the textarea, never radios alone. */
+/* ## ANSWER KEY — the key lives in the page, not with the server: a radio item carries `data-a` = the `value` of its right option, and a typed control (`input.gap`, a textarea other than #feed) carries `data-answer`, with `|` between accepted forms. Complete prints the typed key as a `.ans` line under its field and marks the right option `.correct`; Clear takes both back. An item with no key is an item Complete cannot reveal. */
+
 .blank{display:inline-block;width:3.2em;border-bottom:2px solid var(--tan)}
 
 .qgrid.stack,.blanks.sent{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(var(--rows,2),auto);grid-auto-columns:minmax(0,1fr);column-gap:28px}
