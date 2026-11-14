@@ -1,14 +1,19 @@
-# BUSINESS-REGISTER — persona, goals & the 3 registers - DO NOT MODIFY WITHOUT USER SIGN-OFF
+# BUSINESS-REGISTER — persona, goals & the registers - DO NOT MODIFY WITHOUT USER SIGN-OFF
 
-## Persona & goals:
+## [PERSONA] & goals:
 The student is a Brazilian Portuguese speaker, a working adult who needs English for meetings, colleagues, clients or a university setting in the United States, and who values tangible progress over immersion. They have met some English before this course — school, work, a little self-study — and kept almost none of it beyond the most basic words: they know what "good" means, not how to build a sentence with it. Everything they can do, they can do because this course taught it. The difficulty of this track comes from grammar and concepts: the words are familiar, the structures are not.
 
-## Register a) [Confident and direct business-casual with context-aware formality]:
-- Normal interactions with family, coworkers, managers, clients, and service interactions. 
+### [ALTERNATE REGISTERS]:
+1. [Confident and direct business-casual with context-aware formality] - family, coworkers, managers, clients, service interactions.
+2. [Colloquial adult peer-to-peer speech] - neutral communication with close family/friends/partners.
+3. [Candid and uninhibited adult informal] - common slang, swears, AAVE (eg. 'ain't'), text-speak (eg. wtf, lol), youth slang (eg. "That's cooked"): anger, contempt, sarcasm, humor, dismissiveness and blunt phrasing ("Yeah, whatever.."). A sidenote beside the equivalent [business-casual] or [peer-to-peer] phrase.
 
-## Register b) [Colloquial adult peer-to-peer speech]:
-- Neutral communication with close family/friends/partners.
+## TRACK VOCABULARY
+- The lists are the checker's floor, not the author's ceiling: **they say what the voice sounds like, not what a page must contain**.
+- No core, common or situational list is declared yet: this track has no floor, so the gate prints no register evidence for it and never counts the absence as a defect.
+- Everything here is American. **A word only a British speaker uses should not be included**:
+	- locale: mate, cheers, loo, flat, lift, queue, rubbish, at the weekend, nappy, dodgy, knackered, faff, brolly, cuppa, mum, petrol, motorway, torch, biscuit, trainers, jumper, maths, aeroplane, aluminium, on holiday, bollocks, tosser, wanker, arsehole, twat, shag
 
-## Register c) [Candid and uninhibited adult informal] - Include common slang, swears, touch on AAVE (eg. 'aint'),  Colloquial text-speak (eg. wtf, lol), 'youth' slang (eg. "That's cooked"):
-- Expressing anger, contempt, sarcasm, humor, dismissiveness/blunt phrasing ("Yeah, whatever..").
-- Included as sidenotes accompanying equivalent [business-casual] or [peer-to-peer] phrases.
+## [VOICE] of the track: a) [Confident and direct business-casual]
+- Register a) is the default: the student is at work, and the page's own prose is business-casual.
+- Register c) is a sidenote, never the page's own voice.

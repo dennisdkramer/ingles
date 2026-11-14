@@ -3,9 +3,11 @@
 Six checks, all narrow. None of them judges how a page is laid out: block widths, columns, option
 counts, spacing and class names are generation decisions, not defects.
 
-- `node qa/content.mjs [--track=…] [n …]` — the page still works: engine1/engine2 executed, exactly one
-  `#feed` that is a textarea, every `.listen` has `data-say`, no `<!-- MORE -->` sentinel, every answer
-  control resolves an anchor (an unanchored one is never saved), no console errors.
+- `node qa/check.mjs [--track=…] [n …] [--all]` — the page works: engine1/engine2 executed, exactly one
+  `#feed` that is a textarea, every `.listen` has `data-say`, every answer control resolves an anchor (an
+  unanchored one is never saved), no console errors, no game block engine4 failed to wire. It also PRINTS —
+  never fails — half-coverage of the lesson's roadmap items, the register tiers the page hits, the formal and
+  locale words it uses and the `<h1>` length, for the reader to judge.
 - `node qa/overflow.mjs [--track=…] [n …]` — real Chrome over CDP (jsdom cannot see layout). OVERFLOW
   (content wider than its block), ESCAPE (an element across the `.content-area` frame), CELL (a `.blanks`
   cell whose item does not fit), RESIZE (a draggable textarea). `--shot <file>` saves a picture of the page
@@ -47,16 +49,13 @@ a CSS reorder from damage; it is also the slowest check here and needed two dete
 trustworthy. A per-step run buys nothing a per-batch run does not, and the artefacts it produced when run casually
 cost more attention than the defects it found.
 
-**A build runs one of these on itself.** Before a lesson is reported as done, the page it just wrote is checked
-with `node qa/lang.mjs --track=<track> <N>` (its own voice against the target range in PEDAGOGY-MAP.md
-[PORTUGUESE] HIGH PRIORITY). That page and no others: a sweep is not a self-check, and it
-shows a build the bands and shapes of pages it may not read. A red is fixed in the page, never in the threshold,
-and a page reshaped after the check is recorded again. `content`, `overflow` and `live` are not in that loop —
-each opens a server or a real browser and belongs to the end of a batch (PEDAGOGY-MAP.md §5).
-**Every check above except `qa/liquid.mjs` prints one line and exits 0 unread unless `QA_ON=1` is in the
-environment** (`qa/off.mjs`, owner instruction 2026-11-10, ISSUES.md) — so a green from any of them without that
-variable is the switch reporting, not the page. Run the self-check as `QA_ON=1 node qa/lang.mjs --track=<t> <N>`
-or it proves nothing.
+**A build runs the gate on itself.** Before a lesson is reported as done, the page it just wrote is checked
+with `node qa/check.mjs --track=<track> <N>`. That page and no others: a sweep is not a self-check, and it
+shows a build the shapes of pages it may not read. A red is fixed in the page, never in the threshold.
+`overflow` and `live` are not in that loop — each opens a real browser and belongs to the end of a batch.
+**`qa/check.mjs` is the one harness that runs as written.** Every other harness prints one line and exits 0
+unless `QA_ON=1` is in the environment (`qa/off.mjs`, owner instruction 2026-11-10, ISSUES.md) — so a green
+from one of them without that variable is the switch reporting, not the page.
 
 Which of those to run, and how deep, is the caller's decision, not the harness's: when scope is most or
 all live pages, pick a few with defensible relevance to test/verify. Request user sign-off before

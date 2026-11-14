@@ -1,7 +1,13 @@
 # ISSUES — bugs & problems (only bugs/problems live here)
 Bugs and problems only. Parked plans, to-do items and features live in PARKED.md; handoffs in HANDOFF.md; current state & shared parameter values in STATUS.md.
 
-## ALL QA IS OFF (2026-11-10, owner instruction) — every harness exits 0 without reading a page
+## QA CONSOLIDATED (2026-11-14) — `qa/check.mjs` is live
+`qa/content.mjs`, `qa/lang.mjs` and `qa/register.mjs` are deleted: their checks are one file, `qa/check.mjs`, which
+runs as written. The Portuguese band and the per-track register quotas no longer exist, so every measurement
+below that cites them is historical. Every other harness is still behind `qa/off.mjs`.
+
+
+## ALL QA WAS OFF (2026-11-10, owner instruction) — superseded above for qa/check.mjs
 `qa/off.mjs` holds the switch; each of the twelve harnesses calls `qaOff('…')` as its first statement, so a run
 prints one line and exits 0. Reason: lesson generation is being judged on the page it produces, with nothing
 between the prompt and the page — a harness that reds on a style choice is a second author, and its verdict

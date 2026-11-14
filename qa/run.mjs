@@ -19,11 +19,10 @@
  *   npm  run qa -- content --track=kids 3
  *   node qa/run.mjs                      → the menu, and a non-zero exit
  *
- * `scope` below was read off each file's import block, never assumed: content and overflow import
- * pickTracks/hasTrackFlag/pickLessons (structural), lang and register import pickVoiceTracks/
- * hasAllFlag/touchedScope (voice), and games4, landing, live and build import none.
+ * `scope` below was read off each file's import block, never assumed: check and overflow import the
+ * track resolver, and games4, landing, live, build and liquid import none.
  */
-import { qaOff } from './off.mjs'; qaOff('run'); /* QA OFF - see qa/off.mjs */
+import { qaOff } from './off.mjs'; /* this dispatcher stays live; each member keeps its own switch */
 import path from 'path';
 import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
@@ -33,12 +32,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MEMBERS = {
   build:    { file: 'build-lessons.mjs', scope: false,
               what: 'derive lessons.json and tracks.json from the page FILENAMES — writes files, audits nothing (--check: refuse if stale)' },
-  content:  { file: 'qa/content.mjs',    scope: true,
-              what: 'the page works: engines run, answers save, required blocks present' },
-  lang:     { file: 'qa/lang.mjs',       scope: true,
-              what: 'voice: the language the page explains in' },
-  register: { file: 'qa/register.mjs',   scope: true,
-              what: 'voice: the register the page speaks in' },
+  check:    { file: 'qa/check.mjs',      scope: true,
+              what: 'the lesson gate: page works, every answer saves, half the roadmap block, register printed for reading' },
   overflow: { file: 'qa/overflow.mjs',   scope: true,
               what: 'real Chrome geometry: OVERFLOW, ESCAPE, CELL, RESIZE' },
   games:    { file: 'qa/games4.mjs',     scope: false,
