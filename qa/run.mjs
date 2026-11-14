@@ -32,7 +32,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const MEMBERS = {
   build:    { file: 'build-lessons.mjs', scope: false,
-              what: 'derive lessons.json from every page h1 — writes a file, audits nothing' },
+              what: 'derive lessons.json and tracks.json from the page FILENAMES — writes files, audits nothing (--check: refuse if stale)' },
   content:  { file: 'qa/content.mjs',    scope: true,
               what: 'the page works: engines run, answers save, required blocks present' },
   lang:     { file: 'qa/lang.mjs',       scope: true,

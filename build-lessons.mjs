@@ -1,7 +1,10 @@
 // build-lessons.mjs — what each lesson page IS, taken from its filename. No page is read.
-// Run: node build-lessons.mjs  (or `npm run build:lessons` / `npm run qa`)
+// Run: node build-lessons.mjs          write the derived files
+//      node build-lessons.mjs --check  write nothing; exit 1 if any of them is out of date
 // A page is `lesson<N>-<Title>.html`: the number is its position in the book and the rest is its name, so
 // this file lists {n, title, file} per track, writes root lessons.json, and re-stamps style.css in index.html.
+// --check is what the pre-push hook runs: the derived files are SERVED (GitHub Pages has no build), so a push
+// that leaves them stale publishes a site that does not link the lesson it just added.
 // TRACKS ARE THE TABLE BELOW. A new track is one line, added by hand; a folder holding lesson pages that is
 // missing from the table is reported, never silently dropped.
 import fs from 'fs';
@@ -10,6 +13,23 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
+const CHECK = process.argv.includes('--check');
+
+/* every derived file goes through here: identical content is left alone, and --check reports instead of writes.
+   Line endings are the CHECKOUT's, never a reason to report drift: core.autocrlf=true means a Windows working
+   copy holds CRLF while git stores LF, and a check that compared raw bytes would refuse every push after a
+   fresh clone. */
+const drift = [];
+function emit(rel, text) {
+  const abs = path.join(ROOT, rel);
+  const now = fs.existsSync(abs) ? fs.readFileSync(abs, 'utf8') : null;
+  const eol = now !== null && now.includes('\r\n') ? '\r\n' : '\n';
+  if (eol !== '\n') text = text.replace(/\r?\n/g, eol);
+  if (now === text) return false;
+  if (CHECK) { drift.push(rel); return true; }
+  fs.writeFileSync(abs, text, 'utf8');
+  return true;
+}
 
 /* name, then how the site names and paints the track: label, icon, the 200 swatch of the access switch, order */
 const TRACKS = [
@@ -54,13 +74,14 @@ for (const meta of TRACKS) {
   manifest[track] = entries;
 }
 
-fs.writeFileSync(path.join(ROOT, 'lessons.json'), JSON.stringify(manifest, null, 2) + '\n', 'utf8');
 const summary = Object.fromEntries(Object.entries(manifest).map(([k, v]) => [k, v.length]));
+const wroteLessons = emit('lessons.json', JSON.stringify(manifest, null, 2) + '\n');
 
 // tracks.json is what index.html reads to name and paint each track, so the page holds no track name of
 // its own. No count travels here: a track's size is lessons.json's own array, and a copy can only drift.
+// It changes ONLY when the table above changes — adding a lesson never touches it.
 const trackList = TRACKS.map(m => ({ name: m.name, label: m.label, icon: m.icon, color: m.color, order: m.order }));
-fs.writeFileSync(path.join(ROOT, 'tracks.json'), JSON.stringify(trackList, null, 2) + '\n', 'utf8');
+const wroteTracks = emit('tracks.json', JSON.stringify(trackList, null, 2) + '\n');
 
 // The stylesheet's version stamp is BAKED INTO index.html by this build, never applied at runtime. It used to be
 // swapped in by JS at load, which changed <link>.href while the first fetch was still in flight: the browser
@@ -79,9 +100,19 @@ if (!linkRe.test(htmlNow)) {
   const before = htmlNow.match(linkRe)[0];
   const wanted = '<link rel="stylesheet" href="' + cssUrl + '"';
   if (before !== wanted) {
-    fs.writeFileSync(indexPath, htmlNow.replace(linkRe, wanted), 'utf8');
-    console.log('index.html stylesheet stamped -> ' + cssUrl);
+    emit('index.html', htmlNow.replace(linkRe, wanted));
+    if (!CHECK) console.log('index.html stylesheet stamped -> ' + cssUrl);
   }
 }
-console.log('lessons.json written: ' + JSON.stringify(summary));
-console.log('tracks.json written: ' + trackList.map(t => t.name + ' "' + t.label + '"').join(', '));
+
+if (CHECK) {
+  if (drift.length) {
+    console.error('build-lessons --check: OUT OF DATE -> ' + drift.join(', '));
+    console.error('run: npm run build:lessons   then commit the result (these files are served, not built at deploy)');
+    process.exit(1);
+  }
+  process.exit(process.exitCode || 0);
+}
+if (wroteLessons) console.log('lessons.json written: ' + JSON.stringify(summary));
+if (wroteTracks) console.log('tracks.json written: ' + trackList.map(t => t.name + ' "' + t.label + '"').join(', '));
+if (!wroteLessons && !wroteTracks) console.log('lessons.json and tracks.json already correct — nothing written');

@@ -6,6 +6,7 @@
   "description": "Ingles Abre Portas - static English-lessons site (GitHub Pages) plus its QA harnesses.",
   "scripts": {
     "build:lessons": "node build-lessons.mjs",
+    "build:check": "node build-lessons.mjs --check",
     "qa": "node qa/run.mjs",
     "qa:games": "node qa/run.mjs games",
     "qa:layout": "node qa/run.mjs overflow --selftest && node qa/run.mjs overflow",
