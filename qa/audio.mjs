@@ -28,7 +28,10 @@
  *        (no audio on hand: the site is searched, the audio is downloaded and converted to mp3, and
  *         it is paired with the LRCLIB record whose duration agrees within 2 s — the whole chain,
  *         unattended. Without --out it prints the pairing and writes nothing)
- *        --early=<s> places every sheet line that far before its cue and accepts a NEGATIVE value
+ *   node qa/audio.mjs --in=C:/music/song.mp3 --lrc-id=3209411 --finds="i came in like a wrecking ball" --count=4
+ *        (the line found by its WORDS instead of its index; every line number carrying them is printed,
+ *         the first is taken, `--line=<n>` overrides, and absent words refuse the run)
+ *        Flags: --early=<s> places every sheet line that far before its cue and accepts a NEGATIVE value
  *        (--early=-2 = two seconds later, for a sheet that runs early against its own upload);
  *        --tail=<s> (default 2) ends the clip past the next cue instead of on it
  *        --cue-shift=<s> moves every data-t by that many seconds and touches no audio (the clip is
@@ -302,9 +305,38 @@ if (lrcQuery || lrcId || lrcFile) {
     process.exit(0);
   }
   if (!rows || !rows.length) die('that sheet holds no timed lines');
+  /* A LINE FOUND BY ITS WORDS, NOT BY ITS INDEX. The builder has the words, not the number, and the
+     number is a fact about one sheet that it cannot know. Both sides are normalised (case, apostrophes,
+     punctuation, runs of space); every line whose text contains the words is printed, because a chorus
+     repeats and more than one hit is normal rather than an error; the first is taken unless `--line=<n>`
+     names another. It refuses only when the words are absent — the one case where the words and the
+     sheet really disagree. */
+  let foundFirst = 0;
+  const finds = arg('finds', '');
+  if (finds) {
+    if (arg('lines', '')) die('--finds finds the first line itself — drop --lines (--count=<n> sets how many)');
+    const norm = s => String(s).toLowerCase().replace(/[\u2019]/g, "'")
+      .replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ').trim();
+    const q = norm(finds);
+    if (!q) die('--finds needs the words of a line');
+    const hits = rows.map((r, i) => (norm(r.text).includes(q) ? i + 1 : 0)).filter(Boolean);
+    if (!hits.length) {
+      die('no line in that sheet carries "' + finds + '" — the words and the sheet disagree. ' +
+        'A song whose words only paraphrase the target is not a candidate');
+    }
+    const want = Math.floor(Number(arg('line', String(hits[0]))));
+    if (!hits.includes(want)) {
+      die('--line=' + want + ' does not carry those words — they are at line ' + hits.join(', '));
+    }
+    foundFirst = want;
+    console.log('  --finds: "' + finds + '" is at line ' + hits.join(', ') + ' of ' + rows.length +
+      ' timed lines' + (hits.length > 1 ? ' — a repeat, the first is taken' : ''));
+  }
   const sel = String(arg('lines', '')).split(',').filter(s => s.trim() !== '').map(Number);
-  const first = sel.length ? Math.max(1, Math.floor(sel[0])) : 1;
-  const count = sel.length > 1 ? Math.max(1, Math.floor(sel[1])) : rows.length - first + 1;
+  const countArg = Math.floor(Number(arg('count', '0')) || 0);
+  const first = foundFirst || (sel.length ? Math.max(1, Math.floor(sel[0])) : 1);
+  const count = foundFirst ? (countArg > 0 ? countArg : 4)
+    : (sel.length > 1 ? Math.max(1, Math.floor(sel[1])) : rows.length - first + 1);
   if (first > rows.length) die('--lines=' + first + ' is past the end of that record (' + rows.length + ' timed lines)');
   const take = rows.slice(first - 1, first - 1 + count);
   if (arg('lyrics', '')) die('--lrc-id brings the words too — drop --lyrics');
@@ -323,6 +355,7 @@ if (lrcQuery || lrcId || lrcFile) {
 }
 
 const outName = arg('out') || die('--out=<name> is required (it becomes assets/<name>.mp3)');
+if (arg('finds', '') && !lrcSel) die('--finds needs a timed sheet: add --lrc-id= / --lrc-file= / --search=');
 const lyrics = lrcSel ? lrcSel.lines.slice()
   : (arg('lyrics', '') || '').split('|').map(s => s.trim()).filter(Boolean);
 const wantSeconds = Number(arg('seconds', '0'));

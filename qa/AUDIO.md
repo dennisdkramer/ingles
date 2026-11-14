@@ -31,6 +31,13 @@ Local route — the audio is already on disk:
 node qa/audio.mjs --in=<path> --out=<name> --lrc-id=<id> --lines=<first>,<count>
 ```
 
+## Finding the lines before cutting
+
+A lesson arrives at a song in one of two ways, and only the second needs a search.
+
+1. The song is known and chosen as a teaching tool for a lesson. The lesson generation process names it or words within it. Supply the line's own words and never a line number: `--finds="I came in like a wrecking ball"` looks the words up in the record's own text, prints every line number they occur at, takes the first unless `--line=<n>` says otherwise, and refuses only when the words are absent.
+2. No song is known and the lesson needs a lyric that matches a linguistic structure or vocabulary items taught by the lesson. Search the web for the words themselves — pick one whose sheet is a good match. Then the song is known: run `--finds` to prove the phrase is there and to learn its line number, and cut only after it returns. A song whose words merely paraphrase the target is not a candidate. LRCLIB cannot search lyric text, so step 2 is a web search and never an API call.
+
 ## Flags and defaults
 
 | flag | default | what it does |
@@ -40,6 +47,8 @@ node qa/audio.mjs --in=<path> --out=<name> --lrc-id=<id> --lines=<first>,<count>
 | `--tail=<s>` | 2 | the clip ends this far past the sheet's next cue, not 0.05 s before it |
 | `--fade=<s>` | 0.5 | fade at each end, done by one ffmpeg re-encode; `--fade=0` keeps the pure frame copy |
 | `--cue-shift=<s>` | 0 | moves every `data-t` by that many seconds and touches no audio |
+| `--finds=<text>` | — | the line's own words: prints every line number they occur at and takes the first; `--line=<n>` overrides, absent words refuse the run |
+| `--count=<n>` | 4 | how many lines to take when `--finds` set the first one |
 | `--width=full` | off | prints the full-width shape |
 
 ## The steps, in order
