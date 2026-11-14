@@ -279,9 +279,6 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .ans{display:block;width:100%;margin:2px 0 0;font-size:13px;line-height:1.35;font-weight:700;color:#2f7d32;text-align:left}
 .qopts label.correct{background:#e6f4e7;border-radius:8px;padding:1px 6px;color:#1f5d22}
 
-.blanks.glossdrop>div .ptw{display:block;text-align:right}
-.chart.glossdrop .ptw{display:block}
-
 .lead{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#5c5347;margin:.2em 0 .7em;line-height:1.5}
 .prep{color:var(--tan);font-weight:700}
 .pr-g{color:grey}
