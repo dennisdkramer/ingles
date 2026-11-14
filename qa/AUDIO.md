@@ -67,10 +67,11 @@ node qa/audio.mjs --in=<path> --out=<name> --lrc-id=<id> --lines=<first>,<count>
 
 Two reports, two flags, and the difference is whether the **audio** is wrong or only the **highlight**:
 
-- **the highlight fires N seconds early or late, and the clip itself is right** → `--cue-shift=-N` (later)
-  or `--cue-shift=N` (earlier). It moves nothing but the `data-t` values, adds or removes no audio, and
-  the clip is not rewritten, so the same command still reproduces the page. The provenance row records
-  it as `every data-t moved N s (--cue-shift)`.
+- **the highlight fires N seconds early or late, and the clip itself is right** → `--cue-shift=N` moves
+  every line N seconds **later** (`data-t` grows), `--cue-shift=-N` N seconds **earlier**. It moves
+  nothing but the `data-t` values, adds or removes no audio, and the clip is not rewritten, so the same
+  command still reproduces the page. The provenance row records it as
+  `every data-t moved N s (--cue-shift)`.
 - **the whole excerpt sits wrong inside the recording** → `--early` is a constant per song. "The lines
   fire N seconds early" means subtract N from the current `--early` (1 → -2 for three seconds). "N
   seconds late" means add N. A recut overwrites `assets/<name>.mp3` and reprints the markup, and
