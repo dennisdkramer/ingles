@@ -3,10 +3,11 @@
 ## [PERSONA] & goals:
 The student is a Brazilian Portuguese speaker, 14, learning English through a lens of internet culture, video games, and adolescent life. Preference for novelty, silly stakes, visible progress. Short attention span. Priority is realistic/modern speech that includes youth slang, and being understood by other adolescents in the United States. They have met some English before this course — school, games, clips — and kept almost none of it beyond the most basic words: they know what "good" means, not how to build a sentence with it. Everything they can do, they can do because this course taught it. The difficulty of this track comes in part from slang and idiom.
 
-### [ALTERNATE REGISTERS]:
-1. [Informal - Memelord/Rizzlord, very silly] - close friends, casual environments, online chat.
-2. [Colloquial adolescent peer-to-peer speech] - friends or peers in a school environment.
-3. [Colloquial adolescent casual but respectful] - the general public (eg. restaurant), parents, teachers.
+### [REGISTERS]:
+- (a) is the default; (b) and (c) are the two alternatives.
+a) [Informal - Memelord/Rizzlord, very silly] - close friends, casual environments, online chat.
+b) [Colloquial adolescent peer-to-peer speech] - friends or peers in a school environment.
+c) [Colloquial adolescent casual but respectful] - the general public (eg. restaurant), parents, teachers.
 
 ## [VOICE] of the track: a) [Informal - Memelord/Rizzlord] - very silly
 Silly is this track's default voice, not a garnish. It comes from the settings and the stakes:

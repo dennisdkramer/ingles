@@ -1,13 +1,14 @@
 # [GENERATION] PROCESS & DEFAULTS (binding) - DO NOT MODIFY WITHOUT USER SIGN-OFF
 1. None of the decisions, elements, shapes, vehicles, order, skeleton, block count, the order of teach and train across sections, structure, or composition from any other page may be reproduced, inherited, referenced, or copied.
 2. For each lesson generation, before any shape, display elements, or markup is chosen, author its core structure into PAST_BATCHES.md. Explain in 1 line per block what it teaches, trains, or demonstrates, why it is in that place in the lesson, and what is the best way to structure/visualize/wrap its content. If it is similar in anyway to another block in the lesson or in your memory, you must defend why.
-- 
+
 ## [I/O]
-- MANDATORY Inputs **Withhold inputs not listed here** - **Reading order is the sequence printed below; PRECEDENCE IS NUMERICAL ORDER, this file is #3 in that order**:
+Inputs - ORDERED BY PRECEDENCE **Withhold others**:
 	1) (<TRACK>-ROADMAP.md [#]) section and its contents, never the whole file, and never another lesson's range: this entry is the roadmap that the lesson's contents will be built from. Coverage ≠ section plan: a roadmap item doesn't get its own h2 unless it earns one.
-	5) (<TRACK>-ROADMAP.md '##' HEADERS ONLY) - Reference **only to reduce redundancy with other lessons**.
-	4) FUNCTION.md [CONTENT] - Only within this section if needed 
 	2) <TRACK>-REGISTER.md contains the [PERSONA] of the STUDENT and guides details of the language being taught The same voice - or its context-dependent alternative registers - is used for the prose of all parts of the lessons, and plays a key role in defining which contexts and scenarios the lessons use to present the roadmap concepts and items. The primary register of the lesson is the linguistic shape which is trained and produced by the student, taking precedence over 'book' shapes.
+	3) `node qa/brief.mjs --index=raw`
+	4) FUNCTION.md [CONTENT] - Only within this section if needed 
+	5) (<TRACK>-ROADMAP.md '##' HEADERS ONLY) - Reference **only to reduce redundancy with other lessons**.
 	6) `node qa/brief.mjs --css` - Headers ONLY, each with its line number for Styling & formatting implementation only (eg. which class or knob does what).
 	- As-Needed: - qa/AUDIO.md  (fetch/cut/include music/audio).
 

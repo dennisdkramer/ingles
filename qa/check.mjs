@@ -266,7 +266,7 @@ for (const track of tracks) {
       return h.length ? k + ' ' + h.map(o => '"' + o.w + '"').join(' ') : '';
     }).filter(Boolean);
     if (!T.file) reg.push('no ' + track.toUpperCase() + '-REGISTER.md');
-    else if (!Object.keys(T.tiers).length) reg.push('no ### **tier** heading — nothing to compare');
+    else if (!Object.keys(T.tiers).length) reg.push('no tier heading — nothing to compare');
 
     const line = (cover + ' · register ' + (reg.join(' · ') || 'neutral')
       + (neg.length ? ' · tells ' + neg.join(' · ') : '')
