@@ -30,13 +30,15 @@
  *         unattended. Without --out it prints the pairing and writes nothing)
  *
  * The cut is made at the silence after the last lyric line, so the audio carries exactly the lines
- * the block shows. Nothing is re-encoded: the frames are copied, so the audio is bit-identical.
+ * the block shows. The frames are copied out of the master, so no second encode is paid — unless a
+ * fade is asked for: a fade changes amplitude, which a copied MPEG frame cannot express, so a faded
+ * clip is re-encoded once through the ffmpeg npm installs (`--fade=0` keeps the pure frame copy).
  */
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import { spawn } from 'child_process';
+import { spawn, execFileSync } from 'child_process';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -89,7 +91,12 @@ const search = arg('search', '');
 let searchedFile = null, searchedRecordId = '', searchedUrl = '';
 if (search) {
   if (arg('in') || arg('url') || arg('file')) die('--search fetches the audio itself — drop --in / --url / --file');
-  if (arg('lrc') || arg('lrc-id') || arg('lrc-file')) die('--search finds the sheet too — drop --lrc / --lrc-id / --lrc-file');
+  if (arg('lrc') || arg('lrc-file')) die('--search finds the sheet too — drop --lrc / --lrc-file');
+  /* `--lrc-id` PINS THE PAIRING. The site's search results move between calls, and two records of
+     the same song can each sit 0.0 s from some upload, so an unpinned run can pair a different edit
+     on the next invocation and cut different audio under the same name. Pass the id the audition
+     printed and the same record — and therefore the same video — is chosen every time. */
+  const pinId = arg('lrc-id', '');
   const H = { 'User-Agent': 'ingles-site/1.0 (teaching material)' };
   const json = async (u) => {
     let r = null;
@@ -101,8 +108,18 @@ if (search) {
     return r.json();
   };
   const found = await json('https://lrclib.net/api/search?q=' + encodeURIComponent(search));
-  const records = (found || []).filter(x => x.syncedLyrics && Number(x.duration) > 0)
+  let records = (found || []).filter(x => x.syncedLyrics && Number(x.duration) > 0)
     .map(x => ({ id: x.id, artist: x.artistName, track: x.trackName, dur: Number(x.duration) }));
+  if (pinId) {
+    const only = records.filter(r => String(r.id) === String(pinId));
+    if (only.length) records = only;
+    else {
+      const one = await json('https://lrclib.net/api/get/' + encodeURIComponent(pinId));
+      if (!one || !one.syncedLyrics) die('LRCLIB record ' + pinId + ' is not a synced record');
+      records = [{ id: one.id, artist: one.artistName, track: one.trackName, dur: Number(one.duration) }];
+    }
+    console.log('LRCLIB: pinned to record ' + pinId + ' · ' + records[0].track + ' (' + records[0].dur.toFixed(2) + ' s)');
+  }
   if (!records.length) die('LRCLIB has no synced record for "' + search + '" — nothing to time against');
   console.log('LRCLIB: ' + records.length + ' synced records for "' + search + '"');
 
@@ -182,6 +199,14 @@ if (search) {
    master (another mix or edit) before a student sees a highlight on the wrong words.
    `--lrc="<query>"` without --lrc-id only auditions the records and writes nothing, like --scan. */
 const lead = Math.max(0, Number(arg('lead', '2')) || 0);
+/* EVERY SHEET TIME LANDS A SPLIT SECOND LATE. An LRC or a subtitle is tapped while listening, so its
+   cue sits on the stressed vowel rather than on the consonant that opens the line. Each cue is
+   therefore moved `--early` seconds back (default 1) and the clip's head is extended by the same
+   second, so the first highlight still opens `--lead` seconds in and the END of the clip is
+   untouched — the clip is one second longer and every `data-t` is unchanged. */
+const early = Math.max(0, Number(arg('early', '1')) || 0);
+/* A FADE IS OPTIONAL AND ON BY DEFAULT. 0 disables it and keeps the frame copy. */
+const fade = Math.max(0, Number(arg('fade', '0.5')) || 0);
 let lrcSel = null;
 const lrcQuery = arg('lrc', '');
 const lrcId = arg('lrc-id', '') || searchedRecordId;
@@ -692,7 +717,7 @@ fs.copyFileSync(origPath, path.join(ROOT, relTmp));
 /* with an outside lyric sheet the clip opens `--lead` seconds before the first line, so the student
    hears the line arrive instead of landing on its first syllable */
 const fromAt = Math.max(0, arg('from', '') !== '' ? (Number(arg('from')) || 0)
-  : (lrcSel ? Math.round((lrcSel.times[0] - lead) * 1000) / 1000 : 0));
+  : (lrcSel ? Math.round((lrcSel.times[0] - lead - early) * 1000) / 1000 : 0));
 const orig = await measure(relTmp, null, fromAt);
 /* THE ONE CHECK THAT CATCHES THE WRONG MASTER. An LRC times the release it was written against, so a
    different mix, edit or upload passes every acoustic test and still carries the wrong times. The
@@ -764,6 +789,8 @@ if (lyrics.length && orig.longestHoldSec != null && orig.longestHoldSec < 0.5) {
 const givenTimes = lrcSel ? lrcSel.times.slice()
   : (arg('times', '') || '').split(',')
       .map(s => Number(s.trim())).filter(n => Number.isFinite(n) && n > 0);
+/* the cues as they will be PLACED: each one `--early` seconds before the sheet puts it */
+const sheetStarts = givenTimes.map(t => Math.max(0, Math.round((t - early) * 1000) / 1000));
 if (givenTimes.length) {
   if (!lyrics.length) die('--times needs --lyrics as well: the times and the words ship together');
   if (givenTimes.length !== lyrics.length) {
@@ -775,8 +802,9 @@ if (givenTimes.length) {
   }
   const lastT = givenTimes[givenTimes.length - 1];
   if (lastT >= orig.duration) die('a --times value (' + lastT + ') is past the end of the file');
-  console.log('  times: ' + givenTimes.join(' · ') + ' s — taken verbatim from ' +
-    (lrcSel ? lrcSel.where : 'the file\'s own timed transcript'));
+  console.log('  times: ' + givenTimes.join(' · ') + ' s — from ' +
+    (lrcSel ? lrcSel.where : 'the file\'s own timed transcript') +
+    (early ? ', placed ' + early + ' s earlier (--early=' + early + '): ' + sheetStarts.join(' · ') : ''));
 }
 
 let cutAt = wantSeconds;
@@ -824,15 +852,42 @@ if (lyrics.length && !givenTimes.length) {
 if (cutAt > orig.duration) cutAt = orig.duration;
 
 const destRel = 'assets/' + outName + '.mp3';
-const info = cutTo(fs.readFileSync(origPath), cutAt, path.join(ROOT, destRel), fromAt);
+const destPath = path.join(ROOT, destRel);
+const info = cutTo(fs.readFileSync(origPath), cutAt, destPath, fromAt);
+/* THE FADE, AND WHY IT IS A SECOND ENCODE. A copied MPEG frame carries its own amplitudes, so a fade
+   cannot be written into the copy; the clip is decoded and re-encoded once by ffmpeg, with a fade of
+   `--fade` seconds at each end. The out-fade starts `--fade` before the end, so the clip's own end
+   is untouched and whatever the next line opens with is faded instead of chopped. */
+let shipped = { bytes: info.bytes, reencoded: false };
+if (fade > 0) {
+  const outAt = Math.max(0, info.duration - fade);
+  const chain = 'afade=t=in:st=0:d=' + fade +
+    (outAt > 0 ? ',afade=t=out:st=' + outAt.toFixed(3) + ':d=' + fade : '');
+  fs.mkdirSync(TMP, { recursive: true });
+  const pre = path.join(TMP, outName + '-cut.mp3');
+  fs.renameSync(destPath, pre);
+  let fail = null;
+  try {
+    const bin = (await import('ffmpeg-static')).default;
+    execFileSync(bin, ['-v', 'error', '-y', '-i', pre, '-af', chain,
+      '-c:a', 'libmp3lame', '-b:a', '192k', destPath], { stdio: ['ignore', 'ignore', 'pipe'] });
+  } catch (e) {
+    fail = String(e.stderr || e.message).trim().split('\n').pop();
+  }
+  fs.rmSync(pre, { force: true });
+  if (fail) die('the fade failed (' + fail + ') — run: npm install');
+  shipped = { bytes: fs.statSync(destPath).size, reencoded: true };
+}
 console.log('  cut ' + (fromAt ? info.start.toFixed(2) + '–' + cutAt.toFixed(2) : '0–' + cutAt.toFixed(2)) +
-  ' s → ' + info.bytes + ' bytes, ' + info.frames + ' frames, ' + info.duration.toFixed(2) + ' s, ' + info.header);
+  ' s → ' + (shipped.reencoded
+    ? shipped.bytes + ' bytes, re-encoded once with a ' + fade + ' s fade at each end'
+    : info.bytes + ' bytes, ' + info.frames + ' frames, ' + info.header));
 
 /* LINE TIMES COME FROM THE ORIGINAL, NOT FROM RE-SEGMENTING THE CUT. The cut is a byte prefix of the
    original, so its phrase boundaries are the original's — but its loudest moment differs, so the 2%
    threshold moves and a re-segment can find one phrase fewer. Anchoring on the cut's own segmentation
    refused a correct recording for an artefact of its own measurement. */
-const starts = (givenTimes.length ? givenTimes.slice()
+const starts = (givenTimes.length ? sheetStarts
   : (lyrics.length && !noTiming ? segs.slice(0, lyrics.length).map(s => s.start) : []))
   .map(t => Math.max(0, Math.round((t - info.start) * 1000) / 1000));
 
@@ -919,7 +974,7 @@ const fig = full
       '<!-- OPTION slot: a second .panel below, holding whatever the lesson adds to this block -->',
     ].join('\n')
   : [
-      '<div class="panel itemsize-half" data-kind="teach">',
+      '<div class="panel itemsize-third" data-kind="teach">',
       '<h3>' + esc(songName) + '</h3>',
       '<h4>' + esc(performer) + '</h4>',
       '<figure class="vz-play">',
@@ -939,10 +994,13 @@ const fig = full
 console.log('\n--- paste this into the block (' + (full ? 'the block IS the .panel' : 'inside its .panel') + ') ---\n' + fig);
 console.log('\n--- provenance row for assets/README.md ---');
 console.log('| `' + outName + '.mp3` | ' + (lyrics.length ? 'the first ' + lyrics.length + ' sung lines, ' : '') +
-  cutM.duration.toFixed(2) + ' s, ' + info.bytes + ' bytes — **cut from ' +
-  (fromAt ? info.start.toFixed(2) + ' s to ' : 'the start to ') + cutAt.toFixed(2) +
-  ' s**, frames copied not re-encoded, and the VBR header rewritten for the cut (frame count, byte count, seek table) | ' +
-  (sourcePage || src) + ' | ' + credit + ' | **' + licence + '** |');
+  cutM.duration.toFixed(2) + ' s, ' + shipped.bytes + ' bytes — **cut from ' +
+  (fromAt ? info.start.toFixed(2) + ' s to ' : 'the start to ') + cutAt.toFixed(2) + ' s**, ' +
+  (shipped.reencoded
+    ? 're-encoded once with a ' + fade + ' s fade at each end'
+    : 'frames copied not re-encoded, and the VBR header rewritten for the cut (frame count, byte count, seek table)') +
+  (givenTimes.length && early ? ', every line placed ' + early + ' s before its sheet time' : '') +
+  ' | ' + (sourcePage || src) + ' | ' + credit + ' | **' + licence + '** |');
 console.log('\n--- before it ships ---');
 console.log('1. a lesson page needs the `.vz-*` rules from qa/preview-visual.css moved into style.css');
 console.log('2. `data-duration` must equal the decoded length: ' + cutM.duration.toFixed(2) + ' s');
