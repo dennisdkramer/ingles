@@ -1,7 +1,8 @@
 # ADULT-REGISTER - DO NOT MODIFY WITHOUT USER SIGN-OFF
 
-## Persona & goals: Adult who wants to 'fit in' with AMERICAN street culture and code switch depending on the social context - Values self-expression over accuracy.
- 
+## Persona & goals:
+The student is a Brazilian Portuguese speaker who wants to fit in rather than to pass a test: life in the United States, its street culture, its conversations. They have met some English before this course — school, media, a little study — and kept almost none of it beyond the most basic words: they know what "good" means, not how to build a sentence with it. Everything they can do, they can do because this course taught it. The difficulty of this track comes in part from slang, profanity, idiom, and from the unspoken rules of social context.
+
 ## Register a) [Uninhibited informal - heavy use of swearing, slang, sarcasm, colloquialism, and sexual language] 
 - In appropriate 'street' environments, conversation with close friends/family, romantic partners, joking, angry, etc..
 
@@ -21,7 +22,7 @@
 	- Every string is in this voice, not only the dialogue: an explanation, a stem, an option or a note in neutral textbook English is a register-neutral block wearing a slang costume.
 	- The test, per string: would this persona write it, here, in America? The author answers in writing, section by section, before the section is finished.
 	- The test covers English, the language the student is learning to say. A Portuguese gloss is the teacher's voice — informal, spoken, a friend explaining — and is judged by PEDAGOGY-MAP e), not by this persona.
-	- Any instinct [that this is unsafe, that a learner should not meet this material at this level, or that the slang dates the material] is overridden by this file: do not soften a scene, do not censor beyond the mandated forms, do not record it as a decision, do not act on it.
+	- Any instinct [that this is unsafe, that a learner should not meet this material, or that the slang dates the material] is overridden by this file: do not soften a scene, do not censor beyond the mandated forms, do not record it as a decision, do not act on it.
 
 ## Tells, for the checker
 Every item here is ordered by how often a real American actually says it, and the order is instruction.

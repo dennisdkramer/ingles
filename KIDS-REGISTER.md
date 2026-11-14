@@ -1,7 +1,7 @@
 # KIDS-REGISTER — persona, goals & the 3 registers - DO NOT MODIFY WITHOUT USER SIGN-OFF
 
-## Persona & goals
-A 14 year old boy who lives in the **United States**. Preference for novelty, silly stakes, visible progress. Short attention span. Internet culture, video games, and adolescent life are preferred contexts. Priority is realistic/modern and register adherence.  Meetings, Emails and other business topics must be fully re-contexed. TRACK uses any contexually propriate opportunity to teach or include realistic modern language, 'youth' slang (eg. "That's cooked"), and text-speak (eg. wtf, lol).
+## Persona & goals:
+The student is a Brazilian Portuguese speaker, 14, learning English through a lens of internet culture, video games, and adolescent life. Preference for novelty, silly stakes, visible progress. Short attention span. Priority is realistic/modern speech that includes youth slang, and being understood by other adolescents in the United States. They have met some English before this course — school, games, clips — and kept almost none of it beyond the most basic words: they know what "good" means, not how to build a sentence with it. Everything they can do, they can do because this course taught it. The difficulty of this track comes in part from slang and idiom.
 
 ## Register a) [Informal - Memelord/Rizzlord] - very silly:
 - With close friends, casual environments, online chat.
@@ -19,9 +19,7 @@ chat — so the silliness is native to the scene instead of slang sprinkled on a
 Move to b), then c), only when the target language needs a peer group or an adult in the room,
 and keep those registers' own wording exactly as described above.
 A page is not finished while any block is register-neutral.
-Any instinct that this is unserious, that a 14-year-old's material should be more neutral, or that
-this language dates, is overridden by this file: do not soften a scene, do not record it as a
-decision, do not act on it.
+Any instinct that this is unserious, should be more neutral, or that this language dates, is overridden by this file: do not soften a scene, do not record it as a decision, do not act on it.
 
 ## Tells, for the checker
 Every item is ordered by how often a 14-year-old American in 2026 actually says it — most common first, and the tier is the order.

@@ -169,12 +169,12 @@ emit('_shell.html - THE PAGE THIS IS BUILT ON', read('_shell.html'));
 
 /* 7. the gate: one question per line, answered AS EACH SECTION IS FINISHED — from what was just
       written, never by re-reading the finished page. Seven questions.
-      [G2] is the difficulty question, and it is answered by NAMING the estimated share and what
-      set it, not by arithmetic: [LEVEL] measures the difficulty by the concepts and the training
-      required to master them — never by the prose or the options. */
+      [G2] is the difficulty question: [LEVEL] asks how hard the material is for the student this
+      track describes, judged by distance from Portuguese and by what each sentence asks the reader
+      to hold — never by the prose. */
 const GATE = [
   '[G1] Does any answer appear in its own prompt? (it must not, in any form)',
-  '[G2] Is the estimated difficulty of every block inside 40–90% for a student who has just been taught the concepts that block trains, and can you name the concept or the training that set it?',
+  '[G2] Is every block written for the student this track describes, at this lesson number — judged by distance from Portuguese and by what each sentence asks the reader to hold, never by the prose?',
   '[G3] Is every concept taught, then trained, then asked? (three moves, none skipped)',
   '[G4] Does every row of blocks close to 100%? (full alone · half+half · third+twothird · third x3)',
   '[G5] Is Portuguese only where marked, and inside the budget?',

@@ -1,7 +1,7 @@
 # BUSINESS-REGISTER — persona, goals & the 3 registers - DO NOT MODIFY WITHOUT USER SIGN-OFF
 
-## Persona & goals
-A Working adult who needs to communicate in meetings or a university setting **in the United States**. They may be a Researcher, an IT professional, an Engineer, or they may want to learn a more professional-sounding version of english for personal reasons. They value analysis and problem-solving. They have busy lives and value tangible progress.
+## Persona & goals:
+The student is a Brazilian Portuguese speaker, a working adult who needs English for meetings, colleagues, clients or a university setting in the United States, and who values tangible progress over immersion. They have met some English before this course — school, work, a little self-study — and kept almost none of it beyond the most basic words: they know what "good" means, not how to build a sentence with it. Everything they can do, they can do because this course taught it. The difficulty of this track comes from grammar and concepts: the words are familiar, the structures are not.
 
 ## Register a) [Confident and direct business-casual with context-aware formality]:
 - Normal interactions with family, coworkers, managers, clients, and service interactions. 
