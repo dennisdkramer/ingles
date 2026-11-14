@@ -178,7 +178,7 @@ h2 .h2sub{font-family:var(--serif);font-size:.55em;font-weight:400;letter-spacin
 .chart.center th,.chart.center td{text-align:center}
 .thsub{display:block;font-weight:400;font-size:.78em;letter-spacing:0;opacity:.82}
 .chart tbody tr:nth-child(even) td{background:#fff8ea}
-/* the Portuguese marking itself: :lang(pt) is italic wherever it lands — see ## PORTUGUESE TEXT */
+/* the Portuguese marking itself: :lang(pt) is italic wherever it lands — see ## TEXT AND COLOURS */
 :lang(pt){font-style:italic;font-weight:400}
 /* ## WORD BANK — `.chips` is the vocabulary a TRAIN gap item chooses from: each `<b>` is one option, anything else is text. */
 .chips > b{display:inline-block;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:2px 12px;margin:2px 6px 2px 0;font-weight:600}
@@ -284,7 +284,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .prep{color:var(--tan);font-weight:700}
 .pr-g{color:grey}
 /* ## REFLOW — a reflowed block states `--rows` (items per column, e.g. style="--rows:2") ON ITSELF, never on a section or a wrapper. `.qgrid.stack` and `.blanks.sent` are the two containers that tile: items run DOWN a column and continue at the top of the next; `.wide` returns to one full-width column. */
-/* ## ANSWERS — three shapes and no others: a radio item (`.qgrid > .qitem > .qnum/.qstem/.qopts`), a gap inside a sentence (`.blanks.sent > input.gap`), a `textarea` other than #feed. Every control carries a `name` of `a<sec><block><item>` — `a1c1` for the item, `a1c1g1` for its first gap — so the number is the identity in the saved answer and a reworded stem keeps it. #feed is never saved. No checkbox exists in any page. A block that must `produce` needs the gap or the textarea, never radios alone. */
+/* ## ANSWERS — three shapes and no others: a radio item (`.qgrid > .qitem > .qline` holding `.qnum` and `.qstem`, then `.qopts`), a gap inside a sentence (`.blanks.sent input.gap`), a `textarea` other than #feed. Every control carries a `name` of `a<sec><block><item>` — `a1c1` for the item, `a1c1g1` for its first gap — so the number is the identity in the saved answer and a reworded stem keeps it. #feed is never saved. No checkbox exists in any page. A block that must `produce` needs the gap or the textarea, never radios alone. */
 /* ## ANSWER KEY — the key lives in the page, not with the server: a radio item carries `data-a` = the `value` of its right option, and a typed control (`input.gap`, a textarea other than #feed) carries `data-answer`, with `|` between accepted forms. Complete prints the typed key as a `.ans` line under its field and marks the right option `.correct`; Clear takes both back. An item with no key is an item Complete cannot reveal. */
 
 .blank{display:inline-block;width:3.2em;border-bottom:2px solid var(--tan)}
@@ -305,7 +305,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 body.editing #hlLayer,body.editing #noteLayer{display:none}
 .pt b,.lead b{font-style:normal}
 .chart tr.note td{background:#fff8ea;font-style:italic;color:#5c5347;border-top:0;padding:10px 14px}
-/* ## PAGE SCAFFOLD — the three headings and the fixed page. h1 is the lesson title, ONE line; h2 is a numbered section `1.`; h3 is a lettered block `A.`; no vehicle's heading takes their place, and one follows the number or letter. .page-container is 1400px and .content-area 1200px, both FIXED: no lesson element may size itself in `fr`, `vw` or `auto-fit`, because those make the browser re-decide the layout on resize. A plain link is `a`; the print copy lives in #printRoot. */
+/* ## PAGE SCAFFOLD — the three headings and the fixed page. h1 is the lesson title, ONE line; h2 is a numbered section `1.`; h3 is a lettered block `A.` and the block's first line; h4 is a block's optional introduction, at most one directly under its `h3`, italic by the rule so no `<i>` is written; no vehicle's heading takes their place, and one follows the number or letter. .page-container is 1400px and .content-area 1200px, both FIXED: no lesson element may size itself in `fr`, `vw` or `auto-fit`, because those make the browser re-decide the layout on resize. A plain link is `a`; the print copy lives in #printRoot. */
 body.editing mark.nb.has-rec{background-image:none}
 body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
 

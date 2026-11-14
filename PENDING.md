@@ -16,6 +16,6 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 
 ## [B2] - The block and class contracts state their use and stop deciding layout «\"the styling is supposed to be the minimum necessary to help the model with formatting ... it is not supposed to DECIDE formatting\"» style.css `## ` headers + HANDOFF.md §C
    - [S2] - every rule the builder can reach states its use: `.blank` and `.prep` `## ANSWERS` / `## TEXT AND COLOURS` `node qa/brief.mjs --css` prints a use for each and no named class is left without one
-   - [S3] - one block contract covers `.panel` and `.card`, and `.qline` joins the item shape `## BLOCK FRAME` / `## ANSWERS` a new block is written from the header alone, whichever of the two it is
-   - [S4] - every pointer names a header that exists and h4 is stated as an optional scaffold item `style.css:184`, `style.css:4-5`, `PEDAGOGY-MAP.md:66`, `## PAGE SCAFFOLD` no `## ` citation in the tree names a header the scan does not print
+   - [S3] - a block reads as one frame: `.card` and `.panel` either merge into one rule set or keep two stated roles, and `data-kind` shows on whichever is a block `## BLOCK FRAME` `node qa/brief.mjs --css` prints a block contract that is true of every `.card` and `.panel` in the tree (owner decides which way)
+   - [S4] - one authority for the class vocabulary: `style.css:4-5` stops deferring it to PEDAGOGY-MAP.md while `PEDAGOGY-MAP.md:14` sends the build to these headers `style.css:2-8`, `PEDAGOGY-MAP.md:14` the note and the map name the same owner and no stale `## ` name is left in the tree
    - [S5] - `qa/brief.mjs` prints the indexes on request `qa/brief.mjs` usage `--indexes` prints both scans in one run and the usage line names it
