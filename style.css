@@ -192,7 +192,6 @@ h3{font-family:'Playfair Display',serif;font-weight:700;font-size:19px;color:var
 h4{font-family:var(--serif);font-style:italic;font-weight:600;font-size:15px;color:var(--dkblue);margin:0 0 8px;padding-left:2em}
 .panel>h4,.card>h4{margin-top:-2px}
 @media print{#printRoot .listen{display:none}#barhelp{display:none}}
-.blanks>div .ptw{flex:0 0 auto}
 .dialog{--edge:var(--rose);margin:14px 0;padding:12px 16px;background:#fff8ea;border:2px solid var(--edge);border-radius:12px}
 .row,.dialog p{margin:6px 0}
 
@@ -274,16 +273,13 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 
 .qgrid .qopts,.qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 30px}
 .blanks{display:flex;flex-wrap:wrap;gap:14px 24px;margin:10px 0}
-.blanks>div{display:flex;align-items:center;gap:6px}
 .blanks.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
-.blanks>div input.gap{flex:0 0 auto}
 /* Complete and Clear: Complete puts each key on its own line under its field and greens the right option;
    Clear takes back the answers, the keys and the page lock (FUNCTION.md [CONTENT]) */
-.ans{display:block;flex:1 1 100%;width:100%;margin:2px 0 0;font-size:13px;line-height:1.35;font-weight:700;color:#2f7d32;text-align:left}
+.ans{display:block;width:100%;margin:2px 0 0;font-size:13px;line-height:1.35;font-weight:700;color:#2f7d32;text-align:left}
 .qopts label.correct{background:#e6f4e7;border-radius:8px;padding:1px 6px;color:#1f5d22}
 
-.blanks>div.has-ans,.blanks.glossdrop>div{flex-wrap:wrap}
-.blanks.glossdrop>div .ptw{flex:1 1 100%;text-align:right}
+.blanks.glossdrop>div .ptw{display:block;text-align:right}
 .chart.glossdrop .ptw{display:block}
 
 .lead{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#5c5347;margin:.2em 0 .7em;line-height:1.5}
