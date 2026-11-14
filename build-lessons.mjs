@@ -1,67 +1,42 @@
-// build-lessons.mjs — derive lessons.json from each lesson page's content <h1>.
+// build-lessons.mjs — what each lesson page IS, taken from its filename. No page is read.
 // Run: node build-lessons.mjs  (or `npm run build:lessons` / `npm run qa`)
-// Reads EVERY TRACK FOLDER's lesson*.html (the published lesson pages), takes the
-// lesson number from the filename and the title from the content-area <h1>, and writes root lessons.json
-// plus root tracks.json (each track's label and order, read from that folder's track.json).
-// A TRACK IS A FOLDER: discovery replaced the hardcoded ['kids','business','adult'], so a track created
-// months from now is listed and grantable with no edit here, in index.html or in the QA harnesses.
-// A track whose folder is GITIGNORED is skipped (nothing is gitignored today); without git, every existing
-// folder is included. Generating into a deleted track's folder brings it back automatically.
+// A page is `lesson<N>-<Title>.html`: the number is its position in the book and the rest is its name, so
+// this file lists {n, title, file} per track, writes root lessons.json, and re-stamps style.css in index.html.
+// TRACKS ARE THE TABLE BELOW. A new track is one line, added by hand; a folder holding lesson pages that is
+// missing from the table is reported, never silently dropped.
 import fs from 'fs';
 import { createHash } from 'crypto';
 import path from 'path';
-import { execFileSync } from 'child_process';
 import { fileURLToPath } from 'url';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
-function ignored(rel) {
-  try {
-    execFileSync('git', ['check-ignore', '-q', rel], { cwd: ROOT, stdio: 'ignore' });
-    return true;                     // exit 0 = the path IS ignored
-  } catch (e) {
-    return false;                    // exit 1 = not ignored; any other failure = assume published
-  }
-}
-const TRACKS = discoverTracks();
-const META = TRACKS.map(readTrackMeta).sort((a, b) => (a.order - b.order) || a.name.localeCompare(b.name));
 
-/* Which folders are tracks. A folder counts when it holds at least one published lesson page, OR a
-   track.json — the second so a track can be created and granted before its first lesson is written. */
-function discoverTracks() {
-  const out = [];
-  for (const d of fs.readdirSync(ROOT, { withFileTypes: true })) {
-    if (!d.isDirectory() || d.name[0] === '.' || d.name === 'node_modules') continue;
-    let files = [];
-    try { files = fs.readdirSync(path.join(ROOT, d.name)); } catch (e) { continue; }
-    if (files.some(f => /^lesson\d+\.html$/.test(f)) || files.indexOf('track.json') >= 0) out.push(d.name);
-  }
-  return out.filter(t => !ignored(t)).sort();
-}
+/* name, then how the site names and paints the track: label, icon, the 200 swatch of the access switch, order */
+const TRACKS = [
+  { name: 'kids', label: 'Kids', icon: '🛹', color: '#FFE082', order: 1 },
+  { name: 'business', label: 'Business', icon: '💼', color: '#90CAF9', order: 2 },
+  { name: 'adult', label: 'Adulto', icon: '🔞', color: '#FFAB91', order: 3 },
+  { name: 'advanced-stem', label: 'Advanced STEM', icon: '🔬', color: '#80CBC4', order: 4 },
+  { name: 'advanced-aave', label: 'Advanced AAVE', icon: '🎤', color: '#B39DDB', order: 5 },
+  { name: 'memelord-mogger', label: 'Memelord Mogger', icon: '😎', color: '#E6EE9C', order: 6 },
+  { name: 'english-basic-portuguese', label: 'English → Basic Portuguese', icon: '🔁', color: '#80DEEA', order: 7 },
+  { name: 'gramatica-redacao', label: 'Gramática e Redação', icon: '✍️', color: '#F48FB1', order: 8 },
+  { name: 'linguagem-figurativa-giria', label: 'Linguagem Figurativa e Giria', icon: '🎭', color: '#9FA8DA', order: 9 },
+];
 
-/* track.json is the ONLY place a track's display name lives. The labels are Portuguese and painted
-   ("Adulto 🔞", "Kids 🛹"), which no rule could derive from an English folder name, so the name is data,
-   not code. Both fields are optional: no file (or no field) falls back to the folder name, and a track
-   with no order sorts after every ordered track. */
-function readTrackMeta(track) {
-  const p = path.join(ROOT, track, 'track.json');
-  let meta = {};
-  if (fs.existsSync(p)) {
-    try { meta = JSON.parse(fs.readFileSync(p, 'utf8')) || {}; }
-    catch (e) { console.error('ERROR: ' + track + '/track.json is not valid JSON — ' + e.message); process.exitCode = 1; }
+/* a folder with lesson pages that the table does not know: say so, rather than publish a site without it */
+for (const d of fs.readdirSync(ROOT, { withFileTypes: true })) {
+  if (!d.isDirectory() || d.name[0] === '.' || d.name === 'node_modules') continue;
+  if (TRACKS.some(t => t.name === d.name)) continue;
+  let files = [];
+  try { files = fs.readdirSync(path.join(ROOT, d.name)); } catch (e) { continue; }
+  if (files.some(f => /^lesson\d+.*\.html$/.test(f))) {
+    console.warn('WARN: ' + d.name + '/ has lesson pages but is not in the TRACKS table of this file');
   }
-  const name = String(track);
-  const label = String(meta.label || (name.charAt(0).toUpperCase() + name.slice(1)));
-  const order = Number.isFinite(Number(meta.order)) ? Number(meta.order) : 1000;
-  /* icon: the emoji the approved-student switch carries in its thumb. color: the 200 swatch that switch
-     turns ON in (owner instruction 2026-11-09). Both travel through tracks.json, so a track created later
-     supplies its own and no code holds a track's colour. */
-  const icon = String(meta.icon || '');
-  const color = /^#[0-9a-f]{3,8}$/i.test(String(meta.color || '')) ? String(meta.color) : '';
-  return { name: name, label: label, icon: icon, color: color, order: order };
 }
 
 const manifest = {};
-for (const meta of META) {
+for (const meta of TRACKS) {
   const track = meta.name;
   const dir = path.join(ROOT, track);
   const entries = [];
@@ -82,36 +57,11 @@ for (const meta of META) {
 fs.writeFileSync(path.join(ROOT, 'lessons.json'), JSON.stringify(manifest, null, 2) + '\n', 'utf8');
 const summary = Object.fromEntries(Object.entries(manifest).map(([k, v]) => [k, v.length]));
 
-// tracks.json is what index.html reads to build its columns and its "＋ dar acesso" options, so the page
-// holds no track name of its own: the list, the labels and their order all come from the folders.
-const trackList = META.map(m => ({ name: m.name, label: m.label, icon: m.icon, color: m.color, order: m.order, count: summary[m.name] || 0 }));
+// tracks.json is what index.html reads to name and paint each track, so the page holds no track name of
+// its own. No count travels here: a track's size is lessons.json's own array, and a copy can only drift.
+const trackList = TRACKS.map(m => ({ name: m.name, label: m.label, icon: m.icon, color: m.color, order: m.order }));
 fs.writeFileSync(path.join(ROOT, 'tracks.json'), JSON.stringify(trackList, null, 2) + '\n', 'utf8');
 
-// index.html keeps a COUNTS fallback for the case where lessons.json cannot be fetched, and it is
-// hand-written, so it silently disagreed with the folders: kids said 30 while kids/lesson31.html
-// existed, and a student saw no lesson 31 at all. Derive it from the same walk that made the
-// manifest. A missing anchor is an error, not a quiet pass — the failure this prevents was quiet.
-const indexPath = path.join(ROOT, 'index.html');
-const indexHtml = fs.readFileSync(indexPath, 'utf8');
-const countsLine = /^const COUNTS=\{[^}]*\};$/m;
-if (!countsLine.test(indexHtml)) {
-  console.error('ERROR: index.html has no `const COUNTS={...};` line to keep in sync with the lesson folders.');
-  process.exitCode = 1;
-} else {
-  /* Keys are QUOTED. A track is a folder name, and a folder name may contain a hyphen ("advanced-stem"), which
-     is not a legal identifier: the unquoted form wrote `{advanced-stem:0}` into the page and the whole inline
-     script failed to parse, so the index rendered nothing at all. The guard below refuses to write a line that
-     does not parse, so this class of defect cannot reach the page again. */
-  const wanted = 'const COUNTS={' + META.map(m => JSON.stringify(m.name) + ':' + (summary[m.name] || 0)).join(',') + '};';
-  const before = indexHtml.match(countsLine)[0];
-  let parses = true;
-  try { new Function(wanted + ' return 1;'); }
-  catch (e) { parses = false; console.error('ERROR: the generated COUNTS line is not valid JS (' + e.message + ') — refusing to write it into index.html: ' + wanted); process.exitCode = 1; }
-  if (parses && before !== wanted) {
-    fs.writeFileSync(indexPath, indexHtml.replace(countsLine, wanted), 'utf8');
-    console.log('index.html COUNTS ' + before.slice(13, -1) + ' -> ' + wanted.slice(13, -1) + ' (fallback kept in step with the folders)');
-  }
-}
 // The stylesheet's version stamp is BAKED INTO index.html by this build, never applied at runtime. It used to be
 // swapped in by JS at load, which changed <link>.href while the first fetch was still in flight: the browser
 // aborted and restarted the fetch, painted the document unstyled, then repainted — the page "decomposed", the
@@ -120,7 +70,8 @@ if (!countsLine.test(indexHtml)) {
 // when style.css changes, and a stale stamp is a harness failure rather than an invisible cache miss.
 const cssUrl = 'style.css?v=' + createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'style.css'))).digest('hex').slice(0, 10);
 const linkRe = /<link rel="stylesheet" href="style\.css(?:\?v=[0-9a-f]*)?"/;
-const htmlNow = fs.readFileSync(indexPath, 'utf8');       // re-read: COUNTS may have been written above
+const indexPath = path.join(ROOT, 'index.html');
+const htmlNow = fs.readFileSync(indexPath, 'utf8');
 if (!linkRe.test(htmlNow)) {
   console.error('ERROR: index.html has no <link rel="stylesheet" href="style.css"> for the build to stamp.');
   process.exitCode = 1;

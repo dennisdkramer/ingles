@@ -24,10 +24,12 @@
 const CLIENT_ID="872457390510-jsk9pooj688ogvp6hs9ca4js3iqk5n69.apps.googleusercontent.com";
 const SECRET="abreportas2025";
 const BACKPACK="https://script.google.com/macros/s/AKfycbxSR8UmOwosLIgn1-AGKhgXJvdqOVkzMqrTwdlWNF9kOkt-256TqTacOsQlo6JyHplR/exec";
-const COUNTS={"kids":31,"business":49,"adult":23,"advanced-stem":0,"advanced-aave":0,"memelord-mogger":0,"english-basic-portuguese":0,"gramatica-redacao":0,"linguagem-figurativa-giria":0};
-/* TRACKS ARE DISCOVERED, NOT LISTED. tracks.json (written by build-lessons.mjs from each track folder's
-   track.json) replaces both values below at load, so a NEW TRACK NEEDS NO EDIT IN THIS FILE. The two lines
-   are only the fallback for when tracks.json cannot be fetched. */
+/* NO LESSON COUNT LIVES HERE: a track's lessons come from lessons.json, which build-lessons.mjs writes from
+   the filenames, and a hand-kept count was a copy that could only drift ("kids said 30 while lesson31
+   existed, and the student saw no lesson 31"). A track absent from lessons.json simply has no lessons. */
+/* TRACKS COME FROM tracks.json (written by build-lessons.mjs from the table in that file), so a NEW TRACK
+   NEEDS NO EDIT IN THIS FILE. The three lines below are only the fallback for when tracks.json cannot be
+   fetched. */
 let TN={kids:"Kids",business:"Business",adult:"Adulto"};
 /* per-track icon and 200 swatch, both read from track.json through tracks.json, so a track created later
    carries its own and no code holds a track's colour. These two are the fallback when tracks.json cannot load. */
@@ -361,11 +363,10 @@ function paintStudent(st){
  showAcct();renderStudent(MYTRACKS,st.name);
 }
 function trackLessons(t){
- const ls=LESSONS&&LESSONS[t]&&LESSONS[t].length?LESSONS[t]:Array.from({length:COUNTS[t]||0},(_,k)=>({n:k+1,title:""}));
- return ls;
+ return (LESSONS&&LESSONS[t])||[];
 }
-/* tracks.json → the student columns and the "＋ dar acesso" options. A track known to COUNTS but missing
-   from a stale response keeps its column, so this can never hide a track that already exists. */
+/* tracks.json → the student columns and the "＋ dar acesso" options. The three fallback tables below keep a
+   track that a stale response omits, so this can never hide a track that already exists. */
 function applyTracks(list){
  const names=[],labels={},icons={},colors={};
  (Array.isArray(list)?list:[]).forEach(x=>{
@@ -374,7 +375,7 @@ function applyTracks(list){
   if(x.icon)icons[n]=String(x.icon);
   if(/^#[0-9a-f]{3,8}$/i.test(String(x.color||"")))colors[n]=String(x.color);
  });
- Object.keys(COUNTS).forEach(n=>{if(names.indexOf(n)<0)names.push(n);});
+ Object.keys(TN).forEach(n=>{if(names.indexOf(n)<0)names.push(n);});
  Object.keys(TN).forEach(n=>{if(!labels[n])labels[n]=TN[n];});
  Object.keys(TI).forEach(n=>{if(!icons[n])icons[n]=TI[n];});
  Object.keys(TC).forEach(n=>{if(!colors[n])colors[n]=TC[n];});
