@@ -84,6 +84,7 @@ button:active:not(:disabled):not(.locked){filter:brightness(1.04);transform:tran
 }
 
 .content-area textarea{resize:none}
+.content-area textarea:not(#feed){display:block;width:100%;margin:8px 0}
 a{color:var(--ink);font-weight:600}h2{font-family:'Playfair Display',serif;margin:.9em 0 .3em}
 @keyframes pu{50%{opacity:.25}}
 /* ## TEXT AND COLOURS — never write a hex in a lesson; use a token or a class. Tokens on :root: --cream --paper --ink --tan --rose --ptw --blue --dkblue --bluebg --orange --purple --green --greenbg; faces --serif (the default) --sans --playfair --caveat. Classes that set colour: `.pt` / `.ptw` for Portuguese, italic, plus `lang="pt"` so a screen reader says so; `.dim` muted; `.lead` larger intro; `.h2sub` a section subtitle; `.todo` the unbuilt marker; `.chips`; `.listen`. */
@@ -186,8 +187,10 @@ h2 .h2sub{font-family:var(--serif);font-size:.55em;font-weight:400;letter-spacin
 h3{font-family:'Playfair Display',serif;font-weight:700;font-size:19px;color:var(--dkblue);margin:22px 0 8px;padding-left:10px;border-left:4px solid var(--tan);letter-spacing:.02em}
 /* the block's sub-header: the introduction/explainer that sits under `h3`. It is ALWAYS an `h4` and
    never a `p` — `p` is reserved for the block's own content, so a paragraph inside a block always
-   means "this is the material", and nothing has to be read to tell an intro from content. */
-h4{font-family:var(--serif);font-weight:600;font-size:15px;color:var(--dkblue);margin:0 0 8px;padding-left:2em}
+   means "this is the material", and nothing has to be read to tell an intro from content. Italic by
+   the rule itself, so the slide from `h3` to `h4` is heard as well as seen and no block has to wrap
+   its own text in `<i>`. */
+h4{font-family:var(--serif);font-style:italic;font-weight:600;font-size:15px;color:var(--dkblue);margin:0 0 8px;padding-left:2em}
 .panel>h4,.card>h4{margin-top:-2px}
 @media print{#printRoot .listen{display:none}#barhelp{display:none}}
 .blanks>div .ptw{flex:0 0 auto}
@@ -209,19 +212,19 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .content-area > .panel{margin:14px 0}
 .panel h3{margin-top:0}
 
-/* ## AUDIO PLAYER — the recording block, `[02]`/`[03]` in CONTENT_EXAMPLES.md; nothing else uses these classes. Build it:
-   .panel > h3 (the song's own title) + h4 (who performs it, and nothing else)
-     > figure.vz-play > figcaption (the credit: `Performed by …`, licence, excerpt length)
+/* ## AUDIO PLAYER — the recording block, `[02]`/`[03]` in CONTENT_EXAMPLES.md, cut by `qa/AUDIO.md`; nothing else uses these classes. A page that carries a `figure.vz-play` also carries `<script src="../qa/player.js"></script>` in the `_shell.html` script slot, after `../engine2.js`. Build it:
+   .panel > h3 (the song's own title) + h4 (the block's credit: who performs it, and nothing else —
+        the `h4` rule italicises it, so no `<i>` is written)
+     > figure.vz-play, and NO figcaption — nothing is printed above the player
        > audio.vz-audio[src][controls][preload=metadata][data-duration] (the measured length)
        > .vz-controls > button.vz-btn + span.vz-time[data-now] + .vz-bar[role=slider][aria-valuenow]
          > .vz-fill + .vz-knob + span.vz-time[data-dur]
        > ol.vz-lyrics > li[data-t] (seconds, on any line whose time is known)
    `[03]` wraps the lyrics and one <p> beside them in `.vz-sheet`, and is the reason that block is full width.
-   The native `controls` attribute is the floor and always ships: `qa/player.js` deletes it only after
-   adding `.is-enhanced` to figure.vz-play and wiring the bar, the keys and the lyric highlight, so a page
-   whose script did not load still plays, pauses and scrubs. */
+   The native `controls` attribute is the floor and always ships: `qa/player.js` deletes it only after adding
+   `.is-enhanced` to figure.vz-play and wiring the bar, the keys and the lyric highlight, so a page whose script
+   did not load still plays, pauses and scrubs. */
 .vz-play{display:block;margin:0}
-.vz-play figcaption{font-size:13px;color:#5c5347;margin:0 0 8px;line-height:1.45}
 .vz-audio{display:block;width:100%}
 .vz-controls{display:none;align-items:center;gap:10px;margin:8px 0 10px}
 .vz-play.is-enhanced .vz-controls{display:flex}
@@ -836,7 +839,7 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 /* the bite reels him where he STANDS: the shake has to carry his own x (`--dx`), because a bare
    translateX keyframe drops the inline transform the walk put on him and he snaps back to the middle
    of the road for the length of the animation — the one moment he must not move. */
-/* ## GAMES — ENGINE-OWNED. A build adds <script src="../engine4.js"> after engine2.js and a `.game` block; the art is drawn by the engine, so NEVER author or restyle a `.g4-*` element. Content is identical for every skin, so `data-game` is a presentation choice, never a content choice. */
+/* ## GAMES — ENGINE-OWNED. A page that carries a `.game` block also carries <script src="../engine4.js"></script> after ../engine2.js; the art is drawn by the engine, so NEVER author or restyle a `.g4-*` element. Content is identical for every skin, so `data-game` is a presentation choice, never a content choice. */
 /* KNOBS, all optional on the `.game` element, and what happens when each is ABSENT: data-game (one of 13 skins) · data-time ms per item, 0 = no deadline (0) — this is the difficulty · data-limit seconds for the run, 0 = off (0) · data-retry 0|1 (1: a TRAINING game leaves it, the block that IS the page's quiz writes 0) · data-shuffle (1) · data-rounds 0 = all authored (0) · data-prompt show the stem on the HUD (1) · data-sound (1) · data-skin free-form, CSS may theme, the engine never reads it. */
 .g4-runner.bitten{animation:g4reel .42s ease}
 /* the bite always ends the same way: he goes down where he stands — the `down` state is built on his own
@@ -1039,6 +1042,7 @@ html.kbd .g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:
   .g4-bossart.hurt,.g4-proj,.g4-proj.fire .g4-art,.g4-slash,.g4-acid-drop,.g4-hero.charge{animation:none;transition:none}
 }
 @keyframes g4slash{0%{opacity:0;transform:rotate(-40deg) scale(.55)}
+  35%{opacity:1}
   100%{opacity:0;transform:rotate(30deg) scale(1.3)}}
 @keyframes g4shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .g4-pick-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
@@ -1111,14 +1115,22 @@ html.kbd .g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:
 .g4-mole.alive .g4-eyes{animation:g4moleblink var(--blink-d,5s) linear var(--blink-t,0s) infinite}
 .g4-grid{position:absolute;left:14px;right:14px;top:52px;bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:10px;z-index:2}
 /* each mole surfaces from its OWN LITTLE MOLEHILL, drawn directly under it (qa/NOTES.md 88): the hill
-   is a mound of the same soil as the garden with a dark opening at its crest, and it stands in front of
-   the mole, so a mole on its way up is a mole coming out of a hill rather than a picture in a box. The
-   cell itself draws nothing — the hill is the only thing on the ground. */
+   is a mound of the same soil as the garden with a dark opening at its crest. THE MOLE COMES OUT OF THE
+   HOLE, not from behind it (qa/NOTES.md: "make the moles appear to be coming out of the holes, not
+   hidden BEHIND the holes") — so the layering is three deep: the mound and its opening are drawn BEHIND
+   the mole (`.g4-hole::before`), the mole's own body is above them, and only the hill's front lip stands
+   in front of its base (`.g4-dirt`), which is what makes the body read as rising out of the opening
+   rather than as a picture standing on a box. The cell itself draws nothing — the hill is the only thing
+   on the ground. */
 .g4-hole{position:relative;border-radius:16px;background:transparent;overflow:visible}
-.g4-dirt{position:absolute;left:12%;right:12%;bottom:4px;height:42%;z-index:2;background:radial-gradient(ellipse at 50% 20%,#22150a 0 28%,#3d2914 29% 45%,transparent 46%),linear-gradient(#8a6134 0%,#6b4a26 60%,#48331a 100%);border-radius:50% 50% 44% 44%/78% 78% 22% 22%;box-shadow:0 3px 0 rgba(24,33,54,.16),inset 0 -5px 9px rgba(0,0,0,.3)}
-/* the word sits ABOVE the mole's head, so the hill can stand in front of his body without covering his
-   name; the mole itself is behind the hill (z-index 1 against the hill's 2) */
-.g4-mole{position:absolute;inset:4px 3px 0;z-index:1;display:flex;flex-direction:column-reverse;align-items:center;justify-content:flex-start;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:pointer;transition:transform .24s cubic-bezier(.34,1.56,.64,1);transform:translateY(0)}
+/* the mound and the opening, BEHIND the mole */
+.g4-hole::before{content:'';position:absolute;left:12%;right:12%;bottom:4px;height:42%;z-index:1;background:radial-gradient(ellipse at 50% 20%,#22150a 0 28%,#3d2914 29% 45%,transparent 46%),linear-gradient(#8a6134 0%,#6b4a26 60%,#48331a 100%);border-radius:50% 50% 44% 44%/78% 78% 22% 22%;box-shadow:0 3px 0 rgba(24,33,54,.16),inset 0 -5px 9px rgba(0,0,0,.3)}
+/* the hill's FRONT LIP, the only soil in front of the mole: the bottom of the mound and the near edge of
+   its opening, so his body passes behind the lip and his head clears it */
+.g4-dirt{position:absolute;left:12%;right:12%;bottom:4px;height:15%;z-index:3;background:linear-gradient(#6b4a26 0%,#48331a 100%);border-radius:0 0 46% 46%/0 0 70% 70%;box-shadow:inset 0 4px 7px rgba(0,0,0,.34),0 3px 0 rgba(24,33,54,.16)}
+/* the word sits ABOVE the mole's head, so the lip can stand in front of his body without covering his
+   name; the mole is above the mound (z-index 2 against the mound's 1) and below the lip (3) */
+.g4-mole{position:absolute;inset:4px 3px 0;z-index:2;display:flex;flex-direction:column-reverse;align-items:center;justify-content:flex-start;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:pointer;transition:transform .24s cubic-bezier(.34,1.56,.64,1);transform:translateY(0)}
 .g4-mole .g4-art{height:70%;flex:0 0 auto}
 .g4-mole-t{display:block;max-width:100%;margin-bottom:-4px;padding:2px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 13px var(--ui-tight);line-height:1.18;overflow:hidden}
 html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;border-radius:10px}
@@ -1351,5 +1363,5 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
 .g4-tplank.broken{background:#3b4653;animation:g4tbsnap .7s ease-out forwards}
 @keyframes g4tbsnap{0%{transform:none}30%{transform:translateY(4px) rotate(-6deg)}100%{transform:translateY(26px) rotate(-22deg);opacity:.25}}
 .g4-tstamp{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%) rotate(-8deg);z-index:9;pointer-events:none;opacity:0;padding:6px 18px;border:3px solid #c92a2a;color:#c92a2a;font-weight:800;letter-spacing:2px;background:rgba(255,255,255,.85)}
-.game-prompt.in,.game-fade.on,.game.g4-ready.is-on .g4-hud,.game.g4-ready.is-on .g4-hearts,.game.g4-ready:not(.is-on) .g4-prev.on,.g4-heart.full,.g4-prompt.in,.g4-flag.on,.game.g4-ready.is-on .g4-ammo,.g4-shot.full,.g4-mprompt.in,.g4-xclue.on,.game.g4-ready.is-on .g4-hp,.game.g4-ready.is-on .g4-lprompt,35%,.g4-tbridge.hit .g4-tbrk,.g4-tstamp.showing{opacity:1}
+.game-prompt.in,.game-fade.on,.game.g4-ready.is-on .g4-hud,.game.g4-ready.is-on .g4-hearts,.game.g4-ready:not(.is-on) .g4-prev.on,.g4-heart.full,.g4-prompt.in,.g4-flag.on,.game.g4-ready.is-on .g4-ammo,.g4-shot.full,.g4-mprompt.in,.g4-xclue.on,.game.g4-ready.is-on .g4-hp,.game.g4-ready.is-on .g4-lprompt,.g4-tbridge.hit .g4-tbrk,.g4-tstamp.showing{opacity:1}
 .g4-tstamp.ok{border-color:var(--green);color:var(--green)}
