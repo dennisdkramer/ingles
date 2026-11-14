@@ -243,7 +243,7 @@ button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
   .vz-sheet .vz-lyrics li{white-space:normal}
 }
 
-/* ## BLOCK FRAME — a block is `.panel` or `.card`: one frame, two names, never a bare div and never `fieldset`. `data-kind="teach|train"` on the block element carries the block's shape and sets the frame's edge: its lowercase atoms, with `|` where one block both explains and asks; `data-level="10|20|30|40|50"` beside it is the block's own difficulty band, and it must be at or above the lesson number. Unbuilt work is `p.todo`, which renders as a visible marker. */
+/* ## BLOCK FRAME — a block is `.panel` or `.card`: one frame, two names, never a bare div and never `fieldset`. `data-kind="teach|train"` on the block element carries the block's shape and sets the frame's edge: its lowercase atoms, with `|` where one block both explains and asks. Unbuilt work is `p.todo`, which renders as a visible marker. */
 .panel,.card{--edge:var(--tan);border:2px solid var(--edge);border-radius:12px;padding:12px 16px;background:var(--paper);box-shadow:4px 4px 0 var(--tan);margin:14px 0}
 
 .panel[data-kind="teach"],.card[data-kind="teach"],.game[data-kind="teach"],.dialog[data-kind="teach"]{--edge:var(--ink)}
