@@ -24,6 +24,15 @@ _(Cleared 2026-11-04 at the owner's request.)_
 - Item 6 (the h4 scaffold item) is done at `style.css:304`. Item 7 was read as the PORTUGUESE TEXT pointer, fixed at `style.css:181`; the sentence that deferred the class vocabulary to PEDAGOGY-MAP.md — `style.css:4-5` — is deleted at the owner's word, so these headers are the one stated vocabulary.
 - `qa/brief.mjs --indexes` prints both indexes in one run (`qa/brief.mjs:67-78`): the menu index as the same JSON `--index` prints, then the `--css` lines. Both single-flag paths are unchanged.
 
+### D. The vehicle menu: 31 entries deleted, 15 withheld (2026-11-14) — the builder's index is 20 lines
+- The marks were in `qa/NOTES.md` boxes, not in `CONTENT_EXAMPLES.md`. The 31 boxes reading `delete` lost their whole entry (06,08,09,10,11,13,14,15,16,17,18,19,20,21,22,23,24,25,26,44,45,46,47,48,49,51,52,53,54,59,62) and their box; 35 entries remain, numbered 2–67 with permanent holes.
+- The 15 boxes reading `mark in the header "IGNORE - pending updates"` (40,41,42,43,55,56,57,58,60,61,63,64,65,66,67) carry that phrase at the start of the heading's phrase, after the itemsize, so the heading still ends with its counts.
+- `qa/menu.mjs` strips the mark from `what` and sets `ignore` (`qa/menu.mjs:33-36`, `:48-55`); `headerOf()` prints the mark again, so the preview page shows which shapes are withheld.
+- `qa/brief.mjs` drops ignored entries from step 4 and from `--index=raw`, and the section title prints `15 withheld: marked IGNORE - pending updates` (`qa/brief.mjs:143-154`). `--index` JSON keeps every shape with its `ignore` flag, because the preview nav and note boxes read that call.
+- `qa/examples.mjs` no longer requires contiguous numbers: a deletion leaves a hole on purpose, and renumbering would re-key every preview section and note box (`qa/examples.mjs:74-80`). 8/8 pass.
+- `PEDAGOGY-MAP.md:13` ([I/O] 5) now names `node qa/brief.mjs --index` and the withheld mark; `PEDAGOGY-MAP.md:31` ([BUILD] 3e) names `--section=NN` and drops a stale claim that each heading carries clarity and fun scores.
+- Open by choice: `qa/preview-blocks.html` still holds the 31 prototype sections of the deleted entries (66 sections, 35 with an entry). Kept as the only remaining record of those shapes; removing them is one scripted pass if the owner wants the catalogue to match the menu.
+
 ### B. Open thread — let lesson generation print a pronunciation key - IGNORE - PARKED FOR NOW
 
 **Facts.** `pronkey.js:80-85` exports `words`, `lookup`, `render`, `ready`. `load(obj)` exists at `pronkey.js:59` and is not exported. `render()` (`pronkey.js:34`) splits a key on `-` (syllables joined with `·`), wraps letters in `<b>` and elided letters in `<span class="pr-g">`, and returns the display HTML. `dictionary.json` holds 28,075 entries; **0** contain a space. The page's own lookup (`engine1.js:420-423`) takes a multi-word selection, loops its words, and uses the **first** word that has a key.

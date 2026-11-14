@@ -7,8 +7,7 @@
  *   - CONTENT_EXAMPLES.md has entries (`### [NN] <shape> <itemsize> …`) and every heading parses;
  *     the four `### [GAMES]`, `[BLOCKS]`, `[VISUALS]` and `[IN-BLOCK]` headings are scaffolding under
  *     `## [BUILD]` rather than vehicles, and are named in `SCAFFOLD` so they are skipped;
- *   - no name is used twice (the drafts from the retired IN-BLOCK-VISUALS.md are `[84]`–`[97]` here now,
- *     so there is one list, not two);
+ *   - no name is used twice;
  *   - every block in `qa/preview-blocks.html` carries the shape atoms of the vehicle it renders. Its
  *     atoms are its own (`data-kind="teach"` / `"train"` / `"teach|train"`) and, for a numbered entry,
  *     are checked against that entry's heading: a block may carry a subset of the heading's atoms (a
@@ -72,14 +71,13 @@ const worn = lines.map((l, i) => ({ l, i })).filter(o => /^### \[\d+\]/.test(o.l
 ok('every numbered heading has shape, size, phrase and counts', worn.length === 0,
   worn.slice(0, 4).join(' | ') || 'all complete');
 
-/* the numbers are the index: unique, and no hole between the first and the last */
+/* the numbers are the index: unique, and a hole is permanent. An entry deleted from the menu keeps its
+   number out of circulation — renumbering would re-key every preview section, note box and saved link
+   that names it — so contiguity is not a property this file can have. */
 const nums = entries.filter(e => e.num).map(e => Number(e.num)).sort((a, b) => a - b);
 const dupNum = nums.filter((n, i) => i && n === nums[i - 1]);
-const holes = [];
-for (let n = nums[0]; n <= nums[nums.length - 1]; n++) if (nums.indexOf(n) === -1) holes.push(n);
-ok('numbers are unique and contiguous', dupNum.length === 0 && holes.length === 0,
-  (dupNum.length ? 'twice: ' + dupNum.join(',') : '') + (holes.length ? ' missing: ' + holes.join(',') : '') ||
-  (nums[0] + '–' + nums[nums.length - 1]));
+ok('no number is used twice', dupNum.length === 0,
+  dupNum.length ? 'twice: ' + dupNum.join(',') : nums.length + ' entries, ' + nums[0] + '–' + nums[nums.length - 1]);
 
 const names = entries.map(h => h.name);
 const dupes = names.filter((n, i, a) => a.indexOf(n) !== i);

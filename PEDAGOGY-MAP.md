@@ -10,7 +10,7 @@
 	6) (<TRACK>-ROADMAP.md '##' HEADERS ONLY) - Reference **only to reduce redundancy with other lessons**.
 	3) FUNCTION.md [CONTENT] - Only within this section
 	2) <TRACK>-REGISTER.md - **<TRACK> is the PERSONA - guides**: context, voice, and vocabulary (tiered by real-life frequency (`core` → `common` → `situational` → `rare`, in its tells block))
-	5) Contents within (CONTENT_EXAMPLES.md [INSTRUCTIONS] and **ONLY ###-level** headings after it). **CARRIES NO AUTHORITY AT ALL** — vehicle may be chosen by [BUILD] 3(d), content is written for the lesson.
+	5) Contents within (CONTENT_EXAMPLES.md [INSTRUCTIONS] and **ONLY ###-level** headings after it). **CARRIES NO AUTHORITY AT ALL** — vehicle may be chosen by [BUILD] 3(d), content is written for the lesson. `node qa/brief.mjs --index` prints that index; an entry whose heading carries `IGNORE - pending updates` is withheld from it, because the shape is still waiting for its update, and is not available.
 	7) style.css `/* ## ` Headers ONLY - Styling, formatting implementation (eg. which class or knob does what) - `node qa/brief.mjs --css` prints the index with each header's line number; no stored copy exists.
 
 - As-Needed Inputs — **read only the section that answers the question, never the whole file.** The engines are implementation, not pedagogy: engine1.js, engine2.js, engine4.js (`window.GAMES4`; a page that uses a game block must add `<script src="../engine4.js"></script>` itself, after engine2.js). CONTENT_EXAMPLES.md `### ` section content for each header chosen by ([BUILD] 3(d)) during the current step - that section only. The contents of a specific (style.css `/* ## `) **ONLY WHEN** that span is mandatory to correct authoring of specific HTML for the lesson being generated.
@@ -28,7 +28,7 @@ When the lesson wants to include music/audio: qa/AUDIO.md
   - b) To what extent and in what combination does student success depend on [understanding [a concept] or [translation mapping]], [training and getting accustomed to its use], or [memorization]?
   - c) Is this lesson/section/block a good opportunity to [introduce, compare, or make note of] any [synonyms, antonyms, homophones, homographs, false cognates, relevant idioms/expressions, etc.]?
   - d) Considering (a), (b), and (c), is the given content well suited to a particular display element, vehicle, or game from [I/O] 5 or from an outside source?
-  - e) If an item from among [I/O] #5 `###` headings is chosen, read only that heading's line range for implementation details. Each heading contains a high-level description, and 'clarity of purpose' and 'fun' scores. Any shape and vehicle you imagine is equally valid and may be used for any part of any lesson - examples are mere possibilities.
+  - e) If an item from among [I/O] #5 `###` headings is chosen, read only that heading's entry for implementation details (`node qa/brief.mjs --section=NN` prints one whole). The heading is the shape, the itemsize and what it does; the `markup` and `info` lines under it are how it is built. Any shape and vehicle you imagine is equally valid and may be used for any part of any lesson - examples are mere possibilities.
 
 ## [PORTUGUESE] Quantity decreases as student english level increases **HIGH PRIORITY**
 - For any generated [[**Lesson introduction, explanatory text, tip, headline, or column header**], it is authored in Portuguese [only if [LESSON #] < ([CONTENT LEVEL] of the explanation)] ELSE [it is authored in English, and [CONTENT LEVEL] is authored to be as close as possible to [STUDENT LEVEL]]]

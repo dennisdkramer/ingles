@@ -52,61 +52,13 @@ content belongs in its `###` sections.
 → CONTENT_EXAMPLES.md §`[05]`
 improve the drawings for each location so they are either obviously recognizable OR a building with a sign that indicates what it is ($ BANK, for example) as part of the drawing. Remove the normal text names. put the check boxes centered at the bottom of each location (above the street). Put street names in italic on the streets - vertical streets get names running vertically.  Remove the questions portion below the map. Change the heading to "Street map for directions and relative locations"  and clear the min/max numbers
 
-### [10]
-
-→ CONTENT_EXAMPLES.md §`[10]`
-
-### [17]
-
-→ CONTENT_EXAMPLES.md §`[17]`
-delete the contents of the second block and move the explainer below the chart in block 1 into the second block
-
-### [19]
-
-→ CONTENT_EXAMPLES.md §`[19]`
-change the headline to "A chart with information about an event and questions about it". change the min/max numbers to <2|6><2|4>
-
-### [20]
-
-→ CONTENT_EXAMPLES.md §`[20]`
-
-### [06]
-
-→ CONTENT_EXAMPLES.md §`[06]`
-
 ### [07]
 
 → CONTENT_EXAMPLES.md §`[07]`
 
-### [08]
-
-→ CONTENT_EXAMPLES.md §`[08]`
-
-### [09]
-
-→ CONTENT_EXAMPLES.md §`[09]`
-delete
-
-### [11]
-
-→ CONTENT_EXAMPLES.md §`[11]`
-
 ### [12]
 
 → CONTENT_EXAMPLES.md §`[12]`
-
-### [13]
-
-→ CONTENT_EXAMPLES.md §`[13]`
-make it half width, <h3> is a line about the context, <h4> is instruction text if applicable. Make the lines alternate between speakers :: rafa has two lines in a row, should be separated by '-' not separate lines. Header text is "Standard dialog block"
-
-### [14]
-
-→ CONTENT_EXAMPLES.md §`[14]`
-
-### [15]
-
-→ CONTENT_EXAMPLES.md §`[15]`
 
 ### [27]
 
@@ -132,10 +84,6 @@ make it half width, <h3> is a line about the context, <h4> is instruction text i
 
 → CONTENT_EXAMPLES.md §`[31]`
 
-### [16]
-
-→ CONTENT_EXAMPLES.md §`[16]`
-
 ### [37]
 
 → CONTENT_EXAMPLES.md §`[37]`
@@ -152,49 +100,9 @@ make it half width, <h3> is a line about the context, <h4> is instruction text i
 
 → CONTENT_EXAMPLES.md §`[43]`
 
-### [44]
-
-→ CONTENT_EXAMPLES.md §`[44]`
-
-### [45]
-
-→ CONTENT_EXAMPLES.md §`[45]`
-
-### [46]
-
-→ CONTENT_EXAMPLES.md §`[46]`
-
-### [47]
-
-→ CONTENT_EXAMPLES.md §`[47]`
-
-### [48]
-
-→ CONTENT_EXAMPLES.md §`[48]`
-
-### [49]
-
-→ CONTENT_EXAMPLES.md §`[49]`
-
 ### [50]
 
 → CONTENT_EXAMPLES.md §`[50]`
-
-### [51]
-
-→ CONTENT_EXAMPLES.md §`[51]`
-
-### [52]
-
-→ CONTENT_EXAMPLES.md §`[52]`
-
-### [53]
-
-→ CONTENT_EXAMPLES.md §`[53]`
-
-### [54]
-
-→ CONTENT_EXAMPLES.md §`[54]`
 
 ### [55]
 
@@ -212,10 +120,6 @@ make it half width, <h3> is a line about the context, <h4> is instruction text i
 
 → CONTENT_EXAMPLES.md §`[58]`
 
-### [59]
-
-→ CONTENT_EXAMPLES.md §`[59]`
-
 ### [60]
 
 → CONTENT_EXAMPLES.md §`[60]`
@@ -223,10 +127,6 @@ make it half width, <h3> is a line about the context, <h4> is instruction text i
 ### [61]
 
 → CONTENT_EXAMPLES.md §`[61]`
-
-### [62]
-
-→ CONTENT_EXAMPLES.md §`[62]`
 
 ### [63]
 
@@ -247,3 +147,7 @@ make it half width, <h3> is a line about the context, <h4> is instruction text i
 ### [67]
 
 → CONTENT_EXAMPLES.md §`[67]`
+
+### [40]
+
+→ CONTENT_EXAMPLES.md §`[40]`

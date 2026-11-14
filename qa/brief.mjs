@@ -59,7 +59,7 @@ if (has('css')) {
 const indexArg = process.argv.find(a => a === '--index' || a.startsWith('--index='));
 if (indexArg) {
   const menu = readMenu();
-  if (indexArg === '--index=raw') menu.shapes.forEach(s => process.stdout.write(s.raw + '\n'));
+  if (indexArg === '--index=raw') menu.shapes.filter(s => !s.ignore).forEach(s => process.stdout.write(s.raw + '\n'));
   else process.stdout.write(JSON.stringify(menu, null, 2) + '\n');
   process.exit(0);
 }
@@ -140,11 +140,17 @@ const relEntry = iIns < 0 ? -1 : CE.slice(iIns).search(/\n### \[\d+\] /);
 const iEnd = iIns < 0 ? 0 : (relEntry > 0 ? iIns + relEntry : CE.length);
 if (iIns >= 0) emit('CONTENT_EXAMPLES.md - [INSTRUCTIONS] (the field grammar)',
   CE.slice(iIns, iEnd).trimEnd());
-const heads = readMenu().shapes.map(s => s.raw);
+/* an entry whose heading carries `IGNORE - pending updates` is not in the builder's index: it is a shape
+   still waiting for its update, so offering it would be offering a shape that is about to change. The
+   count is printed with the section so the withholding is visible rather than silent. */
+const shapes = readMenu().shapes;
+const heads = shapes.filter(s => !s.ignore).map(s => s.raw);
+const withheld = shapes.length - heads.length;
 const every = Math.max(1, Number(arg('exemplars', '0')) || 1);
 const picked = heads.filter((_, i) => i % every === 0);
 emit('CONTENT_EXAMPLES.md - ' + picked.length + ' of ' + heads.length + ' SHAPES, one line each'
-  + (every > 1 ? ' (1 in ' + every + ')' : ''),
+  + (every > 1 ? ' (1 in ' + every + ')' : '')
+  + (withheld ? ', ' + withheld + ' withheld: marked IGNORE - pending updates' : ''),
   picked.join('\n'));
 const want = arg('section', '');
 if (want) {

@@ -30,6 +30,10 @@ const SCAFFOLD = /^### (Build \[Constraints\]|\[(GAMES|BLOCKS|VISUALS|IN-BLOCK)\
 const NUM_RE = /^### \[(\d+)\]\s+<([^>]*)>\s+<([^>]*)>\s*(.*)$/;
 const LEG_RE = /^### `([A-Za-z0-9]+)\s*[—–-]\s*(.*)$/;
 const KINDS = '(teaching|training|mixed|games|teach|train)';
+/* the one mark an entry can carry in its heading: it stays in the file and out of the builder's index,
+   because the shape still needs an update before it can be chosen. Stripped from `what`, so everything
+   that prints the entry prints the shape and not the mark. */
+const MARK = /^IGNORE - pending updates\s*[—–-]\s*/;
 
 /* `<3|6> <2|4>` — either number may be omitted and the brackets may be absent altogether */
 function counts(tail) {
@@ -41,10 +45,13 @@ function shapeAt(line, n, section) {
   const num = NUM_RE.exec(line);
   if (num) {
     const c = counts(num[4]);
+    const ignored = MARK.test(c.what);
     return {
       line: n, section, raw: line.trimEnd(), key: '[' + num[1] + ']', num: num[1], name: null,
       anchor: 'item-' + num[1], shape: num[2].trim(), size: num[3].trim(),
-      what: c.what, counts: c.items === null ? null : { items: c.items, opts: c.opts }, kind: null, form: 'numbered'
+      what: ignored ? c.what.replace(MARK, '') : c.what,
+      counts: c.items === null ? null : { items: c.items, opts: c.opts }, kind: null, form: 'numbered',
+      ignore: ignored
     };
   }
   const leg = LEG_RE.exec(line);
@@ -55,14 +62,14 @@ function shapeAt(line, n, section) {
   if (k) { kind = k[1]; rest = rest.slice(0, k.index).trim(); }   // the heading's `(teaching)`, not part of what it does
   return {
     line: n, section, raw: line.trimEnd(), key: leg[1], num: null, name: leg[1],
-    anchor: 'item-' + leg[1], shape: null, size: null, what: rest, counts: null, kind, form: 'legacy'
+    anchor: 'item-' + leg[1], shape: null, size: null, what: rest, counts: null, kind, form: 'legacy',
+    ignore: false
   };
 }
 
 function drafts() {
-  /* the figures that used to live in IN-BLOCK-VISUALS.md are numbered entries now ([84] and up), so
-     they reach the preview page as shapes like any other. Kept as an empty list so a reader written
-     against the old shape of this object keeps working. */
+  /* no draft-only shape remains: every shape in the menu is an entry, so this is always empty. Kept as
+     an empty list so a reader written against the old shape of this object keeps working. */
   return [];
 }
 
@@ -94,10 +101,11 @@ export function readMenu() {
   };
 }
 
-/* the header rest, as the page prints it under a block: identity first, then what the shape does */
+/* the header rest, as the page prints it under a block: identity first, then what the shape does.
+   The preview page shows the mark, because that page is where the update happens. */
 export function headerOf(s) {
   if (s.form === 'numbered') {
-    return '<' + s.shape + '> <' + s.size + '> ' + s.what +
+    return (s.ignore ? 'IGNORE - pending updates — ' : '') + '<' + s.shape + '> <' + s.size + '> ' + s.what +
       (s.counts ? ' <' + s.counts.items + '> <' + s.counts.opts + '>' : '');
   }
   return s.what + (s.kind ? ' (' + s.kind + ')' : '');
