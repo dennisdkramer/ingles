@@ -28,6 +28,9 @@
  *        (no audio on hand: the site is searched, the audio is downloaded and converted to mp3, and
  *         it is paired with the LRCLIB record whose duration agrees within 2 s — the whole chain,
  *         unattended. Without --out it prints the pairing and writes nothing)
+ *        --early=<s> places every sheet line that far before its cue and accepts a NEGATIVE value
+ *        (--early=-2 = two seconds later, for a sheet that runs early against its own upload);
+ *        --tail=<s> (default 2) ends the clip past the next cue instead of on it
  *
  * The cut is made at the silence after the last lyric line, so the audio carries exactly the lines
  * the block shows. The frames are copied out of the master, so no second encode is paid — unless a
@@ -201,12 +204,22 @@ if (search) {
 const lead = Math.max(0, Number(arg('lead', '2')) || 0);
 /* EVERY SHEET TIME LANDS A SPLIT SECOND LATE. An LRC or a subtitle is tapped while listening, so its
    cue sits on the stressed vowel rather than on the consonant that opens the line. Each cue is
-   therefore moved `--early` seconds back (default 1) and the clip's head is extended by the same
-   second, so the first highlight still opens `--lead` seconds in and the END of the clip is
-   untouched — the clip is one second longer and every `data-t` is unchanged. */
-const early = Math.max(0, Number(arg('early', '1')) || 0);
+   therefore moved `--early` seconds back (default 1) together with the clip's head, so the first
+   highlight always opens `--lead` seconds in and every `data-t` is unchanged by the shift.
+   NEGATIVE VALUES ARE THE OTHER DIRECTION, and they are a legitimate fix: a sheet can be early
+   against its own upload — an older, live or re-issued recording whose intro runs longer than the
+   master the sheet was written on — and then `--early=-2` places every line two seconds later. The
+   clamp is ±10 s, past which the sheet and the audio are different works, not a mis-timed one. */
+const earlyRaw = arg('early', '1');
+if (!Number.isFinite(Number(earlyRaw))) die('--early must be a number of seconds, e.g. --early=-2');
+const early = Math.max(-10, Math.min(10, Number(earlyRaw)));
 /* A FADE IS OPTIONAL AND ON BY DEFAULT. 0 disables it and keeps the frame copy. */
 const fade = Math.max(0, Number(arg('fade', '0.5')) || 0);
+/* THE CLIP ENDS `--tail` SECONDS PAST THE NEXT LINE'S CUE, NOT ON IT. The end is the one place a
+   mis-timed sheet is audible as a missing word, and the last line shown is the one the block is
+   teaching; two seconds of the next line costs nothing and means a sync error of a second still
+   leaves the last line whole inside the clip. */
+const tail = Math.max(0, Number(arg('tail', '2')) || 0);
 let lrcSel = null;
 const lrcQuery = arg('lrc', '');
 const lrcId = arg('lrc-id', '') || searchedRecordId;
@@ -291,7 +304,7 @@ if (lrcQuery || lrcId || lrcFile) {
   if (arg('times', '')) die('--lrc-id brings the times too — drop --times');
   if (arg('from', '')) die('--lrc-id sets the start (' + lead + ' s before line ' + first + ') — drop --from or raise --lead');
   lrcSel = {
-    record: rec, first, where, dur,
+    record: rec, first, where, dur, total: rows.length,
     lines: take.map(r => r.text),
     times: take.map(r => r.t),
     next: rows[first - 1 + take.length] ? rows[first - 1 + take.length].t : null,
@@ -804,7 +817,8 @@ if (givenTimes.length) {
   if (lastT >= orig.duration) die('a --times value (' + lastT + ') is past the end of the file');
   console.log('  times: ' + givenTimes.join(' · ') + ' s — from ' +
     (lrcSel ? lrcSel.where : 'the file\'s own timed transcript') +
-    (early ? ', placed ' + early + ' s earlier (--early=' + early + '): ' + sheetStarts.join(' · ') : ''));
+    (early ? ', placed ' + Math.abs(early) + ' s ' + (early > 0 ? 'earlier' : 'later') +
+      ' (--early=' + early + '): ' + sheetStarts.join(' · ') : ''));
 }
 
 let cutAt = wantSeconds;
@@ -845,7 +859,8 @@ if (lyrics.length && !givenTimes.length) {
      line would begin; past the end of the transcript there is no such time, so --seconds or the end */
   /* an outside sheet also says where the line AFTER the excerpt starts, so the clip ends there */
   const next = (lrcSel && lrcSel.next != null) ? lrcSel.next : givenTimes[lyrics.length];
-  cutAt = wantSeconds || (next ? next - 0.05 : Math.min(orig.duration, givenTimes[lyrics.length - 1] + 7));
+  cutAt = wantSeconds ||
+    (next ? next - 0.05 + tail : Math.min(orig.duration, givenTimes[lyrics.length - 1] + 7 + tail));
 } else if (!cutAt) {
   die('give --lyrics="…|…" (the cut follows the last line) or --seconds=<n>');
 }
@@ -993,15 +1008,20 @@ const fig = full
 
 console.log('\n--- paste this into the block (' + (full ? 'the block IS the .panel' : 'inside its .panel') + ') ---\n' + fig);
 console.log('\n--- provenance row for assets/README.md ---');
-console.log('| `' + outName + '.mp3` | ' + (lyrics.length ? 'the first ' + lyrics.length + ' sung lines, ' : '') +
+console.log('| `' + outName + '.mp3` | ' +
+  (lrcSel ? 'lines ' + lrcSel.first + '–' + (lrcSel.first + lyrics.length - 1) +
+    ' of that sheet\'s ' + lrcSel.total + ', '
+    : lyrics.length ? 'the first ' + lyrics.length + ' sung lines, ' : '') +
   cutM.duration.toFixed(2) + ' s, ' + shipped.bytes + ' bytes — **cut from ' +
   (fromAt ? info.start.toFixed(2) + ' s to ' : 'the start to ') + cutAt.toFixed(2) + ' s**, ' +
   (shipped.reencoded
     ? 're-encoded once with a ' + fade + ' s fade at each end'
     : 'frames copied not re-encoded, and the VBR header rewritten for the cut (frame count, byte count, seek table)') +
-  (givenTimes.length && early ? ', every line placed ' + early + ' s before its sheet time' : '') +
+  (givenTimes.length && early ? ', every line placed ' + Math.abs(early) + ' s ' +
+    (early > 0 ? 'before' : 'after') + ' its sheet time' : '') +
   ' | ' + (sourcePage || src) + ' | ' + credit + ' | **' + licence + '** |');
 console.log('\n--- before it ships ---');
-console.log('1. a lesson page needs the `.vz-*` rules from qa/preview-visual.css moved into style.css');
+console.log('1. the page must load the player, `qa/player.js`: it draws the bar and the highlight. Without');
+console.log('   it the audio keeps its native controls and no line ever lights');
 console.log('2. `data-duration` must equal the decoded length: ' + cutM.duration.toFixed(2) + ' s');
 console.log('3. every `data-t` must be inside that length: ' + starts.join(', '));

@@ -38,12 +38,12 @@ prints.</p>
 <nav class="qa-toc" id="qa-toc"><span class="qa-toc-state">reading qa/brief.mjs…</span></nav>
 <section class="qa-demo" id="demo-02">
 <h2>Demo — [02] shape, from the steps</h2>
-<p class="dim"><code>--search="Miley Cyrus Wrecking Ball" --lrc-id=3209411 --lines=9,4 --title="Wrecking Ball"</code> — LRCLIB 3209411 (222.00 s) paired at 0.0 s with the 222 s upload, lines 9–12 at 40.74 · 45.09 · 48.72 · 52.74 s placed 1 s earlier, clip cut 37.73–57.63 s → 19.86 s with a 0.5 s fade at each end.</p>
+<p class="dim"><code>--search="Miley Cyrus Wrecking Ball" --lrc-id=3209411 --lines=9,4 --title="Wrecking Ball" --early=-2</code> — LRCLIB 3209411 (222.00 s) paired at 0.0 s with the 222 s upload, lines 9–12 at 40.74 · 45.09 · 48.72 · 52.74 s placed <b>2 s later</b> because this sheet runs early against the upload, clip cut 40.73–59.63 s → 18.85 s, a 0.5 s fade at each end, and the end 2 s past the next cue.</p>
 <div class="panel itemsize-third" data-kind="teach">
 <h3>Wrecking Ball</h3>
 <h4>Miley Cyrus</h4>
 <figure class="vz-play">
-  <audio class="vz-audio" src="../assets/wrecking-ball.mp3" data-duration="19.86" controls preload="metadata"></audio>
+  <audio class="vz-audio" src="../assets/wrecking-ball.mp3" data-duration="18.85" controls preload="metadata"></audio>
   <div class="vz-controls">
     <button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>
     <span class="vz-time" data-now>0:00</span>
@@ -61,12 +61,12 @@ prints.</p>
 </section>
 <section class="qa-demo" id="demo-03">
 <h2>Demo — [03] shape, from the steps</h2>
-<p class="dim">The same clip and the same four starts with <code>--width=full</code>: the lines and the one paragraph explaining them share the figure's width.</p>
+<p class="dim"><code>--search="The Longest Johns Drunken Sailor" --lines=11,4 --width=full</code> — LRCLIB 9567200 (144.00 s) paired at 0.0 s, lines 11–14 at 17.00 · 18.87 · 20.73 · 22.86 s placed 1 s earlier, clip cut 13.99–26.61 s → 12.57 s with a 0.5 s fade at each end: the same four starts in the full-width shape.</p>
 <div class="panel itemsize" data-kind="teach">
 <h3>Drunken Sailor</h3>
 <h4>The Longest Johns</h4>
 <figure class="vz-play">
-  <audio class="vz-audio" src="../assets/drunken-sailor.mp3" data-duration="9.57" controls preload="metadata"></audio>
+  <audio class="vz-audio" src="../assets/drunken-sailor.mp3" data-duration="12.57" controls preload="metadata"></audio>
   <div class="vz-controls">
     <button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>
     <span class="vz-time" data-now>0:00</span>
@@ -75,10 +75,10 @@ prints.</p>
   </div>
   <div class="vz-sheet">
     <ol class="vz-lyrics">
-      <li data-t="2">What shall we do with a drunken sailor?</li>
-      <li data-t="3.87">What shall we do with a drunken sailor?</li>
-      <li data-t="5.73">What shall we do with a drunken sailor?</li>
-      <li data-t="7.86">Early in the morning</li>
+      <li data-t="2.008">What shall we do with a drunken sailor?</li>
+      <li data-t="3.878">What shall we do with a drunken sailor?</li>
+      <li data-t="5.738">What shall we do with a drunken sailor?</li>
+      <li data-t="7.868">Early in the morning</li>
     </ol>
     <p>A shanty is a work song, and the shape here is a question asked three times so that everyone can join before it resolves. The repeats are not decoration: the first names the trouble, the second gives the crew a line long enough to haul on, and the third lands on <b>Early in the morning</b> — the only line that answers, and the part the sailors actually need, since it says when the work starts.</p>
   </div>
