@@ -9,8 +9,5 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 
 # [CURRENT]
 
-## [B1] - The audio pipeline closed out: the CSS header says only what the owner wrote, a cue shift can be rebuilt from a command, and the remaining pipeline gaps are named «"you can build the --cue-shift" · "tell me if there is anything else missing"» qa/AUDIO.md + qa/audio.mjs + the audit below
-   - [S1] - `## AUDIO PLAYER` carries the owner sentence and names no vehicle .clinerules 9 (wording unsoftened) the header reads the owner line and no `[02]`/`[03]` appears in it
-   - [S2] - `--cue-shift=<s>` moves every `data-t` and touches no audio; Wrecking Ball rebuilt from the local master so the page matches one command rule 8 (tight QA) 1.012/5.362/8.992/13.012 printed at 18.85 s, and the demo and the provenance row carry the flag
-   - [S3] - audit the generation pipeline minus pronkey and say what is missing .clinerules 15 (what the user must know or decide) a list, every item with path:line, nothing executed
+
 
