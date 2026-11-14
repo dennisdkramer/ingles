@@ -2,7 +2,7 @@
 /**
  * qa/brief.mjs - the generation brief. A PRINTER, not a check.
  *
- *   node qa/brief.mjs --track=business --lesson=41        the input set, then the gate
+ *   node qa/brief.mjs --track=business --lesson=41        the input set, then the post-generation checks
  *   node qa/brief.mjs --track=business --lesson=41 --reassert   PEDAGOGY-MAP.md again, nothing else
  *   node qa/brief.mjs --css            the style.css `## ` headers, one line each, with their line numbers
  *   node qa/brief.mjs --indexes        both indexes: the menu index, then the style.css headers
@@ -13,10 +13,14 @@
  *
  * Nothing here judges anything. No page is opened, no lesson page is read, and no file is written.
  *
- * WHAT IT PRINTS, in PEDAGOGY-MAP [I/O] order: the lesson's own roadmap block · that roadmap's `##` headers
- * (reference only) · FUNCTION.md [CONTENT] · <TRACK>-REGISTER.md · the CONTENT_EXAMPLES.md [INSTRUCTIONS]
- * grammar and one line per shape, with `--section=NN|name` for one entry whole · style.css `##` headers ·
- * _shell.html · the seven-question gate. PEDAGOGY-MAP.md itself is printed first, and again on `--reassert`.
+ * WHAT IT PRINTS, in PEDAGOGY-MAP [I/O] order: the lesson's own roadmap block · the neighbouring lessons'
+ * `##` headers, five before and three after (reference only, and printed to AVOID repeating one of them) ·
+ * FUNCTION.md [CONTENT] · <TRACK>-REGISTER.md · the CONTENT_EXAMPLES.md [INSTRUCTIONS] grammar and one line
+ * per shape, with `--section=NN|name` for one entry whole · style.css `##` headers · _shell.html · the
+ * post-generation checks. PEDAGOGY-MAP.md itself is printed first, and again on `--reassert`.
+ *
+ * No count of anything is printed: how many headers, shapes or classes a file holds is that file's
+ * business, and a count in a brief is read as a target.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -75,9 +79,9 @@ if (indexArg) {
 if (has('indexes')) {
   const menu = readMenu();
   const css = cssHeaders();
-  process.stdout.write('CONTENT_EXAMPLES.md - ' + menu.shapes.length + ' SHAPES (the menu index)\n'
+  process.stdout.write('CONTENT_EXAMPLES.md - THE MENU INDEX\n'
     + JSON.stringify(menu, null, 2) + '\n\n');
-  process.stdout.write('style.css - ' + css.length + ' `## ` HEADERS\n');
+  process.stdout.write('style.css - `## ` HEADERS\n');
   css.forEach(h => process.stdout.write('style.css:' + h.line + '  ' + h.text + '\n'));
   process.exit(0);
 }
@@ -104,7 +108,7 @@ const emit = (title, body) => {
 /* the re-assert is one command that prints the map again and stops */
 const MAP = read('PEDAGOGY-MAP.md');
 if (has('reassert')) {
-  emit('PEDAGOGY-MAP.md - COPY 2 OF 2 (re-assert: read this before answering the gate)', MAP);
+  emit('PEDAGOGY-MAP.md - COPY 2 OF 2 (re-assert: read this before running the post-generation checks)', MAP);
   process.stderr.write('\nre-assert: ' + kb(MAP) + '\n');
   process.exit(0);
 }
@@ -124,11 +128,15 @@ let end = R.length;
 for (let i = start + 1; i < R.length; i++) if (/^## /.test(R[i])) { end = i; break; }
 emit(ROADMAP + ' - lesson ' + lesson + ' ONLY', R.slice(start, end).join('\n'));
 
-/* 2b. the roadmap's `##` headers, one line each — PEDAGOGY-MAP [I/O] 5: REFERENCE ONLY, so this lesson
-       does not repeat another one. Never a source of shapes, order or wording. */
-const RH = R.map((l, i) => ({ l, i })).filter(x => /^## /.test(x.l));
-emit(ROADMAP + ' - ' + RH.length + ' `## ` HEADERS ONLY (reference: redundancy with other lessons, nothing else)',
-  RH.map(x => ROADMAP + ':' + (x.i + 1) + '  ' + x.l.trim()).join('\n'));
+/* 2b. the roadmap's NEIGHBOURING `##` headers — PEDAGOGY-MAP [I/O] 5: REFERENCE ONLY. The purpose is to
+       avoid redundancy, not to create it: a shape can only collide with a lesson near this one, so five
+       before and three after are printed and the rest of the file is not. Never a source of shapes, order
+       or wording. No count is printed — how many headers this roadmap holds is the roadmap's business. */
+const head = R.map((l, i) => ({ l, i, n: Number((/^## \[(\d+)\]/.exec(l) || [])[1]) }))
+  .filter(x => /^## /.test(x.l));
+const near = head.filter(x => x.n < lesson).slice(-5).concat(head.filter(x => x.n > lesson).slice(0, 3));
+emit(ROADMAP + ' - the lessons around ' + lesson + ': `## ` HEADERS ONLY (reference: so this lesson does not repeat one of them)',
+  near.map(x => ROADMAP + ':' + (x.i + 1) + '  ' + x.l.trim()).join('\n'));
 
 /* 2c. FUNCTION.md [CONTENT] and nothing else from that file — PEDAGOGY-MAP [I/O] 4. Its own heading says a
        lesson reads this section and nothing else; the rest is runtime behaviour. */
@@ -167,9 +175,8 @@ const heads = shapes.filter(s => !s.ignore).map(s => s.raw);
 const withheld = shapes.length - heads.length;
 const every = Math.max(1, Number(arg('exemplars', '0')) || 1);
 const picked = heads.filter((_, i) => i % every === 0);
-emit('CONTENT_EXAMPLES.md - ' + picked.length + ' of ' + shapes.length + ' SHAPES, one line each'
-  + (every > 1 ? ' (1 in ' + every + ')' : '')
-  + (withheld ? ', ' + withheld + ' withheld: marked IGNORE - pending updates' : ''),
+emit('CONTENT_EXAMPLES.md - THE SHAPES, one line each' + (every > 1 ? ' (sampled: 1 in ' + every + ')' : '')
+  + (withheld ? ' — shapes marked IGNORE - pending updates are withheld' : ''),
   picked.join('\n'));
 const want = arg('section', '');
 if (want) {
@@ -183,17 +190,17 @@ if (want) {
 
 /* 5. the stylesheet, headers only: the contracts, not the mechanism — the scan --css prints */
 const heads2 = cssHeaders();
-emit('style.css - ' + heads2.length + ' `## ` HEADERS ONLY', heads2.map(h => h.block).join('\n\n'));
+emit('style.css - `## ` HEADERS ONLY', heads2.map(h => h.block).join('\n\n'));
 
 /* 6. the shell the page is built on */
 emit('_shell.html - THE PAGE THIS IS BUILT ON', read('_shell.html'));
 
-/* 7. the gate: one question per line, answered AS EACH SECTION IS FINISHED — from what was just
-      written, never by re-reading the finished page. Seven questions.
+/* 7. the post-generation checks: one line per check, answered AS EACH SECTION IS FINISHED — from what was
+      just written, never by re-reading the finished page.
       [G2] is the difficulty question: [LEVEL] asks how hard the material is for the student this
       track describes, judged by distance from Portuguese and by what each sentence asks the reader
       to hold — never by the prose. */
-const GATE = [
+const POST = [
   '[G1] Does any answer appear in its own prompt? (it must not, in any form)',
   '[G2] Is every block written for the student this track describes, at this lesson number — judged by distance from Portuguese and by what each sentence asks the reader to hold, never by the prose?',
   '[G3] Is every concept taught, then trained, then asked? (three moves, none skipped)',
@@ -202,7 +209,7 @@ const GATE = [
   '[G6] Are items numbered in the order the layout draws them? (across for .qopts, down for .qgrid.stack)',
   '[G7] Does every example use the register voice?',
 ];
-emit('THE GATE - seven questions, answered as each section is finished, from what you just wrote (never by re-reading the page)',
-  GATE.join('\n'));
+emit('POST-GENERATION CHECKS - answered as each section is finished, from what you just wrote (never by re-reading the page)',
+  POST.join('\n'));
 
 process.stderr.write('\nbrief total: ' + kb('x'.repeat(total)) + '   (run with --reassert for copy 2 of the map)\n');
