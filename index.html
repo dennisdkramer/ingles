@@ -367,6 +367,13 @@ function paintStudent(st){
 function trackLessons(t){
  return (LESSONS&&LESSONS[t])||[];
 }
+/* THE ADDRESS OF A LESSON is its FILENAME, taken from lessons.json — never `lesson`+n. Every navigation
+   (the book selector's links, "Continuar da lição", the teacher jump) resolves the number through this, so
+   one rename cannot leave a second copy of the old path behind. null = the list has no such lesson. */
+function lessonPath(t,i){
+ const hit=trackLessons(t).find(x=>x&&x.n===i);
+ return hit&&hit.file?t+'/'+encodeURIComponent(hit.file):null;
+}
 /* tracks.json → the student columns and the "＋ dar acesso" options. The three fallback tables below keep a
    track that a stale response omits, so this can never hide a track that already exists. */
 function applyTracks(list){
@@ -460,10 +467,10 @@ function bookButton(t,locked){
  const dn=(DONE&&DONE[t])||[];
  const items=trackLessons(t).map(le=>{
   const n=le.n,num=(n<10?"0":"")+n,txt=le.title?esc(le.title):"—";
-  /* the page's address is its FILENAME, and the title is in it: it comes from lessons.json, never from n.
-     An entry with no `file` is a stale cached list from before the rename — it is shown, never linked: the
-     path it used to imply (`lesson<n>.html`) does not exist any more. */
-  const href=le.file?t+'/'+encodeURIComponent(le.file):'';
+  /* the page's address is its FILENAME, resolved the same way `go()` resolves it, so the href and the click
+     handler cannot disagree. An entry with no `file` is a stale cached list from before the rename — it is
+     shown, never linked: the path it used to imply (`lesson<n>.html`) does not exist any more. */
+  const href=lessonPath(t,n)||'';
   return '<div class="bookitem'+(dn.indexOf(n)>=0?' done':'')+(locked?' inert':'')+'">'
    +'<span class="lnum">'+num+'</span>'
    +(locked||!href
@@ -569,10 +576,11 @@ const prog=()=>{try{const e=profile&&profile.email;return e?JSON.parse(localStor
 function go(t,i){
  if(!profile){welcomeAttention();log("entre para abrir as lições");return}
  if(!teacher&&MYTRACKS.indexOf(t)<0){log("sem acesso a esta trilha");return}
- sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,teacherName:teacher?(profile.name||""):"",name:teacher?(profile.name||""):studentName,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
+ const dest=lessonPath(t,i);if(!dest){log("lição não encontrada");return}
+ sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,teacherName:teacher?(profile.name||""):"",name:teacher?(profile.name||""):studentName,sig:h(profile.email+t+SECRET)});location=dest;}
 /* the teacher's "open this student's next lesson" gate. Currently UNREFERENCED: the per-book ⏭ button it
    served was removed with the switches (2026-11-09), and it is kept so restoring that jump is one line. */
-function goStudent(t,i,email){const s=QUEUE.approved.find(x=>x.email===email);sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher:true,teacherName:profile.name||"",name:s?(s.name||""):"",student:email,sig:h(profile.email+t+SECRET)});location=t+"/lesson"+i+".html";}
+function goStudent(t,i,email){const s=QUEUE.approved.find(x=>x.email===email);const dest=lessonPath(t,i);if(!dest)return;sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher:true,teacherName:profile.name||"",name:s?(s.name||""):"",student:email,sig:h(profile.email+t+SECRET)});location=dest;}
 /* the bar carries NO identity any more (owner instruction 2026-11-09): the account is stated on the login card
    and nowhere else, so the bar is one Logout button. Keep the email as the button's tooltip so the information
    is not lost, only unprinted. */
