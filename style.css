@@ -289,7 +289,7 @@
 
 /* #97 TLN — the line of time: <div class="tln"><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>. NOW sits in the middle: the two runs are equal shares, the arrow is out of the flow. Behind it the line fades on a log curve; ahead it is dashed to a double arrow that steps right. NOW and THEN are grey ink with a text shadow. Vary: --accent, data-grow 0|1|2 */
 @layer rx{
-  .tln{--c:var(--accent);
+  .tln{--c:var(--accent);--end-w:39.2px;
     position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
     align-items:center;width:200px;min-inline-size:100px;height:56px;color:var(--c);
     container-type:inline-size}
@@ -321,10 +321,10 @@
     color:var(--ink-2);white-space:nowrap}
   @keyframes tln-beat{0%,100%{transform:scale(1);opacity:.85}45%{transform:scale(1.15);opacity:1}}
   /* ahead of now: dashed, no fade, ending under a double right arrow that steps right every 1.5s */
-  .tln-ahead{height:2px;align-self:center;margin-right:39.2px;
+  .tln-ahead{height:2px;align-self:center;margin-right:var(--end-w);
     background-image:repeating-linear-gradient(90deg,currentColor 0 6px,transparent 6px 12px);
     background-size:12px 2px;animation:tln-dash 2s linear infinite}
-  .tln-end{position:absolute;right:0;top:50%;transform:translateY(-50%);width:39.2px;z-index:1;
+  .tln-end{position:absolute;right:0;top:50%;transform:translateY(-50%);width:var(--end-w);z-index:1;
     display:grid;place-items:center;animation:tln-nudge 2s ease-in-out infinite}
   .tln-end svg{display:block;width:30.8px;height:30.8px;fill:none;stroke:currentColor;stroke-width:2;
     stroke-linecap:round;stroke-linejoin:round}
@@ -332,10 +332,10 @@
   @keyframes tln-dash{to{background-position:12px 0}}
   @keyframes tln-nudge{0%,100%{translate:0 0;opacity:.75}50%{translate:2px 0;opacity:1}}
   /* then: on the line, centred on the arrow, the same ink on paper */
-  .tln-then{position:absolute;right:29.6px;top:50%;transform:translate(50%,-50%);z-index:2;
+  .tln-then{position:absolute;right:calc(var(--end-w) - 1.6px);top:50%;transform:translate(50%,-50%);z-index:2;
     text-shadow:rgba(200,200,200,.85) 0 0px 3px;
     font:700 calc(10px + 1pt)/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;
-    color:var(--ink-2);white-space:nowrap}
+    color:var(--ink);white-space:nowrap}
   .tln-past,.tln-head,.tln-ahead{position:relative;z-index:1}
   /* night: the shadow is a literal, so it is set here */
   .block[data-look="dark"] .tln-head b,.block[data-look="dark"] .tln-then{
