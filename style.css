@@ -26,7 +26,7 @@
     --ptw:#96601f; --blue:#9c5b22; --dkblue:#6b3d16; --bluebg:rgba(156,91,34,.16);
     --orange:#c2601a; --purple:#8c3b2f; --green:#2f9e44; --greenbg:#e8f7ee;
     --surface:var(--cream); --surface-2:var(--paper); --sunken:#efe6d6;
-    --ink-2:#5c5347; --line:var(--rose); --line-2:#e7dbc9;
+    --ink-2:#5c5347; --line:var(--rose); --line-2:#e7dbc9; --dim:#6b6154;
     --teach-h:65; --train-h:28; --show-h:350; --game-h:96;
     --ok:var(--green); --err:#b3352c; --warn:#e0b341;
     /* one track hue, four intensities — the same rhythm on every track: a deep tone for type and
@@ -379,6 +379,9 @@
   .block[data-look="dark"]{--ink:#f2ece1;--ink-2:#b7ab97;--line:#3d372f;--line-2:#2b2620;
     --surface:#14110d;--surface-2:#1e1a14;--paper:#191510;--sunken:#2b241b;
     --ptw:#e0b27a;--accent-h:38;--accent:oklch(76% .12 38);color-scheme:dark;color:var(--ink);
+    /* .dim and .lead live in the utilities layer, above this one, so their colour has to arrive as a
+       token: a selector here would lose to `u` */
+    --dim:var(--ink-2);
     /* every track lifts the same way: the hue is inherited, only the lightness climbs, so no track can
        keep a dark-on-dark heading */
     --track-ink:oklch(82% .09 var(--track-h));--track-rule:oklch(70% .10 var(--track-h));
@@ -545,7 +548,7 @@
 
 /* #99 U — utilities, wins over every layer above: .dim .lead .pt .mono .stack .row .center .mt .sr .defcard .stress mark ruby .glossbtn Vary: --measure (length) */
 @layer u{
-  .dim{color:#6b6154;font-size:15px;line-height:1.45}
+  .dim{color:var(--dim);font-size:15px;line-height:1.45}
   .lead{font-family:var(--playfair);font-size:18px;font-style:italic;color:#5c5347;
     margin:.2em 0 .7em;line-height:1.5;max-width:var(--measure,62ch)}
   .pt{font-style:italic;color:var(--ptw)}
