@@ -69,6 +69,7 @@
 /* #20 BASE — element defaults. Nothing to invoke; --serif/--sans (font), --ink/--surface (colour). h3 auto-letters A,B,C per section; h4 takes no letter */
 @layer base{
   *,*::before,*::after{box-sizing:border-box}
+  [hidden]{display:none!important}
   html{-webkit-text-size-adjust:100%}
   body{margin:0;min-width:1415px;background:var(--track-ground);color:var(--ink);
     font:var(--s0)/1.62 var(--serif);text-rendering:optimizeLegibility}
@@ -517,10 +518,10 @@
   .control-bar{width:1400px;margin:10px 0 0 15px;display:flex;flex-wrap:wrap;gap:8px;
     align-items:center;justify-content:center;padding:8px 14px;font-family:var(--sans);
     font-size:13px;text-align:center;user-select:none;-webkit-user-select:none}
-  .control-bar button{border:1px solid var(--line);background:var(--surface-2);color:var(--ink);
+  .control-bar button,.welcome-bar #logout{border:1px solid var(--line);background:var(--surface-2);color:var(--ink);
     border-radius:99px;padding:7px 15px;font:600 .82rem var(--sans);cursor:pointer;
     transition:border-color .15s,background .15s,translate .15s}
-  .control-bar button:hover{border-color:var(--accent);background:var(--accent-soft);
+  .control-bar button:hover,.welcome-bar #logout:hover{border-color:var(--accent);background:var(--accent-soft);
     translate:0 -1px}
   footer{text-align:center;font:600 .68rem var(--sans);letter-spacing:.22em;
     color:var(--ink-2);padding:30px 0 34px;text-transform:uppercase;
@@ -1737,6 +1738,9 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
   .welcome-bar #gbtn{display:flex;align-items:center;justify-content:center;min-height:0;margin:0}
   .welcome-bar #needg{flex:1 1 100%;margin:6px 0 0;text-align:left}
   .welcome-bar #needg p{font-size:14px;line-height:1.5;margin:6px 0}
+  /* signed in: Logout stands exactly where the sign-in control was, and the sign-in parts leave */
+  .welcome-bar.is-signed #gtext,.welcome-bar.is-signed #gbtn,.welcome-bar.is-signed #needg,
+  .welcome-bar.is-signed .wsep{display:none}
   .welcome-bar.attention{outline:3px solid var(--tan);outline-offset:2px;
     transition:outline-color .2s}
   .landing-hello{margin:14px 0;border-color:var(--ink);
@@ -1744,8 +1748,8 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
       rgba(29,78,216,.16))}
   .hello-en{font-weight:600;font-size:18px;line-height:1.35}
   .hello-pt{margin-top:4px;font-style:italic;color:#5c5347}
-  .tracks{display:grid;grid-template-columns:repeat(3,390px);gap:15px;width:1200px;
-    align-items:start;margin:14px 0}
+  .tracks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;width:100%;
+    max-width:1200px;align-items:start;margin:14px auto}
   .track-card{margin:0}
   #app h3{font-family:inherit;font-weight:700;font-size:1.17em;color:inherit;margin:1em 0;
     padding-left:0;border-left:0;letter-spacing:normal}
