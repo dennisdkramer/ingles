@@ -5,19 +5,17 @@
 4. RENAME the file to `lesson<N>-<Title>.html`: the filename carries the title, and it is the only place the site index learns either.
 5. RUN `npm run build:lessons`, commit, and push at the end of each lesson generation.
 
-## [I/O]
-Inputs - ORDERED BY PRECEDENCE **Withhold others**:
+## [I/O] THIS FILE HAS PRECEDENCE AND GUIDES SYNTHESIS AND AUTHORING OF A THOROUGH AND ENGAGING ENGLISH LESSON FOR THE CONCEPTS AND VOCABULARY IN THE ROADMAP LESSON PLAN BELOW, USING THE <TRACK>-REGISTER.md VOICE, FOR THE [PERSONA] OF THE TARGET STUDENT
+Inputs:
 	1) (<TRACK>-ROADMAP.md [<lesson #>]) section contents
 	2) <TRACK>-REGISTER.md - [PERSONA] of the STUDENT and guides details of the language being taught The same voice - or its context-dependent alternative registers - is used for the prose of all parts of the lessons, and plays a key role in defining which contexts and scenarios the lessons use to present the roadmap concepts and items. The primary register of the lesson is the linguistic shape which is trained and produced by the student, taking precedence over 'book' shapes.
-	3) `node qa/brief.mjs --index=raw`
-	4) FUNCTION.md [CONTENT] - Only within this section if needed 
+	3) `/* #` Headers only from preview.css
 	5) (<TRACK>-ROADMAP.md '##' HEADERS ONLY) - Reference **only to reduce redundancy with other lessons**.
-	6) `node qa/brief.mjs --css` - to answer **implementation questions only** (eg. which class or knob does what).
 	- As-Needed: - qa/AUDIO.md  (fetch/cut/include music/audio).
-
+**WITHHOLD OTHER INPUTS**
 
 ## [AUTHORING] - 
-- Prose, teaching, and training, activities, prompts, quizzes, etc.. are authored at a difficulty level which is accessible but mildly challenging for the student who has arrived to that lesson.
+- Prose, teaching, and training, activities, prompts, quizzes, etc.. are authored at a difficulty level which is accessible but mildly challenging for the student who has arrived to that lesson. All the concepts and vocabulary from the roadmap plan must be clearly and efficiently taught, thoroughly trained, and tested with a challenging quiz at the end of the lesson.
 - "STUDENT LEVEL" is assumed and relative to [Current Lesson #] and the english concepts and vocabulary they have learned in the course up to that point.
 - **Ability grows with the lesson number** Lesson 1 assumes the student knows no english. By lesson 50 the student should have achieved functional fluency.
 - **What maps directly** onto Portuguese is cheap; what maps onto it and misleads - or has no counterpart - is expensive. ("descend" is cheaper than "go down" although it is the rarer word. Present perfect is very expensive because the mapping breaks)
