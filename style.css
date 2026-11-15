@@ -77,14 +77,14 @@
   h1{font-family:var(--playfair);font-size:var(--s4);letter-spacing:.14em;margin:8px 0 0}
   h2{font-family:var(--playfair);font-size:calc(var(--s3) + 2pt);border-bottom:2px solid var(--rose);
     padding-bottom:6px;margin:1.6em 0 .3em}
-  h3{font-family:var(--display);font-size:calc(var(--s1) + 5pt);color:var(--track-ink);
+  h3{font-family:var(--display);font-size:calc(var(--s1) + 7pt);color:var(--track-ink);
     border-bottom:2px solid var(--rose);
     padding-left:10px;padding-bottom:6px;margin:22px 0 8px;
     letter-spacing:.02em}
   h2{counter-reset:blk}
   h3{counter-increment:blk}
   h3::before{content:counter(blk,upper-alpha) ". ";color:var(--track-ink);padding-right:.5em;
-    font-family:var(--display);font-size:calc(.8em + 7pt);font-weight:700}
+    font-family:var(--display);font-size:calc(.8em + 4.4pt);font-weight:700}
   h4{font-family:var(--serif);font-style:italic;font-weight:700;font-size:var(--s-1);
     color:var(--dkblue);margin:0 0 8px;padding-left:20px;text-transform:none;
     letter-spacing:normal}
