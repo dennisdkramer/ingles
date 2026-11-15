@@ -14,10 +14,9 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S4] - Run the gate and fix every fail <qa/check.mjs; preview.css #60, #76> <✅ adult/lesson30, items at or above `need`, zero fails>
    - [S5] - Run `npm run build:lessons`, measure the page's rows, commit and push <build-lessons.mjs; generation/checks/measure.mjs; .clinerules 8> <lessons.json lists n=30, 0 ragged rows on the page, pushed>
 
-## [B42] - Joins become bars, and the noun mark carries role as a fade <"marks the junction was all i was asking for, but maybe |but| would be better formatting / can we do fades/color blends on these marks / subject nouns start with a strong color or opacity, object nouns end with one, other nouns are the base color"> <style.css #88 JOIN, #94 POS; qa/preview-blocks.html>
-   - [S1] - `#88 JOIN` draws a thin vertical bar each side instead of a line above and below <style.css #88> <both bars paint in the relation's colour and the label mode still prints the relation>
-   - [S2] - The noun group's line becomes a background gradient, so one hue can carry the role: `.pos-subj` strong at the start, `.pos-o` strong at the end, a plain noun flat <style.css #94> <three gradients compute; the object keeps the noun's colour, not a second one>
-   - [S3] - The working page marks a subject noun, an object pronoun and a plain noun in one sentence <qa/preview-blocks.html #tlw> <the three shades are visible side by side>
+## [B43] - Each group gets its own visual: purple for mode and verbs, teal for adjectives, a teal-to-pale-blue noun ramp, pink wavy prepositions <"mode uses the background technique, draws an 80% opacity purple 1px underline and then gradient background behind the bottom of the word.. from 30% at the underline to 0% opacity at the top. normal verbs use a 2px 80% dotted line of the same color. adjectives have a 60% opacity 2px teal underline. subject nouns have 2px underline that goes from 100% opacity teal to 60% opacity pale blue, object nouns reverse the gradient, and other nouns, articles and demonstratives just get the 60% opacity pale blue underline. prepositions can get a wavy pinkish purple 50% opacity underline"> <style.css #94 POS>
+   - [S1] - The four mark colours become tokens at the root, so a hue is changed in one line <style.css #10> <`--pos-purple --pos-teal --pos-pale --pos-pink` declared once>
+   - [S2] - Each group's line is written to the spec: mode a 1px purple 80% line plus a 30%→0% wash behind the word, verbs 2px dotted purple 80%, adjectives 2px teal 60%, prepositions wavy pink 50%, nouns a 2px pale-blue 60% line with the teal ramp for subject and object <style.css #94> <the five computed decorations and the two gradients match the numbers in the request>
 
 
 
