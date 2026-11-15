@@ -14,8 +14,9 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S4] - Run the gate and fix every fail <qa/check.mjs; preview.css #60, #76> <✅ adult/lesson30, items at or above `need`, zero fails>
    - [S5] - Run `npm run build:lessons`, measure the page's rows, commit and push <build-lessons.mjs; generation/checks/measure.mjs; .clinerules 8> <lessons.json lists n=30, 0 ragged rows on the page, pushed>
 
-## [B34] - Each tense pins the axis under one word of its phrase <"make the correct point on the timeline anchor to the correct word in the phrase above"> <style.css #97, qa/preview-blocks.html>
-   - [S1] - `.an` names the one anchor word, `anchor-scope` keeps the name per figure, `--point` moves the untouched axis so its point sits under that word; eight phrases, one per tense <style.css #97; qa/preview-blocks.html> <word centre = axis left + --point in all eight; zero `.tln` rules touched>
+## [B35] - New anchors, two underlines, 60px on the side each tense points away from, and a standard look <"change the present continuous in-phrase anchor to the continuous verb form ... extend the BEFORE side by 60px"> <style.css #97; qa/preview-blocks.html>
+   - [S1] - `.an` moves to `working` / `hit` / `He'll`; `.tw` fades to a 1px faint underline and `.an` carries a 2px one; the axis grows 60px on the BEFORE side for past tenses and on THEN for the rest; the block wears `data-look="tint"` <style.css #97; qa/preview-blocks.html> <word centre = axis left + --point in all eight; axis 260px wide, pad 60 on past figures and 0 on the rest>
+
 
 
 
