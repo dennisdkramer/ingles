@@ -333,7 +333,7 @@
   @keyframes tln-dash{to{background-position:12px 0}}
   @keyframes tln-nudge{0%,100%{translate:0 0;opacity:.75}50%{translate:2px 0;opacity:1}}
   /* then: on the line, centred on the arrow, the same ink on paper */
-  .tln-then{position:absolute;right:calc(var(--end-w) + 4px);
+  .tln-then{position:absolute;right:calc(var(--end-w) - 18px);
     top:50%;transform:translateY(-50%);z-index:2;
     text-shadow:rgba(200,200,200,.85) 0 0px 3px;
     font:700 calc(10px + 1pt)/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;
