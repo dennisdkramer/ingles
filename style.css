@@ -276,26 +276,24 @@
 }
 
 /* #61 CHOICE — .opts > label.opt > input[type=radio] + span; one answer. Unset: options stack. Vary: data-layout="row" */
-/* #61 OPT — <label class="opt"> one per answer, inside .opts. CHOSEN is neutral: a grey card and a grey
-   dot. Picking an answer is not a judgement, so no red, no green, no track hue — that belongs to #80.
-   Vary: --r1 (radius) */
+/* #61 OPT — <label class="opt"> one per answer, inside .opts. Vary: --r1 (radius) */
 @layer control{
   .opts{display:grid;align-content:start;gap:7px;margin:2px 0 0}
   .opts[data-layout="row"]{grid-auto-flow:column;grid-auto-columns:max-content;gap:10px}
   .opt{display:flex;align-items:center;gap:9px;padding:7px 11px;cursor:pointer;
     border:1.5px solid var(--line);border-radius:var(--r1);background:var(--surface-2);
     transition:border-color .15s,background .15s,box-shadow .15s}
-  .opt:hover{border-color:var(--ink-2)}
+  .opt:hover{border-color:var(--accent-line)}
   .opt input[type="radio"]{appearance:none;flex:0 0 auto;width:18px;height:18px;margin:0;
     border:2px solid var(--line);border-radius:50%;background:transparent;
     transition:border-color .15s,background .15s,box-shadow .15s}
-  .opt:has(input:checked){border-color:var(--ink-2);background:var(--sunken);
+  .opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft);
     box-shadow:var(--shadow-1)}
-  .opt input:checked{border-color:var(--ink-2);background:var(--ink-2);
+  .opt input:checked{border-color:var(--accent);background:var(--accent);
     box-shadow:inset 0 0 0 3px var(--surface-2)}
 }
 
-/* #62 MULTI — same .opt with input[type=checkbox]; any number of answers, ticked in ink, not in a hue */
+/* #62 MULTI — same .opt with input[type=checkbox]; any number of answers, ticked with the accent */
 @layer control{
   .opt input[type="checkbox"]{appearance:none;flex:0 0 auto;width:18px;height:18px;margin:0;
     border:2px solid var(--line);border-radius:5px;display:grid;place-content:center;
@@ -303,7 +301,7 @@
   .opt input[type="checkbox"]::after{content:"";width:5px;height:9px;translate:0 -1px;
     border:2px solid var(--surface);border-top:0;border-left:0;rotate:45deg;scale:0;
     transition:scale .16s}
-  .opt input[type="checkbox"]:checked{border-color:var(--ink-2);background:var(--ink-2)}
+  .opt input[type="checkbox"]:checked{border-color:var(--accent);background:var(--accent)}
   .opt input[type="checkbox"]:checked::after{scale:1}
 }
 
@@ -380,16 +378,10 @@
     border-color:var(--line-2);color:var(--ink)}
 }
 
-/* #80 STATE — THE ONLY PLACE RED, GREEN AND YELLOW MAY APPEAR. data-state="correct|wrong|odd|done" on
-   .opt, .side, .qitem or the .block; mark = <i class="mark"></i>. Unset: nothing shows.
-     GREEN  correct  — the key matches.
-     RED    wrong    — the key does not match.
-     YELLOW odd      — technically right but nobody says it, OR close enough that nobody will complain
-                       and still technically wrong. The "I'd understand you, but…" answer.
-   Everything else is neutral (ink, grey, paper) or the track hue (chrome). A CHOICE is never coloured:
-   a ticked radio is grey (#61), a comparison is grey-vs-paper (#53), a highlighted word is yellow marker
-   only when it is the word being taught. If a colour would imply a judgement, it belongs here instead.
-   Vary: --ok/--err/--warn (colour) */
+/* #80 STATE — use colours as indicators: GREEN correct · RED wrong · YELLOW odd (technically right but
+   nobody says it, or close enough that nobody complains and still technically wrong).
+   data-state="correct|wrong|odd|done" on .opt, .side, .qitem or the .block; mark = <i class="mark"></i>.
+   Unset: nothing shows. Vary: --ok/--err/--warn (colour) */
 @layer state{
   [data-state="correct"]{--state:var(--ok)}
   [data-state="wrong"]{--state:var(--err)}
