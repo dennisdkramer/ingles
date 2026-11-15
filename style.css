@@ -118,7 +118,19 @@
 }
 
 /* ## IN-BLOCK VISUALS — a figure a block draws inside itself. None owns a container or a control; the host block supplies the gap, radio or textarea that saves.
-     Members, all in @layer rx: #91 GLOSS · #92 PRON · #93 AXIS · #94 POS · #96 BAR · #97 TLN */
+     Members, all in @layer rx: #89 MARKS · #91 GLOSS · #92 PRON · #93 AXIS · #94 POS · #96 BAR · #97 TLN */
+
+/* #89 MARKS — pointing a figure at words in a sentence. Any figure can use this; nothing here knows what the figure is.
+     <span class="uw">…</span> = the run of words the figure is about (faint underline). Use it for the verb group only, not the pronoun.
+     <span class="an">…</span> = the ONE word the figure is pinned to, or only the contracted letters of it ('ve, 'm, 'll) — a 2px underline and the anchor.
+     The host element carries `anchor-scope:--pin`; any absolutely positioned child of it then puts a chosen point under that word:
+     left:calc(anchor(50%) - var(--pin)) / top:… and so on, where --pin is that point's distance from the child's edge. One anchor per
+     host; `anchor-scope` keeps the name private, so a page may carry many. Vary: --pin (length), the two underline colours */
+@layer rx{
+  .uw{position:relative;font-weight:700;
+    border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent)}
+  .an{anchor-name:--pin;border-bottom:2px solid var(--accent);padding-bottom:1px}
+}
 
 /* #91 GLOSS — .glossbtn popovertarget="ID" opens its .defcard popover id="ID" beside the word, no script. Use: a new word, or a PT literal that is not the meaning/use. One id per card. Vary: none */
 @layer rx{
@@ -346,22 +358,20 @@
     background-image:linear-gradient(90deg,color-mix(in srgb,var(--label-ink) 30%,transparent),
       color-mix(in srgb,var(--label-ink) 90%,transparent));
     -webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
-  /* anchoring: the phrase above carries the axis. `.tw` = the words of the verb group, underlined.
-     `.an` = the ONE word inside it that the axis is pinned to, by the word's centre. Each tense owns
-     `--point`: the distance from the axis's left edge to the point that must sit under that word —
-     BEFORE's centre is 31px in, NOW is 100px (the middle), the arrow's centre is 180.4px. Nothing of
-     the axis itself changes; only where it sits. Vary: --point (per data-tense) */
+  /* the axis, pinned to one word: the host carries the mark (#90 `uw`/`an`), this section only puts
+     a chosen point of the axis under it. Each tense owns `--point`: the distance from the axis's left
+     edge to the point that must sit under the anchored word. Nothing of the axis itself changes;
+     only where it sits. Vary: --point (per data-tense), --pad (which side grew) */
   .tlw{position:relative;width:min(560px,100%);margin:0 auto;padding-bottom:46.5px;--leg:14px;--lead:40px;
-    anchor-scope:--tn}
+    anchor-scope:--pin}
   .tlw+.tlw{margin-top:36px}
   .tlw-say{margin:0;text-align:center;white-space:nowrap;
     font:600 12.5px/1.4 var(--sans);color:var(--ink)}
-  .an{anchor-name:--tn;border-bottom:2px solid var(--accent);padding-bottom:1px}
   /* the axis: the pristine 200px plate, plus 60px on the side the tense points away from. Past
      tenses extend BEFORE (the fade runs 60px further left); the rest extend THEN (the dashes run
      60px further right). --pad is where the plate starts inside the box, so every landmark keeps its
      distance from the others; --point is measured from the box's left edge. */
-  .tlw>.tln{position:absolute;bottom:0;position-anchor:--tn;--pad:60px;--now:100px;width:260px;
+  .tlw>.tln{position:absolute;bottom:0;position-anchor:--pin;--pad:60px;--now:100px;width:260px;
     left:calc(anchor(50%) - var(--point))}
   .tlw[data-side="then"]>.tln{--pad:0px}
   .tlw>.tln .tln-past{left:0;width:calc(var(--pad) + var(--now))}
@@ -375,19 +385,17 @@
   .tlw[data-tense="present-continuous"]{--point:100px}
   .tlw[data-tense="going-to"]{--point:221.8px}
   .tlw[data-tense="future-perfect"]{--point:221.8px}
-  .tw{position:relative;font-weight:700;
-    border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent)}
-  .tw[data-to]::before{content:"";position:absolute;left:50%;top:calc(100% + 1px);
+  .uw[data-to]::before{content:"";position:absolute;left:50%;top:calc(100% + 1px);
     width:var(--leg);height:var(--lead);border-left:2px solid var(--accent);
     border-bottom:2px solid var(--accent)}
-  .tw[data-to="before"]::before{left:auto;right:50%;border-left:0;
+  .uw[data-to="before"]::before{left:auto;right:50%;border-left:0;
     border-right:2px solid var(--accent)}
-  .tw[data-to="now"]::before{border-bottom:2px solid var(--accent)}
-  .tw::after{content:"";position:absolute;width:0;height:0;border:5px solid transparent}
-  .tw[data-to="now"]::after,.tw[data-to="then"]::after{
+  .uw[data-to="now"]::before{border-bottom:2px solid var(--accent)}
+  .uw::after{content:"";position:absolute;width:0;height:0;border:5px solid transparent}
+  .uw[data-to="now"]::after,.uw[data-to="then"]::after{
     left:calc(50% + var(--leg) - 5px);top:calc(100% + 1px + var(--lead) - 5px);
     border-left-color:var(--accent);border-right:0}
-  .tw[data-to="before"]::after{right:calc(50% + var(--leg) - 5px);top:calc(100% + 1px + var(--lead) - 5px);
+  .uw[data-to="before"]::after{right:calc(50% + var(--leg) - 5px);top:calc(100% + 1px + var(--lead) - 5px);
     border-right-color:var(--accent);border-left:0}
   /* a span that sits in the future: the ahead run is painted solid, not dashed */
   .tln[data-fill="ahead"] .tln-ahead{background-image:linear-gradient(currentColor,currentColor)}
