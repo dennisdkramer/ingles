@@ -4,7 +4,7 @@
 
 - WORKING PLAN: PENDING.md (the active subtask batch plan, HANDOFF.md (new task handoffs (when requested)
 
-- LESSON GENERATION: PEDAGOGY-MAP.md (generation process and rules) , `qa/brief.mjs` (indexes for inputs), `qa/AUDIO.md` (the audio cut: routes, flags, steps, and the fix for a sync that is off) , `<TRACK>-ROADMAP.md` (one `##` section per lesson) · `<TRACK>-REGISTER.md` (the persona) · CONTENT_EXAMPLES.md (the vehicle menu: the `###` lines are the index, one section is read only after a shape is chosen) · `_shell.html` (the frame every lesson page starts as) · `new-lesson.mjs` (the first step of a generation: copies the shell, fills its tokens, leaves `.content-area` empty) · 
+- LESSON GENERATION: PEDAGOGY-MAP.md (generation process and rules) , `qa/brief.mjs` (indexes for inputs), `qa/AUDIO.md` (the audio cut: routes, flags, steps, and the fix for a sync that is off) , `<TRACK>-ROADMAP.md` (one `##` section per lesson) · `<TRACK>-REGISTER.md` (the persona) · CONTENT_EXAMPLES.md (the vehicle menu: the `###` lines are the index, one section is read only after a shape is chosen) · `_shell.html` (the frame every lesson page starts as: a generation copies it into the track folder and authors into it) · 
 
 - TRACK ROADMAPS: ROADMAP-GENERATOR.md (produces the roadmaps — a separate pipeline)
 

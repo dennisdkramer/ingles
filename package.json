@@ -7,7 +7,6 @@
   "scripts": {
     "build:lessons": "node build-lessons.mjs",
     "build:check": "node build-lessons.mjs --check",
-    "new:lesson": "node new-lesson.mjs",
     "qa": "node qa/run.mjs",
     "qa:check": "node qa/run.mjs check",
     "qa:games": "node qa/run.mjs games",
