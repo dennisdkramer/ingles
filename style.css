@@ -26,7 +26,8 @@
     --ptw:#96601f; --blue:#9c5b22; --dkblue:#6b3d16; --bluebg:rgba(156,91,34,.16);
     --orange:#c2601a; --purple:#8c3b2f; --green:#2f9e44; --greenbg:#e8f7ee;
     --surface:var(--cream); --surface-2:var(--paper); --sunken:#efe6d6;
-    --ink-2:#5c5347; --line:var(--rose); --line-2:#e7dbc9; --dim:#6b6154;
+    --ink-2:#5c5347; --line:var(--rose); --line-2:#e7dbc9; --dim:#6b6154; --lead:#5c5347;
+    --para-gap:4px;
     --teach-h:65; --train-h:28; --show-h:350; --game-h:96;
     --ok:var(--green); --err:#b3352c; --warn:#e0b341;
     /* one track hue, four intensities — the same rhythm on every track: a deep tone for type and
@@ -88,7 +89,7 @@
   h4{font-family:var(--serif);font-style:italic;font-weight:700;font-size:var(--s-1);
     color:var(--dkblue);margin:0 0 8px;padding-left:20px;text-transform:none;
     letter-spacing:normal}
-  p,li{margin:0 0 .7em;text-wrap:pretty}
+  p,li{margin:0 0 calc(.7em + var(--para-gap));text-wrap:pretty}
   body{cursor:default;caret-color:transparent}
   a,button,label,mark.nb,summary{cursor:pointer}
   /* the I-beam and the blinking bar belong to fields only; prose stays selectable, it just shows no caret */
@@ -286,7 +287,7 @@
 /* #61 CHOICE — .opts > label.opt > input[type=radio] + span; one answer. Unset: options stack. Vary: data-layout="row" */
 /* #61 OPT — <label class="opt"> one per answer, inside .opts. Vary: --r1 (radius) */
 @layer control{
-  .opts{display:grid;align-content:start;gap:7px;margin:2px 0 0}
+  .opts{display:grid;align-content:start;gap:7px;margin:2px 0 calc(6px + var(--para-gap))}
   .opts[data-layout="row"]{grid-auto-flow:column;grid-auto-columns:max-content;gap:10px}
   .opt{display:flex;align-items:center;gap:9px;padding:7px 11px;cursor:pointer;
     border:1.5px solid var(--line);border-radius:var(--r1);background:var(--surface-2);
@@ -381,7 +382,7 @@
     --ptw:#e0b27a;--accent-h:38;--accent:oklch(76% .12 38);color-scheme:dark;color:var(--ink);
     /* .dim and .lead live in the utilities layer, above this one, so their colour has to arrive as a
        token: a selector here would lose to `u` */
-    --dim:var(--ink-2);
+    --dim:var(--ink-2);--lead:var(--ink-2);
     /* every track lifts the same way: the hue is inherited, only the lightness climbs, so no track can
        keep a dark-on-dark heading */
     --track-ink:oklch(82% .09 var(--track-h));--track-rule:oklch(70% .10 var(--track-h));
@@ -549,7 +550,7 @@
 /* #99 U — utilities, wins over every layer above: .dim .lead .pt .mono .stack .row .center .mt .sr .defcard .stress mark ruby .glossbtn Vary: --measure (length) */
 @layer u{
   .dim{color:var(--dim);font-size:15px;line-height:1.45}
-  .lead{font-family:var(--playfair);font-size:18px;font-style:italic;color:#5c5347;
+  .lead{font-family:var(--playfair);font-size:18px;font-style:italic;color:var(--lead);
     margin:.2em 0 .7em;line-height:1.5;max-width:var(--measure,62ch)}
   .pt{font-style:italic;color:var(--ptw)}
   /* Portuguese is italic AND ochre; an English quotation stays italic in ink, so the two never look
