@@ -14,9 +14,10 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S4] - Run the gate and fix every fail <qa/check.mjs; preview.css #60, #76> <✅ adult/lesson30, items at or above `need`, zero fails>
    - [S5] - Run `npm run build:lessons`, measure the page's rows, commit and push <build-lessons.mjs; generation/checks/measure.mjs; .clinerules 8> <lessons.json lists n=30, 0 ragged rows on the page, pushed>
 
-## [B43] - Each group gets its own visual: purple for mode and verbs, teal for adjectives, a teal-to-pale-blue noun ramp, pink wavy prepositions <"mode uses the background technique, draws an 80% opacity purple 1px underline and then gradient background behind the bottom of the word.. from 30% at the underline to 0% opacity at the top. normal verbs use a 2px 80% dotted line of the same color. adjectives have a 60% opacity 2px teal underline. subject nouns have 2px underline that goes from 100% opacity teal to 60% opacity pale blue, object nouns reverse the gradient, and other nouns, articles and demonstratives just get the 60% opacity pale blue underline. prepositions can get a wavy pinkish purple 50% opacity underline"> <style.css #94 POS>
-   - [S1] - The four mark colours become tokens at the root, so a hue is changed in one line <style.css #10> <`--pos-purple --pos-teal --pos-pale --pos-pink` declared once>
-   - [S2] - Each group's line is written to the spec: mode a 1px purple 80% line plus a 30%→0% wash behind the word, verbs 2px dotted purple 80%, adjectives 2px teal 60%, prepositions wavy pink 50%, nouns a 2px pale-blue 60% line with the teal ramp for subject and object <style.css #94> <the five computed decorations and the two gradients match the numbers in the request>
+## [B44] - Mark tweaks: mode 20%, other nouns opaque, subject/object 3px, adjectives dark pink, backgrounds down 1px <"reduce the mode gradient starting opacity to 20%, 'other noun' to 100% opacity, subject and object to 3px, adjective color to 80% opacity dark pink / all the ones that are done with borders, can we do y-1 to move them down and line up with the underlines"> <style.css #94 POS, #10>
+   - [S1] - `--pos-darkpink` joins the mark tokens, since dark pink is a hue the four did not cover <style.css #10> <one new token declared at the root>
+   - [S2] - The six numbers change as asked: mode wash starts at 20%, a plain noun's line is fully opaque, subject/object lines are 3px, the adjective is dark pink at 80% <style.css #94> <the computed values read 0.2 / 1.0 / 3px / darkpink 0.8>
+   - [S3] - The two background-drawn marks drop 1px so their lines sit level with the text-decoration ones <style.css #94> <`.pos-n` at calc(100% - 1px), subject/object at calc(100% - 2px), `.pos-m` line at 100%>
 
 
 
