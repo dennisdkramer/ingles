@@ -5,7 +5,7 @@
 /* #00 HEADER LANGUAGE — a header is read by the lesson builder, and answers five things in as few words as possible (3-6) on one line:
      'Available classes spelled as the builder types. What it does. If not set? Available variants.'    */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:wght@600;700&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&display=swap');
 
 /* Declared initial-value is the floor: an unset or misspelled value lands here, not on a broken layout. */
 @property --accent-h { syntax: '<number>';    inherits: true;  initial-value: 210 }
@@ -42,6 +42,7 @@
     --serif:Georgia,'Iowan Old Style','Palatino Linotype','Book Antiqua',serif;
     --sans:system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     --playfair:'Playfair Display',Georgia,serif;
+    --display:'Cormorant Garamond',Georgia,serif;
     --mono:ui-monospace,'Cascadia Mono','Consolas',monospace;
     --s-1:15px; --s0:17px; --s1:19px; --s2:18px; --s3:26px; --s4:38px;
     --accent:oklch(58% .14 var(--accent-h));
@@ -73,9 +74,9 @@
     font:var(--s0)/1.62 var(--serif);text-rendering:optimizeLegibility}
   h1,h2,h3,h4{margin:0 0 .4em;text-wrap:balance;font-weight:700;line-height:1.18}
   h1{font-family:var(--playfair);font-size:var(--s4);letter-spacing:.14em;margin:8px 0 0}
-  h2{font-family:var(--playfair);font-size:var(--s3);border-bottom:2px solid var(--rose);
+  h2{font-family:var(--playfair);font-size:calc(var(--s3) + 2pt);border-bottom:2px solid var(--rose);
     padding-bottom:6px;margin:1.6em 0 .3em}
-  h3{font-family:var(--playfair);font-size:calc(var(--s1) + 2pt);color:var(--track-ink);
+  h3{font-family:var(--display);font-size:calc(var(--s1) + 2pt);color:var(--track-ink);
     border-bottom:2px solid var(--rose);
     padding-left:10px;padding-bottom:6px;margin:22px 0 8px;
     letter-spacing:.02em}
