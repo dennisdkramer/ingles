@@ -270,7 +270,9 @@
   }
 }
 
-/* #94 POS — <p class="pos"> with each word in <b class="pos-n|pos-v|pos-adj|pos-adv|pos-det|pos-pron|pos-prep|pos-conj|pos-aux|pos-wh">: the underline is the mark, colour only reinforces it. A .pos-key follows. Vary: none */
+/* #94 POS — <p class="pos"> with each word in <b class="pos-n|pos-v|pos-adj|pos-adv|pos-det|pos-pron|pos-prep|pos-conj|pos-aux|pos-wh">: the underline is the mark, colour only reinforces it.
+     The .pos-key legend follows the sentence: <p class="pos-key"><span><b class="pos-aux">have</b> auxiliary</span>…</p>. Each item carries the SAME class as the
+     word it explains, so the key cannot drift from the marks. Use: showing what kind of word each one is, at prose sizes (not inside a 200px figure). Vary: --pos-c */
 @layer rx{
   .pos{line-height:2.2}
   .pos b{font-weight:inherit;text-decoration-line:underline;text-decoration-thickness:2px;
@@ -285,7 +287,9 @@
   .pos-prep{--pos-c:var(--tan);text-decoration-style:dashed}
   .pos-conj{--pos-c:var(--ptw);text-decoration-style:dotted}
   .pos-wh{--pos-c:var(--ptw);text-decoration-style:wavy}
-  .pos-key{display:flex;flex-wrap:wrap;gap:2px 14px;margin:6px 0 0;font-size:12px;color:var(--ink-2)}
+  .pos-key{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 18px;margin:8px 0 0;
+    font:400 12px/1.6 var(--sans);color:var(--ink-2)}
+  .pos-key>span{display:inline-flex;align-items:baseline;gap:6px}
   .pos-key b{font-weight:400}
   @media print{.pos b{text-decoration-color:#000}}
 }
