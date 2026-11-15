@@ -379,9 +379,14 @@
   .block[data-look="dark"]{--ink:#f2ece1;--ink-2:#b7ab97;--line:#3d372f;--line-2:#2b2620;
     --surface:#14110d;--surface-2:#1e1a14;--paper:#191510;--sunken:#2b241b;
     --ptw:#e0b27a;--accent-h:38;--accent:oklch(76% .12 38);color-scheme:dark;color:var(--ink);
+    /* every track lifts the same way: the hue is inherited, only the lightness climbs, so no track can
+       keep a dark-on-dark heading */
+    --track-ink:oklch(82% .09 var(--track-h));--track-rule:oklch(70% .10 var(--track-h));
     border-color:#2b2620;border-top-color:var(--accent);
     box-shadow:0 24px 50px -26px #000}
   .block[data-look="dark"] h4,.block[data-look="dark"] .dim{color:var(--ink-2)}
+  /* a button in a night block is filled with the light track ink, so its label goes dark rather than cream */
+  .block[data-look="dark"] button{color:var(--paper)}
   .block[data-look="dark"] code,.block[data-look="dark"] .set>li{background:var(--sunken);
     border-color:var(--line-2);color:var(--ink)}
 }
