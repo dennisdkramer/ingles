@@ -352,7 +352,7 @@
   body.is-completed .gap{background:var(--sunken)}
 }
 
-/* #70 LOOK — data-look="tint|outline|grain|ruled|tape|raised|float|dark", any block. Unset: paper + 3px accent rule. Vary: --accent-h, --edge-w (outline) */
+/* #70 LOOK — data-look="tint|outline|grain|graph|tape|raised|float|dark", any block. Unset: paper + 3px accent rule. Vary: --accent-h, --edge-w (outline) */
 @layer look{
   .block[data-look="tint"]{background:color-mix(in oklab,var(--accent) 8%,var(--paper));
     border-top-color:var(--accent)}
@@ -364,8 +364,16 @@
     pointer-events:none;opacity:.55;background-image:radial-gradient(rgb(26 33 48/.07) 1px,
       transparent 1px);background-size:3px 3px}
 
-  .block[data-look="ruled"]{background-image:repeating-linear-gradient(to bottom,transparent 0 1.58em,
-    color-mix(in oklab,var(--accent) 13%,transparent) 1.58em 1.6em);background-position:0 1.35em}
+  /* graph paper: a minor square every 1.6em in both axes, a heavier one every 8em */
+  .block[data-look="graph"]{background-image:
+    repeating-linear-gradient(to bottom,transparent 0 1.58em,
+      color-mix(in oklab,var(--accent) 14%,transparent) 1.58em 1.6em),
+    repeating-linear-gradient(to right,transparent 0 1.58em,
+      color-mix(in oklab,var(--accent) 14%,transparent) 1.58em 1.6em),
+    repeating-linear-gradient(to bottom,transparent 0 7.9em,
+      color-mix(in oklab,var(--accent) 32%,transparent) 7.9em 8em),
+    repeating-linear-gradient(to right,transparent 0 7.9em,
+      color-mix(in oklab,var(--accent) 32%,transparent) 7.9em 8em)}
 
   .block[data-look="tape"]::before{content:"";position:absolute;top:-10px;left:50%;
     translate:-50% 0;width:112px;height:21px;rotate:-2deg;z-index:2;
