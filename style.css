@@ -356,18 +356,27 @@
   .tlw+.tlw{margin-top:36px}
   .tlw-say{margin:0;text-align:center;white-space:nowrap;
     font:600 12.5px/1.4 var(--sans);color:var(--ink)}
-  .an{anchor-name:--tn}
-  .tlw>.tln{position:absolute;bottom:0;position-anchor:--tn;
+  .an{anchor-name:--tn;border-bottom:2px solid var(--accent);padding-bottom:1px}
+  /* the axis: the pristine 200px plate, plus 60px on the side the tense points away from. Past
+     tenses extend BEFORE (the fade runs 60px further left); the rest extend THEN (the dashes run
+     60px further right). --pad is where the plate starts inside the box, so every landmark keeps its
+     distance from the others; --point is measured from the box's left edge. */
+  .tlw>.tln{position:absolute;bottom:0;position-anchor:--tn;--pad:60px;--now:100px;width:260px;
     left:calc(anchor(50%) - var(--point))}
+  .tlw[data-side="then"]>.tln{--pad:0px}
+  .tlw>.tln .tln-past{left:0;width:calc(var(--pad) + var(--now))}
+  .tlw>.tln .tln-head{left:calc(var(--pad) + var(--now))}
+  .tlw>.tln .tln-ahead{left:calc(var(--pad) + var(--now))}
   .tlw[data-tense="past-perfect"]{--point:31px}
-  .tlw[data-tense="simple-past"]{--point:65.5px}
-  .tlw[data-tense="past-continuous"]{--point:65.5px}
-  .tlw[data-tense="present-perfect"]{--point:45.5px}
+  .tlw[data-tense="simple-past"]{--point:95.5px}
+  .tlw[data-tense="past-continuous"]{--point:95.5px}
+  .tlw[data-tense="present-perfect"]{--point:75.5px}
   .tlw[data-tense="simple-present"]{--point:100px}
   .tlw[data-tense="present-continuous"]{--point:100px}
-  .tlw[data-tense="going-to"]{--point:180.4px}
-  .tlw[data-tense="future-perfect"]{--point:140.2px}
-  .tw{position:relative;font-weight:700;border-bottom:2px solid var(--accent)}
+  .tlw[data-tense="going-to"]{--point:240.4px}
+  .tlw[data-tense="future-perfect"]{--point:240.4px}
+  .tw{position:relative;font-weight:700;
+    border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent)}
   .tw[data-to]::before{content:"";position:absolute;left:50%;top:calc(100% + 1px);
     width:var(--leg);height:var(--lead);border-left:2px solid var(--accent);
     border-bottom:2px solid var(--accent)}
