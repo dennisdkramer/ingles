@@ -14,11 +14,10 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S4] - Run the gate and fix every fail <qa/check.mjs; preview.css #60, #76> <✅ adult/lesson30, items at or above `need`, zero fails>
    - [S5] - Run `npm run build:lessons`, measure the page's rows, commit and push <build-lessons.mjs; generation/checks/measure.mjs; .clinerules 8> <lessons.json lists n=30, 0 ragged rows on the page, pushed>
 
-## [B39] - The POS marks collapse to five and compose with the timeline's word marks <"you can collapse the list, merge over the css from preview-visual, and dothet uw/an change"> <style.css #94 POS, #89 MARKS; qa/preview-visual.css; qa/preview-blocks.html; qa/preview-menu.html>
-   - [S1] - `#94` keeps five classes only (`pos-v pos-n pos-adj pos-adv pos-fn`) on tokens, and the label mode comes over from `qa/preview-visual.css`, whose duplicate `.pos*`/`.l-*` rules are then deleted <style.css #94; qa/preview-visual.css> <five classes style the line; `preview-visual.css` has no `.pos` rule left>
-   - [S2] - `.uw`/`.an` paint with `text-decoration` driven by `--mk-w`/`--mk-c`, so one word can carry a mark and a POS class at once <style.css #89 MARKS, #94> <a word with both shows one line: the mark's thickness and colour, the class's style>
-   - [S3] - Both pages remapped onto the five classes <qa/preview-blocks.html #tlw; qa/preview-menu.html [65]> <no old class name survives in either page>
-   - [S4] - Re-verify the eight pins and the 2px star gap, then rows and gate <generation/checks/measure.mjs; qa/check.mjs> <word centre = axis left + --point ×8, gap 2px, rows 0 ragged, gate ✅>
+## [B40] - The word classes split the verb into "verb" and "mode", six classes <"id like to differentiate between non-mode-carrying verb (incl. do, have) and 'mode' carrying (can, would, do/have/gonna as verb tenses)"> <style.css #94 POS; qa/pos.mjs; qa/preview-blocks.html; qa/preview-menu.html>
+   - [S1] - `#94` gains `.pos-m`: the word that carries the mode/tense (be, have, do as auxiliaries, and every modal), on the thickness channel so six classes stay separable <style.css #94> <six classes render; `.pos-m` and `.pos-v` differ by line style, `.pos-n` by thickness>
+   - [S2] - `qa/pos.mjs` emits `pos-m` for an auxiliary or modal used as one, `pos-v` for a lexical verb, and states the limitation that a be/have/do used as the main verb is tagged from the lexicon alone <qa/pos.mjs> <`--tags` names mode; a main-verb `have` is flagged in the header as the known miss>
+   - [S3] - Both pages show a mode word in the specimen and the key <qa/preview-blocks.html #tlw; qa/preview-menu.html [65]> <each page has a pos-m word with a key item naming it>
 
 
 
