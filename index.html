@@ -2,7 +2,7 @@
 <!-- build: 2026-10-20T00:00:00Z -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=328951f987">
+<link rel="stylesheet" href="style.css?v=a9415fc5b8">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head><body class="landing">
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>ENGLISH <span>OPENS DOORS</span></h1><p class="script">Let's go <span lang="pt">· Vamos lá</span></p></header>
@@ -31,10 +31,9 @@ const BACKPACK="https://script.google.com/macros/s/AKfycbxSR8UmOwosLIgn1-AGKhgXJ
    NEEDS NO EDIT IN THIS FILE. The three lines below are only the fallback for when tracks.json cannot be
    fetched. */
 let TN={kids:"Kids",business:"Business",adult:"Adult"};
-/* per-track icon and 200 swatch, both read from track.json through tracks.json, so a track created later
-   carries its own and no code holds a track's colour. These two are the fallback when tracks.json cannot load. */
+/* per-track icon, read from track.json through tracks.json. There is NO colour here: a track's colour is
+   a hue in style.css ([data-track=…],.t-…), so index.html carries a track's NAME, never its swatch. */
 let TI={kids:"🛹",business:"💼",adult:"🔞"};
-let TC={kids:"#FFE082",business:"#90CAF9",adult:"#FFAB91"};
 const $=id=>document.getElementById(id);
 /* style.css carries a version stamp BAKED INTO THE HTML by build-lessons.mjs (the hash of its own content), so the link above stays render-blocking and nothing paints before the stylesheet is applied. It was stamped HERE by JS until 2026-11-09, which swapped <link>.href while the first fetch was in flight: the browser aborted it, painted the document unstyled and then repainted — the flash the owner saw on a hard refresh. */
 /* (no runtime swap: see the note above and the stamp in the <head>) */
@@ -377,19 +376,17 @@ function lessonPath(t,i){
 /* tracks.json → the student columns and the "＋ dar acesso" options. The three fallback tables below keep a
    track that a stale response omits, so this can never hide a track that already exists. */
 function applyTracks(list){
- const names=[],labels={},icons={},colors={};
+ const names=[],labels={},icons={};
  (Array.isArray(list)?list:[]).forEach(x=>{
   const n=x&&x.name?String(x.name):"";if(!n||names.indexOf(n)>=0)return;
   names.push(n);labels[n]=String(x.label||(n.charAt(0).toUpperCase()+n.slice(1)));
   if(x.icon)icons[n]=String(x.icon);
-  if(/^#[0-9a-f]{3,8}$/i.test(String(x.color||"")))colors[n]=String(x.color);
  });
  Object.keys(TN).forEach(n=>{if(names.indexOf(n)<0)names.push(n);});
  Object.keys(TN).forEach(n=>{if(!labels[n])labels[n]=TN[n];});
  Object.keys(TI).forEach(n=>{if(!icons[n])icons[n]=TI[n];});
- Object.keys(TC).forEach(n=>{if(!colors[n])colors[n]=TC[n];});
  names.forEach(n=>{if(!labels[n])labels[n]=n.charAt(0).toUpperCase()+n.slice(1);});
- if(names.length){TRACKSALL=names;TN=labels;TI=icons;TC=colors;}
+ if(names.length){TRACKSALL=names;TN=labels;TI=icons;}
 }
 /* the student index (owner instruction 2026-11-03, selector 2026-11-09): ONE COLUMN PER TRACK, whatever
    tracks.json lists. Each card is the book's name, then its "continue" button, then the lesson SELECTOR — the
@@ -455,7 +452,8 @@ async function requestTrack(t){
 let QUEUE={pending:[],approved:[]};
 /* THE lesson selector — ONE component, used by the student index and the teacher panel, so the two lists are
    identical by construction (owner instruction 2026-11-09). It sits under the continue button instead of a list
-   that was always on screen, and it is painted with the track's own 200 swatch. Each item is the number plus the
+   that was always on screen, and it is painted with the track's own hue (`--sw`, from `.t-<track>` in
+   style.css). Each item is the number plus the
    lesson name: the number is plain text — never part of the link, and 2pt larger than the name via CSS — while
    the name is the only link. `locked` renders the same items inert, so a book the student does not hold still
    shows what it contains. */
@@ -463,7 +461,6 @@ let QUEUE={pending:[],approved:[]};
    "Name Icon ▾" without the icon showing twice when a label happens to carry one. */
 function trackName(t){const n=String(TN[t]||t),i=String(TI[t]||"");return i?n+" "+i:n;}
 function bookButton(t,locked){
- const col=/^#[0-9a-f]{3,8}$/i.test(String(TC[t]||""))?TC[t]:"#90CAF9";
  const dn=(DONE&&DONE[t])||[];
  const items=trackLessons(t).map(le=>{
   const n=le.n,num=(n<10?"0":"")+n,txt=le.title?esc(le.title):"—";
@@ -479,7 +476,7 @@ function bookButton(t,locked){
    +'</div>';
  }).join('');
  return '<div class="bookdrop'+(locked?' locked':'')+'">'
-  +'<button type="button" class="bookbtn" style="--sw:'+col+'" onclick="toggleBookMenu(\''+t+'\')">'+esc(trackName(t))+' ▾</button>'
+  +'<button type="button" class="bookbtn t-'+t+'" onclick="toggleBookMenu(\''+t+'\')">'+esc(trackName(t))+' ▾</button>'
   +'<div class="bookmenu" id="menu_'+t+'" hidden>'+items+'</div></div>';
 }
 /* a menu opens only when it has something to show and the book is held (owner instruction 2026-11-09): a greyed
@@ -504,10 +501,9 @@ function pendingHTML(){
  return h+'</div>';
 }
 /* one switch per track (owner instruction 2026-11-09): ON = the track holds this book, OFF = it does not.
-   --sw is the track's 200 swatch from track.json; the thumb carries the track's icon. */
+   The fill is the track's hue from style.css (`.t-<track>`), and the thumb carries the track's icon. */
 function trackSwitch(email,t,on){
- const col=/^#[0-9a-f]{3,8}$/i.test(String(TC[t]||""))?TC[t]:"#90CAF9";
- return '<label class="tswitch'+(on?' on':'')+'" data-k="'+esc(email+'|'+t)+'" title="'+esc(TN[t])+'" style="--sw:'+col+'">'
+ return '<label class="tswitch t-'+t+(on?' on':'')+'" data-k="'+esc(email+'|'+t)+'" title="'+esc(TN[t])+'">'
   +'<input type="checkbox"'+(on?' checked':'')+' onchange="toggleTrack(this,\''+esc(email)+'\',\''+esc(t)+'\')" aria-label="'+esc(TN[t])+'">'
   +'<span class="tsw-track"><span class="tsw-thumb">'+esc(TI[t]||"")+'</span></span></label>';
 }

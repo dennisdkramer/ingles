@@ -130,9 +130,9 @@ ok('teacher: one switch per track', sw.length === w.eval('TRACKSALL.length'), sw
 ok('teacher: the switches are the SECOND line', !!row && row.children[1].classList.contains('tswitches'));
 ok('teacher: a held track reads ON', !!swOf(/Kids/) && swOf(/Kids/).classList.contains('on'));
 ok('teacher: an unheld track reads OFF', !!swOf(/Adulto/) && !swOf(/Adulto/).classList.contains('on'));
-ok('teacher: each switch carries its track.json colour',
-  sw.every(x => /--sw:#[0-9a-f]{6}/i.test(x.getAttribute('style') || '')),
-  sw.map(x => (x.getAttribute('style') || '').replace('--sw:', '')).join(' '));
+ok('teacher: each switch carries its track class (the hue lives in style.css)',
+  sw.every(x => /(^|\s)t-[a-z-]+(\s|$)/.test(String(x.className))),
+  sw.map(x => (String(x.className).match(/t-[a-z-]+/) || ['-'])[0]).join(' '));
 ok('teacher: the thumb carries the track icon',
   !!swOf(/Kids/) && /🛹/.test(swOf(/Kids/).querySelector('.tsw-thumb').textContent));
 ok('teacher: the checkbox is the state',

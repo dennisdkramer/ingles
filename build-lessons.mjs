@@ -31,17 +31,18 @@ function emit(rel, text) {
   return true;
 }
 
-/* name, then how the site names and paints the track: label, icon, the 200 swatch of the access switch, order */
+/* name, then how the site names the track: label, icon, order. NO COLOUR: a track's colour is a hue in
+   style.css (`[data-track=…],.t-…`), so the sheet owns it and nothing here has to be restamped. */
 const TRACKS = [
-  { name: 'kids', label: 'Kids', icon: '🛹', color: '#FFE082', order: 1 },
-  { name: 'business', label: 'Business', icon: '💼', color: '#90CAF9', order: 2 },
-  { name: 'adult', label: 'Adult', icon: '🔞', color: '#FFAB91', order: 3 },
-  { name: 'advanced-stem', label: 'Advanced STEM', icon: '🔬', color: '#80CBC4', order: 4 },
-  { name: 'advanced-aave', label: 'Advanced AAVE', icon: '🎤', color: '#B39DDB', order: 5 },
-  { name: 'memelord-mogger', label: 'Memelord Mogger', icon: '😎', color: '#E6EE9C', order: 6 },
-  { name: 'english-basic-portuguese', label: 'English → Basic Portuguese', icon: '🔁', color: '#80DEEA', order: 7 },
-  { name: 'gramatica-redacao', label: 'Gramática e Redação', icon: '✍️', color: '#F48FB1', order: 8 },
-  { name: 'linguagem-figurativa-giria', label: 'Linguagem Figurativa e Giria', icon: '🎭', color: '#9FA8DA', order: 9 },
+  { name: 'kids', label: 'Kids', icon: '🛹', order: 1 },
+  { name: 'business', label: 'Business', icon: '💼', order: 2 },
+  { name: 'adult', label: 'Adult', icon: '🔞', order: 3 },
+  { name: 'advanced-stem', label: 'Advanced STEM', icon: '🔬', order: 4 },
+  { name: 'advanced-aave', label: 'Advanced AAVE', icon: '🎤', order: 5 },
+  { name: 'memelord-mogger', label: 'Memelord Mogger', icon: '😎', order: 6 },
+  { name: 'english-basic-portuguese', label: 'English → Basic Portuguese', icon: '🔁', order: 7 },
+  { name: 'gramatica-redacao', label: 'Gramática e Redação', icon: '✍️', order: 8 },
+  { name: 'linguagem-figurativa-giria', label: 'Linguagem Figurativa e Giria', icon: '🎭', order: 9 },
 ];
 
 /* a folder with lesson pages that the table does not know: say so, rather than publish a site without it */
@@ -80,7 +81,7 @@ const wroteLessons = emit('lessons.json', JSON.stringify(manifest, null, 2) + '\
 // tracks.json is what index.html reads to name and paint each track, so the page holds no track name of
 // its own. No count travels here: a track's size is lessons.json's own array, and a copy can only drift.
 // It changes ONLY when the table above changes — adding a lesson never touches it.
-const trackList = TRACKS.map(m => ({ name: m.name, label: m.label, icon: m.icon, color: m.color, order: m.order }));
+const trackList = TRACKS.map(m => ({ name: m.name, label: m.label, icon: m.icon, order: m.order }));
 const wroteTracks = emit('tracks.json', JSON.stringify(trackList, null, 2) + '\n');
 
 // The stylesheet's version stamp is BAKED INTO index.html by this build, never applied at runtime. It used to be
