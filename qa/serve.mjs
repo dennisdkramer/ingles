@@ -32,7 +32,7 @@ import { readMenu } from './menu.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const NOTES = path.join(ROOT, 'qa', 'NOTES.md');
-const PAGE = '/qa/preview-blocks.html?notes=server';
+const PAGE = '/qa/preview-menu.html?notes=server';
 const CHROME = process.env.CHROME || 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 
 const argv = process.argv.slice(2);
