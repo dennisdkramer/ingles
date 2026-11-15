@@ -14,10 +14,10 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S4] - Run the gate and fix every fail <qa/check.mjs; preview.css #60, #76> <✅ adult/lesson30, items at or above `need`, zero fails>
    - [S5] - Run `npm run build:lessons`, measure the page's rows, commit and push <build-lessons.mjs; generation/checks/measure.mjs; .clinerules 8> <lessons.json lists n=30, 0 ragged rows on the page, pushed>
 
-## [B41] - Groups regrouped: pronouns, articles and demonstratives join nouns; conjunctions become a join mark <"pronouns -> nouns / conjunctions split phrase so maybe instead of tagging them as individual words we tag them in some kind of way that shows that there are two contrasted or added etc.. clauses / object can just be a daughter tag of subject and use a different color"> <style.css #94 POS; qa/pos.mjs; qa/preview-blocks.html; qa/preview-menu.html>
-   - [S1] - `qa/pos.mjs`: determiners, pronouns and pronominal wh-words emit `pos-n`; `him/me/us/them/whom` also carry `pos-o`; a conjunction emits `pos-join data-rel=` instead of a class <qa/pos.mjs> <`--text` shows n for the article and the pronoun, and a relation for each conjunction>
-   - [S2] - `#94` renames `.pos-fn` to `.pos-prep`, adds the object daughter (`.pos-o`) and the join marks (one per relation), on tokens <style.css #94> <`.pos-prep` wavy; `pos-o` a different colour from `pos-n`; every `data-rel` value paints>
-   - [S3] - Both pages remapped from the tagger's own output <qa/preview-blocks.html #tlw; qa/preview-menu.html [65], test-bed> <no `pos-fn` left; each page shows a joined sentence and an object pronoun>
+## [B42] - Joins become bars, and the noun mark carries role as a fade <"marks the junction was all i was asking for, but maybe |but| would be better formatting / can we do fades/color blends on these marks / subject nouns start with a strong color or opacity, object nouns end with one, other nouns are the base color"> <style.css #88 JOIN, #94 POS; qa/preview-blocks.html>
+   - [S1] - `#88 JOIN` draws a thin vertical bar each side instead of a line above and below <style.css #88> <both bars paint in the relation's colour and the label mode still prints the relation>
+   - [S2] - The noun group's line becomes a background gradient, so one hue can carry the role: `.pos-subj` strong at the start, `.pos-o` strong at the end, a plain noun flat <style.css #94> <three gradients compute; the object keeps the noun's colour, not a second one>
+   - [S3] - The working page marks a subject noun, an object pronoun and a plain noun in one sentence <qa/preview-blocks.html #tlw> <the three shades are visible side by side>
 
 
 
