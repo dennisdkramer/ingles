@@ -323,13 +323,13 @@
   /* ahead of now: dashed, no fade, ending under a double right arrow that steps right every 1.5s */
   .tln-ahead{height:0;border-top:2px dashed currentColor;align-self:center;margin-right:39.2px}
   .tln-end{position:absolute;right:0;top:50%;transform:translateY(-50%);width:39.2px;z-index:1;
-    display:grid;place-items:center;animation:tln-go 1.5s linear infinite}
+    display:grid;place-items:center;animation:tln-go 2s linear infinite}
   .tln-end svg{display:block;width:30.8px;height:30.8px;fill:none;stroke:currentColor;stroke-width:2;
     stroke-linecap:round;stroke-linejoin:round}
   /* log pulse, reversed: it creeps, then accelerates and fades out at the end of the step */
-  @keyframes tln-go{0%{translate:0 0;opacity:1}7%{translate:.4px 0;opacity:.94}
-    14%{translate:1.6px 0;opacity:.85}22%{translate:4px 0;opacity:.7}
-    33.33%{translate:10px 0;opacity:.5}33.34%{translate:0 0;opacity:1}100%{translate:0 0;opacity:1}}
+  @keyframes tln-go{0%{translate:0 0;opacity:1}10.5%{translate:.4px 0;opacity:.94}
+    21%{translate:1.6px 0;opacity:.85}33%{translate:4px 0;opacity:.7}
+    50%{translate:10px 0;opacity:.5}50.01%{translate:0 0;opacity:1}100%{translate:0 0;opacity:1}}
   /* then: on the line, centred on the arrow, the same ink on paper */
   .tln-then{position:absolute;right:19.6px;top:50%;transform:translate(50%,-50%);z-index:2;
     text-shadow:rgba(200,200,200,.85) 0 0px 3px;
