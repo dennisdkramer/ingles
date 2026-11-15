@@ -819,6 +819,7 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    translateX keyframe drops the inline transform the walk put on him and he snaps back to the middle
    of the road for the length of the animation — the one moment he must not move. */
 /* ## GAMES — ENGINE-OWNED. A page that carries a `.game` block also carries <script src="../engine4.js"></script> after ../engine2.js; the art is drawn by the engine, so NEVER author or restyle a `.g4-*` element. Content is identical for every skin, so `data-game` is a presentation choice, never a content choice. */
+/* ## GAME LEVERS — `data-*` on the `.game` element, read by the runner: `data-time` ms per item (0 = no deadline; this is the difficulty), `data-limit` seconds for the whole run, `data-retry` whether a run may repeat (default 1; the page's quiz writes 0), `data-shuffle` (default on), `data-rounds` items a run uses (0 = all), `data-prompt` stem on the HUD line, `data-sound`, `data-skin` (free-form; CSS themes on it, the engine never reads it). */
 .g4-runner.bitten{animation:g4reel .42s ease}
 /* the bite always ends the same way: he goes down where he stands — the `down` state is built on his own
    --dx, so the fall happens at the door he chose — and then he is gone, until the street comes back
