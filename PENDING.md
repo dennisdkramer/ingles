@@ -14,8 +14,10 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S4] - Run the gate and fix every fail <qa/check.mjs; preview.css #60, #76> <✅ adult/lesson30, items at or above `need`, zero fails>
    - [S5] - Run `npm run build:lessons`, measure the page's rows, commit and push <build-lessons.mjs; generation/checks/measure.mjs; .clinerules 8> <lessons.json lists n=30, 0 ragged rows on the page, pushed>
 
-## [B37] - Word marks become a general mechanism, and only the contracted letters are underlined <"make sure the word indicating, underlining, anchoring, etc is something that is generalized ... only the contracted letters and not the pronoun"> <style.css #89 MARKS, #97 TLN; qa/preview-blocks.html>
-   - [S1] - `.uw`/`.an` move out of the timeline into their own `#89 MARKS` section with the `anchor-scope:--pin` / `anchor(50%) - var(--pin)` recipe documented, and the four pronouns leave the underline <style.css #89, #97; qa/preview-blocks.html> <anchor word = axis left + --point in all eight; `'ve`/`'m`/`'ll` carry the 2px, the pronoun carries nothing>
+## [B38] - The parts-of-speech legend, as proposed <"you can implement the legend as proposed"> <style.css #94 POS; qa/preview-blocks.html>
+   - [S1] - `.pos-key` becomes a sample-word legend: one `<b class="pos-…">` per item, so the key wears the same classes as the sentence and cannot drift from the marks <style.css #94> <each legend sample draws the same decoration as its class>
+   - [S2] - A 17px specimen with its legend on the working page, as the timeline will meet it in lesson prose <qa/preview-blocks.html> <sentence and legend render at 17px, legend items aligned on one row, rows still 0 ragged>
+
 
 
 
