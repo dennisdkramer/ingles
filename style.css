@@ -7,7 +7,7 @@
 
 /* #00 GROUPS — the sheet in file order: #10 TOKENS · #20 BASE · #30 PERF · ## IN-BLOCK VISUALS · ## VEHICLES (games at its foot) · #95 PRINT · #98 SHELL · #99 U · @layer legacy */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:wght@600;700&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:wght@600;700&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@700&display=swap');
 
 /* Declared initial-value is the floor: an unset or misspelled value lands here, not on a broken layout. */
 @property --accent-h { syntax: '<number>';    inherits: true;  initial-value: 210 }
@@ -317,7 +317,7 @@
     animation:tln-beat 2.6s ease-in-out infinite;transform-origin:50% 50%}
   .tln-head b{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;
     text-shadow:rgba(200,200,200,.85) 0 0px 3px;
-    font:700 10px/1 var(--mono);letter-spacing:0;text-transform:uppercase;
+    font:700 10px/1 'JetBrains Mono',var(--mono);letter-spacing:0;text-transform:uppercase;
     color:var(--ink-2);white-space:nowrap}
   @keyframes tln-beat{0%,100%{transform:scale(1);opacity:.85}45%{transform:scale(1.15);opacity:1}}
   /* ahead of now: dashed, no fade, ending under a double right arrow that steps right every 1.5s */
@@ -331,7 +331,7 @@
   /* then: on the line, centred on the arrow, the same ink on paper */
   .tln-then{position:absolute;right:14px;top:50%;transform:translate(50%,-50%);z-index:2;
     text-shadow:rgba(200,200,200,.85) 0 0px 3px;
-    font:700 10px/1 var(--mono);letter-spacing:0;text-transform:uppercase;
+    font:700 10px/1 'JetBrains Mono',var(--mono);letter-spacing:0;text-transform:uppercase;
     color:var(--ink-2);white-space:nowrap}
   .tln-past,.tln-head,.tln-ahead{position:relative;z-index:1}
   /* night: the shadow is a literal, so it is set here */
