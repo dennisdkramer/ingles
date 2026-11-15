@@ -14,6 +14,9 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S4] - Run the gate and fix every fail <qa/check.mjs; preview.css #60, #76> <✅ adult/lesson30, items at or above `need`, zero fails>
    - [S5] - Run `npm run build:lessons`, measure the page's rows, commit and push <build-lessons.mjs; generation/checks/measure.mjs; .clinerules 8> <lessons.json lists n=30, 0 ragged rows on the page, pushed>
 
+## [B30] - BEFORE shifts left and thickens at its start <"move it 10px to the left and change the left to 30%">
+   - [S1] - `left:20px`, gradient start 30% <style.css #97>
+
 
 
 
