@@ -71,12 +71,12 @@
   .content-area>section:first-of-type{content-visibility:visible}
 }
 
-/* #40 LAYOUT — .content-area 1200px. .itemrow > .itemsize-third|-half|-twothird|.itemsize = 4/6/8/12 of 12; unset full width. Vary: --row-gap, --col-gap, --section-gap (length) */
+/* #40 LAYOUT — .content-area 1200px. .itemrow > .itemsize-third|-half|-twothird|.itemsize = 4/6/8/12 of 12; unset full width. Frames in a row end on one line. Vary: --row-gap, --col-gap, --section-gap (length) */
 @layer layout{
   .page-container{width:1400px;margin:0 auto;padding:0 15px}
   .content-area{width:1200px;margin:0 auto;position:relative}
   .itemrow{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));
-    gap:var(--row-gap,22px) var(--col-gap,18px);align-items:start}
+    gap:var(--row-gap,22px) var(--col-gap,18px)}
   .itemsize-third{grid-column:span 4}
   .itemsize-half{grid-column:span 6}
   .itemsize-twothird{grid-column:span 8}
