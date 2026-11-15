@@ -1,478 +1,729 @@
-/* ==================================================================================================
-   ⛔ STOP — DO NOT READ, INFER, REFERENCE OR USE THIS FILE FOR LESSON CONTENT CREATION ⛔
-   This stylesheet is IMPLEMENTATION ONLY. A LESSON'S SHAPE IS FREELY IMAGINED. 
-   HOW TO READ THIS FILE: every lesson-facing contract is a `## ` HEADER — one line opening `/* ## `,
-   carrying the rule in words directly above the CSS it governs. Those headers are the SCAN LIST: read
-   them in file order (page skeleton -> section -> block -> block interior -> reflow), take the key rule
-   from the header, and read the CSS under it only when the detail is needed. PEDAGOGY-MAP.md [I/O]
-   names these headers; the CSS under each one is the implementation of what it states.
-   Reading it to answer an implementation question (which class or knob does what), is
-   legitimate; deciding content or shape from it is not
-   ================================================================================================== */
+/* # ALL COMMENTS AUTHORED FREE OF PROSE - **MINIMUM WORDS POSSIBLE** */
+/* # ALL CODE AUTHORED CONSERVATIVELY, MINUMUM CHANGE POSSIBLE, PREFER DELETION TO ADDITION - REQUIRES USER SIGN-OFF */
+
+
+/* #00 HEADER LANGUAGE — a header is read by the lesson builder, and answers five things in as few words as possible (3-6) on one line:
+     'Available classes spelled as the builder types. What it does. If not set? Available variants.'    */
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&display=swap');
 
-/* the shell is not text to work with */
-header.brand,.control-bar,.barhelp,footer{user-select:none;-webkit-user-select:none}
-/* FIXED COLUMNS. The page is a FIXED-WIDTH document — body is
- min-width:1415px,.page-container is position:absolute at 1400px,.content-area is always 1200px — so no
- layout in it may be expressed as `fr`, `vw` or `auto-fit`. Those are decisions the browser RE-MAKES whenever
- the viewport changes, which is exactly the reported fault: "the cards resize and reflow into one per row on
- window resize". Every grid below therefore states its tracks in LITERAL pixels, and the numbers are chosen so
- the arithmetic closes exactly: 390×3 + 15×2 = 1200 (student columns), 593×2 + 14 = 1200 (teacher columns),
- 380×3 + 10×2 = 1160 (teacher dropdown row, which sits inside a.card and so has 40px less than 1200).
- THE NUMBERS ARE WRITTEN, NEVER A var. `repeat(3,var(--col3))` reads better and is a trap: if the variable
- fails to resolve — renamed, or a:root block a stray parse error swallowed — every declaration using it becomes
- invalid at computed-value time, and `grid-template-columns` then computes to `none`, i.e. ONE COLUMN with every
- card stacked vertically. That is precisely the fault this comment exists to prevent, so any change to a column
- width is made in the three rules themselves, and nowhere else. */
-/* TYPOGRAPHY: the site is SERIF, everywhere. --serif is the default every element
- inherits, and it is the only type stack a page/teacher view may use. Georgia leads it because it was drawn for
- screens, it ships on Windows and macOS, it carries the Portuguese accents and the IPA the dictionary uses
- (`#nbKey` already trusted it for exactly that), and where it is absent — Android — the generic `serif` resolves
- to Noto Serif, which has full IPA coverage.
- --ui-tight is the ONE exception and it exists for a stated reason: the game chrome (.g4-*) is 9-13px text in
- fixed-size tiles and badges with `nowrap`+ellipsis (76px pick buttons, 14px-tall rungs), where it reads as an
- instrument panel rather than as prose, and where a font swap would move every metric inside a box that cannot
- grow. It is deliberately ONE custom property: set `--ui-tight:var(--serif)` to make the games serif too. */
-:root{--serif:Georgia,'Iowan Old Style','Palatino Linotype','Book Antiqua','Times New Roman',serif;
-      --ui-tight:'Public Sans',system-ui,sans-serif}
-*{box-sizing:border-box}body{margin:0;min-width:1415px;font:17px/1.6 var(--serif);background:var(--cream);color:var(--ink)}
-/* form controls default to the UA's sans-serif in every engine, which is how sans reached the teacher page
-   (the book dropdowns and their selects) while the text around them was serif */
-button,input,select,textarea{font-family:inherit}
-:root{--cream:#f4eddd;--paper:#fdfaf2;--ink:#182136;--tan:#b9854c;--rose:#d9c1ba;--ptw:#96601f;--blue:#1d4ed8;--dkblue:#1e3a8a;--bluebg:rgba(29,78,216,.16);--orange:#c2601a;--purple:#5b2a86;--green:#2f9e44;--greenbg:#e8f7ee}
-header.brand{width:1400px;margin-left:15px;text-align:center;padding:20px 14px 0}
-.control-bar{width:1400px;margin:10px 0 0 15px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:8px 14px;font-size:13px;text-align:center}
+/* Declared initial-value is the floor: an unset or misspelled value lands here, not on a broken layout. */
+@property --accent-h { syntax: '<number>';    inherits: true;  initial-value: 210 }
+@property --score    { syntax: '<number>';    inherits: true;  initial-value: 0 }
+@property --pct      { syntax: '<integer>';   inherits: false; initial-value: 0 }
+@property --grad     { syntax: '<angle>';     inherits: false; initial-value: 0deg }
+@property --edge-w   { syntax: '<length>';    inherits: true;  initial-value: 2px }
+@property --ring     { syntax: '<percentage>';inherits: false; initial-value: 0% }
 
-/* site-functions legend: ONE baked-in line of static HTML in the shell (index.html / _shell.html). It is
-   shell furniture, never a lesson element: nothing a page generates writes it. */
-.barhelp{width:1400px;margin:2px 0 8px 15px;padding:0 14px;text-align:center;font-size:14px;line-height:1.55;color:var(--ink)}
-.logoFallback{font-size:52px}h1{font-family:'Playfair Display',serif;letter-spacing:.14em;font-size:38px;margin:8px 0 0}
-h1 span{display:block;font-size:.42em;letter-spacing:.5em}
-.content-area h1{text-align:center}
-.script{font-family:Caveat,cursive;font-size:38px;margin:2px 0 0;transform:rotate(-2deg)}
-.barhelp b{font-weight:600}
-.barhelp .hlk{padding:0 4px;border-radius:4px}
-header.brand img{width:120px;filter:drop-shadow(3px 4px 0 var(--rose))}
-main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
-.page-container{margin:0;background:var(--paper);border:2px solid var(--ink);border-radius:0;box-shadow:none;padding:0;position:absolute;left:15px;width:1400px}
-.content-area{width:1200px;margin:0 auto;padding:16px 0}
+@layer legacy, reset, tokens, base, perf, layout, structure, control, look, state, motion, print, shell, u;
 
-.content-area{cursor:default}
-.content-area a,.content-area button,.content-area label,.content-area mark.nb,.content-area summary{cursor:pointer}
-.content-area input.gap,.content-area textarea{cursor:text}
-/* FOCUS RINGS ARE OPT-IN. A ring is drawn only while <html> carries .kbd, which only a real NAVIGATION key
-   sets (Tab, arrows, Home/End, PgUp/PgDn, Enter, Space, Escape — see the gate at the top of engine1.js and in
-   index.html). A modifier key alone (Shift/Ctrl/Alt/Meta) is not navigation, so pressing it cannot ring the
-   button that happens to hold focus. The first rule removes the outline outright while .kbd is absent, so the
-   browser's own UA ring is suppressed too: NOTHING on any page can draw a focus outline without that class. */
-html:not(.kbd) :focus{outline:none}
-html.kbd button:focus-visible{outline:3px solid var(--tan);outline-offset:2px}
-button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;margin:4px 4px 4px 0;font:600 14px var(--serif);cursor:pointer;box-shadow:3px 3px 0 var(--tan)}
+/* #10 TOKENS — Colour, spacing, type and depth. Set token anywhere; unset - back to :root. Vary: --accent-h (hue 0-360); --sp, --r1/--r2, --edge-w (length) */
+@layer tokens{
+  :root{
+    /* the old palette is the palette: every alias below resolves to one of these */
+    --cream:#f4eddd; --paper:#fdfaf2; --ink:#182136; --tan:#b9854c; --rose:#d9c1ba;
+    --ptw:#96601f; --blue:#1d4ed8; --dkblue:#1e3a8a; --bluebg:rgba(29,78,216,.16);
+    --orange:#c2601a; --purple:#5b2a86; --green:#2f9e44; --greenbg:#e8f7ee;
+    --surface:var(--cream); --surface-2:var(--paper); --sunken:#efe6d6;
+    --ink-2:#5c5347; --line:var(--rose); --line-2:#efe4d2;
+    --teach-h:65; --train-h:26; --show-h:286; --game-h:326;
+    --ok:var(--green); --err:#c92a2a; --warn:#e0b341;
+    --r1:10px; --r2:18px; --r3:26px; --sp:12px;
+    --shadow-1:0 1px 2px rgb(26 33 48/.05), 0 4px 14px -6px rgb(26 33 48/.12);
+    --shadow-2:0 2px 6px rgb(26 33 48/.07), 0 22px 44px -18px rgb(26 33 48/.28);
+    --serif:Georgia,'Iowan Old Style','Palatino Linotype','Book Antiqua',serif;
+    --sans:system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --playfair:'Playfair Display',Georgia,serif;
+    --mono:ui-monospace,'Cascadia Mono','Consolas',monospace;
+    --s-1:15px; --s0:17px; --s1:19px; --s2:18px; --s3:26px; --s4:38px;
+    --accent:oklch(58% .14 var(--accent-h));
+    --accent-soft:color-mix(in oklab, var(--accent) 13%, var(--surface));
+    --accent-line:color-mix(in oklab, var(--accent) 42%, var(--line));
+  }
+}
 
-/* one shared hover/press for EVERY button */
-button{transition:transform .09s ease,filter .12s ease}
-button:hover:not(:disabled):not(.locked){filter:brightness(1.14);transform:translateY(-1px)}
-button:active:not(:disabled):not(.locked){filter:brightness(1.04);transform:translate(2px,2px);transition-duration:.04s}
+/* #20 BASE — element defaults. Nothing to invoke; --serif/--sans (font), --ink/--surface (colour). h3 auto-letters A,B,C per section; h4 takes no letter */
+@layer base{
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;min-width:1415px;background:var(--cream);color:var(--ink);
+    font:var(--s0)/1.62 var(--serif);text-rendering:optimizeLegibility}
+  h1,h2,h3,h4{margin:0 0 .4em;text-wrap:balance;font-weight:700;line-height:1.18}
+  h1{font-family:var(--playfair);font-size:var(--s4);letter-spacing:.14em;margin:8px 0 0}
+  h2{font-family:var(--playfair);font-size:var(--s3);border-bottom:2px solid var(--rose);
+    padding-bottom:6px;margin:1.6em 0 .3em}
+  h3{font-family:var(--playfair);font-size:var(--s1);color:var(--dkblue);
+    border-left:4px solid var(--tan);padding-left:10px;margin:22px 0 8px;
+    letter-spacing:.02em}
+  h2{counter-reset:blk}
+  h3{counter-increment:blk}
+  h3::before{content:counter(blk,upper-alpha) ". ";color:var(--accent);padding-right:.5em;
+    font-family:var(--sans);font-size:.8em;font-weight:700}
+  h4{font-family:var(--serif);font-style:italic;font-weight:600;font-size:var(--s-1);
+    color:var(--dkblue);margin:0 0 8px;padding-left:2em;text-transform:none;
+    letter-spacing:normal}
+  p,li{margin:0 0 .7em;text-wrap:pretty}
+  body{cursor:default}
+  a,button,label,mark.nb,summary{cursor:pointer}
+  input.gap,textarea{cursor:text}
+  p:last-child,li:last-child{margin-bottom:0}
+  b,strong{font-weight:700}
+  :lang(pt){font-style:italic;font-weight:400}
+  a{color:var(--ink);font-weight:600;text-underline-offset:.18em;
+    text-decoration-thickness:.07em;text-decoration-color:var(--accent-line)}
+  a:hover{text-decoration-color:var(--accent)}
+  code,kbd{font-family:var(--mono);font-size:.9em;background:var(--sunken);border-radius:6px;padding:.1em .38em}
+  img,svg,video{max-width:100%;height:auto;display:block}
+  button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+  ::selection{background:color-mix(in oklab, var(--accent) 28%, transparent)}
+  :focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:4px}
+  hr{border:0;border-top:1px solid var(--line);margin:calc(var(--sp)*1.6) 0}
+}
+
+/* #30 PERF — sections render only when near the viewport. Nothing to invoke. Vary: --section-est (length, 1200px = height guessed before paint) */
+@layer perf{
+  .content-area>section{content-visibility:auto;
+    contain-intrinsic-size:auto var(--section-est,1200px)}
+  .content-area>section:first-of-type{content-visibility:visible}
+}
+
+/* #40 LAYOUT — .content-area 1200px. .itemrow > .itemsize-third|-half|-twothird|.itemsize = 4/6/8/12 of 12; unset full width. Frames in a row end on one line. Vary: --row-gap, --col-gap, --section-gap (length) */
+@layer layout{
+  main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
+  .page-container{position:absolute;left:15px;width:1400px;margin:0;padding:0;
+    background:var(--paper);border:2px solid var(--ink);border-radius:0;box-shadow:none}
+  .content-area{width:1200px;margin:0 auto;padding:98px 0 16px;position:relative}
+  .itemrow{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));
+    gap:var(--row-gap,22px) var(--col-gap,18px)}
+  .itemsize-third{grid-column:span 4}
+  .itemsize-half{grid-column:span 6}
+  .itemsize-twothird{grid-column:span 8}
+  .itemsize{grid-column:span 12}
+  .itemrow>:only-child{grid-column:1/-1}
+  /* legacy names, same as .itemsize */
+  .panel,.card{grid-column:span 12}
+  .itemrow>*{min-width:0}
+  .content-area>*{margin-block-end:var(--row-gap,22px)}
+  .content-area>section{display:grid;gap:var(--row-gap,22px);
+    margin-block:0 var(--section-gap,34px)}
+  .content-area>h1{margin:0 0 .35em;text-align:center}
+}
+
+/* #50 STRUCTURE — data-structure="prose|set|sequence|grid|pair|media" on .block; data-kind="teach|train|show|game" = hue. Unset: plain stack. Vary: --h (hue 0-360) */
+@layer structure{
+  .block{position:relative;
+    --h:var(--teach-h);--accent-h:var(--h);
+    --accent:oklch(58% .14 var(--accent-h));
+    --accent-soft:color-mix(in oklab, var(--accent) 13%, var(--surface));
+    --accent-line:color-mix(in oklab, var(--accent) 42%, var(--line));
+    background:var(--paper);border:1px solid var(--line-2);border-top:3px solid var(--accent);
+    border-radius:var(--r2);box-shadow:var(--shadow-1);
+    padding:calc(var(--sp)*1.3) calc(var(--sp)*1.55);margin:0}
+  .block[data-kind="train"]{--h:var(--train-h)}
+  .block[data-kind="show"]{--h:var(--show-h)}
+  .block[data-kind="game"]{--h:var(--game-h)}
+  .block[data-kind="teach|train"]{--h:var(--train-h)}
+  .block>h3:first-child,.block>h4:first-child{margin-top:0}
+
+  /* prose — --measure (length, 68ch) */
+  .block[data-structure="prose"]{line-height:1.72}
+  .block[data-structure="prose"]>:is(p,ul,ol,blockquote){max-width:var(--measure,68ch)}
+  .block[data-structure="prose"]>h4{margin-bottom:.5em}
+
+  /* set — <ul class="set"><li>; --cols (integer, 2) */
+  .set{list-style:none;margin:0;padding:0;display:grid;align-content:start;
+    grid-template-columns:repeat(var(--cols,2),minmax(0,1fr));gap:10px}
+  .set>li{background:var(--surface-2);border:1px solid var(--line-2);border-radius:var(--r1);
+    padding:8px 11px;margin:0;transition:border-color .18s,translate .18s}
+  .set>li b{display:block;font-family:var(--sans);font-size:.92rem;letter-spacing:.01em}
+  .set>li .dim{font-size:.92em}
+  .set[data-cols="1"]{--cols:1}
+  .set[data-cols="3"]{--cols:3}
+  .set[data-cols="4"]{--cols:4}
+
+  /* media — <figure>; --media-h (length) */
+  .block[data-structure="media"] figure{margin:0;display:grid;gap:8px}
+  .block[data-structure="media"] .frame{border-radius:var(--r1);overflow:hidden;
+    background:linear-gradient(140deg,color-mix(in oklab,var(--accent) 22%,var(--sunken)),
+      color-mix(in oklab,var(--accent) 6%,var(--sunken)));
+    min-height:var(--media-h,150px);display:grid;place-items:center;
+    font-family:var(--sans);font-size:.86rem;color:var(--ink-2);letter-spacing:.04em;text-transform:uppercase}
+  .block[data-structure="media"] figcaption{font-family:var(--sans);font-size:.86rem;color:var(--ink-2)}
+  .block[data-structure="media"] .transcript{border-left:3px solid var(--accent-line);
+    padding-left:12px;font-size:.95em}
+}
+
+/* #51 SEQUENCE — <ol class="seq">. data-mode="turns" (.who/.say) | "numbered" | "timeline" (.at). Unset: one item per line. Vary: --seq-gap, --date-w, --rail-w (length) */
+@layer structure{
+  .seq{list-style:none;margin:0;padding:0;display:grid;align-content:start;
+    gap:var(--seq-gap,10px)}
+  .seq>li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start;
+    margin:0}
+  .seq>li>*{grid-column:2}
+  .seq[data-mode="timeline"]>li>.at{grid-column:1;grid-row:1}
+
+  .seq[data-mode="turns"]{gap:12px}
+  .seq[data-mode="turns"]>li{display:grid;gap:3px;justify-items:start}
+  .seq[data-mode="turns"] .who{display:block;font:600 .76rem/1.4 var(--sans);
+    text-transform:uppercase;letter-spacing:.08em;color:var(--ink-2)}
+  .seq[data-mode="turns"] .say{display:block;width:fit-content;max-width:80%;padding:9px 13px;
+    border-radius:16px 16px 16px 5px;background:var(--surface-2);border:1px solid var(--line-2);
+    box-shadow:var(--shadow-1)}
+  .seq[data-mode="turns"]>li:nth-child(even){justify-items:end;text-align:right}
+  .seq[data-mode="turns"]>li:nth-child(even) .say{border-radius:16px 16px 5px 16px;
+    background:var(--accent-soft);border-color:var(--accent-line)}
+
+  .seq[data-mode="numbered"]{counter-reset:n}
+  .seq[data-mode="numbered"]>li{counter-increment:n;grid-template-columns:30px minmax(0,1fr)}
+  .seq[data-mode="numbered"]>li::before{content:counter(n);display:grid;place-items:center;
+    width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;
+    font:700 .9rem/1 var(--sans)}
+
+  .seq[data-mode="timeline"]{position:relative;gap:15px;--date-w:64px;--rail-w:16px}
+  .seq[data-mode="timeline"]::before{content:"";position:absolute;top:10px;bottom:10px;
+    left:calc(var(--date-w) + var(--rail-w) / 2 - 1px);width:2px;
+    background:linear-gradient(var(--accent),color-mix(in oklab,var(--accent) 12%,transparent))}
+  .seq[data-mode="timeline"]>li{grid-template-columns:var(--date-w) var(--rail-w) minmax(0,1fr);
+    gap:0;align-items:start}
+  .seq[data-mode="timeline"]>li>*{grid-column:3}
+  .seq[data-mode="timeline"]>li>.at{grid-column:1;grid-row:1;text-align:right;padding:2px 10px 0 0;
+    white-space:nowrap;font:600 .78rem var(--sans);color:var(--accent)}
+  .seq[data-mode="timeline"]>li::before{content:"";grid-column:2;grid-row:1;justify-self:center;
+    margin-top:6px;width:9px;height:9px;border-radius:50%;background:var(--surface);
+    border:2px solid var(--accent);z-index:1}
+}
+
+/* #52 GRID — data-structure="grid" > <table> with <thead> and optional <caption>; tr.note = remark row. Vary: --row-h (length) */
+@layer structure{
+  .block[data-structure="grid"] table{width:100%;border-collapse:separate;border-spacing:0;
+    font-size:.97rem}
+  .block[data-structure="grid"] caption{caption-side:top;text-align:left;
+    font:600 .8rem var(--sans);letter-spacing:.05em;text-transform:uppercase;
+    color:var(--ink-2);padding:0 0 7px}
+  .block[data-structure="grid"] th{font:700 .78rem var(--sans);letter-spacing:.07em;
+    text-transform:uppercase;color:var(--ink-2);text-align:left;padding:8px 11px;
+    background:var(--accent-soft);border-bottom:2px solid var(--accent-line);white-space:nowrap}
+  .block[data-structure="grid"] th:first-child{border-radius:var(--r1) 0 0 0}
+  .block[data-structure="grid"] th:last-child{border-radius:0 var(--r1) 0 0}
+  .block[data-structure="grid"] td{padding:9px 11px;border-bottom:1px solid var(--line-2);
+    height:var(--row-h,auto);vertical-align:top}
+  .block[data-structure="grid"] tbody tr:nth-child(even) td{
+    background:color-mix(in oklab,var(--accent) 4%,transparent)}
+  .block[data-structure="grid"] tbody tr:last-child td{border-bottom:0}
+  .block[data-structure="grid"] tr.note td{font-size:.88em;color:var(--ink-2);
+    background:var(--sunken);border-radius:0 0 var(--r1) var(--r1)}
+}
+
+/* #53 PAIR — data-structure="pair" > .sides > 2x .side, SAME child count each (subgrid rows); side 1 red, side 2 green. Vary: --pair-rows (integer = children per side, 3) */
+@layer structure{
+  .block[data-structure="pair"] .sides{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;
+    grid-template-rows:repeat(var(--pair-rows,3),auto)}
+  .block[data-structure="pair"] .side{grid-row:1/-1;display:grid;grid-template-rows:subgrid;
+    gap:8px;padding:11px 13px;border-radius:var(--r1);background:var(--surface-2);
+    border:1px solid var(--line-2);align-content:start}
+  .block[data-structure="pair"] .side>p{margin:0;font-size:.96rem}
+  .block[data-structure="pair"] .side:first-child{
+    background:color-mix(in oklab,var(--err) 6%,var(--surface-2));
+    border-color:color-mix(in oklab,var(--err) 24%,var(--line-2))}
+  .block[data-structure="pair"] .side:last-child{
+    background:color-mix(in oklab,var(--ok) 6%,var(--surface-2));
+    border-color:color-mix(in oklab,var(--ok) 24%,var(--line-2))}
+}
+
+/* #60 GAP — <input class="gap" data-answer="a|b"> inside a sentence; data-answer is the key, unset = no key. Vary: --gap-w (length, 9em) */
+@layer control{
+  .gap{display:inline-block;width:var(--gap-w,9em);max-width:100%;border:0;
+    border-bottom:2px solid var(--accent-line);border-radius:0;
+    background:transparent;padding:0 .2em;
+    font:inherit;line-height:1.35;height:1.5em;vertical-align:-.22em;text-align:center;
+    transition:border-color .15s,background .15s,box-shadow .15s}
+  .gap:focus{outline:none;border-bottom-color:var(--accent);background:var(--accent-soft);
+    box-shadow:0 2px 0 0 var(--accent)}
+  .gap:not(:placeholder-shown){font-weight:600;border-bottom-color:var(--accent)}
+  .gap:user-invalid{border-bottom-color:var(--err);background:color-mix(in oklab,var(--err) 7%,transparent)}
+}
+
+/* #61 CHOICE — .opts > label.opt > input[type=radio] + span; one answer. Unset: options stack. Vary: data-layout="row" */
+@layer control{
+  .opts{display:grid;align-content:start;gap:7px;margin:2px 0 0}
+  .opts[data-layout="row"]{grid-auto-flow:column;grid-auto-columns:max-content;gap:10px}
+  .opt{display:flex;align-items:center;gap:9px;padding:7px 11px;cursor:pointer;
+    border:1.5px solid var(--line);border-radius:var(--r1);background:var(--surface-2);
+    transition:border-color .15s,background .15s,box-shadow .15s}
+  .opt:hover{border-color:var(--accent-line)}
+  .opt input[type="radio"]{appearance:none;flex:0 0 auto;width:18px;height:18px;margin:0;
+    border:2px solid var(--line);border-radius:50%;background:transparent;
+    transition:border-color .15s,background .15s,box-shadow .15s}
+  .opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft);
+    box-shadow:var(--shadow-1)}
+  .opt input:checked{border-color:var(--accent);background:var(--accent);
+    box-shadow:inset 0 0 0 3px var(--surface-2)}
+}
+
+/* #62 MULTI — same .opt with input[type=checkbox]; any number of answers, ticked with the accent */
+@layer control{
+  .opt input[type="checkbox"]{appearance:none;flex:0 0 auto;width:18px;height:18px;margin:0;
+    border:2px solid var(--line);border-radius:5px;display:grid;place-content:center;
+    transition:border-color .15s,background .15s}
+  .opt input[type="checkbox"]::after{content:"";width:5px;height:9px;translate:0 -1px;
+    border:2px solid var(--surface);border-top:0;border-left:0;rotate:45deg;scale:0;
+    transition:scale .16s}
+  .opt input[type="checkbox"]:checked{border-color:var(--accent);background:var(--accent)}
+  .opt input[type="checkbox"]:checked::after{scale:1}
+}
+
+/* #63 WRITE — <textarea class="write" rows="n">; grows with content. Vary: --lines (integer, 4) */
+@layer control{
+  .write{display:block;width:100%;min-height:calc(var(--lines,4) * 1.75em);max-height:24em;
+    resize:vertical;field-sizing:content;border:1.5px solid var(--line);border-radius:var(--r1);
+    background:var(--surface-2);padding:10px 12px;font:inherit;line-height:1.55;
+    transition:border-color .15s,box-shadow .15s}
+  .write:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+  .write:not(:placeholder-shown){border-color:var(--accent-line)}
+}
+
+/* #64 REVEAL — <details class="reveal"><summary>label</summary><div class="body"><div>content</div></div></details>; closed unset. Inner div required for the fold */
+@layer control{
+  .reveal{border:1px solid var(--line-2);border-radius:var(--r1);background:var(--surface-2);
+    overflow:hidden;margin:8px 0 0}
+  .reveal>summary{cursor:pointer;padding:9px 12px;font:600 .9rem var(--sans);color:var(--ink-2);
+    list-style:none;display:flex;align-items:center;gap:8px}
+  .reveal>summary::-webkit-details-marker{display:none}
+  .reveal>summary::before{content:"▸";color:var(--accent);transition:rotate .22s}
+  .reveal[open]>summary::before{rotate:90deg}
+  .reveal[open]>summary{color:var(--ink);border-bottom:1px solid var(--line-2)}
+  .reveal .body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+  .reveal[open] .body{grid-template-rows:1fr}
+  .reveal .body>div{overflow:hidden;padding:0 12px}
+  .reveal[open] .body>div{padding:10px 12px}
+}
+
+/* #76 ENGINE — nothing to invoke. engine2.js writes label.opt.correct, .ans beside a typed field, and reads .qitem[data-a] on .opts. Vary: --ok (colour) */
+@layer state{
+  label.opt.correct{border-color:var(--ok);
+    background:color-mix(in oklab,var(--ok) 10%,var(--surface-2))}
+  label.opt.correct::after{content:"";margin-left:auto;width:6px;height:11px;rotate:45deg;
+    border:2.5px solid var(--ok);border-top:0;border-left:0}
+  .ans{display:inline-block;margin-left:7px;padding:1px 9px;border-radius:99px;
+    background:color-mix(in oklab,var(--ok) 14%,transparent);
+    color:color-mix(in oklab,var(--ok) 68%,var(--ink));font:600 .82rem var(--sans)}
+  body.is-completed .gap{background:var(--sunken)}
+}
+
+/* #70 LOOK — data-look="tint|outline|grain|ruled|tape|raised|float|dark", any block. Unset: paper + 3px accent rule. Vary: --accent-h, --edge-w (outline) */
+@layer look{
+  .block[data-look="tint"]{background:color-mix(in oklab,var(--accent) 8%,var(--paper));
+    border-top-color:var(--accent)}
+
+  .block[data-look="outline"]{border:var(--edge-w) solid var(--accent);box-shadow:none;
+    background:transparent}
+
+  .block[data-look="grain"]::after{content:"";position:absolute;inset:0;border-radius:inherit;
+    pointer-events:none;opacity:.55;background-image:radial-gradient(rgb(26 33 48/.07) 1px,
+      transparent 1px);background-size:3px 3px}
+
+  .block[data-look="ruled"]{background-image:repeating-linear-gradient(to bottom,transparent 0 1.58em,
+    color-mix(in oklab,var(--accent) 13%,transparent) 1.58em 1.6em);background-position:0 1.35em}
+
+  .block[data-look="tape"]::before{content:"";position:absolute;top:-10px;left:50%;
+    translate:-50% 0;width:112px;height:21px;rotate:-2deg;z-index:2;
+    background:color-mix(in oklab,var(--warn) 50%,transparent);
+    clip-path:polygon(3% 0,100% 7%,96% 100%,0 92%)}
+
+  .block[data-look="raised"]{border-top-width:1px;box-shadow:var(--shadow-2)}
+
+  .block[data-look="float"]{background:transparent;border-color:transparent;
+    border-top-color:transparent;box-shadow:none;padding-inline:0}
+
+  .block[data-look="dark"]{--ink:#eef1f7;--ink-2:#aeb6c6;--line:#3a4352;--line-2:#2b3341;
+    --surface:#121822;--surface-2:#1b2431;--paper:#18202d;--sunken:#26303e;
+    --accent:oklch(74% .13 var(--accent-h));color-scheme:dark;color:var(--ink);
+    border-color:#2b3341;border-top-color:var(--accent);
+    box-shadow:0 24px 50px -26px #000}
+  .block[data-look="dark"] h4,.block[data-look="dark"] .dim{color:var(--ink-2)}
+  .block[data-look="dark"] code,.block[data-look="dark"] .set>li{background:var(--sunken);
+    border-color:var(--line-2);color:var(--ink)}
+}
+
+/* #80 STATE — data-state="correct|wrong|done" on .opt, .side, .qitem or the .block; mark = <i class="mark"></i>. Unset: nothing shows. Vary: --ok/--err (colour) */
+@layer state{
+  [data-state="correct"]{--state:var(--ok)}
+  [data-state="wrong"]{--state:var(--err)}
+  .opt[data-state="correct"],.side[data-state="correct"],.qitem[data-state="correct"]{
+    border-color:var(--ok);background:color-mix(in oklab,var(--ok) 9%,var(--surface-2))}
+  .opt[data-state="wrong"],.side[data-state="wrong"],.qitem[data-state="wrong"]{
+    border-color:var(--err);background:color-mix(in oklab,var(--err) 9%,var(--surface-2))}
+  [data-state="wrong"]:not(.block){animation:shake .32s ease-in-out}
+
+  .mark{position:relative;display:inline-grid;place-items:center;flex:0 0 auto;
+    width:22px;height:22px;border-radius:50%;border:2px solid var(--line);
+    background:transparent;transition:background .2s,border-color .2s}
+  [data-state="correct"] .mark{border-color:var(--ok);background:var(--ok)}
+  [data-state="correct"] .mark::after{content:"";width:6px;height:11px;translate:0 -1px;
+    border:2.5px solid #fff;border-top:0;border-left:0;rotate:45deg;
+    animation:mark-in .26s cubic-bezier(.2,1.4,.6,1) both}
+  [data-state="wrong"] .mark{border-color:var(--err);background:var(--err)}
+  [data-state="wrong"] .mark::before,[data-state="wrong"] .mark::after{content:"";
+    position:absolute;width:11px;height:2.5px;background:#fff;border-radius:2px;
+    animation:mark-in .26s ease both}
+  [data-state="wrong"] .mark::before{rotate:45deg}
+  [data-state="wrong"] .mark::after{rotate:-45deg}
+
+  .block[data-state="done"]{border-color:color-mix(in oklab,var(--ok) 38%,var(--line-2));
+    box-shadow:0 0 0 3px color-mix(in oklab,var(--ok) 16%,transparent),var(--shadow-1)}
+}
+
+/* #81 REACTIVE — .block[data-reactive] style="--score:0-1"; .meter>i reads it. Engine writes the number only. Vary: --meter-h (length) */
+@layer state{
+  .block[data-reactive]{--score:0;transition:--score .55s ease,background .55s ease;
+    background:color-mix(in oklab,var(--accent) calc(var(--score) * 16%),var(--paper))}
+  .meter{height:var(--meter-h,8px);border-radius:99px;background:var(--sunken);
+    overflow:hidden;margin:10px 0 4px}
+  .meter>i{display:block;height:100%;border-radius:inherit;
+    background:linear-gradient(90deg,var(--accent),var(--ok));
+    width:calc(var(--score) * 100%);transition:width .5s ease}
+}
+
+/* #82 RING — <div class="ring" style="--pct:0-100"><b></b></div>; ring and number animate together. Vary: --ring-w (length) */
+@layer state{
+  .ring{--pct:0;position:relative;width:var(--ring-w,76px);aspect-ratio:1;border-radius:50%;
+    display:grid;place-items:center;counter-reset:p var(--pct);
+    background:conic-gradient(var(--accent) calc(var(--pct) * 1%),var(--sunken) 0);
+    transition:--pct .6s ease}
+  .ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--paper)}
+  .ring>b{position:relative;font:700 1.02rem/1 var(--sans);font-variant-numeric:tabular-nums}
+  .ring>b::after{content:counter(p) "%"}
+}
+
+/* #90 MOTION — blocks rise once on paint; data-motion="rise" = scroll-linked. .flip > input + .card3d > 2x .face flips. #focus = reading width. Vary: --dur (time), --flip-h (length) */
+@layer motion{
+  @keyframes rise-in{from{opacity:.35;translate:0 14px}to{opacity:1;translate:0 0}}
+  @keyframes mark-in{from{scale:0;opacity:0}to{scale:1;opacity:1}}
+  @keyframes shake{0%,100%{translate:0 0}20%{translate:-5px 0}40%{translate:5px 0}
+    60%{translate:-3px 0}80%{translate:3px 0}}
+
+  .block{animation:rise-in var(--dur,.45s) ease both}
+  .block[data-motion="rise"]{animation:rise-in linear both;animation-timeline:view();
+    animation-range:entry 8% entry 55%}
+
+  /* outline: hover rotates --grad 0-180deg */
+  .block[data-look="outline"]{--grad:0deg;transition:--grad 1s ease;
+    background-image:linear-gradient(var(--grad),
+      color-mix(in oklab,var(--accent) 15%,transparent),transparent 62%)}
+  .block[data-look="outline"]:hover{--grad:180deg}
+
+  .flip{position:relative;perspective:1200px;min-height:var(--flip-h,168px);display:block}
+  .flip>input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+  .flip>.card3d{display:block;position:relative;height:100%;min-height:inherit;
+    transform-style:preserve-3d;transition:rotate .62s cubic-bezier(.2,.7,.3,1);cursor:pointer}
+  .flip>input:checked+.card3d{rotate:y 180deg}
+  .flip>input:focus-visible+.card3d{outline:2.5px solid var(--accent);outline-offset:3px;
+    border-radius:var(--r1)}
+  .flip .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--r1);
+    border:1px solid var(--line-2);background:var(--surface-2);padding:14px 16px;
+    display:grid;align-content:center;gap:6px;box-shadow:var(--shadow-1)}
+  .flip .face::after{content:"↻";position:absolute;right:10px;bottom:8px;color:var(--ink-2);
+    font-family:var(--sans);opacity:.6}
+  .flip .back{rotate:y 180deg;background:var(--accent-soft);border-color:var(--accent-line)}
+
+  body:has(#focus:checked) .content-area{width:820px}
+  body:has(#focus:checked) .block[data-structure="prose"]{--measure:64ch}
+}
+
+/* #95 PRINT — nothing to invoke. Paper keeps content, drops surface, unfolds .reveal and .flip */
+@layer print{
+  @media print{
+    body{background:#fff}
+    .page-container{width:auto}
+    .content-area{width:100%}
+    .block{box-shadow:none;border-color:#b9b9b9;content-visibility:visible;
+      animation:none;break-inside:avoid}
+    .block[data-look="dark"]{--ink:#000;--ink-2:#333;--line:#ccc;--line-2:#ddd;
+      --surface:#fff;--surface-2:#fff;--paper:#fff;background:#fff;color:#000}
+    .block[data-look="grain"]::after,.block[data-look="tape"]::before{display:none}
+    .block[data-look="outline"]{background-image:none}
+    .reveal .body{grid-template-rows:1fr}
+    .reveal[open] .body>div,.reveal .body>div{padding:6px 12px}
+    .flip{min-height:auto;perspective:none}
+    .flip .card3d{rotate:none;transform-style:flat}
+    .flip .face{position:static;backface-visibility:visible;break-inside:avoid}
+    .flip .back{rotate:none}
+    .mark{display:none}
+    .meter{border:1px solid #999}
+    a{text-decoration:underline}
+    .noprint,#controlbar,.focus-toggle{display:none!important}
+  }
+}
+
+/* #98 SHELL — nothing to invoke. .brand, .control-bar, .barhelp, footer, #feed. Vary: --brand-h (length) */
+@layer shell{
+  .brand{width:1400px;margin-left:15px;padding:20px 14px 0;text-align:center;
+    display:block;user-select:none;-webkit-user-select:none}
+  .brand img{display:block;margin:0 auto;width:140px;height:auto;border-radius:0;
+    object-fit:initial;filter:drop-shadow(3px 4px 0 var(--rose))}
+  .brand h1{font-family:var(--playfair);font-size:38px;letter-spacing:.14em;
+    text-transform:none;margin:8px 0 0;text-align:inherit;line-height:1.18}
+  .brand h1 span{display:block;font-family:inherit;font-size:.42em;font-weight:inherit;
+    letter-spacing:.5em;line-height:inherit;color:inherit}
+  .control-bar{width:1400px;margin:10px 0 0 15px;display:flex;flex-wrap:wrap;gap:8px;
+    align-items:center;justify-content:center;padding:8px 14px;font-family:var(--sans);
+    font-size:13px;text-align:center;user-select:none;-webkit-user-select:none}
+  .control-bar button{border:1px solid var(--line);background:var(--surface-2);color:var(--ink);
+    border-radius:99px;padding:7px 15px;font:600 .82rem var(--sans);cursor:pointer;
+    transition:border-color .15s,background .15s,translate .15s}
+  .control-bar button:hover{border-color:var(--accent);background:var(--accent-soft);
+    translate:0 -1px}
+  footer{text-align:center;font:600 .68rem var(--sans);letter-spacing:.22em;
+    color:var(--ink-2);padding:30px 0 34px;text-transform:uppercase;
+    user-select:none;-webkit-user-select:none}
+  .barhelp{width:1400px;margin:2px 0 8px 15px;padding:0 14px;text-align:center;
+    font:400 14px/1.55 var(--serif);color:var(--ink);user-select:none;-webkit-user-select:none}
+  .barhelp b{color:var(--ink);font-weight:600}
+  #feed{display:block;width:100%;min-height:150px;margin:6px 0 0;resize:vertical;
+    border:1.5px solid var(--line);border-radius:var(--r1);background:var(--surface-2);
+    padding:10px 12px;font:inherit;line-height:1.55;
+    transition:border-color .15s,box-shadow .15s}
+  #feed:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+}
+
+/* #99 U — utilities, wins over every layer above: .dim .lead .pt .mono .stack .row .center .mt .sr .defcard .stress mark ruby .glossbtn Vary: --measure (length) */
+@layer u{
+  .dim{color:#8a8072;font-size:13px}
+  .lead{font-family:var(--playfair);font-size:18px;font-style:italic;color:#5c5347;
+    margin:.2em 0 .7em;line-height:1.5;max-width:var(--measure,62ch)}
+  .pt{font-style:italic;color:#5c5347}
+  .mono{font-family:var(--mono);font-size:.92em}
+  .stack{display:grid;gap:10px}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .center{text-align:center}
+  .mt{margin-top:12px}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+  .defcard{border:1px solid var(--line);border-radius:var(--r1);background:var(--paper);
+    box-shadow:var(--shadow-2);padding:11px 14px;max-width:320px;font-size:.95rem}
+  .defcard::backdrop{background:rgb(18 24 34 / .18);backdrop-filter:blur(2px)}
+  .defcard b{display:block;font-family:var(--sans);font-size:.84rem;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--ink-2);margin-bottom:4px}
+  .stress{font-style:normal;text-emphasis:filled dot var(--accent);text-emphasis-position:over}
+  mark{background:color-mix(in oklab,var(--warn) 42%,transparent);border-radius:3px;padding:0 .16em}
+  ruby rt{font-size:.6em;font-family:var(--sans);color:var(--ink-2);letter-spacing:.02em}
+  .glossbtn{background:none;border:0;padding:0 1px;font:inherit;color:var(--accent);cursor:pointer;
+    border-bottom:1.5px dashed var(--accent-line)}
+  .glossbtn:hover{border-bottom-style:solid}
+}
+
 @media (prefers-reduced-motion:reduce){
- button{transition:none}
- button:hover:not(:disabled):not(.locked),button:active:not(:disabled):not(.locked){transform:none}
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;
+    transition-duration:.001s!important}
 }
 
-.content-area textarea{resize:none}
-.content-area textarea:not(#feed){display:block;width:100%;margin:8px 0}
-a{color:var(--ink);font-weight:600}h2{font-family:'Playfair Display',serif;margin:.9em 0 .3em}
-@keyframes pu{50%{opacity:.25}}
-/* ## TEXT AND COLOURS — never write a hex in a lesson; use a token or a class. Tokens on :root: --cream --paper --ink --tan --rose --ptw --blue --dkblue --bluebg --orange --purple --green --greenbg; faces --serif (the default) --sans --playfair --caveat. Classes that set colour: `.pt` / `.ptw` for Portuguese, italic, plus `lang="pt"` so a screen reader says so; `.dim` muted; `.lead` larger intro; `.h2sub` a section subtitle; `.todo` the unbuilt marker; `.prep` a word in tan bold. */
-.dim{color:#8a8072;font-size:13px}
-.pt{color:#5c5347;font-style:italic}.ptw{font-style:italic;color:var(--ptw);font-weight:600}
-.listen{background:var(--tan);box-shadow:3px 3px 0 var(--ink)}
-details{background:#fff8ea;border:2px dashed var(--tan);border-radius:12px;padding:8px 12px;margin:10px 0}
-mark.nb{background:transparent;cursor:pointer}
-
-/* recording = 2px blue underline, painted by the background with a 2px inset, so the prose never moves */
-mark.nb.has-rec, .barhelp .hb-rec{background-repeat:no-repeat;background-position:2px 100%;
- background-image:linear-gradient(var(--blue),var(--blue));background-size:calc(100% - 4px) 2px}
-
-/* the legend DEMONSTRATES the note wash */
-.barhelp .hb-note{background:var(--bluebg);border-radius:3px}
-.pop{position:absolute;z-index:9;background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:5px;max-height:70vh;overflow:auto}
-.pop button{padding:4px 7px;margin:0;font-size:12.5px;border-radius:8px;box-shadow:2px 2px 0 var(--tan);height:24px;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
-.poprow{display:flex;justify-content:space-between;align-items:center;gap:4px;margin:3px 0}
-.poprow + .poprow{margin-top:5px}
-#nbNote{margin:2px 0 4px;white-space:pre-wrap;font-size:16px;text-align:center;font-style:italic;font-family:var(--serif)}
-#nbKey{margin:2px 0 4px;white-space:pre-wrap;font-size:18px;text-align:center;font-family:var(--serif);color:var(--ptw)}
-.pop textarea{width:100%;margin:6px 0}
-
-/* NOTE paint layer */
-#noteLayer{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
-
-/* a popup button that does not apply yet is greyed out (FUNCTION.md) */
-.pop button:disabled,.pop button.locked{opacity:.45;box-shadow:2px 2px 0 var(--tan);cursor:default}
-
-/* processing spiral: Record while capturing, Play while sounding (FUNCTION.md) */
-.pop button[data-spin] .lbl{display:inline-flex;align-items:center;justify-content:center;min-width:2em}
-.pop button .spin{border-color:currentColor;border-top-color:transparent;vertical-align:middle}
-
-/* HIGHLIGHT paint layer — never mark.nb */
-#hlLayer{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
-
-/* multiply = the tint sits BELOW the ink */
-#hlLayer .hlr{position:absolute;border-radius:3px;mix-blend-mode:multiply}
-#hlLayer .hlr-yellow{background:rgba(255,233,112,.55)}
-#hlLayer .hlr-red{background:rgba(255,64,64,.34)}
-#hlLayer .hlr-green{background:rgba(64,200,96,.34)}
-#noteLayer .ntr{position:absolute;border-radius:3px;mix-blend-mode:multiply;background:var(--bluebg)}
-@keyframes sp{to{transform:rotate(360deg)}}
-
-/* colour palette, single source of truth */
-/* ## CONTROLS — NOT LESSON-FACING. Toolbars, the site popup, confirm dialogs, highlight and note layers, toast, `.loadwrap`. `.dlg*` is UI chrome; `.dialog` is a lesson conversation. */
-.pop.hlpalpop{padding:4px;border-radius:12px;box-shadow:3px 3px 0 var(--tan)}
-.hlpal{display:flex;align-items:center;gap:4px}
-.hlpal button{width:14px;height:14px;min-width:14px;padding:0;margin:0;border:2px solid var(--ink);border-radius:6px;box-shadow:none;cursor:pointer}
-.barhelp .hlk-y,.hlpal button[data-c="yellow"]{background:rgba(255,233,112,.85)}
-.barhelp .hlk-r,.hlpal button[data-c="red"]{background:rgba(255,64,64,.7)}
-.barhelp .hlk-g,.hlpal button[data-c="green"]{background:rgba(64,200,96,.7)}
-/* THE SITE'S ONE CONFIRMATION DIALOG: a browser popup cannot be styled, blocks
- the whole tab, cannot speak this page's own language or voice, and can be suppressed by the user —
- after which a destructive action runs with no prompt at all. eodConfirm (identical block in engine1.js
- and index.html) draws this instead; this is the only styling it needs. z-index 1000 clears every overlay
- the site has (#toast 99, game drag cards 80, game effects 10). */
-.dlgwrap{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;
- padding:20px;background:rgba(24,33,54,.45)}
-.dlg{width:min(440px,100%);max-height:calc(100vh - 40px);overflow:auto;background:var(--paper);
- border:2px solid var(--ink);border-radius:16px;box-shadow:6px 6px 0 var(--tan);padding:18px 22px 16px;
- text-align:center}
-.dlgtitle{margin:0 0 8px;font:700 20px/1.25 var(--serif);color:var(--ink)}
-.dlgbody{margin:0 0 18px;font-size:15.5px;line-height:1.55;color:var(--ink)}
-.dlgbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.dlgbtns button{margin:0;min-height:38px;min-width:112px}
-.dlgcancel{background:var(--paper);color:var(--ink);border:2px solid var(--ink);box-shadow:3px 3px 0 var(--tan)}
-.dlgyes{background:var(--ink);color:var(--cream)}
-.dlg.danger .dlgyes{background:#a33327;box-shadow:3px 3px 0 var(--ink)}
-
-#toast{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:8px 16px;border-radius:10px;z-index:99;display:none;font-weight:600;box-shadow:3px 3px 0 var(--tan)}
-.recind{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:99}
-.spin{width:14px;height:14px;border:2px solid var(--ink);border-top-color:transparent;border-radius:50%;animation:sp 1s linear infinite;display:inline-block;vertical-align:-2px}
-input.gap{border:0;border-bottom:2px solid var(--tan);background:#fff8ea;font:inherit;width:var(--gap-w,9em)}
-
-.todo{font-style:italic;color:#5c5347;opacity:.92;border-left:3px solid var(--tan);padding:2px 10px;margin:8px 10px}
-.pulse{animation:pu 1s infinite;display:inline-block}
-label{margin-right:10px;cursor:pointer}
-#feed{display:block;width:100%;min-height:9em;font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:12px 14px;box-shadow:5px 5px 0 var(--tan);field-sizing:content}
-footer{text-align:center;padding:24px;letter-spacing:.3em;font-size:11px;color:#8a8072}
-#printRoot{display:none}
-
-h2{border-bottom:2px solid var(--rose);padding-bottom:6px;margin-top:1.6em}
-h2 .h2sub{font-family:var(--serif);font-size:.55em;font-weight:400;letter-spacing:.03em;color:#8a8072}
-.chart{border-collapse:collapse;width:100%;margin:14px 0;background:var(--paper);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--tan)}
-.panel .chart,.card .chart,.game .chart,.dialog .chart{border:0;box-shadow:none;margin:0}
-
-/* ## TEACHING DISPLAYS — the two non-answer teaching vehicles: `table.chart` (th/td, `.thsub`, tr.note) for a table of reference, and `.dialog` for a conversation (`p > b` names the speaker). A chart sits IN a block, never as a block. */
-.chart th,.chart td{border:1px solid var(--tan);padding:8px 12px;text-align:left}
-.chart thead th{background:var(--ink);color:var(--cream);font-weight:700;letter-spacing:.02em}
-.chart.center th,.chart.center td{text-align:center}
-.thsub{display:block;font-weight:400;font-size:.78em;letter-spacing:0;opacity:.82}
-.chart tbody tr:nth-child(even) td{background:#fff8ea}
-/* the Portuguese marking itself: :lang(pt) is italic wherever it lands — see ## TEXT AND COLOURS */
-:lang(pt){font-style:italic;font-weight:400}
-/* ## WORD BANK — `.chips` is the vocabulary a TRAIN gap item chooses from: each `<b>` is one option, anything else is text. */
-.chips > b{display:inline-block;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:2px 12px;margin:2px 6px 2px 0;font-weight:600}
-.chips > span{font-style:italic}
-h3{font-family:'Playfair Display',serif;font-weight:700;font-size:19px;color:var(--dkblue);margin:22px 0 8px;padding-left:10px;border-left:4px solid var(--tan);letter-spacing:.02em}
-/* the block's sub-header: the introduction/explainer that sits under `h3`. It is ALWAYS an `h4` and
-   never a `p` — `p` is reserved for the block's own content, so a paragraph inside a block always
-   means "this is the material", and nothing has to be read to tell an intro from content. Italic by
-   the rule itself, so the slide from `h3` to `h4` is heard as well as seen and no block has to wrap
-   its own text in `<i>`. */
-h4{font-family:var(--serif);font-style:italic;font-weight:600;font-size:15px;color:var(--dkblue);margin:0 0 8px;padding-left:2em}
-.panel>h4,.card>h4{margin-top:-2px}
-@media print{#printRoot .listen{display:none}#barhelp{display:none}}
-.dialog{--edge:var(--rose);margin:14px 0;padding:12px 16px;background:#fff8ea;border:2px solid var(--edge);border-radius:12px}
-.row,.dialog p{margin:6px 0}
-
-/* ## LISTENING CHIP —  speaks its `data-say`: the spoken form. For teaching/training listening, not a default - aligned with each other, not appended on strings of different lengths. */
-.listen{display:inline-flex;align-items:center;justify-content:center;padding:5px 10px;margin:2px 6px 2px 0;font-size:14px;white-space:nowrap}
-button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
-
-@media print{
- header.brand,#controlbar,#barhelp,#feed,footer{display:none!important}
- .page-container{border:0!important;box-shadow:none!important}
- .panel,.chart,.card{break-inside:avoid}
-}
-
-/* a block's h3 opens its frame */
-.panel h3,.card h3{margin-top:0}
-
-/* ## AUDIO PLAYER — a page that carries a `figure.vz-play` also carries `<script src="../qa/player.js"></script>` in the `_shell.html` script slot, after `../engine2.js`. */
-.vz-play{display:block;margin:0}
-.vz-audio{display:block;width:100%}
-.vz-controls{display:none;align-items:center;gap:10px;margin:8px 0 10px}
-.vz-play.is-enhanced .vz-controls{display:flex}
-.vz-btn{flex:0 0 auto;width:38px;height:38px;border:2px solid var(--ink);border-radius:50%;background:var(--paper);
-  color:var(--ink);font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.vz-btn:hover{background:var(--tan)}
-.vz-btn:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}
-.vz-time{flex:0 0 auto;font:600 12px var(--serif);color:#5c5347;min-width:3.2em;text-align:center;
-  font-variant-numeric:tabular-nums}
-.vz-bar{position:relative;flex:1 1 auto;height:14px;background:#e8e0cf;border-radius:7px;cursor:pointer}
-.vz-bar:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}
-.vz-fill{position:absolute;top:0;bottom:0;left:0;width:0;background:#b9854c;border-radius:7px;pointer-events:none}
-.vz-knob{position:absolute;top:50%;left:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;
-  background:var(--ink);pointer-events:none}
-.vz-lyrics{margin:0;padding:0;list-style:none;font-size:14px;line-height:1.55}
-.vz-lyrics li{padding:3px 7px;border-radius:5px}
-.vz-lyrics li[data-t]{cursor:pointer}
-.vz-lyrics li[data-t]:hover{background:#f3ece0}
-.vz-lyrics li.is-now{background:#fff8ea;color:var(--ink);font-weight:700;box-shadow:inset 0 0 0 1px #b9854c}
-/* `[03]` only: the columns are why that block is full width — the highlight is honest while one lyric
-   line and one row are the same thing, and a long line in a narrow column wraps under the mark */
-.vz-sheet{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 30px;align-items:start}
-.vz-sheet .vz-lyrics,.vz-sheet .vz-lyrics li{white-space:nowrap}
-.vz-sheet>p{margin:0;font-size:13.5px;line-height:1.5;padding-top:3px}
-/* the second column is dropped before either the lines or the text is allowed to break */
-@media (max-width:860px){
-  .vz-sheet{grid-template-columns:1fr}
-  .vz-sheet .vz-lyrics li{white-space:normal}
-}
-@media print{
-  .vz-play.is-enhanced .vz-controls{display:none}
-  .vz-lyrics li.is-now{background:none}
-  .vz-sheet{grid-template-columns:1fr}
-  .vz-sheet .vz-lyrics li{white-space:normal}
-}
-
-/* ## BLOCK FRAME — a block is `.panel` or `.card`: one frame, two names, never a bare div and never `fieldset`. `data-kind="teach|train"` on the block element carries the block's shape and sets the frame's edge: its lowercase atoms, with `|` where one block both explains and asks. Unbuilt work is `p.todo`, which renders as a visible marker. */
-.panel,.card{--edge:var(--tan);border:2px solid var(--edge);border-radius:12px;padding:12px 16px;background:var(--paper);box-shadow:4px 4px 0 var(--tan);margin:14px 0}
-
-.panel[data-kind="teach"],.card[data-kind="teach"],.game[data-kind="teach"],.dialog[data-kind="teach"]{--edge:var(--ink)}
-.panel[data-kind="train"],.card[data-kind="train"],.game[data-kind="train"],.dialog[data-kind="train"],
-.panel[data-kind="teach|train"],.card[data-kind="teach|train"],.game[data-kind="teach|train"],.dialog[data-kind="teach|train"]{--edge:var(--orange)}
-/* a game keeps its purple edge: the shape value no longer names games — "Games are TRAIN" — so the element does */
-.game[data-kind="train"],.game[data-kind="teach|train"]{--edge:var(--purple)}
-.panel .chart,.card .chart{width:calc(100% - 20px)}
-
-/* ## BLOCK WIDTHS — one of four slots, as a class on a DIRECT CHILD of `.itemrow`: `.itemsize-third` (default), `.itemsize-half`, `.itemsize-twothird`, `.itemsize`. A ROW MUST TOTAL 100%: full alone, half+half, third+twothird, third+third+third — a half beside a third never closes a row. The width follows the needs of the content and prose wraps and doesnt widen a block alone. `data-cols="2"` on the row gives each column 14px less, already inside the calc. */
-.itemsize{width:100%}
-.itemsize-third{width:calc(33.3333% - 9.3333px)}
-/* a two-thirds block, alone on its row or paired with a third: the same 14px gap budget */
-.itemsize-twothird{width:calc(66.6667% - 9.3333px)}
-.itemrow[data-cols="2"]>.itemsize-third{width:calc(33.3333% - 4.6667px)}
-.itemrow[data-cols="2"]>.itemsize-twothird{width:calc(66.6667% - 9.3333px)}
-.itemrow{display:flex;gap:14px;margin:14px 0;align-items:stretch}
-.itemrow>*{min-width:0;margin:0}
-.panel > :not(h3),.card > :not(h3),.content-area > h2, .content-area > p{margin-left:10px;margin-right:10px}
-.itemsize-half,.itemrow[data-cols="2"]>*{width:calc(50% - 7px)}
-.itemrow[data-cols="3"]>*{width:calc(33.3333% - 9.3333px)}
-.qgrid{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;column-gap:14px;row-gap:12px;min-width:0}
-
-.qgrid .qopts,.qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 30px}
-/* ## BLANKS — an item holds one phrase and its `input.gap`; `.blanks` wraps items as rows, `.blanks.sent` tiles them in columns at `--rows`, `.blanks.cols` fills grid columns of at least 240px; in all three the field follows the text and a `<br>` before it puts it on its own line; `.blank` is that same underline with no field; a gap is as long as the answer it asks for (`--gap-w`, 9em unset) and never wider than its item. */
-.blanks{display:flex;flex-wrap:wrap;gap:14px 24px;margin:10px 0}
-.blanks.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
-/* Complete and Clear: Complete puts each key on its own line under its field and greens the right option;
-   Clear takes back the answers, the keys and the page lock (FUNCTION.md [CONTENT]) */
-.ans{display:block;width:100%;margin:2px 0 0;font-size:13px;line-height:1.35;font-weight:700;color:#2f7d32;text-align:left}
-.qopts label.correct{background:#e6f4e7;border-radius:8px;padding:1px 6px;color:#1f5d22}
-
-.lead{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#5c5347;margin:.2em 0 .7em;line-height:1.5}
-.prep{color:var(--tan);font-weight:700}
-.pr-g{color:grey}
-/* ## REFLOW — a reflowed block states `--rows` (items per column, e.g. style="--rows:2") ON ITSELF, never on a section or a wrapper. `.qgrid.stack` and `.blanks.sent` are the two containers that tile: items run DOWN a column and continue at the top of the next; `.wide` returns to one full-width column. */
-/* ## ANSWERS — blocks may be authored with creativity, include or reference other content, etc.. but all answer options must be a radio item (`.qgrid > .qitem > .qline` holding `.qnum` and `.qstem`, then `.qopts`), a gap inside a sentence (`.blanks.sent input.gap`), or a `textarea` other than #feed. Every control carries a `name` of `a<sec><block><item>` — `a1c1` for the item, `a1c1g1` for its first gap — so the number is the identity in the saved answer and a reworded stem keeps it. #feed is never saved. No checkbox exists in any page. A block that must `produce` needs the gap or the textarea, never radios alone. */
-/* ## ANSWER KEY — the key lives in the page, not with the server: a radio item carries `data-a` = the `value` of its right option, and a typed control (`input.gap`, a textarea other than #feed) carries `data-answer`, with `|` between accepted forms. Complete prints the typed key as a `.ans` line under its field and marks the right option `.correct`; Clear takes both back. An item with no key is an item Complete cannot reveal. */
-
-.blank{display:inline-block;width:3.2em;border-bottom:2px solid var(--tan)}
-
-.qgrid.stack,.blanks.sent{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(var(--rows,2),auto);grid-auto-columns:minmax(0,1fr);column-gap:28px}
-.qgrid.stack{align-items:start}
-.qgrid.stack.wide{display:block}
-.qgrid.stack .qitem{margin:0 0 16px}
-.qgrid.stack .qline{display:flex;align-items:baseline;gap:8px}
-.qgrid.stack .qline .qnum{flex:0 0 auto}
-.qgrid.stack .qopts{margin-top:4px}
-.blanks.sent{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(var(--rows,2),auto);grid-auto-columns:minmax(0,1fr);column-gap:28px}
-.blanks.sent.wide{display:block}
-.blanks.sent>*{display:block;margin:8px 0}
-.blanks.sent>* input.gap{display:inline-block;margin:0 .2em}
-
-
-body.editing #hlLayer,body.editing #noteLayer{display:none}
-.pt b,.lead b{font-style:normal}
-.chart tr.note td{background:#fff8ea;font-style:italic;color:#5c5347;border-top:0;padding:10px 14px}
-/* ## PAGE SCAFFOLD — the three headings and the fixed page. h1 is the lesson title, ONE line; h2 is a numbered section `1.`; h3 is a lettered block `A.` and the block's first line; h4 is a block's optional introduction, at most one directly under its `h3`, italic by the rule so no `<i>` is written; no vehicle's heading takes their place, and one follows the number or letter. .page-container is 1400px and .content-area 1200px, both FIXED: no lesson element may size itself in `fr`, `vw` or `auto-fit`, because those make the browser re-decide the layout on resize. A plain link is `a`; the print copy lives in #printRoot. */
-body.editing mark.nb.has-rec{background-image:none}
-body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
-
-/* custom print button: only the snapshot prints */
-@media print{
- body{background:white}
- body.printing>*:not(#printRoot){display:none!important}
- body.printing #printRoot{display:block!important;background:white}
- #printRoot .content-area{position:relative;zoom:0.9}
- #printRoot .pr-layer{position:absolute;left:0;top:0;width:0;height:0}
- #printRoot .pr-hl{position:absolute;border-radius:3px;mix-blend-mode:multiply;-webkit-print-color-adjust:exact;print-color-adjust:exact}
- #printRoot .pr-hl-yellow{background:rgba(255,233,112,.55)}
- #printRoot .pr-hl-red{background:rgba(255,64,64,.34)}
- #printRoot .pr-hl-green{background:rgba(64,200,96,.34)}
- #printRoot .pr-nt{position:absolute;border-radius:3px;mix-blend-mode:multiply;background:var(--bluebg);-webkit-print-color-adjust:exact;print-color-adjust:exact}
- #printRoot mark.nb.has-rec{background:none!important;text-decoration:underline;text-decoration-color:var(--blue);text-decoration-thickness:2px;text-underline-offset:2px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
- #printRoot .pr-gap{border-bottom:2px solid var(--tan);min-width:9em;display:inline-block}
- #printRoot .pr-trw{white-space:pre-wrap;border:1px solid var(--tan);padding:6px;min-height:2em}
- #printRoot .pr-radio{display:inline-block;margin:0 3px}
- #printRoot .pr-radio.pr-on{color:var(--ink);font-weight:600}
- #printRoot .pr-radio.pr-off{color:#8a8072}
-}
-html.kbd .tswitch input:focus-visible~.tsw-track{outline:2px solid var(--tan);outline-offset:3px}
-@media (prefers-reduced-motion:reduce){.tsw-track,.tsw-thumb{transition-duration:.01ms}}
-@media (prefers-reduced-motion:reduce){.spinner{animation-duration:2.6s}}
-.dialog-title,.qgrid .qnum,.qgrid .qstem,.bookitem.cur a.ltitle{font-weight:700}
-
-
-/* teacher admin area */
-.tadmin-books{display:flex;gap:10px;margin-top:2px;flex-wrap:wrap}
-/* one dropdown per track, at a FIXED width: the row wraps on a known count and no button grows into whatever
- space is left over (fixed size, no fractional growth anywhere on this panel).
- 380px is not the 390px of a landing column because this row lives inside a.card — 1160px of interior, so
- 380×3 + 10×2 = 1160 exactly, three per row. A label too long for it is measured and shrunk by fitBookText,
- which covers every.bookbtn — the teacher's dropdowns and the student's cards alike. */
-.tadmin-books .bookdrop{flex:0 0 380px}
-.tadmin-books button{margin:0;white-space:nowrap}
-.bookdrop{position:relative;flex:1 1 0;min-width:0}
-.tadmin-cols{display:grid;grid-template-columns:repeat(2,593px);gap:14px;margin:14px 0}
-.tadmin-col{margin:0}
-.tadmin-col h4{margin:0 0 6px}
-.bookdrop>.bookbtn{width:100%;margin:0;white-space:nowrap}
-.tadmin-item{padding:8px 0;border-bottom:2px dashed var(--tan)}
-.tadmin-item:last-child{border-bottom:0;padding-bottom:0}
-.bookmenu{position:absolute;top:100%;left:0;right:0;z-index:30;margin-top:4px;max-height:320px;overflow-y:auto;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:5px 5px 0 var(--tan);padding:4px}
-/* the trigger is painted with the track's own 200 swatch (track.json "color", passed in as --sw) */
-.bookdrop>.bookbtn{background:var(--sw,#90CAF9);color:var(--ink)}
-.bookdrop>.bookbtn:hover{filter:brightness(1.05)}
-/* a book the student does not hold keeps its selector — greyed, with inert items: advertising, never a way in */
-.bookdrop.locked>.bookbtn{cursor:default}
-.bookdrop.locked .bookitem{pointer-events:none}
-/* the bar's own lesson selector: the Index page's popup, sized to its label
- instead of filling a card, opening below-left of its trigger;.cur marks the lesson being read */
-.control-bar .barsel{flex:0 0 auto}
-.control-bar .barsel>.bookbtn{width:auto;min-width:132px}
-.control-bar .barsel>.bookmenu{left:0;right:auto;min-width:280px;text-align:left}
-
-/* small half-full blocks centre their text */
-.panel.center,.card.center{text-align:center}
-/* EVERY control in the bar is ONE height — the height of ← Last / Next → (8px padding + the 14px line + 8px).
- A button whose label carries an emoji (🖨 🧹 ✏️ ↩️) otherwise gets a TALLER line box than a text-only
- button, so the row used to step up and down. A fixed height with centred
- content makes the glyph unable to change the box; the teacher's student <select> matches it too. */
-.control-bar>button,.control-bar .barsel>.bookbtn{box-sizing:border-box;height:32px;min-height:32px;padding-top:0;padding-bottom:0;display:inline-flex;align-items:center;justify-content:center;line-height:1}
-.control-bar>select{box-sizing:border-box;height:32px;min-height:32px;padding-top:0;padding-bottom:0}
-.bookitem.cur{background:rgba(185,133,76,.14);border-radius:6px}
-.complete-btn{display:block;margin:14px auto;width:fit-content;font-weight:700}
-.trow{display:flex;align-items:center;gap:8px;min-width:0}
-.trow .tname{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.complete-btn:not(.is-done){background:#5b6b84;box-shadow:3px 3px 0 var(--tan)}
-.complete-btn.is-done{background:#0f766e;box-shadow:3px 3px 0 var(--tan)}
-.complete-row{display:flex;justify-content:center;align-items:center;gap:8px;margin:14px 0}
-.complete-row button{margin:0}
-.jumpbtn{padding:6px 12px;flex:0 0 auto}
-.remlink{background:transparent;color:#7f1d1d;border:0;box-shadow:none;padding:0;font-weight:600;text-decoration:underline;cursor:pointer;flex:0 0 auto}
-.trow .temail{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1 1 auto;min-width:0}
-/* approved-student rows: line 1 is the identity plus the whole-student removal,
- line 2 is one switch per track. The identity lives in.twho, which is the ONLY part that shrinks, so the name
- and the email truncate with an ellipsis long before the link can be touched, however long either gets. */
-.trow.tid{align-items:baseline}
-.trow.tid .remstudent{margin-left:auto}
-@keyframes spin{to{transform:rotate(360deg)}}
-.twho{display:flex;align-items:baseline;gap:6px;flex:1 1 auto;min-width:0;overflow:hidden}
-.twho .tname{flex:0 1 auto;min-width:0}
-.twho .temail{flex:1 1 auto;min-width:0}
-/* one switch per book. A Material-style toggle rather than two colour chips:
- OFF is a soft grey groove with a white thumb; ON fills the groove with the track's own 200 swatch (--sw, from
- track.json) so the row reads as a colour-coded picture of what the student holds. The book's icon rides the
- white thumb in both states, so it never fights the fill for contrast; off it is desaturated, on it is full
- colour. Travel is exact: 52 - 2*4 padding - 22 thumb = 22px. A switch whose change is still with the server
- gets.pending — dimmed and non-interactive, that one switch only, never its neighbours. */
-.tswitches{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:2px 0 2px}
-.tswitch{position:relative;display:inline-flex;align-items:center;--sw:#90CAF9;cursor:pointer;border-radius:999px;-webkit-tap-highlight-color:transparent}
-.tswitch input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
-.tsw-track{display:flex;align-items:center;width:52px;height:28px;padding:0 4px;border-radius:14px;background:rgba(24,33,54,.16);box-shadow:inset 0 1px 2px rgba(24,33,54,.18);transition:background .22s cubic-bezier(.2,.7,.3,1),box-shadow .22s cubic-bezier(.2,.7,.3,1)}
-.tsw-thumb{display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(24,33,54,.3),0 0 0 .5px rgba(24,33,54,.06);font-size:12px;line-height:1;filter:saturate(.3);opacity:.85;transition:transform .22s cubic-bezier(.2,.7,.3,1),filter .22s,opacity .22s,box-shadow .22s}
-.tswitch:hover .tsw-track{box-shadow:inset 0 1px 2px rgba(24,33,54,.18),0 0 0 4px rgba(24,33,54,.05)}
-.tswitch:active .tsw-thumb{box-shadow:0 1px 6px rgba(24,33,54,.36),0 0 0 .5px rgba(24,33,54,.08)}
-.tswitch.on .tsw-track{background:var(--sw);box-shadow:inset 0 1px 2px rgba(24,33,54,.1)}
-.tswitch.on .tsw-thumb{transform:translateX(22px);filter:none;opacity:1}
-.tswitch.pending{opacity:.5}
-.tswitch.pending input{cursor:progress}
-/* the load spiral: index.html shows this instead of a "Carregando" line */
-.loadwrap{display:flex;align-items:center;justify-content:center;grid-column:1/-1;width:100%;padding:46px 0}
-
-body.landing .landing-card{max-width:600px;margin:44px auto 12px;padding:32px 38px}
-body.landing .landing-title{font-size:26px;letter-spacing:.05em;margin:0 0 10px}
-body.landing #gtext{font-size:16px;margin:0 0 4px}
-body.landing #gbtn{display:flex;justify-content:center;margin:18px 0 0;min-height:44px}
-body.landing #needg{margin-top:10px;text-align:left}
-body.landing #needg p{font-size:15px;line-height:1.55;margin:10px 0}
-body.landing #needg button{margin:4px 0 8px}
-body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
-.spinner{width:38px;height:38px;border-radius:50%;border:4px solid rgba(24,33,54,.15);border-top-color:var(--tan);animation:spin .85s linear infinite}
-/* THE WELCOME LINE: the site is fully visible without signing in, so the old
- centred "Welcome" CARD became ONE horizontal line directly under the site header. It is outside the paper
- panel, at the same 1400px metric as the header, and #needg drops to a full-width second line when Google's
- script is unavailable — wrapping here is safe because this container is a FIXED width, so it never depends
- on the viewport. */
-/* ## LANDING AND TEACHER — NOT LESSON-FACING. The index.html shell, `.welcome-bar`, `.hello-*`, `.lnum` / `.ltitle`, `.tadmin-*`, `.twho`, `.denbtn`. */
-.welcome-bar{width:1400px;margin:6px 0 0 15px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;padding:8px 14px;font-size:15px}
-.welcome-bar .landing-title{font-size:16px;letter-spacing:0;margin:0;font-family:inherit;font-weight:700}
-.welcome-bar .wsep{color:#a99c88}
-.welcome-bar #gtext{margin:0;font-size:15px}
-.welcome-bar #gbtn{display:flex;align-items:center;justify-content:center;min-height:0;margin:0}
-.welcome-bar #needg{flex:1 1 100%;margin:6px 0 0;text-align:left}
-.welcome-bar #needg p{font-size:14px;line-height:1.5;margin:6px 0}
-.welcome-bar.attention{outline:3px solid var(--tan);outline-offset:2px;transition:outline-color .2s}
-
-/* landing page (index.html), not a lesson */
-.landing-hello{margin:14px 0;border-color:var(--ink);background:linear-gradient(100deg,rgba(217,193,186,.60),rgba(185,133,76,.30) 55%,rgba(29,78,216,.16))}
-.hello-en{font-weight:600;font-size:18px;line-height:1.35}
-.hello-pt{margin-top:4px;font-style:italic;color:#5c5347}
-/* THREE FIXED COLUMNS. This began as `auto-fit`, then became
- `repeat(3,minmax(0,1fr))` — which was still wrong: 1200px split into three FRACTIONAL tracks is 390.67px
- each, so every card measured a slightly different width and the column count was a decision the browser
- re-made on every resize. The document is fixed-width, so the columns are fixed pixels: 390 × 3 + 15 × 2 =
- 1200 exactly. No fractional tracks, no phone breakpoint — a fixed-width document does not reflow, it
- scrolls — and the grid is decided once, by this rule, not by how many tracks have arrived. */
-.tracks{display:grid;grid-template-columns:repeat(3,390px);gap:15px;width:1200px;align-items:start;margin:14px 0}
-.track-card{margin:0}
-/* h3 is the block label everywhere in lesson content; the landing page keeps the browser default */
-#app h3{font-family:inherit;font-weight:700;font-size:1.17em;color:inherit;margin:1em 0;padding-left:0;border-left:0;letter-spacing:normal}
-/* the trigger carries the book's NAME and ICON, so the card needs no heading of its own — and the name is set
- 4pt larger than a button's 14px. It does NOT wrap: a long label ("Linguagem Figurativa e Giria") SHRINKS to fit instead, measured and
- applied by fitBookText in index.html, which steps the size down in half-points to a floor of 11px. The base
- is a custom property so the fitter reads the same number this rule declares. */
-.track-card>.bookdrop>.bookbtn{--bookfs:calc(14px + 4pt);font-size:var(--bookfs);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.track-card .contbtn{display:block;width:100%;margin:10px 0 0;background:#0f766e}
-/* one-line selector entries: the title truncates and keeps the full text as a tooltip; the number is plain
-   text and always exactly 2pt larger than the name beside it, whatever the item's font-size becomes */
-.bookitem{display:flex;align-items:baseline;gap:8px;padding:6px 10px;border-radius:6px;font-size:14px;white-space:nowrap}
-.bookitem+.bookitem{border-top:1px dashed rgba(185,133,76,.35)}
-.bookitem:hover{background:var(--bluebg)}
-.lnum{flex:0 0 auto;font-weight:700;font-size:calc(1em + 2pt);font-variant-numeric:tabular-nums;color:var(--ink)}
-.ltitle{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
-.bookitem a.ltitle{font-weight:600;text-decoration:underline;text-underline-offset:2px}
-.bookitem a.ltitle:hover{text-decoration-thickness:2px}
-.bookitem.done .lnum,.bookitem.done a.ltitle{color:#0f766e}
-.bookitem.inert{opacity:.55}
-/* a LOCKED column greys only its selector, so the invitation below it can stay legible and clickable */
-.track-card.locked>.bookdrop{opacity:.5;filter:grayscale(1)}
-/* The locked column's invitation: "⛌ Denied - Request Access?" replaces the old
- "sem acesso" caption, and asking for THAT book is the one live control a locked column has. A signed-out
- visitor gets the same control; it sends them to the sign-in line instead of the backend. */
-.denbtn{display:block;width:100%;margin:10px 0 0;background:var(--paper);color:#8a2b1f;border:2px dashed #8a2b1f;box-shadow:none;font-size:13px;font-weight:600;padding:6px 10px}
-.denbtn:hover:not(:disabled){background:#fbeae7;filter:none;transform:none}
-.denbtn[disabled]{opacity:.6;cursor:default;border-style:solid;color:#8a8072;background:var(--paper)}
-
-
-
+/* #L0 LEGACY — style.css ported whole: tokens it alone carries, the chrome the engine draws (popup,
+   note/highlight layers, dialog, toast, Complete?), the displays and the games. Declared first, so any
+   layer above wins per property: preview.css speaks about a selector, the port stays silent. */
+@layer legacy{
+  :root{--cream:#f4eddd;--tan:#b9854c;--rose:#d9c1ba;--ptw:#96601f;--blue:#1d4ed8;
+    --dkblue:#1e3a8a;--bluebg:rgba(29,78,216,.16);--orange:#c2601a;--purple:#5b2a86;
+    --green:#2f9e44;--greenbg:#e8f7ee}
+  button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;
+    margin:4px 4px 4px 0;font:600 14px var(--serif);cursor:pointer;
+    box-shadow:3px 3px 0 var(--tan);transition:transform .09s ease,filter .12s ease}
+  button:hover:not(:disabled):not(.locked){filter:brightness(1.14);transform:translateY(-1px)}
+  button:active:not(:disabled):not(.locked){filter:brightness(1.04);transform:translate(2px,2px);
+    transition-duration:.04s}
+  #printRoot{display:none}
+  .ptw{font-style:italic;color:var(--ptw);font-weight:600}
+  .prep{color:var(--tan);font-weight:700}
+  .todo{font-style:italic;color:#5c5347;opacity:.92;border-left:3px solid var(--tan);
+    padding:2px 10px;margin:8px 10px}
+  .pulse{animation:pu 1s infinite;display:inline-block}
+  .spin{width:14px;height:14px;border:2px solid var(--ink);border-top-color:transparent;
+    border-radius:50%;animation:sp 1s linear infinite;display:inline-block;vertical-align:-2px}
+  @keyframes pu{50%{opacity:.25}}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  h2 .h2sub{font-family:var(--serif);font-size:.55em;font-weight:400;letter-spacing:.03em;
+    color:#8a8072}
+  .listen{display:inline-flex;align-items:center;justify-content:center;padding:5px 10px;
+    margin:2px 6px 2px 0;font-size:14px;white-space:nowrap;background:var(--tan);
+    box-shadow:3px 3px 0 var(--ink)}
+  mark.nb{background:transparent;cursor:pointer}
+  mark.nb.has-rec,.barhelp .hb-rec{background-repeat:no-repeat;background-position:2px 100%;
+    background-image:linear-gradient(var(--blue),var(--blue));background-size:calc(100% - 4px) 2px}
+  .barhelp .hb-note{background:var(--bluebg);border-radius:3px}
+  .barhelp .hlk{padding:0 4px;border-radius:4px}
+  .barhelp .hlk-y,.hlpal button[data-c="yellow"]{background:rgba(255,233,112,.85)}
+  .barhelp .hlk-r,.hlpal button[data-c="red"]{background:rgba(255,64,64,.7)}
+  .barhelp .hlk-g,.hlpal button[data-c="green"]{background:rgba(64,200,96,.7)}
+  /* the site popup */
+  .pop{position:absolute;z-index:9;background:var(--paper);border:2px solid var(--ink);
+    border-radius:14px;box-shadow:5px 5px 0 var(--tan);padding:5px;max-height:70vh;overflow:auto}
+  .pop button{padding:4px 7px;margin:0;font-size:12.5px;border-radius:8px;
+    box-shadow:2px 2px 0 var(--tan);height:24px;white-space:nowrap;display:inline-flex;
+    align-items:center;justify-content:center;flex:0 0 auto}
+  .poprow{display:flex;justify-content:space-between;align-items:center;gap:4px;margin:3px 0}
+  .poprow + .poprow{margin-top:5px}
+  .pop textarea{width:100%;margin:6px 0}
+  .pop button:disabled,.pop button.locked{opacity:.45;box-shadow:2px 2px 0 var(--tan);
+    cursor:default}
+  .pop button[data-spin] .lbl{display:inline-flex;align-items:center;justify-content:center;
+    min-width:2em}
+  .pop button .spin{border-color:currentColor;border-top-color:transparent;vertical-align:middle}
+  .pop.hlpalpop{padding:4px;border-radius:12px;box-shadow:3px 3px 0 var(--tan)}
+  .hlpal{display:flex;align-items:center;gap:4px}
+  .hlpal button{width:14px;height:14px;min-width:14px;padding:0;margin:0;border:2px solid var(--ink);
+    border-radius:6px;box-shadow:none;cursor:pointer}
+  #nbNote{margin:2px 0 4px;white-space:pre-wrap;font-size:16px;text-align:center;
+    font-style:italic;font-family:var(--serif)}
+  #nbKey{margin:2px 0 4px;white-space:pre-wrap;font-size:18px;text-align:center;
+    font-family:var(--serif);color:var(--ptw)}
+  /* paint layers */
+  #noteLayer,#hlLayer{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
+  #hlLayer .hlr{position:absolute;border-radius:3px;mix-blend-mode:multiply}
+  #hlLayer .hlr-yellow{background:rgba(255,233,112,.55)}
+  #hlLayer .hlr-red{background:rgba(255,64,64,.34)}
+  #hlLayer .hlr-green{background:rgba(64,200,96,.34)}
+  #noteLayer .ntr{position:absolute;border-radius:3px;mix-blend-mode:multiply;
+    background:var(--bluebg)}
+  /* confirm dialog + toast */
+  .dlgwrap{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;
+    justify-content:center;padding:20px;background:rgba(24,33,54,.45)}
+  .dlg{width:min(440px,100%);max-height:calc(100vh - 40px);overflow:auto;background:var(--paper);
+    border:2px solid var(--ink);border-radius:16px;box-shadow:6px 6px 0 var(--tan);
+    padding:18px 22px 16px;text-align:center}
+  .dlgtitle{margin:0 0 8px;font:700 20px/1.25 var(--serif);color:var(--ink)}
+  .dlgbody{margin:0 0 18px;font-size:15.5px;line-height:1.55;color:var(--ink)}
+  .dlgbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .dlgbtns button{margin:0;min-height:38px;min-width:112px}
+  .dlgcancel{background:var(--paper);color:var(--ink);border:2px solid var(--ink);
+    box-shadow:3px 3px 0 var(--tan)}
+  .dlgyes{background:var(--ink);color:var(--cream)}
+  .dlg.danger .dlgyes{background:#a33327;box-shadow:3px 3px 0 var(--ink)}
+  #toast{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--ink);
+    color:var(--cream);padding:8px 16px;border-radius:10px;z-index:99;display:none;
+    font-weight:600;box-shadow:3px 3px 0 var(--tan)}
+  .recind{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:99}
+  /* Complete? row */
+  .complete-row{display:flex;justify-content:center;align-items:center;gap:8px;margin:14px 0}
+  .complete-row button{margin:0}
+  .complete-btn{display:block;margin:14px auto;width:fit-content;font-weight:700}
+  .complete-btn:not(.is-done){background:#5b6b84;box-shadow:3px 3px 0 var(--tan)}
+  .complete-btn.is-done{background:#0f766e;box-shadow:3px 3px 0 var(--tan)}
+  .loadwrap{display:flex;align-items:center;justify-content:center;grid-column:1/-1;
+    width:100%;padding:46px 0}
+  /* displays: a table of reference and a conversation */
+  .chart{border-collapse:collapse;width:100%;margin:14px 0;background:var(--paper);
+    border:2px solid var(--ink);box-shadow:5px 5px 0 var(--tan)}
+  .panel .chart,.card .chart,.game .chart,.dialog .chart{border:0;box-shadow:none;margin:0}
+  .chart th,.chart td{border:1px solid var(--tan);padding:8px 12px;text-align:left}
+  .chart thead th{background:var(--ink);color:var(--cream);font-weight:700;letter-spacing:.02em}
+  .chart.center th,.chart.center td{text-align:center}
+  .thsub{display:block;font-weight:400;font-size:.78em;letter-spacing:0;opacity:.82}
+  .chart tbody tr:nth-child(even) td{background:#fff8ea}
+  .dialog{--edge:var(--rose);margin:14px 0;padding:12px 16px;background:#fff8ea;
+    border:2px solid var(--edge);border-radius:12px}
+  .dialog p{margin:6px 0}
+  /* word bank */
+  .chips > b{display:inline-block;background:var(--paper);border:2px solid var(--ink);
+    border-radius:999px;padding:2px 12px;margin:2px 6px 2px 0;font-weight:600}
+  .chips > span{font-style:italic}
+  button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+  /* audio player */
+  .vz-play{display:block;margin:0}
+  .vz-audio{display:block;width:100%}
+  .vz-controls{display:none;align-items:center;gap:10px;margin:8px 0 10px}
+  .vz-play.is-enhanced .vz-controls{display:flex}
+  .vz-btn{flex:0 0 auto;width:38px;height:38px;border:2px solid var(--ink);border-radius:50%;
+    background:var(--paper);color:var(--ink);font-size:14px;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center}
+  .vz-btn:hover{background:var(--tan)}
+  .vz-btn:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}
+  .vz-time{flex:0 0 auto;font:600 12px var(--serif);color:#5c5347;min-width:3.2em;
+    text-align:center;font-variant-numeric:tabular-nums}
+  .vz-bar{position:relative;flex:1 1 auto;height:14px;background:#e8e0cf;border-radius:7px;
+    cursor:pointer}
+  .vz-bar:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}
+  .vz-fill{position:absolute;top:0;bottom:0;left:0;width:0;background:#b9854c;border-radius:7px;
+    pointer-events:none}
+  .vz-knob{position:absolute;top:50%;left:0;width:14px;height:14px;margin:-7px 0 0 -7px;
+    border-radius:50%;background:var(--ink);pointer-events:none}
+  .vz-lyrics{margin:0;padding:0;list-style:none;font-size:14px;line-height:1.55}
+  .vz-lyrics li{padding:3px 7px;border-radius:5px}
+  .vz-lyrics li[data-t]{cursor:pointer}
+  .vz-lyrics li[data-t]:hover{background:#f3ece0}
+  .vz-lyrics li.is-now{background:#fff8ea;color:var(--ink);font-weight:700;
+    box-shadow:inset 0 0 0 1px #b9854c}
+  .vz-sheet{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 30px;
+    align-items:start}
+  .vz-sheet .vz-lyrics,.vz-sheet .vz-lyrics li{white-space:nowrap}
+  .vz-sheet>p{margin:0;font-size:13.5px;line-height:1.5;padding-top:3px}
+  @media (max-width:860px){
+    .vz-sheet{grid-template-columns:1fr}
+    .vz-sheet .vz-lyrics li{white-space:normal}
+  }
+  /* block frame, legacy names — preview's .block geometry wins where the two speak */
+  .panel,.card{--edge:var(--tan);border:2px solid var(--edge);border-radius:12px;
+    padding:12px 16px;background:var(--paper);box-shadow:4px 4px 0 var(--tan);margin:14px 0}
+  .panel[data-kind="teach"],.card[data-kind="teach"],.game[data-kind="teach"],
+  .dialog[data-kind="teach"]{--edge:var(--ink)}
+  .panel[data-kind="train"],.card[data-kind="train"],.game[data-kind="train"],
+  .dialog[data-kind="train"]{--edge:var(--orange)}
+  .game[data-kind="train"],.game[data-kind="teach|train"]{--edge:var(--purple)}
+  .panel .chart,.card .chart{width:calc(100% - 20px)}
+  .panel.center,.card.center{text-align:center}
+  /* items: the grid, the blanks and the two tile folds */
+  .qgrid{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;
+    column-gap:14px;row-gap:12px;min-width:0}
+  .qgrid .qopts,.qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;
+    gap:6px 30px}
+  .blanks{display:flex;flex-wrap:wrap;gap:14px 24px;margin:10px 0}
+  .blanks.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+  .blank{display:inline-block;width:3.2em;border-bottom:2px solid var(--tan)}
+  .qgrid.stack,.blanks.sent{display:grid;grid-template-columns:none;grid-auto-flow:column;
+    grid-template-rows:repeat(var(--rows,2),auto);grid-auto-columns:minmax(0,1fr);
+    column-gap:28px}
+  .qgrid.stack{align-items:start}
+  .qgrid.stack.wide{display:block}
+  .qgrid.stack .qitem{margin:0 0 16px}
+  .qgrid.stack .qline{display:flex;align-items:baseline;gap:8px}
+  .qgrid.stack .qline .qnum{flex:0 0 auto}
+  .qgrid.stack .qopts{margin-top:4px}
+  .blanks.sent.wide{display:block}
+  .blanks.sent>*{display:block;margin:8px 0}
+  .blanks.sent>* input.gap{display:inline-block;margin:0 .2em}
+  .dialog-title,.qgrid .qnum,.qgrid .qstem,.bookitem.cur a.ltitle{font-weight:700}
+  .pt b,.lead b{font-style:normal}
+  .chart tr.note td{background:#fff8ea;font-style:italic;color:#5c5347;border-top:0;
+    padding:10px 14px}
+  .pr-g{color:grey}
+  body.editing #hlLayer,body.editing #noteLayer{display:none}
+  body.editing mark.nb.has-rec{background-image:none}
+  body.editing .content-area{outline:2px dashed var(--blue);outline-offset:4px}
+  html.kbd .tswitch input:focus-visible~.tsw-track{outline:2px solid var(--tan);
+    outline-offset:3px}
+  @media (prefers-reduced-motion:reduce){.tsw-track,.tsw-thumb{transition-duration:.01ms}}
+  @media (prefers-reduced-motion:reduce){.spinner{animation-duration:2.6s}}
+  /* the print copy: only the snapshot prints */
+  @media print{
+    body{background:white}
+    body.printing>*:not(#printRoot){display:none!important}
+    body.printing #printRoot{display:block!important;background:white}
+    #printRoot .content-area{position:relative;zoom:.9}
+    #printRoot .pr-layer{position:absolute;left:0;top:0;width:0;height:0}
+    #printRoot .pr-hl{position:absolute;border-radius:3px;mix-blend-mode:multiply;
+      -webkit-print-color-adjust:exact;print-color-adjust:exact}
+    #printRoot .pr-hl-yellow{background:rgba(255,233,112,.55)}
+    #printRoot .pr-hl-red{background:rgba(255,64,64,.34)}
+    #printRoot .pr-hl-green{background:rgba(64,200,96,.34)}
+    #printRoot .pr-nt{position:absolute;border-radius:3px;mix-blend-mode:multiply;
+      background:var(--bluebg);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    #printRoot mark.nb.has-rec{background:none!important;text-decoration:underline;
+      text-decoration-color:var(--blue);text-decoration-thickness:2px;text-underline-offset:2px;
+      -webkit-print-color-adjust:exact;print-color-adjust:exact}
+    #printRoot .pr-gap{border-bottom:2px solid var(--tan);min-width:9em;display:inline-block}
+    #printRoot .pr-trw{white-space:pre-wrap;border:1px solid var(--tan);padding:6px;
+      min-height:2em}
+    #printRoot .pr-radio{display:inline-block;margin:0 3px}
+    #printRoot .pr-radio.pr-on{color:var(--ink);font-weight:600}
+    #printRoot .pr-radio.pr-off{color:#8a8072}
+  }
 /* Tier-1 game block (engine4.js); the authored radios are what persists */
 .game{--edge:var(--ink);margin:14px 0;padding:12px 16px;background:var(--paper);border:2px solid var(--edge);border-radius:16px;box-shadow:5px 5px 0 var(--tan)}
 .game-stage{position:relative;height:240px;overflow:hidden;background:#eef4f7;border:2px dashed var(--tan);border-radius:12px;touch-action:manipulation}
@@ -1344,3 +1595,126 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
 .g4-tstamp{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%) rotate(-8deg);z-index:9;pointer-events:none;opacity:0;padding:6px 18px;border:3px solid #c92a2a;color:#c92a2a;font-weight:800;letter-spacing:2px;background:rgba(255,255,255,.85)}
 .game-prompt.in,.game-fade.on,.game.g4-ready.is-on .g4-hud,.game.g4-ready.is-on .g4-hearts,.game.g4-ready:not(.is-on) .g4-prev.on,.g4-heart.full,.g4-prompt.in,.g4-flag.on,.game.g4-ready.is-on .g4-ammo,.g4-shot.full,.g4-mprompt.in,.g4-xclue.on,.game.g4-ready.is-on .g4-hp,.game.g4-ready.is-on .g4-lprompt,.g4-tbridge.hit .g4-tbrk,.g4-tstamp.showing{opacity:1}
 .g4-tstamp.ok{border-color:var(--green);color:var(--green)}
+}
+
+
+
+
+
+
+
+
+
+/* index/teacher furniture, promoted out of the fallback layer */
+@layer shell{
+  /* teacher admin: one dropdown per track, one switch per book */
+  .tadmin-books{display:flex;gap:10px;margin-top:2px;flex-wrap:wrap}
+  .tadmin-books .bookdrop{flex:0 0 380px}
+  .tadmin-books button{margin:0;white-space:nowrap}
+  .bookdrop{position:relative;flex:1 1 0;min-width:0}
+  .bookdrop>.bookbtn{width:100%;margin:0;white-space:nowrap;background:var(--sw,#90CAF9);
+    color:var(--ink)}
+  .bookdrop>.bookbtn:hover{filter:brightness(1.05)}
+  .bookdrop.locked>.bookbtn{cursor:default}
+  .bookdrop.locked .bookitem{pointer-events:none}
+  .tadmin-cols{display:grid;grid-template-columns:repeat(2,593px);gap:14px;margin:14px 0}
+  .tadmin-col{margin:0}
+  .tadmin-col h4{margin:0 0 6px}
+  .tadmin-item{padding:8px 0;border-bottom:2px dashed var(--tan)}
+  .tadmin-item:last-child{border-bottom:0;padding-bottom:0}
+  .bookmenu{position:absolute;top:100%;left:0;right:0;z-index:30;margin-top:4px;
+    max-height:320px;overflow-y:auto;background:var(--paper);border:2px solid var(--ink);
+    border-radius:10px;box-shadow:5px 5px 0 var(--tan);padding:4px}
+  .control-bar .barsel{flex:0 0 auto}
+  .control-bar .barsel>.bookbtn{width:auto;min-width:132px}
+  .control-bar .barsel>.bookmenu{left:0;right:auto;min-width:280px;text-align:left}
+  .bookitem.cur{background:rgba(185,133,76,.14);border-radius:6px}
+  .trow{display:flex;align-items:center;gap:8px;min-width:0}
+  .trow .tname,.trow .temail{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    min-width:0}
+  .trow .temail{flex:1 1 auto}
+  .trow.tid{align-items:baseline}
+  .trow.tid .remstudent{margin-left:auto}
+  .jumpbtn{padding:6px 12px;flex:0 0 auto}
+  .remlink{background:transparent;color:#7f1d1d;border:0;box-shadow:none;padding:0;
+    font-weight:600;text-decoration:underline;cursor:pointer;flex:0 0 auto}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .twho{display:flex;align-items:baseline;gap:6px;flex:1 1 auto;min-width:0;overflow:hidden}
+  .twho .tname{flex:0 1 auto;min-width:0}
+  .twho .temail{flex:1 1 auto;min-width:0}
+  .tswitches{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:2px 0}
+  .tswitch{position:relative;display:inline-flex;align-items:center;--sw:#90CAF9;cursor:pointer;
+    border-radius:999px;-webkit-tap-highlight-color:transparent}
+  .tswitch input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;
+    cursor:pointer}
+  .tsw-track{display:flex;align-items:center;width:52px;height:28px;padding:0 4px;
+    border-radius:14px;background:rgba(24,33,54,.16);
+    box-shadow:inset 0 1px 2px rgba(24,33,54,.18);
+    transition:background .22s cubic-bezier(.2,.7,.3,1),box-shadow .22s cubic-bezier(.2,.7,.3,1)}
+  .tsw-thumb{display:flex;align-items:center;justify-content:center;width:22px;height:22px;
+    border-radius:50%;background:#fff;
+    box-shadow:0 1px 3px rgba(24,33,54,.3),0 0 0 .5px rgba(24,33,54,.06);font-size:12px;
+    line-height:1;filter:saturate(.3);opacity:.85;
+    transition:transform .22s cubic-bezier(.2,.7,.3,1),filter .22s,opacity .22s,box-shadow .22s}
+  .tswitch:hover .tsw-track{box-shadow:inset 0 1px 2px rgba(24,33,54,.18),
+    0 0 0 4px rgba(24,33,54,.05)}
+  .tswitch:active .tsw-thumb{box-shadow:0 1px 6px rgba(24,33,54,.36),0 0 0 .5px rgba(24,33,54,.08)}
+  .tswitch.on .tsw-track{background:var(--sw);box-shadow:inset 0 1px 2px rgba(24,33,54,.1)}
+  .tswitch.on .tsw-thumb{transform:translateX(22px);filter:none;opacity:1}
+  .tswitch.pending{opacity:.5}
+  .tswitch.pending input{cursor:progress}
+  .spinner{width:38px;height:38px;border-radius:50%;border:4px solid rgba(24,33,54,.15);
+    border-top-color:var(--tan);animation:spin .85s linear infinite}
+  /* the landing page */
+  body.landing .landing-card{max-width:600px;margin:44px auto 12px;padding:32px 38px}
+  body.landing .landing-title{font-size:26px;letter-spacing:.05em;margin:0 0 10px}
+  body.landing #gtext{font-size:16px;margin:0 0 4px}
+  body.landing #gbtn{display:flex;justify-content:center;margin:18px 0 0;min-height:44px}
+  body.landing #needg{margin-top:10px;text-align:left}
+  body.landing #needg p{font-size:15px;line-height:1.55;margin:10px 0}
+  body.landing #needg button{margin:4px 0 8px}
+  body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
+  /* the welcome line + the landing columns */
+  .welcome-bar{width:1400px;margin:6px 0 0 15px;display:flex;flex-wrap:wrap;align-items:center;
+    justify-content:center;gap:10px;padding:8px 14px;font-size:15px}
+  .welcome-bar .landing-title{font-size:16px;letter-spacing:0;margin:0;font-family:inherit;
+    font-weight:700}
+  .welcome-bar .wsep{color:#a99c88}
+  .welcome-bar #gtext{margin:0;font-size:15px}
+  .welcome-bar #gbtn{display:flex;align-items:center;justify-content:center;min-height:0;margin:0}
+  .welcome-bar #needg{flex:1 1 100%;margin:6px 0 0;text-align:left}
+  .welcome-bar #needg p{font-size:14px;line-height:1.5;margin:6px 0}
+  .welcome-bar.attention{outline:3px solid var(--tan);outline-offset:2px;
+    transition:outline-color .2s}
+  .landing-hello{margin:14px 0;border-color:var(--ink);
+    background:linear-gradient(100deg,rgba(217,193,186,.60),rgba(185,133,76,.30) 55%,
+      rgba(29,78,216,.16))}
+  .hello-en{font-weight:600;font-size:18px;line-height:1.35}
+  .hello-pt{margin-top:4px;font-style:italic;color:#5c5347}
+  .tracks{display:grid;grid-template-columns:repeat(3,390px);gap:15px;width:1200px;
+    align-items:start;margin:14px 0}
+  .track-card{margin:0}
+  #app h3{font-family:inherit;font-weight:700;font-size:1.17em;color:inherit;margin:1em 0;
+    padding-left:0;border-left:0;letter-spacing:normal}
+  .track-card>.bookdrop>.bookbtn{--bookfs:calc(14px + 4pt);font-size:var(--bookfs);
+    line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .track-card .contbtn{display:block;width:100%;margin:10px 0 0;background:#0f766e}
+  .bookitem{display:flex;align-items:baseline;gap:8px;padding:6px 10px;border-radius:6px;
+    font-size:14px;white-space:nowrap}
+  .bookitem+.bookitem{border-top:1px dashed rgba(185,133,76,.35)}
+  .bookitem:hover{background:var(--bluebg)}
+  .lnum{flex:0 0 auto;font-weight:700;font-size:calc(1em + 2pt);
+    font-variant-numeric:tabular-nums;color:var(--ink)}
+  .ltitle{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    color:var(--ink)}
+  .bookitem a.ltitle{font-weight:600;text-decoration:underline;text-underline-offset:2px}
+  .bookitem a.ltitle:hover{text-decoration-thickness:2px}
+  .bookitem.done .lnum,.bookitem.done a.ltitle{color:#0f766e}
+  .bookitem.inert{opacity:.55}
+  .track-card.locked>.bookdrop{opacity:.5;filter:grayscale(1)}
+  .denbtn{display:block;width:100%;margin:10px 0 0;background:var(--paper);color:#8a2b1f;
+    border:2px dashed #8a2b1f;box-shadow:none;font-size:13px;font-weight:600;padding:6px 10px}
+  .denbtn:hover:not(:disabled){background:#fbeae7;filter:none;transform:none}
+  .denbtn[disabled]{opacity:.6;cursor:default;border-style:solid;color:#8a8072;
+    background:var(--paper)}
+}

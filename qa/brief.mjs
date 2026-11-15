@@ -4,7 +4,7 @@
  *
  *   node qa/brief.mjs --track=business --lesson=41        the input set only
  *   node qa/brief.mjs --track=business --lesson=41 --reassert   PEDAGOGY-MAP.md again, nothing else
- *   node qa/brief.mjs --css            the style.css `## ` headers, one line each, with their line numbers
+ *   node qa/brief.mjs --css            the style.css `/* #` headers, one line each, with their line numbers
  *   node qa/brief.mjs --indexes        both indexes: the menu index, then the style.css headers
  *
  * Why the map appears twice: it is the file that decides what the lesson contains and at what
@@ -48,7 +48,7 @@ function cssHeaders() {
   const src = lines('style.css');
   const out = [];
   for (let i = 0; i < src.length; i++) {
-    if (!/^\s*\/\*\s##\s/.test(src[i])) continue;
+    if (!/^\s*\/\*\s#+\d*\s/.test(src[i])) continue;
     const buf = [src[i]];
     let j = i;
     while (j < src.length - 1 && !/\*\//.test(src[j])) { j++; buf.push(src[j]); }
@@ -87,7 +87,7 @@ if (has('indexes')) {
   const css = cssHeaders();
   process.stdout.write('CONTENT_EXAMPLES.md - THE MENU INDEX\n'
     + JSON.stringify(menu, null, 2) + '\n\n');
-  process.stdout.write('style.css - `## ` HEADERS\n');
+  process.stdout.write('style.css - `/* #` HEADERS\n');
   css.forEach(h => process.stdout.write('style.css:' + h.line + '  ' + h.text + '\n'));
   process.exit(0);
 }
@@ -97,7 +97,7 @@ const lesson = Number(arg('lesson', '0'));
 if (!track || !lesson) {
   console.error('usage: node qa/brief.mjs --track=<business|adult|kids> --lesson=<n> [--reassert] [--exemplars=N]');
   console.error('       node qa/brief.mjs --index        the menu read as an index (JSON; the preview nav\'s source)');
-  console.error('       node qa/brief.mjs --css          the style.css `## ` headers, with their line numbers');
+  console.error('       node qa/brief.mjs --css          the style.css `/* #` headers, with their line numbers');
   console.error('       node qa/brief.mjs --indexes      both indexes: the menu, then the style.css headers');
   process.exit(2);
 }
@@ -196,7 +196,7 @@ if (want) {
 
 /* 5. the stylesheet, headers only: the contracts, not the mechanism — the scan --css prints */
 const heads2 = cssHeaders();
-emit('style.css - `## ` HEADERS ONLY', heads2.map(h => h.block).join('\n\n'));
+emit('style.css - `/* #` HEADERS ONLY', heads2.map(h => h.block).join('\n\n'));
 
 /* 6. no shell and no checklist. PEDAGOGY-MAP [I/O] lists the input set and closes the list with "Withhold
       others": the frame is already in the file (a page starts as a copy of `_shell.html`), and a printed
