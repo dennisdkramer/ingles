@@ -89,7 +89,7 @@
   main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
   .page-container{position:absolute;left:15px;width:1400px;margin:0;padding:0;
     background:var(--paper);border:2px solid var(--ink);border-radius:0;box-shadow:none}
-  .content-area{width:1200px;margin:0 auto;padding:16px 0;position:relative}
+  .content-area{width:1200px;margin:0 auto;padding:98px 0 16px;position:relative}
   .itemrow{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));
     gap:var(--row-gap,22px) var(--col-gap,18px)}
   .itemsize-third{grid-column:span 4}
@@ -103,7 +103,7 @@
   .content-area>*{margin-block-end:var(--row-gap,22px)}
   .content-area>section{display:grid;gap:var(--row-gap,22px);
     margin-block:0 var(--section-gap,34px)}
-  .content-area>h1{margin-bottom:.35em;text-align:center}
+  .content-area>h1{margin:0 0 .35em;text-align:center}
 }
 
 /* #50 STRUCTURE — data-structure="prose|set|sequence|grid|pair|media" on .block; data-kind="teach|train|show|game" = hue. Unset: plain stack. Vary: --h (hue 0-360) */
