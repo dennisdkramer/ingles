@@ -515,52 +515,12 @@
   .tp2 .tp2-gap,.tp2 .tp2-on{transition:opacity .9s ease}
 }
 
-/* ---- .pos-* — parts of speech as a mark on the word ------------------------------------------
-   Subtle in space, real in help: no column, no baseline shift, no box — the mark is the word's own
-   underline, so it costs ZERO layout and survives any sentence length. Generated, not typed:
-   `node qa/pos.mjs "sentence"` emits this markup, which is what makes long sentences tractable.
-   Two channels so colour is never the only one — the LINE STYLE (solid / double / dotted / dashed
-   / wavy) separates the classes and colour reinforces it, so grayscale print and colour blindness
-   both still read the class. `.pos-labels` adds a one-letter superscript for spelling a class out;
-   off by default because it costs space. */
-.pos-n,.pos-v,.pos-adj,.pos-adv,.pos-det,.pos-pron,.pos-prep,.pos-conj,.pos-aux,.pos-wh,.pos-num{
-  text-underline-offset:3px;text-decoration-thickness:2px;text-decoration-skip-ink:none}
-.pos-n{text-decoration:underline solid #2f7d4f}
-.pos-v{text-decoration:underline double #b03a2e}
-.pos-adj{text-decoration:underline dotted #1d4ed8}
-.pos-adv{text-decoration:underline dashed #7a3fa0}
-.pos-det{text-decoration:underline solid #b9854c;text-decoration-thickness:1px}
-.pos-pron{text-decoration:underline dashed #8a6d3b;text-decoration-thickness:1px}
-.pos-prep{text-decoration:underline solid #0f766e}
-.pos-conj{text-decoration:underline dotted #a16207;text-decoration-thickness:1px}
-.pos-aux{text-decoration:underline wavy #b03a2e;text-decoration-thickness:1px}
-.pos-wh{text-decoration:underline wavy #1d4ed8;text-decoration-thickness:1px}
-.pos-num{text-decoration:underline solid #6b7280}
-.pos-legend{display:flex;flex-wrap:wrap;gap:3px 13px;margin:7px 0 0;padding:0;list-style:none;
-  font:600 10.5px 'Public Sans',sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6f6656}
-.pos-legend li{display:flex;align-items:center;gap:5px}
-.pos-legend s{display:block;width:15px;border-bottom:2px solid #6f6656;text-decoration:none}
-.pos-legend .l-n{border-bottom:2px solid #2f7d4f}
-.pos-legend .l-v{border-bottom:3px double #b03a2e}
-.pos-legend .l-adj{border-bottom:2px dotted #1d4ed8}
-.pos-legend .l-adv{border-bottom:2px dashed #7a3fa0}
-.pos-legend .l-prep{border-bottom:2px solid #0f766e}
-.pos-legend .l-aux{border-bottom:2px wavy #b03a2e}
-.pos-labels .pos-n::after,.pos-labels .pos-v::after,.pos-labels .pos-adj::after,
-.pos-labels .pos-adv::after,.pos-labels .pos-prep::after,.pos-labels .pos-conj::after,
-.pos-labels .pos-aux::after,.pos-labels .pos-det::after,.pos-labels .pos-pron::after,
-.pos-labels .pos-wh::after{font:700 .58em 'Public Sans',sans-serif;vertical-align:.62em;
-  margin-left:.12em;letter-spacing:0;opacity:.72}
-.pos-labels .pos-n::after{content:'N'}
-.pos-labels .pos-v::after{content:'V'}
-.pos-labels .pos-adj::after{content:'ADJ'}
-.pos-labels .pos-adv::after{content:'ADV'}
-.pos-labels .pos-prep::after{content:'PREP'}
-.pos-labels .pos-conj::after{content:'CONJ'}
-.pos-labels .pos-aux::after{content:'AUX'}
-.pos-labels .pos-det::after{content:'DET'}
-.pos-labels .pos-pron::after{content:'PRN'}
-.pos-labels .pos-wh::after{content:'WH'}
+/* ---- .pos-* moved -------------------------------------------------------------------------
+   The parts-of-speech marks now live in `style.css` `#94 POS` as five classes
+   (`pos-v pos-n pos-adj pos-adv pos-fn`), tokenised and composing with `#89 MARKS`.
+   The ten-class copy that was here — and its `.l-aux{border-bottom:2px wavy}` swatch,
+   which was invalid CSS and painted nothing — is deleted. Nothing in this sheet should
+   restyle those classes again. `node qa/pos.mjs --five "sentence"` emits the markup. */
 
 
 /* the step control sits as a sibling of .tp2, so :has() carries the state across */

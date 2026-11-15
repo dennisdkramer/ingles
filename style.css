@@ -121,15 +121,17 @@
      Members, all in @layer rx: #89 MARKS · #91 GLOSS · #92 PRON · #93 AXIS · #94 POS · #96 BAR · #97 TLN */
 
 /* #89 MARKS — pointing a figure at words in a sentence. Any figure can use this; nothing here knows what the figure is.
-     <span class="uw">…</span> = the run of words the figure is about (faint underline). Use it for the verb group only, not the pronoun.
-     <span class="an">…</span> = the ONE word the figure is pinned to, or only the contracted letters of it ('ve, 'm, 'll) — a 2px underline and the anchor.
-     The host element carries `anchor-scope:--pin`; any absolutely positioned child of it then puts a chosen point under that word:
-     left:calc(anchor(50%) - var(--pin)) / top:… and so on, where --pin is that point's distance from the child's edge. One anchor per
-     host; `anchor-scope` keeps the name private, so a page may carry many. Vary: --pin (length), the two underline colours */
+     <span class="uw">…</span> = the run of words the figure is about (1px underline, faint). Use it for the verb group only, not the pronoun.
+     <span class="an">…</span> = the ONE word the figure is pinned to, or only the contracted letters of it ('ve, 'm, 'll) — 2px underline and the anchor.
+     Both paint with text-decoration (never a border), so a word may also carry a #94 POS class and show ONE line: the mark's thickness and
+     colour, the class's line style. The host element carries `anchor-scope:--pin`; any absolutely positioned child then puts a chosen point
+     under that word: left:calc(anchor(50%) - var(--pin)). One anchor per host; `anchor-scope` keeps the name private, so a page may carry many.
+     Vary: --mk-w (thickness), --mk-c (colour) */
 @layer rx{
-  .uw{position:relative;font-weight:700;
-    border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent)}
-  .an{anchor-name:--pin;border-bottom:2px solid var(--accent);padding-bottom:1px}
+  .uw,.an{text-decoration-line:underline;text-decoration-thickness:var(--mk-w);
+    text-decoration-color:var(--mk-c);text-underline-offset:3px}
+  .uw{position:relative;font-weight:700;--mk-w:1px;--mk-c:color-mix(in srgb,var(--accent) 40%,transparent)}
+  .an{anchor-name:--pin;--mk-w:2px;--mk-c:var(--accent)}
 }
 
 /* #91 GLOSS — .glossbtn popovertarget="ID" opens its .defcard popover id="ID" beside the word, no script. Use: a new word, or a PT literal that is not the meaning/use. One id per card. Vary: none */
@@ -270,28 +272,38 @@
   }
 }
 
-/* #94 POS — <p class="pos"> with each word in <b class="pos-n|pos-v|pos-adj|pos-adv|pos-det|pos-pron|pos-prep|pos-conj|pos-aux|pos-wh">: the underline is the mark, colour only reinforces it.
-     The .pos-key legend follows the sentence: <p class="pos-key"><span><b class="pos-aux">have</b> auxiliary</span>…</p>. Each item carries the SAME class as the
-     word it explains, so the key cannot drift from the marks. Use: showing what kind of word each one is, at prose sizes (not inside a 200px figure). Vary: --pos-c */
+/* #94 POS — five classes, one per kind of word: .pos-v verb · .pos-n noun · .pos-adj adjective · .pos-adv adverb ·
+     .pos-fn function word (determiner, pronoun, preposition, conjunction, wh-word).
+     <p class="pos">The <b class="pos-fn">the</b>…</p> with the legend <p class="pos-key"><span><b class="pos-n">report</b> noun</span>…</p> —
+     each key item wears the SAME class as the word it explains, so the key cannot drift from the marks.
+     The line style carries the class and colour only reinforces it, so it survives grayscale print, a projector and colour blindness.
+     Mark the words a figure is about, not whole sentences. Add `pos-labels` to the container to print a superscript tag instead of a line.
+     Composes with #89 MARKS: a word carrying .uw or .an keeps that mark's thickness and colour and takes the class's line style.
+     Use: showing what kind each word is, at prose sizes. Vary: --pos-c, --mk-w, --mk-c */
 @layer rx{
   .pos{line-height:2.2}
-  .pos b{font-weight:inherit;text-decoration-line:underline;text-decoration-thickness:2px;
-    text-underline-offset:3px;text-decoration-color:var(--pos-c,var(--ink-2))}
+  :is(.pos-v,.pos-n,.pos-adj,.pos-adv,.pos-fn){text-decoration-line:underline;text-underline-offset:3px;
+    text-decoration-thickness:var(--mk-w,2px);
+    text-decoration-color:var(--mk-c,var(--pos-c,var(--ink-2)))}
   .pos-n{text-decoration-style:solid}
   .pos-v{--pos-c:var(--accent);text-decoration-style:double}
-  .pos-adj{text-decoration-style:dotted}
-  .pos-adv{text-decoration-style:dashed}
-  .pos-aux{--pos-c:var(--accent);text-decoration-style:wavy}
-  .pos-det{--pos-c:var(--tan);text-decoration-style:dotted}
-  .pos-pron{--pos-c:var(--tan);text-decoration-style:solid}
-  .pos-prep{--pos-c:var(--tan);text-decoration-style:dashed}
-  .pos-conj{--pos-c:var(--ptw);text-decoration-style:dotted}
-  .pos-wh{--pos-c:var(--ptw);text-decoration-style:wavy}
+  .pos-adj{--pos-c:var(--tan);text-decoration-style:dotted}
+  .pos-adv{--pos-c:var(--ptw);text-decoration-style:dashed}
+  .pos-fn{--pos-c:var(--dim);text-decoration-style:wavy}
   .pos-key{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 18px;margin:8px 0 0;
     font:400 12px/1.6 var(--sans);color:var(--ink-2)}
   .pos-key>span{display:inline-flex;align-items:baseline;gap:6px}
   .pos-key b{font-weight:400}
-  @media print{.pos b{text-decoration-color:#000}}
+  /* the label mode prints what the line means, for a cramped column or a screenshot with no key */
+  .pos-labels :is(.pos-v,.pos-n,.pos-adj,.pos-adv,.pos-fn){text-decoration-line:none}
+  .pos-labels :is(.pos-v,.pos-n,.pos-adj,.pos-adv,.pos-fn)::after{margin-left:1px;
+    font:700 .58em var(--sans);vertical-align:.62em;color:var(--ink-2)}
+  .pos-labels .pos-n::after{content:'N'}
+  .pos-labels .pos-v::after{content:'V'}
+  .pos-labels .pos-adj::after{content:'ADJ'}
+  .pos-labels .pos-adv::after{content:'ADV'}
+  .pos-labels .pos-fn::after{content:'FN'}
+  @media print{ :is(.pos-v,.pos-n,.pos-adj,.pos-adv,.pos-fn){text-decoration-color:#000} }
 }
 
 /* #96 BAR — one bar per share: <div class="bar-row"><span>day</span><div class="bar"><i style="--w:62%"></i></div><b>62%</b></div>. The number sits beside the bar, never inside it. Vary: --w, --bar-h */
@@ -366,7 +378,7 @@
      a chosen point of the axis under it. Each tense owns `--point`: the distance from the axis's left
      edge to the point that must sit under the anchored word. Nothing of the axis itself changes;
      only where it sits. Vary: --point (per data-tense), --pad (which side grew) */
-  .tlw{position:relative;width:min(560px,100%);margin:0 auto;padding-bottom:46.5px;--leg:14px;--lead:40px;
+  .tlw{position:relative;width:min(560px,100%);margin:0 auto;padding-bottom:45.5px;--leg:14px;--lead:40px;
     anchor-scope:--pin}
   .tlw+.tlw{margin-top:36px}
   .tlw-say{margin:0;text-align:center;white-space:nowrap;

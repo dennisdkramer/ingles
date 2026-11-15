@@ -31,6 +31,9 @@ const IN = {};
 for (const k of Object.keys(LEX)) for (const w of LEX[k]) IN[w] = k;
 
 const CLS = { n: 'n', v: 'v', adj: 'adj', adv: 'adv', det: 'det', pron: 'pron', prep: 'prep', conj: 'conj', aux: 'aux', wh: 'wh', num: 'num' };
+/* the sheet's five published classes (#94 POS in style.css): function words share one class, and an
+   auxiliary is a verb. The ten internal tags stay, because the reasons are still worth printing. */
+const FIVE = { n: 'n', v: 'v', adj: 'adj', adv: 'adv', det: 'fn', pron: 'fn', prep: 'fn', conj: 'fn', wh: 'fn', aux: 'v', num: 'n' };
 const PUNCT = /^[.,;:!?()"'“”‘’—-]+$/;
 
 /* irregular past forms: no suffix to read, so they are listed. This is the same set the roadmaps
@@ -171,7 +174,7 @@ else {
     console.log(row.map((r, i) => {
       if (r.tag === 'punct') return r.w;
       const glue = (i === 0 || /^['’]/.test(r.w)) ? '' : ' ';
-      return glue + '<span class="pos-' + CLS[r.tag] + '">' + r.w + '</span>';
+      return glue + '<span class="pos-' + FIVE[r.tag] + '">' + r.w + '</span>';
     }).join('').replace(/ ([.,;:!?])/g, '$1').trim());
   }
 }
