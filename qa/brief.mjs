@@ -85,7 +85,7 @@ if (indexArg) {
 if (has('indexes')) {
   const menu = readMenu();
   const css = cssHeaders();
-  process.stdout.write('CONTENT_EXAMPLES.md - THE MENU INDEX\n'
+  process.stdout.write('the menu (VEHICLES.md + IN-BLOCK-VISUALS.md + CONTENT_EXAMPLES.md) - THE MENU INDEX\n'
     + JSON.stringify(menu, null, 2) + '\n\n');
   process.stdout.write('style.css - `/* #` HEADERS\n');
   css.forEach(h => process.stdout.write('style.css:' + h.line + '  ' + h.text + '\n'));
@@ -166,6 +166,10 @@ if (fs.existsSync(path.join(ROOT, REG))) emit(REG, read(REG));
       prints one entry whole, which is what a build does once it has picked that shape — by its number
       (`### [03] <…>`) in the numbered form, or by its backticked name while an entry still carries one. */
 const CE = read('CONTENT_EXAMPLES.md');
+/* `--section` and the shapes index read the whole menu now: VEHICLES.md and IN-BLOCK-VISUALS.md first, so an
+   entry that moved out of this file is still found by its number. */
+const MENU_FILES = ['VEHICLES.md', 'IN-BLOCK-VISUALS.md', 'CONTENT_EXAMPLES.md'];
+const MENU_TEXT = MENU_FILES.map(f => { try { return read(f); } catch { return ''; } }).join('\n');
 const iIns = CE.indexOf('## [INSTRUCTIONS]');
 /* the grammar runs from `## [INSTRUCTIONS]` to the first numbered entry (`### [NN] …`), not to the next
    `##` section: a `##`-only bound runs on into the entries and delivers every one of them in full. */
@@ -181,16 +185,16 @@ const heads = shapes.filter(s => !s.ignore).map(s => s.raw);
 const withheld = shapes.length - heads.length;
 const every = Math.max(1, Number(arg('exemplars', '0')) || 1);
 const picked = heads.filter((_, i) => i % every === 0);
-emit('CONTENT_EXAMPLES.md - THE SHAPES, one line each' + (every > 1 ? ' (sampled: 1 in ' + every + ')' : '')
+emit('THE MENU - THE SHAPES, one line each' + (every > 1 ? ' (sampled: 1 in ' + every + ')' : '')
   + (withheld ? ' — shapes marked IGNORE - pending updates are withheld' : ''),
   picked.join('\n'));
 const want = arg('section', '');
 if (want) {
   const num = /^\d+$/.test(want) ? String(Number(want)) : null;
   const numRe = num && new RegExp('^### \\[0*' + num + '\\] ');
-  const part = CE.split(/\n(?=### )/).find(s =>
+  const part = MENU_TEXT.split(/\n(?=### )/).find(s =>
     s.startsWith('### `' + want + ' ') || s.startsWith('### `' + want + ' -') || (numRe && numRe.test(s)));
-  if (part) emit('CONTENT_EXAMPLES.md - ' + want + ' IN FULL', part.trimEnd());
+  if (part) emit('the menu - ' + want + ' IN FULL', part.trimEnd());
   else console.error('brief: no such shape: ' + want);
 }
 

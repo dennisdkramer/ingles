@@ -24,7 +24,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const MENU = 'CONTENT_EXAMPLES.md';
+/* the menu is three files now: the blocks a lesson is built from, the figures a block draws inside itself,
+   and the build's own rules. One grammar, one parser, one index — the parser never has to know which file
+   an entry came from, and an entry carries its `file` for the page that prints it. */
+const MENU = ['VEHICLES.md', 'IN-BLOCK-VISUALS.md', 'CONTENT_EXAMPLES.md'];
 
 const SCAFFOLD = /^### (Build \[Constraints\]|\[(GAMES|BLOCKS|VISUALS|IN-BLOCK)\])/;
 const NUM_RE = /^### \[(\d+)\]\s+<([^>]*)>\s+<([^>]*)>\s*(.*)$/;
@@ -74,30 +77,36 @@ function drafts() {
 }
 
 export function readMenu() {
-  const text = fs.readFileSync(path.join(ROOT, MENU), 'utf8');
-  const lines = text.split(/\r?\n/);
   const sections = [], shapes = [], unparsed = [];
-  /* `## [INSTRUCTIONS]` and `## [BUILD]` are scaffolding, not groups: the entries that follow them are
-     the menu itself, not members of an instructions section. `[INSIDE]` is the only real group — the
-     four figures a host block draws inside itself, which are never chosen on their own. */
-  const NOT_A_GROUP = /^(INSTRUCTIONS|BUILD)$/;
-  let section = null, group = null;
-  for (let i = 0; i < lines.length; i++) {
-    const l = lines[i];
-    const h = /^## \[([^\]]+)\]/.exec(l);
-    if (h) {
-      section = { key: h[1], title: l.replace(/^##\s+/, '').trimEnd(), line: i + 1 };
-      sections.push(section);
-      group = NOT_A_GROUP.test(h[1]) ? null : section.key;
-      continue;
+  let bytes = 0, lineCount = 0;
+  for (const file of MENU) {
+    let text = '';
+    try { text = fs.readFileSync(path.join(ROOT, file), 'utf8'); } catch { continue; }
+    bytes += Buffer.byteLength(text);
+    const lines = text.split(/\r?\n/);
+    lineCount += lines.length;
+    /* `## [INSTRUCTIONS]` and `## [BUILD]` are scaffolding, not groups: the entries that follow them are
+       the menu itself, not members of an instructions section. `[INSIDE]` is a real group — the figures a
+       host block draws inside itself, which are never chosen on their own. */
+    const NOT_A_GROUP = /^(INSTRUCTIONS|BUILD)$/;
+    let section = null, group = null;
+    for (let i = 0; i < lines.length; i++) {
+      const l = lines[i];
+      const h = /^## \[([^\]]+)\]/.exec(l);
+      if (h) {
+        section = { key: h[1], title: l.replace(/^##\s+/, '').trimEnd(), line: i + 1, file };
+        sections.push(section);
+        group = NOT_A_GROUP.test(h[1]) ? null : section.key;
+        continue;
+      }
+      if (!l.startsWith('### ') || SCAFFOLD.test(l)) continue;
+      const s = shapeAt(l, i + 1, group);
+      if (s) { s.file = file; s.header = headerOf(s); shapes.push(s); }
+      else unparsed.push({ file, line: i + 1, text: l.slice(0, 100) });
     }
-    if (!l.startsWith('### ') || SCAFFOLD.test(l)) continue;
-    const s = shapeAt(l, i + 1, group);
-    if (s) { s.header = headerOf(s); shapes.push(s); } else unparsed.push({ line: i + 1, text: l.slice(0, 100) });
   }
   return {
-    file: MENU, bytes: Buffer.byteLength(text), lineCount: lines.length,
-    sections, shapes, unparsed, drafts: drafts()
+    file: MENU.join(' + '), bytes, lineCount, sections, shapes, unparsed, drafts: drafts()
   };
 }
 

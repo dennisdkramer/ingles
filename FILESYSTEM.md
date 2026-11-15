@@ -4,7 +4,7 @@
 
 - WORKING PLAN: PENDING.md (the active subtask batch plan, HANDOFF.md (new task handoffs (when requested)
 
-- LESSON GENERATION: PEDAGOGY-MAP.md (generation process and rules) , `qa/brief.mjs` (indexes for inputs), `qa/AUDIO.md` (the audio cut: routes, flags, steps, and the fix for a sync that is off) , `<TRACK>-ROADMAP.md` (one `##` section per lesson) · `<TRACK>-REGISTER.md` (the persona) · CONTENT_EXAMPLES.md (the vehicle menu: the `###` lines are the index, one section is read only after a shape is chosen) · `_shell.html` (the frame every lesson page starts as: a generation copies it into the track folder and authors into it) · 
+- LESSON GENERATION: PEDAGOGY-MAP.md (generation process and rules) , `qa/brief.mjs` (indexes for inputs), `qa/AUDIO.md` (the audio cut: routes, flags, steps, and the fix for a sync that is off) , `<TRACK>-ROADMAP.md` (one `##` section per lesson) · `<TRACK>-REGISTER.md` (the persona) · VEHICLES.md (the blocks a lesson is built from — the `###` lines are the index, one section is read only after a shape is chosen, and `## [TIPS]` holds the small ones: a tip, a hint, a piece of trivia) · IN-BLOCK-VISUALS.md (the figures a block draws inside itself — `## [INSIDE]`, where the host owns the container and the control) · CONTENT_EXAMPLES.md (the build rules those two read from: `[GAMES]`, `[BLOCKS]`, `[VISUALS]`, `[INSTRUCTIONS]`, plus the shapes not yet migrated) · `_shell.html` (the frame every lesson page starts as: a generation copies it into the track folder and authors into it) · 
 
 - TRACK ROADMAPS: ROADMAP-GENERATOR.md (produces the roadmaps — a separate pipeline)
 

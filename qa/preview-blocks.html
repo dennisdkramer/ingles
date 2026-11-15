@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>blocks — preview (every entry in CONTENT_EXAMPLES.md)</title>
+<title>blocks — preview (every entry in the three menu files)</title>
 <link rel="stylesheet" href="../style.css">
 <link rel="stylesheet" href="preview.css">
 <link rel="stylesheet" href="preview-visual.css">
@@ -11,7 +11,7 @@
 <body>
 <main class="page-container"><div class="content-area">
 <h1>Blocks — preview</h1>
-<p>Not a lesson and not marked up as one. One block per <code>###</code> entry in CONTENT_EXAMPLES.md,
+<p>Not a lesson and not marked up as one. One block per <code>###</code> entry in the three menu files,
 each on its own heading, in the file's own order. The words are filler; the point is the structure: which container
 carries the block, how many columns the content forces, what the control is, and whether the shape reads as a block
 at all.</p>
@@ -23,13 +23,13 @@ Every other class used here already exists in <code>style.css</code> and every
 block follows the <code>## </code> headers in <code>style.css</code>: <code>.panel</code> / <code>.card</code> / <code>.chart</code> / <code>.dialog</code>
 for the frame, <code>.qgrid stack</code> with <code>--rows</code> for radios, <code>.blanks sent</code> with
 <code>--rows</code> for gaps, <code>.itemrow</code> with <code>data-cols</code> for paired halves.
-The line directly under each note box <b>is that shape's headline from CONTENT_EXAMPLES.md, minus the identity</b> —
+The line directly under each note box <b>is that shape's headline from the three menu files, minus the identity</b> —
 the identity is the frame's own heading, and the line above the block carries the rest of that <code>###</code> line,
 with the shape atoms and the item and option counts. Nothing about it is stored here: the page reads the menu when it
 loads and again every 2 s, so a heading rewritten in the file appears under its block without a reload, and an entry
 with no block on this page is named in the nav rather than quietly missing. Nothing else is printed about a block:
 there is no caption at its foot, because a sentence that is not in the menu would be this page arguing its own case.
-Every block on the page answers for a numbered entry, so nothing here can be out of date against the file: the nav and the line over each block are read from CONTENT_EXAMPLES.md, and a heading rewritten there appears here on the next poll.</p>
+Every block on the page answers for a numbered entry, so nothing here can be out of date against the file: the nav and the line over each block are read from the three menu files, and a heading rewritten there appears here on the next poll.</p>
 <p>The figures drawn <em>inside</em> a block are the six entries under <b>[INSIDE]</b>: <code>[05]</code> the street map, <code>[63]</code> the timeline, <code>[64]</code> the phrase marks, <code>[65]</code> the parts of speech, <code>[66]</code> the voice contour and <code>[67]</code> the pronunciation key. None of them owns a container or a control — the block that hosts one owns the <code>.panel</code> and supplies the radio, gap or textarea that saves, which is why they are listed apart from the vehicles. The ordinary vehicles that carry a drawn figure <em>plus</em> the control that makes it a block are <code>[40]</code>, <code>[41]</code> and <code>[55]</code>–<code>[62]</code>. The player's own CSS (`[02]`/`[03]`) lives in <code>style.css</code> under
 <code>## AUDIO PLAYER</code>, because a kept shape is lesson-facing; every other draft figure here is
 <code>.vz-*</code> in <code>qa/preview-visual.css</code>, so it stays out of the lesson stylesheet until the shape
