@@ -82,8 +82,8 @@
   h3{counter-increment:blk}
   h3::before{content:counter(blk,upper-alpha) ". ";color:var(--track-rule);padding-right:.5em;
     font-family:var(--serif);font-size:calc(.8em + 2pt);font-weight:700}
-  h4{font-family:var(--serif);font-style:italic;font-weight:600;font-size:var(--s-1);
-    color:var(--dkblue);margin:0 0 8px;padding-left:2em;text-transform:none;
+  h4{font-family:var(--serif);font-style:italic;font-weight:700;font-size:var(--s-1);
+    color:var(--dkblue);margin:0 0 8px;padding-left:20px;text-transform:none;
     letter-spacing:normal}
   p,li{margin:0 0 .7em;text-wrap:pretty}
   body{cursor:default}
