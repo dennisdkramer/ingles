@@ -13,26 +13,42 @@
 <h1>Line of time</h1>
 
 <p class="dim">Two axes for tuning one element: <b>new</b> at the top, the whole old group under it. A note under either lands in <code>qa/NOTES.md</code>.</p>
-<section class="qa-item" id="tlw" data-contract="IN-BLOCK-VISUALS.md">
-<h2>words over the line</h2>
-<textarea data-item="[69-words]" aria-label="notes for the words layer" rows="2" class="qa-note" placeholder="notes — words over the axis"></textarea>
-<p class="dim">The verb words of one clause are underlined, and that underline turns into a pointer at the zone the tense points at — <b>before</b> · <b>now</b> · <b>then</b>. Words you do not mark are ignored, so a reversed time clause, a noun clause, or a verb doing an adjective's job needs no rule. The star sits wherever <code>--now</code> puts it, so either side of the axis can be the long one.</p>
+<section class="qa-item" id="tn" data-contract="IN-BLOCK-VISUALS.md">
+<h2>the line, pinned to a word</h2>
+<textarea data-item="[69-pin]" aria-label="notes for the pinned line" rows="2" class="qa-note" placeholder="notes — the pinned line"></textarea>
+<p class="dim">The verb words are underlined and <b>one</b> of them pins the axis under itself, so wrapping never moves it. The tense decides which point of the axis sits under that word, and the axis grows past its 200px floor when a mark needs the room. Past figures show <b>before · now</b>; future figures show <b>now · then</b>.</p>
 <div class="block" data-kind="show">
-  <figure class="tlw" style="--now:55%;--leg:28px">
-    <p class="tlw-say"><b class="tw" data-to="now">I've been feeling sick</b> for days.</p>
-    <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
+  <figure class="tn" data-tense="past-perfect">
+    <p class="tn-say">I <b class="tv an">had</b>n't <b class="tv">been</b> there.</p>
+    <div class="tn-axis"><i class="tn-rule"></i><i class="tn-bef">before</i><i class="tn-now">now</i></div>
   </figure>
-  <figure class="tlw" style="--now:60%;--leg:23px">
-    <p class="tlw-say" style="padding-left:44px">I <b class="tw" data-to="before">hadn't been</b> there.</p>
-    <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
+  <figure class="tn" data-tense="simple-past">
+    <p class="tn-say">I <b class="tv an">saw</b> it in 2019.</p>
+    <div class="tn-axis"><i class="tn-rule"></i><i class="tn-dot"></i><i class="tn-bef">before</i><i class="tn-now">now</i></div>
   </figure>
-  <figure class="tlw" style="--now:46%;--leg:96px">
-    <p class="tlw-say" style="padding-left:12px">I'm <b class="tw" data-to="then">gonna hit</b> the hay.</p>
-    <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
+  <figure class="tn" data-tense="past-continuous">
+    <p class="tn-say">I <b class="tv an">was</b> <b class="tv">walking</b> home.</p>
+    <div class="tn-axis"><i class="tn-rule"></i><i class="tn-span"></i><i class="tn-bef">before</i><i class="tn-now">now</i></div>
   </figure>
-  <figure class="tlw" style="--now:46%;--leg:94px">
-    <p class="tlw-say" style="padding-left:18px"><b class="tw" data-to="then">He'll have done</b> it by then.</p>
-    <div class="tln" data-fill="ahead"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
+  <figure class="tn" data-tense="present-perfect">
+    <p class="tn-say"><b class="tv an">I've</b> <b class="tv">been feeling</b> sick for days.</p>
+    <div class="tn-axis"><i class="tn-rule"></i><i class="tn-span"></i><i class="tn-tail"></i><i class="tn-bef">before</i><i class="tn-now">now</i></div>
+  </figure>
+  <figure class="tn" data-tense="simple-present">
+    <p class="tn-say">I <b class="tv an">work</b> at the shop.</p>
+    <div class="tn-axis"><i class="tn-rule"></i><i class="tn-fut"></i><i class="tn-now">now</i><i class="tn-then">then</i></div>
+  </figure>
+  <figure class="tn" data-tense="present-continuous">
+    <p class="tn-say"><b class="tv an">I'm</b> <b class="tv">working</b> late.</p>
+    <div class="tn-axis"><i class="tn-rule"></i><i class="tn-fut"></i><i class="tn-now">now</i><i class="tn-then">then</i></div>
+  </figure>
+  <figure class="tn" data-tense="going-to">
+    <p class="tn-say"><b class="tv an">I'm gonna</b> hit the hay.</p>
+    <div class="tn-axis"><i class="tn-rule"></i><i class="tn-now">now</i><i class="tn-then">then</i></div>
+  </figure>
+  <figure class="tn" data-tense="future-perfect">
+    <p class="tn-say"><b class="tv an">He'll have</b> <b class="tv">done</b> it by Friday.</p>
+    <div class="tn-axis"><i class="tn-rule"></i><i class="tn-dot"></i><i class="tn-elbow"></i><i class="tn-now">now</i><i class="tn-then">then</i></div>
   </figure>
 </div>
 </section>

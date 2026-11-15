@@ -346,30 +346,59 @@
     background-image:linear-gradient(90deg,color-mix(in srgb,var(--label-ink) 30%,transparent),
       color-mix(in srgb,var(--label-ink) 90%,transparent));
     -webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
-  /* the words: a phrase over the axis. `.tw` marks one clause's verb words — its underline turns
-     down into a pointer at the zone named by data-to. Unmarked words are ignored, so a reversed
-     time clause, a noun clause, or a verb doing an adjective's job needs no rule: don't mark it.
-     Vary: --now (star 0-100%), --leg (how far the pointer travels sideways), data-to=before|now|then */
-  .tlw{position:relative;width:200px;--lead:40px;--leg:14px;margin:0}
-  .tlw+.tlw{margin-top:36px}
-  .tlw-say{margin:0;padding-bottom:var(--lead);white-space:nowrap;
-    font:600 12.5px/1.4 var(--sans);color:var(--ink)}
-  .tlw>.tln{margin-top:-28px}
-  .tw{position:relative;font-weight:700;border-bottom:2px solid var(--accent)}
-  .tw::before{content:"";position:absolute;left:50%;top:calc(100% + 1px);
-    width:var(--leg);height:var(--lead);border-left:2px solid var(--accent);
-    border-bottom:2px solid var(--accent)}
-  .tw[data-to="before"]::before{left:auto;right:50%;border-left:0;
-    border-right:2px solid var(--accent)}
-  .tw[data-to="now"]::before{border-bottom:2px solid var(--accent)}
-  .tw::after{content:"";position:absolute;width:0;height:0;border:5px solid transparent}
-  .tw[data-to="now"]::after,.tw[data-to="then"]::after{
-    left:calc(50% + var(--leg) - 5px);top:calc(100% + 1px + var(--lead) - 5px);
-    border-left-color:var(--accent);border-right:0}
-  .tw[data-to="before"]::after{right:calc(50% + var(--leg) - 5px);top:calc(100% + 1px + var(--lead) - 5px);
-    border-right-color:var(--accent);border-left:0}
-  /* a span that sits in the future: the ahead run is painted solid, not dashed */
-  .tln[data-fill="ahead"] .tln-ahead{background-image:linear-gradient(currentColor,currentColor)}
+  /* the sentence over the axis: <figure class="tn" data-tense="past-perfect"><p class="tn-say">I
+     <b class="tv an">had</b>n't <b class="tv">been</b> there.</p><div class="tn-axis"><i class="tn-rule"></i>
+     <i class="tn-bef">before</i><i class="tn-now">now</i><i class="tn-then">then</i></div></figure>
+     `.tv` = the words of the verb group, underlined. `.an` = the ONE word the axis is pinned to, by
+     its centre, so wrapping never moves the axis. One point of the axis sits under that word: which
+     point is the tense's job, held in `--pin` (px from the axis's start to the pinned point).
+     Vary: --w (axis length, 200px floor), --pin, --drop (how far the word's line falls) */
+  .tn{position:relative;margin:0;padding-bottom:56px;
+    --label-ink:color-mix(in srgb,var(--ink-2) 78%,var(--ink))}
+  .tn+.tn{margin-top:44px}
+  .tn-say{margin:0;text-align:center;font:600 12.5px/1.55 var(--sans);color:var(--ink)}
+  .tv{font-weight:700;border-bottom:2px solid var(--accent)}
+  .an{position:relative;anchor-name:--tn}
+  .tn-axis{position:absolute;bottom:4px;height:44px;width:var(--w,200px);
+    position-anchor:--tn;left:calc(anchor(center) - var(--pin,100px));
+    font:700 calc(8px + 1pt)/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;
+    color:var(--label-ink)}
+  /* the word's line: down to the rule, or further to the labels under it */
+  .an::after{content:"";position:absolute;left:50%;translate:-50% 0;top:100%;
+    width:0;height:var(--drop,19px);border-left:2px solid var(--accent)}
+  .tn-rule{position:absolute;left:0;right:0;top:10px;height:2px;
+    background:color-mix(in srgb,var(--accent) 55%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+  .tn-bef,.tn-now,.tn-then{position:absolute;top:16px;translate:-50% 0;white-space:nowrap}
+  .tn-bef{left:var(--b,6%)} .tn-now{left:var(--n,50%)} .tn-then{left:var(--t,94%)}
+  /* a point with no name: the unnamed past, or where a future-perfect claim lands */
+  .tn-dot{position:absolute;top:5px;left:var(--dot,50%);translate:-50% 0;width:10px;height:10px;
+    border-radius:50%;background:var(--accent)}
+  /* a span that fades out before it reaches a named point */
+  .tn-span{position:absolute;top:10px;left:var(--s1);width:calc(var(--s2) - var(--s1));height:2px;
+    background:linear-gradient(90deg,transparent,var(--accent) 28%,var(--accent) 72%,transparent)}
+  /* …whose right end fades back in, dotted, toward a point */
+  .tn-tail{position:absolute;top:10px;left:var(--s2);width:calc(var(--t2) - var(--s2));height:2px;
+    background-image:repeating-linear-gradient(90deg,var(--accent) 0 3px,transparent 3px 7px);
+    mask-image:linear-gradient(90deg,rgba(0,0,0,.08),#000)}
+  /* the same, all the way into the future, thinning out */
+  .tn-fut{position:absolute;top:10px;left:var(--n);width:calc(var(--t) - var(--n));height:2px;
+    background-image:repeating-linear-gradient(90deg,var(--accent) 0 3px,transparent 3px 7px);
+    mask-image:linear-gradient(90deg,#000,rgba(0,0,0,.2))}
+  /* future perfect: down from the word, then right to THEN */
+  .tn-elbow{position:absolute;top:16px;left:var(--fp);width:calc(var(--t) - var(--fp) - 26px);
+    height:2px;background:var(--accent)}
+  .tn-elbow::after{content:"";position:absolute;right:-10px;top:-4px;width:0;height:0;
+    border:5px solid transparent;border-left-color:var(--accent);border-right:0}
+  /* one preset per tense: where the three points sit, and which one is pinned to the word */
+  .tn[data-tense="past-perfect"]{--b:8%;--n:84%;--pin:16px;--drop:24px}
+  .tn[data-tense="simple-past"]{--w:220px;--b:14%;--n:86%;--dot:34%;--pin:74.8px}
+  .tn[data-tense="past-continuous"]{--w:220px;--b:8%;--n:88%;--s1:24%;--s2:62%;--pin:94.6px}
+  .tn[data-tense="present-perfect"]{--w:220px;--b:6%;--n:92%;--s1:7%;--s2:41%;--t2:80%;--pin:52.6px}
+  .tn[data-tense="simple-present"]{--w:180px;--n:40%;--t:92%;--pin:72px;--drop:24px}
+  .tn[data-tense="present-continuous"]{--w:180px;--n:34%;--t:88%;--pin:61.2px;--drop:24px}
+  .tn[data-tense="going-to"]{--w:120px;--n:26%;--t:90%;--pin:108px;--drop:24px}
+  .tn[data-tense="future-perfect"]{--w:220px;--n:34%;--fp:52%;--t:88%;--pin:114.4px}
   /* night: the shadow is a literal, so it is set here */
   .block[data-look="dark"] .tln-head b,.block[data-look="dark"] .tln-then{
     text-shadow:rgba(0,0,0,.85) 0 0px 3px}
