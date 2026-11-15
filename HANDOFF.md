@@ -87,5 +87,25 @@ Sources: `https://allahabadi.dev/blogs/css/20-modern-css-features/` (20-feature 
 
 **Relationship to the headers.** None of the above belongs in a `## ` header until it is the mechanism a build actually uses. When batch 2 lands, the header index grows by one id per new mechanism (`LOOKS`, `STATE`, `COUNT`), each stating when to use it, the markup it needs, the look it produces, and what toggles it — the four fields agreed in the 2026-11-14 review, with no inventories of content.
 
+### E. Backbone draft v1 — `preview.css` + `preview.html` (2026-11-14)
+
+Parked `style.css` is untouched; the draft is a separate pair that only links to each other.
+
+**Files.** `preview.css` (559 lines, 22 `/* # */` headers, index at `:1-20`) and `preview.html` (358 lines, 8 sections, 31 blocks). The page is a showcase, not a lesson: every mechanism appears once with its own label.
+
+**Mechanisms in the draft.** 6 structures (`prose` · `set` · `sequence` with modes turns/numbered/timeline · `grid` · `pair` · `media`), 4 controls (`gap` · `choice` · `multi` · `write`) plus `reveal`, 8 looks (`tint` · `outline` · `grain` · `ruled` · `tape` · `raised` · `float` · `dark`), 4 state mechanisms (`data-state` + CSS marks, `data-reactive` score surface, `.meter`, `.ring`), motion (one-shot entrance, scroll-linked `data-motion="rise"`, flip card, animated gradient angle, reading mode), `content-visibility` fast path, print, shell, utilities.
+
+**Verified in Chrome 1500×1400 via CDP** (no QA harness, no `QA_ON`): 31 blocks / 8 sections; `3px oklch(0.58 .14 214)` top rule resolved from `--accent-h`; `container-type: inline-size`; `sideRows: subgrid` with `pairRowDelta 0` (sibling rows aligned); `--pct` 64 painted as both the ring arc and the counter text; `--score` .72 → meter 72%; `flip transform-style preserve-3d`, `backface hidden`, card 152px; reveal closed at `grid-template-rows: 0px`; `:has(input:checked)` matches; checkbox `appearance: none` and paints; reading mode 1200 → 820px; `overflowX 0`; `content-visibility` reads `auto` on every non-first block.
+
+**Bugs found and fixed during the pass.** `.ring` number read `0` because `--pct` is registered `inherits:false` — the reset had to move to `.ring`; `code` inside `[data-look="dark"]` was light-on-light until `--sunken` joined the dark ramp; `.gap` was 31px tall and broke the line rhythm (now 25px, `vertical-align:-.22em`); timeline date column overlapped the rail (now three columns: date · rail · content); turns were 55px apart because `.say` was an inline-block inside a block (now a grid item per turn); `contain-intrinsic-size` default 420px inflated a 5,050px page to 6,989px (now 220px → 5,589px).
+
+**Still open — nothing here is decided.**
+- Structure/control/look lists are still prose in this handoff; the `preview.css` headers give ranges, never enumerations, per the `#00` rule.
+- No JSON matrix yet (the "map all possibilities or all conflicts" question).
+- `@property --accent-h` is `<number>`, so hue cannot animate as an angle; fine while hue is static.
+- The draft has no bridge back to `style.css`: `.panel`/`.card` are aliased to full width in `#40`, but nothing else of the current corpus maps yet.
+- Not linked from `index.html`, `build-lessons.mjs` does not know it, and `_shell.html` does not reference it — deliberately, since it is a local preview.
+
+
 
 
