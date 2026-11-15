@@ -76,7 +76,8 @@
   h2{font-family:var(--playfair);font-size:var(--s3);border-bottom:2px solid var(--rose);
     padding-bottom:6px;margin:1.6em 0 .3em}
   h3{font-family:var(--playfair);font-size:calc(var(--s1) + 2pt);color:var(--track-ink);
-    border-left:4px solid var(--track-rule);padding-left:10px;margin:22px 0 8px;
+    border-left:4px solid var(--track-rule);border-bottom:2px solid var(--rose);
+    padding-left:10px;padding-bottom:6px;margin:22px 0 8px;
     letter-spacing:.02em}
   h2{counter-reset:blk}
   h3{counter-increment:blk}
