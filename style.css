@@ -123,12 +123,12 @@
      3px it is otherwise too faint to see. */
   .page-container{position:absolute;left:15px;width:1400px;margin:0;padding:0;
     background-color:var(--paper);
-    background-image:radial-gradient(rgb(74 60 40/.13) 1px, transparent 1px);
+    background-image:radial-gradient(rgb(74 60 40/.065) 1px, transparent 1px);
     background-size:3px 3px;
     border:2px solid var(--ink);border-radius:var(--r2);
     box-shadow:4px 4px 0 color-mix(in oklab,var(--ink) 12%,transparent)}
   /* the rounded grey frame belongs to the page body, inset from the ink edge — not to the 1200px column */
-  .page-container::before{content:"";position:absolute;inset:8px;pointer-events:none;
+  .page-container::before{content:"";position:absolute;inset:6px;pointer-events:none;
     border:2px solid color-mix(in oklab,var(--ink-2) 50%,var(--paper));border-radius:14px}
   .content-area{width:1200px;margin:0 auto;padding:98px 0 16px;position:relative}
   .itemrow{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));
