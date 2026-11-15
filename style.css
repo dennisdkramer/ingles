@@ -20,14 +20,15 @@
 /* #10 TOKENS — Colour, spacing, type and depth. Set token anywhere; unset - back to :root. Vary: --accent-h (hue 0-360); --sp, --r1/--r2, --edge-w (length) */
 @layer tokens{
   :root{
-    /* the old palette is the palette: every alias below resolves to one of these */
-    --cream:#f4eddd; --paper:#fdfaf2; --ink:#182136; --tan:#b9854c; --rose:#d9c1ba;
-    --ptw:#96601f; --blue:#1d4ed8; --dkblue:#1e3a8a; --bluebg:rgba(29,78,216,.16);
-    --orange:#c2601a; --purple:#5b2a86; --green:#2f9e44; --greenbg:#e8f7ee;
+    /* one warm palette: cream paper, warm ink, ochre and clay. No cool hue is defined here, so no
+       legacy name can paint one — the old and the new sheets read as one colour scheme */
+    --cream:#f4eddd; --paper:#fdfaf2; --ink:#1b1917; --tan:#b9854c; --rose:#d9c1ba;
+    --ptw:#96601f; --blue:#9c5b22; --dkblue:#6b3d16; --bluebg:rgba(156,91,34,.16);
+    --orange:#c2601a; --purple:#8c3b2f; --green:#2f9e44; --greenbg:#e8f7ee;
     --surface:var(--cream); --surface-2:var(--paper); --sunken:#efe6d6;
-    --ink-2:#5c5347; --line:var(--rose); --line-2:#efe4d2;
-    --teach-h:65; --train-h:26; --show-h:286; --game-h:326;
-    --ok:var(--green); --err:#c92a2a; --warn:#e0b341;
+    --ink-2:#5c5347; --line:var(--rose); --line-2:#e7dbc9;
+    --teach-h:65; --train-h:28; --show-h:350; --game-h:96;
+    --ok:var(--green); --err:#b3352c; --warn:#e0b341;
     --r1:10px; --r2:18px; --r3:26px; --sp:12px;
     --shadow-1:0 1px 2px rgb(26 33 48/.05), 0 4px 14px -6px rgb(26 33 48/.12);
     --shadow-2:0 2px 6px rgb(26 33 48/.07), 0 22px 44px -18px rgb(26 33 48/.28);
@@ -52,13 +53,13 @@
   h1{font-family:var(--playfair);font-size:var(--s4);letter-spacing:.14em;margin:8px 0 0}
   h2{font-family:var(--playfair);font-size:var(--s3);border-bottom:2px solid var(--rose);
     padding-bottom:6px;margin:1.6em 0 .3em}
-  h3{font-family:var(--serif);font-size:var(--s3);color:var(--ink);
-    border-left:4px solid var(--ink);padding-left:10px;margin:22px 0 10px;
+  h3{font-family:var(--playfair);font-size:var(--s1);color:var(--dkblue);
+    border-left:4px solid var(--tan);padding-left:10px;margin:22px 0 8px;
     letter-spacing:.02em}
   h2{counter-reset:blk}
   h3{counter-increment:blk}
-  h3::before{content:counter(blk,upper-alpha) ". ";color:var(--accent);padding-right:.5em;
-    font-family:var(--sans);font-size:.8em;font-weight:700}
+  h3::before{content:counter(blk,upper-alpha) ". ";color:var(--ink);padding-right:.5em;
+    font-family:var(--serif);font-size:.8em;font-weight:700}
   h4{font-family:var(--serif);font-style:italic;font-weight:600;font-size:var(--s-1);
     color:var(--dkblue);margin:0 0 8px;padding-left:2em;text-transform:none;
     letter-spacing:normal}
@@ -68,7 +69,7 @@
   input.gap,textarea{cursor:text}
   p:last-child,li:last-child{margin-bottom:0}
   b,strong{font-weight:700}
-  :lang(pt){font-style:italic;font-weight:400}
+  :lang(pt){font-style:italic}
   a{color:var(--ink);font-weight:600;text-underline-offset:.18em;
     text-decoration-thickness:.07em;text-decoration-color:var(--accent-line)}
   a:hover{text-decoration-color:var(--accent)}
@@ -136,7 +137,7 @@
   .set>li{background:var(--surface-2);border:1px solid var(--line-2);border-radius:var(--r1);
     padding:8px 11px;margin:0;transition:border-color .18s,translate .18s}
   .set>li b{display:block;font-family:var(--sans);font-size:.92rem;letter-spacing:.01em}
-  .set>li .dim{font-size:.92em}
+  .set>li .dim{font-size:1em}
   .set[data-cols="1"]{--cols:1}
   .set[data-cols="3"]{--cols:3}
   .set[data-cols="4"]{--cols:4}
@@ -164,7 +165,7 @@
 
   .seq[data-mode="turns"]{gap:12px}
   .seq[data-mode="turns"]>li{display:grid;gap:3px;justify-items:start}
-  .seq[data-mode="turns"] .who{display:block;font:600 .76rem/1.4 var(--sans);
+  .seq[data-mode="turns"] .who{display:block;font:600 .88rem/1.4 var(--sans);
     text-transform:uppercase;letter-spacing:.08em;color:var(--ink-2)}
   .seq[data-mode="turns"] .say{display:block;width:fit-content;max-width:80%;padding:9px 13px;
     border-radius:16px 16px 16px 5px;background:var(--surface-2);border:1px solid var(--line-2);
@@ -187,7 +188,7 @@
     gap:0;align-items:start}
   .seq[data-mode="timeline"]>li>*{grid-column:3}
   .seq[data-mode="timeline"]>li>.at{grid-column:1;grid-row:1;text-align:right;padding:2px 10px 0 0;
-    white-space:nowrap;font:600 .78rem var(--sans);color:var(--accent)}
+    white-space:nowrap;font:600 .88rem var(--sans);color:var(--accent)}
   .seq[data-mode="timeline"]>li::before{content:"";grid-column:2;grid-row:1;justify-self:center;
     margin-top:6px;width:9px;height:9px;border-radius:50%;background:var(--surface);
     border:2px solid var(--accent);z-index:1}
@@ -196,11 +197,11 @@
 /* #52 GRID — data-structure="grid" > <table> with <thead> and optional <caption>; tr.note = remark row. Vary: --row-h (length) */
 @layer structure{
   .block[data-structure="grid"] table{width:100%;border-collapse:separate;border-spacing:0;
-    font-size:.97rem}
+    font-size:1rem}
   .block[data-structure="grid"] caption{caption-side:top;text-align:left;
-    font:600 .8rem var(--sans);letter-spacing:.05em;text-transform:uppercase;
+    font:600 .88rem var(--sans);letter-spacing:.05em;text-transform:uppercase;
     color:var(--ink-2);padding:0 0 7px}
-  .block[data-structure="grid"] th{font:700 .78rem var(--sans);letter-spacing:.07em;
+  .block[data-structure="grid"] th{font:700 .88rem var(--sans);letter-spacing:.07em;
     text-transform:uppercase;color:var(--ink-2);text-align:left;padding:8px 11px;
     background:var(--accent-soft);border-bottom:2px solid var(--accent-line);white-space:nowrap}
   .block[data-structure="grid"] th:first-child{border-radius:var(--r1) 0 0 0}
@@ -221,7 +222,7 @@
   .block[data-structure="pair"] .side{grid-row:1/-1;display:grid;grid-template-rows:subgrid;
     gap:8px;padding:11px 13px;border-radius:var(--r1);background:var(--surface-2);
     border:1px solid var(--line-2);align-content:start}
-  .block[data-structure="pair"] .side>p{margin:0;font-size:.96rem}
+  .block[data-structure="pair"] .side>p{margin:0;font-size:1rem}
   .block[data-structure="pair"] .side:first-child{
     background:color-mix(in oklab,var(--err) 6%,var(--surface-2));
     border-color:color-mix(in oklab,var(--err) 24%,var(--line-2))}
@@ -335,10 +336,10 @@
   .block[data-look="float"]{background:transparent;border-color:transparent;
     border-top-color:transparent;box-shadow:none;padding-inline:0}
 
-  .block[data-look="dark"]{--ink:#eef1f7;--ink-2:#aeb6c6;--line:#3a4352;--line-2:#2b3341;
-    --surface:#121822;--surface-2:#1b2431;--paper:#18202d;--sunken:#26303e;
-    --accent:oklch(74% .13 var(--accent-h));color-scheme:dark;color:var(--ink);
-    border-color:#2b3341;border-top-color:var(--accent);
+  .block[data-look="dark"]{--ink:#f2ece1;--ink-2:#b7ab97;--line:#3d372f;--line-2:#2b2620;
+    --surface:#14110d;--surface-2:#1e1a14;--paper:#191510;--sunken:#2b241b;
+    --ptw:#e0b27a;--accent-h:38;--accent:oklch(76% .12 38);color-scheme:dark;color:var(--ink);
+    border-color:#2b2620;border-top-color:var(--accent);
     box-shadow:0 24px 50px -26px #000}
   .block[data-look="dark"] h4,.block[data-look="dark"] .dim{color:var(--ink-2)}
   .block[data-look="dark"] code,.block[data-look="dark"] .set>li{background:var(--sunken);
@@ -488,10 +489,17 @@
 
 /* #99 U — utilities, wins over every layer above: .dim .lead .pt .mono .stack .row .center .mt .sr .defcard .stress mark ruby .glossbtn Vary: --measure (length) */
 @layer u{
-  .dim{color:#8a8072;font-size:13px}
+  .dim{color:#6b6154;font-size:15px;line-height:1.45}
   .lead{font-family:var(--playfair);font-size:18px;font-style:italic;color:#5c5347;
     margin:.2em 0 .7em;line-height:1.5;max-width:var(--measure,62ch)}
-  .pt{font-style:italic;color:#5c5347}
+  .pt{font-style:italic;color:var(--ptw)}
+  /* Portuguese is italic AND ochre; an English quotation stays italic in ink, so the two never look
+     like the same voice (an `i` inside a PT phrase keeps the phrase's colour) */
+  :lang(pt),.ptw{font-style:italic;color:var(--ptw)}
+  /* the activity's prompt line — the sentence right under the heading of a `train` block */
+  .block[data-kind="train"]>h3+p{font-weight:700;color:var(--ink)}
+  /* the page's own subtitle, directly under the lesson title */
+  .content-area>h1+.lead{max-width:none;margin-inline:auto;text-align:center}
   .mono{font-family:var(--mono);font-size:.92em}
   .stack{display:grid;gap:10px}
   .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
@@ -520,9 +528,6 @@
    note/highlight layers, dialog, toast, Complete?), the displays and the games. Declared first, so any
    layer above wins per property: the layers above speak about a selector, the port stays silent. */
 @layer legacy{
-  :root{--cream:#f4eddd;--tan:#b9854c;--rose:#d9c1ba;--ptw:#96601f;--blue:#1d4ed8;
-    --dkblue:#1e3a8a;--bluebg:rgba(29,78,216,.16);--orange:#c2601a;--purple:#5b2a86;
-    --green:#2f9e44;--greenbg:#e8f7ee}
   button{background:var(--ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;
     margin:4px 4px 4px 0;font:600 14px var(--serif);cursor:pointer;
     box-shadow:3px 3px 0 var(--tan);transition:transform .09s ease,filter .12s ease}
@@ -634,12 +639,12 @@
     background:var(--paper);color:var(--ink);font-size:14px;line-height:1;cursor:pointer;
     display:flex;align-items:center;justify-content:center}
   .vz-btn:hover{background:var(--tan)}
-  .vz-btn:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}
+  .vz-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
   .vz-time{flex:0 0 auto;font:600 12px var(--serif);color:#5c5347;min-width:3.2em;
     text-align:center;font-variant-numeric:tabular-nums}
   .vz-bar{position:relative;flex:1 1 auto;height:14px;background:#e8e0cf;border-radius:7px;
     cursor:pointer}
-  .vz-bar:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}
+  .vz-bar:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
   .vz-fill{position:absolute;top:0;bottom:0;left:0;width:0;background:#b9854c;border-radius:7px;
     pointer-events:none}
   .vz-knob{position:absolute;top:50%;left:0;width:14px;height:14px;margin:-7px 0 0 -7px;
