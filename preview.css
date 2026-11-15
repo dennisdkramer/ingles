@@ -1,38 +1,11 @@
-/* ==================================================================================================
-   PREVIEW BACKBONE — the candidate replacement for the lesson half of style.css.
-   Linked by preview.html only. Nothing else on the site uses it yet.
+/* # ALL COMMENTS AUTHORED FREE OF PROSE - **MINIMUM WORDS POSSIBLE** */
+/* # ALL CODE AUTHORED CONSERVATIVELY, MINUMUM CHANGE POSSIBLE, PREFER DELETION TO ADDITION - REQUIRES USER SIGN-OFF */
 
-   CONTENTS — `grep "/* #" preview.css` prints this list in file order.
-   #00 HOW THESE HEADERS ARE WRITTEN
-   #10 TOKENS      colour, spacing, type, radii, depth
-   #20 BASE        element defaults
-   #30 PERF        render only what is near the viewport
-   #40 LAYOUT      the fixed page and the 12-column row
-   #50 STRUCTURE   prose · set · sequence · grid · pair · media
-   #60 CONTROL     gap · choice · multi · write · reveal
-   #70 LOOK        tint · outline · grain · ruled · tape · raised · float · dark
-   #80 STATE       correct · wrong · done · reactive score · progress ring
-   #90 MOTION      entrance · scroll reveal · flip · hover · focus mode
-   #95 PRINT
-   #98 SHELL       brand, bar, footer
-   #99 U           one-off overrides
-   ================================================================================================== */
 
-/* #00 HOW THESE HEADERS ARE WRITTEN
-   Rule 1 — a header is read by the lesson builder, and answers five things in this order:
-     (1) what it does, as a verb; (2) exactly how to invoke it, spelled as the builder must type it;
-     (3) what the student sees; (4) what happens when it is not set; (5) what can be varied.
-   A header that answers fewer is incomplete. A header that forbids, or lists what already exists,
-   is not a header — it is a note for whoever edits this file, and belongs in the section comment.
-   Rule 2 — length: one line, never more than three.
-     Say the mechanism, not the CSS. Anything a browser already does, or a global default declared
-     in #10, is left out; mention it only where a block deviates. Give each knob a RANGE, never a
-     list of allowed values, because a list reads as a closed set and stops the builder inventing.
-     If three lines are not enough, the mechanism is two mechanisms, and gets two headers.
-   */
+/* #00 HEADER LANGUAGE — a header is read by the lesson builder, and answers five things in as few words as possible (3-6) on one line:
+     'Available classes spelled as the builder types. What it does. If not set? Available variants.'    */
 
-/* Registered so they can animate and can never vanish on a typo. A declared initial-value is the
-   floor under every knob: an unset or misspelled value lands here, not on a broken layout. */
+/* Declared initial-value is the floor: an unset or misspelled value lands here, not on a broken layout. */
 @property --accent-h { syntax: '<number>';    inherits: true;  initial-value: 210 }
 @property --score    { syntax: '<number>';    inherits: true;  initial-value: 0 }
 @property --pct      { syntax: '<integer>';   inherits: false; initial-value: 0 }
@@ -42,9 +15,7 @@
 
 @layer reset, tokens, base, perf, layout, structure, control, look, state, motion, print, shell, u;
 
-/* #10 TOKENS — sets the page's colour, spacing, type and depth.
-   Invoke by setting a token anywhere, e.g. style="--accent-h:280"; unset, each falls back to :root.
-   Vary: --accent-h any hue 0-360; --sp any length; --r1/--r2 any length; --edge-w any length. */
+/* #10 TOKENS — Colour, spacing, type and depth. Set token anywhere; unset - back to :root. Vary: --accent-h (hue 0-360); --sp, --r1/--r2, --edge-w (length) */
 @layer tokens{
   :root{
     --surface:#fbf8f2; --surface-2:#ffffff; --paper:#fffdf8; --sunken:#f2ede2;
@@ -64,9 +35,7 @@
   }
 }
 
-/* #20 BASE — element defaults. Nothing to invoke; a block inherits all of it.
-   Vary per block: --serif and --sans are the only type stacks; --ink and --surface are the only
-   text and page colours. A block that wants another face sets --serif on itself. */
+/* #20 BASE — element defaults. Nothing to invoke; --serif/--sans (font), --ink/--surface (colour). h3 auto-letters A,B,C per section; h4 takes no letter */
 @layer base{
   *,*::before,*::after{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
@@ -76,6 +45,10 @@
   h1{font-size:var(--s4);letter-spacing:-.015em}
   h2{font-size:var(--s3)}
   h3{font-size:var(--s1)}
+  h2{counter-reset:blk}
+  h3{counter-increment:blk}
+  h3::before{content:counter(blk,upper-alpha) ". ";color:var(--accent);padding-right:.5em;
+    font-family:var(--sans);font-size:.8em;font-weight:700}
   h4{font-size:var(--s-1);font-family:var(--sans);text-transform:uppercase;letter-spacing:.09em;color:var(--ink-2)}
   p,li{margin:0 0 .7em;text-wrap:pretty}
   p:last-child,li:last-child{margin-bottom:0}
@@ -91,66 +64,55 @@
   hr{border:0;border-top:1px solid var(--line);margin:calc(var(--sp)*1.6) 0}
 }
 
-/* #30 PERF — a block is skipped by the renderer until it nears the viewport, and its real height is
-   remembered after the first paint. Nothing to invoke: it is on every .block.
-   Vary: --block-est is the height guessed before the first paint; any length. Start near the real
-   height of a typical block — too high inflates the scrollbar before a block is ever drawn, too low
-   makes the page jump while scrolling. */
+/* #30 PERF — sections render only when near the viewport. Nothing to invoke. Vary: --section-est (length, 1200px = height guessed before paint) */
 @layer perf{
-  .block{content-visibility:auto;contain-intrinsic-size:auto var(--block-est,220px)}
-  .block:first-child,.block[data-pin]{content-visibility:visible}
+  .content-area>section{content-visibility:auto;
+    contain-intrinsic-size:auto var(--section-est,1200px)}
+  .content-area>section:first-of-type{content-visibility:visible}
 }
 
-/* #40 LAYOUT — the fixed page and the 12-column row.
-   Invoke: .itemrow holds .itemsize-third | -half | -twothird | .itemsize as direct children.
-   Unset, a block is full width and sits on its own line. Vary: --row-gap any length; the four size
-   classes are the whole vocabulary, and their spans are 4 · 6 · 8 · 12 of 12. */
+/* #40 LAYOUT — .content-area 1200px. .itemrow > .itemsize-third|-half|-twothird|.itemsize = 4/6/8/12 of 12; unset full width. Vary: --row-gap, --col-gap, --section-gap (length) */
 @layer layout{
   .page-container{width:1400px;margin:0 auto;padding:0 15px}
   .content-area{width:1200px;margin:0 auto;position:relative}
   .itemrow{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));
-    gap:var(--row-gap,22px) var(--col-gap,18px);margin:0 0 var(--row-gap,22px);
-    align-items:stretch}
+    gap:var(--row-gap,22px) var(--col-gap,18px);align-items:start}
   .itemsize-third{grid-column:span 4}
   .itemsize-half{grid-column:span 6}
   .itemsize-twothird{grid-column:span 8}
   .itemsize{grid-column:span 12}
-  /* bridge: the two class names the current site's pages already write */
+  .itemrow>:only-child{grid-column:1/-1}
+  /* legacy names, same as .itemsize */
   .panel,.card{grid-column:span 12}
   .itemrow>*{min-width:0}
-  .content-area>section{display:flow-root;margin:0 0 30px}
-  .content-area>section:last-child{margin-bottom:8px}
+  .content-area>*{margin-block-end:var(--row-gap,22px)}
+  .content-area>section{display:grid;gap:var(--row-gap,22px);
+    margin-block:0 var(--section-gap,34px)}
   .content-area>h1{margin-bottom:.35em}
 }
 
-/* #50 STRUCTURE — how a block arranges its content. A block is <div class="block" data-structure="…">;
-   the value decides the arrangement, nothing else. Unset, it is a plain stack of its children.
-   Invoke: data-structure="prose|set|sequence|grid|pair|media"; data-kind="teach|train|show|game"
-   picks its accent hue. Vary: --h any hue 0-360 overrides the kind; --pad any length. */
+/* #50 STRUCTURE — data-structure="prose|set|sequence|grid|pair|media" on .block; data-kind="teach|train|show|game" = hue. Unset: plain stack. Vary: --h (hue 0-360) */
 @layer structure{
-  .block{position:relative;display:flex;flex-direction:column;
+  .block{position:relative;
     --h:var(--teach-h);--accent-h:var(--h);
     --accent:oklch(58% .14 var(--accent-h));
     --accent-soft:color-mix(in oklab, var(--accent) 13%, var(--surface));
     --accent-line:color-mix(in oklab, var(--accent) 42%, var(--line));
     background:var(--paper);border:1px solid var(--line-2);border-top:3px solid var(--accent);
     border-radius:var(--r2);box-shadow:var(--shadow-1);
-    padding:calc(var(--sp)*1.3) calc(var(--sp)*1.55);margin:0;container-type:inline-size;
-    container-name:block}
-  .content-area>.block,.content-area>.itemrow{margin-block-end:var(--row-gap,22px)}
-  .itemrow>.block{margin-block-end:0}
+    padding:calc(var(--sp)*1.3) calc(var(--sp)*1.55);margin:0}
   .block[data-kind="train"]{--h:var(--train-h)}
   .block[data-kind="show"]{--h:var(--show-h)}
   .block[data-kind="game"]{--h:var(--game-h)}
   .block[data-kind="teach|train"]{--h:var(--train-h)}
   .block>h3:first-child,.block>h4:first-child{margin-top:0}
 
-  /* prose — running text. Invoke: data-structure="prose". Vary: --measure any length, default 68ch. */
-  .block[data-structure="prose"]{max-width:var(--measure,68ch);line-height:1.72}
+  /* prose — --measure (length, 68ch) */
+  .block[data-structure="prose"]{line-height:1.72}
+  .block[data-structure="prose"]>:is(p,ul,ol,blockquote){max-width:var(--measure,68ch)}
   .block[data-structure="prose"]>h4{margin-bottom:.5em}
 
-  /* set — short entries, order irrelevant, wrapped into columns. Invoke: <ul class="set"><li>… .
-     Vary: --cols any integer, default 2; entries never stretch to fill a short row. */
+  /* set — <ul class="set"><li>; --cols (integer, 2) */
   .set{list-style:none;margin:0;padding:0;display:grid;align-content:start;
     grid-template-columns:repeat(var(--cols,2),minmax(0,1fr));gap:10px}
   .set>li{background:var(--surface-2);border:1px solid var(--line-2);border-radius:var(--r1);
@@ -161,8 +123,7 @@
   .set[data-cols="3"]{--cols:3}
   .set[data-cols="4"]{--cols:4}
 
-  /* media — one image or clip with a caption, and an optional transcript under it.
-     Invoke: data-structure="media" holding <figure>. Vary: --media-h any length. */
+  /* media — <figure>; --media-h (length) */
   .block[data-structure="media"] figure{margin:0;display:grid;gap:8px}
   .block[data-structure="media"] .frame{border-radius:var(--r1);overflow:hidden;
     background:linear-gradient(140deg,color-mix(in oklab,var(--accent) 22%,var(--sunken)),
@@ -174,12 +135,7 @@
     padding-left:12px;font-size:.95em}
 }
 
-/* #51 SEQUENCE — ordered items, where the order carries meaning.
-   Invoke: <ol class="seq"><li>…</li></ol> inside data-structure="sequence". Unset mode = one item
-   per line. data-mode="turns" gives speaker bubbles that alternate sides; "numbered" gives a counted
-   circle per item; "timeline" gives a rail with a dot and a date per item.
-   Vary: --seq-gap any length; --rail any colour. In turns, .who names the speaker and .say is the
-   bubble; in timeline, .at is the date. */
+/* #51 SEQUENCE — <ol class="seq">. data-mode="turns" (.who/.say) | "numbered" | "timeline" (.at). Unset: one item per line. Vary: --seq-gap, --date-w, --rail-w (length) */
 @layer structure{
   .seq{list-style:none;margin:0;padding:0;display:grid;align-content:start;
     gap:var(--seq-gap,10px)}
@@ -219,10 +175,7 @@
     border:2px solid var(--accent);z-index:1}
 }
 
-/* #52 GRID — rows and columns with a header line: facts that belong to the same fields.
-   Invoke: data-structure="grid" holding a <table>, with <thead> for the header row and an optional
-   <caption>. A remark row is <tr class="note">. Unset, nothing changes.
-   Vary: any table markup; --row-h any length for a uniform row height. */
+/* #52 GRID — data-structure="grid" > <table> with <thead> and optional <caption>; tr.note = remark row. Vary: --row-h (length) */
 @layer structure{
   .block[data-structure="grid"] table{width:100%;border-collapse:separate;border-spacing:0;
     font-size:.97rem}
@@ -243,11 +196,7 @@
     background:var(--sunken);border-radius:0 0 var(--r1) var(--r1)}
 }
 
-/* #53 PAIR — two sides that must agree row for row: before/after, right/wrong, PT/EN.
-   Invoke: data-structure="pair" holding <div class="sides"> with exactly two <div class="side">,
-   each side holding the SAME number of children. Unset, each side stacks on its own and rows
-   misalign. Vary: --pair-rows any integer = children per side, default 3; the first side is tinted
-   red, the last green, so the contrast is visible before a word is read. */
+/* #53 PAIR — data-structure="pair" > .sides > 2x .side, SAME child count each (subgrid rows); side 1 red, side 2 green. Vary: --pair-rows (integer = children per side, 3) */
 @layer structure{
   .block[data-structure="pair"] .sides{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;
     grid-template-rows:repeat(var(--pair-rows,3),auto)}
@@ -263,10 +212,7 @@
     border-color:color-mix(in oklab,var(--ok) 24%,var(--line-2))}
 }
 
-/* #60 GAP — a blank the student types into, sitting inside a sentence.
-   Invoke: <input class="gap" data-answer="…">. Unset width, a gap is 9em.
-   Vary: --gap-w any length; data-answer holds accepted forms separated by |, and is read by the
-   engine, never styled here. */
+/* #60 GAP — <input class="gap" data-answer="a|b"> inside a sentence; data-answer is the key, unset = no key. Vary: --gap-w (length, 9em) */
 @layer control{
   .gap{display:inline-block;width:var(--gap-w,9em);max-width:100%;border:0;
     border-bottom:2px solid var(--accent-line);border-radius:0;
@@ -279,9 +225,7 @@
   .gap:user-invalid{border-bottom-color:var(--err);background:color-mix(in oklab,var(--err) 7%,transparent)}
 }
 
-/* #61 CHOICE — one answer out of several. Invoke: <div class="opts"> holding
-   <label class="opt"><input type="radio" name="…"><span>…</span></label>. Unset, options stack.
-   Vary: data-layout="row" lays them side by side; a chosen option fills with the block's accent. */
+/* #61 CHOICE — .opts > label.opt > input[type=radio] + span; one answer. Unset: options stack. Vary: data-layout="row" */
 @layer control{
   .opts{display:grid;align-content:start;gap:7px;margin:2px 0 0}
   .opts[data-layout="row"]{grid-auto-flow:column;grid-auto-columns:max-content;gap:10px}
@@ -298,9 +242,7 @@
     box-shadow:inset 0 0 0 3px var(--surface-2)}
 }
 
-/* #62 MULTI — several answers, any number of them. Invoke: the same .opt label with
-   <input type="checkbox">. Unset, it behaves as CHOICE; a checked option shows a tick.
-   Vary: --tick any colour behind the mark. */
+/* #62 MULTI — same .opt with input[type=checkbox]; any number of answers, ticked with the accent */
 @layer control{
   .opt input[type="checkbox"]{appearance:none;flex:0 0 auto;width:18px;height:18px;margin:0;
     border:2px solid var(--line);border-radius:5px;display:grid;place-content:center;
@@ -312,9 +254,7 @@
   .opt input[type="checkbox"]:checked::after{scale:1}
 }
 
-/* #63 WRITE — a paragraph the student writes. Invoke: <textarea class="write" rows="4">.
-   Unset, the box is a fixed height. Vary: --lines any integer for the height before typing; the box
-   grows with its content in current browsers and keeps that height elsewhere. */
+/* #63 WRITE — <textarea class="write" rows="n">; grows with content. Vary: --lines (integer, 4) */
 @layer control{
   .write{display:block;width:100%;min-height:calc(var(--lines,4) * 1.75em);max-height:24em;
     resize:vertical;field-sizing:content;border:1.5px solid var(--line);border-radius:var(--r1);
@@ -324,10 +264,7 @@
   .write:not(:placeholder-shown){border-color:var(--accent-line)}
 }
 
-/* #64 REVEAL — a folded piece the student opens: a hint, a translation, the answer.
-   Invoke: <details class="reveal"><summary>label</summary><div class="body"><div>content</div>
-   </div></details>. Unset, it starts closed. Vary: any content; the fold animates everywhere.
-   The inner <div> is required — the animation needs one element to squeeze. */
+/* #64 REVEAL — <details class="reveal"><summary>label</summary><div class="body"><div>content</div></div></details>; closed unset. Inner div required for the fold */
 @layer control{
   .reveal{border:1px solid var(--line-2);border-radius:var(--r1);background:var(--surface-2);
     overflow:hidden;margin:8px 0 0}
@@ -343,10 +280,7 @@
   .reveal[open] .body>div{padding:10px 12px}
 }
 
-/* #76 ENGINE — the two marks the shipped engine writes, dressed in the same vocabulary.
-   Invoke: nothing. engine2.js puts .correct on an answered option's label and an .ans span beside a
-   typed field; a .qitem[data-a] group is the only extra class the engine needs on <div class="opts">.
-   Vary: --ok any colour retints both marks. */
+/* #76 ENGINE — nothing to invoke. engine2.js writes label.opt.correct, .ans beside a typed field, and reads .qitem[data-a] on .opts. Vary: --ok (colour) */
 @layer state{
   label.opt.correct{border-color:var(--ok);
     background:color-mix(in oklab,var(--ok) 10%,var(--surface-2))}
@@ -358,10 +292,7 @@
   body.is-completed .gap{background:var(--sunken)}
 }
 
-/* #70 LOOK — paint only: colour, texture, edge, depth. Every look composes with every structure and
-   every control, and two looks never fight because a look writes only what it states.
-   Invoke: data-look="tint|outline|grain|ruled|tape|raised|float|dark" on the block.
-   Unset, a block is paper with a 3px accent top rule. Vary: --accent-h any hue under any look. */
+/* #70 LOOK — data-look="tint|outline|grain|ruled|tape|raised|float|dark", any block. Unset: paper + 3px accent rule. Vary: --accent-h, --edge-w (outline) */
 @layer look{
   .block[data-look="tint"]{background:color-mix(in oklab,var(--accent) 8%,var(--paper));
     border-top-color:var(--accent)}
@@ -396,10 +327,7 @@
     border-color:var(--line-2);color:var(--ink)}
 }
 
-/* #80 STATE — what happens after an attempt. The engine writes the attribute; this file decides the
-   look. Invoke: data-state="correct|wrong|done" on an .opt, a .side, a .qitem or the block itself;
-   unset, nothing shows. Vary: the mark takes --ok or --err, which a block may retint.
-   A mark is <i class="mark"></i> inside the item — one empty element, no text, no script. */
+/* #80 STATE — data-state="correct|wrong|done" on .opt, .side, .qitem or the .block; mark = <i class="mark"></i>. Unset: nothing shows. Vary: --ok/--err (colour) */
 @layer state{
   [data-state="correct"]{--state:var(--ok)}
   [data-state="wrong"]{--state:var(--err)}
@@ -427,10 +355,7 @@
     box-shadow:0 0 0 3px color-mix(in oklab,var(--ok) 16%,transparent),var(--shadow-1)}
 }
 
-/* #81 REACTIVE — the surface answers a number the engine writes, so a section that is going well
-   looks like it. Invoke: style="--score:.65" on a .block with data-reactive (0 to 1).
-   Unset, 0, and the block stays paper. Vary: --score any number 0-1; --meter-h any length.
-   The engine only writes the number; every visual below reads it. */
+/* #81 REACTIVE — .block[data-reactive] style="--score:0-1"; .meter>i reads it. Engine writes the number only. Vary: --meter-h (length) */
 @layer state{
   .block[data-reactive]{--score:0;transition:--score .55s ease,background .55s ease;
     background:color-mix(in oklab,var(--accent) calc(var(--score) * 16%),var(--paper))}
@@ -441,9 +366,7 @@
     width:calc(var(--score) * 100%);transition:width .5s ease}
 }
 
-/* #82 RING — a percentage drawn as a ring with the number inside it. Invoke:
-   <div class="ring" style="--pct:64"><b></b></div>. Unset, 0. Vary: --pct any integer 0-100, and it
-   animates the ring and the number together; --ring-w any length for the ring's size. */
+/* #82 RING — <div class="ring" style="--pct:0-100"><b></b></div>; ring and number animate together. Vary: --ring-w (length) */
 @layer state{
   .ring{--pct:0;position:relative;width:var(--ring-w,76px);aspect-ratio:1;border-radius:50%;
     display:grid;place-items:center;counter-reset:p var(--pct);
@@ -454,11 +377,7 @@
   .ring>b::after{content:counter(p) "%"}
 }
 
-/* #90 MOTION — arrival and response. Nothing to invoke for the one-shot entrance: every block
-   settles in once, on first paint. Unset, nothing animates and everything is instant.
-   Invoke: data-motion="rise" on a block for the scroll-linked version; .flip with two .face children
-   for a card that turns over; a checked box with id="focus" for reading mode.
-   Vary: --dur any time; --flip-h any length for the card's height. */
+/* #90 MOTION — blocks rise once on paint; data-motion="rise" = scroll-linked. .flip > input + .card3d > 2x .face flips. #focus = reading width. Vary: --dur (time), --flip-h (length) */
 @layer motion{
   @keyframes rise-in{from{opacity:.35;translate:0 14px}to{opacity:1;translate:0 0}}
   @keyframes mark-in{from{scale:0;opacity:0}to{scale:1;opacity:1}}
@@ -469,7 +388,7 @@
   .block[data-motion="rise"]{animation:rise-in linear both;animation-timeline:view();
     animation-range:entry 8% entry 55%}
 
-  /* the gradient angle is a registered property, so it animates; the colour follows it */
+  /* outline: hover rotates --grad 0-180deg */
   .block[data-look="outline"]{--grad:0deg;transition:--grad 1s ease;
     background-image:linear-gradient(var(--grad),
       color-mix(in oklab,var(--accent) 15%,transparent),transparent 62%)}
@@ -493,8 +412,7 @@
   body:has(#focus:checked) .block[data-structure="prose"]{--measure:64ch}
 }
 
-/* #95 PRINT — paper. Invoke: nothing; every element above already prints.
-   Unset nothing. Vary: nothing here is a knob — print keeps the content, drops the surface. */
+/* #95 PRINT — nothing to invoke. Paper keeps content, drops surface, unfolds .reveal and .flip */
 @layer print{
   @media print{
     body{background:#fff}
@@ -519,8 +437,7 @@
   }
 }
 
-/* #98 SHELL — brand, bar and footer. Invoke: nothing; it is the frame every page carries.
-   Unset nothing. Vary: --brand-h any length for the logo size. */
+/* #98 SHELL — nothing to invoke. .brand, .control-bar, .barhelp, footer, #feed. Vary: --brand-h (length) */
 @layer shell{
   .brand{display:flex;align-items:center;justify-content:center;gap:16px;padding:24px 0 4px}
   .brand img{width:var(--brand-h,56px);height:var(--brand-h,56px);border-radius:50%;
@@ -547,9 +464,7 @@
   #feed:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
 }
 
-/* #99 U — one-off overrides, the only layer allowed to win over everything above.
-   Invoke: any utility class below, or your own rule in this layer.
-   Unset nothing. Vary: --ink-2 any colour for .dim; --measure any length for .lead. */
+/* #99 U — utilities, wins over every layer above: .dim .lead .pt .mono .stack .row .center .mt .sr .defcard .stress mark ruby .glossbtn Vary: --measure (length) */
 @layer u{
   .dim{color:var(--ink-2)}
   .lead{font-size:var(--s1);line-height:1.48;color:var(--ink-2);max-width:var(--measure,62ch)}
@@ -559,7 +474,6 @@
   .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
   .center{text-align:center}
   .mt{margin-top:12px}
-  .push{flex:1}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
   .defcard{border:1px solid var(--line);border-radius:var(--r1);background:var(--paper);
     box-shadow:var(--shadow-2);padding:11px 14px;max-width:320px;font-size:.95rem}
