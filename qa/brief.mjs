@@ -2,7 +2,7 @@
 /**
  * qa/brief.mjs - the generation brief. A PRINTER, not a check.
  *
- *   node qa/brief.mjs --track=business --lesson=41        the input set, then the post-generation checks
+ *   node qa/brief.mjs --track=business --lesson=41        the input set only
  *   node qa/brief.mjs --track=business --lesson=41 --reassert   PEDAGOGY-MAP.md again, nothing else
  *   node qa/brief.mjs --css            the style.css `## ` headers, one line each, with their line numbers
  *   node qa/brief.mjs --indexes        both indexes: the menu index, then the style.css headers
@@ -16,8 +16,14 @@
  * WHAT IT PRINTS, in PEDAGOGY-MAP [I/O] order: the lesson's own roadmap block · the neighbouring lessons'
  * `##` headers, five before and three after (reference only, and printed to AVOID repeating one of them) ·
  * FUNCTION.md [CONTENT] · <TRACK>-REGISTER.md · the CONTENT_EXAMPLES.md [INSTRUCTIONS] grammar and one line
- * per shape, with `--section=NN|name` for one entry whole · style.css `##` headers · _shell.html · the
- * post-generation checks. PEDAGOGY-MAP.md itself is printed first, and again on `--reassert`.
+ * per shape, with `--section=NN|name` for one entry whole · style.css `##` headers. PEDAGOGY-MAP.md itself
+ * is printed first, and again on `--reassert`.
+ *
+ * WHAT IT WITHHOLDS, because PEDAGOGY-MAP [I/O] lists the input set and closes it with "Withhold others":
+ * `_shell.html` — the frame is already in the file being written, because a page starts as a copy of the
+ * shell with its tokens filled and an empty content area (`node new-lesson.mjs`); and any checklist of
+ * rules, because a list printed beside the map competes with the map for authority and drifts from it —
+ * the last one asked about a Portuguese budget that no longer existed anywhere in the repo.
  *
  * No count of anything is printed: how many headers, shapes or classes a file holds is that file's
  * business, and a count in a brief is read as a target.
@@ -192,24 +198,7 @@ if (want) {
 const heads2 = cssHeaders();
 emit('style.css - `## ` HEADERS ONLY', heads2.map(h => h.block).join('\n\n'));
 
-/* 6. the shell the page is built on */
-emit('_shell.html - THE PAGE THIS IS BUILT ON', read('_shell.html'));
-
-/* 7. the post-generation checks: one line per check, answered AS EACH SECTION IS FINISHED — from what was
-      just written, never by re-reading the finished page.
-      [G2] is the difficulty question: [LEVEL] asks how hard the material is for the student this
-      track describes, judged by distance from Portuguese and by what each sentence asks the reader
-      to hold — never by the prose. */
-const POST = [
-  '[G1] Does any answer appear in its own prompt? (it must not, in any form)',
-  '[G2] Is every block written for the student this track describes, at this lesson number — judged by distance from Portuguese and by what each sentence asks the reader to hold, never by the prose?',
-  '[G3] Is every concept taught, then trained, then asked? (three moves, none skipped)',
-  '[G4] Does every row of blocks close to 100%? (full alone · half+half · third+twothird · third x3)',
-  '[G5] Is Portuguese only where marked, and inside the budget?',
-  '[G6] Are items numbered in the order the layout draws them? (across for .qopts, down for .qgrid.stack)',
-  '[G7] Does every example use the register voice?',
-];
-emit('POST-GENERATION CHECKS - answered as each section is finished, from what you just wrote (never by re-reading the page)',
-  POST.join('\n'));
-
+/* 6. no shell and no checklist. PEDAGOGY-MAP [I/O] lists the input set and closes the list with "Withhold
+      others": the frame is already in the file (a page starts as a copy of `_shell.html`), and a printed
+      checklist of rules would compete with the map, which is the one file that states them. */
 process.stderr.write('\nbrief total: ' + kb('x'.repeat(total)) + '   (run with --reassert for copy 2 of the map)\n');
