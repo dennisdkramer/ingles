@@ -626,6 +626,35 @@
   }
 }
 
+/* #94 POS — <p class="pos"> with each word in <b class="pos-n|pos-v|pos-adj|pos-adv|pos-det|pos-pron|pos-prep|pos-conj|pos-aux|pos-wh">: the underline is the mark, colour only reinforces it. A .pos-key follows. Vary: none */
+@layer rx{
+  .pos{line-height:2.2}
+  .pos b{font-weight:inherit;text-decoration-line:underline;text-decoration-thickness:2px;
+    text-underline-offset:3px;text-decoration-color:var(--pos-c,var(--ink-2))}
+  .pos-n{text-decoration-style:solid}
+  .pos-v{--pos-c:var(--accent);text-decoration-style:double}
+  .pos-adj{text-decoration-style:dotted}
+  .pos-adv{text-decoration-style:dashed}
+  .pos-aux{--pos-c:var(--accent);text-decoration-style:wavy}
+  .pos-det{--pos-c:var(--tan);text-decoration-style:dotted}
+  .pos-pron{--pos-c:var(--tan);text-decoration-style:solid}
+  .pos-prep{--pos-c:var(--tan);text-decoration-style:dashed}
+  .pos-conj{--pos-c:var(--ptw);text-decoration-style:dotted}
+  .pos-wh{--pos-c:var(--ptw);text-decoration-style:wavy}
+  .pos-key{display:flex;flex-wrap:wrap;gap:2px 14px;margin:6px 0 0;font-size:12px;color:var(--ink-2)}
+  .pos-key b{font-weight:400}
+  @media print{.pos b{text-decoration-color:#000}}
+}
+
+/* #96 BAR — one bar per share: <div class="bar-row"><span>day</span><div class="bar"><i style="--w:62%"></i></div><b>62%</b></div>. The number sits beside the bar, never inside it. Vary: --w, --bar-h */
+@layer rx{
+  .bar-row{display:grid;grid-template-columns:9em minmax(0,1fr) 3.2em;align-items:center;gap:10px;margin:6px 0}
+  .bar-row>span{font-size:13px;color:var(--ink-2)}
+  .bar-row>b{font:600 13px/1 var(--sans);font-variant-numeric:tabular-nums;text-align:right}
+  .bar{height:var(--bar-h,14px);background:var(--sunken);border-radius:2px;overflow:hidden}
+  .bar>i{display:block;width:var(--w,50%);height:100%;background:var(--accent)}
+}
+
 /* #95 PRINT — nothing to invoke. Paper keeps content, drops surface, unfolds .reveal and .flip */
 @layer print{
   @media print{

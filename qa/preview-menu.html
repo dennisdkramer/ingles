@@ -6,7 +6,6 @@
 <title>menu — preview (the migrated set)</title>
 <link rel="stylesheet" href="../style.css">
 <link rel="stylesheet" href="preview.css">
-<link rel="stylesheet" href="preview-visual.css">
 </head>
 <body>
 <main class="page-container"><div class="content-area">
@@ -14,6 +13,142 @@
 <p>Only the entries asked for: 30 items, in menu order, each with its prototype and a note box.</p>
 <p class="dim">Served by <code>node qa/serve.mjs</code>, a note box writes straight into <code>qa/NOTES.md</code>. Each section names the file its contract lives in, so the pointer under a request says where the rule is. The line under the box is the entry's <code>###</code> heading, read from the three menu files on load and every 2 s — nothing here is a copy.</p>
 <nav class="qa-toc" id="qa-toc"><span class="qa-toc-state">reading qa/brief.mjs…</span></nav>
+<section class="qa-item" id="item-bed">
+<h2>test-bed</h2>
+<textarea data-item="test-bed" aria-label="notes for the test bed" rows="2" class="qa-note" placeholder="notes — one block carrying one of each in-block visual"></textarea>
+<p class="dim">One block, one of each in-block visual, inside real prose — [67] key · [91] gloss · [69] axis · [65] parts of speech · [02] music · [05] map · [66] contour</p>
+<div class="block" data-kind="teach">
+<h3>Still at it</h3>
+<p class="lead">Two in the afternoon to eight at night, and the same sentence keeps coming back.</p>
+<p>Marcos has been at the counter since two. He <ruby>queued<rp>(</rp><rt>kiawd</rt><rp>)</rp></ruby> once, at four, and has not left since. A colleague texts him <button class="glossbtn" popovertarget="bed-g1">clock in</button>, and the card opens on what the words alone do not give.</p>
+<div class="defcard" popover id="bed-g1">
+<p class="ptw">bater o ponto</p>
+<p>Not <i>entrar no relógio</i>. The words are about a clock; the meaning is about a record.</p>
+</div>
+
+<h4>Where the claim sits</h4>
+<div class="tlx" style="--now:84">
+  <div class="tlx-axis">
+    <i class="tlx-mark" data-end="open" style="--a:14;--b:84"><i>a</i></i>
+    <i class="tlx-now"><b>now</b></i>
+  </div>
+  <p class="tlx-say"><b>He has been here</b> since two. — the claim reaches now and names no end.</p>
+  <div class="tlx-axis">
+    <i class="tlx-mark" data-end="closed" style="--a:14;--b:52"><i>b</i></i>
+    <i class="tlx-band" style="--a:52;--b:84"><i>c</i></i>
+    <i class="tlx-now"><b>now</b></i>
+  </div>
+  <p class="tlx-say"><b>He was here</b> at two. — the hatched <b>c</b> is what that sentence does not claim.</p>
+</div>
+
+<h4>What each word is doing</h4>
+<p class="pos">He <b class="pos-aux">has</b> <b class="pos-v">been</b> <b class="pos-prep">at</b> <b class="pos-det">the</b> <b class="pos-n">counter</b> <b class="pos-prep">since</b> <b class="pos-n">two</b>.</p>
+<p class="pos-key"><span><b class="pos-v">verb</b></span><span><b class="pos-n">noun</b></span><span><b class="pos-prep">preposition</b></span><span><b class="pos-det">determiner</b></span><span><b class="pos-aux">auxiliary</b></span></p>
+
+<h4>One line, one beat</h4>
+<figure class="vz-play">
+<audio class="vz-audio" src="../assets/twinkle-stanza1.mp3" data-duration="18.5" controls preload="metadata"></audio>
+<ol class="vz-lyrics">
+<li data-t="0">Twinkle, twinkle, <b>lit</b>tle star —</li>
+<li data-t="4.6">how I <b>won</b>der what you are.</li>
+<li data-t="9.2">Up a<b>bove</b> the world so high,</li>
+<li data-t="13.8">like a <b>dia</b>mond in the sky.</li>
+</ol>
+<figcaption class="vz-cap">The beat falls on the bold syllable, not on the word that carries the meaning.</figcaption>
+</figure>
+
+<h4>Where it happens</h4>
+<svg viewBox="0 0 360 168" width="420" style="width:420px;max-width:100%" role="img" aria-label="A corner: a café, a bank, a bus stop and a block of flats">
+<path d="M0 72H360" stroke="var(--line)" stroke-width="17"/>
+<path d="M0 72H360" stroke="var(--paper)" stroke-width="1.5" stroke-dasharray="9 7"/>
+<path d="M126 0V168" stroke="var(--line)" stroke-width="17"/>
+<path d="M126 0V168" stroke="var(--paper)" stroke-width="1.5" stroke-dasharray="9 7"/>
+<rect x="18" y="16" width="86" height="44" fill="var(--sunken)" stroke="var(--ink)" stroke-width="1.5"/>
+<rect x="150" y="16" width="104" height="44" fill="var(--sunken)" stroke="var(--ink)" stroke-width="1.5"/>
+<rect x="18" y="92" width="86" height="58" fill="var(--sunken)" stroke="var(--ink)" stroke-width="1.5"/>
+<rect x="266" y="92" width="72" height="26" fill="var(--sunken)" stroke="var(--ink)" stroke-width="1.5"/>
+<text x="26" y="42" font-family="Georgia,serif" font-size="12" fill="var(--ink)">Café</text>
+<text x="26" y="56" font-family="Georgia,serif" font-size="9" fill="var(--ink-2)">open till 20h</text>
+<text x="158" y="42" font-family="Georgia,serif" font-size="12" fill="var(--ink)">Bank</text>
+<text x="158" y="56" font-family="Georgia,serif" font-size="9" fill="var(--ink-2)">closed</text>
+<text x="26" y="120" font-family="Georgia,serif" font-size="12" fill="var(--ink)">Flats</text>
+<text x="274" y="109" font-family="Georgia,serif" font-size="10" fill="var(--ink)">Bus stop</text>
+<circle cx="126" cy="72" r="5" fill="var(--accent)" stroke="var(--paper)" stroke-width="2"/>
+<text x="136" y="62" font-family="Georgia,serif" font-size="9" fill="var(--ink-2)">you are here</text>
+</svg>
+
+<h4>How the voice moves</h4>
+<svg viewBox="0 0 360 78" width="420" style="width:420px;max-width:100%" role="img" aria-label="Pitch rising on the stressed word and falling after it">
+<path d="M12 56H348" stroke="var(--line)" stroke-width="1.5"/>
+<path d="M24 56C64 18 104 18 144 56" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+<path d="M144 56C184 22 224 22 264 56" fill="none" stroke="var(--accent)" stroke-width="2.5" opacity=".55"/>
+<text x="72" y="14" font-family="Georgia,serif" font-size="10" fill="var(--ink-2)">still</text>
+<text x="196" y="14" font-family="Georgia,serif" font-size="10" fill="var(--ink-2)">at it</text>
+<text x="12" y="72" font-family="Georgia,serif" font-size="9" fill="var(--ink-2)">the voice lifts on the word that changes the claim, and the rest rides under it</text>
+</svg>
+</div>
+</section>
+
+<section><h2>Tips</h2><p class="dim">small ones · VEHICLES.md ## [TIPS]</p></section>
+<section class="qa-item" id="item-04" data-contract="VEHICLES.md">
+<h2>[04]</h2>
+<textarea data-item="[04]" aria-label="notes for [04]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;THIRD-&gt; Presents a word's etymology and how that is relevant or useful to the student &lt;2|4&gt; &lt;,&gt;</p>
+<div class="block itemsize-third" data-kind="teach" data-look="outline">
+<h3>Nice</h3>
+<dl>
+  <dt><b>c. 1300 — Latin</b> <i>nescius</i></dt>
+  <dd>"not knowing"<br>the word enters meaning <i>foolish</i></dd>
+  <dt><b>1300s — Old French</b> <i>nice</i></dt>
+  <dd>"careless, clumsy"</dd>
+  <dt><b>1500s — English</b></dt>
+  <dd>"precise, careful"<br>the sense turns inward</dd>
+  <dt><b>1800s — English</b></dt>
+  <dd>"pleasant, kind"<br>the sense in use now</dd>
+</dl>
+  <p class="dim">Nothing was added to this word. The meaning walked from <i>ignorant</i> to <i>kind</i> in six hundred years, which is why <i>nice</i> is the vaguest compliment in English.</p>
+</div>
+</section>
+<section class="qa-item" id="item-11">
+<h2>[11]</h2>
+<textarea data-item="[11]" aria-label="notes for [11]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; One root's forms in columns by the job each does &lt;5|5&gt; &lt;3|6&gt;</p>
+<div class="itemrow" data-cols="2">
+<div class="block itemsize-twothird" data-kind="teach">
+<h3>wordFamily</h3>
+<table><caption>One root, five jobs</caption>
+  <thead><tr><th>verb</th><th>person</th><th>thing</th><th>thing2</th><th>description</th></tr></thead>
+  <tbody>
+    <tr><td>decide</td><td>decider</td><td>decision</td><td>—</td><td>decisive</td></tr>
+    <tr><td>produce</td><td>producer</td><td>product</td><td>production</td><td>productive</td></tr>
+    <tr><td>explain</td><td>—</td><td>explanation</td><td>explainer</td><td>explanatory</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="block itemsize-third" data-kind="train">
+<h3>wordFamily</h3>
+  <p>Use one member of the family in each sentence.</p>
+  <div class="blanks sent" style="--rows:2">
+    <div>1. It was a hard <input class="gap" style="--gap-w:8em"> to make.</div>
+    <div>2. This factory <input class="gap" style="--gap-w:8em"> about two hundred units a day.</div>
+    <div>3. He gave a long <input class="gap" style="--gap-w:8em">.</div>
+    <div>4. She is <input class="gap" style="--gap-w:8em"> in the mornings.</div>
+  </div>
+</div>
+</div>
+</section>
+<section class="qa-item" id="item-71" data-contract="VEHICLES.md">
+<h2>[71]</h2>
+<textarea data-item="[71]" aria-label="notes for [71]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;THIRD-&gt; A figure with its source, drawn as one bar &lt;1|3&gt; &lt;1|1&gt;</p>
+<div class="block" data-kind="teach" data-look="outline">
+<h3>Use at work</h3>
+<div class="bar-row"><span>every day</span><div class="bar"><i style="--w:62%"></i></div><b>62%</b></div>
+<div class="bar-row"><span>once a week</span><div class="bar"><i style="--w:34%"></i></div><b>34%</b></div>
+<p class="dim">2019 census</p>
+</div>
+</section>
+
 <section><h2>Vehicles</h2><p class="dim">whole blocks · VEHICLES.md</p></section>
 <section class="qa-item" id="item-02" data-contract="VEHICLES.md">
 <h2>[02]</h2>
@@ -648,67 +783,7 @@
   </div>
 </div>
 </section>
-<section><h2>Tips</h2><p class="dim">small ones · VEHICLES.md ## [TIPS]</p></section>
-<section class="qa-item" id="item-04" data-contract="VEHICLES.md">
-<h2>[04]</h2>
-<textarea data-item="[04]" aria-label="notes for [04]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;TEACH&gt; &lt;THIRD-&gt; Presents a word's etymology and how that is relevant or useful to the student &lt;2|4&gt; &lt;,&gt;</p>
-<div class="panel itemsize-third" data-kind="teach">
-<h3>Nice</h3>
-<dl>
-  <dt><b>c. 1300 — Latin</b> <i>nescius</i></dt>
-  <dd>"not knowing"<br>the word enters meaning <i>foolish</i></dd>
-  <dt><b>1300s — Old French</b> <i>nice</i></dt>
-  <dd>"careless, clumsy"</dd>
-  <dt><b>1500s — English</b></dt>
-  <dd>"precise, careful"<br>the sense turns inward</dd>
-  <dt><b>1800s — English</b></dt>
-  <dd>"pleasant, kind"<br>the sense in use now</dd>
-</dl>
-  <p class="dim">Nothing was added to this word. The meaning walked from <i>ignorant</i> to <i>kind</i> in six hundred years, which is why <i>nice</i> is the vaguest compliment in English.</p>
-</div>
-</section>
-<section class="qa-item" id="item-11">
-<h2>[11]</h2>
-<textarea data-item="[11]" aria-label="notes for [11]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; One root's forms in columns by the job each does &lt;5|5&gt; &lt;3|6&gt;</p>
-<div class="itemrow" data-cols="2">
-<div class="panel itemsize-twothird" data-kind="teach">
-<h3>wordFamily</h3>
-<table class="chart">
-  <thead><tr><th>verb</th><th>person</th><th>thing</th><th>thing2</th><th>description</th></tr></thead>
-  <tbody>
-    <tr><td>decide</td><td>decider</td><td>decision</td><td>—</td><td>decisive</td></tr>
-    <tr><td>produce</td><td>producer</td><td>product</td><td>production</td><td>productive</td></tr>
-    <tr><td>explain</td><td>—</td><td>explanation</td><td>explainer</td><td>explanatory</td></tr>
-  </tbody>
-</table>
-</div>
-<div class="panel itemsize-third" data-kind="train">
-<h3>wordFamily</h3>
-  <p>Use one member of the family in each sentence.</p>
-  <div class="blanks sent" style="--rows:2">
-    <div>1. It was a hard <input class="gap" style="--gap-w:8em"> to make.</div>
-    <div>2. This factory <input class="gap" style="--gap-w:8em"> about two hundred units a day.</div>
-    <div>3. He gave a long <input class="gap" style="--gap-w:8em">.</div>
-    <div>4. She is <input class="gap" style="--gap-w:8em"> in the mornings.</div>
-  </div>
-</div>
-</div>
-</section>
-<section class="qa-item" id="item-71" data-contract="VEHICLES.md">
-<h2>[71]</h2>
-<textarea data-item="[71]" aria-label="notes for [71]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;TEACH&gt; &lt;THIRD-&gt; A figure with its source, drawn as one bar &lt;1|3&gt; &lt;1|1&gt;</p>
-<div class="panel" data-kind="teach">
-<h3>Use at work</h3>
-<p>Every day — <b>62%</b></p>
-<p style="width:62%;height:14px;background:var(--blue);margin:0 0 .8em 15px"></p>
-<p>Once a week — <b>34%</b></p>
-<p style="width:34%;height:14px;background:var(--blue);margin:0 0 .8em 15px"></p>
-<p class="dim">2019 census</p>
-</div>
-</section>
+
 <section><h2>In-block visuals</h2><p class="dim">figures a host draws inside itself · IN-BLOCK-VISUALS.md, and [55] still in CONTENT_EXAMPLES.md</p></section>
 <section class="qa-item" id="item-05" data-contract="IN-BLOCK-VISUALS.md">
 <h2>[05]</h2>
@@ -1182,6 +1257,7 @@ teacher's evidence.</p>
 </section>
 </div></main>
 <div id="qa-status" class="qa-status">notes: nothing typed yet</div>
+
 <script src="../engine4.js"></script>
 <script src="player.js"></script>
 <script src="notes.js"></script>
