@@ -14,8 +14,12 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S4] - Run the gate and fix every fail <qa/check.mjs; preview.css #60, #76> <✅ adult/lesson30, items at or above `need`, zero fails>
    - [S5] - Run `npm run build:lessons`, measure the page's rows, commit and push <build-lessons.mjs; generation/checks/measure.mjs; .clinerules 8> <lessons.json lists n=30, 0 ragged rows on the page, pushed>
 
-## [B30] - BEFORE shifts left and thickens at its start <"move it 10px to the left and change the left to 30%">
-   - [S1] - `left:20px`, gradient start 30% <style.css #97>
+## [B31] - The line of time gets words over it: one clause's verbs underlined into pointers at BEFORE / NOW / THEN <"underline the verb elements of one clause ... have those underlines flow as a pointer"> <style.css #97, qa/preview-blocks.html>
+   - [S1] - `--now` places the star and both runs hang off it, so either side of the axis can stretch <style.css #97> <`--now:50%` renders exactly as before; 0-100% moves the star>
+   - [S2] - `.tlw` words layer: `.tw[data-to]` underline drops into an elbow and an arrowhead that lands on its zone <style.css #97> <the pointer's foot is on the axis line, `data-to` flips the tick's direction>
+   - [S3] - Four figures — perfect present, perfect past, going-to, future perfect — each with a phrase above a 200px axis <qa/preview-blocks.html> <four figures render, page parses, note box keyed `[69-words]`>
+   - [S4] - Screenshot the figures and correct the placement numbers until each pointer lands on its zone <_tmp probe> <every pointer's foot within a few px of its target>
+
 
 
 
