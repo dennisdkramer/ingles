@@ -14,11 +14,12 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S4] - Run the gate and fix every fail <qa/check.mjs; preview.css #60, #76> <✅ adult/lesson30, items at or above `need`, zero fails>
    - [S5] - Run `npm run build:lessons`, measure the page's rows, commit and push <build-lessons.mjs; generation/checks/measure.mjs; .clinerules 8> <lessons.json lists n=30, 0 ragged rows on the page, pushed>
 
-## [B31] - The line of time gets words over it: one clause's verbs underlined into pointers at BEFORE / NOW / THEN <"underline the verb elements of one clause ... have those underlines flow as a pointer"> <style.css #97, qa/preview-blocks.html>
-   - [S1] - `--now` places the star and both runs hang off it, so either side of the axis can stretch <style.css #97> <`--now:50%` renders exactly as before; 0-100% moves the star>
-   - [S2] - `.tlw` words layer: `.tw[data-to]` underline drops into an elbow and an arrowhead that lands on its zone <style.css #97> <the pointer's foot is on the axis line, `data-to` flips the tick's direction>
-   - [S3] - Four figures — perfect present, perfect past, going-to, future perfect — each with a phrase above a 200px axis <qa/preview-blocks.html> <four figures render, page parses, note box keyed `[69-words]`>
-   - [S4] - Screenshot the figures and correct the placement numbers until each pointer lands on its zone <_tmp probe> <every pointer's foot within a few px of its target>
+## [B32] - The line of time is pinned to one word: the axis gets a minimum 200px, one point sits under one word, and each tense is a preset <"its always one point on the timeline anchors to one word in the string"> <style.css #97, qa/preview-blocks.html>
+   - [S1] - Replace the `.tlw` words layer with `.tn`: verb words underlined, one `.an` word pinned to the axis by `anchor(center)`, axis pinned to it by `--pin` <style.css #97> <the axis's pinned point sits under the word's centre at every width>
+   - [S2] - Marks: dot, fading span, dotted tail, dotted future, and the future-perfect elbow <style.css #97> <each mark lands on the line, fades at both ends>
+   - [S3] - One preset per tense — past perfect, simple past, past continuous, present perfect, simple present, present continuous, going-to, future perfect — and the figures on the page, sentences centred <qa/preview-blocks.html> <eight figures render, each pinned word's mark aligned>
+   - [S4] - Screenshot, correct the pin/drop numbers, commit <_tmp probe> <every drop reaches its mark, no label collides>
+
 
 
 
