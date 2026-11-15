@@ -9,16 +9,13 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 
 # [CURRENT]
 
-## [B1] - The probe lives in the repo and the working tree ships <"move the new measure.mjs to a new folder in the repo called generation/checks/ ... Commit and push any pending files"> <generation/checks/measure.mjs, one commit>
-   - [S1] - Copy the probe into `generation/checks/`, retitle it with the problem it measures, run it from the repo root, then commit and push the pending tree (.clinerules, PENDING.md, the probe) <generation/checks/measure.mjs; .clinerules 8> <it prints 0/7 and 0/12 from its new path; git status clean after the push>
+## [B2] - A second shell, the one that wears preview.css <"Create a copy of the shell which references our new preview.css"> <_shell-preview.html>
+   - [S2] - Copy `_shell.html` to `_shell-preview.html`; exactly two lines differ — the stylesheet link, and the comment that names style.css to the builder <_shell.html:4, _shell.html:14-17; preview.css #98> <`git diff --no-index _shell.html _shell-preview.html` shows only those two lines>
 
-## [B2] - Lesson 30 authored on the adult track <"Generate lesson 30 on the adult track following pedagogy-map.md"> <adult/lesson30-Can You Manage — Ability, Favours, and Getting Away With It.html, lessons.json>
-   - [S2] - Copy `_shell.html` to the lesson-30 filename, fill TRACK/LESSON_TITLE, link `../preview.css` (the map's input is preview.css headers, lesson 29's precedent), and lay the seven-section scaffold in `.content-area` <_shell.html; PEDAGOGY-MAP 1-4> <one h1, the shell frame unchanged, 7 empty sections in place>
-   - [S3] - Author sections 1-2: the favour across the wall (turns) + the four forms in one table <ADULT-ROADMAP [30]; preview.css #51, #52> <every form taught appears in prose before any drill uses it>
-   - [S4] - Author sections 3-4: the politeness dial (pair, 4 rows a side) + permission and getting away with it <preview.css #53, #60; ADULT-ROADMAP [30] modal/could-polite, modal/permission> <each side has 4 children and --pair-rows:4 is set>
-   - [S5] - Author sections 5-6: yes/no vocabulary (set) + ability under pressure (could vs managed to vs was able to) <preview.css #50, #64; ADULT-ROADMAP [30] vocabulary> <brackets state the meaning, never the word>
-   - [S6] - Author section 7 (write + reveal + handoff to lesson 31) and close the page with #feed <PEDAGOGY-MAP 3; FUNCTION.md [CONTENT]> <all 6 vocabulary items and all 3 example lines appear verbatim>
-   - [S7] - Run the gate and fix every fail <qa/check.mjs; FUNCTION.md [CONTENT]> <✅ adult/lesson30, items at or above `need`, zero fails>
-   - [S8] - Run `npm run build:lessons`, measure the page's rows, commit and push <build-lessons.mjs; generation/checks/measure.mjs; .clinerules 8> <lessons.json lists n=30, 0 ragged rows on the page, pushed>
+## [B3] - Lesson 30 authored on the adult track <"Generate lesson 30 on the adult track following pedagogy-map.md"> <adult/lesson30-Can You Manage — Ability, Favours, and Getting Away With It.html, lessons.json>
+   - [S3] - Author §3-§7 (the frame and §1-§2 exist): every control is `class="gap" data-answer=` with no inherited `name` scheme, every bracket states a meaning, each row's sizes sum to 12 <ADULT-ROADMAP [30]; preview.css #50, #52, #53, #60, #61, #63, #64> <all 3 example lines and all 5 quoted vocabulary items appear verbatim; no control carries an attribute no allowed input declares>
+   - [S4] - Run the gate and fix every fail <qa/check.mjs; preview.css #60, #76> <✅ adult/lesson30, items at or above `need`, zero fails>
+   - [S5] - Run `npm run build:lessons`, measure the page's rows, commit and push <build-lessons.mjs; generation/checks/measure.mjs; .clinerules 8> <lessons.json lists n=30, 0 ragged rows on the page, pushed>
+
 
 
