@@ -5,6 +5,8 @@
 /* #00 HEADER LANGUAGE — a header is read by the lesson builder, and answers five things in as few words as possible (3-6) on one line:
      'Available classes spelled as the builder types. What it does. If not set? Available variants.'    */
 
+/* #00 GROUPS — the sheet in file order: #10 TOKENS · #20 BASE · #30 PERF · ## IN-BLOCK VISUALS · ## VEHICLES (games at its foot) · #95 PRINT · #98 SHELL · #99 U · @layer legacy */
+
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:wght@600;700&family=Caveat:wght@700&family=Public+Sans:wght@400;600;700&display=swap');
 
 /* Declared initial-value is the floor: an unset or misspelled value lands here, not on a broken layout. */
@@ -114,6 +116,225 @@
     contain-intrinsic-size:auto var(--section-est,1200px)}
   .content-area>section:first-of-type{content-visibility:visible}
 }
+
+/* ## IN-BLOCK VISUALS — a figure a block draws inside itself. None owns a container or a control; the host block supplies the gap, radio or textarea that saves.
+     Members, all in @layer rx: #91 GLOSS · #92 PRON · #93 AXIS · #94 POS · #96 BAR · #97 TLN */
+
+/* #91 GLOSS — .glossbtn popovertarget="ID" opens its .defcard popover id="ID" beside the word, no script. Use: a new word, or a PT literal that is not the meaning/use. One id per card. Vary: none */
+@layer rx{
+  .glossbtn{background:none;border:0;padding:0 1px;font:inherit;color:var(--accent);cursor:pointer;
+    border-bottom:1.5px dashed var(--accent-line)}
+  .glossbtn:hover{border-bottom-style:solid}
+  /* a popover's invoker IS its implicit anchor, so position-area needs no per-card id or script;
+     flip-block keeps a word near the page's foot readable */
+  .defcard{position:fixed;inset:auto;margin:0 0 7px;width:max-content;max-width:min(320px,80vw);
+    position-area:top;position-try-fallbacks:flip-block;
+    border:1px solid var(--line);border-radius:var(--r1);background:var(--paper);
+    box-shadow:var(--shadow-2);padding:11px 14px;font-size:.95rem;color:var(--ink)}
+  .defcard::backdrop{background:rgb(27 25 23/.16);backdrop-filter:blur(2px)}
+  .defcard b{display:block;font-family:var(--sans);font-size:.84rem;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--ink-2);margin-bottom:4px}
+}
+
+/* #92 PRON — <ruby>word<rp>(</rp><rt>key</rt><rp>)</rp></ruby>: the key over the word, one word at a time, rp never omitted. rt text = dictionary.json notation. Vary: none */
+@layer rx{
+  ruby{ruby-position:over}
+  ruby rt{font-size:.85em;font-family:var(--sans);font-weight:600;color:var(--ink-2);
+    letter-spacing:.02em;line-height:1.15;white-space:nowrap}
+}
+
+/* #93 AXIS — <div class="tlx" style="--now:70"> with .tlx-say + one or more .tlx-axis of marks: .tlx-mark[data-end="open|closed"][data-form="recent"], .tlx-band, .tlx-dot[style="--at"], .tlx-tick, .tlx-wall, .tlx-now. Sizes: .tlx--half, .tlx--stamp (inside an option). Saves: .tlx-pick (which word) and .tlx-build (which shape). Vary: --now, --a/--b/--at (% of the axis), --c (hue) */
+@layer rx{
+  .tlx{--now:86;--c:var(--accent);--lbl:var(--ink-2);position:relative;
+    margin:10px 0 2px;font-size:14px}
+  .tlx-say{position:relative;margin:0 0 4px;line-height:1.55}
+  /* a word that makes a claim: ruled in its own hue, with the letter that keys it to the axis */
+  .tlx-w{--c:var(--accent);font-weight:600;color:inherit;cursor:default;
+    border-bottom:2px solid var(--c);padding-bottom:1px;margin-right:1px}
+  .tlx-w::after{content:attr(data-k);font:700 9px/1 var(--sans);color:var(--c);
+    vertical-align:super;margin-left:2px;letter-spacing:.03em}
+  .tlx-axis{position:relative;height:46px;margin:6px 0 0}
+  /* the line: a hairline, not a stroke. 2px of ink reads as print; 3px reads as a marker pen */
+  .tlx-axis::before{content:"";position:absolute;left:0;right:11px;top:23px;height:2px;
+    background:var(--ink);border-radius:1px}
+  .tlx-axis::after{content:"";position:absolute;right:3px;top:19px;width:8px;height:8px;
+    border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);
+    border-radius:1px;transform:rotate(-45deg)}
+  /* a mark sits ON the line, never floating: top 12 + height 12 ends exactly at the axis */
+  .tlx-mark{position:absolute;left:calc(var(--a) * 1%);width:calc((var(--b) - var(--a)) * 1%);
+    top:12px;height:12px;border:2px solid var(--c);border-radius:6px;
+    background:color-mix(in srgb,var(--c) 16%,transparent)}
+  .tlx-mark[data-end="open"]::before{content:"";position:absolute;right:-8px;top:0;
+    border-left:8px solid var(--c);border-top:5px solid transparent;border-bottom:5px solid transparent}
+  .tlx-mark[data-end="closed"]::after{content:"";position:absolute;right:-3px;top:-4px;bottom:-4px;
+    width:3px;border-radius:2px;background:var(--c)}
+  /* shape 1 — still going, and it has been going a while: the left end dissolves, because
+     "lately" names no start. The mask fades the border too, which is why it reads as drawn. */
+  .tlx-mark[data-form="recent"]{-webkit-mask-image:linear-gradient(90deg,transparent,#000 58%);
+    mask-image:linear-gradient(90deg,transparent,#000 58%);border-left-width:0;
+    border-top-left-radius:0;border-bottom-left-radius:0;
+    background:linear-gradient(90deg,color-mix(in srgb,var(--c) 2%,transparent),
+      color-mix(in srgb,var(--c) 38%,transparent))}
+  /* shape 2 — a fact about a whole finished span: the span is a FIELD and the event a dot inside it.
+     Reading "in my life" as a duration is the mistake; a field cannot be misread as one. */
+  .tlx-band{position:absolute;left:calc(var(--a) * 1%);width:calc((var(--b) - var(--a)) * 1%);
+    top:12px;height:12px;
+    border:1px solid color-mix(in srgb,var(--c) 40%,transparent);border-radius:4px;
+    background:repeating-linear-gradient(45deg,
+      color-mix(in srgb,var(--c) 13%,transparent) 0 4px,transparent 4px 8px)}
+  .tlx-dot{position:absolute;left:calc(var(--at) * 1%);top:19px;width:10px;height:10px;
+    border-radius:50%;background:var(--c);
+    box-shadow:0 0 0 2px var(--paper);transform:translateX(-50%)}
+  .tlx-wall{position:absolute;left:calc(var(--at) * 1%);top:8px;height:22px;width:0;
+    border-left:2px solid var(--ok)}
+  .tlx-wall b{position:absolute;top:-15px;left:3px;white-space:nowrap;font:700 10px/1 var(--sans);
+    letter-spacing:.05em;color:var(--ok)}
+  /* the word-side letter, repeated at the head of its mark — the key that survives greyscale */
+  .tlx-mark>i,.tlx-band>i{position:absolute;left:3px;top:-3px;font:700 9px/1 var(--sans);
+    font-style:normal;color:var(--c);background:var(--paper);padding:0 2px;border-radius:3px}
+  .tlx-mark[data-form="recent"]>i{left:auto;right:2px;top:-11px}
+  .tlx-now{position:absolute;left:calc(var(--now) * 1%);top:20px;height:8px;width:0;
+    border-left:2px solid var(--ink)}
+  .tlx-now b{position:absolute;top:9px;left:50%;transform:translateX(-50%);white-space:nowrap;
+    font:700 10px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+  .tlx-tick{position:absolute;left:calc(var(--at) * 1%);top:21px;height:6px;width:1px;
+    background:color-mix(in srgb,var(--ink) 38%,transparent)}
+  .tlx-tick b{position:absolute;top:8px;left:50%;transform:translateX(-50%);white-space:nowrap;
+    font:600 10px/1 var(--sans);color:var(--lbl)}
+  .tlx-cap{margin:4px 0 0;font-size:12.5px;line-height:1.45;color:var(--dim)}
+  /* a mark's MEANING decides where it sits: a container you are inside is not on the same footing as a
+     claim about the present (`.tlx-field`); a word that points at a moment drops below it */
+  .tlx-field{top:-3px}
+  .tlx-field>i{top:-10px}
+  .tlx-dot.in{top:1px}
+  .tlx-under{top:27px;height:7px}
+  .tlx-under>i{top:-11px;left:auto;right:2px}
+  /* interactive 1 — the WORD is the answer: the radio lives inside the label, so the control saves */
+  .tlx-pick label.tlx-w{position:relative;cursor:pointer;border-bottom-style:dotted}
+  .tlx-pick label.tlx-w input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+  .tlx-pick label.tlx-w:hover{border-bottom-style:solid}
+  .tlx-pick label.tlx-w:has(input:checked){border-bottom-style:solid;
+    background:color-mix(in srgb,var(--c) 12%,transparent)}
+  .tlx-pick label.tlx-w:has(input:checked)::before{content:"✓ ";color:var(--c);font-weight:700}
+  .tlx-pick label.tlx-w:has(input:focus-visible){outline:2px solid var(--c);outline-offset:2px}
+  /* interactive 2 — the SHAPE is the answer: each candidate axis carries its own radio */
+  .tlx-build{display:block;cursor:pointer;margin:2px 0 0;font-size:13px}
+  .tlx-build .tlx-cap{display:block;margin:0;font-size:13px;color:var(--ink)}
+  .tlx-build .tlx-axis{height:38px;margin-top:2px}
+  .tlx-build .tlx-mark,.tlx-build .tlx-band{cursor:pointer;opacity:.55;border-style:dashed;
+    background:transparent}
+  .tlx-build:hover .tlx-mark,.tlx-build:hover .tlx-band{opacity:.75}
+  .tlx-build .tlx-mark input,.tlx-build .tlx-band input{position:absolute;opacity:0;width:1px;
+    height:1px;margin:0}
+  .tlx-build .tlx-mark:has(input:checked),.tlx-build .tlx-band:has(input:checked){opacity:1;
+    border-style:solid;background:color-mix(in srgb,var(--c) 22%,transparent)}
+  .tlx-build .tlx-mark:has(input:checked)::after{content:"✓";position:absolute;right:-7px;top:-13px;
+    font:700 11px/1 var(--sans);color:var(--c)}
+  .tlx-build:has(input:focus-visible){outline:2px solid var(--c);outline-offset:3px;border-radius:6px}
+  /* sizes: the same axis at the widths it is used at — half, third, and inside an answer option */
+  .tlx--half{font-size:13.5px}
+  .tlx--half .tlx-axis{height:40px}
+  .tlx--third{font-size:13px}
+  .tlx--third .tlx-axis{height:36px}
+  .tlx--stamp{font-size:11.5px;margin:0}
+  .tlx--stamp .tlx-axis{height:34px}
+  .tlx--stamp .tlx-axis::before{top:15px}
+  .tlx--stamp .tlx-mark,.tlx--stamp .tlx-band{top:9px;height:9px;border-width:1.5px}
+  .tlx--stamp .tlx-now{top:12px;height:7px}
+  .tlx--stamp .tlx-now b{display:none}
+  .tlx--stamp .tlx-dot{top:13px;width:7px;height:7px}
+  /* a legend for a block that shows more than one shape */
+  .tlx-key{display:flex;flex-wrap:wrap;gap:2px 14px;margin:6px 0 0;font-size:11.5px;color:var(--ink-2)}
+  .tlx-key span{display:inline-flex;align-items:center;gap:5px}
+  .tlx-key i{width:24px;height:9px;border:2px solid var(--accent);border-radius:5px;
+    background:color-mix(in srgb,var(--accent) 16%,transparent)}
+  .tlx-key i.fade{-webkit-mask-image:linear-gradient(90deg,transparent,#000 58%);
+    mask-image:linear-gradient(90deg,transparent,#000 58%);border-left-width:0;border-radius:0 5px 5px 0}
+  .tlx-key i.band{border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
+    background:repeating-linear-gradient(45deg,
+      color-mix(in srgb,var(--accent) 13%,transparent) 0 3px,transparent 3px 6px)}
+  @media print{
+    .tlx-mark[data-end="open"]{border-right-style:solid}
+  }
+}
+
+/* #94 POS — <p class="pos"> with each word in <b class="pos-n|pos-v|pos-adj|pos-adv|pos-det|pos-pron|pos-prep|pos-conj|pos-aux|pos-wh">: the underline is the mark, colour only reinforces it. A .pos-key follows. Vary: none */
+@layer rx{
+  .pos{line-height:2.2}
+  .pos b{font-weight:inherit;text-decoration-line:underline;text-decoration-thickness:2px;
+    text-underline-offset:3px;text-decoration-color:var(--pos-c,var(--ink-2))}
+  .pos-n{text-decoration-style:solid}
+  .pos-v{--pos-c:var(--accent);text-decoration-style:double}
+  .pos-adj{text-decoration-style:dotted}
+  .pos-adv{text-decoration-style:dashed}
+  .pos-aux{--pos-c:var(--accent);text-decoration-style:wavy}
+  .pos-det{--pos-c:var(--tan);text-decoration-style:dotted}
+  .pos-pron{--pos-c:var(--tan);text-decoration-style:solid}
+  .pos-prep{--pos-c:var(--tan);text-decoration-style:dashed}
+  .pos-conj{--pos-c:var(--ptw);text-decoration-style:dotted}
+  .pos-wh{--pos-c:var(--ptw);text-decoration-style:wavy}
+  .pos-key{display:flex;flex-wrap:wrap;gap:2px 14px;margin:6px 0 0;font-size:12px;color:var(--ink-2)}
+  .pos-key b{font-weight:400}
+  @media print{.pos b{text-decoration-color:#000}}
+}
+
+/* #96 BAR — one bar per share: <div class="bar-row"><span>day</span><div class="bar"><i style="--w:62%"></i></div><b>62%</b></div>. The number sits beside the bar, never inside it. Vary: --w, --bar-h */
+@layer rx{
+  .bar-row{display:grid;grid-template-columns:9em minmax(0,1fr) 3.2em;align-items:center;gap:10px;margin:6px 0}
+  .bar-row>span{font-size:13px;color:var(--ink-2)}
+  .bar-row>b{font:600 13px/1 var(--sans);font-variant-numeric:tabular-nums;text-align:right}
+  .bar{height:var(--bar-h,14px);background:var(--sunken);border-radius:2px;overflow:hidden}
+  .bar>i{display:block;width:var(--w,50%);height:100%;background:var(--accent)}
+}
+
+/* #97 TLN — the line of time: <div class="tln"><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/></svg></i><b class="tln-future">future</b></div>. Flexible: fills its host, never under 100px. Behind NOW the line fades to nothing on a log curve; ahead of NOW it is dashed and ends in a double arrow. Vary: --past (share of the line behind now), --accent */
+@layer rx{
+  .tln{--past:36%;--c:var(--accent);--dash:6px;
+    position:relative;display:grid;grid-template-columns:var(--past) auto minmax(0,1fr) auto;
+    align-items:center;width:200px;min-inline-size:100px;height:48px;color:var(--c);
+    container-type:inline-size}
+  /* how it gets wider: nothing = 100px · 1 = the width of its host · 2 = the width of an anchor string.
+     Only the rules grow — the star, the arrow and the words keep their own size */
+  .tln[data-grow="1"],.tln[data-grow="2"]{width:100%}
+  .tln-anchor{display:inline-block;max-width:100%;vertical-align:top}
+  .tln-anchor>span{display:block}
+  /* under 180px there is no room for FUTURE behind the line, so it goes */
+  @container (max-width:180px){
+    .tln-future{display:none}
+    .tln-head b{font-size:8.5px;letter-spacing:.1em}
+  }
+  /* behind now: one 2px rule, masked into a log curve so it has no visible start */
+  .tln-past{height:0;border-top:2px solid currentColor;align-self:center;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.28) 10%,rgba(0,0,0,.4) 20%,
+      rgba(0,0,0,.49) 30%,rgba(0,0,0,.57) 40%,rgba(0,0,0,.63) 50%,rgba(0,0,0,.7) 60%,
+      rgba(0,0,0,.76) 70%,rgba(0,0,0,.82) 80%,rgba(0,0,0,.89) 90%,#000 100%);
+    mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.28) 10%,rgba(0,0,0,.4) 20%,
+      rgba(0,0,0,.49) 30%,rgba(0,0,0,.57) 40%,rgba(0,0,0,.63) 50%,rgba(0,0,0,.7) 60%,
+      rgba(0,0,0,.76) 70%,rgba(0,0,0,.82) 80%,rgba(0,0,0,.89) 90%,#000 100%)}
+  /* now: a star that breathes, and the word under it */
+  .tln-head{position:relative;display:grid;place-items:center;width:22px;margin-inline:-2px}
+  .tln-star{width:15px;height:15px;fill:currentColor;stroke:none;
+    animation:tln-beat 2.6s ease-in-out infinite;transform-origin:50% 50%}
+  .tln-head b{position:absolute;top:100%;margin-top:4px;font:700 9.5px/1 var(--sans);
+    letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+  @keyframes tln-beat{0%,100%{transform:scale(1);opacity:.85}45%{transform:scale(1.22);opacity:1}}
+  /* ahead of now: dashed, no fade, ending in a double arrow */
+  .tln-ahead{height:0;border-top:2px dashed currentColor;align-self:center}
+  .tln-end{display:grid;place-items:center;width:26px;margin-inline:-2px 0}
+  .tln-end svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;
+    stroke-linecap:round;stroke-linejoin:round}
+  /* the word sits behind the line, not over it */
+  .tln-future{position:absolute;right:20px;top:50%;transform:translateY(-50%);z-index:0;
+    font:700 10px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;
+    color:color-mix(in srgb,var(--ink-2) 70%,transparent);pointer-events:none}
+  .tln-past,.tln-head,.tln-ahead,.tln-end{position:relative;z-index:1}
+  @media (prefers-reduced-motion:reduce){.tln-star{animation:none}}
+  @media print{.tln-ahead{border-top-style:solid}.tln-star{animation:none}}
+}
+
+
+/* ## VEHICLES — the block itself: its columns, structure, control and look. Members: #40 LAYOUT · #50 STRUCTURE · #51 SEQUENCE · #52 GRID · #53 PAIR · #60-#64 controls · #70 LOOK · #76/#80-#82 engine, state and motion
+     Foot: ## GAMES — engine-owned, in @layer legacy at the end of the file, because a game paints its own art and must lose to every lesson rule */
 
 /* #40 LAYOUT — .content-area 1200px. .itemrow > .itemsize-third|-half|-twothird|.itemsize = 4/6/8/12 of 12; unset full width. Frames in a row end on one line. Vary: --row-gap, --col-gap, --section-gap (length) */
 @layer layout{
@@ -486,218 +707,6 @@
 
   body:has(#focus:checked) .content-area{width:820px}
   body:has(#focus:checked) .block[data-structure="prose"]{--measure:64ch}
-}
-
-/* #91 GLOSS — .glossbtn popovertarget="ID" opens its .defcard popover id="ID" beside the word, no script. Use: a new word, or a PT literal that is not the meaning/use. One id per card. Vary: none */
-@layer rx{
-  .glossbtn{background:none;border:0;padding:0 1px;font:inherit;color:var(--accent);cursor:pointer;
-    border-bottom:1.5px dashed var(--accent-line)}
-  .glossbtn:hover{border-bottom-style:solid}
-  /* a popover's invoker IS its implicit anchor, so position-area needs no per-card id or script;
-     flip-block keeps a word near the page's foot readable */
-  .defcard{position:fixed;inset:auto;margin:0 0 7px;width:max-content;max-width:min(320px,80vw);
-    position-area:top;position-try-fallbacks:flip-block;
-    border:1px solid var(--line);border-radius:var(--r1);background:var(--paper);
-    box-shadow:var(--shadow-2);padding:11px 14px;font-size:.95rem;color:var(--ink)}
-  .defcard::backdrop{background:rgb(27 25 23/.16);backdrop-filter:blur(2px)}
-  .defcard b{display:block;font-family:var(--sans);font-size:.84rem;letter-spacing:.04em;
-    text-transform:uppercase;color:var(--ink-2);margin-bottom:4px}
-}
-
-/* #92 PRON — <ruby>word<rp>(</rp><rt>key</rt><rp>)</rp></ruby>: the key over the word, one word at a time, rp never omitted. rt text = dictionary.json notation. Vary: none */
-@layer rx{
-  ruby{ruby-position:over}
-  ruby rt{font-size:.85em;font-family:var(--sans);font-weight:600;color:var(--ink-2);
-    letter-spacing:.02em;line-height:1.15;white-space:nowrap}
-}
-
-/* #93 AXIS — <div class="tlx" style="--now:70"> with .tlx-say + one or more .tlx-axis of marks: .tlx-mark[data-end="open|closed"][data-form="recent"], .tlx-band, .tlx-dot[style="--at"], .tlx-tick, .tlx-wall, .tlx-now. Sizes: .tlx--half, .tlx--stamp (inside an option). Saves: .tlx-pick (which word) and .tlx-build (which shape). Vary: --now, --a/--b/--at (% of the axis), --c (hue) */
-@layer rx{
-  .tlx{--now:86;--c:var(--accent);--lbl:var(--ink-2);position:relative;
-    margin:10px 0 2px;font-size:14px}
-  .tlx-say{position:relative;margin:0 0 4px;line-height:1.55}
-  /* a word that makes a claim: ruled in its own hue, with the letter that keys it to the axis */
-  .tlx-w{--c:var(--accent);font-weight:600;color:inherit;cursor:default;
-    border-bottom:2px solid var(--c);padding-bottom:1px;margin-right:1px}
-  .tlx-w::after{content:attr(data-k);font:700 9px/1 var(--sans);color:var(--c);
-    vertical-align:super;margin-left:2px;letter-spacing:.03em}
-  .tlx-axis{position:relative;height:46px;margin:6px 0 0}
-  /* the line: a hairline, not a stroke. 2px of ink reads as print; 3px reads as a marker pen */
-  .tlx-axis::before{content:"";position:absolute;left:0;right:11px;top:23px;height:2px;
-    background:var(--ink);border-radius:1px}
-  .tlx-axis::after{content:"";position:absolute;right:3px;top:19px;width:8px;height:8px;
-    border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);
-    border-radius:1px;transform:rotate(-45deg)}
-  /* a mark sits ON the line, never floating: top 12 + height 12 ends exactly at the axis */
-  .tlx-mark{position:absolute;left:calc(var(--a) * 1%);width:calc((var(--b) - var(--a)) * 1%);
-    top:12px;height:12px;border:2px solid var(--c);border-radius:6px;
-    background:color-mix(in srgb,var(--c) 16%,transparent)}
-  .tlx-mark[data-end="open"]::before{content:"";position:absolute;right:-8px;top:0;
-    border-left:8px solid var(--c);border-top:5px solid transparent;border-bottom:5px solid transparent}
-  .tlx-mark[data-end="closed"]::after{content:"";position:absolute;right:-3px;top:-4px;bottom:-4px;
-    width:3px;border-radius:2px;background:var(--c)}
-  /* shape 1 — still going, and it has been going a while: the left end dissolves, because
-     "lately" names no start. The mask fades the border too, which is why it reads as drawn. */
-  .tlx-mark[data-form="recent"]{-webkit-mask-image:linear-gradient(90deg,transparent,#000 58%);
-    mask-image:linear-gradient(90deg,transparent,#000 58%);border-left-width:0;
-    border-top-left-radius:0;border-bottom-left-radius:0;
-    background:linear-gradient(90deg,color-mix(in srgb,var(--c) 2%,transparent),
-      color-mix(in srgb,var(--c) 38%,transparent))}
-  /* shape 2 — a fact about a whole finished span: the span is a FIELD and the event a dot inside it.
-     Reading "in my life" as a duration is the mistake; a field cannot be misread as one. */
-  .tlx-band{position:absolute;left:calc(var(--a) * 1%);width:calc((var(--b) - var(--a)) * 1%);
-    top:12px;height:12px;
-    border:1px solid color-mix(in srgb,var(--c) 40%,transparent);border-radius:4px;
-    background:repeating-linear-gradient(45deg,
-      color-mix(in srgb,var(--c) 13%,transparent) 0 4px,transparent 4px 8px)}
-  .tlx-dot{position:absolute;left:calc(var(--at) * 1%);top:19px;width:10px;height:10px;
-    border-radius:50%;background:var(--c);
-    box-shadow:0 0 0 2px var(--paper);transform:translateX(-50%)}
-  .tlx-wall{position:absolute;left:calc(var(--at) * 1%);top:8px;height:22px;width:0;
-    border-left:2px solid var(--ok)}
-  .tlx-wall b{position:absolute;top:-15px;left:3px;white-space:nowrap;font:700 10px/1 var(--sans);
-    letter-spacing:.05em;color:var(--ok)}
-  /* the word-side letter, repeated at the head of its mark — the key that survives greyscale */
-  .tlx-mark>i,.tlx-band>i{position:absolute;left:3px;top:-3px;font:700 9px/1 var(--sans);
-    font-style:normal;color:var(--c);background:var(--paper);padding:0 2px;border-radius:3px}
-  .tlx-mark[data-form="recent"]>i{left:auto;right:2px;top:-11px}
-  .tlx-now{position:absolute;left:calc(var(--now) * 1%);top:20px;height:8px;width:0;
-    border-left:2px solid var(--ink)}
-  .tlx-now b{position:absolute;top:9px;left:50%;transform:translateX(-50%);white-space:nowrap;
-    font:700 10px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
-  .tlx-tick{position:absolute;left:calc(var(--at) * 1%);top:21px;height:6px;width:1px;
-    background:color-mix(in srgb,var(--ink) 38%,transparent)}
-  .tlx-tick b{position:absolute;top:8px;left:50%;transform:translateX(-50%);white-space:nowrap;
-    font:600 10px/1 var(--sans);color:var(--lbl)}
-  .tlx-cap{margin:4px 0 0;font-size:12.5px;line-height:1.45;color:var(--dim)}
-  /* a mark's MEANING decides where it sits: a container you are inside is not on the same footing as a
-     claim about the present (`.tlx-field`); a word that points at a moment drops below it */
-  .tlx-field{top:-3px}
-  .tlx-field>i{top:-10px}
-  .tlx-dot.in{top:1px}
-  .tlx-under{top:27px;height:7px}
-  .tlx-under>i{top:-11px;left:auto;right:2px}
-  /* interactive 1 — the WORD is the answer: the radio lives inside the label, so the control saves */
-  .tlx-pick label.tlx-w{position:relative;cursor:pointer;border-bottom-style:dotted}
-  .tlx-pick label.tlx-w input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
-  .tlx-pick label.tlx-w:hover{border-bottom-style:solid}
-  .tlx-pick label.tlx-w:has(input:checked){border-bottom-style:solid;
-    background:color-mix(in srgb,var(--c) 12%,transparent)}
-  .tlx-pick label.tlx-w:has(input:checked)::before{content:"✓ ";color:var(--c);font-weight:700}
-  .tlx-pick label.tlx-w:has(input:focus-visible){outline:2px solid var(--c);outline-offset:2px}
-  /* interactive 2 — the SHAPE is the answer: each candidate axis carries its own radio */
-  .tlx-build{display:block;cursor:pointer;margin:2px 0 0;font-size:13px}
-  .tlx-build .tlx-cap{display:block;margin:0;font-size:13px;color:var(--ink)}
-  .tlx-build .tlx-axis{height:38px;margin-top:2px}
-  .tlx-build .tlx-mark,.tlx-build .tlx-band{cursor:pointer;opacity:.55;border-style:dashed;
-    background:transparent}
-  .tlx-build:hover .tlx-mark,.tlx-build:hover .tlx-band{opacity:.75}
-  .tlx-build .tlx-mark input,.tlx-build .tlx-band input{position:absolute;opacity:0;width:1px;
-    height:1px;margin:0}
-  .tlx-build .tlx-mark:has(input:checked),.tlx-build .tlx-band:has(input:checked){opacity:1;
-    border-style:solid;background:color-mix(in srgb,var(--c) 22%,transparent)}
-  .tlx-build .tlx-mark:has(input:checked)::after{content:"✓";position:absolute;right:-7px;top:-13px;
-    font:700 11px/1 var(--sans);color:var(--c)}
-  .tlx-build:has(input:focus-visible){outline:2px solid var(--c);outline-offset:3px;border-radius:6px}
-  /* sizes: the same axis at the widths it is used at — half, third, and inside an answer option */
-  .tlx--half{font-size:13.5px}
-  .tlx--half .tlx-axis{height:40px}
-  .tlx--third{font-size:13px}
-  .tlx--third .tlx-axis{height:36px}
-  .tlx--stamp{font-size:11.5px;margin:0}
-  .tlx--stamp .tlx-axis{height:34px}
-  .tlx--stamp .tlx-axis::before{top:15px}
-  .tlx--stamp .tlx-mark,.tlx--stamp .tlx-band{top:9px;height:9px;border-width:1.5px}
-  .tlx--stamp .tlx-now{top:12px;height:7px}
-  .tlx--stamp .tlx-now b{display:none}
-  .tlx--stamp .tlx-dot{top:13px;width:7px;height:7px}
-  /* a legend for a block that shows more than one shape */
-  .tlx-key{display:flex;flex-wrap:wrap;gap:2px 14px;margin:6px 0 0;font-size:11.5px;color:var(--ink-2)}
-  .tlx-key span{display:inline-flex;align-items:center;gap:5px}
-  .tlx-key i{width:24px;height:9px;border:2px solid var(--accent);border-radius:5px;
-    background:color-mix(in srgb,var(--accent) 16%,transparent)}
-  .tlx-key i.fade{-webkit-mask-image:linear-gradient(90deg,transparent,#000 58%);
-    mask-image:linear-gradient(90deg,transparent,#000 58%);border-left-width:0;border-radius:0 5px 5px 0}
-  .tlx-key i.band{border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
-    background:repeating-linear-gradient(45deg,
-      color-mix(in srgb,var(--accent) 13%,transparent) 0 3px,transparent 3px 6px)}
-  @media print{
-    .tlx-mark[data-end="open"]{border-right-style:solid}
-  }
-}
-
-/* #94 POS — <p class="pos"> with each word in <b class="pos-n|pos-v|pos-adj|pos-adv|pos-det|pos-pron|pos-prep|pos-conj|pos-aux|pos-wh">: the underline is the mark, colour only reinforces it. A .pos-key follows. Vary: none */
-@layer rx{
-  .pos{line-height:2.2}
-  .pos b{font-weight:inherit;text-decoration-line:underline;text-decoration-thickness:2px;
-    text-underline-offset:3px;text-decoration-color:var(--pos-c,var(--ink-2))}
-  .pos-n{text-decoration-style:solid}
-  .pos-v{--pos-c:var(--accent);text-decoration-style:double}
-  .pos-adj{text-decoration-style:dotted}
-  .pos-adv{text-decoration-style:dashed}
-  .pos-aux{--pos-c:var(--accent);text-decoration-style:wavy}
-  .pos-det{--pos-c:var(--tan);text-decoration-style:dotted}
-  .pos-pron{--pos-c:var(--tan);text-decoration-style:solid}
-  .pos-prep{--pos-c:var(--tan);text-decoration-style:dashed}
-  .pos-conj{--pos-c:var(--ptw);text-decoration-style:dotted}
-  .pos-wh{--pos-c:var(--ptw);text-decoration-style:wavy}
-  .pos-key{display:flex;flex-wrap:wrap;gap:2px 14px;margin:6px 0 0;font-size:12px;color:var(--ink-2)}
-  .pos-key b{font-weight:400}
-  @media print{.pos b{text-decoration-color:#000}}
-}
-
-/* #96 BAR — one bar per share: <div class="bar-row"><span>day</span><div class="bar"><i style="--w:62%"></i></div><b>62%</b></div>. The number sits beside the bar, never inside it. Vary: --w, --bar-h */
-@layer rx{
-  .bar-row{display:grid;grid-template-columns:9em minmax(0,1fr) 3.2em;align-items:center;gap:10px;margin:6px 0}
-  .bar-row>span{font-size:13px;color:var(--ink-2)}
-  .bar-row>b{font:600 13px/1 var(--sans);font-variant-numeric:tabular-nums;text-align:right}
-  .bar{height:var(--bar-h,14px);background:var(--sunken);border-radius:2px;overflow:hidden}
-  .bar>i{display:block;width:var(--w,50%);height:100%;background:var(--accent)}
-}
-
-/* #97 TLN — the line of time: <div class="tln"><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/></svg></i><b class="tln-future">future</b></div>. Flexible: fills its host, never under 100px. Behind NOW the line fades to nothing on a log curve; ahead of NOW it is dashed and ends in a double arrow. Vary: --past (share of the line behind now), --accent */
-@layer rx{
-  .tln{--past:36%;--c:var(--accent);--dash:6px;
-    position:relative;display:grid;grid-template-columns:var(--past) auto minmax(0,1fr) auto;
-    align-items:center;width:200px;min-inline-size:100px;height:48px;color:var(--c);
-    container-type:inline-size}
-  /* how it gets wider: nothing = 100px · 1 = the width of its host · 2 = the width of an anchor string.
-     Only the rules grow — the star, the arrow and the words keep their own size */
-  .tln[data-grow="1"],.tln[data-grow="2"]{width:100%}
-  .tln-anchor{display:inline-block;max-width:100%;vertical-align:top}
-  .tln-anchor>span{display:block}
-  /* under 180px there is no room for FUTURE behind the line, so it goes */
-  @container (max-width:180px){
-    .tln-future{display:none}
-    .tln-head b{font-size:8.5px;letter-spacing:.1em}
-  }
-  /* behind now: one 2px rule, masked into a log curve so it has no visible start */
-  .tln-past{height:0;border-top:2px solid currentColor;align-self:center;
-    -webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.28) 10%,rgba(0,0,0,.4) 20%,
-      rgba(0,0,0,.49) 30%,rgba(0,0,0,.57) 40%,rgba(0,0,0,.63) 50%,rgba(0,0,0,.7) 60%,
-      rgba(0,0,0,.76) 70%,rgba(0,0,0,.82) 80%,rgba(0,0,0,.89) 90%,#000 100%);
-    mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.28) 10%,rgba(0,0,0,.4) 20%,
-      rgba(0,0,0,.49) 30%,rgba(0,0,0,.57) 40%,rgba(0,0,0,.63) 50%,rgba(0,0,0,.7) 60%,
-      rgba(0,0,0,.76) 70%,rgba(0,0,0,.82) 80%,rgba(0,0,0,.89) 90%,#000 100%)}
-  /* now: a star that breathes, and the word under it */
-  .tln-head{position:relative;display:grid;place-items:center;width:22px;margin-inline:-2px}
-  .tln-star{width:15px;height:15px;fill:currentColor;stroke:none;
-    animation:tln-beat 2.6s ease-in-out infinite;transform-origin:50% 50%}
-  .tln-head b{position:absolute;top:100%;margin-top:4px;font:700 9.5px/1 var(--sans);
-    letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
-  @keyframes tln-beat{0%,100%{transform:scale(1);opacity:.85}45%{transform:scale(1.22);opacity:1}}
-  /* ahead of now: dashed, no fade, ending in a double arrow */
-  .tln-ahead{height:0;border-top:2px dashed currentColor;align-self:center}
-  .tln-end{display:grid;place-items:center;width:26px;margin-inline:-2px 0}
-  .tln-end svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;
-    stroke-linecap:round;stroke-linejoin:round}
-  /* the word sits behind the line, not over it */
-  .tln-future{position:absolute;right:20px;top:50%;transform:translateY(-50%);z-index:0;
-    font:700 10px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;
-    color:color-mix(in srgb,var(--ink-2) 70%,transparent);pointer-events:none}
-  .tln-past,.tln-head,.tln-ahead,.tln-end{position:relative;z-index:1}
-  @media (prefers-reduced-motion:reduce){.tln-star{animation:none}}
-  @media print{.tln-ahead{border-top-style:solid}.tln-star{animation:none}}
 }
 
 /* #95 PRINT — nothing to invoke. Paper keeps content, drops surface, unfolds .reveal and .flip */
