@@ -123,11 +123,12 @@
     background-color:var(--paper);
     background-image:radial-gradient(rgb(74 60 40/.13) 1px, transparent 1px);
     background-size:3px 3px;
-    border:2px solid var(--ink);border-radius:0;box-shadow:none}
-  .content-area{width:1200px;margin:0 auto;padding:98px 0 16px;position:relative;
-    border:2px solid color-mix(in oklab,var(--ink-2) 55%,var(--paper));
-    border-radius:var(--r2);
+    border:2px solid var(--ink);border-radius:0;
     box-shadow:4px 4px 0 color-mix(in oklab,var(--ink) 12%,transparent)}
+  /* the rounded grey frame belongs to the page body, inset from the ink edge — not to the 1200px column */
+  .page-container::before{content:"";position:absolute;inset:8px;pointer-events:none;
+    border:2px solid color-mix(in oklab,var(--ink-2) 50%,var(--paper));border-radius:14px}
+  .content-area{width:1200px;margin:0 auto;padding:98px 0 16px;position:relative}
   .itemrow{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));
     gap:var(--row-gap,22px) var(--col-gap,18px)}
   .itemsize-third{grid-column:span 4}
@@ -1671,7 +1672,10 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
   .bookdrop>.bookbtn:hover{filter:brightness(1.05)}
   .bookdrop.locked>.bookbtn{cursor:default}
   .bookdrop.locked .bookitem{pointer-events:none}
-  .tadmin-cols{display:grid;grid-template-columns:repeat(2,593px);gap:14px;margin:14px 0}
+  .tadmin-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:14px;margin:14px 0}
+  /* the columns are cards, and layout gives every .card the full 12 columns — inside this grid they take
+     their own column instead */
+  .tadmin-cols>.card{grid-column:auto}
   .tadmin-col{margin:0}
   .tadmin-col h4{margin:0 0 6px}
   .tadmin-item{padding:8px 0;border-bottom:2px dashed var(--tan)}
