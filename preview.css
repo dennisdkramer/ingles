@@ -63,6 +63,10 @@
     color:var(--dkblue);margin:0 0 8px;padding-left:2em;text-transform:none;
     letter-spacing:normal}
   p,li{margin:0 0 .7em;text-wrap:pretty}
+  .content-area{cursor:default}
+  .content-area a,.content-area button,.content-area label,.content-area mark.nb,
+  .content-area summary{cursor:pointer}
+  .content-area input.gap,.content-area textarea{cursor:text}
   p:last-child,li:last-child{margin-bottom:0}
   b,strong{font-weight:700}
   :lang(pt){font-style:italic;font-weight:400}
