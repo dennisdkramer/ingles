@@ -15,7 +15,7 @@
   },
   {
     "name": "adult",
-    "label": "Adulto",
+    "label": "Adult",
     "icon": "🔞",
     "color": "#FFAB91",
     "order": 3

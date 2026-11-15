@@ -35,7 +35,7 @@ function emit(rel, text) {
 const TRACKS = [
   { name: 'kids', label: 'Kids', icon: '🛹', color: '#FFE082', order: 1 },
   { name: 'business', label: 'Business', icon: '💼', color: '#90CAF9', order: 2 },
-  { name: 'adult', label: 'Adulto', icon: '🔞', color: '#FFAB91', order: 3 },
+  { name: 'adult', label: 'Adult', icon: '🔞', color: '#FFAB91', order: 3 },
   { name: 'advanced-stem', label: 'Advanced STEM', icon: '🔬', color: '#80CBC4', order: 4 },
   { name: 'advanced-aave', label: 'Advanced AAVE', icon: '🎤', color: '#B39DDB', order: 5 },
   { name: 'memelord-mogger', label: 'Memelord Mogger', icon: '😎', color: '#E6EE9C', order: 6 },
