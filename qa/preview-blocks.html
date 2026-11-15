@@ -14,25 +14,41 @@
 
 <p class="dim">Two axes for tuning one element: <b>new</b> at the top, the whole old group under it. A note under either lands in <code>qa/NOTES.md</code>.</p>
 <section class="qa-item" id="tlw" data-contract="IN-BLOCK-VISUALS.md">
-<h2>words over the line</h2>
-<textarea data-item="[69-words]" aria-label="notes for the words layer" rows="2" class="qa-note" placeholder="notes — words over the axis"></textarea>
-<p class="dim">The verb words of one clause are underlined, and that underline turns into a pointer at the zone the tense points at — <b>before</b> · <b>now</b> · <b>then</b>. Words you do not mark are ignored, so a reversed time clause, a noun clause, or a verb doing an adjective's job needs no rule. The star sits wherever <code>--now</code> puts it, so either side of the axis can be the long one.</p>
+<h2>anchoring</h2>
+<textarea data-item="[69-anchor]" aria-label="notes for the anchoring" rows="2" class="qa-note" placeholder="notes — anchoring"></textarea>
+<p class="dim">One word of each verb group pins the axis under itself: <code>.an</code> names the word, <code>--point</code> says which point of the axis must sit under that word's centre. The axis is untouched — only its position moves. No marks, lines or arrows yet.</p>
 <div class="block" data-kind="show">
-  <figure class="tlw" style="--now:55%;--leg:28px">
-    <p class="tlw-say"><b class="tw" data-to="now">I've been feeling sick</b> for days.</p>
+  <figure class="tlw" data-tense="past-perfect">
+    <p class="tlw-say">I <b class="tw"><span class="an">had</span>n't been</b> there.</p>
     <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
   </figure>
-  <figure class="tlw" style="--now:60%;--leg:23px">
-    <p class="tlw-say" style="padding-left:44px">I <b class="tw" data-to="before">hadn't been</b> there.</p>
+  <figure class="tlw" data-tense="simple-past">
+    <p class="tlw-say">I <b class="tw"><span class="an">saw</span></b> it in 2019.</p>
     <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
   </figure>
-  <figure class="tlw" style="--now:46%;--leg:96px">
-    <p class="tlw-say" style="padding-left:12px">I'm <b class="tw" data-to="then">gonna hit</b> the hay.</p>
+  <figure class="tlw" data-tense="past-continuous">
+    <p class="tlw-say">I <b class="tw"><span class="an">was</span> walking</b> home.</p>
     <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
   </figure>
-  <figure class="tlw" style="--now:46%;--leg:94px">
-    <p class="tlw-say" style="padding-left:18px"><b class="tw" data-to="then">He'll have done</b> it by then.</p>
-    <div class="tln" data-fill="ahead"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
+  <figure class="tlw" data-tense="present-perfect">
+    <p class="tlw-say"><b class="tw"><span class="an">I've</span> been feeling</b> sick for days.</p>
+    <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
+  </figure>
+  <figure class="tlw" data-tense="simple-present">
+    <p class="tlw-say">I <b class="tw"><span class="an">work</span></b> at the shop.</p>
+    <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
+  </figure>
+  <figure class="tlw" data-tense="present-continuous">
+    <p class="tlw-say"><b class="tw"><span class="an">I'm</span> working</b> late.</p>
+    <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
+  </figure>
+  <figure class="tlw" data-tense="going-to">
+    <p class="tlw-say"><b class="tw">I'm <span class="an">gonna</span> hit</b> the hay.</p>
+    <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
+  </figure>
+  <figure class="tlw" data-tense="future-perfect">
+    <p class="tlw-say"><b class="tw">He'll <span class="an">have</span> done</b> it by Friday.</p>
+    <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
   </figure>
 </div>
 </section>
