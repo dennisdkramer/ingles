@@ -287,7 +287,7 @@
   .bar>i{display:block;width:var(--w,50%);height:100%;background:var(--accent)}
 }
 
-/* #97 TLN — the line of time: <div class="tln"><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>. NOW sits in the middle: the two runs are equal shares, the arrow is out of the flow. Behind it the line fades on a log curve; ahead it is dashed to a double arrow that steps right. Vary: --accent, data-grow 0|1|2 */
+/* #97 TLN — the line of time: <div class="tln"><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>. NOW sits in the middle: the two runs are equal shares, the arrow is out of the flow. Behind it the line fades on a log curve; ahead it is dashed to a double arrow that steps right. NOW and THEN are ink on a paper halo, so both flip. Vary: --accent, data-grow 0|1|2 */
 @layer rx{
   .tln{--c:var(--accent);
     position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
@@ -315,21 +315,24 @@
   .tln-head{position:relative;display:grid;place-items:center;width:34px;z-index:1}
   .tln-star{width:30px;height:30px;fill:currentColor;stroke:none;
     animation:tln-beat 2.6s ease-in-out infinite;transform-origin:50% 50%}
-  .tln-head b{position:absolute;inset:0;display:grid;place-items:center;z-index:2;
+  .tln-head b{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;
+    padding:1px 3px;border-radius:2px;box-shadow:0 0 0 3px var(--paper);
     font:700 10px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;
-    color:var(--paper);white-space:nowrap}
+    color:var(--ink);white-space:nowrap}
   @keyframes tln-beat{0%,100%{transform:scale(1);opacity:.85}45%{transform:scale(1.15);opacity:1}}
   /* ahead of now: dashed, no fade, ending under a double right arrow that steps right every 1.5s */
   .tln-ahead{height:0;border-top:2px dashed currentColor;align-self:center;margin-right:28px}
   .tln-end{position:absolute;right:0;top:50%;transform:translateY(-50%);width:28px;z-index:1;
-    animation:tln-go 1.5s ease-out infinite}
+    display:grid;place-items:center;animation:tln-go 1.5s ease-out infinite}
   .tln-end svg{display:block;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;
     stroke-linecap:round;stroke-linejoin:round}
   @keyframes tln-go{0%{translate:0 0;opacity:1}33.33%{translate:10px 0;opacity:.5}
     33.34%{translate:0 0;opacity:1}100%{translate:0 0;opacity:1}}
-  /* then: on the line, in the middle of the arrow */
-  .tln-then{position:absolute;right:0;top:50%;transform:translateY(-50%);width:28px;text-align:center;
-    z-index:2;font:700 10px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--paper)}
+  /* then: on the line, centred on the arrow, the same ink on paper */
+  .tln-then{position:absolute;right:14px;top:50%;transform:translate(50%,-50%);z-index:2;
+    padding:1px 3px;border-radius:2px;box-shadow:0 0 0 3px var(--paper);
+    font:700 10px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;
+    color:var(--ink);white-space:nowrap}
   .tln-past,.tln-head,.tln-ahead{position:relative;z-index:1}
   @media (prefers-reduced-motion:reduce){.tln-star,.tln-end{animation:none}}
   @media print{.tln-ahead{border-top-style:solid}.tln-star,.tln-end{animation:none}}
