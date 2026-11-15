@@ -285,9 +285,11 @@
 }
 
 /* #61 CHOICE — .opts > label.opt > input[type=radio] + span; one answer. Unset: options stack. Vary: data-layout="row" */
-/* #61 OPT — <label class="opt"> one per answer, inside .opts. Vary: --r1 (radius) */
 @layer control{
   .opts{display:grid;align-content:start;gap:7px;margin:2px 0 calc(18px + var(--para-gap))}
+  /* a prompt keeps its original gap to the options it introduces: the extra paragraph rhythm belongs
+     between paragraphs, not between a question and its answers */
+  p:has(+.opts){margin-bottom:.7em}
   .opts[data-layout="row"]{grid-auto-flow:column;grid-auto-columns:max-content;gap:10px}
   .opt{display:flex;align-items:center;gap:9px;padding:7px 11px;cursor:pointer;
     border:1.5px solid var(--line);border-radius:var(--r1);background:var(--surface-2);
