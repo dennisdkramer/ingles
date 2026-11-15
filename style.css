@@ -15,7 +15,7 @@
 @property --edge-w   { syntax: '<length>';    inherits: true;  initial-value: 2px }
 @property --ring     { syntax: '<percentage>';inherits: false; initial-value: 0% }
 
-@layer legacy, reset, tokens, base, perf, layout, structure, control, look, state, motion, print, shell, u;
+@layer legacy, reset, tokens, base, perf, layout, structure, control, look, state, motion, print, shell, u, rx;
 
 /* #10 TOKENS — Colour, spacing, type and depth. Set token anywhere; unset - back to :root. Vary: --accent-h (hue 0-360); --sp, --r1/--r2, --edge-w (length) */
 @layer tokens{
@@ -490,6 +490,29 @@
   body:has(#focus:checked) .block[data-structure="prose"]{--measure:64ch}
 }
 
+/* #91 GLOSS — .glossbtn popovertarget="ID" opens its .defcard popover id="ID" beside the word, no script. Use: a new word, or a PT literal that is not the meaning/use. One id per card. Vary: none */
+@layer rx{
+  .glossbtn{background:none;border:0;padding:0 1px;font:inherit;color:var(--accent);cursor:pointer;
+    border-bottom:1.5px dashed var(--accent-line)}
+  .glossbtn:hover{border-bottom-style:solid}
+  /* a popover's invoker IS its implicit anchor, so position-area needs no per-card id or script;
+     flip-block keeps a word near the page's foot readable */
+  .defcard{position:fixed;inset:auto;margin:0 0 7px;width:max-content;max-width:min(320px,80vw);
+    position-area:top;position-try-fallbacks:flip-block;
+    border:1px solid var(--line);border-radius:var(--r1);background:var(--paper);
+    box-shadow:var(--shadow-2);padding:11px 14px;font-size:.95rem;color:var(--ink)}
+  .defcard::backdrop{background:rgb(27 25 23/.16);backdrop-filter:blur(2px)}
+  .defcard b{display:block;font-family:var(--sans);font-size:.84rem;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--ink-2);margin-bottom:4px}
+}
+
+/* #92 PRON — <ruby>word<rp>(</rp><rt>key</rt><rp>)</rp></ruby>: the key over the word, one word at a time, rp never omitted. rt text = dictionary.json notation. Vary: none */
+@layer rx{
+  ruby{ruby-position:over}
+  ruby rt{font-size:.85em;font-family:var(--sans);font-weight:600;color:var(--ink-2);
+    letter-spacing:.02em;line-height:1.15;white-space:nowrap}
+}
+
 /* #95 PRINT — nothing to invoke. Paper keeps content, drops surface, unfolds .reveal and .flip */
 @layer print{
   @media print{
@@ -546,7 +569,7 @@
   #feed:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
 }
 
-/* #99 U — utilities, wins over every layer above: .dim .lead .pt .mono .stack .row .center .mt .sr .defcard .stress mark ruby .glossbtn Vary: --measure (length) */
+/* #99 U — utilities, wins over every layer above: .dim .lead .pt .ptw .mono .stack .row .center .mt .sr .stress mark Vary: --measure (length) */
 @layer u{
   .dim{color:var(--dim);font-size:15px;line-height:1.45}
   .lead{font-family:var(--playfair);font-size:18px;font-style:italic;color:var(--lead);
@@ -565,17 +588,8 @@
   .center{text-align:center}
   .mt{margin-top:12px}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
-  .defcard{border:1px solid var(--line);border-radius:var(--r1);background:var(--paper);
-    box-shadow:var(--shadow-2);padding:11px 14px;max-width:320px;font-size:.95rem}
-  .defcard::backdrop{background:rgb(18 24 34 / .18);backdrop-filter:blur(2px)}
-  .defcard b{display:block;font-family:var(--sans);font-size:.84rem;letter-spacing:.04em;
-    text-transform:uppercase;color:var(--ink-2);margin-bottom:4px}
   .stress{font-style:normal;text-emphasis:filled dot var(--accent);text-emphasis-position:over}
   mark{background:color-mix(in oklab,var(--warn) 42%,transparent);border-radius:3px;padding:0 .16em}
-  ruby rt{font-size:.6em;font-family:var(--sans);color:var(--ink-2);letter-spacing:.02em}
-  .glossbtn{background:none;border:0;padding:0 1px;font:inherit;color:var(--accent);cursor:pointer;
-    border-bottom:1.5px dashed var(--accent-line)}
-  .glossbtn:hover{border-bottom-style:solid}
 }
 
 @media (prefers-reduced-motion:reduce){
