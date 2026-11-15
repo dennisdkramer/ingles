@@ -89,9 +89,11 @@
     color:var(--dkblue);margin:0 0 8px;padding-left:20px;text-transform:none;
     letter-spacing:normal}
   p,li{margin:0 0 .7em;text-wrap:pretty}
-  body{cursor:default}
+  body{cursor:default;user-select:none;-webkit-user-select:none;caret-color:transparent}
   a,button,label,mark.nb,summary{cursor:pointer}
-  input.gap,textarea{cursor:text}
+  /* the I-beam and the blinking bar belong to fields only */
+  input,textarea,[contenteditable]{cursor:text;caret-color:auto;
+    user-select:text;-webkit-user-select:text}
   p:last-child,li:last-child{margin-bottom:0}
   b,strong{font-weight:700}
   :lang(pt){font-style:italic}
