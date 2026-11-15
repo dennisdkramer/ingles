@@ -50,7 +50,6 @@ content belongs in its `###` sections.
 ### [05]
 
 → CONTENT_EXAMPLES.md §`[05]`
-Make it a third-width block by default. improve the drawings for each location so they are either obviously recognizable OR a building with a sign that indicates what it is ($ BANK, for example) as part of the drawing. Remove the normal text names. put the check boxes centered at the bottom of each location (above the street). Put street names in italic on the streets - vertical streets get names running vertically.  Remove the questions portion below the map. Change the heading to "Street map for directions and relative locations"  and clear the min/max numbers
 
 ### [07]
 
@@ -91,17 +90,14 @@ Make it a third-width block by default. improve the drawings for each location s
 ### [41]
 
 → CONTENT_EXAMPLES.md §`[41]`
-mark in the header "IGNORE - pending updates"
 
 ### [42]
 
 → CONTENT_EXAMPLES.md §`[42]`
-mark in the header "IGNORE - pending updates"
 
 ### [43]
 
 → CONTENT_EXAMPLES.md §`[43]`
-mark in the header "IGNORE - pending updates"
 
 ### [50]
 
@@ -110,214 +106,171 @@ mark in the header "IGNORE - pending updates"
 ### [55]
 
 → CONTENT_EXAMPLES.md §`[55]`
-mark in the header "IGNORE - pending updates"
 
 ### [56]
 
 → CONTENT_EXAMPLES.md §`[56]`
-mark in the header "IGNORE - pending updates"
 
 ### [57]
 
 → CONTENT_EXAMPLES.md §`[57]`
-mark in the header "IGNORE - pending updates"
 
 ### [58]
 
 → CONTENT_EXAMPLES.md §`[58]`
-mark in the header "IGNORE - pending updates"
 
 ### [60]
 
 → CONTENT_EXAMPLES.md §`[60]`
-mark in the header "IGNORE - pending updates"
 
 ### [61]
 
 → CONTENT_EXAMPLES.md §`[61]`
-mark in the header "IGNORE - pending updates"
 
 ### [63]
 
 → CONTENT_EXAMPLES.md §`[63]`
-mark in the header "IGNORE - pending updates"
 
 ### [64]
 
 → CONTENT_EXAMPLES.md §`[64]`
-mark in the header "IGNORE - pending updates"
 
 ### [65]
 
 → CONTENT_EXAMPLES.md §`[65]`
-mark in the header "IGNORE - pending updates"
 
 ### [66]
 
 → CONTENT_EXAMPLES.md §`[66]`
-mark in the header "IGNORE - pending updates"
 
 ### [67]
 
 → CONTENT_EXAMPLES.md §`[67]`
-mark in the header "IGNORE - pending updates"
 
 ### [40]
 
 → CONTENT_EXAMPLES.md §`[40]`
-mark in the header "IGNORE - pending updates"
 
 ### [08]
 
 → CONTENT_EXAMPLES.md §`[08]`
-delete
 
 ### [09]
 
 → CONTENT_EXAMPLES.md §`[09]`
-delete
 
 ### [10]
 
 → CONTENT_EXAMPLES.md §`[10]`
-delete
 
 ### [11]
 
 → CONTENT_EXAMPLES.md §`[11]`
-delete
 
 ### [13]
 
 → CONTENT_EXAMPLES.md §`[13]`
-delete
 
 ### [14]
 
 → CONTENT_EXAMPLES.md §`[14]`
-delete
 
 ### [15]
 
 → CONTENT_EXAMPLES.md §`[15]`
-delete
 
 ### [16]
 
 → CONTENT_EXAMPLES.md §`[16]`
-delete
 
 ### [17]
 
 → CONTENT_EXAMPLES.md §`[17]`
-delete
 
 ### [18]
 
 → CONTENT_EXAMPLES.md §`[18]`
-delete
 
 ### [19]
 
 → CONTENT_EXAMPLES.md §`[19]`
-delete
 
 ### [20]
 
 → CONTENT_EXAMPLES.md §`[20]`
-delete
 
 ### [21]
 
 → CONTENT_EXAMPLES.md §`[21]`
-delete
 
 ### [22]
 
 → CONTENT_EXAMPLES.md §`[22]`
-delete
 
 ### [23]
 
 → CONTENT_EXAMPLES.md §`[23]`
-delete
 
 ### [24]
 
 → CONTENT_EXAMPLES.md §`[24]`
-delete
 
 ### [25]
 
 → CONTENT_EXAMPLES.md §`[25]`
-delete
 
 ### [26]
 
 → CONTENT_EXAMPLES.md §`[26]`
-delete
 
 ### [44]
 
 → CONTENT_EXAMPLES.md §`[44]`
-delete
 
 ### [45]
 
 → CONTENT_EXAMPLES.md §`[45]`
-delete
 
 ### [46]
 
 → CONTENT_EXAMPLES.md §`[46]`
-delete
 
 ### [47]
 
 → CONTENT_EXAMPLES.md §`[47]`
-delete
 
 ### [48]
 
 → CONTENT_EXAMPLES.md §`[48]`
-delete
 
 ### [49]
 
 → CONTENT_EXAMPLES.md §`[49]`
-delete
 
 ### [51]
 
 → CONTENT_EXAMPLES.md §`[51]`
-delete
 
 ### [52]
 
 → CONTENT_EXAMPLES.md §`[52]`
-delete
 
 ### [53]
 
 → CONTENT_EXAMPLES.md §`[53]`
-delete
 
 ### [54]
 
 → CONTENT_EXAMPLES.md §`[54]`
-delete
 
 ### [59]
 
 → CONTENT_EXAMPLES.md §`[59]`
-delete
 
 ### [62]
 
 → CONTENT_EXAMPLES.md §`[62]`
-delete
 
 ### [39]
 
 → CONTENT_EXAMPLES.md §`[39]`
-scramble the word order of the prompt
