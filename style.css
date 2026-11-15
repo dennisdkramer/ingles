@@ -511,6 +511,121 @@
     letter-spacing:.02em;line-height:1.15;white-space:nowrap}
 }
 
+/* #93 AXIS — <div class="tlx" style="--now:70"> with .tlx-say + one or more .tlx-axis of marks: .tlx-mark[data-end="open|closed"][data-form="recent"], .tlx-band, .tlx-dot[style="--at"], .tlx-tick, .tlx-wall, .tlx-now. Sizes: .tlx--half, .tlx--stamp (inside an option). Saves: .tlx-pick (which word) and .tlx-build (which shape). Vary: --now, --a/--b/--at (% of the axis), --c (hue) */
+@layer rx{
+  .tlx{--now:86;--c:var(--accent);--lbl:var(--ink-2);position:relative;
+    margin:10px 0 2px;font-size:14px}
+  .tlx-say{position:relative;margin:0 0 4px;line-height:1.55}
+  /* a word that makes a claim: ruled in its own hue, with the letter that keys it to the axis */
+  .tlx-w{--c:var(--accent);font-weight:600;color:inherit;cursor:default;
+    border-bottom:2px solid var(--c);padding-bottom:1px;margin-right:1px}
+  .tlx-w::after{content:attr(data-k);font:700 9px/1 var(--sans);color:var(--c);
+    vertical-align:super;margin-left:2px;letter-spacing:.03em}
+  .tlx-axis{position:relative;height:46px;margin:6px 0 0}
+  /* the line: a hairline, not a stroke. 2px of ink reads as print; 3px reads as a marker pen */
+  .tlx-axis::before{content:"";position:absolute;left:0;right:11px;top:23px;height:2px;
+    background:var(--ink);border-radius:1px}
+  .tlx-axis::after{content:"";position:absolute;right:3px;top:19px;width:8px;height:8px;
+    border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);
+    border-radius:1px;transform:rotate(-45deg)}
+  /* a mark sits ON the line, never floating: top 12 + height 12 ends exactly at the axis */
+  .tlx-mark{position:absolute;left:calc(var(--a) * 1%);width:calc((var(--b) - var(--a)) * 1%);
+    top:12px;height:12px;border:2px solid var(--c);border-radius:6px;
+    background:color-mix(in srgb,var(--c) 16%,transparent)}
+  .tlx-mark[data-end="open"]::before{content:"";position:absolute;right:-8px;top:0;
+    border-left:8px solid var(--c);border-top:5px solid transparent;border-bottom:5px solid transparent}
+  .tlx-mark[data-end="closed"]::after{content:"";position:absolute;right:-3px;top:-4px;bottom:-4px;
+    width:3px;border-radius:2px;background:var(--c)}
+  /* shape 1 — still going, and it has been going a while: the left end dissolves, because
+     "lately" names no start. The mask fades the border too, which is why it reads as drawn. */
+  .tlx-mark[data-form="recent"]{-webkit-mask-image:linear-gradient(90deg,transparent,#000 58%);
+    mask-image:linear-gradient(90deg,transparent,#000 58%);border-left-width:0;
+    border-top-left-radius:0;border-bottom-left-radius:0;
+    background:linear-gradient(90deg,color-mix(in srgb,var(--c) 2%,transparent),
+      color-mix(in srgb,var(--c) 38%,transparent))}
+  /* shape 2 — a fact about a whole finished span: the span is a FIELD and the event a dot inside it.
+     Reading "in my life" as a duration is the mistake; a field cannot be misread as one. */
+  .tlx-band{position:absolute;left:calc(var(--a) * 1%);width:calc((var(--b) - var(--a)) * 1%);
+    top:12px;height:12px;
+    border:1px solid color-mix(in srgb,var(--c) 40%,transparent);border-radius:4px;
+    background:repeating-linear-gradient(45deg,
+      color-mix(in srgb,var(--c) 13%,transparent) 0 4px,transparent 4px 8px)}
+  .tlx-dot{position:absolute;left:calc(var(--at) * 1%);top:19px;width:10px;height:10px;
+    border-radius:50%;background:var(--c);
+    box-shadow:0 0 0 2px var(--paper);transform:translateX(-50%)}
+  .tlx-wall{position:absolute;left:calc(var(--at) * 1%);top:8px;height:22px;width:0;
+    border-left:2px solid var(--ok)}
+  .tlx-wall b{position:absolute;top:-15px;left:3px;white-space:nowrap;font:700 10px/1 var(--sans);
+    letter-spacing:.05em;color:var(--ok)}
+  /* the word-side letter, repeated at the head of its mark — the key that survives greyscale */
+  .tlx-mark>i,.tlx-band>i{position:absolute;left:3px;top:-3px;font:700 9px/1 var(--sans);
+    font-style:normal;color:var(--c);background:var(--paper);padding:0 2px;border-radius:3px}
+  .tlx-mark[data-form="recent"]>i{left:auto;right:2px;top:-11px}
+  .tlx-now{position:absolute;left:calc(var(--now) * 1%);top:20px;height:8px;width:0;
+    border-left:2px solid var(--ink)}
+  .tlx-now b{position:absolute;top:9px;left:50%;transform:translateX(-50%);white-space:nowrap;
+    font:700 10px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+  .tlx-tick{position:absolute;left:calc(var(--at) * 1%);top:21px;height:6px;width:1px;
+    background:color-mix(in srgb,var(--ink) 38%,transparent)}
+  .tlx-tick b{position:absolute;top:8px;left:50%;transform:translateX(-50%);white-space:nowrap;
+    font:600 10px/1 var(--sans);color:var(--lbl)}
+  .tlx-cap{margin:4px 0 0;font-size:12.5px;line-height:1.45;color:var(--dim)}
+  /* a mark's MEANING decides where it sits: a container you are inside is not on the same footing as a
+     claim about the present (`.tlx-field`); a word that points at a moment drops below it */
+  .tlx-field{top:-3px}
+  .tlx-field>i{top:-10px}
+  .tlx-dot.in{top:1px}
+  .tlx-under{top:27px;height:7px}
+  .tlx-under>i{top:-11px;left:auto;right:2px}
+  /* interactive 1 — the WORD is the answer: the radio lives inside the label, so the control saves */
+  .tlx-pick label.tlx-w{position:relative;cursor:pointer;border-bottom-style:dotted}
+  .tlx-pick label.tlx-w input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+  .tlx-pick label.tlx-w:hover{border-bottom-style:solid}
+  .tlx-pick label.tlx-w:has(input:checked){border-bottom-style:solid;
+    background:color-mix(in srgb,var(--c) 12%,transparent)}
+  .tlx-pick label.tlx-w:has(input:checked)::before{content:"✓ ";color:var(--c);font-weight:700}
+  .tlx-pick label.tlx-w:has(input:focus-visible){outline:2px solid var(--c);outline-offset:2px}
+  /* interactive 2 — the SHAPE is the answer: each candidate axis carries its own radio */
+  .tlx-build{display:block;cursor:pointer;margin:2px 0 0;font-size:13px}
+  .tlx-build .tlx-cap{display:block;margin:0;font-size:13px;color:var(--ink)}
+  .tlx-build .tlx-axis{height:38px;margin-top:2px}
+  .tlx-build .tlx-mark,.tlx-build .tlx-band{cursor:pointer;opacity:.55;border-style:dashed;
+    background:transparent}
+  .tlx-build:hover .tlx-mark,.tlx-build:hover .tlx-band{opacity:.75}
+  .tlx-build .tlx-mark input,.tlx-build .tlx-band input{position:absolute;opacity:0;width:1px;
+    height:1px;margin:0}
+  .tlx-build .tlx-mark:has(input:checked),.tlx-build .tlx-band:has(input:checked){opacity:1;
+    border-style:solid;background:color-mix(in srgb,var(--c) 22%,transparent)}
+  .tlx-build .tlx-mark:has(input:checked)::after{content:"✓";position:absolute;right:-7px;top:-13px;
+    font:700 11px/1 var(--sans);color:var(--c)}
+  .tlx-build:has(input:focus-visible){outline:2px solid var(--c);outline-offset:3px;border-radius:6px}
+  /* sizes: the same axis at the widths it is used at — half, third, and inside an answer option */
+  .tlx--half{font-size:13.5px}
+  .tlx--half .tlx-axis{height:40px}
+  .tlx--third{font-size:13px}
+  .tlx--third .tlx-axis{height:36px}
+  .tlx--stamp{font-size:11.5px;margin:0}
+  .tlx--stamp .tlx-axis{height:34px}
+  .tlx--stamp .tlx-axis::before{top:15px}
+  .tlx--stamp .tlx-mark,.tlx--stamp .tlx-band{top:9px;height:9px;border-width:1.5px}
+  .tlx--stamp .tlx-now{top:12px;height:7px}
+  .tlx--stamp .tlx-now b{display:none}
+  .tlx--stamp .tlx-dot{top:13px;width:7px;height:7px}
+  /* a legend for a block that shows more than one shape */
+  .tlx-key{display:flex;flex-wrap:wrap;gap:2px 14px;margin:6px 0 0;font-size:11.5px;color:var(--ink-2)}
+  .tlx-key span{display:inline-flex;align-items:center;gap:5px}
+  .tlx-key i{width:24px;height:9px;border:2px solid var(--accent);border-radius:5px;
+    background:color-mix(in srgb,var(--accent) 16%,transparent)}
+  .tlx-key i.fade{-webkit-mask-image:linear-gradient(90deg,transparent,#000 58%);
+    mask-image:linear-gradient(90deg,transparent,#000 58%);border-left-width:0;border-radius:0 5px 5px 0}
+  .tlx-key i.band{border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
+    background:repeating-linear-gradient(45deg,
+      color-mix(in srgb,var(--accent) 13%,transparent) 0 3px,transparent 3px 6px)}
+  @media print{
+    .tlx-mark[data-end="open"]{border-right-style:solid}
+  }
+}
+
 /* #95 PRINT — nothing to invoke. Paper keeps content, drops surface, unfolds .reveal and .flip */
 @layer print{
   @media print{
