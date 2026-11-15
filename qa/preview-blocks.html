@@ -3,39 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>blocks — preview (every entry in the three menu files)</title>
+<title>line of time — preview</title>
 <link rel="stylesheet" href="../style.css">
 <link rel="stylesheet" href="preview.css">
 <link rel="stylesheet" href="preview-visual.css">
 </head>
 <body>
 <main class="page-container"><div class="content-area">
-<h1>Blocks — preview</h1>
-<p>Not a lesson and not marked up as one. One block per <code>###</code> entry in the three menu files,
-each on its own heading, in the file's own order. The words are filler; the point is the structure: which container
-carries the block, how many columns the content forces, what the control is, and whether the shape reads as a block
-at all.</p>
-<p class="dim">Four scripts run on this page. <code>notes.js</code> reads and writes
-<code>qa/NOTES.md</code> for the note box under each item heading; <code>player.js</code> upgrades the music block
-below from its native <code>&lt;audio controls&gt;</code> to the drawn bar and the lit lyric line, and does nothing at
-all if it is missing; <code>readout.js</code> builds the nav and the line under each note box from the menu itself; <code>engine4.js</code> presents the thirteen game blocks, <code>[27]</code>–<code>[39]</code>, and does nothing if it is missing.
-Every other class used here already exists in <code>style.css</code> and every
-block follows the <code>## </code> headers in <code>style.css</code>: <code>.panel</code> / <code>.card</code> / <code>.chart</code> / <code>.dialog</code>
-for the frame, <code>.qgrid stack</code> with <code>--rows</code> for radios, <code>.blanks sent</code> with
-<code>--rows</code> for gaps, <code>.itemrow</code> with <code>data-cols</code> for paired halves.
-The line directly under each note box <b>is that shape's headline from the three menu files, minus the identity</b> —
-the identity is the frame's own heading, and the line above the block carries the rest of that <code>###</code> line,
-with the shape atoms and the item and option counts. Nothing about it is stored here: the page reads the menu when it
-loads and again every 2 s, so a heading rewritten in the file appears under its block without a reload, and an entry
-with no block on this page is named in the nav rather than quietly missing. Nothing else is printed about a block:
-there is no caption at its foot, because a sentence that is not in the menu would be this page arguing its own case.
-Every block on the page answers for a numbered entry, so nothing here can be out of date against the file: the nav and the line over each block are read from the three menu files, and a heading rewritten there appears here on the next poll.</p>
-<p>The figures drawn <em>inside</em> a block are the eight entries under <b>[INSIDE]</b>: <code>[05]</code> the street map, <code>[69]</code> the timeline (was <code>[57]</code> and <code>[63]</code>), <code>[72]</code> the place prepositions (was <code>[58]</code>), <code>[64]</code> the phrase marks, <code>[65]</code> the parts of speech, <code>[66]</code> the voice contour and <code>[67]</code> the pronunciation key. None of them owns a container or a control — the block that hosts one owns the <code>.panel</code> and supplies the radio, gap or textarea that saves, which is why they are listed apart from the vehicles. The ordinary vehicles that carry a drawn figure <em>plus</em> the control that makes it a block are <code>[40]</code>, <code>[41]</code> and <code>[55]</code>–<code>[62]</code>. The player's own CSS (`[02]`/`[03]`) lives in <code>style.css</code> under
-<code>## AUDIO PLAYER</code>, because a kept shape is lesson-facing; every other draft figure here is
-<code>.vz-*</code> in <code>qa/preview-visual.css</code>, so it stays out of the lesson stylesheet until the shape
-is kept. No network, no font above the page's own palette, and every figure
-prints.</p>
-<nav class="qa-toc" id="qa-toc"><span class="qa-toc-state">reading qa/brief.mjs…</span></nav>
+<h1>Line of time</h1>
+
+<p class="dim">Two axes for tuning one element: <b>new</b> at the top, the whole old group under it. A note under either lands in <code>qa/NOTES.md</code>.</p>
 <section class="qa-item" id="demo-tln" data-contract="IN-BLOCK-VISUALS.md">
 <h2>axis, new</h2>
 <textarea data-item="[69-axis]" aria-label="notes for the new axis" rows="2" class="qa-note" placeholder="notes — the new line of time"></textarea>
@@ -46,7 +23,7 @@ prints.</p>
 </section>
 
 <section class="qa-item" id="item-69" data-contract="IN-BLOCK-VISUALS.md">
-<h2>[57]</h2>
+<h2>axis, old</h2>
 <textarea data-item="[57]" aria-label="notes for [57]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Places a form on one time axis at three sizes &lt;,&gt; &lt;,&gt;</p>
 <div class="card">
@@ -329,7 +306,6 @@ prints.</p>
 <script src="../engine4.js"></script>
 <script src="player.js"></script>
 <script src="notes.js"></script>
-<script src="readout.js"></script>
 </body>
 </html>
 
