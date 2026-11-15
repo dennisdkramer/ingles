@@ -116,9 +116,18 @@
 
   /* ---- the markdown shape of qa/NOTES.md ------------------------------------------------ */
 
-  var POINTER = /^→\s*CONTENT_EXAMPLES\.md/;      // the line every section opens with
+  var POINTER = /^→\s*\S+\.md\s+§/;   // the line every section opens with, whichever menu file it names
 
-  function pointer(item) { return '→ ' + CONTRACT + ' §`' + item + '`'; }
+  /* the entry lives in one of three files now, so the section carries the file it belongs to and the
+     pointer names that one — a pointer to a file the entry is not in is worse than no pointer. */
+  function contractOf(item) {
+    var box = null;
+    for (var i = 0; i < boxes.length && !box; i++) if (name(boxes[i]) === item) box = boxes[i];
+    var sec = box && box.closest ? box.closest('section.qa-item') : null;
+    return (sec && sec.getAttribute('data-contract')) || CONTRACT;
+  }
+
+  function pointer(item) { return '→ ' + contractOf(item) + ' §`' + item + '`'; }
 
   /** body lines with the pointer removed: what a box shows, and what a box's text becomes */
   function strip(lines) {

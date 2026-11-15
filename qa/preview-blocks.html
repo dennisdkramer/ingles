@@ -30,7 +30,7 @@ loads and again every 2 s, so a heading rewritten in the file appears under its 
 with no block on this page is named in the nav rather than quietly missing. Nothing else is printed about a block:
 there is no caption at its foot, because a sentence that is not in the menu would be this page arguing its own case.
 Every block on the page answers for a numbered entry, so nothing here can be out of date against the file: the nav and the line over each block are read from the three menu files, and a heading rewritten there appears here on the next poll.</p>
-<p>The figures drawn <em>inside</em> a block are the six entries under <b>[INSIDE]</b>: <code>[05]</code> the street map, <code>[63]</code> the timeline, <code>[64]</code> the phrase marks, <code>[65]</code> the parts of speech, <code>[66]</code> the voice contour and <code>[67]</code> the pronunciation key. None of them owns a container or a control — the block that hosts one owns the <code>.panel</code> and supplies the radio, gap or textarea that saves, which is why they are listed apart from the vehicles. The ordinary vehicles that carry a drawn figure <em>plus</em> the control that makes it a block are <code>[40]</code>, <code>[41]</code> and <code>[55]</code>–<code>[62]</code>. The player's own CSS (`[02]`/`[03]`) lives in <code>style.css</code> under
+<p>The figures drawn <em>inside</em> a block are the eight entries under <b>[INSIDE]</b>: <code>[05]</code> the street map, <code>[69]</code> the timeline (was <code>[57]</code> and <code>[63]</code>), <code>[72]</code> the place prepositions (was <code>[58]</code>), <code>[64]</code> the phrase marks, <code>[65]</code> the parts of speech, <code>[66]</code> the voice contour and <code>[67]</code> the pronunciation key. None of them owns a container or a control — the block that hosts one owns the <code>.panel</code> and supplies the radio, gap or textarea that saves, which is why they are listed apart from the vehicles. The ordinary vehicles that carry a drawn figure <em>plus</em> the control that makes it a block are <code>[40]</code>, <code>[41]</code> and <code>[55]</code>–<code>[62]</code>. The player's own CSS (`[02]`/`[03]`) lives in <code>style.css</code> under
 <code>## AUDIO PLAYER</code>, because a kept shape is lesson-facing; every other draft figure here is
 <code>.vz-*</code> in <code>qa/preview-visual.css</code>, so it stays out of the lesson stylesheet until the shape
 is kept. No network, no font above the page's own palette, and every figure
@@ -86,7 +86,7 @@ prints.</p>
 </div>
 </section>
 
-<section class="qa-item" id="item-02">
+<section class="qa-item" id="item-02" data-contract="VEHICLES.md">
 <h2>[02]</h2>
 <textarea data-item="[02]" aria-label="notes for [02]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH|OPTION&gt; &lt;THIRD-&gt; Plays a recording with lyrics and shows which line is being sung &lt;,&gt; &lt;,&gt;</p>
@@ -109,8 +109,7 @@ prints.</p>
   </ol>
 </figure>
 </div>
-</section>
-<section class="qa-item" id="item-03">
+</section><section class="qa-item" id="item-03" data-contract="VEHICLES.md">
 <h2>[03]</h2>
 <textarea data-item="[03]" aria-label="notes for [03]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH|OPTION&gt; &lt;FULL&gt; Plays a recording full width with one paragraph explaining its words &lt;,&gt; &lt;,&gt;</p>
@@ -147,8 +146,7 @@ prints.</p>
   </tbody>
 </table>
 </div>
-</section>
-<section class="qa-item" id="item-04">
+</section><section class="qa-item" id="item-04" data-contract="VEHICLES.md">
 <h2>[04]</h2>
 <textarea data-item="[04]" aria-label="notes for [04]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH&gt; &lt;THIRD-&gt; Presents a word's etymology and how that is relevant or useful to the student &lt;2|4&gt; &lt;,&gt;</p>
@@ -166,8 +164,7 @@ prints.</p>
 </dl>
   <p class="dim">Nothing was added to this word. The meaning walked from <i>ignorant</i> to <i>kind</i> in six hundred years, which is why <i>nice</i> is the vaguest compliment in English.</p>
 </div>
-</section>
-<section class="qa-item" id="item-05">
+</section><section class="qa-item" id="item-05" data-contract="IN-BLOCK-VISUALS.md">
 <h2>[05]</h2>
 <textarea data-item="[05]" aria-label="notes for [05]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;SHOW|TRAIN&gt; &lt;HALF-&gt; Street map for directions and relative locations &lt; , &gt; &lt; , &gt;</p>
@@ -250,8 +247,7 @@ prints.</p>
   </div>
   <p>The route, in the places you pass: <input class="gap" style="--gap-w:100%" aria-label="the route"></p>
 </div>
-</section>
-<section class="qa-item" id="item-06">
+</section><section class="qa-item" id="item-06">
 <h2>[06]</h2>
 <textarea data-item="[06]" aria-label="notes for [06]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH&gt; &lt;HALF-&gt; Cue, the form it forces, an example &lt;4|6&gt; &lt;3|3&gt;</p>
@@ -269,8 +265,7 @@ prints.</p>
   </tbody>
 </table>
 </div>
-</section>
-<section class="qa-item" id="item-07">
+</section><section class="qa-item" id="item-07" data-contract="CONTENT_EXAMPLES.md">
 <h2>[07]</h2>
 <textarea data-item="[07]" aria-label="notes for [07]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH&gt; &lt;FULL&gt; One contrast across three word positions &lt;2|4&gt; &lt;3|3&gt;</p>
@@ -285,8 +280,7 @@ prints.</p>
   </tbody>
 </table>
 </div>
-</section>
-<section class="qa-item" id="item-08">
+</section><section class="qa-item" id="item-08">
 <h2>[08]</h2>
 <textarea data-item="[08]" aria-label="notes for [08]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH&gt; &lt;HALF-&gt; Two word sets as rows and columns, ticks where they combine &lt;3|5&gt; &lt;3|4&gt;</p>
@@ -303,8 +297,7 @@ prints.</p>
   </tbody>
 </table>
 </div>
-</section>
-<section class="qa-item" id="item-09">
+</section><section class="qa-item" id="item-09">
 <h2>[09]</h2>
 <textarea data-item="[09]" aria-label="notes for [09]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; Pairs an everyday verb with its one-word twin, then asks which twin fits &lt;3|6&gt; &lt;1|1&gt;</p>
@@ -332,8 +325,7 @@ prints.</p>
   </div>
 </div>
 </div>
-</section>
-<section class="qa-item" id="item-10">
+</section><section class="qa-item" id="item-10">
 <h2>[10]</h2>
 <textarea data-item="[10]" aria-label="notes for [10]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; Two correct versions of one message for a named hearer &lt;3|6&gt; &lt;2|4&gt;</p>
@@ -370,8 +362,7 @@ prints.</p>
     </div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-11">
+</section><section class="qa-item" id="item-11">
 <h2>[11]</h2>
 <textarea data-item="[11]" aria-label="notes for [11]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; One root's forms in columns by the job each does &lt;5|5&gt; &lt;3|6&gt;</p>
@@ -398,8 +389,7 @@ prints.</p>
   </div>
 </div>
 </div>
-</section>
-<section class="qa-item" id="item-12">
+</section><section class="qa-item" id="item-12" data-contract="VEHICLES.md">
 <h2>[12]</h2>
 <textarea data-item="[12]" aria-label="notes for [12]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH|TRAIN&gt; &lt;FULL&gt; 'Unknown plan' block, beside block with fields to have the student ask questions and learn the details that they need &lt;1|1&gt; &lt;4|8&gt;</p>
@@ -420,8 +410,7 @@ prints.</p>
     <textarea rows="2" style="width:100%;margin-top:10px" aria-label="Third question"></textarea>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-13">
+</section><section class="qa-item" id="item-13">
 <h2>[13]</h2>
 <textarea data-item="[13]" aria-label="notes for [13]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; A real document read for what its parts do &lt;1|1&gt; &lt;3|&gt;</p>
@@ -459,8 +448,7 @@ prints.</p>
     </div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-14">
+</section><section class="qa-item" id="item-14">
 <h2>[14]</h2>
 <textarea data-item="[14]" aria-label="notes for [14]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; Notices, the options each offers, the word doing the work &lt;4|8&gt; &lt;4|4&gt;</p>
@@ -476,8 +464,7 @@ prints.</p>
   </tbody>
 </table>
 </div>
-</section>
-<section class="qa-item" id="item-15">
+</section><section class="qa-item" id="item-15">
 <h2>[15]</h2>
 <textarea data-item="[15]" aria-label="notes for [15]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF-&gt; A form's fields, one item in each &lt;3|&gt; &lt;1|1&gt;</p>
@@ -494,8 +481,7 @@ prints.</p>
 </table>
   <p class="dim">The details given: Ana Ferreira · 3 April 2009 · SW1A 2AA · and one detail that belongs in no box at all.</p>
 </div>
-</section>
-<section class="qa-item" id="item-16">
+</section><section class="qa-item" id="item-16">
 <h2>[16]</h2>
 <textarea data-item="[16]" aria-label="notes for [16]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH&gt; &lt;HALF&gt; The idiom, its literal reading, its source &lt;1|1&gt; &lt;,&gt;</p>
@@ -504,8 +490,7 @@ prints.</p>
   <p><b>literally:</b> to open a bag and let an animal leave it</p>
   <p><b>where it comes from:</b> one story is that a market seller would swap a pig for a cat, and the buyer found out when the bag was opened</p>
 </div>
-</section>
-<section class="qa-item" id="item-17">
+</section><section class="qa-item" id="item-17">
 <h2>[17]</h2>
 <textarea data-item="[17]" aria-label="notes for [17]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; The answer given, the question to write &lt;3|6&gt; &lt;1|1&gt;</p>
@@ -519,8 +504,7 @@ prints.</p>
     <div>4. <i>“Because the bus didn't come.”</i> <input class="gap" style="--gap-w:13em"></div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-18">
+</section><section class="qa-item" id="item-18">
 <h2>[18]</h2>
 <textarea data-item="[18]" aria-label="notes for [18]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;HALF&gt; The moves that repair a breakdown, with the tone of each &lt;3|6&gt; &lt;1|1&gt;</p>
@@ -539,8 +523,7 @@ prints.</p>
     <div>4. They are talking too fast for you: <input class="gap" style="--gap-w:11em"></div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-19">
+</section><section class="qa-item" id="item-19">
 <h2>[19]</h2>
 <textarea data-item="[19]" aria-label="notes for [19]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; One sentence and the three readings its stress creates &lt;2|&gt; &lt;3|5&gt;</p>
@@ -562,8 +545,7 @@ prints.</p>
   </div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-20">
+</section><section class="qa-item" id="item-20">
 <h2>[20]</h2>
 <textarea data-item="[20]" aria-label="notes for [20]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;SHOW|TRAIN&gt; &lt;HALF-&gt; One real line, one named concept, and its questions &lt;2|3&gt; &lt;1|1&gt;</p>
@@ -588,8 +570,7 @@ prints.</p>
     </div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-21">
+</section><section class="qa-item" id="item-21">
 <h2>[21]</h2>
 <textarea data-item="[21]" aria-label="notes for [21]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; Lines whose endings rhyme, marked and named &lt;2|4&gt; &lt;2|4&gt;</p>
@@ -611,8 +592,7 @@ prints.</p>
     <div>3. They end in the same sound, spelled <input class="gap" style="--gap-w:6em"> and <input class="gap" style="--gap-w:6em">.</div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-22">
+</section><section class="qa-item" id="item-22">
 <h2>[22]</h2>
 <textarea data-item="[22]" aria-label="notes for [22]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A lyric's parts named by what each does &lt;3|4&gt; &lt;1|1&gt;</p>
@@ -637,8 +617,7 @@ prints.</p>
 <h3>songStructure</h3>
   <p>One line comes back changed. Write the word that changed it: <input class="gap" style="--gap-w:8em"></p>
 </div>
-</section>
-<section class="qa-item" id="item-23">
+</section><section class="qa-item" id="item-23">
 <h2>[23]</h2>
 <textarea data-item="[23]" aria-label="notes for [23]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;HALF&gt; The beats a line lands on, as a number &lt;2|&gt; &lt;1|1&gt;</p>
@@ -659,8 +638,7 @@ prints.</p>
   <p>One of these lines breaks its count. Write the word that sits on the break: <input class="gap" style="--gap-w:9em"></p>
 </div>
 </div>
-</section>
-<section class="qa-item" id="item-24">
+</section><section class="qa-item" id="item-24">
 <h2>[24]</h2>
 <textarea data-item="[24]" aria-label="notes for [24]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; A clip and the one line that justifies its mood &lt;1|&gt; &lt;3|3&gt;</p>
@@ -675,8 +653,7 @@ prints.</p>
   </div>
   <p>Because <input class="gap" style="--gap-w:22em"></p>
 </div>
-</section>
-<section class="qa-item" id="item-25">
+</section><section class="qa-item" id="item-25">
 <h2>[25]</h2>
 <textarea data-item="[25]" aria-label="notes for [25]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;HALF&gt; Questions ranked by where they are off-limits, then the student rewrites them &lt;2|&gt; &lt;2|4&gt;</p>
@@ -695,8 +672,7 @@ prints.</p>
   </div>
   <p>Rewrite the off-limits one so it becomes askable: <input class="gap" style="--gap-w:20em"></p>
 </div>
-</section>
-<section class="qa-item" id="item-26">
+</section><section class="qa-item" id="item-26">
 <h2>[26]</h2>
 <textarea data-item="[26]" aria-label="notes for [26]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;THIRD-&gt; A funny line and the flag on what makes it work &lt;1|&gt; &lt;2|4&gt;</p>
@@ -714,8 +690,7 @@ prints.</p>
   </div>
   <p>What would line 1 lose if it were translated word for word? <input class="gap" style="--gap-w:20em"></p>
 </div>
-</section>
-<section class="qa-item" id="item-27">
+</section><section class="qa-item" id="item-27" data-contract="VEHICLES.md">
 <h2>[27]</h2>
 <textarea data-item="[27]" aria-label="notes for [27]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; Words crossing the screen, shot inside a clock &lt;1|&gt; &lt;2|6&gt;</p>
@@ -745,8 +720,7 @@ prints.</p>
   </div>
   <button class="game-start" type="button">▶ Play</button>
 </div>
-</section>
-<section class="qa-item" id="item-28">
+</section><section class="qa-item" id="item-28" data-contract="VEHICLES.md">
 <h2>[28]</h2>
 <textarea data-item="[28]" aria-label="notes for [28]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; Lookalike options surfacing, the fitting one struck &lt;1|&gt; &lt;2|6&gt;</p>
@@ -780,8 +754,7 @@ prints.</p>
   </div>
   <button class="game-start" type="button">▶ Play</button>
 </div>
-</section>
-<section class="qa-item" id="item-29">
+</section><section class="qa-item" id="item-29" data-contract="VEHICLES.md">
 <h2>[29]</h2>
 <textarea data-item="[29]" aria-label="notes for [29]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; Items falling, sorted into two to four baskets &lt;1|&gt; &lt;2|4&gt;</p>
@@ -811,8 +784,7 @@ prints.</p>
   </div>
   <button class="game-start" type="button">▶ Play</button>
 </div>
-</section>
-<section class="qa-item" id="item-30">
+</section><section class="qa-item" id="item-30" data-contract="VEHICLES.md">
 <h2>[30]</h2>
 <textarea data-item="[30]" aria-label="notes for [30]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A drill answered item by item, the stack built as it is earned &lt;6|10&gt; &lt;2|4&gt;</p>
@@ -846,8 +818,7 @@ prints.</p>
   </div>
   <button class="game-start" type="button">▶ Play</button>
 </div>
-</section>
-<section class="qa-item" id="item-31">
+</section><section class="qa-item" id="item-31" data-contract="VEHICLES.md">
 <h2>[31]</h2>
 <textarea data-item="[31]" aria-label="notes for [31]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; Recognition at speed, one gate per right answer &lt;1|&gt; &lt;2|4&gt;</p>
@@ -877,8 +848,7 @@ prints.</p>
   </div>
   <button class="game-start" type="button">▶ Play</button>
 </div>
-</section>
-<section class="qa-item" id="item-32">
+</section><section class="qa-item" id="item-32" data-contract="VEHICLES.md">
 <h2>[32]</h2>
 <textarea data-item="[32]" aria-label="notes for [32]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A word guessed to a five-try limit, letter feedback each try &lt;1|&gt; &lt;2|4&gt;</p>
@@ -908,8 +878,7 @@ prints.</p>
   </div>
   <button class="game-start" type="button">▶ Play</button>
 </div>
-</section>
-<section class="qa-item" id="item-33">
+</section><section class="qa-item" id="item-33" data-contract="VEHICLES.md">
 <h2>[33]</h2>
 <textarea data-item="[33]" aria-label="notes for [33]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A grid where a wrong move costs a mark &lt;1|&gt; &lt;4|4&gt;</p>
@@ -943,8 +912,7 @@ prints.</p>
   </div>
   <button class="game-start" type="button">▶ Play</button>
 </div>
-</section>
-<section class="qa-item" id="item-34">
+</section><section class="qa-item" id="item-34" data-contract="VEHICLES.md">
 <h2>[34]</h2>
 <textarea data-item="[34]" aria-label="notes for [34]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A board of crossing words, one clue per word &lt;2|6&gt; &lt;2|&gt;</p>
@@ -974,8 +942,7 @@ prints.</p>
   </div>
   <button class="game-start" type="button">▶ Play</button>
 </div>
-</section>
-<section class="qa-item" id="item-35">
+</section><section class="qa-item" id="item-35" data-contract="VEHICLES.md">
 <h2>[35]</h2>
 <textarea data-item="[35]" aria-label="notes for [35]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A sentence built one word at a time from pads &lt;2|&gt; &lt;4|4&gt;</p>
@@ -1021,8 +988,7 @@ prints.</p>
   </div>
   <button class="game-start" type="button">▶ Play</button>
 </div>
-</section>
-<section class="qa-item" id="item-36">
+</section><section class="qa-item" id="item-36" data-contract="VEHICLES.md">
 <h2>[36]</h2>
 <textarea data-item="[36]" aria-label="notes for [36]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A card of words with the spoken form called &lt;1|&gt; &lt;2|9&gt;</p>
@@ -1068,8 +1034,7 @@ prints.</p>
   </div>
   <button class="game-start" type="button">▶ Play</button>
 </div>
-</section>
-<section class="qa-item" id="item-37">
+</section><section class="qa-item" id="item-37" data-contract="VEHICLES.md">
 <h2>[37]</h2>
 <textarea data-item="[37]" aria-label="notes for [37]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A quiz run that carries the score already earned &lt;5|&gt; &lt;2|4&gt;</p>
@@ -1111,8 +1076,7 @@ prints.</p>
   </div>
   <button class="game-start" type="button">▶ Play</button>
 </div>
-</section>
-<section class="qa-item" id="item-38">
+</section><section class="qa-item" id="item-38" data-contract="VEHICLES.md">
 <h2>[38]</h2>
 <textarea data-item="[38]" aria-label="notes for [38]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A drill with a visible cost for every miss &lt;3|&gt; &lt;2|4&gt;</p>
@@ -1146,8 +1110,7 @@ prints.</p>
   </div>
   <button class="game-start" type="button">▶ Play</button>
 </div>
-</section>
-<section class="qa-item" id="item-39">
+</section><section class="qa-item" id="item-39" data-contract="VEHICLES.md">
 <h2>[39]</h2>
 <textarea data-item="[39]" aria-label="notes for [39]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; Adjective order made physical in one sentence &lt;2|8&gt; &lt;8|8&gt;</p>
@@ -1199,8 +1162,7 @@ prints.</p>
   </div>
   <button class="game-start" type="button">▶ Play</button>
 </div>
-</section>
-<section class="qa-item" id="item-40">
+</section><section class="qa-item" id="item-40" data-contract="VEHICLES.md">
 <h2>[40]</h2>
 <textarea data-item="[40]" aria-label="notes for [40]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Moves the tongue between two sounds &lt;2|4&gt; &lt;2|4&gt;</p>
@@ -1263,8 +1225,21 @@ prints.</p>
     <div>2. The one instruction that turns the tap into the <i>r</i> is: leave the <input class="gap" style="--gap-w:4em">.</div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-41">
+</section><section class="qa-item" id="item-68" data-contract="VEHICLES.md">
+<h2>[68]</h2>
+<textarea data-item="[68]" aria-label="notes for [68]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH|TRAIN&gt; &lt;FULL&gt; Two forms on one time axis, the difference between them drawn as a gap &lt;3|3&gt; &lt;2|4&gt;</p>
+<div class="panel" data-kind="teach">
+<h3>Two forms, one event</h3>
+<h4>A sketch, not the final shape: the axis it needs is <code>[69]</code>, which has no CSS yet.</h4>
+<p>a · I <b>have lost</b> my keys. — the span reaches <code>now</code>; the loss is still true.</p>
+<p>b · I <b>lost</b> my keys. — the same span, closed before <code>now</code>; the gap to now is the claim.</p>
+<div class="blanks sent" style="--rows:2">
+  <div>1. The manager is still waiting — the report <input class="gap" style="--gap-w:7em"> yet.</div>
+  <div>2. That was last week — the report <input class="gap" style="--gap-w:7em"> on Tuesday.</div>
+</div>
+</div>
+</section><section class="qa-item" id="item-41">
 <h2>[41]</h2>
 <textarea data-item="[41]" aria-label="notes for [41]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Shows countable against mass as objects you can see &lt;3|6&gt; &lt;1|2&gt;</p>
@@ -1336,8 +1311,7 @@ prints.</p>
     <div>6. She gave me <input class="gap" style="--gap-w:7em"> of advice I still use. <span class="ptw">um conselho</span></div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-42">
+</section><section class="qa-item" id="item-42" data-contract="IN-BLOCK-VISUALS.md">
 <h2>[42]</h2>
 <textarea data-item="[42]" aria-label="notes for [42]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; Wordless panels with a line under each &lt;4|6&gt; &lt;1|1&gt;</p>
@@ -1358,8 +1332,7 @@ prints.</p>
 </table>
   <p class="dim">One line per panel, past simple. Panels are inline SVG here; a real block takes four frames from <code>assets/</code> or the same SVG, and the caption names the source.</p>
 </div>
-</section>
-<section class="qa-item" id="item-43">
+</section><section class="qa-item" id="item-43">
 <h2>[43]</h2>
 <textarea data-item="[43]" aria-label="notes for [43]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; Bars whose length is the value, then the sentence about them &lt;2|4&gt; &lt;1|1&gt;</p>
@@ -1377,8 +1350,19 @@ prints.</p>
   </div>
   <p class="dim">Figures: placeholder for the preview — a real block names its source here, and never rounds a bar away from its own label.</p>
 </div>
-</section>
-<section class="qa-item" id="item-44">
+</section><section class="qa-item" id="item-71" data-contract="VEHICLES.md">
+<h2>[71]</h2>
+<textarea data-item="[71]" aria-label="notes for [71]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;TEACH&gt; &lt;THIRD-&gt; A figure with its source, drawn as one bar &lt;1|3&gt; &lt;1|1&gt;</p>
+<div class="panel" data-kind="teach">
+<h3>Use at work</h3>
+<p>Every day — <b>62%</b></p>
+<p style="width:62%;height:14px;background:var(--blue);margin:0 0 .8em 15px"></p>
+<p>Once a week — <b>34%</b></p>
+<p style="width:34%;height:14px;background:var(--blue);margin:0 0 .8em 15px"></p>
+<p class="dim">2019 census</p>
+</div>
+</section><section class="qa-item" id="item-44">
 <h2>[44]</h2>
 <textarea data-item="[44]" aria-label="notes for [44]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH&gt; &lt;THIRD&gt; One rule in three labelled lines: pattern, meaning, use when &lt;1|1&gt; &lt;3|3&gt;</p>
@@ -1388,8 +1372,7 @@ prints.</p>
   <p><b>Means:</b><br>the thing is finished, and it still matters now</p>
   <p><b>Use when:</b><br>the time is not named, or the result is the point</p>
 </div>
-</section>
-<section class="qa-item" id="item-45">
+</section><section class="qa-item" id="item-45">
 <h2>[45]</h2>
 <textarea data-item="[45]" aria-label="notes for [45]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH&gt; &lt;THIRD&gt; A skeleton with named slots, filled versions under it &lt;1|1&gt; &lt;2|3&gt;</p>
@@ -1400,8 +1383,7 @@ prints.</p>
   <p>I'd rather <b>not say</b> than <b>say something wrong</b>.</p>
   <p class="dim">Slot 1 and slot 2 both take the bare verb. Nothing else in the sentence moves.</p>
 </div>
-</section>
-<section class="qa-item" id="item-46">
+</section><section class="qa-item" id="item-46">
 <h2>[46]</h2>
 <textarea data-item="[46]" aria-label="notes for [46]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH&gt; &lt;HALF-&gt; A scripted exchange with the target form inside the noise &lt;3|&gt; &lt;1|1&gt;</p>
@@ -1416,8 +1398,7 @@ prints.</p>
   <p><b>rafa:</b> okk</p>
 </div>
 <p class="dim">Look at lines 3 and 4: <b>wanna</b> is the reduced form of <b>want to</b>, and the message that follows is not adding information — it is doing politeness. Two messages in a row is normal here.</p>
-</section>
-<section class="qa-item" id="item-47">
+</section><section class="qa-item" id="item-47">
 <h2>[47]</h2>
 <textarea data-item="[47]" aria-label="notes for [47]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; Fixed chunks and what each does, then a situation the student writes each into &lt;3|6&gt; &lt;1|1&gt;</p>
@@ -1446,8 +1427,7 @@ prints.</p>
   </div>
 </div>
 </div>
-</section>
-<section class="qa-item" id="item-48">
+</section><section class="qa-item" id="item-48">
 <h2>[48]</h2>
 <textarea data-item="[48]" aria-label="notes for [48]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF-&gt; Local conventions of number, date, money and measure, both ways &lt;3|5&gt; &lt;1|1&gt;</p>
@@ -1463,8 +1443,7 @@ prints.</p>
   </tbody>
 </table>
 </div>
-</section>
-<section class="qa-item" id="item-49">
+</section><section class="qa-item" id="item-49">
 <h2>[49]</h2>
 <textarea data-item="[49]" aria-label="notes for [49]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TEACH|TRAIN&gt; &lt;HALF&gt; A form beside the region it comes from, none of them ranked &lt;3|6&gt; &lt;3|6&gt;</p>
@@ -1480,8 +1459,7 @@ prints.</p>
   </tbody>
 </table>
 </div>
-</section>
-<section class="qa-item" id="item-50">
+</section><section class="qa-item" id="item-50" data-contract="IN-BLOCK-VISUALS.md">
 <h2>[50]</h2>
 <textarea data-item="[50]" aria-label="notes for [50]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; Chunks in the wrong order, and one box the student rebuilds the sentence in &lt;3|8&gt; &lt;1|1&gt;</p>
@@ -1498,8 +1476,7 @@ prints.</p>
   </p>
   <p style="text-align:center"><input class="gap" style="--gap-w:100%" aria-label="the whole sentence"></p>
 </div>
-</section>
-<section class="qa-item" id="item-51">
+</section><section class="qa-item" id="item-51">
 <h2>[51]</h2>
 <textarea data-item="[51]" aria-label="notes for [51]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;FULL&gt; A short text and a stated number of errors to find &lt;3|8&gt; &lt;1|1&gt;</p>
@@ -1513,8 +1490,7 @@ prints.</p>
     <div>3. <input class="gap" style="--gap-w:14em"></div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-52">
+</section><section class="qa-item" id="item-52">
 <h2>[52]</h2>
 <textarea data-item="[52]" aria-label="notes for [52]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;HALF&gt; Four items, one from another category, with the reason &lt;4|5&gt; &lt;4|5&gt;</p>
@@ -1536,8 +1512,7 @@ prints.</p>
     </div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-53">
+</section><section class="qa-item" id="item-53">
 <h2>[53]</h2>
 <textarea data-item="[53]" aria-label="notes for [53]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Two versions of one text, and what changed &lt;2|2&gt; &lt;2|6&gt;</p>
@@ -1560,8 +1535,7 @@ prints.</p>
     <div>3. The word that carries that order is <input class="gap" style="--gap-w:9em">.</div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-54">
+</section><section class="qa-item" id="item-54">
 <h2>[54]</h2>
 <textarea data-item="[54]" aria-label="notes for [54]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;TRAIN&gt; &lt;HALF-&gt; The setup, a written guess, then the end behind a fold &lt;1|1&gt; &lt;1|1&gt;</p>
@@ -1575,8 +1549,7 @@ prints.</p>
     <p>Nothing arrived. The second speaker's question is not about the phone — it is about which channel the first speaker used, and that is the part English marks with a different word.</p>
   </details>
 </div>
-</section>
-<section class="qa-item" id="item-55">
+</section><section class="qa-item" id="item-55" data-contract="CONTENT_EXAMPLES.md">
 <h2>[55]</h2>
 <textarea data-item="[55]" aria-label="notes for [55]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Draws a relative-pronoun decision tree the student answers from &lt;3|5&gt; &lt;4|5&gt;</p>
@@ -1629,8 +1602,7 @@ prints.</p>
     </div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-56">
+</section><section class="qa-item" id="item-56" data-contract="CONTENT_EXAMPLES.md">
 <h2>[56]</h2>
 <textarea data-item="[56]" aria-label="notes for [56]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;SHOW|TRAIN&gt; &lt;HALF-&gt; Shows an idiom as an absurd literal scene beside what it means &lt;3|5&gt; &lt;|2&gt;</p>
@@ -1726,8 +1698,7 @@ prints.</p>
     <div>6. He <input class="gap" style="--gap-w:11em"> about the surprise party on the way there. <span class="ptw">entregou o ouro</span></div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-57">
+</section><section class="qa-item" id="item-69" data-contract="IN-BLOCK-VISUALS.md">
 <h2>[57]</h2>
 <textarea data-item="[57]" aria-label="notes for [57]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Places a form on one time axis at three sizes &lt;,&gt; &lt;,&gt;</p>
@@ -1831,410 +1802,8 @@ prints.</p>
     gap belongs in a sentence.</p>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-58">
-<h2>[58]</h2>
-<textarea data-item="[58]" aria-label="notes for [58]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Shows at/on/in as a point, a surface, an enclosure &lt;3|5&gt; &lt;3|5&gt;</p>
-<div class="card">
-  <p>One tin, drawn from above the front. Cover the phrase under each picture and say what you see first.</p>
-  <div class="itemrow" data-cols="3">
-    <div class="panel">
-      <svg class="vz-fig" viewBox="0 0 260 190" role="img" aria-label="A pin standing at one point of a floor">
-        <path d="M26 140 L160 140 L232 100 L98 100 Z" class="lid"/>
-        <ellipse cx="129" cy="120" rx="36" ry="12" class="dash" fill="none"/>
-        <ellipse cx="129" cy="120" rx="12" ry="4" class="shadow"/>
-        <path d="M129 120 V74" class="ln"/>
-        <circle cx="129" cy="66" r="8" class="hot"/>
-        <text x="140" y="48" class="lbl">um ponto</text>
-      </svg>
-      <p><b>at</b> — a point you could put your finger on.<br><i>We waited <b>at</b> the station.</i></p>
-    </div>
-    <div class="panel">
-      <svg class="vz-fig" viewBox="0 0 260 190" role="img" aria-label="A closed tin with a ball resting on its lid">
-        <path d="M50 60 V126 A62 22 0 0 0 174 126 V60 Z" class="pa"/>
-        <ellipse cx="112" cy="60" rx="62" ry="22" class="lid"/>
-        <ellipse cx="112" cy="56" rx="19" ry="7" class="shadow"/>
-        <circle cx="112" cy="36" r="19" class="hot" stroke="#182136" stroke-width="2"/>
-        <text x="182" y="56" class="lbl">a tampa</text>
-      </svg>
-      <p><b>on</b> — touching a surface, and the whole ball is still in view.<br><i>The book is <b>on</b> the table.</i></p>
-    </div>
-    <div class="panel">
-      <svg class="vz-fig" viewBox="0 0 260 190" role="img" aria-label="An open tin with a ball inside, its bottom hidden by the front wall">
-        <ellipse cx="112" cy="60" rx="62" ry="22" class="cav"/>
-        <circle cx="112" cy="76" r="20" class="hot" stroke="#182136" stroke-width="2"/>
-        <path d="M50 60 A62 22 0 0 0 174 60 V126 A62 22 0 0 1 50 126 Z" class="pa"/>
-        <path d="M50 60 A62 22 0 0 1 174 60" class="ln"/>
-        <text x="196" y="112" class="lbl">por dentro</text>
-      </svg>
-      <p><b>in</b> — inside the walls: the tin hides the bottom of the ball.<br><i>The keys are <b>in</b> the box.</i></p>
-    </div>
-  </div>
-  <p class="vz-cap">These three are a picture of one meaning each, not a rule: <i>at the corner</i>, <i>on the corner</i> and
-  <i>in the corner</i> all exist and mean different things.</p>
-</div>
-<div class="card">
-  <p>Now movement. Same tin, and the arrow ends in two different places: outside the wall, or past the rim.</p>
-  <div class="itemrow" data-cols="2">
-    <div class="panel">
-      <svg class="vz-fig" viewBox="0 0 320 190" role="img" aria-label="A ball moving toward a closed tin, the arrow stopping at its wall">
-        <path d="M160 96 V162 A62 22 0 0 0 284 162 V96 Z" class="pa"/>
-        <ellipse cx="222" cy="96" rx="62" ry="22" class="lid"/>
-        <circle cx="52" cy="160" r="13" class="hot" stroke="#182136" stroke-width="2"/>
-        <path d="M68 160 H146" class="soft"/>
-        <path d="M138 154 l10 6 l-10 6" class="soft"/>
-        <path d="M160 138 V182" class="ln"/>
-      </svg>
-      <p><b>to</b> — the direction, and it stops at the outside.<br><i>She drove <b>to</b> the office.</i></p>
-    </div>
-    <div class="panel">
-      <svg class="vz-fig" viewBox="0 0 320 190" role="img" aria-label="A ball moving over the rim of an open tin and coming to rest inside it">
-        <ellipse cx="222" cy="96" rx="62" ry="22" class="cav"/>
-        <ellipse cx="222" cy="116" rx="26" ry="8" class="shadow"/>
-        <circle cx="222" cy="112" r="20" class="hot" stroke="#182136" stroke-width="2"/>
-        <path d="M160 96 A62 22 0 0 0 284 96 V162 A62 22 0 0 1 160 162 Z" class="pa"/>
-        <path d="M160 96 A62 22 0 0 1 284 96" class="ln"/>
-        <circle cx="52" cy="150" r="13" class="hot" stroke="#182136" stroke-width="2"/>
-        <path d="M66 140 Q132 92 194 106" class="soft"/>
-        <path d="M184 100 l12 7 l-13 5" class="soft"/>
-      </svg>
-      <p><b>into</b> — the direction <i>and</i> the crossing of the boundary.<br><i>She walked <b>into</b> the office.</i></p>
-    </div>
-  </div>
-  <p class="vz-cap">The tin stands for the <b>boundary</b>, not for a tin: what decides the word is whether the movement
-  stops at it or crosses it. Nothing about the object changes between the two pictures.</p>
-</div>
-<div class="panel">
-  <p>Which picture does each sentence need?</p>
-  <div class="qgrid stack" style="--rows:2">
-    <div class="qitem">
-      <div class="qline"><span class="qnum">1.</span><span class="qstem">We waited ___ the bus stop for twenty minutes.</span></div>
-      <div class="qopts"><label><input type="radio" name="b-space-1" value="a">at</label><label><input type="radio" name="b-space-1" value="b">on</label><label><input type="radio" name="b-space-1" value="c">in</label></div>
-    </div>
-    <div class="qitem">
-      <div class="qline"><span class="qnum">2.</span><span class="qstem">Your keys are ___ the drawer, under the receipts.</span></div>
-      <div class="qopts"><label><input type="radio" name="b-space-2" value="a">at</label><label><input type="radio" name="b-space-2" value="b">on</label><label><input type="radio" name="b-space-2" value="c">in</label></div>
-    </div>
-    <div class="qitem">
-      <div class="qline"><span class="qnum">3.</span><span class="qstem">The poster is ___ the wall, above the door.</span></div>
-      <div class="qopts"><label><input type="radio" name="b-space-3" value="a">at</label><label><input type="radio" name="b-space-3" value="b">on</label><label><input type="radio" name="b-space-3" value="c">in</label></div>
-    </div>
-    <div class="qitem">
-      <div class="qline"><span class="qnum">4.</span><span class="qstem">He walked ___ the meeting ten minutes late.</span></div>
-      <div class="qopts"><label><input type="radio" name="b-space-4" value="a">to</label><label><input type="radio" name="b-space-4" value="b">into</label></div>
-    </div>
-  </div>
-  <div class="blanks sent" style="--rows:2">
-    <div>5. We drove <input class="gap" style="--gap-w:6em"> the airport and left the car outside. <span class="ptw">até</span></div>
-    <div>6. She opened the door and came <input class="gap" style="--gap-w:6em"> the kitchen. <span class="ptw">para dentro</span></div>
-  </div>
-</div>
-</section>
-<section class="qa-item" id="item-59">
-<h2>[59]</h2>
-<textarea data-item="[59]" aria-label="notes for [59]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Draws the teaching on top of a real engraving &lt;4|6&gt; &lt;4|4&gt;</p>
-<div class="card">
-  <p>One mouth, two languages: there is no new anatomy to learn. The whole lesson is <b>which part moves</b> — and every part can be found with your own tongue in about ten seconds.</p>
-  <div class="itemrow" data-cols="2">
-    <div class="panel">
-      <p class="vz-tag">the four places</p>
-      <div class="vz-plate">
-        <img src="../assets/speech-organs.png" alt="Side view of the head and neck: nasal cavity, palate, mouth, tongue, lips, pharynx and larynx">
-        <span class="vz-pin" style="--x:18.6;--y:44.2">1</span>
-        <span class="vz-pin" style="--x:34;--y:39.5">2</span>
-        <span class="vz-pin" style="--x:51.7;--y:41.3">3</span>
-        <span class="vz-pin" style="--x:64;--y:54.7">4</span>
-      </div>
-      <ul class="vz-key">
-        <li><b>1</b> <b>the ledge</b> — the bumpy ridge just behind your top teeth. Where <i>d, t, n, l</i> live. <span class="ptw">o “degrau” atrás dos dentes</span></li>
-        <li><b>2</b> <b>hard roof</b> — the front half. Run your tongue back: you can feel ridges. <span class="ptw">céu da boca duro</span></li>
-        <li><b>3</b> <b>soft roof</b> — the back third, no ridges, ends in the little hanger. <span class="ptw">céu da boca mole, úvula</span></li>
-        <li><b>4</b> <b>throat wall</b> — the back of the room, past the tongue. <span class="ptw">parede da garganta</span></li>
-      </ul>
-      <p class="vz-cite">Plate: “Illu01 head neck” — US National Cancer Institute, via Arcadian. <b>Public domain</b>, Wikimedia Commons. Numbers, cropping and the overlays below are ours.</p>
-    </div>
-    <div class="panel">
-      <p class="vz-tag">three R's, three addresses</p>
-      <p><b>pt-BR <i>caro</i></b> — the tip <b>taps 1</b>. One touch; the air stops dead. <span class="ptw">o “r” de interior / trill</span></p>
-      <p><b>pt-BR <i>carro</i></b> (Rio) — the back of the tongue rises to <b>3</b> and <b>4</b>. The air is squeezed, never stopped: it <b>scrapes</b>. <span class="ptw">o “rr” carioca</span></p>
-      <p><b>English <i>red · very</i></b> — the tip comes near <b>1</b> but <b>touches nothing</b>, or the body bunches under <b>2</b>. Air flows free and the lips round.</p>
-      <p class="vz-note"><b>Why “try harder” fails.</b> Both Brazilian R's are <b>obstruents</b>: they stop air or scrape it. The English R is neither — nothing touches, nothing rubs, and it behaves more like a vowel than a consonant. Extra effort turns into friction, and friction <i>is</i> the Brazilian R. The instruction is <b>less</b>.</p>
-    </div>
-  </div>
-</div>
-<div class="panel">
-  <p class="vz-tag">find it, then build it — no teacher needed</p>
-  <ol class="vz-steps">
-    <li><b>Find 1.</b> Say <i>no no no</i> fast, then freeze mid-word with your tongue where it is. That spot is the ledge.</li>
-    <li><b>Find 3.</b> Say <i>sing</i> and hold the <i>-ng</i>. That hum is the back of your tongue on the soft roof — it ends right where the hanger is.</li>
-    <li><b>Open the gap.</b> From <i>-ng</i>, slide the contact forward toward <b>1</b> and stop one tooth-width short. Nothing touches now.</li>
-    <li><b>Round.</b> Push the lips forward as if whistling. Keep the gap. Turn the voice on: <i>rrr</i>.</li>
-    <li><b>Test.</b> Say <i>very</i>. If it comes out <i>veddy</i>, the tip hit <b>1</b>: that was a tap, not the R. Back to step 3.</li>
-  </ol>
-</div>
-<div class="itemrow" data-cols="2">
-  <div class="panel">
-    <p class="vz-tag">pt-BR <i>carro</i> — the air scrapes</p>
-    <div class="vz-plate wide">
-      <img src="../assets/speech-organs-mouth.png" alt="Side view of the mouth: lips, teeth, hard and soft palate, tongue and throat">
-      <svg class="ov" viewBox="0 0 456 344" aria-hidden="true">
-        <!-- one instruction, drawn: the back of the tongue travels up to 3 and leaves a slit -->
-        <path class="halo" d="M250 214 Q304 198 344 160"/>
-        <path class="red" d="M250 214 Q304 198 344 160"/>
-        <path class="halo" d="M328 164 L346 160 L338 146"/>
-        <path class="red" d="M328 164 L346 160 L338 146"/>
-        <!-- the slit, and the three strokes that mean air is being forced through it -->
-        <path class="halo" d="M356 132 q-5 20 3 36"/>
-        <path class="red" d="M356 132 q-5 20 3 36"/>
-        <path class="halo" d="M368 140 l14 -7 M370 154 l14 -6 M360 168 l13 -8"/>
-        <path class="red" d="M368 140 l14 -7 M370 154 l14 -6 M360 168 l13 -8"/>
-      </svg>
-      <span class="vz-pin" style="--x:76.8;--y:33.4">3</span>
-    </div>
-    <p class="vz-cap">The back of the tongue lifts to <b>3</b> and leaves a slit. Voiced air forced through
-    that slit <i>is</i> the sound — the scrape is the point, not a mistake. <span class="ptw">o rr carioca é fricção</span></p>
-  </div>
-  <div class="panel">
-    <p class="vz-tag">English <i>red</i> — nothing touches</p>
-    <div class="vz-plate wide">
-      <img src="../assets/speech-organs-mouth.png" alt="Side view of the mouth: lips, teeth, hard and soft palate, tongue and throat">
-      <svg class="ov" viewBox="0 0 456 344" aria-hidden="true">
-        <!-- the whole sound is a MEASUREMENT: an arrow that says "leave this distance" -->
-        <path class="halo" d="M54 176 L74 138"/>
-        <path class="grn" d="M54 176 L74 138"/>
-        <path class="halo" d="M46 164 L54 176 L68 170"/>
-        <path class="grn" d="M46 164 L54 176 L68 170"/>
-        <path class="halo" d="M64 150 L74 138 L60 132"/>
-        <path class="grn" d="M64 150 L74 138 L60 132"/>
-      </svg>
-      <span class="vz-pin" style="--x:15.4;--y:40.7">1</span>
-      <span class="vz-pin" style="--x:43.9;--y:29.1">2</span>
-    </div>
-    <p class="vz-cap">Either the tip curls up toward <b>1</b> with a gap, or the body bunches under <b>2</b>.
-    Two approved shapes, one sound. What they share is the only thing that matters: <b>no contact anywhere</b>.
-    <span class="ptw">o R inglês não encosta</span></p>
-  </div>
-</div>
-<div class="panel">
-  <p>Where does the sound happen?</p>
-  <div class="qgrid stack" style="--rows:2">
-    <div class="qitem">
-      <div class="qline"><span class="qnum">1.</span><span class="qstem">pt-BR <i>carro</i> (Rio de Janeiro)</span></div>
-      <div class="qopts"><label><input type="radio" name="b-mouth-1" value="a">at the ledge, with a tap</label><label><input type="radio" name="b-mouth-1" value="b">near the soft roof and the throat</label><label><input type="radio" name="b-mouth-1" value="c">at the lips</label></div>
-    </div>
-    <div class="qitem">
-      <div class="qline"><span class="qnum">2.</span><span class="qstem">pt-BR <i>caro</i> (one <i>r</i> between vowels)</span></div>
-      <div class="qopts"><label><input type="radio" name="b-mouth-2" value="a">at the ledge, with a tap</label><label><input type="radio" name="b-mouth-2" value="b">near the soft roof</label><label><input type="radio" name="b-mouth-2" value="c">nowhere — nothing touches</label></div>
-    </div>
-    <div class="qitem">
-      <div class="qline"><span class="qnum">3.</span><span class="qstem">English <i>red</i>, said well</span></div>
-      <div class="qopts"><label><input type="radio" name="b-mouth-3" value="a">at the ledge, with a tap</label><label><input type="radio" name="b-mouth-3" value="b">near the ledge, touching nothing</label><label><input type="radio" name="b-mouth-3" value="c">deep in the throat, scraping</label></div>
-    </div>
-    <div class="qitem">
-      <div class="qline"><span class="qnum">4.</span><span class="qstem">English <i>very</i>, said badly — it comes out <i>veddy</i></span></div>
-      <div class="qopts"><label><input type="radio" name="b-mouth-4" value="a">the tip touched 1 — that is the Portuguese tap</label><label><input type="radio" name="b-mouth-4" value="b">the lips were too round</label><label><input type="radio" name="b-mouth-4" value="c">the voice was off</label></div>
-    </div>
-  </div>
-  <div class="blanks sent" style="--rows:2">
-    <div>5. The English R needs <input class="gap" style="--gap-w:5em"> effort than the Brazilian R, not more.</div>
-    <div>6. If you feel a tap on <b>1</b>, your tongue is doing the <input class="gap" style="--gap-w:6em"> R. <span class="ptw">português</span></div>
-  </div>
-</div>
-</section>
-<section class="qa-item" id="item-60">
-<h2>[60]</h2>
-<textarea data-item="[60]" aria-label="notes for [60]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Colour-codes each clause function as a brick &lt;2|5&gt; &lt;3|6&gt;</p>
-<div class="panel">
-  <p>Read down the blue column. English fills it every single time — even when there is nothing and nobody to talk about.</p>
-  <div class="vz-wall">
-    <div></div><div class="vz-colhead">S — sujeito</div><div class="vz-colhead">V — verbo</div><div class="vz-colhead">o resto</div>
-
-    <div class="vz-rowhead">português</div>
-    <div class="vz-cell"><span class="vz-hole">vazio</span></div>
-    <div class="vz-cell"><span class="vz-brick v"><b>V</b> está chovendo</span></div>
-    <div class="vz-cell"><span class="vz-brick ghost"><b>—</b> nada</span></div>
-
-    <div class="vz-rowhead">inglês</div>
-    <div class="vz-cell"><span class="vz-brick s"><b>S</b> It</span></div>
-    <div class="vz-cell"><span class="vz-brick v"><b>V</b> is raining</span></div>
-    <div class="vz-cell"><span class="vz-brick ghost"><b>—</b> nada</span></div>
-
-    <div class="vz-rowhead">português</div>
-    <div class="vz-cell"><span class="vz-hole">vazio</span></div>
-    <div class="vz-cell"><span class="vz-brick v"><b>V</b> tem</span></div>
-    <div class="vz-cell"><span class="vz-brick o"><b>O</b> três recados</span></div>
-
-    <div class="vz-rowhead">inglês</div>
-    <div class="vz-cell"><span class="vz-brick s"><b>S</b> There</span></div>
-    <div class="vz-cell"><span class="vz-brick v"><b>V</b> are</span></div>
-    <div class="vz-cell"><span class="vz-brick o"><b>O</b> three messages</span></div>
-
-    <div class="vz-rowhead">o erro</div>
-    <div class="vz-cell"><span class="vz-hole">vazio ✗</span></div>
-    <div class="vz-cell"><span class="vz-brick v"><b>V</b> Is raining</span></div>
-    <div class="vz-cell"><span class="vz-brick ghost"><b>—</b> nada</span></div>
-  </div>
-  <p class="vz-cap">The two words that fill the hole are not about weather or messages. <b>It</b> and <b>there</b> are
-  bricks with no meaning of their own — they are there to hold the slot open, because English will not leave it empty.</p>
-</div>
-<div class="panel">
-  <p>Fill the hole. One word each.</p>
-  <div class="blanks sent" style="--rows:2">
-    <div>1. <input class="gap" style="--gap-w:6em"> is raining again. <span class="ptw">está chovendo</span></div>
-    <div>2. <input class="gap" style="--gap-w:6em"> are three messages for you. <span class="ptw">tem três recados</span></div>
-    <div>3. <input class="gap" style="--gap-w:6em"> is two o'clock. <span class="ptw">são duas horas</span></div>
-    <div>4. <input class="gap" style="--gap-w:6em"> was a lot of traffic. <span class="ptw">tinha muito trânsito</span></div>
-  </div>
-  <p>Which one is impossible in English?</p>
-  <div class="qgrid stack" style="--rows:1">
-    <div class="qitem">
-      <div class="qline"><span class="qnum">5.</span><span class="qstem">pick the sentence with the empty <b>S</b> slot</span></div>
-      <div class="qopts"><label><input type="radio" name="b-slot-5" value="a">Is cold today</label><label><input type="radio" name="b-slot-5" value="b">It is cold today</label><label><input type="radio" name="b-slot-5" value="c">Today is cold</label></div>
-    </div>
-  </div>
-</div>
-</section>
-<section class="qa-item" id="item-61">
-<h2>[61]</h2>
-<textarea data-item="[61]" aria-label="notes for [61]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Moves active to passive as positions, not as two sentences &lt;3|6&gt; &lt;1|1&gt;</p>
-<div class="panel">
-  <p>Watch one full loop with the labels covered. Then read the letters.</p>
-  <div class="vz-stage">
-    <div class="vz-lane a">lane 1 — quem fica na frente</div>
-    <div class="vz-lane b">lane 2 — quem sai de cena</div>
-    <span class="vz-token vz-actor"><span class="vz-chips"><b class="vz-j1">S</b><b class="vz-j2">X</b></span>the manager</span>
-    <span class="vz-token vz-object"><span class="vz-chips"><b class="vz-j1">O</b><b class="vz-j2">S</b></span>the contract</span>
-    <span class="vz-token vz-verb"><span class="vz-aux">was </span>signed</span>
-    <div class="vz-veil">by</div>
-  </div>
-  <p class="vz-cap">Nothing was added and nothing was deleted — two things swapped posts. The letters say so: the
-  manager goes <b>S</b>→<b>X</b>, the contract goes <b>O</b>→<b>S</b>, and the verb takes a helper because the thing it
-  agrees with changed. The order matters: the subject is demoted <i>first</i>, which is why a passive can leave the
-  actor out entirely — it is already at the back, and <i>by</i> is the only thing still holding it on the page.</p>
-</div>
-<div class="panel">
-  <p>Say the same sentence from the other end.</p>
-  <div class="blanks sent" style="--rows:2">
-    <div>1. Somebody stole my bike last night. → My bike <input class="gap" style="--gap-w:9em"> last night.</div>
-    <div>2. They built this house in 1970. → This house <input class="gap" style="--gap-w:9em"> in 1970.</div>
-    <div>3. The chef cooked the fish. → The fish <input class="gap" style="--gap-w:9em"> by the chef.</div>
-    <div>4. The manager signed the contract. → The contract <input class="gap" style="--gap-w:9em"> by the manager.</div>
-  </div>
-</div>
-<div class="panel">
-  <p>The doer is not worth naming. Which sentence do you actually write?</p>
-  <div class="qgrid stack" style="--rows:2">
-    <div class="qitem">
-      <div class="qline"><span class="qnum">1.</span><span class="qstem">Your bike was taken from the corridor overnight.</span></div>
-      <div class="qopts"><label><input type="radio" name="b-voice-1" value="a">My bike was stolen.</label><label><input type="radio" name="b-voice-1" value="b">My bike was stolen by somebody.</label><label><input type="radio" name="b-voice-1" value="c">Somebody stole my bike.</label></div>
-    </div>
-    <div class="qitem">
-      <div class="qline"><span class="qnum">2.</span><span class="qstem">You know exactly who did it and you are naming him.</span></div>
-      <div class="qopts"><label><input type="radio" name="b-voice-2" value="a">The window was broken by Rafa.</label><label><input type="radio" name="b-voice-2" value="b">Rafa broke the window.</label></div>
-    </div>
-  </div>
-  <p class="vz-cap">A passive with <i>by somebody</i> is grammatical and pointless. If the actor is not worth naming,
-  leave it out; if it is worth naming, the active sentence is shorter.</p>
-</div>
-</section>
-<section class="qa-item" id="item-62">
-<h2>[62]</h2>
-<textarea data-item="[62]" aria-label="notes for [62]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
-<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Fills a level on a scale of degrees &lt;3|5&gt; &lt;3|5&gt;</p>
-<div class="panel">
-  <p>Five words for one feeling. Portuguese has about two of them, so the dictionary puts them all in the same
-  place — the tube is the only place their order is visible.</p>
-  <div class="vz-heat">
-    <div class="vz-thermo">
-      <div class="vz-tube" style="--lvl:50%"><i></i></div>
-      <div class="vz-bulb"><i></i></div>
-    </div>
-    <div class="vz-scale">
-      <div><s></s><span><b>furious</b> — you raise your voice; there is nothing left to discuss</span></div>
-      <div><s></s><span><b>angry</b> — you say something sharp, and you mean it</span></div>
-      <div><s></s><span><b>annoyed</b> — you mention it, calmly, once</span></div>
-      <div><s></s><span><b>disappointed</b> — you say “oh”, and you mean that too</span></div>
-      <div><s></s><span><b>fine</b> — the word that hides everything above it</span></div>
-    </div>
-  </div>
-  <p class="vz-cap">A height is not a synonym of the height below it: it is a different amount of the same thing.
-  Choosing the wrong one is the whole error — <i>furious</i> about cold coffee tells the listener something you did
-  not mean to say. <b>fine</b> sits at the bottom on purpose: it is not “no feeling”, it is a feeling with the lid on.</p>
-</div>
-<div class="panel">
-  <p>Each situation below has one right <i>height</i>. The words are all correct English — pick the one that
-  matches the feeling, not the one that matches the dictionary.</p>
-  <div class="qgrid stack" style="--rows:2">
-    <div class="qitem">
-      <div class="qline"><span class="qnum">1.</span><span class="qstem">O café chega frio. Você fala com o garçom, com calma, uma vez.</span></div>
-      <div class="qopts"><label><input type="radio" name="b-leval-1" value="a">disappointed</label><label><input type="radio" name="b-leval-1" value="b">annoyed</label><label><input type="radio" name="b-leval-1" value="c">furious</label></div>
-    </div>
-    <div class="qitem">
-      <div class="qline"><span class="qnum">2.</span><span class="qstem">Você esperou duas horas e ninguém avisou. Você levanta a voz.</span></div>
-      <div class="qopts"><label><input type="radio" name="b-leval-2" value="a">annoyed</label><label><input type="radio" name="b-leval-2" value="b">angry</label><label><input type="radio" name="b-leval-2" value="c">fine</label></div>
-    </div>
-    <div class="qitem">
-      <div class="qline"><span class="qnum">3.</span><span class="qstem">Seu amigo cancela de novo, em cima da hora. Você só diz “ah”.</span></div>
-      <div class="qopts"><label><input type="radio" name="b-leval-3" value="a">disappointed</label><label><input type="radio" name="b-leval-3" value="b">furious</label><label><input type="radio" name="b-leval-3" value="c">fine</label></div>
-    </div>
-    <div class="qitem">
-      <div class="qline"><span class="qnum">4.</span><span class="qstem">Alguém bateu no seu carro e fugiu. Não sobrou nada para discutir.</span></div>
-      <div class="qopts"><label><input type="radio" name="b-leval-4" value="a">annoyed</label><label><input type="radio" name="b-leval-4" value="b">angry</label><label><input type="radio" name="b-leval-4" value="c">furious</label></div>
-    </div>
-  </div>
-  <div class="blanks sent" style="--rows:2">
-    <div>5. It's not a disaster, but I am a little <input class="gap" style="--gap-w:8em"> about the delay. <span class="ptw">chateado</span></div>
-    <div>6. I could not speak for a minute. I was <input class="gap" style="--gap-w:8em">. <span class="ptw">furioso</span></div>
-  </div>
-  <p class="vz-cap">The tube is not deciding which word is correct — all four are. It is showing that the situation
-  has already fixed a height, and a word from the wrong height says something you did not mean. That is the choice
-  the dictionary cannot help with, because it gives all four the same Portuguese word.</p>
-</div>
-<div class="panel">
-  <p>Same ruler, a harder job: seven ways to disagree, from the one that leaves the most room to the one that
-  leaves none. Rung 7 is not bad English — it is a rung that needs the right listener.</p>
-  <div class="vz-ladder">
-    <div class="vz-rung"><span>I'm not sure I agree</span><span class="vz-meter" style="--lvl:14%"><i></i></span><em>1</em></div>
-    <div class="vz-rung"><span>I'm not on board with that</span><span class="vz-meter" style="--lvl:28%"><i></i></span><em>2</em></div>
-    <div class="vz-rung"><span>Where'd you get that idea from?</span><span class="vz-meter" style="--lvl:42%"><i></i></span><em>3</em></div>
-    <div class="vz-rung"><span>I think you have the wrong idea</span><span class="vz-meter" style="--lvl:58%"><i></i></span><em>4</em></div>
-    <div class="vz-rung"><span>That's wrong</span><span class="vz-meter" style="--lvl:72%"><i></i></span><em>5</em></div>
-    <div class="vz-rung"><span>I completely disagree</span><span class="vz-meter" style="--lvl:86%"><i></i></span><em>6</em></div>
-    <div class="vz-rung"><span>You've got it ass-backwards</span><span class="vz-meter" style="--lvl:100%"><i></i></span><em>7</em></div>
-  </div>
-  <p class="vz-cap">Rung 3 is not a softer rung 2 — it is a question, and it hands the work back. The bar measures
-  how much room you leave the other person, not how polite the words are.</p>
-  <p>A rewrite that looks like a synonym can land two rungs away. That silent change of heat is the error this
-  ruler exists to catch, so the items ask about <i>position</i>, never about politeness.</p>
-  <div class="qgrid stack" style="--rows:2">
-    <div class="qitem">
-      <div class="qline"><span class="qnum">1.</span><span class="qstem">You are at rung 5 — “That's wrong.” Which rewrite stays at rung 5?</span></div>
-      <div class="qopts"><label><input type="radio" name="b-level-1" value="a">That isn't right.</label><label><input type="radio" name="b-level-1" value="b">I'm not sure I agree.</label><label><input type="radio" name="b-level-1" value="c">You've got it ass-backwards.</label></div>
-    </div>
-    <div class="qitem">
-      <div class="qline"><span class="qnum">2.</span><span class="qstem">You are at rung 2 — “I'm not on board with that.” Which rewrite is hotter?</span></div>
-      <div class="qopts"><label><input type="radio" name="b-level-2" value="a">I'm not sure I agree.</label><label><input type="radio" name="b-level-2" value="b">I completely disagree.</label><label><input type="radio" name="b-level-2" value="c">I'd push back on that.</label></div>
-    </div>
-    <div class="qitem">
-      <div class="qline"><span class="qnum">3.</span><span class="qstem">Which rung leaves the other person the most room to answer without losing face?</span></div>
-      <div class="qopts"><label><input type="radio" name="b-level-3" value="a">rung 1</label><label><input type="radio" name="b-level-3" value="b">rung 4</label><label><input type="radio" name="b-level-3" value="c">rung 7</label></div>
-    </div>
-  </div>
-  <div class="blanks sent" style="--rows:2">
-    <div>4. Move it down two rungs: “I completely disagree.” → “I'm not sure I <input class="gap" style="--gap-w:7em">.”</div>
-    <div>5. Move it up to rung 7: “I'm not sure I agree.” → “You've got it <input class="gap" style="--gap-w:7em">.”</div>
-  </div>
-  <p class="vz-cap">No block on the page may ask for a rung the lesson has not placed on the ladder first. The
-  ladder is taught; the items only point at it.</p>
-</div>
-</section>
-<section class="qa-item" id="item-63">
-<h2>[63]</h2>
-<textarea data-item="[63]" aria-label="notes for [63]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<hr>
+<p class="dim">The same component dropped inside a line — this was <code>[63]</code>, and it is one entry with the axis above now.</p>
 <p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Draws a linked timeline inside a host block's container &lt;,&gt; &lt;,&gt;</p>
 <div class="card">
   <p>It is not a picture next to a sentence: it belongs to a sentence. Under the sentence, an axis
@@ -2405,8 +1974,402 @@ prints.</p>
     belongs in a sentence.</p>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-64">
+</section><section class="qa-item" id="item-72">
+<h2>[72]</h2>
+<textarea data-item="[72]" aria-label="notes for [58]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Shows at/on/in as a point, a surface, an enclosure &lt;3|5&gt; &lt;3|5&gt;</p>
+<div class="card">
+  <p>One tin, drawn from above the front. Cover the phrase under each picture and say what you see first.</p>
+  <div class="itemrow" data-cols="3">
+    <div class="panel">
+      <svg class="vz-fig" viewBox="0 0 260 190" role="img" aria-label="A pin standing at one point of a floor">
+        <path d="M26 140 L160 140 L232 100 L98 100 Z" class="lid"/>
+        <ellipse cx="129" cy="120" rx="36" ry="12" class="dash" fill="none"/>
+        <ellipse cx="129" cy="120" rx="12" ry="4" class="shadow"/>
+        <path d="M129 120 V74" class="ln"/>
+        <circle cx="129" cy="66" r="8" class="hot"/>
+        <text x="140" y="48" class="lbl">um ponto</text>
+      </svg>
+      <p><b>at</b> — a point you could put your finger on.<br><i>We waited <b>at</b> the station.</i></p>
+    </div>
+    <div class="panel">
+      <svg class="vz-fig" viewBox="0 0 260 190" role="img" aria-label="A closed tin with a ball resting on its lid">
+        <path d="M50 60 V126 A62 22 0 0 0 174 126 V60 Z" class="pa"/>
+        <ellipse cx="112" cy="60" rx="62" ry="22" class="lid"/>
+        <ellipse cx="112" cy="56" rx="19" ry="7" class="shadow"/>
+        <circle cx="112" cy="36" r="19" class="hot" stroke="#182136" stroke-width="2"/>
+        <text x="182" y="56" class="lbl">a tampa</text>
+      </svg>
+      <p><b>on</b> — touching a surface, and the whole ball is still in view.<br><i>The book is <b>on</b> the table.</i></p>
+    </div>
+    <div class="panel">
+      <svg class="vz-fig" viewBox="0 0 260 190" role="img" aria-label="An open tin with a ball inside, its bottom hidden by the front wall">
+        <ellipse cx="112" cy="60" rx="62" ry="22" class="cav"/>
+        <circle cx="112" cy="76" r="20" class="hot" stroke="#182136" stroke-width="2"/>
+        <path d="M50 60 A62 22 0 0 0 174 60 V126 A62 22 0 0 1 50 126 Z" class="pa"/>
+        <path d="M50 60 A62 22 0 0 1 174 60" class="ln"/>
+        <text x="196" y="112" class="lbl">por dentro</text>
+      </svg>
+      <p><b>in</b> — inside the walls: the tin hides the bottom of the ball.<br><i>The keys are <b>in</b> the box.</i></p>
+    </div>
+  </div>
+  <p class="vz-cap">These three are a picture of one meaning each, not a rule: <i>at the corner</i>, <i>on the corner</i> and
+  <i>in the corner</i> all exist and mean different things.</p>
+</div>
+<div class="card">
+  <p>Now movement. Same tin, and the arrow ends in two different places: outside the wall, or past the rim.</p>
+  <div class="itemrow" data-cols="2">
+    <div class="panel">
+      <svg class="vz-fig" viewBox="0 0 320 190" role="img" aria-label="A ball moving toward a closed tin, the arrow stopping at its wall">
+        <path d="M160 96 V162 A62 22 0 0 0 284 162 V96 Z" class="pa"/>
+        <ellipse cx="222" cy="96" rx="62" ry="22" class="lid"/>
+        <circle cx="52" cy="160" r="13" class="hot" stroke="#182136" stroke-width="2"/>
+        <path d="M68 160 H146" class="soft"/>
+        <path d="M138 154 l10 6 l-10 6" class="soft"/>
+        <path d="M160 138 V182" class="ln"/>
+      </svg>
+      <p><b>to</b> — the direction, and it stops at the outside.<br><i>She drove <b>to</b> the office.</i></p>
+    </div>
+    <div class="panel">
+      <svg class="vz-fig" viewBox="0 0 320 190" role="img" aria-label="A ball moving over the rim of an open tin and coming to rest inside it">
+        <ellipse cx="222" cy="96" rx="62" ry="22" class="cav"/>
+        <ellipse cx="222" cy="116" rx="26" ry="8" class="shadow"/>
+        <circle cx="222" cy="112" r="20" class="hot" stroke="#182136" stroke-width="2"/>
+        <path d="M160 96 A62 22 0 0 0 284 96 V162 A62 22 0 0 1 160 162 Z" class="pa"/>
+        <path d="M160 96 A62 22 0 0 1 284 96" class="ln"/>
+        <circle cx="52" cy="150" r="13" class="hot" stroke="#182136" stroke-width="2"/>
+        <path d="M66 140 Q132 92 194 106" class="soft"/>
+        <path d="M184 100 l12 7 l-13 5" class="soft"/>
+      </svg>
+      <p><b>into</b> — the direction <i>and</i> the crossing of the boundary.<br><i>She walked <b>into</b> the office.</i></p>
+    </div>
+  </div>
+  <p class="vz-cap">The tin stands for the <b>boundary</b>, not for a tin: what decides the word is whether the movement
+  stops at it or crosses it. Nothing about the object changes between the two pictures.</p>
+</div>
+<div class="panel">
+  <p>Which picture does each sentence need?</p>
+  <div class="qgrid stack" style="--rows:2">
+    <div class="qitem">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">We waited ___ the bus stop for twenty minutes.</span></div>
+      <div class="qopts"><label><input type="radio" name="b-space-1" value="a">at</label><label><input type="radio" name="b-space-1" value="b">on</label><label><input type="radio" name="b-space-1" value="c">in</label></div>
+    </div>
+    <div class="qitem">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">Your keys are ___ the drawer, under the receipts.</span></div>
+      <div class="qopts"><label><input type="radio" name="b-space-2" value="a">at</label><label><input type="radio" name="b-space-2" value="b">on</label><label><input type="radio" name="b-space-2" value="c">in</label></div>
+    </div>
+    <div class="qitem">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">The poster is ___ the wall, above the door.</span></div>
+      <div class="qopts"><label><input type="radio" name="b-space-3" value="a">at</label><label><input type="radio" name="b-space-3" value="b">on</label><label><input type="radio" name="b-space-3" value="c">in</label></div>
+    </div>
+    <div class="qitem">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">He walked ___ the meeting ten minutes late.</span></div>
+      <div class="qopts"><label><input type="radio" name="b-space-4" value="a">to</label><label><input type="radio" name="b-space-4" value="b">into</label></div>
+    </div>
+  </div>
+  <div class="blanks sent" style="--rows:2">
+    <div>5. We drove <input class="gap" style="--gap-w:6em"> the airport and left the car outside. <span class="ptw">até</span></div>
+    <div>6. She opened the door and came <input class="gap" style="--gap-w:6em"> the kitchen. <span class="ptw">para dentro</span></div>
+  </div>
+</div>
+</section><section class="qa-item" id="item-59">
+<h2>[59]</h2>
+<textarea data-item="[59]" aria-label="notes for [59]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Draws the teaching on top of a real engraving &lt;4|6&gt; &lt;4|4&gt;</p>
+<div class="card">
+  <p>One mouth, two languages: there is no new anatomy to learn. The whole lesson is <b>which part moves</b> — and every part can be found with your own tongue in about ten seconds.</p>
+  <div class="itemrow" data-cols="2">
+    <div class="panel">
+      <p class="vz-tag">the four places</p>
+      <div class="vz-plate">
+        <img src="../assets/speech-organs.png" alt="Side view of the head and neck: nasal cavity, palate, mouth, tongue, lips, pharynx and larynx">
+        <span class="vz-pin" style="--x:18.6;--y:44.2">1</span>
+        <span class="vz-pin" style="--x:34;--y:39.5">2</span>
+        <span class="vz-pin" style="--x:51.7;--y:41.3">3</span>
+        <span class="vz-pin" style="--x:64;--y:54.7">4</span>
+      </div>
+      <ul class="vz-key">
+        <li><b>1</b> <b>the ledge</b> — the bumpy ridge just behind your top teeth. Where <i>d, t, n, l</i> live. <span class="ptw">o “degrau” atrás dos dentes</span></li>
+        <li><b>2</b> <b>hard roof</b> — the front half. Run your tongue back: you can feel ridges. <span class="ptw">céu da boca duro</span></li>
+        <li><b>3</b> <b>soft roof</b> — the back third, no ridges, ends in the little hanger. <span class="ptw">céu da boca mole, úvula</span></li>
+        <li><b>4</b> <b>throat wall</b> — the back of the room, past the tongue. <span class="ptw">parede da garganta</span></li>
+      </ul>
+      <p class="vz-cite">Plate: “Illu01 head neck” — US National Cancer Institute, via Arcadian. <b>Public domain</b>, Wikimedia Commons. Numbers, cropping and the overlays below are ours.</p>
+    </div>
+    <div class="panel">
+      <p class="vz-tag">three R's, three addresses</p>
+      <p><b>pt-BR <i>caro</i></b> — the tip <b>taps 1</b>. One touch; the air stops dead. <span class="ptw">o “r” de interior / trill</span></p>
+      <p><b>pt-BR <i>carro</i></b> (Rio) — the back of the tongue rises to <b>3</b> and <b>4</b>. The air is squeezed, never stopped: it <b>scrapes</b>. <span class="ptw">o “rr” carioca</span></p>
+      <p><b>English <i>red · very</i></b> — the tip comes near <b>1</b> but <b>touches nothing</b>, or the body bunches under <b>2</b>. Air flows free and the lips round.</p>
+      <p class="vz-note"><b>Why “try harder” fails.</b> Both Brazilian R's are <b>obstruents</b>: they stop air or scrape it. The English R is neither — nothing touches, nothing rubs, and it behaves more like a vowel than a consonant. Extra effort turns into friction, and friction <i>is</i> the Brazilian R. The instruction is <b>less</b>.</p>
+    </div>
+  </div>
+</div>
+<div class="panel">
+  <p class="vz-tag">find it, then build it — no teacher needed</p>
+  <ol class="vz-steps">
+    <li><b>Find 1.</b> Say <i>no no no</i> fast, then freeze mid-word with your tongue where it is. That spot is the ledge.</li>
+    <li><b>Find 3.</b> Say <i>sing</i> and hold the <i>-ng</i>. That hum is the back of your tongue on the soft roof — it ends right where the hanger is.</li>
+    <li><b>Open the gap.</b> From <i>-ng</i>, slide the contact forward toward <b>1</b> and stop one tooth-width short. Nothing touches now.</li>
+    <li><b>Round.</b> Push the lips forward as if whistling. Keep the gap. Turn the voice on: <i>rrr</i>.</li>
+    <li><b>Test.</b> Say <i>very</i>. If it comes out <i>veddy</i>, the tip hit <b>1</b>: that was a tap, not the R. Back to step 3.</li>
+  </ol>
+</div>
+<div class="itemrow" data-cols="2">
+  <div class="panel">
+    <p class="vz-tag">pt-BR <i>carro</i> — the air scrapes</p>
+    <div class="vz-plate wide">
+      <img src="../assets/speech-organs-mouth.png" alt="Side view of the mouth: lips, teeth, hard and soft palate, tongue and throat">
+      <svg class="ov" viewBox="0 0 456 344" aria-hidden="true">
+        <!-- one instruction, drawn: the back of the tongue travels up to 3 and leaves a slit -->
+        <path class="halo" d="M250 214 Q304 198 344 160"/>
+        <path class="red" d="M250 214 Q304 198 344 160"/>
+        <path class="halo" d="M328 164 L346 160 L338 146"/>
+        <path class="red" d="M328 164 L346 160 L338 146"/>
+        <!-- the slit, and the three strokes that mean air is being forced through it -->
+        <path class="halo" d="M356 132 q-5 20 3 36"/>
+        <path class="red" d="M356 132 q-5 20 3 36"/>
+        <path class="halo" d="M368 140 l14 -7 M370 154 l14 -6 M360 168 l13 -8"/>
+        <path class="red" d="M368 140 l14 -7 M370 154 l14 -6 M360 168 l13 -8"/>
+      </svg>
+      <span class="vz-pin" style="--x:76.8;--y:33.4">3</span>
+    </div>
+    <p class="vz-cap">The back of the tongue lifts to <b>3</b> and leaves a slit. Voiced air forced through
+    that slit <i>is</i> the sound — the scrape is the point, not a mistake. <span class="ptw">o rr carioca é fricção</span></p>
+  </div>
+  <div class="panel">
+    <p class="vz-tag">English <i>red</i> — nothing touches</p>
+    <div class="vz-plate wide">
+      <img src="../assets/speech-organs-mouth.png" alt="Side view of the mouth: lips, teeth, hard and soft palate, tongue and throat">
+      <svg class="ov" viewBox="0 0 456 344" aria-hidden="true">
+        <!-- the whole sound is a MEASUREMENT: an arrow that says "leave this distance" -->
+        <path class="halo" d="M54 176 L74 138"/>
+        <path class="grn" d="M54 176 L74 138"/>
+        <path class="halo" d="M46 164 L54 176 L68 170"/>
+        <path class="grn" d="M46 164 L54 176 L68 170"/>
+        <path class="halo" d="M64 150 L74 138 L60 132"/>
+        <path class="grn" d="M64 150 L74 138 L60 132"/>
+      </svg>
+      <span class="vz-pin" style="--x:15.4;--y:40.7">1</span>
+      <span class="vz-pin" style="--x:43.9;--y:29.1">2</span>
+    </div>
+    <p class="vz-cap">Either the tip curls up toward <b>1</b> with a gap, or the body bunches under <b>2</b>.
+    Two approved shapes, one sound. What they share is the only thing that matters: <b>no contact anywhere</b>.
+    <span class="ptw">o R inglês não encosta</span></p>
+  </div>
+</div>
+<div class="panel">
+  <p>Where does the sound happen?</p>
+  <div class="qgrid stack" style="--rows:2">
+    <div class="qitem">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">pt-BR <i>carro</i> (Rio de Janeiro)</span></div>
+      <div class="qopts"><label><input type="radio" name="b-mouth-1" value="a">at the ledge, with a tap</label><label><input type="radio" name="b-mouth-1" value="b">near the soft roof and the throat</label><label><input type="radio" name="b-mouth-1" value="c">at the lips</label></div>
+    </div>
+    <div class="qitem">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">pt-BR <i>caro</i> (one <i>r</i> between vowels)</span></div>
+      <div class="qopts"><label><input type="radio" name="b-mouth-2" value="a">at the ledge, with a tap</label><label><input type="radio" name="b-mouth-2" value="b">near the soft roof</label><label><input type="radio" name="b-mouth-2" value="c">nowhere — nothing touches</label></div>
+    </div>
+    <div class="qitem">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">English <i>red</i>, said well</span></div>
+      <div class="qopts"><label><input type="radio" name="b-mouth-3" value="a">at the ledge, with a tap</label><label><input type="radio" name="b-mouth-3" value="b">near the ledge, touching nothing</label><label><input type="radio" name="b-mouth-3" value="c">deep in the throat, scraping</label></div>
+    </div>
+    <div class="qitem">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">English <i>very</i>, said badly — it comes out <i>veddy</i></span></div>
+      <div class="qopts"><label><input type="radio" name="b-mouth-4" value="a">the tip touched 1 — that is the Portuguese tap</label><label><input type="radio" name="b-mouth-4" value="b">the lips were too round</label><label><input type="radio" name="b-mouth-4" value="c">the voice was off</label></div>
+    </div>
+  </div>
+  <div class="blanks sent" style="--rows:2">
+    <div>5. The English R needs <input class="gap" style="--gap-w:5em"> effort than the Brazilian R, not more.</div>
+    <div>6. If you feel a tap on <b>1</b>, your tongue is doing the <input class="gap" style="--gap-w:6em"> R. <span class="ptw">português</span></div>
+  </div>
+</div>
+</section><section class="qa-item" id="item-60" data-contract="CONTENT_EXAMPLES.md">
+<h2>[60]</h2>
+<textarea data-item="[60]" aria-label="notes for [60]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Colour-codes each clause function as a brick &lt;2|5&gt; &lt;3|6&gt;</p>
+<div class="panel">
+  <p>Read down the blue column. English fills it every single time — even when there is nothing and nobody to talk about.</p>
+  <div class="vz-wall">
+    <div></div><div class="vz-colhead">S — sujeito</div><div class="vz-colhead">V — verbo</div><div class="vz-colhead">o resto</div>
+
+    <div class="vz-rowhead">português</div>
+    <div class="vz-cell"><span class="vz-hole">vazio</span></div>
+    <div class="vz-cell"><span class="vz-brick v"><b>V</b> está chovendo</span></div>
+    <div class="vz-cell"><span class="vz-brick ghost"><b>—</b> nada</span></div>
+
+    <div class="vz-rowhead">inglês</div>
+    <div class="vz-cell"><span class="vz-brick s"><b>S</b> It</span></div>
+    <div class="vz-cell"><span class="vz-brick v"><b>V</b> is raining</span></div>
+    <div class="vz-cell"><span class="vz-brick ghost"><b>—</b> nada</span></div>
+
+    <div class="vz-rowhead">português</div>
+    <div class="vz-cell"><span class="vz-hole">vazio</span></div>
+    <div class="vz-cell"><span class="vz-brick v"><b>V</b> tem</span></div>
+    <div class="vz-cell"><span class="vz-brick o"><b>O</b> três recados</span></div>
+
+    <div class="vz-rowhead">inglês</div>
+    <div class="vz-cell"><span class="vz-brick s"><b>S</b> There</span></div>
+    <div class="vz-cell"><span class="vz-brick v"><b>V</b> are</span></div>
+    <div class="vz-cell"><span class="vz-brick o"><b>O</b> three messages</span></div>
+
+    <div class="vz-rowhead">o erro</div>
+    <div class="vz-cell"><span class="vz-hole">vazio ✗</span></div>
+    <div class="vz-cell"><span class="vz-brick v"><b>V</b> Is raining</span></div>
+    <div class="vz-cell"><span class="vz-brick ghost"><b>—</b> nada</span></div>
+  </div>
+  <p class="vz-cap">The two words that fill the hole are not about weather or messages. <b>It</b> and <b>there</b> are
+  bricks with no meaning of their own — they are there to hold the slot open, because English will not leave it empty.</p>
+</div>
+<div class="panel">
+  <p>Fill the hole. One word each.</p>
+  <div class="blanks sent" style="--rows:2">
+    <div>1. <input class="gap" style="--gap-w:6em"> is raining again. <span class="ptw">está chovendo</span></div>
+    <div>2. <input class="gap" style="--gap-w:6em"> are three messages for you. <span class="ptw">tem três recados</span></div>
+    <div>3. <input class="gap" style="--gap-w:6em"> is two o'clock. <span class="ptw">são duas horas</span></div>
+    <div>4. <input class="gap" style="--gap-w:6em"> was a lot of traffic. <span class="ptw">tinha muito trânsito</span></div>
+  </div>
+  <p>Which one is impossible in English?</p>
+  <div class="qgrid stack" style="--rows:1">
+    <div class="qitem">
+      <div class="qline"><span class="qnum">5.</span><span class="qstem">pick the sentence with the empty <b>S</b> slot</span></div>
+      <div class="qopts"><label><input type="radio" name="b-slot-5" value="a">Is cold today</label><label><input type="radio" name="b-slot-5" value="b">It is cold today</label><label><input type="radio" name="b-slot-5" value="c">Today is cold</label></div>
+    </div>
+  </div>
+</div>
+</section><section class="qa-item" id="item-61" data-contract="IN-BLOCK-VISUALS.md">
+<h2>[61]</h2>
+<textarea data-item="[61]" aria-label="notes for [61]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Moves active to passive as positions, not as two sentences &lt;3|6&gt; &lt;1|1&gt;</p>
+<div class="panel">
+  <p>Watch one full loop with the labels covered. Then read the letters.</p>
+  <div class="vz-stage">
+    <div class="vz-lane a">lane 1 — quem fica na frente</div>
+    <div class="vz-lane b">lane 2 — quem sai de cena</div>
+    <span class="vz-token vz-actor"><span class="vz-chips"><b class="vz-j1">S</b><b class="vz-j2">X</b></span>the manager</span>
+    <span class="vz-token vz-object"><span class="vz-chips"><b class="vz-j1">O</b><b class="vz-j2">S</b></span>the contract</span>
+    <span class="vz-token vz-verb"><span class="vz-aux">was </span>signed</span>
+    <div class="vz-veil">by</div>
+  </div>
+  <p class="vz-cap">Nothing was added and nothing was deleted — two things swapped posts. The letters say so: the
+  manager goes <b>S</b>→<b>X</b>, the contract goes <b>O</b>→<b>S</b>, and the verb takes a helper because the thing it
+  agrees with changed. The order matters: the subject is demoted <i>first</i>, which is why a passive can leave the
+  actor out entirely — it is already at the back, and <i>by</i> is the only thing still holding it on the page.</p>
+</div>
+<div class="panel">
+  <p>Say the same sentence from the other end.</p>
+  <div class="blanks sent" style="--rows:2">
+    <div>1. Somebody stole my bike last night. → My bike <input class="gap" style="--gap-w:9em"> last night.</div>
+    <div>2. They built this house in 1970. → This house <input class="gap" style="--gap-w:9em"> in 1970.</div>
+    <div>3. The chef cooked the fish. → The fish <input class="gap" style="--gap-w:9em"> by the chef.</div>
+    <div>4. The manager signed the contract. → The contract <input class="gap" style="--gap-w:9em"> by the manager.</div>
+  </div>
+</div>
+<div class="panel">
+  <p>The doer is not worth naming. Which sentence do you actually write?</p>
+  <div class="qgrid stack" style="--rows:2">
+    <div class="qitem">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">Your bike was taken from the corridor overnight.</span></div>
+      <div class="qopts"><label><input type="radio" name="b-voice-1" value="a">My bike was stolen.</label><label><input type="radio" name="b-voice-1" value="b">My bike was stolen by somebody.</label><label><input type="radio" name="b-voice-1" value="c">Somebody stole my bike.</label></div>
+    </div>
+    <div class="qitem">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">You know exactly who did it and you are naming him.</span></div>
+      <div class="qopts"><label><input type="radio" name="b-voice-2" value="a">The window was broken by Rafa.</label><label><input type="radio" name="b-voice-2" value="b">Rafa broke the window.</label></div>
+    </div>
+  </div>
+  <p class="vz-cap">A passive with <i>by somebody</i> is grammatical and pointless. If the actor is not worth naming,
+  leave it out; if it is worth naming, the active sentence is shorter.</p>
+</div>
+</section><section class="qa-item" id="item-62">
+<h2>[62]</h2>
+<textarea data-item="[62]" aria-label="notes for [62]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
+<p class="dim">&lt;SHOW|TRAIN&gt; &lt;FULL&gt; Fills a level on a scale of degrees &lt;3|5&gt; &lt;3|5&gt;</p>
+<div class="panel">
+  <p>Five words for one feeling. Portuguese has about two of them, so the dictionary puts them all in the same
+  place — the tube is the only place their order is visible.</p>
+  <div class="vz-heat">
+    <div class="vz-thermo">
+      <div class="vz-tube" style="--lvl:50%"><i></i></div>
+      <div class="vz-bulb"><i></i></div>
+    </div>
+    <div class="vz-scale">
+      <div><s></s><span><b>furious</b> — you raise your voice; there is nothing left to discuss</span></div>
+      <div><s></s><span><b>angry</b> — you say something sharp, and you mean it</span></div>
+      <div><s></s><span><b>annoyed</b> — you mention it, calmly, once</span></div>
+      <div><s></s><span><b>disappointed</b> — you say “oh”, and you mean that too</span></div>
+      <div><s></s><span><b>fine</b> — the word that hides everything above it</span></div>
+    </div>
+  </div>
+  <p class="vz-cap">A height is not a synonym of the height below it: it is a different amount of the same thing.
+  Choosing the wrong one is the whole error — <i>furious</i> about cold coffee tells the listener something you did
+  not mean to say. <b>fine</b> sits at the bottom on purpose: it is not “no feeling”, it is a feeling with the lid on.</p>
+</div>
+<div class="panel">
+  <p>Each situation below has one right <i>height</i>. The words are all correct English — pick the one that
+  matches the feeling, not the one that matches the dictionary.</p>
+  <div class="qgrid stack" style="--rows:2">
+    <div class="qitem">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">O café chega frio. Você fala com o garçom, com calma, uma vez.</span></div>
+      <div class="qopts"><label><input type="radio" name="b-leval-1" value="a">disappointed</label><label><input type="radio" name="b-leval-1" value="b">annoyed</label><label><input type="radio" name="b-leval-1" value="c">furious</label></div>
+    </div>
+    <div class="qitem">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">Você esperou duas horas e ninguém avisou. Você levanta a voz.</span></div>
+      <div class="qopts"><label><input type="radio" name="b-leval-2" value="a">annoyed</label><label><input type="radio" name="b-leval-2" value="b">angry</label><label><input type="radio" name="b-leval-2" value="c">fine</label></div>
+    </div>
+    <div class="qitem">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">Seu amigo cancela de novo, em cima da hora. Você só diz “ah”.</span></div>
+      <div class="qopts"><label><input type="radio" name="b-leval-3" value="a">disappointed</label><label><input type="radio" name="b-leval-3" value="b">furious</label><label><input type="radio" name="b-leval-3" value="c">fine</label></div>
+    </div>
+    <div class="qitem">
+      <div class="qline"><span class="qnum">4.</span><span class="qstem">Alguém bateu no seu carro e fugiu. Não sobrou nada para discutir.</span></div>
+      <div class="qopts"><label><input type="radio" name="b-leval-4" value="a">annoyed</label><label><input type="radio" name="b-leval-4" value="b">angry</label><label><input type="radio" name="b-leval-4" value="c">furious</label></div>
+    </div>
+  </div>
+  <div class="blanks sent" style="--rows:2">
+    <div>5. It's not a disaster, but I am a little <input class="gap" style="--gap-w:8em"> about the delay. <span class="ptw">chateado</span></div>
+    <div>6. I could not speak for a minute. I was <input class="gap" style="--gap-w:8em">. <span class="ptw">furioso</span></div>
+  </div>
+  <p class="vz-cap">The tube is not deciding which word is correct — all four are. It is showing that the situation
+  has already fixed a height, and a word from the wrong height says something you did not mean. That is the choice
+  the dictionary cannot help with, because it gives all four the same Portuguese word.</p>
+</div>
+<div class="panel">
+  <p>Same ruler, a harder job: seven ways to disagree, from the one that leaves the most room to the one that
+  leaves none. Rung 7 is not bad English — it is a rung that needs the right listener.</p>
+  <div class="vz-ladder">
+    <div class="vz-rung"><span>I'm not sure I agree</span><span class="vz-meter" style="--lvl:14%"><i></i></span><em>1</em></div>
+    <div class="vz-rung"><span>I'm not on board with that</span><span class="vz-meter" style="--lvl:28%"><i></i></span><em>2</em></div>
+    <div class="vz-rung"><span>Where'd you get that idea from?</span><span class="vz-meter" style="--lvl:42%"><i></i></span><em>3</em></div>
+    <div class="vz-rung"><span>I think you have the wrong idea</span><span class="vz-meter" style="--lvl:58%"><i></i></span><em>4</em></div>
+    <div class="vz-rung"><span>That's wrong</span><span class="vz-meter" style="--lvl:72%"><i></i></span><em>5</em></div>
+    <div class="vz-rung"><span>I completely disagree</span><span class="vz-meter" style="--lvl:86%"><i></i></span><em>6</em></div>
+    <div class="vz-rung"><span>You've got it ass-backwards</span><span class="vz-meter" style="--lvl:100%"><i></i></span><em>7</em></div>
+  </div>
+  <p class="vz-cap">Rung 3 is not a softer rung 2 — it is a question, and it hands the work back. The bar measures
+  how much room you leave the other person, not how polite the words are.</p>
+  <p>A rewrite that looks like a synonym can land two rungs away. That silent change of heat is the error this
+  ruler exists to catch, so the items ask about <i>position</i>, never about politeness.</p>
+  <div class="qgrid stack" style="--rows:2">
+    <div class="qitem">
+      <div class="qline"><span class="qnum">1.</span><span class="qstem">You are at rung 5 — “That's wrong.” Which rewrite stays at rung 5?</span></div>
+      <div class="qopts"><label><input type="radio" name="b-level-1" value="a">That isn't right.</label><label><input type="radio" name="b-level-1" value="b">I'm not sure I agree.</label><label><input type="radio" name="b-level-1" value="c">You've got it ass-backwards.</label></div>
+    </div>
+    <div class="qitem">
+      <div class="qline"><span class="qnum">2.</span><span class="qstem">You are at rung 2 — “I'm not on board with that.” Which rewrite is hotter?</span></div>
+      <div class="qopts"><label><input type="radio" name="b-level-2" value="a">I'm not sure I agree.</label><label><input type="radio" name="b-level-2" value="b">I completely disagree.</label><label><input type="radio" name="b-level-2" value="c">I'd push back on that.</label></div>
+    </div>
+    <div class="qitem">
+      <div class="qline"><span class="qnum">3.</span><span class="qstem">Which rung leaves the other person the most room to answer without losing face?</span></div>
+      <div class="qopts"><label><input type="radio" name="b-level-3" value="a">rung 1</label><label><input type="radio" name="b-level-3" value="b">rung 4</label><label><input type="radio" name="b-level-3" value="c">rung 7</label></div>
+    </div>
+  </div>
+  <div class="blanks sent" style="--rows:2">
+    <div>4. Move it down two rungs: “I completely disagree.” → “I'm not sure I <input class="gap" style="--gap-w:7em">.”</div>
+    <div>5. Move it up to rung 7: “I'm not sure I agree.” → “You've got it <input class="gap" style="--gap-w:7em">.”</div>
+  </div>
+  <p class="vz-cap">No block on the page may ask for a rung the lesson has not placed on the ladder first. The
+  ladder is taught; the items only point at it.</p>
+</div>
+</section><section class="qa-item" id="item-64" data-contract="CONTENT_EXAMPLES.md">
 <h2>[64]</h2>
 <textarea data-item="[64]" aria-label="notes for [64]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Marks up to seven phrase-level features on one sentence &lt;,&gt; &lt;,&gt;</p>
@@ -2439,8 +2402,7 @@ prints.</p>
     </div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-65">
+</section><section class="qa-item" id="item-65" data-contract="IN-BLOCK-VISUALS.md">
 <h2>[65]</h2>
 <textarea data-item="[65]" aria-label="notes for [65]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Underlines each word's part of speech, generated from the sentence &lt;,&gt; &lt;,&gt;</p>
@@ -2476,8 +2438,7 @@ prints.</p>
     <div>2. The word <i>told</i> takes the <input class="gap" style="--gap-w:4em"> underline, because it carries the action.</div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-66">
+</section><section class="qa-item" id="item-66" data-contract="IN-BLOCK-VISUALS.md">
 <h2>[66]</h2>
 <textarea data-item="[66]" aria-label="notes for [66]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;SHOW|TRAIN&gt; &lt;THIRD-&gt; Draws the voice's rise and fall over the line it belongs to &lt;,&gt; &lt;,&gt;</p>
@@ -2492,8 +2453,7 @@ prints.</p>
     <div>1. “you're <b>coming</b> on Friday, aren't you” <input class="gap" style="--gap-w:7em"></div>
   </div>
 </div>
-</section>
-<section class="qa-item" id="item-67">
+</section><section class="qa-item" id="item-67" data-contract="IN-BLOCK-VISUALS.md">
 <h2>[67]</h2>
 <textarea data-item="[67]" aria-label="notes for [67]" rows="2" class="qa-note" placeholder="notes — instructions / issues for this item"></textarea>
 <p class="dim">&lt;SHOW|TEACH&gt; &lt;HALF-&gt; Sets a pronunciation key above the words of a line it is dropped into &lt;,&gt; &lt;,&gt;</p>
