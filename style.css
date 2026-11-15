@@ -27,7 +27,7 @@
     --orange:#c2601a; --purple:#8c3b2f; --green:#2f9e44; --greenbg:#e8f7ee;
     --surface:var(--cream); --surface-2:var(--paper); --sunken:#efe6d6;
     --ink-2:#5c5347; --line:var(--rose); --line-2:#e7dbc9; --dim:#6b6154; --lead:#5c5347;
-    --para-gap:4px;
+    --para-gap:8px;
     --teach-h:65; --train-h:28; --show-h:350; --game-h:96;
     --ok:var(--green); --err:#b3352c; --warn:#e0b341;
     /* one track hue, four intensities — the same rhythm on every track: a deep tone for type and
@@ -287,7 +287,7 @@
 /* #61 CHOICE — .opts > label.opt > input[type=radio] + span; one answer. Unset: options stack. Vary: data-layout="row" */
 /* #61 OPT — <label class="opt"> one per answer, inside .opts. Vary: --r1 (radius) */
 @layer control{
-  .opts{display:grid;align-content:start;gap:7px;margin:2px 0 calc(6px + var(--para-gap))}
+  .opts{display:grid;align-content:start;gap:7px;margin:2px 0 calc(18px + var(--para-gap))}
   .opts[data-layout="row"]{grid-auto-flow:column;grid-auto-columns:max-content;gap:10px}
   .opt{display:flex;align-items:center;gap:9px;padding:7px 11px;cursor:pointer;
     border:1.5px solid var(--line);border-radius:var(--r1);background:var(--surface-2);
