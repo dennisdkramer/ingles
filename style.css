@@ -659,7 +659,18 @@
 @layer rx{
   .tln{--past:36%;--c:var(--accent);--dash:6px;
     position:relative;display:grid;grid-template-columns:var(--past) auto minmax(0,1fr) auto;
-    align-items:center;width:100%;min-inline-size:100px;height:48px;color:var(--c)}
+    align-items:center;width:100px;min-inline-size:100px;height:48px;color:var(--c);
+    container-type:inline-size}
+  /* how it gets wider: nothing = 100px · 1 = the width of its host · 2 = the width of an anchor string.
+     Only the rules grow — the star, the arrow and the words keep their own size */
+  .tln[data-grow="1"],.tln[data-grow="2"]{width:100%}
+  .tln-anchor{display:inline-block;max-width:100%;vertical-align:top}
+  .tln-anchor>span{display:block}
+  /* under 200px there is no room for FUTURE behind the line, so it goes */
+  @container (max-width:200px){
+    .tln-future{display:none}
+    .tln-head b{font-size:8.5px;letter-spacing:.1em}
+  }
   /* behind now: one 2px rule, masked into a log curve so it has no visible start */
   .tln-past{height:0;border-top:2px solid currentColor;align-self:center;
     -webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.28) 10%,rgba(0,0,0,.4) 20%,
