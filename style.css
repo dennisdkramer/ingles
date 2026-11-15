@@ -518,7 +518,7 @@
 
 /* #L0 LEGACY — style.css ported whole: tokens it alone carries, the chrome the engine draws (popup,
    note/highlight layers, dialog, toast, Complete?), the displays and the games. Declared first, so any
-   layer above wins per property: preview.css speaks about a selector, the port stays silent. */
+   layer above wins per property: the layers above speak about a selector, the port stays silent. */
 @layer legacy{
   :root{--cream:#f4eddd;--tan:#b9854c;--rose:#d9c1ba;--ptw:#96601f;--blue:#1d4ed8;
     --dkblue:#1e3a8a;--bluebg:rgba(29,78,216,.16);--orange:#c2601a;--purple:#5b2a86;
