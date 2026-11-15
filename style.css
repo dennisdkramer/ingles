@@ -351,7 +351,7 @@
      `--point`: the distance from the axis's left edge to the point that must sit under that word —
      BEFORE's centre is 31px in, NOW is 100px (the middle), the arrow's centre is 180.4px. Nothing of
      the axis itself changes; only where it sits. Vary: --point (per data-tense) */
-  .tlw{position:relative;width:min(560px,100%);margin:0 auto;padding-bottom:68px;--leg:14px;--lead:40px;
+  .tlw{position:relative;width:min(560px,100%);margin:0 auto;padding-bottom:46.5px;--leg:14px;--lead:40px;
     anchor-scope:--tn}
   .tlw+.tlw{margin-top:36px}
   .tlw-say{margin:0;text-align:center;white-space:nowrap;
@@ -370,11 +370,11 @@
   .tlw[data-tense="past-perfect"]{--point:31px}
   .tlw[data-tense="simple-past"]{--point:95.5px}
   .tlw[data-tense="past-continuous"]{--point:95.5px}
-  .tlw[data-tense="present-perfect"]{--point:75.5px}
+  .tlw[data-tense="present-perfect"]{--point:95.5px}
   .tlw[data-tense="simple-present"]{--point:100px}
   .tlw[data-tense="present-continuous"]{--point:100px}
-  .tlw[data-tense="going-to"]{--point:240.4px}
-  .tlw[data-tense="future-perfect"]{--point:240.4px}
+  .tlw[data-tense="going-to"]{--point:221.8px}
+  .tlw[data-tense="future-perfect"]{--point:221.8px}
   .tw{position:relative;font-weight:700;
     border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent)}
   .tw[data-to]::before{content:"";position:absolute;left:50%;top:calc(100% + 1px);
