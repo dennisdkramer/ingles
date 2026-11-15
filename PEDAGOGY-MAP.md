@@ -28,6 +28,6 @@ Inputs - ORDERED BY PRECEDENCE **Withhold others**:
 
 **Output** = `<track>/lesson<N>-<Title>.html`. Every generation runs these four steps, in this order:
 1. COPY `_shell.html` into the track folder. The frame is fixed — head, `header.brand`, `#controlbar`, `#barhelp`, `main#page > .page-container > .content-area`, the script slot — and nothing is authored outside `.content-area`.
-2. AUTHOR the lesson into that copy: the `<h1>` and the blocks, inside `.content-area` only. The shell's placeholders are filled as the page is written — TRACK_TITLE from track.json `label`, TRACK_UPPER, TRACK, LESSON_TITLE (the title the generation chose), L.
+2. AUTHOR the lesson into that copy: the `<h1>` and the blocks, inside `.content-area` only. The shell's placeholders are filled as the page is written — TRACK_TITLE (the track's name in English: the folder name, capitalised, `Adult`), TRACK_UPPER (the same word in capitals), TRACK (the folder name, the backend key), LESSON_TITLE (the title the generation chose), L.
 3. RENAME the file to `lesson<N>-<Title>.html`: the filename carries the title, and it is the only place the site index learns either.
 4. RUN `npm run build:lessons`. This is the final step of every generation, so no lesson is ever committed while `lessons.json` and `tracks.json` still lack it. 
