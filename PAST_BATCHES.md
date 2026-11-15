@@ -183,3 +183,30 @@ Voice: `ADULT-REGISTER.md:10-12` and the rule the user added at `PEDAGOGY-MAP.md
 - Sections 1 to 5 each run a teaching block into a training block, which is the same macro-rhythm as 26 and 27 — that is the build's taught-then-trained move applied to four items, not a vehicle taken from a page. Inside it the containers differ from 27 at every step: plain `.blanks` (`:50`), `.chips` + `.blanks` (`:84`), `.qgrid.stack` (`:110`), `.chips` + `.blanks` (`:170`), `.dialog` + `.blanks.sent` (`:187`, `:211`), textarea (`:230`).
 - The one container this page shares with 27 is `.blanks.sent`, and it earns the overlap: 27 used it for past-participle gaps the bracket named, this page uses it for seven verbs the bracket only describes. The `table.chart` and the `.qgrid.stack` also appear in both pages, and neither is doing the same job — 27's chart put two tenses against one event, this one puts four joiners against four behaviours; 27's radios offered three sentences and asked which the situation wanted, these offer three repairs and ask whether the given line survives.
 
+## Lesson 29 — `preview.css` generation test (adult)
+
+**Purpose.** Not a normal batch: lesson 29 was generated as the first real page written against `preview.css`, with `style.css` and `CONTENT-EXAMPLES.md` withheld, to test the new backbone on authored content.
+
+**Inputs used:** `ADULT-ROADMAP.md` [29] (`:251-258`), `ADULT-REGISTER.md`, `PEDAGOGY-MAP.md`, `FUNCTION.md [CONTENT]`, `preview.css` headers. Withheld: `style.css`, `CONTENT-EXAMPLES.md`, `qa/brief.mjs --index`.
+
+**Shape.** 7 sections, 20 blocks: prose+set (1), grid+prose+pair+filled gaps (2), dark timeline+prose (3), pair+prose (4), prose+set+gap block (5), turns dialog+prose+two choice blocks (6), write block+reveal+handoff (7).
+
+**Roadmap coverage:** all three tags (continuous, continuous-vs-simple, continuous-pt), the deepen of `duration-for-since`, the two uses, six vocabulary items, and all three example lines verbatim — `items 8/8` from `qa/check.mjs`.
+
+**What the test found in the backbone** (all fixed in `preview.css` before the commit):
+
+- `align-items:start` plus a 14px gap made rows ragged; now `stretch` with `--row-gap:22px` / `--col-gap:18px`, so a row's frames agree on the bottom edge (measured delta 0 on all seven multi-block rows).
+- `.block` was block-flow; now `flex;flex-direction:column`, so a block can push its last line to its own bottom.
+- `.set`, `.seq` and `.opts` stretched their rows to fill a tall block (grid's default `align-content:stretch`), so bubbles and set entries spread down the frame; `align-content:start` on all three.
+- `p,li{margin:0 0 .7em}` leaked onto `.seq>li` and `.set>li`, adding 12px under every entry on top of the grid gap; both reset to `margin:0`.
+- `.gap` was a pale filled box with a rounded top; now a bare underline on `transparent`, so it reads as a blank and not as a disabled field.
+- `#feed` and `.barhelp` were unstyled in the shell, so the shared notebook rendered as a 200px UA textarea and the help line as body text above the page.
+
+**Authoring notes, so the next page does not repeat them:**
+
+- The shell's `<h1>{{LESSON_TITLE}}</h1>` is filled by the copy step; authoring a second `<h1>` below it opened the page with the title twice. One `<h1>`.
+- Pairing a long block with a short one now leaves a large empty area in the short one, because the frames are equal height by design. Balance content across a row.
+
+**Still open:** `--score`, `--pct`, the marks and `.flip` are demonstrated only in `preview.html`; nothing on this page writes them, since no engine change accompanies the backbone.
+
+
