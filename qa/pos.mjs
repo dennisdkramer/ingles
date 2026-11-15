@@ -31,9 +31,12 @@ const IN = {};
 for (const k of Object.keys(LEX)) for (const w of LEX[k]) IN[w] = k;
 
 const CLS = { n: 'n', v: 'v', adj: 'adj', adv: 'adv', det: 'det', pron: 'pron', prep: 'prep', conj: 'conj', aux: 'aux', wh: 'wh', num: 'num' };
-/* the sheet's five published classes (#94 POS in style.css): function words share one class, and an
-   auxiliary is a verb. The ten internal tags stay, because the reasons are still worth printing. */
-const FIVE = { n: 'n', v: 'v', adj: 'adj', adv: 'adv', det: 'fn', pron: 'fn', prep: 'fn', conj: 'fn', wh: 'fn', aux: 'v', num: 'n' };
+/* the sheet's six published classes (#94 POS in style.css): a function word shares one class, and an
+   auxiliary or modal is its own class — `pos-m`, the word that carries the mode and the tense. The ten
+   internal tags stay, because the reasons are still worth printing.
+   KNOWN MISS: be/have/do are tagged from the closed-class lexicon, so `I have a car` and `I do the
+   dishes` come out as mode words. `--tags` shows this, and the fix is a context rule, not a lexicon. */
+const FIVE = { n: 'n', v: 'v', adj: 'adj', adv: 'adv', det: 'fn', pron: 'fn', prep: 'fn', conj: 'fn', wh: 'fn', aux: 'm', num: 'n' };
 const PUNCT = /^[.,;:!?()"'“”‘’—-]+$/;
 
 /* irregular past forms: no suffix to read, so they are listed. This is the same set the roadmaps
