@@ -127,8 +127,12 @@
      Nine relations, six palette colours, so three pairs share a colour: add/comparison, contrast/content, time/place.
      Add `pos-labels` to the container to print the relation instead of the line. Vary: --rel-c */
 @layer rx{
-  .pos-join{--rel-c:var(--ink-2);text-decoration-line:underline overline;text-decoration-thickness:1px;
-    text-underline-offset:3px;text-decoration-color:var(--rel-c)}
+  .pos-join{--rel-c:var(--ink-2);text-decoration-line:none;padding:0 2px;white-space:nowrap}
+  /* a thin bar on each side, in the relation's colour: the word is fenced, not underlined */
+  .pos-join::before,.pos-join::after{content:'';display:inline-block;width:1.5px;height:.9em;
+    vertical-align:-.1em;background:var(--rel-c);border-radius:1px}
+  .pos-join::before{margin-right:3px}
+  .pos-join::after{margin-left:3px}
   .pos-join[data-rel="add"]{--rel-c:var(--ink-2)}
   .pos-join[data-rel="comparison"]{--rel-c:var(--ink-2)}
   .pos-join[data-rel="contrast"]{--rel-c:var(--ptw)}
@@ -138,10 +142,10 @@
   .pos-join[data-rel="condition"]{--rel-c:var(--blue)}
   .pos-join[data-rel="time"]{--rel-c:var(--dim)}
   .pos-join[data-rel="place"]{--rel-c:var(--dim)}
-  .pos-labels .pos-join{text-decoration-line:none}
-  .pos-labels .pos-join::after{margin-left:2px;font:700 .58em var(--sans);vertical-align:.62em;
-    letter-spacing:.02em;color:var(--rel-c);text-transform:uppercase}
-  .pos-labels .pos-join[data-rel]::after{content:'(' attr(data-rel) ')'}
+  .pos-labels .pos-join::before,.pos-labels .pos-join::after{content:none;display:none}
+  .pos-labels .pos-join::after{content:'(' attr(data-rel) ')';display:inline;margin-left:2px;
+    font:700 .58em var(--sans);vertical-align:.62em;letter-spacing:.02em;color:var(--rel-c);
+    text-transform:uppercase;background:none;width:auto;height:auto}
 }
 
 /* #89 MARKS — pointing a figure at words in a sentence. Any figure can use this; nothing here knows what the figure is.
@@ -317,8 +321,15 @@
   .pos{line-height:2.2}
   :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep){text-decoration-line:underline;text-underline-offset:3px;
     text-decoration-color:var(--mk-c,var(--pos-c,var(--ink-2)))}
-  .pos-n{--pos-c:var(--ink-2);text-decoration-style:solid;text-decoration-thickness:var(--mk-w,1px)}
-  .pos-n.pos-o{--pos-c:var(--accent)}
+  .pos-n{--pos-c:var(--ink-2);text-decoration-line:none;padding-bottom:1px;
+    background-image:linear-gradient(90deg,var(--pos-c),var(--pos-c));
+    background-repeat:no-repeat;background-size:100% 1px;background-position:0 calc(100% - 1px)}
+  /* role rides the SAME hue as a fade, so every noun mark reads as one group:
+     a subject starts strong and thins to the right, an object does the reverse, everything else stays flat */
+  .pos-n.pos-subj{background-image:linear-gradient(90deg,var(--pos-c),
+    color-mix(in srgb,var(--pos-c) 45%,transparent) 55%,color-mix(in srgb,var(--pos-c) 12%,transparent))}
+  .pos-n.pos-o{background-image:linear-gradient(90deg,color-mix(in srgb,var(--pos-c) 12%,transparent),
+    color-mix(in srgb,var(--pos-c) 45%,transparent) 45%,var(--pos-c))}
   .pos-v{--pos-c:var(--ink-2);text-decoration-style:solid;text-decoration-thickness:var(--mk-w,2px)}
   .pos-m{--pos-c:var(--accent);text-decoration-style:double;text-decoration-thickness:var(--mk-w,2px)}
   .pos-adj{--pos-c:var(--tan);text-decoration-style:dotted;text-decoration-thickness:var(--mk-w,2px)}
@@ -330,6 +341,7 @@
   .pos-key b{font-weight:400}
   /* the label mode prints what the line means, for a cramped column or a screenshot with no key */
   .pos-labels :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep){text-decoration-line:none}
+  .pos-labels .pos-n{background-image:none}
   .pos-labels :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep)::after{margin-left:1px;
     font:700 .58em var(--sans);vertical-align:.62em;color:var(--ink-2)}
   .pos-labels .pos-n::after{content:'N'}
