@@ -354,13 +354,13 @@
   body.is-completed .gap{background:var(--sunken)}
 }
 
-/* #70 LOOK — data-look="tint|outline|grain|tape|raised|float|dark", any block. Unset: paper + 3px accent rule. Vary: --accent-h, --edge-w (outline) */
+/* #70 LOOK — data-look="tint|outline|grain|tape|float|dark", any block. outline: a standout tip or an interesting note — accent frame + deep shadow. Unset: paper + 3px accent rule. Vary: --accent-h, --edge-w (outline) */
 @layer look{
   .block[data-look="tint"]{background:color-mix(in oklab,var(--accent) 8%,var(--paper));
     border-top-color:var(--accent)}
 
-  .block[data-look="outline"]{border:var(--edge-w) solid var(--accent);box-shadow:none;
-    background:transparent}
+  .block[data-look="outline"]{border:var(--edge-w) solid var(--accent);
+    box-shadow:var(--shadow-2);background:transparent}
 
   .block[data-look="grain"]::after{content:"";position:absolute;inset:0;border-radius:inherit;
     pointer-events:none;opacity:.55;background-image:radial-gradient(rgb(26 33 48/.07) 1px,
@@ -370,8 +370,6 @@
     translate:-50% 0;width:112px;height:21px;rotate:-2deg;z-index:2;
     background:color-mix(in oklab,var(--warn) 50%,transparent);
     clip-path:polygon(3% 0,100% 7%,96% 100%,0 92%)}
-
-  .block[data-look="raised"]{border-top-width:1px;box-shadow:var(--shadow-2)}
 
   .block[data-look="float"]{background:transparent;border-color:transparent;
     border-top-color:transparent;box-shadow:none;padding-inline:0}
