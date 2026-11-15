@@ -31,12 +31,25 @@ const IN = {};
 for (const k of Object.keys(LEX)) for (const w of LEX[k]) IN[w] = k;
 
 const CLS = { n: 'n', v: 'v', adj: 'adj', adv: 'adv', det: 'det', pron: 'pron', prep: 'prep', conj: 'conj', aux: 'aux', wh: 'wh', num: 'num' };
-/* the sheet's six published classes (#94 POS in style.css): a function word shares one class, and an
-   auxiliary or modal is its own class — `pos-m`, the word that carries the mode and the tense. The ten
-   internal tags stay, because the reasons are still worth printing.
+/* the sheet's published groups (#94 POS in style.css). English pedagogy groups the words that can
+   head a noun phrase together with the nouns: articles and demonstratives, pronouns, and a
+   substantival infinitive all take a noun's slot, so they all emit `pos-n`. A conjunction is not a
+   word class here — it joins two clauses, so it emits `pos-join data-rel=` and the relation is the
+   mark. An auxiliary or modal emits `pos-m` (the word that carries the mode and the tense).
+   The ten internal tags stay, because the reasons are still worth printing.
    KNOWN MISS: be/have/do are tagged from the closed-class lexicon, so `I have a car` and `I do the
    dishes` come out as mode words. `--tags` shows this, and the fix is a context rule, not a lexicon. */
-const FIVE = { n: 'n', v: 'v', adj: 'adj', adv: 'adv', det: 'fn', pron: 'fn', prep: 'fn', conj: 'fn', wh: 'fn', aux: 'm', num: 'n' };
+const GROUP = { n: 'n', v: 'v', adj: 'adj', adv: 'adv', det: 'n', pron: 'n', prep: 'prep', wh: 'n', aux: 'm', num: 'n',
+  infn: 'n', infp: 'prep' };
+/* wh-words split: the pronominal ones take a noun's slot, the rest are adverbs */
+const WH_ADV = 'when where why how'.split(' ');
+/* only pronouns whose form is object-only can be marked as the object; you/it/her are both cases */
+const OBJ = 'me him us them whom'.split(' ');
+/* a conjunction is a relation between two clauses, so the relation is what gets marked */
+const REL = { and: 'add', nor: 'add', but: 'contrast', yet: 'contrast', although: 'contrast',
+  though: 'contrast', whereas: 'contrast', while: 'contrast', or: 'alternative', so: 'cause',
+  because: 'cause', if: 'condition', unless: 'condition', when: 'time', whenever: 'time',
+  where: 'place', than: 'comparison', that: 'content', whether: 'content' };
 const PUNCT = /^[.,;:!?()"'“”‘’—-]+$/;
 
 /* irregular past forms: no suffix to read, so they are listed. This is the same set the roadmaps
@@ -93,7 +106,15 @@ function tag(words) {
 
     /* 1. closed class: a finite list, no guessing */
     if (IN[t]) {
-      if (t === 'to' && (IN[next] === 'aux' || !IN[next])) return rec('aux', 'to + verb = infinitive marker');
+      if (t === 'to' && (IN[next] === 'aux' || !IN[next])) {
+        /* a substantival infinitive takes a noun's slot (I want TO GO / TO GO is hard), so it joins the
+           noun group. Everywhere else the marker is a connector, and the remainder of the groups is the
+           prepositions. The verb after it is tagged below, whichever way this goes. */
+        const prevW = i ? lower(words[i - 1]) : '';
+        const SUBST = /^(want|wants|wanted|need|needs|needed|try|tries|tried|decide|decides|decided|hope|hopes|hoped|plan|plans|planned|forget|forgets|forgot|forget|remember|remembers|remembered|learn|learns|learned|learnt|choose|chooses|chose|chosen|begin|begins|began|start|starts|started|refuse|refuses|refused|promise|promises|promised|agree|agrees|agreed|manage|manages|managed|offer|offers|offered|love|loves|loved|like|likes|liked|hate|hates|hated|prefer|prefers|preferred|ask|asks|asked|tell|tells|told|expect|expects|expected|afford|affords|afforded|help|helps|helped)$/;
+        if (SUBST.test(prevW) || i === 0) return rec('infn', 'infinitive in a noun slot = noun group');
+        return rec('infp', 'infinitive marker = connector, so a preposition');
+      }
       if (t === 'that' && ptag === 'v') return rec('conj', 'that after a verb = clause link');
       return rec(IN[t], 'closed-class lexicon');
     }
@@ -103,6 +124,8 @@ function tag(words) {
       return rec('v', 'irregular past form (listed)');
     }
 
+    /* the word after the infinitive marker is a base verb, whichever way the marker was tagged */
+    if (ptag === 'infn' || ptag === 'infp') return rec('v', 'base verb after the infinitive marker');
     /* 2. an auxiliary other than be has already decided the word after it: "would finish", "can run".
        This runs BEFORE the suffix rules, because a suffix reads one word alone and "-ish" in
        "finish" is not an adjective once "would" is in front of it. be is excluded on purpose:
@@ -177,7 +200,16 @@ else {
     console.log(row.map((r, i) => {
       if (r.tag === 'punct') return r.w;
       const glue = (i === 0 || /^['’]/.test(r.w)) ? '' : ' ';
-      return glue + '<span class="pos-' + FIVE[r.tag] + '">' + r.w + '</span>';
+      const t = lower(r.w);
+      if (r.tag === 'conj') {
+        return glue + '<span class="pos-join" data-rel="' + (REL[t] || 'add') + '">' + r.w + '</span>';
+      }
+      if (r.tag === 'wh' && WH_ADV.indexOf(t) === -1) {
+        return glue + '<span class="pos-n">' + r.w + '</span>';
+      }
+      const cls = GROUP[r.tag] || 'n';
+      const obj = r.tag === 'pron' && OBJ.indexOf(t) !== -1 ? ' pos-o' : '';
+      return glue + '<span class="pos-' + cls + obj + '">' + r.w + '</span>';
     }).join('').replace(/ ([.,;:!?])/g, '$1').trim());
   }
 }

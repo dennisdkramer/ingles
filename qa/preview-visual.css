@@ -517,7 +517,7 @@
 
 /* ---- .pos-* moved -------------------------------------------------------------------------
    The parts-of-speech marks now live in `style.css` `#94 POS` as five classes
-   (`pos-v pos-n pos-adj pos-adv pos-fn`), tokenised and composing with `#89 MARKS`.
+   (`pos-v pos-m pos-n pos-adj pos-adv pos-prep`), tokenised, with `#88 JOIN` for conjunctions.
    The ten-class copy that was here — and its `.l-aux{border-bottom:2px wavy}` swatch,
    which was invalid CSS and painted nothing — is deleted. Nothing in this sheet should
    restyle those classes again. `node qa/pos.mjs --five "sentence"` emits the markup. */

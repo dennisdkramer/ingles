@@ -118,7 +118,31 @@
 }
 
 /* ## IN-BLOCK VISUALS — a figure a block draws inside itself. None owns a container or a control; the host block supplies the gap, radio or textarea that saves.
-     Members, all in @layer rx: #89 MARKS · #91 GLOSS · #92 PRON · #93 AXIS · #94 POS · #96 BAR · #97 TLN */
+     Members, all in @layer rx: #88 JOIN · #89 MARKS · #91 GLOSS · #92 PRON · #93 AXIS · #94 POS · #96 BAR · #97 TLN */
+
+/* #88 JOIN — a conjunction is not a word class: it joins two clauses and the RELATION is the mark.
+     <span class="pos-join" data-rel="contrast">but</span>- the word gets a line above and below (a hinge, unique to joins)
+     and one colour per relation. Use it where the point of the sentence is how the halves meet — contrast, cause, condition.
+     data-rel: add · contrast · alternative · cause · condition · time · place · comparison · content.
+     Nine relations, six palette colours, so three pairs share a colour: add/comparison, contrast/content, time/place.
+     Add `pos-labels` to the container to print the relation instead of the line. Vary: --rel-c */
+@layer rx{
+  .pos-join{--rel-c:var(--ink-2);text-decoration-line:underline overline;text-decoration-thickness:1px;
+    text-underline-offset:3px;text-decoration-color:var(--rel-c)}
+  .pos-join[data-rel="add"]{--rel-c:var(--ink-2)}
+  .pos-join[data-rel="comparison"]{--rel-c:var(--ink-2)}
+  .pos-join[data-rel="contrast"]{--rel-c:var(--ptw)}
+  .pos-join[data-rel="content"]{--rel-c:var(--ptw)}
+  .pos-join[data-rel="alternative"]{--rel-c:var(--tan)}
+  .pos-join[data-rel="cause"]{--rel-c:var(--accent)}
+  .pos-join[data-rel="condition"]{--rel-c:var(--blue)}
+  .pos-join[data-rel="time"]{--rel-c:var(--dim)}
+  .pos-join[data-rel="place"]{--rel-c:var(--dim)}
+  .pos-labels .pos-join{text-decoration-line:none}
+  .pos-labels .pos-join::after{margin-left:2px;font:700 .58em var(--sans);vertical-align:.62em;
+    letter-spacing:.02em;color:var(--rel-c);text-transform:uppercase}
+  .pos-labels .pos-join[data-rel]::after{content:'(' attr(data-rel) ')'}
+}
 
 /* #89 MARKS — pointing a figure at words in a sentence. Any figure can use this; nothing here knows what the figure is.
      <span class="uw">…</span> = the run of words the figure is about (1px underline, faint). Use it for the verb group only, not the pronoun.
@@ -272,42 +296,52 @@
   }
 }
 
-/* #94 POS — six classes, one per kind of word: .pos-v verb · .pos-m mode · .pos-n noun · .pos-adj adjective ·
-     .pos-adv adverb · .pos-fn function word (determiner, pronoun, preposition, conjunction, wh-word).
-     .pos-m is the word that carries the mode and the tense — be, have and do when they are auxiliaries, and every
-     modal (can, would, will, must…). English conjugates for person only in the present and past affirmative; in every
-     other tense a mode word carries the tense and the verb does not change, so the two are different jobs.
-     <p class="pos">The <b class="pos-fn">the</b>…</p> with the legend <p class="pos-key"><span><b class="pos-n">report</b> noun</span>…</p> —
+/* #94 POS — the groups: .pos-n noun group · .pos-v verb · .pos-m mode · .pos-adj adjective · .pos-adv adverb ·
+     .pos-prep preposition.
+     The NOUN GROUP is what can head a noun phrase and takes its slot: the noun, its article or demonstrative
+     (the, a, this, some), a pronoun (he, him, what), and a substantival infinitive (`to swim` in `To swim is hard`,
+     `to go` in `I want to go`). A purpose infinitive marker stays out of it and counts as a preposition
+     (`I went to see`).
+     Inside it, `.pos-o` marks the OBJECT — a daughter of the noun mark, not its own group: only the pronouns whose
+     form is object-only take it (him, me, us, them, whom), and it is told apart by colour, not by a second line.
+     .pos-m is the word that carries the mode and the tense — be, have and do as auxiliaries, and every modal.
+     English conjugates for person only in the present and past affirmative; everywhere else a mode word carries the
+     tense and the verb does not change, so the two are different jobs.
+     <p class="pos">The <b class="pos-n">the</b>…</p> with the legend <p class="pos-key"><span><b class="pos-n">report</b> noun</span>…</p> —
      each key item wears the SAME class as the word it explains, so the key cannot drift from the marks.
-     The line style carries the class and colour only reinforces it, so it survives grayscale print, a projector and
-     colour blindness. Six classes, five line styles: noun takes a thinner solid line, so thickness is the sixth channel.
+     The line carries the group and colour only reinforces it, so it survives grayscale print, a projector and
+     colour blindness. Six groups, five line styles: noun takes a thinner solid line, so thickness is the sixth channel.
      Mark the words a figure is about, not whole sentences. Add `pos-labels` to the container to print a superscript tag
-     instead of a line. Vary: --pos-c, --mk-w, --mk-c */
+     instead. A conjunction is not here — see #88 JOIN. Vary: --pos-c, --mk-w, --mk-c */
 @layer rx{
   .pos{line-height:2.2}
-  :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-fn){text-decoration-line:underline;text-underline-offset:3px;
+  :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep){text-decoration-line:underline;text-underline-offset:3px;
     text-decoration-color:var(--mk-c,var(--pos-c,var(--ink-2)))}
-  .pos-n{text-decoration-style:solid;text-decoration-thickness:var(--mk-w,1px)}
-  .pos-v{text-decoration-style:solid;text-decoration-thickness:var(--mk-w,2px)}
+  .pos-n{--pos-c:var(--ink-2);text-decoration-style:solid;text-decoration-thickness:var(--mk-w,1px)}
+  .pos-n.pos-o{--pos-c:var(--accent)}
+  .pos-v{--pos-c:var(--ink-2);text-decoration-style:solid;text-decoration-thickness:var(--mk-w,2px)}
   .pos-m{--pos-c:var(--accent);text-decoration-style:double;text-decoration-thickness:var(--mk-w,2px)}
   .pos-adj{--pos-c:var(--tan);text-decoration-style:dotted;text-decoration-thickness:var(--mk-w,2px)}
   .pos-adv{--pos-c:var(--ptw);text-decoration-style:dashed;text-decoration-thickness:var(--mk-w,2px)}
-  .pos-fn{--pos-c:var(--dim);text-decoration-style:wavy;text-decoration-thickness:var(--mk-w,2px)}
+  .pos-prep{--pos-c:var(--dim);text-decoration-style:wavy;text-decoration-thickness:var(--mk-w,2px)}
   .pos-key{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 18px;margin:8px 0 0;
     font:400 12px/1.6 var(--sans);color:var(--ink-2)}
   .pos-key>span{display:inline-flex;align-items:baseline;gap:6px}
   .pos-key b{font-weight:400}
   /* the label mode prints what the line means, for a cramped column or a screenshot with no key */
-  .pos-labels :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-fn){text-decoration-line:none}
-  .pos-labels :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-fn)::after{margin-left:1px;
+  .pos-labels :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep){text-decoration-line:none}
+  .pos-labels :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep)::after{margin-left:1px;
     font:700 .58em var(--sans);vertical-align:.62em;color:var(--ink-2)}
   .pos-labels .pos-n::after{content:'N'}
+  .pos-labels .pos-n.pos-o::after{content:'N·O'}
   .pos-labels .pos-v::after{content:'V'}
   .pos-labels .pos-m::after{content:'M'}
   .pos-labels .pos-adj::after{content:'ADJ'}
   .pos-labels .pos-adv::after{content:'ADV'}
-  .pos-labels .pos-fn::after{content:'FN'}
-  @media print{ :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-fn){text-decoration-color:#000} }
+  .pos-labels .pos-prep::after{content:'PREP'}
+  @media print{
+    :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep){text-decoration-color:#000}
+  }
 }
 
 /* #96 BAR — one bar per share: <div class="bar-row"><span>day</span><div class="bar"><i style="--w:62%"></i></div><b>62%</b></div>. The number sits beside the bar, never inside it. Vary: --w, --bar-h */

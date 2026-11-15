@@ -48,8 +48,8 @@
 </div></div>
 <div class="itemrow"><div class="itemsize-half">
 <h4>What each word is doing</h4>
-<p class="pos">He <b class="pos-m">has</b> <b class="pos-v">been</b> <b class="pos-fn">at</b> <b class="pos-fn">the</b> <b class="pos-n">counter</b> <b class="pos-fn">since</b> <b class="pos-n">two</b>.</p>
-<p class="pos-key"><span><b class="pos-m">has</b> mode</span><span><b class="pos-v">been</b> verb</span><span><b class="pos-n">counter</b> noun</span><span><b class="pos-fn">since</b> function word</span></p>
+<p class="pos">He <b class="pos-m">has</b> <b class="pos-v">been</b> <b class="pos-prep">at</b> <b class="pos-n">the</b> <b class="pos-n">counter</b> <b class="pos-prep">since</b> <b class="pos-n">two</b>.</p>
+<p class="pos-key"><span><b class="pos-m">has</b> mode</span><span><b class="pos-v">been</b> verb</span><span><b class="pos-n">counter</b> noun</span><span><b class="pos-prep">since</b> preposition</span></p>
 <p>The auxiliary carries the time and the verb carries the meaning. <b>Since</b> is a mark on the clock, and <b>for</b> would be a length. Change one of those three words and the sentence still stands, which is why the shape matters more than the vocabulary.</p>
 </div><div class="itemsize-half">
 <p>A word can be right and still leave the listener guessing. <i>Been</i> names no action at all; it only hangs the verb on a time. Students look for a Portuguese word to match it and find none, because Portuguese puts the work in the tense ending.</p>
@@ -1217,25 +1217,27 @@ teacher's evidence.</p>
   <p class="vz-tag">parts of speech as an underline — no column, no baseline shift, zero layout cost</p>
   <p>Every label is a class on the word, so a long sentence is as cheap as a short one — and
   <code>node qa/pos.mjs "…"</code> tags it for you, printing the rule that decided each word. The <b>line</b>
-  separates the six classes and colour only reinforces it: double for the <b>mode</b> word that carries the tense,
-  solid for the verb, a thinner solid for the noun, dotted adjective, dashed adverb, wavy function word.
+  separates the groups and colour only reinforces it: double for the <b>mode</b> word that carries the tense,
+  solid for the verb, a thinner solid for the whole noun group (noun, article, pronoun), dotted adjective,
+  dashed adverb, wavy preposition, and a line above and below for a join.
   That survives grayscale print, a projector and colour blindness.</p>
   <p class="pos-sent pos" style="font-size:17px;line-height:2">
-    <span class="pos-fn">The</span> <span class="pos-adj">tired</span> <span class="pos-n">student</span>
-    <span class="pos-adv">quietly</span> <span class="pos-v">told</span> <span class="pos-fn">his</span>
-    <span class="pos-n">sister</span> <span class="pos-fn">that</span> <span class="pos-fn">she</span>
-    <span class="pos-m">had</span> <span class="pos-v">finished</span> <span class="pos-fn">the</span>
-    <span class="pos-adj">hard</span> <span class="pos-n">homework</span> <span class="pos-fn">before</span>
+    <span class="pos-n">The</span> <span class="pos-adj">tired</span> <span class="pos-n">student</span>
+    <span class="pos-adv">quietly</span> <span class="pos-v">told</span> <span class="pos-n">his</span>
+    <span class="pos-n">sister</span> <span class="pos-join" data-rel="content">that</span> <span class="pos-n">she</span>
+    <span class="pos-m">had</span> <span class="pos-v">finished</span> <span class="pos-n">the</span>
+    <span class="pos-adj">hard</span> <span class="pos-n">homework</span> <span class="pos-prep">before</span>
     <span class="pos-n">dinner</span>.
   </p>
   <p class="pos-key">
     <span><span class="pos-m">had</span>mode</span><span><span class="pos-n">homework</span>noun</span><span><span class="pos-v">finished</span>verb</span>
-    <span><span class="pos-adj">hard</span>adjective</span><span><span class="pos-adv">quietly</span>adverb</span><span><span class="pos-fn">before</span>function word</span>
+    <span><span class="pos-adj">hard</span>adjective</span><span><span class="pos-adv">quietly</span>adverb</span><span><span class="pos-prep">before</span>preposition</span>
+    <span><span class="pos-join" data-rel="content">that</span>join</span>
   </p>
   <p class="vz-cap">The <b>mode</b> word carries the tense — <i>had finished</i> is a double line for the mode word and a
-  solid one for the verb, and in the present and past affirmative the verb carries it alone. Determiners, pronouns,
-  prepositions, conjunctions and wh-words share the wave. Add <code>pos-labels</code> to the container to print
-  a superscript tag instead — same markup, more space.</p>
+  solid one for the verb. Articles, demonstratives, pronouns and wh-words belong to the noun group, because they take a
+  noun's slot; an object pronoun is the noun mark in a different colour. A conjunction gets a line above and below,
+  because it is not a class of word — it is how the two halves of the sentence meet.</p>
 </div>
 <div class="panel">
   <p class="vz-cap">The mark is display; the scored item stays a radio or a gap.</p>
