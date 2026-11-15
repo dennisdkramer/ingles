@@ -30,12 +30,12 @@
     --teach-h:65; --train-h:28; --show-h:350; --game-h:96;
     --ok:var(--green); --err:#b3352c; --warn:#e0b341;
     /* one track hue, four intensities — the same rhythm on every track: a deep tone for type and
-       buttons, a mid tone for rules, a wash for the paper and a paler wash for the page around it */
+       buttons, a mid tone for rules, then a wash for the page AROUND the sheet. The sheet itself stays
+       untinted paper: a tinted reading surface competes with the feedback colours below. */
     --track-h:65;
     --track-ink:oklch(42% .085 var(--track-h));
     --track-rule:oklch(62% .11 var(--track-h));
-    --track-ground:color-mix(in oklab, oklch(90% .05 var(--track-h)) 60%, var(--cream));
-    --track-paper:color-mix(in oklab, oklch(96% .035 var(--track-h)) 70%, var(--paper));
+    --track-ground:color-mix(in oklab, oklch(90% .05 var(--track-h)) 30%, var(--cream));
     --r1:10px; --r2:18px; --r3:26px; --sp:12px;
     --shadow-1:0 1px 2px rgb(26 33 48/.05), 0 4px 14px -6px rgb(26 33 48/.12);
     --shadow-2:0 2px 6px rgb(26 33 48/.07), 0 22px 44px -18px rgb(26 33 48/.28);
@@ -113,8 +113,14 @@
 /* #40 LAYOUT — .content-area 1200px. .itemrow > .itemsize-third|-half|-twothird|.itemsize = 4/6/8/12 of 12; unset full width. Frames in a row end on one line. Vary: --row-gap, --col-gap, --section-gap (length) */
 @layer layout{
   main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
+  /* the sheet is untinted paper + a grain, so the reading surface never carries a hue that could be
+     mistaken for feedback. The grain is the `grain` look's dot, at page scale and stronger, because at
+     3px it is otherwise too faint to see. */
   .page-container{position:absolute;left:15px;width:1400px;margin:0;padding:0;
-    background:var(--track-paper);border:2px solid var(--ink);border-radius:0;box-shadow:none}
+    background-color:var(--paper);
+    background-image:radial-gradient(rgb(74 60 40/.13) 1px, transparent 1px);
+    background-size:3px 3px;
+    border:2px solid var(--ink);border-radius:0;box-shadow:none}
   .content-area{width:1200px;margin:0 auto;padding:98px 0 16px;position:relative}
   .itemrow{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));
     gap:var(--row-gap,22px) var(--col-gap,18px)}
@@ -237,7 +243,10 @@
     background:var(--sunken);border-radius:0 0 var(--r1) var(--r1)}
 }
 
-/* #53 PAIR — data-structure="pair" > .sides > 2x .side, SAME child count each (subgrid rows); side 1 red, side 2 green. Vary: --pair-rows (integer = children per side, 3) */
+/* #53 PAIR — data-structure="pair" > .sides > 2x .side, SAME child count each (subgrid rows). The two
+   sides are two LANGUAGES (or two versions), never a right and a wrong answer, so they are painted with
+   weight only — a grey card and a paper card. Red and green are reserved for feedback (see #80), and a
+   Portuguese line tells you it is Portuguese by being ochre italic, not by being red. Vary: --pair-rows */
 @layer structure{
   .block[data-structure="pair"] .sides{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;
     grid-template-rows:repeat(var(--pair-rows,3),auto)}
@@ -246,11 +255,11 @@
     border:1px solid var(--line-2);align-content:start}
   .block[data-structure="pair"] .side>p{margin:0;font-size:1rem}
   .block[data-structure="pair"] .side:first-child{
-    background:color-mix(in oklab,var(--err) 6%,var(--surface-2));
-    border-color:color-mix(in oklab,var(--err) 24%,var(--line-2))}
+    background:var(--sunken);
+    border-color:var(--line)}
   .block[data-structure="pair"] .side:last-child{
-    background:color-mix(in oklab,var(--ok) 6%,var(--surface-2));
-    border-color:color-mix(in oklab,var(--ok) 24%,var(--line-2))}
+    background:var(--surface-2);
+    border-color:color-mix(in oklab,var(--ink) 18%,var(--line-2))}
 }
 
 /* #60 GAP — <input class="gap" data-answer="a|b"> inside a sentence; data-answer is the key, unset = no key. Vary: --gap-w (length, 9em) */
@@ -267,23 +276,26 @@
 }
 
 /* #61 CHOICE — .opts > label.opt > input[type=radio] + span; one answer. Unset: options stack. Vary: data-layout="row" */
+/* #61 OPT — <label class="opt"> one per answer, inside .opts. CHOSEN is neutral: a grey card and a grey
+   dot. Picking an answer is not a judgement, so no red, no green, no track hue — that belongs to #80.
+   Vary: --r1 (radius) */
 @layer control{
   .opts{display:grid;align-content:start;gap:7px;margin:2px 0 0}
   .opts[data-layout="row"]{grid-auto-flow:column;grid-auto-columns:max-content;gap:10px}
   .opt{display:flex;align-items:center;gap:9px;padding:7px 11px;cursor:pointer;
     border:1.5px solid var(--line);border-radius:var(--r1);background:var(--surface-2);
     transition:border-color .15s,background .15s,box-shadow .15s}
-  .opt:hover{border-color:var(--accent-line)}
+  .opt:hover{border-color:var(--ink-2)}
   .opt input[type="radio"]{appearance:none;flex:0 0 auto;width:18px;height:18px;margin:0;
     border:2px solid var(--line);border-radius:50%;background:transparent;
     transition:border-color .15s,background .15s,box-shadow .15s}
-  .opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft);
+  .opt:has(input:checked){border-color:var(--ink-2);background:var(--sunken);
     box-shadow:var(--shadow-1)}
-  .opt input:checked{border-color:var(--accent);background:var(--accent);
+  .opt input:checked{border-color:var(--ink-2);background:var(--ink-2);
     box-shadow:inset 0 0 0 3px var(--surface-2)}
 }
 
-/* #62 MULTI — same .opt with input[type=checkbox]; any number of answers, ticked with the accent */
+/* #62 MULTI — same .opt with input[type=checkbox]; any number of answers, ticked in ink, not in a hue */
 @layer control{
   .opt input[type="checkbox"]{appearance:none;flex:0 0 auto;width:18px;height:18px;margin:0;
     border:2px solid var(--line);border-radius:5px;display:grid;place-content:center;
@@ -291,7 +303,7 @@
   .opt input[type="checkbox"]::after{content:"";width:5px;height:9px;translate:0 -1px;
     border:2px solid var(--surface);border-top:0;border-left:0;rotate:45deg;scale:0;
     transition:scale .16s}
-  .opt input[type="checkbox"]:checked{border-color:var(--accent);background:var(--accent)}
+  .opt input[type="checkbox"]:checked{border-color:var(--ink-2);background:var(--ink-2)}
   .opt input[type="checkbox"]:checked::after{scale:1}
 }
 
@@ -368,14 +380,27 @@
     border-color:var(--line-2);color:var(--ink)}
 }
 
-/* #80 STATE — data-state="correct|wrong|done" on .opt, .side, .qitem or the .block; mark = <i class="mark"></i>. Unset: nothing shows. Vary: --ok/--err (colour) */
+/* #80 STATE — THE ONLY PLACE RED, GREEN AND YELLOW MAY APPEAR. data-state="correct|wrong|odd|done" on
+   .opt, .side, .qitem or the .block; mark = <i class="mark"></i>. Unset: nothing shows.
+     GREEN  correct  — the key matches.
+     RED    wrong    — the key does not match.
+     YELLOW odd      — technically right but nobody says it, OR close enough that nobody will complain
+                       and still technically wrong. The "I'd understand you, but…" answer.
+   Everything else is neutral (ink, grey, paper) or the track hue (chrome). A CHOICE is never coloured:
+   a ticked radio is grey (#61), a comparison is grey-vs-paper (#53), a highlighted word is yellow marker
+   only when it is the word being taught. If a colour would imply a judgement, it belongs here instead.
+   Vary: --ok/--err/--warn (colour) */
 @layer state{
   [data-state="correct"]{--state:var(--ok)}
   [data-state="wrong"]{--state:var(--err)}
+  [data-state="odd"]{--state:var(--warn)}
   .opt[data-state="correct"],.side[data-state="correct"],.qitem[data-state="correct"]{
     border-color:var(--ok);background:color-mix(in oklab,var(--ok) 9%,var(--surface-2))}
   .opt[data-state="wrong"],.side[data-state="wrong"],.qitem[data-state="wrong"]{
     border-color:var(--err);background:color-mix(in oklab,var(--err) 9%,var(--surface-2))}
+  .opt[data-state="odd"],.side[data-state="odd"],.qitem[data-state="odd"]{
+    border-color:color-mix(in oklab,var(--warn) 72%,var(--ink));
+    background:color-mix(in oklab,var(--warn) 16%,var(--surface-2))}
   [data-state="wrong"]:not(.block){animation:shake .32s ease-in-out}
 
   .mark{position:relative;display:inline-grid;place-items:center;flex:0 0 auto;
@@ -391,6 +416,10 @@
     animation:mark-in .26s ease both}
   [data-state="wrong"] .mark::before{rotate:45deg}
   [data-state="wrong"] .mark::after{rotate:-45deg}
+  [data-state="odd"] .mark{border-color:color-mix(in oklab,var(--warn) 72%,var(--ink));
+    background:var(--warn)}
+  [data-state="odd"] .mark::after{content:"";width:11px;height:2.5px;border-radius:2px;
+    background:var(--ink);animation:mark-in .26s ease both}
 
   .block[data-state="done"]{border-color:color-mix(in oklab,var(--ok) 38%,var(--line-2));
     box-shadow:0 0 0 3px color-mix(in oklab,var(--ok) 16%,transparent),var(--shadow-1)}
