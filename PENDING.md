@@ -14,8 +14,9 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S4] - Run the gate and fix every fail <qa/check.mjs; preview.css #60, #76> <✅ adult/lesson30, items at or above `need`, zero fails>
    - [S5] - Run `npm run build:lessons`, measure the page's rows, commit and push <build-lessons.mjs; generation/checks/measure.mjs; .clinerules 8> <lessons.json lists n=30, 0 ragged rows on the page, pushed>
 
-## [B36] - THEN centred on the word, the to-be anchor back on 'm, no 20px on present perfect, and 2px between star and underline <"make sure then is centered under the middle of 'have' ... move the timeline up until there is 2px of separation"> <style.css #97; qa/preview-blocks.html>
-   - [S1] - `--point` for going-to and future-perfect becomes THEN's label centre (221.8px), `.an` moves to `have` and back to `I'm`, present-perfect loses its 20px, and `.tlw`'s padding-bottom drops to 46.5px <style.css #97; qa/preview-blocks.html> <word centre = axis left + --point in all eight; star top − underline bottom = 2px>
+## [B37] - Word marks become a general mechanism, and only the contracted letters are underlined <"make sure the word indicating, underlining, anchoring, etc is something that is generalized ... only the contracted letters and not the pronoun"> <style.css #89 MARKS, #97 TLN; qa/preview-blocks.html>
+   - [S1] - `.uw`/`.an` move out of the timeline into their own `#89 MARKS` section with the `anchor-scope:--pin` / `anchor(50%) - var(--pin)` recipe documented, and the four pronouns leave the underline <style.css #89, #97; qa/preview-blocks.html> <anchor word = axis left + --point in all eight; `'ve`/`'m`/`'ll` carry the 2px, the pronoun carries nothing>
+
 
 
 
