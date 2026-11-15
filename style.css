@@ -34,6 +34,7 @@
     /* the four word-mark colours for #94 POS. Loud on purpose: these marks carry meaning, so they are
        the one place a cool hue is allowed to appear in the warm scheme. Change a mark's colour here. */
     --pos-purple:#7c3aed; --pos-teal:#0f8f8f; --pos-pale:#a9c9ec; --pos-pink:#b565a7;
+    --pos-darkpink:#a81d5e;
     --ok:var(--green); --err:#b3352c; --warn:#e0b341;
     /* one track hue, four intensities — the same rhythm on every track: a deep tone for type and
        buttons, a mid tone for rules, then a wash for the page AROUND the sheet. The sheet itself stays
@@ -317,36 +318,38 @@
      <p class="pos">The <b class="pos-n">the</b>…</p> with the legend <p class="pos-key"><span><b class="pos-n">report</b> noun</span>…</p> —
      each key item wears the SAME class as the word it explains, so the key cannot drift from the marks.
      Each group owns one look, and the look is the only channel that has to work: purple for the mode word and its verb
-     (a 1px line plus a wash for mode, 2px dotted for the verb), 2px teal for an adjective, a teal-to-pale-blue ramp for
-     nouns (the direction is the role), wavy pink for a preposition. Colour never carries a distinction alone — the line's
-     shape, thickness or direction does, so it survives grayscale print and colour blindness.
+     (a 1px line plus a wash for mode, 2px dotted for the verb), 2px dark pink for an adjective, a teal-to-pale-blue ramp
+     for nouns with the direction carrying the role (subjects and objects at 3px), wavy pink for a preposition. Colour
+     never carries a distinction alone — the line's shape, thickness or direction does, so it survives grayscale print.
      Mark the words a figure is about, not whole sentences. Add `pos-labels` to the container to print a superscript tag
      instead. A conjunction is not here — see #88 JOIN. Vary: --pos-purple, --pos-teal, --pos-pale, --pos-pink */
 @layer rx{
   .pos{line-height:2.2}
   :is(.pos-v,.pos-n,.pos-adj,.pos-adv,.pos-prep){text-decoration-line:underline;text-underline-offset:3px}
-  /* NOUN GROUP — a 2px ramped line, so the role is a direction on one hue.
-     subject: teal 100% at the start → pale blue 60% at the end. object: the reverse.
-     any other noun, article or demonstrative: pale blue 60% flat. */
-  .pos-n{--n-a:color-mix(in srgb,var(--pos-pale) 60%,transparent);--n-b:var(--pos-teal);
+  /* NOUN GROUP — a ramped line, so the role is a direction on one hue.
+     subject: teal 100% at the start → pale blue at the end. object: the reverse, at 3px.
+     any other noun, article or demonstrative: pale blue, full opacity, 2px flat. */
+  .pos-n{--n-a:var(--pos-pale);--n-b:var(--pos-teal);
     text-decoration-line:none;padding-bottom:1px;
     background-image:linear-gradient(90deg,var(--n-a),var(--n-a));
-    background-repeat:no-repeat;background-size:100% 2px;background-position:0 calc(100% - 2px)}
-  .pos-n.pos-subj{background-image:linear-gradient(90deg,var(--n-b),var(--n-a))}
-  .pos-n.pos-o{background-image:linear-gradient(90deg,var(--n-a),var(--n-b))}
+    background-repeat:no-repeat;background-size:100% 2px;background-position:0 calc(100% - 1px)}
+  .pos-n.pos-subj{background-image:linear-gradient(90deg,var(--n-b),var(--n-a));
+    background-size:100% 3px;background-position:0 calc(100% - 2px)}
+  .pos-n.pos-o{background-image:linear-gradient(90deg,var(--n-a),var(--n-b));
+    background-size:100% 3px;background-position:0 calc(100% - 2px)}
   /* MODE — the background technique: a 1px purple line at 80%, plus a wash behind the word that runs
-     from 30% at the line up to 0% at the top of the box */
+     from 20% at the line up to 0% at the top of the box */
   .pos-m{--m-c:color-mix(in srgb,var(--pos-purple) 80%,transparent);text-decoration-line:none;
-    background-image:linear-gradient(to top,color-mix(in srgb,var(--pos-purple) 30%,transparent),
+    background-image:linear-gradient(to top,color-mix(in srgb,var(--pos-purple) 20%,transparent),
       color-mix(in srgb,var(--pos-purple) 0%,transparent)),linear-gradient(90deg,var(--m-c),var(--m-c));
     background-repeat:no-repeat,no-repeat;background-size:100% 100%,100% 1px;
-    background-position:0 0,0 calc(100% - 1px)}
+    background-position:0 0,0 100%}
   /* VERB — 2px dotted, the same purple at 80% */
   .pos-v{text-decoration-style:dotted;text-decoration-thickness:2px;
     text-decoration-color:color-mix(in srgb,var(--pos-purple) 80%,transparent)}
-  /* ADJECTIVE — 2px teal at 60% */
+  /* ADJECTIVE — 2px dark pink at 80% */
   .pos-adj{text-decoration-style:solid;text-decoration-thickness:2px;
-    text-decoration-color:color-mix(in srgb,var(--pos-teal) 60%,transparent)}
+    text-decoration-color:color-mix(in srgb,var(--pos-darkpink) 80%,transparent)}
   .pos-adv{text-decoration-style:dashed;text-decoration-thickness:2px;text-decoration-color:var(--ptw)}
   /* PREPOSITION — wavy, a pinkish purple at 50% */
   .pos-prep{text-decoration-style:wavy;text-decoration-thickness:2px;
