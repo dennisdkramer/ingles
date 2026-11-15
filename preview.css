@@ -446,8 +446,8 @@
 @layer shell{
   .brand{width:1400px;margin-left:15px;padding:20px 14px 0;text-align:center;
     display:block;user-select:none;-webkit-user-select:none}
-  .brand img{width:120px;height:auto;border-radius:0;object-fit:initial;
-    filter:drop-shadow(3px 4px 0 var(--rose))}
+  .brand img{display:block;margin:0 auto;width:140px;height:auto;border-radius:0;
+    object-fit:initial;filter:drop-shadow(3px 4px 0 var(--rose))}
   .brand h1{font-family:var(--playfair);font-size:38px;letter-spacing:.14em;
     text-transform:none;margin:8px 0 0;text-align:inherit;line-height:1.18}
   .brand h1 span{display:block;font-family:inherit;font-size:.42em;font-weight:inherit;
