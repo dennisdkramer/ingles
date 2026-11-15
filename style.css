@@ -31,6 +31,9 @@
     --ink-2:#5c5347; --line:var(--rose); --line-2:#e7dbc9; --dim:#6b6154; --lead:#5c5347;
     --para-gap:8px;
     --teach-h:65; --train-h:28; --show-h:350; --game-h:96;
+    /* the four word-mark colours for #94 POS. Loud on purpose: these marks carry meaning, so they are
+       the one place a cool hue is allowed to appear in the warm scheme. Change a mark's colour here. */
+    --pos-purple:#7c3aed; --pos-teal:#0f8f8f; --pos-pale:#a9c9ec; --pos-pink:#b565a7;
     --ok:var(--green); --err:#b3352c; --warn:#e0b341;
     /* one track hue, four intensities — the same rhythm on every track: a deep tone for type and
        buttons, a mid tone for rules, then a wash for the page AROUND the sheet. The sheet itself stays
@@ -313,28 +316,41 @@
      tense and the verb does not change, so the two are different jobs.
      <p class="pos">The <b class="pos-n">the</b>…</p> with the legend <p class="pos-key"><span><b class="pos-n">report</b> noun</span>…</p> —
      each key item wears the SAME class as the word it explains, so the key cannot drift from the marks.
-     The line carries the group and colour only reinforces it, so it survives grayscale print, a projector and
-     colour blindness. Six groups, five line styles: noun takes a thinner solid line, so thickness is the sixth channel.
+     Each group owns one look, and the look is the only channel that has to work: purple for the mode word and its verb
+     (a 1px line plus a wash for mode, 2px dotted for the verb), 2px teal for an adjective, a teal-to-pale-blue ramp for
+     nouns (the direction is the role), wavy pink for a preposition. Colour never carries a distinction alone — the line's
+     shape, thickness or direction does, so it survives grayscale print and colour blindness.
      Mark the words a figure is about, not whole sentences. Add `pos-labels` to the container to print a superscript tag
-     instead. A conjunction is not here — see #88 JOIN. Vary: --pos-c, --mk-w, --mk-c */
+     instead. A conjunction is not here — see #88 JOIN. Vary: --pos-purple, --pos-teal, --pos-pale, --pos-pink */
 @layer rx{
   .pos{line-height:2.2}
-  :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep){text-decoration-line:underline;text-underline-offset:3px;
-    text-decoration-color:var(--mk-c,var(--pos-c,var(--ink-2)))}
-  .pos-n{--pos-c:var(--ink-2);text-decoration-line:none;padding-bottom:1px;
-    background-image:linear-gradient(90deg,var(--pos-c),var(--pos-c));
-    background-repeat:no-repeat;background-size:100% 1px;background-position:0 calc(100% - 1px)}
-  /* role rides the SAME hue as a fade, so every noun mark reads as one group:
-     a subject starts strong and thins to the right, an object does the reverse, everything else stays flat */
-  .pos-n.pos-subj{background-image:linear-gradient(90deg,var(--pos-c),
-    color-mix(in srgb,var(--pos-c) 45%,transparent) 55%,color-mix(in srgb,var(--pos-c) 12%,transparent))}
-  .pos-n.pos-o{background-image:linear-gradient(90deg,color-mix(in srgb,var(--pos-c) 12%,transparent),
-    color-mix(in srgb,var(--pos-c) 45%,transparent) 45%,var(--pos-c))}
-  .pos-v{--pos-c:var(--ink-2);text-decoration-style:solid;text-decoration-thickness:var(--mk-w,2px)}
-  .pos-m{--pos-c:var(--accent);text-decoration-style:double;text-decoration-thickness:var(--mk-w,2px)}
-  .pos-adj{--pos-c:var(--tan);text-decoration-style:dotted;text-decoration-thickness:var(--mk-w,2px)}
-  .pos-adv{--pos-c:var(--ptw);text-decoration-style:dashed;text-decoration-thickness:var(--mk-w,2px)}
-  .pos-prep{--pos-c:var(--dim);text-decoration-style:wavy;text-decoration-thickness:var(--mk-w,2px)}
+  :is(.pos-v,.pos-n,.pos-adj,.pos-adv,.pos-prep){text-decoration-line:underline;text-underline-offset:3px}
+  /* NOUN GROUP — a 2px ramped line, so the role is a direction on one hue.
+     subject: teal 100% at the start → pale blue 60% at the end. object: the reverse.
+     any other noun, article or demonstrative: pale blue 60% flat. */
+  .pos-n{--n-a:color-mix(in srgb,var(--pos-pale) 60%,transparent);--n-b:var(--pos-teal);
+    text-decoration-line:none;padding-bottom:1px;
+    background-image:linear-gradient(90deg,var(--n-a),var(--n-a));
+    background-repeat:no-repeat;background-size:100% 2px;background-position:0 calc(100% - 2px)}
+  .pos-n.pos-subj{background-image:linear-gradient(90deg,var(--n-b),var(--n-a))}
+  .pos-n.pos-o{background-image:linear-gradient(90deg,var(--n-a),var(--n-b))}
+  /* MODE — the background technique: a 1px purple line at 80%, plus a wash behind the word that runs
+     from 30% at the line up to 0% at the top of the box */
+  .pos-m{--m-c:color-mix(in srgb,var(--pos-purple) 80%,transparent);text-decoration-line:none;
+    background-image:linear-gradient(to top,color-mix(in srgb,var(--pos-purple) 30%,transparent),
+      color-mix(in srgb,var(--pos-purple) 0%,transparent)),linear-gradient(90deg,var(--m-c),var(--m-c));
+    background-repeat:no-repeat,no-repeat;background-size:100% 100%,100% 1px;
+    background-position:0 0,0 calc(100% - 1px)}
+  /* VERB — 2px dotted, the same purple at 80% */
+  .pos-v{text-decoration-style:dotted;text-decoration-thickness:2px;
+    text-decoration-color:color-mix(in srgb,var(--pos-purple) 80%,transparent)}
+  /* ADJECTIVE — 2px teal at 60% */
+  .pos-adj{text-decoration-style:solid;text-decoration-thickness:2px;
+    text-decoration-color:color-mix(in srgb,var(--pos-teal) 60%,transparent)}
+  .pos-adv{text-decoration-style:dashed;text-decoration-thickness:2px;text-decoration-color:var(--ptw)}
+  /* PREPOSITION — wavy, a pinkish purple at 50% */
+  .pos-prep{text-decoration-style:wavy;text-decoration-thickness:2px;
+    text-decoration-color:color-mix(in srgb,var(--pos-pink) 50%,transparent)}
   .pos-key{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 18px;margin:8px 0 0;
     font:400 12px/1.6 var(--sans);color:var(--ink-2)}
   .pos-key>span{display:inline-flex;align-items:baseline;gap:6px}
@@ -342,6 +358,7 @@
   /* the label mode prints what the line means, for a cramped column or a screenshot with no key */
   .pos-labels :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep){text-decoration-line:none}
   .pos-labels .pos-n{background-image:none}
+  .pos-labels .pos-m{background-image:none}
   .pos-labels :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep)::after{margin-left:1px;
     font:700 .58em var(--sans);vertical-align:.62em;color:var(--ink-2)}
   .pos-labels .pos-n::after{content:'N'}
