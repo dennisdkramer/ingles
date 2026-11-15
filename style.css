@@ -334,6 +334,9 @@
     font:700 10px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;
     color:var(--ink-2);white-space:nowrap}
   .tln-past,.tln-head,.tln-ahead{position:relative;z-index:1}
+  /* night: the shadow is a literal, so it is set here */
+  .block[data-look="dark"] .tln-head b,.block[data-look="dark"] .tln-then{
+    text-shadow:rgba(0,0,0,.85) 0 0px 3px}
   @media (prefers-reduced-motion:reduce){.tln-star,.tln-end{animation:none}}
   @media print{.tln-ahead{border-top-style:solid}.tln-star,.tln-end{animation:none}}
 }
