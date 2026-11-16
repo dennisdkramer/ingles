@@ -29,6 +29,9 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S1] - `.tlw-say` drops its own font shorthand so the sentence inherits the page's body type <style.css #97> <computed font-size 17px, family the page serif>
 ## [B50] - The legend is the class names themselves <"Below the timelines, can you remove those 4 lines and just style the class names: Noun (Subject, Object) - Mode Carrier - Verb - Adverb - Preposition - Adjective - Conjunction"> <qa/preview-blocks.html>
    - [S1] - The specimen sentence, its key, the composition line and its caption go; one legend line takes their place, each item wearing the class it names <qa/preview-blocks.html> <one row: Noun (Subject, Object) · Mode Carrier · Verb · Adverb · Preposition · Adjective · Conjunction, each painted by its own class>
+## [B51] - The provisional timeline marks go <"those timeline marks were provisional. remove them from the test page and you can remove them from the css too unless theyre in use for something else"> <style.css #89 MARKS; qa/preview-blocks.html>
+   - [S1] - `.uw` is deleted; `.an` keeps only its anchor role and paints nothing; the eight sentences lose their `uw` wrappers but keep `an` <style.css #89; qa/preview-blocks.html> <no `.uw` in the sheet or on the page; eight axes still land word centre = axis left + --point>
+
 
    - [S2] - `pos.mjs` splits a contraction into pronoun + clitic, and knows gonna/wanna/gotta, so `I've …` is a pronoun and a mode word rather than one unplaced noun <qa/pos.mjs> <"I've been feeling sick" → I pron + 've m; "I'm gonna hit" → I pron + 'm m + gonna m; "He'll have done" → He pron + 'll m>
    - [S3] - The eight anchored sentences are rebuilt from the tagger, with `uw` on the verb group and `an` on the pinned word, so both the paint and the anchor survive <qa/preview-blocks.html> <each sentence paints its parts of speech; eight anchors still land word centre = axis left + --point>
