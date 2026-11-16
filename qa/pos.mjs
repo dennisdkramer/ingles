@@ -55,12 +55,18 @@ const REL = { and: 'add', nor: 'add', but: 'contrast', yet: 'contrast', although
   though: 'contrast', whereas: 'contrast', while: 'contrast', or: 'alternative', so: 'cause',
   because: 'cause', if: 'condition', unless: 'condition', when: 'time', whenever: 'time',
   where: 'place', than: 'comparison', that: 'content', whether: 'content' };
-/* the recipient's arrow: ONE filled brushstroke — a tapered shaft and its barbed head in a single
-   <path>, so nothing can seam. It is swept on from the tail and erased into the tip (see iobj-draw). */
-const ARROW = '<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 42 28">'
-  + '<path fill="currentColor" d="M40.5 4.2C33.6 2.9 26.2 3.8 20.4 7.6C17.2 9.8 14.6 11.8 13.5 14'
-  + 'L17.5 20C19.5 15.4 24.4 10.4 30.2 7C33.6 5.2 37.2 4.6 40.9 5.2Z'
-  + 'M8.7 14.8L9.6 27.2L24.5 20.5C20.6 19.4 16.6 18.6 15.2 18.2Z"/></svg></i>';
+/* the recipient's arrow: the shape from assets/SVG/Arrow-Curved.svg, inlined so it inherits
+   currentColor and costs no request. It is mirrored and nudged so its head lands on the word. */
+const ARROW = '<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 296 74">'
+  + '<path fill="currentColor" d="M-8.59302e-06 71C13.102 44.3623 83.0496 8.91537 132.922 2.62301'
+  + 'C186.809-4.29859 217.873 1.57428 281.27 31.1484C280.425 26.9535 279.368 23.5976 278.945 20.4514'
+  + 'C278.311 16.8857 277.677 13.1103 277.889 9.54461C277.889 8.49589 279.791 6.60818 281.059 6.39843'
+  + 'C282.327 6.18869 284.44 7.6569 284.862 8.70563C288.666 18.7734 292.047 28.8412 295.64 39.1187'
+  + 'C296.696 42.4746 295.428 44.9916 291.836 46.0403C278.1 49.3962 264.364 52.9619 250.417 56.1081'
+  + 'C247.247 56.7373 243.443 55.8983 239.217 55.8983C242.598 46.8793 250.206 47.928 255.7 45.6208'
+  + 'C261.406 43.1039 267.534 41.6357 274.93 39.1187C257.39 27.373 239.639 20.0319 220.832 15.4175'
+  + 'C151.941-1.78164 88.544 12.481 30.0078 50.6547C22.4002 55.6886 15.4266 61.5615 8.03027 66.8051'
+  + 'C5.70573 67.8538 3.59247 68.9026-8.59302e-06 71Z"/></svg></i>';
 
 const PUNCT = /^[.,;:!?()"'“”‘’—-]+$/;
 
