@@ -25,6 +25,11 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 ## [B47] - The star's opacity comes down 20% <"going back to the timeline, reduce the opacity of the star by 20%"> <style.css #97 TLN>
 ## [B48] - The star and the arrow shrink 30% and dim 10% <"redyce the max size by 30% and reduce the opacity of the star and the arrows by 10%"; answer: the star and the arrow both: 30px → 21px and 30.8px → 21.6px> <style.css #97 TLN>
    - [S1] - The star is 21px and floats at 70%, so its beat runs .595–.7 <style.css #97> <`.tln-star` 21px, opacity .7>
+## [B49] - The anchored sentences wear page type, painted with parts of speech <"apply the normal page font style to the texts that the timelines are anchored to in the test block, then how do i call the tool that paints the parts of speech? do it on those strings"> <style.css #97 TLN; qa/pos.mjs; qa/preview-blocks.html>
+   - [S1] - `.tlw-say` drops its own font shorthand so the sentence inherits the page's body type <style.css #97> <computed font-size 17px, family the page serif>
+   - [S2] - `pos.mjs` splits a contraction into pronoun + clitic, and knows gonna/wanna/gotta, so `I've …` is a pronoun and a mode word rather than one unplaced noun <qa/pos.mjs> <"I've been feeling sick" → I pron + 've m; "I'm gonna hit" → I pron + 'm m + gonna m; "He'll have done" → He pron + 'll m>
+   - [S3] - The eight anchored sentences are rebuilt from the tagger, with `uw` on the verb group and `an` on the pinned word, so both the paint and the anchor survive <qa/preview-blocks.html> <each sentence paints its parts of speech; eight anchors still land word centre = axis left + --point>
+
    - [S2] - The arrow glyph is 21.6px and its breathe runs .675–.9, which is the same 10% off in both directions <style.css #97> <`.tln-end svg` 21.6px; `tln-nudge` opacities .675 and .9; base opacity .9 for reduced motion>
 
    - [S1] - `.tln-star` carries `opacity:.8`, which multiplies the beat's own .85–1 so the star now breathes .68–.8 <style.css #97> <one declaration; the pulse keeps its range, 20% lower>
