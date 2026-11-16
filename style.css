@@ -427,7 +427,7 @@
   /* now: the star in the middle, the word above it and over it, the arrow out of the flow */
   .tln-head{position:absolute;top:50%;left:var(--now,50%);translate:-50% -50%;
     display:grid;place-items:center;width:34px;z-index:1}
-  .tln-star{width:30px;height:30px;fill:currentColor;stroke:none;
+  .tln-star{width:30px;height:30px;fill:currentColor;stroke:none;opacity:.8;
     animation:tln-beat 2.6s ease-in-out infinite;transform-origin:50% 50%}
   .tln-head b{position:absolute;left:calc(50% + 2px);top:50%;transform:translate(-50%,-50%);z-index:2;
     text-shadow:rgba(200,200,200,.85) 0 0px 3px;
