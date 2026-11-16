@@ -55,6 +55,12 @@ const REL = { and: 'add', nor: 'add', but: 'contrast', yet: 'contrast', although
   though: 'contrast', whereas: 'contrast', while: 'contrast', or: 'alternative', so: 'cause',
   because: 'cause', if: 'condition', unless: 'condition', when: 'time', whenever: 'time',
   where: 'place', than: 'comparison', that: 'content', whether: 'content' };
+/* the recipient's arrow: two strokes, so the shaft can draw itself with stroke-dashoffset and the
+   head can arrive after it and outlive it. Mirrored by data-side. */
+const ARROW = '<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none">'
+  + '<path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"/>'
+  + '<path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"/></svg></i>';
+
 const PUNCT = /^[.,;:!?()"'“”‘’—-]+$/;
 
 /* irregular past forms: no suffix to read, so they are listed. This is the same set the roadmaps
@@ -509,20 +515,24 @@ else {
       const x = open.get(i);
       if (x) {
         const words = row.slice(x.s, x.e + 1).map(r => r.w).join(' ');
-        const role = x.role === 'subj' ? ' pos-subj' : x.role === 'obj' ? ' pos-o'
-          : x.role === 'iobj' ? ' pos-i' + (x.side ? ' data-side="' + x.side + '"' : '') : '';
-        html += glueAt(x.s) + '<span class="pos-n' + role + '" data-ph="' + x.kind + '">' + words + '</span>';
+        const cls = x.role === 'subj' ? ' pos-subj' : x.role === 'obj' ? ' pos-o'
+          : x.role === 'iobj' ? ' pos-i' : '';
+        const attr = x.role === 'iobj' && x.side ? ' data-side="' + x.side + '"' : '';
+        html += glueAt(x.s) + '<span class="pos-n' + cls + '" data-ph="' + x.kind + '"' + attr + '>' + words
+          + (x.role === 'iobj' ? ARROW : '') + '</span>';
         i = x.e + 1;
         continue;
       }
       const r = row[i], t = lower(r.w);
       const R = r.role === 'subj' ? ' pos-subj' : '';
-      const O = r.role === 'iobj' ? ' pos-i' + (r.side ? ' data-side="' + r.side + '"' : '')
+      const O = r.role === 'iobj' ? ' pos-i'
         : (r.role === 'obj' || (r.tag === 'pron' && OBJ.indexOf(t) !== -1)) ? ' pos-o' : '';
+      const A = r.role === 'iobj' && r.side ? ' data-side="' + r.side + '"' : '';
       html += glueAt(i) + (r.tag === 'punct' ? r.w
         : r.tag === 'conj' ? '<span class="pos-join" data-rel="' + (REL[t] || 'add') + '">' + r.w + '</span>'
         : r.tag === 'vm' ? '<span class="pos-m pos-v' + R + '">' + r.w + '</span>'
-        : '<span class="pos-' + (GROUP[r.tag] || 'n') + R + O + '">' + r.w + '</span>');
+        : '<span class="pos-' + (GROUP[r.tag] || 'n') + R + O + '"' + A + '>' + r.w
+          + (r.role === 'iobj' ? ARROW : '') + '</span>');
       i++;
     }
     console.log(html.replace(/ ([.,;:!?])/g, '$1').replace(/ (['’])/g, '$1').trim());

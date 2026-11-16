@@ -325,25 +325,28 @@
     background-image:linear-gradient(90deg,var(--n-a),var(--n-a));background-size:100% var(--mk-h)}
   .pos-n.pos-subj{background-image:linear-gradient(90deg,var(--n-b),var(--n-a));background-size:100% 3px}
   .pos-n.pos-o{background-image:linear-gradient(90deg,var(--n-a),var(--n-b));background-size:100% 3px}
-  /* .pos-n.pos-i (the recipient): no line — an arrow from the side the direct object sits, curving down
-     into the word and dissolving. data-side="left|right" comes from the tagger. Vary: --i-c, --i-w */
+  /* .pos-n.pos-i (the recipient): no line — an arrow from the side the direct object sits, drawn along
+     its own path. data-side="left|right" comes from the tagger. Vary: --i-c, --i-w */
   .pos-n.pos-i{--i-c:var(--ink-2);--i-w:19px;position:relative;background-image:none}
-  .pos-n.pos-i::after{content:'';position:absolute;top:-.62em;left:auto;right:-.42em;
-    width:var(--i-w);height:calc(var(--i-w)*.92);
-    background-color:var(--i-c);
-    -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 19 18'%3E%3Cpath d='M18 1.6C11.6 1.6 6.9 5.6 6.3 12.4' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round'/%3E%3Cpath d='M2.4 9.2 6.2 13.1 10.2 10.4' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 19 18'%3E%3Cpath d='M18 1.6C11.6 1.6 6.9 5.6 6.3 12.4' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round'/%3E%3Cpath d='M2.4 9.2 6.2 13.1 10.2 10.4' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    -webkit-mask-size:contain;mask-size:contain;
-    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
-    -webkit-mask-position:center;mask-position:center;
-    animation:iobj-in 2s ease-in-out infinite}
-  .pos-n.pos-i[data-side="left"]::after{right:auto;left:-.42em;scale:-1 1}
-  @keyframes iobj-in{
-    0%{opacity:0;translate:0 -.18em}
-    12%{opacity:.9;translate:0 -.12em}
-    62%{opacity:.85;translate:0 .12em}
-    82%{opacity:0;translate:0 .2em}
-    100%{opacity:0;translate:0 -.18em}
+  .pos-n.pos-i .pos-i-arr{position:absolute;bottom:calc(100% - 3px);right:-.42em;display:block;
+    width:var(--i-w);height:calc(var(--i-w)*.95);pointer-events:none}
+  .pos-n.pos-i[data-side="left"] .pos-i-arr{right:auto;left:-.42em;scale:-1 1}
+  .pos-i-arr svg{display:block;width:100%;height:100%;overflow:visible}
+  .pos-i-arr path{fill:none;stroke:var(--i-c);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .pos-i-arr .shaft{stroke-dasharray:22;stroke-dashoffset:0;animation:iobj-shaft 2.6s linear infinite}
+  .pos-i-arr .head{animation:iobj-head 2.6s linear infinite}
+  @keyframes iobj-shaft{
+    0%{stroke-dashoffset:22;opacity:1}
+    45%{stroke-dashoffset:0;opacity:1}
+    60%{stroke-dashoffset:0;opacity:1}
+    78%{opacity:0}
+    100%{stroke-dashoffset:0;opacity:0}
+  }
+  @keyframes iobj-head{
+    0%,42%{opacity:0}
+    52%{opacity:1}
+    84%{opacity:1}
+    97%,100%{opacity:0}
   }
   /* .pos-m: 1px line + a wash from 20% at the line to 0 at the top */
   .pos-m{--m-c:color-mix(in srgb,var(--pos-purple) 80%,transparent);
@@ -396,8 +399,8 @@
   .pos-labels .pos-n::after{content:'N'}
   .pos-labels .pos-n.pos-o::after{content:'DO'}
   .pos-labels .pos-n.pos-o{background-image:none}
-  .pos-labels .pos-n.pos-i::after{content:'IO';position:static;width:auto;height:auto;background:none;
-    clip-path:none;top:auto;right:auto;left:auto}
+  .pos-labels .pos-n.pos-i::after{content:'IO'}
+  .pos-labels .pos-i-arr{display:none}
   .pos-labels .pos-v::after{content:'V'}
   .pos-labels .pos-m::after{content:'M'}
   .pos-labels .pos-adj::after{content:'ADJ'}
@@ -405,7 +408,7 @@
   .pos-labels .pos-prep::after{content:'PREP'}
   @media print{
     :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep){text-decoration-color:#000}
-    .pos-n.pos-i::after{animation:none;opacity:1;translate:0 0}
+    .pos-i-arr .shaft,.pos-i-arr .head{animation:none;stroke-dashoffset:0;opacity:1}
   }
 }
 
