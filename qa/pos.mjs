@@ -348,15 +348,59 @@ function phrases(row) {
       const u = row[j];
       if (u.tag === 'punct') { end = j - 1; break; }
       if (u.tag === 'conj' && j > i + 1) { end = j - 1; break; }
-      if (kind === 'gerund' && u.tag === 'v') { end = j - 1; break; }
+      if (kind === 'gerund' && /^(v|vm)$/.test(u.tag)) { end = j - 1; break; }
       /* the phrase's own verb is the first one inside it; the second one belongs to the clause that
          contains the phrase — "⟨To swim⟩ IS hard", "⟨What she said⟩ WAS true" */
-      if (u.tag === 'v') { if (seenV) { end = j - 1; break; } seenV = true; }
+      if (/^(v|vm)$/.test(u.tag)) { if (seenV) { end = j - 1; break; } seenV = true; }
     }
     if (end > i) out.push({ s: i, e: end, kind });
     i = end;
   }
   return out;
+}
+
+/* Who does the verb, and what it acts on. Position, not meaning: inside each clause the nearest noun
+   group before the first finite verb is the subject, and the noun groups after the verb chain are
+   objects — until a preposition, because a noun after one belongs to the preposition, not the verb
+   ("saw it IN 2019"). Each verb records whether an object followed, so `--tags` reads
+   "object follows: him, truth" against "no object". */
+function roles(row, ph) {
+  const spanAt = new Map(ph.map(x => [x.s, x]));
+  const units = [];
+  for (let i = 0; i < row.length;) {
+    const x = spanAt.get(i);
+    if (x) { units.push({ s: i, e: x.e, tag: 'n', x }); i = x.e + 1; continue; }
+    units.push({ s: i, e: i, tag: row[i].tag }); i++;
+  }
+  const mark = (u, role) => { if (u.x) u.x.role = role; else row[u.s].role = role; };
+  /* only a noun or a pronoun can BE the subject or the object; a determiner and an adjective merely
+     accompany one — marking them would put the object mark on the word "the" */
+  const NOMINAL = /^(n|pron)$/;
+  for (let s = 0; s < units.length;) {
+    let e = s;
+    while (e < units.length && units[e].tag !== 'punct' && units[e].tag !== 'conj') e++;
+    const c = units.slice(s, e);
+    s = e + 1;
+    let vi = -1;
+    for (let k = 0; k < c.length; k++) if (/^(aux|v|vm)$/.test(c[k].tag)) { vi = k; break; }
+    if (vi === -1) continue;
+    for (let k = vi - 1; k >= 0; k--) if (c[k].tag === 'n' || c[k].tag === 'pron') { mark(c[k], 'subj'); break; }
+    let ve = vi;
+    while (ve + 1 < c.length && /^(aux|v|vm)$/.test(c[ve + 1].tag)) ve++;
+    const objs = [];
+    let afterPrep = false;
+    for (let k = ve + 1; k < c.length; k++) {
+      const u = c[k];
+      if (u.tag === 'prep') { afterPrep = true; continue; }
+      if (/^(v|vm)$/.test(u.tag)) break;
+      if (!NOMINAL.test(u.tag)) continue;
+      if (afterPrep) { afterPrep = false; continue; }
+      objs.push(u);
+    }
+    objs.forEach(u => mark(u, 'obj'));
+    const head = row[c[ve].s];
+    head.objs = objs.map(u => row.slice(u.s, u.e + 1).map(r => r.w).join(' '));
+  }
 }
 
 const argv = process.argv.slice(2);
@@ -368,6 +412,7 @@ else {
   const row = sentence ? tag(clitic(tokenize(sentence))) : [];
 
   const ph = phrases(row);
+  roles(row, ph);
   const open = new Map(ph.map(x => [x.s, x]));
 
   /* a clitic is glued to the word it was split from: "I've" is I + 've, "hadn't" is had + n't */
@@ -380,7 +425,9 @@ else {
     const inPh = new Map();
     for (const x of ph) for (let j = x.s; j <= x.e; j++) inPh.set(j, j === x.s ? x.kind : '·');
     row.forEach((r, i) => console.log(r.w.padEnd(14) + ' ' + String(r.tag).padEnd(6) + ' ' +
-      (inPh.has(i) ? '«' + inPh.get(i) + '» ' : '') + r.why));
+      (inPh.has(i) ? '«' + inPh.get(i) + '» ' : '') + r.why +
+      (r.role ? ' · ' + (r.role === 'subj' ? 'SUBJECT' : 'OBJECT') : '') +
+      (r.objs ? ' · ' + (r.objs.length ? 'object follows: ' + r.objs.join(', ') : 'no object') : '')));
   } else if (mode === '--check') {
     const bad = row.filter(r => r.why.indexOf('UNPLACED') === 0);
     console.log(bad.length ? bad.map(r => r.w).join(', ') : 'all placed');
@@ -414,15 +461,18 @@ else {
       const x = open.get(i);
       if (x) {
         const words = row.slice(x.s, x.e + 1).map(r => r.w).join(' ');
-        html += glueAt(x.s) + '<span class="pos-n" data-ph="' + x.kind + '">' + words + '</span>';
+        const role = x.role === 'subj' ? ' pos-subj' : x.role === 'obj' ? ' pos-o' : '';
+        html += glueAt(x.s) + '<span class="pos-n' + role + '" data-ph="' + x.kind + '">' + words + '</span>';
         i = x.e + 1;
         continue;
       }
       const r = row[i], t = lower(r.w);
+      const R = r.role === 'subj' ? ' pos-subj' : '';
+      const O = (r.role === 'obj' || (r.tag === 'pron' && OBJ.indexOf(t) !== -1)) ? ' pos-o' : '';
       html += glueAt(i) + (r.tag === 'punct' ? r.w
         : r.tag === 'conj' ? '<span class="pos-join" data-rel="' + (REL[t] || 'add') + '">' + r.w + '</span>'
-        : r.tag === 'vm' ? '<span class="pos-m pos-v' + (r.tag === 'pron' && OBJ.indexOf(t) !== -1 ? ' pos-o' : '') + '">' + r.w + '</span>'
-        : '<span class="pos-' + (GROUP[r.tag] || 'n') + (r.tag === 'pron' && OBJ.indexOf(t) !== -1 ? ' pos-o' : '') + '">' + r.w + '</span>');
+        : r.tag === 'vm' ? '<span class="pos-m pos-v' + R + O + '">' + r.w + '</span>'
+        : '<span class="pos-' + (GROUP[r.tag] || 'n') + R + O + '">' + r.w + '</span>');
       i++;
     }
     console.log(html.replace(/ ([.,;:!?])/g, '$1').replace(/ (['’])/g, '$1').trim());
