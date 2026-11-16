@@ -31,10 +31,8 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S1] - The specimen sentence, its key, the composition line and its caption go; one legend line takes their place, each item wearing the class it names <qa/preview-blocks.html> <one row: Noun (Subject, Object) · Mode Carrier · Verb · Adverb · Preposition · Adjective · Conjunction, each painted by its own class>
 ## [B51] - The provisional timeline marks go <"those timeline marks were provisional. remove them from the test page and you can remove them from the css too unless theyre in use for something else"> <style.css #89 MARKS; qa/preview-blocks.html>
    - [S1] - `.uw` is deleted; `.an` keeps only its anchor role and paints nothing; the eight sentences lose their `uw` wrappers but keep `an` <style.css #89; qa/preview-blocks.html> <no `.uw` in the sheet or on the page; eight axes still land word centre = axis left + --point>
-## [B54] - Substantive clauses stay nouns, a demonstrative splits by use, and the chart lists categories first <"[what she said] [was] [true]" is: noun clause verb adj. / a wh-word, determiner, substantive, verb in that order is a substantive clause — vs with a mode carrier it is a question / put the included categories in the first row of each column"> <qa/pos.mjs; qa/preview-blocks.html>
-   - [S1] - A wh-word followed by a determiner and a noun and then a verb opens a substantive clause; a mode word in that stretch makes it a question and opens nothing <qa/pos.mjs> <"what that guy did" → one pos-n span; "What did that guy do?" → What=m, no span>
-   - [S2] - this/that/these/those before a noun are determiners (adjective); standing alone they are demonstrative pronouns (noun) <qa/pos.mjs> <"this book" → this adj; "This is hard" → This n>
-   - [S3] - The chart's first row gives each column's categories; the member words move to the row below <qa/preview-blocks.html> <7 category cells above 7 word cells, rows PASS>
+## [B55] - A phrase that stops after an ambiguous word makes that word a mode <"a phrase that ends or commas after a word that could be a mode or a plain verb defines that word as a mode (I have = perfect tense response, verb implicit)"> <qa/pos.mjs>
+   - [S1] - An auxiliary followed by a full stop, a comma or nothing keeps its mode job instead of being demoted to the verb <qa/pos.mjs> <"I have." → have = m; "Yes, I do." → do = m; "I have a car." → have = v>
 
 
 
