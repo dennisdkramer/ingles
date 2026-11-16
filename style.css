@@ -465,7 +465,7 @@
     anchor-scope:--pin}
   .tlw+.tlw{margin-top:36px}
   .tlw-say{margin:0;text-align:center;white-space:nowrap;
-    font:600 12.5px/1.4 var(--sans);color:var(--ink)}
+    font:inherit;line-height:1.4;color:var(--ink)}
   /* the axis: the pristine 200px plate, plus 60px on the side the tense points away from. Past
      tenses extend BEFORE (the fade runs 60px further left); the rest extend THEN (the dashes run
      60px further right). --pad is where the plate starts inside the box, so every landmark keeps its

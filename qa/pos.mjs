@@ -23,7 +23,7 @@ const LEX = {
   pron: 'i you he she it we they me him us them myself yourself himself herself itself ourselves themselves someone anyone everyone nobody somebody anybody everybody something anything everything nothing mine yours hers ours theirs one'.split(' '),
   prep: 'in on at to by for with about under over into onto from off through during before after between among against without within across behind beyond up down near since until till per via despite beside besides around along toward towards inside outside above below'.split(' '),
   conj: 'and but or so because although though while if unless when whenever where whereas than that whether nor yet'.split(' '),
-  aux: 'be is am are was were been being have has had having do does did doing will would can could shall should may might must ought'.split(' '),
+  aux: 'be is am are was were been being have has had having do does did doing will would can could shall should may might must ought gonna wanna gotta \'ve \'m \'ll \'re \'d \'s'.split(' '),
   wh: 'who whom whose what which when where why how whoever whatever whichever'.split(' '),
   adv: 'not never always often sometimes usually already still just only even too very really quite rather almost soon then now here there again also perhaps maybe ever once twice away back out however therefore instead anyway actually probably definitely honestly basically literally lowkey yesterday today tomorrow tonight later recently afterwards beforehand'.split(' '),
 };
@@ -81,6 +81,17 @@ function tokenize(s) {
   return s.match(/[A-Za-z0-9'’-]+|[.,;:!?()"'“”‘’]|—/g) || [];
 }
 const lower = t => t.toLowerCase().replace(/’/g, "'");
+/* a contraction is two words for our purposes: the pronoun and the clitic that carries the mode.
+   "I've been" is I + 've + been, which is how the pedagogy teaches it and how the sheet marks it,
+   so the tagger has to see two tokens rather than one unreadable one. */
+function clitic(tokens) {
+  const out = [];
+  for (const t of tokens) {
+    const m = /^([A-Za-z]+)(n't|'(?:ve|m|ll|d|re|s))$/.exec(t.replace(/’/g, "'"));
+    if (m) out.push(m[1], m[2]); else out.push(t);
+  }
+  return out;
+}
 const isCap = t => /^[A-Z]/.test(t);
 
 
@@ -280,10 +291,16 @@ const mode = isFlag(argv[0]) ? argv[0] : '';
 const sentence = (isFlag(argv[0]) ? argv.slice(1) : argv).join(' ').trim();
 if (!sentence) { console.error('usage: node qa/pos.mjs [--tags|--check|--text] "sentence"'); process.exitCode = 2; }
 else {
-  const row = tag(tokenize(sentence));
+  const row = tag(clitic(tokenize(sentence)));
 
   const ph = phrases(row);
   const open = new Map(ph.map(x => [x.s, x]));
+
+  /* a clitic is glued to the word it was split from: "I've" is I + 've, "hadn't" is had + n't */
+  const glueAt = k => {
+    const w = row[k] ? lower(row[k].w) : '';
+    return (k === 0 || /^(n't|['’])/.test(w)) ? '' : ' ';
+  };
 
   if (mode === '--tags') {
     const inPh = new Map();
@@ -298,12 +315,12 @@ else {
     while (i < row.length) {
       const x = open.get(i);
       if (x) {
-        s += (i ? ' ' : '') + '⟨' + row.slice(x.s, x.e + 1).map(r => r.w).join(' ') + '⟩' + x.kind;
+        s += glueAt(x.s) + '⟨' + row.slice(x.s, x.e + 1).map(r => r.w).join(' ') + '⟩' + x.kind;
         i = x.e + 1;
         continue;
       }
       const r = row[i];
-      s += (i ? ' ' : '') + (r.tag === 'punct' ? r.w : r.w + '[' + r.tag + ']');
+      s += glueAt(i) + (r.tag === 'punct' ? r.w : r.w + '[' + r.tag + ']');
       i++;
     }
     console.log(s);
@@ -313,12 +330,12 @@ else {
       const x = open.get(i);
       if (x) {
         const words = row.slice(x.s, x.e + 1).map(r => r.w).join(' ');
-        html += (i ? ' ' : '') + '<span class="pos-n" data-ph="' + x.kind + '">' + words + '</span>';
+        html += glueAt(x.s) + '<span class="pos-n" data-ph="' + x.kind + '">' + words + '</span>';
         i = x.e + 1;
         continue;
       }
       const r = row[i], t = lower(r.w);
-      html += (i ? ' ' : '') + (r.tag === 'punct' ? r.w
+      html += glueAt(i) + (r.tag === 'punct' ? r.w
         : r.tag === 'conj' ? '<span class="pos-join" data-rel="' + (REL[t] || 'add') + '">' + r.w + '</span>'
         : r.tag === 'wh' && WH_ADV.indexOf(t) === -1 ? '<span class="pos-n">' + r.w + '</span>'
         : '<span class="pos-' + (GROUP[r.tag] || 'n') + (r.tag === 'pron' && OBJ.indexOf(t) !== -1 ? ' pos-o' : '') + '">' + r.w + '</span>');
