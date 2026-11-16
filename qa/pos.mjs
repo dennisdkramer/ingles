@@ -359,6 +359,25 @@ function phrases(row) {
   return out;
 }
 
+/* verbs that take a recipient as well as a thing: "she gave the dog a bone", "he told me the truth" */
+const DITRANS = new Set(('give gives gave given giving send sends sent sending show shows showed shown showing ' +
+  'tell tells told telling offer offers offered offering hand hands handed handing pass passes passed passing ' +
+  'promise promises promised ' +
+  'promising teach teaches taught teaching lend lends lent lending pay pays paid paying owe owes owed owing ' +
+  'bring brings brought bringing read reads reading write writes wrote written writing mail mails mailed mailing ' +
+  'feed feeds fed feeding sell sells sold selling throw throws threw thrown throwing ask asks asked asking ' +
+  'cost costs charge charges charged award awards awarded grant grants granted allow allows allowed deny denies ' +
+  'denied refuse refuses refused wish wishes wished get gets got gotten getting make makes made making ' +
+  'find finds found finding leave leaves left saving save saves saved book books booked order orders ordered ' +
+  'cook cooks cooked sing sings sang sung kick kicks kicked cook').split(' '));
+/* verbs whose "for" phrase is a beneficiary: "she bought a coat for her son" */
+const BENEF = new Set(('buy buys bought buying get gets got gotten getting make makes made making cook cooks ' +
+  'cooked cooking save saves saved saving find finds found finding leave leaves left order orders ordered ' +
+  'book books booked keep keeps kept keeping hold holds held holding bring brings brought bringing').split(' '));
+/* these nouns say when or where, so they are never the object: "walked home", "worked all day" */
+const OBLIQUE_NOUN = /^(home|today|tomorrow|yesterday|tonight|now|then|here|there|back|away|upstairs|downstairs|outside|inside|downtown|abroad|overseas)$/;
+const DURATION_DET = /^(all|every|each)$/;
+
 /* Who does the verb, and what it acts on. Position, not meaning: inside each clause the nearest noun
    group before the first finite verb is the subject, and the noun groups after the verb chain are
    objects — until a preposition, because a noun after one belongs to the preposition, not the verb
@@ -387,21 +406,42 @@ function roles(row, ph) {
     for (let k = vi - 1; k >= 0; k--) if (c[k].tag === 'n' || c[k].tag === 'pron') { mark(c[k], 'subj'); break; }
     let ve = vi;
     while (ve + 1 < c.length && /^(aux|v|vm)$/.test(c[ve + 1].tag)) ve++;
-    const objs = [];
-    let afterPrep = false;
+    /* what follows the verb: noun groups, each with the preposition that introduced it (if any) */
+    const after = [];
+    let prep = null;
     for (let k = ve + 1; k < c.length; k++) {
       const u = c[k];
-      if (u.tag === 'prep') { afterPrep = true; continue; }
       if (/^(v|vm)$/.test(u.tag)) break;
+      if (u.tag === 'prep') { prep = lower(row[u.s].w); continue; }
       if (!NOMINAL.test(u.tag)) continue;
-      if (afterPrep) { afterPrep = false; continue; }
-      objs.push(u);
+      after.push({ u, prep, before: c[k - 1] });
+      prep = null;
     }
-    objs.forEach(u => mark(u, 'obj'));
+    const v = lower(row[c[ve].s].w);
+    const bare = after.filter(x => !x.prep);
+    const core = bare.filter(x => {
+      const head = lower(row[x.u.s].w);
+      if (OBLIQUE_NOUN.test(head)) return false;
+      const d = x.before && x.before.tag === 'det' ? lower(row[x.before.s].w) : '';
+      return !DURATION_DET.test(d);
+    });
+    /* the recipient: a second bare noun group, or the thing a to/for phrase gives to */
+    let iobj = null, dobj = null;
+    if (DITRANS.has(v) && core.length >= 2) { iobj = core[0]; dobj = core[1]; }
+    else if (core.length && DITRANS.has(v) && after.some(x => x.prep === 'to')) iobj = after.find(x => x.prep === 'to');
+    else if (core.length && BENEF.has(v) && after.some(x => x.prep === 'for')) iobj = after.find(x => x.prep === 'for');
+    if (core.length) dobj = dobj || core[0];
+    if (dobj) mark(dobj.u, 'obj');
+    if (iobj) mark(iobj.u, 'iobj');
+    const obliques = after.filter(x => x !== iobj && x !== dobj).map(x => rangeWords(row, x.u));
     const head = row[c[ve].s];
-    head.objs = objs.map(u => row.slice(u.s, u.e + 1).map(r => r.w).join(' '));
+    head.objs = { iobj: iobj ? rangeWords(row, iobj.u) : '', dobj: dobj ? rangeWords(row, dobj.u) : '',
+      obl: obliques };
   }
 }
+
+/* the words a unit covers, for reporting */
+function rangeWords(row, u) { return row.slice(u.s, u.e + 1).map(r => r.w).join(' '); }
 
 const argv = process.argv.slice(2);
 const isFlag = a => /^--/.test(a);
@@ -426,8 +466,10 @@ else {
     for (const x of ph) for (let j = x.s; j <= x.e; j++) inPh.set(j, j === x.s ? x.kind : '·');
     row.forEach((r, i) => console.log(r.w.padEnd(14) + ' ' + String(r.tag).padEnd(6) + ' ' +
       (inPh.has(i) ? '«' + inPh.get(i) + '» ' : '') + r.why +
-      (r.role ? ' · ' + (r.role === 'subj' ? 'SUBJECT' : 'OBJECT') : '') +
-      (r.objs ? ' · ' + (r.objs.length ? 'object follows: ' + r.objs.join(', ') : 'no object') : '')));
+      (r.role ? ' · ' + (r.role === 'subj' ? 'SUBJECT' : r.role === 'iobj' ? 'INDIRECT OBJECT' : 'DIRECT OBJECT') : '') +
+      (r.objs ? ' · ' + ([r.objs.iobj && 'iobj: ' + r.objs.iobj, r.objs.dobj && 'dobj: ' + r.objs.dobj]
+        .filter(Boolean).join(' · ') || 'no core object') +
+        (r.objs.obl.length ? ' · oblique: ' + r.objs.obl.join(', ') : '') : '')));
   } else if (mode === '--check') {
     const bad = row.filter(r => r.why.indexOf('UNPLACED') === 0);
     console.log(bad.length ? bad.map(r => r.w).join(', ') : 'all placed');
@@ -461,14 +503,14 @@ else {
       const x = open.get(i);
       if (x) {
         const words = row.slice(x.s, x.e + 1).map(r => r.w).join(' ');
-        const role = x.role === 'subj' ? ' pos-subj' : x.role === 'obj' ? ' pos-o' : '';
+        const role = x.role === 'subj' ? ' pos-subj' : x.role === 'obj' ? ' pos-o' : x.role === 'iobj' ? ' pos-i' : '';
         html += glueAt(x.s) + '<span class="pos-n' + role + '" data-ph="' + x.kind + '">' + words + '</span>';
         i = x.e + 1;
         continue;
       }
       const r = row[i], t = lower(r.w);
       const R = r.role === 'subj' ? ' pos-subj' : '';
-      const O = (r.role === 'obj' || (r.tag === 'pron' && OBJ.indexOf(t) !== -1)) ? ' pos-o' : '';
+      const O = r.role === 'iobj' ? ' pos-i' : (r.role === 'obj' || (r.tag === 'pron' && OBJ.indexOf(t) !== -1)) ? ' pos-o' : '';
       html += glueAt(i) + (r.tag === 'punct' ? r.w
         : r.tag === 'conj' ? '<span class="pos-join" data-rel="' + (REL[t] || 'add') + '">' + r.w + '</span>'
         : r.tag === 'vm' ? '<span class="pos-m pos-v' + R + O + '">' + r.w + '</span>'
