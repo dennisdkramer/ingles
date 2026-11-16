@@ -1005,7 +1005,6 @@
   #hlLayer .hlr-green{background:rgba(64,200,96,.34)}
   #noteLayer .ntr{position:absolute;border-radius:3px;mix-blend-mode:multiply;
     background:var(--bluebg)}
-  /* confirm dialog + toast */
   .dlgwrap{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;
     justify-content:center;padding:20px;background:rgba(24,33,54,.45)}
   .dlg{width:min(440px,100%);max-height:calc(100vh - 40px);overflow:auto;background:var(--paper);
@@ -1023,7 +1022,6 @@
     color:var(--cream);padding:8px 16px;border-radius:10px;z-index:99;display:none;
     font-weight:600;box-shadow:3px 3px 0 var(--tan)}
   .recind{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:99}
-  /* Complete? row */
   .complete-row{display:flex;justify-content:center;align-items:center;gap:8px;margin:14px 0}
   .complete-row button{margin:0}
   .complete-btn{display:block;margin:14px auto;width:fit-content;font-weight:700}
@@ -1031,7 +1029,6 @@
   .complete-btn.is-done{background:#0f766e;box-shadow:3px 3px 0 var(--tan)}
   .loadwrap{display:flex;align-items:center;justify-content:center;grid-column:1/-1;
     width:100%;padding:46px 0}
-  /* displays: a table of reference and a conversation */
   .chart{border-collapse:collapse;width:100%;margin:14px 0;background:var(--paper);
     border:2px solid var(--ink);box-shadow:5px 5px 0 var(--tan)}
   .panel .chart,.card .chart,.game .chart,.dialog .chart{border:0;box-shadow:none;margin:0}
@@ -1043,12 +1040,10 @@
   .dialog{--edge:var(--rose);margin:14px 0;padding:12px 16px;background:#fff8ea;
     border:2px solid var(--edge);border-radius:12px}
   .dialog p{margin:6px 0}
-  /* word bank */
   .chips > b{display:inline-block;background:var(--paper);border:2px solid var(--ink);
     border-radius:999px;padding:2px 12px;margin:2px 6px 2px 0;font-weight:600}
   .chips > span{font-style:italic}
   button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
-  /* audio player */
   .vz-play{display:block;margin:0}
   .vz-audio{display:block;width:100%}
   .vz-controls{display:none;align-items:center;gap:10px;margin:8px 0 10px}
@@ -1091,7 +1086,6 @@
   .game[data-kind="train"],.game[data-kind="teach|train"]{--edge:var(--purple)}
   .panel .chart,.card .chart{width:calc(100% - 20px)}
   .panel.center,.card.center{text-align:center}
-  /* items: the grid, the blanks and the two tile folds */
   .qgrid{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;
     column-gap:14px;row-gap:12px;min-width:0}
   .qgrid .qopts,.qgrid.stack .qopts{display:flex;flex-wrap:wrap;justify-content:flex-start;
@@ -1123,7 +1117,6 @@
     outline-offset:3px}
   @media (prefers-reduced-motion:reduce){.tsw-track,.tsw-thumb{transition-duration:.01ms}}
   @media (prefers-reduced-motion:reduce){.spinner{animation-duration:2.6s}}
-  /* the print copy: only the snapshot prints */
   @media print{
     body{background:white}
     body.printing>*:not(#printRoot){display:none!important}
@@ -2033,7 +2026,6 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
 
 /* index/teacher furniture, promoted out of the fallback layer */
 @layer shell{
-  /* teacher admin: one dropdown per track, one switch per book */
   .tadmin-books{display:flex;gap:10px;margin-top:2px;flex-wrap:wrap}
   .tadmin-books .bookdrop{flex:0 0 380px}
   .tadmin-books button{margin:0;white-space:nowrap}
@@ -2094,7 +2086,6 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
   .tswitch.pending input{cursor:progress}
   .spinner{width:38px;height:38px;border-radius:50%;border:4px solid rgba(24,33,54,.15);
     border-top-color:var(--tan);animation:spin .85s linear infinite}
-  /* the landing page */
   body.landing .landing-card{max-width:600px;margin:44px auto 12px;padding:32px 38px}
   body.landing .landing-title{font-size:26px;letter-spacing:.05em;margin:0 0 10px}
   body.landing #gtext{font-size:16px;margin:0 0 4px}
@@ -2103,7 +2094,6 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
   body.landing #needg p{font-size:15px;line-height:1.55;margin:10px 0}
   body.landing #needg button{margin:4px 0 8px}
   body.landing .landing-footer{letter-spacing:.12em;padding:22px 16px 32px}
-  /* the welcome line + the landing columns */
   .welcome-bar{width:1400px;margin:6px 0 0 15px;display:flex;flex-wrap:wrap;align-items:center;
     justify-content:center;gap:10px;padding:8px 14px;font-size:15px}
   .welcome-bar .landing-title{font-size:16px;letter-spacing:0;margin:0;font-family:inherit;
