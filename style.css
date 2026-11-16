@@ -325,43 +325,54 @@
      instead. A conjunction is not here — see #88 JOIN. Vary: --pos-purple, --pos-teal, --pos-pale, --pos-pink */
 @layer rx{
   .pos{line-height:2.2}
-  :is(.pos-v,.pos-n,.pos-adj,.pos-adv,.pos-prep){text-decoration-line:underline;text-underline-offset:3px}
+  /* EVERY mark is drawn as a background line, because the two techniques cannot agree: a
+     text-decoration is placed by the font's baseline plus an offset, a background by the element's
+     box. Rendered side by side they disagreed by a pixel, in different directions for different
+     thicknesses, and no combination of offsets fixed both. One technique, one reference: the box.
+     --mk-gap is that reference — the line's bottom sits this far above the box's bottom. */
+  :is(.pos-n,.pos-v,.pos-m,.pos-adj,.pos-adv,.pos-prep){
+    text-decoration-line:none;--mk-gap:1px;--mk-h:2px;
+    background-repeat:no-repeat;background-position:0 calc(100% - var(--mk-gap))}
   /* NOUN GROUP — a ramped line, so the role is a direction on one hue.
      subject: teal 100% at the start → pale blue at the end. object: the reverse, at 3px.
      any other noun, article or demonstrative: pale blue, full opacity, 2px flat. */
   .pos-n{--n-a:var(--pos-pale);--n-b:var(--pos-teal);
-    text-decoration-line:none;padding-bottom:1px;
-    background-image:linear-gradient(90deg,var(--n-a),var(--n-a));
-    background-repeat:no-repeat;background-size:100% 2px;background-position:0 calc(100% - 1px)}
-  .pos-n.pos-subj{background-image:linear-gradient(90deg,var(--n-b),var(--n-a));
-    background-size:100% 3px;background-position:0 calc(100% - 1px)}
-  .pos-n.pos-o{background-image:linear-gradient(90deg,var(--n-a),var(--n-b));
-    background-size:100% 3px;background-position:0 calc(100% - 1px)}
-  /* MODE — the background technique: a 1px purple line at 80%, plus a wash behind the word that runs
-     from 20% at the line up to 0% at the top of the box */
-  .pos-m{--m-c:color-mix(in srgb,var(--pos-purple) 80%,transparent);text-decoration-line:none;
+    background-image:linear-gradient(90deg,var(--n-a),var(--n-a));background-size:100% var(--mk-h)}
+  .pos-n.pos-subj{background-image:linear-gradient(90deg,var(--n-b),var(--n-a));background-size:100% 3px}
+  .pos-n.pos-o{background-image:linear-gradient(90deg,var(--n-a),var(--n-b));background-size:100% 3px}
+  /* MODE — a 1px purple line at 80%, plus a wash behind the word that runs from 20% at the line up to 0% */
+  .pos-m{--m-c:color-mix(in srgb,var(--pos-purple) 80%,transparent);
     background-image:linear-gradient(to top,color-mix(in srgb,var(--pos-purple) 20%,transparent),
       color-mix(in srgb,var(--pos-purple) 0%,transparent)),linear-gradient(90deg,var(--m-c),var(--m-c));
     background-repeat:no-repeat,no-repeat;background-size:100% 100%,100% 1px;
-    background-position:0 0,0 calc(100% - 1px)}
-  /* VERB — 2px dotted, the same purple at 80% */
-  .pos-v{text-decoration-style:dotted;text-decoration-thickness:2px;
-    text-decoration-color:color-mix(in srgb,var(--pos-purple) 80%,transparent)}
-  /* ADJECTIVE — 2px dark pink at 80% */
-  .pos-adj{text-decoration-style:solid;text-decoration-thickness:2px;
-    text-decoration-color:color-mix(in srgb,var(--pos-darkpink) 80%,transparent)}
-  .pos-adv{text-decoration-style:dashed;text-decoration-thickness:2px;text-decoration-color:var(--ptw)}
-  /* PREPOSITION — wavy, a pinkish purple at 50% */
-  .pos-prep{text-decoration-style:wavy;text-decoration-thickness:2px;
-    text-decoration-color:color-mix(in srgb,var(--pos-pink) 50%,transparent)}
+    background-position:0 0,0 calc(100% - var(--mk-gap))}
+  /* VERB — dotted, the same purple at 80%: a repeating gradient reads as dots on the same line */
+  .pos-v{--v-c:color-mix(in srgb,var(--pos-purple) 80%,transparent);
+    background-image:repeating-linear-gradient(90deg,var(--v-c) 0 2px,transparent 2px 6px);
+    background-size:100% var(--mk-h)}
+  /* ADJECTIVE — dark pink at 80% */
+  .pos-adj{--j-c:color-mix(in srgb,var(--pos-darkpink) 80%,transparent);
+    background-image:linear-gradient(90deg,var(--j-c),var(--j-c));background-size:100% var(--mk-h)}
+  /* ADVERB — dashed */
+  .pos-adv{--w-c:var(--ptw);
+    background-image:repeating-linear-gradient(90deg,var(--w-c) 0 5px,transparent 5px 9px);
+    background-size:100% var(--mk-h)}
+  /* PREPOSITION — wavy: a wave mask filled with the colour, so the hue stays a token */
+  .pos-prep{position:relative;--p-c:color-mix(in srgb,var(--pos-pink) 50%,transparent);background-image:none}
+  .pos-prep::after{content:'';position:absolute;left:0;right:0;height:var(--mk-h);
+    bottom:var(--mk-gap);background:var(--p-c);
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='2'%3E%3Cpath d='M0 1.4Q1.5 .2 3 1.4T6 1.4' fill='none' stroke='%23000' stroke-width='1.1'/%3E%3C/svg%3E");
+    mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='2'%3E%3Cpath d='M0 1.4Q1.5 .2 3 1.4T6 1.4' fill='none' stroke='%23000' stroke-width='1.1'/%3E%3C/svg%3E");
+    -webkit-mask-size:6px 2px;-webkit-mask-repeat:repeat-x;mask-size:6px 2px;mask-repeat:repeat-x}
   .pos-key{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 18px;margin:8px 0 0;
     font:400 12px/1.6 var(--sans);color:var(--ink-2)}
   .pos-key>span{display:inline-flex;align-items:baseline;gap:6px}
   .pos-key b{font-weight:400}
   /* the label mode prints what the line means, for a cramped column or a screenshot with no key */
-  .pos-labels :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep){text-decoration-line:none}
+  .pos-labels :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep){text-decoration-line:none;background-image:none}
   .pos-labels .pos-n{background-image:none}
   .pos-labels .pos-m{background-image:none}
+  .pos-labels .pos-prep::after{display:none}
   .pos-labels :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep)::after{margin-left:1px;
     font:700 .58em var(--sans);vertical-align:.62em;color:var(--ink-2)}
   .pos-labels .pos-n::after{content:'N'}
