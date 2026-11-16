@@ -23,6 +23,10 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S2] - A substantive phrase emits one `pos-n` span with nothing marked inside it: that/whether/if-clause, free relative, substantival infinitive, gerund subject <qa/pos.mjs> <"That he left surprised me" → ⟨That he left⟩ that-clause + surprised v; "What she said was true" → ⟨What she said⟩ + was v; "I told him to leave" → ⟨to leave⟩ infinitive; "Swimming is fun" → ⟨Swimming⟩ gerund>
    - [S3] - Re-run the twelve probe sentences, confirm the two preview pages' hand-written samples are untouched, commit and push <qa/pos.mjs> <all twelve read correctly; gate ✅; only qa/pos.mjs in the diff>
 ## [B47] - The star's opacity comes down 20% <"going back to the timeline, reduce the opacity of the star by 20%"> <style.css #97 TLN>
+## [B48] - The star and the arrow shrink 30% and dim 10% <"redyce the max size by 30% and reduce the opacity of the star and the arrows by 10%"; answer: the star and the arrow both: 30px → 21px and 30.8px → 21.6px> <style.css #97 TLN>
+   - [S1] - The star is 21px and floats at 70%, so its beat runs .595–.7 <style.css #97> <`.tln-star` 21px, opacity .7>
+   - [S2] - The arrow glyph is 21.6px and its breathe runs .675–.9, which is the same 10% off in both directions <style.css #97> <`.tln-end svg` 21.6px; `tln-nudge` opacities .675 and .9; base opacity .9 for reduced motion>
+
    - [S1] - `.tln-star` carries `opacity:.8`, which multiplies the beat's own .85–1 so the star now breathes .68–.8 <style.css #97> <one declaration; the pulse keeps its range, 20% lower>
 
 
