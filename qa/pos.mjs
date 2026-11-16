@@ -360,16 +360,17 @@ function phrases(row) {
 }
 
 /* verbs that take a recipient as well as a thing: "she gave the dog a bone", "he told me the truth" */
-const DITRANS = new Set(('give gives gave given giving send sends sent sending show shows showed shown showing ' +
-  'tell tells told telling offer offers offered offering hand hands handed handing pass passes passed passing ' +
-  'promise promises promised ' +
-  'promising teach teaches taught teaching lend lends lent lending pay pays paid paying owe owes owed owing ' +
-  'bring brings brought bringing read reads reading write writes wrote written writing mail mails mailed mailing ' +
-  'feed feeds fed feeding sell sells sold selling throw throws threw thrown throwing ask asks asked asking ' +
-  'cost costs charge charges charged award awards awarded grant grants granted allow allows allowed deny denies ' +
-  'denied refuse refuses refused wish wishes wished get gets got gotten getting make makes made making ' +
-  'find finds found finding leave leaves left saving save saves saved book books booked order orders ordered ' +
-  'cook cooks cooked sing sings sang sung kick kicks kicked cook').split(' '));
+const DITRANS = new Set(('give gives gave given giving send sends sent sending tell tells told telling ' +
+  'show shows showed shown showing offer offers offered offering hand hands handed handing pass passes passed ' +
+  'passing promise promises promised promising teach teaches taught teaching lend lends lent lending pay pays ' +
+  'paid paying owe owes owed owing bring brings brought bringing read reads reading write writes wrote written ' +
+  'writing mail mails mailed mailing feed feeds fed feeding sell sells sold selling throw throws threw thrown ' +
+  'throwing ask asks asked asking cost costs charge charges charged award awards awarded grant grants granted ' +
+  'allow allows allowed deny denies denied refuse refuses refused wish wishes wished get gets got gotten ' +
+  'getting make makes made making find finds found finding leave leaves left save saves saved book books booked ' +
+  'order orders ordered cook cooks cooked buy buys bought buying sing sings sang sung kick kicks kicked ' +
+  'play plays played playing draw draws drew drawn drawing build builds built building lose loses lost losing ' +
+  'win wins won winning choose chooses chose chosen choosing pick picks picked picking cut cuts cutting').split(' '));
 /* verbs whose "for" phrase is a beneficiary: "she bought a coat for her son" */
 const BENEF = new Set(('buy buys bought buying get gets got gotten getting make makes made making cook cooks ' +
   'cooked cooking save saves saved saving find finds found finding leave leaves left order orders ordered ' +
@@ -432,7 +433,12 @@ function roles(row, ph) {
     else if (core.length && BENEF.has(v) && after.some(x => x.prep === 'for')) iobj = after.find(x => x.prep === 'for');
     if (core.length) dobj = dobj || core[0];
     if (dobj) mark(dobj.u, 'obj');
-    if (iobj) mark(iobj.u, 'iobj');
+    if (iobj) {
+      mark(iobj.u, 'iobj');
+      /* which side the direct object sits on, so one rule can point the arrow at the recipient */
+      const side = dobj && dobj.u.s > iobj.u.s ? 'right' : 'left';
+      if (iobj.u.x) iobj.u.x.side = side; else row[iobj.u.s].side = side;
+    }
     const obliques = after.filter(x => x !== iobj && x !== dobj).map(x => rangeWords(row, x.u));
     const head = row[c[ve].s];
     head.objs = { iobj: iobj ? rangeWords(row, iobj.u) : '', dobj: dobj ? rangeWords(row, dobj.u) : '',
@@ -503,17 +509,19 @@ else {
       const x = open.get(i);
       if (x) {
         const words = row.slice(x.s, x.e + 1).map(r => r.w).join(' ');
-        const role = x.role === 'subj' ? ' pos-subj' : x.role === 'obj' ? ' pos-o' : x.role === 'iobj' ? ' pos-i' : '';
+        const role = x.role === 'subj' ? ' pos-subj' : x.role === 'obj' ? ' pos-o'
+          : x.role === 'iobj' ? ' pos-i' + (x.side ? ' data-side="' + x.side + '"' : '') : '';
         html += glueAt(x.s) + '<span class="pos-n' + role + '" data-ph="' + x.kind + '">' + words + '</span>';
         i = x.e + 1;
         continue;
       }
       const r = row[i], t = lower(r.w);
       const R = r.role === 'subj' ? ' pos-subj' : '';
-      const O = r.role === 'iobj' ? ' pos-i' : (r.role === 'obj' || (r.tag === 'pron' && OBJ.indexOf(t) !== -1)) ? ' pos-o' : '';
+      const O = r.role === 'iobj' ? ' pos-i' + (r.side ? ' data-side="' + r.side + '"' : '')
+        : (r.role === 'obj' || (r.tag === 'pron' && OBJ.indexOf(t) !== -1)) ? ' pos-o' : '';
       html += glueAt(i) + (r.tag === 'punct' ? r.w
         : r.tag === 'conj' ? '<span class="pos-join" data-rel="' + (REL[t] || 'add') + '">' + r.w + '</span>'
-        : r.tag === 'vm' ? '<span class="pos-m pos-v' + R + O + '">' + r.w + '</span>'
+        : r.tag === 'vm' ? '<span class="pos-m pos-v' + R + '">' + r.w + '</span>'
         : '<span class="pos-' + (GROUP[r.tag] || 'n') + R + O + '">' + r.w + '</span>');
       i++;
     }

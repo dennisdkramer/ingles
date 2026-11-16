@@ -325,6 +325,14 @@
     background-image:linear-gradient(90deg,var(--n-a),var(--n-a));background-size:100% var(--mk-h)}
   .pos-n.pos-subj{background-image:linear-gradient(90deg,var(--n-b),var(--n-a));background-size:100% 3px}
   .pos-n.pos-o{background-image:linear-gradient(90deg,var(--n-a),var(--n-b));background-size:100% 3px}
+  /* .pos-n.pos-i (the recipient): no line — an arrow on the side the direct object sits, pointing into it.
+     data-side="left|right" comes from the tagger. Vary: --i-c */
+  .pos-n.pos-i{--i-c:var(--ink-2);position:relative;background-image:none}
+  .pos-n.pos-i::after{content:'';position:absolute;top:-.1em;width:15px;height:.36em;background:var(--i-c);
+    clip-path:polygon(0 50%,30% 0,30% 30%,100% 30%,100% 70%,30% 70%,30% 100%)}
+  .pos-n.pos-i[data-side="right"]::after{right:-.34em}
+  .pos-n.pos-i[data-side="left"]::after{left:-.34em;
+    clip-path:polygon(100% 50%,70% 0,70% 30%,0 30%,0 70%,70% 70%,70% 100%)}
   /* .pos-m: 1px line + a wash from 20% at the line to 0 at the top */
   .pos-m{--m-c:color-mix(in srgb,var(--pos-purple) 80%,transparent);
     background-image:linear-gradient(to top,color-mix(in srgb,var(--pos-purple) 20%,transparent),
@@ -374,6 +382,8 @@
   .pos-labels :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep)::after{margin-left:1px;
     font:700 .58em var(--sans);vertical-align:.62em;color:var(--ink-2)}
   .pos-labels .pos-n::after{content:'N'}
+  .pos-labels .pos-n.pos-i::after{content:'N·I';position:static;width:auto;height:auto;background:none;
+    clip-path:none;top:auto;right:auto;left:auto}
   .pos-labels .pos-n.pos-o::after{content:'N·O'}
   .pos-labels .pos-v::after{content:'V'}
   .pos-labels .pos-m::after{content:'M'}
