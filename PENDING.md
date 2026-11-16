@@ -34,12 +34,13 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 ## [B58] - Subject and object nouns are tagged from position <"the last thing that the script needs to resolve is tagging subject and object nouns ... it will be very useful to see when a verb always requires an object noun to accompany it vs there just happens to be another noun after it"> <qa/pos.mjs>
    - [S1] - In each clause, the noun group before the first finite verb is the subject and a noun group after it is an object; they emit `pos-subj` and `pos-o`, and `--tags` says for each verb whether an object follows <qa/pos.mjs> <"I told him the truth" → I subj, him + truth objects; "She sings" → no object; "I saw it in 2019" → saw has an object, in 2019 does not>
    - [S2] - The eight sentences are re-painted from the tagger so the subject and object ramps show on the page <qa/preview-blocks.html> <anchors still land exactly; rows PASS>
+## [B60] - An empty block for the decision flow chart <"there was a flow chart vehicle that i told you to migrate over but it looks like its completely deleted now ... can you make an empty block for that on preview-menu.html and note the idea for us to work on later"> <qa/preview-menu.html>
+   - [S1] - A `flow` section joins the in-block group beside `[55]`, with a note box keyed `[flow]` and an empty `.block` holding only its heading; the idea and its candidate uses are stated on the page <qa/preview-menu.html> <section present, note box binds, block renders empty at full width, rows PASS>
 ## [B59] - Direct and indirect objects are told apart, and a noun after a verb is not always an object <"i am leaning towards we continue building ourselves ... if you find that something is not working well, stop and give me an update"> <qa/pos.mjs>
    - [S1] - A ditransitive verb with two bare noun groups marks the first indirect and the second direct; a `to` phrase after such a verb, or a `for` phrase after a benefactive verb, is the indirect object; any other noun after the verb is oblique and is not marked at all <qa/pos.mjs> <gave the dog a bone → iobj dog · dobj bone; gave a bone to the dog → dobj bone · iobj dog; worked all day → obl, no object; walked home → obl, no object; felt sick for days → no object>
 
 
 
-   - [S2] - The arrow glyph is 21.6px and its breathe runs .675–.9, which is the same 10% off in both directions <style.css #97> <`.tln-end svg` 21.6px; `tln-nudge` opacities .675 and .9; base opacity .9 for reduced motion>
 
    - [S1] - `.tln-star` carries `opacity:.8`, which multiplies the beat's own .85–1 so the star now breathes .68–.8 <style.css #97> <one declaration; the pulse keeps its range, 20% lower>
 
