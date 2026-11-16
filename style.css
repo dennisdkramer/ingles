@@ -336,6 +336,13 @@
   .pos-v{--v-c:color-mix(in srgb,var(--pos-purple) 80%,transparent);
     background-image:repeating-linear-gradient(90deg,var(--v-c) 0 3px,transparent 3px 6px);
     background-size:100% var(--mk-h)}
+  /* .pos-m.pos-v: the wash plus the dots on the mark baseline */
+  .pos-m.pos-v{
+    background-image:linear-gradient(to top,color-mix(in srgb,var(--pos-purple) 20%,transparent),
+      color-mix(in srgb,var(--pos-purple) 0%,transparent)),repeating-linear-gradient(90deg,var(--v-c) 0 3px,transparent 3px 6px);
+    background-repeat:no-repeat,no-repeat;
+    background-size:100% calc(100% - var(--mk-gap)),100% var(--mk-h);
+    background-position:0 0,0 calc(100% - var(--mk-gap))}
   /* .pos-adj */
   .pos-adj{--j-c:color-mix(in srgb,var(--pos-darkpink) 80%,transparent);
     background-image:linear-gradient(90deg,var(--j-c),var(--j-c));background-size:100% var(--mk-h)}
