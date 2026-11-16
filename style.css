@@ -25,7 +25,8 @@
 
 @layer legacy, reset, tokens, base, perf, layout, structure, control, look, state, motion, print, shell, u, rx;
 
-/* #10 TOKENS — Colour, spacing, type and depth. Set token anywhere; unset - back to :root. Vary: --accent-h (hue 0-360); --sp, --r1/--r2, --edge-w (length) */
+/* #10 TOKENS — colour, spacing, type, depth. Set a token on any element; unset falls back to :root.
+     Vary: --accent-h (hue 0-360), --sp, --r1/--r2, --edge-w (length) */
 @layer tokens{
   :root{
     /* one warm palette: cream paper, warm ink, ochre and clay. No cool hue is defined here, so no
@@ -79,7 +80,7 @@
   .bookbtn,.tswitch{--sw:oklch(90% .10 var(--track-h,65))}
 }
 
-/* #20 BASE — element defaults. Nothing to invoke; --serif/--sans (font), --ink/--surface (colour). h3 auto-letters A,B,C per section; h4 takes no letter */
+/* #20 BASE — element defaults. Vary: --serif/--sans (font), --ink/--surface (colour). h3 auto-letters A,B,C per section */
 @layer base{
   *,*::before,*::after{box-sizing:border-box}
   [hidden]{display:none!important}
@@ -120,7 +121,7 @@
   hr{border:0;border-top:1px solid var(--line);margin:calc(var(--sp)*1.6) 0}
 }
 
-/* #30 PERF — sections render only when near the viewport. Nothing to invoke. Vary: --section-est (length, 1200px = height guessed before paint) */
+/* #30 PERF — sections render only when near the viewport. Vary: --section-est (length, 1200px = height guessed before paint) */
 @layer perf{
   .content-area>section{content-visibility:auto;
     contain-intrinsic-size:auto var(--section-est,1200px)}
@@ -314,41 +315,34 @@
      Vary: --pos-purple, --pos-teal, --pos-pale, --pos-pink, --pos-darkpink */
 @layer rx{
   .pos{line-height:2.2}
-  /* EVERY mark is drawn as a background line, because the two techniques cannot agree: a
-     text-decoration is placed by the font's baseline plus an offset, a background by the element's
-     box. Rendered side by side they disagreed by a pixel, in different directions for different
-     thicknesses, and no combination of offsets fixed both. One technique, one reference: the box.
-     --mk-gap is that reference — the line's bottom sits this far above the box's bottom. */
+  /* --mk-gap (length): the line's bottom sits this far above the box's bottom */
   :is(.pos-n,.pos-v,.pos-m,.pos-adj,.pos-adv,.pos-prep){
     text-decoration-line:none;--mk-gap:0px;--mk-h:2px;
     background-repeat:no-repeat;background-position:0 calc(100% - var(--mk-gap))}
-  /* NOUN GROUP — a ramped line, so the role is a direction on one hue.
-     subject: teal 100% at the start → pale blue at the end. object: the reverse, at 3px.
-     any other noun, article or demonstrative: pale blue, full opacity, 2px flat. */
+  /* .pos-n: pale flat · .pos-n.pos-subj / .pos-o: 3px teal-to-pale ramp */
   .pos-n{--n-a:var(--pos-pale);--n-b:var(--pos-teal);
     background-image:linear-gradient(90deg,var(--n-a),var(--n-a));background-size:100% var(--mk-h)}
   .pos-n.pos-subj{background-image:linear-gradient(90deg,var(--n-b),var(--n-a));background-size:100% 3px}
   .pos-n.pos-o{background-image:linear-gradient(90deg,var(--n-a),var(--n-b));background-size:100% 3px}
-  /* MODE — a 1px purple line at 80%, plus a wash behind the word that runs from 20% at the line up to 0%.
-     The wash's bottom stops where the line's bottom stops, or it shows a 1px lip under the line. */
+  /* .pos-m: 1px line + a wash from 20% at the line to 0 at the top */
   .pos-m{--m-c:color-mix(in srgb,var(--pos-purple) 80%,transparent);
     background-image:linear-gradient(to top,color-mix(in srgb,var(--pos-purple) 20%,transparent),
       color-mix(in srgb,var(--pos-purple) 0%,transparent)),linear-gradient(90deg,var(--m-c),var(--m-c));
     background-repeat:no-repeat,no-repeat;
     background-size:100% calc(100% - var(--mk-gap)),100% 1px;
     background-position:0 0,0 calc(100% - var(--mk-gap))}
-  /* VERB — dotted, the same purple at 80%: 3px on, 3px off reads as a dot, not a dash */
+  /* .pos-v: 3px on, 3px off */
   .pos-v{--v-c:color-mix(in srgb,var(--pos-purple) 80%,transparent);
     background-image:repeating-linear-gradient(90deg,var(--v-c) 0 3px,transparent 3px 6px);
     background-size:100% var(--mk-h)}
-  /* ADJECTIVE — dark pink at 80% */
+  /* .pos-adj */
   .pos-adj{--j-c:color-mix(in srgb,var(--pos-darkpink) 80%,transparent);
     background-image:linear-gradient(90deg,var(--j-c),var(--j-c));background-size:100% var(--mk-h)}
-  /* ADVERB — dashed */
+  /* .pos-adv */
   .pos-adv{--w-c:var(--ptw);
     background-image:repeating-linear-gradient(90deg,var(--w-c) 0 5px,transparent 5px 9px);
     background-size:100% var(--mk-h)}
-  /* PREPOSITION — wavy: a wave mask filled with the colour, so the hue stays a token */
+  /* .pos-prep: a wave mask filled with colour */
   .pos-prep{position:relative;--p-c:color-mix(in srgb,var(--pos-pink) 50%,transparent);background-image:none}
   .pos-prep::after{content:'';position:absolute;left:0;right:0;height:var(--mk-h);
     bottom:var(--mk-gap);background:var(--p-c);
@@ -396,18 +390,15 @@
     --label-ink:color-mix(in srgb,var(--ink-2) 78%,var(--ink));
     position:relative;display:block;width:200px;min-inline-size:100px;height:56px;color:var(--c);
     container-type:inline-size}
-  /* where NOW sits: --now 0-100% on the axis or on any ancestor. Unset: the middle, as before */
-  /* how it gets wider: nothing = 200px · 1 = the width of its host · 2 = the width of an anchor string.
-     Only the rules grow — the star, the arrow and the words keep their own size */
+  /* --now (0-100%): where NOW sits; unset = 50% */
+  /* data-grow="1|2" = the host's width, or the width of an anchor string. Unset: 200px */
   .tln[data-grow="1"],.tln[data-grow="2"]{width:100%}
   .tln-anchor{display:inline-block;max-width:100%;vertical-align:top}
   .tln-anchor>span{display:block}
-  /* under 180px there is no room for THEN under the arrow, so it goes */
   @container (max-width:180px){
     .tln-then{display:none}
     .tln-head b{font-size:8.5px;letter-spacing:.1em}
   }
-  /* behind now: one 2px rule, masked into a log curve so it has no visible start */
   .tln-past{position:absolute;top:50%;translate:0 -50%;left:0;width:var(--now,50%);
     height:0;border-top:2px solid currentColor;
     -webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.28) 10%,rgba(0,0,0,.4) 20%,
@@ -416,7 +407,6 @@
     mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.28) 10%,rgba(0,0,0,.4) 20%,
       rgba(0,0,0,.49) 30%,rgba(0,0,0,.57) 40%,rgba(0,0,0,.63) 50%,rgba(0,0,0,.7) 60%,
       rgba(0,0,0,.76) 70%,rgba(0,0,0,.82) 80%,rgba(0,0,0,.89) 90%,#000 100%)}
-  /* now: the star in the middle, the word above it and over it, the arrow out of the flow */
   .tln-head{position:absolute;top:50%;left:var(--now,50%);translate:-50% -50%;
     display:grid;place-items:center;width:34px;z-index:1}
   .tln-star{width:21px;height:21px;fill:currentColor;stroke:none;opacity:.7;
@@ -426,7 +416,6 @@
     font:700 calc(10px + 3pt)/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;
     color:var(--label-ink);white-space:nowrap}
   @keyframes tln-beat{0%,100%{transform:scale(1);opacity:.85}45%{transform:scale(1.15);opacity:1}}
-  /* ahead of now: dashed, no fade, ending under a double right arrow that steps right every 1.5s */
   .tln-ahead{position:absolute;top:50%;translate:0 -50%;left:var(--now,50%);right:var(--end-w);height:2px;
     background-image:repeating-linear-gradient(90deg,currentColor 0 6px,transparent 6px 12px);
     background-size:12px 2px;animation:tln-dash 2s linear infinite}
@@ -434,25 +423,20 @@
     opacity:.9;display:grid;place-items:center;animation:tln-nudge 2s ease-in-out infinite}
   .tln-end svg{display:block;width:21.6px;height:21.6px;fill:none;stroke:currentColor;stroke-width:2;
     stroke-linecap:round;stroke-linejoin:round}
-  /* the motion lives in the dashes, which never reset; the arrow only breathes */
   @keyframes tln-dash{to{background-position:12px 0}}
   @keyframes tln-nudge{0%,100%{translate:0 0;opacity:.675}50%{translate:2px 0;opacity:.9}}
-  /* then: on the line, centred on the arrow, the same ink on paper */
   .tln-then{position:absolute;right:calc(var(--end-w) - 18px);
     top:50%;transform:translateY(-50%);z-index:2;
     text-shadow:rgba(200,200,200,.85) 0 0px 3px;
     font:700 calc(10px + 1pt)/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;
     color:var(--label-ink);white-space:nowrap}
-  /* before: the line's own past label, ink that thins out toward the left */
   .tln-before{position:absolute;left:8px;top:50%;transform:translateY(-50%);z-index:2;
     font:700 calc(10px + 1pt)/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;
     background-image:linear-gradient(90deg,color-mix(in srgb,var(--label-ink) 30%,transparent),
       color-mix(in srgb,var(--label-ink) 90%,transparent));
     -webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
-  /* the axis, pinned to one word: the host carries the mark (#90 `uw`/`an`), this section only puts
-     a chosen point of the axis under it. Each tense owns `--point`: the distance from the axis's left
-     edge to the point that must sit under the anchored word. Nothing of the axis itself changes;
-     only where it sits. Vary: --point (per data-tense), --pad (which side grew) */
+  /* .tlw: the host that carries #89 `an` and `anchor-scope:--pin`.
+     Vary: --point (per data-tense, the dotted distance to the anchored word), --pad (px added on the side the tense points away from) */
   .tlw{position:relative;width:min(560px,100%);margin:0 auto;padding-bottom:45.5px;--leg:14px;--lead:40px;
     anchor-scope:--pin}
   .tlw+.tlw{margin-top:36px}
@@ -499,8 +483,9 @@
 }
 
 
-/* ## VEHICLES — the block itself: its columns, structure, control and look. Members: #40 LAYOUT · #50 STRUCTURE · #51 SEQUENCE · #52 GRID · #53 PAIR · #60-#64 controls · #70 LOOK · #76/#80-#82 engine, state and motion
-     Foot: ## GAMES — engine-owned, in @layer legacy at the end of the file, because a game paints its own art and must lose to every lesson rule */
+/* ## VEHICLES — the block itself: columns, structure, control, look.
+     Members: #40 LAYOUT · #50 STRUCTURE · #51 SEQUENCE · #52 GRID · #53 PAIR · #60-#64 controls · #70 LOOK · #76/#80-#82 engine, state, motion
+     ## GAMES sits below, in @layer legacy. */
 
 /* #40 LAYOUT — .content-area 1200px. .itemrow > .itemsize-third|-half|-twothird|.itemsize = 4/6/8/12 of 12; unset full width. Frames in a row end on one line. Vary: --row-gap, --col-gap, --section-gap (length) */
 @layer layout{
@@ -639,10 +624,8 @@
     background:var(--sunken);border-radius:0 0 var(--r1) var(--r1)}
 }
 
-/* #53 PAIR — data-structure="pair" > .sides > 2x .side, SAME child count each (subgrid rows). The two
-   sides are two LANGUAGES (or two versions), never a right and a wrong answer, so they are painted with
-   weight only — a grey card and a paper card. Red and green are reserved for feedback (see #80), and a
-   Portuguese line tells you it is Portuguese by being ochre italic, not by being red. Vary: --pair-rows */
+/* #53 PAIR — data-structure="pair" > .sides > 2x .side, the same child count in each (subgrid rows).
+     USE: two languages, or two versions, of one sentence. Vary: --pair-rows */
 @layer structure{
   .block[data-structure="pair"] .sides{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;
     grid-template-rows:repeat(var(--pair-rows,3),auto)}
@@ -729,7 +712,7 @@
   .reveal[open] .body>div{padding:10px 12px}
 }
 
-/* #76 ENGINE — nothing to invoke. engine2.js writes label.opt.correct, .ans beside a typed field, and reads .qitem[data-a] on .opts. Vary: --ok (colour) */
+/* #76 ENGINE — engine2.js writes label.opt.correct and .ans beside a typed field, and reads .qitem[data-a] on .opts. Vary: --ok (colour) */
 @layer state{
   label.opt.correct{border-color:var(--ok);
     background:color-mix(in oklab,var(--ok) 10%,var(--surface-2))}
@@ -741,7 +724,8 @@
   body.is-completed .gap{background:var(--sunken)}
 }
 
-/* #70 LOOK — data-look="tint|outline|grain|tape|float|dark", any block. outline: a standout tip or an interesting note — accent frame + deep shadow. Unset: paper + 3px accent rule. Vary: --accent-h, --edge-w (outline) */
+/* #70 LOOK — data-look="tint|outline|grain|tape|float|dark" on .block.
+     USE: outline for a standout tip or an interesting note. Unset: paper + 2px accent rule. Vary: --accent-h, --edge-w (outline) */
 @layer look{
   .block[data-look="tint"]{background:color-mix(in oklab,var(--accent) 8%,var(--paper));
     border-top-color:var(--accent)}
@@ -779,10 +763,8 @@
     border-color:var(--line-2);color:var(--ink)}
 }
 
-/* #80 STATE — use colours as indicators: GREEN correct · RED wrong · YELLOW odd (technically right but
-   nobody says it, or close enough that nobody complains and still technically wrong).
-   data-state="correct|wrong|odd|done" on .opt, .side, .qitem or the .block; mark = <i class="mark"></i>.
-   Unset: nothing shows. Vary: --ok/--err/--warn (colour) */
+/* #80 STATE — data-state="correct|wrong|odd|done" on .opt, .side, .qitem or .block; mark = <i class="mark"></i>.
+     green correct · red wrong · yellow odd. Unset: no state shows. Vary: --ok/--err/--warn (colour) */
 @layer state{
   [data-state="correct"]{--state:var(--ok)}
   [data-state="wrong"]{--state:var(--err)}
@@ -840,7 +822,8 @@
   .ring>b::after{content:counter(p) "%"}
 }
 
-/* #90 MOTION — blocks rise once on paint; data-motion="rise" = scroll-linked. .flip > input + .card3d > 2x .face flips. #focus = reading width. Vary: --dur (time), --flip-h (length) */
+/* #90 MOTION — .block[data-motion="rise"] · .flip > input + .card3d > 2x .face · #focus:target .content-area.
+     USE: one entrance per page, a fold that turns, a reading-width pass. Vary: --dur (time), --flip-h (length) */
 @layer motion{
   @keyframes rise-in{from{opacity:.35;translate:0 14px}to{opacity:1;translate:0 0}}
   @keyframes mark-in{from{scale:0;opacity:0}to{scale:1;opacity:1}}
@@ -875,7 +858,7 @@
   body:has(#focus:checked) .block[data-structure="prose"]{--measure:64ch}
 }
 
-/* #95 PRINT — nothing to invoke. Paper keeps content, drops surface, unfolds .reveal and .flip */
+/* #95 PRINT — @media print rules for .block, .reveal, .flip, .mark, .meter. Vary: none */
 
 @layer print{
   @media print{
@@ -901,7 +884,7 @@
   }
 }
 
-/* #98 SHELL — nothing to invoke. .brand, .control-bar, .barhelp, footer, #feed. Vary: --brand-h (length) */
+/* #98 SHELL — .brand, .control-bar, .welcome-bar, .barhelp, footer, #feed. Vary: --brand-h (length) */
 @layer shell{
   .brand{width:1400px;margin-left:15px;padding:20px 14px 0;text-align:center;
     display:block;user-select:none;-webkit-user-select:none}
@@ -960,9 +943,8 @@
     transition-duration:.001s!important}
 }
 
-/* #L0 LEGACY — style.css ported whole: tokens it alone carries, the chrome the engine draws (popup,
-   note/highlight layers, dialog, toast, Complete?), the displays and the games. Declared first, so any
-   layer above wins per property: the layers above speak about a selector, the port stays silent. */
+/* #L0 LEGACY — the whole old style.css, at the weakest layer: engine chrome (popup, note and highlight layers,
+   dialog, toast, Complete?), the displays, the games. Vary: none */
 @layer legacy{
   button{background:var(--track-ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;
     margin:4px 4px 4px 0;font:600 14px var(--serif);cursor:pointer;
@@ -1510,8 +1492,11 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 /* the bite reels him where he STANDS: the shake has to carry his own x (`--dx`), because a bare
    translateX keyframe drops the inline transform the walk put on him and he snaps back to the middle
    of the road for the length of the animation — the one moment he must not move. */
-/* ## GAMES — ENGINE-OWNED. A page that carries a `.game` block also carries <script src="../engine4.js"></script> after ../engine2.js; the art is drawn by the engine, so NEVER author or restyle a `.g4-*` element. Content is identical for every skin, so `data-game` is a presentation choice, never a content choice. */
-/* ## GAME LEVERS — `data-*` on the `.game` element, read by the runner: `data-time` ms per item (0 = no deadline; this is the difficulty), `data-limit` seconds for the whole run, `data-retry` whether a run may repeat (default 1; the page's quiz writes 0), `data-shuffle` (default on), `data-rounds` items a run uses (0 = all), `data-prompt` stem on the HUD line, `data-sound`, `data-skin` (free-form; CSS themes on it, the engine never reads it). */
+/* ## GAMES — engine4.js after engine2.js on any page with a `.game` block. `.g4-*` is engine-drawn: never author or restyle it.
+     data-game is a skin. Content is the same for every skin. */
+/* ## GAME LEVERS — `data-*` on the `.game` element, read by the runner:
+     data-time (ms per item, 0 = no deadline) · data-limit (s for the run) · data-retry (default 1) · data-shuffle (default on) ·
+     data-rounds (items per run, 0 = all) · data-prompt (HUD stem) · data-sound · data-skin (CSS themes on it) */
 .g4-runner.bitten{animation:g4reel .42s ease}
 /* the bite always ends the same way: he goes down where he stands — the `down` state is built on his own
    --dx, so the fall happens at the door he chose — and then he is gone, until the street comes back
