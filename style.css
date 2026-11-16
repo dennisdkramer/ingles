@@ -329,7 +329,7 @@
      rolls over it from tail to tip. data-side="left|right" comes from the tagger. Vary: --i-c, --i-w */
   .pos-n.pos-i{--i-c:var(--ink-2);--i-w:20px;--i-rot:30deg;--i-sw:2;position:relative;background-image:none}
   .pos-n.pos-i .pos-i-arr{position:absolute;bottom:calc(100% - 9px);right:-.5em;display:block;
-    width:var(--i-w);height:calc(var(--i-w)*1.03);pointer-events:none;color:var(--i-c);rotate:var(--i-rot);
+    width:var(--i-w);height:calc(var(--i-w)*1.03);pointer-events:none;color:var(--i-c);transform:rotate(var(--i-rot));
     mask-image:linear-gradient(to bottom left,transparent 0 16%,#000 30% 70%,transparent 84% 100%);
     mask-size:100% 100%;mask-repeat:no-repeat;
     animation:iobj-roll 2s linear infinite}
