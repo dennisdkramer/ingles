@@ -18,6 +18,11 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S1] - `--pos-darkpink` joins the mark tokens, since dark pink is a hue the four did not cover <style.css #10> <one new token declared at the root>
    - [S2] - The six numbers change as asked: mode wash starts at 20%, a plain noun's line is fully opaque, subject/object lines are 3px, the adjective is dark pink at 80% <style.css #94> <the computed values read 0.2 / 1.0 / 3px / darkpink 0.8>
    - [S3] - The two background-drawn marks drop 1px so their lines sit level with the text-decoration ones <style.css #94> <`.pos-n` at calc(100% - 1px), subject/object at calc(100% - 2px), `.pos-m` line at 100%>
+## [B46] - The mode-carrying-verb and substantive-phrase parser <"can you build the 'mode-carrying-verb' and 'substantive phrase' parser"; answer to my question: one pos-n span around the whole phrase, inner words unmarked> <qa/pos.mjs>
+   - [S1] - The auxiliary chain survives an adverb (`not`), and be/have/do become the verb itself when no verb follows them <qa/pos.mjs> <"I do not know" → know = v; "I have a car" → have = v; "I have finished" → m; "I do the dishes" → do = v; "He does like it" → m; "He is happy" → is = v; "She is working" → m>
+   - [S2] - A substantive phrase emits one `pos-n` span with nothing marked inside it: that/whether/if-clause, free relative, substantival infinitive, gerund subject <qa/pos.mjs> <"That he left surprised me" → ⟨That he left⟩ that-clause + surprised v; "What she said was true" → ⟨What she said⟩ + was v; "I told him to leave" → ⟨to leave⟩ infinitive; "Swimming is fun" → ⟨Swimming⟩ gerund>
+   - [S3] - Re-run the twelve probe sentences, confirm the two preview pages' hand-written samples are untouched, commit and push <qa/pos.mjs> <all twelve read correctly; gate ✅; only qa/pos.mjs in the diff>
+
 
 
 
