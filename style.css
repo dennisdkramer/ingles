@@ -153,17 +153,13 @@
 }
 
 /* #89 MARKS — pointing a figure at words in a sentence. Any figure can use this; nothing here knows what the figure is.
-     <span class="uw">…</span> = the run of words the figure is about (1px underline, faint). Use it for the verb group only, not the pronoun.
-     <span class="an">…</span> = the ONE word the figure is pinned to, or only the contracted letters of it ('ve, 'm, 'll) — 2px underline and the anchor.
-     Both paint with text-decoration (never a border), so a word may also carry a #94 POS class and show ONE line: the mark's thickness and
-     colour, the class's line style. The host element carries `anchor-scope:--pin`; any absolutely positioned child then puts a chosen point
-     under that word: left:calc(anchor(50%) - var(--pin)). One anchor per host; `anchor-scope` keeps the name private, so a page may carry many.
-     Vary: --mk-w (thickness), --mk-c (colour) */
+     <span class="an">…</span> = the ONE word the figure is pinned to, or only the contracted letters of it ('ve, 'm, 'll).
+     It PAINTS NOTHING: its job is the anchor, so a word keeps whatever #94 POS look it has. The host carries
+     `anchor-scope:--pin`; any absolutely positioned child then puts a chosen point under that word:
+     left:calc(anchor(50%) - var(--pin)). One anchor per host; `anchor-scope` keeps the name private, so a page may carry many.
+     Vary: none */
 @layer rx{
-  .uw,.an{text-decoration-line:underline;text-decoration-thickness:var(--mk-w);
-    text-decoration-color:var(--mk-c);text-underline-offset:3px}
-  .uw{position:relative;font-weight:700;--mk-w:1px;--mk-c:color-mix(in srgb,var(--accent) 40%,transparent)}
-  .an{anchor-name:--pin;--mk-w:2px;--mk-c:var(--accent)}
+  .an{anchor-name:--pin}
 }
 
 /* #91 GLOSS — .glossbtn popovertarget="ID" opens its .defcard popover id="ID" beside the word, no script. Use: a new word, or a PT literal that is not the meaning/use. One id per card. Vary: none */
