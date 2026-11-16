@@ -31,12 +31,10 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S1] - The specimen sentence, its key, the composition line and its caption go; one legend line takes their place, each item wearing the class it names <qa/preview-blocks.html> <one row: Noun (Subject, Object) · Mode Carrier · Verb · Adverb · Preposition · Adjective · Conjunction, each painted by its own class>
 ## [B51] - The provisional timeline marks go <"those timeline marks were provisional. remove them from the test page and you can remove them from the css too unless theyre in use for something else"> <style.css #89 MARKS; qa/preview-blocks.html>
    - [S1] - `.uw` is deleted; `.an` keeps only its anchor role and paints nothing; the eight sentences lose their `uw` wrappers but keep `an` <style.css #89; qa/preview-blocks.html> <no `.uw` in the sheet or on the page; eight axes still land word centre = axis left + --point>
-## [B52] - Headers become a build contract, and nothing else <"the CSS should NOT have text that defines grammar or anything else, the headers are ONLY for the styling info that the build needs to know ... write rules into the CSS file ... then do a sweep and trim all that shit out"> <style.css; qa/brief.mjs --css>
-   - [S1] - The rule itself goes at the top of the sheet, in the strongest wording available <style.css #00> <`qa/brief.mjs --css` prints it first>
-   - [S2] - IN-BLOCK VISUALS swept: ##, #88, #89, #91, #92, #93, #94, #96, #97 <style.css> <each header is call · use · vary; no quantities, rationale, grammar or "there is no">
-   - [S3] - VEHICLES swept: ##, #40, #50, #51, #52, #53, #60, #61, #62, #63, #64, #70, #76, #80, #81, #82, #90 <style.css> <same three parts only>
-   - [S4] - The rest swept: #10, #20, #30, #95, #98, #99, ## GAMES, ## GAME LEVERS <style.css> <same>
-   - [S5] - Prove the generator still reads the sheet, then commit and push <qa/brief.mjs --css; npm run build:lessons; qa/check.mjs> <--css prints every header, gate ✅, only style.css in the diff>
+## [B53] - The taxonomy the pedagogy teaches, and a chart of what is in each class <"a/the - adjective group; object pronouns - noun group / lets put relative, demonstrative pronouns ... as adjectives / question words mode carriers / put each type as a header of a chart, and in each column list all the things that weve categorized under that label"> <qa/pos.mjs; qa/preview-blocks.html>
+   - [S1] - The groups move: determiner and demonstrative → adjective, interrogative word → mode, relative pronoun → adjective, object pronoun → noun group with `pos-o` <qa/pos.mjs> <"the man that I met" → that adj; "What she said" → What m; "the report" → the adj; "told me" → me n.pos-o>
+   - [S2] - `--classes` prints every closed-class member under the group it belongs to, so the chart is generated rather than retyped <qa/pos.mjs> <seven blocks, each a group and its words>
+   - [S3] - The legend line becomes a 7-column chart inside the block: each header wears its class, each column lists its members <qa/preview-blocks.html; style.css #94> <table renders 7 columns, headers painted by their own class, rows 0 ragged>
 
 
 
