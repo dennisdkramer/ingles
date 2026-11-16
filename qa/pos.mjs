@@ -132,6 +132,8 @@ function tag(words) {
     if (IN[t]) {
       /* a wh-word or `that` right after a noun is a RELATIVE pronoun, and takes the adjective group */
       if (ptag === 'n' && (IN[t] === 'wh' || t === 'that')) return rec('rel', 'relative pronoun after a noun');
+      /* `that` right after a question word is a demonstrative pointing at a noun: "what THAT guy did" */
+      if (t === 'that' && ptag === 'wh') return rec('det', 'demonstrative before a noun');
       if (t === 'to' && (IN[next] === 'aux' || !IN[next])) {
         /* a substantival infinitive takes a noun's slot (I want TO GO / TO GO is hard), so it joins the
            noun group. Everywhere else the marker is a connector, and the remainder of the groups is the
@@ -222,20 +224,43 @@ function tag(words) {
     if (out[i].tag !== 'aux') continue;
     const w = lower(out[i].w);
     if (MODAL.test(w)) continue;
+    /* an auxiliary right after a question word is the question's own: "What DID that guy do?" */
+    if (i > 0 && out[i - 1].tag === 'wh') continue;
     /* look ahead for the verb it would govern, across adverbs and up to four words */
     let verb = false;
     for (let j = i + 1; j < out.length && j <= i + 4; j++) {
       const t = out[j];
       if (t.tag === 'adv' && ADV_SKIP.test(lower(t.w))) continue;
-      if (t.tag === 'v' || /^(been|being|got|gotten)$/.test(lower(t.w))) { verb = true; break; }
+      if (t.tag === 'v' || t.tag === 'aux' || /^(been|being|got|gotten)$/.test(lower(t.w))) { verb = true; break; }
       if (t.tag === 'punct') break;
       if (/^(det|n|adj|num|pron)$/.test(t.tag)) break;   /* that is its object, so no verb follows */
     }
     if (HV_F.test(w) && /^to$/.test(lower((out[i + 1] || {}).w || ''))) verb = true;   /* have to go */
+    /* an auxiliary, then a subject, then a verb is inversion: "which book DID YOU read", "how ARE they" */
+    if (!verb) {
+      let sawSubj = false, inv = false;
+      for (let m = i + 1; m < out.length && m <= i + 4; m++) {
+        const t = out[m];
+        if (/^(pron|n|det)$/.test(t.tag)) sawSubj = true;
+        else if (t.tag === 'v') { inv = sawSubj; break; }
+        else if (t.tag === 'punct') break;
+      }
+      if (inv) verb = true;
+    }
     if (!verb && (BE_FORM.test(w) || HV_F.test(w) || DO_F.test(w))) {
       out[i].tag = 'v';
       out[i].why = 'nothing after it to govern = the verb itself (not a mode word)';
     }
+  }
+  /* 7. a demonstrative splits by use: before a noun it is a determiner (adjective group), standing
+     alone it is a demonstrative pronoun (noun group). */
+  const DEM = /^(this|that|these|those)$/;
+  for (let i = 0; i < out.length; i++) {
+    if (out[i].tag !== 'det' || !DEM.test(lower(out[i].w))) continue;
+    const nx = out[i + 1];
+    const mod = nx && /^(n|adj|num)$/.test(nx.tag);
+    out[i].tag = mod ? 'adj' : 'n';
+    out[i].why = mod ? 'demonstrative + noun = a determiner' : 'demonstrative standing alone = a pronoun';
   }
   return out;
 }
@@ -256,6 +281,27 @@ const REL_WORDS = 'that which who whom whose where when'.split(' ');
 
 function phrases(row) {
   const out = [];
+  /* a wh-word opens a substantive clause when a noun of some kind stands between it and the first
+     verb — "what that guy did", "which book he read". An auxiliary in that stretch makes it a
+     question instead, and a question is not a substantive. */
+  const opensClause = k => {
+    for (let j = k + 1; j < row.length; j++) {
+      const tg = row[j].tag;
+      if (tg === 'punct') return false;
+      if (tg === 'conj' && lower(row[j].w) !== 'that') return false;
+      if (tg === 'aux') {
+        /* an auxiliary followed by a subject and then a verb is inversion, so a question:
+           "which book DID YOU read" */
+        for (let m = j + 1; m < Math.min(row.length, j + 4); m++) {
+          if (/^(n|pron|det|adj|num)$/.test(row[m].tag)) return false;
+          if (row[m].tag === 'v') break;
+        }
+        continue;
+      }
+      if (tg === 'v') return true;
+    }
+    return false;
+  };
   for (let i = 0; i < row.length; i++) {
     const t = row[i], w = lower(t.w);
     let kind = '';
@@ -266,9 +312,8 @@ function phrases(row) {
       const before = v !== -1 ? lower(row[v].w) : '';
       if (w === 'that' && (v !== -1 && SAY.test(before) || i === 0)) kind = 'content-clause';
       if (w !== 'that' && v !== -1 && IF_VERB.test(before)) kind = 'content-clause';
-    } else if (/^(what|whoever|whatever|whichever)$/.test(w)) {
-      const nx = row[i + 1];
-      if (nx && (nx.tag === 'pron' || nx.tag === 'v')) kind = 'free-relative';
+    } else if (/^(what|whoever|whatever|whichever|which|who)$/.test(w)) {
+      if (opensClause(i)) kind = 'substantive';
     } else if (t.tag === 'infn') {
       kind = 'infinitive';
     }
