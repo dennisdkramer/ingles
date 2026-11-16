@@ -39,8 +39,8 @@ const CLS = { n: 'n', v: 'v', adj: 'adj', adv: 'adv', det: 'det', pron: 'pron', 
    The ten internal tags stay, because the reasons are still worth printing.
    KNOWN MISS: be/have/do are tagged from the closed-class lexicon, so `I have a car` and `I do the
    dishes` come out as mode words. `--tags` shows this, and the fix is a context rule, not a lexicon. */
-const GROUP = { n: 'n', v: 'v', adj: 'adj', adv: 'adv', det: 'n', pron: 'n', prep: 'prep', wh: 'n', aux: 'm', num: 'n',
-  infn: 'n', infp: 'prep' };
+const GROUP = { n: 'n', v: 'v', adj: 'adj', adv: 'adv', det: 'adj', pron: 'n', prep: 'prep', wh: 'm', aux: 'm', num: 'n',
+  infn: 'n', infp: 'prep', rel: 'adj' };
 /* wh-words split: the pronominal ones take a noun's slot, the rest are adverbs */
 const WH_ADV = 'when where why how'.split(' ');
 /* only pronouns whose form is object-only can be marked as the object; you/it/her are both cases */
@@ -130,6 +130,8 @@ function tag(words) {
 
     /* 1. closed class: a finite list, no guessing */
     if (IN[t]) {
+      /* a wh-word or `that` right after a noun is a RELATIVE pronoun, and takes the adjective group */
+      if (ptag === 'n' && (IN[t] === 'wh' || t === 'that')) return rec('rel', 'relative pronoun after a noun');
       if (t === 'to' && (IN[next] === 'aux' || !IN[next])) {
         /* a substantival infinitive takes a noun's slot (I want TO GO / TO GO is hard), so it joins the
            noun group. Everywhere else the marker is a connector, and the remainder of the groups is the
@@ -188,6 +190,8 @@ function tag(words) {
     /* 3. local context */
     if (ptag === 'det' || ptag === 'adj') return rec('n', 'after a determiner/adjective = noun');
     if (ptag === 'aux') return rec('v', 'after an auxiliary = verb');
+    if (ptag === 'wh' && /^(which|what|whose)$/.test(lower(prev.w)))
+      return rec('n', 'noun after an interrogative determiner');
     if (ptag === 'wh') return rec('v', 'after a wh-word = the verb of its clause');
     if (ptag === 'adv' && /^(very|so|too|quite|really|rather)$/.test(lower(prev.w))) return rec('adj', 'after an intensifier = adjective');
     if (ptag === 'prep') return rec('n', 'after a preposition = noun');
@@ -247,6 +251,8 @@ function tag(words) {
    the second one belongs to what contains it. That is why the spans are found after tagging. */
 const SAY = /^(say|says|said|tell|tells|told|ask|asks|asked|know|knows|knew|known|think|thinks|thought|believe|believes|believed|hope|hopes|hoped|wish|wishes|wished|wonder|wonders|wondered|doubt|doubts|doubted|feel|feels|felt|seem|seems|seemed|appear|appears|appeared|notice|notices|noticed|remember|remembers|remembered|forget|forgets|forgot|forgotten|hear|hears|heard|see|sees|saw|seen|show|shows|showed|shown|suggest|suggests|suggested|mean|means|meant|explain|explains|explained|agree|agrees|agreed|promise|promises|promised|answer|answers|answered|reply|replies|replied|admit|admits|admitted|deny|denies|denied|realise|realize|realises|realizes|realised|realized|guess|guesses|guessed|suppose|supposes|supposed|assume|assumes|assumed)$/;
 const IF_VERB = /^(ask|asks|asked|know|knows|knew|known|wonder|wonders|wondered|doubt|doubts|doubted|see|sees|saw|seen|tell|tells|told|say|says|said|remember|remembers|remembered|forget|forgets|forgot|decide|decides|decided|check|checks|checked)$/;
+/* the words that can be a relative pronoun; the group they take is the adjective group */
+const REL_WORDS = 'that which who whom whose where when'.split(' ');
 
 function phrases(row) {
   const out = [];
@@ -289,9 +295,9 @@ const argv = process.argv.slice(2);
 const isFlag = a => /^--/.test(a);
 const mode = isFlag(argv[0]) ? argv[0] : '';
 const sentence = (isFlag(argv[0]) ? argv.slice(1) : argv).join(' ').trim();
-if (!sentence) { console.error('usage: node qa/pos.mjs [--tags|--check|--text] "sentence"'); process.exitCode = 2; }
+if (!sentence && mode !== '--classes') { console.error('usage: node qa/pos.mjs [--tags|--check|--text|--classes] "sentence"'); process.exitCode = 2; }
 else {
-  const row = tag(clitic(tokenize(sentence)));
+  const row = sentence ? tag(clitic(tokenize(sentence))) : [];
 
   const ph = phrases(row);
   const open = new Map(ph.map(x => [x.s, x]));
@@ -310,6 +316,16 @@ else {
   } else if (mode === '--check') {
     const bad = row.filter(r => r.why.indexOf('UNPLACED') === 0);
     console.log(bad.length ? bad.map(r => r.w).join(', ') : 'all placed');
+  } else if (mode === '--classes') {
+    /* every closed-class member, under the group the sheet paints it with — the chart is read off this */
+    const g = {};
+    const add = (grp, w) => { (g[grp] = g[grp] || new Set()).add(w); };
+    for (const k of Object.keys(LEX)) for (const w of LEX[k]) add(k === 'conj' ? 'join' : (GROUP[k] || 'n'), w);
+    for (const w of ADJ_CLOSED) add('adj', w);
+    for (const w of ADJ_OPEN) add('adj', w);
+    for (const w of REL_WORDS) add('adj', w);
+    for (const [k, label] of [['n', 'noun'], ['m', 'mode'], ['v', 'verb'], ['adv', 'adverb'], ['prep', 'preposition'], ['adj', 'adjective'], ['join', 'conjunction']])
+      console.log(label + '\t' + [...(g[k] || [])].sort().join(' '));
   } else if (mode === '--text') {
     let s = '', i = 0;
     while (i < row.length) {
@@ -337,7 +353,6 @@ else {
       const r = row[i], t = lower(r.w);
       html += glueAt(i) + (r.tag === 'punct' ? r.w
         : r.tag === 'conj' ? '<span class="pos-join" data-rel="' + (REL[t] || 'add') + '">' + r.w + '</span>'
-        : r.tag === 'wh' && WH_ADV.indexOf(t) === -1 ? '<span class="pos-n">' + r.w + '</span>'
         : '<span class="pos-' + (GROUP[r.tag] || 'n') + (r.tag === 'pron' && OBJ.indexOf(t) !== -1 ? ' pos-o' : '') + '">' + r.w + '</span>');
       i++;
     }

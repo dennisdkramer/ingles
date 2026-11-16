@@ -311,6 +311,7 @@
 /* #94 POS — <p class="pos"> with each word in <span class="pos-n|pos-v|pos-m|pos-adj|pos-adv|pos-prep">, and `.pos-o` on a noun that is the object.
      USE: showing what job each word does, on the words a figure is about.
      Legend: <p class="pos-key"><span><b class="pos-n">report</b> noun</span>…</p> — each item wears the class it names.
+     Chart: <table class="poschart"> with one <th> per group, each wearing its class.
      On a container carrying `pos-labels` the tag prints instead of the line.
      Vary: --pos-purple, --pos-teal, --pos-pale, --pos-pink, --pos-darkpink */
 @layer rx{
@@ -352,6 +353,11 @@
   .pos-key{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 18px;margin:8px 0 0;
     font:400 12px/1.6 var(--sans);color:var(--ink-2)}
   .pos-key>span{display:inline-flex;align-items:baseline;gap:6px}
+  /* .poschart: one column per group, the header wearing the class it names */
+  .poschart{width:100%;border-collapse:collapse;text-align:left;
+    font:400 12px/1.5 var(--sans);color:var(--ink-2)}
+  .poschart th,.poschart td{border:1px solid var(--line-2);padding:6px 8px;vertical-align:top}
+  .poschart th{font:700 12px var(--sans);color:var(--ink);border-bottom-width:2px}
   .pos-key b{font-weight:400}
   /* the label mode prints what the line means, for a cramped column or a screenshot with no key */
   .pos-labels :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep){text-decoration-line:none;background-image:none}
