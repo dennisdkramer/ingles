@@ -31,10 +31,8 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
    - [S1] - The specimen sentence, its key, the composition line and its caption go; one legend line takes their place, each item wearing the class it names <qa/preview-blocks.html> <one row: Noun (Subject, Object) · Mode Carrier · Verb · Adverb · Preposition · Adjective · Conjunction, each painted by its own class>
 ## [B51] - The provisional timeline marks go <"those timeline marks were provisional. remove them from the test page and you can remove them from the css too unless theyre in use for something else"> <style.css #89 MARKS; qa/preview-blocks.html>
    - [S1] - `.uw` is deleted; `.an` keeps only its anchor role and paints nothing; the eight sentences lose their `uw` wrappers but keep `an` <style.css #89; qa/preview-blocks.html> <no `.uw` in the sheet or on the page; eight axes still land word centre = axis left + --point>
-## [B56] - A lone conjugated verb is mode and verb at once; a perfect participle is verb only <"both / the past participle in the perfect tense is verb only, but in the present perfect continuous it is mode carrier only"> <qa/pos.mjs; qa/preview-blocks.html>
-   - [S1] - A verb with no mode word earlier in its clause is tagged as both, and emits `class="pos-m pos-v"` <qa/pos.mjs> <"I work" → pos-m pos-v; "she told me" → pos-m pos-v; "I have finished" → finished = pos-v; "I have been working" → been = pos-m, working = pos-v>
-   - [S2] - The two sentences on the page that now carry both marks are re-painted, and the chart says so in its Verb cell <qa/preview-blocks.html> <saw and work carry pos-m pos-v; rows PASS>
-
+## [B57] - A word wearing mode and verb keeps the wash and puts the dots on the bottom <"it put the dotted border on the top of 'saw' and 'work' and removed the wash"> <style.css #94 POS>
+   - [S1] - `.pos-m.pos-v` composes the wash and the dotted line in one layer list, so the dots sit at the mark baseline instead of the box top <style.css #94> <saw/work show a wash plus dots on the bottom row; have keeps its 1px line + wash>
 
 
    - [S2] - `pos.mjs` splits a contraction into pronoun + clitic, and knows gonna/wanna/gotta, so `I've …` is a pronoun and a mode word rather than one unplaced noun <qa/pos.mjs> <"I've been feeling sick" → I pron + 've m; "I'm gonna hit" → I pron + 'm m + gonna m; "He'll have done" → He pron + 'll m>
