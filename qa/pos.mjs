@@ -261,7 +261,21 @@ function tag(words) {
       }
     }
   }
-  /* 7. a demonstrative splits by use: before a noun it is a determiner (adjective group), standing
+  /* 8. a conjugated verb that is the only tense-carrying word in its clause is BOTH: it carries the
+     mode and it is the verb. A participle behind an auxiliary is verb only ("I have finished"), and the
+     auxiliary itself is mode only ("have been working" → been). */
+  for (let i = 0; i < out.length; i++) {
+    if (out[i].tag !== 'v') continue;
+    if (i > 0 && /^(infn|infp)$/.test(out[i - 1].tag)) continue;      /* an infinitive does not conjugate */
+    let aux = false;
+    for (let j = i - 1; j >= 0; j--) {
+      const tg = out[j].tag;
+      if (tg === 'punct' || tg === 'conj') break;
+      if (tg === 'aux') { aux = true; break; }
+    }
+    if (!aux) { out[i].tag = 'vm'; out[i].why = 'the only tense carrier in its clause = mode + verb'; }
+  }
+  /* 9. a demonstrative splits by use: before a noun it is a determiner (adjective group), standing
      alone it is a demonstrative pronoun (noun group). */
   const DEM = /^(this|that|these|those)$/;
   for (let i = 0; i < out.length; i++) {
@@ -407,6 +421,7 @@ else {
       const r = row[i], t = lower(r.w);
       html += glueAt(i) + (r.tag === 'punct' ? r.w
         : r.tag === 'conj' ? '<span class="pos-join" data-rel="' + (REL[t] || 'add') + '">' + r.w + '</span>'
+        : r.tag === 'vm' ? '<span class="pos-m pos-v' + (r.tag === 'pron' && OBJ.indexOf(t) !== -1 ? ' pos-o' : '') + '">' + r.w + '</span>'
         : '<span class="pos-' + (GROUP[r.tag] || 'n') + (r.tag === 'pron' && OBJ.indexOf(t) !== -1 ? ' pos-o' : '') + '">' + r.w + '</span>');
       i++;
     }
