@@ -58,7 +58,7 @@ const REL = { and: 'add', nor: 'add', but: 'contrast', yet: 'contrast', although
 /* the recipient's arrow: ONE filled brushstroke — a tapered shaft and its barbed head in a single
    <path>, so nothing can seam. It is swept on from the tail and erased into the tip (see iobj-draw). */
 const ARROW = '<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 42 28">'
-  + '<path fill="currentColor" d="M40 3C32 2.2 21 5 14.5 13.2L18.5 19.4C24 12.5 33 4.6 40.3 4.6Z'
+  + '<path fill="currentColor" d="M40 3C32 2.2 20 5.6 11.2 15.4L16.8 20.4C23 12.5 32 4.6 40.3 4.6Z'
   + 'M25.4 19.5L12.7 26.6L9 13.6L15.6 18.7Z"/></svg></i>';
 
 const PUNCT = /^[.,;:!?()"'“”‘’—-]+$/;
