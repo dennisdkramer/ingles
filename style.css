@@ -325,22 +325,22 @@
     background-image:linear-gradient(90deg,var(--n-a),var(--n-a));background-size:100% var(--mk-h)}
   .pos-n.pos-subj{background-image:linear-gradient(90deg,var(--n-b),var(--n-a));background-size:100% 3px}
   .pos-n.pos-o{background-image:linear-gradient(90deg,var(--n-a),var(--n-b));background-size:100% 3px}
-  /* .pos-n.pos-i (the recipient): no line — one painted arrow from the side the direct object sits,
-     swept on from its tail. data-side="left|right" comes from the tagger. Vary: --i-c, --i-w */
+  /* .pos-n.pos-i (the recipient): no line — one painted arrow, invisible until a band of opacity
+     rolls over it from tail to tip. data-side="left|right" comes from the tagger. Vary: --i-c, --i-w */
   .pos-n.pos-i{--i-c:var(--ink-2);--i-w:23px;position:relative;background-image:none}
   .pos-n.pos-i .pos-i-arr{position:absolute;bottom:calc(100% - 4px);right:-.5em;display:block;
     width:var(--i-w);height:calc(var(--i-w)*.66);pointer-events:none;color:var(--i-c);
-    mask-image:linear-gradient(to bottom left,rgba(0,0,0,.45),#000 62%);
-    animation:iobj-draw 2.8s linear infinite}
+    mask-image:linear-gradient(to bottom left,transparent 0 16%,#000 30% 70%,transparent 84% 100%);
+    mask-size:100% 100%;mask-repeat:no-repeat;
+    animation:iobj-roll 2s linear infinite}
   .pos-n.pos-i[data-side="left"] .pos-i-arr{right:auto;left:-.5em;scale:-1 1}
   .pos-i-arr svg{display:block;width:100%;height:100%;overflow:visible}
-  @keyframes iobj-draw{
-    0%{clip-path:polygon(100% 0,100% 0,100% 100%,130% 100%);opacity:0}
-    5%{opacity:1}
-    55%{clip-path:polygon(-60% 0,100% 0,100% 100%,-10% 100%);opacity:1}
-    76%{opacity:1}
-    100%{clip-path:polygon(-60% 0,100% 0,100% 100%,-10% 100%);opacity:0}
+  @keyframes iobj-roll{
+    0%{mask-position:calc(var(--i-w)*.95) calc(var(--i-w)*-.6)}
+    100%{mask-position:calc(var(--i-w)*-.95) calc(var(--i-w)*.6)}
   }
+  @media (prefers-reduced-motion:reduce){.pos-i-arr{animation:none;mask-image:none}}
+
   /* .pos-m: 1px line + a wash from 20% at the line to 0 at the top */
   .pos-m{--m-c:color-mix(in srgb,var(--pos-purple) 80%,transparent);
     background-image:linear-gradient(to top,color-mix(in srgb,var(--pos-purple) 20%,transparent),
