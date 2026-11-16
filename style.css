@@ -325,28 +325,21 @@
     background-image:linear-gradient(90deg,var(--n-a),var(--n-a));background-size:100% var(--mk-h)}
   .pos-n.pos-subj{background-image:linear-gradient(90deg,var(--n-b),var(--n-a));background-size:100% 3px}
   .pos-n.pos-o{background-image:linear-gradient(90deg,var(--n-a),var(--n-b));background-size:100% 3px}
-  /* .pos-n.pos-i (the recipient): no line — an arrow from the side the direct object sits, drawn along
-     its own path. data-side="left|right" comes from the tagger. Vary: --i-c, --i-w */
-  .pos-n.pos-i{--i-c:var(--ink-2);--i-w:19px;position:relative;background-image:none}
-  .pos-n.pos-i .pos-i-arr{position:absolute;bottom:calc(100% - 3px);right:-.42em;display:block;
-    width:var(--i-w);height:calc(var(--i-w)*.95);pointer-events:none}
-  .pos-n.pos-i[data-side="left"] .pos-i-arr{right:auto;left:-.42em;scale:-1 1}
+  /* .pos-n.pos-i (the recipient): no line — one painted arrow from the side the direct object sits,
+     swept on from its tail. data-side="left|right" comes from the tagger. Vary: --i-c, --i-w */
+  .pos-n.pos-i{--i-c:var(--ink-2);--i-w:23px;position:relative;background-image:none}
+  .pos-n.pos-i .pos-i-arr{position:absolute;bottom:calc(100% - 4px);right:-.5em;display:block;
+    width:var(--i-w);height:calc(var(--i-w)*.66);pointer-events:none;color:var(--i-c);
+    mask-image:linear-gradient(to bottom left,rgba(0,0,0,.45),#000 62%);
+    animation:iobj-draw 2.8s linear infinite}
+  .pos-n.pos-i[data-side="left"] .pos-i-arr{right:auto;left:-.5em;scale:-1 1}
   .pos-i-arr svg{display:block;width:100%;height:100%;overflow:visible}
-  .pos-i-arr path{fill:none;stroke:var(--i-c);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-  .pos-i-arr .shaft{stroke-dasharray:22;stroke-dashoffset:0;animation:iobj-shaft 2.6s linear infinite}
-  .pos-i-arr .head{animation:iobj-head 2.6s linear infinite}
-  @keyframes iobj-shaft{
-    0%{stroke-dashoffset:22;opacity:1}
-    45%{stroke-dashoffset:0;opacity:1}
-    60%{stroke-dashoffset:0;opacity:1}
-    78%{opacity:0}
-    100%{stroke-dashoffset:0;opacity:0}
-  }
-  @keyframes iobj-head{
-    0%,42%{opacity:0}
-    52%{opacity:1}
-    84%{opacity:1}
-    97%,100%{opacity:0}
+  @keyframes iobj-draw{
+    0%{clip-path:polygon(100% 0,100% 0,100% 100%,130% 100%);opacity:0}
+    5%{opacity:1}
+    55%{clip-path:polygon(-60% 0,100% 0,100% 100%,-10% 100%);opacity:1}
+    76%{opacity:1}
+    100%{clip-path:polygon(-60% 0,100% 0,100% 100%,-10% 100%);opacity:0}
   }
   /* .pos-m: 1px line + a wash from 20% at the line to 0 at the top */
   .pos-m{--m-c:color-mix(in srgb,var(--pos-purple) 80%,transparent);
@@ -408,7 +401,7 @@
   .pos-labels .pos-prep::after{content:'PREP'}
   @media print{
     :is(.pos-v,.pos-m,.pos-n,.pos-adj,.pos-adv,.pos-prep){text-decoration-color:#000}
-    .pos-i-arr .shaft,.pos-i-arr .head{animation:none;stroke-dashoffset:0;opacity:1}
+    .pos-i-arr{animation:none;clip-path:none;opacity:1;mask-image:none}
   }
 }
 

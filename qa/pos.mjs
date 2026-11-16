@@ -55,11 +55,11 @@ const REL = { and: 'add', nor: 'add', but: 'contrast', yet: 'contrast', although
   though: 'contrast', whereas: 'contrast', while: 'contrast', or: 'alternative', so: 'cause',
   because: 'cause', if: 'condition', unless: 'condition', when: 'time', whenever: 'time',
   where: 'place', than: 'comparison', that: 'content', whether: 'content' };
-/* the recipient's arrow: two strokes, so the shaft can draw itself with stroke-dashoffset and the
-   head can arrive after it and outlive it. Mirrored by data-side. */
-const ARROW = '<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none">'
-  + '<path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"/>'
-  + '<path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"/></svg></i>';
+/* the recipient's arrow: ONE filled brushstroke — a tapered shaft and its barbed head in a single
+   <path>, so nothing can seam. It is swept on from the tail and erased into the tip (see iobj-draw). */
+const ARROW = '<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 42 28">'
+  + '<path fill="currentColor" d="M40 3C32 2.2 21 5 14.5 13.2L18.5 19.4C24 12.5 33 4.6 40.3 4.6Z'
+  + 'M25.4 19.5L12.7 26.6L9 13.6L15.6 18.7Z"/></svg></i>';
 
 const PUNCT = /^[.,;:!?()"'“”‘’—-]+$/;
 
