@@ -247,9 +247,18 @@ function tag(words) {
       }
       if (inv) verb = true;
     }
-    if (!verb && (BE_FORM.test(w) || HV_F.test(w) || DO_F.test(w))) {
-      out[i].tag = 'v';
-      out[i].why = 'nothing after it to govern = the verb itself (not a mode word)';
+    /* a phrase that stops right after an ambiguous word makes that word a MODE, with the verb left
+       implicit: "I have." (perfect), "Yes, I do." (do-support). A determiner or noun after it makes it
+       the verb: "I have a car." */
+    if (!verb) {
+      let nx = out[i + 1];
+      let k = i + 1;
+      while (out[k] && out[k].tag === 'adv' && ADV_SKIP.test(lower(out[k].w))) { nx = out[k + 1]; k++; }
+      const stops = !nx || nx.tag === 'punct';
+      if (!stops && (BE_FORM.test(w) || HV_F.test(w) || DO_F.test(w))) {
+        out[i].tag = 'v';
+        out[i].why = 'nothing after it to govern = the verb itself (not a mode word)';
+      }
     }
   }
   /* 7. a demonstrative splits by use: before a noun it is a determiner (adjective group), standing
