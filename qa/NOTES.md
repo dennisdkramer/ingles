@@ -284,10 +284,12 @@ content belongs in its `###` sections.
 ### [28]
 
 → VEHICLES.md §`[28]`
+molehills persist between rounds, moles do not move positions until after the next prompt appears
 
 ### [29]
 
 → VEHICLES.md §`[29]`
+align the flowers with the pots so the bottom of the stem is inside the dark top of the pot. double the flower size (dont alter the bckground)
 
 ### [30]
 
@@ -296,14 +298,17 @@ content belongs in its `###` sections.
 ### [31]
 
 → VEHICLES.md §`[31]`
+make the bird start vertically centered at the beginning of the game
 
 ### [32]
 
 → VEHICLES.md §`[32]`
+the gridstays between questions, just fade out the letters when the next prompt appears
 
 ### [33]
 
 → VEHICLES.md §`[33]`
+make the guy 30%  smaller and the doors bottom position align with the bottom of the building
 
 ### [34]
 
@@ -320,8 +325,6 @@ content belongs in its `###` sections.
 ### [37]
 
 → VEHICLES.md §`[37]`
-put an open briefcase of cash on top of the prompt card 100px away from the ladder. When you get all the questions right and the guy goes on to the card, have him go to the briefcase, and throw several dollar bills  that simultaniously float down and land on the answer cards at the bottom of the screen. Delay the play again state/popup until 2s after the money lands. apply a .5s fade transition to all elements that leave and enter the screen at the games root, nothing should appear and disappear instantly
-
 ### [39]
 
 → VEHICLES.md §`[39]`

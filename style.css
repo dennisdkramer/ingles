@@ -1566,11 +1566,15 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    nothing claimed the block (engine4.js missing/failed, or an unknown data-game) — no .g4-ready */
 .game.g4-ready .game-list{display:none}
 .game:not(.g4-ready) .game-start{display:none}
-.game.g4 .g4-intro{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:12px}
+.game.g4 .g4-intro{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:12px;opacity:1;transition:opacity .5s ease}
+/* THE RUN'S OWN CARD COMES AND GOES OVER .5s (qa/NOTES.md, item [37]): the intro is the Play again card, and
+   it used to be cut with `display:none` — the one instant swap left at the root of every game. It now fades
+   out over .5s when Play is pressed and back in over .5s when the run is handed back, and while it is
+   invisible it takes no clicks and no focus. */
+.game.g4-ready.is-on .g4-intro{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .5s ease,visibility 0s .5s}
 /* the intro is a CARD over the game's own scene, so the art stays visible around it — the block reads
    as the game it is about to become, not as a form with a button under it */
 .g4-intro-card{display:flex;flex-direction:column;align-items:center;gap:9px;max-width:min(560px,94%);padding:14px 18px;text-align:center;background:rgba(253,250,242,.92);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 rgba(185,133,76,.75);backdrop-filter:blur(2px)}
-.game.g4-ready.is-on .g4-intro{display:none}
 /* the poster: a still of the game's own art, drawn behind the intro so the block looks like the game it
    is about to become. Never interactive (pointer-events:none) and never a timer.
    REVERTED: it carried `z-index:1` for a while, which put the still ABOVE the scene — and the stills
