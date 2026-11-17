@@ -280,55 +280,37 @@ content belongs in its `###` sections.
 
 → VEHICLES.md §`[27]`
 
-→ done: reticule hides on mouseleave/pointerleave/window blur (engine4.js `lower()`); targets draw an inline
-
 ### [28]
 
 → VEHICLES.md §`[28]`
-
-→ done: the handover is choreographed in the runner (`Runner.prototype.step` / `resolve`), so it holds for every
 
 ### [29]
 
 → VEHICLES.md §`[29]`
 
-→ done: `.g4-tray` bottom 10px → 30px (the pots and their labels move up together); blooms 18x46 → 36x54 (twice
-
 ### [30]
 
 → VEHICLES.md §`[30]`
-
-→ done: the option cards already held one line; the missing part was the size. `fitBlocks()` publishes the block
 
 ### [31]
 
 → VEHICLES.md §`[31]`
 
-→ done: `flapGate.clear()` no longer resets mid-run. When the run is continuing (`r.phase === 'done'` with items
-
 ### [32]
 
 → VEHICLES.md §`[32]`
-
-→ done: the wall was an SVG pattern laid out in a 400x240 `viewBox` and then stretched to the stage, so every tile
 
 ### [33]
 
 → VEHICLES.md §`[33]`
 
-→ done: `.g4-runner` 60x92 → 120x184. `.enter` is a step up into the doorway with a fade and no scale, so he is
-
 ### [34]
 
 → VEHICLES.md §`[34]`
 
-→ done: `maxlength="1"` is gone (it stopped a filled square taking a new letter at all); the value is clamped in
-
 ### [35]
 
 → VEHICLES.md §`[35]`
-
-→ done: the `🔊 Say the sentence` button and the `.g4-echo-hint` line are both gone (the element is no longer
 
 ### [36]
 
