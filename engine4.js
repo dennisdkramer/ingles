@@ -2881,7 +2881,20 @@ function say(text, lang) {
         });
       });
     }
-    function clear() { grid.innerHTML = ''; entry.value = ''; guesses = []; word = ''; done = false; }
+    function clear() {
+      entry.value = ''; guesses = []; word = ''; done = false;
+      /* THE WALL STAYS ON SCREEN (qa/NOTES.md, item [32]): between questions the rows and their tiles are
+         left standing and only the letters and colours are taken back. Emptying the grid made the board
+         blink out for the whole handover — the old prompt left, the wall went with it, and the new word
+         drew into bare stage. The next word now draws into the wall that is already there. */
+      for (var i = 0; i < grid.children.length; i++) {
+        var row = grid.children[i];
+        for (var j = 0; j < row.children.length; j++) {
+          var t = row.children[j];
+          t.textContent = ''; t.className = 'g4-tile';
+        }
+      }
+    }
     function show(item) {
       clear();
       word = target(item);

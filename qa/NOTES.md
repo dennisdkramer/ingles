@@ -280,9 +280,12 @@ content belongs in its `###` sections.
 ### [27]
 
 → VEHICLES.md §`[27]`
+
 ### [28]
 
 → VEHICLES.md §`[28]`
+the molehill graphics should not redraw or disappear they should be fixed throughout the game and on the start screen as well
+the moles
 
 ### [29]
 
@@ -299,7 +302,6 @@ content belongs in its `###` sections.
 ### [32]
 
 → VEHICLES.md §`[32]`
-leave the grid on screen between questions
 
 ### [33]
 
@@ -317,7 +319,14 @@ make the guy 30% smaller and the doors 15px shorter, reduced from the bottom, le
 ### [36]
 
 → VEHICLES.md §`[36]`
+
 ### [37]
 
 → VEHICLES.md §`[37]`
 put an open briefcase of cash on top of the prompt card 100px away from the ladder. When you get all the questions right and the guy goes on to the card, have him go to the briefcase, and throw several dollar bills  that simultaniously float down and land on the answer cards at the bottom of the screen. Delay the play again state/popup until 2s after the money lands. apply a .5s fade transition to all elements that leave and enter the screen at the games root, nothing should appear and disappear instantly
+
+### [39]
+
+→ VEHICLES.md §`[39]`
+- scramble the order of the options
+- leave the position
