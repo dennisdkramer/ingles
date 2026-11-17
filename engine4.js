@@ -1345,6 +1345,21 @@ window.GAMES4 = (function () {
     var stage = r.stage;
     var grid = el('div', 'g4-grid');
     stage.appendChild(grid);
+    /* THE GARDEN IS BUILT ONCE (qa/NOTES.md, item [28]): six molehills, made here at init and never
+       removed — not when an item ends, not between items, not on a restart — so the start screen, every
+       question and the end of the run all show the same six nodes. Only the moles come and go.
+       `order` is ONE deal of those six holes, made here rather than per item, so a mole's hole is fixed
+       for the life of the page: each item's options fill the front of that same deal. */
+    var order = [];
+    (function garden() {
+      for (var i = 0; i < 6; i++) {
+        var h = el('div', 'g4-hole');
+        h.innerHTML = '<span class="g4-dirt"></span>';
+        grid.appendChild(h);
+        order.push(h);
+      }
+      order = shuffle(order);
+    })();
     var moles = [], live = false, idle = 0;
 
     /* the glance: each mole picks a direction and holds it for a moment, then looks front again. The
@@ -1366,21 +1381,17 @@ window.GAMES4 = (function () {
     function clear() {
       live = false;
       if (idle) { clearTimeout(idle); idle = 0; }
-      grid.innerHTML = ''; moles = [];
+      /* the HOLES stay standing — only the moles are taken off the garden, so nothing redraws between
+         items and no mole ever reappears somewhere else mid-run */
+      moles.forEach(function (m) { if (m.parentNode) m.parentNode.removeChild(m); });
+      moles = [];
     }
     function show(item) {
       clear();
       live = true;
-      /* ALWAYS A 3x2 GARDEN: six holes, always — the grid never reflows between items, and the content
-         contract is 2-6 options (CONTENT_EXAMPLES.md §`whackMole`), so one hole per option always fits. */
-      var n = 6, holes = [], i;
-      for (i = 0; i < n; i++) {
-        var h = el('div', 'g4-hole');
-        h.innerHTML = '<span class="g4-dirt"></span>';
-        grid.appendChild(h);
-        holes.push(h);
-      }
-      var slots = shuffle(holes.slice()).slice(0, item.opts.length);
+      /* the item's options go into the FRONT OF THE SAME DEAL every time, so a mole keeps its hole from
+         one question to the next and the empty hills around it never move */
+      var slots = order.slice(0, item.opts.length);
       item.opts.forEach(function (o, k) {
         if (!slots[k]) return;
         var m = el('button', 'g4-mole');
@@ -1405,6 +1416,10 @@ window.GAMES4 = (function () {
           m.style.setProperty('--rise-t', (70 + k * 95) + 'ms');
           m.classList.add('rise');
         }
+        /* THE OPTION CARDS FADE IN AFTER THE MOLES HAVE SURFACED (qa/NOTES.md, item [28]): the last rise
+           ends at 70 + 95(n-1) + 260ms, and every word fades in over .3s from that moment */
+        m.style.setProperty('--card-t', (r.reduced ? 0 : 70 + (item.opts.length - 1) * 95 + 260) + 'ms');
+        m.classList.add('cardin');
       });
       idle = r.later(glance, 600 + Math.random() * 500);
     }
@@ -1741,18 +1756,12 @@ window.GAMES4 = (function () {
       });
       box.appendChild(tray);
     },
-    whackMole: function (box, items) {
-      /* the six holes are the still's garden; the moles are one per option, as in the live game */
-      var texts = (items[0].opts || []).map(function (o) { return o.text; });
-      for (var i = 0; i < 6; i++) {
-        var h = el('div', 'g4-hole g4-bit');
-        h.innerHTML = '<span class="g4-dirt"></span>';
-        abs(h, 'left:' + (5 + (i % 3) * 31) + '%;top:' + (30 + Math.floor(i / 3) * 34) + '%;width:27%;height:30%');
-        if (texts[i]) {
-          h.appendChild(el('div', 'g4-mole', ART.mole + '<span class="g4-mole-t">' + esc(texts[i]) + '</span>'));
-        }
-        box.appendChild(h);
-      }
+    whackMole: function () {
+      /* NO STILL OF ITS OWN (qa/NOTES.md, item [28]): the garden the game plays in is built once, at
+         plugin init, and stands in the stage from the first paint — so the six molehills behind the
+         intro card ARE the six the game plays in, not a second set drawn on top of them. No moles are
+         drawn either: a mole's card is the first item's options, and a block nobody has started asks
+         nothing. */
     },
     stackDrop: function (box, items) {
       /* the still is the tower as it stands, drawn in the live game's own furniture: three blocks already

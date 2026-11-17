@@ -2263,6 +2263,12 @@ html.kbd .g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:
    never be left standing in the hole below (that is what hid its word under the next mound) */
 .g4-mole.rise{animation:g4rise .26s cubic-bezier(.34,1.56,.64,1) var(--rise-t,0ms) both}
 @keyframes g4rise{0%{transform:translateY(104%)}100%{transform:translateY(0)}}
+/* THE OPTION CARD FADES IN AFTER THE MOLES HAVE SURFACED (qa/NOTES.md, item [28]): each word fades in over
+   .3s from the end of the last rise, a delay the engine hands down per item in --card-t. There is no base
+   `opacity:0` — with `both` the animation holds the word hidden until its delay, and if a mole is marked
+   before the fade has finished the mark's own animation takes over and the card is simply visible. */
+.g4-mole.cardin .g4-mole-t{animation:g4cardin .3s ease var(--card-t,0ms) both}
+@keyframes g4cardin{from{opacity:0}to{opacity:1}}
 .g4-mole.duck{transform:translateY(104%)}
 .g4-mole-t{display:block;max-width:100%;margin-bottom:-4px;padding:2px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 13px var(--ui-tight);line-height:1.18;overflow:hidden}
 html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;border-radius:10px}
@@ -2277,6 +2283,7 @@ html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;
   .g4-mole .g4-art,.g4-mole .g4-eyes{animation:none}
   .g4-chip,.g4-bucket .g4-art{transition:none;animation:none}
   .g4-mole.no .g4-mole-t,.g4-bucket.reveal .g4-bucket-t,.g4-mole.reveal .g4-mole-t{animation:none}
+  .g4-mole.cardin .g4-mole-t{animation:none}
   .g4-prompt{transition:none}
 }
 .g4-tcard.picked{transform:translateY(-3px) scale(1.05);border-color:var(--blue);

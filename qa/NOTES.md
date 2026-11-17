@@ -284,8 +284,6 @@ content belongs in its `###` sections.
 ### [28]
 
 → VEHICLES.md §`[28]`
-the molehill graphics should not redraw or disappear they should be fixed throughout the game and on the start screen as well
-the moles should never change which locaiton theyre in during a question, right now at the end of one question they redraw in the ne
 
 ### [29]
 
@@ -328,4 +326,5 @@ put an open briefcase of cash on top of the prompt card 100px away from the ladd
 
 → VEHICLES.md §`[39]`
 - scramble the order of the options
-- leave the position
+- leave the position of the trains and cars the same, but make the height of the light brown element on top of the train cars grow by 8px per position. (first position stays exactly the same as it is now) 
+when the cards are thrown up onto the traincars, their height changes based on the *intended order of the sentence*, so the LAST answer retains the same card height, and each prior answer grows by 8px more per position. The result is that the sum of the traincar height + the card is exactly the same for every traincar when the correct asnwer is given.
