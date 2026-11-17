@@ -280,6 +280,7 @@ content belongs in its `###` sections.
 ### [27]
 
 → VEHICLES.md §`[27]`
+make the two wing animations synced rather than offset so the wings beat together. do not change the wing appearance or anything else about the ducks
 
 ### [28]
 
@@ -300,10 +301,12 @@ content belongs in its `###` sections.
 ### [32]
 
 → VEHICLES.md §`[32]`
+leave the grid on screen between questions
 
 ### [33]
 
 → VEHICLES.md §`[33]`
+make the guy 30% smaller and the doors 15px shorter, reduced from the bottom, leave the top anchor point the same
 
 ### [34]
 
@@ -316,3 +319,7 @@ content belongs in its `###` sections.
 ### [36]
 
 → VEHICLES.md §`[36]`
+### [37]
+
+→ VEHICLES.md §`[37]`
+put an open briefcase of cash on top of the prompt card 100px away from the ladder. When you get all the questions right and the guy goes on to the card, have him go to the briefcase, and throw several dollar bills  that simultaniously float down and land on the answer cards at the bottom of the screen. Delay the play again state/popup until 2s after the money lands. apply a .5s fade transition to all elements that leave and enter the screen at the games root, nothing should appear and disappear instantly

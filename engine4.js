@@ -3411,12 +3411,19 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       var cells = shuffle(mine.concat(extra).slice(0, 9));
       while (cells.length < 9) cells.push({ text: '·', value: '~' });
       cells.forEach(function (c) {
-        var t = el('button', 'g4-btile', c.text);
+        /* THE CELL IS THE BUTTON; THE CARD IS THE FACE INSIDE IT. The cell keeps the grid track it always
+           had and the face sits 10px in from every edge, so the tiles get smaller while the grid, the card
+           wrap, the curtain and the deadline stay exactly where they were measured from (qa/NOTES.md [36]).
+           The face carries the paper, the border and every state; the poster still is a plain `div.g4-btile`
+           and is not a cell, so it draws what it always drew. */
+        var t = el('button', 'g4-btcell');
+        var face = el('span', 'g4-btile', c.text);
         t.type = 'button';
         t.setAttribute('data-v', c.value);
+        t.appendChild(face);
         t.addEventListener('click', function () {
-          if (r.phase !== 'play' || !open || t.classList.contains('stamped')) return;
-          t.classList.add('stamped');
+          if (r.phase !== 'play' || !open || face.classList.contains('stamped')) return;
+          face.classList.add('stamped');
           open = false;                             /* the stamp stops the clock */
           rush.textContent = '';
           r.pick(c.value);
@@ -3449,7 +3456,7 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
     function mark(item, hit, value) {
       tiles.forEach(function (t) {
         if (t.getAttribute('data-v') !== value) return;
-        t.classList.add(hit ? 'ok' : 'no');
+        t.firstElementChild.classList.add(hit ? 'ok' : 'no');   /* the state is a property of the CARD, not the cell */
       });
     }
     /* the prompt is CLAIMED and left empty: the stem is the word "listen" and the caller already says that

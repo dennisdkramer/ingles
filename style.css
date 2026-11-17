@@ -2066,6 +2066,15 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-bingo.open .g4-count-rush{visibility:visible}
 @keyframes g4count{0%{opacity:0;transform:scale(.45)}22%{opacity:1;transform:scale(1.12)}
   60%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.9)}}
+/* THE CELL AND THE CARD (qa/NOTES.md, item [36]): the button is the CELL and keeps the grid track it always
+   had; the card is the `.g4-btile` face inside it, 10px in from every edge, so the tiles get smaller while
+   the grid, the card wrap, the curtain and the deadline measure exactly as before — the curtain covers the
+   wrap and the rush card is placed from it, so neither can move. The face keeps its own paper, its border
+   and the stamped / ok / no states, and its `overflow:hidden` cuts a long word at the card's edge rather
+   than letting it spill into the 10px of air. The poster still is a plain `div.g4-btile`, not a cell, so it
+   is untouched. */
+.g4-btcell{display:flex;padding:10px;background:none;border:0;border-radius:0;box-shadow:none;cursor:pointer}
+.g4-btcell>.g4-btile{flex:1 1 auto;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;text-align:center;box-shadow:3px 3px 0 var(--tan)}
 .g4-btile{background:var(--paper);border:2px solid var(--ink);border-radius:10px;font:700 15px/1.15 var(--ui-tight);color:var(--ink);cursor:pointer;overflow:hidden;padding:4px 8px}
 /* the round's own start: nothing is said until the student asks to hear it, so the one chance at the
    word is a decision they made rather than a sound that arrived while they were reading the page */
