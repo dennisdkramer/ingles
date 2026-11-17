@@ -3674,9 +3674,9 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       var s = el('div', 'g4-acid-splash');
       s.style.left = x + 'px'; s.style.top = y + 'px';
       for (var i = 0; i < 7; i++) {
-        var d = el('span', 'g4-acid-drop'), a = (i / 7) * Math.PI * 2, r = 14 + (i % 3) * 9;
-        d.style.setProperty('--dx', Math.round(Math.cos(a) * r) + 'px');
-        d.style.setProperty('--dy', Math.round(Math.sin(a) * r) + 'px');
+        var d = el('span', 'g4-acid-drop'), a = (i / 7) * Math.PI * 2, rad = 14 + (i % 3) * 9;
+        d.style.setProperty('--dx', Math.round(Math.cos(a) * rad) + 'px');
+        d.style.setProperty('--dy', Math.round(Math.sin(a) * rad) + 'px');
         d.style.setProperty('--sz', (i % 3 === 0 ? 1.3 : 0.85) + '');
         s.appendChild(d);
       }

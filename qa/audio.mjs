@@ -1008,7 +1008,7 @@ const sheet = [
 ];
 const fig = full
   ? [
-      '<div class="panel itemsize" data-kind="teach">',
+      '<div class="panel" data-kind="teach">',
       '<h3>' + esc(songName) + '</h3>',
       '<h4>' + esc(performer) + '</h4>',
       '<figure class="vz-play">',
@@ -1029,7 +1029,7 @@ const fig = full
       '<!-- OPTION slot: a second .panel below, holding whatever the lesson adds to this block -->',
     ].join('\n')
   : [
-      '<div class="panel itemsize-third" data-kind="teach">',
+      '<div class="panel" data-kind="teach">',
       '<h3>' + esc(songName) + '</h3>',
       '<h4>' + esc(performer) + '</h4>',
       '<figure class="vz-play">',

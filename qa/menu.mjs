@@ -8,7 +8,7 @@
  *
  * An entry is the numbered form, which is the one the conversion is producing:
  *
- *   ### [03] <TEACH|OPTION> <HALF-> What it is and/or does <3|6> <2|4>
+ *   ### [03] <TEACH|OPTION> What it is and/or does <3|6> <2|4>
  *
  * or the legacy form, still read so the two can sit side by side while entries are converted:
  *
@@ -30,7 +30,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MENU = ['VEHICLES.md', 'IN-BLOCK-VISUALS.md', 'CONTENT_EXAMPLES.md'];
 
 const SCAFFOLD = /^### (Build \[Constraints\]|\[(GAMES|BLOCKS|VISUALS|IN-BLOCK)\])/;
-const NUM_RE = /^### \[(\d+)\]\s+<([^>]*)>\s+<([^>]*)>\s*(.*)$/;
+const NUM_RE = /^### \[(\d+)\]\s+<([^>]*)>(?:\s+<([^>]*)>)?\s*(.*)$/;
 const LEG_RE = /^### `([A-Za-z0-9]+)\s*[—–-]\s*(.*)$/;
 const KINDS = '(teaching|training|mixed|games|teach|train)';
 /* the one mark an entry can carry in its heading: it stays in the file and out of the builder's index,
@@ -51,7 +51,7 @@ function shapeAt(line, n, section) {
     const ignored = MARK.test(c.what);
     return {
       line: n, section, raw: line.trimEnd(), key: '[' + num[1] + ']', num: num[1], name: null,
-      anchor: 'item-' + num[1], shape: num[2].trim(), size: num[3].trim(),
+      anchor: 'item-' + num[1], shape: num[2].trim(), size: num[3] ? num[3].trim() : '',
       what: ignored ? c.what.replace(MARK, '') : c.what,
       counts: c.items === null ? null : { items: c.items, opts: c.opts }, kind: null, form: 'numbered',
       ignore: ignored

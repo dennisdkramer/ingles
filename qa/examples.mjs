@@ -4,7 +4,7 @@
  * The A–J scoring block was removed from the file, so this no longer asserts it: a harness that
  * keeps checking a deleted rule fails forever and trains everyone to ignore it. What is checked is
  * what still breaks silently:
- *   - CONTENT_EXAMPLES.md has entries (`### [NN] <shape> <itemsize> …`) and every heading parses;
+ *   - CONTENT_EXAMPLES.md has entries (`### [NN] <shape> …`) and every heading parses;
  *     the four `### [GAMES]`, `[BLOCKS]`, `[VISUALS]` and `[IN-BLOCK]` headings are scaffolding under
  *     `## [BUILD]` rather than vehicles, and are named in `SCAFFOLD` so they are skipped;
  *   - no name is used twice;
@@ -31,7 +31,10 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FILE = path.join(ROOT, 'CONTENT_EXAMPLES.md');
 const text = fs.readFileSync(FILE, 'utf8');
 const lines = text.split(/\r?\n/);
-const preview = fs.readFileSync(path.join(ROOT, 'qa', 'preview-blocks.html'), 'utf8');
+const previewFile = path.join(ROOT, 'qa', 'preview-blocks.html');
+/* the specimen page was folded into capability-map.html and deleted; the shape-atom checks have no
+   subject without it, so they are skipped rather than failing on a missing file */
+const preview = fs.existsSync(previewFile) ? fs.readFileSync(previewFile, 'utf8') : '';
 
 let pass = 0, fail = 0;
 const ok = (name, cond, extra) => {
@@ -40,7 +43,7 @@ const ok = (name, cond, extra) => {
 };
 
 /* an entry is  `### `name — what shape it is (teaching|training|mixed|games)``  (the old form, still read)
-   an entry is  `### [NN] <SHAPE> <ITEMSIZE> what it does <min|max> <min|max>`      (the numbered form)                 */
+   an entry is  `### [NN] <SHAPE> what it does <min|max> <min|max>`      (the numbered form)                 */
 const ENTRY_RE = /^### `([A-Za-z0-9]+) — /;
 const NUM_RE = /^### \[(\d+)\] <[^>]*>/;
 /* `[BUILD]`'s sub-headings and the old `### Build [Constraints]` are scaffolding, not vehicles: they
@@ -64,11 +67,11 @@ ok('the file has entries', entries.length > 20, entries.length + ' entries');
 ok('every ### heading parses', unparsed.length === 0,
   unparsed.length ? unparsed.slice(0, 5).join(' | ') : 'all parse');
 
-/* a numbered heading carries all four fields: shape, itemsize, the phrase and the counts */
+/* a numbered heading carries shape, the phrase and the counts */
 const worn = lines.map((l, i) => ({ l, i })).filter(o => /^### \[\d+\]/.test(o.l))
-  .filter(o => !/^### \[\d+\] <[^>]+> <[^>]+> .+ <[^>]*> <[^>]*>$/.test(o.l))
+  .filter(o => !/^### \[\d+\] <[^>]+> .+ <[^>]*> <[^>]*>$/.test(o.l))
   .map(o => (o.i + 1) + ': ' + o.l.slice(0, 60));
-ok('every numbered heading has shape, size, phrase and counts', worn.length === 0,
+ok('every numbered heading has shape, phrase and counts', worn.length === 0,
   worn.slice(0, 4).join(' | ') || 'all complete');
 
 /* the numbers are the index: unique, and a hole is permanent. An entry deleted from the menu keeps its

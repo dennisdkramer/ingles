@@ -55,11 +55,26 @@ const REL = { and: 'add', nor: 'add', but: 'contrast', yet: 'contrast', although
   though: 'contrast', whereas: 'contrast', while: 'contrast', or: 'alternative', so: 'cause',
   because: 'cause', if: 'condition', unless: 'condition', when: 'time', whenever: 'time',
   where: 'place', than: 'comparison', that: 'content', whether: 'content' };
-/* the recipient's arrow: the shape from assets/SVG/Arrow-Curved.svg, inlined so it inherits
-   currentColor and costs no request. It is mirrored and nudged so its head lands on the word. */
-const ARROW = '<i class="pos-i-arr" aria-hidden="true"><svg viewBox="4.5 2 15 15.5">'
-  + '<path d="M8 9h3c0-4.27-5-6-5-6 4.21 0 9 1.07 9 6h3l-5 6.76Z" fill="none"'
-  + ' stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i>';
+/* the recipient's arrow: the supplied swoosh, inlined with its box trimmed to the ink — the art
+   itself is untouched, so it draws at the same size. `.pos-i-arr` is the sheet's #94 POS hook,
+   which places it and mirrors it when the anchor word sits on the left. */
+const ARROW = '<svg class="pos-i-arr" width="200px" height="79.09px" viewBox="0 0 220 87" fill="none" ' +
+  'xmlns="http://www.w3.org/2000/svg" style="width: 200px; height: 79.09px; color: rgb(0, 0, 0);" ' +
+  'transform="rotate(180)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g>' +
+  '<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>' +
+  '<g id="SVGRepo_iconCarrier">' +
+  '<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --> ' +
+  '<path d="M3.17247 25.8421C5.28745 28.1788 7.82542 30.0907 9.7289 32.6399C26.0142 55.3699 49.279 66.6287 ' +
+  '75.0817 72.7892C83.9646 74.9135 94.1165 74.7011 103.211 72.7892C129.225 67.6909 152.913 56.8569 173.428 ' +
+  '39.8625C179.35 34.9766 184.426 28.8161 188.656 21.8059C186.33 22.6556 183.792 23.5054 181.465 24.5675C174.697 ' +
+  '27.5415 167.929 30.728 160.95 33.2772C157.989 34.3393 154.393 34.3393 151.009 34.1269C149.74 34.1269 147.837 ' +
+  '32.215 147.625 30.9404C147.414 29.6658 148.683 27.3291 149.74 27.1167C167.718 21.5935 183.369 10.972 199.654 ' +
+  '1.83746C205.364 -1.34899 208.96 -0.49927 211.498 5.23635C217.631 19.4692 220.381 34.5517 219.958 50.0592C219.958 ' +
+  '50.484 219.112 51.1213 217.843 52.3959C205.364 47.7224 209.171 34.1269 203.038 23.2929C201.557 25.8421 200.5 ' +
+  '27.9664 199.231 29.6658C172.582 62.5926 137.262 80.0118 96.2315 86.3848C90.0981 87.4469 83.3301 87.022 76.9852 ' +
+  '85.9599C53.7205 81.9237 32.9937 72.1519 15.8623 55.7948C10.3634 50.484 6.34493 43.4738 2.32647 36.8885C0.634492 ' +
+  '34.3393 0.634494 30.728 0 27.754C1.05749 27.1167 2.11498 26.4794 3.17247 25.8421Z" fill="#0D1927"></path> ' +
+  '</g></svg>';
 
 const PUNCT = /^[.,;:!?()"'“”‘’—-]+$/;
 

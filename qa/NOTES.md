@@ -35,6 +35,8 @@ content belongs in its `###` sections.
 
 ## preview-blocks.html
 
+**Deleted 2026-11-16.** Its specimens were folded into `capability-map.html` §4; the note boxes below are kept as the record of what each one was asked to show.
+
 ### [02]
 
 → CONTENT_EXAMPLES.md §`[02]`
@@ -113,7 +115,8 @@ content belongs in its `###` sections.
 
 ### [57]
 
-→ CONTENT_EXAMPLES.md §`[57]`
+→ IN-BLOCK-VISUALS.md §`[57]`
+the first thing is making the line something more than a 1px line with a arrow icon.  not a fixed length, we will give it a minimum length of 100px, so lets get started with an empty block and centered at the bottom (via html, not css) build a new timeline. I want a  2px line which has a small animated svg icon with the word NOW below it. To the left of the star, the line fades out on a log curve to 0 at the left end. On the right side of the star it becomes a dashed line, no fade, until the far right which has a double arrow icon and the word 'FUTURE' faint but visible behind the end of the line
 
 ### [58]
 
@@ -274,3 +277,10 @@ content belongs in its `###` sections.
 ### [39]
 
 → CONTENT_EXAMPLES.md §`[39]`
+
+## preview-menu.html
+
+### [40]
+
+→ CONTENT_EXAMPLES.md §`[40]`
+delete
