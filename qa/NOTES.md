@@ -285,7 +285,7 @@ content belongs in its `###` sections.
 
 → VEHICLES.md §`[28]`
 the molehill graphics should not redraw or disappear they should be fixed throughout the game and on the start screen as well
-the moles
+the moles should never change which locaiton theyre in during a question, right now at the end of one question they redraw in the ne
 
 ### [29]
 
@@ -306,7 +306,6 @@ the moles
 ### [33]
 
 → VEHICLES.md §`[33]`
-make the guy 30% smaller and the doors 15px shorter, reduced from the bottom, leave the top anchor point the same
 
 ### [34]
 
