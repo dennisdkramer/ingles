@@ -1769,7 +1769,9 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    is a rotation on a group INSIDE that mirror, so the two never share a pivot */
 .g4-duck-wing{transform-box:view-box;transform-origin:48px 32px;transform:scaleX(-1)}
 .g4-duck-flap{transform-origin:20% 90%;animation:g4flapd .44s ease-in-out infinite}
-.g4-duck-wing-far .g4-duck-flap{animation-delay:-.22s}
+/* BOTH WINGS BEAT ON ONE CLOCK (qa/NOTES.md, item [27]): the far wing used to carry a -.22s delay, so the
+   pair alternated; it now starts with the near wing and the only thing separating them is its lighter
+   paint. Appearance is untouched — same keyframes, same pivot, same opacity. */
 .g4-duck-wing-far{opacity:.72}
 .g4-duck-tail{transform-origin:90% 50%;animation:g4ducktail 1.1s ease-in-out infinite}
 @keyframes g4flapd{0%,100%{rotate:-9deg}50%{rotate:16deg}}

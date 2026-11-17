@@ -280,8 +280,6 @@ content belongs in its `###` sections.
 ### [27]
 
 → VEHICLES.md §`[27]`
-make the two wing animations synced rather than offset so the wings beat together. do not change the wing appearance or anything else about the ducks
-
 ### [28]
 
 → VEHICLES.md §`[28]`
