@@ -3529,7 +3529,7 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
     /* LADDER RUN'S OWN TIMERS (qa/NOTES.md, item [37]): the finish outlives the runner — finish() clears
        every r.later timer — so the walk to the case, the bills and the beat after the money lands are
        held here, and reset() clears them together with the props. */
-    var own = [], caseEl = null, moneyOn = false, moneyDone = false, settleFn = null;
+    var own = [], caseEl = null, moneyOn = false, moneyDone = false, settleFn = null, holdUntil = 0;
     function ownLater(fn, ms) { var id = setTimeout(fn, ms); own.push(id); return id; }
     function ownClear() { own.forEach(clearTimeout); own = []; }
     function safeOf(n) { return Math.floor(n / 5) * 5; }
@@ -3660,15 +3660,23 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       notes.forEach(function (n2) { n2.classList.add('float'); });
       ownLater(function () {
         moneyDone = true;
-        if (settleFn) settleFn();
+        /* THE PLAY AGAIN WAITS 2s AFTER THE MONEY LANDS (qa/NOTES.md, item [37]): the money sits on the
+           cards for a beat before the run's own card comes back over it — nothing appears and takes the
+           moment away */
+        holdUntil = (window.performance && performance.now ? performance.now() : Date.now()) + 2000;
+        ownLater(function () { if (settleFn) settleFn(); }, 2000);
       }, r.reduced ? 240 : 1050);
     }
     /* THE FINISH IS THIS GAME'S: the money is still in the air when the runner would hand the stage back,
-       so ladderRun keeps it until the last bill has landed, and only then lets the intro come back */
+       so ladderRun keeps it until the last bill has landed and the 2s beat after it has run out */
     function finale(done) {
-      if (moneyDone || (!moneyOn && !ended)) { done(); return; }
       settleFn = done;
-      ownLater(function () { if (settleFn) settleFn(); }, r.reduced ? 800 : 4000);   /* a net: the stage is always handed back */
+      if (!moneyOn && !ended) { done(); return; }        /* nothing was thrown: hand the stage back now */
+      if (moneyDone) {                                   /* landed already: honour what is left of the beat */
+        var now = (window.performance && performance.now ? performance.now() : Date.now());
+        ownLater(function () { if (settleFn) settleFn(); }, Math.max(0, holdUntil - now));
+      }
+      ownLater(function () { if (settleFn) settleFn(); }, 6000);   /* a net: the stage is always handed back */
     }
     /* THE DOG FINISH (qa/NOTES.md 65): a point was missed, so a dog runs past, knocks the ladder over,
        and the ladder and the climber both go down with it. */
