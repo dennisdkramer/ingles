@@ -3191,11 +3191,11 @@ function say(text, lang) {
     var stage = r.stage;
     var box = el('div', 'g4-echo');
     var sayLine = el('div', 'g4-echo-say');
-    var hint = el('div', 'g4-echo-hint');
     var pads = el('div', 'g4-pads');
-    var again = el('button', 'g4-again', '🔊 Say the sentence');
-    again.type = 'button';
-    box.appendChild(sayLine); box.appendChild(hint); box.appendChild(pads); box.appendChild(again);
+    /* no audio and no hint (qa/NOTES.md 35): the sentence and the pads are the whole game. The spoken
+       button and the "Next word:" line were both a second voice over a board that already says what it
+       wants, and the lives are the hearts in the HUD, not a sentence under the pads. */
+    box.appendChild(sayLine); box.appendChild(pads);
     stage.appendChild(box);
 
     var queue = [], at = 0, parts = [], given = '', lives = 3, top = 3, busy = false;
@@ -3231,7 +3231,6 @@ function say(text, lang) {
       given = (r.root.getAttribute('data-first') || '').trim();
       top = Math.max(1, num(r.root, 'data-lives', 3));
       lives = top;
-      hint.textContent = '';
       pads.innerHTML = '';
       box.classList.remove('off');
       paint();
@@ -3242,7 +3241,6 @@ function say(text, lang) {
       paint();
       pads.innerHTML = '';
       if (!it) return;
-      hint.textContent = hard() ? '' : (it.prompt && it.prompt !== '·' ? it.prompt : 'Next word:');
       it.opts.forEach(function (o) {
         var p = el('button', 'g4-pad', o.text);
         p.type = 'button';
@@ -3262,8 +3260,6 @@ function say(text, lang) {
         pad.classList.remove('no');
         void pad.offsetWidth;
         pad.classList.add('no');
-        hint.textContent = hard() ? '' : 'Not that one — ' + lives + ' ' + (lives === 1 ? 'life' : 'lives')
-          + ' left. Try the word that fits "' + sentence() + '".';
         if (!lives) {
           busy = true;
           r.later(function () { if (r.phase === 'play') r.finish(); }, 700);
@@ -3274,7 +3270,6 @@ function say(text, lang) {
       pad.classList.add('ok');
       parts.push(o.text);
       paint();
-      hint.textContent = '';
       r.scoreBoard(it, o.value);            /* the radio is written, the score counted by the runner */
       at++;
       r.later(function () {
@@ -3282,13 +3277,6 @@ function say(text, lang) {
         if (r.phase === 'play' && at < queue.length) showItem();
       }, 620);
     }
-    again.addEventListener('click', function () {
-      if (r.phase !== 'play') return;
-      var t = sentence();
-      if (!t) return;
-      say(t, 'en-US');                      /* the sentence, as it stands, out loud */
-      SFX.blip && SFX.blip();
-    });
     /* board mode: the run IS the sentence, so the game claims the queue and fills it word by word */
     function begin(q) {
       queue = q.slice();
@@ -3350,7 +3338,7 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
     var wrap = el('div', 'g4-card-wrap');
     /* the round's own start, 15px under the grid: the word is not said until this is pressed, so the one
        chance at it is a decision the student made. Pressing it says the word ONCE and starts 3 · 2 · 1. */
-    var begin = el('button', 'g4-begin', 'Begin Round — Hear Word');
+    var begin = el('button', 'g4-begin', 'Listen, then select the correct word');
     begin.type = 'button';
     /* the lead-in count lives ON the curtain and inside the card's own box, so "dead centre" is the
        card's centre and not the stage's; the deadline sits outside, 30px off the grid's right edge */
@@ -3375,7 +3363,6 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       open = false; said = false;
       armed = 'off';
       begin.disabled = true;
-      begin.textContent = 'Begin Round — Hear Word';
       box.classList.remove('open');
       lead.textContent = ''; rush.textContent = '';
       lead.classList.remove('pop'); rush.classList.remove('pop');
@@ -3443,9 +3430,6 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
          restart begins again at the start label instead of counting on from the last attempt. */
       armed = 'ready';
       begin.disabled = false;
-      begin.textContent = r.answered
-        ? 'Next Round! - Listen to the Target Word'
-        : 'Start Game - Listen to the Target Word';
     }
     /* Begin: the word is said ONCE, the button goes quiet for the round, and 3 · 2 · 1 starts over the
        curtain. A second press cannot happen — the button is disabled for the rest of the item. */
@@ -3453,8 +3437,13 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       if (r.phase !== 'play' || armed !== 'ready') return;
       armed = 'run';
       begin.disabled = true;
-      begin.textContent = 'Listen…';
-      if (phrase && !said) { said = true; say(phrase); }
+      /* the word follows the press by half a second (qa/NOTES.md 36), so the student hears it as a
+         consequence of pressing rather than as something already happening; `said` is spent at once, so
+         a second press inside that half second cannot say it twice. */
+      if (phrase && !said) {
+        said = true;
+        r.later(function () { if (r.phase === 'play') say(phrase); }, 500);
+      }
       countdown();
     });
     function mark(item, hit, value) {

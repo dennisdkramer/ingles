@@ -290,6 +290,10 @@ for all the games, when you select the wrong answer, instead of a card behind th
   duck (`ART.duck`, `ART.duck` + `.g4-duck*`) with the word on its plaque, flapping wings and a bobbing tail;
   `.game[data-game="skeetRange"] .g4-stage{height:380px}`; every `reveal` rule now shows a pulsing green glow
   (`@keyframes g4pulse`) instead of a dashed border or a card.
+  → follow-up: EVERY frame is 100px taller, not one — measured `.g4-stage` 380 in all ten games (27-36), from
+    280 before. The wings flap about an attachment point on their body side rather than the shoulder, which is
+    what made them read backwards; `.g4-duck-flap` groups now carry the origin so the feather sweeps away from
+    the body, and the near wing paints over the far one.
 
 ### [28]
 
@@ -368,7 +372,14 @@ instead of being normal text fields, make it so clicking a field highlights it a
 → VEHICLES.md §`[35]`
 remove the audio and its button, remove the hint text,  and move the prompt and options down by 30px
 
+→ done: the `🔊 Say the sentence` button and the `.g4-echo-hint` line are both gone (the element is no longer
+  built, so nothing can write into it), and `.g4-echo` starts 30px lower (`top:44px` → `74px`).
+  → open question, recorded rather than guessed: removing the hint also removed the "Not that one — 2 lives
+    left" line that followed a wrong pad. The hearts still show the lives and the pad still flashes red, so
+    nothing is silent — but if that sentence was meant to stay, it needs its own element and it is one line
+    to restore.
+
 ### [36]
 
 → VEHICLES.md §`[36]`
-delay the word audio by .5s after clicking the button. make the button invisible/not there  on the start screen and fade in after clicking play.make the button always just say "Listen, then select the correct word". leave the fade on the button the way it is, but dont make it change text
+for the answer/option buttons, leave the container the same size so the curtain and positions stay exactly the same, just add 10px padding so the button cards are smaller
