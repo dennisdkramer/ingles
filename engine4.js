@@ -70,6 +70,10 @@ window.GAMES4 = (function () {
     return (window.performance && window.performance.now) ? window.performance.now() : Date.now();
   };
   var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  /* the beat a question and its options are handed over in (qa/NOTES.md 28). PROMISE_OUT is how long the
+     old prompt takes to leave, PROMISE_IN how long the new one takes to arrive; both match the
+     `.g4-prompt` opacity transition in style.css, so nothing is ever read off a half-changed stage. */
+  var PROMISE_OUT = 240, PROMISE_IN = 180;
 
   function norm(s) {
     return String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ').trim();
@@ -287,9 +291,9 @@ window.GAMES4 = (function () {
        bird flaps and bobs while it crosses the range; the word it carries sits on `.g4-target-t` and is
        untouched. Drawn facing right, the way the whole range throws. */
     duck: '<svg class="g4-duck" viewBox="0 0 96 64" aria-hidden="true" focusable="false">'
-      + '<g class="g4-duck-wing g4-duck-wing-far">'
-      + '<path d="M46 30q14-22 26-14-4 12-16 18z" fill="#d98f28" stroke="#7d4a10" stroke-width="2.4" stroke-linejoin="round"/>'
-      + '</g>'
+      + '<g class="g4-duck-wing g4-duck-wing-far"><g class="g4-duck-flap">'
+      + '<path d="M46 30 Q 60 -2 84 4 Q 78 20 58 30 Z" fill="#e09b2f" stroke="#7d4a10" stroke-width="2.4" stroke-linejoin="round"/>'
+      + '</g></g>'
       + '<path class="g4-duck-tail" d="M20 32q-11-6-13 3 6 7 14 4z" fill="#f6c65a" stroke="#7d4a10" stroke-width="2.4" stroke-linejoin="round"/>'
       + '<ellipse cx="46" cy="34" rx="26" ry="16" fill="#ffd766" stroke="#7d4a10" stroke-width="2.8"/>'
       + '<ellipse cx="45" cy="39" rx="16" ry="9" fill="#ffe9a8"/>'
@@ -297,10 +301,10 @@ window.GAMES4 = (function () {
       + '<circle cx="73" cy="19" r="2.2" fill="#241708"/>'
       + '<circle cx="73.8" cy="18.2" r=".8" fill="#fff"/>'
       + '<path d="M79 24l13 3-13 4z" fill="#ef8a2f" stroke="#7d4a10" stroke-width="2" stroke-linejoin="round"/>'
-      + '<g class="g4-duck-wing g4-duck-wing-near">'
-      + '<path d="M44 34q10-19 24-12-2 13-14 20z" fill="#f6a93a" stroke="#7d4a10" stroke-width="2.6" stroke-linejoin="round"/>'
-      + '<path d="M50 30q9-9 15-9" stroke="#c9801f" stroke-width="1.8" fill="none"/>'
-      + '</g>'
+      + '<g class="g4-duck-wing g4-duck-wing-near"><g class="g4-duck-flap">'
+      + '<path d="M50 34 Q 64 10 82 16 Q 74 30 60 34 Z" fill="#f9c05a" stroke="#7d4a10" stroke-width="2.6" stroke-linejoin="round"/>'
+      + '<path d="M56 30 Q 66 18 76 20" stroke="#c9801f" stroke-width="1.8" fill="none"/>'
+      + '</g></g>'
       + '</svg>',
     /* the one little character shared by the three progress games: tower climb, mine runner, boss
        fight. Drawn once so his proportions never disagree between games. */
@@ -838,9 +842,13 @@ window.GAMES4 = (function () {
     return true;
   };
 
+  /* THE OPTIONS ARRIVE WITH THEIR QUESTION (qa/NOTES.md 28): the old question is taken off the stage and
+     the new one is given the same beat before its options surface. Without it, a presentation that builds
+     its options synchronously in show() put the next question's moles/pots/cards on the stage during the
+     beat the previous prompt was still fading out — so an option appeared under the answer just read. */
   Runner.prototype.step = function () {
     if (!this.queue.length) return this.finish();
-    var it = this.queue[0];
+    var self = this, it = this.queue[0];
     this.phase = 'play';
     /* the stem is spoken once. A presentation that draws the stem itself (a chip to sort, a clue
        beside the grid, the tower's question block) is already showing it, so drawing it again on the
@@ -848,8 +856,15 @@ window.GAMES4 = (function () {
     var owns = !!(this.view && this.view.ownsPrompt);
     this.setPrompt(owns ? '' : it.prompt, !owns);
     this.hud();
-    if (this.view) this.view.show(it);
-    this.startItemClock();
+    var arrive = function () {
+      if (self.phase !== 'play' || self.queue[0] !== it) return;
+      if (self.view) self.view.show(it);
+      self.startItemClock();
+    };
+    /* the clock starts WITH the options, never before them: a deadline that runs while the stage is
+       still empty is a deadline the student cannot meet */
+    var beat = self.reduced ? 0 : PROMISE_IN;
+    if (beat) this.later(arrive, beat); else arrive();
     return it;
   };
 
@@ -900,10 +915,15 @@ window.GAMES4 = (function () {
     if (this.livesLeft() === 0) this.dead = true;
     this.later(function () {
       if (self.view) self.view.clear();
-      self.queue.shift(); self.idx++;
+      /* the question leaves the stage BEFORE its options are replaced: the prompt fades out on its own
+         (`.g4-prompt` transitions its opacity), and the next item is only stepped to once that has
+         happened, so nothing from the old item is ever still on screen under the new one */
       self.setPrompt('', false);
-      if (self.dead) self.finish(); else self.next();
-    }, hit ? 620 : 1000);
+      self.later(function () {
+        self.queue.shift(); self.idx++;
+        if (self.dead) self.finish(); else self.next();
+      }, self.reduced ? 0 : PROMISE_OUT);
+    }, hit ? 560 : 900);
     return hit;
   };
   Runner.prototype.pick = function (value) {
@@ -1593,9 +1613,11 @@ window.GAMES4 = (function () {
         bricks += '<path d="M0 ' + y + 'h400"/>';
         for (c = 0; c < 10; c++) bricks += '<path d="M' + (c * 40 + (r % 2 ? 0 : 20)) + ' ' + y + 'v36"/>';
       }
+      /* the bricks run the whole frame and nothing else: the board's own backing is drawn by the DOM tile, so a
+         painted rectangle here would stretch with the art and leave a ghost slab behind the real board
+         (qa/NOTES.md 32) */
       return frame('<rect width="400" height="260" fill="url(#g4-brick)"/>'
-        + '<g stroke="#7d4526" stroke-width="2" opacity=".55">' + bricks + '</g>'
-        + '<rect x="112" y="34" width="176" height="192" rx="10" fill="#1d2733" opacity=".22"/>');
+        + '<g stroke="#7d4526" stroke-width="2" opacity=".55">' + bricks + '</g>');
     },
     /* newspaper on a desk */
     crosswordBoard: function () {
@@ -2027,6 +2049,9 @@ function say(text, lang) {
       AH = Math.floor((stageH - 40 - (n - 1) * GAP) / n);   /* 27px floor + ~13px of roof headroom */
       AH = Math.max(19, Math.min(48, AH));
       view.style.bottom = '27px';
+      /* the block height is published for the CSS: the answer cards in the tray take it, so an option and
+         the block it becomes are the same height before the flight starts (qa/NOTES.md 30) */
+      box.style.setProperty('--ah', AH + 'px');
     }
     /* the roof the tower is built TO. It is fixed the moment the tray tells us how tall a block is, at the
        height the finished tower will reach, so the goal is in the picture from the first answer and every
@@ -2131,6 +2156,8 @@ function say(text, lang) {
       var fly = el('div', 'g4-flyblk', pad ? pad.textContent : '');
       fly.style.left = x0 + 'px';
       fly.style.top = y0 + 'px';
+      fly.style.width = pb.width + 'px';
+      fly.style.height = pb.height + 'px';
       box.appendChild(fly);
       void fly.offsetWidth;
       fly.style.marginLeft = (-fly.offsetWidth / 2).toFixed(0) + 'px';
@@ -2141,8 +2168,14 @@ function say(text, lang) {
       var sb = ledge.getBoundingClientRect();
       var tx = sb.left - bb.left + sb.width / 2;
       var ty = viewH - top + d - AH;                  /* where the new block's top edge will be */
+      /* the block's own width: the ledge is as wide as the bottom block and each level up is 20px
+         narrower, so the flight aims at the size the card will actually become (qa/NOTES.md 30) */
+      var lvl = Math.round(top / (AH + GAP));
+      var blockW = Math.max(60, sb.width - lvl * 20);
       fly.style.transform = 'translate(' + (tx - x0).toFixed(0) + 'px,'
-        + (ty - y0).toFixed(0) + 'px) scale(.88)';
+        + (ty - y0).toFixed(0) + 'px)';
+      fly.style.width = blockW + 'px';
+      fly.style.height = AH + 'px';
       fly.classList.add('go');
       r.later(function () {
         if (fly.parentNode) fly.parentNode.removeChild(fly);
@@ -2281,6 +2314,13 @@ function say(text, lang) {
       return w;
     }
     function clear() {
+      /* ONE CONTINUOUS FLIGHT (qa/NOTES.md 31): between two questions nothing is reset — the bird keeps its
+         height and its climb, and the wall it just flew through keeps flying while the next question is cut
+         into a wall behind it. A reset here put him back in the middle of the sky between every answer,
+         which is what made the run read as a series of restarts. The only things that end a flight are
+         hitting a brick or the run itself finishing. */
+      var continuing = r.running && r.phase === 'done' && r.queue.length > 1 && !r.dead;
+      if (continuing) { target = ''; return; }
       stop();
       walls.forEach(function (w) { if (w.el.parentNode) w.el.parentNode.removeChild(w.el); });
       walls = []; judgedWall = null; target = '';
@@ -2386,7 +2426,9 @@ function say(text, lang) {
           var right = picked.value === target;
           picked.gap.classList.add(right ? 'ok' : 'no');
           bird.classList.add(right ? 'ok' : 'no');
-          if (right) bird.classList.add('through');
+          /* NO DASH FORWARD (qa/NOTES.md 31): the bird stays where it is and keeps flying. It used to leap
+             150px right and fade out on a right gap, which read as the bird being reset rather than carrying
+             on — and left it invisible for the rest of the run, since that animation was `forwards`. */
           r.pick(picked.value);
         } else if (hitWall()) {
           return;                                  /* the brick: the run is over, or starting again */
@@ -2788,12 +2830,10 @@ function say(text, lang) {
     main.appendChild(grid); main.appendChild(entry);
     box.appendChild(clue); box.appendChild(main); box.appendChild(msg);
     stage.appendChild(box);
-    /* a wall of faint tiles behind the board: the game reads as a board, not a form */
+    /* a wall of faint tiles behind the board: the game reads as a board, not a form. The grid is drawn by
+       the stylesheet in CSS pixels (qa/NOTES.md 32) — squared-off tiles at any stage size — so nothing is
+       injected here. */
     var back = el('div', 'g4-wbg');
-    back.innerHTML = '<svg viewBox="0 0 400 240" preserveAspectRatio="none" aria-hidden="true">'
-      + '<defs><pattern id="g4wt" width="42" height="42" patternUnits="userSpaceOnUse">'
-      + '<rect x="2" y="2" width="38" height="38" rx="6" fill="none" stroke="currentColor" stroke-opacity=".18" stroke-width="2"/>'
-      + '</pattern></defs><rect width="400" height="240" fill="url(#g4wt)"/></svg>';
     stage.insertBefore(back, box);
     var word = '', rows = 5, guesses = [], done = false;
     /* LIVES, not a guess countdown: the score counts UP (words got out of the run's words, the runner's
@@ -3003,12 +3043,19 @@ function say(text, lang) {
           var cell = el('div', 'g4-xcell' + (size < 24 ? ' small' : ''));
           var inp = document.createElement('input');
           inp.className = 'g4-gap';
-          inp.setAttribute('maxlength', '1');
+          /* NO `maxlength` (qa/NOTES.md 34): a one-character limit stops a filled square from taking a new
+             letter at all, so typing over a letter needed a Backspace first. The value is clamped to one
+             character in type() instead, and the caret selects what is there, so typing overwrites it. */
           inp.setAttribute('autocomplete', 'off');
+          inp.setAttribute('spellcheck', 'false');
           inp.setAttribute('aria-label', 'Row ' + (rr + 1) + ' column ' + (cc + 1));
           inp.setAttribute('data-key', key);
           inp.addEventListener('input', function () { type(this); });
-          inp.addEventListener('focus', function () { sayClue(this); });
+          inp.addEventListener('focus', function () {
+            sayClue(this);
+            /* the letter already there is SELECTED, so the next keystroke replaces it */
+            try { this.select(); } catch (e) { /* older engines */ }
+          });
           inp.addEventListener('keydown', function (e) { if (e.key === 'Backspace' && !this.value) back(this); });
           cell.appendChild(inp);
           grid.appendChild(cell);
@@ -3057,6 +3104,7 @@ function say(text, lang) {
       }
     }
     function type(inp) {
+      if (inp.readOnly) return;                  /* a solved word is locked (qa/NOTES.md 34) */
       var v = (inp.value || '').replace(/[^a-zA-Z]/g, '').slice(-1).toUpperCase();
       inp.value = v;
       if (v) nextIn(inp);

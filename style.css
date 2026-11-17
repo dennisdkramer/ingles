@@ -1539,7 +1539,7 @@
   }
 /* Tier-1 game block (engine4.js); the authored radios are what persists */
 .game{--edge:var(--ink);margin:14px 0;padding:12px 16px;background:var(--paper);border:2px solid var(--edge);border-radius:16px;box-shadow:5px 5px 0 var(--tan)}
-.game-stage{position:relative;height:240px;overflow:hidden;background:#eef4f7;border:2px dashed var(--tan);border-radius:12px;touch-action:manipulation}
+.game-stage{position:relative;height:340px;overflow:hidden;background:#eef4f7;border:2px dashed var(--tan);border-radius:12px;touch-action:manipulation}
 .game:not(.is-on) .game-stage{display:none}
 .game.is-on .game-list{display:none}
 .game-prompt{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:3;background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:4px 14px;font-weight:700;font-size:15px;white-space:nowrap;opacity:0;transition:opacity .45s ease}
@@ -1594,7 +1594,7 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    rule paints stage buttons in ink — which is the button's background too, so the label vanished. It is
    cream on ink here, as `button` says (qa/NOTES.md 99). */
 .g4-intro .game-start{font-size:16px;padding:10px 22px;color:var(--cream)}
-.game.g4 .g4-stage{position:relative;margin:10px 0 0;height:280px;overflow:hidden;background:linear-gradient(#eaf3f8,#dce9f2);border:2px solid var(--ink);border-radius:14px}
+.game.g4 .g4-stage{position:relative;margin:10px 0 0;height:380px;overflow:hidden;background:linear-gradient(#eaf3f8,#dce9f2);border:2px solid var(--ink);border-radius:14px}
 /* the scene: a finished picture of the place the game happens in; it sits under everything, for the
    whole run, so play never happens on a bare colour */
 .g4-scene{position:absolute;inset:0;z-index:0;overflow:hidden}
@@ -1705,18 +1705,29 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 /* bossRaid — the boss keels over when the killing hit lands (keeps the centring translateX) */
 .g4-bossart.down{animation:g4bossdown .9s ease-in forwards}
 @keyframes g4bossdown{to{transform:translateX(-50%) translateY(22px) rotate(-6deg);opacity:.28}}
-.g4-flyblk{position:absolute;z-index:8;min-width:46px;max-width:72%;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:9px;color:var(--ink);font:700 12.5px var(--ui-tight);text-align:center;pointer-events:none;box-shadow:3px 3px 0 var(--tan);transition:transform .3s cubic-bezier(.4,1,.5,1),opacity .3s ease}
+.g4-flyblk{position:absolute;z-index:8;min-width:46px;max-width:72%;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:9px;color:var(--ink);font:700 12.5px var(--ui-tight);text-align:center;pointer-events:none;box-shadow:3px 3px 0 var(--tan);
+  /* the flight is also the size change (qa/NOTES.md 30): the card leaves the tray at the tray's size and
+     lands at the block's, so it never moves over and then pops bigger. `overflow:hidden` keeps the word
+     inside it while the box is still narrow, and `box-sizing:border-box` makes the target width the
+     block's own outer width */
+  box-sizing:border-box;overflow:hidden;white-space:nowrap;
+  transition:transform .3s cubic-bezier(.4,1,.5,1),opacity .3s ease,width .3s cubic-bezier(.4,1,.5,1),height .3s ease}
 .g4-flyblk.go{opacity:.85}
 .g4-padbtn.lifted{box-shadow:6px 6px 0 var(--ink);cursor:grabbing;pointer-events:none}
-.g4-towerpads{position:absolute;right:10px;bottom:10px;display:flex;flex-direction:column;gap:30px;width:150px;height:auto}
-/* the two answer blocks stand bottom-right as a vertical pair, 30px apart; each keeps its own height */
-.g4-towerpads .g4-padbtn{flex:0 0 auto;min-height:44px}
+.g4-towerpads{position:absolute;right:10px;bottom:10px;display:flex;flex-direction:column;gap:30px;width:300px;height:auto}
+/* the answer blocks stand bottom-right as a vertical pair, 30px apart; each is EXACTLY one tower block
+   tall (`--ah`, published by the presentation), so the card that flies onto the stack is already the
+   height of the block it becomes and nothing jumps in size on landing (qa/NOTES.md 30) */
+.g4-towerpads .g4-padbtn{flex:0 0 auto;min-height:44px;height:var(--ah,44px)}
 .g4-raceopts{display:flex;gap:8px;position:absolute;left:10px;right:10px;bottom:10px}
 .g4-raceopt{flex:1 1 0;min-width:0;padding:8px 10px;margin:0;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);font:700 13.5px var(--ui-tight);color:var(--ink);cursor:pointer}
 .g4-raceopt.ok{border-color:var(--green);background:var(--greenbg)}
 .g4-marker{position:absolute;left:68px;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:11px solid var(--ink);transition:bottom .3s ease}
 .g4-slot,.g4-car{border-radius:6px;background:var(--ink);border:2px solid var(--tan)}
-.g4-padbtn{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;padding:0 8px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);color:var(--ink);font:700 13px var(--ui-tight);line-height:1.1;cursor:pointer;overflow:hidden}
+.g4-padbtn{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;padding:0 8px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);color:var(--ink);font:700 13px var(--ui-tight);line-height:1.1;cursor:pointer;overflow:hidden;
+  /* the choice text stays on one line (qa/NOTES.md 30): the tray is 300px wide, and a wrapped option read as
+     two options stacked in one button */
+  white-space:nowrap;text-overflow:ellipsis}
 .g4-padbtn.ok{border-color:var(--green);background:var(--greenbg)}
 /* the mark that says "it was this one" is a GREEN GLOW around the option as it already stands — never a
    filled card, a dashed border or a second background, which read as an answer the student gave */
@@ -1736,19 +1747,15 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-bird{position:absolute;left:64px;width:46px;height:34px;z-index:3;pointer-events:none}
 .g4-bird.ok{filter:drop-shadow(0 0 5px rgba(47,158,68,.95))}
 .g4-bird.no{filter:drop-shadow(0 0 5px rgba(201,42,42,.95))}
-/* the right gap: he does not stop in the doorway he chose — he flies on out the far side of it, and the
-   next wall is already coming in from the right when he clears this one */
-.g4-bird.through{animation:g4through .38s cubic-bezier(.4,.1,.7,1) forwards}
-@keyframes g4through{60%{opacity:1}to{transform:translate(150px,-10px);opacity:0}}
+/* no `.g4-bird.through`: a right gap used to leap him 150px forward and fade him out, which read as the
+   bird resetting instead of flying on (qa/NOTES.md 31). The gap keeps its green mark; he keeps his place */
 .g4-wing{transform-box:fill-box;transform-origin:82% 84%}
 .g4-bird.flap .g4-wing{animation:g4wing .26s ease}
 /* skeetRange — a disc per option thrown across the range on its own arc, one crosshair, one shot. The
    ring is drawn with a radial gradient so it needs no art file, and the option's plaque sits ON the
    disc, not under it: the disc is what the student aims at, so the word has to fly with it. */
-/* skeetRange asks for a taller frame than the default stage: the discs fly an arc over the range and its
-   prompt, ammunition and lanes need the headroom (qa/NOTES.md 27: "make the frame height 100px taller at
-   the game class root") */
-.game[data-game="skeetRange"] .g4-stage{height:380px}
+/* every game's stage is 100px taller than the old 240px at the class root (qa/NOTES.md 27), so a lane,
+   a stack or a bird has room without each plugin asking for its own height */
 .g4-range{position:absolute;inset:0;cursor:crosshair;touch-action:manipulation}
 .g4-target{position:absolute;left:0;top:0;width:112px;height:78px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:crosshair;transform:translate(0,0);will-change:transform}
 .g4-ring{position:absolute;left:50%;top:0;width:58px;height:58px;margin-left:-29px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#fff8ea 0 30%,var(--tan) 31% 42%,#fff8ea 43% 58%,var(--ink) 59% 66%,#fff8ea 67%);box-shadow:2px 2px 0 rgba(24,33,54,.22)}
@@ -1756,10 +1763,14 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    bird flaps and bobs so the range reads as a flock rather than a rack of discs */
 .g4-duck{position:absolute;left:50%;top:2px;width:88px;height:59px;margin-left:-44px;overflow:visible;
   color:inherit;transition:filter .18s ease}
-.g4-duck-wing,.g4-duck-tail{transform-box:fill-box}
-.g4-duck-wing-near{transform-origin:20% 90%;animation:g4flapd .44s ease-in-out infinite}
-.g4-duck-wing-far{transform-origin:20% 90%;animation:g4flapd .44s ease-in-out infinite}
-.g4-duck-wing-far{opacity:.72;animation-delay:-.22s}
+.g4-duck-wing,.g4-duck-tail,.g4-duck-flap{transform-box:fill-box}
+/* the wings sweep BACK over the body: each wing is mirrored on the DUCK's own x axis, not its own bbox —
+   mirrored in place it would keep its coordinates and vanish behind the body (qa/NOTES.md 27). The flap
+   is a rotation on a group INSIDE that mirror, so the two never share a pivot */
+.g4-duck-wing{transform-box:view-box;transform-origin:48px 32px;transform:scaleX(-1)}
+.g4-duck-flap{transform-origin:20% 90%;animation:g4flapd .44s ease-in-out infinite}
+.g4-duck-wing-far .g4-duck-flap{animation-delay:-.22s}
+.g4-duck-wing-far{opacity:.72}
 .g4-duck-tail{transform-origin:90% 50%;animation:g4ducktail 1.1s ease-in-out infinite}
 @keyframes g4flapd{0%,100%{rotate:-9deg}50%{rotate:16deg}}
 @keyframes g4ducktail{0%,100%{rotate:-4deg}50%{rotate:5deg}}
@@ -1767,7 +1778,7 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-target.no .g4-duck{filter:hue-rotate(-38deg) saturate(1.5) brightness(.96)}
 .g4-target.ok .g4-duck,.g4-target.no .g4-duck{animation:none}
 @media (prefers-reduced-motion:reduce){
-  .g4-duck-wing-near,.g4-duck-wing-far,.g4-duck-tail{animation:none}
+  .g4-duck-flap,.g4-duck-tail{animation:none}
 }
 .g4-target-t{position:absolute;left:50%;bottom:0;transform:translateX(-50%);padding:2px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 13px var(--ui-tight);line-height:1.18;white-space:nowrap}
 .g4-target:hover .g4-target-t{border-color:var(--blue)}
@@ -1818,7 +1829,7 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    height), which is also the saloon's visible foot — the frontage runs down behind the road, so its
    bottom edge is hidden there. Both were at 54px, which left every doorway hanging 20px below the wall
    it is set into. */
-.g4-doors{position:absolute;left:0;right:0;top:38%;bottom:74px;display:flex;align-items:flex-end;justify-content:center;gap:10px;transform:translateX(100px)}
+.g4-doors{position:absolute;left:0;right:0;top:38%;bottom:54px;display:flex;align-items:flex-end;justify-content:center;gap:10px;transform:translateX(100px)}
 /* the saloon itself: one timber frontage behind every doorway, so all four doors are entrances to the
    same building. Plank siding, a corner board down each side, a deep overhanging eave with its cornice,
    two windows either side of the porch and the SALOON board painted on the front — background, never a
@@ -1894,11 +1905,10 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-door.ok .g4-doorsign{border-color:var(--green);background:var(--greenbg)}
 .g4-door.no .g4-doorsign{border-color:#c92a2a;background:#fdeaea;animation:g4shake-x .34s ease}
 .g4-door.reveal .g4-doorsign{animation:g4pulse .7s ease-in-out 2}
-.g4-runner{position:absolute;left:50%;bottom:4px;width:30px;height:46px;margin-left:-15px;z-index:4;transition:transform .42s cubic-bezier(.3,1.1,.6,1),opacity .3s ease;pointer-events:none}
+.g4-runner{position:absolute;left:50%;bottom:4px;width:120px;height:184px;margin-left:-60px;z-index:4;transform-origin:50% 100%;transition:transform .42s cubic-bezier(.3,1.1,.6,1),opacity .3s ease;pointer-events:none}
 /* he goes in: the step through the doorway and the fade are ONE movement — he walks up and INTO the
-   opening, shrinking because he is going away from us, and the fade is the LAST thing that happens to
-   him rather than the whole of it */
-.g4-runner.enter{opacity:0;transform:translate(var(--dx, 0),-40px) scale(.56) !important;transition:transform .46s cubic-bezier(.32,.9,.5,1),opacity .34s ease .22s}
+   opening and FADES, he does not shrink (qa/NOTES.md 33: "dont make him shrink, just fade") */
+.g4-runner.enter{opacity:0;transform:translate(var(--dx, 0),-40px) !important;transition:transform .46s cubic-bezier(.32,.9,.5,1),opacity .46s ease .1s}
 @keyframes g4reel{0%,100%{transform:translate(var(--dx,0),0)}25%{transform:translate(calc(var(--dx,0) - 5px),-2px)}
   50%{transform:translate(calc(var(--dx,0) + 5px),0)}75%{transform:translate(calc(var(--dx,0) - 3px),-1px)}}
 @keyframes g4ladderfall{to{transform:rotate(-74deg)}}
@@ -1914,26 +1924,37 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 /* the bite always ends the same way: he goes down where he stands — the `down` state is built on his own
    --dx, so the fall happens at the door he chose — and then he is gone, until the street comes back
    with the next question */
-.g4-runner.down{transform:translate(var(--dx, 0),42px) rotate(84deg) !important;opacity:.6}
-.g4-runner.down.gone{opacity:0;transition:opacity .42s ease}
+.g4-runner.down{transform:translate(var(--dx, 0),60px) rotate(84deg) !important;opacity:.75}
+.g4-runner.down.gone{opacity:0;transition:opacity .5s ease}
 /* wordleBoard: clue on the left, letters and the typing box in the middle, a message on the right —
    one line, centred, so nothing moves when a letter lands */
 .g4-wordle{position:absolute;left:12px;right:12px;top:44px;bottom:8px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;column-gap:12px}
 .g4-wmain{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
 .g4-wclue{justify-self:end;align-self:center;max-width:26ch;text-align:right}
-.g4-wclue-t{display:block;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:2px 2px 0 var(--tan);font:700 12.5px var(--ui-tight);line-height:1.25}
+.g4-wclue-t{display:block;padding:4px 10px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:2px 2px 0 var(--tan);font:700 12.5px var(--ui-tight);line-height:1.25;
+  text-shadow:0 1px 0 rgba(255,255,255,.75)}
 .g4-wmsg{justify-self:start;align-self:center;max-width:26ch;opacity:0;padding:5px 11px;background:var(--paper);border:2px solid #c92a2a;border-radius:10px;box-shadow:2px 2px 0 rgba(201,42,42,.42);font:700 12.5px var(--ui-tight);line-height:1.25;color:var(--ink)}
 .g4-wmsg.show{animation:g4msg 3s ease forwards}
 @keyframes g4msg{0%{opacity:0}17%{opacity:1}83%{opacity:1}100%{opacity:0}}
 .g4-wgrid{display:flex;flex-direction:column;gap:4px}
 .g4-wrow{display:flex;gap:4px;justify-content:center}
-.g4-tile{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:2px solid var(--tan);border-radius:6px;font:800 15px var(--ui-tight);background:var(--paper)}
+.g4-tile{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:2px solid var(--tan);border-radius:6px;font:800 15px var(--ui-tight);background:var(--paper);
+  /* the letter cards look slightly raised (qa/NOTES.md 32): a light top edge inside and a soft drop under,
+     plus the glyph's own shadow, so a row reads as tiles on the wall rather than flat squares */
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.85),inset 0 -2px 0 rgba(0,0,0,.12),0 2px 3px rgba(24,33,54,.28);
+  text-shadow:0 1px 0 rgba(255,255,255,.7),0 -1px 0 rgba(0,0,0,.18)}
 .g4-tile.ok{background:var(--green);border-color:var(--green);color:#fff}
 .g4-tile.near{background:#d9a13c;border-color:#d9a13c;color:#fff}
 .g4-tile.no{background:#9aa4b2;border-color:#9aa4b2;color:#fff}
 .g4-wtype{width:200px;padding:7px 10px;border:2px solid var(--ink);border-radius:8px;font:700 14px var(--ui-tight);text-align:center}
-.g4-wbg{position:absolute;inset:0;color:var(--ink);opacity:.55;pointer-events:none}
-.g4-wbg svg{display:block;width:100%;height:100%}
+/* wordleBoard: a wall of faint SQUARE tiles behind the board. The tiles are drawn in CSS pixels, not as an
+   SVG pattern in a stretched viewBox (qa/NOTES.md 32): the old pattern was laid out in a 400x240 box and
+   then stretched to the stage, so every tile came out 3x wider than it was tall and the grid did not line up
+   with anything. A CSS grid is square at any stage size and needs no art. */
+.g4-wbg{position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(to right,rgba(24,33,54,.16) 2px,transparent 2px),
+    linear-gradient(to bottom,rgba(24,33,54,.16) 2px,transparent 2px);
+  background-size:46px 46px}
 
 .g4-xboard{position:absolute;left:10px;right:10px;top:10px;bottom:10px;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:16px}
 .g4-xgrid{display:grid;gap:3px;justify-content:center;align-content:center}
@@ -1966,7 +1987,15 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 /* on the way up to the top of the card, then along it: `left` is what moves, so it needs its own ease */
 .g4-lclimber.oncard{transition:bottom .38s ease,left .8s ease}
 .g4-lclimber.walking{animation:g4walk .38s steps(2,end) infinite}
-.g4-gap{width:100%;height:100%;text-align:center;text-transform:uppercase;border:2px solid var(--ink);border-radius:6px;font:800 15px var(--ui-tight);background:var(--paper)}
+.g4-gap{width:100%;height:100%;text-align:center;text-transform:uppercase;border:2px solid var(--ink);border-radius:6px;font:800 15px var(--ui-tight);background:var(--paper);
+  /* clicking a square highlights it (qa/NOTES.md 34): the field under the caret wears the accent ring and a
+     tinted fill, so which square is being typed into is never in doubt */
+  cursor:text}
+.g4-gap:focus{outline:0;border-color:var(--accent);background:var(--sunken);
+  box-shadow:0 0 0 3px color-mix(in oklab,var(--accent) 30%,transparent)}
+/* a solved word is LOCKED: the letters stay green and cannot be retyped over (qa/NOTES.md 34) */
+.g4-gap.ok:focus{box-shadow:0 0 0 3px color-mix(in oklab,var(--green) 30%,transparent)}
+.g4-gap[readonly]{cursor:default}
 .g4-gap.from{background:#fff8ea;border-color:var(--tan)}
 .g4-gap.ok{border-color:var(--green);background:var(--greenbg)}
 .g4-echo{position:absolute;left:12px;right:12px;top:44px;bottom:10px;display:flex;flex-direction:column;justify-content:center;gap:10px}
@@ -2133,18 +2162,21 @@ html.kbd .g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:
 .g4-chip.caught{border-color:var(--green);background:var(--greenbg)}
 .g4-chip.spilled{border-color:#c92a2a;background:#fdeaea;animation:g4shake .3s ease}
 
-.g4-tray{position:absolute;left:12px;right:12px;bottom:10px;display:flex;justify-content:center;gap:26px;z-index:2}
+.g4-tray{position:absolute;left:12px;right:12px;bottom:30px;display:flex;justify-content:center;gap:26px;z-index:2}
 /* catchBasket: the options are POTS. A right answer waters the pot it belongs in and grows one flower
    there; the flowers are the run's garden, so a pot keeps every bloom it earned. Each pot's word is its
    LABEL UNDER THE POT, and the pots themselves are lifted clear of it. */
-.g4-bucket{position:relative;flex:0 0 132px;min-width:0;height:134px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);font:700 14px var(--ui-tight);line-height:1.15;text-align:center;cursor:pointer;overflow:visible;
+.g4-bucket{position:relative;flex:0 0 132px;min-width:0;height:150px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);font:700 14px var(--ui-tight);line-height:1.15;text-align:center;cursor:pointer;overflow:visible;
   /* one pair of numbers decides the pot and where its flowers come from: the blooms hang off the pot's own
-     rim, so a taller pot never leaves them floating above it and a shorter one never buries them */
-  --pot-h:70px;--pot-sit:24px}
-.g4-bucket .g4-art{position:absolute;left:0;right:0;bottom:var(--pot-sit);height:var(--pot-h);width:100%;transition:transform .18s ease}
+     rim, so a taller pot never leaves them floating above it and a shorter one never buries them. The pot
+     keeps its drawn proportions (`width` alone; height follows from the art's own 120:84 ratio), which is
+     what makes it read as a pot rather than a squashed tub (qa/NOTES.md 29) */
+  --pot-w:104px;--pot-h:73px;--pot-sit:26px}
+.g4-bucket .g4-art{position:absolute;left:50%;bottom:var(--pot-sit);width:var(--pot-w);height:auto;
+  transform:translateX(-50%);transition:transform .18s ease}
 .g4-bucket-t{position:absolute;left:50%;bottom:0;transform:translateX(-50%);z-index:2;display:block;max-width:100%;padding:2px 7px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);white-space:nowrap;overflow:hidden}
-.g4-blooms{position:absolute;left:0;right:0;bottom:calc(var(--pot-sit) + var(--pot-h) - 7px);height:52px;z-index:1;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
-.g4-bloom{flex:0 0 auto;width:18px;height:46px;transform-origin:50% 100%;animation:g4grow .5s cubic-bezier(.3,1.5,.6,1)}
+.g4-blooms{position:absolute;left:0;right:0;bottom:calc(var(--pot-sit) + var(--pot-h));height:60px;z-index:1;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+.g4-bloom{flex:0 0 auto;width:36px;height:54px;transform-origin:50% 100%;animation:g4grow .5s cubic-bezier(.3,1.5,.6,1)}
 .g4-bloom+.g4-bloom{margin-left:-6px}
 .g4-bloom:nth-child(2n){transform:rotate(-8deg)}
 .g4-bloom:nth-child(3n){transform:rotate(7deg)}
@@ -2242,8 +2274,10 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
    The arithmetic is ONE geometry in two places that must agree: here (--rail / --car0 / --step /
    --deck) and the plugin's own constants of the same names.
    Vertical budget of the 340px stage, from the bottom: dock 6..44 · crew 48..124 · rail 140 · the
-   front car's roof 186 · a correct block's top 286 · the deck's underside 289 · the girder to 340. */
-.game[data-game="trainOrder"] .g4-stage{height:340px}
+   front car's roof 186 · a correct block's top 286 · the deck's underside 289 · the girder to 340.
+   The stage is now 380px at the root, so the yard's own geometry is unchanged and the extra 40px is air
+   above the gantry. */
+.game[data-game="trainOrder"] .g4-stage{height:380px}
 @keyframes g4pulse{0%,100%{box-shadow:2px 2px 0 var(--tan),0 0 0 0 rgba(47,158,68,0)}
   50%{box-shadow:2px 2px 0 var(--tan),0 0 0 6px rgba(47,158,68,.3),0 0 20px 7px rgba(47,158,68,.34)}}
 .g4-yard{position:absolute;inset:0;z-index:2;

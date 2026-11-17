@@ -149,7 +149,7 @@ content belongs in its `###` sections.
 
 ### [40]
 
-→ VEHICLES.md §`[40]`
+→ CONTENT_EXAMPLES.md §`[40]`
 
 ### [08]
 
@@ -280,7 +280,6 @@ content belongs in its `###` sections.
 ### [27]
 
 → VEHICLES.md §`[27]`
-
 make the targeting reticule disappear when the mouse moves out of the game /when the cursor reappears
 turn the targets into ducks, leave the word labels the same. 
 fetch an asset for a simple  animated cartoon  flying duck
@@ -295,39 +294,81 @@ for all the games, when you select the wrong answer, instead of a card behind th
 ### [28]
 
 → VEHICLES.md §`[28]`
+the option for the next question appears behind the current answer when you click it. make sure the options only appear when their question appears. for the transition to a new question, wipe or fade the old question/prompt card out and the new one in
 
-fix the mole size/positioning and option cards (missing/not visible currently)
-
-→ done: the option cards were the site's `details.reveal` accordion rule painting `--surface-2` on any element
-  with `.reveal`, so the moles' plaques came out as solid cream cards. That rule is now scoped to
-  `details.reveal` (its only 24 authored uses), so a game's `reveal` is just the glow.
+→ done: the handover is choreographed in the runner (`Runner.prototype.step` / `resolve`), so it holds for every
+  game at once. `PROMISE_OUT` (240ms) takes the old prompt off the stage before the item is stepped past, and
+  `PROMISE_IN` (180ms) holds the new options back until their question is up — the item clock now starts with
+  the options, not before them. Nothing from the old item is ever on screen under the new one.
 
 ### [29]
 
 → VEHICLES.md §`[29]`
+move the pots and and their answer cards up 20px. make the flowers start size and growth % twice as big and re-align their bottom with the top of the pots
 
-make the pots the correct size (the flowers should come out of the top of them)
-
-→ done: the pot is 70px tall (was 56) and the blooms now hang off the pot's own rim (`--pot-h` / `--pot-sit`
-  and `.g4-blooms{bottom:calc(var(--pot-sit) + var(--pot-h) - 7px)}`), so they grow out of the top.
-
+→ done: `.g4-tray` bottom 10px → 30px (the pots and their labels move up together); blooms 18x46 → 36x54 (twice
+  the width, and now the art's own 40:60 proportion rather than a squashed box) hanging off
+  `--pot-sit + --pot-h`, which IS the pot's rim, so their bottoms sit on the top of the pot. The pot itself is
+  sized by `--pot-w:104px` with `height:auto`, so it keeps its drawn 120:84 shape.
 
 ### [30]
 
 → VEHICLES.md §`[30]`
-make the option buttons 300px and no text wrapping inside them
+the question cards should have a single line or text with no wrapping  so their cards are the same height as the answer card stack. animate their width change as they move onto the stack - right now they move over and then just instantly get bigger
+
+→ done: the option cards already held one line; the missing part was the size. `fitBlocks()` publishes the block
+  height as `--ah`, and `.g4-towerpads .g4-padbtn{height:var(--ah)}` makes every option exactly one tower block
+  tall. The flying card now leaves at the option's own width and height and lands at the block's (the ledge width
+  less 20px per level), with `width`/`height` in the transition — so the size change happens during the flight
+  instead of on landing.
 
 ### [31]
 
 → VEHICLES.md §`[31]`
-make the bird not reset position or dash forward after passing through a gap - current behavior of hitting hte wall is correct
+the bird stil resets position after a right or wrong anser - it needs to be one continuous flight/game with no reset other than hitting the wall
+
+→ done: `flapGate.clear()` no longer resets mid-run. When the run is continuing (`r.phase === 'done'` with items
+  still in the queue) it only drops the pending target — the bird keeps its height and its climb, and the wall it
+  just flew through keeps flying while the next question is cut into a wall behind it. The only resets left are
+  hitting a brick and the run ending.
 
 ### [32]
 
 → VEHICLES.md §`[32]`
-align the background layers to be more appealing, its kind of messy right now
+the two background layers should align better, or you can try a different background.
+put a shadow on the text and an edge shadow on the letter card backgrounds so they seem slightly 3d
+
+→ done: the wall was an SVG pattern laid out in a 400x240 `viewBox` and then stretched to the stage, so every tile
+  came out about three times wider than it was tall. It is now a CSS grid at 46px square (`background-size`), which
+  is square at any stage size and aligns with itself. The letter cards carry an inset light top edge, an inset dark
+  bottom edge and a soft drop (`box-shadow`), plus a two-way `text-shadow`, so they read as raised tiles. The clue
+  card took the same text shadow.
 
 ### [33]
 
 → VEHICLES.md §`[33]`
-align the door elements with the building properly
+make the guy 2x taller/bigger. when you get the answer right and he goes in the door dont make him shrink, just fade. When you get it wrong, animate him falling over before he disappears and resets
+
+→ done: `.g4-runner` 60x92 → 120x184. `.enter` is a step up into the doorway with a fade and no scale, so he is
+  never shrunk. A wrong answer reels him (`g4reel`), drops him at the door he chose (`.down`: translate down and
+  rotate 84deg, built on his own `--dx`) and then fades him out (`.down.gone`).
+
+### [34]
+
+→ VEHICLES.md §`[34]`
+instead of being normal text fields, make it so clicking a field highlights it and typing overwrites any letter thats in it - correct words - when they turn the boxes green - lock the letters so they cant be overwritten
+
+→ done: `maxlength="1"` is gone (it stopped a filled square taking a new letter at all); the value is clamped in
+  `type()` instead, and focus selects what is there so the next keystroke replaces it. The focused square wears an
+  accent ring and a tinted fill (`.g4-gap:focus`), green once solved. A solved word is `readOnly` and `type()`
+  refuses to write into a locked square.
+
+### [35]
+
+→ VEHICLES.md §`[35]`
+remove the audio and its button, remove the hint text,  and move the prompt and options down by 30px
+
+### [36]
+
+→ VEHICLES.md §`[36]`
+delay the word audio by .5s after clicking the button. make the button invisible/not there  on the start screen and fade in after clicking play.make the button always just say "Listen, then select the correct word". leave the fade on the button the way it is, but dont make it change text
