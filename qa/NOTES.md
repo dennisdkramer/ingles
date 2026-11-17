@@ -35,23 +35,21 @@ content belongs in its `###` sections.
 
 ## preview-blocks.html
 
-**Deleted 2026-11-16.** Its specimens were folded into `capability-map.html` §4; the note boxes below are kept as the record of what each one was asked to show.
-
 ### [02]
 
-→ CONTENT_EXAMPLES.md §`[02]`
+→ IN-BLOCK-VISUALS.md §`[02]`
 
 ### [03]
 
-→ CONTENT_EXAMPLES.md §`[03]`
+→ VEHICLES.md §`[03]`
 
 ### [04]
 
-→ CONTENT_EXAMPLES.md §`[04]`
+→ VEHICLES.md §`[04]`
 
 ### [05]
 
-→ CONTENT_EXAMPLES.md §`[05]`
+→ IN-BLOCK-VISUALS.md §`[05]`
 
 ### [07]
 
@@ -59,35 +57,35 @@ content belongs in its `###` sections.
 
 ### [12]
 
-→ CONTENT_EXAMPLES.md §`[12]`
+→ VEHICLES.md §`[12]`
 
 ### [27]
 
-→ CONTENT_EXAMPLES.md §`[27]`
+→ VEHICLES.md §`[27]`
 
 ### [36]
 
-→ CONTENT_EXAMPLES.md §`[36]`
+→ VEHICLES.md §`[36]`
 
 ### [38]
 
-→ CONTENT_EXAMPLES.md §`[38]`
+→ VEHICLES.md §`[38]`
 
 ### [30]
 
-→ CONTENT_EXAMPLES.md §`[30]`
+→ VEHICLES.md §`[30]`
 
 ### [35]
 
-→ CONTENT_EXAMPLES.md §`[35]`
+→ VEHICLES.md §`[35]`
 
 ### [31]
 
-→ CONTENT_EXAMPLES.md §`[31]`
+→ VEHICLES.md §`[31]`
 
 ### [37]
 
-→ CONTENT_EXAMPLES.md §`[37]`
+→ VEHICLES.md §`[37]`
 
 ### [41]
 
@@ -95,7 +93,7 @@ content belongs in its `###` sections.
 
 ### [42]
 
-→ CONTENT_EXAMPLES.md §`[42]`
+→ IN-BLOCK-VISUALS.md §`[42]`
 
 ### [43]
 
@@ -103,7 +101,7 @@ content belongs in its `###` sections.
 
 ### [50]
 
-→ CONTENT_EXAMPLES.md §`[50]`
+→ IN-BLOCK-VISUALS.md §`[50]`
 
 ### [55]
 
@@ -115,8 +113,7 @@ content belongs in its `###` sections.
 
 ### [57]
 
-→ IN-BLOCK-VISUALS.md §`[57]`
-the first thing is making the line something more than a 1px line with a arrow icon.  not a fixed length, we will give it a minimum length of 100px, so lets get started with an empty block and centered at the bottom (via html, not css) build a new timeline. I want a  2px line which has a small animated svg icon with the word NOW below it. To the left of the star, the line fades out on a log curve to 0 at the left end. On the right side of the star it becomes a dashed line, no fade, until the far right which has a double arrow icon and the word 'FUTURE' faint but visible behind the end of the line
+→ CONTENT_EXAMPLES.md §`[57]`
 
 ### [58]
 
@@ -128,7 +125,7 @@ the first thing is making the line something more than a 1px line with a arrow i
 
 ### [61]
 
-→ CONTENT_EXAMPLES.md §`[61]`
+→ IN-BLOCK-VISUALS.md §`[61]`
 
 ### [63]
 
@@ -140,19 +137,19 @@ the first thing is making the line something more than a 1px line with a arrow i
 
 ### [65]
 
-→ CONTENT_EXAMPLES.md §`[65]`
+→ IN-BLOCK-VISUALS.md §`[65]`
 
 ### [66]
 
-→ CONTENT_EXAMPLES.md §`[66]`
+→ IN-BLOCK-VISUALS.md §`[66]`
 
 ### [67]
 
-→ CONTENT_EXAMPLES.md §`[67]`
+→ IN-BLOCK-VISUALS.md §`[67]`
 
 ### [40]
 
-→ CONTENT_EXAMPLES.md §`[40]`
+→ VEHICLES.md §`[40]`
 
 ### [08]
 
@@ -276,11 +273,61 @@ the first thing is making the line something more than a 1px line with a arrow i
 
 ### [39]
 
-→ CONTENT_EXAMPLES.md §`[39]`
+→ VEHICLES.md §`[39]`
 
 ## preview-menu.html
 
-### [40]
+### [27]
 
-→ CONTENT_EXAMPLES.md §`[40]`
-delete
+→ VEHICLES.md §`[27]`
+
+make the targeting reticule disappear when the mouse moves out of the game /when the cursor reappears
+turn the targets into ducks, leave the word labels the same. 
+fetch an asset for a simple  animated cartoon  flying duck
+make the frame height 100px taller at the game class root
+for all the games, when you select the wrong answer, instead of a card behind the correct answer, make it a green translucent glow
+
+→ done: reticule hides on mouseleave/pointerleave/window blur (engine4.js `lower()`); targets draw an inline
+  duck (`ART.duck`, `ART.duck` + `.g4-duck*`) with the word on its plaque, flapping wings and a bobbing tail;
+  `.game[data-game="skeetRange"] .g4-stage{height:380px}`; every `reveal` rule now shows a pulsing green glow
+  (`@keyframes g4pulse`) instead of a dashed border or a card.
+
+### [28]
+
+→ VEHICLES.md §`[28]`
+
+fix the mole size/positioning and option cards (missing/not visible currently)
+
+→ done: the option cards were the site's `details.reveal` accordion rule painting `--surface-2` on any element
+  with `.reveal`, so the moles' plaques came out as solid cream cards. That rule is now scoped to
+  `details.reveal` (its only 24 authored uses), so a game's `reveal` is just the glow.
+
+### [29]
+
+→ VEHICLES.md §`[29]`
+
+make the pots the correct size (the flowers should come out of the top of them)
+
+→ done: the pot is 70px tall (was 56) and the blooms now hang off the pot's own rim (`--pot-h` / `--pot-sit`
+  and `.g4-blooms{bottom:calc(var(--pot-sit) + var(--pot-h) - 7px)}`), so they grow out of the top.
+
+
+### [30]
+
+→ VEHICLES.md §`[30]`
+make the option buttons 300px and no text wrapping inside them
+
+### [31]
+
+→ VEHICLES.md §`[31]`
+make the bird not reset position or dash forward after passing through a gap - current behavior of hitting hte wall is correct
+
+### [32]
+
+→ VEHICLES.md §`[32]`
+align the background layers to be more appealing, its kind of messy right now
+
+### [33]
+
+→ VEHICLES.md §`[33]`
+align the door elements with the building properly

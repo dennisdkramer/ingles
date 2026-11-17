@@ -130,7 +130,12 @@
     text-decoration-thickness:.07em;text-decoration-color:var(--accent-line)}
   a:hover{text-decoration-color:var(--accent)}
   code,kbd{font-family:var(--mono);font-size:.9em;background:var(--sunken);border-radius:6px;padding:.1em .38em}
-  img,svg,video{max-width:100%;height:auto;display:block}
+  /* `height:auto` on a bare `svg` would win over every height declared in a LATER-in-order layer even at
+     lower specificity (layer order beats specificity), and the GAMES block lives in `legacy`, the first
+     layer — so an svg there could never be sized by its own rule. Images keep the responsive default;
+     an svg keeps only the width cap, and its own CSS or its width/height attributes decide the rest. */
+  img,video{max-width:100%;height:auto;display:block}
+  svg{max-width:100%;display:block}
   input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
   ::selection{background:color-mix(in oklab, var(--accent) 28%, transparent)}
   :focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:4px}
@@ -1052,18 +1057,18 @@
 
 /* #64 REVEAL — <details class="reveal"><summary>label</summary><div class="body"><div>content</div></div></details>; closed unset. Inner div required for the fold */
 @layer control{
-  .reveal{border:1px solid var(--line-2);border-radius:var(--r1);background:var(--surface-2);
+  details.reveal{border:1px solid var(--line-2);border-radius:var(--r1);background:var(--surface-2);
     overflow:hidden;margin:8px 0 0}
-  .reveal>summary{cursor:pointer;padding:9px 12px;font:600 .9rem var(--sans);color:var(--ink-2);
+  details.reveal>summary{cursor:pointer;padding:9px 12px;font:600 .9rem var(--sans);color:var(--ink-2);
     list-style:none;display:flex;align-items:center;gap:8px}
-  .reveal>summary::-webkit-details-marker{display:none}
-  .reveal>summary::before{content:"▸";color:var(--accent);transition:rotate .22s}
-  .reveal[open]>summary::before{rotate:90deg}
-  .reveal[open]>summary{color:var(--ink);border-bottom:1px solid var(--line-2)}
-  .reveal .body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
-  .reveal[open] .body{grid-template-rows:1fr}
-  .reveal .body>div{overflow:hidden;padding:0 12px}
-  .reveal[open] .body>div{padding:10px 12px}
+  details.reveal>summary::-webkit-details-marker{display:none}
+  details.reveal>summary::before{content:"▸";color:var(--accent);transition:rotate .22s}
+  details.reveal[open]>summary::before{rotate:90deg}
+  details.reveal[open]>summary{color:var(--ink);border-bottom:1px solid var(--line-2)}
+  details.reveal .body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+  details.reveal[open] .body{grid-template-rows:1fr}
+  details.reveal .body>div{overflow:hidden;padding:0 12px}
+  details.reveal[open] .body>div{padding:10px 12px}
 }
 
 /* #76 ENGINE — engine2.js writes label.opt.correct and .ans beside a typed field, and reads .qitem[data-a] on .opts. Vary: --ok (colour) */
@@ -1225,8 +1230,8 @@
       --surface:#fff;--surface-2:#fff;--paper:#fff;background:#fff;color:#000}
     .block[data-look="grain"]::after,.block[data-look="tape"]::before{display:none}
     .block[data-look="outline"]{background-image:none}
-    .reveal .body{grid-template-rows:1fr}
-    .reveal[open] .body>div,.reveal .body>div{padding:6px 12px}
+    details.reveal .body{grid-template-rows:1fr}
+    details.reveal[open] .body>div,.reveal .body>div{padding:6px 12px}
     .flip{min-height:auto;perspective:none}
     .flip .card3d{rotate:none;transform-style:flat}
     .flip .face{position:static;backface-visibility:visible;break-inside:avoid}
@@ -1713,7 +1718,9 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-slot,.g4-car{border-radius:6px;background:var(--ink);border:2px solid var(--tan)}
 .g4-padbtn{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;padding:0 8px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--tan);color:var(--ink);font:700 13px var(--ui-tight);line-height:1.1;cursor:pointer;overflow:hidden}
 .g4-padbtn.ok{border-color:var(--green);background:var(--greenbg)}
-.g4-raceopt.reveal,.g4-padbtn.reveal{border-style:dashed;border-color:var(--green)}
+/* the mark that says "it was this one" is a GREEN GLOW around the option as it already stands — never a
+   filled card, a dashed border or a second background, which read as an answer the student gave */
+.g4-raceopt.reveal,.g4-padbtn.reveal{animation:g4pulse .7s ease-in-out 2}
 @keyframes g4drop-in{from{transform:translateY(-16px);opacity:0}to{transform:none;opacity:1}}
 .g4-sky{position:absolute;inset:0;background:linear-gradient(#dff0f7,#eef7ea);cursor:pointer;overflow:hidden}
 /* flapGate: the wall is a 100px column of bricks; the gaps cut out of it are where the bird must be.
@@ -1725,7 +1732,7 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-gapg-t{display:block;padding:2px 8px;background:var(--paper);border-radius:6px;font:700 18px var(--ui-tight);line-height:1.1;text-align:center;white-space:nowrap;color:#3a3f47;opacity:1}
 .g4-gapg.ok .g4-gapg-t{background:var(--greenbg);color:#1d5c2c;opacity:1}
 .g4-gapg.no .g4-gapg-t{background:#fdeaea;color:#7d1f1f;opacity:1}
-.g4-gapg.reveal .g4-gapg-t{background:var(--greenbg);color:#1d5c2c;outline:2px dashed var(--green);opacity:1}
+.g4-gapg.reveal .g4-gapg-t{opacity:1;animation:g4pulse .7s ease-in-out 2}
 .g4-bird{position:absolute;left:64px;width:46px;height:34px;z-index:3;pointer-events:none}
 .g4-bird.ok{filter:drop-shadow(0 0 5px rgba(47,158,68,.95))}
 .g4-bird.no{filter:drop-shadow(0 0 5px rgba(201,42,42,.95))}
@@ -1738,15 +1745,36 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 /* skeetRange — a disc per option thrown across the range on its own arc, one crosshair, one shot. The
    ring is drawn with a radial gradient so it needs no art file, and the option's plaque sits ON the
    disc, not under it: the disc is what the student aims at, so the word has to fly with it. */
+/* skeetRange asks for a taller frame than the default stage: the discs fly an arc over the range and its
+   prompt, ammunition and lanes need the headroom (qa/NOTES.md 27: "make the frame height 100px taller at
+   the game class root") */
+.game[data-game="skeetRange"] .g4-stage{height:380px}
 .g4-range{position:absolute;inset:0;cursor:crosshair;touch-action:manipulation}
-.g4-target{position:absolute;left:0;top:0;width:112px;height:58px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:crosshair;transform:translate(0,0);will-change:transform}
+.g4-target{position:absolute;left:0;top:0;width:112px;height:78px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:crosshair;transform:translate(0,0);will-change:transform}
 .g4-ring{position:absolute;left:50%;top:0;width:58px;height:58px;margin-left:-29px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#fff8ea 0 30%,var(--tan) 31% 42%,#fff8ea 43% 58%,var(--ink) 59% 66%,#fff8ea 67%);box-shadow:2px 2px 0 rgba(24,33,54,.22)}
-.g4-target-t{position:absolute;left:50%;top:29px;transform:translate(-50%,-50%);padding:2px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 13px var(--ui-tight);line-height:1.18;white-space:nowrap}
+/* the flying target is a DUCK (qa/NOTES.md 27): the word rides on the plaque exactly as before, and the
+   bird flaps and bobs so the range reads as a flock rather than a rack of discs */
+.g4-duck{position:absolute;left:50%;top:2px;width:88px;height:59px;margin-left:-44px;overflow:visible;
+  color:inherit;transition:filter .18s ease}
+.g4-duck-wing,.g4-duck-tail{transform-box:fill-box}
+.g4-duck-wing-near{transform-origin:20% 90%;animation:g4flapd .44s ease-in-out infinite}
+.g4-duck-wing-far{transform-origin:20% 90%;animation:g4flapd .44s ease-in-out infinite}
+.g4-duck-wing-far{opacity:.72;animation-delay:-.22s}
+.g4-duck-tail{transform-origin:90% 50%;animation:g4ducktail 1.1s ease-in-out infinite}
+@keyframes g4flapd{0%,100%{rotate:-9deg}50%{rotate:16deg}}
+@keyframes g4ducktail{0%,100%{rotate:-4deg}50%{rotate:5deg}}
+.g4-target.ok .g4-duck{filter:hue-rotate(58deg) saturate(1.25) brightness(1.02)}
+.g4-target.no .g4-duck{filter:hue-rotate(-38deg) saturate(1.5) brightness(.96)}
+.g4-target.ok .g4-duck,.g4-target.no .g4-duck{animation:none}
+@media (prefers-reduced-motion:reduce){
+  .g4-duck-wing-near,.g4-duck-wing-far,.g4-duck-tail{animation:none}
+}
+.g4-target-t{position:absolute;left:50%;bottom:0;transform:translateX(-50%);padding:2px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 13px var(--ui-tight);line-height:1.18;white-space:nowrap}
 .g4-target:hover .g4-target-t{border-color:var(--blue)}
 .g4-target.ok .g4-target-t{border-color:var(--green);background:var(--greenbg)}
 .g4-target.ok .g4-ring{background:radial-gradient(circle at 50% 50%,var(--greenbg) 0 30%,var(--green) 31% 42%,var(--greenbg) 43% 58%,var(--green) 59% 66%,var(--greenbg) 67%)}
 .g4-target.no .g4-target-t{border-color:#c92a2a;background:#fdeaea;animation:g4shake-anchor .34s ease-in-out}
-.g4-target.reveal .g4-target-t{border-style:dashed;border-color:var(--green);animation:g4pulse .7s ease-in-out 2}
+.g4-target.reveal .g4-target-t{animation:g4pulse .7s ease-in-out 2}
 .g4-target.ok .g4-ring,.g4-target.no .g4-ring{animation:g4puff .42s ease-out}
 .g4-cross{position:absolute;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;pointer-events:none;opacity:0;transition:opacity .15s ease}
 .g4-cross::before,.g4-cross::after{content:'';position:absolute;background:var(--ink);box-shadow:0 0 0 2px rgba(253,250,242,.8)}
@@ -1865,7 +1893,7 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-door.bitten .g4-snake{transform:translate(-50%,0);opacity:1}
 .g4-door.ok .g4-doorsign{border-color:var(--green);background:var(--greenbg)}
 .g4-door.no .g4-doorsign{border-color:#c92a2a;background:#fdeaea;animation:g4shake-x .34s ease}
-.g4-door.reveal .g4-doorsign{border-style:dashed;border-color:var(--green);animation:g4pulse .7s ease-in-out 2}
+.g4-door.reveal .g4-doorsign{animation:g4pulse .7s ease-in-out 2}
 .g4-runner{position:absolute;left:50%;bottom:4px;width:30px;height:46px;margin-left:-15px;z-index:4;transition:transform .42s cubic-bezier(.3,1.1,.6,1),opacity .3s ease;pointer-events:none}
 /* he goes in: the step through the doorway and the fade are ONE movement — he walks up and INTO the
    opening, shrinking because he is going away from us, and the fade is the LAST thing that happens to
@@ -2105,14 +2133,17 @@ html.kbd .g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:
 .g4-chip.caught{border-color:var(--green);background:var(--greenbg)}
 .g4-chip.spilled{border-color:#c92a2a;background:#fdeaea;animation:g4shake .3s ease}
 
-.g4-tray{position:absolute;left:12px;right:12px;bottom:10px;display:flex;gap:14px;z-index:2}
+.g4-tray{position:absolute;left:12px;right:12px;bottom:10px;display:flex;justify-content:center;gap:26px;z-index:2}
 /* catchBasket: the options are POTS. A right answer waters the pot it belongs in and grows one flower
    there; the flowers are the run's garden, so a pot keeps every bloom it earned. Each pot's word is its
    LABEL UNDER THE POT, and the pots themselves are lifted clear of it. */
-.g4-bucket{position:relative;flex:1 1 0;min-width:0;height:134px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);font:700 14px var(--ui-tight);line-height:1.15;text-align:center;cursor:pointer;overflow:visible}
-.g4-bucket .g4-art{position:absolute;left:0;right:0;bottom:32px;height:56px;width:100%;transition:transform .18s ease}
+.g4-bucket{position:relative;flex:0 0 132px;min-width:0;height:134px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);font:700 14px var(--ui-tight);line-height:1.15;text-align:center;cursor:pointer;overflow:visible;
+  /* one pair of numbers decides the pot and where its flowers come from: the blooms hang off the pot's own
+     rim, so a taller pot never leaves them floating above it and a shorter one never buries them */
+  --pot-h:70px;--pot-sit:24px}
+.g4-bucket .g4-art{position:absolute;left:0;right:0;bottom:var(--pot-sit);height:var(--pot-h);width:100%;transition:transform .18s ease}
 .g4-bucket-t{position:absolute;left:50%;bottom:0;transform:translateX(-50%);z-index:2;display:block;max-width:100%;padding:2px 7px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);white-space:nowrap;overflow:hidden}
-.g4-blooms{position:absolute;left:0;right:0;bottom:64px;height:52px;z-index:1;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+.g4-blooms{position:absolute;left:0;right:0;bottom:calc(var(--pot-sit) + var(--pot-h) - 7px);height:52px;z-index:1;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
 .g4-bloom{flex:0 0 auto;width:18px;height:46px;transform-origin:50% 100%;animation:g4grow .5s cubic-bezier(.3,1.5,.6,1)}
 .g4-bloom+.g4-bloom{margin-left:-6px}
 .g4-bloom:nth-child(2n){transform:rotate(-8deg)}
@@ -2138,7 +2169,7 @@ html.kbd .g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:
 .g4-bucket.hot .g4-bucket-t{border-color:var(--blue)}
 .g4-bucket.ok .g4-bucket-t{border-color:var(--green);background:var(--greenbg)}
 .g4-raceopt.no,.g4-padbtn.no,.g4-gap.no,.g4-btile.no,.g4-bucket.no .g4-bucket-t{border-color:#c92a2a;background:#fdeaea}
-.g4-bucket.reveal .g4-bucket-t{border-style:dashed;border-color:var(--green);animation:g4pulse .7s ease-in-out 2}
+.g4-bucket.reveal .g4-bucket-t{animation:g4pulse .7s ease-in-out 2}
 @keyframes g4grow{0%{transform:scaleY(.15) scaleX(.6);opacity:0}60%{transform:scaleY(1.08)}100%{opacity:1}}
 @keyframes g4splash{0%{opacity:0;transform:translateY(-10px) scaleY(.7)}
   25%{opacity:1;transform:none}
@@ -2154,7 +2185,9 @@ html.kbd .g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:
 @keyframes g4moleblink{0%,90%,96%,100%{opacity:1}93%{opacity:.1}}
 .g4-mole.alive .g4-art{animation:g4bob var(--bob-d,2.4s) ease-in-out var(--bob-t,0s) infinite;transform-origin:50% 96%}
 .g4-mole.alive .g4-eyes{animation:g4moleblink var(--blink-d,5s) linear var(--blink-t,0s) infinite}
-.g4-grid{position:absolute;left:14px;right:14px;top:52px;bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:10px;z-index:2}
+/* the garden is a GARDEN, not a stadium: the cells are capped and centred, so a wide stage cannot stretch
+   a molehill into a pancake (the mound is drawn as a share of its cell, so cell shape is the whole look) */
+.g4-grid{position:absolute;left:14px;right:14px;top:52px;bottom:18px;display:grid;grid-template-columns:repeat(3,minmax(0,200px));grid-auto-rows:1fr;justify-content:center;gap:10px;z-index:2}
 /* each mole surfaces from its OWN LITTLE MOLEHILL, drawn directly under it (qa/NOTES.md 88): the hill
    is a mound of the same soil as the garden with a dark opening at its crest. THE MOLE COMES OUT OF THE
    HOLE, not from behind it (qa/NOTES.md: "make the moles appear to be coming out of the holes, not
@@ -2173,6 +2206,11 @@ html.kbd .g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:
    name; the mole is above the mound (z-index 2 against the mound's 1) and below the lip (3) */
 .g4-mole{position:absolute;inset:4px 3px 0;z-index:2;display:flex;flex-direction:column-reverse;align-items:center;justify-content:flex-start;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:var(--ink);cursor:pointer;transition:transform .24s cubic-bezier(.34,1.56,.64,1);transform:translateY(0)}
 .g4-mole .g4-art{height:70%;flex:0 0 auto}
+/* the rise is an animation, not a timer-undoable inline transform: it always completes, so a mole can
+   never be left standing in the hole below (that is what hid its word under the next mound) */
+.g4-mole.rise{animation:g4rise .26s cubic-bezier(.34,1.56,.64,1) var(--rise-t,0ms) both}
+@keyframes g4rise{0%{transform:translateY(104%)}100%{transform:translateY(0)}}
+.g4-mole.duck{transform:translateY(104%)}
 .g4-mole-t{display:block;max-width:100%;margin-bottom:-4px;padding:2px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 13px var(--ui-tight);line-height:1.18;overflow:hidden}
 html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;border-radius:10px}
 @keyframes g4shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
@@ -2180,7 +2218,7 @@ html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;
 .g4-mole.ok{transform:translateY(-4px)}
 .g4-mole.ok .g4-mole-t{border-color:var(--green);background:var(--greenbg)}
 .g4-mole.no .g4-mole-t{border-color:#c92a2a;background:#fdeaea;animation:g4shake .34s ease-in-out}
-.g4-mole.reveal .g4-mole-t{border-style:dashed;border-color:var(--green);animation:g4pulse .7s ease-in-out 2}
+.g4-mole.reveal .g4-mole-t{animation:g4pulse .7s ease-in-out 2}
 @media (prefers-reduced-motion:reduce){
   .g4-mole{transition:none}
   .g4-mole .g4-art,.g4-mole .g4-eyes{animation:none}
@@ -2206,7 +2244,8 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
    Vertical budget of the 340px stage, from the bottom: dock 6..44 · crew 48..124 · rail 140 · the
    front car's roof 186 · a correct block's top 286 · the deck's underside 289 · the girder to 340. */
 .game[data-game="trainOrder"] .g4-stage{height:340px}
-@keyframes g4pulse{0%,100%{box-shadow:2px 2px 0 var(--tan)}50%{box-shadow:0 0 0 4px rgba(47,158,68,.35)}}
+@keyframes g4pulse{0%,100%{box-shadow:2px 2px 0 var(--tan),0 0 0 0 rgba(47,158,68,0)}
+  50%{box-shadow:2px 2px 0 var(--tan),0 0 0 6px rgba(47,158,68,.3),0 0 20px 7px rgba(47,158,68,.34)}}
 .g4-yard{position:absolute;inset:0;z-index:2;
   --rail:140px;--car0:46px;--step:6px;--deck:289px;
   /* the whole train is a fixed 76% of the yard whatever its length, so these are the values for a train of

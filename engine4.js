@@ -283,6 +283,25 @@ window.GAMES4 = (function () {
       + '</g>'
       + '<path d="M36 74q6-7 12-1M64 74q-6-7-12-1" stroke="#3a2314" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
       + '</svg>',
+    /* skeetRange's target: a cartoon duck in flight. Two wings and the tail are separate groups, so the
+       bird flaps and bobs while it crosses the range; the word it carries sits on `.g4-target-t` and is
+       untouched. Drawn facing right, the way the whole range throws. */
+    duck: '<svg class="g4-duck" viewBox="0 0 96 64" aria-hidden="true" focusable="false">'
+      + '<g class="g4-duck-wing g4-duck-wing-far">'
+      + '<path d="M46 30q14-22 26-14-4 12-16 18z" fill="#d98f28" stroke="#7d4a10" stroke-width="2.4" stroke-linejoin="round"/>'
+      + '</g>'
+      + '<path class="g4-duck-tail" d="M20 32q-11-6-13 3 6 7 14 4z" fill="#f6c65a" stroke="#7d4a10" stroke-width="2.4" stroke-linejoin="round"/>'
+      + '<ellipse cx="46" cy="34" rx="26" ry="16" fill="#ffd766" stroke="#7d4a10" stroke-width="2.8"/>'
+      + '<ellipse cx="45" cy="39" rx="16" ry="9" fill="#ffe9a8"/>'
+      + '<circle cx="69" cy="21" r="11" fill="#ffdf7a" stroke="#7d4a10" stroke-width="2.6"/>'
+      + '<circle cx="73" cy="19" r="2.2" fill="#241708"/>'
+      + '<circle cx="73.8" cy="18.2" r=".8" fill="#fff"/>'
+      + '<path d="M79 24l13 3-13 4z" fill="#ef8a2f" stroke="#7d4a10" stroke-width="2" stroke-linejoin="round"/>'
+      + '<g class="g4-duck-wing g4-duck-wing-near">'
+      + '<path d="M44 34q10-19 24-12-2 13-14 20z" fill="#f6a93a" stroke="#7d4a10" stroke-width="2.6" stroke-linejoin="round"/>'
+      + '<path d="M50 30q9-9 15-9" stroke="#c9801f" stroke-width="1.8" fill="none"/>'
+      + '</g>'
+      + '</svg>',
     /* the one little character shared by the three progress games: tower climb, mine runner, boss
        fight. Drawn once so his proportions never disagree between games. */
     hero: '<svg class="g4-art" viewBox="0 0 60 92" aria-hidden="true" focusable="false">'
@@ -1359,10 +1378,12 @@ window.GAMES4 = (function () {
         slots[k].appendChild(m);
         moles.push(m);
         /* rise out of the hole a beat later, staggered, so it reads as surfacing rather than popping
-           in. Reduced motion skips the stagger and shows them already up. */
+           in. The rise is an ANIMATION with its own delay, not an inline transform undone by a timer:
+           a timer can be cleared (a new item, a restart) and leave the mole stuck down, which is what
+           made the option cards look missing. Reduced motion skips the stagger and shows them up. */
         if (!r.reduced) {
-          m.style.transform = 'translateY(104%)';
-          r.later(function () { if (m.parentNode) m.style.transform = ''; }, 70 + k * 95);
+          m.style.setProperty('--rise-t', (70 + k * 95) + 'ms');
+          m.classList.add('rise');
         }
       });
       idle = r.later(glance, 600 + Math.random() * 500);
@@ -1372,10 +1393,10 @@ window.GAMES4 = (function () {
       if (idle) { clearTimeout(idle); idle = 0; }
       moles.forEach(function (m) {
         var v = m.getAttribute('data-v');
-        m.classList.remove('look-l', 'look-r', 'alive');
+        m.classList.remove('look-l', 'look-r', 'alive', 'rise');
         if (v === value) m.classList.add(hit ? 'ok' : 'no');
         else if (!hit && v === item.key) m.classList.add('reveal');
-        else m.style.transform = 'translateY(104%)';
+        else m.classList.add('duck');
       });
       if (hit) SFX.squeak(r.sound); else SFX.groan(r.sound);
     }
@@ -2478,6 +2499,13 @@ function say(text, lang) {
       cross.classList.add('live');
     }
     box.addEventListener('mousemove', aim);
+    /* the reticule is a PICTURE of where the shot will go, so it lives only while the pointer is over the
+       range: on the way out it is put away, and the next move brings it back. Left standing, it read as a
+       second, frozen cursor sitting where the mouse used to be. */
+    function lower() { cross.classList.remove('live'); }
+    box.addEventListener('mouseleave', lower);
+    box.addEventListener('pointerleave', lower);
+    window.addEventListener('blur', lower);
     /* one shot: the disc is the answer, and the sky is a miss. Either way a shot is spent — and when
        the last one is gone the run is over, whatever is still in the air. */
     function shot(value) {
@@ -2531,7 +2559,7 @@ function say(text, lang) {
         var d = el('button', 'g4-target');
         d.type = 'button';
         d.setAttribute('data-v', o.value);
-        d.innerHTML = '<span class="g4-ring"></span><span class="g4-target-t">' + esc(o.text) + '</span>';
+        d.innerHTML = ART.duck + '<span class="g4-target-t">' + esc(o.text) + '</span>';
         d.addEventListener('click', function (ev) { ev.stopPropagation(); shot(o.value); });
         field.appendChild(d);
         d._lane = n === 1 ? 0.5 : i / (n - 1);       /* even bands, first option highest */
