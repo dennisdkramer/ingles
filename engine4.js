@@ -341,6 +341,20 @@ window.GAMES4 = (function () {
       + '<circle cx="22" cy="12" r="5" fill="#e9f7d8" stroke="#4f8a2c" stroke-width="1.4"/>'
       + '<path d="M22 9.4v5.2M20 10.6h4M20 13.4h4" stroke="#4f8a2c" stroke-width="1.2" stroke-linecap="round"/>'
       + '</svg>',
+    /* ladderRun: the OPEN BRIEFCASE OF CASH that stands on the prompt card at the end of a perfect run
+       (qa/NOTES.md, item [37]) — lid thrown back, notes standing out of it, in the same greens as the
+       banknote he throws */
+    case: '<svg class="g4-art" viewBox="0 0 64 40" aria-hidden="true" focusable="false">'
+      + '<path d="M7 17 10 6h44l3 11z" fill="#8a5a2c" stroke="#4d3016" stroke-width="2" stroke-linejoin="round"/>'
+      + '<g>'
+      + '<rect x="13" y="2" width="27" height="12" rx="2" fill="#a8d97a" stroke="#3f6b22" stroke-width="1.6" transform="rotate(-7 26 8)"/>'
+      + '<rect x="24" y="1" width="27" height="12" rx="2" fill="#7fbf4d" stroke="#3f6b22" stroke-width="1.6" transform="rotate(6 37 7)"/>'
+      + '</g>'
+      + '<rect x="4" y="16" width="56" height="22" rx="4" fill="#a06a35" stroke="#4d3016" stroke-width="2"/>'
+      + '<path d="M4 24h56" stroke="#5f3d1c" stroke-width="2" opacity=".75"/>'
+      + '<path d="M25 15V9h14v6" fill="none" stroke="#4d3016" stroke-width="2.2"/>'
+      + '<rect x="29" y="24" width="6" height="7" rx="1.4" fill="#e8c46a" stroke="#7d5a12" stroke-width="1.2"/>'
+      + '</svg>',
     dog: '<svg class="g4-art" viewBox="0 0 70 44" aria-hidden="true" focusable="false">'
       + '<path d="M16 20q-8-3-11-10" stroke="#8a6a44" stroke-width="4" fill="none" stroke-linecap="round"/>'
       + '<ellipse cx="34" cy="24" rx="18" ry="10" fill="#8a6a44" stroke="#4d3a22" stroke-width="2.2"/>'
@@ -3512,6 +3526,12 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
     box.appendChild(track); box.appendChild(opts);
     stage.appendChild(box);
     var built = 0, climb = 0, safe = 0, ended = false;
+    /* LADDER RUN'S OWN TIMERS (qa/NOTES.md, item [37]): the finish outlives the runner — finish() clears
+       every r.later timer — so the walk to the case, the bills and the beat after the money lands are
+       held here, and reset() clears them together with the props. */
+    var own = [], caseEl = null, moneyOn = false, moneyDone = false, settleFn = null;
+    function ownLater(fn, ms) { var id = setTimeout(fn, ms); own.push(id); return id; }
+    function ownClear() { own.forEach(clearTimeout); own = []; }
     function safeOf(n) { return Math.floor(n / 5) * 5; }
     function build() {
       if (built === r.total) return;
@@ -3531,6 +3551,10 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
     }
     function reset() {
       climb = 0; safe = 0; built = 0; ended = false;
+      ownClear();
+      moneyOn = false; moneyDone = false; settleFn = null;
+      if (caseEl && caseEl.parentNode) caseEl.parentNode.removeChild(caseEl);
+      caseEl = null;
       boardT.textContent = '';
       opts.innerHTML = '';
       climber.style.bottom = '0px';
@@ -3541,7 +3565,9 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
         if (n.parentNode) n.parentNode.removeChild(n);
       });
     }
-    function clear() { opts.innerHTML = ''; }
+    /* the option row is emptied between items — EXCEPT at the end of a perfect run, where the cards are
+       what the money lands on, so they stay until the run is handed back */
+    function clear() { if (!ended) opts.innerHTML = ''; }
     function show(item) {
       build();
       boardT.textContent = item.prompt || '';
@@ -3574,8 +3600,9 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
          step(); a point missed is the dog's turn (qa/NOTES.md 65). */
       if (r.queue.length <= 1 && climb < r.total) dogWreck();
     }
-    /* THE MONEY FINISH (qa/NOTES.md 65): he climbs onto the prompt card, walks along it to its centre,
-       and throws the notes out of his hand — each one falls and lands on an answer card below. */
+    /* THE MONEY FINISH (qa/NOTES.md 65, item [37]): he climbs onto the prompt card, crosses it to the OPEN
+       BRIEFCASE that stands 100px clear of the ladder, and throws the notes out of it — every bill leaves
+       at the same instant and floats down onto an answer card, where it stays. */
     function jackpot() {
       if (ended) return;
       ended = true;
@@ -3585,34 +3612,63 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       climber.classList.add('oncard');
       climber.style.left = Math.max(4, b.left - t.left + 4) + 'px';   /* up the face of the card */
       climber.style.bottom = onTop + 'px';
-      r.later(function () {
+      /* the case is on the card before he gets there, so the walk has somewhere to go and the money has a
+         visible source */
+      placeCase();
+      ownLater(function () {
         climber.classList.add('walking');
-        /* along the top of the card to its centre, where he stands to throw */
-        climber.style.left = Math.max(4, b.left - t.left + b.width / 2 - 17) + 'px';
+        /* along the top of the card to the CASE — he stands at its left corner to throw */
+        climber.style.left = Math.max(4, 170 - 34 + 10) + 'px';
       }, r.reduced ? 40 : 460);
-      var notes = Math.max(4, Math.min(10, r.total * 2));
-      for (var i = 0; i < notes; i++) {
-        r.later(throwNote, (r.reduced ? 80 : 1000) + i * (r.reduced ? 110 : 280));
-      }
-      r.later(function () { climber.classList.remove('walking'); }, (r.reduced ? 260 : 1500));
+      ownLater(function () { climber.classList.remove('walking'); }, r.reduced ? 260 : 1600);
+      ownLater(throwBills, r.reduced ? 160 : 1300);
     }
-    /* one note, out of his hand and down onto an answer card, where it stays */
-    function throwNote() {
+    /* THE CASE: open on the prompt card, its left edge 100px clear of the ladder (the rail ends at 70px,
+       so 170px), its foot on the card's own top edge */
+    function placeCase() {
+      if (caseEl) return;
+      caseEl = el('div', 'g4-case', ART.case);
+      caseEl.style.left = (26 + 44 + 100) + 'px';
+      caseEl.style.top = '-42px';
+      track.appendChild(caseEl);
+      void caseEl.offsetWidth;
+      caseEl.classList.add('on');
+    }
+    /* EVERY BILL LEAVES TOGETHER and floats down onto an answer card, spreading over the row so the money
+       lands across the cards rather than in one spot */
+    function throwBills() {
       var cards = [].slice.call(opts.querySelectorAll('.g4-raceopt'));
       if (!cards.length) return;
-      var target = cards[Math.floor(Math.random() * cards.length)];
-      var bb = box.getBoundingClientRect(), cb = climber.getBoundingClientRect();
-      var tb = target.getBoundingClientRect();
-      var x0 = cb.left - bb.left + cb.width / 2, y0 = cb.top - bb.top;
-      var note = el('div', 'g4-cash', ART.cash);
-      note.style.left = x0 + 'px';
-      note.style.top = y0 + 'px';
-      note.style.setProperty('--dx', Math.round((tb.left - bb.left + tb.width * (0.2 + Math.random() * 0.6)) - x0) + 'px');
-      note.style.setProperty('--dy', Math.round((tb.top - bb.top + tb.height * 0.3) - y0) + 'px');
-      note.style.setProperty('--rot', Math.round(-260 - Math.random() * 240) + 'deg');
-      box.appendChild(note);
-      void note.offsetWidth;
-      note.classList.add('fall');
+      var bb = box.getBoundingClientRect(), src = (caseEl || climber).getBoundingClientRect();
+      var sx = src.left - bb.left + src.width / 2, sy = src.top - bb.top + src.height * 0.35;
+      var n = Math.max(cards.length, Math.min(8, r.total + 2)), notes = [];
+      moneyOn = true;
+      for (var i = 0; i < n; i++) {
+        var tb = cards[i % cards.length].getBoundingClientRect();
+        var tx = tb.left - bb.left + tb.width * (0.2 + Math.random() * 0.6);
+        var ty = tb.top - bb.top + tb.height * 0.25;
+        var note = el('div', 'g4-cash', ART.cash);
+        note.style.left = sx + 'px';
+        note.style.top = sy + 'px';
+        note.style.setProperty('--dx', Math.round(tx - sx) + 'px');
+        note.style.setProperty('--dy', Math.round(ty - sy) + 'px');
+        note.style.setProperty('--rot', Math.round(-150 - Math.random() * 210) + 'deg');
+        box.appendChild(note);
+        notes.push(note);
+      }
+      void box.offsetWidth;                        /* one layout, then every note starts in the same frame */
+      notes.forEach(function (n2) { n2.classList.add('float'); });
+      ownLater(function () {
+        moneyDone = true;
+        if (settleFn) settleFn();
+      }, r.reduced ? 240 : 1050);
+    }
+    /* THE FINISH IS THIS GAME'S: the money is still in the air when the runner would hand the stage back,
+       so ladderRun keeps it until the last bill has landed, and only then lets the intro come back */
+    function finale(done) {
+      if (moneyDone || (!moneyOn && !ended)) { done(); return; }
+      settleFn = done;
+      ownLater(function () { if (settleFn) settleFn(); }, r.reduced ? 800 : 4000);   /* a net: the stage is always handed back */
     }
     /* THE DOG FINISH (qa/NOTES.md 65): a point was missed, so a dog runs past, knocks the ladder over,
        and the ladder and the climber both go down with it. */
@@ -3638,7 +3694,7 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
         dog.style.transform = 'translateX(-140px)';
       }, r.reduced ? 500 : 1700);
     }
-    return { show: show, mark: mark, clear: clear, reset: reset, ownsPrompt: true };
+    return { show: show, mark: mark, clear: clear, reset: reset, finale: finale, ownsPrompt: true };
   };
   /* the start card's own line, because the finish is this game's (see the runner's `startText`) */
   PLUGINS.ladderRun.startText = 'Get all the phrases right, climb to the top and get your Trump Ca$h!';

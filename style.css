@@ -1984,6 +1984,19 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-cash{position:absolute;width:34px;height:20px;margin-left:-17px;opacity:0;pointer-events:none;z-index:6}
 .g4-cash .g4-art{display:block;width:100%;height:100%}
 .g4-cash.fall{animation:g4cashfall .78s cubic-bezier(.45,0,.85,.6) forwards}
+/* THE BILLS FLOAT DOWN OFF THE BRIEFCASE (qa/NOTES.md, item [37]): every note leaves the case in the same
+   frame and drifts down to the card it was aimed at, ending exactly on it (--dx / --dy) and staying there */
+.g4-cash.float{animation:g4billfall 1.05s cubic-bezier(.32,.02,.62,1) forwards}
+@keyframes g4billfall{
+  0%{opacity:0;transform:translate(0,0) rotate(0deg)}
+  12%{opacity:1}
+  55%{transform:translate(calc(var(--dx,0px) * .62),calc(var(--dy,0px) * .62)) rotate(calc(var(--rot,0deg) * .55))}
+  100%{opacity:1;transform:translate(var(--dx,0px),var(--dy,0px)) rotate(var(--rot,0deg))}}
+/* THE OPEN BRIEFCASE OF CASH (qa/NOTES.md, item [37]): it stands on the prompt card, 100px clear of the
+   ladder, and it is never a control. It fades in over .5s — nothing on this stage may pop into being. */
+.g4-case{position:absolute;width:64px;height:40px;z-index:5;pointer-events:none;opacity:0;transition:opacity .5s ease}
+.g4-case.on{opacity:1}
+.g4-case .g4-art{display:block;width:100%;height:100%}
 @keyframes g4cashfall{0%{opacity:0;transform:translate(0,0) rotate(0)}14%{opacity:1}100%{opacity:1;transform:translate(var(--dx,0),var(--dy,0)) rotate(var(--rot,180deg))}}
 .g4-dog{position:absolute;left:0;bottom:4px;width:66px;height:40px;z-index:5;pointer-events:none;will-change:transform}
 .g4-dog .g4-art{display:block;width:100%;height:100%}
