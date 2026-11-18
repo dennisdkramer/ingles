@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // qa/span.mjs — measures each frame in a rendered page and writes its `data-span`.
-// The span is measured, never chosen: node qa/span.mjs --page=preview.html [--write|--json]
+// The span is measured, never chosen: node qa/span.mjs --page=capability-map.html [--write|--json]
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
@@ -32,6 +32,8 @@ const PROBE = `
   if (!firstRow) { out.error = 'no .itemrow on this page'; document.getElementById('span-out').textContent = JSON.stringify(out); return; }
   out.rowW = Math.round(firstRow.getBoundingClientRect().width);
   out.gap = Math.round(parseFloat(getComputedStyle(firstRow).columnGap) || 0);
+  var all = [].slice.call(document.querySelectorAll('.block,.panel,.card,.dialog'));
+  out.all = all.length;
   [].forEach.call(document.querySelectorAll('.itemrow'), function (row, ri) {
     var frames = [].filter.call(row.children, function (c) { return c.matches('.block,.panel,.card,.dialog'); });
     if (!frames.length) return;
@@ -41,7 +43,7 @@ const PROBE = `
       document.body.appendChild(c);
       var w = Math.round(c.getBoundingClientRect().width);
       c.remove();
-      return { want: w, span: b.getAttribute('data-span') || '' };
+      return { want: w, span: b.getAttribute('data-span') || '', idx: all.indexOf(b) };
     });
     out.rows.push({ row: ri, items: items });
   });
@@ -108,7 +110,7 @@ function pack(wants) {
 const results = [];
 for (const row of data.rows) {
   const spans = pack(row.items.map(i => i.want));
-  row.items.forEach((it, i) => results.push({ row: row.row, want: it.want, span: spans[i], had: it.span }));
+  row.items.forEach((it, i) => results.push({ row: row.row, want: it.want, span: spans[i], had: it.span, idx: it.idx }));
 }
 
 if (flag('json')) {
@@ -124,14 +126,18 @@ if (flag('json')) {
 
 if (flag('write')) {
   const tag = /<(div|section|article)\b[^>]*\bclass="[^"]*\b(?:block|panel|card|dialog)\b[^"]*"[^>]*>/g;
-  const tags = [...src.matchAll(tag)];
-  if (tags.length !== results.length) {
-    console.error('refusing to write: ' + tags.length + ' frame tags in the file, ' + results.length + ' measured');
+  /* a specimen inside <pre> holds escaped markup: a frame written there is text, not an element.
+     Masking keeps every index where it was, so the offsets still line up with src. */
+  const masked = src.replace(/<pre\b[\s\S]*?<\/pre>/gi, s => ' '.repeat(s.length));
+  const tags = [...masked.matchAll(tag)];
+  if (tags.length !== data.all) {
+    console.error('refusing to write: ' + tags.length + ' frame tags in the file, ' + data.all + ' on the page');
     process.exit(2);
   }
   let out = '', last = 0, changed = 0;
-  results.forEach((r, i) => {
-    const t = tags[i];
+  results.slice().sort((a, b) => a.idx - b.idx).forEach(r => {
+    const t = tags[r.idx];
+    if (t.index < last) { console.error('refusing to write: frames out of order at ' + r.idx); process.exit(2); }
     let open = t[0];
     if (/\bdata-span="/.test(open)) {
       const next = open.replace(/data-span="[^"]*"/, 'data-span="' + r.span + '"');

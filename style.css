@@ -1089,8 +1089,9 @@
   body.is-completed .gap{background:var(--sunken)}
 }
 
-/* #70 LOOK — data-look="tint|outline|grain|tape|float|dark" on .block.
-     USE: outline for a standout tip or an interesting note. Unset: paper + 2px accent rule. Vary: --accent-h, --edge-w (outline) */
+/* #70 LOOK — data-look="tint|outline|stripes|tape|float|dark" on .block.
+     USE: declared by the builder, never inferred from what the block contains. Unset: paper + 2px accent rule.
+     Vary: --accent-h, --edge-w (outline) */
 @layer look{
   .block[data-look="tint"]{background:color-mix(in oklab,var(--accent) 8%,var(--paper));
     border-top-color:var(--accent)}
@@ -1098,9 +1099,9 @@
   .block[data-look="outline"]{border:var(--edge-w) solid var(--accent);
     box-shadow:var(--shadow-2);background:transparent}
 
-  .block[data-look="grain"]::after{content:"";position:absolute;inset:0;border-radius:inherit;
-    pointer-events:none;opacity:.55;background-image:radial-gradient(rgb(26 33 48/.07) 1px,
-      transparent 1px);background-size:3px 3px}
+  .block[data-look="stripes"]::after{content:"";position:absolute;inset:0;border-radius:inherit;
+    pointer-events:none;opacity:.5;background-image:repeating-linear-gradient(-45deg,
+      rgb(26 33 48/.08) 0 2px, transparent 2px 8px)}
 
   .block[data-look="tape"]::before{content:"";position:absolute;top:-10px;left:50%;
     translate:-50% 0;width:112px;height:21px;rotate:-2deg;z-index:2;
@@ -1187,8 +1188,8 @@
   .ring>b::after{content:counter(p) "%"}
 }
 
-/* #90 MOTION — .block[data-motion="rise"] · .flip > input + .card3d > 2x .face · #focus:target .content-area.
-     USE: one entrance per page, a fold that turns, a reading-width pass. Vary: --dur (time), --flip-h (length) */
+/* #90 MOTION — .block entrance · .flip > input + .card3d > 2x .face · outline hover.
+     USE: a fold that turns, and the one entrance a block gets when the page opens. Vary: --dur (time), --flip-h (length) */
 @layer motion{
   @keyframes rise-in{from{opacity:.35;translate:0 14px}to{opacity:1;translate:0 0}}
   @keyframes mark-in{from{scale:0;opacity:0}to{scale:1;opacity:1}}
@@ -1196,8 +1197,6 @@
     60%{translate:-3px 0}80%{translate:3px 0}}
 
   .block{animation:rise-in var(--dur,.45s) ease both}
-  .block[data-motion="rise"]{animation:rise-in linear both;animation-timeline:view();
-    animation-range:entry 8% entry 55%}
 
   /* outline: hover rotates --grad 0-180deg */
   .block[data-look="outline"]{--grad:0deg;transition:--grad 1s ease;
@@ -1218,9 +1217,6 @@
   .flip .face::after{content:"↻";position:absolute;right:10px;bottom:8px;color:var(--ink-2);
     font-family:var(--sans);opacity:.6}
   .flip .back{rotate:y 180deg;background:var(--accent-soft);border-color:var(--accent-line)}
-
-  body:has(#focus:checked) .content-area{width:820px}
-  body:has(#focus:checked) .block[data-structure="prose"]{--measure:64ch}
 }
 
 /* #95 PRINT — @media print rules for .block, .reveal, .flip, .mark, .meter. Vary: none */
