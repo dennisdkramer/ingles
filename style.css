@@ -102,7 +102,7 @@
       var(--rose) calc(100% - 8px),transparent 100%) bottom left/100% 2px no-repeat border-box;
     padding-bottom:6px;margin:1.6em 0 .3em}
   h3{font-family:var(--display);font-size:calc(var(--s1) + 7pt);color:var(--track-ink);
-    position:relative;width:max-content;max-width:100%;
+    position:relative;width:auto;
     padding-left:15px;padding-right:15px;padding-bottom:3px;margin:22px 0 8px;
     letter-spacing:.02em}
   /* the header's rule: 3px under the text, arriving over the 15px before the heading and leaving over the
@@ -859,9 +859,19 @@
   .itemrow{display:flex;flex-wrap:wrap;align-items:stretch;
     gap:var(--row-gap,22px) var(--col-gap,18px)}
   .itemrow>*{min-width:0}
-  /* a frame whose content can wrap takes the row's leftover width; a frame built around a figure keeps its
-     own, so a chart stays as wide as the chart and the prose beside it takes what is left */
-  .itemrow>:is(.block,.panel,.card,.dialog):has(>p){flex:1 1 22ch}
+  /* a frame is as wide as what it holds and no wider, and a block with nothing wide inside it collapses to
+     a quarter of the row. No tag decides width — the row wraps when the contents do not fit. */
+  .itemrow>:is(.block,.panel,.card,.dialog){flex:0 1 fit-content;
+    min-inline-size:calc((100% - 3*var(--col-gap,18px))/4)}
+  /* a measured span beats the collapse. The builder never chooses one: qa/span.mjs measures the block and
+     writes the attribute, so the same content always produces the same layout */
+  .itemrow>:is(.block,.panel,.card,.dialog)[data-span="quarter"]{flex:0 1 calc((100% - 3*var(--col-gap,18px))/4)}
+  .itemrow>:is(.block,.panel,.card,.dialog)[data-span="third"]{flex:0 1 calc((100% - 2*var(--col-gap,18px))/3)}
+  .itemrow>:is(.block,.panel,.card,.dialog)[data-span="twothird"]{flex:0 1 calc((200% - var(--col-gap,18px))/3)}
+  .itemrow>:is(.block,.panel,.card,.dialog)[data-span="half"]{flex:0 1 calc((100% - var(--col-gap,18px))/2)}
+  .itemrow>:is(.block,.panel,.card,.dialog)[data-span="full"]{flex:0 1 100%}
+  /* a page written before spans existed keeps its old sizing until qa/span.mjs writes them */
+  .itemrow>:is(.block,.panel,.card,.dialog):not([data-span]):has(>p){flex:1 1 22ch}
   /* a chart is not stretched to the row's height: it keeps its own, and centres on the block beside it */
   .itemrow>.chart{align-self:center;margin-block:0}
   /* a frame's own vertical margin would lift it off the row's line, so the row's gap is the only spacing */
