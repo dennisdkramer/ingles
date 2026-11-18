@@ -1609,6 +1609,14 @@ window.GAMES4 = (function () {
     return (items[0].opts || []).slice(0, n || 3).map(function (o) { return o.text; });
   }
   function abs(node, css) { node.style.cssText = css; return node; }
+  /* a node whose CONTENTS are the drawing: mark-up goes in as mark-up, never as a text node. Passing an
+     `ART.*` string through `el`’s third argument printed the svg source itself on the stage: the ladder
+     game’s dog, case and bills, and four posters, all showed a line of HTML where the picture belongs. */
+  function artNode(cls, markup) {
+    var n = el('div', cls);
+    n.innerHTML = markup || '';
+    return n;
+  }
   /* one finished scene per game — the picture the game actually happens in */
   var SCENE = {
     /* orchard: baskets wait on the grass under the trees — and the grass itself is awake */
@@ -1834,10 +1842,10 @@ window.GAMES4 = (function () {
         box.appendChild(abs(el('div', 'g4-layer g4-bit', esc(texts[i] || '')),
           'left:52px;bottom:' + (46 + b) + 'px;height:26px'));
       });
-      box.appendChild(abs(el('div', 'g4-climber g4-bit', ART.hero),
+      box.appendChild(abs(artNode('g4-climber g4-bit', ART.hero),
         'left:52px;bottom:76px;width:30px;height:44px;margin-left:-8px'));
       box.appendChild(abs(el('div', 'g4-ledge g4-bit'), 'left:52px;bottom:132px;height:10px'));
-      box.appendChild(abs(el('div', 'g4-prize g4-bit', ART.chest), 'bottom:142px;height:34px;opacity:.85'));
+      box.appendChild(abs(artNode('g4-prize g4-bit', ART.chest), 'bottom:142px;height:34px;opacity:.85'));
       box.appendChild(abs(el('div', 'g4-roof g4-bit'), 'bottom:176px;height:12px'));
       var n = Math.max(1, texts.length);
       var tray = abs(el('div', 'g4-towerpads g4-bit'), 'left:52px;right:12px;bottom:8px;height:40px');
@@ -1862,7 +1870,7 @@ window.GAMES4 = (function () {
       });
       wall.appendChild(abs(el('div', 'g4-seg'), 'top:' + prev + '%;bottom:0'));
       box.appendChild(wall);
-      box.appendChild(abs(el('div', 'g4-bird g4-bit', ART.bird), 'left:14px;top:40%;width:40px;height:30px'));
+      box.appendChild(abs(artNode('g4-bird g4-bit', ART.bird), 'left:14px;top:40%;width:40px;height:30px'));
     },
     mineGrid: function (box, items) {
       /* the still is the street as the game draws it: the SAME saloon frontage, the same boardwalk and the
@@ -1892,7 +1900,7 @@ window.GAMES4 = (function () {
       });
       frame_.appendChild(facade); frame_.appendChild(road); frame_.appendChild(row);
       box.appendChild(frame_);
-      box.appendChild(abs(el('div', 'g4-runner g4-bit', ART.hero), 'left:50%;bottom:4px;width:30px;height:46px;margin-left:-15px'));
+      box.appendChild(abs(artNode('g4-runner g4-bit', ART.hero), 'left:50%;bottom:4px;width:30px;height:46px;margin-left:-15px'));
     },
 
   wordleBoard: function (box, items) {
@@ -1965,7 +1973,7 @@ window.GAMES4 = (function () {
     art.innerHTML = ART.boss;
     abs(art, 'left:50%;top:8%;transform:translateX(-50%);width:96px;height:96px');
     box.appendChild(art);
-    box.appendChild(abs(el('div', 'g4-hero g4-bit', ART.heroSword), 'left:6%;bottom:12%;width:52px;height:76px'));
+    box.appendChild(abs(artNode('g4-hero g4-bit', ART.heroSword), 'left:6%;bottom:12%;width:52px;height:76px'));
   },
   skeetRange: function (box, items) {
     /* one disc per option the lesson actually wrote (two to four), label on the disc like the live
@@ -3705,7 +3713,7 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
        so 170px), its foot on the card's own top edge */
     function placeCase() {
       if (caseEl) return;
-      caseEl = el('div', 'g4-case', ART.case);
+      caseEl = artNode('g4-case', ART.case);
       caseEl.style.left = (26 + 44 + 100) + 'px';
       caseEl.style.top = '-42px';
       track.appendChild(caseEl);
@@ -3725,7 +3733,7 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
         var tb = cards[i % cards.length].getBoundingClientRect();
         var tx = tb.left - bb.left + tb.width * (0.2 + Math.random() * 0.6);
         var ty = tb.top - bb.top + tb.height * 0.25;
-        var note = el('div', 'g4-cash', ART.cash);
+        var note = artNode('g4-cash', ART.cash);
         note.style.left = sx + 'px';
         note.style.top = sy + 'px';
         note.style.setProperty('--dx', Math.round(tx - sx) + 'px');
@@ -3762,7 +3770,7 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       if (ended) return;
       ended = true;
       var w = box.clientWidth || 480;
-      var dog = el('div', 'g4-dog', ART.dog);
+      var dog = artNode('g4-dog', ART.dog);
       dog.style.transform = 'translateX(' + (w + 80) + 'px)';
       box.appendChild(dog);
       void dog.offsetWidth;
