@@ -2235,8 +2235,8 @@ html.kbd .g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:
    edge, so the flowers sat ON the rim instead of in it. They now come 8px lower — inside the dark opening at
    the pot's crest — and each bloom is twice its old size (72x108, was 36x54). The background and the pot
    itself are untouched. */
-.g4-blooms{position:absolute;left:0;right:0;bottom:calc(var(--pot-sit) + var(--pot-h) - 8px);height:120px;z-index:1;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
-.g4-bloom{flex:0 0 auto;width:72px;height:108px;transform-origin:50% 100%;animation:g4grow .5s cubic-bezier(.3,1.5,.6,1)}
+.g4-blooms{position:absolute;left:0;right:0;bottom:calc(var(--pot-sit) + var(--pot-h));height:160px;z-index:1;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+.g4-bloom{flex:0 0 auto;width:36px;height:92px;transform-origin:50% 100%;animation:g4grow .5s cubic-bezier(.3,1.5,.6,1)}
 .g4-bloom+.g4-bloom{margin-left:-6px}
 .g4-bloom:nth-child(2n){transform:rotate(-8deg)}
 .g4-bloom:nth-child(3n){transform:rotate(7deg)}
@@ -2309,7 +2309,6 @@ html.kbd .g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:
    animation takes over and the card is simply visible. */
 .g4-mole.cardin .g4-mole-t{animation:g4cardin .3s ease var(--card-t,0ms) both}
 @keyframes g4cardin{from{opacity:0}to{opacity:1}}
-.g4-mole.duck{transform:translateY(104%)}
 .g4-mole-t{display:block;max-width:100%;margin-bottom:-4px;padding:2px 8px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);font:700 13px var(--ui-tight);line-height:1.18;overflow:hidden}
 html.kbd .g4-mole:focus-visible{outline:3px solid var(--tan);outline-offset:2px;border-radius:10px}
 @keyframes g4shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}

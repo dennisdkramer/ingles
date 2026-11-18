@@ -1222,8 +1222,11 @@ window.GAMES4 = (function () {
            can have (qa/NOTES.md 83). The pot that was watered most holds the winner, and two pots level
            on blooms is the tie the girl settles by picking one at random. */
         var s = 0.72 + i * 0.07;
-        f.style.width = Math.round(18 * s) + 'px';
-        f.style.height = Math.round(46 * s) + 'px';
+        /* THE BLOOM IS TWICE THE SIZE IT WAS (qa/NOTES.md, item [29]): the base is 36 x 92 where it was 18 x 46.
+           These inline sizes are what the pot actually draws - the stylesheet one is only the poster fallback -
+           so the doubling has to happen HERE, or nothing on the stage changes. */
+        f.style.width = Math.round(36 * s) + 'px';
+        f.style.height = Math.round(92 * s) + 'px';
         box.appendChild(f);
       }
     }
@@ -1487,12 +1490,14 @@ window.GAMES4 = (function () {
     function mark(item, hit, value) {
       live = false;
       if (idle) { clearTimeout(idle); idle = 0; }
+      /* NOBODY DUCKS WHEN THE ANSWER SHOWS (qa/NOTES.md, item [28]): the moles that were not chosen stay up where
+         they are, in the holes they came out of. Only the colours change - and the right answer pulses, which moves
+         nothing - so a revealed answer never takes a mole down, away, or somewhere else. */
       moles.forEach(function (m) {
         var v = m.getAttribute('data-v');
         m.classList.remove('look-l', 'look-r', 'alive', 'rise');
         if (v === value) m.classList.add(hit ? 'ok' : 'no');
         else if (!hit && v === item.key) m.classList.add('reveal');
-        else m.classList.add('duck');
       });
       if (hit) SFX.squeak(r.sound); else SFX.groan(r.sound);
     }
