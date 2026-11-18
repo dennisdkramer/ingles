@@ -2404,6 +2404,11 @@ function say(text, lang) {
       /* one wall's crossing of the stage is the whole clock this game has (noTimer): a fixed pace, so the
          words come round again and again until one is flown through */
       speed = (W - BX) / CROSS;
+      /* THE BIRD OPENS IN THE MIDDLE OF THE SKY (qa/NOTES.md, item [31]): `y` starts at 0, and nothing placed
+         him before the first frame, so the very first flight began in the top-left corner and climbed from
+         there. `clear()` puts him at `home()` on every restart, but the first run of the page never passes
+         through it — so the flight opens on the same height it is restarted to. */
+      if (!bird.style.top) { y = home(); bird.style.top = y + 'px'; }
       /* the loop runs under `prefers-reduced-motion` too: the wall's flight is the GAME, not an effect,
          and with no timer there is nothing else that could ever bring a wall to the bird or end an item */
       live = true;

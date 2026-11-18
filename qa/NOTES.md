@@ -296,8 +296,6 @@ molehills persist between rounds, moles do not move positions until after the ne
 ### [31]
 
 → VEHICLES.md §`[31]`
-make the bird start vertically centered at the beginning of the game
-
 ### [32]
 
 → VEHICLES.md §`[32]`

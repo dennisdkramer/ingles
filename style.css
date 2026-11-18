@@ -1748,7 +1748,9 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-gapg.ok .g4-gapg-t{background:var(--greenbg);color:#1d5c2c;opacity:1}
 .g4-gapg.no .g4-gapg-t{background:#fdeaea;color:#7d1f1f;opacity:1}
 .g4-gapg.reveal .g4-gapg-t{opacity:1;animation:g4pulse .7s ease-in-out 2}
-.g4-bird{position:absolute;left:64px;width:46px;height:34px;z-index:3;pointer-events:none}
+/* the resting height before the first frame is the middle of the sky, so the bird is centred from the moment
+   the stage is laid out, not from the moment the loop happens to reach him (qa/NOTES.md, item [31]) */
+.g4-bird{position:absolute;left:64px;top:calc(50% - 17px);width:46px;height:34px;z-index:3;pointer-events:none}
 .g4-bird.ok{filter:drop-shadow(0 0 5px rgba(47,158,68,.95))}
 .g4-bird.no{filter:drop-shadow(0 0 5px rgba(201,42,42,.95))}
 /* no `.g4-bird.through`: a right gap used to leap him 150px forward and fade him out, which read as the
