@@ -1443,6 +1443,13 @@
   button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
   .vz-play{display:block;margin:0}
   .vz-audio{display:block;width:100%}
+  /* An in-block drawing is the builder's to size: `--map-w` caps the wrapper's width (any CSS length),
+     and unset it is the host's own width — the size the map has always been drawn at. It is a cap and
+     not a width so a drawing can never overflow the host that holds it; a builder wanting it larger
+     gives it a wider host. The wrapper hugs the drawing (the svg is the only thing that gives the wrapper
+     its height) so the tick labels laid over it in % stay on their places at every width. */
+  .vz-map{position:relative;width:100%;max-width:var(--map-w,100%)}
+  .vz-map>svg{display:block;width:100%;height:auto}
   .vz-controls{display:none;align-items:center;gap:10px;margin:8px 0 10px}
   .vz-play.is-enhanced .vz-controls{display:flex}
   .vz-btn{flex:0 0 auto;width:38px;height:38px;border:2px solid var(--ink);border-radius:50%;

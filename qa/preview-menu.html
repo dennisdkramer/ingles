@@ -748,7 +748,10 @@
 <div class="panel" data-kind="train">
 <h3>Street map for directions and relative locations</h3>
   <p>Look at the map, then write the route in the field below it.</p>
-  <div style="position:relative">
+  <!-- THE DRAWING IS THE BUILDER'S TO SIZE: `--map-w` on the wrapper takes any CSS length; with none the
+       drawing takes the host's width, which is the size it has always been. The wrapper hugs the drawing,
+       so the ticks below, positioned in % of the wrapper, stay on their places at every width. -->
+  <div class="vz-map">
   <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, eight places each drawn with its name on a sign — a station under a canopy with a clock, a café with a striped awning, a park with trees, a bank under a dollar sign, a library wall of books, a post office with a postbox, a bus shelter, and two market awnings">
     <rect x="0" y="0" width="360" height="240" style="fill:var(--paper)"></rect>
     <g style="fill:var(--tan);opacity:.45">

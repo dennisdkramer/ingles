@@ -9,7 +9,10 @@ The **host block** owns the container and the   control, and the figure is writt
 ## [05] <SHOW|TRAIN> Street map for directions and relative locations < , > < , >
 - **markup**: nothing but the drawing, inside the host block's own container — no `.panel`, no `<h3>`, no
   caption, no control of its own: the host's `input.gap` or `textarea` is the answer and the map is its stem.
-  One inline `<svg>` in a `position:relative` wrapper; each place's tick is
+  One inline `<svg>` in a `.vz-map` wrapper (`position:relative`, the drawing at `width:100%`; the builder's
+  size is `--map-w` on the wrapper, any CSS length **capping** the host's width — unset, the drawing takes
+  the host's width, which is the size it is drawn at, and a cap is safe where a width is not: no drawing can
+  overflow its host); each place's tick is
   `<label><input type="checkbox" aria-label="the station"> 1</label>` in a `position:absolute` box at
   `transform:translateX(-50%)`, centred **under that place's own front, above the street it faces**, its
   `left`/`top` in `%` of the drawing. The tick marks the route as the student walks it and is **not saved**;
