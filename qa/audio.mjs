@@ -1062,7 +1062,7 @@ console.log('| `' + outName + '.mp3` | ' +
   (cueShift ? ', every `data-t` moved ' + cueShift + ' s (--cue-shift)' : '') +
   ' | ' + (sourcePage || src) + ' | ' + credit + ' | **' + licence + '** |');
 console.log('\n--- before it ships ---');
-console.log('1. the page must load the player, `qa/player.js`: it draws the bar and the highlight. Without');
+console.log('1. the page must load the player, `player.js`: it draws the bar and the highlight. Without');
 console.log('   it the audio keeps its native controls and no line ever lights');
 console.log('2. `data-duration` must equal the decoded length: ' + cutM.duration.toFixed(2) + ' s');
 console.log('3. every `data-t` must be inside that length: ' + starts.join(', '));

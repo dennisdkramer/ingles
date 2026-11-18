@@ -1,5 +1,5 @@
 /**
- * qa/player.js — the musicPlayer primitive (CONTENT_EXAMPLES.md [PRIMITIVES]).
+ * player.js — the musicPlayer primitive (CONTENT_EXAMPLES.md [PRIMITIVES]).
  *
  * WHAT IT IS FOR. A lesson that teaches from a song needs the track, a way to sit on one line of
  * it, and the words in front of the student. The markup ships `<audio controls>`, so with no
@@ -24,8 +24,10 @@
  * recording (a silencedetect pass or a listening pass), and a line whose time is a guess is
  * written without one. Clicking a line seeks to it; playback lights the last line passed.
  *
- * Runs on qa/preview-blocks.html only, for now. If the shape is kept, this file and the `.vz-*`
- * rules in qa/preview-visual.css move to the site root and style.css unchanged.
+ * SHIPPED, NOT A PROTOTYPE. `_shell.html` declares this file beside the engines, so every lesson page has
+ * it, and the rules it dresses — `.vz-play`, `.vz-bar`, `.vz-lyrics` and the rest — are in style.css beside
+ * the other block shapes. A page with no `.vz-play` pays one query and nothing else. The preview page,
+ * qa/preview-menu.html, loads it from the root, as a lesson does.
  */
 (function () {
   'use strict';
