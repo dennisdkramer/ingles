@@ -4,8 +4,8 @@
 <link rel="stylesheet" href="style.css">
 <style>/* an index page, not a lesson: its panel titles are names, not the lesson's A/B/C sequence */
 .panel>h3::before{content:none}</style>
-<!-- The tool reference a lesson reads: unlinked from the site, in the site's own frame, and deliberately
-     loading no engine. It holds no answer, saves nothing, and is not in lessons.json. -->
+<!-- The tool reference a lesson reads: unlinked from the site, in the site's own frame, and loading only
+     the player. It holds no answer, saves nothing, and is not in lessons.json. -->
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>TOOL REFERENCE</span></h1></header>
@@ -345,7 +345,7 @@ and above .tln:
 
 <div class="panel" id="audio">
 <h3>Real speech — the mini player</h3>
-<p>The player is the small one: a single control row that sits inside any other block, so a listening item is a sentence plus a play button rather than a page of its own. <b>No clip is shipped on this page</b>, and no lesson loads the script that drives the drawn controls, so this is the one built component whose behaviour this page cannot show.</p>
+<p>The player is the small one: a single control row that sits inside any other block, so a listening item is a sentence plus a play button rather than a page of its own. <b>No clip is shipped on this page</b>, and the specimen below stops at the native floor, so the drawn controls are not shown here yet.</p>
 <pre class="mono">&lt;figure class="vz-play"&gt;
   &lt;audio class="vz-audio" src="../assets/&lt;name&gt;.mp3" data-duration="0:14" controls preload="metadata"&gt;&lt;/audio&gt;
 &lt;/figure&gt;</pre>
@@ -424,4 +424,5 @@ difference can be seen.</p>
 <footer>MATERIAIS SIMPLES E INOVADORES · INGLES CERTO EUA</footer>
 </div>
 </main>
+<script src="player.js"></script>
 </body></html>
