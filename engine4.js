@@ -979,9 +979,11 @@ window.GAMES4 = (function () {
        run is over for real, so the misses are not replayed afterwards. */
     if (this.livesLeft() === 0) this.dead = true;
     /* THE SWAP IS ONE FRAME (qa/NOTES.md, item [40]): `advance` takes the ghost of the picture that is
-       leaving, clears it, and steps the queue in the same frame it always did — the fade is drawn over
-       the swap, never waited for before it */
-    this.later(function () { self.advance(); }, hit ? 560 : 900);
+       leaving, clears it, and steps the queue in the same frame it always did — the fade is drawn over the
+       swap, never waited for before it. The beat before it is the one the marks were drawn for, 620 on a
+       hit and 1000 on a miss: exactly what the hand-over cost before any fade existed, so the crossfade
+       adds nothing to it. */
+    this.later(function () { self.advance(); }, hit ? 620 : 1000);
     return hit;
   };
   Runner.prototype.pick = function (value) {
