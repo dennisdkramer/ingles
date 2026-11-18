@@ -303,8 +303,6 @@ make the bird start vertically centered at the beginning of the game
 ### [32]
 
 → VEHICLES.md §`[32]`
-the gridstays between questions, just fade out the letters when the next prompt appears
-
 ### [33]
 
 → VEHICLES.md §`[33]`

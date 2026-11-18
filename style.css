@@ -1958,6 +1958,11 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-tile.ok{background:var(--green);border-color:var(--green);color:#fff}
 .g4-tile.near{background:#d9a13c;border-color:#d9a13c;color:#fff}
 .g4-tile.no{background:#9aa4b2;border-color:#9aa4b2;color:#fff}
+/* THE LETTERS FADE OUT WHEN THE NEXT PROMPT ARRIVES (qa/NOTES.md, item [32]): `retire` takes the letter and
+   its colour away over .5s while the CARD stays exactly where it is on the wall — the grid never blinks and
+   nothing moves, only the ink goes */
+.g4-tile.retire{color:transparent;background:var(--paper);border-color:var(--tan);
+  transition:color .5s ease,background-color .5s ease,border-color .5s ease}
 .g4-wtype{width:200px;padding:7px 10px;border:2px solid var(--ink);border-radius:8px;font:700 14px var(--ui-tight);text-align:center}
 /* wordleBoard: a wall of faint SQUARE tiles behind the board. The tiles are drawn in CSS pixels, not as an
    SVG pattern in a stretched viewBox (qa/NOTES.md 32): the old pattern was laid out in a 400x240 box and

@@ -2878,21 +2878,32 @@ function say(text, lang) {
       item.opts.forEach(function (o) { if (o.value === item.key) t = o.text; });
       return norm(t).replace(/[^a-z]/g, '');
     }
-    function draw() {
+    /* the wall's SHAPE is only built when it changes: rows × the word's length. Every item of a block holds
+       the same length (VEHICLES.md §`[32]`), so after the first word the tiles are the same nodes for the
+       whole run and a new word writes into them rather than replacing them */
+    function shape() {
+      if (grid.children.length === rows && grid.firstChild && grid.firstChild.children.length === word.length) return;
       grid.innerHTML = '';
       for (var i = 0; i < rows; i++) {
         var row = el('div', 'g4-wrow');
         for (var j = 0; j < word.length; j++) row.appendChild(el('span', 'g4-tile'));
         grid.appendChild(row);
       }
-      guesses.forEach(function (g, ri) {
-        var row = grid.children[ri];
-        if (!row) return;
+    }
+    function draw() {
+      shape();
+      for (var ri = 0; ri < rows; ri++) {
+        var row = grid.children[ri], g = guesses[ri] || '';
+        for (var ci = 0; ci < row.children.length; ci++) {
+          var t = row.children[ci];
+          t.textContent = g[ci] ? g[ci].toUpperCase() : '';
+          t.className = 'g4-tile';                 /* a written tile is never a retired one */
+        }
+        if (!g) continue;
         var left = word.split('');
         g.split('').forEach(function (ch, ci) {
           var t = row.children[ci];
           if (!t) return;
-          t.textContent = ch.toUpperCase();
           if (word[ci] === ch) { t.className = 'g4-tile ok'; left[ci] = ''; }
         });
         g.split('').forEach(function (ch, ci) {
@@ -2902,28 +2913,43 @@ function say(text, lang) {
           if (at > -1) { t.className = 'g4-tile near'; left[at] = ''; }
           else t.className = 'g4-tile no';
         });
-      });
+      }
     }
     function clear() {
       entry.value = ''; guesses = []; word = ''; done = false;
-      /* THE WALL STAYS ON SCREEN (qa/NOTES.md, item [32]): between questions the rows and their tiles are
-         left standing and only the letters and colours are taken back. Emptying the grid made the board
-         blink out for the whole handover — the old prompt left, the wall went with it, and the new word
-         drew into bare stage. The next word now draws into the wall that is already there. */
+      /* THE WALL STAYS ON SCREEN (qa/NOTES.md, item [32]): nothing on the grid is touched here — the rows,
+         the tiles and the last word's letters are all still standing when the handover starts, and the
+         letters fade out later, when the NEXT prompt is up (`retire`, called from show). */
+    }
+    /* the last word's letters are retired: the card stays on the wall, the letter and its colour go over
+       .5s, and `wash` clears what the fade left behind half a second later */
+    function retire() {
       for (var i = 0; i < grid.children.length; i++) {
         var row = grid.children[i];
         for (var j = 0; j < row.children.length; j++) {
           var t = row.children[j];
-          t.textContent = ''; t.className = 'g4-tile';
+          if (t.textContent || t.className.indexOf('g4-tile ') === 0) t.classList.add('retire');
         }
       }
+    }
+    function wash() {
+      for (var i = 0; i < grid.children.length; i++) {
+        var row = grid.children[i];
+        for (var j = 0; j < row.children.length; j++) row.children[j].className = 'g4-tile';
+      }
+      draw();
     }
     function show(item) {
       clear();
       word = target(item);
       clue.innerHTML = '';
       clue.appendChild(el('span', 'g4-wclue-t', item.prompt || ''));
-      draw();
+      /* THE LETTERS FADE OUT AS THE NEXT PROMPT ARRIVES: the wall is already standing with the last word on
+         it, so the fade starts here — one .5s colour transition — and the tiles are only swept clean once it
+         has run (a guess made inside that half second rewrites the tiles and ends the fade at once) */
+      /* the first word has nothing to retire — the wall is built and drawn straight away; from the second
+         item on, the last word's letters fade out under the new prompt and the tiles are swept after it */
+      if (grid.children.length) { retire(); r.later(wash, r.reduced ? 0 : 500); } else draw();
       entry.disabled = !word;
       if (word && entry.focus) { try { entry.focus({ preventScroll: true }); } catch (e) { entry.focus(); } }
     }
