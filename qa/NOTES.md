@@ -306,8 +306,6 @@ make the bird start vertically centered at the beginning of the game
 ### [33]
 
 → VEHICLES.md §`[33]`
-make the guy 30%  smaller and the doors bottom position align with the bottom of the building
-
 ### [34]
 
 → VEHICLES.md §`[34]`

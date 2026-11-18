@@ -1835,10 +1835,10 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    height), which is also the saloon's visible foot — the frontage runs down behind the road, so its
    bottom edge is hidden there. Both were at 54px, which left every doorway hanging 20px below the wall
    it is set into. */
-.g4-doors{position:absolute;left:0;right:0;top:38%;bottom:69px;display:flex;align-items:flex-end;justify-content:center;gap:10px;transform:translateX(100px)}
-/* THE DOORS ARE 15px SHORTER, TAKEN OFF THE BOTTOM (qa/NOTES.md, item [33]): `bottom` went 54px -> 69px,
-   so the strip's TOP edge (38%) has not moved, the words above each door stay pinned to the same line, and
-   the 15px came off the foot of every doorway. */
+.g4-doors{position:absolute;left:0;right:0;top:38%;bottom:54px;display:flex;align-items:flex-end;justify-content:center;gap:10px;transform:translateX(100px)}
+/* THE DOORS' FOOT IS THE BUILDING'S FOOT (qa/NOTES.md, item [33]): `bottom:54px` is the `.g4-facade`'s own
+   bottom, so the row of doorways ends on the same line the saloon ends on — measured, the last pixel of
+   every doorway and of the frontage are the same y. */
 /* the saloon itself: one timber frontage behind every doorway, so all four doors are entrances to the
    same building. Plank siding, a corner board down each side, a deep overhanging eave with its cornice,
    two windows either side of the porch and the SALOON board painted on the front — background, never a
