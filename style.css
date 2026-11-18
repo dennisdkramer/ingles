@@ -882,20 +882,16 @@
   .content-area>h1{margin:0 0 .35em;text-align:center}
 }
 
-/* #50 STRUCTURE — data-structure="prose|set|sequence|grid|pair|media" on .block; data-kind="teach|train|show|game" = hue. Unset: plain stack. Vary: --h (hue 0-360) */
+/* #50 STRUCTURE — data-structure="prose|set|sequence|grid|pair|media" on .block; the hue is the track's. Unset: plain stack. Vary: --h (hue 0-360) */
 @layer structure{
   .block{position:relative;
-    --h:var(--track-h,var(--teach-h));--accent-h:var(--h);
+    --h:var(--track-h);--accent-h:var(--h);
     --accent:oklch(58% .14 var(--accent-h));
     --accent-soft:color-mix(in oklab, var(--accent) 13%, var(--surface));
     --accent-line:color-mix(in oklab, var(--accent) 42%, var(--line));
     background:var(--paper);border:1px solid var(--line);border-top:2px solid var(--accent);
     border-radius:var(--r2);box-shadow:2px 2px 0 var(--line-2),var(--shadow-1);
     width:fit-content;max-width:100%;padding:20px;margin:0}
-  .block[data-kind="train"]{--h:var(--train-h)}
-  .block[data-kind="show"]{--h:var(--show-h)}
-  .block[data-kind="game"]{--h:var(--game-h)}
-  .block[data-kind="teach|train"]{--h:var(--train-h)}
   .block>:is(h3,h4):first-child,.panel>:is(h3,h4):first-child,.card>:is(h3,h4):first-child,
   .game>:is(h3,h4):first-child,.dialog>:is(h3,h4):first-child{margin-top:0}
   /* text that sits directly in a frame keeps 3px of its own on every side, so a paragraph or a list never
@@ -1293,8 +1289,8 @@
   /* Portuguese is italic AND ochre; an English quotation stays italic in ink, so the two never look
      like the same voice (an `i` inside a PT phrase keeps the phrase's colour) */
   :lang(pt),.ptw{font-family:var(--pt-serif);font-style:italic;color:var(--ptw)}
-  /* the activity's prompt line — the sentence right under the heading of a `train` block */
-  .block[data-kind="train"]>h3+p{font-weight:700;color:var(--ink)}
+  /* the activity's prompt line — the sentence right under the heading of a `train` block.
+     Quarantined with the kind hue: the look is declared now */
   /* the page's own subtitle, directly under the lesson title */
   .content-area>h1+.lead{max-width:none;margin-inline:auto;text-align:center}
   .mono{font-family:var(--mono);font-size:.92em}
@@ -1315,6 +1311,13 @@
 /* #L0 LEGACY — the whole old style.css, at the weakest layer: engine chrome (popup, note and highlight layers,
    dialog, toast, Complete?), the displays, the games. Vary: none */
 @layer legacy{
+  /* a built page's kind hue: quarantined here, and the legacy layer is the weakest, so it no longer paints.
+     The look is declared on the block now; these lines exist only so an un-regenerated page is not stripped */
+  .block[data-kind="train"]{--h:var(--train-h)}
+  .block[data-kind="show"]{--h:var(--show-h)}
+  .block[data-kind="game"]{--h:var(--game-h)}
+  .block[data-kind="teach"]{--h:var(--teach-h)}
+  .block[data-kind="train"]>h3+p{font-weight:700;color:var(--ink)}
   button{background:var(--track-ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;
     margin:4px 4px 4px 0;font:600 14px var(--serif);cursor:pointer;
     box-shadow:3px 3px 0 var(--tan);transition:transform .09s ease,filter .12s ease}
@@ -1498,7 +1501,7 @@
   .dialog[data-kind="teach"]{--edge:var(--ink)}
   .panel[data-kind="train"],.card[data-kind="train"],.game[data-kind="train"],
   .dialog[data-kind="train"]{--edge:var(--orange)}
-  .game[data-kind="train"],.game[data-kind="teach|train"]{--edge:var(--purple)}
+  .game[data-kind="train"]{--edge:var(--purple)}
   .panel.center,.card.center{text-align:center}
   .qgrid{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;
     column-gap:14px;row-gap:12px;min-width:0}
