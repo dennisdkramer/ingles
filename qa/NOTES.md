@@ -284,8 +284,6 @@ content belongs in its `###` sections.
 ### [28]
 
 → VEHICLES.md §`[28]`
-molehills persist between rounds, moles do not move positions until after the next prompt appears
-
 ### [29]
 
 → VEHICLES.md §`[29]`
