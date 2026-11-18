@@ -4004,6 +4004,10 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
      slot allows: a load needing more room than the deck gives is visibly too tall for the car it stands in,
      and the taller it is the later the car — the error, made visible at the moment of loading. */
   var CARDH = 26, CARD_RISE = 9;
+  /* the step between two positions of the sentence: the bed on the car grows by it per position and the card
+     that stands on that car shrinks by it, so the two together are one height down the whole train
+     (qa/NOTES.md, item [39]) */
+  var CARD_STEP = 8;
 
   function yardGame(r) {
     function tag(cls, text) { var n = el('div', cls); if (text != null) n.textContent = text; return n; }
@@ -4084,6 +4088,11 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
         var car = tag('g4-tcar');
         car.style.left = (k * 100 / n) + '%';
         car.style.width = 'calc(' + (100 / n) + '% - 4px)';
+        /* THE CAR'S OWN POSITION, as a number the stylesheet can read (qa/NOTES.md, item [39]): the light brown
+           bed on top of each flatbed is 8px taller per position and the card that lands on it is 8px shorter
+           per position, so the bed + the card is the same height on every car. `--k` is 0 on the front car, so
+           the first position is exactly the bed it has always been. */
+        car.style.setProperty('--k', String(k));
         var body = tag('g4-tbody');
         body.appendChild(tag('g4-tdeckbed'));
         car.appendChild(body);
@@ -4120,11 +4129,12 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
     function buildDock() {
       dock.innerHTML = '';
       words = [];
-      /* THE DOCK KEEPS THE AUTHORED ORDER: a sentence's adjectives are dressed in sentence order, and it is
-         the CAR each one stands on that has to be right — a shuffled dock would only hide the words. It also
-         stops at eight, the same ceiling build() puts on the cars and the crew: a ninth adjective would have
-         no man to carry it and no wagon to land on. */
-      var list = trains[ti].items.slice(0, 8);
+      /* THE DOCK IS SCRAMBLED (qa/NOTES.md, item [39]): the adjectives are dealt in a random order, so where a
+         word stands on the dock says nothing about where it goes on the train. The ITEMS themselves keep the
+         lesson's order — the train is grouped from them and the cars are read off their slots — so what is
+         shuffled here is this dock's own copy, not the queue. It stops at eight, the same ceiling build() puts
+         on the cars and the crew: a ninth adjective would have no man to carry it and no wagon to land on. */
+      var list = shuffle(trains[ti].items.slice(0, 8));
       need = list.length;
       list.forEach(function (w) {
         var c = tag('g4-tword g4-tcard', w.it.prompt);
@@ -4257,8 +4267,17 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
       var hit = w.home === slotOf[k];
       /* further back than its slot allows = the load needs more headroom than the deck it landed on */
       var late = slotOf[k] - w.home;
+      /* A CARD'S HEIGHT FOLLOWS THE WORD'S POSITION IN THE SENTENCE (qa/NOTES.md, item [39]): the last word of
+         the sentence keeps the plain card height, and each earlier word is `CARD_STEP` taller, because the bed it
+         lands on is `CARD_STEP` taller on the car before it. So on a right answer — the card on the car its
+         position names — the bed plus the card is the same height on every car, and the roofs line up. A word
+         put further back than its own slot still grows on top of that, by `CARD_RISE` a car: that surplus is what
+         stands up through the load beside it and bursts. */
+      var rank = slotOf.indexOf(w.home);
+      if (rank < 0) rank = slotOf.length - 1;
+      var sentenceTall = Math.max(0, slotOf.length - 1 - rank) * CARD_STEP;
       var load = tag('g4-tload', w.it.prompt);
-      load.style.height = (CARDH + (late > 0 ? Math.min(54, late * CARD_RISE) : 0)) + 'px';
+      load.style.height = (CARDH + sentenceTall + (late > 0 ? Math.min(54, late * CARD_RISE) : 0)) + 'px';
       cars[k].appendChild(load);
       cars[k].classList.add('loaded');
       cars[k].classList.add(hit ? 'ok' : 'no');

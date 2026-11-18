@@ -320,6 +320,4 @@ molehills persist between rounds, moles do not move positions until after the ne
 ### [39]
 
 → VEHICLES.md §`[39]`
-- scramble the order of the options
-- leave the position of the trains and cars the same, but make the height of the light brown element on top of the train cars grow by 8px per position. (first position stays exactly the same as it is now) 
-when the cards are thrown up onto the traincars, their height changes based on the *intended order of the sentence*, so the LAST answer retains the same card height, and each prior answer grows by 8px more per position. The result is that the sum of the traincar height + the card is exactly the same for every traincar when the correct asnwer is given.
+

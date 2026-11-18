@@ -2489,7 +2489,11 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
 .g4-tbody{position:absolute;left:0;right:0;bottom:9px;height:16px;
   background:linear-gradient(#7f6b4e,#5b4a33);border:2px solid #3a2d1c;border-radius:3px;
   box-shadow:inset 0 2px 0 rgba(255,255,255,.22)}
-.g4-tdeckbed{position:absolute;left:5px;right:5px;top:-9px;height:9px;
+/* THE BED RISES DOWN THE TRAIN (qa/NOTES.md, item [39]): the light brown bed on top of a flatbed is 8px
+   taller per position: the front car keeps the 9px it has always been and every car behind adds one step, and
+   it grows UPWARD off the deck, so the wagons themselves never move. Each car carries its own --k (build() in
+   engine4.js); a bed with no --k reads as the front car, which is what the start card and its still want. */
+.g4-tdeckbed{position:absolute;left:5px;right:5px;bottom:100%;height:calc(9px + 8px * var(--k,0));
   border:2px solid #6b5233;border-bottom:0;border-radius:3px 3px 0 0;background:rgba(160,132,90,.45)}
 .g4-twheels{position:absolute;left:0;right:0;bottom:-6px;height:14px}
 .g4-twheel{position:absolute;bottom:0;width:14px;height:14px;border-radius:50%;z-index:2;
@@ -2504,7 +2508,9 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
 .g4-tbin{position:absolute;left:0;right:0;bottom:20px;
   height:calc(var(--car0) + var(--step) * var(--k) - 22px);
   display:flex;flex-direction:column-reverse}
-.g4-tload{position:absolute;left:4px;right:4px;bottom:22px;z-index:5;display:flex;align-items:center;
+/* the card stands on the bed it lands on, so it comes up with the bed: 22px off the car plus the bed own
+   8px a position. With the card height stepped the other way, every right answer roofs at one height. */
+.g4-tload{position:absolute;left:4px;right:4px;bottom:calc(22px + 8px * var(--k,0));z-index:5;display:flex;align-items:center;
   justify-content:center;padding:1px 4px;overflow:hidden;text-align:center;background:#fff8ea;
   border:2px solid #6b4e26;border-radius:4px;box-shadow:0 2px 0 rgba(40,30,15,.22);
   font:700 12px/1.1 var(--ui-tight);color:var(--ink);
