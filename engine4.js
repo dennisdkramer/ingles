@@ -376,15 +376,28 @@ window.GAMES4 = (function () {
       + '<path d="M214 34l18-18 18 18-8 12-10-5-10 5z" fill="#f2f7fb"/>'
       + '<path d="M0 118V96l54-34 50 30 46-22 60 30 58-34 58 32 74-24v44z" fill="#8d9fb0"/>'
       + '</svg>',
-    heroHurt: '<svg class="g4-art" viewBox="0 0 60 92" aria-hidden="true" focusable="false">'
+    /* THE FACE SAYS HOW BAD IT IS (qa/NOTES.md, item [33]): whole, then a flat brow over a flat mouth once a
+       life has gone, then the mad brows he has always worn with a frown when one life is all that is left.
+       The white bandage the hurt face used to wear across it is gone: a plaster was never what losing a life
+       looked like. Drawn here, beside `hero`, so both share the body and only the face differs. */
+    heroFlat: '<svg class="g4-art" viewBox="0 0 60 92" aria-hidden="true" focusable="false">'
       + '<circle cx="30" cy="16" r="12" fill="#e8b78e" stroke="#8a5a2b" stroke-width="2.5"/>'
       + '<path d="M18 12q4-9 12-9t12 9" fill="#2b1d12"/>'
-      + '<path d="M22 15l6 4M38 15l-6 4" stroke="#2a1c10" stroke-width="2.4" stroke-linecap="round"/>'
-      + '<path d="M26 24q4-2 8 0" stroke="#8a5a2b" stroke-width="2" fill="none" stroke-linecap="round"/>'
+      + '<circle cx="25.5" cy="17" r="1.9" fill="#2a1c10"/><circle cx="34.5" cy="17" r="1.9" fill="#2a1c10"/>'
+      + '<path d="M21.5 12.5h6M32.5 12.5h6" stroke="#2a1c10" stroke-width="2.2" stroke-linecap="round"/>'
+      + '<path d="M26 23.5h8" stroke="#8a5a2b" stroke-width="2" fill="none" stroke-linecap="round"/>'
       + '<path d="M30 28v26" stroke="#5f7a92" stroke-width="11" stroke-linecap="round"/>'
       + '<path d="M30 34l-13 8M30 34l13 8" stroke="#e8b78e" stroke-width="5" stroke-linecap="round"/>'
       + '<path d="M30 52l-8 22M30 52l8 22" stroke="#2b3a4a" stroke-width="6" stroke-linecap="round"/>'
-      + '<path d="M21 20l18 8" stroke="#fdfaf2" stroke-width="5" stroke-linecap="round"/>'
+      + '</svg>',
+    heroMad: '<svg class="g4-art" viewBox="0 0 60 92" aria-hidden="true" focusable="false">'
+      + '<circle cx="30" cy="16" r="12" fill="#e8b78e" stroke="#8a5a2b" stroke-width="2.5"/>'
+      + '<path d="M18 12q4-9 12-9t12 9" fill="#2b1d12"/>'
+      + '<path d="M22 15l6 4M38 15l-6 4" stroke="#2a1c10" stroke-width="2.4" stroke-linecap="round"/>'
+      + '<path d="M26 25q4-3 8 0" stroke="#8a5a2b" stroke-width="2" fill="none" stroke-linecap="round"/>'
+      + '<path d="M30 28v26" stroke="#5f7a92" stroke-width="11" stroke-linecap="round"/>'
+      + '<path d="M30 34l-13 8M30 34l13 8" stroke="#e8b78e" stroke-width="5" stroke-linecap="round"/>'
+      + '<path d="M30 52l-8 22M30 52l8 22" stroke="#2b3a4a" stroke-width="6" stroke-linecap="round"/>'
       + '</svg>',
     /* bossRaid's boss: a horned animal head rather than a spiked ball — eyes, muzzle, fangs, claws */
     boss: '<svg class="g4-art" viewBox="0 0 140 130" aria-hidden="true" focusable="false">'
@@ -2838,6 +2851,10 @@ function say(text, lang) {
 
     /* a restart begins with three lives: run state, so the runner resets it on start — and the question
        board goes blank, because the last run's question is not this run's */
+    /* HIS FACE SAYS HOW BAD IT IS (qa/NOTES.md, item [33]): the whole man while all three lives are his, a
+       flat brow over a flat mouth once one is gone, and the mad brows with a frown when one life is all he
+       has left. The white bandage the hurt face used to wear across it is gone. */
+    function faceFor(n) { return n >= 3 ? ART.hero : (n >= 2 ? ART.heroFlat : ART.heroMad); }
     function reset() { left = 3; ask.classList.remove('in'); ask.textContent = ''; }
     function clear() {
       /* the street is emptied between items — the LIVES are not: they were paid for. The question board
@@ -2845,7 +2862,7 @@ function say(text, lang) {
          question nobody has been given. `show` puts it back with the next item. */
       doors.innerHTML = ''; tiles = []; busy = false; picked = null; dx = 0;
       ask.classList.remove('in');
-      hero.innerHTML = left < 2 ? ART.heroHurt : ART.hero;
+      hero.innerHTML = faceFor(left);
       hero.classList.remove('enter', 'bitten', 'down', 'gone');
       hero.style.transform = 'translate(0,0)';
       hero.style.setProperty('--dx', '0px');
@@ -2928,7 +2945,7 @@ function say(text, lang) {
       });
       if (!hit) {
         left = Math.max(0, left - 1);
-        hero.innerHTML = left < 2 ? ART.heroHurt : ART.hero;
+        hero.innerHTML = faceFor(left);
         if (!left) {
           hero.classList.add('down');
           r.later(function () { if (r.running) r.finish(); }, 700);
