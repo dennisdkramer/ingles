@@ -1,9 +1,9 @@
 /**
  * qa/menu.mjs — CONTENT_EXAMPLES.md read as an INDEX: the heading grammar, in one place.
  *
- * Three things print the index and none of them may own a copy of the regex: the generation brief
- * (`qa/brief.mjs` step 4), the preview page's nav (`qa/serve.mjs` → `qa/readout.js`), and
- * `node qa/brief.mjs --index=json`. A second copy is how the nav came to list names the file no
+ * Three things may print the index, and none may own a copy of the regex: this file is the only one.
+ * The preview page's nav (`qa/serve.mjs` → `qa/readout.js`) calls `readMenu()` here, and anything else
+ * that lists the menu calls it too. A second copy is how the nav came to list names the file no
  * longer had — and to list one shape twice — while the menu itself read cleanly.
  *
  * An entry is the numbered form, which is the one the conversion is producing:

@@ -4,8 +4,8 @@
  * Both used to be baked into the page and both drifted. The nav listed names CONTENT_EXAMPLES.md no
  * longer had, and listed one shape twice; the line under each note box was a hand copy of a heading
  * that had since been rewritten. Neither can drift now, because nothing is stored: the page asks
- * /__qa-brief, qa/serve.mjs answers with `readMenu()` from qa/menu.mjs — the same call
- * `node qa/brief.mjs --index` prints, so the nav IS the brief's index and not a copy of it —
+ * /__qa-menu, qa/serve.mjs answers with `readMenu()` from qa/menu.mjs — the index the menu file itself
+ * defines, so the nav IS that index and not a copy of it —
  * builds the nav from that, writes each entry's header into the dim line under its note box, and
  * re-reads every 2 s so an edit to the file shows up without a reload.
  *
@@ -25,7 +25,7 @@
   if (!toc) return;
 
   var POLL_MS = 2000;
-  var ENDPOINT = '/__qa-brief';
+  var ENDPOINT = '/__qa-menu';
   var sig = null;                 // what the page is showing, so a poll that changes nothing does nothing
   var live = false;               // the endpoint answered at least once: this page is served
 
@@ -133,7 +133,7 @@
       blocks + ' with a block here' +
       (missing ? ' · ' + missing + ' without one' : '') +
       (stale.length ? ' · ' + stale.length + ' block(s) with no entry' : '') +
-      ' · ' + data.file + (live ? ', via qa/brief.mjs' : ' (no server)'));
+      ' · ' + data.file + (live ? ', via qa/serve.mjs' : ' (no server)'));
   }
 
   function render(data) {
@@ -174,7 +174,7 @@
     return { file: 'this page', sections: [], groupTitle: 'blocks on this page', shapes: shapes };
   }
 
-  /* served: the JSON endpoint, which is the brief's own index — every entry in the file, grouped by the
+  /* served: the JSON endpoint, which is the menu's own index — every entry in the file, grouped by the
      file's sections, including the ones with no block here. Without it the page's own blocks are the
      index, which is every block here and no claim about the rest. */
   function poll() {

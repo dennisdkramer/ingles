@@ -4,13 +4,13 @@
 <link rel="stylesheet" href="style.css">
 <style>/* an index page, not a lesson: its panel titles are names, not the lesson's A/B/C sequence */
 .panel>h3::before{content:none}</style>
-<!-- A working index for the author, not a lesson: unlinked from the site, in the site's own frame,
-     and deliberately loading no engine. It holds no answer, saves nothing, and is not in lessons.json. -->
+<!-- The tool reference a lesson reads: unlinked from the site, in the site's own frame, and deliberately
+     loading no engine. It holds no answer, saves nothing, and is not in lessons.json. -->
 </head><body>
 <div id="toast"></div>
-<header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>WORKING INDEX</span></h1></header>
+<header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>TOOL REFERENCE</span></h1></header>
 <div id="controlbar" class="control-bar"></div>
-<div id="barhelp" class="barhelp">A page for the author, not the student — what the course can <b>teach with</b>, what each figure is for, and what it may not be used to claim.</div>
+<div id="barhelp" class="barhelp">The tools a lesson may use — what the course can <b>teach with</b>, what each one is for, what it may not be used to claim, and the markup that draws it.</div>
 <main id="page"><div class="page-container"><div class="content-area">
 
 <h1>What we can teach with</h1>
@@ -19,6 +19,12 @@
 The table maps a concept to the question it raises and to the figure that can show the answer.
 Each figure is described by four things, because those are what a lesson needs in order to choose well:
 what it is for, what it assumes the student already has, what it must never be used to claim, and whether a second appearance earns its place.</p>
+
+<p><b>This page is where a lesson looks.</b> Read it in this order: <b>§3</b> maps a concept to the question it
+raises and to the tools that answer it · the chosen tool's own entry in <b>§4</b> says what it is for, what it
+assumes and what it may not claim, and shows the markup that draws it · <b>§6</b> holds the decisions already
+taken, which are not to be re-opened in a lesson · <b>§7</b> names the concepts no tool draws, where the page's
+own prose carries the work.</p>
 
 <p><b>Status key.</b>
 <b>built</b> — in the stylesheet and rendering on this page ·
@@ -37,6 +43,22 @@ what it is for, what it assumes the student already has, what it must never be u
 <li><b>What it must not be used to claim.</b> Every figure asserts something. An axis of time asserts that time is a line with a present on it; it says nothing about how sure the speaker is, how often it happens, or whether the form is polite. A positions figure asserts that a transformation is available — which is false in most of the places it gets borrowed for. Used where its claim is false, a figure does not merely fail to teach: it installs an error.</li>
 <li><b>Whether a repeat earns its place.</b> Not a number. Two tests: does this appearance tell the student something the sentence does not already say, and is a second appearance <i>answered</i> or is it the same display again? Repetition inside an exercise is how a student transfers; repetition of a picture is decoration.</li>
 </ul>
+
+<p><b>The words this page owns.</b> These names belong to the figures. A lesson uses one only in a block where
+that figure is drawn, and with the meaning below — a tense is a form, not a claim, and outside the figure the
+page says what the wording is and what it does:</p>
+
+<table class="chart">
+<thead><tr><th>word</th><th>figure</th><th>what it names</th></tr></thead>
+<tbody>
+<tr><td><b>claim</b></td><td>the line of time</td><td>what a sentence asserts, drawn as the stretch of the line it covers</td></tr>
+<tr><td><b>span</b>, <b>open end</b>, <b>closed end</b></td><td>the line of time</td><td>that stretch itself; an open end means the claim still holds now</td></tr>
+<tr><td><b>field</b></td><td>the line of time</td><td>a container the event sits inside, not a length of time</td></tr>
+<tr><td><b>wall</b></td><td>the line of time</td><td>a deadline the claim has to reach</td></tr>
+<tr><td><b>now</b></td><td>the line of time</td><td>where the speaker stands</td></tr>
+<tr><td><b>job</b></td><td>word jobs</td><td>the part a word plays in its sentence</td></tr>
+</tbody>
+</table>
 
 <h2>2. The tests a use must pass</h2>
 
@@ -86,6 +108,9 @@ what it is for, what it assumes the student already has, what it must never be u
 <h2>4. What exists today</h2>
 
 <p>Every block below is the real component, with the markup that produced it behind the fold. If a figure is in this section it renders on a page today. If it is not here, it is in the next section as documentation only — a specification with no code behind it.</p>
+
+<p>Each entry opens by saying what it shows, so the section reads without the pictures. The last entry is prose,
+the one tool with no markup.</p>
 
 <div class="panel" id="pos">
 <h3>Word jobs — the underline</h3>
@@ -262,7 +287,7 @@ and above .tln:
 <tr><td><b>push</b></td><td><span class="pt">empurrar</span></td></tr>
 </tbody>
 </table>
-<div class="panel">
+<div class="panel" id="partner">
 <h3>A word and its partner</h3>
 <p>Two columns and nothing else: the word, and the word it is paired with. The pairing is the whole lesson — the opposite, the homophone, or the translation that traps a Portuguese speaker. The margin label says only which pairing a row is doing.</p>
 <p>Everything that would have taken a third column is written here instead: <span class="pt">emprestar</span> covers both directions, <i>cheap</i> also judges quality where <span class="pt">barato</span> does not, and <i>push back</i> is to resist rather than to shove.</p>
@@ -271,7 +296,7 @@ and above .tln:
 </div>
 
 <div class="itemrow" id="chart-split">
-<div class="panel">
+<div class="panel" id="label">
 <h3>The label is the teaching</h3>
 <p>The margin label carries one word — which family the rows beside it belong to — and the rule is written here, where it can be a sentence: <b>Regular</b> adds <i>-ed</i> and the base never moves, so the rows are only evidence that the rule holds; <b>Irregular</b> has a form of its own for each verb, so each has to be learned one at a time.</p>
 <p class="dim">The same margin label splits any family a lesson must separate — two conjugations, two registers, the words that follow the rule from the words that do not. A chart with no family to separate does not get one.</p>
@@ -327,9 +352,44 @@ and above .tln:
 <p class="dim">The native <code>controls</code> are the floor: with no script the student still plays, pauses and scrubs.</p>
 </div>
 
+<div class="panel" id="prose">
+<h3>Prose — the explanation</h3>
+<p>The one tool with no markup: the sentences that state a rule, put two wordings side by side, or name a
+difference Portuguese hides. Every lesson uses it, and it fails more quietly than a figure, because a wrong
+sentence still reads like teaching. The same four statements apply:</p>
+<ul>
+<li><b>What it is for.</b> The rule no figure can draw, and the student's question answered in words.</li>
+<li><b>What it assumes.</b> Every term is the student's own word or is defined on this page. The figure words
+above are used only where their figure is drawn.</li>
+<li><b>What it must not claim.</b> Anything the wording does not do: a metaphor standing where a fact belongs,
+two wordings presented as one, two wordings claimed to behave alike without naming the shared behaviour, a
+promise about the lesson, or an <i>only</i> / <i>never</i> / <i>always</i> that is not true.</li>
+<li><b>Whether a repeat earns its place.</b> One rule per paragraph, with an example. A second paragraph on the
+same rule adds a case, not a restatement.</li>
+</ul>
+<h4>Two pairs from a real draft</h4>
+<p><b>Rejected.</b> “Portuguese puts the whole claim inside the verb's ending: escrevi, tenho escrito. English
+splits it into two words that never touch, and one of them is a word you already know from do and will.”</p>
+<p class="dim">Two tenses presented as one · <i>claim</i> with no axis on the page · <i>splits</i> and <i>never
+touch</i> are figures of speech where a fact belongs · <i>do</i> and <i>will</i> share no behaviour with
+<i>have</i>.</p>
+<p><b>Kept.</b> “<i>Escrevi</i> is past simple: one finished event. <i>Tenho escrito</i> is present perfect:
+the writing is still true now. English keeps that difference — <i>wrote</i> / <i>have written</i>.”</p>
+<p class="dim">Each wording is named with what it does, the difference is stated rather than implied, and the
+Portuguese is a fact about Portuguese.</p>
+<p><b>Rejected.</b> “<i>has been</i> + <i>-ing</i> is the same machine with a longer tail.”</p>
+<p class="dim"><i>Machine</i> is a term this page does not define, and the sentence explains the lesson instead
+of the English.</p>
+<p><b>Kept.</b> “<i>He's been playing all week</i> is <i>he has been playing</i>: the playing started before
+this week and has not stopped. The same words with <i>he is</i> — <i>he's playing</i> — say only that it is
+happening now.”</p>
+<p class="dim">Both readings are shown, the deciding word is named, and nothing has to be learned before the
+difference can be seen.</p>
+</div>
+
 <h2>5. Documented, not built</h2>
 
-<p>These are specifications with no code behind them. A lesson cannot use them today, and a brief that offers them would be offering a shape that does not exist.</p>
+<p>These are specifications with no code behind them. A lesson cannot use them today, and offering them would be offering a shape that does not exist.</p>
 
 <table class="chart">
 <thead><tr><th>Wanted</th><th>What is written</th><th>What is missing</th></tr></thead>
@@ -358,7 +418,7 @@ and above .tln:
 
 <p>Concepts the course owes and cannot draw: <b>how sure the speaker is</b> (modal strength), <b>how often something happens</b>, and <b>register</b> — what is too rude, too stiff or too casual for the room. Those lessons carry the work in prose and in the choice of examples, and a figure invented for them would be a diagram of taste.</p>
 
-<p class="dim">This page is a working document for the author. It is unlinked from the site index, holds no answer, saves nothing, and loads no engine. Add a row when a concept is planned; add a specimen when a figure is built; delete a row when it is pruned.</p>
+<p class="dim">This page is the tool reference a lesson reads. It is unlinked from the site index, holds no answer, saves nothing, and loads no engine. Add a row when a concept is planned; add a specimen when a figure is built; delete a row when it is pruned.</p>
 
 </div>
 <footer>MATERIAIS SIMPLES E INOVADORES · INGLES CERTO EUA</footer>

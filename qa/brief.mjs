@@ -1,33 +1,9 @@
 #!/usr/bin/env node
-/**
- * qa/brief.mjs - the generation brief. A PRINTER, not a check.
- *
- *   node qa/brief.mjs --track=business --lesson=41        the input set only
- *   node qa/brief.mjs --track=business --lesson=41 --reassert   PEDAGOGY-MAP.md again, nothing else
- *   node qa/brief.mjs --css            the style.css `/* #` headers, one line each, with their line numbers
- *   node qa/brief.mjs --indexes        both indexes: the menu index, then the style.css headers
- *
- * Why the map appears twice: it is the file that decides what the lesson contains and at what
- * level, and it has been the file least obeyed. Copy 1 is read before the shape is chosen; copy 2
- * is read after it, when the drift has already happened.
- *
- * Nothing here judges anything. No page is opened, no lesson page is read, and no file is written.
- *
- * WHAT IT PRINTS, in PEDAGOGY-MAP [I/O] order: the lesson's own roadmap block · the neighbouring lessons'
- * `##` headers, five before and three after (reference only, and printed to AVOID repeating one of them) ·
- * FUNCTION.md [CONTENT] · <TRACK>-REGISTER.md · the CONTENT_EXAMPLES.md [INSTRUCTIONS] grammar and one line
- * per shape, with `--section=NN|name` for one entry whole · style.css `##` headers. PEDAGOGY-MAP.md itself
- * is printed first, and again on `--reassert`.
- *
- * WHAT IT WITHHOLDS, because PEDAGOGY-MAP [I/O] lists the input set and closes it with "Withhold others":
- * `_shell.html` — the frame is already in the file being written, because a page starts as a copy of the
- * shell with its tokens filled and an empty content area (`node new-lesson.mjs`); and any checklist of
- * rules, because a list printed beside the map competes with the map for authority and drifts from it —
- * the last one asked about a Portuguese budget that no longer existed anywhere in the repo.
- *
- * No count of anything is printed: how many headers, shapes or classes a file holds is that file's
- * business, and a count in a brief is read as a target.
- */
+// [DEPRECATED] not a generation input — see capability-map.html. `--revive` runs it anyway.
+if (!process.argv.includes('--revive')) {
+  console.error('qa/brief.mjs is deprecated and is not a generation input. See capability-map.html; pass --revive to run it.');
+  process.exit(1);
+}
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

@@ -14,9 +14,9 @@
  *   GET  /__qa-notes/ping   { ok, file }        what notes.js probes for; another static server answers 404
  *   GET  /__qa-notes        the markdown       what the boxes read, every 2 s
  *   POST /__qa-notes        the markdown       written temp-then-renamed, so a dropped tab cannot half-write
- *   GET  /__qa-brief        the menu's index   the same parse `node qa/brief.mjs --index` prints, because
- *                                              both call qa/menu.mjs — this is what the preview page's nav
- *                                              and the line above each block are a readout of (qa/readout.js)
+ *   GET  /__qa-menu         the menu's index   `readMenu()` from qa/menu.mjs, which is what the preview
+ *                                              page's nav and the line above each block are a readout of
+ *                                              (qa/readout.js)
  *
  * Everything else is the repo, unchanged: the page, style.css, the engines, logo.png.
  *
@@ -76,8 +76,8 @@ const server = http.createServer((req, res) => {
 
   if (rel === '/__qa-notes/ping') return json(res, 200, { ok: true, file: 'qa/NOTES.md' });
 
-  /* the preview pages' nav: the index the brief prints, from the one parser the brief uses */
-  if (rel === '/__qa-brief') {
+  /* the preview pages' nav: the menu index, from the one parser */
+  if (rel === '/__qa-menu') {
     try { return json(res, 200, readMenu()); }
     catch (e) { return json(res, 500, { ok: false, error: 'cannot read the menu: ' + e.message }); }
   }
