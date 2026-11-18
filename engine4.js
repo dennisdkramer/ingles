@@ -70,10 +70,12 @@ window.GAMES4 = (function () {
     return (window.performance && window.performance.now) ? window.performance.now() : Date.now();
   };
   var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  /* the beat a question and its options are handed over in (qa/NOTES.md 28). PROMISE_OUT is how long the
-     old prompt takes to leave, PROMISE_IN how long the new one takes to arrive; both match the
-     `.g4-prompt` opacity transition in style.css, so nothing is ever read off a half-changed stage. */
-  var PROMISE_OUT = 240, PROMISE_IN = 180;
+  /* THE HANDOVER IS ONE CROSSFADE, AND IT COSTS NO TIME (qa/NOTES.md, item [40]): a fade may never take the
+     beat the swap used to take. An item still changes in the single frame it always did — the outgoing
+     picture is left standing over the stage for XFADE ms while the new one is painted under it, and the two
+     fades run together. There is no "fade out, then swap, then fade in" left in the runner: that turned one
+     frame into 420ms of empty stage, which is exactly what makes a hand-over feel slower than it was. */
+  var XFADE = 500;
 
   function norm(s) {
     return String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ').trim();
@@ -670,6 +672,10 @@ window.GAMES4 = (function () {
     if (this.itemTime) stage.appendChild(bar);
     this.bar = bar; this.barFill = bar.querySelector('i');
     this.stage = stage; this.hudEl = hud;
+    /* the runner’s own furniture: the scene, the HUD, the score line, the deadline bar and the intro are NOT
+       part of the picture that fades on a hand-over — only the presentation’s own nodes are */
+    this.ownNodes = [scene, hud, prev, bar, intro];
+    if (this.promptEl) this.ownNodes.push(this.promptEl);
     /* the stage goes BELOW the block's lettered header, never above it: the `## PAGE SCAFFOLD` contract requires the h3 to be
        the block's first line, so a block that opens with one keeps it on top and the stage lands directly
        under it. A block whose markup has no heading is inserted at the top exactly as before. */
@@ -856,10 +862,55 @@ window.GAMES4 = (function () {
     return true;
   };
 
-  /* THE OPTIONS ARRIVE WITH THEIR QUESTION (qa/NOTES.md 28): the old question is taken off the stage and
-     the new one is given the same beat before its options surface. Without it, a presentation that builds
-     its options synchronously in show() put the next question's moles/pots/cards on the stage during the
-     beat the previous prompt was still fading out — so an option appeared under the answer just read. */
+  /* the nodes a presentation owns on the stage: everything that is not the runner’s own furniture */
+  Runner.prototype.contentNodes = function () {
+    var own = this.ownNodes || [];
+    return [].filter.call(this.stage.children, function (n) {
+      return own.indexOf(n) < 0 && n.className.indexOf('g4-xghost') < 0;
+    });
+  };
+  /* THE PICTURE THAT IS LEAVING (qa/NOTES.md, item [40]): a copy of the presentation’s own nodes and of the
+     prompt, laid over the stage for the length of one fade while the new item is painted underneath it. It
+     is aria-hidden, it takes no pointer and no tab, and no id is copied — so it can never shadow the live
+     stage it is fading off. Reduced motion gets no ghost at all: nothing fades, and nothing waits either. */
+  Runner.prototype.ghost = function () {
+    if (this.reduced) return null;
+    var nodes = this.contentNodes();
+    if (!nodes.length) return null;
+    var g = el('div', 'g4-xghost');
+    nodes.forEach(function (n) { g.appendChild(n.cloneNode(true)); });
+    if (this.promptEl && this.promptEl.textContent) {
+      var p = this.promptEl.cloneNode(true);
+      p.classList.add('in');                   /* the copy is the prompt as it stood, text and all */
+      g.appendChild(p);
+    }
+    [].forEach.call(g.querySelectorAll('[id]'), function (x) { x.removeAttribute('id'); });
+    g.setAttribute('aria-hidden', 'true');
+    this.stage.appendChild(g);
+    return g;
+  };
+  /* THE SWAP, IN ONE FRAME (qa/NOTES.md, item [40]): the ghost is taken FIRST, because after clear() there is
+     nothing left to copy; then the queue steps exactly as it did before any fade existed, and the new picture
+     is given its own fade under the ghost. Both start in this same frame, so the hand-over adds no time to
+     the run. The ghost is removed by a plain timer, not a runner one: it must die even if the next item has
+     already begun. */
+  Runner.prototype.advance = function () {
+    var ghost = this.ghost(), self = this;
+    if (this.view) this.view.clear();
+    this.setPrompt('', false);
+    this.queue.shift(); this.idx++;
+    if (this.dead) this.finish(); else this.next();
+    if (!ghost) return;
+    this.contentNodes().forEach(function (n) { n.classList.add('g4-xin'); });
+    window.setTimeout(function () {
+      if (ghost.parentNode) ghost.parentNode.removeChild(ghost);
+      self.contentNodes().forEach(function (n) { n.classList.remove('g4-xin'); });
+    }, XFADE + 60);
+  };
+
+  /* THE OPTIONS ARRIVE WITH THEIR QUESTION (qa/NOTES.md 28, and item [40] for the timing): the options are
+     built in the frame their own prompt goes up — the picture that was there a moment ago is a fading ghost
+     over them, so an option can never be read off the question before its own */
   Runner.prototype.step = function () {
     if (!this.queue.length) return this.finish();
     var self = this, it = this.queue[0];
@@ -875,10 +926,10 @@ window.GAMES4 = (function () {
       if (self.view) self.view.show(it);
       self.startItemClock();
     };
-    /* the clock starts WITH the options, never before them: a deadline that runs while the stage is
-       still empty is a deadline the student cannot meet */
-    var beat = self.reduced ? 0 : PROMISE_IN;
-    if (beat) this.later(arrive, beat); else arrive();
+    /* the options arrive with their question, in the SAME frame: setPrompt has already put the new prompt
+       up, and the outgoing picture is a fading ghost over it — so the clock starts on the beat the student
+       answered into, never after a wait */
+    arrive();
     return it;
   };
 
@@ -927,17 +978,10 @@ window.GAMES4 = (function () {
        echoPads' three wrong pads) does not have to know about it — spending the last one here is enough. The
        run is over for real, so the misses are not replayed afterwards. */
     if (this.livesLeft() === 0) this.dead = true;
-    this.later(function () {
-      if (self.view) self.view.clear();
-      /* the question leaves the stage BEFORE its options are replaced: the prompt fades out on its own
-         (`.g4-prompt` transitions its opacity), and the next item is only stepped to once that has
-         happened, so nothing from the old item is ever still on screen under the new one */
-      self.setPrompt('', false);
-      self.later(function () {
-        self.queue.shift(); self.idx++;
-        if (self.dead) self.finish(); else self.next();
-      }, self.reduced ? 0 : PROMISE_OUT);
-    }, hit ? 560 : 900);
+    /* THE SWAP IS ONE FRAME (qa/NOTES.md, item [40]): `advance` takes the ghost of the picture that is
+       leaving, clears it, and steps the queue in the same frame it always did — the fade is drawn over
+       the swap, never waited for before it */
+    this.later(function () { self.advance(); }, hit ? 560 : 900);
     return hit;
   };
   Runner.prototype.pick = function (value) {

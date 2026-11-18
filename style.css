@@ -1548,7 +1548,7 @@
 .game-fade{position:absolute;inset:0;z-index:4;background:var(--paper);opacity:0;pointer-events:none;transition:opacity .5s ease}
 .target{position:absolute;left:0;top:0;width:118px;height:104px;padding:0;margin:0;background:transparent;border:0;box-shadow:none;cursor:crosshair;will-change:transform;z-index:2}
 html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;border-radius:8px}
-@media (prefers-reduced-motion:reduce){.game-prompt{transition:none}.game-fade{transition:none}}
+@media (prefers-reduced-motion:reduce){.game-prompt{transition:none}.game-fade{transition:none}.g4-xghost{display:none}.g4-xin{animation:none}}
 @media print{.game-stage{display:none}.game.is-on .game-list{display:block}}
 @keyframes g4sway{0%,100%{transform:rotate(-3.4deg)}50%{transform:rotate(3.4deg)}}
 .target svg{display:block;width:118px;height:74px;color:#f3b23c}
@@ -1603,6 +1603,15 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    whole run, so play never happens on a bare colour */
 .g4-scene{position:absolute;inset:0;z-index:0;overflow:hidden}
 .g4-scene svg{display:block;width:100%;height:100%}
+/* THE HAND-OVER IS ONE CROSSFADE (qa/NOTES.md, item [40]): the picture that is leaving is a ghost laid over
+   the stage, fading out while the picture that is arriving fades in underneath it. Both run the same .5s from
+   the same frame, so an item change still takes the one frame it always took - never .5s out and then
+   .5s in. The ghost takes no pointer and no tab; the class on the arriving nodes is taken off again by the
+   runner once the fade has run, so the next hand-over can start it afresh. */
+.g4-xghost{position:absolute;inset:0;z-index:9;pointer-events:none;animation:g4xout .5s ease both}
+.g4-xin{animation:g4xin .5s ease both}
+@keyframes g4xout{from{opacity:1}to{opacity:0}}
+@keyframes g4xin{from{opacity:0}to{opacity:1}}
 /* the scene moves where a game says it does: catchBasket's orchard nods, drops petals out of the trees
    and carries a butterfly along the grass. These run forever (an animation that ends leaves a still
    picture again), sit on their own inner groups so no game part's transform is touched, and stop dead
