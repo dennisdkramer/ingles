@@ -284,9 +284,11 @@ content belongs in its `###` sections.
 ### [28]
 
 → VEHICLES.md §`[28]`
+
 ### [29]
 
 → VEHICLES.md §`[29]`
+
 ### [30]
 
 → VEHICLES.md §`[30]`
@@ -294,12 +296,15 @@ content belongs in its `###` sections.
 ### [31]
 
 → VEHICLES.md §`[31]`
+
 ### [32]
 
 → VEHICLES.md §`[32]`
+
 ### [33]
 
 → VEHICLES.md §`[33]`
+
 ### [34]
 
 → VEHICLES.md §`[34]`
@@ -315,6 +320,7 @@ content belongs in its `###` sections.
 ### [37]
 
 → VEHICLES.md §`[37]`
+
 ### [39]
 
 → VEHICLES.md §`[39]`
