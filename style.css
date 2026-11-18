@@ -2218,8 +2218,12 @@ html.kbd .g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:
 .g4-bucket .g4-art{position:absolute;left:50%;bottom:var(--pot-sit);width:var(--pot-w);height:auto;
   transform:translateX(-50%);transition:transform .18s ease}
 .g4-bucket-t{position:absolute;left:50%;bottom:0;transform:translateX(-50%);z-index:2;display:block;max-width:100%;padding:2px 7px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;box-shadow:2px 2px 0 var(--tan);white-space:nowrap;overflow:hidden}
-.g4-blooms{position:absolute;left:0;right:0;bottom:calc(var(--pot-sit) + var(--pot-h));height:60px;z-index:1;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
-.g4-bloom{flex:0 0 auto;width:36px;height:54px;transform-origin:50% 100%;animation:g4grow .5s cubic-bezier(.3,1.5,.6,1)}
+/* THE STEMS GO INTO THE POT (qa/NOTES.md, item [29]): the blooms' feet used to stop exactly on the pot's top
+   edge, so the flowers sat ON the rim instead of in it. They now come 8px lower — inside the dark opening at
+   the pot's crest — and each bloom is twice its old size (72x108, was 36x54). The background and the pot
+   itself are untouched. */
+.g4-blooms{position:absolute;left:0;right:0;bottom:calc(var(--pot-sit) + var(--pot-h) - 8px);height:120px;z-index:1;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+.g4-bloom{flex:0 0 auto;width:72px;height:108px;transform-origin:50% 100%;animation:g4grow .5s cubic-bezier(.3,1.5,.6,1)}
 .g4-bloom+.g4-bloom{margin-left:-6px}
 .g4-bloom:nth-child(2n){transform:rotate(-8deg)}
 .g4-bloom:nth-child(3n){transform:rotate(7deg)}

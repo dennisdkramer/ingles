@@ -289,8 +289,6 @@ molehills persist between rounds, moles do not move positions until after the ne
 ### [29]
 
 → VEHICLES.md §`[29]`
-align the flowers with the pots so the bottom of the stem is inside the dark top of the pot. double the flower size (dont alter the bckground)
-
 ### [30]
 
 → VEHICLES.md §`[30]`
