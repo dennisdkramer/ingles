@@ -1846,7 +1846,7 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
    height), which is also the saloon's visible foot — the frontage runs down behind the road, so its
    bottom edge is hidden there. Both were at 54px, which left every doorway hanging 20px below the wall
    it is set into. */
-.g4-doors{position:absolute;left:0;right:0;top:38%;bottom:54px;display:flex;align-items:flex-end;justify-content:center;gap:10px;transform:translateX(100px)}
+.g4-doors{position:absolute;left:0;right:0;top:38%;bottom:69px;display:flex;align-items:flex-end;justify-content:center;gap:10px;transform:translateX(100px)}
 /* THE DOORS' FOOT IS THE BUILDING'S FOOT (qa/NOTES.md, item [33]): `bottom:54px` is the `.g4-facade`'s own
    bottom, so the row of doorways ends on the same line the saloon ends on — measured, the last pixel of
    every doorway and of the frontage are the same y. */
@@ -1925,10 +1925,12 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 .g4-door.ok .g4-doorsign{border-color:var(--green);background:var(--greenbg)}
 .g4-door.no .g4-doorsign{border-color:#c92a2a;background:#fdeaea;animation:g4shake-x .34s ease}
 .g4-door.reveal .g4-doorsign{animation:g4pulse .7s ease-in-out 2}
-.g4-runner{position:absolute;left:50%;bottom:59.2px;width:84px;height:128.8px;margin-left:-42px;z-index:4;transform-origin:50% 100%;transition:transform .42s cubic-bezier(.3,1.1,.6,1),opacity .3s ease;pointer-events:none}
-/* HE IS 30% SMALLER, AND THE BOX SHRANK FROM THE FEET UP (qa/NOTES.md, item [33]): 120x184 became
-   84x128.8 (both ×0.7, the art's own proportion), and `bottom` went 4px -> 59.2px so the TOP edge sits at
-   the same y it did before — the 55.2px he lost came off the bottom, and only the bottom. */
+.g4-runner{position:absolute;left:50%;bottom:0;width:84px;height:128.8px;margin-left:-42px;z-index:4;transform-origin:50% 100%;transition:transform .42s cubic-bezier(.3,1.1,.6,1),opacity .3s ease;pointer-events:none}
+/* HE IS 30% SMALLER (qa/NOTES.md, item [33]): 120x184 became 84x128.8, both x0.7, the art’s own proportion.
+   AND HE STANDS ON THE BOTTOM OF THE FRAME (qa/NOTES.md, item [33] again, the "guys starting/resting
+   position should be the bottom of the game frame"): `bottom` is 0, not the 59.2px he was floated at when
+   only his top edge was allowed to stay put. His feet are the frame’s feet, in the start card and in the
+   street, and the fall is a rotation on those feet rather than a drop below them. */
 /* he goes in: the step through the doorway and the fade are ONE movement — he walks up and INTO the
    opening and FADES, he does not shrink (qa/NOTES.md 33: "dont make him shrink, just fade") */
 .g4-runner.enter{opacity:0;transform:translate(var(--dx, 0),-40px) !important;transition:transform .46s cubic-bezier(.32,.9,.5,1),opacity .46s ease .1s}
@@ -1947,7 +1949,7 @@ html.kbd .target:focus-visible{outline:3px solid var(--tan);outline-offset:2px;b
 /* the bite always ends the same way: he goes down where he stands — the `down` state is built on his own
    --dx, so the fall happens at the door he chose — and then he is gone, until the street comes back
    with the next question */
-.g4-runner.down{transform:translate(var(--dx, 0),60px) rotate(84deg) !important;opacity:.75}
+.g4-runner.down{transform:translate(var(--dx, 0),-34px) rotate(84deg) !important;opacity:.75}
 .g4-runner.down.gone{opacity:0;transition:opacity .5s ease}
 /* wordleBoard: clue on the left, letters and the typing box in the middle, a message on the right —
    one line, centred, so nothing moves when a letter lands */

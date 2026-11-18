@@ -1900,7 +1900,7 @@ window.GAMES4 = (function () {
       });
       frame_.appendChild(facade); frame_.appendChild(road); frame_.appendChild(row);
       box.appendChild(frame_);
-      box.appendChild(abs(artNode('g4-runner g4-bit', ART.hero), 'left:50%;bottom:4px;width:30px;height:46px;margin-left:-15px'));
+      box.appendChild(abs(artNode('g4-runner g4-bit', ART.hero), 'left:50%;bottom:8px;width:30px;height:46px;margin-left:-15px'));
     },
 
   wordleBoard: function (box, items) {
@@ -2377,19 +2377,47 @@ function say(text, lang) {
     var CROSS = 2800;
     var raf = 0, live = false, y = 0, vy = 0, t0 = 0, speed = 0.06;
     /* A WALL IS AN OBJECT IN FLIGHT, not a state of the stage (qa/NOTES.md 60). Each one is cut once, flies
-       from the right edge to past the left one at the stream's own pace, and is retired when it is gone.
-       The wall the bird has just flown through KEEPS GOING, and the next question is cut into a wall behind
-       it, so the flight is continuous: the sky is never empty waiting for the next wall to appear. */
-    var walls = [], judgedWall = null, target = '', left = 3;
+       from the right edge to past the left one at the stream's own pace, and is retired when it is gone -
+       never rebuilt: every question in the block was cut at init (`prepare`), so the flight is continuous and
+       a hand-over costs nothing but a wall floating in (qa/NOTES.md, item [31]). */
+    var prepared = [], prepH = 0, judgedWall = null, target = '', left = 3;
     function stop() { live = false; if (raf && window.cancelAnimationFrame) window.cancelAnimationFrame(raf); raf = 0; }
     function home() { return ((box.clientHeight || 280) / 2) - BH / 2; }
     function reset() { left = 3; }
-    function newWall() {
-      var w = { el: el('div', 'g4-walls'), gaps: [], judged: true, built: false, x: 0 };
+    /* CUT ONE WALL FOR ONE ITEM: the gaps are holes in the bricks and their words are text inside the
+       holes. This runs once per question, at init - never on the hand-over (qa/NOTES.md, item [31]). */
+    function cutOne(item, h) {
+      var w = { el: el('div', 'g4-walls'), gaps: [], judged: true, built: false, x: 0, item: item };
       w.el.style.transform = 'translateX(9999px)';
+      var n = Math.max(1, item.opts.length), prev = 0;
+      for (var j = 0; j < n; j++) {
+        var c = h * (j + 1) / (n + 1), top = Math.max(4, c - GAPH / 2);
+        var o = item.opts[j];
+        /* the answer is TEXT in the gap, not a button: the whole sky is the control (click or Space
+           flaps), so nothing in the wall may take a click of its own */
+        var g = el('div', 'g4-gapg');
+        g.setAttribute('data-v', o.value);
+        g.style.top = top + 'px';
+        g.style.height = GAPH + 'px';
+        g.appendChild(el('span', 'g4-gapg-t', o.text));
+        w.el.appendChild(g);
+        w.gaps.push({ top: top, value: o.value, gap: g });
+        /* the brick between the previous gap and this one */
+        if (top > prev) w.el.appendChild(seg(prev, top - prev));
+        prev = top + GAPH;
+      }
+      if (h > prev) w.el.appendChild(seg(prev, h - prev));
       box.insertBefore(w.el, bird);     /* behind the bird, which is z-index 3 */
-      walls.push(w);
       return w;
+    }
+    /* EVERY QUESTION IS LOADED AT ONCE (qa/NOTES.md, item [31]): the whole block is cut into the sky before
+       the first question is asked, one wall per item, all parked off the right edge. A hand-over then only
+       floats the next one in, with the timing and the positions it always had. */
+    function prepare() {
+      prepared.forEach(function (w) { if (w.el.parentNode) w.el.parentNode.removeChild(w.el); });
+      prepared = [];
+      prepH = box.clientHeight || 280;
+      r.items.forEach(function (it) { prepared.push(cutOne(it, prepH)); });
     }
     function clear() {
       /* ONE CONTINUOUS FLIGHT (qa/NOTES.md 31): between two questions nothing is reset — the bird keeps its
@@ -2400,8 +2428,13 @@ function say(text, lang) {
       var continuing = r.running && r.phase === 'done' && r.queue.length > 1 && !r.dead;
       if (continuing) { target = ''; return; }
       stop();
-      walls.forEach(function (w) { if (w.el.parentNode) w.el.parentNode.removeChild(w.el); });
-      walls = []; judgedWall = null; target = '';
+      /* the cut walls are the run own furniture: put them back off-stage and keep their bricks */
+      prepared.forEach(function (w) {
+        w.built = false; w.judged = true;
+        w.gaps.forEach(function (g) { g.gap.classList.remove('ok', 'no', 'reveal'); });
+        w.el.style.transform = 'translateX(9999px)';
+      });
+      judgedWall = null; target = '';
       y = home(); vy = 0;
       bird.style.top = y + 'px';
       bird.classList.remove('ok', 'no', 'through');
@@ -2424,38 +2457,30 @@ function say(text, lang) {
       r.later(function () { if (r.running) r.restartRun(); }, 620);
       return true;
     }
-    /* an item is cut into a wall on its way IN, never into the one the bird is flying through: that is what
-       keeps the flight continuous across a question (qa/NOTES.md 60) */
+    /* SHOW LAUNCHES A WALL THAT WAS CUT LONG AGO (qa/NOTES.md, item [31]): the question is already standing in
+       the sky at translateX(9999px), so showing it is one transform - never a wall built between questions.
+       What keeps the flight continuous is that the wall he flew through is NOT touched here (qa/NOTES.md 60) */
     function show(item) {
       target = item.key;
-      var h = box.clientHeight || 280, W = box.clientWidth || 600;
+      var W = box.clientWidth || 600, h = box.clientHeight || 280;
+      /* THE WALLS ARE ALL CUT ALREADY (qa/NOTES.md, item [31]) - unless the stage has been resized since they
+         were, the one case that needs new cuts, because the gaps are laid out in the sky own pixels. So a
+         hand-over floats an existing wall in from the right and rebuilds nothing. */
+      if (!prepared.length || h !== prepH) prepare();
       var w = null;
-      for (var i = 0; i < walls.length; i++) { if (!walls[i].built) { w = walls[i]; break; } }
-      if (!w) w = newWall();
-      w.el.innerHTML = '';
-      /* the gaps are cut out of the wall for real: the segments between them are the bricks */
-      w.gaps = [];
-      var n = Math.max(1, item.opts.length), prev = 0;
-      for (var j = 0; j < n; j++) {
-        var c = h * (j + 1) / (n + 1), top = Math.max(4, c - GAPH / 2);
-        var o = item.opts[j];
-        /* the answer is TEXT in the gap, not a button: the whole sky is the control (click or Space
-           flaps), so nothing in the wall may take a click of its own */
-        var g = el('div', 'g4-gapg');
-        g.setAttribute('data-v', o.value);
-        g.style.top = top + 'px';
-        g.style.height = GAPH + 'px';
-        g.appendChild(el('span', 'g4-gapg-t', o.text));
-        w.el.appendChild(g);
-        w.gaps.push({ top: top, value: o.value, gap: g });
-        /* the brick between the previous gap and this one */
-        if (top > prev) w.el.appendChild(seg(prev, top - prev));
-        prev = top + GAPH;
-      }
-      if (h > prev) w.el.appendChild(seg(prev, h - prev));
+      for (var i = 0; i < prepared.length; i++) { if (prepared[i].item === item) { w = prepared[i]; break; } }
+      if (!w) { w = cutOne(item, h); prepared.push(w); }
+      /* THE WALL HE JUST FLEW THROUGH KEEPS FLYING (qa/NOTES.md 60): only a wall that is still in the air
+         and was never judged - a leftover from an attempt a brick cut short - is put away here. The marks the
+         last flight left on the wall being launched come off with no rebuild of its bricks. */
+      prepared.forEach(function (o) {
+        if (o === w || o.judged) return;
+        o.built = false;
+        o.el.style.transform = 'translateX(9999px)';
+      });
+      w.gaps.forEach(function (g) { g.gap.classList.remove('ok', 'no', 'reveal'); });
       w.built = true; w.judged = false;
       w.x = W;
-      w.el.style.transform = 'translateX(' + W + 'px)';
       /* one wall's crossing of the stage is the whole clock this game has (noTimer): a fixed pace, so the
          words come round again and again until one is flown through */
       speed = (W - BX) / CROSS;
@@ -2480,11 +2505,13 @@ function say(text, lang) {
       y = Math.max(2, Math.min(h - BH - 2, y + vy * dt));
       bird.style.top = y.toFixed(1) + 'px';
       /* every wall in flight moves, and one that is past the left edge is retired and waits to be cut */
-      walls.forEach(function (w) {
+      prepared.forEach(function (w) {
         if (!w.built) return;
         w.x -= speed * dt * 1000;
         if (w.x + (w.el.offsetWidth || 100) < 0) {
-          w.built = false; w.judged = true; w.gaps = []; w.el.innerHTML = '';
+          /* retired where it stands: its bricks and words stay cut, waiting for the next flight that
+             needs them - only the marks come off, and `show` does that when it launches it again */
+          w.built = false; w.judged = true;
           w.el.style.transform = 'translateX(9999px)';
           return;
         }
@@ -2493,7 +2520,7 @@ function say(text, lang) {
       /* the wall meets the bird: the gap it is in is the answer it flew through. The NEAREST unread wall
          is the one that counts, so two walls on the screen at once can never both be answered. */
       var near = null;
-      walls.forEach(function (w) {
+      prepared.forEach(function (w) {
         if (!w.built || w.judged) return;
         if (w.x <= BX && (!near || w.x > near.x)) near = w;
       });

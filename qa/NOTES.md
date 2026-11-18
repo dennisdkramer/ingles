@@ -284,10 +284,12 @@ content belongs in its `###` sections.
 ### [28]
 
 → VEHICLES.md §`[28]`
+make sure the moles do not move down, disappear , change positions when the answer is revealed
 
 ### [29]
 
 → VEHICLES.md §`[29]`
+doesnt look like you made the last requested change = the flower that appears when you get a correct answer should be 2x bigger and must be positioned anchor bottom to the pots top
 
 ### [30]
 
@@ -324,4 +326,3 @@ content belongs in its `###` sections.
 ### [39]
 
 → VEHICLES.md §`[39]`
-
