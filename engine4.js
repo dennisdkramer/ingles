@@ -869,16 +869,37 @@ window.GAMES4 = (function () {
       return own.indexOf(n) < 0 && n.className.indexOf('g4-xghost') < 0;
     });
   };
+  /* FURNITURE (qa/NOTES.md, item [51]): a node marked `g4-keep` is part of the place the game happens in — the
+     pots, the molehills, the street, the arena, the sky, the yard — and it is built once and drawn once. It is
+     therefore never in the ghost and never given the fade: the crossfade is for what is REDRAWN, and nothing
+     else. Only the presentation knows which of its nodes those are, so it says so with the class. */
+  function isKeep(node) {
+    return (node.getAttribute('class') || '').indexOf('g4-keep') > -1;
+  }
+  /* THE FADE GOES TO WHAT IS REDRAWN: a node with furniture inside it cannot fade itself (that would take the
+     furniture with it), so where that is the case the fade walks down to the children instead */
+  Runner.prototype.paintIn = function (node) {
+    if (!node || isKeep(node)) return;
+    if (!node.querySelector || !node.querySelector('.g4-keep')) { node.classList.add('g4-xin'); return; }
+    [].forEach.call(node.children, this.paintIn.bind(this));
+  };
   /* THE PICTURE THAT IS LEAVING (qa/NOTES.md, item [40]): a copy of the presentation’s own nodes and of the
      prompt, laid over the stage for the length of one fade while the new item is painted underneath it. It
      is aria-hidden, it takes no pointer and no tab, and no id is copied — so it can never shadow the live
-     stage it is fading off. Reduced motion gets no ghost at all: nothing fades, and nothing waits either. */
+     stage it is fading off. Reduced motion gets no ghost at all: nothing fades, and nothing waits either.
+     Furniture is left out of the copy (qa/NOTES.md, item [51]): it is not going anywhere, so it must not
+     fade out with the item that is. */
   Runner.prototype.ghost = function () {
     if (this.reduced) return null;
     var nodes = this.contentNodes();
     if (!nodes.length) return null;
     var g = el('div', 'g4-xghost');
-    nodes.forEach(function (n) { g.appendChild(n.cloneNode(true)); });
+    nodes.forEach(function (n) {
+      if (isKeep(n)) return;                 /* the whole node is furniture: nothing of it is leaving */
+      var copy = n.cloneNode(true);
+      [].forEach.call(copy.querySelectorAll('.g4-keep'), function (k) { if (k.parentNode) k.parentNode.removeChild(k); });
+      g.appendChild(copy);
+    });
     if (this.promptEl && this.promptEl.textContent) {
       var p = this.promptEl.cloneNode(true);
       p.classList.add('in');                   /* the copy is the prompt as it stood, text and all */
@@ -901,10 +922,13 @@ window.GAMES4 = (function () {
     this.queue.shift(); this.idx++;
     if (this.dead) this.finish(); else this.next();
     if (!ghost) return;
-    this.contentNodes().forEach(function (n) { n.classList.add('g4-xin'); });
+    this.contentNodes().forEach(function (n) { self.paintIn(n); });
     window.setTimeout(function () {
       if (ghost.parentNode) ghost.parentNode.removeChild(ghost);
-      self.contentNodes().forEach(function (n) { n.classList.remove('g4-xin'); });
+      self.contentNodes().forEach(function (n) {
+        n.classList.remove('g4-xin');
+        [].forEach.call(n.querySelectorAll('.g4-xin'), function (x) { x.classList.remove('g4-xin'); });
+      });
     }, XFADE + 60);
   };
 
@@ -1238,7 +1262,8 @@ window.GAMES4 = (function () {
       b.innerHTML = ART.pot
         + '<span class="g4-bucket-t"></span>'
         + '<span class="g4-splash" aria-hidden="true"><i></i><i></i><i></i></span>'
-        + '<span class="g4-blooms" aria-hidden="true"></span>';
+        + '<span class="g4-blooms g4-keep" aria-hidden="true"></span>';
+      var potArt = b.querySelector('.g4-art'); if (potArt) potArt.classList.add('g4-keep');
       b.addEventListener('click', function () {
         if (r.phase === 'play' && cur) r.pickOn(cur, b.getAttribute('data-v'));
       });
@@ -1417,7 +1442,7 @@ window.GAMES4 = (function () {
     (function garden() {
       for (var i = 0; i < 6; i++) {
         var h = el('div', 'g4-hole');
-        h.innerHTML = '<span class="g4-dirt"></span>';
+        h.innerHTML = '<span class="g4-dirt g4-keep"></span>';
         grid.appendChild(h);
         order.push(h);
       }
@@ -2371,7 +2396,7 @@ function say(text, lang) {
      Authoring: `.qitem` per item, one gap per option. `data-time` is not used by this game. */
   PLUGINS.flapGate = function (r) {
     var stage = r.stage;
-    var box = el('div', 'g4-sky'), bird = el('div', 'g4-bird');
+    var box = el('div', 'g4-sky'), bird = el('div', 'g4-bird g4-keep');
     bird.innerHTML = ART.bird;
     box.appendChild(bird);
     stage.appendChild(box);
@@ -2618,7 +2643,7 @@ function say(text, lang) {
      repeats, which is the range with no clock). */
   PLUGINS.skeetRange = function (r) {
     var stage = r.stage;
-    var box = el('div', 'g4-range'), field = el('div', 'g4-discs'), cross = el('div', 'g4-cross');
+    var box = el('div', 'g4-range'), field = el('div', 'g4-discs'), cross = el('div', 'g4-cross g4-keep');
     box.appendChild(field); box.appendChild(cross);
     stage.appendChild(box);
     var FLIGHT = 7000;                  /* only when the block has no data-time: the throw repeats */
@@ -2795,14 +2820,14 @@ function say(text, lang) {
   PLUGINS.mineGrid = function (r) {
     var stage = r.stage;
     var box = el('div', 'g4-mines'), street = el('div', 'g4-street');
-    var facade = el('div', 'g4-facade');        /* the saloon itself: one frontage behind every door */
+    var facade = el('div', 'g4-facade g4-keep');        /* the saloon itself: one frontage behind every door */
     /* the built parts of the frontage CSS alone has no pseudo-element left for: the cornice under the
        eave, and a window either side of the porch. Background, never controls. */
     facade.innerHTML = '<span class="g4-cornice"></span>'
       + '<span class="g4-saloon-win a"></span><span class="g4-saloon-win b"></span>';
-    var road = el('div', 'g4-road'), doors = el('div', 'g4-doors'), tiles = [];
+    var road = el('div', 'g4-road g4-keep'), doors = el('div', 'g4-doors'), tiles = [];
     var ask = el('div', 'g4-mprompt');          /* the question, on its own board to the left of the doors */
-    var hero = el('div', 'g4-runner');
+    var hero = el('div', 'g4-runner g4-keep');
     var flash = el('div', 'g4-flash');          /* the screen flash a snake bite throws */
     hero.innerHTML = ART.hero;
     street.appendChild(facade); street.appendChild(road); street.appendChild(doors);
@@ -3635,7 +3660,7 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
   PLUGINS.ladderRun = function (r) {
     var stage = r.stage;
     var box = el('div', 'g4-ladder'), track = el('div', 'g4-ltrack');
-    var rail = el('div', 'g4-rail'), climber = el('div', 'g4-lclimber');
+    var rail = el('div', 'g4-rail g4-keep'), climber = el('div', 'g4-lclimber g4-keep');
     var board = el('div', 'g4-lprompt'), boardT = el('span', 'g4-lprompt-t');
     var opts = el('div', 'g4-raceopts');
     board.appendChild(boardT);
@@ -3845,8 +3870,8 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
   PLUGINS.bossRaid = function (r) {
     var stage = r.stage;
     var box = el('div', 'g4-boss'), arena = el('div', 'g4-arena');
-    var art = el('div', 'g4-bossart'), bar = el('div', 'g4-hp'), hpFill = el('div', 'g4-hp-fill');
-    var hero = el('div', 'g4-hero'), shots = el('div', 'g4-shots'), opts = el('div', 'g4-raceopts');
+    var art = el('div', 'g4-bossart g4-keep'), bar = el('div', 'g4-hp g4-keep'), hpFill = el('div', 'g4-hp-fill');
+    var hero = el('div', 'g4-hero g4-keep'), shots = el('div', 'g4-shots'), opts = el('div', 'g4-raceopts');
     art.innerHTML = ART.boss;
     bar.appendChild(hpFill);
     arena.appendChild(art); arena.appendChild(bar);
@@ -4102,10 +4127,10 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
     var yard = tag('g4-yard');
     /* a sky above and hills in the distance, so the yard is a place on the ground rather than a beige
        field (qa/NOTES.md 89) */
-    var mts = tag('g4-tmount'); mts.innerHTML = ART.mountains;
-    yard.appendChild(tag('g4-tsky'));
+    var mts = tag('g4-tmount g4-keep'); mts.innerHTML = ART.mountains;
+    yard.appendChild(tag('g4-tsky g4-keep'));
     yard.appendChild(mts);
-    ['g4-tground', 'g4-tplat', 'g4-tsleep', 'g4-trail'].forEach(function (c) { yard.appendChild(tag(c)); });
+    ['g4-tground g4-keep', 'g4-tplat g4-keep', 'g4-tsleep g4-keep', 'g4-trail g4-keep'].forEach(function (c) { yard.appendChild(tag(c)); });
     var bridge = tag('g4-tbridge');
     ['g4-tgirder', 'g4-tdeck', 'g4-tabut'].forEach(function (c) { bridge.appendChild(tag(c)); });
     bridge.appendChild(tag('g4-tsignl', '\u26a0 LOW BRIDGE'));
