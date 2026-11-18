@@ -1476,9 +1476,10 @@ window.GAMES4 = (function () {
           m.style.setProperty('--rise-t', (70 + k * 95) + 'ms');
           m.classList.add('rise');
         }
-        /* THE OPTION CARDS FADE IN AFTER THE MOLES HAVE SURFACED (qa/NOTES.md, item [28]): the last rise
-           ends at 70 + 95(n-1) + 260ms, and every word fades in over .3s from that moment */
-        m.style.setProperty('--card-t', (r.reduced ? 0 : 70 + (item.opts.length - 1) * 95 + 260) + 'ms');
+        /* THE WORD FADES IN WITH ITS OWN MOLE (qa/NOTES.md, item [28], and item [40] for the rule): the fade
+           starts on the same beat as the rise, so the word is read as the mole surfaces instead of after the
+           whole row has — a fade may never be the reason a student has to wait to read an option */
+        m.style.setProperty('--card-t', (r.reduced ? 0 : 70 + k * 95) + 'ms');
         m.classList.add('cardin');
       });
       idle = r.later(glance, 600 + Math.random() * 500);

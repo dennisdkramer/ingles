@@ -2300,10 +2300,11 @@ html.kbd .g4-pick-btn:focus-visible{outline:3px solid var(--tan);outline-offset:
    never be left standing in the hole below (that is what hid its word under the next mound) */
 .g4-mole.rise{animation:g4rise .26s cubic-bezier(.34,1.56,.64,1) var(--rise-t,0ms) both}
 @keyframes g4rise{0%{transform:translateY(104%)}100%{transform:translateY(0)}}
-/* THE OPTION CARD FADES IN AFTER THE MOLES HAVE SURFACED (qa/NOTES.md, item [28]): each word fades in over
-   .3s from the end of the last rise, a delay the engine hands down per item in --card-t. There is no base
-   `opacity:0` — with `both` the animation holds the word hidden until its delay, and if a mole is marked
-   before the fade has finished the mark's own animation takes over and the card is simply visible. */
+/* THE WORD FADES IN WITH ITS OWN MOLE (qa/NOTES.md, item [28], and item [40] for the rule): the .3s fade
+   starts on the beat that mole rises on, handed down in --card-t, so the word is read as the mole surfaces
+   instead of after the whole row has. There is no base `opacity:0`: with `both` the animation holds the
+   word hidden until its delay, and if a mole is marked before the fade has finished the mark’s own
+   animation takes over and the card is simply visible. */
 .g4-mole.cardin .g4-mole-t{animation:g4cardin .3s ease var(--card-t,0ms) both}
 @keyframes g4cardin{from{opacity:0}to{opacity:1}}
 .g4-mole.duck{transform:translateY(104%)}
