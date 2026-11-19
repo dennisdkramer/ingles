@@ -582,7 +582,7 @@ next();
 
 <div class="block" data-look="stripes" data-span="12">
 <h3>Marked activities with controls</h3>
-<p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>The four controls are alternatives chosen by what the student must do</b> — a gap for a form, a radio for a judgement, a checkbox for several at once, a written field for a sentence. The rows that follow add seven more, one row each: numbered chunks, a chart whose cells are answered, four options to pick one from, a matching pool, a correction, a translation into English and a dictation — the last three for no beginner, and the sentence they ask for always tuned to the lesson's band. Two blocks at the end of this section are marked <b>IGNORED</b>: they stay on the page for reference and lessons are not using them for now.</p>
+<p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>The four controls are alternatives chosen by what the student must do</b> — a gap for a form, a radio for a judgement, a checkbox for several at once, a written field for a sentence. The rows below add three more driven the same way: numbered chunks, a chart whose cells are answered, and a correction, a translation into English and a dictation — the last three for no beginner, and the sentence they ask for always tuned to the lesson's band. The two blocks after this one, side by side, are four options to pick one from and a matching pool. Two more at the end of the section are marked <b>IGNORED</b>: they stay on the page for reference and lessons are not using them for now.</p>
 <p class="dim"><code>data-answer</code> keys a gap, <code>|</code> separating alternatives; <code>--gap-w</code> is the width the answer needs. A radio group's key is <code>data-a</code> on <code>.qitem</code>; engine2.js marks the right option and writes <code>.ans</code> beside a typed field.</p>
 <p>Each of these can stand as a block of its own or sit inside a block with the prose, the chart or the drawing it accompanies; every row below is the in-block size.</p>
 
@@ -653,6 +653,28 @@ next();
 </div>
 </div>
 
+<div class="rows">
+<div>
+<p class="dim">One word is wrong. Write the sentence again.</p>
+<p>He <b>have</b> clocked in early.</p>
+<textarea class="write" rows="2" data-answer="He has clocked in early.|He's clocked in early." placeholder="the sentence, corrected"></textarea>
+</div>
+<div>
+<p class="dim">Say it in English.</p>
+<p class="pt">Ele já tinha saído quando eu cheguei.</p>
+<input class="gap" data-answer="He had already left when I got there|He had already left when I arrived" style="--gap-w:100%">
+</div>
+<div>
+<p class="dim">Listen, then write what you hear.</p>
+<p><button class="listen" type="button" data-say="I clocked in at six forty.">▶</button></p>
+<textarea class="write" rows="2" data-answer="I clocked in at six forty." placeholder="what you hear"></textarea>
+</div>
+</div>
+</div>
+
+<div class="rows">
+<div class="block" data-look="stripes">
+<h3>Multiple choice</h3>
 <p>Choose the answer that fits the line.</p>
 <div class="rows">
 <div class="qitem" data-a="b">
@@ -674,7 +696,9 @@ next();
 </div>
 </div>
 </div>
-
+</div>
+<div class="block" data-look="stripes">
+<h3>Matching</h3>
 <p>Write the letter of the meaning beside each phrase. One letter is left over.</p>
 <div class="rows">
 <div>
@@ -698,23 +722,6 @@ next();
 <li><b>e</b> insulted someone indirectly</li>
 </ul>
 </div>
-</div>
-
-<div class="rows">
-<div>
-<p class="dim">One word is wrong. Write the sentence again.</p>
-<p>He <b>have</b> clocked in early.</p>
-<textarea class="write" rows="2" data-answer="He has clocked in early.|He's clocked in early." placeholder="the sentence, corrected"></textarea>
-</div>
-<div>
-<p class="dim">Say it in English.</p>
-<p class="pt">Ele já tinha saído quando eu cheguei.</p>
-<input class="gap" data-answer="He had already left when I got there|He had already left when I arrived" style="--gap-w:100%">
-</div>
-<div>
-<p class="dim">Listen, then write what you hear.</p>
-<p><button class="listen" type="button" data-say="I clocked in at six forty.">▶</button></p>
-<textarea class="write" rows="2" data-answer="I clocked in at six forty." placeholder="what you hear"></textarea>
 </div>
 </div>
 </div>
