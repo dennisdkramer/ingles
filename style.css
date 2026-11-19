@@ -109,6 +109,13 @@
     text-decoration-thickness:2px;text-underline-offset:6px}
   /* the heading's underline is a text decoration: it follows the words and wraps with them, and it is
      drawn 6px below the baseline so it clears the descenders. No rules, no box to pin it to. */
+  /* a step heading carries its own number (0.1, 0.2 …) and takes no letter from the block counter */
+  .block[data-step]>h3::before{content:none}
+  .block[data-step]>h3{counter-increment:none}
+  /* a numbered section heading (3a. Figures …) stands on its own and takes no letter either */
+  .content-area>h3::before{content:none}
+  .content-area>h3{counter-increment:none}
+
   h2{counter-reset:blk}
   h3{counter-increment:blk}
   /* inline-block keeps the lettered prefix out of the heading's underline: a decoration propagates to

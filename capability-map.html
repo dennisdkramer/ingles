@@ -16,17 +16,20 @@
 <h1>What we can teach with</h1>
 
 <div class="block" data-look="float" data-span="12">
-<p class="lead">This page is the reference a lesson is written against. It has three parts: the way a page is
-written, the tools a page may use and how to choose between them, and a working example of every one of them.</p>
+<p class="lead">This page is the reference a lesson is written against. It has four parts: the process a page is built
+by, the way a page is written, the tools a page may use and how to choose between them, and a working example of
+every one of them.</p>
 </div>
 
 <div class="block" data-span="6">
 <h4>Read it in this order</h4>
 <ul>
-<li><b>§1</b> governs the sentences, and it comes first because prose is in every block.</li>
+<li><b>§0</b> is the process a page is built by: write the content, arrange it on the grid, clean up the
+wording, choose a look.</li>
+<li><b>§1</b> governs the sentences, and it comes before the tools because prose is in every block.</li>
 <li><b>§2</b> holds the four statements every tool is described by, the tests a use must pass, the words the
 figures own, and the table that maps a concept to the tools that show it.</li>
-<li><b>§3</b> is the examples — a figure, a layout, a look, a state, a motion, each rendered with the markup
+<li><b>§3</b> is the examples — a figure, a dialog, a state, a motion, each rendered with the markup
 beside it.</li>
 <li><b>§4</b> is what is specified and not built · <b>§5</b> the decisions already taken · <b>§6</b> the
 concepts no tool draws.</li>
@@ -42,6 +45,216 @@ concepts no tool draws.</li>
 <li><b>superseded</b> — keep one of the pair, prune the other.</li>
 <li><b>gap</b> — the lesson must teach it in prose.</li>
 </ul>
+</div>
+
+<h2>0. Generation — how a page gets built</h2>
+
+<div class="block" data-look="float">
+<p>A page is built in three moves, and they are kept apart on purpose: what the page teaches, how what it teaches
+is arranged, and how the wording sits once it is arranged. A writer deciding what to teach should not be deciding
+how wide a block is in the same breath, and an arrangement is easier to judge on a page whose words are already
+there.</p>
+</div>
+<div class="block" data-step>
+<h3>0.1 Write the page</h3>
+<p>Sections and blocks, in teaching order, with nothing yet decided about how they will sit: a section is one
+concept, a block is one idea inside it carrying its own heading, and the words inside a block are written as they
+will be read. Where a line ends, and where a block lands on the grid, belongs to the second move.</p>
+</div>
+
+<div class="block" data-step>
+<h3>0.2 Arrange it</h3>
+<p>Every block is given a span by looking at it: what it holds, how much text it carries, and what it sits beside.
+The rules below are what that looking is for; the examples after them are results, not required elements.</p>
+</div>
+
+
+<div class="block" data-span="6">
+<p>The page is twelve tracks. A block takes the whole line unless it is given a span of <b>3, 4, 6, 8</b> or
+<b>9</b>, and the lines are filled in order. Nothing is left short: a last line is folded into the line above, or
+the block takes the rest of the line rather than starting a new one. A tall thin block may also cover two or
+three rows, and the blocks that follow stack beside it.</p>
+</div>
+
+<div class="block" data-span="6">
+<p>The span is chosen by looking at the block: what it holds, how much text it carries, and what it sits beside.
+Four short and distinct points are four spans of 3; a piece with twice the text of its neighbour is 8 beside 4.
+Three wide blocks in a row is the signal to merge them into one block with subheadings, unless they are truly
+distinct.</p>
+</div>
+
+<div class="block" data-span="12">
+<h4>The spans, and when each is right</h4>
+<table class="chart">
+<thead><tr><th>the block is</th><th>takes</th><th>why</th></tr></thead>
+<tbody>
+<tr><td>a label, a short line, a word set, a picture</td><td>3</td><td>it cannot fill a line and has no need to</td></tr>
+<tr><td>prose, a dialog, an example group</td><td>6</td><td>about 65 characters a line — the reading measure</td></tr>
+<tr><td>a chart, or prose with a table in it</td><td>8</td><td>it needs the room, and a short note fits beside it</td></tr>
+<tr><td>a wide block with a small companion</td><td>9 + 3</td><td>three to one: the companion is a note, not a half</td></tr>
+<tr><td>a five-column table, or one argument that needs the column</td><td>12</td><td>the only case where a block is expected to be tall</td></tr>
+</tbody>
+</table>
+<p class="dim">The examples below are results at those spans. They are examples, not required elements: what a
+lesson copies is the reason, and the numbers are what the reason produces.</p>
+</div>
+
+<div class="block" data-look="float" data-span="12">
+<p><b>Two blocks, one comparison.</b> A rule and the words that exercise it: the reader moves between them, and
+neither carries the lesson alone.</p>
+</div>
+
+<div class="block" data-structure="prose" data-span="6">
+<h3>Two past forms</h3>
+<p><i>I wrote three songs in 2022</i> names a finished year. <i>I've written three songs</i> counts up to now and
+names no year.</p>
+<details class="reveal" open><summary>The markup</summary>
+<pre>&lt;div class="block" data-structure="prose" data-span="6"&gt;
+  &lt;h3&gt;Two past forms&lt;/h3&gt;
+  &lt;p&gt;&lt;i&gt;I wrote three songs in 2022&lt;/i&gt; names a finished year.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="block" data-structure="set" data-span="6"&gt;
+  &lt;h3&gt;Words here&lt;/h3&gt;
+  &lt;ul class="set" data-cols="2"&gt;
+    &lt;li&gt;&lt;b&gt;wrote&lt;/b&gt;&lt;span class="dim"&gt;past simple&lt;/span&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;</pre>
+<p class="dim">Two blocks and nothing between them: 6 + 6. The span is written on each block and chosen by
+looking at the two together.</p></details>
+</div>
+
+<div class="block" data-structure="set" data-span="6">
+<h3>Words here</h3>
+<ul class="set" data-cols="2">
+<li><b>write</b><span class="dim">verb</span></li>
+<li><b>wrote</b><span class="dim">past simple</span></li>
+<li><b>written</b><span class="dim">third form</span></li>
+<li><b>writing</b><span class="dim">-ing form</span></li>
+</ul>
+</div>
+
+<div class="block" data-look="float" data-span="12">
+<p><b>A picture beside its sentence.</b> The reader looks, then reads. The frame takes the width of its image
+and the prose takes the rest — it never shares the row equally, because a caption is not half a lesson.</p>
+</div>
+
+<div class="block" data-structure="media" data-span="3">
+<figure><div class="frame" style="--media-h:128px">a photo of the street</div>
+<figcaption>The café on the left, the station behind it.</figcaption></figure>
+</div>
+
+<div class="block" data-structure="prose" data-span="9">
+<h3>Where it is</h3>
+<p>The café is on the corner; the station is one street back, behind the square. Walk past the café and turn
+left at the bank.</p>
+<p class="dim">The <code>.frame</code> holds a picture or a placeholder of the same height, so the caption never
+jumps when the image arrives.</p>
+</div>
+
+<div class="block" data-look="float" data-span="12">
+<p><b>A tall thin list, and what fills beside it.</b> The list is one column of twelve items, taller than any
+block beside it. It covers two rows, and the two blocks that follow take the space next to it.</p>
+</div>
+
+<div class="block" data-structure="set" data-span="3" data-rows="2">
+<h3>Twelve words</h3>
+<ul class="set" data-cols="1">
+<li><b>write</b><span class="dim">verb</span></li>
+<li><b>wrote</b><span class="dim">past simple</span></li>
+<li><b>written</b><span class="dim">third form</span></li>
+<li><b>writing</b><span class="dim">-ing form</span></li>
+<li><b>borrow</b><span class="dim">take, give back</span></li>
+<li><b>lend</b><span class="dim">give, get back</span></li>
+<li><b>owe</b><span class="dim">still to give back</span></li>
+<li><b>cheap</b><span class="dim">low price</span></li>
+<li><b>expensive</b><span class="dim">high price</span></li>
+<li><b>actually</b><span class="dim">in fact</span></li>
+<li><b>push</b><span class="dim">move away</span></li>
+<li><b>clock in</b><span class="dim">start the shift</span></li>
+</ul>
+</div>
+
+<div class="block" data-span="9">
+<h3>The list is the reference</h3>
+<p>A set holds the words a lesson uses, each with the one fact that makes it usable: the form, the person, or the
+word it is confused with. Twelve items is about the practical ceiling, past which a set stops being a list and
+becomes a chart.</p>
+</div>
+
+<div class="block" data-span="9">
+<h3>What sits beside it</h3>
+<p>The two blocks beside the list are read with it, so they take the rest of the line and the list keeps one
+column. If a third block belonged with it, it would take the next place in the same column and the list would
+cover three rows instead of two.</p>
+</div>
+
+<div class="block" data-step>
+<h3>0.3 Clean up the wording</h3>
+<p>Now read every line as it will break. A line that ends in one to three words is rewritten — shortened,
+lengthened or split — until the block's lines are even; a block that is short beside a tall neighbour gains the
+sentence it was missing, or gives one up; a last row carrying a stub paragraph is deleted rather than padded, and a
+last row that is a thin activity takes the whole line and the room it needs. Only the words change, never what
+they say.</p>
+</div>
+
+<div class="block" data-look="float" data-span="12" data-step>
+<h3>0.4 Choose the look</h3>
+<p>A look is declared, never inferred: the builder names it on the block. It changes the paint only — the markup,
+the content and the control stay the same — so a block can be re-skinned without being rewritten. Six are
+defined and one is the default.</p>
+</div>
+
+<div class="block" data-span="3"><h4>Default</h4>
+<p>Paper and a 2px accent rule on the top edge, in the track's hue. Any block that has no job beyond being a
+block.</p></div>
+<div class="block" data-look="tint" data-span="3"><h4>Tint</h4>
+<p>Context or register: the surface takes the register's hue, and the block is about <i>how it sounds in the
+room</i> rather than what it means.</p></div>
+
+<div class="block" data-look="tape" data-span="3"><h4>Tape</h4>
+<p>A thing that would sit on paper — a schedule, a reminder, an aside, where a word came from.</p></div>
+<div class="block" data-look="float" data-span="3"><h4>Float</h4>
+<p>No frame at all: a section's opening or closing line, or the higher-level view set beside the block it
+frames.</p></div>
+
+<div class="block" data-look="stripes" data-span="4"><h4>Stripes</h4>
+<p>An activity or a question block. The stripes say the student does something here, and the block reports
+itself when every answer is in (§3c).</p>
+<div class="opts" data-layout="row">
+<label class="opt"><input type="radio" name="lk1"><span>routine</span></label>
+<label class="opt"><input type="radio" name="lk1"><span>surprise</span></label>
+</div></div>
+<div class="block" data-look="outline" data-span="4"><h4>Outline</h4>
+<p>The one critical element in a section: a thick accent edge and a deep shadow. If two blocks wear it, the
+page no longer has one thing that is obviously the thing to look at.</p></div>
+
+<div class="block" data-look="dark" data-span="4"><h4>Dark</h4>
+<p>Night, or fun. A scene at night, a section that is deliberately a change of light. The native controls
+follow, because the block sets <code>color-scheme: dark</code>.</p>
+<div class="opts">
+<label class="opt"><input type="radio" name="dk1"><span>the yard at night</span></label>
+<label class="opt"><input type="radio" name="dk1"><span>the yard at dawn</span></label>
+</div></div>
+<div class="block" data-look="tint" data-span="12"><h4>Tint, in a sentence</h4>
+<p><b>Kept.</b> “<i>Cooked</i> is what you say to a friend. To a teacher, <i>exhausted</i> — the same fact,
+and nobody wonders whether you are joking.”</p>
+<p class="dim">This is the block tint exists for: the content is register, so its surface is the register's
+colour. The hue is the track's — no per-block colour.</p></div>
+
+<div class="block" data-span="12">
+<h4>The look, and what it must not be</h4>
+<table class="chart">
+<thead><tr><th>look</th><th>the job</th><th>what it must not be</th></tr></thead>
+<tbody>
+<tr><td>default</td><td>none beyond being a block</td><td>a block that has a job wearing no look</td></tr>
+<tr><td>tint</td><td>context or register</td><td>a way to make a section pretty; a second tint beside the first</td></tr>
+<tr><td>tape</td><td>a thing that would sit on paper</td><td>a way to mark importance</td></tr>
+<tr><td>float</td><td>a section's opening or closing, or the higher-level view</td><td>an ordinary block with its frame switched off</td></tr>
+<tr><td>stripes</td><td>an activity or question block</td><td>a teaching block dressed as an activity</td></tr>
+<tr><td>outline</td><td>the one critical element</td><td>two per section</td></tr>
+<tr><td>dark</td><td>night, or play</td><td>a way to vary the page</td></tr>
+</tbody>
+</table>
 </div>
 
 <h2>1. Prose — how a page is written</h2>
@@ -200,18 +413,14 @@ claim.</p>
 
 <h2>3. The elements — examples</h2>
 
-<div class="block" data-span="8">
-<p>Every tool below is real: it renders on this page, and the markup that produced it is beside it. Each entry
-says what it shows before it shows it, and names the case it is an example of — a <b>figure</b> carries a
-concept, a <b>layout</b> sets how many blocks share a row and why, a <b>look</b> is the block's paint for one
-job, a <b>state</b> is how an activity reports itself, and a <b>motion</b> is a reveal the student controls.</p>
+<div class="block">
+<p>Every tool below is real: it renders on this page, and the markup that produced it is beside it. Each entry says
+what it shows before it shows it, and names the case it is an example of — a <b>figure</b> carries a concept, a
+<b>dialog</b> holds speech, a <b>state</b> is how an activity reports itself, and a <b>motion</b> is a reveal the
+student controls.</p>
+<p class="dim">These are examples, not required elements. A lesson is free to compose differently; what it copies
+is the markup and the reason, never the arrangement for its own sake.</p>
 </div>
-
-<div class="block" data-span="4">
-<p class="dim">These are examples, not required elements. A lesson is free to compose differently, and what it
-copies is the markup and the reason, never the arrangement for its own sake.</p>
-</div>
-
 <h3 id="figures">3a. Figures — what carries a concept</h3>
 
 <div class="block" data-look="float" data-span="12">
@@ -469,128 +678,7 @@ and above .tln:
 <p class="dim">The native <code>controls</code> are the floor: with no script the student still plays, pauses and scrubs.</p>
 </div>
 
-<h3 id="layouts">3b. Layouts — how blocks fill a line</h3>
-
-<div class="block" data-span="6">
-<p>The page is twelve tracks. A block takes the whole line unless it is given a span of <b>3, 4, 6, 8</b> or
-<b>9</b>, and the lines are filled in order. Nothing is left short: a last line is folded into the line above, or
-the block takes the rest of the line rather than starting a new one. A tall thin block may also cover two or
-three rows, and the blocks that follow stack beside it.</p>
-</div>
-
-<div class="block" data-span="6">
-<p>The span is chosen by looking at the block: what it holds, how much text it carries, and what it sits beside.
-Four short and distinct points are four spans of 3; a piece with twice the text of its neighbour is 8 beside 4.
-Three wide blocks in a row is the signal to merge them into one block with subheadings, unless they are truly
-distinct.</p>
-</div>
-
-<div class="block" data-span="12">
-<h4>The spans, and when each is right</h4>
-<table class="chart">
-<thead><tr><th>the block is</th><th>takes</th><th>why</th></tr></thead>
-<tbody>
-<tr><td>a label, a short line, a word set, a picture</td><td>3</td><td>it cannot fill a line and has no need to</td></tr>
-<tr><td>prose, a dialog, an example group</td><td>6</td><td>about 65 characters a line — the reading measure</td></tr>
-<tr><td>a chart, or prose with a table in it</td><td>8</td><td>it needs the room, and a short note fits beside it</td></tr>
-<tr><td>a wide block with a small companion</td><td>9 + 3</td><td>three to one: the companion is a note, not a half</td></tr>
-<tr><td>a five-column table, or one argument that needs the column</td><td>12</td><td>the only case where a block is expected to be tall</td></tr>
-</tbody>
-</table>
-<p class="dim">The examples below are results at those spans. They are examples, not required elements: what a
-lesson copies is the reason, and the numbers are what the reason produces.</p>
-</div>
-
-<div class="block" data-look="float" data-span="12">
-<p><b>Two blocks, one comparison.</b> A rule and the words that exercise it: the reader moves between them, and
-neither carries the lesson alone.</p>
-</div>
-
-<div class="block" data-structure="prose" data-span="6">
-<h3>Two past forms</h3>
-<p><i>I wrote three songs in 2022</i> names a finished year. <i>I've written three songs</i> counts up to now and
-names no year.</p>
-<details class="reveal" open><summary>The markup</summary>
-<pre>&lt;div class="block" data-structure="prose" data-span="6"&gt;
-  &lt;h3&gt;Two past forms&lt;/h3&gt;
-  &lt;p&gt;&lt;i&gt;I wrote three songs in 2022&lt;/i&gt; names a finished year.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="block" data-structure="set" data-span="6"&gt;
-  &lt;h3&gt;Words here&lt;/h3&gt;
-  &lt;ul class="set" data-cols="2"&gt;
-    &lt;li&gt;&lt;b&gt;wrote&lt;/b&gt;&lt;span class="dim"&gt;past simple&lt;/span&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/div&gt;</pre>
-<p class="dim">Two blocks and nothing between them: 6 + 6. The span is written on each block and chosen by
-looking at the two together.</p></details>
-</div>
-
-<div class="block" data-structure="set" data-span="6">
-<h3>Words here</h3>
-<ul class="set" data-cols="2">
-<li><b>write</b><span class="dim">verb</span></li>
-<li><b>wrote</b><span class="dim">past simple</span></li>
-<li><b>written</b><span class="dim">third form</span></li>
-<li><b>writing</b><span class="dim">-ing form</span></li>
-</ul>
-</div>
-
-<div class="block" data-look="float" data-span="12">
-<p><b>A picture beside its sentence.</b> The reader looks, then reads. The frame takes the width of its image
-and the prose takes the rest — it never shares the row equally, because a caption is not half a lesson.</p>
-</div>
-
-<div class="block" data-structure="media" data-span="3">
-<figure><div class="frame" style="--media-h:128px">a photo of the street</div>
-<figcaption>The café on the left, the station behind it.</figcaption></figure>
-</div>
-
-<div class="block" data-structure="prose" data-span="9">
-<h3>Where it is</h3>
-<p>The café is on the corner; the station is one street back, behind the square. Walk past the café and turn
-left at the bank.</p>
-<p class="dim">The <code>.frame</code> holds a picture or a placeholder of the same height, so the caption never
-jumps when the image arrives.</p>
-</div>
-
-<div class="block" data-look="float" data-span="12">
-<p><b>A tall thin list, and what fills beside it.</b> The list is one column of twelve items, taller than any
-block beside it. It covers two rows, and the two blocks that follow take the space next to it.</p>
-</div>
-
-<div class="block" data-structure="set" data-span="3" data-rows="2">
-<h3>Twelve words</h3>
-<ul class="set" data-cols="1">
-<li><b>write</b><span class="dim">verb</span></li>
-<li><b>wrote</b><span class="dim">past simple</span></li>
-<li><b>written</b><span class="dim">third form</span></li>
-<li><b>writing</b><span class="dim">-ing form</span></li>
-<li><b>borrow</b><span class="dim">take, give back</span></li>
-<li><b>lend</b><span class="dim">give, get back</span></li>
-<li><b>owe</b><span class="dim">still to give back</span></li>
-<li><b>cheap</b><span class="dim">low price</span></li>
-<li><b>expensive</b><span class="dim">high price</span></li>
-<li><b>actually</b><span class="dim">in fact</span></li>
-<li><b>push</b><span class="dim">move away</span></li>
-<li><b>clock in</b><span class="dim">start the shift</span></li>
-</ul>
-</div>
-
-<div class="block" data-span="9">
-<h3>The list is the reference</h3>
-<p>A set holds the words a lesson uses, each with the one fact that makes it usable: the form, the person, or the
-word it is confused with. Twelve items is about the practical ceiling, past which a set stops being a list and
-becomes a chart.</p>
-</div>
-
-<div class="block" data-span="9">
-<h3>What sits beside it</h3>
-<p>The two blocks beside the list are read with it, so they take the rest of the line and the list keeps one
-column. If a third block belonged with it, it would take the next place in the same column and the list would
-cover three rows instead of two.</p>
-</div>
-
-<h3 id="dialogs">3b.1 Dialogs — the default shape for speech</h3>
+<h3 id="dialogs">3b. Dialogs — the default shape for speech</h3>
 
 <div class="block" data-look="float" data-span="12">
 <p>Two members, and the difference is whether the student writes in it. A plain dialog is read; a dialog with
@@ -643,8 +731,8 @@ checkbox for several, a text field for a written answer — the cell decides, no
 <tr><td>7:10</td><td>Nobody had told the office.</td>
 <td><input class="gap" data-answer="past perfect" style="--gap-w:8em"></td></tr>
 </tbody></table>
-<p class="dim">A chart like this is an activity, so its block takes the activity look (§3c) and reports
-itself when every row is answered (§3d).</p>
+<p class="dim">A chart like this is an activity, so its block takes the activity look (§0.4) and reports
+itself when every row is answered (§3c).</p>
 </div>
 
 <div class="panel" id="layout-flows" data-span="12">
@@ -665,69 +753,7 @@ Use one when the order itself is what the section teaches.</p>
 </ol>
 </div>
 </div>
-
-<h3 id="looks">3c. Looks — the paint for one job</h3>
-
-<div class="block" data-look="float" data-span="12">
-<p>A look is declared, never inferred: the builder names it on the block. It changes the paint only — the markup,
-the content and the control stay the same — so a block can be re-skinned without being rewritten. Six are
-defined and one is the default.</p>
-</div>
-
-<div class="block" data-span="3"><h4>Default</h4>
-<p>Paper and a 2px accent rule on the top edge, in the track's hue. Any block that has no job beyond being a
-block.</p></div>
-<div class="block" data-look="tint" data-span="3"><h4>Tint</h4>
-<p>Context or register: the surface takes the register's hue, and the block is about <i>how it sounds in the
-room</i> rather than what it means.</p></div>
-
-<div class="block" data-look="tape" data-span="3"><h4>Tape</h4>
-<p>A thing that would sit on paper — a schedule, a reminder, an aside, where a word came from.</p></div>
-<div class="block" data-look="float" data-span="3"><h4>Float</h4>
-<p>No frame at all: a section's opening or closing line, or the higher-level view set beside the block it
-frames.</p></div>
-
-<div class="block" data-look="stripes" data-span="4"><h4>Stripes</h4>
-<p>An activity or a question block. The stripes say the student does something here, and the block reports
-itself when every answer is in (§3d).</p>
-<div class="opts" data-layout="row">
-<label class="opt"><input type="radio" name="lk1"><span>routine</span></label>
-<label class="opt"><input type="radio" name="lk1"><span>surprise</span></label>
-</div></div>
-<div class="block" data-look="outline" data-span="4"><h4>Outline</h4>
-<p>The one critical element in a section: a thick accent edge and a deep shadow. If two blocks wear it, the
-page no longer has one thing that is obviously the thing to look at.</p></div>
-
-<div class="block" data-look="dark" data-span="4"><h4>Dark</h4>
-<p>Night, or fun. A scene at night, a section that is deliberately a change of light. The native controls
-follow, because the block sets <code>color-scheme: dark</code>.</p>
-<div class="opts">
-<label class="opt"><input type="radio" name="dk1"><span>the yard at night</span></label>
-<label class="opt"><input type="radio" name="dk1"><span>the yard at dawn</span></label>
-</div></div>
-<div class="block" data-look="tint" data-span="12"><h4>Tint, in a sentence</h4>
-<p><b>Kept.</b> “<i>Cooked</i> is what you say to a friend. To a teacher, <i>exhausted</i> — the same fact,
-and nobody wonders whether you are joking.”</p>
-<p class="dim">This is the block tint exists for: the content is register, so its surface is the register's
-colour. The hue is the track's — no per-block colour.</p></div>
-
-<div class="block" data-span="12">
-<h4>The look, and what it must not be</h4>
-<table class="chart">
-<thead><tr><th>look</th><th>the job</th><th>what it must not be</th></tr></thead>
-<tbody>
-<tr><td>default</td><td>none beyond being a block</td><td>a block that has a job wearing no look</td></tr>
-<tr><td>tint</td><td>context or register</td><td>a way to make a section pretty; a second tint beside the first</td></tr>
-<tr><td>tape</td><td>a thing that would sit on paper</td><td>a way to mark importance</td></tr>
-<tr><td>float</td><td>a section's opening or closing, or the higher-level view</td><td>an ordinary block with its frame switched off</td></tr>
-<tr><td>stripes</td><td>an activity or question block</td><td>a teaching block dressed as an activity</td></tr>
-<tr><td>outline</td><td>the one critical element</td><td>two per section</td></tr>
-<tr><td>dark</td><td>night, or play</td><td>a way to vary the page</td></tr>
-</tbody>
-</table>
-</div>
-
-<h3 id="state">3d. State — how an activity reports itself</h3>
+<h3 id="state">3c. State — how an activity reports itself</h3>
 
 <div class="block" data-look="float" data-span="12">
 <p>An activity's state is written on the block, not drawn by the page: the marker classes are the engine's, the
@@ -763,7 +789,7 @@ above the last / completed / next controls, so a student meets the result and th
 placement is a decision recorded in §5; the element it uses is the same <code>.meter</code> shown above.</p>
 </div>
 
-<h3 id="motion">3e. Motion — a reveal the student controls</h3>
+<h3 id="motion">3d. Motion — a reveal the student controls</h3>
 
 <div class="block" data-span="6"><h4>Flip card</h4>
 <label class="flip" style="--flip-h:152px">
