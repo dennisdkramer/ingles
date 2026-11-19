@@ -1481,6 +1481,10 @@
   /* a line naming what the chart is: outside the chart, above its collapsed row. The wrapper hugs the table
      so the line is centred on the chart rather than on the column it happens to sit in */
   .chartwrap{width:fit-content;max-width:100%;margin:0}
+  /* a chart that sits in a cell beside another element, or under other content, is centred in that cell:
+     it never hugs one edge with the slack piled on the other. A chart standing as its own frame is not
+     affected — it is the cell, so it has nothing to centre within */
+  :is(.cols,.rows)>div>.chartwrap{margin-inline:auto}
   .chartwrap>.chart{margin:0}
   .chartcap{font-size:calc(var(--s0) + 2pt);font-weight:300;color:var(--ink-2);text-align:center;
     letter-spacing:normal;margin:0 0 6px}

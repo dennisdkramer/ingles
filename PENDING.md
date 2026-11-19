@@ -4,5 +4,5 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 ---
 
 # [CURRENT]
-## [B1] - Make an in-block row a flex row that fills the block, the sentence growing and the figure keeping its own width <"the in-block content rows should be flowed with flex rows to fill the width ... 'The label is the teaching' expands to fill the row with the chart. that is the default"> <style.css .rows, capability-map.html §4>
+## [B1] - Centre a chart that sits in a cell beside other content, and drop the pair chart's heading <"when a chart is inside another element it should be centered ... center it, and remove 'What it pairs with' label"> <style.css .chartwrap in .cols/.rows cells, capability-map.html #chart-pair>
 

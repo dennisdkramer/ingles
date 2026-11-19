@@ -1,5 +1,8 @@
 # PAST BATCHES
 
+## 2026-11-19 — a chart in a cell is centred in it
+## [B1] - Centre a figure.chartwrap that shares its cell with other content, and remove the pair chart's heading <"when a chart is inside another element it should be centered, correct me if im wrong but the only example of this is the chart 'Three words Portuguese folds together' right? center it, and remove 'What it pairs with' label"> <style.css:1484-1487 :is(.cols,.rows)>div>.chartwrap margin-inline:auto; capability-map.html: the h4 "What it pairs with" deleted, the chart cell now holds only the figure; Chrome: #chart cell 868 fig 689 left 89 right 89, #chart-pair 252=252, #chart-split 168=168 — the only chart with slack was the one named; 0 lessons use .cols/.rows so nothing shipped moves>
+
 ## 2026-11-19 — an in-block row fills the block, the sentence grows and the figure does not
 ## [B1] - Give .rows the sizing its rows were missing: cells share what is left, a cell that is only a heading and a figure keeps its own width <"the in-block content rows should be flowed with flex rows to fill the width ... that is the default, and if those elements are currently in columns instead of rows, they shouldnt be"> <style.css:907-908 .rows>* flex:1 1 0 and .rows>:not(:has(>p)) flex:0 1 auto; capability-map.html: 7 hand-written inline flex values deleted from §4, the row's markup spec added to the charts reveal; Chrome: three rows each 1146 wide, chart cells match their figures exactly (252=252, 168=168), no overflow>
 
