@@ -26,16 +26,16 @@
 
 <div class="block" data-span="12">
 <h3>Arrange it, and give it a look</h3>
-<p>The page is divided into twelfths, so a block can take 3, 4, 6, 8, 9 or 12 of them — a quarter, a third, a half, two thirds, three quarters or the whole line. A block with no span takes the whole line. A span is written only when something must sit beside it, and the spans in a row add to 12; which one it gets is decided by what the block holds, never by what kind of block it is. Nothing is measured in the browser.</p>
+<p>The page is divided into twelfths, so a block can take 3, 4, 6, 8, 9 or 12 of them — a quarter, a third, a half, two thirds, three quarters or the whole line. <b>Width starts at the minimum and is earned.</b> A block is written at the narrowest span its content reads in — 4, or 3 when the whole block is one short line — and it widens only for a reason it can name: its own content cannot be read at that width (a chart's columns, a dialog's long turns, a marked sentence's arrows, an answer field that needs the line), or nothing sits beside it and the rest of the line would be empty. Two short blocks share a row before either takes the whole line; the spans in a row add to 12; full width is the exception, never the default. Which span it gets is decided by what the block holds, never by what kind of block it is. Nothing is measured in the browser.</p>
 <p>The look is settled in the same pass: declared on the block, never inferred from what it holds, and it changes the paint only. One tint and one outline per section at most. A look never varies the page for its own sake, marks importance, or dresses a teaching block as an activity.</p>
-<details class="reveal" open><summary>Markup — a block on its own, and one with a neighbour</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — a block at its minimum, and one that had to widen</summary><div class="body"><div>
 <pre>&lt;h2&gt;a section the sheet numbers&lt;/h2&gt;
 
-&lt;div class="block"&gt;…the whole line: nothing sits beside it…&lt;/div&gt;
+&lt;div class="block" data-span="4"&gt;…the narrowest the content reads in…&lt;/div&gt;
+&lt;div class="block" data-span="8" data-look="tint"&gt;…the prose beside it…&lt;/div&gt;
 
-&lt;div class="block" data-span="8"&gt;…the sentence…&lt;/div&gt;
-&lt;div class="block" data-span="4" data-look="tint"&gt;…the note beside it…&lt;/div&gt;</pre>
-<p class="dim">No span until something must sit beside the block, then the two add to 12. Looks: <code>tint</code>, <code>tape</code>, <code>float</code>, <code>stripes</code>, <code>outline</code>, <code>dark</code>. A section is an <code>&lt;h2&gt;</code>: the sheet numbers it and restarts the lettering under it, so neither is typed. An unset block is paper with the 2px accent rule; <code>--accent-h</code> and <code>--edge-w</code> change that rule, and <code>--sp</code>, <code>--r1</code>, <code>--r2</code> the spacing and corners. The box you are reading is <code>&lt;details class="reveal"&gt;&lt;summary&gt;…&lt;/summary&gt;&lt;div class="body"&gt;&lt;div&gt;…&lt;/div&gt;&lt;/div&gt;&lt;/details&gt;</code> — the inner <code>div</code> is what folds. Print needs nothing from a page.</p>
+&lt;div class="block" data-span="12"&gt;…no neighbour, so it takes the rest of the line…&lt;/div&gt;</pre>
+<p class="dim">Minimum first, then the reason: a neighbour fills the row (4+8, 6+6, 3+9), a lone block takes what the line has left, and full width is the content's demand rather than the page's habit. Looks: <code>tint</code>, <code>tape</code>, <code>float</code>, <code>stripes</code>, <code>outline</code>, <code>dark</code>. A section is an <code>&lt;h2&gt;</code>: the sheet numbers it and restarts the lettering under it, so neither is typed. An unset block is paper with the 2px accent rule; <code>--accent-h</code> and <code>--edge-w</code> change that rule, and <code>--sp</code>, <code>--r1</code>, <code>--r2</code> the spacing and corners. The box you are reading is <code>&lt;details class="reveal"&gt;&lt;summary&gt;…&lt;/summary&gt;&lt;div class="body"&gt;&lt;div&gt;…&lt;/div&gt;&lt;/div&gt;&lt;/details&gt;</code> — the inner <code>div</code> is what folds. Print needs nothing from a page.</p>
 </div></div></details>
 </div>
 
@@ -163,7 +163,7 @@
 <h2>In-Block Features</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>Each of these goes inside a block with the prose that reads it, or with other elements, or stands as a block of its own at any span; the examples here are the in-block size. They come in two families.</p>
+<p>Each of these goes inside a block with the prose that reads it, or with other elements, or stands as a block of its own at the span its content reads in; the examples here are the in-block size. They come in two families.</p>
 <p><b>A. Augment existing text</b> — the marks, the ruby lines, the card at a word and the timeline all attach to a sentence the lesson has already written. <b>B. Standalone visuals</b> — a chart, a list, a dialog, a drawing, a recording or a strip is a thing of its own, read by the sentence beside it.</p>
 <p><b>None of them is used without accompaniment.</b> Each is read by something — the sentence that explains it, a word list, the questions the student answers — in the same block or in the block next to it, and that holds when the element is the block's own subject. Nothing about an element changes when the block around it becomes an activity: an activity about word order uses the underline and the numbered list, and the same markup moves between the two.</p>
 </div>
@@ -402,14 +402,12 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div>
 </div>
 
-<div class="rows">
-<div id="dialog">
+<div id="dialog" style="width:50%">
 <ol class="seq viz" data-mode="turns">
 <li><span class="who">Ana</span><span class="say">Did you post the letter?</span></li>
 <li><span class="who">Beto</span><span class="say">Three times. I keep thinking I forgot.</span></li>
 <li><span class="who">Ana</span><span class="say">Then photograph it next time.</span></li>
 </ol>
-</div>
 </div>
 <details class="reveal" open><summary>Markup — a dialog</summary><div class="body"><div>
 <pre>&lt;ol class="seq viz" data-mode="turns"&gt;

@@ -5,6 +5,15 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 
 # [CURRENT]
 ---
+## [B2] - Make the level/difficulty contract strong enough that lesson 44 cannot be written as a beginner page <"make sure that pedagogy-map.md definition of level and difficulty is MUCH stronger, because this is lesson 44 - an ADVANCED lesson, written at a beginner difficulty"> <PEDAGOGY-MAP.md: new [LEVEL] section — the number is both floor and ceiling, difficulty is what the student must do, four bands (1-10, 11-25, 26-40, 41-50) each naming what the page may assume and must demand, the lesson-44 case named as a defect, and a [CHECK] line that reads difficulty against the number>
+---
+## [B3] - Make width start at the minimum and be earned <"make sure that the default width is not a full width, it is the minimum width, things are expanded to full only if the content inside them forces them to be expanded or if there is no other block/content to pair it with"> <PEDAGOGY-MAP.md [1b] + capability-map.html §2: a block is written at the narrowest span its content reads in (4, or 3 for a block that is one short line) and widens only when its content cannot be read there or it is alone in its row; two short blocks share a row before either goes full; the markup specimen shows a 4+8 pair and a lone 12>
+---
+## [B4] - Take the §4 dialog off full width and prove dialogs/charts do not force it <"go into capability-map and make the section 4 dialog half-width and double check theres no reason that dialogs or charts would be forcing a block to full width even though their contents are super short"> <capability-map.html: the dialog specimen is `width:50%` with its lone-child `.rows` wrapper removed (that wrapper was the actual cause, since `.rows>*{flex:1 1 0}` stretches a single child); `.chart{width:fit-content;max-width:100%}` and `.seq .say{width:fit-content;max-width:80%}` recorded as the verified reason short content cannot widen a block>
+---
+## [B5] - Regenerate kids lesson 44 at the advanced band <"if you have any questions or concerns, voice them. If not, regenerate kids lesson 44"> <kids/lesson44-<Title>.html rewritten for band 41-50: English-only metalanguage, clause-length answers, the backshift's off switch, the three re-centering families, the subject-question exception, tell-vs-ask as a claim about power, the spoken quotative, false-friend vocabulary; widths start at 4/6 and widen only where a clause-length field needs the line; `node qa/check.mjs --track=kids 44` and `build-lessons --check` clean, commit and push>
+---
+
 ## [B1] - Generate kids lesson 44 through the rewired PEDAGOGY-MAP <"as a test, generate kids lesson 44"> <kids/lesson44-<Title>.html: pass 1 content from KIDS-ROADMAP [44] + KIDS-REGISTER, pass 2 shapes only from capability-map.html, teach → train → quiz, then `npm run build:lessons`, `node qa/check.mjs --track=kids 44`, commit and push>
 ---
 
