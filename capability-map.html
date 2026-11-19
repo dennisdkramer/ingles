@@ -566,7 +566,7 @@ next();
 
 <div class="block" data-look="stripes" data-span="12">
 <h3>Marked activities with controls</h3>
-<p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>The four controls are alternatives chosen by what the student must do</b> — a gap for a form, a radio for a judgement, a checkbox for several at once, a written field for a sentence. Two blocks at the end of this section are marked <b>IGNORED</b>: they stay on the page for reference and lessons are not using them for now.</p>
+<p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>The four controls are alternatives chosen by what the student must do</b> — a gap for a form, a radio for a judgement, a checkbox for several at once, a written field for a sentence. The blocks that follow add four shapes that are not a control: numbered chunks, a chart whose cells are answered, four options to pick one from, and a matching pool. Two blocks at the end of this section are marked <b>IGNORED</b>: they stay on the page for reference and lessons are not using them for now.</p>
 <p class="dim"><code>data-answer</code> keys a gap, <code>|</code> separating alternatives; <code>--gap-w</code> is the width the answer needs. A radio group's key is <code>data-a</code> on <code>.qitem</code>; engine2.js marks the right option and writes <code>.ans</code> beside a typed field.</p>
 <p>Each of these can stand as a block of its own or sit inside a block with the prose, the chart or the drawing it accompanies; the two below are the in-block size.</p>
 
@@ -638,6 +638,57 @@ next();
 </div>
 </div>
 
+<div class="block" data-look="stripes" data-span="12">
+<h3>Multiple choice</h3>
+<p>Choose the answer that fits the line.</p>
+<div class="qitem" data-a="b">
+<p class="qstem">The pallet <b>was tipping</b> when I got to the dock.</p>
+<div class="qopts">
+<label class="opt"><input type="radio" name="mc1" value="a"><span>a habit</span></label>
+<label class="opt"><input type="radio" name="mc1" value="b"><span>a scene already going on</span></label>
+<label class="opt"><input type="radio" name="mc1" value="c"><span>a promise about later</span></label>
+<label class="opt"><input type="radio" name="mc1" value="d"><span>a finished count</span></label>
+</div>
+</div>
+<div class="qitem" data-a="c">
+<p class="qstem">By the time I clocked in, the crew <b>had loaded</b> the truck.</p>
+<div class="qopts">
+<label class="opt"><input type="radio" name="mc2" value="a"><span>loading now</span></label>
+<label class="opt"><input type="radio" name="mc2" value="b"><span>loading after I arrived</span></label>
+<label class="opt"><input type="radio" name="mc2" value="c"><span>done before I arrived</span></label>
+<label class="opt"><input type="radio" name="mc2" value="d"><span>not loaded yet</span></label>
+</div>
+</div>
+</div>
+
+<div class="block" data-look="stripes" data-span="12">
+<h3>Matching</h3>
+<p>Write the letter of the meaning beside each phrase. One letter is left over.</p>
+<div class="rows">
+<div>
+<figure class="chartwrap">
+<table class="chart">
+<tbody>
+<tr><td><b>clocked in</b></td><td><input class="gap" data-answer="c" style="--gap-w:3em" aria-label="the meaning of clocked in"></td></tr>
+<tr><td><b>spilled the tea</b></td><td><input class="gap" data-answer="a" style="--gap-w:3em" aria-label="the meaning of spilled the tea"></td></tr>
+<tr><td><b>threw shade</b></td><td><input class="gap" data-answer="e" style="--gap-w:3em" aria-label="the meaning of threw shade"></td></tr>
+<tr><td><b>bailed</b></td><td><input class="gap" data-answer="b" style="--gap-w:3em" aria-label="the meaning of bailed"></td></tr>
+</tbody>
+</table>
+</figure>
+</div>
+<div>
+<ul>
+<li><b>a</b> shared the gossip</li>
+<li><b>b</b> got out of a situation</li>
+<li><b>c</b> recorded the time you got to work</li>
+<li><b>d</b> paid for everyone</li>
+<li><b>e</b> insulted someone indirectly</li>
+</ul>
+</div>
+</div>
+</div>
+
 <div class="block" data-look="dark" data-span="6">
 <h3>A dark block <span class="dim">— IGNORED</span></h3>
 <p>At 2 a.m. the yard is lit by one lamp and the only sound is the compressor.</p>
@@ -701,6 +752,36 @@ next();
   &lt;/table&gt;
   &lt;!-- one example of each control type is shown — an activity may mix them or use a single type, as its content needs --&gt;
 &lt;/div&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — 5B · multiple choice</summary><div class="body"><div>
+<pre>&lt;div class="qitem" data-a="b"&gt;
+  &lt;p class="qstem"&gt;the line the student reads&lt;/p&gt;
+  &lt;div class="qopts"&gt;
+    &lt;label class="opt"&gt;&lt;input type="radio" name="mc1" value="a"&gt;&lt;span&gt;option&lt;/span&gt;&lt;/label&gt;
+    &lt;label class="opt"&gt;&lt;input type="radio" name="mc1" value="b"&gt;&lt;span&gt;option&lt;/span&gt;&lt;/label&gt;
+    …four, each with its own value…
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- data-a on the .qitem is the key and matches the value of the right input · one .qitem per item --&gt;
+&lt;!-- a set of items gets its own name per item (mc1, mc2), so two items never share one radio group --&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — 5B · matching</summary><div class="body"><div>
+<pre>&lt;div class="rows"&gt;
+  &lt;div&gt;
+    &lt;figure class="chartwrap"&gt;&lt;table class="chart"&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;b&gt;the phrase&lt;/b&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;input class="gap" data-answer="c" style="--gap-w:3em"
+                     aria-label="the meaning of the phrase"&gt;&lt;/td&gt;&lt;/tr&gt;
+      …one row per item…
+    &lt;/table&gt;&lt;/figure&gt;
+  &lt;/div&gt;
+  &lt;div&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;a&lt;/b&gt; the first meaning&lt;/li&gt;…&lt;/ul&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- the pool of letters is visible beside the items, and that shared pool is what makes it matching --&gt;
+&lt;!-- one meaning more than there are items, so the last answer cannot be reached by elimination --&gt;
+&lt;!-- each .gap keys the letter it expects and carries its own aria-label; engine2 marks them on Complete --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #chunks · chunks in the wrong order</summary><div class="body"><div>
 <pre>&lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;

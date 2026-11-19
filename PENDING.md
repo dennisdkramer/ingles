@@ -3,7 +3,7 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 `## [Bn] - <the overarching thing getting done> <The user's words that guide this task compressed to 1 sentence> <artifact produced>`
 ---
 
-# [CURRENT]
+## [B20] - Restore the number-judged level rule from the old short PEDAGOGY-MAP, make every training block defend its shape, and draw multiple choice and matching into the map <"i want you to look back at old versions of pedagogy-map.md from a couple days ago ... we need to re-integrate my guidance from there" + "one sentence per training block you can implement your proposal" + "you can add the multiple choice and matching pairs blocks"> <PEDAGOGY-MAP [LEVEL] leads with the recovered rule (authored accessible but mildly challenging for the student who has arrived at that lesson; student level relative to the number; ability grows to functional fluency at 50), the bands demoted to background under it, frequency/held-at-once/importance restored from _v2, and item-level option rules added; [1a] gains the one-sentence shape defence and the four build questions (a-d) from _v2 [BUILD] SHAPE; [CHECK] reads the defences instead of counting shapes and reads both halves of the number rule; capability-map §5 gains a keyed multiple-choice block (2 qitems, data-a matching input value) and a matching block (lettered pool beside keyed .gaps), each with its markup box>
 ---
 
 # PAST BATCHES
