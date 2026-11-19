@@ -891,18 +891,15 @@
   .cols{display:flex;gap:var(--flex-gap,26px);align-items:flex-start;flex-wrap:wrap;
         padding-top:8px}
   .cols>*{flex:1 1 var(--cw,220px);min-width:0}
-  /* the other case: cells whose sizes differ, so each takes the width its own content needs and the
-     row is shared between them. Any number of cells; the writer decides the pairing, not a wrap.
-     Heights are matched across the row, so a cell is a column and the object inside it — a dialog, a
-     player, a map — takes the row's height; a cell that is only a figure keeps the width its own
-     columns need, so a chart never sits in a cell wider than it draws, and the space it does not use
-     goes to the cell beside it. */
+  /* the other case: any number of cells sharing one line, the writer deciding the pairing rather than a
+     wrap. Every cell takes an equal share of the width and the row's height; nothing is measured from
+     what a cell happens to contain. Heights are matched across the row, so a cell is a column and the
+     object inside it — a dialog, a player, a comic — takes the row's height. */
   .rows{display:flex;flex-wrap:nowrap;gap:var(--flex-gap,26px);align-items:stretch;padding-top:8px}
   .rows>*{display:flex;flex-direction:column;flex:1 1 0;min-width:0}
   /* a dialog, a player or a comic takes the row's height; the map does not — its frame is drawn on the
      drawing, so it keeps the drawing's own 3:2 box and the cell around it holds the rest */
   .rows>*>:is(.viz,figure.vz-play):not(.vz-map){flex:1 1 auto;min-height:0}
-  .rows>:not(:has(>p)):not(:has(>figure.vz-play)):not(:has(>ol)):not(:has(>ul)){flex:0 1 auto}
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
   .content-area>h2{margin-block:var(--section-gap,34px) 0}

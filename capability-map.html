@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Capability map — English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=fab47748b6">
+<link rel="stylesheet" href="style.css?v=f037db03c6">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>VISUAL REFERENCE</span></h1></header>
@@ -134,8 +134,8 @@
 <p><code>.viz</code> frames three things: the dialog, the player and the map — a chart and a strip carry a frame of their own. It is never a second <code>.block</code>.</p>
 <div class="rows" style="justify-content:space-around">
 <div id="chart">
+<p>A chart can stand outside a block or sit inside one, and either way the text beside it has to explain it or point at it — a chart nobody refers to is a picture the student has to guess at. The chart below is that pair: the sentence introduces it, and the chart centres itself in the column it is given.</p>
 <figure class="chartwrap">
-<figcaption class="chartcap">The chart — parallel items</figcaption>
 <table class="chart">
 <thead><tr class="bare"><th colspan="3"></th></tr></thead>
 <tbody>
@@ -168,7 +168,7 @@
 
 
 <div class="rows">
-<div id="map" style="flex:1 1 0">
+<div id="map">
   <div class="vz-map viz">
   <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, eight places each drawn with its name on a sign — a station under a canopy with a clock, a café with a striped awning, a park with trees, a bank under a dollar sign, a library wall of books, a post office with a postbox, a bus shelter, and two market awnings">
     <rect x="0" y="0" width="360" height="240" style="fill:var(--paper)"></rect>
@@ -244,7 +244,7 @@
 </div>
   </div>
 </div>
-<div id="comic" style="flex:1 1 0">
+<div id="comic">
 <table class="chart" style="width:100%;height:100%;flex:1 1 auto">
   <tbody>
     <tr>
@@ -552,13 +552,13 @@ next();
 <p>Each of these can stand as a block of its own or sit inside a block with the prose, the chart or the drawing it accompanies; the two below are the in-block size.</p>
 
 <div class="rows">
-<div style="flex:1 1 0">
+<div>
 <ol class="seq viz" data-mode="turns">
 <li><span class="who">Jess</span><span class="say">Did you post the letter?</span></li>
 <li><span class="who">Mike</span><span class="say">Three times. I <input class="gap" data-answer="have|'ve" style="--gap-w:4em"> already posted it.</span></li>
 </ol>
 </div>
-<div style="flex:1 1 0">
+<div>
 <figure class="chartwrap">
 <table class="chart center">
 <thead><tr><th>Time</th><th>What he did</th><th>Which is it?</th></tr></thead>
@@ -667,8 +667,8 @@ next();
       &lt;input class="gap" data-answer="have|'ve" style="--gap-w:4em"&gt;
       already posted it.&lt;/span&gt;&lt;/li&gt;
 
-&lt;!-- an item and the chart beside it: one .rows, each in its own cell with flex:1 1 0,
-     the chart in a figure.chartwrap so it centres in the half it was given --&gt;</pre>
+&lt;!-- an item and the chart beside it: one .rows, each in a cell of its own — neither cell carries a size,
+     the row gives them equal shares, and the chart centres in the half it was given --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — 5B · a chart whose rows are answered</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes" data-span="12"&gt;
