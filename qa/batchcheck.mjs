@@ -27,7 +27,7 @@ import { JSDOM } from 'jsdom';
 const ROOT = process.cwd();
 // the palette is the map's own element ids: a lesson names the element it built, and the markup box
 // it copied is the same name. A game is a skin over one of these, never an element of its own.
-const PALETTE = ['gap', 'chunks', 'stripgaps', 'chartanswer', 'dialoggap', 'mc', 'matching',
+const PALETTE = ['chunks', 'stripgaps', 'chartanswer', 'dialoggap', 'mc', 'matching',
   'correction', 'translation', 'dictation', 'flip'];
 const SUBJECTS = ['rul', 'rsn', 'ex', 'con', 'exc', 'voc', 'mng', 'prn', 'tim', 'soc', 'rcp'];
 const NOVEL_WINDOW = 3, CHURN_WINDOW = 5, COVER_WINDOW = 10, QUIZ_WINDOW = 2;
@@ -118,7 +118,6 @@ function detectEl(unit) {
   if (items.some(i => i.querySelectorAll('input[type=radio]').length >= 3)) return 'mc';
   const gapN = unit.querySelectorAll('input.gap').length;
   if (gapN && unit.querySelector('table.chart')) return 'chartanswer';
-  if (gapN) return 'gap';
   return null;
 }
 
@@ -147,9 +146,13 @@ function pageScan(file, locale) {
   for (const b of area.querySelectorAll('.block')) {
     if (!b.querySelector(CTRL)) continue;
     if (b.matches('[data-activity]') || b.querySelector('[data-activity]') || b.closest('[data-activity]')) continue;
-    activityBlocks++;
     const t = detectEl(b);
-    if (!t) { unattributed++; continue; }
+    if (!t) {
+      const composite = b.querySelector('.qitem,.chips,.flip,.game,.listen,textarea,.qopts,.opts,table.chart');
+      if (!composite && b.querySelector('input.gap')) continue; // a lone field is a component, not an activity
+      activityBlocks++; unattributed++; continue;
+    }
+    activityBlocks++;
     els[t] = (els[t] || 0) + 1;
   }
   const text = area.textContent.toLowerCase();
