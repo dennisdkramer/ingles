@@ -589,7 +589,11 @@ let OPENING=false;
 async function openLesson(t,i){
  if(OPENING)return;OPENING=true;
  log("abrindo lição "+i+"…");
- try{const lr=await fetch("lessons.json?t="+Date.now(),{cache:"no-store"});
+ /* the re-read may never answer (flaky network, a proxy that stalls); a click that hangs would also leave
+    OPENING set, so it aborts at 2.5s and the painted list opens the lesson instead of nothing happening. */
+ try{const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),2500);
+  const lr=await fetch("lessons.json?t="+Date.now(),{cache:"no-store",signal:ctl.signal});
+  clearTimeout(to);
   if(lr.ok){const j=await lr.json();if(j&&Array.isArray(j[t])){LESSONS=j;writeCache("lessons2",j)}}
  }catch(e){}
  const rel=lessonPath(t,i);
