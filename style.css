@@ -890,7 +890,7 @@
     --accent-line:color-mix(in oklab, var(--accent) 42%, var(--line));
     background:var(--paper);border:1px solid var(--line);border-top:2px solid var(--accent);
     border-radius:var(--r2);box-shadow:2px 2px 0 var(--line-2),var(--shadow-1);
-    padding:0 20px 20px;margin:0}
+    padding:6px 20px 20px;margin:0}
   /* the frame has no top padding: its first child brings the space, 14px like every other child */
   .block>:first-child,.panel>:first-child,.card>:first-child{margin-top:14px}
   .game>:is(h3,h4):first-child,.dialog>:is(h3,h4):first-child{margin-top:0}
@@ -900,13 +900,15 @@
      (their rule is measured from their padding) */
   :is(.block,.panel,.card,.dialog)>:is(p,ul,ol,dl,blockquote){padding:3px}
 
-  /* #43 RHYTHM — the space between things in a frame is the margin ABOVE each one, not below: a
-     paragraph, a flex row or a chart that is a child of a frame takes 14px, and a .dim note takes 8px.
-     A list item keeps its own bottom margin (li, in base) so a list stays readable. Vary: the three
-     numbers here. */
-  :is(.block,.panel,.card,.dialog)>:is(p,.cols,table,.figure,.chartwrap),
-  .cols>div>:is(p,.cols){margin-top:14px}
-  :is(.block,.panel,.card,.dialog)>p.dim,.cols>div>p.dim{margin-top:8px}
+  /* #43 RHYTHM — the space between things in a frame is the margin ABOVE each one: a paragraph, a flex
+     row or a chart that follows another takes 14px. A list item keeps its own bottom margin (li, in base),
+     and inside a flex row the row carries the space, so a cell's first item adds none and the rest add 10.
+     Vary: these numbers. */
+  :is(.block,.panel,.card,.dialog)>:is(p,.cols,table,figure,.chartwrap){margin-top:14px}
+  :is(.block,.panel,.card,.dialog)>p.dim{margin-top:8px}
+  .cols>div>:first-child{margin-top:0}
+  .cols>div>:is(p,.cols,table,figure):not(:first-child){margin-top:10px}
+  .cols>div>p.dim:not(:first-child){margin-top:8px}
 
   /* prose — --measure (length, 68ch) */
   .block[data-structure="prose"]{line-height:1.72}
@@ -1499,7 +1501,7 @@
   }
   /* block frame, legacy names — preview's .block geometry wins where the two speak */
   .panel,.card{--edge:var(--tan);border:2px solid var(--edge);border-radius:12px;
-    width:fit-content;max-width:100%;padding:0 20px 20px;background:var(--paper);
+    width:fit-content;max-width:100%;padding:6px 20px 20px;background:var(--paper);
     box-shadow:4px 4px 0 var(--tan);margin:14px 0}
   .panel[data-kind="teach"],.card[data-kind="teach"],.game[data-kind="teach"],
   .dialog[data-kind="teach"]{--edge:var(--ink)}
