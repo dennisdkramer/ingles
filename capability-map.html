@@ -189,7 +189,7 @@
 <tr><td>a part of a whole</td><td>a bar beside its number</td><td><a href="#bar" aria-label="a bar beside its number">example</a></td></tr>
 <tr><td>a word whose Portuguese twin misleads</td><td>a gloss behind a click</td><td><a href="#gloss" aria-label="a gloss behind a click">example</a></td></tr>
 <tr><td>how one word is said</td><td>the key, in <code>ruby</code> / <code>rt</code></td><td><a href="#key" aria-label="the key, in ruby / rt">example</a></td></tr>
-<tr><td>real speech in context</td><td>the mini player, with the words beside it</td><td><a href="#audio" aria-label="the mini player, with the words beside it">example</a></td></tr>
+<tr><td>real speech in context</td><td>the player</td><td><a href="#audio" aria-label="the player">example</a></td></tr>
 <tr><td>which place, and where it sits</td><td>the street map</td><td><a href="#map" aria-label="the street map">example</a></td></tr>
 <tr><td>a sequence of events</td><td>the comic strip, or the vertical timeline</td><td><a href="#comic" aria-label="the comic strip">example</a> · <a href="#vline" aria-label="the vertical timeline">example</a></td></tr>
 <tr><td>a word or form recalled from memory</td><td>the flash card</td><td><a href="#flip" aria-label="the flash card">example</a></td></tr>
@@ -202,7 +202,8 @@
 <h2>In-Block Features</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>Everything in this section goes inside a block: the underline, the horizontal timeline, the vertical timeline, the numbered list, the dialog, the charts, the bar, the gloss, the key, the player, the map, the strip and the flash card. Inside a block each is half a row at most, beside the prose that reads it.</p>
+<p>Everything in this section goes inside a block: the underline, the horizontal timeline, the vertical timeline, the numbered list, the dialog, the charts, the bar, the gloss, the key, the player, the map, the strip and the flash card.</p>
+<p><b>None of them is used without accompaniment.</b> Each is half a row at most, and each is read by something — the sentence that explains it, a word list, the questions the student answers — in the cell beside it or in the block next to it. The same holds when the element is the block's own subject. That rule is the same for every element here and is not repeated under the examples.</p>
 <p><b>Not one of them belongs to a particular block.</b> Each goes wherever a lesson needs it: inside a teaching block, inside an activity block, or alone as the block's own subject at whatever span it needs. An activity about word order uses the underline and the numbered list; an activity about a series of events uses the vertical timeline; a comparison the student answers row by row uses the chart. Nothing about the element changes when the block around it becomes an activity, and the same markup moves between the two.</p>
 </div>
 
@@ -245,7 +246,7 @@
 </figure>
 </div>
 </div>
-<p class="dim">One claim per figure: a band that reaches <b>now</b> is still open, a point with no band is finished.</p>
+<p class="dim">These two are the <b>anchored</b> form: a sentence, and the line pinned to one word of it. <code>.an</code> marks that word and <code>data-tense</code> chooses which point of the line must sit under it — the word moves the line, the sentence never moves.</p>
 <details class="reveal" open><summary>Markup — the timeline</summary><div class="body"><div>
 <pre>&lt;figure class="tlw" data-tense="simple-past"&gt;
   &lt;p class="tlw-say"&gt;I &lt;span class="pos-m pos-v an"&gt;wrote&lt;/span&gt; it.&lt;/p&gt;
@@ -257,7 +258,7 @@
     &lt;b class="tln-then"&gt;then&lt;/b&gt;
   &lt;/div&gt;
 &lt;/figure&gt;</pre>
-<p class="dim">Use one figure per tense. <code>.an</code> marks the one word the line pins to, and <code>data-tense</code> says which point of the timeline must sit under it; the sentence itself never moves. <code>.tlgrid</code> holds a family, each cell named by an <code>&lt;h4&gt;</code>. The tense adds one mark inside <code>.tln</code>: <code>tln-span</code> a band to now, <code>tln-that</code> a second past, <code>tln-bar</code> a stretch, <code>tln-gloss</code> a Portuguese word under a point.</p>
+<p class="dim">One figure per tense; <code>.tlgrid</code> holds a family, each cell named by an <code>&lt;h4&gt;</code>. <b>Anchoring is optional:</b> a bare <code>.tln</code> with no <code>.tlw</code> above it draws the three points on its own, for a block that needs the line and no sentence. <b>Width:</b> unset it hugs its phrase and never goes under 300px; <code>data-grow="1"</code> fills the container and <code>data-grow="2"</code> takes the width of an anchor string. <b>Marks, only where the claim is the lesson:</b> <code>tln-span</code> a band to now, <code>tln-that</code> a second past, <code>tln-bar</code> a stretch, <code>tln-gloss</code> a Portuguese word under a point.</p>
 </div></div></details>
 
 <div class="rows">
@@ -269,6 +270,12 @@
 <li><p>Change the person and only the first word moves.</p></li>
 </ol>
 <p class="dim">When the sequence is the teaching, not a process the reader already knows. Unset <code>data-mode</code> gives one item per line.</p>
+<details class="reveal" open><summary>Markup — a numbered list</summary><div class="body"><div>
+<pre>&lt;ol class="seq" data-mode="numbered"&gt;
+  &lt;li&gt;&lt;p&gt;&lt;b&gt;Have&lt;/b&gt; carries the person: &lt;i&gt;I have&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;The third form carries the action.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;</pre>
+</div></div></details>
 </div>
 <div id="vline">
 <h4>The vertical timeline — dated events</h4>
@@ -277,23 +284,15 @@
 <li><span class="at">2023</span><p>She stopped writing.</p></li>
 <li><span class="at">now</span><p>She has written three songs.</p></li>
 </ol>
-<p class="dim">When the dates themselves are the point. The horizontal timeline draws one claim on a line; this lists what happened and when, one <code>.at</code> per item.</p>
-</div>
-</div>
-<details class="reveal" open><summary>Markup — a numbered list</summary><div class="body"><div>
-<pre>&lt;ol class="seq" data-mode="numbered"&gt;
-  &lt;li&gt;&lt;p&gt;&lt;b&gt;Have&lt;/b&gt; carries the person: &lt;i&gt;I have&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;p&gt;The third form carries the action.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;</pre>
-<p class="dim">When the sequence is the teaching. Unset <code>data-mode</code> gives one item per line.</p>
-</div></div></details>
+<p class="dim">When the dates themselves are the point. One <code>.at</code> per item; the horizontal timeline above draws one claim instead of listing events.</p>
 <details class="reveal" open><summary>Markup — a vertical timeline</summary><div class="body"><div>
 <pre>&lt;ol class="seq" data-mode="timeline"&gt;
   &lt;li&gt;&lt;span class="at"&gt;2022&lt;/span&gt;&lt;p&gt;She wrote three songs.&lt;/p&gt;&lt;/li&gt;
   &lt;li&gt;&lt;span class="at"&gt;now&lt;/span&gt;&lt;p&gt;She has written three songs.&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;</pre>
-<p class="dim">When the dates themselves are the point. One <code>.at</code> per item; the horizontal timeline in this block draws one claim instead of listing events.</p>
 </div></div></details>
+</div>
+</div>
 
 <div class="rows">
 <div id="dialog">
@@ -457,13 +456,6 @@
 <li data-t="26.82">I love your grand old ocean and I love her rugged shore.</li>
 </ol>
 </figure>
-</div>
-<div>
-<h4>Half the row, and the words beside it</h4>
-<p>The player takes half the row by default and the paragraph that explains its words sits beside it. A recording that is a whole block of its own keeps the song title as the <code>h3</code> and the credit as the <code>h4</code> directly above the player, with the lyrics at full width.</p>
-<p class="dim">Every <code>data-t</code> comes from the cut that <code>qa/AUDIO.md</code> prints, never typed by eye; <code>data-duration</code> is the decoded length of the file that shipped. The line lights as it is sung. Native controls are the floor, and <code>player.js</code> replaces them with the drawn bar.</p>
-</div>
-</div>
 <details class="reveal" open><summary>Markup — the recording</summary><div class="body"><div>
 <pre>&lt;figure class="vz-play"&gt;
   &lt;audio class="vz-audio" src="assets/&lt;name&gt;.mp3" data-duration="35.87"
@@ -484,10 +476,9 @@
   &lt;/ol&gt;
   &lt;p&gt;one paragraph explaining the words, never the block&lt;/p&gt;
 &lt;/figure&gt;</pre>
-<p class="dim">One paragraph explaining the words, never the block. <code>data-t</code> comes from the cut, never typed by eye; <code>data-duration</code> is the decoded length of the shipped file. The native controls are the floor: with no script the student still plays and scrubs.</p>
+<p class="dim">When the recording is the block's own subject, the song title is the <code>h3</code> and the performer the <code>h4</code> directly above the player. <code>data-t</code> comes from the cut that <code>qa/AUDIO.md</code> prints, never typed by eye; <code>data-duration</code> is the decoded length of the shipped file. The line lights as it is sung; native controls are the floor and <code>player.js</code> draws the bar.</p>
 </div></div></details>
-
-<div class="rows">
+</div>
 <div id="map">
 <h4>The street map</h4>
   <!-- THE DRAWING IS THE BUILDER'S TO SIZE: `--map-w` on the wrapper caps its width (any CSS length); unset,
@@ -568,13 +559,6 @@
     <label style="position:absolute;left:52.5%;top:92.2%;transform:translateX(-50%)"><input type="checkbox" aria-label="the market"> 8</label>
   </div>
   <p>Walk the route, ticking each place as you pass it.</p>
-</div>
-<div>
-<h4>Directions and relative places</h4>
-<p>Use it where the words are prepositions of place: <i>at the station</i> is a point, <i>in the café</i> is a container, and drawn, the difference needs no explanation. Every place carries its name on a sign inside the drawing, so nothing is read from a key beside it.</p>
-<p class="dim">The ticks are a checklist the student walks the route with, and nothing is saved; the gap that stores an answer belongs to the host. <code>--map-w</code> caps the drawing; unset, it takes the host's width.</p>
-</div>
-</div>
 <details class="reveal" open><summary>Markup — the map</summary><div class="body"><div>
 <pre>&lt;div class="vz-map"&gt;
   &lt;svg viewBox="0 0 360 240" width="100%" role="img"
@@ -585,8 +569,10 @@
   &lt;/label&gt;
   …one tick per place, in % of the wrapper…
 &lt;/div&gt;</pre>
-<p class="dim">The places are drawn, not listed: a name written beside a rectangle leaves the drawing unread. The ticks are the work and never the answer — a route the student writes goes in a <code>.gap</code> in the paragraph beside the map. The wrapper hugs the drawing so the ticks stay on their places, and <code>aria-label</code> names the drawing for a reader who cannot see it.</p>
+<p class="dim">When the words are prepositions of place: <i>at</i> the station is a point, <i>in</i> the café is a container. The places are drawn, not listed — a name written beside a rectangle leaves the drawing unread — and the ticks are a checklist, never the answer: a route the student writes goes in a <code>.gap</code>. The wrapper hugs the drawing so the ticks stay on their places, <code>--map-w</code> caps it, and <code>aria-label</code> names it for a reader who cannot see it.</p>
 </div></div></details>
+</div>
+</div>
 
 <div class="rows">
 <div id="comic" style="max-width:33.333%">
@@ -608,7 +594,7 @@
 <div>
 <h4>One panel, one sentence</h4>
 <p>The drawing carries what happened and the line under it is the only place the tense appears; the order of the panels is the order of the paragraph. Use it where the sequence is the lesson.</p>
-<p class="dim">Panels are inline <code>svg</code> here; a block takes four frames from <code>assets/</code> or the same drawing, captioned with the source. A strip takes a third of a row: the drawings stay small because the sentence is what is read. Swap each <code>&lt;p&gt;</code> for a <code>.gap</code> and it is the activity in §5.</p>
+<p class="dim">Panels are inline <code>svg</code> here; a block takes four frames from <code>assets/</code> or the same drawing, captioned with the source. A strip takes a third of a row. Swap each <code>&lt;p&gt;</code> for a <code>.gap</code> and it is the activity in §5.</p>
 </div>
 </div>
 <div class="rows">
@@ -625,7 +611,7 @@
 <div>
 <h4>Prompt on the front, answer on the back</h4>
 <p>The student reads the front, answers, and turns the card to check. Nothing is typed and there is no script. Use it for anything trained by recall — a form, a meaning, a word's second sense.</p>
-<p class="dim">A card takes a third of a row beside the prose that reads it; on its own it is a block whose subject is the two faces. <code>--flip-h</code> is the height both faces share, and the only thing a lesson sets.</p>
+<p class="dim">A card takes a third of a row. <code>--flip-h</code> is the height both faces share, and the only thing a lesson sets.</p>
 </div>
 </div>
 <details class="reveal" open><summary>Markup — a flash card</summary><div class="body"><div>
