@@ -1142,15 +1142,22 @@
 }
 
 /* #65 MARKUP ROW — every markup box a builder copies, taken out of the teaching flow and gathered at
-   the foot of its section as one line each: .cols.markup-row > details.reveal. Closed, a box is only
-   its label — the pointer naming the element it draws — and the code stays in the page for whoever
-   reads the source. A box hugs its label and the row fills the line; a label too long for its share
-   ellipsizes rather than wrapping to a second line. Vary: --cw (length) */
+   the foot of its section as one line each: .cols.markup-row > details.reveal. Each box is OPEN, so
+   its code is rendered and read by whatever reads the page — the markup the builder is handed — while
+   the body is folded shut by the rule below, so the page shows the label and nothing else. The label
+   is the pointer naming the element the box draws. A box hugs its label and the row fills the line; a
+   label too long for its share ellipsizes rather than wrapping to a second line. Vary: --cw (length) */
 @layer control{
   .markup-row{gap:10px}
   .markup-row>details.reveal{flex:1 1 auto;min-width:0;margin:0}
   .markup-row>details.reveal>summary{padding:6px 10px;white-space:nowrap;overflow:hidden;
     text-overflow:ellipsis}
+  /* open, but folded: the body keeps its height at zero, and the label keeps the look of a shut box */
+  .markup-row>details.reveal>.body,
+  .markup-row>details.reveal[open]>.body{grid-template-rows:0fr}
+  .markup-row>details.reveal>summary{border-bottom:0}
+  .markup-row>details.reveal[open]>summary{color:var(--ink-2)}
+  .markup-row>details.reveal[open]>summary::before{rotate:none}
 }
 @media print{ .markup-row{display:none} }
 
@@ -1176,9 +1183,11 @@
   .block[data-look="outline"]{border:var(--edge-w) solid var(--accent);
     box-shadow:var(--shadow-2);background:transparent}
 
-  .block[data-look="stripes"]::after{content:"";position:absolute;inset:0;border-radius:inherit;
-    pointer-events:none;opacity:.5;background-image:repeating-linear-gradient(-45deg,
-      rgb(26 33 48/.08) 0 2px, transparent 2px 8px)}
+  /* the stripes are the block's own background, never an overlay: painted as a background-image they sit
+     under the content, so a chart, a flash card, a bubble or a panel inside the block keeps its own paper
+     without being given a colour of its own */
+  .block[data-look="stripes"]{background-image:repeating-linear-gradient(-45deg,
+    rgb(26 33 48/.04) 0 2px, transparent 2px 8px)}
 
   .block[data-look="tape"]::before{content:"";position:absolute;top:-10px;left:50%;
     translate:-50% 0;width:112px;height:21px;rotate:-2deg;z-index:2;
