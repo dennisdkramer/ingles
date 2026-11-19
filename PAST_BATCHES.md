@@ -1,5 +1,11 @@
 # PAST BATCHES
 
+## 2026-11-19 — in-block visuals paired with their teaching
+## [B1] - Put the player in half a row with the words it is there for beside it, and add the [05] street map and the [42] comic strip to §4 verbatim <"The audio player for example should be half-width by default and paired with teaching content that relates to the audio ... I want that specific street map from 05, minus the question below it. i want the comic strip scaled to 1/3 width"> <capability-map.html §4: .rows with #audio 560 | teaching 560, #map 560 | prose 560, #comic 382 | prose 738; the map's SVG, its eight tick labels and the strip's four panels copied from qa/preview-menu.html:756-828 and :839-850, the route question and the strip's preview notes left behind; both get a reveal and a row in the §3 mapping>
+---
+## [B2] - Park sentence surgery at the foot of §5 as block F, verbatim from [50] <"the sentence surgery will go into a section about activity and question options, not in-block visuals, so you can add it to the bottom of section 5 on the capability map for now"> <capability-map.html §5: p.chips with six numbered chunks and one full-width .gap, plus its reveal>
+
+
 ## 2026-11-19 — a chart in a cell is centred in it
 ## [B1] - Centre a figure.chartwrap that shares its cell with other content, and remove the pair chart's heading <"when a chart is inside another element it should be centered, correct me if im wrong but the only example of this is the chart 'Three words Portuguese folds together' right? center it, and remove 'What it pairs with' label"> <style.css:1484-1487 :is(.cols,.rows)>div>.chartwrap margin-inline:auto; capability-map.html: the h4 "What it pairs with" deleted, the chart cell now holds only the figure; Chrome: #chart cell 868 fig 689 left 89 right 89, #chart-pair 252=252, #chart-split 168=168 — the only chart with slack was the one named; 0 lessons use .cols/.rows so nothing shipped moves>
 
