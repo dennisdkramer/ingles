@@ -878,6 +878,9 @@
   .cols{display:flex;gap:var(--flex-gap,26px);align-items:flex-start;flex-wrap:wrap;
         padding-top:8px}
   .cols>*{flex:1 1 var(--cw,220px);min-width:0}
+  /* how many fit in a row: a cell's basis is a share of the row, so the row wraps at that count */
+  .cols[data-per="2"]{--cw:calc(50% - 13px)}
+  .cols[data-per="3"]{--cw:calc(33.333% - 18px)}
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
   .content-area>h2{margin-block:var(--section-gap,34px) 0}
