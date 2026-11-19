@@ -12,6 +12,11 @@
 <h1>What we can teach with</h1>
 <p class="lead">A page is content first. These are the tools that content can take, each shown in the block it is used in.</p>
 
+<div class="block" data-look="float" data-span="12">
+<p><b>Read the page this way.</b> Every sentence, name, number, song and date inside a block below is <b>example content</b> — it stands in for a lesson's own words and means nothing about this page. What a block contributes is its <i>shape</i>: the markup in the fold under it, the look on its frame, the span it is written at.</p>
+<p class="dim">The folds under each block are the contract, and they are open: markup, and the one sentence that says when to use it. The table in section 3 is the index — one concept, the tool that answers it, and a link to it drawn. Everything here is a shape a lesson may use; nothing here is a lesson.</p>
+</div>
+
 <h2>How a page gets built</h2>
 
 <div class="block" data-look="float" data-span="12">
@@ -27,7 +32,7 @@
 <h3>Arrange it, and give it a look</h3>
 <p>The page is twelve columns and every block is full width, so a page that decides nothing flows straight down it. A span is written on a block only when something has to sit beside it: the row is divided into twelfths, each block takes 3, 4, 6, 8, 9 or 12 of them, and the numbers in a row add to 12. The number is a fit, not a category — the same prose is 6 beside a chart and 12 on its own — so it comes from looking at what the block holds and what must sit beside it, never from the kind of block it is. The sheet reads the number as written — nothing is measured or packed in the browser.</p>
 <p>A look is settled in the same pass, by the same looking: declared on the block, never inferred from what it holds, and it changes the paint only, so a block is re-skinned without being rewritten. One tint and one outline per section at most; a look is never a way to vary the page, to mark importance, or to dress a teaching block as an activity.</p>
-<details class="reveal"><summary>Markup — a page that flows, and the one row that does not</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — a page that flows, and the one row that does not</summary><div class="body"><div>
 <pre>&lt;h2&gt;a section the sheet numbers&lt;/h2&gt;
 
 &lt;div class="block"&gt;…full width: nothing sits beside it…&lt;/div&gt;
@@ -84,7 +89,7 @@
 <p class="dim">Both readings are shown, the deciding word is named, and nothing has to be learned before the difference can be seen.</p>
 </div>
 </div>
-<details class="reveal"><summary>Markup — parallel items inside one block</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — parallel items inside one block</summary><div class="body"><div>
 <pre>&lt;div class="cols" style="--cw:420px"&gt;
   &lt;div&gt;&lt;h4&gt;first&lt;/h4&gt;&lt;p&gt;…&lt;/p&gt;&lt;/div&gt;
   &lt;div&gt;&lt;h4&gt;second&lt;/h4&gt;&lt;p&gt;…&lt;/p&gt;&lt;/div&gt;
@@ -195,6 +200,7 @@
 <tr><td>a sequence of events</td><td>the comic strip</td><td><a href="#comic" aria-label="the comic strip">example</a></td></tr>
 </tbody>
 </table>
+<p class="dim">Read a row as a decision: the first column is the occasion — when a lesson sets out to teach that concept — the second is the tool that shows it, and the third opens it drawn on this page. A concept with no row is a concept the tool cannot show yet.</p>
 </div>
 
 
@@ -207,30 +213,8 @@
 <div class="block" data-span="12">
 <h3>One block, and everything it can carry</h3>
 <p class="pos" id="pos"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p>
-<p class="dim">The tagger emits the marks, so they cannot drift from the sentence when the sentence is edited. On a container carrying <code>pos-labels</code> every mark prints its role instead — N · V · M · DO · IO · ADJ · ADV · PREP — which is the same information for a page that must not rely on line style. The joining word is fenced rather than underlined, because a conjunction is how two halves meet: the relation decides the colour.</p>
-<table class="poschart">
-<thead><tr>
-<th class="pos-n">Noun</th>
-<th class="pos-m">Mode Carrier</th>
-<th class="pos-v">Verb</th>
-<th class="pos-adv">Adverb</th>
-<th class="pos-prep">Preposition</th>
-<th class="pos-adj">Adjective</th>
-<th class="pos-join" data-rel="add">Conjunction</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>noun · pronoun (subject, object) · demonstrative pronoun · substantive clause</td>
-<td>auxiliary · modal · question word · a conjugated verb with no mode word of its own (marked as both)</td>
-<td>verb · the same lone conjugated verb</td>
-<td>adverb</td>
-<td>preposition</td>
-<td>adjective · determiner · relative pronoun</td>
-<td>conjunction (by relation)</td>
-</tr>
-</tbody>
-</table>
-<details class="reveal"><summary>Markup — the job each word carries, and the fence</summary><div class="body"><div>
+<p class="pos pos-labels"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p>
+<details class="reveal" open><summary>Markup — the job each word carries, and the fence</summary><div class="body"><div>
 <pre>&lt;p class="pos"&gt;
   &lt;span class="pos-adj"&gt;The old&lt;/span&gt;
   &lt;span class="pos-n pos-subj"&gt;man&lt;/span&gt;
@@ -243,7 +227,7 @@
 &lt;p class="pos pos-labels"&gt;…the same sentence…&lt;/p&gt;
 
 &lt;table class="poschart"&gt;…one column per group…&lt;/table&gt;</pre>
-<p class="dim">Use it where the job of each word is the lesson, and let the tagger write the classes — no word is marked by hand. <code>pos-labels</code> prints the role instead of the line, for a page or a printout that must not rely on colour and rule style. The fence goes on the joining word itself and <code>data-rel</code> is one of add · contrast · alternative · cause · condition · time · place · comparison · content; under <code>pos-labels</code> the relation prints instead of the fence.</p>
+<p class="dim">The two lines are the same sentence twice: the first with the marks, the second with <code>pos-labels</code>, which prints the role instead of the line — N · V · M · DO · IO · ADJ · ADV · PREP — for a page or a printout that must not rely on colour and rule style. The tagger emits the marks, so they cannot drift from the sentence when the sentence is edited, and no word is marked by hand. <b>The marks go on any sentence the lesson wants marked, as many as it wants</b>: they are a wrapper around one sentence, not a component with a block of its own — three sentences in a block means three of these. The fence goes on the joining word itself, because a conjunction is how two halves meet; <code>data-rel</code> is one of add · contrast · alternative · cause · condition · time · place · comparison · content, and under <code>pos-labels</code> the relation prints instead of the fence.</p>
 </div></div></details>
 
 <h4>Where <i>now</i> sits — the timeline</h4>
@@ -266,7 +250,7 @@
 </div>
 </div>
 <p class="dim">Both sentences can be true of the same person on the same day. The first pins a band that reaches <b>now</b>, so the writing is still open. The second pins a point and no band: the writing is a finished event, and the year in the words is the only time it names.</p>
-<details class="reveal"><summary>Markup — the timeline</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — the timeline</summary><div class="body"><div>
 <pre>&lt;figure class="tlw" data-tense="simple-past"&gt;
   &lt;p class="tlw-say"&gt;I &lt;span class="pos-m pos-v an"&gt;wrote&lt;/span&gt; it.&lt;/p&gt;
   &lt;i class="tln-link" data-mark="dot"&gt;…tapered tail, swept barb…&lt;/i&gt;
@@ -342,7 +326,7 @@
 </figure>
 </div>
 </div>
-<details class="reveal"><summary>Markup — the charts</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — the charts</summary><div class="body"><div>
 <pre>&lt;figure class="chartwrap"&gt;
   &lt;figcaption class="chartcap"&gt;what the chart holds&lt;/figcaption&gt;
   &lt;table class="chart"&gt;…&lt;/table&gt;
@@ -382,7 +366,7 @@
 <p class="dim">The key is copied from the dictionary in its own notation: <code>-</code> a syllable break, <code>[x]</code> a letter written and not said, <code>ə</code> the schwa. The popup and the printed key use the same three conventions, so a student who has met one recognises the other.</p>
 </div>
 </div>
-<details class="reveal"><summary>Markup — the bar, the gloss and the key</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — the bar, the gloss and the key</summary><div class="body"><div>
 <pre>&lt;div class="bar-row"&gt;
   &lt;span&gt;same in Portuguese&lt;/span&gt;
   &lt;div class="bar"&gt;&lt;i style="--w:62%"&gt;&lt;/i&gt;&lt;/div&gt;
@@ -425,7 +409,7 @@
 <p class="dim">The player takes half the row by default, and the teaching that reads it sits beside it: the words a clip is there for are on the page with the clip, not after it. A recording that is a whole teaching block of its own keeps the song title as its <code>h3</code> and this credit as the <code>h4</code> directly above the player, with the lyrics at full width beneath.</p>
 </div>
 </div>
-<details class="reveal"><summary>Markup — the recording</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — the recording</summary><div class="body"><div>
 <pre>&lt;figure class="vz-play"&gt;
   &lt;audio class="vz-audio" src="assets/&lt;name&gt;.mp3" data-duration="35.87"
          controls preload="metadata"&gt;&lt;/audio&gt;
@@ -536,7 +520,7 @@
 <p class="dim">The ticks are a checklist the student walks the route with — eight places, each on the street its door faces — and nothing about them is saved; the gap that stores an answer belongs to the host, not to the drawing. <code>--map-w</code> caps the drawing's width; unset, it takes the host's.</p>
 </div>
 </div>
-<details class="reveal"><summary>Markup — the map</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — the map</summary><div class="body"><div>
 <pre>&lt;div class="vz-map"&gt;
   &lt;svg viewBox="0 0 360 240" width="100%" role="img"
        aria-label="everything the drawing shows, named"&gt;…&lt;/svg&gt;
@@ -572,7 +556,7 @@
 <p class="dim">Panels are inline <code>svg</code> here; a block takes four frames from <code>assets/</code> or the same drawing, and the caption names the source. A strip takes a third of a row: the drawings stay small because the sentence is what is being read, and the sentence under each panel is the model the student copies. Taking the sentences out and putting a <code>.gap</code> under each panel is the same strip as an activity — §5 has it.</p>
 </div>
 </div>
-<details class="reveal"><summary>Markup — the comic strip</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — the comic strip</summary><div class="body"><div>
 <pre>&lt;table class="chart"&gt;
   &lt;tbody&gt;
     &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" width="100%" role="img"
@@ -601,7 +585,7 @@
 <li><span class="who">Beto</span><span class="say">Three times. I keep thinking I forgot.</span></li>
 <li><span class="who">Ana</span><span class="say">Then photograph it next time.</span></li>
 </ol>
-<details class="reveal"><summary>Markup — a dialog nobody has to answer</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — a dialog nobody has to answer</summary><div class="body"><div>
 <pre>&lt;ol class="seq" data-mode="turns"&gt;
   &lt;li&gt;&lt;span class="who"&gt;Ana&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
   &lt;li&gt;&lt;span class="who"&gt;Beto&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
@@ -618,7 +602,7 @@
 <li><span class="who">Beto</span><span class="say">Three times. I <input class="gap" data-answer="have|'ve" style="--gap-w:4em"> already posted it.</span></li>
 </ol>
 <p class="dim">The control sits inside the turn and the block did not change to allow it: a control goes anywhere inside a structure.</p>
-<details class="reveal"><summary>Markup — a dialog with a gap</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — a dialog with a gap</summary><div class="body"><div>
 <pre>&lt;li&gt;&lt;span class="who"&gt;Beto&lt;/span&gt;
     &lt;span class="say"&gt;Three times. I
       &lt;input class="gap" data-answer="have|'ve" style="--gap-w:4em"&gt;
@@ -648,7 +632,7 @@
 <td><input class="gap" data-answer="past perfect" style="--gap-w:8em"></td></tr>
 </tbody></table>
 <p class="dim">A chart like this is an activity, so its block wears the activity look and reports itself when every row is answered.</p>
-<details class="reveal"><summary>Markup — a chart whose rows are answered</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — a chart whose rows are answered</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes" data-span="12"&gt;
   &lt;table class="chart" style="width:100%"&gt;
     &lt;tr&gt;&lt;td&gt;6:40&lt;/td&gt;&lt;td&gt;He clocked in.&lt;/td&gt;
@@ -670,7 +654,7 @@
 <li><p>The third form carries the action: <i>written</i>.</p></li>
 <li><p>Change the person and only the first word moves.</p></li>
 </ol>
-<details class="reveal"><summary>Markup — an order that is the lesson</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — an order that is the lesson</summary><div class="body"><div>
 <pre>&lt;ol class="seq" data-mode="numbered"&gt;
   &lt;li&gt;&lt;p&gt;&lt;b&gt;Have&lt;/b&gt; carries the person: &lt;i&gt;I have&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;
   &lt;li&gt;&lt;p&gt;The third form carries the action.&lt;/p&gt;&lt;/li&gt;
@@ -686,7 +670,7 @@
 <li><span class="at">2023</span><p>She stopped writing.</p></li>
 <li><span class="at">now</span><p>She has written three songs.</p></li>
 </ol>
-<details class="reveal"><summary>Markup — a date that is the lesson</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — a date that is the lesson</summary><div class="body"><div>
 <pre>&lt;ol class="seq" data-mode="timeline"&gt;
   &lt;li&gt;&lt;span class="at"&gt;2022&lt;/span&gt;&lt;p&gt;She wrote three songs.&lt;/p&gt;&lt;/li&gt;
   &lt;li&gt;&lt;span class="at"&gt;now&lt;/span&gt;&lt;p&gt;She has written three songs.&lt;/p&gt;&lt;/li&gt;
@@ -708,7 +692,7 @@
     <span><b style="font-size:.8em">6</b> never</span>
   </p>
   <p style="text-align:center"><input class="gap" style="--gap-w:100%" aria-label="the whole sentence"></p>
-<details class="reveal"><summary>Markup — chunks in the wrong order</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — chunks in the wrong order</summary><div class="body"><div>
 <pre>&lt;p class="chips" style="display:flex;gap:20px;
    justify-content:center;align-items:center"&gt;
   &lt;span&gt;&lt;b style="font-size:.8em"&gt;1&lt;/b&gt; she&lt;/span&gt;
@@ -736,7 +720,7 @@
   </tbody>
 </table>
   <p class="dim">The instruction is in the block, because a gap with no tense named has more than one right answer. One line per panel, in the order the panels are read, and the four panels in one row keep the drawings at the size they were drawn.</p>
-<details class="reveal"><summary>Markup — the strip as an activity</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — the strip as an activity</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes"&gt;
   &lt;h3&gt;the task the panels set&lt;/h3&gt;
   &lt;p&gt;Describe what is happening in each picture,
@@ -764,7 +748,7 @@
 <h3>Every answer is in</h3>
 <p>Beto <input class="gap" data-answer="has" style="--gap-w:5em"> already posted it.</p>
 <p class="dim">The block carries <code>data-state="done"</code>: the border and the halo turn green, and nothing else about the block changes.</p>
-<details class="reveal"><summary>Markup — the block that reports itself done</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — the block that reports itself done</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes" data-state="done"&gt;
   …the activity…
 &lt;/div&gt;</pre>
@@ -784,7 +768,7 @@
 </span>
 </label>
 <p class="dim">Two faces and no script: the checkbox holds the state, so the card stays turned and prints the first face.</p>
-<details class="reveal"><summary>Markup — a fold the student turns</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — a fold the student turns</summary><div class="body"><div>
 <pre>&lt;label class="flip" style="--flip-h:152px"&gt;
   &lt;input type="checkbox"&gt;
   &lt;span class="card3d"&gt;

@@ -1,5 +1,8 @@
 # PAST BATCHES
 
+## 2026-11-19 — the page says it is a reference, and shows one
+## [B1] - Open with a statement that every word inside a block is example content, open all 18 markup folds, reduce the POS example to the sentence it marks, and make 3F state how a row is read <"make it VERY clear to the builder that every word in every block that it is referencing is an example ... 1b needs to see the page with markup folds open ... delete the prose and the chart from below the POS example"> <capability-map.html: a float under the h1 says a block contributes its shape and never its words, its fold is the contract and the §3 table is the index; the POS block is the marked sentence, the same sentence under pos-labels, and the fold — the poschart and its prose are gone; the fold now says the marks go on any sentence the lesson wants marked; 3F gains "read a row as a decision: the first column is the occasion"; all details.reveal carry open>
+
 ## 2026-11-19 — the strip taught in §4, worked in §5
 ## [B1] - Keep the four panels in §4 with a written sentence under each, and put the gap version in §5 as an activity block <"that version of the comic strip is an activity - make a version which has text under each image for section 4 and move that one to section 5 as an activity"> <capability-map.html: §4 #comic is now "A strip, and the sentence under each" — the same four drawings at a third of the row with p captions (Ana waited at the stop in the rain / A bus came down the road / She ran to catch it / It pulled away without her) and a reveal that shows the p and the swap to a gap; §5 gains block G "Four panels, four sentences", striped, the four drawings in one row with a gap under each and an aria-label on every field, plus its own reveal>
 

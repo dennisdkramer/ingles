@@ -4,4 +4,4 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 ---
 
 # [CURRENT]
-## [B1] - Split the comic strip into a captioned version in §4 and the gap version as an activity in §5 <"that version of the comic strip is an activity - make a version which has text under each image for section 4 and move that one to section 5 as an activity"> <capability-map.html §4 #comic, §5 G>
+## [B1] - Mark the page as a reference of shapes, open the markup folds, strip the POS block to its example, and state how a mapping row is read <"make it VERY clear to the builder that every word in every block that it is referencing is an example ... 1b needs to see the page with markup folds open ... delete the prose and the chart from below the POS example"> <capability-map.html>
