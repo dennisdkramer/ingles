@@ -268,17 +268,6 @@
       <text transform="translate(270,236) rotate(-90)">Park Lane</text>
     </g>
   </svg>
-    <!-- one tick per place, on the drawing rather than on the frame: this overlay is exactly the svg's box -->
-    <div style="position:absolute;left:0;top:0;width:100%;aspect-ratio:360/240">
-    <label style="position:absolute;left:15%;top:25.8%;transform:translateX(-50%)"><input type="checkbox" aria-label="the station"> 1</label>
-    <label style="position:absolute;left:52.5%;top:25.8%;transform:translateX(-50%)"><input type="checkbox" aria-label="the café"> 2</label>
-    <label style="position:absolute;left:87.5%;top:25.8%;transform:translateX(-50%)"><input type="checkbox" aria-label="the park"> 3</label>
-    <label style="position:absolute;left:15%;top:59.2%;transform:translateX(-50%)"><input type="checkbox" aria-label="the bank"> 4</label>
-    <label style="position:absolute;left:52.5%;top:59.2%;transform:translateX(-50%)"><input type="checkbox" aria-label="the library"> 5</label>
-    <label style="position:absolute;left:87.5%;top:59.2%;transform:translateX(-50%)"><input type="checkbox" aria-label="the post office"> 6</label>
-    <label style="position:absolute;left:15%;top:92.2%;transform:translateX(-50%)"><input type="checkbox" aria-label="the bus stop"> 7</label>
-    <label style="position:absolute;left:52.5%;top:92.2%;transform:translateX(-50%)"><input type="checkbox" aria-label="the market"> 8</label>
-</div>
   </div>
 </div>
 <div id="comic">
@@ -431,19 +420,27 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;/div&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #map · the street map</summary><div class="body"><div>
-<pre>&lt;div class="vz-map viz"&gt;
+<pre>&lt;!-- as a display: the drawing, and nothing else --&gt;
+&lt;div class="vz-map viz"&gt;
   &lt;svg viewBox="0 0 360 240" width="100%" role="img"
        aria-label="everything the drawing shows, named"&gt;…&lt;/svg&gt;
-  &lt;!-- the ticks sit on the drawing, not on the frame: the overlay is the svg's own box --&gt;
-  &lt;div style="position:absolute;left:0;top:0;width:100%;aspect-ratio:360/240"&gt;
-    &lt;label style="position:absolute;left:15%;top:25.8%;
-                  transform:translateX(-50%)"&gt;
-      &lt;input type="checkbox" aria-label="the station"&gt; 1
-    &lt;/label&gt;
-    …one tick per place, in % of the drawing's box…
+&lt;/div&gt;</pre>
+<p class="dim">The frame keeps the viewBox's 3:2 box and the cell around it holds the rest; <code>--map-w</code> caps the drawing when it must be smaller than its cell, and <code>aria-label</code> names everything in the drawing, because the drawing is all a screen reader gets.</p>
+<pre>&lt;!-- as an activity: the same drawing, and one answerable question about it --&gt;
+&lt;div class="block" data-activity="mc"&gt;
+  &lt;div class="vz-map viz"&gt;…the same svg…&lt;/div&gt;
+  &lt;div class="qitem" data-a="c"&gt;
+    &lt;p class="qstem"&gt;You leave the station and walk east along High Street.
+      What is on the corner where the next street crosses?&lt;/p&gt;
+    &lt;div class="opts"&gt;
+      &lt;label&gt;&lt;input type="radio" name="map1" value="a"&gt; the bank&lt;/label&gt;
+      &lt;label&gt;&lt;input type="radio" name="map1" value="b"&gt; the park&lt;/label&gt;
+      &lt;label&gt;&lt;input type="radio" name="map1" value="c"&gt; the café&lt;/label&gt;
+      &lt;label&gt;&lt;input type="radio" name="map1" value="d"&gt; the market&lt;/label&gt;
+    &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</pre>
-<p class="dim">A tick is a checklist, never the answer; the route the student writes goes in a <code>.gap</code>. <code>aria-label</code> names the drawing. The border is drawn on the drawing, not on the cell: the frame keeps the viewBox's 3:2 box and the cell around it holds the rest. The overlay carries the same <code>aspect-ratio</code>, so the ticks hold their place however wide the cell grows. <code>--map-w</code> caps its width when the drawing must be smaller than its cell.</p>
+<p class="dim">The map is the stem, so the activity is a multiple-choice item: one prompt, one key, every option a place the drawing shows. It may ask for a position (<i>which place is across from the library?</i>), what the place is for (<i>where do you send a letter?</i>) or a route (<i>walk out of the station, turn right, and stop at the second corner — where are you?</i>) — versatile, and always one answer. Without a control it is a display, and the places it draws are the referent for whatever the prose asks.</p>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #comic · the comic strip</summary><div class="body"><div>
 <pre>&lt;table class="chart"&gt;
