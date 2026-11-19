@@ -874,10 +874,9 @@
   .content-area>*[data-rows="2"]{grid-row:span 2}
   .content-area>*[data-rows="3"]{grid-row:span 3}
   /* parallel items inside one block: one flex row, evenly spaced, never a second grid.
-     Its gap is wider than the grid's, and it opens with a hairline: a row of columns has no frame
-     between them to read as an edge. The line sits between the space above it and the row's own. */
+     Its gap is wider than the grid's, and the row carries its own opening space above and below. */
   .cols{display:flex;gap:var(--flex-gap,26px);align-items:flex-start;flex-wrap:wrap;
-        border-top:1px solid var(--line);padding-top:8px}
+        padding-top:8px}
   .cols>*{flex:1 1 var(--cw,220px);min-width:0}
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
