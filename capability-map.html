@@ -463,8 +463,8 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 <div class="block" data-look="stripes" data-span="12" id="flip">
 <h3>Cards face-down, one meaning at a time</h3>
-<p>One card per item the lesson has <b>already taught</b> — vocabulary, phrases, the words of an earlier section. The block shows the back of one card and the student picks the card it belongs to: the pick tints red or green, the card turns back on its own, and the next card comes after four seconds. <b>Nothing here is scored and no answer is saved</b>, so it trains and never tests: when a lesson carries one it is the last activity before the quiz, never the quiz.</p>
-<p class="flip-ask" aria-live="polite"><b>Which card means:</b> <span>…</span></p>
+<p>One card per item the lesson has <b>already taught</b> — vocabulary, phrases, the words of an earlier section. The block shows the back of one card and the student turns cards until they find the one it belongs to: a turn tints that card red when it is not the answer and green when it is, any number of cards may be turned in a round, and only the right one turns them all back and brings the next prompt four seconds later. <b>Nothing here is scored and no answer is saved</b>, so it trains and never tests: when a lesson carries one it is the last activity before the quiz, never the quiz.</p>
+<h4 class="flip-ask" style="text-align:center" aria-live="polite">…</h4>
 <div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
 <label class="flip" style="--flip-h:112px">
 <input type="checkbox">
@@ -526,7 +526,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <details class="reveal" open><summary>Markup — the cards, the prompt, and the pick</summary><div class="body"><div>
 <pre>&lt;div class="block" id="flip"&gt;
   &lt;p&gt;what the cards carry, and that this is the last activity before the quiz&lt;/p&gt;
-  &lt;p class="flip-ask" aria-live="polite"&gt;&lt;b&gt;Which card means:&lt;/b&gt; &lt;span&gt;…&lt;/span&gt;&lt;/p&gt;
+  &lt;h4 class="flip-ask" style="text-align:center" aria-live="polite"&gt;…&lt;/h4&gt;
   &lt;div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"&gt;
     &lt;label class="flip" style="--flip-h:112px"&gt;
       &lt;input type="checkbox"&gt;
@@ -540,25 +540,27 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;script&gt;…below, inside the same block…&lt;/script&gt;
 &lt;/div&gt;
 
-&lt;!-- the prompt shows one card's back; the pick that matches it tints green, any other red --&gt;
-&lt;!-- the card turns back and the next prompt comes after 4 s · --flip-h is the height both faces share --&gt;
-&lt;!-- the script turns the card itself (it cancels the label's own toggle and sets the box), so a click is never doubled --&gt;
+&lt;!-- the prompt is one card's back, in a centred h4, and it is the whole prompt · any number of cards may be turned in a round --&gt;
+&lt;!-- a turn tints red when it is not the answer and green when it is; only the right one turns every card back and brings the next prompt 4 s later --&gt;
+&lt;!-- the script turns the card itself (it cancels the label's own toggle and sets the box), so a click is never doubled · --flip-h is the height both faces share --&gt;
 &lt;!-- training only: no data-answer and no data-a in this block, so no engine marks it and it cannot be the quiz --&gt;</pre>
 </div></div></details>
 <script>
 (function(){
-var B=document.currentScript.closest('#flip'),A=B.querySelector('.flip-ask span'),
-C=[].slice.call(B.querySelectorAll('.flip')),P=[],T=-1,busy=0,
+var B=document.currentScript.closest('#flip'),A=B.querySelector('.flip-ask'),
+C=[].slice.call(B.querySelectorAll('.flip')),P=[],T=-1,done=0,
 M=C.map(function(c){return c.querySelector('.back').textContent.replace(/\s+/g,' ').trim();});
 function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
 function next(){if(!P.length)P=sh(C.map(function(_,i){return i;}));T=P.pop();A.textContent=M[T];}
+function clear(){C.forEach(function(c){c.querySelector('input').checked=false;c.querySelector('.back').style.background='';});done=0;}
 C.forEach(function(c,i){c.addEventListener('click',function(e){
 e.preventDefault();
-if(busy)return;
-busy=1;var inp=c.querySelector('input'),b=c.querySelector('.back');
-inp.checked=true;
-b.style.background='color-mix(in oklab, var('+(i===T?'--ok':'--err')+') 26%, var(--paper))';
-setTimeout(function(){b.style.background='';inp.checked=false;busy=0;next();},4000);
+if(done)return;
+c.querySelector('input').checked=true;
+c.querySelector('.back').style.background='color-mix(in oklab, var('+(i===T?'--ok':'--err')+') 26%, var(--paper))';
+if(i!==T)return;
+done=1;
+setTimeout(function(){clear();next();},4000);
 });});
 next();
 })();
