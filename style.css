@@ -94,6 +94,9 @@
   body{margin:0;min-width:1415px;background:var(--track-ground);color:var(--ink);
     font:var(--s0)/1.62 var(--serif);text-rendering:optimizeLegibility;text-align:justify}
   h1,h2,h3,h4{margin:0 0 .4em;text-wrap:balance;font-weight:700;line-height:1.18}
+  /* the body is justified for prose only: a heading is a label, and a label whose line is stretched
+     reads as a title set across a width it does not fill. The page title re-centres itself in #41 */
+  h1,h2,h3{text-align:left}
   h1{font-family:var(--playfair);font-size:var(--s4);letter-spacing:.14em;margin:8px 0 0}
   /* the section rule fades over 8px at each end; the 2px border stays in the box (transparent) so the
      heading's height and the flow under it do not change */
@@ -118,6 +121,14 @@
 
   h2{counter-reset:blk}
   h3{counter-increment:blk}
+  /* the section is numbered by the sheet too: one counter per content area, incremented by every <h2>,
+     so a section heading carries no number of its own and a margin note above it shifts nothing.
+     The notebook the shell appends is the page's chrome, not a lesson section, so it takes no number */
+  h2{counter-increment:sec}
+  h2::before{content:counter(sec) ". ";display:inline-block;padding-right:.45em;
+    font-family:var(--display);font-size:.74em;font-weight:700;color:var(--track-ink)}
+  .content-area>h2:has(+#feed){counter-increment:none}
+  .content-area>h2:has(+#feed)::before{content:none}
   /* inline-block keeps the lettered prefix out of the heading's underline: a decoration propagates to
      in-flow text but is not drawn across an inline-block, which is where the letter sits */
   h3::before{content:counter(blk,upper-alpha) ". ";color:var(--track-ink);padding-right:.5em;
@@ -871,7 +882,8 @@
      is a choice made by looking at its content, and the choice is written on the element: nothing is
      inferred in the browser and no packer runs. Vary: --col-gap, --row-gap, --section-gap */
   .content-area{display:grid;grid-template-columns:repeat(12,1fr);
-    column-gap:var(--col-gap,18px);row-gap:var(--row-gap,22px);align-items:stretch}
+    column-gap:var(--col-gap,18px);row-gap:var(--row-gap,22px);align-items:stretch;
+    counter-reset:sec}
   .content-area>*{grid-column:span 12;min-width:0;margin-block:0;width:auto}
   .content-area>*[data-span="3"]{grid-column:span 3}
   .content-area>*[data-span="4"]{grid-column:span 4}
@@ -1011,7 +1023,7 @@
   .block[data-structure="grid"] th:first-child{border-radius:var(--r1) 0 0 0}
   .block[data-structure="grid"] th:last-child{border-radius:0 var(--r1) 0 0}
   .block[data-structure="grid"] td{padding:9px 11px;border-bottom:1px solid var(--line-2);
-    height:var(--row-h,auto);vertical-align:top}
+    height:var(--row-h,auto);vertical-align:top;text-align:left}
   .block[data-structure="grid"] tbody tr:nth-child(even) td{
     background:color-mix(in oklab,var(--accent) 4%,transparent)}
   .block[data-structure="grid"] tbody tr:last-child td{border-bottom:0}
@@ -1105,6 +1117,10 @@
   details.reveal[open] .body{grid-template-rows:1fr}
   details.reveal .body>div{overflow:hidden;padding:0 12px}
   details.reveal[open] .body>div{padding:10px 12px}
+  /* a specimen is code, not a drawing: it wraps inside the reveal whatever width the block has, so a
+     three-span block can hold the markup it printed without the page growing a scrollbar */
+  details.reveal pre{margin:8px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;
+    font:400 12px/1.5 var(--mono);color:var(--ink-2);text-align:left}
 }
 
 /* #76 ENGINE — engine2.js writes label.opt.correct and .ans beside a typed field, and reads .qitem[data-a] on .opts. Vary: --ok (colour) */
@@ -1506,7 +1522,8 @@
   .vz-knob{position:absolute;top:50%;left:0;width:14px;height:14px;margin:-7px 0 0 -7px;
     border-radius:50%;background:var(--ink);pointer-events:none}
   .vz-lyrics{margin:0;padding:0;list-style:none;font-size:14px;line-height:1.55}
-  .vz-lyrics li{padding:3px 7px;border-radius:5px}
+  /* a lyric line is a line, not a list item with a paragraph's gap under it */
+  .vz-lyrics li{margin:0;padding:3px 7px;border-radius:5px}
   .vz-lyrics li[data-t]{cursor:pointer}
   .vz-lyrics li[data-t]:hover{background:#f3ece0}
   .vz-lyrics li.is-now{background:#fff8ea;color:var(--ink);font-weight:700;
