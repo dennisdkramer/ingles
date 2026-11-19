@@ -4,6 +4,8 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 ---
 
 # [CURRENT]
+## [B8] - Make the level and register of the *examples* a written contract, then rewrite kids 44 to meet it <"the prose that explains concepts and vocabulary does NOT need to be advance ... but the example phrases and activity content ABSOLUTELY MUST BE at the appropriate level. This lesson also fails to meet the register voice and use casual language and youth slang."> <PEDAGOGY-MAP.md: [LEVEL] gains "The explanation is not the material" (prose may be plain and sits at the band; every example, quote, dialog turn, gap answer, drill and quiz item must be at the band) and "The examples are also the register" (they carry the track's own words, never a neutral course voice); [CHECK] gains a read of three examples and three drill items *as the evidence*, not the prose. Then kids/lesson44 rebuilt: 6113 words, 48 blocks, 66 keyed gaps, multi-clause quoted utterances (perfect/continuous backshift, modal shifts, deictics), reporting verbs that change the claim, band-level answers, kids register throughout, locale tells ("mum", "pitch", "changing room") removed>
+
 ## [B7] - Make a lesson click resolve the file the server currently lists <"im seeing the new lesson tile but the contents of the page look the same as before"> <index.html: `go()` splits into `go()` (permission checks only) + `openLesson()`, which re-reads `lessons.json?t=<now>` with `cache:"no-store"` at click time and adopts it when it carries the track, then navigates to `lessonPath()+"?v="+Date.now()`; a failed request falls back to the painted list and the gate is signed unchanged; verified in jsdom that a stale painted list pointing at a deleted file still opens the current file>
 
 ---
