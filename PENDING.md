@@ -5,6 +5,9 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 
 # [CURRENT]
 ---
+## [B1] - Generate kids lesson 44 through the rewired PEDAGOGY-MAP <"as a test, generate kids lesson 44"> <kids/lesson44-<Title>.html: pass 1 content from KIDS-ROADMAP [44] + KIDS-REGISTER, pass 2 shapes only from capability-map.html, teach → train → quiz, then `npm run build:lessons`, `node qa/check.mjs --track=kids 44`, commit and push>
+---
+
 ## [B0] - Repair the malformed markup sample that swallows the page <"what did you just do that broke the formatting of capability-map.html"> <capability-map.html:38 — the reveal specimen escapes only its first `<`, so `<summary>` is parsed as a live element and never closes; after the fix `.content-area` has 30 top-level children and 5 direct-child `<h2>`s again, and `node qa/cmcheck.mjs` prints `h2 sections=5` with 0 failures>
 ---
 
