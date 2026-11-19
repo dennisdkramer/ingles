@@ -92,13 +92,13 @@
 <div class="block" data-look="tint" data-span="12">
 <h3>Register, and the one tint</h3>
 <p><b>Cooked</b> is what you say to a friend, <b>exhausted</b> to a teacher: the same fact, and the choice of word is the register. Teach it by putting the two side by side and naming the room each belongs to.</p>
-<p class="dim">The tint is that room's colour on the page, and the only thing the look is for. One tint per section: a second makes the first a decoration.</p>
+<p class="dim">The tint is that room's colour on the page. One tint per section: a second makes the first a decoration.</p>
 </div>
 
 <h2>Choosing a visual</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>A visual is chosen by the question it answers, never by its name. These four statements decide whether using it teaches or decorates.</p>
+<p>A visual is chosen by the question it answers, never by its name.</p>
 </div>
 
 <div class="block" data-span="12">
@@ -123,12 +123,12 @@
 <li>If it were removed, the student would lose the answer to the concept's question.</li>
 <li>The page still has one thing that is obviously the thing to look at.</li>
 </ol>
-<p>No ceilings: one visual may appear twenty times in a lesson and be wrong once in another. The failures are saturation (one visual repeated until it carries nothing) and monotony (every section through one shape).</p>
+<p>No ceiling on quantity: one visual can appear twenty times and be wrong once. The failures are saturation (one visual repeated until it carries nothing) and monotony (every section through one shape).</p>
 </div>
 
 <div class="block" data-look="tape" data-span="4" style="align-self:start">
 <h3>Cost is a demand</h3>
-<p>Every visual costs attention, space and a convention the reader must already have — sometimes a media file, sometimes a script. The cheapest visual is the one the sentence already carries.</p>
+<p>A visual costs attention and space, and sometimes a media file or a script. The cheapest one is the visual the sentence already carries.</p>
 </div>
 
 <div class="block" data-span="12">
@@ -161,7 +161,7 @@
 <h2>In-Block Features</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>Everything in this section is an in-block element: it can sit inside a block with the prose that reads it, with other elements, or be a block of its own at any span. The examples here are the in-block size. They come in two families.</p>
+<p>Each of these goes inside a block with the prose that reads it, or with other elements, or stands as a block of its own at any span; the examples here are the in-block size. They come in two families.</p>
 <p><b>A. Augment existing text</b> — the marks, the ruby lines, the card at a word and the timeline all attach to a sentence the lesson has already written. <b>B. Standalone visuals</b> — a chart, a list, a dialog, a drawing, a recording or a strip is a thing of its own, read by the sentence beside it.</p>
 <p><b>None of them is used without accompaniment.</b> Each is read by something — the sentence that explains it, a word list, the questions the student answers — in the same block or in the block next to it, and that holds when the element is the block's own subject. Nothing about an element changes when the block around it becomes an activity: an activity about word order uses the underline and the numbered list, and the same markup moves between the two.</p>
 </div>
@@ -304,8 +304,8 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </tbody>
 </table>
 </figure>
-<p>A chart sets parallel items side by side while the student compares them: comparison, or a vocabulary set too large for one sentence. It is not a recap of prose, and a page of charts is a page with one shape.</p>
-<p class="dim">Below three items a chart is a sentence with rules around it. A header earns its space only where a column would be ambiguous without one; where none needs a name the row collapses to a rule. A chart that stands alone takes a <code>figcaption</code>; a chart in a block takes one too, unless the block already names it in an <code>h4</code>.</p>
+<p>Put vocabulary, or a set of comparisons, in a chart when the lesson needs the items side by side.</p>
+<p class="dim">A header earns its space only where a column would be ambiguous without one; where none needs a name the row collapses to a rule. A chart that stands alone takes a <code>figcaption</code>; a chart in a block takes one too, unless the block already names it in an <code>h4</code>.</p>
 </div>
 <div id="chart-pair">
 <figure class="chartwrap">
@@ -329,8 +329,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 <div class="rows">
 <div id="label">
-<p><code>th.vlab</code> carries the family name, which side the rows beside it belong to, and the rule that separates the families is written here: <b>Regular</b> adds <i>-ed</i> and the base never moves, so the rows are evidence the rule holds; <b>Irregular</b> has a form of its own for each verb, so each is learned alone.</p>
-<p>The same label splits any family a lesson must separate — two conjugations, two registers, the words that follow the rule from the words that do not. A chart with no family to separate gets none.</p>
+<p><code>th.vlab</code> carries a family name for the rows beside it, and spends no column: the words stand outside the chart’s edge. Use it when a lesson separates two families — two conjugations, two registers, the rows that follow the rule from the rows that do not. A chart with no family to separate gets none.</p>
 <p class="dim">Anything that would have taken a third column is written here instead. Add the column and it stops being a label and becomes the bulk chart beside it.</p>
 </div>
 <div id="chart-split">
@@ -399,7 +398,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <li><p>The third word carries the action: <i>written</i>.</p></li>
 <li><p>Change the person and only the first word moves.</p></li>
 </ol>
-<p class="dim">When the order is the lesson, not a process the reader already knows. Unset <code>data-mode</code> gives one item per line.</p>
+<p class="dim">Use it for steps in order. Unset <code>data-mode</code> gives one item per line.</p>
 <details class="reveal" open><summary>Markup — a numbered list</summary><div class="body"><div>
 <pre>&lt;ol class="seq" data-mode="numbered"&gt;
   &lt;li&gt;&lt;p&gt;&lt;b&gt;Have&lt;/b&gt; carries the person: &lt;i&gt;I have&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;
@@ -413,7 +412,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <li><span class="at">2023</span><p>She stopped writing.</p></li>
 <li><span class="at">now</span><p>She has written three songs.</p></li>
 </ol>
-<p class="dim">When the dates themselves are the point. One <code>.at</code> per item; the horizontal timeline above draws one claim instead of listing events.</p>
+<p class="dim">Use it when the dates are the point, one <code>.at</code> per item. The horizontal timeline above draws one claim instead of listing events.</p>
 <details class="reveal" open><summary>Markup — a vertical timeline</summary><div class="body"><div>
 <pre>&lt;ol class="seq" data-mode="timeline"&gt;
   &lt;li&gt;&lt;span class="at"&gt;2022&lt;/span&gt;&lt;p&gt;She wrote three songs.&lt;/p&gt;&lt;/li&gt;
@@ -438,7 +437,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;li&gt;&lt;span class="who"&gt;Ana&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
   &lt;li&gt;&lt;span class="who"&gt;Beto&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
 &lt;/ol&gt;</pre>
-<p class="dim">For speech that is read, not worked. A control can sit inside a turn without the block changing shape.</p>
+<p class="dim">Use it for speech that is read rather than filled in. A control can sit inside a turn without the block changing shape.</p>
 </div></div></details>
 
 <div class="rows">
@@ -572,7 +571,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;/label&gt;
   …one tick per place, in % of the wrapper…
 &lt;/div&gt;</pre>
-<p class="dim">When the words are prepositions of place: <i>at</i> the station is a point, <i>in</i> the café is a container. The places are drawn, not listed — a name written beside a rectangle leaves the drawing unread — and the ticks are a checklist, never the answer: a route the student writes goes in a <code>.gap</code>. The wrapper hugs the drawing so the ticks stay on their places, <code>--map-w</code> caps it, and <code>aria-label</code> names it for a reader who cannot see it.</p>
+<p class="dim">Use it for prepositions of place: <i>at</i> the station is a point, <i>in</i> the café is a container. A tick is a checklist, never the answer — a route the student writes goes in a <code>.gap</code>. The wrapper hugs the drawing so the ticks, placed in % of it, stay on their places; <code>--map-w</code> caps the width and <code>aria-label</code> names the drawing.</p>
 </div></div></details>
 </div>
 </div>
@@ -634,12 +633,12 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <h2>Dialogs and activities</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>An activity is a block the student writes in. The dialog with blanks is the worked version of the dialog in §4, and it carries its instruction in the same block or the gap has no single answer.</p>
+<p>An activity is a block the student writes in, and it carries its own instruction in the block: a gap with no instruction has more than one right answer.</p>
 </div>
 
 <div class="block" data-span="12">
 <h3>The dialog, worked</h3>
-<p>Fill each gap with <b>have</b>, <b>has</b> or <b>had</b>. Without the instruction the gap has more than one right answer.</p>
+<p>Fill each gap with <b>have</b>, <b>has</b> or <b>had</b>.</p>
 <ol class="seq" data-mode="turns">
 <li><span class="who">Ana</span><span class="say">Did you post the letter?</span></li>
 <li><span class="who">Beto</span><span class="say">Three times. I <input class="gap" data-answer="have|'ve" style="--gap-w:4em"> already posted it.</span></li>
@@ -656,7 +655,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 <div class="block" data-look="stripes" data-span="12">
 <h3>A chart whose rows are answered</h3>
-<p>The comparison is the table and the answer is per row. A radio for one of a pair, a checkbox for several, a text field for a written answer — the cell decides, not the chart.</p>
+<p>Put the comparison in the table and the answer in a cell: a radio for one of a pair, a checkbox for several, a text field for a written answer.</p>
 <table class="chart center" style="width:100%">
 <caption>One event, three tellings</caption>
 <thead><tr><th>Time</th><th>What he did</th><th>Which is it?</th></tr></thead>
@@ -674,7 +673,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <tr><td>7:10</td><td>Nobody had told the office.</td>
 <td><input class="gap" data-answer="past perfect" style="--gap-w:8em"></td></tr>
 </tbody></table>
-<p class="dim">A radio for one of a pair, a checkbox for several, a text field for a written answer: the cell decides. The block wears the activity look and reports itself when every row is answered.</p>
+<p class="dim">What control a cell holds is the cell’s decision. The block wears the activity look and reports itself when every row is answered.</p>
 <details class="reveal" open><summary>Markup — a chart whose rows are answered</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes" data-span="12"&gt;
   &lt;table class="chart" style="width:100%"&gt;
@@ -686,7 +685,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
     &lt;tr&gt;…a checkbox row, a gap row…&lt;/tr&gt;
   &lt;/table&gt;
 &lt;/div&gt;</pre>
-<p class="dim">The comparison is the table and the answer is per row; the cell decides what control it holds.</p>
+<p class="dim">One row per comparison, one control per cell.</p>
 </div></div></details>
 </div>
 
@@ -713,7 +712,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;p style="text-align:center"&gt;
   &lt;input class="gap" style="--gap-w:100%" aria-label="the whole sentence"&gt;
 &lt;/p&gt;</pre>
-<p class="dim">Where the order of the words is the question and there is one right sentence: the numbered chunks are the material and the one wide gap under them is the answer, so the student writes the whole sentence. The numbers let a student name a chunk while asking about it; they are not a sequence to follow.</p>
+<p class="dim">Use it where the order is the question and there is one right sentence: the chunks are the material, the wide gap under them is the answer, and the numbers let a student name a chunk while asking about it; they are not a sequence to follow.</p>
 </div></div></details>
 </div>
 
