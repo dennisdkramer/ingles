@@ -421,6 +421,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;li&gt;&lt;span class="who"&gt;Beto&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
 &lt;/ol&gt;</pre>
 <p class="dim"><code>&lt;ol class="seq"></code> takes <code>data-mode</code>: <code>turns</code> (<code>.who</code> / <code>.say</code>), <code>numbered</code>, or <code>timeline</code> (<code>.at</code>); unset puts one item per line. <code>--seq-gap</code>, <code>--date-w</code> and <code>--rail-w</code> size it. A control can sit inside a turn without the block changing shape.</p>
+<p class="dim"><b><code>viz</code> is what draws the frame.</b> Three objects draw no frame of their own — the dialog, the player and the map — so each carries <code>viz</code>, which supplies the edge, the pad and the shade. A dialog standing in a section is therefore <code>&lt;ol class="seq viz"&gt;</code>, as above. The same list <b>inside</b> a block that already draws an edge is written without it (§5): a <code>seq</code> with neither a <code>viz</code> nor a surrounding block is a bare list of turns and will read as one.</p>
 </div></div></details>
 
 <div class="rows">
@@ -641,7 +642,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <li><span class="who">Ana</span><span class="say">Did you post the letter?</span></li>
 <li><span class="who">Beto</span><span class="say">Three times. I <input class="gap" data-answer="have|'ve" style="--gap-w:4em"> already posted it.</span></li>
 </ol>
-<p class="dim">The control sits inside the turn and the block does not change shape to allow it. <code>data-answer</code> is the key, alternatives separated by <code>|</code>; <code>--gap-w</code> is the width the answer needs.</p>
+<p class="dim">The control sits inside the turn and the block does not change shape to allow it. <code>data-answer</code> is the key, alternatives separated by <code>|</code>; <code>--gap-w</code> is the width the answer needs. <b>No <code>viz</code> on this list:</b> it sits inside a block and the block is the frame — adding <code>viz</code> here would draw a second edge inside the first.</p>
 <details class="reveal" open><summary>Markup — a dialog with a gap</summary><div class="body"><div>
 <pre>&lt;li&gt;&lt;span class="who"&gt;Beto&lt;/span&gt;
     &lt;span class="say"&gt;Three times. I
