@@ -5,6 +5,9 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 
 # [CURRENT]
 ---
+## [B6] - Fix the landing page hiding its own sign-in button <"it seems like i cant log in to the live site, can you check it out?"> <index.html: `showNeedGoogle()` no longer hides `#gbtn`/`#gtext` (it only adds the `#needg` fallback); `probeSession()`'s `isNotDisplayed()` branch keeps the button and logs the reason instead of calling the fallback, because One Tap not displaying is normal and `renderButton` is the only path to a credential; the GIS retry budget grows from 4s to 12s>
+---
+
 ## [B2] - Make the level/difficulty contract strong enough that lesson 44 cannot be written as a beginner page <"make sure that pedagogy-map.md definition of level and difficulty is MUCH stronger, because this is lesson 44 - an ADVANCED lesson, written at a beginner difficulty"> <PEDAGOGY-MAP.md: new [LEVEL] section — the number is both floor and ceiling, difficulty is what the student must do, four bands (1-10, 11-25, 26-40, 41-50) each naming what the page may assume and must demand, the lesson-44 case named as a defect, and a [CHECK] line that reads difficulty against the number>
 ---
 ## [B3] - Make width start at the minimum and be earned <"make sure that the default width is not a full width, it is the minimum width, things are expanded to full only if the content inside them forces them to be expanded or if there is no other block/content to pair it with"> <PEDAGOGY-MAP.md [1b] + capability-map.html §2: a block is written at the narrowest span its content reads in (4, or 3 for a block that is one short line) and widens only when its content cannot be read there or it is alone in its row; two short blocks share a row before either goes full; the markup specimen shows a 4+8 pair and a lone 12>

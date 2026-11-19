@@ -156,7 +156,7 @@ async function guest(){
 }
 function bootGoogle(wantPrompt){let tries=0;
  (function ready(){
-  if(!window.google){if(++tries<5){setTimeout(ready,800);return}log("ERRO: script Google não carregou.");if($("needg"))showNeedGoogle();return}
+  if(!window.google){if(++tries<15){setTimeout(ready,800);return}log("ERRO: script Google não carregou (accounts.google.com/gsi bloqueado?).");if($("needg"))showNeedGoogle();return}
   google.accounts.id.initialize({client_id:CLIENT_ID,callback:onLogin,auto_select:true});
   enableGoogleUI();
   if(wantPrompt)probeSession();
@@ -167,15 +167,20 @@ function enableGoogleUI(){
  if(!gbtnReady){google.accounts.id.renderButton($("gbtn"),{theme:"outline",size:"large",shape:"pill"});gbtnReady=true;}
  $("gbtn").hidden=false;$("gtext").hidden=false;$("needg").hidden=true;
 }
-function showNeedGoogle(){$("gbtn").hidden=true;$("gtext").hidden=true;$("needg").hidden=false;}
+/* THE FALLBACK IS ADDED, NEVER A REPLACEMENT. One Tap not displaying is the NORMAL case for a visitor who is
+   not signed into Google in this browser, or whose browser blocks third-party cookies — and the button that
+   renderButton() paints is the only control that can produce a credential. Hiding it here is what locked the
+   owner out: the page replaced its own sign-in button with "go to accounts.google.com and come back", which
+   cannot create a site session. The fallback stays for the one case that is real — the script never loaded. */
+function showNeedGoogle(){$("needg").hidden=false;}
 function probeSession(){
  try{
   google.accounts.id.prompt(m=>{
    if(m.isDisplayed()||m.isSkippedMoment()||m.isDismissedMoment()){enableGoogleUI();}
    else if(m.isNotDisplayed()){
     const r=m.getNotDisplayedReason();
-    if(r!=="opt_out_or_no_session"&&r!=="suppressed_by_user")log("Google indisponível ("+r+")");
-    showNeedGoogle();
+    if(r!=="opt_out_or_no_session"&&r!=="suppressed_by_user")log("Google One Tap não exibido ("+r+") — use o botão");
+    enableGoogleUI();   /* the prompt not showing is not a failure: the button is the way in */
    }
   });
  }catch(e){log("Google: "+e.message);showNeedGoogle();}

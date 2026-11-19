@@ -465,6 +465,25 @@ await new Promise(r => setTimeout(r, 40));
 ok('a visitor\'s click signs in instead of requesting', reqSent.length === reqBefore &&
   d.getElementById('welcome').classList.contains('attention'));
 
+/* THE SIGN-IN BUTTON SURVIVES ONE TAP SAYING NO (owner report 2026-11-19: "i cant log in to the live site").
+   One Tap not displaying is the NORMAL state for a visitor with no Google session or with third-party cookies
+   blocked, and the button renderButton() paints is the only control that can produce a credential. A prompt
+   result must therefore never remove it. */
+w.eval('window.google={accounts:{id:{initialize:function(){},renderButton:function(){},'
+  + 'prompt:function(cb){cb({isDisplayed:function(){return false},isSkippedMoment:function(){return false},'
+  + 'isDismissedMoment:function(){return false},isNotDisplayed:function(){return true},'
+  + 'getNotDisplayedReason:function(){return "opt_out_or_no_session"}})}}}}');
+w.eval('gbtnReady=false;document.getElementById("gbtn").hidden=true;probeSession()');
+ok('One Tap not displaying keeps the sign-in button on screen',
+  d.getElementById('gbtn').hidden === false && d.getElementById('gtext').hidden === false &&
+  d.getElementById('needg').hidden === true,
+  'gbtn.hidden=' + d.getElementById('gbtn').hidden + ' needg.hidden=' + d.getElementById('needg').hidden);
+
+w.eval('showNeedGoogle()');
+ok('the fallback text is added beside the button, never instead of it',
+  d.getElementById('needg').hidden === false && d.getElementById('gbtn').hidden === false,
+  'gbtn.hidden=' + d.getElementById('gbtn').hidden + ' needg.hidden=' + d.getElementById('needg').hidden);
+
 console.log('\nstudent landing index — jsdom render');
 out.forEach(r => console.log('  ' + (r.pass ? '✅ ' : '❌ ') + r.name + (r.extra ? '  «' + r.extra + '»' : '')));
 const fails = out.filter(r => !r.pass).length;
