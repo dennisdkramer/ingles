@@ -903,8 +903,22 @@
   .content-area>h2{margin-block:var(--section-gap,34px) 0}
 }
 
-/* #50 STRUCTURE — data-structure="prose|set|sequence|grid|pair|media" on .block; the hue is the track's. Unset: plain stack. Vary: --h (hue 0-360) */
+/* #50 STRUCTURE — data-structure="prose|set|sequence|grid|pair|media" on .block; the hue is the track's. Unset: plain stack.
+   .viz — a standalone visual that draws no frame of its own wears the chart's own surface, never a second .block.
+   Vary: --h (hue 0-360), --viz-pad (length, 10px 12px) */
 @layer structure{
+  /* one object on the page: the edge is a 2px outline and a short shadow, so the thing reads as drawn rather
+     than as another frame. The same recipe the chart spends, minus the padding a chart gets from its cells */
+  .viz{--viz-pad:10px 12px;background:var(--paper);border-radius:3px;padding:var(--viz-pad);
+    translate:0 3px;
+    box-shadow:0 0 0 2px color-mix(in oklab,var(--ink-2) 72%,var(--paper)),
+      -3px 3px 8px -2px color-mix(in oklab,var(--ink-2) 55%,transparent)}
+  /* a list is a grid with its own padding reset, so the frame's inset is restated for it */
+  .seq.viz{padding:var(--viz-pad)}
+  /* the map is drawn to its own edges and its ticks sit in % of that box: a padded frame moves every tick off
+     its place, so the map takes the outline and none of the padding */
+  .vz-map.viz{--viz-pad:0}
+
   .block{position:relative;
     --h:var(--track-h);--accent-h:var(--h);
     --accent:oklch(58% .14 var(--accent-h));

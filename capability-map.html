@@ -294,6 +294,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div>
 <div class="block" data-span="12">
 <h3>Standalone visuals</h3>
+<p>A visual that draws no frame of its own wears <code>.viz</code> — the bar, the three lists, the player and the map. A chart, a flash card and a strip carry their own frame and take nothing. <code>.viz</code> is never a second <code>.block</code>: the block is the teaching frame, so a frame inside it would be two edges of the same rank.</p>
 <div class="rows">
 <div id="chart">
 <h4>The chart — parallel items</h4>
@@ -380,14 +381,18 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <div class="rows">
 <div id="bar">
 <h4>A part of a whole</h4>
+<div class="viz">
 <div class="bar-row"><span>same in Portuguese</span><div class="bar"><i style="--w:62%"></i></div><b>62%</b></div>
 <div class="bar-row"><span>of those, false friends</span><div class="bar"><i style="--w:28%"></i></div><b>28%</b></div>
+</div>
 <p class="dim">The number is a sibling of the bar, never inside it, so it reads at any width and survives print.</p>
 <details class="reveal" open><summary>Markup — a bar with its number</summary><div class="body"><div>
-<pre>&lt;div class="bar-row"&gt;
+<pre>&lt;div class="viz"&gt;
+  &lt;div class="bar-row"&gt;
   &lt;span&gt;same in Portuguese&lt;/span&gt;
   &lt;div class="bar"&gt;&lt;i style="--w:62%"&gt;&lt;/i&gt;&lt;/div&gt;
   &lt;b&gt;62%&lt;/b&gt;
+  &lt;/div&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
 </div>
@@ -395,14 +400,14 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <div class="rows">
 <div id="list">
 <h4>The numbered list — an order</h4>
-<ol class="seq" data-mode="numbered">
+<ol class="seq viz" data-mode="numbered">
 <li><p><b>Have</b> carries the person: <i>I have</i>, <i>she has</i>.</p></li>
 <li><p>The third word carries the action: <i>written</i>.</p></li>
 <li><p>Change the person and only the first word moves.</p></li>
 </ol>
 <p class="dim">When the order is the lesson, not a process the reader already knows. Unset <code>data-mode</code> gives one item per line.</p>
 <details class="reveal" open><summary>Markup — a numbered list</summary><div class="body"><div>
-<pre>&lt;ol class="seq" data-mode="numbered"&gt;
+<pre>&lt;ol class="seq viz" data-mode="numbered"&gt;
   &lt;li&gt;&lt;p&gt;&lt;b&gt;Have&lt;/b&gt; carries the person: &lt;i&gt;I have&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;
   &lt;li&gt;&lt;p&gt;The third word carries the action.&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;</pre>
@@ -410,14 +415,14 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div>
 <div id="vline">
 <h4>The vertical timeline — dated events</h4>
-<ol class="seq" data-mode="timeline">
+<ol class="seq viz" data-mode="timeline">
 <li><span class="at">2022</span><p>She wrote three songs.</p></li>
 <li><span class="at">2023</span><p>She stopped writing.</p></li>
 <li><span class="at">now</span><p>She has written three songs.</p></li>
 </ol>
 <p class="dim">When the dates themselves are the point. One <code>.at</code> per item; the horizontal timeline above draws one claim instead of listing events.</p>
 <details class="reveal" open><summary>Markup — a vertical timeline</summary><div class="body"><div>
-<pre>&lt;ol class="seq" data-mode="timeline"&gt;
+<pre>&lt;ol class="seq viz" data-mode="timeline"&gt;
   &lt;li&gt;&lt;span class="at"&gt;2022&lt;/span&gt;&lt;p&gt;She wrote three songs.&lt;/p&gt;&lt;/li&gt;
   &lt;li&gt;&lt;span class="at"&gt;now&lt;/span&gt;&lt;p&gt;She has written three songs.&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;</pre>
@@ -428,7 +433,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <div class="rows">
 <div id="dialog">
 <h4>The dialog — one turn per speaker</h4>
-<ol class="seq" data-mode="turns">
+<ol class="seq viz" data-mode="turns">
 <li><span class="who">Ana</span><span class="say">Did you post the letter?</span></li>
 <li><span class="who">Beto</span><span class="say">Three times. I keep thinking I forgot.</span></li>
 <li><span class="who">Ana</span><span class="say">Then photograph it next time.</span></li>
@@ -442,7 +447,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div>
 </div>
 <details class="reveal" open><summary>Markup — a dialog</summary><div class="body"><div>
-<pre>&lt;ol class="seq" data-mode="turns"&gt;
+<pre>&lt;ol class="seq viz" data-mode="turns"&gt;
   &lt;li&gt;&lt;span class="who"&gt;Ana&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
   &lt;li&gt;&lt;span class="who"&gt;Beto&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
 &lt;/ol&gt;</pre>
@@ -453,7 +458,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <div id="audio">
 <h4>I Love You, California</h4>
 <p class="dim">Knickerbocker Quartet and Elizabeth Spencer — the credit is the last line above the player, and nothing else goes there.</p>
-<figure class="vz-play">
+<figure class="vz-play viz">
 <audio class="vz-audio" src="assets/california.mp3" data-duration="35.87" controls preload="metadata"></audio>
 <div class="vz-controls"><button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>
 <span class="vz-time" data-now>0:00</span>
@@ -467,7 +472,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </ol>
 </figure>
 <details class="reveal" open><summary>Markup — the recording</summary><div class="body"><div>
-<pre>&lt;figure class="vz-play"&gt;
+<pre>&lt;figure class="vz-play viz"&gt;
   &lt;audio class="vz-audio" src="assets/&lt;name&gt;.mp3" data-duration="35.87"
          controls preload="metadata"&gt;&lt;/audio&gt;
   &lt;div class="vz-controls"&gt;
@@ -494,7 +499,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   <!-- THE DRAWING IS THE BUILDER'S TO SIZE: `--map-w` on the wrapper caps its width (any CSS length); unset,
        it takes the host's width. A cap rather than a width, so no drawing can overflow its host. The wrapper
        hugs the drawing, so the ticks below, positioned in % of the wrapper, stay on their places. -->
-  <div class="vz-map" style="--map-w:560px">
+  <div class="vz-map viz" style="--map-w:560px">
   <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, eight places each drawn with its name on a sign — a station under a canopy with a clock, a café with a striped awning, a park with trees, a bank under a dollar sign, a library wall of books, a post office with a postbox, a bus shelter, and two market awnings">
     <rect x="0" y="0" width="360" height="240" style="fill:var(--paper)"></rect>
     <g style="fill:var(--tan);opacity:.45">
@@ -570,7 +575,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   </div>
   <p>Walk the route, ticking each place as you pass it.</p>
 <details class="reveal" open><summary>Markup — the map</summary><div class="body"><div>
-<pre>&lt;div class="vz-map"&gt;
+<pre>&lt;div class="vz-map viz"&gt;
   &lt;svg viewBox="0 0 360 240" width="100%" role="img"
        aria-label="everything the drawing shows, named"&gt;…&lt;/svg&gt;
   &lt;label style="position:absolute;left:15%;top:25.8%;
