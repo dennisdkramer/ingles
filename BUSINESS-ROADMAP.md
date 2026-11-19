@@ -1,7 +1,7 @@
 ## Lesson 1: Welcome - how this track works
 
-   - Focus: The track, the method, and the two ideas the whole course stands on.
-   - teaches: `foundation/method`, `sound/vowel-no-fixed`, `cognate/suffix-code`
+   - Focus: An introduction to how these lessons work and to English in general — the two ideas the whole course stands on: English vowels have no fixed sound, and the Portuguese suffix code already hands you thousands of English words.
+   - teaches: `sound/vowel-no-fixed`, `cognate/suffix-code`
    - Deepens: -
    - Uses: -
    - Vocabulary: meeting, report, project, client, deadline, budget, team, manager, email, schedule, review, task
@@ -13,7 +13,7 @@
    - Focus: The fixed order of an English sentence, and `be` as the first verb in it.
    - teaches: `clause/skeleton`, `be/linking-verb`, `pronoun/subject-object`
    - Deepens: -
-   - Uses: `cognate/suffix-code`, `foundation/method`
+   - Uses: `cognate/suffix-code`
    - Vocabulary: engineer, analyst, developer, designer, company, job, role, live, "work for", local, interesting, difficult
    - Examples: "I am an analyst." / "He is a developer." / "We work for a Brazilian company." / "They are here."
    - Real-world relevance: The first sentence every student needs at work is who they are and what they do; the second is who someone else is.

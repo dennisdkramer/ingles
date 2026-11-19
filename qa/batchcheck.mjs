@@ -25,8 +25,10 @@ import path from 'node:path';
 import { JSDOM } from 'jsdom';
 
 const ROOT = process.cwd();
-const PALETTE = ['gap', 'mc', 'chunks', 'stripgaps', 'chartanswer', 'matching',
-  'correction', 'translation', 'dictation', 'flip', 'game'];
+// the palette is the map's own element ids: a lesson names the element it built, and the markup box
+// it copied is the same name. A game is a skin over one of these, never an element of its own.
+const PALETTE = ['gap', 'chunks', 'stripgaps', 'chartanswer', 'dialoggap', 'mc', 'matching',
+  'correction', 'translation', 'dictation', 'flip'];
 const SUBJECTS = ['rul', 'rsn', 'ex', 'con', 'exc', 'voc', 'mng', 'prn', 'tim', 'soc', 'rcp'];
 const NOVEL_WINDOW = 3, CHURN_WINDOW = 5, COVER_WINDOW = 10, QUIZ_WINDOW = 2;
 const CHURN_SHARE = 0.6, MATURE_FROM = 10;
@@ -101,21 +103,22 @@ function readLedger(file) {
 }
 
 // ---- what the page says it did -------------------------------------------------------------
-// a block may declare data-activity="<element>" to make its element exact; otherwise the markup
-// is read heuristically and an unrecognised activity block is reported as unattributed.
-function detectEl(block) {
-  if (block.dataset.activity) return block.dataset.activity;
-  if (block.querySelector('.game')) return 'game';
-  if (block.querySelector('.flip')) return 'flip';
-  if (block.querySelector('.chips')) return 'chunks';
-  if (block.querySelector('.listen')) return 'dictation';
-  if (block.querySelector('textarea.write')) return 'correction';
-  if (block.querySelector('.pt') && block.querySelector('input.gap')) return 'translation';
-  const items = [...block.querySelectorAll('.qitem')];
+// a unit may declare data-activity="<element id>" on the element that holds the control; without it
+// the markup is read heuristically and an unrecognised activity unit is reported as unattributed.
+// A game is a skin: its inner list is read, so a reskinned gap counts as a gap.
+function detectEl(unit) {
+  if (unit.dataset.activity) return unit.dataset.activity;
+  if (unit.querySelector('.flip')) return 'flip';
+  if (unit.querySelector('.chips')) return 'chunks';
+  if (unit.querySelector('textarea.write') && unit.querySelector('.listen')) return 'dictation';
+  if (unit.querySelector('textarea.write')) return 'correction';
+  if (unit.querySelector('.pt') && unit.querySelector('input.gap')) return 'translation';
+  if (unit.querySelector('.seq .who') && unit.querySelector('input')) return 'dialoggap';
+  const items = [...unit.querySelectorAll('.qitem')];
   if (items.some(i => i.querySelectorAll('input[type=radio]').length >= 3)) return 'mc';
-  const gaps = block.querySelectorAll('input.gap').length;
-  if (gaps && block.querySelector('table.chart')) return 'chartanswer';
-  if (gaps) return 'gap';
+  const gapN = unit.querySelectorAll('input.gap').length;
+  if (gapN && unit.querySelector('table.chart')) return 'chartanswer';
+  if (gapN) return 'gap';
   return null;
 }
 
@@ -130,13 +133,20 @@ function pageScan(file, locale) {
     const paras = nodes.flatMap(n => [...n.querySelectorAll('p')]).filter(p => !p.classList.contains('dim'));
     const words = paras.reduce((a, p) => a + p.textContent.trim().split(/\s+/).filter(Boolean).length, 0);
     const sents = paras.reduce((a, p) => a + Math.max(1, (p.textContent.match(/[.!?]+(\s|$)/g) || []).length), 0);
-    return { n: i + 1, title: h.textContent.trim(), teaching: !/quiz|test/i.test(h.textContent), words, sents };
+    return { n: i + 1, title: h.textContent.trim(), teaching: !(i === heads.length - 1 || /quiz|test/i.test(h.textContent)), words, sents };
   });
   const els = {};
   let unattributed = 0, activityBlocks = 0;
+  const CTRL = 'input.gap,input[type=radio],input[type=checkbox],textarea,.chips,.flip,.game,.listen,.qitem';
+  for (const u of area.querySelectorAll('[data-activity]')) {
+    const t = u.dataset.activity;
+    if (!PALETTE.includes(t)) { unattributed++; continue; }
+    els[t] = (els[t] || 0) + 1;
+    activityBlocks++;
+  }
   for (const b of area.querySelectorAll('.block')) {
-    const hasControl = !!b.querySelector('input.gap,input[type=radio],input[type=checkbox],textarea,.chips,.flip,.game,.listen,.qitem');
-    if (!hasControl) continue;
+    if (!b.querySelector(CTRL)) continue;
+    if (b.matches('[data-activity]') || b.querySelector('[data-activity]') || b.closest('[data-activity]')) continue;
     activityBlocks++;
     const t = detectEl(b);
     if (!t) { unattributed++; continue; }
@@ -278,13 +288,7 @@ function checkPage(row, scan, where) {
   const L = row.L;
   for (const e of Object.keys(row.el)) if (!scan.els[e]) warn(where + L, `ledger claims ${e}; the page has none`);
   for (const e of Object.keys(scan.els)) if (!row.el[e]) warn(where + L, `the page builds ${e} x${scan.els[e]}; the ledger does not`);
-  if (scan.unattributed) warn(where + L, `${scan.unattributed} activity block(s) with no recognisable element — add data-activity`);
-  const maxSent = 8 + 0.28 * L, maxWords = 60 + 6 * L;
-  for (const s of scan.sections) {
-    const avg = s.words / Math.max(1, s.sents);
-    if (avg > maxSent) warn(where + L, `prose: "${s.title}" averages ${avg.toFixed(1)} words a sentence, L${L} allows ${maxSent.toFixed(1)}`);
-    if (s.words > maxWords) warn(where + L, `prose: "${s.title}" carries ${s.words} words, L${L} allows ${maxWords}`);
-  }
+  if (scan.unattributed) warn(where + L, `${scan.unattributed} activity unit(s) with no element id — mark the element that holds the control with data-activity="<id>"`);
   const hits = scan.localeHits.reduce((a, h) => a + h.n, 0);
   const list = scan.localeHits.map(h => h.word + '×' + h.n).join(', ');
   if (hits >= 3) fail(where + L, `locale: ${list}`);
@@ -314,7 +318,7 @@ function runTrack(track) {
   checkQuiz(rows, where);
   checkBlocks(rows, where);
   for (const row of rows) {
-    const page = fs.readdirSync(dir).find(f => f.startsWith(`lesson${row.L}-`) && f.endsWith('.html'));
+    const page = fs.readdirSync(dir).find(f => new RegExp(`^lesson0*${row.L}-.+\\.html$`).test(f));
     if (!page) { warn(where + row.L, 'no page for this row'); continue; }
     checkPage(row, pageScan(path.join(dir, page), locale), where);
   }

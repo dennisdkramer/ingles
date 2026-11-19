@@ -432,11 +432,11 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;div class="qitem" data-a="c"&gt;
     &lt;p class="qstem"&gt;You leave the station and walk east along High Street.
       What is on the corner where the next street crosses?&lt;/p&gt;
-    &lt;div class="opts"&gt;
-      &lt;label&gt;&lt;input type="radio" name="map1" value="a"&gt; the bank&lt;/label&gt;
-      &lt;label&gt;&lt;input type="radio" name="map1" value="b"&gt; the park&lt;/label&gt;
-      &lt;label&gt;&lt;input type="radio" name="map1" value="c"&gt; the café&lt;/label&gt;
-      &lt;label&gt;&lt;input type="radio" name="map1" value="d"&gt; the market&lt;/label&gt;
+    &lt;div class="qopts"&gt;
+      &lt;label class="opt"&gt;&lt;input type="radio" name="map1" value="a"&gt;&lt;span&gt;the bank&lt;/span&gt;&lt;/label&gt;
+      &lt;label class="opt"&gt;&lt;input type="radio" name="map1" value="b"&gt;&lt;span&gt;the park&lt;/span&gt;&lt;/label&gt;
+      &lt;label class="opt"&gt;&lt;input type="radio" name="map1" value="c"&gt;&lt;span&gt;the café&lt;/span&gt;&lt;/label&gt;
+      &lt;label class="opt"&gt;&lt;input type="radio" name="map1" value="d"&gt;&lt;span&gt;the market&lt;/span&gt;&lt;/label&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</pre>
@@ -493,7 +493,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 <h2>Activities</h2>
 
-<div class="block" data-look="stripes" data-span="12" id="flip">
+<div class="block" data-look="stripes" data-span="12" id="flip" data-activity="flip">
 <h3>Training</h3>
 <p>One card per item the lesson has <b>already taught</b> — vocabulary, phrases, the words of an earlier section. The block shows the back of one card and the student turns cards until they find the one it belongs to: a turn tints that card red when it is not the answer and green when it is, any number of cards may be turned in a round, and only the right one turns them all back and brings the next prompt four seconds later. <b>Nothing here is scored and no answer is saved</b>, so it trains and never tests: when a lesson carries one it is the last activity before the quiz, never the quiz.</p>
 <h4 class="flip-ask" style="text-align:center;padding-top:10px" aria-live="polite">…</h4>
@@ -584,13 +584,13 @@ next();
 <p>Each of these can stand as a block of its own or sit inside a block with the prose, the chart or the drawing it accompanies; every row below is the in-block size.</p>
 
 <div class="rows">
-<div>
+<div id="dialoggap" data-activity="dialoggap">
 <ol class="seq viz" data-mode="turns">
 <li><span class="who">Jess</span><span class="say">Did you post the letter?</span></li>
 <li><span class="who">Mike</span><span class="say">Three times. I <input class="gap" data-answer="have|'ve" style="--gap-w:4em"> already posted it.</span></li>
 </ol>
 </div>
-<div>
+<div id="chartanswer" data-activity="chartanswer">
 <figure class="chartwrap">
 <table class="chart center">
 <thead><tr><th>Time</th><th>What he did</th><th>Which is it?</th></tr></thead>
@@ -613,7 +613,7 @@ next();
 </div>
 
 <div class="rows">
-<div id="chunks">
+<div id="chunks" data-activity="chunks">
   <p>Unscramble the sentences:</p>
   <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px">
     <span><b style="font-size:.8em">1</b> she</span>
@@ -634,7 +634,7 @@ next();
   </p>
   <p style="text-align:center"><input class="gap" style="--gap-w:100%"></p>
 </div>
-<div id="stripgaps">
+<div id="stripgaps" data-activity="stripgaps">
   <p>Describe what is happening in each picture, using the <b>past simple</b>.</p>
 <table class="chart">
   <tbody>
@@ -651,17 +651,21 @@ next();
 </div>
 
 <div class="rows">
-<div>
+<div id="gap" data-activity="gap">
+<p class="dim">Fill in the word you hear.</p>
+<p>I <input class="gap" data-answer="clock" style="--gap-w:5em"> in at six every morning.</p>
+</div>
+<div id="correction" data-activity="correction">
 <p class="dim">One word is wrong. Write the sentence again.</p>
 <p>He <b>have</b> clocked in early.</p>
 <textarea class="write" rows="2" data-answer="He has clocked in early.|He's clocked in early." placeholder="the sentence, corrected"></textarea>
 </div>
-<div>
+<div id="translation" data-activity="translation">
 <p class="dim">Say it in English.</p>
 <p class="pt">Ele já tinha saído quando eu cheguei.</p>
 <input class="gap" data-answer="He had already left when I got there|He had already left when I arrived" style="--gap-w:100%">
 </div>
-<div>
+<div id="dictation" data-activity="dictation">
 <p class="dim">Listen, then write what you hear.</p>
 <p><button class="listen" type="button" data-say="I clocked in at six forty.">▶</button></p>
 <textarea class="write" rows="2" data-answer="I clocked in at six forty." placeholder="what you hear"></textarea>
@@ -670,7 +674,7 @@ next();
 </div>
 
 <div class="rows">
-<div class="block" data-look="stripes">
+<div class="block" data-look="stripes" id="mc" data-activity="mc">
 <h3>Multiple choice</h3>
 <p>Choose the answer that fits the line.</p>
 <div class="rows">
@@ -694,7 +698,7 @@ next();
 </div>
 </div>
 </div>
-<div class="block" data-look="stripes">
+<div class="block" data-look="stripes" id="matching" data-activity="matching">
 <h3>Matching</h3>
 <p>Write the letter of the meaning beside each phrase. One letter is left over.</p>
 <div class="rows">
@@ -767,7 +771,7 @@ next();
 &lt;!-- the script turns the card itself (it cancels the label's own toggle and sets the box), so a click is never doubled · --flip-h is the height both faces share --&gt;
 &lt;!-- training only: no data-answer and no data-a in this block, so no engine marks it and it cannot be the quiz --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — a dialog with a gap</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — #dialoggap · a dialog with a gap</summary><div class="body"><div>
 <pre>&lt;li&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;
     &lt;span class="say"&gt;Three times. I
       &lt;input class="gap" data-answer="have|'ve" style="--gap-w:4em"&gt;
@@ -776,7 +780,7 @@ next();
 &lt;!-- an item and the chart beside it: one .rows, each in a cell of its own — neither cell carries a size,
      the row gives them equal shares, and the chart centres in the half it was given --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — a chart whose rows are answered</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — #chartanswer · a chart whose rows are answered</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes" data-span="12"&gt;
   &lt;table class="chart"&gt;
     &lt;tr&gt;&lt;td&gt;6:40&lt;/td&gt;&lt;td&gt;He clocked in.&lt;/td&gt;
@@ -789,7 +793,7 @@ next();
   &lt;!-- one example of each control type is shown — an activity may mix them or use a single type, as its content needs --&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — multiple choice</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — #mc · four options, one answer</summary><div class="body"><div>
 <pre>&lt;div class="qitem" data-a="b"&gt;
   &lt;p class="qstem"&gt;the line the student reads&lt;/p&gt;
   &lt;div class="qopts"&gt;
@@ -802,7 +806,7 @@ next();
 &lt;!-- data-a on the .qitem is the key and matches the value of the right input · one .qitem per item --&gt;
 &lt;!-- a set of items gets its own name per item (mc1, mc2), so two items never share one radio group --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — matching</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — #matching · a pool of meanings</summary><div class="body"><div>
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;
     &lt;figure class="chartwrap"&gt;&lt;table class="chart"&gt;
@@ -818,7 +822,7 @@ next();
 &lt;!-- one meaning more than there are items, so the last answer cannot be reached by elimination --&gt;
 &lt;!-- each .gap keys the letter it expects; engine2 marks them on Complete --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — correction</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — #correction · one word wrong</summary><div class="body"><div>
 <pre>&lt;p&gt;He &lt;b&gt;have&lt;/b&gt; clocked in early.&lt;/p&gt;
 &lt;textarea class="write" rows="2"
           data-answer="He has clocked in early.|He's clocked in early."
@@ -827,13 +831,13 @@ next();
 &lt;!-- the wrong word is marked in the line; the field asks for the whole sentence, so it is .write and not a gap --&gt;
 &lt;!-- data-answer takes the accepted forms separated by | · the placeholder is what makes the field read as filled --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — translation</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — #translation · say it in English</summary><div class="body"><div>
 <pre>&lt;p class="pt"&gt;the sentence in Portuguese&lt;/p&gt;
 &lt;input class="gap" style="--gap-w:100%" data-answer="the English|another accepted form"&gt;
 
 &lt;!-- .pt is the Portuguese utility · the answer is produced from meaning, never copied from the line above --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — dictation</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — #dictation · listen, then write</summary><div class="body"><div>
 <pre>&lt;button class="listen" type="button"
         data-say="I clocked in at six forty."&gt;▶&lt;/button&gt;
 &lt;textarea class="write" rows="2" data-answer="I clocked in at six forty."
@@ -841,6 +845,15 @@ next();
 
 &lt;!-- .listen is wired by engine2 and speaks its data-say text, so dictation needs no recording --&gt;
 &lt;!-- with a .vz-play player in the block instead, the same field is the dictation --&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #gap · one word in a sentence</summary><div class="body"><div>
+<pre>&lt;div id="gap" data-activity="gap"&gt;
+  &lt;p class="dim"&gt;the instruction&lt;/p&gt;
+  &lt;p&gt;I &lt;input class="gap" data-answer="clock" style="--gap-w:5em"&gt; in at six.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;!-- data-answer keys it, | between alternatives · --gap-w is the width the answer needs --&gt;
+&lt;!-- data-activity carries the element's own id: it is how the ledger and the page agree --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #chunks · chunks in the wrong order</summary><div class="body"><div>
 <pre>&lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
@@ -881,7 +894,7 @@ next();
 <h2>Games</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p><b>Don’t add a game just to have one.</b> A game is a flavour element: it is used occasionally, and only where it fits a particular activity well enough that the activity would be worse without it. A set of items that trains fine as a list stays a list.</p>
+<p><b>Don’t add a game just to have one.</b> A game is a skin over an activity the lesson already wanted: the activity is chosen first and the game is how it is presented, so a reskinned game is that element in the ledger and never an element of its own. Nothing counts a game and nothing requires one. A game is a flavour element: it is used occasionally, and only where it fits a particular activity well enough that the activity would be worse without it. A set of items that trains fine as a list stays a list.</p>
 <p class="dim">A <code>.game</code> draws its own edge, so it stands at page level and is never put inside a <code>.block</code>. Every game reads the same content — <code>.game-list &gt; .qitem</code>, each with a <code>.qstem</code> and radio options, <code>data-a</code> marking the right one — so that list is what prints and what the student answers if the script never runs; <code>data-game</code> chooses only the presentation, never the content. A game in a quiz section carries <code>data-retry="0"</code>; a training game carries nothing.</p>
 </div>
 
