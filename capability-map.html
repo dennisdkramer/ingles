@@ -47,18 +47,13 @@
 <thead><tr><th>Concept</th><th>Visual</th></tr></thead>
 <tbody>
 <tr><td>word order and the jobs inside a sentence</td><td><a href="#pos">parts-of-speech marking</a></td></tr>
-<tr><td>how two clauses meet</td><td><a href="#pos">the fenced join</a></td></tr>
-<tr><td>who receives what</td><td><a href="#pos">the recipient and its arrow</a></td></tr>
-<tr><td>a tense, and where <i>now</i> falls</td><td><a href="#axis">the timeline</a></td></tr>
-<tr><td>who says what, and in what order</td><td><a href="#dialog">the dialog</a></td></tr>
-<tr><td>Vocabulary - verb tenses, translation, definition, etc</td><td><a href="#chart">a chart</a>, <a href="#chart-split">a split chart</a></td></tr>
-<tr><td>a word the sentence cannot explain in passing</td><td><a href="#gloss">a card at the word</a></td></tr>
+<tr><td>teach english use of indirect object</td><td><a href="#recipient">the recipient and its arrow</a></td></tr>
+<tr><td>teach verb tenses - timelines anchored to phrases</td><td><a href="#axis">the timeline</a></td></tr>
+<tr><td>chart for bulk vocabulary, definitions/translations/etc</td><td><a href="#chart">a chart</a></td></tr>
+<tr><td>standout note for special case words/phrases</td><td><a href="#gloss">a card at the word</a></td></tr>
 <tr><td>how one word is said</td><td><a href="#key-sound">the pronunciation key, above the word</a></td></tr>
-<tr><td>real speech in context</td><td><a href="#audio">the player</a></td></tr>
+<tr><td>include music w/ relevant lyrics - script fetch &amp; audio player</td><td><a href="#audio">the player</a></td></tr>
 <tr><td>locations, directions, relative positions</td><td><a href="#map">the street map</a></td></tr>
-<tr><td>a sequence of events</td><td><a href="#comic">the comic strip</a>, <a href="#vline">the vertical timeline</a></td></tr>
-<tr><td>something the student must recall</td><td><a href="#flip">the flash card</a></td></tr>
-<tr><td>the order of the words is the question</td><td><a href="#chunks">the chunks and one wide gap</a></td></tr>
 <tr><td>the student writes the sentence a panel shows</td><td><a href="#stripgaps">the strip with a gap under each panel</a></td></tr>
 </tbody>
 </table>
@@ -337,7 +332,8 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
       <text transform="translate(270,236) rotate(-90)">Park Lane</text>
     </g>
   </svg>
-    <!-- one tick per place, centred under it, in % of the wrapper -->
+    <!-- one tick per place, on the drawing rather than on the frame: this overlay is exactly the svg's box -->
+    <div style="position:absolute;left:0;top:0;width:100%;aspect-ratio:360/240">
     <label style="position:absolute;left:15%;top:25.8%;transform:translateX(-50%)"><input type="checkbox" aria-label="the station"> 1</label>
     <label style="position:absolute;left:52.5%;top:25.8%;transform:translateX(-50%)"><input type="checkbox" aria-label="the café"> 2</label>
     <label style="position:absolute;left:87.5%;top:25.8%;transform:translateX(-50%)"><input type="checkbox" aria-label="the park"> 3</label>
@@ -346,19 +342,23 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
     <label style="position:absolute;left:87.5%;top:59.2%;transform:translateX(-50%)"><input type="checkbox" aria-label="the post office"> 6</label>
     <label style="position:absolute;left:15%;top:92.2%;transform:translateX(-50%)"><input type="checkbox" aria-label="the bus stop"> 7</label>
     <label style="position:absolute;left:52.5%;top:92.2%;transform:translateX(-50%)"><input type="checkbox" aria-label="the market"> 8</label>
+</div>
   </div>
   <p>Walk the route, ticking each place as you pass it.</p>
 <details class="reveal" open><summary>Markup — the map</summary><div class="body"><div>
 <pre>&lt;div class="vz-map viz"&gt;
   &lt;svg viewBox="0 0 360 240" width="100%" role="img"
        aria-label="everything the drawing shows, named"&gt;…&lt;/svg&gt;
-  &lt;label style="position:absolute;left:15%;top:25.8%;
-                transform:translateX(-50%)"&gt;
-    &lt;input type="checkbox" aria-label="the station"&gt; 1
-  &lt;/label&gt;
-  …one tick per place, in % of the wrapper…
+  &lt;!-- the ticks sit on the drawing, not on the frame: the overlay is the svg's own box --&gt;
+  &lt;div style="position:absolute;left:0;top:0;width:100%;aspect-ratio:360/240"&gt;
+    &lt;label style="position:absolute;left:15%;top:25.8%;
+                  transform:translateX(-50%)"&gt;
+      &lt;input type="checkbox" aria-label="the station"&gt; 1
+    &lt;/label&gt;
+    …one tick per place, in % of the drawing's box…
+  &lt;/div&gt;
 &lt;/div&gt;</pre>
-<p class="dim">A tick is a checklist, never the answer; the route the student writes goes in a <code>.gap</code>. <code>aria-label</code> names the drawing; <code>--map-w</code> caps its width when the drawing must be smaller than its cell.</p>
+<p class="dim">A tick is a checklist, never the answer; the route the student writes goes in a <code>.gap</code>. <code>aria-label</code> names the drawing. The overlay carries the viewBox's <code>aspect-ratio</code>, so the ticks hold their place however tall the frame around the drawing becomes; <code>--map-w</code> caps its width when the drawing must be smaller than its cell.</p>
 </div></div></details>
 </div>
 <div id="comic">
@@ -464,7 +464,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <div class="block" data-look="stripes" data-span="12" id="flip">
 <h3>Cards face-down, one meaning at a time</h3>
 <p>One card per item the lesson has <b>already taught</b> — vocabulary, phrases, the words of an earlier section. The block shows the back of one card and the student turns cards until they find the one it belongs to: a turn tints that card red when it is not the answer and green when it is, any number of cards may be turned in a round, and only the right one turns them all back and brings the next prompt four seconds later. <b>Nothing here is scored and no answer is saved</b>, so it trains and never tests: when a lesson carries one it is the last activity before the quiz, never the quiz.</p>
-<h4 class="flip-ask" style="text-align:center" aria-live="polite">…</h4>
+<h4 class="flip-ask" style="text-align:center;padding-top:10px" aria-live="polite">…</h4>
 <div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
 <label class="flip" style="--flip-h:112px">
 <input type="checkbox">
@@ -526,7 +526,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <details class="reveal" open><summary>Markup — the cards, the prompt, and the pick</summary><div class="body"><div>
 <pre>&lt;div class="block" id="flip"&gt;
   &lt;p&gt;what the cards carry, and that this is the last activity before the quiz&lt;/p&gt;
-  &lt;h4 class="flip-ask" style="text-align:center" aria-live="polite"&gt;…&lt;/h4&gt;
+  &lt;h4 class="flip-ask" style="text-align:center;padding-top:10px" aria-live="polite"&gt;…&lt;/h4&gt;
   &lt;div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"&gt;
     &lt;label class="flip" style="--flip-h:112px"&gt;
       &lt;input type="checkbox"&gt;
@@ -628,7 +628,7 @@ next();
     <span><b style="font-size:.8em">5</b> told</span>
     <span><b style="font-size:.8em">6</b> never</span>
   </p>
-  <p style="text-align:center"><input class="gap" style="--gap-w:100%" aria-label="the whole sentence"></p>
+  <p style="text-align:center;margin-top:auto"><input class="gap" style="--gap-w:100%" aria-label="the whole sentence"></p>
 <details class="reveal" open><summary>Markup — chunks in the wrong order</summary><div class="body"><div>
 <pre>&lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
    justify-content:center;align-items:center"&gt;
@@ -636,7 +636,7 @@ next();
   &lt;span&gt;&lt;b style="font-size:.8em"&gt;2&lt;/b&gt; that&lt;/span&gt;
   …
 &lt;/p&gt;
-&lt;p style="text-align:center"&gt;
+&lt;p style="text-align:center;margin-top:auto"&gt;
   &lt;input class="gap" style="--gap-w:100%" aria-label="the whole sentence"&gt;
 &lt;/p&gt;</pre>
 </div></div></details>
