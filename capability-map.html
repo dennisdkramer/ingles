@@ -69,37 +69,37 @@
 <div class="block" data-span="12">
 <h3>Augment existing text</h3>
 <p>The marks, the ruby lines, the card at a word and the timeline attach to a sentence the lesson already wrote.</p>
-<div class="rows">
-<div>
+<div class="rows" style="justify-content:space-between">
+<div style="flex:0 1 auto;justify-content:center">
 <p class="pos" id="pos"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p>
 </div>
-<div id="key-job">
+<div id="key-job" style="flex:0 1 auto;justify-content:center">
 <p class="pos"><span class="pos-n pos-subj"><ruby>She<rp>(</rp><rt>N</rt><rp>)</rp></ruby></span> <span class="pos-m"><ruby>has<rp>(</rp><rt>M</rt><rp>)</rp></ruby></span> <span class="pos-v"><ruby>finished<rp>(</rp><rt>V</rt><rp>)</rp></ruby></span> <span class="pos-adj"><ruby>the<rp>(</rp><rt>ADJ</rt><rp>)</rp></ruby></span> <span class="pos-n pos-o"><ruby>report<rp>(</rp><rt>DO</rt><rp>)</rp></ruby></span>.</p>
 <p class="dim">The <code>rt</code> carries the role the tagger gives the word: N · V · M · DO · IO · ADJ · ADV · PREP.</p>
 </div>
 </div>
 
-<div class="rows">
-<div id="recipient">
+<div class="rows" style="justify-content:space-between">
+<div id="recipient" style="flex:0 1 auto;justify-content:center">
 <p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-i" data-side="right">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span> <span class="pos-adj">the</span> <span class="pos-n pos-o">book</span>.</p>
 <p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-o">it</span> <span class="pos-prep">to</span> <span class="pos-n pos-i" data-side="left">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span>.</p>
 </div>
-<div id="key">
+<div id="key" style="flex:0 1 auto;justify-content:center">
 <p>I can't <ruby>record<rp>(</rp><rt>gravar</rt><rp>)</rp></ruby> it tonight.</p>
 </div>
-<div id="key-sound">
+<div id="key-sound" style="flex:0 1 auto;justify-content:center">
 <p>The <ruby>library<rp>(</rp><rt><b>li</b>·<b>br</b><span class="pr-g">e</span><b>ry</b></rt><rp>)</rp></ruby> closes at six.</p>
 <p class="dim">The key is the entry in <code>dictionary.json</code>, rendered by <code>PronKey.render</code>: <code>-</code> a syllable break, a greyed letter written and not said, <code>ə</code> the schwa. <code>rp</code> is never omitted.</p>
 </div>
 </div>
 
-<div class="rows">
-<div id="gloss">
+<div class="rows" style="justify-content:space-between">
+<div id="gloss" style="flex:0 1 auto;justify-content:center">
 <p>You have to <button type="button" class="glossbtn" popovertarget="d1">clock in</button> before eight.</p>
 <div class="defcard" popover id="d1"><b>clock in</b>bater o ponto — the punch clock at work, not <i>entrar</i>.</div>
 <p class="dim">One card per <code>id</code>, opened at its word by <code>popovertarget</code>.</p>
 </div>
-<div id="vline">
+<div id="vline" style="flex:0 1 auto;justify-content:center">
 <ol class="seq" data-mode="timeline">
 <li><span class="at">2022</span><p>She wrote three songs.</p></li>
 <li><span class="at">2023</span><p>She stopped writing.</p></li>
@@ -132,8 +132,8 @@
 <h3>Standalone visuals</h3>
 <p>A chart, a list, a dialog, a drawing, a recording or a strip is a thing of its own. Each sits inside a block with the prose that reads it, or stands outside at its own width.</p>
 <p><code>.viz</code> frames three things: the dialog, the player and the map — a chart and a strip carry a frame of their own. It is never a second <code>.block</code>.</p>
-<div class="rows" style="justify-content:space-around">
-<div id="chart">
+<div class="rows">
+<div id="chart" style="flex:1 1 auto">
 <p>A chart can stand outside a block or sit inside one, and either way the text beside it has to explain it or point at it — a chart nobody refers to is a picture the student has to guess at. The chart below is that pair: the sentence introduces it, and the chart centres itself in the column it is given.</p>
 <figure class="chartwrap">
 <table class="chart">
@@ -146,7 +146,7 @@
 </table>
 </figure>
 </div>
-<div id="chart-split">
+<div id="chart-split" style="flex:0 0 auto">
 <figure class="chartwrap">
 <table class="chart">
 <tbody>
