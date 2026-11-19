@@ -605,6 +605,36 @@
   .tlw>.tln-link{--tln-gap:20.3px;position:absolute;bottom:28px;height:var(--tln-gap);
     width:12px;z-index:1;pointer-events:none;position-anchor:--pin;left:anchor(50%);margin-left:-6px;
     color:var(--accent)}
+  /* THE INVERTED FIGURE — the same words, the same pin, the other way round. The line is in the flow and
+     sets the width, and the phrase is laid over it, split at the anchored word: that word is placed at
+     --pin, the point its tense pins to, and the two halves of the sentence hang off it with anchor().
+     Nothing is measured, and the connector still runs from the same word to the same point, because both
+     are --pin by construction. Use: two tenses described against the same line, one above it and one
+     below. Vary: the same data-tense the anchored figure takes */
+  .tlw-invert{--p-before:50px;--p-now:50%;--p-then:50px;--w:100%;
+    --p-half:calc((var(--p-before) + var(--p-now)) / 2);
+    position:relative;width:300px;min-width:300px;max-width:100%;margin:0;padding:1.5em 0 0;
+    anchor-scope:all}
+  .tlw-invert[data-grow="1"]{width:100%}
+  .tlw-invert[data-tense="past-perfect"]{--pin:var(--p-before)}
+  .tlw-invert[data-tense="simple-past"],
+  .tlw-invert[data-tense="past-continuous"],
+  .tlw-invert[data-tense="present-perfect"]{--pin:var(--p-half)}
+  .tlw-invert[data-tense="simple-present"],
+  .tlw-invert[data-tense="present-continuous"]{--pin:var(--p-now)}
+  .tlw-invert[data-tense="going-to"],
+  .tlw-invert[data-tense="future-perfect"]{--pin:calc(100% - var(--p-then))}
+  /* the line keeps its own box and stops being the thing that moves */
+  .tlw-invert>.tln{position:relative;bottom:auto;left:auto;--w:100%;z-index:2}
+  /* the phrase sits over the line, one line tall, its three parts placed against each other */
+  .tlw-invert>.tlw-say{position:absolute;left:0;right:0;top:0;height:1.5em;line-height:1.5;
+    text-align:left;white-space:nowrap}
+  .tlw-invert .an{position:absolute;top:0;left:var(--pin);translate:-50% 0;white-space:nowrap;
+    anchor-name:--wpin}
+  .tlw-invert .say-pre{position:absolute;top:0;right:anchor(--wpin left);white-space:pre}
+  .tlw-invert .say-post{position:absolute;top:0;left:anchor(--wpin right);white-space:pre}
+  /* the connector, on the same x as the word it leaves: bottom 28px is the rule inside the 56px line */
+  .tlw-invert>.tln-link{--tln-gap:28px;bottom:28px;height:28px;left:var(--pin);position-anchor:none}
   /* the box the arrow flies in is the arrow's own length, so its lower edge is the line: the barb passes
      that edge and is erased by it a sliver at a time, point first, rather than fading where it lands */
   .tln-link>.tln-fly{position:absolute;inset:0;overflow:hidden}
