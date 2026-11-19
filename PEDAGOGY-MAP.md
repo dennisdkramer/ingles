@@ -2,18 +2,39 @@
 
 1. Generation **BEGINS** by copying `_shell.html` - The frame is fixed — head, `header.brand`, `#controlbar`, `#barhelp`, `main#page > .page-container > .content-area`, the script slot.
 2. Choose a title that gives a clear idea of whe main thing taught by the lesson, then RENAME the file to `lesson<N>-<Title>.html`: the filename carries the title, and it is the only place the site index learns either.
-3. Synthesize a thorough lesson based on the lesson plan in the ROADMAP, the teaching voice and student needs in the REGISTER, and [AUTHORING] instructions. The shell's placeholders are filled as the page is written — TRACK_TITLE (<`track`>), TRACK_UPPER (the same word in capitals), TRACK (the folder name, the backend key)
-4. WHEN the lesson is finished, RUN `npm run build:lessons`, commit, and push.
+3. **[PASS 1 — CONTENT, capability-map.html §1A]** Synthesize the lesson from this lesson's ROADMAP section, the REGISTER's persona and voice, and [AUTHORING]: the sections in teaching order, and every word the student reads, hears or answers — headings, explanations, examples, dialogs, activities with their instructions and keys, word lists, chart contents, song lines. **Decide nothing about form in this pass**: no `data-span`, no `data-look`, no visual's markup, no shape chosen to fit a row. This pass decides whether the lesson is good.
+4. **[PASS 2 — ARRANGEMENT, capability-map.html §1B]** Choose each block's visual by the question it answers (capability-map.html §3), copy its markup from the example drawn for it (§4 or §5), then set `data-span` and `data-look`. Run the tool the shape needs — `qa/pos.mjs`, `qa/audio.mjs`, `PronKey.render` — and paste what it prints. Finish with §1C: shorten or lengthen a wording only where the lesson does not get worse for it.
+5. The shell's placeholders are filled as the page is written — TRACK_TITLE (<`track`>), TRACK_UPPER (the same word in capitals), TRACK (the folder name, the backend key).
+6. WHEN the lesson is finished, RUN `npm run build:lessons`, commit, and push.
 
 ## [I/O] THIS FILE HAS PRECEDENCE AND GUIDES SYNTHESIS AND AUTHORING OF A THOROUGH AND ENGAGING ENGLISH LESSON FOR THE CONCEPTS AND VOCABULARY IN THE ROADMAP LESSON PLAN BELOW, USING THE <TRACK>-REGISTER.md VOICE, FOR THE [PERSONA] OF THE TARGET STUDENT
 Mandatory Inputs:
-	1) (<TRACK>-ROADMAP.md [<lesson #>]) section contents
-	2) <TRACK>-REGISTER.md - the voice of the author and student, **who the student is**.
-	3) `/* #` Headers only from style.css  **formatting and styling options**
+	1) `<TRACK>-ROADMAP.md` [lesson #] — this lesson's own `##` section in full, plus the `##` header LINES ONLY of the five lessons before it and the two after it (reference only: so this lesson does not repeat one of them — never their bodies, their order, or their wording).
+	2) `<TRACK>-REGISTER.md` — **the strongest input after the lesson's own roadmap section, and binding on every line.** It is who the student is, which of its registers is the track's default, the voice, the vocabulary that is the voice, and the contexts the track licenses. It is read first and re-read before the page is finished, and it decides the room, the people and the words; the roadmap decides the language. A scene, topic or word it does not license is not used, however convenient it is for the grammar — an adult lesson does not become a business lesson because a desk makes the tense easier to explain.
+	3) `capability-map.html` — **every shape the page is built from, and the only source of markup, classes, attributes, looks, spans and page mechanics.** §1 the three passes (A content, B arrangement, C wording), §2 what prose is held to, §3 the visual index (a visual is chosen by the question it answers), §4 the in-block elements, §5 the activities. The open `details.reveal` under each element is the contract; every word inside a block is example content and never the lesson's text.
+	4) `_shell.html` — the frame every page starts as (step 1), its placeholders left for step 5.
+Tools the page is built with — run them, never read them as a source of lesson content:
+	- `qa/pos.mjs` — `node qa/pos.mjs "<sentence>"` emits the `.pos-*` markup for a sentence the page already wrote; the marks are pasted, never written by hand.
+	- `qa/AUDIO.md` and `qa/audio.mjs` — find, fetch, cut and time a recording; the command prints the player figure with its `data-t` values, its `data-duration`, and the provenance row for `assets/README.md`. A lesson page is one folder below the root, so the map's `assets/<name>.mp3` is written `../assets/<name>.mp3` on the page.
+	- `dictionary.json` and `pronkey.js` — the entry and the renderer behind the pronunciation key the map draws above a word (`PronKey.render`); a key is never typed by eye.
 Optional Inputs: 
-	- (IN-BLOCK-VISUALS.md [AUDIO] section only) and its inputs
-	- qa/pos.mjs (paint parts of speech)
+	- `assets/` and `assets/README.md` — the shipped media files, and the provenance row that records where each came from.
+Withheld — do not read, search, diff, quote, recall or offer as precedent: `style.css`, `CONTENT_EXAMPLES.md`, `VEHICLES.md`, `IN-BLOCK-VISUALS.md`, `PEDAGOGY.md`, and any `lesson<N>*.html` or `preview*.html` (the top rule).
 **WITHHOLD ALL OTHER INPUTS** DO NOT READ ANY FILE NOT ON THIS LIST
+
+## [PASSES] — capability-map.html §1's three steps, in its order; the first pass decides nothing about form
+### [1a] CONTENT — the words of the lesson, before any shape
+- The teaching sequence is written first, and every word the student will read, hear or answer is written with it: the headings, the explanations, the examples, the dialogs, the activities with their instructions and their keys, the word lists, the chart contents, and the lines a recording will carry.
+- Nothing about appearance is decided here: no `data-span`, no `data-look`, no visual's markup, no section invented to fill a row, no frame. A block is opened only where a teaching unit ends.
+- This is the pass that decides whether the lesson is good. A block whose content is thin cannot be rescued by the shape it is given later, so the [COVERAGE] rules below are met on the words alone.
+### [1b] ARRANGEMENT — the shape, once the words exist
+- Each block takes the visual that answers its question, chosen from capability-map.html §3 by the concept it teaches and never by the visual's name; its markup is copied from the example where that visual is drawn (§4 or §5), never from memory.
+- §3's tests are the gate: a visual that repeats the sentence beside it, or whose removal would cost the student nothing, is not used. A block of prose with no visual is the normal case.
+- `data-span` and `data-look` are set now and only here: a span when something must sit beside the block and the row adds to 12, one tint and one outline per section at most, and a look that never marks importance, never dresses a teaching block as an activity, and never varies the page for its own sake.
+- The tools run here — `qa/pos.mjs` for the marks, `qa/audio.mjs` for a recording, `PronKey.render` for a key — and what they print is pasted, never retyped.
+### [1c] WORDING — after the page is built
+- Prose may be shortened to remove a wrapped stub at the end of a line, or lengthened to fill one, only where the lesson does not get worse for it; a block shorter than its neighbour in a row may gain an example or a question to even the heights.
+
 
 ## [AUTHORING] - 
 - Each lesson is imagined and generated in a unique and varied way, the order and type of its sections and blocks are never a standard - they are conceived independently as the optimal way to deliver the specific lesson and/or the specific elements within it.
@@ -28,5 +49,18 @@ Optional Inputs:
 - Teach the rule, the reasoning (the mental model), and its direct consequences.
 - Multiple-choice options are shuffled so the right one is not always in the same slot. No copy-exercises: the student produces from memory or meaning,
 - Portuguese is used to explain content, compare/contrast grammar/vocabulary between the languages, or give translations when the necessary information in english would not be well understood by the student at the level of the lesson that contains it or when it is significantly more efficient to explain something with portuguese.
+- **[COVERAGE] The roadmap section is a floor, not a summary.** Every concept, construction and example it names is accounted for in the page, and every vocabulary item it lists is carried where the register licenses it. The lesson is not finished because the section has been mentioned: it is finished when each concept has been taught, contrasted, trained and tested.
+- **A concept is not taught until the student could produce it unaided.** For each concept the page carries the rule; the reasoning (the mental model) and what follows from it; where Portuguese maps, misleads or has no counterpart; worked examples in the register's own scenes; training in which the student produces it rather than recognizes it; and a check that would fail had the student only read the explanation. A label, a table row or a passing mention is not teaching.
+- **Thin is measured by consequence, not by length.** An explanation that leaves the student unable to say the sentence unaided is thin at any length; a short one that hands them the rule and its reason is not. Where a concept is expensive (above), its support grows — more teaching before it and more training after it — because importance outranks level.
+- **The page ends by using every concept it taught on material the student has not seen**: mixed, new sentences, in the register's world — never the lesson's own examples again.
+- **[TEACH → TRAIN → QUIZ] Every lesson runs the same three obligations, in this order.** **Teach** the elements of its content thoroughly — each concept and vocabulary item the lesson owns, with the rule, its reasoning, its consequences and the Portuguese contrast where the mapping misleads — and present each before the student is asked to use it. **Train** what was taught: the student practices it, producing from memory or meaning, on material that is new to the page rather than a copy of the explanation, and the training follows the teaching it belongs to. **Quiz** at the end: the lesson closes with a quiz (the last section before the notebook) that tests the lesson's content as a whole — every concept the lesson taught appears in it, alone or inside a sentence that combines it with another, on material the student has not seen, with its keys written — so that passing it requires having learned the lesson, not having read it.
+
+## [CHECK] — before the build, read the page back against its strongest inputs
+- Re-read the roadmap section line by line and name the block that teaches each concept and the block that trains it. A concept with no teaching block is a defect; a concept with no training block is unfinished. (Catches the concept that was mentioned and dropped.)
+- Re-read the register. A scene, person, word or topic that belongs to another track is removed, however well it carries the grammar. (Catches an adult lesson drifting into business English.)
+- Find the concept that is only a label, a table row, a chart cell or a drawing, with no sentence stating its rule. (Catches the thin explanation the student cannot reproduce.)
+- Read the quiz: it is the last section before the notebook, it tests every concept the lesson taught on material the student has not seen, and every item carries its key. (Catches a lesson that ends in practice and never proves the learning.)
+- Check every block, class and attribute on the page against capability-map.html. A shape the map does not draw is not used, and a class remembered from another page is not used. (Catches markup that renders but no longer matches the contract.)
+- Then `npm run build:lessons`, commit, and push.
 
 

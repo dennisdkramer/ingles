@@ -35,7 +35,7 @@
 
 &lt;div class="block" data-span="8"&gt;…the sentence…&lt;/div&gt;
 &lt;div class="block" data-span="4" data-look="tint"&gt;…the note beside it…&lt;/div&gt;</pre>
-<p class="dim">No span until something must sit beside the block, then the two add to 12. Looks: <code>tint</code>, <code>tape</code>, <code>float</code>, <code>stripes</code>, <code>outline</code>, <code>dark</code>. A section is an <code>&lt;h2&gt;</code>: the sheet numbers it and restarts the lettering under it, so neither is typed.</p>
+<p class="dim">No span until something must sit beside the block, then the two add to 12. Looks: <code>tint</code>, <code>tape</code>, <code>float</code>, <code>stripes</code>, <code>outline</code>, <code>dark</code>. A section is an <code>&lt;h2&gt;</code>: the sheet numbers it and restarts the lettering under it, so neither is typed. An unset block is paper with the 2px accent rule; <code>--accent-h</code> and <code>--edge-w</code> change that rule, and <code>--sp</code>, <code>--r1</code>, <code>--r2</code> the spacing and corners. The box you are reading is <code>&lt;details class="reveal"&gt;&lt;summary&gt;…&lt;/summary&gt;&lt;div class="body"&gt;&lt;div&gt;…&lt;/div&gt;&lt;/div&gt;&lt;/details&gt;</code> — the inner <code>div</code> is what folds. Print needs nothing from a page.</p>
 </div></div></details>
 </div>
 
@@ -184,7 +184,7 @@
 &lt;/p&gt;
 
 &lt;table class="poschart"&gt;…one column per group…&lt;/table&gt;</pre>
-<p class="dim">The tagger emits the marks, so they cannot drift from the sentence and no word is marked by hand. <b>Any sentence the lesson wants marked, as many as it wants</b>: the marks wrap one sentence and are not a component with a block of its own. The fence goes on the joining word; <code>data-rel</code> is one of add · contrast · alternative · cause · condition · time · place · comparison · content.</p>
+<p class="dim">The tagger emits the marks, so they cannot drift from the sentence and no word is marked by hand. <b>Any sentence the lesson wants marked, as many as it wants</b>: the marks wrap one sentence and are not a component with a block of its own. The fence goes on the joining word; <code>data-rel</code> is one of add · contrast · alternative · cause · condition · time · place · comparison · content, and <code>--rel-c</code> colours it. Legend: <code>&lt;p class="pos-key">…</code> with each item wearing the class it names; the <code>--pos-*</code> tokens colour the marks.</p>
 </div></div></details>
 </div>
 <div id="key-job">
@@ -278,7 +278,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </figure>
 </div>
 </div>
-<p class="dim">These two are the <b>anchored</b> version: a sentence, and the line pinned to one word of it. <code>.an</code> marks that word and <code>data-tense</code> chooses which point of the line must sit under it — the word moves the line, the sentence never moves.</p>
+<p class="dim">These two are the <b>anchored</b> version: a sentence, and the line pinned to one word of it. <code>.an</code> marks that word and <code>data-tense</code> chooses which point of the line must sit under it — the word moves the line, the sentence never moves. One anchor per host, and the host carries <code>anchor-scope:--pin</code>; <code>--now</code> moves the present and <code>--accent</code> colours the line.</p>
 <details class="reveal" open><summary>Markup — the timeline</summary><div class="body"><div>
 <pre>&lt;figure class="tlw" data-tense="simple-past"&gt;
   &lt;p class="tlw-say"&gt;I &lt;span class="pos-m pos-v an"&gt;wrote&lt;/span&gt; it.&lt;/p&gt;
@@ -347,7 +347,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
     …
   &lt;/tbody&gt;
 &lt;/table&gt;</pre>
-<p class="dim"><code>figure.chartwrap</code> when the chart carries its own name, and a <code>&lt;figcaption class="chartcap"&gt;</code> for that name. <code>th.vlab</code> spends no column on a family label — its words stand outside the chart's edge — and <code>tr.bare</code> collapses a nameless header row to a rule.</p>
+<p class="dim"><code>figure.chartwrap</code> when the chart carries its own name, and a <code>&lt;figcaption class="chartcap"&gt;</code> for that name. <code>th.vlab</code> spends no column on a family label — its words stand outside the chart's edge — and <code>tr.bare</code> collapses a nameless header row to a rule. Structure: <code>data-structure="grid"</code> on the block takes a <code>&lt;table&gt;</code> with a <code>&lt;thead&gt;</code> and an optional <code>&lt;caption&gt;</code>, and <code>tr.note</code> is a remark row (<code>--row-h</code>). Two versions of one sentence: <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each (<code>--pair-rows</code>).</p>
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;…the sentence, and the chart it reads…&lt;/div&gt;
   &lt;div&gt;
@@ -363,7 +363,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <div id="bar">
 <div class="bar-row"><span>same in Portuguese</span><div class="bar"><i style="--w:62%"></i></div><b>62%</b></div>
 <div class="bar-row"><span>of those, false friends</span><div class="bar"><i style="--w:28%"></i></div><b>28%</b></div>
-<p class="dim">The number is never inside the bar.</p>
+<p class="dim">The number is never inside the bar. <code>--w</code> is the fill’s width and <code>--bar-h</code> the bar’s height.</p>
 <details class="reveal" open><summary>Markup — a bar with its number</summary><div class="body"><div>
 <pre>&lt;div class="bar-row"&gt;
   &lt;span&gt;same in Portuguese&lt;/span&gt;
@@ -416,7 +416,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;li&gt;&lt;span class="who"&gt;Ana&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
   &lt;li&gt;&lt;span class="who"&gt;Beto&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
 &lt;/ol&gt;</pre>
-<p class="dim">A control can sit inside a turn without the block changing shape.</p>
+<p class="dim"><code>&lt;ol class="seq"></code> takes <code>data-mode</code>: <code>turns</code> (<code>.who</code> / <code>.say</code>), <code>numbered</code>, or <code>timeline</code> (<code>.at</code>); unset puts one item per line. <code>--seq-gap</code>, <code>--date-w</code> and <code>--rail-w</code> size it. A control can sit inside a turn without the block changing shape.</p>
 </div></div></details>
 
 <div class="rows">
@@ -602,7 +602,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;/div&gt;
   &lt;div&gt;…the prose that reads it…&lt;/div&gt;
 &lt;/div&gt;</pre>
-<p class="dim">The checkbox keeps the card turned and print shows the front; no script. <code>--flip-h</code> is the height both faces share.</p>
+<p class="dim">The checkbox keeps the card turned and print shows the front; no script. <code>--flip-h</code> is the height both faces share and <code>--dur</code> the turn’s duration; the block’s own entrance is the same token.</p>
 </div></div></details>
 </div>
 </div>
@@ -613,10 +613,14 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 <div class="block" data-look="float" data-span="12">
 <p>An activity is a block the student writes in, and it carries its own instruction in the block: a gap with no instruction has more than one right answer.</p>
+<p>Each activity type here can stand as a block of its own, sized to the content it holds, or sit inside a block with the prose, the chart or the drawing it accompanies; the examples below are the in-block size. A lesson chooses and combines them, and it can teach a concept and train it in one block or teach in one block and train in another.</p>
+<p class="dim">engine2.js marks the right option and writes <code>.ans</code> beside a typed field; a radio group’s key is <code>data-a</code> on <code>.qitem</code>. <code>--ok</code> is the colour it uses.</p>
 </div>
 
-<div class="block" data-span="12">
-<h3>The dialog, worked</h3>
+<div class="block" data-look="stripes" data-span="12">
+<h3>Four activity types, in-block size</h3>
+<div class="rows">
+<div>
 <p>Fill each gap with <b>have</b>, <b>has</b> or <b>had</b>.</p>
 <ol class="seq" data-mode="turns">
 <li><span class="who">Ana</span><span class="say">Did you post the letter?</span></li>
@@ -630,9 +634,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
       already posted it.&lt;/span&gt;&lt;/li&gt;</pre>
 </div></div></details>
 </div>
-
-<div class="block" data-look="stripes" data-span="12">
-<h3>A chart whose rows are answered</h3>
+<div>
 <p>Put the comparison in the table and the answer in a cell: a radio for one of a pair, a checkbox for several, a text field for a written answer.</p>
 <table class="chart center" style="width:100%">
 <caption>One event, three tellings</caption>
@@ -651,7 +653,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <tr><td>7:10</td><td>Nobody had told the office.</td>
 <td><input class="gap" data-answer="past perfect" style="--gap-w:8em"></td></tr>
 </tbody></table>
-<p class="dim">What control a cell holds is the cell’s decision. The block wears the activity look and reports itself when every row is answered.</p>
+<p class="dim">A written answer that needs more than a line is <code>&lt;textarea class="write" rows="n"></code>, which grows with its content (<code>--lines</code>). What control a cell holds is the cell’s decision. The block wears the activity look and reports itself when every row is answered.</p>
 <details class="reveal" open><summary>Markup — a chart whose rows are answered</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes" data-span="12"&gt;
   &lt;table class="chart" style="width:100%"&gt;
@@ -665,12 +667,12 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;/div&gt;</pre>
 </div></div></details>
 </div>
+</div>
 
-
-<div class="block" data-span="12" id="chunks">
-<h3>Chunks in the wrong order</h3>
+<div class="rows">
+<div id="chunks">
   <p>Unscramble the sentence:</p>
-  <p class="chips" style="display:flex;gap:20px;justify-content:center;align-items:center">
+  <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center">
     <span><b style="font-size:.8em">1</b> she</span>
     <span><b style="font-size:.8em">2</b> that</span>
     <span><b style="font-size:.8em">3</b> anyone</span>
@@ -680,7 +682,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   </p>
   <p style="text-align:center"><input class="gap" style="--gap-w:100%" aria-label="the whole sentence"></p>
 <details class="reveal" open><summary>Markup — chunks in the wrong order</summary><div class="body"><div>
-<pre>&lt;p class="chips" style="display:flex;gap:20px;
+<pre>&lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
    justify-content:center;align-items:center"&gt;
   &lt;span&gt;&lt;b style="font-size:.8em"&gt;1&lt;/b&gt; she&lt;/span&gt;
   &lt;span&gt;&lt;b style="font-size:.8em"&gt;2&lt;/b&gt; that&lt;/span&gt;
@@ -692,9 +694,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <p class="dim">The chunks are the material, the one wide gap under them is the answer, and the numbers let a student name a chunk while asking about it; they are not a sequence to follow.</p>
 </div></div></details>
 </div>
-
-<div class="block" data-look="stripes" data-span="12" id="stripgaps">
-<h3>Four panels, four sentences</h3>
+<div id="stripgaps">
   <p>Describe what is happening in each picture, using the <b>past simple</b>.</p>
 <table class="chart" style="width:100%">
   <tbody>
@@ -723,6 +723,8 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <p class="dim">The panel is the question and the gap under it is the answer, so there is no separate stem. Every gap carries its own <code>aria-label</code> — four unnamed fields are four anonymous boxes to a screen reader.</p>
 </div></div></details>
 </div>
+</div>
+</div>
 
 <div class="block" data-look="dark" data-span="6">
 <h3>A dark block</h3>
@@ -742,7 +744,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <pre>&lt;div class="block" data-look="stripes" data-state="done"&gt;
   …the activity…
 &lt;/div&gt;</pre>
-<p class="dim">The sheet draws the border and the halo from <code>data-state</code> and the markup is not touched. No shipped script writes it yet, so for now the state is set by whatever marks the block.</p>
+<p class="dim">The values are <code>correct</code>, <code>wrong</code>, <code>odd</code> and <code>done</code>, on <code>.opt</code>, <code>.side</code>, <code>.qitem</code> or the block, and the mark is <code>&lt;i class="mark"></code>; <code>--ok</code>, <code>--err</code> and <code>--warn</code> are the colours. In the sheet and unused: <code>data-reactive</code> with <code>.meter</code> and the <code>.ring</code> score — no engine writes <code>--score</code>. The sheet draws the border and the halo from <code>data-state</code> and the markup is not touched. No shipped script writes it yet, so for now the state is set by whatever marks the block.</p>
 </div></div></details>
 </div>
 
