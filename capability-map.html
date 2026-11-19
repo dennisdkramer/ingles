@@ -181,6 +181,7 @@
 <tr><td>word order and the jobs inside a sentence</td><td>parts-of-speech marking</td><td><a href="#pos" aria-label="parts-of-speech marking">example</a></td></tr>
 <tr><td>how two clauses meet</td><td>the fenced join</td><td><a href="#pos" aria-label="the fenced join">example</a></td></tr>
 <tr><td>a tense, and where <i>now</i> falls</td><td>the timeline</td><td><a href="#axis" aria-label="the timeline">example</a></td></tr>
+<tr><td>who says what, and in what order</td><td>the dialog</td><td><a href="#dialog" aria-label="the dialog">example</a></td></tr>
 <tr><td>how a form is built, step by step</td><td>the numbered list</td><td><a href="#list" aria-label="the numbered list">example</a></td></tr>
 <tr><td>vocabulary arriving in bulk</td><td>a chart</td><td><a href="#chart" aria-label="a chart">example</a></td></tr>
 <tr><td>a word and what it pairs with</td><td>a thin pair chart</td><td><a href="#chart-pair" aria-label="a thin pair chart">example</a></td></tr>
@@ -201,7 +202,7 @@
 <h2>In-Block Features</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>Everything in this section goes inside a block: the underline, the horizontal timeline, the vertical timeline, the numbered list, the charts, the bar, the gloss, the key, the player, the map, the strip and the flash card. Inside a block each is half a row at most, beside the prose that reads it.</p>
+<p>Everything in this section goes inside a block: the underline, the horizontal timeline, the vertical timeline, the numbered list, the dialog, the charts, the bar, the gloss, the key, the player, the map, the strip and the flash card. Inside a block each is half a row at most, beside the prose that reads it.</p>
 <p><b>Not one of them belongs to a particular block.</b> Each goes wherever a lesson needs it: inside a teaching block, inside an activity block, or alone as the block's own subject at whatever span it needs. An activity about word order uses the underline and the numbered list; an activity about a series of events uses the vertical timeline; a comparison the student answers row by row uses the chart. Nothing about the element changes when the block around it becomes an activity, and the same markup moves between the two.</p>
 </div>
 
@@ -292,6 +293,30 @@
   &lt;li&gt;&lt;span class="at"&gt;now&lt;/span&gt;&lt;p&gt;She has written three songs.&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;</pre>
 <p class="dim">When the dates themselves are the point. One <code>.at</code> per item; the horizontal timeline in this block draws one claim instead of listing events.</p>
+</div></div></details>
+
+<div class="rows">
+<div id="dialog">
+<h4>The dialog — one turn per speaker</h4>
+<ol class="seq" data-mode="turns">
+<li><span class="who">Ana</span><span class="say">Did you post the letter?</span></li>
+<li><span class="who">Beto</span><span class="say">Three times. I keep thinking I forgot.</span></li>
+<li><span class="who">Ana</span><span class="say">Then photograph it next time.</span></li>
+</ol>
+<p class="dim">One turn per speaker, in order: <code>.who</code> names the speaker, <code>.say</code> carries the words.</p>
+</div>
+<div>
+<h4>Read, or worked with a gap</h4>
+<p>Read as it stands, or with a <code>.gap</code> inside a turn — the block does not change shape either way.</p>
+<p class="dim">Use it where two people talk and nothing is answered. Turns alternate sides; nothing is scored unless a control is in it.</p>
+</div>
+</div>
+<details class="reveal" open><summary>Markup — a dialog</summary><div class="body"><div>
+<pre>&lt;ol class="seq" data-mode="turns"&gt;
+  &lt;li&gt;&lt;span class="who"&gt;Ana&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;span class="who"&gt;Beto&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;</pre>
+<p class="dim">For speech that is read, not worked. A control can sit inside a turn without the block changing shape.</p>
 </div></div></details>
 
 <div class="rows">
@@ -637,28 +662,11 @@
 <h2>Dialogs and activities</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>A dialog is the default shape for speech. A plain dialog is read; a dialog with blanks is worked, and the worked one carries its instruction in the same block or the gap has no single answer.</p>
+<p>An activity is a block the student writes in. The dialog with blanks is the worked form of the dialog in §4, and it carries its instruction in the same block or the gap has no single answer.</p>
 </div>
 
-<div class="block" data-span="6">
-<h3>Two speakers, no task</h3>
-<p>Read, not worked: the student follows who says what, in order.</p>
-<ol class="seq" data-mode="turns">
-<li><span class="who">Ana</span><span class="say">Did you post the letter?</span></li>
-<li><span class="who">Beto</span><span class="say">Three times. I keep thinking I forgot.</span></li>
-<li><span class="who">Ana</span><span class="say">Then photograph it next time.</span></li>
-</ol>
-<details class="reveal" open><summary>Markup — a dialog nobody has to answer</summary><div class="body"><div>
-<pre>&lt;ol class="seq" data-mode="turns"&gt;
-  &lt;li&gt;&lt;span class="who"&gt;Ana&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;span class="who"&gt;Beto&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
-&lt;/ol&gt;</pre>
-<p class="dim">For speech that is read, not worked. The speaker is <code>.who</code>, the words <code>.say</code>; a control can sit inside a turn without the block changing shape.</p>
-</div></div></details>
-</div>
-
-<div class="block" data-span="6">
-<h3>The same dialog, worked</h3>
+<div class="block" data-span="12">
+<h3>The dialog, worked</h3>
 <p>Fill each gap with <b>have</b>, <b>has</b> or <b>had</b>. Without the instruction the gap has more than one right answer.</p>
 <ol class="seq" data-mode="turns">
 <li><span class="who">Ana</span><span class="say">Did you post the letter?</span></li>
