@@ -92,17 +92,25 @@ const wroteTracks = emit('tracks.json', JSON.stringify(trackList, null, 2) + '\n
 // when style.css changes, and a stale stamp is a harness failure rather than an invisible cache miss.
 const cssUrl = 'style.css?v=' + createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'style.css'))).digest('hex').slice(0, 10);
 const linkRe = /<link rel="stylesheet" href="style\.css(?:\?v=[0-9a-f]*)?"/;
-const indexPath = path.join(ROOT, 'index.html');
-const htmlNow = fs.readFileSync(indexPath, 'utf8');
-if (!linkRe.test(htmlNow)) {
-  console.error('ERROR: index.html has no <link rel="stylesheet" href="style.css"> for the build to stamp.');
-  process.exitCode = 1;
-} else {
+/* every hand-built page that links the sheet carries the same stamp: index.html draws the menu and
+   capability-map.html is read while the sheet is being changed, so both would otherwise show a
+   cached stylesheet and a change would look like it never happened. */
+for (const page of ['index.html', 'capability-map.html']) {
+  const pagePath = path.join(ROOT, page);
+  if (!fs.existsSync(pagePath)) continue;
+  const htmlNow = fs.readFileSync(pagePath, 'utf8');
+  if (!linkRe.test(htmlNow)) {
+    if (page === 'index.html') {
+      console.error('ERROR: index.html has no <link rel="stylesheet" href="style.css"> for the build to stamp.');
+      process.exitCode = 1;
+    }
+    continue;
+  }
   const before = htmlNow.match(linkRe)[0];
   const wanted = '<link rel="stylesheet" href="' + cssUrl + '"';
   if (before !== wanted) {
-    emit('index.html', htmlNow.replace(linkRe, wanted));
-    if (!CHECK) console.log('index.html stylesheet stamped -> ' + cssUrl);
+    emit(page, htmlNow.replace(linkRe, wanted));
+    if (!CHECK) console.log(page + ' stylesheet stamped -> ' + cssUrl);
   }
 }
 

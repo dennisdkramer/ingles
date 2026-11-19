@@ -893,10 +893,13 @@
   .cols>*{flex:1 1 var(--cw,220px);min-width:0}
   /* the other case: cells whose sizes differ, so each takes the width its own content needs and the
      row is shared between them. Any number of cells; the writer decides the pairing, not a wrap.
-     Heights are matched across the row, and a cell that is only a figure keeps the width its own
-     columns need, so a chart never sits in a cell wider than it draws. */
+     Heights are matched across the row, so a cell is a column and the object inside it — a dialog, a
+     player, a map — takes the row's height; a cell that is only a figure keeps the width its own
+     columns need, so a chart never sits in a cell wider than it draws, and the space it does not use
+     goes to the cell beside it. */
   .rows{display:flex;flex-wrap:nowrap;gap:var(--flex-gap,26px);align-items:stretch;padding-top:8px}
-  .rows>*{flex:1 1 0;min-width:0}
+  .rows>*{display:flex;flex-direction:column;flex:1 1 0;min-width:0}
+  .rows>*>:is(.viz,figure.vz-play){flex:1 1 auto;min-height:0}
   .rows>:not(:has(>p)):not(:has(>figure.vz-play)):not(:has(>ol)):not(:has(>ul)){flex:0 1 auto}
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
