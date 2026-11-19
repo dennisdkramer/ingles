@@ -4,38 +4,34 @@
 <link rel="stylesheet" href="style.css">
 </head><body>
 <div id="toast"></div>
-<header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>TOOL REFERENCE</span></h1></header>
+<header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>VISUAL REFERENCE</span></h1></header>
 <div id="controlbar" class="control-bar"></div>
-<div id="barhelp" class="barhelp">What a page may be built with — the prose, the figures, and a block of each in use.</div>
+<div id="barhelp" class="barhelp">What a page may be built with — the prose, the visuals, and a block of each in use.</div>
 <main id="page"><div class="page-container"><div class="content-area">
 
 <h1>What we can teach with</h1>
-<p class="lead">The tools a lesson is built from, each drawn in a block that uses it.</p>
+<p class="lead">The visuals a lesson is built from, each drawn on this page.</p>
 
 <div class="block" data-look="float" data-span="12">
 <p><b>Every word inside a block below is example content.</b> What a block contributes is its shape: the markup in the reveal under it, its look, its span.</p>
-<p class="dim">The reveals are open and they are the contract. Section 3 is the index: one concept, the tool that answers it, a link to it drawn.</p>
+<p class="dim">The reveals are open and they are the contract. Section 3 is the index: one concept, the visual that answers it, and a link to it drawn.</p>
 </div>
 
 <h2>How a page gets built</h2>
 
-<div class="block" data-look="float" data-span="12">
-<p>Three moves, in this order: what the page teaches, how it is arranged, how the wording is cleaned up.</p>
-</div>
-
 <div class="block" data-span="12">
 <h3>Write the content</h3>
-<p>One section per concept, one block per idea, each block with its own heading, in teaching order. No layout decision yet.</p>
+<p>Write the words first — the headings and the sentences the student reads — and decide nothing about layout yet.</p>
 </div>
 
 <div class="block" data-span="12">
 <h3>Arrange it, and give it a look</h3>
-<p>The page is twelve columns and every block is full width, so a page that decides nothing flows straight down. A span is written only when something must sit beside the block: the row is split into twelfths, each block takes 3, 4, 6, 8, 9 or 12, and the numbers in a row add to 12. The span is a fit, not a category — the same prose is 6 beside a chart and 12 alone — so it follows what the block holds and what must sit beside it. Nothing is measured or packed in the browser.</p>
+<p>The page is divided into twelfths, so a block can take 3, 4, 6, 8, 9 or 12 of them — a quarter, a third, a half, two thirds, three quarters or the whole line. A block with no span takes the whole line. A span is written only when something must sit beside it, and the spans in a row add to 12; which one it gets is decided by what the block holds, never by what kind of block it is. Nothing is measured in the browser.</p>
 <p>The look is settled in the same pass: declared on the block, never inferred from what it holds, and it changes the paint only. One tint and one outline per section at most. A look never varies the page for its own sake, marks importance, or dresses a teaching block as an activity.</p>
-<details class="reveal" open><summary>Markup — a page that flows, and the one row that does not</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — a block on its own, and one with a neighbour</summary><div class="body"><div>
 <pre>&lt;h2&gt;a section the sheet numbers&lt;/h2&gt;
 
-&lt;div class="block"&gt;…full width: nothing sits beside it…&lt;/div&gt;
+&lt;div class="block"&gt;…the whole line: nothing sits beside it…&lt;/div&gt;
 
 &lt;div class="block" data-span="8"&gt;…the sentence…&lt;/div&gt;
 &lt;div class="block" data-span="4" data-look="tint"&gt;…the note beside it…&lt;/div&gt;</pre>
@@ -45,38 +41,27 @@
 
 <div class="block" data-span="12">
 <h3>Clean up the wording</h3>
-<p>Read every line as it will break: rewrite a line that ends in one to three words, give a short block beside a tall one the sentence it is missing, fold a last line into the one above, delete a last-row stub rather than pad it. Only the words change.</p>
+<p>Prose can be made shorter to remove a wrapped stub at the end of a line, or longer to fill one, as long as the lesson does not get worse for it. A block whose content is shorter than the blocks beside it in a row may gain an example or a question to even the heights.</p>
 </div>
-
-<div class="block" data-span="12">
-<h3>Concepts no tool draws</h3>
-<p>No figure for these: <b>how sure the speaker is</b>, <b>how often it happens</b>, <b>register</b> — what the room allows. Those lessons carry it in prose and in the choice of examples.</p>
-<p class="dim">Add a row here when a tool is built, a block when a figure is built, and delete the row when it is pruned. This page is unlinked from the index, holds no answer, saves nothing, and loads only the player.</p>
-</div>
-
 
 <h2>How a page is written</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>Prose is a tool with no markup and every block uses it: it states the rule a figure cannot draw. It comes before the figures because it fails quietly.</p>
+<p>Prose is not a visual: it has no markup, every block uses it, and it states the rule a visual cannot draw.</p>
 </div>
 
 <div class="block" data-span="12">
 <h3>What prose is held to</h3>
-<div class="cols" style="--cw:420px">
+<div class="cols" style="--cw:520px">
 <div><h4>What it is for</h4>
-<p>The rule no figure can draw, and the student's question answered in words — never the sentence a figure on the page already shows.</p></div>
+<p>The rule no visual can draw, and the student's question answered in words — never the sentence a visual on the page already shows.</p></div>
 <div><h4>What it assumes</h4>
-<p>Every term is the student's own word or is defined here. A word a figure owns (§3) is used only where that figure is drawn.</p></div>
-</div>
-<div class="cols" style="--cw:420px">
-<div><h4>What it must not claim</h4>
-<p>Anything the wording does not do: a metaphor where a fact belongs, two forms presented as one, two forms claimed to behave alike without naming what they share, a promise about the lesson, a false <i>only</i> / <i>never</i> / <i>always</i>.</p></div>
+<p>Every term is the student's own word or is defined here. A visual's own word (§3) is used only where that visual is drawn.</p></div>
+<div><h4>What it must not do</h4>
+<p>A metaphor where a fact belongs, two tenses presented as one, two tenses claimed to behave alike without naming what they share, a promise about the lesson, a false <i>only</i> / <i>never</i> / <i>always</i>. Nothing is coined either: a word this page does not define is not given a meaning in a lesson.</p></div>
 <div><h4>Whether a repeat earns its place</h4>
 <p>One rule per paragraph, with an example. A second paragraph on the same rule adds a case.</p></div>
 </div>
-<p><b>A form is the exact wording.</b> <i>wrote</i>, <i>have written</i>, <i>has been writing</i> are three forms. Two side by side is how a difference is taught, and saying what each does that the other does not is the paragraph's job.</p>
-<p><b>Nothing is coined.</b> A word this page does not define is not given a meaning in a lesson.</p>
 </div>
 
 <div class="block" data-span="12">
@@ -84,15 +69,15 @@
 <div class="cols">
 <div>
 <p><b>Rejected.</b> “Portuguese puts the whole claim inside the verb's ending: escrevi, tenho escrito. English splits it into two words that never touch, and one of them is a word you already know from do and will.”</p>
-<p class="dim">Two forms presented as one · <i>claim</i> with no timeline on the page · <i>splits</i> and <i>never touch</i> are figures of speech where a fact belongs · <i>do</i> and <i>will</i> share no behaviour with <i>have</i>.</p>
+<p class="dim">Two tenses presented as one · <i>claim</i> with no timeline on the page · <i>splits</i> and <i>never touch</i> are figures of speech where a fact belongs · <i>do</i> and <i>will</i> share no behaviour with <i>have</i>.</p>
 <p><b>Kept.</b> “<i>Escrevi</i> is past simple: one finished event. <i>Tenho escrito</i> is present perfect: the writing is still true now. English keeps that difference — <i>wrote</i> / <i>have written</i>.”</p>
-<p class="dim">Each form is named with what it does, the difference is stated, and the Portuguese is a fact about Portuguese.</p>
+<p class="dim">Each tense is named with what it does, the difference is stated, and the Portuguese is a fact about Portuguese.</p>
 </div>
 <div>
 <p><b>Rejected.</b> “<i>has been</i> + <i>-ing</i> is the same machine with a longer tail.”</p>
 <p class="dim"><i>Machine</i> is a term this page does not define, and the sentence talks about the lesson instead of the English.</p>
 <p><b>Kept.</b> “<i>He's been playing all week</i> is <i>he has been playing</i>: the playing started before this week and has not stopped. The same words with <i>he is</i> — <i>he's playing</i> — say only that it is happening now.”</p>
-<p class="dim">Both forms are shown, the deciding word is named, and nothing must be learned first.</p>
+<p class="dim">Both are shown, the deciding word is named, and nothing must be learned first.</p>
 </div>
 </div>
 <details class="reveal" open><summary>Markup — parallel items inside one block</summary><div class="body"><div>
@@ -110,25 +95,23 @@
 <p class="dim">The tint is that room's colour on the page, and the only thing the look is for. One tint per section: a second makes the first a decoration.</p>
 </div>
 
-<h2>Choosing a tool</h2>
+<h2>Choosing a visual</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>A tool is chosen by the question it answers, never by its name. Four statements fix whether using it teaches or decorates.</p>
+<p>A visual is chosen by the question it answers, never by its name. These four statements decide whether using it teaches or decorates.</p>
 </div>
 
 <div class="block" data-span="12">
-<h3>What every tool is described by</h3>
-<div class="cols" style="--cw:420px">
+<h3>What every visual is described by</h3>
+<div class="cols" style="--cw:520px">
 <div><h4>What it is for</h4>
-<p>The question it answers, in the student's words — <i>is this still true now?</i>, <i>which word carries which job?</i></p></div>
+<p>The one question it answers, in the student's words.</p></div>
 <div><h4>What it assumes</h4>
-<p>Whether the concept is new, known or retrievable, and every convention the figure needs: what a span means, what the mark for <i>now</i> means, that a dissolving left end means “lately”. The page supplies them or the figure is unreadable — Portuguese is often the efficient place.</p></div>
-</div>
-<div class="cols" style="--cw:420px">
-<div><h4>What it must not be used to claim</h4>
-<p>Every figure asserts something: a timeline asserts that time is a line with a present on it, and says nothing about how sure the speaker is or how often it happens. Used where its claim is false, it installs an error.</p></div>
+<p>Whether the concept is new, and every convention needed to read the drawing. The page supplies them or the visual is unreadable.</p></div>
+<div><h4>What it claims</h4>
+<p>One thing only. Used where that claim is false, it installs an error.</p></div>
 <div><h4>Whether a repeat earns its place</h4>
-<p>Two tests: does this appearance say something the sentence does not, and is a second appearance <i>answered</i> rather than the same display again? Repetition inside an exercise transfers; a repeated picture is decoration.</p></div>
+<p>Two tests: it says something the sentence does not, and a repeat is answered rather than re-displayed.</p></div>
 </div>
 </div>
 
@@ -140,71 +123,45 @@
 <li>If it were removed, the student would lose the answer to the concept's question.</li>
 <li>The page still has one thing that is obviously the thing to look at.</li>
 </ol>
-<p>No ceilings: one figure may justifiably appear twenty times in a lesson and be wrong once in another. The tests constrain the justification, not the quantity, and are applied per use — the same timeline can pass in one block and fail in the next, because the failure belongs to the sentence it was asked to carry.</p>
-<p>Two failures wear a rationale. <b>Saturation</b>: one figure repeated until it carries nothing — underline every line and the underline becomes typography. <b>Monotony</b>: different content through one shape, every section a chart. The variety rule is per page.</p>
+<p>No ceilings: one visual may appear twenty times in a lesson and be wrong once in another. The failures are saturation (one visual repeated until it carries nothing) and monotony (every section through one shape).</p>
 </div>
 
-<div class="block" data-look="tape" data-span="4">
+<div class="block" data-look="tape" data-span="4" style="align-self:start">
 <h3>Cost is a demand</h3>
-<p>What a figure asks of the page: attention, a convention the reader must already have, space, and sometimes a media file. It is paid where the figure is drawn — a mark the student cannot name is a tax on the sentence.</p>
-<p>A figure also costs the page its one obvious thing to look at. Two marks doing the same job is the same figure bought twice, and the cheapest figure is the one the sentence already carries.</p>
-</div>
-
-<div class="block" data-span="6">
-<h3>The words the figures own</h3>
-<p>A figure's own word is used only in a block where that figure is drawn, with the meaning below. Elsewhere the page says what the wording is and what it does.</p>
-<table class="chart" style="width:100%">
-<thead><tr><th>Word</th><th>Figure</th><th>What it names</th></tr></thead>
-<tbody>
-<tr><td><b>claim</b></td><td>the timeline</td><td>what a sentence asserts, drawn as the stretch of the line it covers</td></tr>
-<tr><td><b>span</b>, <b>open end</b>, <b>closed end</b></td><td>the timeline</td><td>that stretch itself; an open end means the claim still holds now</td></tr>
-<tr><td><b>field</b></td><td>the timeline</td><td>a container the event sits inside, not a length of time</td></tr>
-<tr><td><b>wall</b></td><td>the timeline</td><td>a deadline the claim has to reach</td></tr>
-<tr><td><b>now</b></td><td>the timeline</td><td>where the speaker stands</td></tr>
-<tr><td><b>job</b></td><td>word jobs</td><td>the part a word plays in its sentence</td></tr>
-</tbody>
-</table>
-</div>
-
-<div class="block" data-span="6">
-<h3>One concept, one row</h3>
-<p>One row per concept: start from the concept, take the tool in the second column, follow the link to it drawn. A concept with no tool has no row — §1 D names them.</p>
-<p>One concept never names two tools in one lesson: two figures answering one question fail the saturation test before the section is written. A row is added when a tool is built and changed when a tool is pruned.</p>
-<p class="dim">Two rows are owed before anything else is built: <b>a claim against a deadline</b>, and <b>the difference between two sounds</b> — the ear, not the eye, so a figure can only point.</p>
+<p>Every visual costs attention, space and a convention the reader must already have — sometimes a media file, sometimes a script. The cheapest visual is the one the sentence already carries.</p>
 </div>
 
 <div class="block" data-span="12">
 <h3>The mapping</h3>
 <table class="chart" style="width:100%">
-<thead><tr><th>Concept</th><th>Tool</th><th>Where</th></tr></thead>
+<thead><tr><th>Concept</th><th>Visual</th></tr></thead>
 <tbody>
-<tr><td>word order and the jobs inside a sentence</td><td>parts-of-speech marking</td><td><a href="#pos" aria-label="parts-of-speech marking">example</a></td></tr>
-<tr><td>how two clauses meet</td><td>the fenced join</td><td><a href="#pos" aria-label="the fenced join">example</a></td></tr>
-<tr><td>a tense, and where <i>now</i> falls</td><td>the timeline</td><td><a href="#axis" aria-label="the timeline">example</a></td></tr>
-<tr><td>who says what, and in what order</td><td>the dialog</td><td><a href="#dialog" aria-label="the dialog">example</a></td></tr>
-<tr><td>how a form is built, step by step</td><td>the numbered list</td><td><a href="#list" aria-label="the numbered list">example</a></td></tr>
-<tr><td>vocabulary arriving in bulk</td><td>a chart</td><td><a href="#chart" aria-label="a chart">example</a></td></tr>
-<tr><td>a word and what it pairs with</td><td>a thin pair chart</td><td><a href="#chart-pair" aria-label="a thin pair chart">example</a></td></tr>
-<tr><td>the forms of one verb</td><td>a split chart</td><td><a href="#chart-split" aria-label="a split chart">example</a></td></tr>
-<tr><td>a part of a whole</td><td>a bar beside its number</td><td><a href="#bar" aria-label="a bar beside its number">example</a></td></tr>
-<tr><td>a word whose Portuguese twin misleads</td><td>a gloss behind a click</td><td><a href="#gloss" aria-label="a gloss behind a click">example</a></td></tr>
-<tr><td>how one word is said</td><td>the key, in <code>ruby</code> / <code>rt</code></td><td><a href="#key" aria-label="the key, in ruby / rt">example</a></td></tr>
-<tr><td>real speech in context</td><td>the player</td><td><a href="#audio" aria-label="the player">example</a></td></tr>
-<tr><td>which place, and where it sits</td><td>the street map</td><td><a href="#map" aria-label="the street map">example</a></td></tr>
-<tr><td>a sequence of events</td><td>the comic strip, or the vertical timeline</td><td><a href="#comic" aria-label="the comic strip">example</a> · <a href="#vline" aria-label="the vertical timeline">example</a></td></tr>
-<tr><td>a word or form recalled from memory</td><td>the flash card</td><td><a href="#flip" aria-label="the flash card">example</a></td></tr>
+<tr><td>word order and the jobs inside a sentence</td><td><a href="#pos">parts-of-speech marking</a></td></tr>
+<tr><td>how two clauses meet</td><td><a href="#pos">the fenced join</a></td></tr>
+<tr><td>a tense, and where <i>now</i> falls</td><td><a href="#axis">the timeline</a></td></tr>
+<tr><td>who says what, and in what order</td><td><a href="#dialog">the dialog</a></td></tr>
+<tr><td>how a tense is put together</td><td><a href="#list">the numbered list</a></td></tr>
+<tr><td>vocabulary arriving in bulk</td><td><a href="#chart">a chart</a></td></tr>
+<tr><td>a word and what it pairs with</td><td><a href="#chart-pair">a thin pair chart</a></td></tr>
+<tr><td>one verb's past, by rule and by memory</td><td><a href="#chart-split">a split chart</a></td></tr>
+<tr><td>a part of a whole</td><td><a href="#bar">a bar beside its number</a></td></tr>
+<tr><td>a word whose Portuguese twin misleads</td><td><a href="#gloss">a gloss behind a click</a></td></tr>
+<tr><td>how one word is said</td><td><a href="#key">the key, in <code>ruby</code> / <code>rt</code></a></td></tr>
+<tr><td>real speech in context</td><td><a href="#audio">the player</a></td></tr>
+<tr><td>which place, and where it sits</td><td><a href="#map">the street map</a></td></tr>
+<tr><td>a sequence of events</td><td><a href="#comic">the comic strip</a>, <a href="#vline">the vertical timeline</a></td></tr>
+<tr><td>something the student must recall</td><td><a href="#flip">the flash card</a></td></tr>
 </tbody>
 </table>
-<p class="dim">The first column is the occasion, the second the tool, the third opens it drawn. A concept with no row is one no tool shows yet.</p>
+<p class="dim">The first column is the occasion, the second the visual that answers it, and every name opens it drawn. A concept with no row is one no visual shows yet.</p>
 </div>
 
 
 <h2>In-Block Features</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>Everything in this section goes inside a block: the underline, the horizontal timeline, the vertical timeline, the numbered list, the dialog, the charts, the bar, the gloss, the key, the player, the map, the strip and the flash card.</p>
-<p><b>None of them is used without accompaniment.</b> Each is half a row at most, and each is read by something — the sentence that explains it, a word list, the questions the student answers — in the cell beside it or in the block next to it. The same holds when the element is the block's own subject. That rule is the same for every element here and is not repeated under the examples.</p>
-<p><b>Not one of them belongs to a particular block.</b> Each goes wherever a lesson needs it: inside a teaching block, inside an activity block, or alone as the block's own subject at whatever span it needs. An activity about word order uses the underline and the numbered list; an activity about a series of events uses the vertical timeline; a comparison the student answers row by row uses the chart. Nothing about the element changes when the block around it becomes an activity, and the same markup moves between the two.</p>
+<p>The underline, the timeline, the vertical timeline, the numbered list, the dialog, the charts, the bar, the gloss, the key, the player, the map, the strip and the flash card can each go inside a block — alone, with other elements, or beside the prose that reads them — and none of them has to. A chart, a dialog or a timeline can be a block of its own, and any of them may take more of a row when the content needs it. The examples here are the smaller in-block size.</p>
+<p><b>None of them is used without accompaniment.</b> Each is read by something — the sentence that explains it, a word list, the questions the student answers — in the same block or in the block next to it, and that holds when the element is the block's own subject. Nothing about an element changes when the block around it becomes an activity: an activity about word order uses the underline and the numbered list, and the same markup moves between the two.</p>
 </div>
 
 <div class="block" data-span="12">
@@ -246,7 +203,7 @@
 </figure>
 </div>
 </div>
-<p class="dim">These two are the <b>anchored</b> form: a sentence, and the line pinned to one word of it. <code>.an</code> marks that word and <code>data-tense</code> chooses which point of the line must sit under it — the word moves the line, the sentence never moves.</p>
+<p class="dim">These two are the <b>anchored</b> version: a sentence, and the line pinned to one word of it. <code>.an</code> marks that word and <code>data-tense</code> chooses which point of the line must sit under it — the word moves the line, the sentence never moves.</p>
 <details class="reveal" open><summary>Markup — the timeline</summary><div class="body"><div>
 <pre>&lt;figure class="tlw" data-tense="simple-past"&gt;
   &lt;p class="tlw-say"&gt;I &lt;span class="pos-m pos-v an"&gt;wrote&lt;/span&gt; it.&lt;/p&gt;
@@ -258,7 +215,7 @@
     &lt;b class="tln-then"&gt;then&lt;/b&gt;
   &lt;/div&gt;
 &lt;/figure&gt;</pre>
-<p class="dim">One figure per tense; <code>.tlgrid</code> holds a family, each cell named by an <code>&lt;h4&gt;</code>. <b>Anchoring is optional:</b> a bare <code>.tln</code> with no <code>.tlw</code> above it draws the three points on its own, for a block that needs the line and no sentence. <b>Width:</b> unset it hugs its phrase and never goes under 300px; <code>data-grow="1"</code> fills the container and <code>data-grow="2"</code> takes the width of an anchor string. <b>Marks, only where the claim is the lesson:</b> <code>tln-span</code> a band to now, <code>tln-that</code> a second past, <code>tln-bar</code> a stretch, <code>tln-gloss</code> a Portuguese word under a point.</p>
+<p class="dim">One timeline per tense; <code>.tlgrid</code> holds a family, each cell named by an <code>&lt;h4&gt;</code>. <b>Anchoring is optional:</b> a bare <code>.tln</code> with no <code>.tlw</code> above it draws the three points on its own, for a block that needs the line and no sentence. <b>Width:</b> unset it hugs its phrase and never goes under 300px; <code>data-grow="1"</code> fills the container and <code>data-grow="2"</code> takes the width of an anchor string. <b>Marks, only where the span or the position is the lesson:</b> <code>tln-span</code> a band to now, <code>tln-that</code> a second past, <code>tln-bar</code> a stretch, <code>tln-gloss</code> a Portuguese word under a point.</p>
 </div></div></details>
 
 <div class="rows">
@@ -266,14 +223,14 @@
 <h4>The numbered list — an order</h4>
 <ol class="seq" data-mode="numbered">
 <li><p><b>Have</b> carries the person: <i>I have</i>, <i>she has</i>.</p></li>
-<li><p>The third form carries the action: <i>written</i>.</p></li>
+<li><p>The third word carries the action: <i>written</i>.</p></li>
 <li><p>Change the person and only the first word moves.</p></li>
 </ol>
-<p class="dim">When the sequence is the teaching, not a process the reader already knows. Unset <code>data-mode</code> gives one item per line.</p>
+<p class="dim">When the order is the lesson, not a process the reader already knows. Unset <code>data-mode</code> gives one item per line.</p>
 <details class="reveal" open><summary>Markup — a numbered list</summary><div class="body"><div>
 <pre>&lt;ol class="seq" data-mode="numbered"&gt;
   &lt;li&gt;&lt;p&gt;&lt;b&gt;Have&lt;/b&gt; carries the person: &lt;i&gt;I have&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;p&gt;The third form carries the action.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;The third word carries the action.&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;</pre>
 </div></div></details>
 </div>
@@ -575,30 +532,32 @@
 </div>
 
 <div class="rows">
-<div id="comic" style="max-width:33.333%">
+<div id="comic" style="width:50%">
 <h4>The strip — one sentence per panel</h4>
-<p>Each panel carries the sentence it stands for, in the <b>past simple</b>.</p>
 <table class="chart">
   <tbody>
     <tr>
       <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0">Ana waited at the stop in the rain.</p></td>
       <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0">A bus came down the road.</p></td>
-    </tr>
-    <tr>
       <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><p style="margin:6px 0 0">She ran to catch it.</p></td>
       <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0">It pulled away without her.</p></td>
     </tr>
   </tbody>
 </table>
+<details class="reveal" open><summary>Markup — the comic strip</summary><div class="body"><div>
+<pre>&lt;table class="chart"&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" width="100%" role="img"
+               aria-label="what the panel shows"&gt;…&lt;/svg&gt;
+            &lt;p&gt;the sentence under the panel&lt;/p&gt;&lt;/td&gt;
+        &lt;td&gt;…the next panel…&lt;/td&gt;&lt;/tr&gt;
+    …
+  &lt;/tbody&gt;
+&lt;/table&gt;</pre>
+<p class="dim">One row per beat, one sentence per panel. The panel is a <code>td</code>, so the grid is the strip's own and the sentence never becomes a column beside the picture. <code>svg</code> panels take <code>width="100%"</code> and an <code>aria-label</code> describing the drawing. Swap the <code>&lt;p&gt;</code> for <code>&lt;input class="gap" style="--gap-w:100%"&gt;</code> and the same strip is the activity in §5.</p>
+</div></div></details>
 </div>
-<div>
-<h4>One panel, one sentence</h4>
-<p>The drawing carries what happened and the line under it is the only place the tense appears; the order of the panels is the order of the paragraph. Use it where the sequence is the lesson.</p>
-<p class="dim">Panels are inline <code>svg</code> here; a block takes four frames from <code>assets/</code> or the same drawing, captioned with the source. A strip takes a third of a row. Swap each <code>&lt;p&gt;</code> for a <code>.gap</code> and it is the activity in §5.</p>
-</div>
-</div>
-<div class="rows">
-<div id="flip" style="width:33.333%">
+<div id="flip" style="width:50%">
 <h4>A flash card the student turns</h4>
 <label class="flip" style="--flip-h:152px">
 <input type="checkbox">
@@ -607,16 +566,9 @@
 <span class="face back"><b>lend</b><span class="dim">give something, get it back later</span></span>
 </span>
 </label>
-</div>
-<div>
-<h4>Prompt on the front, answer on the back</h4>
-<p>The student reads the front, answers, and turns the card to check. Nothing is typed and there is no script. Use it for anything trained by recall — a form, a meaning, a word's second sense.</p>
-<p class="dim">A card takes a third of a row. <code>--flip-h</code> is the height both faces share, and the only thing a lesson sets.</p>
-</div>
-</div>
 <details class="reveal" open><summary>Markup — a flash card</summary><div class="body"><div>
 <pre>&lt;div class="rows"&gt;
-  &lt;div id="flip" style="width:33.333%"&gt;
+  &lt;div id="flip" style="width:50%"&gt;
     &lt;h4&gt;what the card asks&lt;/h4&gt;
     &lt;label class="flip" style="--flip-h:152px"&gt;
       &lt;input type="checkbox"&gt;
@@ -630,25 +582,14 @@
 &lt;/div&gt;</pre>
 <p class="dim">The checkbox keeps the card turned and print shows the front; no script. <code>--flip-h</code> is the height both faces share.</p>
 </div></div></details>
-<details class="reveal" open><summary>Markup — the comic strip</summary><div class="body"><div>
-<pre>&lt;table class="chart"&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" width="100%" role="img"
-               aria-label="what the panel shows"&gt;…&lt;/svg&gt;
-            &lt;p&gt;the sentence under the panel&lt;/p&gt;&lt;/td&gt;
-        &lt;td&gt;…the next panel…&lt;/td&gt;&lt;/tr&gt;
-    …
-  &lt;/tbody&gt;
-&lt;/table&gt;</pre>
-<p class="dim">One row per beat, one sentence per panel, one tense. The panel is a <code>td</code>, so the grid is the strip's own and the sentence never becomes a column beside the picture. <code>svg</code> panels take <code>width="100%"</code> and an <code>aria-label</code> describing the drawing. Swap the <code>&lt;p&gt;</code> for <code>&lt;input class="gap" style="--gap-w:100%"&gt;</code> and the same strip is the activity in §5.</p>
-</div></div></details>
-
+</div>
+</div>
 </div>
 
 <h2>Dialogs and activities</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>An activity is a block the student writes in. The dialog with blanks is the worked form of the dialog in §4, and it carries its instruction in the same block or the gap has no single answer.</p>
+<p>An activity is a block the student writes in. The dialog with blanks is the worked version of the dialog in §4, and it carries its instruction in the same block or the gap has no single answer.</p>
 </div>
 
 <div class="block" data-span="12">
