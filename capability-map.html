@@ -651,10 +651,6 @@ next();
 </div>
 
 <div class="rows">
-<div id="gap" data-activity="gap">
-<p class="dim">Fill in the word you hear.</p>
-<p>I <input class="gap" data-answer="clock" style="--gap-w:5em"> in at six every morning.</p>
-</div>
 <div id="correction" data-activity="correction">
 <p class="dim">One word is wrong. Write the sentence again.</p>
 <p>He <b>have</b> clocked in early.</p>
@@ -845,15 +841,6 @@ next();
 
 &lt;!-- .listen is wired by engine2 and speaks its data-say text, so dictation needs no recording --&gt;
 &lt;!-- with a .vz-play player in the block instead, the same field is the dictation --&gt;</pre>
-</div></div></details>
-<details class="reveal" open><summary>Markup — #gap · one word in a sentence</summary><div class="body"><div>
-<pre>&lt;div id="gap" data-activity="gap"&gt;
-  &lt;p class="dim"&gt;the instruction&lt;/p&gt;
-  &lt;p&gt;I &lt;input class="gap" data-answer="clock" style="--gap-w:5em"&gt; in at six.&lt;/p&gt;
-&lt;/div&gt;
-
-&lt;!-- data-answer keys it, | between alternatives · --gap-w is the width the answer needs --&gt;
-&lt;!-- data-activity carries the element's own id: it is how the ledger and the page agree --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #chunks · chunks in the wrong order</summary><div class="body"><div>
 <pre>&lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
