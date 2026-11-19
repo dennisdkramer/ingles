@@ -1060,6 +1060,12 @@
   .block[data-structure="pair"] .side:last-child{
     background:var(--surface-2);
     border-color:color-mix(in oklab,var(--ink) 18%,var(--line-2))}
+  /* the same two versions stacked, each only as wide as its own sentence — a contrast pair that sits
+     in a row beside the text it belongs to instead of spanning the block */
+  .pair-stack{display:grid;gap:6px;justify-items:start}
+  .pair-stack .side{display:grid;gap:8px;padding:11px 13px;border-radius:var(--r1);
+    background:var(--surface-2);border:1px solid var(--line-2);align-content:start}
+  .pair-stack .side>p{margin:0;font-size:1rem}
 }
 
 /* #60 GAP — <input class="gap" data-answer="a|b"> inside a sentence; data-answer is the key, unset = no key. Vary: --gap-w (length, 9em) */

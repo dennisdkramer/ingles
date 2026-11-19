@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Capability map — English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=f037db03c6">
+<link rel="stylesheet" href="style.css?v=7e52523b4e">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>VISUAL REFERENCE</span></h1></header>
@@ -71,6 +71,12 @@
 <div class="rows">
 <div>
 <p class="pos" id="pos"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p>
+</div>
+<div id="pair" style="justify-content:center">
+<div class="pair-stack">
+<div class="side" data-state="wrong"><p><i class="mark"></i> I <b>am knowing</b> the answer.</p></div>
+<div class="side" data-state="correct"><p><i class="mark"></i> I <b>know</b> the answer.</p></div>
+</div>
 </div>
 </div>
 
@@ -324,28 +330,17 @@
 
 
 
-<div class="block" data-structure="pair" data-span="12" id="pair">
-<h3>One sentence, two versions</h3>
-<p>Only one of these is what a native speaker says.</p>
-<div class="sides" style="--pair-rows:1">
-<div class="side" data-state="wrong"><p><i class="mark"></i> I <b>am knowing</b> the answer.</p></div>
-<div class="side" data-state="correct"><p><i class="mark"></i> I <b>know</b> the answer.</p></div>
-</div>
-</div>
-
 <p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
 <div class="cols markup-row">
 <details class="reveal" open><summary>Markup — #pair · one sentence, two versions</summary><div class="body"><div>
-<pre>&lt;div class="block" data-structure="pair"&gt;
-  &lt;div class="sides" style="--pair-rows:1"&gt;
-    &lt;div class="side" data-state="wrong"&gt;&lt;p&gt;&lt;i class="mark"&gt;&lt;/i&gt; the sentence that is wrong&lt;/p&gt;&lt;/div&gt;
-    &lt;div class="side" data-state="correct"&gt;&lt;p&gt;&lt;i class="mark"&gt;&lt;/i&gt; the sentence that is right&lt;/p&gt;&lt;/div&gt;
-  &lt;/div&gt;
+<pre>&lt;div class="pair-stack"&gt;
+  &lt;div class="side" data-state="wrong"&gt;&lt;p&gt;&lt;i class="mark"&gt;&lt;/i&gt; the sentence that is wrong&lt;/p&gt;&lt;/div&gt;
+  &lt;div class="side" data-state="correct"&gt;&lt;p&gt;&lt;i class="mark"&gt;&lt;/i&gt; the sentence that is right&lt;/p&gt;&lt;/div&gt;
 &lt;/div&gt;
 
-&lt;!-- data-structure="pair" on the block, .sides holding exactly two .side — each .side is one version --&gt;
-&lt;!-- --pair-rows is the number of children each side has, so the two align row by row --&gt;
-&lt;!-- the state colours the side and draws the glyph; the .mark element is what draws it --&gt;</pre>
+&lt;!-- the two versions stack, one above the other, and each is only as wide as its own sentence --&gt;
+&lt;!-- data-state colours the side and draws the glyph; the .mark element is what draws it --&gt;
+&lt;!-- .sides (two columns) is the other shape, for a block whose whole content is the pair --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #pos · the job each word carries, and the fence</summary><div class="body"><div>
 <pre>&lt;p class="pos"&gt;
@@ -587,9 +582,9 @@ next();
 
 <div class="block" data-look="stripes" data-span="12">
 <h3>Marked activities with controls</h3>
-<p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>The four controls are alternatives chosen by what the student must do</b> — a gap for a form, a radio for a judgement, a checkbox for several at once, a written field for a sentence. The blocks that follow add four shapes that are not a control: numbered chunks, a chart whose cells are answered, four options to pick one from, and a matching pool. Two blocks at the end of this section are marked <b>IGNORED</b>: they stay on the page for reference and lessons are not using them for now.</p>
+<p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>The four controls are alternatives chosen by what the student must do</b> — a gap for a form, a radio for a judgement, a checkbox for several at once, a written field for a sentence. The rows that follow add seven more, one row each: numbered chunks, a chart whose cells are answered, four options to pick one from, a matching pool, a correction, a translation into English and a dictation — the last three for no beginner, and the sentence they ask for always tuned to the lesson's band. Two blocks at the end of this section are marked <b>IGNORED</b>: they stay on the page for reference and lessons are not using them for now.</p>
 <p class="dim"><code>data-answer</code> keys a gap, <code>|</code> separating alternatives; <code>--gap-w</code> is the width the answer needs. A radio group's key is <code>data-a</code> on <code>.qitem</code>; engine2.js marks the right option and writes <code>.ans</code> beside a typed field.</p>
-<p>Each of these can stand as a block of its own or sit inside a block with the prose, the chart or the drawing it accompanies; the two below are the in-block size.</p>
+<p>Each of these can stand as a block of its own or sit inside a block with the prose, the chart or the drawing it accompanies; every row below is the in-block size.</p>
 
 <div class="rows">
 <div>
@@ -657,11 +652,9 @@ next();
   <p class="dim">The gap is under its panel: the panel is the question and there is no separate stem.</p>
 </div>
 </div>
-</div>
 
-<div class="block" data-look="stripes" data-span="12">
-<h3>Multiple choice</h3>
 <p>Choose the answer that fits the line.</p>
+<div class="rows">
 <div class="qitem" data-a="b">
 <p class="qstem">The pallet <b>was tipping</b> when I got to the dock.</p>
 <div class="qopts">
@@ -682,8 +675,6 @@ next();
 </div>
 </div>
 
-<div class="block" data-look="stripes" data-span="12">
-<h3>Matching</h3>
 <p>Write the letter of the meaning beside each phrase. One letter is left over.</p>
 <div class="rows">
 <div>
@@ -708,10 +699,7 @@ next();
 </ul>
 </div>
 </div>
-</div>
 
-<div class="block" data-look="stripes" data-span="12">
-<h3>Correction, translation, dictation</h3>
 <div class="rows">
 <div>
 <p class="dim">One word is wrong. Write the sentence again.</p>
@@ -729,10 +717,10 @@ next();
 <textarea class="write" rows="2" data-answer="I clocked in at six forty." placeholder="what you hear"></textarea>
 </div>
 </div>
-<p class="dim">Any of the three may sit inside another block beside the element it trains, and a lesson may use one or none of them. <b>None is for a beginner</b>, and at any level the sentence they ask for is tuned to that lesson's difficulty — a correction of one word at band 12 is a correction of a clause at band 40.</p>
 </div>
 
-<div class="block" data-look="dark" data-span="6">
+<div class="rows">
+<div class="block" data-look="dark">
 <h3>A dark block <span class="dim">— IGNORED</span></h3>
 <p>At 2 a.m. the yard is lit by one lamp and the only sound is the compressor.</p>
 <div class="opts">
@@ -742,10 +730,11 @@ next();
 <p class="dim">For a block whose content <i>is</i> a night, a screen or a stage — never to make a block stand out.</p>
 </div>
 
-<div class="block" data-look="stripes" data-state="done" data-span="6">
+<div class="block" data-look="stripes" data-state="done">
 <h3>A block that reports its own state <span class="dim">— IGNORED</span></h3>
 <p>Mike <input class="gap" data-answer="has" style="--gap-w:5em"> already posted it.</p>
 <p class="dim">The block reports itself with <code>data-state</code>; the border and halo turn green.</p>
+</div>
 </div>
 
 
@@ -774,7 +763,7 @@ next();
 &lt;!-- the script turns the card itself (it cancels the label's own toggle and sets the box), so a click is never doubled · --flip-h is the height both faces share --&gt;
 &lt;!-- training only: no data-answer and no data-a in this block, so no engine marks it and it cannot be the quiz --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — 5B · a dialog with a gap</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — a dialog with a gap</summary><div class="body"><div>
 <pre>&lt;li&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;
     &lt;span class="say"&gt;Three times. I
       &lt;input class="gap" data-answer="have|'ve" style="--gap-w:4em"&gt;
@@ -783,7 +772,7 @@ next();
 &lt;!-- an item and the chart beside it: one .rows, each in a cell of its own — neither cell carries a size,
      the row gives them equal shares, and the chart centres in the half it was given --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — 5B · a chart whose rows are answered</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — a chart whose rows are answered</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes" data-span="12"&gt;
   &lt;table class="chart"&gt;
     &lt;tr&gt;&lt;td&gt;6:40&lt;/td&gt;&lt;td&gt;He clocked in.&lt;/td&gt;
@@ -796,7 +785,7 @@ next();
   &lt;!-- one example of each control type is shown — an activity may mix them or use a single type, as its content needs --&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — 5B · multiple choice</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — multiple choice</summary><div class="body"><div>
 <pre>&lt;div class="qitem" data-a="b"&gt;
   &lt;p class="qstem"&gt;the line the student reads&lt;/p&gt;
   &lt;div class="qopts"&gt;
@@ -809,7 +798,7 @@ next();
 &lt;!-- data-a on the .qitem is the key and matches the value of the right input · one .qitem per item --&gt;
 &lt;!-- a set of items gets its own name per item (mc1, mc2), so two items never share one radio group --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — 5B · matching</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — matching</summary><div class="body"><div>
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;
     &lt;figure class="chartwrap"&gt;&lt;table class="chart"&gt;
@@ -825,7 +814,7 @@ next();
 &lt;!-- one meaning more than there are items, so the last answer cannot be reached by elimination --&gt;
 &lt;!-- each .gap keys the letter it expects; engine2 marks them on Complete --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — 5B · correction</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — correction</summary><div class="body"><div>
 <pre>&lt;p&gt;He &lt;b&gt;have&lt;/b&gt; clocked in early.&lt;/p&gt;
 &lt;textarea class="write" rows="2"
           data-answer="He has clocked in early.|He's clocked in early."
@@ -834,13 +823,13 @@ next();
 &lt;!-- the wrong word is marked in the line; the field asks for the whole sentence, so it is .write and not a gap --&gt;
 &lt;!-- data-answer takes the accepted forms separated by | · the placeholder is what makes the field read as filled --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — 5B · translation</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — translation</summary><div class="body"><div>
 <pre>&lt;p class="pt"&gt;the sentence in Portuguese&lt;/p&gt;
 &lt;input class="gap" style="--gap-w:100%" data-answer="the English|another accepted form"&gt;
 
 &lt;!-- .pt is the Portuguese utility · the answer is produced from meaning, never copied from the line above --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — 5B · dictation</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — dictation</summary><div class="body"><div>
 <pre>&lt;button class="listen" type="button"
         data-say="I clocked in at six forty."&gt;▶&lt;/button&gt;
 &lt;textarea class="write" rows="2" data-answer="I clocked in at six forty."
@@ -877,7 +866,7 @@ next();
   &lt;/table&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — 5D · the block that reports itself done</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — the block that reports itself done</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes" data-state="done"&gt;
   …the activity…
 &lt;/div&gt;</pre>
