@@ -115,8 +115,8 @@
   h3{counter-increment:blk}
   h3::before{content:counter(blk,upper-alpha) ". ";color:var(--track-ink);padding-right:.5em;
     font-family:var(--display);font-size:calc(.8em + 4.4pt);font-weight:700}
-  h4{font-family:var(--serif);font-style:italic;font-weight:700;font-size:var(--s-1);
-    color:var(--dkblue);margin:0 0 8px;padding-left:20px;text-transform:none;
+  h4{font-family:var(--serif);font-style:italic;font-weight:700;font-size:calc(var(--s-1) + 2px);
+    color:var(--dkblue);margin:0 0 8px;padding:0;text-align:center;text-transform:none;
     letter-spacing:normal}
   p,li{margin:0 0 calc(.7em + var(--para-gap));text-wrap:pretty}
   body{cursor:default;caret-color:transparent}
@@ -857,17 +857,24 @@
     border:2px solid color-mix(in oklab,var(--ink-2) 50%,var(--paper));border-radius:14px}
   .content-area{width:1200px;margin:0 auto;padding:98px 0 16px;position:relative}
 
-  /* #41 ROW — the page is a line of four quarters: .content-area itself, a section inside it, and an
-     .itemrow are all the same grid. A child takes the whole line unless the pass gives it a span in
-     quarters: data-span="1".."4". DOM order is the order on the page, a row is as tall as its tallest
-     block, and no packer runs in the browser. Vary: --col-gap, --row-gap, --section-gap */
-  .content-area,.itemrow,.content-area>section{display:grid;
-    grid-template-columns:repeat(4,1fr);
-    column-gap:var(--col-gap,18px);row-gap:var(--row-gap,22px);align-items:start}
-  .content-area>*,.itemrow>*,.content-area>section>*{grid-column:span 4;min-width:0;margin-block:0}
-  .content-area>*[data-span="1"],.itemrow>*[data-span="1"],.content-area>section>*[data-span="1"]{grid-column:span 1}
-  .content-area>*[data-span="2"],.itemrow>*[data-span="2"],.content-area>section>*[data-span="2"]{grid-column:span 2}
-  .content-area>*[data-span="3"],.itemrow>*[data-span="3"],.content-area>section>*[data-span="3"]{grid-column:span 3}
+  /* #41 GRID — the page is twelve tracks. A block takes the whole line unless it is given a span of 3, 4,
+     6, 8 or 9; a tall thin block may also cover 2 or 3 rows, and the blocks that follow fill beside it.
+     Rows are as tall as their tallest box and every box in a row is that height. Which span a block gets
+     is a choice made by looking at its content, and the choice is written on the element: nothing is
+     inferred in the browser and no packer runs. Vary: --col-gap, --row-gap, --section-gap */
+  .content-area{display:grid;grid-template-columns:repeat(12,1fr);
+    column-gap:var(--col-gap,18px);row-gap:var(--row-gap,22px);align-items:stretch}
+  .content-area>*{grid-column:span 12;min-width:0;margin-block:0;width:auto}
+  .content-area>*[data-span="3"]{grid-column:span 3}
+  .content-area>*[data-span="4"]{grid-column:span 4}
+  .content-area>*[data-span="6"]{grid-column:span 6}
+  .content-area>*[data-span="8"]{grid-column:span 8}
+  .content-area>*[data-span="9"]{grid-column:span 9}
+  .content-area>*[data-rows="2"]{grid-row:span 2}
+  .content-area>*[data-rows="3"]{grid-row:span 3}
+  /* parallel items inside one block: one flex row, evenly spaced, never a second grid */
+  .cols{display:flex;gap:var(--col-gap,18px);align-items:flex-start;flex-wrap:wrap;padding-block:3px}
+  .cols>*{flex:1 1 var(--cw,220px);min-width:0}
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
   .content-area>h2{margin-block:var(--section-gap,34px) 0}
