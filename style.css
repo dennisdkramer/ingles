@@ -92,7 +92,7 @@
   [hidden]{display:none!important}
   html{-webkit-text-size-adjust:100%}
   body{margin:0;min-width:1415px;background:var(--track-ground);color:var(--ink);
-    font:var(--s0)/1.62 var(--serif);text-rendering:optimizeLegibility}
+    font:var(--s0)/1.62 var(--serif);text-rendering:optimizeLegibility;text-align:justify}
   h1,h2,h3,h4{margin:0 0 .4em;text-wrap:balance;font-weight:700;line-height:1.18}
   h1{font-family:var(--playfair);font-size:var(--s4);letter-spacing:.14em;margin:8px 0 0}
   /* the section rule fades over 8px at each end; the 2px border stays in the box (transparent) so the
