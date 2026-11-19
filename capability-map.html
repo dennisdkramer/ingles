@@ -20,7 +20,7 @@
 
 <div class="block" data-span="12">
 <h3>Arrange it, and give it a look</h3>
-<p><b>The flow arranges the page; the span repairs it.</b> 1A puts related things into one row — <code>.rows</code> when the cells need different widths, <code>.cols</code> when they are interchangeable — and a cell that is only a figure keeps the width its own columns need. <b>1B writes <code>data-span</code> only where the flow reads badly</b> — a row too tight, an element squeezed under the width it draws at, a lone block with half a line empty beside it. Width is the repair, never the plan.</p>
+<p><b>Adjacent things go into one flex row, and that is the default.</b> Two blocks of similar height, and two items beside each other inside a block, are written into one <code>.rows</code>: the cells share the width, match the row's height and need no size of their own. <code>.cols</code> is for interchangeable cells that must wrap, and <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. <b>No width is written on a cell</b> — 1A pairs, the flow sizes, and <b>1B writes a span or a size only to repair a row the flow got wrong</b>: too tight, an element squeezed under the width it draws at, a lone block with half a line empty beside it. Width is the repair, never the plan.</p>
 <p><code>data-look</code> is declared on the block, never inferred from what it holds, and changes the paint only: one tint and one outline per section at most.</p>
 <details class="reveal" open><summary>Markup — a row, an element on its own, and a span written as the repair</summary><div class="body"><div>
 <pre>&lt;h2&gt;a section the sheet numbers&lt;/h2&gt;

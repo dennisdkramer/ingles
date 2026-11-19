@@ -893,9 +893,9 @@
   .cols>*{flex:1 1 var(--cw,220px);min-width:0}
   /* the other case: cells whose sizes differ, so each takes the width its own content needs and the
      row is shared between them. Any number of cells; the writer decides the pairing, not a wrap.
-     One cell carries the sentence and fills what is left; a cell that is only a figure keeps the width
-     its own columns need, so a chart never sits in a cell wider than it draws. */
-  .rows{display:flex;flex-wrap:nowrap;gap:var(--flex-gap,26px);align-items:flex-start;padding-top:8px}
+     Heights are matched across the row, and a cell that is only a figure keeps the width its own
+     columns need, so a chart never sits in a cell wider than it draws. */
+  .rows{display:flex;flex-wrap:nowrap;gap:var(--flex-gap,26px);align-items:stretch;padding-top:8px}
   .rows>*{flex:1 1 0;min-width:0}
   .rows>:not(:has(>p)):not(:has(>figure.vz-play)):not(:has(>ol)):not(:has(>ul)){flex:0 1 auto}
 
