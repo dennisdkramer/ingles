@@ -1157,7 +1157,15 @@
     clip-path:polygon(3% 0,100% 7%,96% 100%,0 92%)}
 
   .block[data-look="float"]{background:transparent;border-color:transparent;
-    border-top-color:transparent;box-shadow:none;padding-inline:0}
+    border-top-color:transparent;box-shadow:none;padding:0 10px}
+  /* an intro is text under the section rule, not a frame: it keeps the 10px inset and nothing else, so the
+     space above and below it is the page's own row gap rather than a frame's padding */
+  .block[data-look="float"]>:first-child{margin-top:0}
+
+  /* the top rule is the only place a look spends colour, and only the top edge changes:
+     an activity is red, a taped note is dark yellow, a tint keeps the track's own hue */
+  .block[data-look="stripes"]{border-top-color:var(--err)}
+  .block[data-look="tape"]{border-top-color:color-mix(in oklab,var(--warn) 70%,var(--dkblue))}
 
   .block[data-look="dark"]{--ink:#f2ece1;--ink-2:#b7ab97;--line:#3d372f;--line-2:#2b2620;
     --surface:#14110d;--surface-2:#1e1a14;--paper:#191510;--sunken:#2b241b;

@@ -1,5 +1,10 @@
 # PAST BATCHES
 
+## 2026-11-19 — the activity section reports only what an engine reads
+## [B1] - Delete the score-reactive bar and the ring: nothing on a page counts answers, so 6B's premise was false <"Can it read the totality of all the questions on the page? if so, we will put it at the bottom of the lesson page above the completed button. if not, delete 6b"> <engine2.js:261-292 marks keys and toggles body.is-completed only; no writer of --score in engine1/2/4, player.js or pronkey.js; capability-map.html: 6B/6C/6D deleted, 6A kept at span 12, its "the engine writes it" claim replaced by the fact, Decisions bullet now records "No score bar, anywhere">
+---
+## [B2] - Give the three looks a coloured top edge and let an intro sit on the page's own row gap <"change the default styling of stripes so the top colored part of the border is 2px red, tint 2px track hue, tape 2px dark yellow" + "reduce the margin/padding so that it doesnt have huge gaps above and below it"> <style.css: stripes border-top var(--err), tape border-top a dark yellow mix, tint already var(--accent); .block[data-look="float"] padding 0 10px and its first child margin-top 0 — measured 35-38px above (22 of it the page row gap) and 23px below, was 61/49; Chrome: float intros 38/23, stripes top rgb(179,53,44), tape 2px oklab dark ochre>
+
 ## 2026-11-19 — §4 is one block of in-block features
 ## [B1] - Collapse §4 into one block: the join folded into the underline, "timeline" everywhere, the pair chart out of its frame, the split chart's caption gone, the picture and listening blocks deleted <"4e is already in 4a ... change the section header to In-Block Features"> <capability-map.html §4: h2 "In-Block Features", one 12-span block holding underline + poschart, timeline .tlgrid, bulk and pair charts, label prose and split chart, bar + gloss + key, and the recording; 5 reveals; mapping links re-pointed to #pos and relabelled timeline>
 ---

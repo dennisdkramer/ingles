@@ -591,61 +591,18 @@
 <h2>How an activity reports itself</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>An activity's state is written on the block, not drawn by the page: the marker classes are the engine's, the sheet reads them, and no element is added to make the change happen.</p>
+<p>An activity's state is written on the block, not drawn by the page: one attribute or class on the frame, the sheet reads it, and no element is added to make the change happen.</p>
 </div>
 
-<div class="block" data-look="stripes" data-state="done" data-span="6">
+<div class="block" data-look="stripes" data-state="done" data-span="12">
 <h3>Every answer is in</h3>
 <p>Beto <input class="gap" data-answer="has" style="--gap-w:5em"> already posted it.</p>
-<p class="dim">The block carries <code>data-state="done"</code> once every answer in it is in. The border and the halo turn green; nothing else about the block changes.</p>
+<p class="dim">The block carries <code>data-state="done"</code>: the border and the halo turn green, and nothing else about the block changes.</p>
 <details class="reveal"><summary>Markup — the block that reports itself done</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes" data-state="done"&gt;
   …the activity…
 &lt;/div&gt;</pre>
-<p class="dim">The engine writes <code>data-state="done"</code> once every answer in the block is in. The sheet reads it; no element is added to make the change happen.</p>
-</div></div></details>
-</div>
-
-<div class="block" data-reactive style="--score:.72" data-span="6">
-<h3>The number the engine writes</h3>
-<p>The block carries <code>--score:.72</code>. The engine writes the number, the surface and the bar read it, and both animate when it changes.</p>
-<div class="meter"><i></i></div>
-<p class="dim">12 of 17 correct in this section.</p>
-<details class="reveal"><summary>Markup — the number the engine writes</summary><div class="body"><div>
-<pre>&lt;div class="block" data-reactive style="--score:.72"&gt;
-  &lt;div class="meter"&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;
-&lt;/div&gt;</pre>
-<p class="dim">The engine writes <code>--score</code> between 0 and 1, and only the number: the surface and the meter read it, and both animate when it changes.</p>
-</div></div></details>
-</div>
-
-<div class="block" data-span="6">
-<h3>Right, wrong, not tried</h3>
-<div class="opts">
-<label class="opt" data-state="correct"><i class="mark"></i><span>He was standing there when it went off.</span></label>
-<label class="opt" data-state="wrong"><i class="mark"></i><span>He stood there when it was going off.</span></label>
-<label class="opt"><i class="mark"></i><span>Not tried yet.</span></label>
-</div>
-<p class="dim">One empty <code>&lt;i class="mark"&gt;</code> per row; the tick and the cross are drawn in CSS, and the third row is what an untouched mark looks like.</p>
-<details class="reveal"><summary>Markup — right, wrong, not tried</summary><div class="body"><div>
-<pre>&lt;div class="opts"&gt;
-  &lt;label class="opt" data-state="correct"&gt;&lt;i class="mark"&gt;&lt;/i&gt;&lt;span&gt;…&lt;/span&gt;&lt;/label&gt;
-  &lt;label class="opt" data-state="wrong"&gt;&lt;i class="mark"&gt;&lt;/i&gt;&lt;span&gt;…&lt;/span&gt;&lt;/label&gt;
-  &lt;label class="opt"&gt;&lt;i class="mark"&gt;&lt;/i&gt;&lt;span&gt;not tried yet&lt;/span&gt;&lt;/label&gt;
-&lt;/div&gt;</pre>
-<p class="dim">One empty <code>&lt;i class="mark"&gt;</code> per row: the tick and the cross are drawn in CSS from <code>data-state</code>, and a row with no state is the untouched mark.</p>
-</div></div></details>
-</div>
-
-<div class="block center" data-span="6">
-<h3>The last number on the page</h3>
-<div class="ring" style="--pct:64"><b></b></div>
-<p class="dim mt">64% of the section. The score-reactive bar is the last element of the page's content, above the last / completed / next controls, so a student meets the result and the way on in one place.</p>
-<details class="reveal"><summary>Markup — the last number on the page</summary><div class="body"><div>
-<pre>&lt;div class="block center" data-span="6"&gt;
-  &lt;div class="ring" style="--pct:64"&gt;&lt;b&gt;&lt;/b&gt;&lt;/div&gt;
-&lt;/div&gt;</pre>
-<p class="dim">Use it once, where the section's result belongs: the last element of the page's content, above the last / completed / next controls. <code>--pct</code> is the only thing that changes.</p>
+<p class="dim">The sheet reads <code>data-state</code> and draws the border and the halo; the markup is not touched. No shipped script writes it yet — <code>engine2.js</code> marks keys and the page's completion, not a block's — so for now the state is set by whatever marks the block.</p>
 </div></div></details>
 </div>
 
@@ -724,7 +681,7 @@
 <li><b>The underline is the exception among figures.</b> Its contract is a script that reads a sentence and prints the spans, so the markup is generated, never hand-typed. An inline timeline is generated the same way, from the same call.</li>
 <li><b>A look is declared, never inferred.</b> The hue is the track's; no block sets its own colour.</li>
 <li><b>The span is chosen, not measured.</b> The number is written on the block, and DOM order stays the order on the page.</li>
-<li><b>The section score is the last thing on the page.</b> The score-reactive bar sits above the last / completed / next controls, so the result and the way on are met in one place.</li>
+<li><b>No score bar, anywhere.</b> Nothing on a page counts answers: <code>engine2.js</code> reveals keys and knows only whether the page is complete, and no script writes <code>--score</code>. A bar at the foot of the lesson would be a number typed by hand, so a section reports its state on the block and nowhere else.</li>
 <li><b>One reference, not two.</b> Everything a retired elements page demonstrated is a block or a card-less figure in §4–§7, so the page a lesson reads and the page a person reads are the same page.</li>
 </ul>
 </div>
