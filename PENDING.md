@@ -4,6 +4,8 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 ---
 
 # [CURRENT]
+## [B7] - Make a lesson click resolve the file the server currently lists <"im seeing the new lesson tile but the contents of the page look the same as before"> <index.html: `go()` splits into `go()` (permission checks only) + `openLesson()`, which re-reads `lessons.json?t=<now>` with `cache:"no-store"` at click time and adopts it when it carries the track, then navigates to `lessonPath()+"?v="+Date.now()`; a failed request falls back to the painted list and the gate is signed unchanged; verified in jsdom that a stale painted list pointing at a deleted file still opens the current file>
+
 ---
 ## [B6] - Fix the landing page hiding its own sign-in button <"it seems like i cant log in to the live site, can you check it out?"> <index.html: `showNeedGoogle()` no longer hides `#gbtn`/`#gtext` (it only adds the `#needg` fallback); `probeSession()`'s `isNotDisplayed()` branch keeps the button and logs the reason instead of calling the fallback, because One Tap not displaying is normal and `renderButton` is the only path to a credential; the GIS retry budget grows from 4s to 12s>
 ---

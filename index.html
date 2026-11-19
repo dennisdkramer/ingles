@@ -576,8 +576,26 @@ const prog=()=>{try{const e=profile&&profile.email;return e?JSON.parse(localStor
 function go(t,i){
  if(!profile){welcomeAttention();log("entre para abrir as lições");return}
  if(!teacher&&MYTRACKS.indexOf(t)<0){log("sem acesso a esta trilha");return}
- const dest=lessonPath(t,i);if(!dest){log("lição não encontrada");return}
- sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,teacherName:teacher?(profile.name||""):"",name:teacher?(profile.name||""):studentName,sig:h(profile.email+t+SECRET)});location=dest;}
+ openLesson(t,i);
+}
+/* THE ADDRESS OF A LESSON IS RESOLVED WHEN IT IS CLICKED, not when the tile was painted (owner report
+   2026-11-19: the index listed the new lesson 44 while the click kept opening the file it replaced — the tile
+   had been painted from the cached list, and a lesson page is served with a 10-minute max-age on top of that).
+   Two cures, both here: the list is re-read with a cache-busting query, so a tile that is a moment out of date
+   still opens the file the server currently lists, and the page is requested with a stamp, so the DOCUMENT can
+   never be an older copy of the same address. A failed request falls back to the painted list rather than
+   blocking the student; the gate is signed exactly as before, so the permission rules do not move. */
+let OPENING=false;
+async function openLesson(t,i){
+ if(OPENING)return;OPENING=true;
+ log("abrindo lição "+i+"…");
+ try{const lr=await fetch("lessons.json?t="+Date.now(),{cache:"no-store"});
+  if(lr.ok){const j=await lr.json();if(j&&Array.isArray(j[t])){LESSONS=j;writeCache("lessons2",j)}}
+ }catch(e){}
+ const rel=lessonPath(t,i);
+ if(!rel){OPENING=false;log("lição não encontrada");return}
+ sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher,teacherName:teacher?(profile.name||""):"",name:teacher?(profile.name||""):studentName,sig:h(profile.email+t+SECRET)});
+ location=rel+"?v="+Date.now();}
 /* the teacher's "open this student's next lesson" gate. Currently UNREFERENCED: the per-book ⏭ button it
    served was removed with the switches (2026-11-09), and it is kept so restoring that jump is one line. */
 function goStudent(t,i,email){const s=QUEUE.approved.find(x=>x.email===email);const dest=lessonPath(t,i);if(!dest)return;sessionStorage.gate=JSON.stringify({email:profile.email,track:t,teacher:true,teacherName:profile.name||"",name:s?(s.name||""):"",student:email,sig:h(profile.email+t+SECRET)});location=dest;}
