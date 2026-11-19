@@ -201,7 +201,6 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 
 <div class="rows">
 <div id="key">
-<h4>Above a word: your own text</h4>
 <p>I can't <ruby>record<rp>(</rp><rt>gravar</rt><rp>)</rp></ruby> it tonight.</p>
 <p class="dim"><code>rt</code> takes any words the block needs above that word: a translation, a reminder, a gloss in the student's own language.</p>
 <details class="reveal" open><summary>Markup — a word and the text above it</summary><div class="body"><div>
@@ -211,7 +210,6 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 </div></div></details>
 </div>
 <div id="key-job">
-<h4>Above a word: its job</h4>
 <p class="pos"><span class="pos-n pos-subj"><ruby>She<rp>(</rp><rt>N</rt><rp>)</rp></ruby></span> <span class="pos-m"><ruby>has<rp>(</rp><rt>M</rt><rp>)</rp></ruby></span> <span class="pos-v"><ruby>finished<rp>(</rp><rt>V</rt><rp>)</rp></ruby></span> <span class="pos-adj"><ruby>the<rp>(</rp><rt>ADJ</rt><rp>)</rp></ruby></span> <span class="pos-n pos-o"><ruby>report<rp>(</rp><rt>DO</rt><rp>)</rp></ruby></span>.</p>
 <p class="dim">The labels are the ones <code>pos-labels</code> prints — N · V · M · DO · IO · ADJ · ADV · PREP — written in <code>rt</code> above each word instead of after it. The marks stay on the span, so the two readings of the same sentence can stand side by side.</p>
 <details class="reveal" open><summary>Markup — a word and its job above it</summary><div class="body"><div>
@@ -225,7 +223,6 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 </div></div></details>
 </div>
 <div id="key-sound">
-<h4>Above a word: how it is said</h4>
 <p>The <ruby>library<rp>(</rp><rt><b>li</b>·<b>br</b><span class="pr-g">e</span><b>ry</b></rt><rp>)</rp></ruby> closes at six.</p>
 <p class="dim">The key is the entry <code>dictionary.json</code> holds for that word, rendered by <code>PronKey.render</code> — never a key typed by eye. <code>-</code> is a syllable break, a greyed letter is written and not said, <code>ə</code> is the schwa. <code>rp</code> is never omitted: a browser without ruby still prints the key in parentheses.</p>
 <details class="reveal" open><summary>Markup — a word and the dictionary's key</summary><div class="body"><div>
@@ -241,7 +238,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 <div class="rows">
 <div id="gloss">
-<h4>A word explained where it is read</h4>
 <p>You have to <button type="button" class="glossbtn" popovertarget="d1">clock in</button> before eight.</p>
 <div class="defcard" popover id="d1"><b>clock in</b>bater o ponto — the punch clock at work, not <i>entrar</i>.</div>
 <p class="dim">One card per <code>id</code>, opened by its own word through <code>popovertarget</code>: nothing is scripted and the card opens at the word. The card holds the brief, clear thing the reader needs at that word — a translation, a usage note, what the word is not.</p>
@@ -257,7 +253,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div></div></details>
 </div>
 </div>
-<h4>Where <i>now</i> sits — the timeline</h4>
 <div class="tlgrid" id="axis">
 <div>
 <h4>present perfect</h4>
@@ -295,10 +290,11 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <div class="block" data-span="12">
 <h3>Standalone visuals</h3>
 <p>A visual that draws no frame of its own wears <code>.viz</code> — the bar, the three lists, the player and the map. A chart, a flash card and a strip carry their own frame and take nothing. <code>.viz</code> is never a second <code>.block</code>: the block is the teaching frame, so a frame inside it would be two edges of the same rank.</p>
+<p>A cell takes an <code>h4</code> only where the lesson needs to name what is in it. Only the recording must have one, because the song's own name is part of the recording; nothing else here carries a heading, and the sentence beside an element is what tells the reader what it is.</p>
 <div class="rows">
 <div id="chart">
-<h4>The chart — parallel items</h4>
 <figure class="chartwrap">
+<figcaption class="chartcap">The chart — parallel items</figcaption>
 <table class="chart">
 <thead><tr class="bare"><th colspan="3"></th></tr></thead>
 <tbody>
@@ -309,7 +305,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </table>
 </figure>
 <p>A chart sets parallel items side by side while the student compares them: comparison, or a vocabulary set too large for one sentence. It is not a recap of prose, and a page of charts is a page with one shape.</p>
-<p class="dim">Below three items a chart is a sentence with rules around it. A header earns its space only where a column would be ambiguous without one; where none needs a name the row collapses to a rule. A chart that stands alone takes a <code>figcaption</code>, one inside a block takes the <code>h4</code> above it.</p>
+<p class="dim">Below three items a chart is a sentence with rules around it. A header earns its space only where a column would be ambiguous without one; where none needs a name the row collapses to a rule. A chart that stands alone takes a <code>figcaption</code>; a chart in a block takes one too, unless the block already names it in an <code>h4</code>.</p>
 </div>
 <div id="chart-pair">
 <figure class="chartwrap">
@@ -333,7 +329,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 <div class="rows">
 <div id="label">
-<h4>The split chart — a label per family</h4>
 <p><code>th.vlab</code> carries the family name, which side the rows beside it belong to, and the rule that separates the families is written here: <b>Regular</b> adds <i>-ed</i> and the base never moves, so the rows are evidence the rule holds; <b>Irregular</b> has a form of its own for each verb, so each is learned alone.</p>
 <p>The same label splits any family a lesson must separate — two conjugations, two registers, the words that follow the rule from the words that do not. A chart with no family to separate gets none.</p>
 <p class="dim">Anything that would have taken a third column is written here instead. Add the column and it stops being a label and becomes the bulk chart beside it.</p>
@@ -370,17 +365,21 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
     …
   &lt;/tbody&gt;
 &lt;/table&gt;</pre>
-<p class="dim"><code>figure.chartwrap</code> when the chart carries its own name, the <code>&lt;h4&gt;</code> above it when the block names it. <code>th.vlab</code> spends no column on a family label — its words stand outside the chart's edge — and <code>tr.bare</code> collapses a nameless header row to a rule. One chart per comparison.</p>
+<p class="dim"><code>figure.chartwrap</code> when the chart carries its own name, and a <code>&lt;figcaption class="chartcap"&gt;</code> for that name. <code>th.vlab</code> spends no column on a family label — its words stand outside the chart's edge — and <code>tr.bare</code> collapses a nameless header row to a rule. One chart per comparison.</p>
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;…the sentence, and the chart it reads…&lt;/div&gt;
-  &lt;div&gt;&lt;h4&gt;the chart's name&lt;/h4&gt;&lt;figure class="chartwrap"&gt;…&lt;/figure&gt;&lt;/div&gt;
+  &lt;div&gt;
+    &lt;figure class="chartwrap"&gt;
+      &lt;figcaption class="chartcap"&gt;the chart's name&lt;/figcaption&gt;
+      &lt;table class="chart"&gt;…&lt;/table&gt;
+    &lt;/figure&gt;
+  &lt;/div&gt;
 &lt;/div&gt;</pre>
-<p class="dim">A row of in-block content is one flex row that fills the block, never a column of stacked parts: the cell carrying the sentence grows, a cell that is only a heading and a figure keeps its figure's width — so no chart sits in a cell wider than it draws. The content decides; a figure smaller than its cell caps itself (<code>--map-w</code>, <code>max-width</code>), and a width is never written on the cell.</p>
+<p class="dim">A row of in-block content is one flex row that fills the block, never a column of stacked parts: the cell carrying the sentence grows, a cell that is only a figure keeps its figure's width — so no chart sits in a cell wider than it draws. The content decides; a figure smaller than its cell caps itself (<code>--map-w</code>, <code>max-width</code>), and a width is never written on the cell.</p>
 </div></div></details>
 
 <div class="rows">
 <div id="bar">
-<h4>A part of a whole</h4>
 <div class="viz">
 <div class="bar-row"><span>same in Portuguese</span><div class="bar"><i style="--w:62%"></i></div><b>62%</b></div>
 <div class="bar-row"><span>of those, false friends</span><div class="bar"><i style="--w:28%"></i></div><b>28%</b></div>
@@ -399,7 +398,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div>
 <div class="rows">
 <div id="list">
-<h4>The numbered list — an order</h4>
 <ol class="seq viz" data-mode="numbered">
 <li><p><b>Have</b> carries the person: <i>I have</i>, <i>she has</i>.</p></li>
 <li><p>The third word carries the action: <i>written</i>.</p></li>
@@ -414,7 +412,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div></div></details>
 </div>
 <div id="vline">
-<h4>The vertical timeline — dated events</h4>
 <ol class="seq viz" data-mode="timeline">
 <li><span class="at">2022</span><p>She wrote three songs.</p></li>
 <li><span class="at">2023</span><p>She stopped writing.</p></li>
@@ -432,18 +429,12 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 <div class="rows">
 <div id="dialog">
-<h4>The dialog — one turn per speaker</h4>
 <ol class="seq viz" data-mode="turns">
 <li><span class="who">Ana</span><span class="say">Did you post the letter?</span></li>
 <li><span class="who">Beto</span><span class="say">Three times. I keep thinking I forgot.</span></li>
 <li><span class="who">Ana</span><span class="say">Then photograph it next time.</span></li>
 </ol>
 <p class="dim">One turn per speaker, in order: <code>.who</code> names the speaker, <code>.say</code> carries the words.</p>
-</div>
-<div>
-<h4>Read, or worked with a gap</h4>
-<p>Read as it stands, or with a <code>.gap</code> inside a turn — the block does not change shape either way.</p>
-<p class="dim">Use it where two people talk and nothing is answered. Turns alternate sides; nothing is scored unless a control is in it.</p>
 </div>
 </div>
 <details class="reveal" open><summary>Markup — a dialog</summary><div class="body"><div>
@@ -495,7 +486,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div></div></details>
 </div>
 <div id="map">
-<h4>The street map</h4>
   <!-- THE DRAWING IS THE BUILDER'S TO SIZE: `--map-w` on the wrapper caps its width (any CSS length); unset,
        it takes the host's width. A cap rather than a width, so no drawing can overflow its host. The wrapper
        hugs the drawing, so the ticks below, positioned in % of the wrapper, stay on their places. -->
@@ -591,7 +581,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 <div class="rows">
 <div id="comic" style="width:50%">
-<h4>The strip — one sentence per panel</h4>
 <table class="chart">
   <tbody>
     <tr>
@@ -616,7 +605,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div></div></details>
 </div>
 <div id="flip" style="width:50%">
-<h4>A flash card the student turns</h4>
 <label class="flip" style="--flip-h:152px">
 <input type="checkbox">
 <span class="card3d">
