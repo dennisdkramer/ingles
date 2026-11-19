@@ -580,7 +580,7 @@ next();
 
 <div class="rows">
 <div id="chunks">
-  <p>Unscramble the sentence:</p>
+  <p>Unscramble the sentences:</p>
   <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center">
     <span><b style="font-size:.8em">1</b> she</span>
     <span><b style="font-size:.8em">2</b> that</span>
@@ -589,7 +589,16 @@ next();
     <span><b style="font-size:.8em">5</b> told</span>
     <span><b style="font-size:.8em">6</b> never</span>
   </p>
-  <p style="text-align:center;margin-top:auto"><input class="gap" style="--gap-w:100%" aria-label="the whole sentence"></p>
+  <p style="text-align:center"><input class="gap" style="--gap-w:100%" aria-label="the first sentence"></p>
+  <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center">
+    <span><b style="font-size:.8em">1</b> he</span>
+    <span><b style="font-size:.8em">2</b> when</span>
+    <span><b style="font-size:.8em">3</b> already</span>
+    <span><b style="font-size:.8em">4</b> had</span>
+    <span><b style="font-size:.8em">5</b> left</span>
+    <span><b style="font-size:.8em">6</b> I got there</span>
+  </p>
+  <p style="text-align:center"><input class="gap" style="--gap-w:100%" aria-label="the second sentence"></p>
 </div>
 <div id="stripgaps">
   <p>Describe what is happening in each picture, using the <b>past simple</b>.</p>
@@ -676,9 +685,13 @@ next();
   &lt;span&gt;&lt;b style="font-size:.8em"&gt;2&lt;/b&gt; that&lt;/span&gt;
   …
 &lt;/p&gt;
-&lt;p style="text-align:center;margin-top:auto"&gt;
-  &lt;input class="gap" style="--gap-w:100%" aria-label="the whole sentence"&gt;
-&lt;/p&gt;</pre>
+&lt;p style="text-align:center"&gt;
+  &lt;input class="gap" style="--gap-w:100%" aria-label="the first sentence"&gt;
+&lt;/p&gt;
+
+&lt;!-- one set, or as many as the activity needs: a further .chips over its own answer line, one after
+     another vertically as here, side by side in a .rows of their own, or mixed with the prose, the chart
+     or the strip they are read with. Each answer line needs its own aria-label. --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #stripgaps · the strip as an activity</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes"&gt;
