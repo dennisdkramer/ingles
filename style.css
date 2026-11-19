@@ -102,15 +102,13 @@
       var(--rose) calc(100% - 8px),transparent 100%) bottom left/100% 2px no-repeat border-box;
     padding-bottom:6px;margin:1.6em 0 .3em}
   h3{font-family:var(--display);font-size:calc(var(--s1) + 7pt);color:var(--track-ink);
-    position:relative;width:fit-content;max-width:100%;
-    padding-left:15px;padding-right:15px;padding-bottom:6px;margin:22px 0 0;
-    letter-spacing:.02em}
-  /* the heading's rule: 2px, 3px under the text, and only as long as the heading plus 15px either side —
-     the two ends fade out over exactly that margin, so it is solid under the text and gone past it */
-  h3::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;
-    background:linear-gradient(90deg,transparent 0,var(--rose) 15px,
-      var(--rose) calc(100% - 15px),transparent 100%);
-    pointer-events:none}
+    position:relative;
+    padding-bottom:6px;margin:22px 0 0;
+    letter-spacing:.02em;
+    text-decoration:underline;text-decoration-color:var(--rose);
+    text-decoration-thickness:2px;text-underline-offset:6px}
+  /* the heading's underline is a text decoration: it follows the words and wraps with them, and it is
+     drawn 6px below the baseline so it clears the descenders. No rules, no box to pin it to. */
   h2{counter-reset:blk}
   h3{counter-increment:blk}
   h3::before{content:counter(blk,upper-alpha) ". ";color:var(--track-ink);padding-right:.5em;
