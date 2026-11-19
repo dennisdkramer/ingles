@@ -878,8 +878,8 @@
   .cols{display:flex;gap:var(--flex-gap,26px);align-items:flex-start;flex-wrap:wrap;
         padding-top:8px}
   .cols>*{flex:1 1 var(--cw,220px);min-width:0}
-  /* the other case: two things side by side, their widths taken from what each holds. A row of the
-     same shape sits under it, so the pair is chosen by the writer, never by a wrap. */
+  /* the other case: cells whose sizes differ, so each takes the width its own content needs and the
+     row is shared between them. Any number of cells; the writer decides the pairing, not a wrap. */
   .rows{display:flex;flex-wrap:nowrap;gap:var(--flex-gap,26px);align-items:flex-start;padding-top:8px}
   .rows>*{flex:1 1 auto;min-width:0}
 
@@ -909,18 +909,19 @@
      own padding and read as if they were in the margin */
   :is(.block,.panel,.card,.dialog)>:is(ul,ol){padding-left:1.6em}
   /* the same gutter inside a flex cell, where the cell is narrower than a frame */
-  .cols>div>:is(ul,ol){padding-left:1.2em}
+  :is(.cols,.rows)>div>:is(ul,ol){padding-left:1.2em}
 
   /* #43 RHYTHM — the space between things in a frame is the margin ABOVE each one: a paragraph, a flex
      row or a chart that follows another takes 14px. A list item keeps its own bottom margin (li, in base),
      and inside a flex row the row carries the space, so a cell's first item adds none and the rest add 10.
      Vary: these numbers. */
   :is(.block,.panel,.card,.dialog)>:is(p,table,figure,.chartwrap){margin-top:14px}
-  :is(.block,.panel,.card,.dialog)>.cols{margin-top:12px}
+  :is(.block,.panel,.card,.dialog)>.cols,
+  :is(.block,.panel,.card,.dialog)>.rows{margin-top:12px}
   :is(.block,.panel,.card,.dialog)>p.dim{margin-top:7px;padding:0 6px 4px}
-  .cols>div>:first-child{margin-top:0}
-  .cols>div>:is(p,.cols,table,figure):not(:first-child){margin-top:10px}
-  .cols>div>p.dim:not(:first-child){margin-top:7px;padding:0 6px 4px}
+  :is(.cols,.rows)>div>:first-child{margin-top:0}
+  :is(.cols,.rows)>div>:is(p,.cols,.rows,table,figure):not(:first-child){margin-top:10px}
+  :is(.cols,.rows)>div>p.dim:not(:first-child){margin-top:7px;padding:0 6px 4px}
 
   /* prose — --measure (length, 68ch) */
   .block[data-structure="prose"]{line-height:1.72}
