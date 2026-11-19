@@ -680,25 +680,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </table>
 </div>
 
-<div class="game" data-game="skeetRange" data-time="6000" data-kind="train">
-  <p class="game-how">One shot per round. Hit the disc whose meaning fits the clue before it leaves the range.</p>
-  <div class="game-list">
-    <div class="qitem" data-a="a">
-      <div class="qline"><span class="qnum">1.</span><span class="qstem">which one means “take it now, give it back later”</span></div>
-      <div class="qopts"><label><input type="radio" name="g1" value="a">borrow</label><label><input type="radio" name="g1" value="b">lend</label><label><input type="radio" name="g1" value="c">owe</label></div>
-    </div>
-    <div class="qitem" data-a="c">
-      <div class="qline"><span class="qnum">2.</span><span class="qstem">which one means “you still have to give it back”</span></div>
-      <div class="qopts"><label><input type="radio" name="g2" value="a">borrow</label><label><input type="radio" name="g2" value="b">lend</label><label><input type="radio" name="g2" value="c">owe</label></div>
-    </div>
-    <div class="qitem" data-a="b">
-      <div class="qline"><span class="qnum">3.</span><span class="qstem">which one is the direction the giver takes</span></div>
-      <div class="qopts"><label><input type="radio" name="g3" value="a">borrow</label><label><input type="radio" name="g3" value="b">lend</label><label><input type="radio" name="g3" value="c">owe</label></div>
-    </div>
-  </div>
-  <button class="game-start" type="button">▶ Play</button>
-</div>
-
 <details class="reveal" open><summary>Markup — a game, and the levers on it</summary><div class="body"><div>
 <pre>&lt;div class="game" data-game="skeetRange" data-time="6000" data-kind="train"&gt;
   &lt;p class="game-how"&gt;one line: how to play&lt;/p&gt;
@@ -718,6 +699,12 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 &lt;!-- levers on .game: data-game · data-time (ms per item, 0 = none) · data-limit · data-retry
      · data-shuffle · data-rounds · data-prompt · data-sound · data-skin --&gt;</pre>
+<pre>&lt;!-- the question can be a spoken word instead of a written stem --&gt;
+&lt;div class="qline"&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt;
+  &lt;span class="qstem"&gt;&lt;button class="listen" type="button" data-say="borrow"&gt;▶&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;
+
+&lt;!-- with a .listen chip the item may leave data-a off: the option whose text the clip speaks is the
+     answer (engine4 matches it against data-say) --&gt;</pre>
 <p class="dim">Words the game needs on the item, not on the block: <code>data-answer="&lt;word&gt;"</code> for <code>wordleBoard</code> and <code>crosswordBoard</code>, <code>data-first</code> and <code>data-lives</code> for <code>echoPads</code>, <code>data-train</code> for <code>trainOrder</code>, <code>data-buckets</code> for <code>catchBasket</code>. Every game answers with the same radios, so engine4 checks the option and the page's own marking still saves it.</p>
 </div></div></details>
 
@@ -727,5 +714,4 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div>
 </main>
 <script src="player.js"></script>
-<script src="engine4.js"></script>
 </body></html>
