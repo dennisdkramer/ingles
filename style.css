@@ -1288,7 +1288,7 @@
 
 /* #99 U — utilities, wins over every layer above: .dim .lead .pt .ptw .mono .stack .row .center .mt .sr .stress mark Vary: --measure (length) */
 @layer u{
-  .dim{color:var(--dim);font-size:15px;line-height:1.45}
+  .dim{color:var(--dim);font-size:15px;line-height:1.45;font-style:italic}
   .lead{font-family:var(--playfair);font-size:18px;font-style:italic;color:var(--lead);
     margin:.2em 0 .7em;line-height:1.5;max-width:var(--measure,62ch)}
   .pt{font-family:var(--pt-serif);font-style:italic;color:var(--ptw)}
