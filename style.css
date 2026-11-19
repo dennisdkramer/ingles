@@ -897,7 +897,7 @@
      its own columns need, so a chart never sits in a cell wider than it draws. */
   .rows{display:flex;flex-wrap:nowrap;gap:var(--flex-gap,26px);align-items:flex-start;padding-top:8px}
   .rows>*{flex:1 1 0;min-width:0}
-  .rows>:not(:has(>p)){flex:0 1 auto}
+  .rows>:not(:has(>p)):not(:has(>figure.vz-play)){flex:0 1 auto}
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
   .content-area>h2{margin-block:var(--section-gap,34px) 0}
@@ -1532,7 +1532,7 @@
      not a width so a drawing can never overflow the host that holds it; a builder wanting it larger
      gives it a wider host. The wrapper hugs the drawing (the svg is the only thing that gives the wrapper
      its height) so the tick labels laid over it in % stay on their places at every width. */
-  .vz-map{position:relative;width:100%;max-width:var(--map-w,100%)}
+  .vz-map{position:relative;width:var(--map-w,100%);max-width:100%}
   .vz-map>svg{display:block;width:100%;height:auto}
   .vz-controls{display:none;align-items:center;gap:10px;margin:8px 0 10px}
   .vz-play.is-enhanced .vz-controls{display:flex}

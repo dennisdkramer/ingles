@@ -443,9 +443,9 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 <div class="rows">
 <div id="audio">
-<h4>I Love You, California</h4>
-<p class="dim">Knickerbocker Quartet and Elizabeth Spencer — the credit is the last line above the player, and nothing else goes there.</p>
 <figure class="vz-play viz">
+<h4>I Love You, California</h4>
+<p class="dim">Knickerbocker Quartet and Elizabeth Spencer</p>
 <audio class="vz-audio" src="assets/california.mp3" data-duration="35.87" controls preload="metadata"></audio>
 <div class="vz-controls"><button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>
 <span class="vz-time" data-now>0:00</span>
@@ -460,6 +460,8 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </figure>
 <details class="reveal" open><summary>Markup — the recording</summary><div class="body"><div>
 <pre>&lt;figure class="vz-play viz"&gt;
+  &lt;h4&gt;the song's own name&lt;/h4&gt;
+  &lt;p class="dim"&gt;the performer&lt;/p&gt;
   &lt;audio class="vz-audio" src="assets/&lt;name&gt;.mp3" data-duration="35.87"
          controls preload="metadata"&gt;&lt;/audio&gt;
   &lt;div class="vz-controls"&gt;
@@ -478,7 +480,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;/ol&gt;
   &lt;p&gt;one paragraph explaining the words, never the block&lt;/p&gt;
 &lt;/figure&gt;</pre>
-<p class="dim">When the recording is the block's own subject, the song title is the <code>h3</code> and the performer the <code>h4</code> directly above the player. <code>data-t</code> comes from the cut that <code>qa/AUDIO.md</code> prints, never typed by eye; <code>data-duration</code> is the decoded length of the shipped file. The line lights as it is sung; native controls are the floor and <code>player.js</code> draws the bar.</p>
+<p class="dim">The song's own name is the <code>h4</code> and the performer the credit line under it, both inside the frame — the one heading this page keeps, because the name is part of the recording. <code>data-t</code> comes from the cut that <code>qa/AUDIO.md</code> prints, never typed by eye; <code>data-duration</code> is the decoded length of the shipped file. The line lights as it is sung; native controls are the floor and <code>player.js</code> draws the bar.</p>
 </div></div></details>
 </div>
 <div id="map">
