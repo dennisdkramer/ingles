@@ -582,31 +582,42 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <p class="dim">The panel is a <code>td</code>, so a panel and anything under it share one cell. <code>svg</code> panels take <code>width="100%"</code> and an <code>aria-label</code> describing the drawing. Put an <code>input.gap</code> under a panel and the same strip is the activity in §5.</p>
 </div></div></details>
 </div>
-<div id="flip" style="width:50%">
-<label class="flip" style="--flip-h:152px">
+<div id="flip" style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center">
+<label class="flip" style="flex:0 0 auto;width:min(100%,18rem);--flip-h:152px">
 <input type="checkbox">
 <span class="card3d">
 <span class="face"><b>borrow</b><span class="dim">take something, give it back later</span></span>
 <span class="face back"><b>lend</b><span class="dim">give something, get it back later</span></span>
 </span>
 </label>
-<details class="reveal" open><summary>Markup — a flash card</summary><div class="body"><div>
-<pre>&lt;div class="rows"&gt;
-  &lt;div id="flip" style="width:50%"&gt;
-    &lt;h4&gt;what the card asks&lt;/h4&gt;
-    &lt;label class="flip" style="--flip-h:152px"&gt;
-      &lt;input type="checkbox"&gt;
-      &lt;span class="card3d"&gt;
-        &lt;span class="face"&gt;&lt;b&gt;front&lt;/b&gt;&lt;span class="dim"&gt;…&lt;/span&gt;&lt;/span&gt;
-        &lt;span class="face back"&gt;&lt;b&gt;back&lt;/b&gt;&lt;span class="dim"&gt;…&lt;/span&gt;&lt;/span&gt;
-      &lt;/span&gt;
-    &lt;/label&gt;
-  &lt;/div&gt;
-  &lt;div&gt;…the prose that reads it…&lt;/div&gt;
-&lt;/div&gt;</pre>
-<p class="dim">The checkbox keeps the card turned and print shows the front; no script. <code>--flip-h</code> is the height both faces share and <code>--dur</code> the turn’s duration; the block’s own entrance is the same token.</p>
-</div></div></details>
+<label class="flip" style="flex:0 0 auto;width:min(100%,18rem);--flip-h:152px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face"><b>spill the tea</b><span class="dim">you are being asked for it</span></span>
+<span class="face back"><b>hand over the gossip</b><span class="dim">“what did she actually say?”</span></span>
+</span>
+</label>
+<label class="flip" style="flex:0 0 auto;width:min(100%,18rem);--flip-h:152px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face"><b>throw shade</b><span class="dim">it lands, but not straight</span></span>
+<span class="face back"><b>insult without naming them</b><span class="dim">“she never said his name once”</span></span>
+</span>
+</label>
 </div>
+<details class="reveal" open><summary>Markup — a flash card, and a row of them</summary><div class="body"><div>
+<pre>&lt;div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center"&gt;
+  &lt;label class="flip" style="flex:0 0 auto;width:min(100%,18rem);--flip-h:152px"&gt;
+    &lt;input type="checkbox"&gt;
+    &lt;span class="card3d"&gt;
+      &lt;span class="face"&gt;&lt;b&gt;front&lt;/b&gt;&lt;span class="dim"&gt;…&lt;/span&gt;&lt;/span&gt;
+      &lt;span class="face back"&gt;&lt;b&gt;back&lt;/b&gt;&lt;span class="dim"&gt;…&lt;/span&gt;&lt;/span&gt;
+    &lt;/span&gt;
+  &lt;/label&gt;
+  …one more label per card, same attributes…
+&lt;/div&gt;</pre>
+<p class="dim">The checkbox keeps the card turned and print shows the front; no script. <code>--flip-h</code> is the height both faces share and <code>--dur</code> the turn’s duration. <b>A card owns its width.</b> Its two faces are taken out of the flow and stacked on top of each other, so the card has nothing inside to measure itself from: give it <code>width:min(100%,18rem)</code> — wide enough for the longer face — and it is drawn to its content instead of being squeezed by whatever sits beside it. A group of cards is one wrapping, centred flex row, and each card is <code>flex:0 0 auto</code>, so it keeps that width and the row centres what is left over. Never put cards in <code>.rows</code>, and never give each one a bare wrapper <code>div</code>: those cells shrink below their content, which is how three cards end up compressed into columns of broken lines.</p>
+</div></div></details>
 </div>
 </div>
 
