@@ -146,8 +146,8 @@
 <tr><td>a word and what it pairs with</td><td><a href="#chart-pair">a thin pair chart</a></td></tr>
 <tr><td>one verb's past, by rule and by memory</td><td><a href="#chart-split">a split chart</a></td></tr>
 <tr><td>a part of a whole</td><td><a href="#bar">a bar beside its number</a></td></tr>
-<tr><td>a word whose Portuguese twin misleads</td><td><a href="#gloss">a gloss behind a click</a></td></tr>
-<tr><td>how one word is said</td><td><a href="#key">the key, in <code>ruby</code> / <code>rt</code></a></td></tr>
+<tr><td>a word the sentence cannot explain in passing</td><td><a href="#gloss">a card at the word</a></td></tr>
+<tr><td>how one word is said</td><td><a href="#key-sound">the pronunciation key, above the word</a></td></tr>
 <tr><td>real speech in context</td><td><a href="#audio">the player</a></td></tr>
 <tr><td>which place, and where it sits</td><td><a href="#map">the street map</a></td></tr>
 <tr><td>a sequence of events</td><td><a href="#comic">the comic strip</a>, <a href="#vline">the vertical timeline</a></td></tr>
@@ -378,37 +378,71 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <div class="bar-row"><span>same in Portuguese</span><div class="bar"><i style="--w:62%"></i></div><b>62%</b></div>
 <div class="bar-row"><span>of those, false friends</span><div class="bar"><i style="--w:28%"></i></div><b>28%</b></div>
 <p class="dim">The number is a sibling of the bar, never inside it, so it reads at any width and survives print.</p>
-</div>
-<div id="gloss">
-<h4>A word whose Portuguese twin misleads</h4>
-<p>You have to <button type="button" class="glossbtn" popovertarget="d1">clock in</button> before eight. The card is the meaning half of the word, the key beside it is the sound half.</p>
-<div class="defcard" popover id="d1"><b>clock in</b>bater o ponto — not <i>entrar no relógio</i>.</div>
-<p class="dim">One card per word, opened by the word itself, with no script: the popover is anchored to its own invoker. Only for the word whose Portuguese twin is the trap — a page of cards is a dictionary, and a dictionary teaches nothing.</p>
-</div>
-<div id="key">
-<h4>How a word is said</h4>
-<p>I can't <ruby>record<rp>(</rp><rt>ri-córd</rt><rp>)</rp></ruby> it tonight.</p>
-<p class="dim">Copied from the dictionary in its own notation: <code>-</code> a syllable break, <code>[x]</code> a letter written and not said, <code>ə</code> the schwa. Never omit <code>rp</code>: a browser without ruby still prints the key.</p>
-</div>
-</div>
-<details class="reveal" open><summary>Markup — the bar, the gloss and the key</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — a bar with its number</summary><div class="body"><div>
 <pre>&lt;div class="bar-row"&gt;
   &lt;span&gt;same in Portuguese&lt;/span&gt;
   &lt;div class="bar"&gt;&lt;i style="--w:62%"&gt;&lt;/i&gt;&lt;/div&gt;
   &lt;b&gt;62%&lt;/b&gt;
 &lt;/div&gt;</pre>
+</div></div></details>
+</div>
+<div id="gloss">
+<h4>A word explained where it is read</h4>
+<p>You have to <button type="button" class="glossbtn" popovertarget="d1">clock in</button> before eight.</p>
+<div class="defcard" popover id="d1"><b>clock in</b>bater o ponto — the punch clock at work, not <i>entrar</i>.</div>
+<p class="dim">One card per <code>id</code>, opened by its own word through <code>popovertarget</code>: nothing is scripted and the card opens at the word. The card holds the brief, clear thing the reader needs at that word — a translation, a usage note, what the word is not.</p>
+<details class="reveal" open><summary>Markup — a word and its card</summary><div class="body"><div>
 <pre>&lt;p&gt;You have to
   &lt;button class="glossbtn" popovertarget="d1"&gt;clock in&lt;/button&gt;
   before eight.&lt;/p&gt;
 
 &lt;div class="defcard" popover id="d1"&gt;
-  &lt;b&gt;clock in&lt;/b&gt;bater o ponto — not &lt;i&gt;entrar no relógio&lt;/i&gt;.
+  &lt;b&gt;clock in&lt;/b&gt;bater o ponto — the punch clock at work,
+  not &lt;i&gt;entrar&lt;/i&gt;.
 &lt;/div&gt;</pre>
-<pre>&lt;p&gt;I can't
-  &lt;ruby&gt;record&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;ri-córd&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
-  it tonight.&lt;/p&gt;</pre>
-<p class="dim">The bar where the quantity is the lesson. The gloss for the word whose Portuguese twin is the trap, one card per id, opened by its own invoker with no script. <code>rt</code> on the one word whose sound the student would guess wrong, with <code>rp</code> never omitted.</p>
 </div></div></details>
+</div>
+</div>
+
+<div class="rows">
+<div id="key">
+<h4>Above a word: your own text</h4>
+<p>I can't <ruby>record<rp>(</rp><rt>gravar</rt><rp>)</rp></ruby> it tonight.</p>
+<p class="dim"><code>rt</code> takes any words the block needs above that word: a translation, a reminder, a gloss in the student's own language.</p>
+<details class="reveal" open><summary>Markup — a word and the text above it</summary><div class="body"><div>
+<pre>&lt;p&gt;I can't
+  &lt;ruby&gt;record&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;gravar&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
+  it tonight.&lt;/p&gt;</pre>
+</div></div></details>
+</div>
+<div id="key-job">
+<h4>Above a word: its job</h4>
+<p class="pos"><span class="pos-n pos-subj"><ruby>She<rp>(</rp><rt>N</rt><rp>)</rp></ruby></span> <span class="pos-m"><ruby>has<rp>(</rp><rt>M</rt><rp>)</rp></ruby></span> <span class="pos-v"><ruby>finished<rp>(</rp><rt>V</rt><rp>)</rp></ruby></span> <span class="pos-adj"><ruby>the<rp>(</rp><rt>ADJ</rt><rp>)</rp></ruby></span> <span class="pos-n pos-o"><ruby>report<rp>(</rp><rt>DO</rt><rp>)</rp></ruby></span>.</p>
+<p class="dim">The labels are the ones <code>pos-labels</code> prints — N · V · M · DO · IO · ADJ · ADV · PREP — written in <code>rt</code> above each word instead of after it. The marks stay on the span, so the two readings of the same sentence can stand side by side.</p>
+<details class="reveal" open><summary>Markup — a word and its job above it</summary><div class="body"><div>
+<pre>&lt;p class="pos"&gt;
+  &lt;span class="pos-n pos-subj"&gt;&lt;ruby&gt;She&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;N&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
+  &lt;span class="pos-m"&gt;&lt;ruby&gt;has&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;M&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
+  &lt;span class="pos-v"&gt;&lt;ruby&gt;finished&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;V&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
+  …
+&lt;/p&gt;</pre>
+<p class="dim">One <code>ruby</code> per word, its <code>rt</code> the label <code>pos-labels</code> would print for that word. The classes are unchanged, so the marks draw under the word as they always do.</p>
+</div></div></details>
+</div>
+<div id="key-sound">
+<h4>Above a word: how it is said</h4>
+<p>The <ruby>library<rp>(</rp><rt><b>li</b>·<b>br</b><span class="pr-g">e</span><b>ry</b></rt><rp>)</rp></ruby> closes at six.</p>
+<p class="dim">The key is the entry <code>dictionary.json</code> holds for that word, rendered by <code>PronKey.render</code> — never a key typed by eye. <code>-</code> is a syllable break, a greyed letter is written and not said, <code>ə</code> is the schwa. <code>rp</code> is never omitted: a browser without ruby still prints the key in parentheses.</p>
+<details class="reveal" open><summary>Markup — a word and the dictionary's key</summary><div class="body"><div>
+<pre>&lt;ruby&gt;library&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;
+  &lt;b&gt;li&lt;/b&gt;·&lt;b&gt;br&lt;/b&gt;&lt;span class="pr-g"&gt;e&lt;/span&gt;&lt;b&gt;ry&lt;/b&gt;
+&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
+
+dictionary.json:  "library": "li-br[e]ry"
+PronKey.render("li-br[e]ry") → the rt above</pre>
+</div></div></details>
+</div>
+</div>
 
 <div class="rows">
 <div id="audio">
