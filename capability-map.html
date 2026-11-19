@@ -170,11 +170,10 @@
 
 <div class="block" data-span="12">
 <h3>Augment existing text</h3>
+<div class="rows">
+<div>
 <p class="pos" id="pos"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p>
-<p class="pos pos-labels"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p>
-<p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-i" data-side="right">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span> <span class="pos-adj">the</span> <span class="pos-n pos-o">book</span>.</p>
-<p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-o">it</span> <span class="pos-prep">to</span> <span class="pos-n pos-i" data-side="left">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span>.</p>
-<details class="reveal" open><summary>Markup — the job each word carries, the fence, and the recipient</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — the job each word carries, and the fence</summary><div class="body"><div>
 <pre>&lt;p class="pos"&gt;
   &lt;span class="pos-adj"&gt;The old&lt;/span&gt;
   &lt;span class="pos-n pos-subj"&gt;man&lt;/span&gt;
@@ -184,31 +183,15 @@
   …, &lt;span class="pos-join" data-rel="contrast"&gt;but&lt;/span&gt; …
 &lt;/p&gt;
 
-&lt;p class="pos pos-labels"&gt;…the same sentence…&lt;/p&gt;
-
-&lt;table class="poschart"&gt;…one column per group…&lt;/table&gt;
-
-&lt;!-- the recipient: no line of its own, an arrow from the side the object sits on --&gt;
-I gave &lt;span class="pos-n pos-i" data-side="right"&gt;her
-  &lt;i class="pos-i-arr" aria-hidden="true"&gt;
-    &lt;svg viewBox="0 0 20 18" fill="none"&gt;
-      &lt;path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"/&gt;
-      &lt;path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"/&gt;
-    &lt;/svg&gt;
-  &lt;/i&gt;&lt;/span&gt; the book.
-
-I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt;</pre>
-<p class="dim">The two lines are the same sentence twice: the first with the marks, the second with <code>pos-labels</code>, which prints the role instead of the line — N · V · M · DO · IO · ADJ · ADV · PREP — for a page or a printout that must not rely on colour. The tagger emits the marks, so they cannot drift from the sentence and no word is marked by hand. <b>The marks go on any sentence the lesson wants marked, as many as it wants</b>: they wrap one sentence and are not a component with a block of its own — three sentences in a block means three of these. The fence goes on the joining word; <code>data-rel</code> is one of add · contrast · alternative · cause · condition · time · place · comparison · content, and under <code>pos-labels</code> the relation prints instead of the fence. <b>The recipient</b> carries no line: <code>pos-i</code> draws an arrow from the side the object sits on, its shaft drawing itself and its head arriving after, and <code>data-side="left"</code> mirrors it for a recipient that follows the object — the two orders of the same verb, each with its own arrow. Under <code>pos-labels</code> it prints IO and the arrow is not drawn.</p>
+&lt;table class="poschart"&gt;…one column per group…&lt;/table&gt;</pre>
+<p class="dim">The tagger emits the marks, so they cannot drift from the sentence and no word is marked by hand. <b>Any sentence the lesson wants marked, as many as it wants</b>: the marks wrap one sentence and are not a component with a block of its own. The fence goes on the joining word; <code>data-rel</code> is one of add · contrast · alternative · cause · condition · time · place · comparison · content.</p>
 </div></div></details>
-
-<div class="rows">
-<div id="key">
-<p>I can't <ruby>record<rp>(</rp><rt>gravar</rt><rp>)</rp></ruby> it tonight.</p>
-<p class="dim"><code>rt</code> takes any words the block needs above that word: a translation, a reminder, a gloss in the student's own language.</p>
-<details class="reveal" open><summary>Markup — a word and the text above it</summary><div class="body"><div>
-<pre>&lt;p&gt;I can't
-  &lt;ruby&gt;record&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;gravar&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
-  it tonight.&lt;/p&gt;</pre>
+</div>
+<div>
+<p class="pos pos-labels"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p>
+<details class="reveal" open><summary>Markup — the role printed after each word</summary><div class="body"><div>
+<pre>&lt;p class="pos pos-labels"&gt;…the same sentence…&lt;/p&gt;</pre>
+<p class="dim"><code>pos-labels</code> prints the role instead of the line — N · V · M · DO · IO · ADJ · ADV · PREP — for a page or a printout that must not rely on colour. Under it the relation prints instead of the fence, and the recipient prints IO with no arrow.</p>
 </div></div></details>
 </div>
 <div id="key-job">
@@ -222,6 +205,35 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
   …
 &lt;/p&gt;</pre>
 <p class="dim">One <code>ruby</code> per word, its <code>rt</code> the label <code>pos-labels</code> would print for that word. The classes are unchanged, so the marks draw under the word as they always do.</p>
+</div></div></details>
+</div>
+</div>
+
+<div class="rows">
+<div id="recipient">
+<p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-i" data-side="right">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span> <span class="pos-adj">the</span> <span class="pos-n pos-o">book</span>.</p>
+<p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-o">it</span> <span class="pos-prep">to</span> <span class="pos-n pos-i" data-side="left">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span>.</p>
+<details class="reveal" open><summary>Markup — the recipient and its arrow</summary><div class="body"><div>
+<pre>&lt;!-- the recipient: no line of its own, an arrow from the side the object sits on --&gt;
+I gave &lt;span class="pos-n pos-i" data-side="right"&gt;her
+  &lt;i class="pos-i-arr" aria-hidden="true"&gt;
+    &lt;svg viewBox="0 0 20 18" fill="none"&gt;
+      &lt;path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"/&gt;
+      &lt;path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"/&gt;
+    &lt;/svg&gt;
+  &lt;/i&gt;&lt;/span&gt; the book.
+
+I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt;</pre>
+<p class="dim">The recipient carries no line: <code>pos-i</code> draws an arrow from the side the object sits on, its shaft drawing itself and its head arriving after, and <code>data-side="left"</code> mirrors it for a recipient that follows the object — the two orders of the same verb, each with its own arrow.</p>
+</div></div></details>
+</div>
+<div id="key">
+<p>I can't <ruby>record<rp>(</rp><rt>gravar</rt><rp>)</rp></ruby> it tonight.</p>
+<p class="dim"><code>rt</code> takes any words the block needs above that word: a translation, a reminder, a gloss in the student's own language.</p>
+<details class="reveal" open><summary>Markup — a word and the text above it</summary><div class="body"><div>
+<pre>&lt;p&gt;I can't
+  &lt;ruby&gt;record&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;gravar&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
+  it tonight.&lt;/p&gt;</pre>
 </div></div></details>
 </div>
 <div id="key-sound">
