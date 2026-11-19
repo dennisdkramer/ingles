@@ -905,10 +905,10 @@
      and inside a flex row the row carries the space, so a cell's first item adds none and the rest add 10.
      Vary: these numbers. */
   :is(.block,.panel,.card,.dialog)>:is(p,.cols,table,figure,.chartwrap){margin-top:14px}
-  :is(.block,.panel,.card,.dialog)>p.dim{margin-top:4px;padding-bottom:2px}
+  :is(.block,.panel,.card,.dialog)>p.dim{margin-top:4px;padding:0 6px 2px}
   .cols>div>:first-child{margin-top:0}
   .cols>div>:is(p,.cols,table,figure):not(:first-child){margin-top:10px}
-  .cols>div>p.dim:not(:first-child){margin-top:4px;padding-bottom:2px}
+  .cols>div>p.dim:not(:first-child){margin-top:4px;padding:0 6px 2px}
 
   /* prose — --measure (length, 68ch) */
   .block[data-structure="prose"]{line-height:1.72}
