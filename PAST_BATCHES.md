@@ -1,5 +1,8 @@
 # PAST BATCHES
 
+## 2026-11-19 — the section number is the heading
+## [B1] - Print the section number at the heading's own size, so it reads as part of the heading <"make the generated h2 numbrs the same size as the text they accompany"> <style.css: h2::before, font-size and display face dropped — the prefix is now 28.67px Playfair like the h2, colour only differs; all 10 headings still one line, no overflow>
+
 ## 2026-11-19 — capability map is the markup contract
 ## [B1] - Number the sections in the sheet, un-justify headings and grid cells, hold markup specimens inside a reveal <"the sections are supposed to be auto-numbered too" + "you can apply that heading change, and the text align in tables/charts"> <style.css: h1/h2/h3 text-align, sec counter + h2::before + #feed exclusion, grid td text-align, details.reveal pre>
 ---

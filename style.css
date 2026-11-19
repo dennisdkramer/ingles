@@ -125,8 +125,10 @@
      so a section heading carries no number of its own and a margin note above it shifts nothing.
      The notebook the shell appends is the page's chrome, not a lesson section, so it takes no number */
   h2{counter-increment:sec}
+  /* the number is the heading's own type at the heading's own size — only its colour differs, so it reads
+     as "1." and not as a footnote marker sitting beside a title */
   h2::before{content:counter(sec) ". ";display:inline-block;padding-right:.45em;
-    font-family:var(--display);font-size:.74em;font-weight:700;color:var(--track-ink)}
+    font-weight:700;color:var(--track-ink)}
   .content-area>h2:has(+#feed){counter-increment:none}
   .content-area>h2:has(+#feed)::before{content:none}
   /* inline-block keeps the lettered prefix out of the heading's underline: a decoration propagates to
