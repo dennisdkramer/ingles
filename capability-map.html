@@ -149,9 +149,11 @@
 <tr><td>a word the sentence cannot explain in passing</td><td><a href="#gloss">a card at the word</a></td></tr>
 <tr><td>how one word is said</td><td><a href="#key-sound">the pronunciation key, above the word</a></td></tr>
 <tr><td>real speech in context</td><td><a href="#audio">the player</a></td></tr>
-<tr><td>which place, and where it sits</td><td><a href="#map">the street map</a></td></tr>
+<tr><td>locations, directions, relative positions</td><td><a href="#map">the street map</a></td></tr>
 <tr><td>a sequence of events</td><td><a href="#comic">the comic strip</a>, <a href="#vline">the vertical timeline</a></td></tr>
 <tr><td>something the student must recall</td><td><a href="#flip">the flash card</a></td></tr>
+<tr><td>the order of the words is the question</td><td><a href="#chunks">the chunks and one wide gap</a></td></tr>
+<tr><td>the student writes the sentence a panel shows</td><td><a href="#stripgaps">the strip with a gap under each panel</a></td></tr>
 </tbody>
 </table>
 <p class="dim">The first column is the occasion, the second the visual that answers it, and every name opens it drawn. A concept with no row is one no visual shows yet.</p>
@@ -661,7 +663,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div>
 
 
-<div class="block" data-span="12">
+<div class="block" data-span="12" id="chunks">
 <h3>Chunks in the wrong order</h3>
   <p>Unscramble the sentence:</p>
   <p class="chips" style="display:flex;gap:20px;justify-content:center;align-items:center">
@@ -683,11 +685,11 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;p style="text-align:center"&gt;
   &lt;input class="gap" style="--gap-w:100%" aria-label="the whole sentence"&gt;
 &lt;/p&gt;</pre>
-<p class="dim">Use it where the order is the question and there is one right sentence: the chunks are the material, the wide gap under them is the answer, and the numbers let a student name a chunk while asking about it; they are not a sequence to follow.</p>
+<p class="dim">The chunks are the material, the one wide gap under them is the answer, and the numbers let a student name a chunk while asking about it; they are not a sequence to follow.</p>
 </div></div></details>
 </div>
 
-<div class="block" data-look="stripes" data-span="12">
+<div class="block" data-look="stripes" data-span="12" id="stripgaps">
 <h3>Four panels, four sentences</h3>
   <p>Describe what is happening in each picture, using the <b>past simple</b>.</p>
 <table class="chart" style="width:100%">
@@ -714,7 +716,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
       …
   &lt;/table&gt;
 &lt;/div&gt;</pre>
-<p class="dim">When the student supplies the sentence: the panel is the question and the gap under it is the answer, so there is no separate stem. The block wears the activity look, and every gap carries its own <code>aria-label</code> — four unnamed fields are four anonymous boxes to a screen reader.</p>
+<p class="dim">The panel is the question and the gap under it is the answer, so there is no separate stem. Every gap carries its own <code>aria-label</code> — four unnamed fields are four anonymous boxes to a screen reader.</p>
 </div></div></details>
 </div>
 
