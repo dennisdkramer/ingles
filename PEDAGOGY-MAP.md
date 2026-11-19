@@ -11,7 +11,7 @@ Mandatory Inputs:
 	2) <TRACK>-REGISTER.md - the voice of the author and student, **who the student is**.
 	3) `/* #` Headers only from style.css  **formatting and styling options**
 Optional Inputs: 
-	- (IN-BLOCK-VISIUALS.md [AUDIO] section only) and its inputs
+	- (IN-BLOCK-VISUALS.md [AUDIO] section only) and its inputs
 	- qa/pos.mjs (paint parts of speech)
 **WITHHOLD ALL OTHER INPUTS** DO NOT READ ANY FILE NOT ON THIS LIST
 
