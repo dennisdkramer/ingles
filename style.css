@@ -1338,6 +1338,9 @@
   /* the page's own subtitle, directly under the lesson title */
   .content-area>h1+.lead{max-width:none;margin-inline:auto;text-align:center}
   .mono{font-family:var(--mono);font-size:.92em}
+  /* a lyric line is a line: the player's own rule is legacy, and legacy sits below base, so its
+     margin:0 never reaches `li` — the reset has to ride here, above base, to take effect */
+  .vz-lyrics li{margin-block:0}
   .stack{display:grid;gap:10px}
   .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
   .center{text-align:center}

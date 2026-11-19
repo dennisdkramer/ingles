@@ -1,5 +1,10 @@
 # PAST BATCHES
 
+## 2026-11-19 — §4 is one block of in-block features
+## [B1] - Collapse §4 into one block: the join folded into the underline, "timeline" everywhere, the pair chart out of its frame, the split chart's caption gone, the picture and listening blocks deleted <"4e is already in 4a ... change the section header to In-Block Features"> <capability-map.html §4: h2 "In-Block Features", one 12-span block holding underline + poschart, timeline .tlgrid, bulk and pair charts, label prose and split chart, bar + gloss + key, and the recording; 5 reveals; mapping links re-pointed to #pos and relabelled timeline>
+---
+## [B2] - Verify the merged section and fix the lyric-list spacing it exposed <"take all the remaining items and put them into a single block"> <qa/cmcheck.mjs: 41 rows all 12, 0 dead links, 20 specimens; Chrome: no heading wraps, lyric margin 0px, no overflow, height 15053>
+
 ## 2026-11-19 — the section number is the heading
 ## [B1] - Print the section number at the heading's own size, so it reads as part of the heading <"make the generated h2 numbrs the same size as the text they accompany"> <style.css: h2::before, font-size and display face dropped — the prefix is now 28.67px Playfair like the h2, colour only differs; all 10 headings still one line, no overflow>
 
