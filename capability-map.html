@@ -161,12 +161,13 @@
 <h2>In-Block Features</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>The underline, the timeline, the vertical timeline, the numbered list, the dialog, the charts, the bar, the gloss, the key, the player, the map, the strip and the flash card can each go inside a block — alone, with other elements, or beside the prose that reads them — and none of them has to. A chart, a dialog or a timeline can be a block of its own, and any of them may take more of a row when the content needs it. The examples here are the smaller in-block size.</p>
+<p>Everything in this section is an in-block element: it can sit inside a block with the prose that reads it, with other elements, or be a block of its own at any span. The examples here are the in-block size. They come in two families.</p>
+<p><b>A. Augment existing text</b> — the marks, the ruby lines, the card at a word and the timeline all attach to a sentence the lesson has already written. <b>B. Standalone visuals</b> — a chart, a list, a dialog, a drawing, a recording or a strip is a thing of its own, read by the sentence beside it.</p>
 <p><b>None of them is used without accompaniment.</b> Each is read by something — the sentence that explains it, a word list, the questions the student answers — in the same block or in the block next to it, and that holds when the element is the block's own subject. Nothing about an element changes when the block around it becomes an activity: an activity about word order uses the underline and the numbered list, and the same markup moves between the two.</p>
 </div>
 
 <div class="block" data-span="12">
-<h3>One block, and everything it can carry</h3>
+<h3>Augment existing text</h3>
 <p class="pos" id="pos"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p>
 <p class="pos pos-labels"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p>
 <p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-i" data-side="right">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span> <span class="pos-adj">the</span> <span class="pos-n pos-o">book</span>.</p>
@@ -198,6 +199,64 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <p class="dim">The two lines are the same sentence twice: the first with the marks, the second with <code>pos-labels</code>, which prints the role instead of the line — N · V · M · DO · IO · ADJ · ADV · PREP — for a page or a printout that must not rely on colour. The tagger emits the marks, so they cannot drift from the sentence and no word is marked by hand. <b>The marks go on any sentence the lesson wants marked, as many as it wants</b>: they wrap one sentence and are not a component with a block of its own — three sentences in a block means three of these. The fence goes on the joining word; <code>data-rel</code> is one of add · contrast · alternative · cause · condition · time · place · comparison · content, and under <code>pos-labels</code> the relation prints instead of the fence. <b>The recipient</b> carries no line: <code>pos-i</code> draws an arrow from the side the object sits on, its shaft drawing itself and its head arriving after, and <code>data-side="left"</code> mirrors it for a recipient that follows the object — the two orders of the same verb, each with its own arrow. Under <code>pos-labels</code> it prints IO and the arrow is not drawn.</p>
 </div></div></details>
 
+<div class="rows">
+<div id="key">
+<h4>Above a word: your own text</h4>
+<p>I can't <ruby>record<rp>(</rp><rt>gravar</rt><rp>)</rp></ruby> it tonight.</p>
+<p class="dim"><code>rt</code> takes any words the block needs above that word: a translation, a reminder, a gloss in the student's own language.</p>
+<details class="reveal" open><summary>Markup — a word and the text above it</summary><div class="body"><div>
+<pre>&lt;p&gt;I can't
+  &lt;ruby&gt;record&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;gravar&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
+  it tonight.&lt;/p&gt;</pre>
+</div></div></details>
+</div>
+<div id="key-job">
+<h4>Above a word: its job</h4>
+<p class="pos"><span class="pos-n pos-subj"><ruby>She<rp>(</rp><rt>N</rt><rp>)</rp></ruby></span> <span class="pos-m"><ruby>has<rp>(</rp><rt>M</rt><rp>)</rp></ruby></span> <span class="pos-v"><ruby>finished<rp>(</rp><rt>V</rt><rp>)</rp></ruby></span> <span class="pos-adj"><ruby>the<rp>(</rp><rt>ADJ</rt><rp>)</rp></ruby></span> <span class="pos-n pos-o"><ruby>report<rp>(</rp><rt>DO</rt><rp>)</rp></ruby></span>.</p>
+<p class="dim">The labels are the ones <code>pos-labels</code> prints — N · V · M · DO · IO · ADJ · ADV · PREP — written in <code>rt</code> above each word instead of after it. The marks stay on the span, so the two readings of the same sentence can stand side by side.</p>
+<details class="reveal" open><summary>Markup — a word and its job above it</summary><div class="body"><div>
+<pre>&lt;p class="pos"&gt;
+  &lt;span class="pos-n pos-subj"&gt;&lt;ruby&gt;She&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;N&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
+  &lt;span class="pos-m"&gt;&lt;ruby&gt;has&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;M&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
+  &lt;span class="pos-v"&gt;&lt;ruby&gt;finished&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;V&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
+  …
+&lt;/p&gt;</pre>
+<p class="dim">One <code>ruby</code> per word, its <code>rt</code> the label <code>pos-labels</code> would print for that word. The classes are unchanged, so the marks draw under the word as they always do.</p>
+</div></div></details>
+</div>
+<div id="key-sound">
+<h4>Above a word: how it is said</h4>
+<p>The <ruby>library<rp>(</rp><rt><b>li</b>·<b>br</b><span class="pr-g">e</span><b>ry</b></rt><rp>)</rp></ruby> closes at six.</p>
+<p class="dim">The key is the entry <code>dictionary.json</code> holds for that word, rendered by <code>PronKey.render</code> — never a key typed by eye. <code>-</code> is a syllable break, a greyed letter is written and not said, <code>ə</code> is the schwa. <code>rp</code> is never omitted: a browser without ruby still prints the key in parentheses.</p>
+<details class="reveal" open><summary>Markup — a word and the dictionary's key</summary><div class="body"><div>
+<pre>&lt;ruby&gt;library&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;
+  &lt;b&gt;li&lt;/b&gt;·&lt;b&gt;br&lt;/b&gt;&lt;span class="pr-g"&gt;e&lt;/span&gt;&lt;b&gt;ry&lt;/b&gt;
+&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
+
+dictionary.json:  "library": "li-br[e]ry"
+PronKey.render("li-br[e]ry") → the rt above</pre>
+</div></div></details>
+</div>
+</div>
+
+<div class="rows">
+<div id="gloss">
+<h4>A word explained where it is read</h4>
+<p>You have to <button type="button" class="glossbtn" popovertarget="d1">clock in</button> before eight.</p>
+<div class="defcard" popover id="d1"><b>clock in</b>bater o ponto — the punch clock at work, not <i>entrar</i>.</div>
+<p class="dim">One card per <code>id</code>, opened by its own word through <code>popovertarget</code>: nothing is scripted and the card opens at the word. The card holds the brief, clear thing the reader needs at that word — a translation, a usage note, what the word is not.</p>
+<details class="reveal" open><summary>Markup — a word and its card</summary><div class="body"><div>
+<pre>&lt;p&gt;You have to
+  &lt;button class="glossbtn" popovertarget="d1"&gt;clock in&lt;/button&gt;
+  before eight.&lt;/p&gt;
+
+&lt;div class="defcard" popover id="d1"&gt;
+  &lt;b&gt;clock in&lt;/b&gt;bater o ponto — the punch clock at work,
+  not &lt;i&gt;entrar&lt;/i&gt;.
+&lt;/div&gt;</pre>
+</div></div></details>
+</div>
+</div>
 <h4>Where <i>now</i> sits — the timeline</h4>
 <div class="tlgrid" id="axis">
 <div>
@@ -232,63 +291,9 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <p class="dim">One timeline per tense; <code>.tlgrid</code> holds a family, each cell named by an <code>&lt;h4&gt;</code>. <b>Anchoring is optional:</b> a bare <code>.tln</code> with no <code>.tlw</code> above it draws the three points on its own, for a block that needs the line and no sentence. <b>Width:</b> unset it hugs its phrase and never goes under 300px; <code>data-grow="1"</code> fills the container and <code>data-grow="2"</code> takes the width of an anchor string. <b>Marks, only where the span or the position is the lesson:</b> <code>tln-span</code> a band to now, <code>tln-that</code> a second past, <code>tln-bar</code> a stretch, <code>tln-gloss</code> a Portuguese word under a point.</p>
 </div></div></details>
 
-<div class="rows">
-<div id="list">
-<h4>The numbered list — an order</h4>
-<ol class="seq" data-mode="numbered">
-<li><p><b>Have</b> carries the person: <i>I have</i>, <i>she has</i>.</p></li>
-<li><p>The third word carries the action: <i>written</i>.</p></li>
-<li><p>Change the person and only the first word moves.</p></li>
-</ol>
-<p class="dim">When the order is the lesson, not a process the reader already knows. Unset <code>data-mode</code> gives one item per line.</p>
-<details class="reveal" open><summary>Markup — a numbered list</summary><div class="body"><div>
-<pre>&lt;ol class="seq" data-mode="numbered"&gt;
-  &lt;li&gt;&lt;p&gt;&lt;b&gt;Have&lt;/b&gt; carries the person: &lt;i&gt;I have&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;p&gt;The third word carries the action.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;</pre>
-</div></div></details>
 </div>
-<div id="vline">
-<h4>The vertical timeline — dated events</h4>
-<ol class="seq" data-mode="timeline">
-<li><span class="at">2022</span><p>She wrote three songs.</p></li>
-<li><span class="at">2023</span><p>She stopped writing.</p></li>
-<li><span class="at">now</span><p>She has written three songs.</p></li>
-</ol>
-<p class="dim">When the dates themselves are the point. One <code>.at</code> per item; the horizontal timeline above draws one claim instead of listing events.</p>
-<details class="reveal" open><summary>Markup — a vertical timeline</summary><div class="body"><div>
-<pre>&lt;ol class="seq" data-mode="timeline"&gt;
-  &lt;li&gt;&lt;span class="at"&gt;2022&lt;/span&gt;&lt;p&gt;She wrote three songs.&lt;/p&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;span class="at"&gt;now&lt;/span&gt;&lt;p&gt;She has written three songs.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;</pre>
-</div></div></details>
-</div>
-</div>
-
-<div class="rows">
-<div id="dialog">
-<h4>The dialog — one turn per speaker</h4>
-<ol class="seq" data-mode="turns">
-<li><span class="who">Ana</span><span class="say">Did you post the letter?</span></li>
-<li><span class="who">Beto</span><span class="say">Three times. I keep thinking I forgot.</span></li>
-<li><span class="who">Ana</span><span class="say">Then photograph it next time.</span></li>
-</ol>
-<p class="dim">One turn per speaker, in order: <code>.who</code> names the speaker, <code>.say</code> carries the words.</p>
-</div>
-<div>
-<h4>Read, or worked with a gap</h4>
-<p>Read as it stands, or with a <code>.gap</code> inside a turn — the block does not change shape either way.</p>
-<p class="dim">Use it where two people talk and nothing is answered. Turns alternate sides; nothing is scored unless a control is in it.</p>
-</div>
-</div>
-<details class="reveal" open><summary>Markup — a dialog</summary><div class="body"><div>
-<pre>&lt;ol class="seq" data-mode="turns"&gt;
-  &lt;li&gt;&lt;span class="who"&gt;Ana&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;span class="who"&gt;Beto&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
-&lt;/ol&gt;</pre>
-<p class="dim">For speech that is read, not worked. A control can sit inside a turn without the block changing shape.</p>
-</div></div></details>
-
+<div class="block" data-span="12">
+<h3>Standalone visuals</h3>
 <div class="rows">
 <div id="chart">
 <h4>The chart — parallel items</h4>
@@ -386,63 +391,63 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 &lt;/div&gt;</pre>
 </div></div></details>
 </div>
-<div id="gloss">
-<h4>A word explained where it is read</h4>
-<p>You have to <button type="button" class="glossbtn" popovertarget="d1">clock in</button> before eight.</p>
-<div class="defcard" popover id="d1"><b>clock in</b>bater o ponto — the punch clock at work, not <i>entrar</i>.</div>
-<p class="dim">One card per <code>id</code>, opened by its own word through <code>popovertarget</code>: nothing is scripted and the card opens at the word. The card holds the brief, clear thing the reader needs at that word — a translation, a usage note, what the word is not.</p>
-<details class="reveal" open><summary>Markup — a word and its card</summary><div class="body"><div>
-<pre>&lt;p&gt;You have to
-  &lt;button class="glossbtn" popovertarget="d1"&gt;clock in&lt;/button&gt;
-  before eight.&lt;/p&gt;
-
-&lt;div class="defcard" popover id="d1"&gt;
-  &lt;b&gt;clock in&lt;/b&gt;bater o ponto — the punch clock at work,
-  not &lt;i&gt;entrar&lt;/i&gt;.
-&lt;/div&gt;</pre>
+</div>
+<div class="rows">
+<div id="list">
+<h4>The numbered list — an order</h4>
+<ol class="seq" data-mode="numbered">
+<li><p><b>Have</b> carries the person: <i>I have</i>, <i>she has</i>.</p></li>
+<li><p>The third word carries the action: <i>written</i>.</p></li>
+<li><p>Change the person and only the first word moves.</p></li>
+</ol>
+<p class="dim">When the order is the lesson, not a process the reader already knows. Unset <code>data-mode</code> gives one item per line.</p>
+<details class="reveal" open><summary>Markup — a numbered list</summary><div class="body"><div>
+<pre>&lt;ol class="seq" data-mode="numbered"&gt;
+  &lt;li&gt;&lt;p&gt;&lt;b&gt;Have&lt;/b&gt; carries the person: &lt;i&gt;I have&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;The third word carries the action.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;</pre>
+</div></div></details>
+</div>
+<div id="vline">
+<h4>The vertical timeline — dated events</h4>
+<ol class="seq" data-mode="timeline">
+<li><span class="at">2022</span><p>She wrote three songs.</p></li>
+<li><span class="at">2023</span><p>She stopped writing.</p></li>
+<li><span class="at">now</span><p>She has written three songs.</p></li>
+</ol>
+<p class="dim">When the dates themselves are the point. One <code>.at</code> per item; the horizontal timeline above draws one claim instead of listing events.</p>
+<details class="reveal" open><summary>Markup — a vertical timeline</summary><div class="body"><div>
+<pre>&lt;ol class="seq" data-mode="timeline"&gt;
+  &lt;li&gt;&lt;span class="at"&gt;2022&lt;/span&gt;&lt;p&gt;She wrote three songs.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;span class="at"&gt;now&lt;/span&gt;&lt;p&gt;She has written three songs.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;</pre>
 </div></div></details>
 </div>
 </div>
 
 <div class="rows">
-<div id="key">
-<h4>Above a word: your own text</h4>
-<p>I can't <ruby>record<rp>(</rp><rt>gravar</rt><rp>)</rp></ruby> it tonight.</p>
-<p class="dim"><code>rt</code> takes any words the block needs above that word: a translation, a reminder, a gloss in the student's own language.</p>
-<details class="reveal" open><summary>Markup — a word and the text above it</summary><div class="body"><div>
-<pre>&lt;p&gt;I can't
-  &lt;ruby&gt;record&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;gravar&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
-  it tonight.&lt;/p&gt;</pre>
+<div id="dialog">
+<h4>The dialog — one turn per speaker</h4>
+<ol class="seq" data-mode="turns">
+<li><span class="who">Ana</span><span class="say">Did you post the letter?</span></li>
+<li><span class="who">Beto</span><span class="say">Three times. I keep thinking I forgot.</span></li>
+<li><span class="who">Ana</span><span class="say">Then photograph it next time.</span></li>
+</ol>
+<p class="dim">One turn per speaker, in order: <code>.who</code> names the speaker, <code>.say</code> carries the words.</p>
+</div>
+<div>
+<h4>Read, or worked with a gap</h4>
+<p>Read as it stands, or with a <code>.gap</code> inside a turn — the block does not change shape either way.</p>
+<p class="dim">Use it where two people talk and nothing is answered. Turns alternate sides; nothing is scored unless a control is in it.</p>
+</div>
+</div>
+<details class="reveal" open><summary>Markup — a dialog</summary><div class="body"><div>
+<pre>&lt;ol class="seq" data-mode="turns"&gt;
+  &lt;li&gt;&lt;span class="who"&gt;Ana&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;span class="who"&gt;Beto&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;</pre>
+<p class="dim">For speech that is read, not worked. A control can sit inside a turn without the block changing shape.</p>
 </div></div></details>
-</div>
-<div id="key-job">
-<h4>Above a word: its job</h4>
-<p class="pos"><span class="pos-n pos-subj"><ruby>She<rp>(</rp><rt>N</rt><rp>)</rp></ruby></span> <span class="pos-m"><ruby>has<rp>(</rp><rt>M</rt><rp>)</rp></ruby></span> <span class="pos-v"><ruby>finished<rp>(</rp><rt>V</rt><rp>)</rp></ruby></span> <span class="pos-adj"><ruby>the<rp>(</rp><rt>ADJ</rt><rp>)</rp></ruby></span> <span class="pos-n pos-o"><ruby>report<rp>(</rp><rt>DO</rt><rp>)</rp></ruby></span>.</p>
-<p class="dim">The labels are the ones <code>pos-labels</code> prints — N · V · M · DO · IO · ADJ · ADV · PREP — written in <code>rt</code> above each word instead of after it. The marks stay on the span, so the two readings of the same sentence can stand side by side.</p>
-<details class="reveal" open><summary>Markup — a word and its job above it</summary><div class="body"><div>
-<pre>&lt;p class="pos"&gt;
-  &lt;span class="pos-n pos-subj"&gt;&lt;ruby&gt;She&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;N&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
-  &lt;span class="pos-m"&gt;&lt;ruby&gt;has&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;M&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
-  &lt;span class="pos-v"&gt;&lt;ruby&gt;finished&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;V&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
-  …
-&lt;/p&gt;</pre>
-<p class="dim">One <code>ruby</code> per word, its <code>rt</code> the label <code>pos-labels</code> would print for that word. The classes are unchanged, so the marks draw under the word as they always do.</p>
-</div></div></details>
-</div>
-<div id="key-sound">
-<h4>Above a word: how it is said</h4>
-<p>The <ruby>library<rp>(</rp><rt><b>li</b>·<b>br</b><span class="pr-g">e</span><b>ry</b></rt><rp>)</rp></ruby> closes at six.</p>
-<p class="dim">The key is the entry <code>dictionary.json</code> holds for that word, rendered by <code>PronKey.render</code> — never a key typed by eye. <code>-</code> is a syllable break, a greyed letter is written and not said, <code>ə</code> is the schwa. <code>rp</code> is never omitted: a browser without ruby still prints the key in parentheses.</p>
-<details class="reveal" open><summary>Markup — a word and the dictionary's key</summary><div class="body"><div>
-<pre>&lt;ruby&gt;library&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;
-  &lt;b&gt;li&lt;/b&gt;·&lt;b&gt;br&lt;/b&gt;&lt;span class="pr-g"&gt;e&lt;/span&gt;&lt;b&gt;ry&lt;/b&gt;
-&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
-
-dictionary.json:  "library": "li-br[e]ry"
-PronKey.render("li-br[e]ry") → the rt above</pre>
-</div></div></details>
-</div>
-</div>
 
 <div class="rows">
 <div id="audio">
@@ -633,6 +638,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div>
 </div>
 </div>
+
 
 <h2>Dialogs and activities</h2>
 
