@@ -1241,7 +1241,9 @@
   .opt[data-state="odd"],.side[data-state="odd"],.qitem[data-state="odd"]{
     border-color:color-mix(in oklab,var(--warn) 72%,var(--ink));
     background:color-mix(in oklab,var(--warn) 16%,var(--surface-2))}
-  [data-state="wrong"]:not(.block){animation:shake .32s ease-in-out}
+  /* the shake is a reaction, not a state: it plays when the wrong item is pointed at or tapped,
+     never on load, so a page with a marked-wrong example does not animate itself when it opens */
+  [data-state="wrong"]:not(.block):is(:hover,:active){animation:shake .32s ease-in-out}
 
   .mark{position:relative;display:inline-grid;place-items:center;flex:0 0 auto;
     width:22px;height:22px;border-radius:50%;border:2px solid var(--line);
