@@ -903,9 +903,9 @@
   .content-area>h2{margin-block:var(--section-gap,34px) 0}
 }
 
-/* #50 STRUCTURE — data-structure="prose|set|sequence|grid|pair|media" on .block; the hue is the track's. Unset: plain stack.
-   .viz — a standalone visual that draws no frame of its own wears the chart's own surface, never a second .block.
-   Vary: --h (hue 0-360), --viz-pad (length, 10px 12px) */
+/* #50 STRUCTURE — data-structure="prose|set|sequence|grid|pair|media" on .block; the hue is the track's.
+   .viz — the frame for the dialog, the player and the map: their content draws no frame of its own.
+   Never a second .block. Vary: --h (hue 0-360), --viz-pad (length, 10px 12px) */
 @layer structure{
   /* one object on the page: the edge is a 2px outline and a short shadow, so the thing reads as drawn rather
      than as another frame. The same recipe the chart spends, minus the padding a chart gets from its cells */

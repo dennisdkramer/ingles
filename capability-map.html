@@ -289,7 +289,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div>
 <div class="block" data-span="12">
 <h3>Standalone visuals</h3>
-<p>A visual that draws no frame of its own wears <code>.viz</code> — the bar, the three lists, the player and the map. A chart, a flash card and a strip carry their own frame and take nothing. <code>.viz</code> is never a second <code>.block</code>: the block is the teaching frame, so a frame inside it would be two edges of the same rank.</p>
+<p><code>.viz</code> frames three things: the dialog, the player and the map. A chart, a flash card and a strip carry a frame of their own, and the lists and the bar take none. <code>.viz</code> is never a second <code>.block</code>: the block is the teaching frame, so a frame inside it would be two edges of the same rank.</p>
 <p>A cell takes an <code>h4</code> only where the lesson needs to name what is in it. Only the recording must have one, because the song's own name is part of the recording; nothing else here carries a heading, and the sentence beside an element is what tells the reader what it is.</p>
 <div class="rows">
 <div id="chart">
@@ -380,46 +380,42 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 <div class="rows">
 <div id="bar">
-<div class="viz">
 <div class="bar-row"><span>same in Portuguese</span><div class="bar"><i style="--w:62%"></i></div><b>62%</b></div>
 <div class="bar-row"><span>of those, false friends</span><div class="bar"><i style="--w:28%"></i></div><b>28%</b></div>
-</div>
 <p class="dim">The number is a sibling of the bar, never inside it, so it reads at any width and survives print.</p>
 <details class="reveal" open><summary>Markup — a bar with its number</summary><div class="body"><div>
-<pre>&lt;div class="viz"&gt;
-  &lt;div class="bar-row"&gt;
+<pre>&lt;div class="bar-row"&gt;
   &lt;span&gt;same in Portuguese&lt;/span&gt;
   &lt;div class="bar"&gt;&lt;i style="--w:62%"&gt;&lt;/i&gt;&lt;/div&gt;
   &lt;b&gt;62%&lt;/b&gt;
-  &lt;/div&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
 </div>
 </div>
 <div class="rows">
 <div id="list">
-<ol class="seq viz" data-mode="numbered">
+<ol class="seq" data-mode="numbered">
 <li><p><b>Have</b> carries the person: <i>I have</i>, <i>she has</i>.</p></li>
 <li><p>The third word carries the action: <i>written</i>.</p></li>
 <li><p>Change the person and only the first word moves.</p></li>
 </ol>
 <p class="dim">When the order is the lesson, not a process the reader already knows. Unset <code>data-mode</code> gives one item per line.</p>
 <details class="reveal" open><summary>Markup — a numbered list</summary><div class="body"><div>
-<pre>&lt;ol class="seq viz" data-mode="numbered"&gt;
+<pre>&lt;ol class="seq" data-mode="numbered"&gt;
   &lt;li&gt;&lt;p&gt;&lt;b&gt;Have&lt;/b&gt; carries the person: &lt;i&gt;I have&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;
   &lt;li&gt;&lt;p&gt;The third word carries the action.&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;</pre>
 </div></div></details>
 </div>
 <div id="vline">
-<ol class="seq viz" data-mode="timeline">
+<ol class="seq" data-mode="timeline">
 <li><span class="at">2022</span><p>She wrote three songs.</p></li>
 <li><span class="at">2023</span><p>She stopped writing.</p></li>
 <li><span class="at">now</span><p>She has written three songs.</p></li>
 </ol>
 <p class="dim">When the dates themselves are the point. One <code>.at</code> per item; the horizontal timeline above draws one claim instead of listing events.</p>
 <details class="reveal" open><summary>Markup — a vertical timeline</summary><div class="body"><div>
-<pre>&lt;ol class="seq viz" data-mode="timeline"&gt;
+<pre>&lt;ol class="seq" data-mode="timeline"&gt;
   &lt;li&gt;&lt;span class="at"&gt;2022&lt;/span&gt;&lt;p&gt;She wrote three songs.&lt;/p&gt;&lt;/li&gt;
   &lt;li&gt;&lt;span class="at"&gt;now&lt;/span&gt;&lt;p&gt;She has written three songs.&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;</pre>
