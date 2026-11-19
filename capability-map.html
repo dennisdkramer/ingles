@@ -31,6 +31,156 @@ not built · <b>§5</b> the decisions already taken · <b>§6</b> the concepts n
 <b>superseded</b> — keep one of the pair, prune the other ·
 <b>gap</b> — the lesson must teach it in prose.</p>
 
+<h2>0. The test bed</h2>
+
+<p class="dim">A lab, not a rule. The same ten items are arranged twice: once by flow, where each takes
+its width from its content, and once on a grid, where a tall item does not leave a hole beside it. The table
+under them reports what each one measured, so the two questions — how much text earns a block of its own, and
+what earns the full width — can be answered with numbers rather than taste.</p>
+
+<h3 id="lab-flow">0a. Flow — the content sets the width</h3>
+
+<style>/* the lab is measured, and an off-screen section under content-visibility:auto reports a guessed
+  1200px height instead of its own. The pass has to measure with this off, or in the viewport. */
+#lab-src,#lab-mos{content-visibility:visible}
+</style>
+
+<section class="flow" id="lab-src">
+<ul class="set">
+<li><b>clock in</b><span class="dim">register your arrival</span></li>
+<li><b>clock out</b><span class="dim">register your leaving</span></li>
+<li><b>bay</b><span class="dim">where trucks unload</span></li>
+<li><b>pallet</b><span class="dim">goods on a base</span></li>
+<li><b>forklift</b><span class="dim">lifts pallets</span></li>
+<li><b>manifest</b><span class="dim">what a truck carries</span></li>
+<li><b>tip over</b><span class="dim">fall on its side</span></li>
+<li><b>rack</b><span class="dim">the shelf frame</span></li>
+<li><b>bolt</b><span class="dim">holds the rack</span></li>
+<li><b>shift</b><span class="dim">the hours you work</span></li>
+<li><b>paper towels</b><span class="dim">what fell on it</span></li>
+<li><b>told</b><span class="dim">past of <i>tell</i></span></li>
+</ul>
+<table>
+<thead><tr><th>Minute</th><th>Action</th><th>Tense</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>6:40</td><td>clocked in</td><td>past simple</td><td>one finished act</td></tr>
+<tr><td>6:44</td><td>was tipping</td><td>past continuous</td><td>in progress</td></tr>
+<tr><td>6:50</td><td>had gone</td><td>past perfect</td><td>before a past moment</td></tr>
+<tr><td>7:10</td><td>has been</td><td>present perfect</td><td>still true now</td></tr>
+</tbody></table>
+<p>One short line.</p>
+<p>A sentence long enough to see where a second one would sit beside it, and no longer.</p>
+<p>The accident is not the interesting part; what matters is that the same four minutes can be told as a
+sequence of events, as a list of words, or as one picture with a caption, and the student needs all three.</p>
+<p>The accident is not the interesting part. What matters is that the same four minutes can be told as a
+sequence of events, as a list of words, or as one picture with a caption, and the student needs all three of
+those in that order before the past continuous makes any sense at all. That is why the section opens with the
+scene and not with the tense, and why the words arrive only after the student has something to hang them on.</p>
+<p>The accident is not the interesting part. What matters is that the same four minutes can be told as a
+sequence of events, as a list of words, or as one picture with a caption, and the student needs all three of
+those in that order before the past continuous makes any sense at all. That is why the section opens with the
+scene and not with the tense, and why the words arrive only after the student has something to hang them on.
+A second paragraph of the same length follows here so that the block has the bulk a full-width argument needs:
+two paragraphs, one idea, and an example the reader can check against the sentence above it without scrolling
+away from the block that raised the question in the first place, which is what the width is for.</p>
+<p>He clocked in at 6:40.</p>
+<ul class="set" data-cols="2">
+<li><b>clock in</b><span class="dim">register your arrival</span></li>
+<li><b>bay</b><span class="dim">where trucks unload</span></li>
+<li><b>pallet</b><span class="dim">goods on a base</span></li>
+<li><b>manifest</b><span class="dim">what a truck carries</span></li>
+</ul>
+<table>
+<thead><tr><th>Time</th><th>What he did</th></tr></thead>
+<tbody>
+<tr><td>6:40</td><td>He <b>clocked in</b>.</td></tr>
+<tr><td>6:44</td><td>The pallet <b>was tipping</b>.</td></tr>
+<tr><td>7:10</td><td>Nobody had told the office.</td></tr>
+</tbody></table>
+</section>
+
+<h3 id="lab-mosaic">0b. Mosaic — the same items on a grid</h3>
+
+<p class="dim">The identical children, placed again on a four-column grid with an 8px row unit: each item takes
+as many columns as its content wants and as many rows as its height needs, so a tall vocabulary list stops
+leaving a hole beside it. The spans below are computed by the lab's own script — the prototype of the pass —
+and nothing in the markup decides them.</p>
+
+<section class="mosaic" id="lab-mos" style="--cols:4"></section>
+
+<pre id="lab-out" class="dim" style="max-height:340px;overflow:auto"></pre>
+
+<script>
+(function () {
+  var src = document.getElementById('lab-src');
+  var mos = document.getElementById('lab-mos');
+  var out = document.getElementById('lab-out');
+  var UNIT = 8, VGAP = 22;
+
+  function maxc(el) {
+    var c = el.cloneNode(true);
+    c.style.cssText += ';position:absolute;left:-99999px;top:0;width:max-content;max-width:none;' +
+      'min-width:0;flex:none;margin:0';
+    document.body.appendChild(c);
+    var w = Math.ceil(c.getBoundingClientRect().width);
+    c.remove();
+    return w;
+  }
+  function words(el) {
+    var t = (el.textContent || '').trim().replace(/\s+/g, ' ');
+    return t ? t.split(' ').length : 0;
+  }
+  function kind(el) {
+    if (el.tagName === 'P') return 'p';
+    if (el.tagName === 'UL') return 'set';
+    if (el.tagName === 'TABLE') return 'table';
+    return el.tagName.toLowerCase();
+  }
+
+  var rowW = mos.getBoundingClientRect().width;
+  var colRoom = (rowW - 3 * 18) / 4;               /* one column of four, gaps out */
+  var flow = [].map.call(src.children, function (c) {
+    var r = c.getBoundingClientRect();
+    return { kind: kind(c), words: words(c), want: maxc(c), w: Math.round(r.width), h: Math.round(r.height) };
+  });
+
+  var placed = [];
+  flow.forEach(function (f, i) {
+    var el = src.children[i].cloneNode(true);
+    var cols = Math.max(1, Math.min(4, Math.round(f.want / (colRoom + 18))));
+    el.style.gridColumn = 'span ' + cols;
+    mos.appendChild(el);
+    var h = el.getBoundingClientRect().height;
+    var rows = Math.max(1, Math.ceil((h + VGAP) / UNIT));
+    el.style.gridRow = 'span ' + rows;
+    placed.push({ kind: f.kind, words: f.words, want: f.want, flowW: f.w, flowH: f.h, cols: cols, rows: rows, h: Math.round(h) });
+  });
+
+  var lines = ['column ' + Math.round(rowW) + 'px, one column of four = ' + Math.round(colRoom) + 'px', ''];
+  lines.push('   item           words  max-content   flow w×h      grid c×r   grid h');
+  placed.forEach(function (p) {
+    lines.push('   ' + p.kind.padEnd(14) + String(p.words).padStart(4) + '   ' +
+      String(p.want).padStart(6) + 'px   ' + (p.flowW + '×' + p.flowH).padEnd(11) + '   ' +
+      (p.cols + '×' + p.rows).padEnd(9) + '  ' + p.h + 'px');
+  });
+  var flowH = Math.round(src.getBoundingClientRect().height);
+  var mosH = Math.round(mos.getBoundingClientRect().height);
+  lines.push('');
+  lines.push('   grid tracks: ' + getComputedStyle(mos).gridTemplateColumns);
+  lines.push('   placed at (x,y) w×h:');
+  [].forEach.call(mos.children, function (c, i) {
+    var r = c.getBoundingClientRect(), m = mos.getBoundingClientRect();
+    lines.push('     ' + String(i).padStart(2) + '  ' + kind(c).padEnd(6) +
+      Math.round(r.left - m.left) + ',' + Math.round(r.top - m.top) + '  ' +
+      Math.round(r.width) + '×' + Math.round(r.height));
+  });
+  lines.push('   the same content occupies ' + flowH + 'px in flow and ' + mosH + 'px on the grid');
+  mos.innerHTML = '';
+  lines.push('   empty mosaic height: ' + Math.round(mos.getBoundingClientRect().height) + 'px');
+  out.textContent = lines.join('\n');
+})();
+</script>
+
 <h2>1. Prose — how a page is written</h2>
 
 <p>Prose is the one tool with no markup, and every block uses it: it states the rule a figure cannot draw, puts
