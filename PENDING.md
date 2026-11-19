@@ -4,5 +4,4 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 ---
 
 # [CURRENT]
-## [B1] - Add the street map and the comic strip to §4 as in-block visuals, put the player beside its teaching, park sentence surgery at the foot of §5 <"The audio player for example should be half-width by default and paired with teaching content ... i want the comic strip scaled to 1/3 width ... the sentence surgery ... add it to the bottom of section 5"> <capability-map.html §4 and §5>
-
+## [B1] - Fold the look into arrangement and state spanning as a fit, deleting the spans table and the looks table <"1D will be happening during 1B, correct? ... 1E is bullshit, its too specific ... 1f is not needed if were giving examples and markup for the looks on the rest of the page"> <capability-map.html §1>

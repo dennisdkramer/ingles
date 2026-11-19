@@ -15,70 +15,34 @@
 <h2>How a page gets built</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>Four moves, kept apart: what the page teaches, how that is arranged, how the wording sits once it is arranged, and which paint it wears. A writer deciding what to teach should not be deciding how wide a block is in the same breath, and an arrangement is easier to judge on a page whose words are already there.</p>
+<p>Three moves, kept apart: what the page teaches, how it is arranged, and how the wording sits once it is arranged. A writer deciding what to teach should not be deciding how wide a block is in the same breath, and an arrangement is easier to judge on a page whose words are already there.</p>
 </div>
 
-<div class="block" data-span="6">
+<div class="block" data-span="12">
 <h3>Write the content</h3>
 <p>Sections and blocks in teaching order, with nothing yet decided about layout: a section is one concept, a block is one idea inside it carrying its own heading, and the words are already the words the student reads.</p>
 </div>
 
-<div class="block" data-span="6">
-<h3>Arrange it</h3>
-<p>Every block is given a span by looking at it: what it holds, how much text it carries, and what it sits beside. The examples on this page are results at those spans; what a page copies is the reason.</p>
-</div>
-
-<div class="block" data-span="6">
-<h3>Clean up the wording</h3>
-<p>Read every line as it will break. A line that ends in one to three words is rewritten until the block's lines are even; a short block beside a tall one gains the sentence it was missing, and a last-row stub is deleted rather than padded. Only the words change, never what they say.</p>
-</div>
-
-<div class="block" data-span="6">
-<h3>Choose the look</h3>
-<p>A look is declared on the block, never inferred from what it holds. It changes the paint only — markup, content and control stay the same — so a block can be re-skinned without being rewritten.</p>
-</div>
-
 <div class="block" data-span="12">
-<h3>The spans, and when each is right</h3>
-<table class="chart" style="width:100%">
-<thead><tr><th>The block is</th><th>Takes</th><th>Why</th></tr></thead>
-<tbody>
-<tr><td>a label, a short line, a word set, a picture</td><td>3</td><td>it cannot fill a line and has no need to</td></tr>
-<tr><td>a figure with nothing but its heading</td><td>3 or 4</td><td>the width is what the figure draws, not the rest of the row</td></tr>
-<tr><td>prose, a dialog, an example group</td><td>6</td><td>about 65 characters a line — the reading measure</td></tr>
-<tr><td>a chart, or prose with a table in it</td><td>8</td><td>it needs the room, and a short note fits beside it</td></tr>
-<tr><td>a wide block with a small companion</td><td>9 + 3</td><td>three to one: the companion is a note, not a half</td></tr>
-<tr><td>a five-column table, or one argument that needs the column</td><td>12</td><td>the only case where a block is expected to be tall</td></tr>
-</tbody>
-</table>
-<p class="dim">A last line is folded into the line above, or the block takes the rest of the line rather than starting a new one. The number is written on the block; nothing is inferred in the browser and no packer runs.</p>
-<details class="reveal"><summary>Markup — the block, and the span written on it</summary><div class="body"><div>
-<pre>&lt;div class="block" data-span="6" data-look="tint"&gt;
-  &lt;h3&gt;a heading the sheet letters&lt;/h3&gt;
-  …prose, one component, or both…
-&lt;/div&gt;
+<h3>Arrange it, and give it a look</h3>
+<p>The page is twelve columns and every block is full width, so a page that decides nothing flows straight down it. A span is written on a block only when something has to sit beside it: the row is divided into twelfths, each block takes 3, 4, 6, 8, 9 or 12 of them, and the numbers in a row add to 12. The number is a fit, not a category — the same prose is 6 beside a chart and 12 on its own — so it comes from looking at what the block holds and what must sit beside it, never from the kind of block it is. The sheet reads the number as written — nothing is measured or packed in the browser.</p>
+<p>A look is settled in the same pass, by the same looking: declared on the block, never inferred from what it holds, and it changes the paint only, so a block is re-skinned without being rewritten. One tint and one outline per section at most; a look is never a way to vary the page, to mark importance, or to dress a teaching block as an activity.</p>
+<details class="reveal"><summary>Markup — a page that flows, and the one row that does not</summary><div class="body"><div>
+<pre>&lt;h2&gt;a section the sheet numbers&lt;/h2&gt;
 
-&lt;h2&gt;a section the sheet numbers&lt;/h2&gt;</pre>
-<p class="dim">Use a block for every frame of a lesson page. The span is 3, 4, 6, 8, 9 or 12 and is written on the element; the look is one of the seven above, written only where that job is real. A section is an <code>&lt;h2&gt;</code> — the sheet numbers it and restarts the letters under it, so neither number is typed.</p>
+&lt;div class="block"&gt;…full width: nothing sits beside it…&lt;/div&gt;
+
+&lt;div class="block" data-span="8"&gt;…the sentence…&lt;/div&gt;
+&lt;div class="block" data-span="4" data-look="tint"&gt;…the note beside it…&lt;/div&gt;</pre>
+<p class="dim">Use a block for every frame of a lesson page, and write no span on it until something must sit beside it — then the two spans add to 12. The looks are <code>tint</code>, <code>tape</code>, <code>float</code>, <code>stripes</code>, <code>outline</code> and <code>dark</code>, each written only where that job is real. A section is an <code>&lt;h2&gt;</code> — the sheet numbers it and restarts the letters under it, so neither number is typed.</p>
 </div></div></details>
 </div>
 
 <div class="block" data-span="12">
-<h3>The looks, and what each is for</h3>
-<table class="chart" style="width:100%">
-<thead><tr><th>Look</th><th>The job</th><th>What it must not be</th></tr></thead>
-<tbody>
-<tr><td>default</td><td>none beyond being a block</td><td>a block that has a job wearing no look</td></tr>
-<tr><td>tint</td><td>context or register</td><td>a way to make a section pretty; a second tint beside the first</td></tr>
-<tr><td>tape</td><td>a thing that would sit on paper</td><td>a way to mark importance</td></tr>
-<tr><td>float</td><td>a section's opening or closing, or the higher-level view</td><td>an ordinary block with its frame switched off</td></tr>
-<tr><td>stripes</td><td>an activity or question block</td><td>a teaching block dressed as an activity</td></tr>
-<tr><td>outline</td><td>the one critical element</td><td>two per section</td></tr>
-<tr><td>dark</td><td>night, or play</td><td>a way to vary the page</td></tr>
-</tbody>
-</table>
-<p class="dim">The hue is the track's, so the looks below appear only where that job is real: the register block in §2, the test in §3, the activity blocks in §5, the night scene in §7.</p>
+<h3>Clean up the wording</h3>
+<p>Read every line as it will break. A line that ends in one to three words is rewritten until the block's lines are even; a short block beside a tall one gains the sentence it was missing, a last line is folded into the one above, and a last-row stub is deleted rather than padded. Only the words change, never what they say.</p>
 </div>
+
 
 <h2>How a page is written</h2>
 
@@ -887,4 +851,3 @@
 </main>
 <script src="player.js"></script>
 </body></html>
-

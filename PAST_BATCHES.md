@@ -1,5 +1,8 @@
 # PAST BATCHES
 
+## 2026-11-19 — §1 is three moves, and spanning is a fit
+## [B1] - Fold the look into arrangement, put auto-flow and the 12ths into §1 B, delete the spans table (1E) and the looks table (1F) <"1D will be happening during 1B, correct? ... 1E is bullshit, its too specific ... 1f is not needed if were giving examples and markup for the looks on the rest of the page"> <capability-map.html §1: intro float now says three moves; A Write the content, B Arrange it and give it a look, C Clean up the wording, all at span 12; B states the page flows, a span is written only when something sits beside it, 3/4/6/8/9/12 adding to 12, a fit not a category, nothing measured in the browser, the look declared in the same pass, one tint and one outline per section; its reveal shows a full-width block and an 8+4 row; the look names survive as data-look values in that reveal>
+
 ## 2026-11-19 — in-block visuals paired with their teaching
 ## [B1] - Put the player in half a row with the words it is there for beside it, and add the [05] street map and the [42] comic strip to §4 verbatim <"The audio player for example should be half-width by default and paired with teaching content that relates to the audio ... I want that specific street map from 05, minus the question below it. i want the comic strip scaled to 1/3 width"> <capability-map.html §4: .rows with #audio 560 | teaching 560, #map 560 | prose 560, #comic 382 | prose 738; the map's SVG, its eight tick labels and the strip's four panels copied from qa/preview-menu.html:756-828 and :839-850, the route question and the strip's preview notes left behind; both get a reveal and a row in the §3 mapping>
 ---
