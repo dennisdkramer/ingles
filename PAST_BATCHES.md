@@ -1,5 +1,8 @@
 # PAST BATCHES
 
+## 2026-11-19 — an in-block row fills the block, the sentence grows and the figure does not
+## [B1] - Give .rows the sizing its rows were missing: cells share what is left, a cell that is only a heading and a figure keeps its own width <"the in-block content rows should be flowed with flex rows to fill the width ... that is the default, and if those elements are currently in columns instead of rows, they shouldnt be"> <style.css:907-908 .rows>* flex:1 1 0 and .rows>:not(:has(>p)) flex:0 1 auto; capability-map.html: 7 hand-written inline flex values deleted from §4, the row's markup spec added to the charts reveal; Chrome: three rows each 1146 wide, chart cells match their figures exactly (252=252, 168=168), no overflow>
+
 ## 2026-11-19 — the activity section reports only what an engine reads
 ## [B1] - Delete the score-reactive bar and the ring: nothing on a page counts answers, so 6B's premise was false <"Can it read the totality of all the questions on the page? if so, we will put it at the bottom of the lesson page above the completed button. if not, delete 6b"> <engine2.js:261-292 marks keys and toggles body.is-completed only; no writer of --score in engine1/2/4, player.js or pronkey.js; capability-map.html: 6B/6C/6D deleted, 6A kept at span 12, its "the engine writes it" claim replaced by the fact, Decisions bullet now records "No score bar, anywhere">
 ---

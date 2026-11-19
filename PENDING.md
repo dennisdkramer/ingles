@@ -4,5 +4,5 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 ---
 
 # [CURRENT]
-## [B1] - Delete 6C/6D and the score bar nothing computes; colour the top edge of stripes and tape; sit an intro on the page's row gap <"delete 6c and 6d ... change the default styling of stripes ... reduce the margin/padding"> <capability-map.html §6, style.css #70 LOOK>
+## [B1] - Make an in-block row a flex row that fills the block, the sentence growing and the figure keeping its own width <"the in-block content rows should be flowed with flex rows to fill the width ... 'The label is the teaching' expands to fill the row with the chart. that is the default"> <style.css .rows, capability-map.html §4>
 

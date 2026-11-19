@@ -900,9 +900,12 @@
         padding-top:8px}
   .cols>*{flex:1 1 var(--cw,220px);min-width:0}
   /* the other case: cells whose sizes differ, so each takes the width its own content needs and the
-     row is shared between them. Any number of cells; the writer decides the pairing, not a wrap. */
+     row is shared between them. Any number of cells; the writer decides the pairing, not a wrap.
+     One cell carries the sentence and fills what is left; a cell that is only a figure keeps the width
+     its own columns need, so a chart never sits in a cell wider than it draws. */
   .rows{display:flex;flex-wrap:nowrap;gap:var(--flex-gap,26px);align-items:flex-start;padding-top:8px}
-  .rows>*{flex:1 1 auto;min-width:0}
+  .rows>*{flex:1 1 0;min-width:0}
+  .rows>:not(:has(>p)){flex:0 1 auto}
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
   .content-area>h2{margin-block:var(--section-gap,34px) 0}
