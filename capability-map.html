@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Capability map — English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=e3d478ad4b">
+<link rel="stylesheet" href="style.css?v=5ee832d220">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>VISUAL REFERENCE</span></h1></header>
@@ -21,7 +21,7 @@
 <div class="block" data-span="12">
 <h3>Arrange it, and give it a look</h3>
 <p><b>Adjacent things go into one flex row, and that is the default.</b> Two blocks of similar height, and two items beside each other inside a block, are written into one <code>.rows</code>: the cells share the width, match the row's height and need no size of their own. <code>.cols</code> is for interchangeable cells that must wrap, and <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. <b>No width is written on a cell</b> — 1A pairs, the flow sizes, and <b>1B writes a span or a size only to repair a row the flow got wrong</b>: too tight, an element squeezed under the width it draws at, a lone block with half a line empty beside it. Width is the repair, never the plan.</p>
-<p><code>data-look</code> is declared on the block, never inferred from what it holds, and changes the paint only: one tint and one outline per section at most.</p>
+<p class="dim"><code>data-look</code> is declared on the block, never inferred from what it holds, and changes the paint only.</p>
 </div>
 
 
@@ -38,7 +38,7 @@
 &lt;table class="chart"&gt;…nothing purposeful to accompany it, so it stands outside a block…&lt;/table&gt;
 
 &lt;div class="block" data-span="6"&gt;…narrowed by 1B, because the full line read badly…&lt;/div&gt;</pre>
-<p class="dim">Looks, and why each is chosen: <code>float</code> for the section's opening words, which are not a boxed unit · <code>tint</code> for one idea held together, one per section · <code>outline</code> for the block that states the rule the section turns on, one per section · <code>stripes</code> for an activity the student answers, whose top rule turns red · <code>tape</code> for a note pinned to the page rather than taught in sequence · <code>dark</code> for content that <i>is</i> a night, a screen or a stage. A section is an <code>&lt;h2&gt;</code>: the sheet numbers it, so it is never typed, and it restarts the lettering under it. An unset block is paper with the 2px accent rule. The markup box you are reading is <code>&lt;details class="reveal"&gt;&lt;summary&gt;…&lt;/summary&gt;&lt;div class="body"&gt;&lt;div&gt;&lt;pre&gt;…&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;/details&gt;</code>.</p>
+<p class="dim">Looks, and why each is chosen: <code>float</code> for text that applies to everything in the section and belongs to no single block · <code>tint</code> for content about the track's own voice — how a word taught in that voice compares with the same word in another voice, what it really means or the use cases a slang word has · <code>outline</code> for content important enough to stand out from the page · <code>stripes</code> for an activity the student answers, whose top rule turns red · <code>tape</code> for a note pinned to the page rather than taught in sequence · <code>dark</code> for content that <i>is</i> a night, a screen or a stage. One tint and one outline per section at most. A section is an <code>&lt;h2&gt;</code>: the sheet numbers it, so it is never typed, and it restarts the lettering under it. An unset block is paper with the 2px accent rule. The markup box you are reading is <code>&lt;details class="reveal" open&gt;&lt;summary&gt;…&lt;/summary&gt;&lt;div class="body"&gt;&lt;div&gt;&lt;pre&gt;…&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;/details&gt;</code>.</p>
 </div></div></details>
 </div>
 
@@ -66,12 +66,9 @@
 
 <h2>In-Block Features</h2>
 
-<div class="block" data-look="float" data-span="12">
-<p><b>A. Augment existing text</b> — the marks, the ruby lines, the card at a word and the timeline attach to a sentence the lesson already wrote. <b>B. Standalone visuals</b> — a chart, a list, a dialog, a drawing, a recording or a strip is a thing of its own. Each sits inside a block with the prose that reads it, or stands outside at its own width.</p>
-</div>
-
 <div class="block" data-span="12">
 <h3>Augment existing text</h3>
+<p>The marks, the ruby lines, the card at a word and the timeline attach to a sentence the lesson already wrote.</p>
 <div class="rows">
 <div>
 <p class="pos" id="pos"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p>
@@ -133,8 +130,9 @@
 </div>
 <div class="block" data-span="12">
 <h3>Standalone visuals</h3>
+<p>A chart, a list, a dialog, a drawing, a recording or a strip is a thing of its own. Each sits inside a block with the prose that reads it, or stands outside at its own width.</p>
 <p><code>.viz</code> frames three things: the dialog, the player and the map — a chart and a strip carry a frame of their own. It is never a second <code>.block</code>.</p>
-<div class="rows">
+<div class="rows" style="justify-content:space-around">
 <div id="chart">
 <figure class="chartwrap">
 <figcaption class="chartcap">The chart — parallel items</figcaption>
@@ -170,9 +168,7 @@
 
 
 <div class="rows">
-<div id="map">
-  <!-- `--map-w` on the wrapper caps its width (any CSS length); unset, it fills its cell. The wrapper
-       hugs the drawing, so the ticks below, positioned in % of the wrapper, stay on their places. -->
+<div id="map" style="flex:1 1 0">
   <div class="vz-map viz">
   <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, eight places each drawn with its name on a sign — a station under a canopy with a clock, a café with a striped awning, a park with trees, a bank under a dollar sign, a library wall of books, a post office with a postbox, a bus shelter, and two market awnings">
     <rect x="0" y="0" width="360" height="240" style="fill:var(--paper)"></rect>
@@ -247,10 +243,9 @@
     <label style="position:absolute;left:52.5%;top:92.2%;transform:translateX(-50%)"><input type="checkbox" aria-label="the market"> 8</label>
 </div>
   </div>
-  <p>Walk the route, ticking each place as you pass it.</p>
 </div>
-<div id="comic">
-<table class="chart">
+<div id="comic" style="flex:1 1 0">
+<table class="chart" style="width:100%;height:100%;flex:1 1 auto">
   <tbody>
     <tr>
       <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0">Ana waited at the stop in the rain.</p></td>
@@ -389,7 +384,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
     …
   &lt;/tbody&gt;
 &lt;/table&gt;</pre>
-<p class="dim"><code>figcaption.chartcap</code> names a chart. <code>th.vlab</code> puts a family label outside the chart's edge; <code>tr.bare</code> collapses a nameless header row to a rule. A block takes <code>data-structure="grid"</code> with a <code>thead</code> and optional <code>caption</code>, and <code>tr.note</code> for a remark row. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each.</p>
+<p class="dim"><code>figcaption.chartcap</code> names a chart. <code>th.vlab</code> puts a family label outside the chart's edge; <code>tr.bare</code> collapses a nameless header row to a rule. A block takes <code>data-structure="grid"</code> with a <code>thead</code> and optional <code>caption</code>, and <code>tr.note</code> for a remark row. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each. <b>Content beside a chart should flex to fill the row</b>; where it does not, 1B centres the chart in the space it was given, or sets <code>justify-content:space-around</code> on the row.</p>
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;…the sentence, and the chart it reads…&lt;/div&gt;
   &lt;div&gt;
@@ -413,7 +408,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
     …one tick per place, in % of the drawing's box…
   &lt;/div&gt;
 &lt;/div&gt;</pre>
-<p class="dim">A tick is a checklist, never the answer; the route the student writes goes in a <code>.gap</code>. <code>aria-label</code> names the drawing. The overlay carries the viewBox's <code>aspect-ratio</code>, so the ticks hold their place however tall the frame around the drawing becomes; <code>--map-w</code> caps its width when the drawing must be smaller than its cell.</p>
+<p class="dim">A tick is a checklist, never the answer; the route the student writes goes in a <code>.gap</code>. <code>aria-label</code> names the drawing. The border is drawn on the drawing, not on the cell: the frame keeps the viewBox's 3:2 box and the cell around it holds the rest. The overlay carries the same <code>aspect-ratio</code>, so the ticks hold their place however wide the cell grows. <code>--map-w</code> caps its width when the drawing must be smaller than its cell.</p>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #comic · the comic strip</summary><div class="body"><div>
 <pre>&lt;table class="chart"&gt;
@@ -427,7 +422,9 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;!-- two panels a row, two rows, as drawn · one &lt;tr&gt; holding all four makes it 4×1 · one row of two makes it 2×1 --&gt;</pre>
+&lt;!-- two panels a row, two rows, as drawn · one &lt;tr&gt; holding all four makes it 4×1 --&gt;
+&lt;!-- beside a taller neighbour the strip fills the row: width:100%, height:100%, flex:1 1 auto
+     on the table, so its rows split the height it was given --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #audio · the recording</summary><div class="body"><div>
 <pre>&lt;figure class="vz-play viz"&gt;
@@ -462,10 +459,10 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div></div></details>
 </div>
 
-<h2>Activities - 5A Training 5B Marked activities with controls</h2>
+<h2>Activities</h2>
 
 <div class="block" data-look="stripes" data-span="12" id="flip">
-<h3>5A · Cards face-down, one meaning at a time</h3>
+<h3>Training</h3>
 <p>One card per item the lesson has <b>already taught</b> — vocabulary, phrases, the words of an earlier section. The block shows the back of one card and the student turns cards until they find the one it belongs to: a turn tints that card red when it is not the answer and green when it is, any number of cards may be turned in a round, and only the right one turns them all back and brings the next prompt four seconds later. <b>Nothing here is scored and no answer is saved</b>, so it trains and never tests: when a lesson carries one it is the last activity before the quiz, never the quiz.</p>
 <h4 class="flip-ask" style="text-align:center;padding-top:10px" aria-live="polite">…</h4>
 <div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
@@ -549,7 +546,7 @@ next();
 </div>
 
 <div class="block" data-look="stripes" data-span="12">
-<h3>5B · Four activity types, in-block size</h3>
+<h3>Marked activities with controls</h3>
 <p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>The four controls are alternatives chosen by what the student must do</b> — a gap for a form, a radio for a judgement, a checkbox for several at once, a written field for a sentence. Two blocks at the end of this section are marked <b>IGNORED</b>: they stay on the page for reference and lessons are not using them for now.</p>
 <p class="dim"><code>data-answer</code> keys a gap, <code>|</code> separating alternatives; <code>--gap-w</code> is the width the answer needs. A radio group's key is <code>data-a</code> on <code>.qitem</code>; engine2.js marks the right option and writes <code>.ans</code> beside a typed field.</p>
 <p>Each of these can stand as a block of its own or sit inside a block with the prose, the chart or the drawing it accompanies; the two below are the in-block size.</p>

@@ -899,7 +899,9 @@
      goes to the cell beside it. */
   .rows{display:flex;flex-wrap:nowrap;gap:var(--flex-gap,26px);align-items:stretch;padding-top:8px}
   .rows>*{display:flex;flex-direction:column;flex:1 1 0;min-width:0}
-  .rows>*>:is(.viz,figure.vz-play){flex:1 1 auto;min-height:0}
+  /* a dialog, a player or a comic takes the row's height; the map does not — its frame is drawn on the
+     drawing, so it keeps the drawing's own 3:2 box and the cell around it holds the rest */
+  .rows>*>:is(.viz,figure.vz-play):not(.vz-map){flex:1 1 auto;min-height:0}
   .rows>:not(:has(>p)):not(:has(>figure.vz-play)):not(:has(>ol)):not(:has(>ul)){flex:0 1 auto}
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
