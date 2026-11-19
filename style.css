@@ -890,8 +890,9 @@
     --accent-line:color-mix(in oklab, var(--accent) 42%, var(--line));
     background:var(--paper);border:1px solid var(--line);border-top:2px solid var(--accent);
     border-radius:var(--r2);box-shadow:2px 2px 0 var(--line-2),var(--shadow-1);
-    padding:20px;margin:0}
-  .block>:is(h3,h4):first-child,.panel>:is(h3,h4):first-child,.card>:is(h3,h4):first-child,
+    padding:0 20px 20px;margin:0}
+  /* the frame has no top padding: its first child brings the space, 14px like every other child */
+  .block>:first-child,.panel>:first-child,.card>:first-child{margin-top:14px}
   .game>:is(h3,h4):first-child,.dialog>:is(h3,h4):first-child{margin-top:0}
   /* text that sits directly in a frame keeps 3px of its own on every side, so a paragraph or a list never
      runs flush against the frame's inner edge. Only direct children are touched: text nested inside a chart,
@@ -1498,7 +1499,7 @@
   }
   /* block frame, legacy names — preview's .block geometry wins where the two speak */
   .panel,.card{--edge:var(--tan);border:2px solid var(--edge);border-radius:12px;
-    width:fit-content;max-width:100%;padding:20px;background:var(--paper);
+    width:fit-content;max-width:100%;padding:0 20px 20px;background:var(--paper);
     box-shadow:4px 4px 0 var(--tan);margin:14px 0}
   .panel[data-kind="teach"],.card[data-kind="teach"],.game[data-kind="teach"],
   .dialog[data-kind="teach"]{--edge:var(--ink)}
