@@ -838,9 +838,9 @@
      Members: #40 LAYOUT · #50 STRUCTURE · #51 SEQUENCE · #52 GRID · #53 PAIR · #60-#64 controls · #70 LOOK · #76/#80-#82 engine, state, motion
      ## GAMES sits below, in @layer legacy. */
 
-/* #40 LAYOUT — .content-area 1200px. A row is flex and no width is declared: every frame is as wide as
-   what it holds, and every frame in a row ends on the same line. An author sizes a block by its content,
-   not by a fraction. Vary: --row-gap, --col-gap, --section-gap (length) */
+/* #40 LAYOUT — .content-area 1200px. #41 ROW is the only arrangement: a section is a line of four
+   quarters, a child takes the whole line unless it carries a span in quarters, and nothing is decided
+   in the browser. Vary: --row-gap, --col-gap, --section-gap (length) */
 @layer layout{
   main{width:1400px;margin:0 0 0 15px;padding:8px 14px 30px}
   /* the sheet is untinted paper + a grain, so the reading surface never carries a hue that could be
@@ -856,48 +856,21 @@
   .page-container::before{content:"";position:absolute;inset:6px;pointer-events:none;
     border:2px solid color-mix(in oklab,var(--ink-2) 50%,var(--paper));border-radius:14px}
   .content-area{width:1200px;margin:0 auto;padding:98px 0 16px;position:relative}
-  /* #41 FLOW — section.flow: blocks and raw elements take their width from their content and auto-flow.
-     USE: the default arrangement of a section. Vary: --col-gap, --row-gap, --flow-floor */
-  .content-area>section.flow{display:flex;flex-wrap:wrap;align-items:flex-start;
-    gap:var(--row-gap,22px) var(--col-gap,18px)}
-  .content-area>section.flow>*{flex:0 1 fit-content;max-width:100%;margin-block:0;
-    min-inline-size:calc((100% - 3*var(--col-gap,18px))/4)}
-  /* a heading is not a block: it takes the line and never sets a width */
-  .content-area>section.flow>:is(h1,h2,h3,h4,h5){flex:1 1 100%;min-inline-size:0}
 
-  /* #42 MOSAIC — section.mosaic: the same children placed on a grid, so a tall block does not leave a
-     hole beside it. The row unit is small and items span it; the spans are written by the measuring pass.
-     USE: a section where one block is much taller than its neighbours. Vary: --unit, --cols */
-  .content-area>section.mosaic{display:grid;grid-template-columns:repeat(var(--cols,4),1fr);
-    grid-auto-rows:var(--unit,8px);grid-auto-flow:row dense;
-    column-gap:var(--col-gap,18px);row-gap:0}
-  .content-area>section.mosaic>*{margin-block:0;align-self:start;grid-row:span 1}
+  /* #41 ROW — the page is a line of four quarters: .content-area itself, a section inside it, and an
+     .itemrow are all the same grid. A child takes the whole line unless the pass gives it a span in
+     quarters: data-span="1".."4". DOM order is the order on the page, a row is as tall as its tallest
+     block, and no packer runs in the browser. Vary: --col-gap, --row-gap, --section-gap */
+  .content-area,.itemrow,.content-area>section{display:grid;
+    grid-template-columns:repeat(4,1fr);
+    column-gap:var(--col-gap,18px);row-gap:var(--row-gap,22px);align-items:start}
+  .content-area>*,.itemrow>*,.content-area>section>*{grid-column:span 4;min-width:0;margin-block:0}
+  .content-area>*[data-span="1"],.itemrow>*[data-span="1"],.content-area>section>*[data-span="1"]{grid-column:span 1}
+  .content-area>*[data-span="2"],.itemrow>*[data-span="2"],.content-area>section>*[data-span="2"]{grid-column:span 2}
+  .content-area>*[data-span="3"],.itemrow>*[data-span="3"],.content-area>section>*[data-span="3"]{grid-column:span 3}
 
-  .itemrow{display:flex;flex-wrap:wrap;align-items:stretch;
-    gap:var(--row-gap,22px) var(--col-gap,18px)}
-
-  .itemrow>*{min-width:0}
-  /* a frame is as wide as what it holds and no wider, and a block with nothing wide inside it collapses to
-     a quarter of the row. No tag decides width — the row wraps when the contents do not fit. */
-  .itemrow>:is(.block,.panel,.card,.dialog){flex:0 1 fit-content;
-    min-inline-size:calc((100% - 3*var(--col-gap,18px))/4)}
-  /* a measured span beats the collapse. The builder never chooses one: qa/span.mjs measures the block and
-     writes the attribute, so the same content always produces the same layout */
-  .itemrow>:is(.block,.panel,.card,.dialog)[data-span="quarter"]{flex:0 1 calc((100% - 3*var(--col-gap,18px))/4)}
-  .itemrow>:is(.block,.panel,.card,.dialog)[data-span="third"]{flex:0 1 calc((100% - 2*var(--col-gap,18px))/3)}
-  .itemrow>:is(.block,.panel,.card,.dialog)[data-span="twothird"]{flex:0 1 calc((200% - var(--col-gap,18px))/3)}
-  .itemrow>:is(.block,.panel,.card,.dialog)[data-span="half"]{flex:0 1 calc((100% - var(--col-gap,18px))/2)}
-  .itemrow>:is(.block,.panel,.card,.dialog)[data-span="full"]{flex:0 1 100%}
-  /* a page written before spans existed keeps its old sizing until qa/span.mjs writes them */
-  .itemrow>:is(.block,.panel,.card,.dialog):not([data-span]):has(>p){flex:1 1 22ch}
-  /* a chart is not stretched to the row's height: it keeps its own, and centres on the block beside it */
-  .itemrow>.chart{align-self:center;margin-block:0}
-  /* a frame's own vertical margin would lift it off the row's line, so the row's gap is the only spacing */
-  .itemrow>:is(.block,.panel,.card,.game,.dialog){margin-block:0}
-  .content-area>*{margin-block-end:var(--row-gap,22px)}
-  .content-area>section{display:grid;gap:var(--row-gap,22px);
-    margin-block:0 var(--section-gap,34px)}
   .content-area>h1{margin:0 0 .35em;text-align:center}
+  .content-area>h2{margin-block:var(--section-gap,34px) 0}
 }
 
 /* #50 STRUCTURE — data-structure="prose|set|sequence|grid|pair|media" on .block; the hue is the track's. Unset: plain stack. Vary: --h (hue 0-360) */
@@ -909,7 +882,7 @@
     --accent-line:color-mix(in oklab, var(--accent) 42%, var(--line));
     background:var(--paper);border:1px solid var(--line);border-top:2px solid var(--accent);
     border-radius:var(--r2);box-shadow:2px 2px 0 var(--line-2),var(--shadow-1);
-    width:fit-content;max-width:100%;padding:20px;margin:0}
+    padding:20px;margin:0}
   .block>:is(h3,h4):first-child,.panel>:is(h3,h4):first-child,.card>:is(h3,h4):first-child,
   .game>:is(h3,h4):first-child,.dialog>:is(h3,h4):first-child{margin-top:0}
   /* text that sits directly in a frame keeps 3px of its own on every side, so a paragraph or a list never

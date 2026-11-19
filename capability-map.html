@@ -31,163 +31,16 @@ not built · <b>§5</b> the decisions already taken · <b>§6</b> the concepts n
 <b>superseded</b> — keep one of the pair, prune the other ·
 <b>gap</b> — the lesson must teach it in prose.</p>
 
-<h2>0. The test bed</h2>
-
-<p class="dim">A lab, not a rule. The same ten items are arranged twice: once by flow, where each takes
-its width from its content, and once on a grid, where a tall item does not leave a hole beside it. The table
-under them reports what each one measured, so the two questions — how much text earns a block of its own, and
-what earns the full width — can be answered with numbers rather than taste.</p>
-
-<h3 id="lab-flow">0a. Flow — the content sets the width</h3>
-
-<style>/* the lab is measured, and an off-screen section under content-visibility:auto reports a guessed
-  1200px height instead of its own. The pass has to measure with this off, or in the viewport. */
-#lab-src,#lab-mos{content-visibility:visible}
-</style>
-
-<section class="flow" id="lab-src">
-<ul class="set">
-<li><b>clock in</b><span class="dim">register your arrival</span></li>
-<li><b>clock out</b><span class="dim">register your leaving</span></li>
-<li><b>bay</b><span class="dim">where trucks unload</span></li>
-<li><b>pallet</b><span class="dim">goods on a base</span></li>
-<li><b>forklift</b><span class="dim">lifts pallets</span></li>
-<li><b>manifest</b><span class="dim">what a truck carries</span></li>
-<li><b>tip over</b><span class="dim">fall on its side</span></li>
-<li><b>rack</b><span class="dim">the shelf frame</span></li>
-<li><b>bolt</b><span class="dim">holds the rack</span></li>
-<li><b>shift</b><span class="dim">the hours you work</span></li>
-<li><b>paper towels</b><span class="dim">what fell on it</span></li>
-<li><b>told</b><span class="dim">past of <i>tell</i></span></li>
-</ul>
-<table>
-<thead><tr><th>Minute</th><th>Action</th><th>Tense</th><th>Why</th></tr></thead>
-<tbody>
-<tr><td>6:40</td><td>clocked in</td><td>past simple</td><td>one finished act</td></tr>
-<tr><td>6:44</td><td>was tipping</td><td>past continuous</td><td>in progress</td></tr>
-<tr><td>6:50</td><td>had gone</td><td>past perfect</td><td>before a past moment</td></tr>
-<tr><td>7:10</td><td>has been</td><td>present perfect</td><td>still true now</td></tr>
-</tbody></table>
-<p>One short line.</p>
-<p>A sentence long enough to see where a second one would sit beside it, and no longer.</p>
-<p>The accident is not the interesting part; what matters is that the same four minutes can be told as a
-sequence of events, as a list of words, or as one picture with a caption, and the student needs all three.</p>
-<p>The accident is not the interesting part. What matters is that the same four minutes can be told as a
-sequence of events, as a list of words, or as one picture with a caption, and the student needs all three of
-those in that order before the past continuous makes any sense at all. That is why the section opens with the
-scene and not with the tense, and why the words arrive only after the student has something to hang them on.</p>
-<p>The accident is not the interesting part. What matters is that the same four minutes can be told as a
-sequence of events, as a list of words, or as one picture with a caption, and the student needs all three of
-those in that order before the past continuous makes any sense at all. That is why the section opens with the
-scene and not with the tense, and why the words arrive only after the student has something to hang them on.
-A second paragraph of the same length follows here so that the block has the bulk a full-width argument needs:
-two paragraphs, one idea, and an example the reader can check against the sentence above it without scrolling
-away from the block that raised the question in the first place, which is what the width is for.</p>
-<p>He clocked in at 6:40.</p>
-<ul class="set" data-cols="2">
-<li><b>clock in</b><span class="dim">register your arrival</span></li>
-<li><b>bay</b><span class="dim">where trucks unload</span></li>
-<li><b>pallet</b><span class="dim">goods on a base</span></li>
-<li><b>manifest</b><span class="dim">what a truck carries</span></li>
-</ul>
-<table>
-<thead><tr><th>Time</th><th>What he did</th></tr></thead>
-<tbody>
-<tr><td>6:40</td><td>He <b>clocked in</b>.</td></tr>
-<tr><td>6:44</td><td>The pallet <b>was tipping</b>.</td></tr>
-<tr><td>7:10</td><td>Nobody had told the office.</td></tr>
-</tbody></table>
-</section>
-
-<h3 id="lab-mosaic">0b. Mosaic — the same items on a grid</h3>
-
-<p class="dim">The identical children, placed again on a four-column grid with an 8px row unit: each item takes
-as many columns as its content wants and as many rows as its height needs, so a tall vocabulary list stops
-leaving a hole beside it. The spans below are computed by the lab's own script — the prototype of the pass —
-and nothing in the markup decides them.</p>
-
-<section class="mosaic" id="lab-mos" style="--cols:4"></section>
-
-<pre id="lab-out" class="dim" style="max-height:340px;overflow:auto"></pre>
-
-<script>
-(function () {
-  var src = document.getElementById('lab-src');
-  var mos = document.getElementById('lab-mos');
-  var out = document.getElementById('lab-out');
-  var UNIT = 8, VGAP = 22;
-
-  function maxc(el) {
-    var c = el.cloneNode(true);
-    c.style.cssText += ';position:absolute;left:-99999px;top:0;width:max-content;max-width:none;' +
-      'min-width:0;flex:none;margin:0';
-    document.body.appendChild(c);
-    var w = Math.ceil(c.getBoundingClientRect().width);
-    c.remove();
-    return w;
-  }
-  function words(el) {
-    var t = (el.textContent || '').trim().replace(/\s+/g, ' ');
-    return t ? t.split(' ').length : 0;
-  }
-  function kind(el) {
-    if (el.tagName === 'P') return 'p';
-    if (el.tagName === 'UL') return 'set';
-    if (el.tagName === 'TABLE') return 'table';
-    return el.tagName.toLowerCase();
-  }
-
-  var rowW = mos.getBoundingClientRect().width;
-  var colRoom = (rowW - 3 * 18) / 4;               /* one column of four, gaps out */
-  var flow = [].map.call(src.children, function (c) {
-    var r = c.getBoundingClientRect();
-    return { kind: kind(c), words: words(c), want: maxc(c), w: Math.round(r.width), h: Math.round(r.height) };
-  });
-
-  var placed = [];
-  flow.forEach(function (f, i) {
-    var el = src.children[i].cloneNode(true);
-    var cols = Math.max(1, Math.min(4, Math.round(f.want / (colRoom + 18))));
-    el.style.gridColumn = 'span ' + cols;
-    mos.appendChild(el);
-    var h = el.getBoundingClientRect().height;
-    var rows = Math.max(1, Math.ceil((h + VGAP) / UNIT));
-    el.style.gridRow = 'span ' + rows;
-    placed.push({ kind: f.kind, words: f.words, want: f.want, flowW: f.w, flowH: f.h, cols: cols, rows: rows, h: Math.round(h) });
-  });
-
-  var lines = ['column ' + Math.round(rowW) + 'px, one column of four = ' + Math.round(colRoom) + 'px', ''];
-  lines.push('   item           words  max-content   flow w×h      grid c×r   grid h');
-  placed.forEach(function (p) {
-    lines.push('   ' + p.kind.padEnd(14) + String(p.words).padStart(4) + '   ' +
-      String(p.want).padStart(6) + 'px   ' + (p.flowW + '×' + p.flowH).padEnd(11) + '   ' +
-      (p.cols + '×' + p.rows).padEnd(9) + '  ' + p.h + 'px');
-  });
-  var flowH = Math.round(src.getBoundingClientRect().height);
-  var mosH = Math.round(mos.getBoundingClientRect().height);
-  lines.push('');
-  lines.push('   grid tracks: ' + getComputedStyle(mos).gridTemplateColumns);
-  lines.push('   placed at (x,y) w×h:');
-  [].forEach.call(mos.children, function (c, i) {
-    var r = c.getBoundingClientRect(), m = mos.getBoundingClientRect();
-    lines.push('     ' + String(i).padStart(2) + '  ' + kind(c).padEnd(6) +
-      Math.round(r.left - m.left) + ',' + Math.round(r.top - m.top) + '  ' +
-      Math.round(r.width) + '×' + Math.round(r.height));
-  });
-  lines.push('   the same content occupies ' + flowH + 'px in flow and ' + mosH + 'px on the grid');
-  mos.innerHTML = '';
-  lines.push('   empty mosaic height: ' + Math.round(mos.getBoundingClientRect().height) + 'px');
-  out.textContent = lines.join('\n');
-})();
-</script>
-
 <h2>1. Prose — how a page is written</h2>
 
+<div class="block" data-span="2">
 <p>Prose is the one tool with no markup, and every block uses it: it states the rule a figure cannot draw, puts
 two wordings side by side, and names the difference Portuguese hides. It is first on this page because it fails
 more quietly than a figure — a wrong sentence still reads like teaching. Four statements describe it, the same
 four §2 asks of every other tool:</p>
+</div>
 
+<div class="block" data-span="2">
 <ul>
 <li><b>What it is for.</b> The rule no figure can draw, and the student's question answered in words. If a
 figure on the page answers it, the prose does not say it again.</li>
@@ -199,17 +52,23 @@ about the lesson, or an <i>only</i> / <i>never</i> / <i>always</i> that is not t
 <li><b>Whether a repeat earns its place.</b> One rule per paragraph, with an example. A second paragraph on the
 same rule adds a case, not a restatement.</li>
 </ul>
+</div>
 
+<div class="block" data-span="2">
 <p><b>A form is the exact wording.</b> <i>wrote</i>, <i>have written</i>, <i>has been writing</i> are three
 forms. Two forms side by side is the normal way to teach a difference, and saying what each one does that the
 other does not is the point of the paragraph. What is forbidden is presenting two forms as one thing, or
 claiming two behave alike without naming what they share, in the same sentence.</p>
+</div>
 
+<div class="block" data-span="2">
 <p><b>Nothing is coined.</b> A word this page does not define is not given a meaning in a lesson. If something
 needs a name, the ordinary word for it is used, or the thing is said in full.</p>
+</div>
 
 <h3>Two pairs, and why one of each was cut</h3>
 
+<div class="block" data-span="2">
 <p><b>Rejected.</b> “Portuguese puts the whole claim inside the verb's ending: escrevi, tenho escrito. English
 splits it into two words that never touch, and one of them is a word you already know from do and will.”</p>
 <p class="dim">Two forms presented as one · <i>claim</i> with no axis on the page · <i>splits</i> and <i>never
@@ -219,7 +78,9 @@ touch</i> are figures of speech where a fact belongs · <i>do</i> and <i>will</i
 the writing is still true now. English keeps that difference — <i>wrote</i> / <i>have written</i>.”</p>
 <p class="dim">Each wording is named with what it does, the difference is stated rather than implied, and the
 Portuguese is a fact about Portuguese.</p>
+</div>
 
+<div class="block" data-span="2">
 <p><b>Rejected.</b> “<i>has been</i> + <i>-ing</i> is the same machine with a longer tail.”</p>
 <p class="dim"><i>Machine</i> is a term this page does not define, and the sentence talks about the lesson
 instead of the English.</p>
@@ -228,41 +89,53 @@ this week and has not stopped. The same words with <i>he is</i> — <i>he's play
 happening now.”</p>
 <p class="dim">Both readings are shown, the deciding word is named, and nothing has to be learned before the
 difference can be seen.</p>
+</div>
 
 <h2>2. Choosing a tool</h2>
 
 <h3>What every tool is described by</h3>
 
+<div class="block" data-span="2">
 <p>A tool is not markup and a picture. It is an instrument, and four statements decide whether using it teaches
 or decorates.</p>
+</div>
 
+<div class="block" data-span="2">
 <ul>
 <li><b>What it is for.</b> The question it answers, in the student's words — <i>is this still true now?</i>, <i>which word carries which job?</i>, <i>did the voice rise?</i> A figure chosen by name instead of by question is chosen by taste.</li>
 <li><b>What it assumes.</b> Two separate things: the <b>status of the concept</b> in the student's head, and the <b>conventions of reading the figure</b>. The first is <i>introduced</i> (the page must supply the way to read the figure), <i>known</i> (the figure can work as a reminder), or <i>retrievable on demand</i> (the figure is only worth showing to contrast or to test). The second is never in the student and never in the curriculum: what a span means, what the mark for <i>now</i> means, that a dissolving left end means "lately". If the page does not supply it, the figure is not advanced — it is unreadable. Portuguese is often the efficient place to supply it.</li>
 <li><b>What it must not be used to claim.</b> Every figure asserts something. An axis of time asserts that time is a line with a present on it; it says nothing about how sure the speaker is, how often it happens, or whether the form is polite. A positions figure asserts that a transformation is available — which is false in most of the places it gets borrowed for. Used where its claim is false, a figure does not merely fail to teach: it installs an error.</li>
 <li><b>Whether a repeat earns its place.</b> Not a number. Two tests: does this appearance tell the student something the sentence does not already say, and is a second appearance <i>answered</i> or is it the same display again? Repetition inside an exercise is how a student transfers; repetition of a picture is decoration.</li>
 </ul>
+</div>
 
 <h3>The tests a use must pass</h3>
 
+<div class="block" data-span="2">
 <ol>
 <li>It carries information the sentence does not already state.</li>
 <li>If it repeats, the repeat is answered rather than re-displayed.</li>
 <li>If it were removed, the student would lose the answer to the concept's question.</li>
 <li>The page still has one thing that is obviously the thing to look at.</li>
 </ol>
+</div>
 
+<div class="block" data-span="2">
 <p><b>No ceilings, by design.</b> A lesson may justifiably use one figure twenty times — a present-perfect lesson needs the axis on every example — and another may be wrong to use it once. The tests constrain the justification, not the quantity. What they forbid is the two failure modes:</p>
 
 <ul>
 <li><b>Saturation</b> — one figure repeated until it stops carrying information. Underline every line and the underline becomes typography.</li>
 <li><b>Monotony</b> — different content delivered through one shape. Every section a chart, every block a card, every lesson opening the same way. The variety rule is per page, not per figure.</li>
 </ul>
+</div>
 
+<div class="block" data-span="4">
 <p><b>Cost is a demand, not a price.</b> What a figure asks of the page is attention, an explanation the reader must already have, space, and sometimes a media file. Its size, skin and placement are a construction choice the sheet already limits — not a decision to re-take per lesson.</p>
+</div>
 
 <h3>The words the figures own</h3>
 
+<div class="block" data-span="4">
 <p>These names belong to the figures, and a lesson uses one only in a block where that figure is drawn, with the
 meaning below. Outside the figure the page says what the wording is and what it does: a tense is a form, not a
 claim.</p>
@@ -278,10 +151,12 @@ claim.</p>
 <tr><td><b>job</b></td><td>word jobs</td><td>the part a word plays in its sentence</td></tr>
 </tbody>
 </table>
+</div>
 
 <h3>The mapping</h3>
 
 
+<div class="block" data-span="4">
 <p>One row per concept the course owes. The third column is the point of the page: it names the figures that can show that answer, so a lesson's own plan can produce its candidates instead of relying on the author remembering what exists. A blank third column is left visible — it is a concept that must be taught in prose.</p>
 
 <table class="chart">
@@ -306,6 +181,7 @@ claim.</p>
 </table>
 
 <p class="dim">Two more rows are worth writing before anything else is built: <b>a claim against a deadline</b> (the wall on the axis already draws it) and <b>the difference between two sounds</b> (the ear, not the eye — a figure can only point).</p>
+</div>
 
 <h2>3. The elements — examples</h2>
 
@@ -497,7 +373,7 @@ and above .tln:
 <tr><td><b>push</b></td><td><span class="pt">empurrar</span></td></tr>
 </tbody>
 </table>
-<div class="panel" id="partner" data-span="full">
+<div class="panel" id="partner" data-span="4">
 <h3>A word and its partner</h3>
 <p>Two columns and nothing else: the word, and the word it is paired with. The pairing is the whole lesson — the opposite, the homophone, or the translation that traps a Portuguese speaker. The margin label says only which pairing a row is doing.</p>
 <p>Everything that would have taken a third column is written here instead: <span class="pt">emprestar</span> covers both directions, <i>cheap</i> also judges quality where <span class="pt">barato</span> does not, and <i>push back</i> is to resist rather than to shove.</p>
@@ -506,7 +382,7 @@ and above .tln:
 </div>
 
 <div class="itemrow" id="chart-split">
-<div class="panel" id="label" data-span="full">
+<div class="panel" id="label" data-span="4">
 <h3>The label is the teaching</h3>
 <p>The margin label carries one word — which family the rows beside it belong to — and the rule is written here, where it can be a sentence: <b>Regular</b> adds <i>-ed</i> and the base never moves, so the rows are only evidence that the rule holds; <b>Irregular</b> has a form of its own for each verb, so each has to be learned one at a time.</p>
 <p class="dim">The same margin label splits any family a lesson must separate — two conjugations, two registers, the words that follow the rule from the words that do not. A chart with no family to separate does not get one.</p>
@@ -562,22 +438,35 @@ and above .tln:
 <p class="dim">The native <code>controls</code> are the floor: with no script the student still plays, pauses and scrubs.</p>
 </div>
 
-<h3 id="layouts">3b. Layouts — how many blocks share a row</h3>
+<h3 id="layouts">3b. Layouts — how blocks fill a line</h3>
 
-<p>A layout is not a width setting. It answers what the reader must do with two things at once: compare them,
-follow one into the other, or meet one before the other. Sizing follows the content — every frame has a
-quarter-width floor and no width of its own, the sheet gives no tag a say, and <code>qa/span.mjs</code> writes
-the span each block needs from what the block holds. The examples below are results at those spans.</p>
+<p>A section is a line of four quarters. A block takes the whole line unless it is given fewer, the lines are
+filled in order, and the last line of a section is either folded into the line above or widened to four. Nothing
+is left at three quarters alone: if nothing fits beside a wide block it takes the fourth, and three wide blocks
+in a row is the signal to merge them into one block with subheadings. The numbers come from what a block is:</p>
+
+<table class="chart">
+<thead><tr><th>the block is</th><th>quarters</th><th>why</th></tr></thead>
+<tbody>
+<tr><td>a label, a short line, a word set, a picture</td><td>1</td><td>it cannot fill a line and has no need to</td></tr>
+<tr><td>prose, a dialog, a chart, an example group</td><td>2</td><td>about 65 characters a line — the reading measure</td></tr>
+<tr><td>a wide table or a wide figure</td><td>3</td><td>it needs the room; a one-quarter companion fills the line</td></tr>
+<tr><td>an argument that needs the whole column</td><td>4</td><td>the only case where a block is expected to be tall</td></tr>
+</tbody>
+</table>
+
+<p class="dim">The examples below are results at those spans. They are examples, not required elements: what a
+lesson copies is the reason, and the numbers are what the reason produces.</p>
 
 <div class="panel" id="layout-pair">
 <h3>Two blocks, one comparison</h3>
 <p><b>The case.</b> A rule and the words that exercise it. The reader moves between them, and neither carries
 the lesson alone. The rule takes the wider half; a list takes what its lines need.</p>
 <div class="itemrow">
-<div class="block" data-structure="prose" data-span="twothird"><h3>Two past forms</h3>
+<div class="block" data-structure="prose" data-span="2"><h3>Two past forms</h3>
 <p><i>I wrote three songs in 2022</i> names a finished year. <i>I've written three songs</i> counts up to
 now and names no year.</p></div>
-<div class="block" data-structure="set" data-span="third"><h3>Words here</h3>
+<div class="block" data-structure="set" data-span="2"><h3>Words here</h3>
 <ul class="set" data-cols="2">
 <li><b>write</b><span class="dim">verb</span></li>
 <li><b>wrote</b><span class="dim">past simple</span></li>
@@ -587,11 +476,11 @@ now and names no year.</p></div>
 </div>
 <details class="reveal" open><summary>The markup</summary>
 <pre>&lt;div class="itemrow"&gt;
-  &lt;div class="block" data-structure="prose" data-span="half"&gt;
+  &lt;div class="block" data-structure="prose" data-span="2"&gt;
     &lt;h3&gt;Two past forms&lt;/h3&gt;
     &lt;p&gt;&lt;i&gt;I wrote three songs in 2022&lt;/i&gt; names a finished year.&lt;/p&gt;
   &lt;/div&gt;
-  &lt;div class="block" data-structure="set" data-span="half"&gt;
+  &lt;div class="block" data-structure="set" data-span="2"&gt;
     &lt;h3&gt;Words here&lt;/h3&gt;
     &lt;ul class="set" data-cols="2"&gt;
       &lt;li&gt;&lt;b&gt;wrote&lt;/b&gt;&lt;span class="dim"&gt;past simple&lt;/span&gt;&lt;/li&gt;
@@ -607,11 +496,11 @@ chosen; a block whose content changed is re-measured.</p></details>
 <p><b>The case.</b> The reader looks, then reads. The frame takes the width of its image and the prose takes
 the rest — it never shares the row equally, because a caption is not half a lesson.</p>
 <div class="itemrow">
-<div class="block" data-structure="media" data-span="third">
+<div class="block" data-structure="media" data-span="1">
 <figure><div class="frame" style="--media-h:128px">a photo of the street</div>
 <figcaption>The café on the left, the station behind it.</figcaption></figure>
 </div>
-<div class="block" data-structure="prose" data-span="twothird"><h3>Where it is</h3>
+<div class="block" data-structure="prose" data-span="3"><h3>Where it is</h3>
 <p>The café is on the corner; the station is one street back, behind the square. Walk past the café and
 turn left at the bank.</p></div>
 </div>
@@ -698,44 +587,44 @@ markup, the content and the control stay the same — so a block can be re-skinn
 Six are defined and one is the default.</p>
 
 <div class="itemrow">
-<div class="block" data-span="third"><h4>Default</h4>
+<div class="block" data-span="2"><h4>Default</h4>
 <p>Paper and a 2px accent rule on the top edge, in the track's hue. Any block that has no job beyond being a
 block.</p></div>
-<div class="block" data-look="tint" data-span="twothird"><h4>Tint</h4>
+<div class="block" data-look="tint" data-span="2"><h4>Tint</h4>
 <p>Context or register: the surface takes the register's hue, and the block is about <i>how it sounds in the
 room</i> rather than what it means.</p></div>
 </div>
 
 <div class="itemrow">
-<div class="block" data-look="tape" data-span="half"><h4>Tape</h4>
+<div class="block" data-look="tape" data-span="2"><h4>Tape</h4>
 <p>A thing that would sit on paper — a schedule, a reminder, an aside, where a word came from.</p></div>
-<div class="block" data-look="float" data-span="half"><h4>Float</h4>
+<div class="block" data-look="float" data-span="2"><h4>Float</h4>
 <p>No frame at all: a section's opening or closing line, or the higher-level view set beside the block it
 frames.</p></div>
 </div>
 
 <div class="itemrow">
-<div class="block" data-look="stripes" data-span="third"><h4>Stripes</h4>
+<div class="block" data-look="stripes" data-span="2"><h4>Stripes</h4>
 <p>An activity or a question block. The stripes say the student does something here, and the block reports
 itself when every answer is in (§3d).</p>
 <div class="opts" data-layout="row">
 <label class="opt"><input type="radio" name="lk1"><span>routine</span></label>
 <label class="opt"><input type="radio" name="lk1"><span>surprise</span></label>
 </div></div>
-<div class="block" data-look="outline" data-span="twothird"><h4>Outline</h4>
+<div class="block" data-look="outline" data-span="2"><h4>Outline</h4>
 <p>The one critical element in a section: a thick accent edge and a deep shadow. If two blocks wear it, the
 page no longer has one thing that is obviously the thing to look at.</p></div>
 </div>
 
 <div class="itemrow">
-<div class="block" data-look="dark" data-span="third"><h4>Dark</h4>
+<div class="block" data-look="dark" data-span="2"><h4>Dark</h4>
 <p>Night, or fun. A scene at night, a section that is deliberately a change of light. The native controls
 follow, because the block sets <code>color-scheme: dark</code>.</p>
 <div class="opts">
 <label class="opt"><input type="radio" name="dk1"><span>the yard at night</span></label>
 <label class="opt"><input type="radio" name="dk1"><span>the yard at dawn</span></label>
 </div></div>
-<div class="block" data-look="tint" data-span="twothird"><h4>Tint, in a sentence</h4>
+<div class="block" data-look="tint" data-span="2"><h4>Tint, in a sentence</h4>
 <p><b>Kept.</b> “<i>Cooked</i> is what you say to a friend. To a teacher, <i>exhausted</i> — the same fact,
 and nobody wonders whether you are joking.”</p>
 <p class="dim">This is the block tint exists for: the content is register, so its surface is the register's
@@ -761,10 +650,10 @@ colour. The hue is the track's — no per-block colour.</p></div>
 the sheet reads them, and no element is added to make the change happen.</p>
 
 <div class="itemrow">
-<div class="block" data-state="done" data-span="third"><h4>Done</h4>
+<div class="block" data-state="done" data-span="2"><h4>Done</h4>
 <p>The block carries <code>data-state="done"</code> once every answer in it is in. The border and the halo turn
 green; nothing else about the block changes.</p></div>
-<div class="block" data-reactive style="--score:.72" data-span="twothird"><h4>Score-reactive surface</h4>
+<div class="block" data-reactive style="--score:.72" data-span="2"><h4>Score-reactive surface</h4>
 <p>This block carries <code>--score:.72</code>. The engine writes the number, the surface and the bar read it,
 and both animate when it changes.</p>
 <div class="meter"><i></i></div>
@@ -772,7 +661,7 @@ and both animate when it changes.</p>
 </div>
 
 <div class="itemrow">
-<div class="block" data-span="twothird"><h4>Marks</h4>
+<div class="block" data-span="2"><h4>Marks</h4>
 <div class="opts">
 <label class="opt" data-state="correct"><i class="mark"></i>
 <span>He was standing there when it went off.</span></label>
@@ -782,7 +671,7 @@ and both animate when it changes.</p>
 </div>
 <p class="dim">One empty <code>&lt;i class="mark"&gt;</code> per row; the tick and the cross are drawn in
 CSS, and the third row is what an untouched mark looks like.</p></div>
-<div class="block center" data-span="third">
+<div class="block center" data-span="2">
 <div class="ring" style="--pct:64"><b></b></div>
 <p class="dim mt">64% of the section — the same number as the bar, for the end of a page.</p></div>
 </div>
@@ -794,7 +683,7 @@ placement is a decision recorded in §5; the element it uses is the same <code>.
 <h3 id="motion">3e. Motion — a reveal the student controls</h3>
 
 <div class="itemrow">
-<div class="block" data-span="half"><h4>Flip card</h4>
+<div class="block" data-span="2"><h4>Flip card</h4>
 <label class="flip" style="--flip-h:152px">
 <input type="checkbox">
 <span class="card3d">
@@ -806,7 +695,7 @@ placement is a decision recorded in §5; the element it uses is the same <code>.
 </label>
 <p class="dim">Two faces and no script: the checkbox holds the state, so the card stays turned and prints
 the first face.</p></div>
-<div class="block" data-look="dark" data-span="half"><h4>Flip card, in a night block</h4>
+<div class="block" data-look="dark" data-span="2"><h4>Flip card, in a night block</h4>
 <label class="flip" style="--flip-h:152px">
 <input type="checkbox">
 <span class="card3d">
