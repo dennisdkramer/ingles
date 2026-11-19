@@ -542,6 +542,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 &lt;!-- the prompt shows one card's back; the pick that matches it tints green, any other red --&gt;
 &lt;!-- the card turns back and the next prompt comes after 4 s · --flip-h is the height both faces share --&gt;
+&lt;!-- the script turns the card itself (it cancels the label's own toggle and sets the box), so a click is never doubled --&gt;
 &lt;!-- training only: no data-answer and no data-a in this block, so no engine marks it and it cannot be the quiz --&gt;</pre>
 </div></div></details>
 <script>
@@ -552,10 +553,12 @@ M=C.map(function(c){return c.querySelector('.back').textContent.replace(/\s+/g,'
 function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
 function next(){if(!P.length)P=sh(C.map(function(_,i){return i;}));T=P.pop();A.textContent=M[T];}
 C.forEach(function(c,i){c.addEventListener('click',function(e){
-if(busy){e.preventDefault();return;}
-busy=1;var b=c.querySelector('.back');
+e.preventDefault();
+if(busy)return;
+busy=1;var inp=c.querySelector('input'),b=c.querySelector('.back');
+inp.checked=true;
 b.style.background='color-mix(in oklab, var('+(i===T?'--ok':'--err')+') 26%, var(--paper))';
-setTimeout(function(){b.style.background='';c.querySelector('input').checked=false;busy=0;next();},4000);
+setTimeout(function(){b.style.background='';inp.checked=false;busy=0;next();},4000);
 });});
 next();
 })();
