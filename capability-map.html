@@ -324,8 +324,29 @@
 
 
 
+<div class="block" data-structure="pair" data-span="12" id="pair">
+<h3>One sentence, two versions</h3>
+<p>Only one of these is what a native speaker says.</p>
+<div class="sides" style="--pair-rows:1">
+<div class="side" data-state="wrong"><p><i class="mark"></i> I <b>am knowing</b> the answer.</p></div>
+<div class="side" data-state="correct"><p><i class="mark"></i> I <b>know</b> the answer.</p></div>
+</div>
+</div>
+
 <p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
 <div class="cols markup-row">
+<details class="reveal" open><summary>Markup — #pair · one sentence, two versions</summary><div class="body"><div>
+<pre>&lt;div class="block" data-structure="pair"&gt;
+  &lt;div class="sides" style="--pair-rows:1"&gt;
+    &lt;div class="side" data-state="wrong"&gt;&lt;p&gt;&lt;i class="mark"&gt;&lt;/i&gt; the sentence that is wrong&lt;/p&gt;&lt;/div&gt;
+    &lt;div class="side" data-state="correct"&gt;&lt;p&gt;&lt;i class="mark"&gt;&lt;/i&gt; the sentence that is right&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- data-structure="pair" on the block, .sides holding exactly two .side — each .side is one version --&gt;
+&lt;!-- --pair-rows is the number of children each side has, so the two align row by row --&gt;
+&lt;!-- the state colours the side and draws the glyph; the .mark element is what draws it --&gt;</pre>
+</div></div></details>
 <details class="reveal" open><summary>Markup — #pos · the job each word carries, and the fence</summary><div class="body"><div>
 <pre>&lt;p class="pos"&gt;
   &lt;span class="pos-adj"&gt;The old&lt;/span&gt;
@@ -474,7 +495,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;li&gt;&lt;span class="who"&gt;Jess&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
   &lt;li&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
 &lt;/ol&gt;</pre>
-<p class="dim"><code>data-mode</code>: <code>turns</code> (<code>.who</code> / <code>.say</code>), <code>numbered</code>, <code>timeline</code> (<code>.at</code>); unset = one item per line. <code>--seq-gap</code>, <code>--date-w</code> and <code>--rail-w</code> size it. A dialog is an example of content the page already taught, never the way a lesson opens.</p>
+<p class="dim">A dialog is an example of content the page already taught, never the way a lesson opens.</p>
 </div></div></details>
 </div>
 
@@ -610,7 +631,7 @@ next();
     <span><b style="font-size:.8em">5</b> told</span>
     <span><b style="font-size:.8em">6</b> never</span>
   </p>
-  <p style="text-align:center"><input class="gap" style="--gap-w:100%" aria-label="the first sentence"></p>
+  <p style="text-align:center"><input class="gap" style="--gap-w:100%"></p>
   <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px">
     <span><b style="font-size:.8em">1</b> he</span>
     <span><b style="font-size:.8em">2</b> when</span>
@@ -619,21 +640,21 @@ next();
     <span><b style="font-size:.8em">5</b> left</span>
     <span><b style="font-size:.8em">6</b> I got there</span>
   </p>
-  <p style="text-align:center"><input class="gap" style="--gap-w:100%" aria-label="the second sentence"></p>
+  <p style="text-align:center"><input class="gap" style="--gap-w:100%"></p>
 </div>
 <div id="stripgaps">
   <p>Describe what is happening in each picture, using the <b>past simple</b>.</p>
 <table class="chart">
   <tbody>
     <tr>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%" aria-label="what the first picture shows"></td>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%" aria-label="what the second picture shows"></td>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><input class="gap" style="--gap-w:100%" aria-label="what the third picture shows"></td>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%" aria-label="what the fourth picture shows"></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%"></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%"></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><input class="gap" style="--gap-w:100%"></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%"></td>
     </tr>
   </tbody>
 </table>
-  <p class="dim">The gap is under its panel: the panel is the question and there is no separate stem. Every gap carries its own <code>aria-label</code>.</p>
+  <p class="dim">The gap is under its panel: the panel is the question and there is no separate stem.</p>
 </div>
 </div>
 </div>
@@ -669,10 +690,10 @@ next();
 <figure class="chartwrap">
 <table class="chart">
 <tbody>
-<tr><td><b>clocked in</b></td><td><input class="gap" data-answer="c" style="--gap-w:3em" aria-label="the meaning of clocked in"></td></tr>
-<tr><td><b>spilled the tea</b></td><td><input class="gap" data-answer="a" style="--gap-w:3em" aria-label="the meaning of spilled the tea"></td></tr>
-<tr><td><b>threw shade</b></td><td><input class="gap" data-answer="e" style="--gap-w:3em" aria-label="the meaning of threw shade"></td></tr>
-<tr><td><b>bailed</b></td><td><input class="gap" data-answer="b" style="--gap-w:3em" aria-label="the meaning of bailed"></td></tr>
+<tr><td><b>clocked in</b></td><td><input class="gap" data-answer="c" style="--gap-w:3em"></td></tr>
+<tr><td><b>spilled the tea</b></td><td><input class="gap" data-answer="a" style="--gap-w:3em"></td></tr>
+<tr><td><b>threw shade</b></td><td><input class="gap" data-answer="e" style="--gap-w:3em"></td></tr>
+<tr><td><b>bailed</b></td><td><input class="gap" data-answer="b" style="--gap-w:3em"></td></tr>
 </tbody>
 </table>
 </figure>
@@ -687,6 +708,28 @@ next();
 </ul>
 </div>
 </div>
+</div>
+
+<div class="block" data-look="stripes" data-span="12">
+<h3>Correction, translation, dictation</h3>
+<div class="rows">
+<div>
+<p class="dim">One word is wrong. Write the sentence again.</p>
+<p>He <b>have</b> clocked in early.</p>
+<textarea class="write" rows="2" data-answer="He has clocked in early.|He's clocked in early." placeholder="the sentence, corrected"></textarea>
+</div>
+<div>
+<p class="dim">Say it in English.</p>
+<p class="pt">Ele já tinha saído quando eu cheguei.</p>
+<input class="gap" data-answer="He had already left when I got there|He had already left when I arrived" style="--gap-w:100%">
+</div>
+<div>
+<p class="dim">Listen, then write what you hear.</p>
+<p><button class="listen" type="button" data-say="I clocked in at six forty.">▶</button></p>
+<textarea class="write" rows="2" data-answer="I clocked in at six forty." placeholder="what you hear"></textarea>
+</div>
+</div>
+<p class="dim">Any of the three may sit inside another block beside the element it trains, and a lesson may use one or none of them. <b>None is for a beginner</b>, and at any level the sentence they ask for is tuned to that lesson's difficulty — a correction of one word at band 12 is a correction of a clause at band 40.</p>
 </div>
 
 <div class="block" data-look="dark" data-span="6">
@@ -771,8 +814,7 @@ next();
   &lt;div&gt;
     &lt;figure class="chartwrap"&gt;&lt;table class="chart"&gt;
       &lt;tr&gt;&lt;td&gt;&lt;b&gt;the phrase&lt;/b&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;input class="gap" data-answer="c" style="--gap-w:3em"
-                     aria-label="the meaning of the phrase"&gt;&lt;/td&gt;&lt;/tr&gt;
+          &lt;td&gt;&lt;input class="gap" data-answer="c" style="--gap-w:3em"&gt;&lt;/td&gt;&lt;/tr&gt;
       …one row per item…
     &lt;/table&gt;&lt;/figure&gt;
   &lt;/div&gt;
@@ -781,7 +823,31 @@ next();
 
 &lt;!-- the pool of letters is visible beside the items, and that shared pool is what makes it matching --&gt;
 &lt;!-- one meaning more than there are items, so the last answer cannot be reached by elimination --&gt;
-&lt;!-- each .gap keys the letter it expects and carries its own aria-label; engine2 marks them on Complete --&gt;</pre>
+&lt;!-- each .gap keys the letter it expects; engine2 marks them on Complete --&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — 5B · correction</summary><div class="body"><div>
+<pre>&lt;p&gt;He &lt;b&gt;have&lt;/b&gt; clocked in early.&lt;/p&gt;
+&lt;textarea class="write" rows="2"
+          data-answer="He has clocked in early.|He's clocked in early."
+          placeholder="the sentence, corrected"&gt;&lt;/textarea&gt;
+
+&lt;!-- the wrong word is marked in the line; the field asks for the whole sentence, so it is .write and not a gap --&gt;
+&lt;!-- data-answer takes the accepted forms separated by | · the placeholder is what makes the field read as filled --&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — 5B · translation</summary><div class="body"><div>
+<pre>&lt;p class="pt"&gt;the sentence in Portuguese&lt;/p&gt;
+&lt;input class="gap" style="--gap-w:100%" data-answer="the English|another accepted form"&gt;
+
+&lt;!-- .pt is the Portuguese utility · the answer is produced from meaning, never copied from the line above --&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — 5B · dictation</summary><div class="body"><div>
+<pre>&lt;button class="listen" type="button"
+        data-say="I clocked in at six forty."&gt;▶&lt;/button&gt;
+&lt;textarea class="write" rows="2" data-answer="I clocked in at six forty."
+          placeholder="what you hear"&gt;&lt;/textarea&gt;
+
+&lt;!-- .listen is wired by engine2 and speaks its data-say text, so dictation needs no recording --&gt;
+&lt;!-- with a .vz-play player in the block instead, the same field is the dictation --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #chunks · chunks in the wrong order</summary><div class="body"><div>
 <pre>&lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
@@ -791,12 +857,12 @@ next();
   …
 &lt;/p&gt;
 &lt;p style="text-align:center"&gt;
-  &lt;input class="gap" style="--gap-w:100%" aria-label="the first sentence"&gt;
+  &lt;input class="gap" style="--gap-w:100%"&gt;
 &lt;/p&gt;
 
 &lt;!-- one set, or as many as the activity needs: a further .chips over its own answer line, one after
      another vertically as here, side by side in a .rows of their own, or mixed with the prose, the chart
-     or the strip they are read with. Each answer line needs its own aria-label. --&gt;</pre>
+     or the strip they are read with. --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #stripgaps · the strip as an activity</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes"&gt;
@@ -806,8 +872,7 @@ next();
   &lt;table class="chart"&gt;
     &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" width="100%" role="img"
                  aria-label="what the panel shows"&gt;…&lt;/svg&gt;
-              &lt;input class="gap" style="--gap-w:100%"
-                     aria-label="what this picture shows"&gt;&lt;/td&gt;
+              &lt;input class="gap" style="--gap-w:100%"&gt;&lt;/td&gt;
       …
   &lt;/table&gt;
 &lt;/div&gt;</pre>
