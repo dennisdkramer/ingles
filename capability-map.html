@@ -454,15 +454,10 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 
 
-<h2>Dialogs and activities</h2>
-
-<div class="block" data-look="float" data-span="12">
-<p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>The four controls are alternatives chosen by what the student must do</b> — a gap for a form, a radio for a judgement, a checkbox for several at once, a written field for a sentence. Two blocks at the end of this section are marked <b>IGNORED</b>: they stay on the page for reference and lessons are not using them for now.</p>
-<p class="dim"><code>data-answer</code> keys a gap, <code>|</code> separating alternatives; <code>--gap-w</code> is the width the answer needs. A radio group's key is <code>data-a</code> on <code>.qitem</code>; engine2.js marks the right option and writes <code>.ans</code> beside a typed field.</p>
-</div>
+<h2>Activities - 5A Training 5B Marked activities with controls</h2>
 
 <div class="block" data-look="stripes" data-span="12" id="flip">
-<h3>Cards face-down, one meaning at a time</h3>
+<h3>5A · Cards face-down, one meaning at a time</h3>
 <p>One card per item the lesson has <b>already taught</b> — vocabulary, phrases, the words of an earlier section. The block shows the back of one card and the student turns cards until they find the one it belongs to: a turn tints that card red when it is not the answer and green when it is, any number of cards may be turned in a round, and only the right one turns them all back and brings the next prompt four seconds later. <b>Nothing here is scored and no answer is saved</b>, so it trains and never tests: when a lesson carries one it is the last activity before the quiz, never the quiz.</p>
 <h4 class="flip-ask" style="text-align:center;padding-top:10px" aria-live="polite">…</h4>
 <div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
@@ -568,7 +563,9 @@ next();
 </div>
 
 <div class="block" data-look="stripes" data-span="12">
-<h3>Four activity types, in-block size</h3>
+<h3>5B · Four activity types, in-block size</h3>
+<p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>The four controls are alternatives chosen by what the student must do</b> — a gap for a form, a radio for a judgement, a checkbox for several at once, a written field for a sentence. Two blocks at the end of this section are marked <b>IGNORED</b>: they stay on the page for reference and lessons are not using them for now.</p>
+<p class="dim"><code>data-answer</code> keys a gap, <code>|</code> separating alternatives; <code>--gap-w</code> is the width the answer needs. A radio group's key is <code>data-a</code> on <code>.qitem</code>; engine2.js marks the right option and writes <code>.ans</code> beside a typed field.</p>
 <p>Each of these can stand as a block of its own or sit inside a block with the prose, the chart or the drawing it accompanies; the two below are the in-block size.</p>
 
 <div class="rows">
