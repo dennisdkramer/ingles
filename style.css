@@ -103,7 +103,7 @@
     padding-bottom:6px;margin:1.6em 0 .3em}
   h3{font-family:var(--display);font-size:calc(var(--s1) + 7pt);color:var(--track-ink);
     position:relative;width:auto;
-    padding-left:15px;padding-right:15px;padding-bottom:6px;margin:22px 0 8px;
+    padding-left:15px;padding-right:15px;padding-bottom:6px;margin:22px 0 0;
     letter-spacing:.02em}
   /* the header's rule: 3px under the text, arriving over the 15px before the heading and leaving over the
      15px after it, so it ends the same distance past the text on both sides */
@@ -118,7 +118,8 @@
   h4{font-family:var(--serif);font-style:italic;font-weight:700;font-size:calc(var(--s-1) + 2px);
     color:var(--dkblue);margin:0 0 8px;padding:0;text-align:center;text-transform:none;
     letter-spacing:normal}
-  p,li{margin:0 0 calc(.7em + var(--para-gap));text-wrap:pretty}
+  p{margin:0;text-wrap:pretty}
+  li{margin:0 0 calc(.7em + var(--para-gap));text-wrap:pretty}
   body{cursor:default;caret-color:transparent}
   a,button,label,mark.nb,summary{cursor:pointer}
   /* the I-beam and the blinking bar belong to fields only; prose stays selectable, it just shows no caret */
@@ -875,8 +876,6 @@
   /* parallel items inside one block: one flex row, evenly spaced, never a second grid */
   .cols{display:flex;gap:var(--col-gap,18px);align-items:flex-start;flex-wrap:wrap;padding-block:3px}
   .cols>*{flex:1 1 var(--cw,220px);min-width:0}
-  /* the space between two flex rows inside one block, not around a single row */
-  .cols + .cols{padding-top:14px}
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
   .content-area>h2{margin-block:var(--section-gap,34px) 0}
@@ -899,6 +898,14 @@
      a game, a dialogue or any other component keeps its own spacing, and headings keep theirs
      (their rule is measured from their padding) */
   :is(.block,.panel,.card,.dialog)>:is(p,ul,ol,dl,blockquote){padding:3px}
+
+  /* #43 RHYTHM — the space between things in a frame is the margin ABOVE each one, not below: a
+     paragraph, a flex row or a chart that is a child of a frame takes 14px, and a .dim note takes 8px.
+     A list item keeps its own bottom margin (li, in base) so a list stays readable. Vary: the three
+     numbers here. */
+  :is(.block,.panel,.card,.dialog)>:is(p,.cols,table,.figure,.chartwrap),
+  .cols>div>:is(p,.cols){margin-top:14px}
+  :is(.block,.panel,.card,.dialog)>p.dim,.cols>div>p.dim{margin-top:8px}
 
   /* prose — --measure (length, 68ch) */
   .block[data-structure="prose"]{line-height:1.72}
