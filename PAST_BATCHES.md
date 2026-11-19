@@ -1,5 +1,8 @@
 # PAST BATCHES
 
+## 2026-11-19 — the strip taught in §4, worked in §5
+## [B1] - Keep the four panels in §4 with a written sentence under each, and put the gap version in §5 as an activity block <"that version of the comic strip is an activity - make a version which has text under each image for section 4 and move that one to section 5 as an activity"> <capability-map.html: §4 #comic is now "A strip, and the sentence under each" — the same four drawings at a third of the row with p captions (Ana waited at the stop in the rain / A bus came down the road / She ran to catch it / It pulled away without her) and a reveal that shows the p and the swap to a gap; §5 gains block G "Four panels, four sentences", striped, the four drawings in one row with a gap under each and an aria-label on every field, plus its own reveal>
+
 ## 2026-11-19 — the mapping is three fields
 ## [B1] - Reduce 3F to Concept / Tool / Where over the twelve concepts that have a tool, and move the owed concepts to where they are already recorded <"clean up 3f to be much simpler. Concept / Tool / Where: Link to where that tools examples are"> <capability-map.html: §3 F is a 12-row table (Concept | Tool | Where) with an "example" link per row carrying an aria-label naming its tool; the student's-question and status columns are gone with the five rows that had no tool — intonation and prepositions are in §8 already, "how sure" and "how often" in §9, and "passive against active" was added to §8's table so it is not lost; §3 E now says a concept with no tool has no row rather than explaining a status column, and the table's footnote moved into E, which took its slack from 125px to 49px>
 
