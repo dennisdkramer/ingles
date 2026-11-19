@@ -8,7 +8,7 @@
 //   L07 | S1-rul@chart:rsn>ex>con>rul | S2-voc:mng>voc>mng | Q:rul>mng>rul>ex | el:gap:3,mc:1 | qel:mc:1,flip:1 | reg:3/5
 //
 // Rules (a window counts the current lesson and the ones before it):
-//   novelty   from lesson 2 — >=1 element the previous 10 lessons did not use
+//   novelty   from lesson 2 — >=1 element the previous 3 lessons did not use
 //   churn     from lesson 10 — >=60% of the palette inside any 5 consecutive lessons
 //   coverage  from lesson 10 — every element inside any 10 consecutive lessons
 //   quiz      from lesson 3 — no 3 identical subjects in a row, >=1 element the previous 2 quizzes did not use
@@ -28,9 +28,14 @@ const ROOT = process.cwd();
 const PALETTE = ['gap', 'mc', 'chunks', 'stripgaps', 'chartanswer', 'matching',
   'correction', 'translation', 'dictation', 'flip', 'game'];
 const SUBJECTS = ['rul', 'rsn', 'ex', 'con', 'exc', 'voc', 'mng', 'prn', 'tim', 'soc', 'rcp'];
-const NOVEL_WINDOW = 10, CHURN_WINDOW = 5, COVER_WINDOW = 10, QUIZ_WINDOW = 2;
+const NOVEL_WINDOW = 3, CHURN_WINDOW = 5, COVER_WINDOW = 10, QUIZ_WINDOW = 2;
 const CHURN_SHARE = 0.6, MATURE_FROM = 10;
 const REG_FAIL = 0.6, REG_WARN = 0.75, DEVICE_SHARE = 0.35;
+// high-frequency Portuguese: the only cheap signal a page's explanation is carried in the student's
+// language. Never a failure — the band and the lesson's own need decide what it should be.
+const PT_WORDS = new Set(['que', 'não', 'nao', 'para', 'você', 'voce', 'isso', 'uma', 'com', 'do', 'da',
+  'seu', 'sua', 'mais', 'como', 'mas', 'sim', 'muito', 'aqui', 'agora', 'então', 'entao', 'também',
+  'tambem', 'por', 'dos', 'das', 'ao', 'se', 'já', 'ja', 'tá', 'ta', 'pra', 'né', 'ne', 'é', 'ser', 'tem']);
 
 const fails = [];
 const warns = [];
@@ -144,7 +149,10 @@ function pageScan(file, locale) {
     const n = (text.match(re) || []).length;
     if (n) hits.push({ word: w, n });
   }
-  return { els, unattributed, activityBlocks, sections, localeHits: hits };
+  const words = text.match(/[a-zà-ÿ']+/g) || [];
+  const ptTokens = words.filter(w => PT_WORDS.has(w)).length;
+  const ptElems = area.querySelectorAll('.pt').length;
+  return { els, unattributed, activityBlocks, sections, localeHits: hits, ptTokens, ptElems };
 }
 
 function readLocale(track) {
@@ -285,9 +293,13 @@ function checkPage(row, scan, where) {
   else {
     const r = row.reg.good / Math.max(1, row.reg.total);
     const pct = (r * 100).toFixed(0);
+    if (row.reg.total !== scan.sections.length) warn(where + L, `register score covers ${row.reg.total} sections; the page has ${scan.sections.length}`);
     if (r < REG_FAIL) fail(where + L, `register: ${row.reg.good}/${row.reg.total} sections in voice, ${pct}%`);
     else if (r < REG_WARN) warn(where + L, `register: ${row.reg.good}/${row.reg.total} sections in voice, ${pct}%`);
   }
+  const pt = `português: ${scan.ptTokens} common word(s), ${scan.ptElems} .pt element(s)`;
+  if (L <= 10 && scan.ptTokens === 0 && scan.ptElems === 0) warn(where + L, `${pt} — none, on a page whose band allows Portuguese to carry the instruction`);
+  if (L >= 26 && (scan.ptTokens >= 10 || scan.ptElems >= 5)) warn(where + L, `${pt} — at L${L}, where the band expects English`);
 }
 
 // ---- running -------------------------------------------------------------------------------
@@ -321,6 +333,9 @@ function selfTest() {
   const cases = [
     ['novelty fails on a repeat', () => { checkWindows([row(1, { gap: 1 }), row(2, { gap: 1 })], 'T L'); }, 'novelty'],
     ['novelty passes on a new element', () => { checkWindows([row(1, { gap: 1 }), row(2, { mc: 1 })], 'T L'); }, null],
+    ['novelty window is 3, so the fourth lesson may reuse the first', () => {
+      checkWindows([row(1, { gap: 1 }), row(2, { mc: 1 }), row(3, { chunks: 1 }), row(4, { flip: 1 }), row(5, { gap: 1 })], 'T L');
+    }, null],
     ['churn fails inside 5 lessons', () => {
       const rs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(L => row(L, { gap: 1 }));
       rs.forEach((r, i) => { if (i) r.el = { [PALETTE[i]]: 1 }; });

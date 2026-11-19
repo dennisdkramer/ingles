@@ -13,7 +13,7 @@ L07 | S1-rul@chart:rsn>ex>con>rul | S2-voc:mng>voc>mng | Q:rul>mng>rul>ex | el:g
 - **device** — the element doing the teaching in that section, if any (`chart`, `timeline`, `pos`, `comic`, `map`, `key`…). Leave it off when the prose teaches.
 - **element** — `gap` `mc` `chunks` `stripgaps` `chartanswer` `matching` `correction` `translation` `dictation` `flip` `game`. Count every activity block, not every kind once.
 
-**Before writing a lesson**, read the previous rows and ask: which elements have not appeared in the last 10 (one is required); how many of the eleven the last 5 lessons hold (7 required, from lesson 10); which two the last 10 lack (none allowed, from lesson 10); which sections still need a device no recent section used. **There is no batch plan — the answers come from what already happened.**
+**Before writing a lesson**, read the previous rows and ask: which elements have not appeared in the last 3 (one is required); how many of the eleven the last 5 lessons hold (7 required, from lesson 10); which two the last 10 lack (none allowed, from lesson 10); which sections still need a device no recent section used. **There is no batch plan — the answers come from what already happened.**
 
 **Before finishing a lesson**, run `npm run batchcheck` after appending the row.
 
