@@ -187,16 +187,9 @@
 <p class="dim">The tagger emits the marks, so they cannot drift from the sentence and no word is marked by hand. <b>Any sentence the lesson wants marked, as many as it wants</b>: the marks wrap one sentence and are not a component with a block of its own. The fence goes on the joining word; <code>data-rel</code> is one of add · contrast · alternative · cause · condition · time · place · comparison · content.</p>
 </div></div></details>
 </div>
-<div>
-<p class="pos pos-labels"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p>
-<details class="reveal" open><summary>Markup — the role printed after each word</summary><div class="body"><div>
-<pre>&lt;p class="pos pos-labels"&gt;…the same sentence…&lt;/p&gt;</pre>
-<p class="dim"><code>pos-labels</code> prints the role instead of the line — N · V · M · DO · IO · ADJ · ADV · PREP — for a page or a printout that must not rely on colour. Under it the relation prints instead of the fence, and the recipient prints IO with no arrow.</p>
-</div></div></details>
-</div>
 <div id="key-job">
 <p class="pos"><span class="pos-n pos-subj"><ruby>She<rp>(</rp><rt>N</rt><rp>)</rp></ruby></span> <span class="pos-m"><ruby>has<rp>(</rp><rt>M</rt><rp>)</rp></ruby></span> <span class="pos-v"><ruby>finished<rp>(</rp><rt>V</rt><rp>)</rp></ruby></span> <span class="pos-adj"><ruby>the<rp>(</rp><rt>ADJ</rt><rp>)</rp></ruby></span> <span class="pos-n pos-o"><ruby>report<rp>(</rp><rt>DO</rt><rp>)</rp></ruby></span>.</p>
-<p class="dim">The labels are the ones <code>pos-labels</code> prints — N · V · M · DO · IO · ADJ · ADV · PREP — written in <code>rt</code> above each word instead of after it. The marks stay on the span, so the two readings of the same sentence can stand side by side.</p>
+<p class="dim">The labels are the roles the tagger gives — N · V · M · DO · IO · ADJ · ADV · PREP — written in <code>rt</code> above each word. The classes stay on the span, so the marks still draw under the word.</p>
 <details class="reveal" open><summary>Markup — a word and its job above it</summary><div class="body"><div>
 <pre>&lt;p class="pos"&gt;
   &lt;span class="pos-n pos-subj"&gt;&lt;ruby&gt;She&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;N&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
@@ -204,7 +197,7 @@
   &lt;span class="pos-v"&gt;&lt;ruby&gt;finished&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;V&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
   …
 &lt;/p&gt;</pre>
-<p class="dim">One <code>ruby</code> per word, its <code>rt</code> the label <code>pos-labels</code> would print for that word. The classes are unchanged, so the marks draw under the word as they always do.</p>
+<p class="dim">One <code>ruby</code> per word, its <code>rt</code> the role the tagger gives that word. The classes are unchanged, so the marks draw under the word as they always do.</p>
 </div></div></details>
 </div>
 </div>
