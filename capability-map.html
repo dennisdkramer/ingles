@@ -181,6 +181,7 @@
 <tr><td>word order and the jobs inside a sentence</td><td>parts-of-speech marking</td><td><a href="#pos" aria-label="parts-of-speech marking">example</a></td></tr>
 <tr><td>how two clauses meet</td><td>the fenced join</td><td><a href="#pos" aria-label="the fenced join">example</a></td></tr>
 <tr><td>a tense, and where <i>now</i> falls</td><td>the timeline</td><td><a href="#axis" aria-label="the timeline">example</a></td></tr>
+<tr><td>how a form is built, step by step</td><td>the numbered list</td><td><a href="#list" aria-label="the numbered list">example</a></td></tr>
 <tr><td>vocabulary arriving in bulk</td><td>a chart</td><td><a href="#chart" aria-label="a chart">example</a></td></tr>
 <tr><td>a word and what it pairs with</td><td>a thin pair chart</td><td><a href="#chart-pair" aria-label="a thin pair chart">example</a></td></tr>
 <tr><td>the forms of one verb</td><td>a split chart</td><td><a href="#chart-split" aria-label="a split chart">example</a></td></tr>
@@ -189,7 +190,7 @@
 <tr><td>how one word is said</td><td>the key, in <code>ruby</code> / <code>rt</code></td><td><a href="#key" aria-label="the key, in ruby / rt">example</a></td></tr>
 <tr><td>real speech in context</td><td>the mini player, with the words beside it</td><td><a href="#audio" aria-label="the mini player, with the words beside it">example</a></td></tr>
 <tr><td>which place, and where it sits</td><td>the street map</td><td><a href="#map" aria-label="the street map">example</a></td></tr>
-<tr><td>a sequence of events</td><td>the comic strip</td><td><a href="#comic" aria-label="the comic strip">example</a></td></tr>
+<tr><td>a sequence of events</td><td>the comic strip, or the vertical timeline</td><td><a href="#comic" aria-label="the comic strip">example</a> · <a href="#vline" aria-label="the vertical timeline">example</a></td></tr>
 <tr><td>a word or form recalled from memory</td><td>the flash card</td><td><a href="#flip" aria-label="the flash card">example</a></td></tr>
 </tbody>
 </table>
@@ -200,8 +201,8 @@
 <h2>In-Block Features</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>Everything in this section goes inside a block: underline, timeline, charts, bar, gloss, key, player, map, strip, flash card. Each is half a row at most, beside the prose that reads it.</p>
-<p><b>Any one can also be a block's own subject:</b> then it stands alone under the block's heading at whatever span it needs, its prose in a block beside it — §5's answered chart and strip are that shape, and the same markup moves between the two.</p>
+<p>Everything in this section goes inside a block: the underline, the horizontal timeline, the vertical timeline, the numbered list, the charts, the bar, the gloss, the key, the player, the map, the strip and the flash card. Inside a block each is half a row at most, beside the prose that reads it.</p>
+<p><b>Not one of them belongs to a particular block.</b> Each goes wherever a lesson needs it: inside a teaching block, inside an activity block, or alone as the block's own subject at whatever span it needs. An activity about word order uses the underline and the numbered list; an activity about a series of events uses the vertical timeline; a comparison the student answers row by row uses the chart. Nothing about the element changes when the block around it becomes an activity, and the same markup moves between the two.</p>
 </div>
 
 <div class="block" data-span="12">
@@ -256,6 +257,41 @@
   &lt;/div&gt;
 &lt;/figure&gt;</pre>
 <p class="dim">Use one figure per tense. <code>.an</code> marks the one word the line pins to, and <code>data-tense</code> says which point of the timeline must sit under it; the sentence itself never moves. <code>.tlgrid</code> holds a family, each cell named by an <code>&lt;h4&gt;</code>. The tense adds one mark inside <code>.tln</code>: <code>tln-span</code> a band to now, <code>tln-that</code> a second past, <code>tln-bar</code> a stretch, <code>tln-gloss</code> a Portuguese word under a point.</p>
+</div></div></details>
+
+<div class="rows">
+<div id="list">
+<h4>The numbered list — an order</h4>
+<ol class="seq" data-mode="numbered">
+<li><p><b>Have</b> carries the person: <i>I have</i>, <i>she has</i>.</p></li>
+<li><p>The third form carries the action: <i>written</i>.</p></li>
+<li><p>Change the person and only the first word moves.</p></li>
+</ol>
+<p class="dim">When the sequence is the teaching, not a process the reader already knows. Unset <code>data-mode</code> gives one item per line.</p>
+</div>
+<div id="vline">
+<h4>The vertical timeline — dated events</h4>
+<ol class="seq" data-mode="timeline">
+<li><span class="at">2022</span><p>She wrote three songs.</p></li>
+<li><span class="at">2023</span><p>She stopped writing.</p></li>
+<li><span class="at">now</span><p>She has written three songs.</p></li>
+</ol>
+<p class="dim">When the dates themselves are the point. The horizontal timeline draws one claim on a line; this lists what happened and when, one <code>.at</code> per item.</p>
+</div>
+</div>
+<details class="reveal" open><summary>Markup — a numbered list</summary><div class="body"><div>
+<pre>&lt;ol class="seq" data-mode="numbered"&gt;
+  &lt;li&gt;&lt;p&gt;&lt;b&gt;Have&lt;/b&gt; carries the person: &lt;i&gt;I have&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;p&gt;The third form carries the action.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;</pre>
+<p class="dim">When the sequence is the teaching. Unset <code>data-mode</code> gives one item per line.</p>
+</div></div></details>
+<details class="reveal" open><summary>Markup — a vertical timeline</summary><div class="body"><div>
+<pre>&lt;ol class="seq" data-mode="timeline"&gt;
+  &lt;li&gt;&lt;span class="at"&gt;2022&lt;/span&gt;&lt;p&gt;She wrote three songs.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;span class="at"&gt;now&lt;/span&gt;&lt;p&gt;She has written three songs.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;</pre>
+<p class="dim">When the dates themselves are the point. One <code>.at</code> per item; the horizontal timeline in this block draws one claim instead of listing events.</p>
 </div></div></details>
 
 <div class="rows">
@@ -671,38 +707,6 @@
   &lt;/table&gt;
 &lt;/div&gt;</pre>
 <p class="dim">The comparison is the table and the answer is per row; the cell decides what control it holds.</p>
-</div></div></details>
-</div>
-
-<div class="block" data-span="6">
-<h3>Order that is the lesson</h3>
-<ol class="seq" data-mode="numbered">
-<li><p><b>Have</b> carries the person: <i>I have</i>, <i>she has</i>.</p></li>
-<li><p>The third form carries the action: <i>written</i>.</p></li>
-<li><p>Change the person and only the first word moves.</p></li>
-</ol>
-<details class="reveal" open><summary>Markup — an order that is the lesson</summary><div class="body"><div>
-<pre>&lt;ol class="seq" data-mode="numbered"&gt;
-  &lt;li&gt;&lt;p&gt;&lt;b&gt;Have&lt;/b&gt; carries the person: &lt;i&gt;I have&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;p&gt;The third form carries the action.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;</pre>
-<p class="dim">When the sequence is the teaching, not a process the reader already knows. Unset <code>data-mode</code> gives one item per line.</p>
-</div></div></details>
-</div>
-
-<div class="block" data-span="6">
-<h3>A date that is the lesson</h3>
-<ol class="seq" data-mode="timeline">
-<li><span class="at">2022</span><p>She wrote three songs.</p></li>
-<li><span class="at">2023</span><p>She stopped writing.</p></li>
-<li><span class="at">now</span><p>She has written three songs.</p></li>
-</ol>
-<details class="reveal" open><summary>Markup — a date that is the lesson</summary><div class="body"><div>
-<pre>&lt;ol class="seq" data-mode="timeline"&gt;
-  &lt;li&gt;&lt;span class="at"&gt;2022&lt;/span&gt;&lt;p&gt;She wrote three songs.&lt;/p&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;span class="at"&gt;now&lt;/span&gt;&lt;p&gt;She has written three songs.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;</pre>
-<p class="dim">When the dates themselves are the point. The timeline in §4 draws one claim on a line; this lists what happened and when.</p>
 </div></div></details>
 </div>
 
