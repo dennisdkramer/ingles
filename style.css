@@ -1141,6 +1141,19 @@
     font:400 12px/1.5 var(--mono);color:var(--ink-2);text-align:left}
 }
 
+/* #65 MARKUP ROW — every markup box a builder copies, taken out of the teaching flow and gathered at
+   the foot of its section as one line each: .cols.markup-row > details.reveal. Closed, a box is only
+   its label — the pointer naming the element it draws — and the code stays in the page for whoever
+   reads the source. A box hugs its label and the row fills the line; a label too long for its share
+   ellipsizes rather than wrapping to a second line. Vary: --cw (length) */
+@layer control{
+  .markup-row{gap:10px}
+  .markup-row>details.reveal{flex:1 1 auto;min-width:0;margin:0}
+  .markup-row>details.reveal>summary{padding:6px 10px;white-space:nowrap;overflow:hidden;
+    text-overflow:ellipsis}
+}
+@media print{ .markup-row{display:none} }
+
 /* #76 ENGINE — engine2.js writes label.opt.correct and .ans beside a typed field, and reads .qitem[data-a] on .opts. Vary: --ok (colour) */
 @layer state{
   label.opt.correct{border-color:var(--ok);

@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Capability map — English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=425c5c4d35">
+<link rel="stylesheet" href="style.css?v=331c39e113">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>VISUAL REFERENCE</span></h1></header>
@@ -22,7 +22,12 @@
 <h3>Arrange it, and give it a look</h3>
 <p><b>Adjacent things go into one flex row, and that is the default.</b> Two blocks of similar height, and two items beside each other inside a block, are written into one <code>.rows</code>: the cells share the width, match the row's height and need no size of their own. <code>.cols</code> is for interchangeable cells that must wrap, and <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. <b>No width is written on a cell</b> — 1A pairs, the flow sizes, and <b>1B writes a span or a size only to repair a row the flow got wrong</b>: too tight, an element squeezed under the width it draws at, a lone block with half a line empty beside it. Width is the repair, never the plan.</p>
 <p><code>data-look</code> is declared on the block, never inferred from what it holds, and changes the paint only: one tint and one outline per section at most.</p>
-<details class="reveal" open><summary>Markup — a row, an element on its own, and a span written as the repair</summary><div class="body"><div>
+</div>
+
+
+<p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
+<div class="cols markup-row">
+<details class="reveal"><summary>Markup — rows · a row, an element on its own, and a span</summary><div class="body"><div>
 <pre>&lt;h2&gt;a section the sheet numbers&lt;/h2&gt;
 
 &lt;div class="rows"&gt;
@@ -72,32 +77,10 @@
 <div class="rows">
 <div>
 <p class="pos" id="pos"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p>
-<details class="reveal" open><summary>Markup — the job each word carries, and the fence</summary><div class="body"><div>
-<pre>&lt;p class="pos"&gt;
-  &lt;span class="pos-adj"&gt;The old&lt;/span&gt;
-  &lt;span class="pos-n pos-subj"&gt;man&lt;/span&gt;
-  &lt;span class="pos-m"&gt;can&lt;/span&gt;
-  &lt;span class="pos-v"&gt;carry&lt;/span&gt;
-  &lt;span class="pos-n pos-o"&gt;the box&lt;/span&gt;
-  …, &lt;span class="pos-join" data-rel="contrast"&gt;but&lt;/span&gt; …
-&lt;/p&gt;
-
-&lt;table class="poschart"&gt;…one column per group…&lt;/table&gt;</pre>
-<p class="dim">The marks are pasted from <code>node qa/pos.mjs "…"</code>, never written by hand. <code>data-rel</code>: add · contrast · alternative · cause · condition · time · place · comparison · content.</p>
-</div></div></details>
 </div>
 <div id="key-job">
 <p class="pos"><span class="pos-n pos-subj"><ruby>She<rp>(</rp><rt>N</rt><rp>)</rp></ruby></span> <span class="pos-m"><ruby>has<rp>(</rp><rt>M</rt><rp>)</rp></ruby></span> <span class="pos-v"><ruby>finished<rp>(</rp><rt>V</rt><rp>)</rp></ruby></span> <span class="pos-adj"><ruby>the<rp>(</rp><rt>ADJ</rt><rp>)</rp></ruby></span> <span class="pos-n pos-o"><ruby>report<rp>(</rp><rt>DO</rt><rp>)</rp></ruby></span>.</p>
 <p class="dim">The <code>rt</code> carries the role the tagger gives the word: N · V · M · DO · IO · ADJ · ADV · PREP.</p>
-<details class="reveal" open><summary>Markup — a word and its job above it</summary><div class="body"><div>
-<pre>&lt;p class="pos"&gt;
-  &lt;span class="pos-n pos-subj"&gt;&lt;ruby&gt;She&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;N&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
-  &lt;span class="pos-m"&gt;&lt;ruby&gt;has&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;M&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
-  &lt;span class="pos-v"&gt;&lt;ruby&gt;finished&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;V&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
-  …
-&lt;/p&gt;</pre>
-<p class="dim"><code>rt</code> takes the role the tagger gives that word.</p>
-</div></div></details>
 </div>
 </div>
 
@@ -105,38 +88,13 @@
 <div id="recipient">
 <p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-i" data-side="right">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span> <span class="pos-adj">the</span> <span class="pos-n pos-o">book</span>.</p>
 <p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-o">it</span> <span class="pos-prep">to</span> <span class="pos-n pos-i" data-side="left">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span>.</p>
-<details class="reveal" open><summary>Markup — the recipient and its arrow</summary><div class="body"><div>
-<pre>&lt;!-- the recipient: no line of its own, an arrow from the side the object sits on --&gt;
-I gave &lt;span class="pos-n pos-i" data-side="right"&gt;her
-  &lt;i class="pos-i-arr" aria-hidden="true"&gt;
-    &lt;svg viewBox="0 0 20 18" fill="none"&gt;
-      &lt;path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"/&gt;
-      &lt;path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"/&gt;
-    &lt;/svg&gt;
-  &lt;/i&gt;&lt;/span&gt; the book.
-
-I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt;</pre>
-</div></div></details>
 </div>
 <div id="key">
 <p>I can't <ruby>record<rp>(</rp><rt>gravar</rt><rp>)</rp></ruby> it tonight.</p>
-<details class="reveal" open><summary>Markup — a word and the text above it</summary><div class="body"><div>
-<pre>&lt;p&gt;I can't
-  &lt;ruby&gt;record&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;gravar&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
-  it tonight.&lt;/p&gt;</pre>
-</div></div></details>
 </div>
 <div id="key-sound">
 <p>The <ruby>library<rp>(</rp><rt><b>li</b>·<b>br</b><span class="pr-g">e</span><b>ry</b></rt><rp>)</rp></ruby> closes at six.</p>
 <p class="dim">The key is the entry in <code>dictionary.json</code>, rendered by <code>PronKey.render</code>: <code>-</code> a syllable break, a greyed letter written and not said, <code>ə</code> the schwa. <code>rp</code> is never omitted.</p>
-<details class="reveal" open><summary>Markup — a word and the dictionary's key</summary><div class="body"><div>
-<pre>&lt;ruby&gt;library&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;
-  &lt;b&gt;li&lt;/b&gt;·&lt;b&gt;br&lt;/b&gt;&lt;span class="pr-g"&gt;e&lt;/span&gt;&lt;b&gt;ry&lt;/b&gt;
-&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
-
-dictionary.json:  "library": "li-br[e]ry"
-PronKey.render("li-br[e]ry") → the rt above</pre>
-</div></div></details>
 </div>
 </div>
 
@@ -145,16 +103,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <p>You have to <button type="button" class="glossbtn" popovertarget="d1">clock in</button> before eight.</p>
 <div class="defcard" popover id="d1"><b>clock in</b>bater o ponto — the punch clock at work, not <i>entrar</i>.</div>
 <p class="dim">One card per <code>id</code>, opened at its word by <code>popovertarget</code>.</p>
-<details class="reveal" open><summary>Markup — a word and its card</summary><div class="body"><div>
-<pre>&lt;p&gt;You have to
-  &lt;button class="glossbtn" popovertarget="d1"&gt;clock in&lt;/button&gt;
-  before eight.&lt;/p&gt;
-
-&lt;div class="defcard" popover id="d1"&gt;
-  &lt;b&gt;clock in&lt;/b&gt;bater o ponto — the punch clock at work,
-  not &lt;i&gt;entrar&lt;/i&gt;.
-&lt;/div&gt;</pre>
-</div></div></details>
 </div>
 <div id="vline">
 <ol class="seq" data-mode="timeline">
@@ -162,12 +110,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <li><span class="at">2023</span><p>She stopped writing.</p></li>
 <li><span class="at">now</span><p>She has written three songs.</p></li>
 </ol>
-<details class="reveal" open><summary>Markup — a vertical timeline</summary><div class="body"><div>
-<pre>&lt;ol class="seq" data-mode="timeline"&gt;
-  &lt;li&gt;&lt;span class="at"&gt;2022&lt;/span&gt;&lt;p&gt;She wrote three songs.&lt;/p&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;span class="at"&gt;now&lt;/span&gt;&lt;p&gt;She has written three songs.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;</pre>
-</div></div></details>
 </div>
 </div>
 <div class="tlgrid" id="axis">
@@ -189,19 +131,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div>
 </div>
 <p class="dim">The anchored version: <code>.an</code> marks the word the line pins to, <code>data-tense</code> chooses which point sits under it, one anchor per host.</p>
-<details class="reveal" open><summary>Markup — the timeline</summary><div class="body"><div>
-<pre>&lt;figure class="tlw" data-tense="simple-past"&gt;
-  &lt;p class="tlw-say"&gt;I &lt;span class="pos-m pos-v an"&gt;wrote&lt;/span&gt; it.&lt;/p&gt;
-  &lt;i class="tln-link" data-mark="dot"&gt;…tapered tail, swept barb…&lt;/i&gt;
-  &lt;div class="tln"&gt;
-    &lt;b class="tln-before"&gt;before&lt;/b&gt;&lt;i class="tln-past"&gt;&lt;/i&gt;
-    &lt;i class="tln-head"&gt;…star…&lt;b&gt;now&lt;/b&gt;&lt;/i&gt;
-    &lt;i class="tln-ahead"&gt;&lt;/i&gt;&lt;i class="tln-end"&gt;…double chevron…&lt;/i&gt;
-    &lt;b class="tln-then"&gt;then&lt;/b&gt;
-  &lt;/div&gt;
-&lt;/figure&gt;</pre>
-<p class="dim">One timeline per tense; <code>.tlgrid</code> holds a family, <code>&lt;h4&gt;</code> names a cell. A bare <code>.tln</code> with no <code>.tlw</code> draws the line alone. <code>data-grow="1"</code> fills the container, <code>data-grow="2"</code> takes the anchor string's width. Marks: <code>tln-span</code> · <code>tln-that</code> · <code>tln-bar</code> · <code>tln-gloss</code>. <code>data-tense</code>: simple-present · present-continuous · present-perfect · simple-past · past-continuous · past-perfect · going-to · future-perfect.</p>
-</div></div></details>
 
 </div>
 <div class="block" data-span="12">
@@ -241,30 +170,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div>
 </div>
 
-<details class="reveal" open><summary>Markup — the charts</summary><div class="body"><div>
-<pre>&lt;figure class="chartwrap"&gt;
-  &lt;figcaption class="chartcap"&gt;what the chart holds&lt;/figcaption&gt;
-  &lt;table class="chart"&gt;…&lt;/table&gt;
-&lt;/figure&gt;</pre>
-<pre>&lt;table class="chart"&gt;
-  &lt;tbody&gt;
-    &lt;tr class="bare"&gt;&lt;th colspan="3"&gt;&lt;/th&gt;&lt;/tr&gt;
-    &lt;tr&gt;&lt;th class="vlab" rowspan="3"&gt;&lt;span&gt;Regular&lt;/span&gt;&lt;/th&gt;
-        &lt;td&gt;walk&lt;/td&gt;&lt;td&gt;walked&lt;/td&gt;&lt;/tr&gt;
-    …
-  &lt;/tbody&gt;
-&lt;/table&gt;</pre>
-<p class="dim"><code>figcaption.chartcap</code> names a chart. <code>th.vlab</code> puts a family label outside the chart's edge; <code>tr.bare</code> collapses a nameless header row to a rule. A block takes <code>data-structure="grid"</code> with a <code>thead</code> and optional <code>caption</code>, and <code>tr.note</code> for a remark row. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each.</p>
-<pre>&lt;div class="rows"&gt;
-  &lt;div&gt;…the sentence, and the chart it reads…&lt;/div&gt;
-  &lt;div&gt;
-    &lt;figure class="chartwrap"&gt;
-      &lt;figcaption class="chartcap"&gt;the chart's name&lt;/figcaption&gt;
-      &lt;table class="chart"&gt;…&lt;/table&gt;
-    &lt;/figure&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</pre>
-</div></div></details>
 
 <div class="rows">
 <div id="map">
@@ -345,21 +250,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div>
   </div>
   <p>Walk the route, ticking each place as you pass it.</p>
-<details class="reveal" open><summary>Markup — the map</summary><div class="body"><div>
-<pre>&lt;div class="vz-map viz"&gt;
-  &lt;svg viewBox="0 0 360 240" width="100%" role="img"
-       aria-label="everything the drawing shows, named"&gt;…&lt;/svg&gt;
-  &lt;!-- the ticks sit on the drawing, not on the frame: the overlay is the svg's own box --&gt;
-  &lt;div style="position:absolute;left:0;top:0;width:100%;aspect-ratio:360/240"&gt;
-    &lt;label style="position:absolute;left:15%;top:25.8%;
-                  transform:translateX(-50%)"&gt;
-      &lt;input type="checkbox" aria-label="the station"&gt; 1
-    &lt;/label&gt;
-    …one tick per place, in % of the drawing's box…
-  &lt;/div&gt;
-&lt;/div&gt;</pre>
-<p class="dim">A tick is a checklist, never the answer; the route the student writes goes in a <code>.gap</code>. <code>aria-label</code> names the drawing. The overlay carries the viewBox's <code>aspect-ratio</code>, so the ticks hold their place however tall the frame around the drawing becomes; <code>--map-w</code> caps its width when the drawing must be smaller than its cell.</p>
-</div></div></details>
 </div>
 <div id="comic">
 <table class="chart">
@@ -374,20 +264,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
     </tr>
   </tbody>
 </table>
-<details class="reveal" open><summary>Markup — the comic strip</summary><div class="body"><div>
-<pre>&lt;table class="chart"&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" width="100%" role="img"
-               aria-label="what the panel shows"&gt;…&lt;/svg&gt;
-            &lt;p&gt;the sentence under the panel&lt;/p&gt;&lt;/td&gt;
-        &lt;td&gt;…the second panel…&lt;/td&gt;&lt;/tr&gt;
-    &lt;tr&gt;&lt;td&gt;…the third panel…&lt;/td&gt;
-        &lt;td&gt;…the fourth panel…&lt;/td&gt;&lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;!-- two panels a row, two rows, as drawn · one &lt;tr&gt; holding all four makes it 4×1 · one row of two makes it 2×1 --&gt;</pre>
-</div></div></details>
 </div>
 </div>
 
@@ -408,7 +284,154 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <li data-t="26.82">I love your grand old ocean and I love her rugged shore.</li>
 </ol>
 </figure>
-<details class="reveal" open><summary>Markup — the recording</summary><div class="body"><div>
+</div>
+<div id="dialog">
+<ol class="seq viz" data-mode="turns">
+<li><span class="who">Jess</span><span class="say">Did you post the letter?</span></li>
+<li><span class="who">Mike</span><span class="say">Three times. I keep thinking I forgot.</span></li>
+<li><span class="who">Jess</span><span class="say">Then photograph it next time.</span></li>
+</ol>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+<p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
+<div class="cols markup-row">
+<details class="reveal"><summary>Markup — #pos · the job each word carries, and the fence</summary><div class="body"><div>
+<pre>&lt;p class="pos"&gt;
+  &lt;span class="pos-adj"&gt;The old&lt;/span&gt;
+  &lt;span class="pos-n pos-subj"&gt;man&lt;/span&gt;
+  &lt;span class="pos-m"&gt;can&lt;/span&gt;
+  &lt;span class="pos-v"&gt;carry&lt;/span&gt;
+  &lt;span class="pos-n pos-o"&gt;the box&lt;/span&gt;
+  …, &lt;span class="pos-join" data-rel="contrast"&gt;but&lt;/span&gt; …
+&lt;/p&gt;
+
+&lt;table class="poschart"&gt;…one column per group…&lt;/table&gt;</pre>
+<p class="dim">The marks are pasted from <code>node qa/pos.mjs "…"</code>, never written by hand. <code>data-rel</code>: add · contrast · alternative · cause · condition · time · place · comparison · content.</p>
+</div></div></details>
+<details class="reveal"><summary>Markup — #key-job · a word and its job above it</summary><div class="body"><div>
+<pre>&lt;p class="pos"&gt;
+  &lt;span class="pos-n pos-subj"&gt;&lt;ruby&gt;She&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;N&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
+  &lt;span class="pos-m"&gt;&lt;ruby&gt;has&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;M&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
+  &lt;span class="pos-v"&gt;&lt;ruby&gt;finished&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;V&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;&lt;/span&gt;
+  …
+&lt;/p&gt;</pre>
+<p class="dim"><code>rt</code> takes the role the tagger gives that word.</p>
+</div></div></details>
+<details class="reveal"><summary>Markup — #recipient · the recipient and its arrow</summary><div class="body"><div>
+<pre>&lt;!-- the recipient: no line of its own, an arrow from the side the object sits on --&gt;
+I gave &lt;span class="pos-n pos-i" data-side="right"&gt;her
+  &lt;i class="pos-i-arr" aria-hidden="true"&gt;
+    &lt;svg viewBox="0 0 20 18" fill="none"&gt;
+      &lt;path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"/&gt;
+      &lt;path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"/&gt;
+    &lt;/svg&gt;
+  &lt;/i&gt;&lt;/span&gt; the book.
+
+I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt;</pre>
+</div></div></details>
+<details class="reveal"><summary>Markup — #key · a word and the text above it</summary><div class="body"><div>
+<pre>&lt;p&gt;I can't
+  &lt;ruby&gt;record&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;gravar&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
+  it tonight.&lt;/p&gt;</pre>
+</div></div></details>
+<details class="reveal"><summary>Markup — #key-sound · a word and the dictionary's key</summary><div class="body"><div>
+<pre>&lt;ruby&gt;library&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;
+  &lt;b&gt;li&lt;/b&gt;·&lt;b&gt;br&lt;/b&gt;&lt;span class="pr-g"&gt;e&lt;/span&gt;&lt;b&gt;ry&lt;/b&gt;
+&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
+
+dictionary.json:  "library": "li-br[e]ry"
+PronKey.render("li-br[e]ry") → the rt above</pre>
+</div></div></details>
+<details class="reveal"><summary>Markup — #gloss · a word and its card</summary><div class="body"><div>
+<pre>&lt;p&gt;You have to
+  &lt;button class="glossbtn" popovertarget="d1"&gt;clock in&lt;/button&gt;
+  before eight.&lt;/p&gt;
+
+&lt;div class="defcard" popover id="d1"&gt;
+  &lt;b&gt;clock in&lt;/b&gt;bater o ponto — the punch clock at work,
+  not &lt;i&gt;entrar&lt;/i&gt;.
+&lt;/div&gt;</pre>
+</div></div></details>
+<details class="reveal"><summary>Markup — #vline · a vertical timeline</summary><div class="body"><div>
+<pre>&lt;ol class="seq" data-mode="timeline"&gt;
+  &lt;li&gt;&lt;span class="at"&gt;2022&lt;/span&gt;&lt;p&gt;She wrote three songs.&lt;/p&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;span class="at"&gt;now&lt;/span&gt;&lt;p&gt;She has written three songs.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;</pre>
+</div></div></details>
+<details class="reveal"><summary>Markup — #axis · the timeline</summary><div class="body"><div>
+<pre>&lt;figure class="tlw" data-tense="simple-past"&gt;
+  &lt;p class="tlw-say"&gt;I &lt;span class="pos-m pos-v an"&gt;wrote&lt;/span&gt; it.&lt;/p&gt;
+  &lt;i class="tln-link" data-mark="dot"&gt;…tapered tail, swept barb…&lt;/i&gt;
+  &lt;div class="tln"&gt;
+    &lt;b class="tln-before"&gt;before&lt;/b&gt;&lt;i class="tln-past"&gt;&lt;/i&gt;
+    &lt;i class="tln-head"&gt;…star…&lt;b&gt;now&lt;/b&gt;&lt;/i&gt;
+    &lt;i class="tln-ahead"&gt;&lt;/i&gt;&lt;i class="tln-end"&gt;…double chevron…&lt;/i&gt;
+    &lt;b class="tln-then"&gt;then&lt;/b&gt;
+  &lt;/div&gt;
+&lt;/figure&gt;</pre>
+<p class="dim">One timeline per tense; <code>.tlgrid</code> holds a family, <code>&lt;h4&gt;</code> names a cell. A bare <code>.tln</code> with no <code>.tlw</code> draws the line alone. <code>data-grow="1"</code> fills the container, <code>data-grow="2"</code> takes the anchor string's width. Marks: <code>tln-span</code> · <code>tln-that</code> · <code>tln-bar</code> · <code>tln-gloss</code>. <code>data-tense</code>: simple-present · present-continuous · present-perfect · simple-past · past-continuous · past-perfect · going-to · future-perfect.</p>
+</div></div></details>
+<details class="reveal"><summary>Markup — #chart · the chart, and the split chart</summary><div class="body"><div>
+<pre>&lt;figure class="chartwrap"&gt;
+  &lt;figcaption class="chartcap"&gt;what the chart holds&lt;/figcaption&gt;
+  &lt;table class="chart"&gt;…&lt;/table&gt;
+&lt;/figure&gt;</pre>
+<pre>&lt;table class="chart"&gt;
+  &lt;tbody&gt;
+    &lt;tr class="bare"&gt;&lt;th colspan="3"&gt;&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;th class="vlab" rowspan="3"&gt;&lt;span&gt;Regular&lt;/span&gt;&lt;/th&gt;
+        &lt;td&gt;walk&lt;/td&gt;&lt;td&gt;walked&lt;/td&gt;&lt;/tr&gt;
+    …
+  &lt;/tbody&gt;
+&lt;/table&gt;</pre>
+<p class="dim"><code>figcaption.chartcap</code> names a chart. <code>th.vlab</code> puts a family label outside the chart's edge; <code>tr.bare</code> collapses a nameless header row to a rule. A block takes <code>data-structure="grid"</code> with a <code>thead</code> and optional <code>caption</code>, and <code>tr.note</code> for a remark row. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each.</p>
+<pre>&lt;div class="rows"&gt;
+  &lt;div&gt;…the sentence, and the chart it reads…&lt;/div&gt;
+  &lt;div&gt;
+    &lt;figure class="chartwrap"&gt;
+      &lt;figcaption class="chartcap"&gt;the chart's name&lt;/figcaption&gt;
+      &lt;table class="chart"&gt;…&lt;/table&gt;
+    &lt;/figure&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+</div></div></details>
+<details class="reveal"><summary>Markup — #map · the street map</summary><div class="body"><div>
+<pre>&lt;div class="vz-map viz"&gt;
+  &lt;svg viewBox="0 0 360 240" width="100%" role="img"
+       aria-label="everything the drawing shows, named"&gt;…&lt;/svg&gt;
+  &lt;!-- the ticks sit on the drawing, not on the frame: the overlay is the svg's own box --&gt;
+  &lt;div style="position:absolute;left:0;top:0;width:100%;aspect-ratio:360/240"&gt;
+    &lt;label style="position:absolute;left:15%;top:25.8%;
+                  transform:translateX(-50%)"&gt;
+      &lt;input type="checkbox" aria-label="the station"&gt; 1
+    &lt;/label&gt;
+    …one tick per place, in % of the drawing's box…
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+<p class="dim">A tick is a checklist, never the answer; the route the student writes goes in a <code>.gap</code>. <code>aria-label</code> names the drawing. The overlay carries the viewBox's <code>aspect-ratio</code>, so the ticks hold their place however tall the frame around the drawing becomes; <code>--map-w</code> caps its width when the drawing must be smaller than its cell.</p>
+</div></div></details>
+<details class="reveal"><summary>Markup — #comic · the comic strip</summary><div class="body"><div>
+<pre>&lt;table class="chart"&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" width="100%" role="img"
+               aria-label="what the panel shows"&gt;…&lt;/svg&gt;
+            &lt;p&gt;the sentence under the panel&lt;/p&gt;&lt;/td&gt;
+        &lt;td&gt;…the second panel…&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;…the third panel…&lt;/td&gt;
+        &lt;td&gt;…the fourth panel…&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;!-- two panels a row, two rows, as drawn · one &lt;tr&gt; holding all four makes it 4×1 · one row of two makes it 2×1 --&gt;</pre>
+</div></div></details>
+<details class="reveal"><summary>Markup — #audio · the recording</summary><div class="body"><div>
 <pre>&lt;figure class="vz-play viz"&gt;
   &lt;h4&gt;the song's own name&lt;/h4&gt;
   &lt;p class="dim"&gt;the performer&lt;/p&gt;
@@ -432,14 +455,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;/figure&gt;</pre>
 <p class="dim"><code>data-t</code> and <code>data-duration</code> come from <code>qa/audio.mjs</code>, never typed by eye. The song's own name is the <code>h4</code>, the performer the credit line under it.</p>
 </div></div></details>
-</div>
-<div id="dialog">
-<ol class="seq viz" data-mode="turns">
-<li><span class="who">Jess</span><span class="say">Did you post the letter?</span></li>
-<li><span class="who">Mike</span><span class="say">Three times. I keep thinking I forgot.</span></li>
-<li><span class="who">Jess</span><span class="say">Then photograph it next time.</span></li>
-</ol>
-<details class="reveal" open><summary>Markup — a dialog</summary><div class="body"><div>
+<details class="reveal"><summary>Markup — #dialog · a dialog</summary><div class="body"><div>
 <pre>&lt;ol class="seq viz" data-mode="turns"&gt;
   &lt;li&gt;&lt;span class="who"&gt;Jess&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
   &lt;li&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
@@ -447,12 +463,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <p class="dim"><code>data-mode</code>: <code>turns</code> (<code>.who</code> / <code>.say</code>), <code>numbered</code>, <code>timeline</code> (<code>.at</code>); unset = one item per line. <code>--seq-gap</code>, <code>--date-w</code> and <code>--rail-w</code> size it. A dialog is an example of content the page already taught, never the way a lesson opens.</p>
 </div></div></details>
 </div>
-</div>
-</div>
-
-
-
-
 
 <h2>Activities - 5A Training 5B Marked activities with controls</h2>
 
@@ -518,28 +528,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </span>
 </label>
 </div>
-<details class="reveal" open><summary>Markup — the cards, the prompt, and the pick</summary><div class="body"><div>
-<pre>&lt;div class="block" id="flip"&gt;
-  &lt;p&gt;what the cards carry, and that this is the last activity before the quiz&lt;/p&gt;
-  &lt;h4 class="flip-ask" style="text-align:center;padding-top:10px" aria-live="polite"&gt;…&lt;/h4&gt;
-  &lt;div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"&gt;
-    &lt;label class="flip" style="--flip-h:112px"&gt;
-      &lt;input type="checkbox"&gt;
-      &lt;span class="card3d"&gt;
-        &lt;span class="face" style="text-align:center"&gt;&lt;b&gt;the item&lt;/b&gt;&lt;span class="dim"&gt;what it is&lt;/span&gt;&lt;/span&gt;
-        &lt;span class="face back" style="text-align:center"&gt;&lt;b&gt;what it means&lt;/b&gt;&lt;/span&gt;
-      &lt;/span&gt;
-    &lt;/label&gt;
-    …eight cards, four to a row, two rows…
-  &lt;/div&gt;
-  &lt;script&gt;…below, inside the same block…&lt;/script&gt;
-&lt;/div&gt;
-
-&lt;!-- the prompt is one card's back, in a centred h4, and it is the whole prompt · any number of cards may be turned in a round --&gt;
-&lt;!-- a turn tints red when it is not the answer and green when it is; only the right one turns every card back and brings the next prompt 4 s later --&gt;
-&lt;!-- the script turns the card itself (it cancels the label's own toggle and sets the box), so a click is never doubled · --flip-h is the height both faces share --&gt;
-&lt;!-- training only: no data-answer and no data-a in this block, so no engine marks it and it cannot be the quiz --&gt;</pre>
-</div></div></details>
 <script>
 (function(){
 var B=document.currentScript.closest('#flip'),A=B.querySelector('.flip-ask'),
@@ -574,12 +562,6 @@ next();
 <li><span class="who">Jess</span><span class="say">Did you post the letter?</span></li>
 <li><span class="who">Mike</span><span class="say">Three times. I <input class="gap" data-answer="have|'ve" style="--gap-w:4em"> already posted it.</span></li>
 </ol>
-<details class="reveal" open><summary>Markup — a dialog with a gap</summary><div class="body"><div>
-<pre>&lt;li&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;
-    &lt;span class="say"&gt;Three times. I
-      &lt;input class="gap" data-answer="have|'ve" style="--gap-w:4em"&gt;
-      already posted it.&lt;/span&gt;&lt;/li&gt;</pre>
-</div></div></details>
 </div>
 <div>
 <table class="chart center">
@@ -598,19 +580,6 @@ next();
 <tr><td>7:10</td><td>Nobody had told the office.</td>
 <td><input class="gap" data-answer="past perfect" style="--gap-w:8em"></td></tr>
 </tbody></table>
-<details class="reveal" open><summary>Markup — a chart whose rows are answered</summary><div class="body"><div>
-<pre>&lt;div class="block" data-look="stripes" data-span="12"&gt;
-  &lt;table class="chart"&gt;
-    &lt;tr&gt;&lt;td&gt;6:40&lt;/td&gt;&lt;td&gt;He clocked in.&lt;/td&gt;
-      &lt;td&gt;&lt;div class="opts" data-layout="row"&gt;
-        &lt;label class="opt"&gt;&lt;input type="radio" name="m1"&gt;&lt;span&gt;routine&lt;/span&gt;&lt;/label&gt;
-        &lt;label class="opt"&gt;&lt;input type="radio" name="m1"&gt;&lt;span&gt;surprise&lt;/span&gt;&lt;/label&gt;
-      &lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;
-    &lt;tr&gt;…a checkbox row, a gap row…&lt;/tr&gt;
-  &lt;/table&gt;
-  &lt;!-- one example of each control type is shown — an activity may mix them or use a single type, as its content needs --&gt;
-&lt;/div&gt;</pre>
-</div></div></details>
 </div>
 </div>
 
@@ -626,17 +595,6 @@ next();
     <span><b style="font-size:.8em">6</b> never</span>
   </p>
   <p style="text-align:center;margin-top:auto"><input class="gap" style="--gap-w:100%" aria-label="the whole sentence"></p>
-<details class="reveal" open><summary>Markup — chunks in the wrong order</summary><div class="body"><div>
-<pre>&lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
-   justify-content:center;align-items:center"&gt;
-  &lt;span&gt;&lt;b style="font-size:.8em"&gt;1&lt;/b&gt; she&lt;/span&gt;
-  &lt;span&gt;&lt;b style="font-size:.8em"&gt;2&lt;/b&gt; that&lt;/span&gt;
-  …
-&lt;/p&gt;
-&lt;p style="text-align:center;margin-top:auto"&gt;
-  &lt;input class="gap" style="--gap-w:100%" aria-label="the whole sentence"&gt;
-&lt;/p&gt;</pre>
-</div></div></details>
 </div>
 <div id="stripgaps">
   <p>Describe what is happening in each picture, using the <b>past simple</b>.</p>
@@ -651,20 +609,6 @@ next();
   </tbody>
 </table>
   <p class="dim">The gap is under its panel: the panel is the question and there is no separate stem. Every gap carries its own <code>aria-label</code>.</p>
-<details class="reveal" open><summary>Markup — the strip as an activity</summary><div class="body"><div>
-<pre>&lt;div class="block" data-look="stripes"&gt;
-  &lt;h3&gt;the task the panels set&lt;/h3&gt;
-  &lt;p&gt;Describe what is happening in each picture,
-     using the &lt;b&gt;past simple&lt;/b&gt;.&lt;/p&gt;
-  &lt;table class="chart"&gt;
-    &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" width="100%" role="img"
-                 aria-label="what the panel shows"&gt;…&lt;/svg&gt;
-              &lt;input class="gap" style="--gap-w:100%"
-                     aria-label="what this picture shows"&gt;&lt;/td&gt;
-      …
-  &lt;/table&gt;
-&lt;/div&gt;</pre>
-</div></div></details>
 </div>
 </div>
 </div>
@@ -683,14 +627,85 @@ next();
 <h3>A block that reports its own state <span class="dim">— IGNORED</span></h3>
 <p>Mike <input class="gap" data-answer="has" style="--gap-w:5em"> already posted it.</p>
 <p class="dim">The block reports itself with <code>data-state</code>; the border and halo turn green.</p>
-<details class="reveal" open><summary>Markup — the block that reports itself done</summary><div class="body"><div>
+</div>
+
+
+
+<p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
+<div class="cols markup-row">
+<details class="reveal"><summary>Markup — #flip · the cards, the prompt, and the pick</summary><div class="body"><div>
+<pre>&lt;div class="block" id="flip"&gt;
+  &lt;p&gt;what the cards carry, and that this is the last activity before the quiz&lt;/p&gt;
+  &lt;h4 class="flip-ask" style="text-align:center;padding-top:10px" aria-live="polite"&gt;…&lt;/h4&gt;
+  &lt;div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"&gt;
+    &lt;label class="flip" style="--flip-h:112px"&gt;
+      &lt;input type="checkbox"&gt;
+      &lt;span class="card3d"&gt;
+        &lt;span class="face" style="text-align:center"&gt;&lt;b&gt;the item&lt;/b&gt;&lt;span class="dim"&gt;what it is&lt;/span&gt;&lt;/span&gt;
+        &lt;span class="face back" style="text-align:center"&gt;&lt;b&gt;what it means&lt;/b&gt;&lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/label&gt;
+    …eight cards, four to a row, two rows…
+  &lt;/div&gt;
+  &lt;script&gt;…below, inside the same block…&lt;/script&gt;
+&lt;/div&gt;
+
+&lt;!-- the prompt is one card's back, in a centred h4, and it is the whole prompt · any number of cards may be turned in a round --&gt;
+&lt;!-- a turn tints red when it is not the answer and green when it is; only the right one turns every card back and brings the next prompt 4 s later --&gt;
+&lt;!-- the script turns the card itself (it cancels the label's own toggle and sets the box), so a click is never doubled · --flip-h is the height both faces share --&gt;
+&lt;!-- training only: no data-answer and no data-a in this block, so no engine marks it and it cannot be the quiz --&gt;</pre>
+</div></div></details>
+<details class="reveal"><summary>Markup — 5B · a dialog with a gap</summary><div class="body"><div>
+<pre>&lt;li&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;
+    &lt;span class="say"&gt;Three times. I
+      &lt;input class="gap" data-answer="have|'ve" style="--gap-w:4em"&gt;
+      already posted it.&lt;/span&gt;&lt;/li&gt;</pre>
+</div></div></details>
+<details class="reveal"><summary>Markup — 5B · a chart whose rows are answered</summary><div class="body"><div>
+<pre>&lt;div class="block" data-look="stripes" data-span="12"&gt;
+  &lt;table class="chart"&gt;
+    &lt;tr&gt;&lt;td&gt;6:40&lt;/td&gt;&lt;td&gt;He clocked in.&lt;/td&gt;
+      &lt;td&gt;&lt;div class="opts" data-layout="row"&gt;
+        &lt;label class="opt"&gt;&lt;input type="radio" name="m1"&gt;&lt;span&gt;routine&lt;/span&gt;&lt;/label&gt;
+        &lt;label class="opt"&gt;&lt;input type="radio" name="m1"&gt;&lt;span&gt;surprise&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;…a checkbox row, a gap row…&lt;/tr&gt;
+  &lt;/table&gt;
+  &lt;!-- one example of each control type is shown — an activity may mix them or use a single type, as its content needs --&gt;
+&lt;/div&gt;</pre>
+</div></div></details>
+<details class="reveal"><summary>Markup — #chunks · chunks in the wrong order</summary><div class="body"><div>
+<pre>&lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
+   justify-content:center;align-items:center"&gt;
+  &lt;span&gt;&lt;b style="font-size:.8em"&gt;1&lt;/b&gt; she&lt;/span&gt;
+  &lt;span&gt;&lt;b style="font-size:.8em"&gt;2&lt;/b&gt; that&lt;/span&gt;
+  …
+&lt;/p&gt;
+&lt;p style="text-align:center;margin-top:auto"&gt;
+  &lt;input class="gap" style="--gap-w:100%" aria-label="the whole sentence"&gt;
+&lt;/p&gt;</pre>
+</div></div></details>
+<details class="reveal"><summary>Markup — #stripgaps · the strip as an activity</summary><div class="body"><div>
+<pre>&lt;div class="block" data-look="stripes"&gt;
+  &lt;h3&gt;the task the panels set&lt;/h3&gt;
+  &lt;p&gt;Describe what is happening in each picture,
+     using the &lt;b&gt;past simple&lt;/b&gt;.&lt;/p&gt;
+  &lt;table class="chart"&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" width="100%" role="img"
+                 aria-label="what the panel shows"&gt;…&lt;/svg&gt;
+              &lt;input class="gap" style="--gap-w:100%"
+                     aria-label="what this picture shows"&gt;&lt;/td&gt;
+      …
+  &lt;/table&gt;
+&lt;/div&gt;</pre>
+</div></div></details>
+<details class="reveal"><summary>Markup — 5D · the block that reports itself done</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes" data-state="done"&gt;
   …the activity…
 &lt;/div&gt;</pre>
 <p class="dim">The values are <code>correct</code>, <code>wrong</code>, <code>odd</code> and <code>done</code>, on <code>.opt</code>, <code>.side</code>, <code>.qitem</code> or the block, and the mark is <code>&lt;i class="mark"></code>; <code>--ok</code>, <code>--err</code> and <code>--warn</code> are the colours. In the sheet and unused: <code>data-reactive</code> with <code>.meter</code>. No shipped script writes a state; whatever marks the block sets it.</p>
 </div></div></details>
 </div>
-
 
 <h2>Games</h2>
 
@@ -721,7 +736,12 @@ next();
 </table>
 </div>
 
-<details class="reveal" open><summary>Markup — a game, and the levers on it</summary><div class="body"><div>
+
+
+
+<p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
+<div class="cols markup-row">
+<details class="reveal"><summary>Markup — 6 · a game, and the levers on it</summary><div class="body"><div>
 <pre>&lt;div class="game" data-game="skeetRange" data-time="6000" data-kind="train"&gt;
   &lt;p class="game-how"&gt;one line: how to play&lt;/p&gt;
   &lt;div class="game-list"&gt;
@@ -748,7 +768,7 @@ next();
      answer (engine4 matches it against data-say) --&gt;</pre>
 <p class="dim">Words the game needs on the item, not on the block: <code>data-answer="&lt;word&gt;"</code> for <code>wordleBoard</code> and <code>crosswordBoard</code>, <code>data-first</code> and <code>data-lives</code> for <code>echoPads</code>, <code>data-train</code> for <code>trainOrder</code>, <code>data-buckets</code> for <code>catchBasket</code>. Every game answers with the same radios, so engine4 checks the option and the page's own marking still saves it.</p>
 </div></div></details>
-
+</div>
 
 </div>
 <footer>MATERIAIS SIMPLES E INOVADORES · INGLES CERTO EUA</footer>
