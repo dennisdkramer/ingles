@@ -573,7 +573,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
     …
   &lt;/tbody&gt;
 &lt;/table&gt;</pre>
-<p class="dim">One row per beat, one sentence per panel. The panel is a <code>td</code>, so the grid is the strip's own and the sentence never becomes a column beside the picture. <code>svg</code> panels take <code>width="100%"</code> and an <code>aria-label</code> describing the drawing. Swap the <code>&lt;p&gt;</code> for <code>&lt;input class="gap" style="--gap-w:100%"&gt;</code> and the same strip is the activity in §5.</p>
+<p class="dim">The panel is a <code>td</code>, so a panel and anything under it share one cell. <code>svg</code> panels take <code>width="100%"</code> and an <code>aria-label</code> describing the drawing. Put an <code>input.gap</code> under a panel and the same strip is the activity in §5.</p>
 </div></div></details>
 </div>
 <div id="flip" style="width:50%">
@@ -702,7 +702,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
     </tr>
   </tbody>
 </table>
-  <p class="dim">The instruction is in the block: a gap with no tense named has more than one right answer. One line per panel, in the order the panels are read, and four panels in one row keep the drawings at their own size.</p>
+  <p class="dim">The instruction is in the block: a gap with no tense named has more than one right answer.</p>
 <details class="reveal" open><summary>Markup — the strip as an activity</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes"&gt;
   &lt;h3&gt;the task the panels set&lt;/h3&gt;
