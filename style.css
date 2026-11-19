@@ -892,7 +892,7 @@
     --accent-line:color-mix(in oklab, var(--accent) 42%, var(--line));
     background:var(--paper);border:1px solid var(--line);border-top:2px solid var(--accent);
     border-radius:var(--r2);box-shadow:2px 2px 0 var(--line-2),var(--shadow-1);
-    padding:6px 20px 20px;margin:0}
+    padding:12px 26px 26px;margin:0}
   /* the frame has no top padding: its first child brings the space, 14px like every other child */
   .block>:first-child,.panel>:first-child,.card>:first-child{margin-top:14px}
   .game>:is(h3,h4):first-child,.dialog>:is(h3,h4):first-child{margin-top:0}
@@ -901,6 +901,11 @@
      a game, a dialogue or any other component keeps its own spacing, and headings keep theirs
      (their rule is measured from their padding) */
   :is(.block,.panel,.card,.dialog)>:is(p,ul,ol,dl,blockquote){padding:3px}
+  /* a list needs its marker gutter back: with the 3px above, the bullets hang outside the frame's
+     own padding and read as if they were in the margin */
+  :is(.block,.panel,.card,.dialog)>:is(ul,ol){padding-left:1.6em}
+  /* the same gutter inside a flex cell, where the cell is narrower than a frame */
+  .cols>div>:is(ul,ol){padding-left:1.2em}
 
   /* #43 RHYTHM — the space between things in a frame is the margin ABOVE each one: a paragraph, a flex
      row or a chart that follows another takes 14px. A list item keeps its own bottom margin (li, in base),
@@ -1504,7 +1509,7 @@
   }
   /* block frame, legacy names — preview's .block geometry wins where the two speak */
   .panel,.card{--edge:var(--tan);border:2px solid var(--edge);border-radius:12px;
-    width:fit-content;max-width:100%;padding:6px 20px 20px;background:var(--paper);
+    width:fit-content;max-width:100%;padding:12px 26px 26px;background:var(--paper);
     box-shadow:4px 4px 0 var(--tan);margin:14px 0}
   .panel[data-kind="teach"],.card[data-kind="teach"],.game[data-kind="teach"],
   .dialog[data-kind="teach"]{--edge:var(--ink)}
