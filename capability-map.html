@@ -138,6 +138,7 @@
 <tbody>
 <tr><td>word order and the jobs inside a sentence</td><td><a href="#pos">parts-of-speech marking</a></td></tr>
 <tr><td>how two clauses meet</td><td><a href="#pos">the fenced join</a></td></tr>
+<tr><td>who receives what</td><td><a href="#pos">the recipient and its arrow</a></td></tr>
 <tr><td>a tense, and where <i>now</i> falls</td><td><a href="#axis">the timeline</a></td></tr>
 <tr><td>who says what, and in what order</td><td><a href="#dialog">the dialog</a></td></tr>
 <tr><td>how a tense is put together</td><td><a href="#list">the numbered list</a></td></tr>
@@ -168,7 +169,9 @@
 <h3>One block, and everything it can carry</h3>
 <p class="pos" id="pos"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p>
 <p class="pos pos-labels"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p>
-<details class="reveal" open><summary>Markup — the job each word carries, and the fence</summary><div class="body"><div>
+<p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-i" data-side="right">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span> <span class="pos-adj">the</span> <span class="pos-n pos-o">book</span>.</p>
+<p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-o">it</span> <span class="pos-prep">to</span> <span class="pos-n pos-i" data-side="left">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span>.</p>
+<details class="reveal" open><summary>Markup — the job each word carries, the fence, and the recipient</summary><div class="body"><div>
 <pre>&lt;p class="pos"&gt;
   &lt;span class="pos-adj"&gt;The old&lt;/span&gt;
   &lt;span class="pos-n pos-subj"&gt;man&lt;/span&gt;
@@ -180,8 +183,19 @@
 
 &lt;p class="pos pos-labels"&gt;…the same sentence…&lt;/p&gt;
 
-&lt;table class="poschart"&gt;…one column per group…&lt;/table&gt;</pre>
-<p class="dim">The two lines are the same sentence twice: the first with the marks, the second with <code>pos-labels</code>, which prints the role instead of the line — N · V · M · DO · IO · ADJ · ADV · PREP — for a page or a printout that must not rely on colour. The tagger emits the marks, so they cannot drift from the sentence and no word is marked by hand. <b>The marks go on any sentence the lesson wants marked, as many as it wants</b>: they wrap one sentence and are not a component with a block of its own — three sentences in a block means three of these. The fence goes on the joining word; <code>data-rel</code> is one of add · contrast · alternative · cause · condition · time · place · comparison · content, and under <code>pos-labels</code> the relation prints instead of the fence.</p>
+&lt;table class="poschart"&gt;…one column per group…&lt;/table&gt;
+
+&lt;!-- the recipient: no line of its own, an arrow from the side the object sits on --&gt;
+I gave &lt;span class="pos-n pos-i" data-side="right"&gt;her
+  &lt;i class="pos-i-arr" aria-hidden="true"&gt;
+    &lt;svg viewBox="0 0 20 18" fill="none"&gt;
+      &lt;path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"/&gt;
+      &lt;path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"/&gt;
+    &lt;/svg&gt;
+  &lt;/i&gt;&lt;/span&gt; the book.
+
+I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt;</pre>
+<p class="dim">The two lines are the same sentence twice: the first with the marks, the second with <code>pos-labels</code>, which prints the role instead of the line — N · V · M · DO · IO · ADJ · ADV · PREP — for a page or a printout that must not rely on colour. The tagger emits the marks, so they cannot drift from the sentence and no word is marked by hand. <b>The marks go on any sentence the lesson wants marked, as many as it wants</b>: they wrap one sentence and are not a component with a block of its own — three sentences in a block means three of these. The fence goes on the joining word; <code>data-rel</code> is one of add · contrast · alternative · cause · condition · time · place · comparison · content, and under <code>pos-labels</code> the relation prints instead of the fence. <b>The recipient</b> carries no line: <code>pos-i</code> draws an arrow from the side the object sits on, its shaft drawing itself and its head arriving after, and <code>data-side="left"</code> mirrors it for a recipient that follows the object — the two orders of the same verb, each with its own arrow. Under <code>pos-labels</code> it prints IO and the arrow is not drawn.</p>
 </div></div></details>
 
 <h4>Where <i>now</i> sits — the timeline</h4>
