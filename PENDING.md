@@ -4,4 +4,4 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 ---
 
 # [CURRENT]
-## [B1] - Fold the look into arrangement and state spanning as a fit, deleting the spans table and the looks table <"1D will be happening during 1B, correct? ... 1E is bullshit, its too specific ... 1f is not needed if were giving examples and markup for the looks on the rest of the page"> <capability-map.html §1>
+## [B1] - Cut the mapping to three fields and the twelve concepts that have a tool <"clean up 3f to be much simpler. Concept / Tool / Where: Link to where that tools examples are"> <capability-map.html §3 E and F>

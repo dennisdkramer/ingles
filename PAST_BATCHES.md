@@ -1,5 +1,8 @@
 # PAST BATCHES
 
+## 2026-11-19 — the mapping is three fields
+## [B1] - Reduce 3F to Concept / Tool / Where over the twelve concepts that have a tool, and move the owed concepts to where they are already recorded <"clean up 3f to be much simpler. Concept / Tool / Where: Link to where that tools examples are"> <capability-map.html: §3 F is a 12-row table (Concept | Tool | Where) with an "example" link per row carrying an aria-label naming its tool; the student's-question and status columns are gone with the five rows that had no tool — intonation and prepositions are in §8 already, "how sure" and "how often" in §9, and "passive against active" was added to §8's table so it is not lost; §3 E now says a concept with no tool has no row rather than explaining a status column, and the table's footnote moved into E, which took its slack from 125px to 49px>
+
 ## 2026-11-19 — §1 is three moves, and spanning is a fit
 ## [B1] - Fold the look into arrangement, put auto-flow and the 12ths into §1 B, delete the spans table (1E) and the looks table (1F) <"1D will be happening during 1B, correct? ... 1E is bullshit, its too specific ... 1f is not needed if were giving examples and markup for the looks on the rest of the page"> <capability-map.html §1: intro float now says three moves; A Write the content, B Arrange it and give it a look, C Clean up the wording, all at span 12; B states the page flows, a span is written only when something sits beside it, 3/4/6/8/9/12 adding to 12, a fit not a category, nothing measured in the browser, the look declared in the same pass, one tint and one outline per section; its reveal shows a full-width block and an 8+4 row; the look names survive as data-look values in that reveal>
 
