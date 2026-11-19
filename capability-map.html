@@ -51,9 +51,7 @@
 <tr><td>who receives what</td><td><a href="#pos">the recipient and its arrow</a></td></tr>
 <tr><td>a tense, and where <i>now</i> falls</td><td><a href="#axis">the timeline</a></td></tr>
 <tr><td>who says what, and in what order</td><td><a href="#dialog">the dialog</a></td></tr>
-<tr><td>how a tense is put together</td><td><a href="#list">the numbered list</a></td></tr>
 <tr><td>Vocabulary - verb tenses, translation, definition, etc</td><td><a href="#chart">a chart</a>, <a href="#chart-split">a split chart</a></td></tr>
-<tr><td>a part of a whole</td><td><a href="#bar">a bar beside its number</a></td></tr>
 <tr><td>a word the sentence cannot explain in passing</td><td><a href="#gloss">a card at the word</a></td></tr>
 <tr><td>how one word is said</td><td><a href="#key-sound">the pronunciation key, above the word</a></td></tr>
 <tr><td>real speech in context</td><td><a href="#audio">the player</a></td></tr>
@@ -200,7 +198,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div>
 <div class="block" data-span="12">
 <h3>Standalone visuals</h3>
-<p><code>.viz</code> frames three things: the dialog, the player and the map — a chart, a flash card and a strip carry a frame of their own, and the lists and the bar take none. It is never a second <code>.block</code>.</p>
+<p><code>.viz</code> frames three things: the dialog, the player and the map — a chart and a strip carry a frame of their own. It is never a second <code>.block</code>.</p>
 <div class="rows">
 <div id="chart">
 <figure class="chartwrap">
@@ -261,33 +259,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div></div></details>
 
 <div class="rows">
-<div id="bar">
-<div class="bar-row"><span>same in Portuguese</span><div class="bar"><i style="--w:62%"></i></div><b>62%</b></div>
-<div class="bar-row"><span>of those, false friends</span><div class="bar"><i style="--w:28%"></i></div><b>28%</b></div>
-<p class="dim"><code>--w</code> the fill's width, <code>--bar-h</code> the bar's height.</p>
-<details class="reveal" open><summary>Markup — a bar with its number</summary><div class="body"><div>
-<pre>&lt;div class="bar-row"&gt;
-  &lt;span&gt;same in Portuguese&lt;/span&gt;
-  &lt;div class="bar"&gt;&lt;i style="--w:62%"&gt;&lt;/i&gt;&lt;/div&gt;
-  &lt;b&gt;62%&lt;/b&gt;
-&lt;/div&gt;</pre>
-</div></div></details>
-</div>
-</div>
-<div class="rows">
-<div id="list">
-<ol class="seq" data-mode="numbered">
-<li><p><b>Have</b> carries the person: <i>I have</i>, <i>she has</i>.</p></li>
-<li><p>The third word carries the action: <i>written</i>.</p></li>
-<li><p>Change the person and only the first word moves.</p></li>
-</ol>
-<details class="reveal" open><summary>Markup — a numbered list</summary><div class="body"><div>
-<pre>&lt;ol class="seq" data-mode="numbered"&gt;
-  &lt;li&gt;&lt;p&gt;&lt;b&gt;Have&lt;/b&gt; carries the person: &lt;i&gt;I have&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;p&gt;The third word carries the action.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;</pre>
-</div></div></details>
-</div>
 <div id="vline">
 <ol class="seq" data-mode="timeline">
 <li><span class="at">2022</span><p>She wrote three songs.</p></li>
@@ -303,13 +274,13 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div>
 </div>
 
-<div id="dialog" style="width:50%">
+<div class="rows">
+<div id="dialog">
 <ol class="seq viz" data-mode="turns">
 <li><span class="who">Jess</span><span class="say">Did you post the letter?</span></li>
 <li><span class="who">Mike</span><span class="say">Three times. I keep thinking I forgot.</span></li>
 <li><span class="who">Jess</span><span class="say">Then photograph it next time.</span></li>
 </ol>
-</div>
 <details class="reveal" open><summary>Markup — a dialog</summary><div class="body"><div>
 <pre>&lt;ol class="seq viz" data-mode="turns"&gt;
   &lt;li&gt;&lt;span class="who"&gt;Jess&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
@@ -317,6 +288,36 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;/ol&gt;</pre>
 <p class="dim"><code>data-mode</code>: <code>turns</code> (<code>.who</code> / <code>.say</code>), <code>numbered</code>, <code>timeline</code> (<code>.at</code>); unset = one item per line. <code>--seq-gap</code>, <code>--date-w</code> and <code>--rail-w</code> size it. A dialog is an example of content the page already taught, never the way a lesson opens.</p>
 </div></div></details>
+</div>
+<div id="comic">
+<table class="chart">
+  <tbody>
+    <tr>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0">Ana waited at the stop in the rain.</p></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0">A bus came down the road.</p></td>
+    </tr>
+    <tr>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><p style="margin:6px 0 0">She ran to catch it.</p></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0">It pulled away without her.</p></td>
+    </tr>
+  </tbody>
+</table>
+<details class="reveal" open><summary>Markup — the comic strip</summary><div class="body"><div>
+<pre>&lt;table class="chart"&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" width="100%" role="img"
+               aria-label="what the panel shows"&gt;…&lt;/svg&gt;
+            &lt;p&gt;the sentence under the panel&lt;/p&gt;&lt;/td&gt;
+        &lt;td&gt;…the second panel…&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;…the third panel…&lt;/td&gt;
+        &lt;td&gt;…the fourth panel…&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;!-- two panels a row, two rows, as drawn · one &lt;tr&gt; holding all four makes it 4×1 · one row of two makes it 2×1 --&gt;</pre>
+</div></div></details>
+</div>
+</div>
 
 <div class="rows">
 <div id="audio">
@@ -451,72 +452,11 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div></div></details>
 </div>
 </div>
-
-<div class="rows">
-<div id="comic">
-<table class="chart">
-  <tbody>
-    <tr>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0">Ana waited at the stop in the rain.</p></td>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0">A bus came down the road.</p></td>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><p style="margin:6px 0 0">She ran to catch it.</p></td>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0">It pulled away without her.</p></td>
-    </tr>
-  </tbody>
-</table>
-<details class="reveal" open><summary>Markup — the comic strip</summary><div class="body"><div>
-<pre>&lt;table class="chart"&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" width="100%" role="img"
-               aria-label="what the panel shows"&gt;…&lt;/svg&gt;
-            &lt;p&gt;the sentence under the panel&lt;/p&gt;&lt;/td&gt;
-        &lt;td&gt;…the next panel…&lt;/td&gt;&lt;/tr&gt;
-    …
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;!-- 4×1 as drawn · a second &lt;tr&gt; of two more td makes it 2×2 · one row of two makes it 2×1 --&gt;</pre>
-</div></div></details>
-</div>
 </div>
 
-<div id="flip" style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center">
-<label class="flip" style="flex:0 0 auto;width:min(100%,18rem);--flip-h:152px">
-<input type="checkbox">
-<span class="card3d">
-<span class="face"><b>borrow</b><span class="dim">the word you need</span></span>
-<span class="face back"><b>take it now, give it back later</b><span class="dim">not <i>lend</i> — that is the other direction</span></span>
-</span>
-</label>
-<label class="flip" style="flex:0 0 auto;width:min(100%,18rem);--flip-h:152px">
-<input type="checkbox">
-<span class="card3d">
-<span class="face"><b>spill the tea</b><span class="dim">you are being asked for it</span></span>
-<span class="face back"><b>hand over the gossip</b><span class="dim">“what did she actually say?”</span></span>
-</span>
-</label>
-<label class="flip" style="flex:0 0 auto;width:min(100%,18rem);--flip-h:152px">
-<input type="checkbox">
-<span class="card3d">
-<span class="face"><b>throw shade</b><span class="dim">it lands, but not straight</span></span>
-<span class="face back"><b>insult without naming them</b><span class="dim">“she never said his name once”</span></span>
-</span>
-</label>
-</div>
-<details class="reveal" open><summary>Markup — a flash card, and a row of them</summary><div class="body"><div>
-<pre>&lt;div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center"&gt;
-  &lt;label class="flip" style="flex:0 0 auto;width:min(100%,18rem);--flip-h:152px"&gt;
-    &lt;input type="checkbox"&gt;
-    &lt;span class="card3d"&gt;
-      &lt;span class="face"&gt;&lt;b&gt;front&lt;/b&gt;&lt;span class="dim"&gt;…&lt;/span&gt;&lt;/span&gt;
-      &lt;span class="face back"&gt;&lt;b&gt;back&lt;/b&gt;&lt;span class="dim"&gt;…&lt;/span&gt;&lt;/span&gt;
-    &lt;/span&gt;
-  &lt;/label&gt;
-  …one more label per card, same attributes…
-&lt;/div&gt;</pre>
-<p class="dim">A card owns its width — its faces are out of the flow, so give it <code>width:min(100%,18rem)</code> and <code>flex:0 0 auto</code>, in one wrapping, centred row; never a cell of <code>.rows</code>, never a wrapper <code>div</code>. <code>--flip-h</code> is the height both faces share, <code>--dur</code> the turn. No script: the checkbox turns the card.</p>
-</div></div></details>
-</div>
+
+
+
 
 <h2>Dialogs and activities</h2>
 
@@ -525,8 +465,110 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <p class="dim"><code>data-answer</code> keys a gap, <code>|</code> separating alternatives; <code>--gap-w</code> is the width the answer needs. A radio group's key is <code>data-a</code> on <code>.qitem</code>; engine2.js marks the right option and writes <code>.ans</code> beside a typed field.</p>
 </div>
 
+<div class="block" data-look="stripes" data-span="12" id="flip">
+<h3>Cards face-down, one meaning at a time</h3>
+<p>One card per item the lesson has <b>already taught</b> — vocabulary, phrases, the words of an earlier section. The block shows the back of one card and the student picks the card it belongs to: the pick tints red or green, the card turns back on its own, and the next card comes after four seconds. <b>Nothing here is scored and no answer is saved</b>, so it trains and never tests: when a lesson carries one it is the last activity before the quiz, never the quiz.</p>
+<p class="flip-ask" aria-live="polite"><b>Which card means:</b> <span>…</span></p>
+<div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>borrow</b><span class="dim">the verb</span></span>
+<span class="face back" style="text-align:center"><b>take it now, give it back later</b></span>
+</span>
+</label>
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>lend</b><span class="dim">the verb</span></span>
+<span class="face back" style="text-align:center"><b>give it away, get it back later</b></span>
+</span>
+</label>
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>owe</b><span class="dim">the verb</span></span>
+<span class="face back" style="text-align:center"><b>you still have to give it back</b></span>
+</span>
+</label>
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>spill the tea</b><span class="dim">the phrase</span></span>
+<span class="face back" style="text-align:center"><b>hand over the gossip</b></span>
+</span>
+</label>
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>throw shade</b><span class="dim">the phrase</span></span>
+<span class="face back" style="text-align:center"><b>insult without naming anyone</b></span>
+</span>
+</label>
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>clock in</b><span class="dim">the phrase</span></span>
+<span class="face back" style="text-align:center"><b>start the shift on the punch clock</b></span>
+</span>
+</label>
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>hang out</b><span class="dim">the phrase</span></span>
+<span class="face back" style="text-align:center"><b>spend time with no plan</b></span>
+</span>
+</label>
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>bail</b><span class="dim">the verb</span></span>
+<span class="face back" style="text-align:center"><b>leave and not come back</b></span>
+</span>
+</label>
+</div>
+<details class="reveal" open><summary>Markup — the cards, the prompt, and the pick</summary><div class="body"><div>
+<pre>&lt;div class="block" id="flip"&gt;
+  &lt;p&gt;what the cards carry, and that this is the last activity before the quiz&lt;/p&gt;
+  &lt;p class="flip-ask" aria-live="polite"&gt;&lt;b&gt;Which card means:&lt;/b&gt; &lt;span&gt;…&lt;/span&gt;&lt;/p&gt;
+  &lt;div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"&gt;
+    &lt;label class="flip" style="--flip-h:112px"&gt;
+      &lt;input type="checkbox"&gt;
+      &lt;span class="card3d"&gt;
+        &lt;span class="face" style="text-align:center"&gt;&lt;b&gt;the item&lt;/b&gt;&lt;span class="dim"&gt;what it is&lt;/span&gt;&lt;/span&gt;
+        &lt;span class="face back" style="text-align:center"&gt;&lt;b&gt;what it means&lt;/b&gt;&lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/label&gt;
+    …eight cards, four to a row, two rows…
+  &lt;/div&gt;
+  &lt;script&gt;…below, inside the same block…&lt;/script&gt;
+&lt;/div&gt;
+
+&lt;!-- the prompt shows one card's back; the pick that matches it tints green, any other red --&gt;
+&lt;!-- the card turns back and the next prompt comes after 4 s · --flip-h is the height both faces share --&gt;
+&lt;!-- training only: no data-answer and no data-a in this block, so no engine marks it and it cannot be the quiz --&gt;</pre>
+</div></div></details>
+<script>
+(function(){
+var B=document.currentScript.closest('#flip'),A=B.querySelector('.flip-ask span'),
+C=[].slice.call(B.querySelectorAll('.flip')),P=[],T=-1,busy=0,
+M=C.map(function(c){return c.querySelector('.back').textContent.replace(/\s+/g,' ').trim();});
+function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function next(){if(!P.length)P=sh(C.map(function(_,i){return i;}));T=P.pop();A.textContent=M[T];}
+C.forEach(function(c,i){c.addEventListener('click',function(e){
+if(busy){e.preventDefault();return;}
+busy=1;var b=c.querySelector('.back');
+b.style.background='color-mix(in oklab, var('+(i===T?'--ok':'--err')+') 26%, var(--paper))';
+setTimeout(function(){b.style.background='';c.querySelector('input').checked=false;busy=0;next();},4000);
+});});
+next();
+})();
+</script>
+</div>
+
 <div class="block" data-look="stripes" data-span="12">
 <h3>Four activity types, in-block size</h3>
+
 <div class="rows">
 <div>
 <ol class="seq viz" data-mode="turns">
