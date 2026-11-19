@@ -561,7 +561,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div>
 
 <div class="rows">
-<div id="comic" style="width:50%">
+<div id="comic">
 <table class="chart">
   <tbody>
     <tr>
@@ -585,12 +585,14 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <p class="dim">The panel is a <code>td</code>, so a panel and anything under it share one cell. <code>svg</code> panels take <code>width="100%"</code> and an <code>aria-label</code> describing the drawing. Put an <code>input.gap</code> under a panel and the same strip is the activity in §5.</p>
 </div></div></details>
 </div>
+</div>
+
 <div id="flip" style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center">
 <label class="flip" style="flex:0 0 auto;width:min(100%,18rem);--flip-h:152px">
 <input type="checkbox">
 <span class="card3d">
-<span class="face"><b>borrow</b><span class="dim">take something, give it back later</span></span>
-<span class="face back"><b>lend</b><span class="dim">give something, get it back later</span></span>
+<span class="face"><b>borrow</b><span class="dim">the word you need</span></span>
+<span class="face back"><b>take it now, give it back later</b><span class="dim">not <i>lend</i> — that is the other direction</span></span>
 </span>
 </label>
 <label class="flip" style="flex:0 0 auto;width:min(100%,18rem);--flip-h:152px">
@@ -619,11 +621,11 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;/label&gt;
   …one more label per card, same attributes…
 &lt;/div&gt;</pre>
-<p class="dim">The checkbox keeps the card turned and print shows the front; no script. <code>--flip-h</code> is the height both faces share and <code>--dur</code> the turn’s duration. <b>A card owns its width.</b> Its two faces are taken out of the flow and stacked on top of each other, so the card has nothing inside to measure itself from: give it <code>width:min(100%,18rem)</code> — wide enough for the longer face — and it is drawn to its content instead of being squeezed by whatever sits beside it. A group of cards is one wrapping, centred flex row, and each card is <code>flex:0 0 auto</code>, so it keeps that width and the row centres what is left over. Never put cards in <code>.rows</code>, and never give each one a bare wrapper <code>div</code>: those cells shrink below their content, which is how three cards end up compressed into columns of broken lines.</p>
+<p class="dim">The checkbox keeps the card turned and print shows the front; no script. <code>--flip-h</code> is the height both faces share and <code>--dur</code> the turn’s duration.</p>
+<p class="dim"><b>A card owns its width.</b> Its two faces are taken out of the flow and stacked on top of each other, so the card has nothing inside to measure itself from: give it <code>width:min(100%,18rem)</code> — wide enough for the longer face — and it is drawn to its content instead of being squeezed by whatever sits beside it.</p>
+<p class="dim">A group of cards is one wrapping, centred flex row, and each card is <code>flex:0 0 auto</code>, so it keeps that width and the row centres what is left over. The group is never a cell of <code>.rows</code> and a card never gets a wrapper <code>div</code>: those cells shrink below their content, which is how three cards end up compressed into columns of broken lines.</p>
 </div></div></details>
 </div>
-</div>
-
 
 <h2>Dialogs and activities</h2>
 
