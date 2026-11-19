@@ -1073,6 +1073,9 @@
      between paragraphs, not between a question and its answers */
   p:has(+.opts){margin-bottom:.7em}
   .opts[data-layout="row"]{grid-auto-flow:column;grid-auto-columns:max-content;gap:10px}
+  /* options that sit in a table cell use the cell's width: the choices spread across it instead of
+     hugging its left edge, so a cell holding two options does not read as a cell holding one */
+  .chart :is(td,th) .opts[data-layout="row"]{display:flex;flex-wrap:wrap;justify-content:space-around}
   .opt{display:flex;align-items:center;gap:9px;padding:7px 11px;cursor:pointer;
     border:1.5px solid var(--line);border-radius:var(--r1);background:var(--surface-2);
     transition:border-color .15s,background .15s,box-shadow .15s}
