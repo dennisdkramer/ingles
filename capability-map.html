@@ -48,6 +48,12 @@
 <p>Read every line as it will break. A line that ends in one to three words is rewritten until the block's lines are even; a short block beside a tall one gains the sentence it was missing, a last line is folded into the one above, and a last-row stub is deleted rather than padded. Only the words change, never what they say.</p>
 </div>
 
+<div class="block" data-span="12">
+<h3>Concepts no tool draws</h3>
+<p>Concepts the course owes and cannot draw: <b>how sure the speaker is</b> (modal strength), <b>how often something happens</b>, and <b>register</b> — what is too rude, too stiff or too casual for the room. Those lessons carry the work in prose and in the choice of examples, and a figure invented for them would be a diagram of taste.</p>
+<p class="dim">This page is the tool reference a lesson is written against. It is unlinked from the site index, holds no answer, saves nothing, and loads only the player. Add a row when a concept is planned; add a block when a figure is built; delete a row when it is pruned.</p>
+</div>
+
 
 <h2>How a page is written</h2>
 
@@ -175,7 +181,7 @@
 <h3>One concept, one row</h3>
 <p>The mapping below is the point of this page: one row per concept, the tool that answers it, and a link to where that tool is drawn here, so a lesson's own plan can produce its candidates instead of relying on the author remembering what exists.</p>
 <p>A row is written once and reused: the plan starts from the concept it has to teach, finds the row, and takes the tool the second column names. The same concept cannot be taught twice with two different tools in two lessons, because there is only one place to look.</p>
-<p>A concept with no tool has no row here, and that is not a deletion: §8 holds the shapes that are specified and not built, and §9 the concepts no tool draws. This table names only what a lesson may use today.</p>
+<p>A concept with no tool has no row here, and that is not a deletion: the concepts the course owes and no figure can carry are named at the foot of §1, and a row is written here the day a tool for one of them is built. This table names only what a lesson may use today.</p>
 <p>Where two tools answer one concept the row names both, and the lesson keeps one per section: two figures answering one question fails the saturation test before the section is written.</p>
 <p>A row is added when a tool is built and changes when a tool is pruned. The table is the course's schema, not a summary of this page.</p>
 <p class="dim">Two concepts are worth a row before anything else is built: <b>a claim against a deadline</b> (the wall on the timeline already draws it) and <b>the difference between two sounds</b> (the ear, not the eye — a figure can only point).</p>
@@ -198,6 +204,7 @@
 <tr><td>real speech in context</td><td>the mini player, with the words beside it</td><td><a href="#audio" aria-label="the mini player, with the words beside it">example</a></td></tr>
 <tr><td>which place, and where it sits</td><td>the street map</td><td><a href="#map" aria-label="the street map">example</a></td></tr>
 <tr><td>a sequence of events</td><td>the comic strip</td><td><a href="#comic" aria-label="the comic strip">example</a></td></tr>
+<tr><td>one thing, and the face it hides</td><td>the fold</td><td><a href="#flip" aria-label="the fold">example</a></td></tr>
 </tbody>
 </table>
 <p class="dim">Read a row as a decision: the first column is the occasion — when a lesson sets out to teach that concept — the second is the tool that shows it, and the third opens it drawn on this page. A concept with no row is a concept the tool cannot show yet.</p>
@@ -207,7 +214,8 @@
 <h2>In-Block Features</h2>
 
 <div class="block" data-look="float" data-span="12">
-<p>Everything in this section goes inside a block, never as a block of its own: the underline, the timeline, the charts, the bar, the gloss, the key, the player, the map and the comic strip all live in the one block below. A block is still one idea — these are the marks that idea can wear while it is taught, and each one is half a row at most, paired with the teaching that reads it.</p>
+<p>Everything in this section goes inside a block: the underline, the timeline, the charts, the bar, the gloss, the key, the player, the map, the comic strip and the fold all live in the one block below. A block is still one idea — these are the marks that idea can wear while it is taught, and each one is half a row at most, paired with the teaching that reads it.</p>
+<p><b>And any one of them can be the block's own subject.</b> When the figure <i>is</i> what the block teaches, it stands alone under the block's own heading at whatever span it needs, with the prose beside it in a block of its own — §5's answered chart and its strip are that shape, and the same markup moves between the two without changing a line.</p>
 </div>
 
 <div class="block" data-span="12">
@@ -556,6 +564,39 @@
 <p class="dim">Panels are inline <code>svg</code> here; a block takes four frames from <code>assets/</code> or the same drawing, and the caption names the source. A strip takes a third of a row: the drawings stay small because the sentence is what is being read, and the sentence under each panel is the model the student copies. Taking the sentences out and putting a <code>.gap</code> under each panel is the same strip as an activity — §5 has it.</p>
 </div>
 </div>
+<div class="rows">
+<div id="flip" style="max-width:33.333%">
+<h4>A fold, when one thing has two faces</h4>
+<label class="flip" style="--flip-h:152px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face"><b>scene</b><span class="dim">The pallet stood where the forklift turns.</span></span>
+<span class="face back"><b>event</b><span class="dim">It went off on the night shift.</span></span>
+</span>
+</label>
+</div>
+<div>
+<h4>Two readings of one event</h4>
+<p>A fold holds two faces of the same thing and the student turns it to see the other: here the same report read as the scene it happens in and as the event itself. The card is the question and the turn is the answer, so nothing is typed.</p>
+<p class="dim">Two faces and no script: the checkbox holds the state, so the card stays turned, and print shows the first face. A fold takes a third of a row beside the prose that reads it; on its own it is a block whose subject is the two faces.</p>
+</div>
+</div>
+<details class="reveal" open><summary>Markup — a fold the student turns</summary><div class="body"><div>
+<pre>&lt;div class="rows"&gt;
+  &lt;div id="flip" style="max-width:33.333%"&gt;
+    &lt;h4&gt;what the two faces are&lt;/h4&gt;
+    &lt;label class="flip" style="--flip-h:152px"&gt;
+      &lt;input type="checkbox"&gt;
+      &lt;span class="card3d"&gt;
+        &lt;span class="face"&gt;&lt;b&gt;scene&lt;/b&gt;&lt;span class="dim"&gt;…&lt;/span&gt;&lt;/span&gt;
+        &lt;span class="face back"&gt;&lt;b&gt;event&lt;/b&gt;&lt;span class="dim"&gt;…&lt;/span&gt;&lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/label&gt;
+  &lt;/div&gt;
+  &lt;div&gt;…the prose that reads the two faces…&lt;/div&gt;
+&lt;/div&gt;</pre>
+<p class="dim">Two faces and no script: the checkbox holds the state, so the card stays turned, and print shows the first face. <code>--flip-h</code> is the one thing a lesson sets, and it is the height both faces share.</p>
+</div></div></details>
 <details class="reveal" open><summary>Markup — the comic strip</summary><div class="body"><div>
 <pre>&lt;table class="chart"&gt;
   &lt;tbody&gt;
@@ -737,14 +778,17 @@
 </div></div></details>
 </div>
 
-
-<h2>How an activity reports itself</h2>
-
-<div class="block" data-look="float" data-span="12">
-<p>An activity's state is written on the block, not drawn by the page: one attribute or class on the frame, the sheet reads it, and no element is added to make the change happen.</p>
+<div class="block" data-look="dark" data-span="6">
+<h3>The yard at night</h3>
+<p>At 2 a.m. the yard is lit by one lamp and the only sound is the compressor. Everything in the story happens in that light.</p>
+<div class="opts">
+<label class="opt"><input type="radio" name="dk1"><span>the yard at night</span></label>
+<label class="opt"><input type="radio" name="dk1"><span>the yard at dawn</span></label>
+</div>
+<p class="dim">The native controls follow the block, because it sets <code>color-scheme: dark</code>. The look is for a block whose content <i>is</i> a place, a screen or a night — never for making a block stand out.</p>
 </div>
 
-<div class="block" data-look="stripes" data-state="done" data-span="12">
+<div class="block" data-look="stripes" data-state="done" data-span="6">
 <h3>Every answer is in</h3>
 <p>Beto <input class="gap" data-answer="has" style="--gap-w:5em"> already posted it.</p>
 <p class="dim">The block carries <code>data-state="done"</code>: the border and the halo turn green, and nothing else about the block changes.</p>
@@ -756,105 +800,6 @@
 </div></div></details>
 </div>
 
-<h2>Motion</h2>
-
-<div class="block" data-span="6">
-<h3>A fold the student turns</h3>
-<label class="flip" style="--flip-h:152px">
-<input type="checkbox">
-<span class="card3d">
-<span class="face"><b>scene</b><span class="dim">The pallet stood where the forklift turns.</span></span>
-<span class="face back"><b>event</b><span class="dim">It went off on the night shift.</span></span>
-</span>
-</label>
-<p class="dim">Two faces and no script: the checkbox holds the state, so the card stays turned and prints the first face.</p>
-<details class="reveal" open><summary>Markup — a fold the student turns</summary><div class="body"><div>
-<pre>&lt;label class="flip" style="--flip-h:152px"&gt;
-  &lt;input type="checkbox"&gt;
-  &lt;span class="card3d"&gt;
-    &lt;span class="face"&gt;&lt;b&gt;scene&lt;/b&gt;&lt;span class="dim"&gt;…&lt;/span&gt;&lt;/span&gt;
-    &lt;span class="face back"&gt;&lt;b&gt;event&lt;/b&gt;&lt;span class="dim"&gt;…&lt;/span&gt;&lt;/span&gt;
-  &lt;/span&gt;
-&lt;/label&gt;</pre>
-<p class="dim">Two faces and no script: the checkbox holds the state, so the card stays turned, and print shows the first face.</p>
-</div></div></details>
-</div>
-
-<div class="block" data-look="dark" data-span="6">
-<h3>The yard at night</h3>
-<p>At 2 a.m. the yard is lit by one lamp and the only sound is the compressor. Everything in the story happens in that light.</p>
-<div class="opts">
-<label class="opt"><input type="radio" name="dk1"><span>the yard at night</span></label>
-<label class="opt"><input type="radio" name="dk1"><span>the yard at dawn</span></label>
-</div>
-<p class="dim">The native controls follow the block, because it sets <code>color-scheme: dark</code>.</p>
-</div>
-
-<div class="block" data-look="float" data-span="12">
-<p><b>What is absent, and stays absent.</b> No parallax, no infinite animation, no cursor effect. Every motion is CSS, settles in under half a second, and stops under <code>prefers-reduced-motion</code>. A reveal tied to the viewport was specified and has been dropped: a student scrolling back to re-read should not watch the page arrive again.</p>
-</div>
-
-
-<h2>Documented, not built</h2>
-
-<div class="block" data-look="float" data-span="12">
-<p>These are specifications with no code behind them. A lesson cannot use them today, and offering them would be offering a shape that does not exist.</p>
-</div>
-
-<div class="block" data-span="12">
-<h3>What is missing</h3>
-<table class="chart" style="width:100%">
-<thead><tr><th>Wanted</th><th>What is written</th><th>What is missing</th></tr></thead>
-<tbody>
-<tr><td>at / on / in, then to / into / onto</td><td>six small drawings: junction, wall, enclosure, arrow short of a place, arrow crossing an outline, arrow meeting a face</td><td>no markup contract, no classes</td></tr>
-<tr><td>a sentence rebuilt from shuffled chunks</td><td>chips in a row and one box for the whole sentence</td><td>the chip class named in the spec does not exist</td></tr>
-<tr><td>passive against active</td><td>two rows with the changed element drawn in both and a leader between</td><td>no component and no markup</td></tr>
-</tbody>
-<tbody>
-<tr class="grp"><th colspan="3">Maybe later, and ignored until then</th></tr>
-<tr><td>stress, rise and fall, links, dropped letters, syllable rules</td><td>eight inline mark classes, specified with the phrases they suit</td><td>no class of that family exists in the stylesheet</td></tr>
-<tr><td>a contour over a spoken line</td><td>a drawing rule: one path per sentence, one glyph per syllable</td><td>no component and no clip to hang it on</td></tr>
-</tbody>
-</table>
-</div>
-
-<h2>Decisions recorded</h2>
-
-<div class="block" data-span="12">
-<h3>What is settled, and what is dropped</h3>
-<div class="cols">
-<div>
-<h4>What is settled</h4>
-<ul>
-<li><b>The player.</b> The mini player is the capability. The full audio block is a <i>composition</i> of the mini player with a lyrics column and one paragraph — not a second component, and not something the author has to choose between.</li>
-<li><b>Time.</b> The timeline — <code>&lt;figure class="tlw" data-tense="…"&gt;</code> — is the one to use: it is pinned under the one word the tense belongs to. The now-centred drawing (<code>.tlx</code>) and the draft plot of claim spans are <b>superseded</b> and are prune candidates: one question to answer, and only one of these geometries should survive.</li>
-<li><b>Intonation.</b> Neither the contour nor the inline marks are in use. Build or prune, decided before either is offered to a lesson.</li>
-<li><b>The underline is the exception among figures.</b> Its contract is a script that reads a sentence and prints the spans, so the markup is generated, never hand-typed. An inline timeline is generated the same way, from the same call.</li>
-<li><b>A look is declared, never inferred.</b> The hue is the track's; no block sets its own colour.</li>
-<li><b>The span is chosen, not measured.</b> The number is written on the block, and DOM order stays the order on the page.</li>
-<li><b>No score bar, anywhere.</b> Nothing on a page counts answers: <code>engine2.js</code> reveals keys and knows only whether the page is complete, and no script writes <code>--score</code>. A bar at the foot of the lesson would be a number typed by hand, so a section reports its state on the block and nowhere else.</li>
-<li><b>One reference, not two.</b> Everything a retired elements page demonstrated is a block or a card-less figure in §4–§7, so the page a lesson reads and the page a person reads are the same page.</li>
-</ul>
-</div>
-<div>
-<h4>What is dropped</h4>
-<ul>
-<li><b>Reading mode.</b> It narrows the page for one reader, and a teacher and a student looking at the same lesson must see the same page. Propagating the switch from the student's device to the teacher's would be a mechanism that can fail mid-lesson, for a feature a phone's own viewport already provides.</li>
-<li><b>A viewport-triggered reveal.</b> Motion here is what the student controls or what an activity reports; a scroll-triggered arrival replays itself every time the page is re-read.</li>
-<li><b>Hand-lettered headings.</b> The sheet numbers the section and each block's heading takes the next letter from it; a heading that writes its own number or letter shows it twice.</li>
-<li><b>A second frame inside one block.</b> A block is the frame; a panel inside it is a card that says the block has two subjects.</li>
-</ul>
-</div>
-</div>
-</div>
-
-<h2>Gaps</h2>
-
-<div class="block" data-span="12">
-<h3>Concepts no tool draws</h3>
-<p>Concepts the course owes and cannot draw: <b>how sure the speaker is</b> (modal strength), <b>how often something happens</b>, and <b>register</b> — what is too rude, too stiff or too casual for the room. Those lessons carry the work in prose and in the choice of examples, and a figure invented for them would be a diagram of taste.</p>
-<p class="dim">This page is the tool reference a lesson is written against. It is unlinked from the site index, holds no answer, saves nothing, and loads only the player. Add a row when a concept is planned; add a block when a figure is built; delete a row when it is pruned.</p>
-</div>
 
 </div>
 <footer>MATERIAIS SIMPLES E INOVADORES · INGLES CERTO EUA</footer>
