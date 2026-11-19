@@ -873,8 +873,9 @@
   .content-area>*[data-span="9"]{grid-column:span 9}
   .content-area>*[data-rows="2"]{grid-row:span 2}
   .content-area>*[data-rows="3"]{grid-row:span 3}
-  /* parallel items inside one block: one flex row, evenly spaced, never a second grid */
-  .cols{display:flex;gap:var(--col-gap,18px);align-items:flex-start;flex-wrap:wrap}
+  /* parallel items inside one block: one flex row, evenly spaced, never a second grid.
+     Its gap is wider than the grid's: a row of columns has no frame between them to read as an edge. */
+  .cols{display:flex;gap:var(--flex-gap,26px);align-items:flex-start;flex-wrap:wrap}
   .cols>*{flex:1 1 var(--cw,220px);min-width:0}
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
