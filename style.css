@@ -1313,6 +1313,9 @@
   .flip .face::after{content:"↻";position:absolute;right:10px;bottom:8px;color:var(--ink-2);
     font-family:var(--sans);opacity:.6}
   .flip .back{rotate:y 180deg;background:var(--accent-soft);border-color:var(--accent-line)}
+  /* the card block's prompt: the h4 is the sentence the student answers, so it reads 4px larger than
+     every other h4 on the page — this one selector and nowhere else */
+  .flip-ask{font-size:calc(var(--s-1) + 6px)}
 }
 
 /* #95 PRINT — @media print rules for .block, .reveal, .flip, .mark, .meter. Vary: none */
