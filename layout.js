@@ -20,6 +20,10 @@ window.LayoutEditor = (function () {
   var THRESH = 4;   /* px of travel before a press counts as a drag, so a click keeps its caret */
 
   var STILL = 'h1,h2,h3';
+  /* THE SMALLEST THING A PRESS MAY PICK UP is a paragraph, a question-and-answer pair, a chart or a
+     cell — never a word, a span, a bold or a link. Editing inside a paragraph is copy and paste in the
+     text mode, not a drag. So a press walks up to the nearest grain and drags THAT. */
+  var GRAIN = 'p,ul,ol,dl,figure,table,pre,blockquote,div,section,article,aside,header,footer,form,fieldset,details,hr';
   var COMPOSITE = '.qitem,label.flip,figure,table,.seq,.tlgrid,.flip-grid,.chartwrap,.viz';
   var PARTS = '.qopts,.qstem,.qline,.qnum,input,textarea,button,select,option,td,th,.gap,.write,.listen,.glossbtn,.ans';
   /* a container that cannot hold an item, because the browser would not have parsed it there */
@@ -38,6 +42,7 @@ window.LayoutEditor = (function () {
   function movable(n) {
     if (!inside(n) || still(n) || part(n)) return false;
     if (n.matches(COMPOSITE)) return true;
+    if (!n.matches(GRAIN)) return false;          /* a span, a bold, a link: never picked up */
     return !(n.closest && n.closest(COMPOSITE));
   }
 
@@ -78,6 +83,19 @@ window.LayoutEditor = (function () {
     if (!el) return null;
     if (el === ca()) return { box: ca(), inside: true, host: null };
     if (!inside(el)) return null;
+    /* BETWEEN TWO ROWS is its own target, and it is the top or bottom band of a row: a cell dropped
+       there leaves the row it came from and stands between rows, instead of joining the next row. */
+    var row = el.closest ? el.closest('.rows') : null;
+    if (row && row.parentElement) {
+      var rr = row.getBoundingClientRect(), band = Math.min(18, rr.height / 3);
+      if (y < rr.top + band || y > rr.bottom - band) {
+        var rp = row.parentElement;
+        if (accepts(n, rp)) {
+          var before = y < rr.top + rr.height / 2;
+          return { box: rp, ref: before ? row : row.nextElementSibling, inside: false, host: row, before: before };
+        }
+      }
+    }
     var r = el.getBoundingClientRect(), f = flow(el), e = 18;
     var onEdge = f === 'x' ? (x < r.left + e || x > r.right - e)
                            : (y < r.top + e || y > r.bottom - e);
@@ -306,7 +324,14 @@ window.LayoutEditor = (function () {
     if (!ON || e.button !== 0) return;
     if (!chipEl) paintChip();          /* a save cleaned the chrome away; the press brings it back */
     var n = e.target && e.target.nodeType === 1 ? e.target : null;
-    if (!n || !movable(n)) return;
+    if (!n) return;
+    /* walk up to the nearest thing that may be picked up: a word becomes its paragraph, a chart's cell
+       becomes its table, an option becomes the whole question */
+    while (n && !movable(n)) {
+      if (n === ca() || !n.parentElement) return;
+      n = n.parentElement;
+    }
+    if (!n) return;
     drag = { node: n, x: e.clientX, y: e.clientY, on: false, t: null, attr: null, target: n };
     window.addEventListener('pointermove', move, true);
     window.addEventListener('pointerup', up, true);
