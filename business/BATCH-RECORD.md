@@ -41,5 +41,25 @@ L9 | S1-rul@timeline:rul>ex>mng | S2-rul@chart:rul>ex | S3-con@chart:con>ex | S4
 
 L10 | S1-rul@chart:rul>ex>ex | S2-rul@chart:rul>ex | S3-mng@gloss:mng>ex | S4-voc:voc>ex | S5-rsn:rsn>ex | S6-rcp:ex | Q:rul>voc>ex | el:fill:2,chartanswer:2,mc:2,translation:2,dictation:1,chunks:1,correction:1 | qel:mc:1,fill:1,chartanswer:1,translation:1,correction:1 | reg:8/8
 
+L11 | S1-rul@chart:rul>ex | S2-rsn@gloss:rsn>ex | S3-rul@chart:con>rul | S4-voc@flip:voc>ex | S5-mng@gloss:mng>voc | S6-soc@dialog:soc | S7-exc@pos:exc>rul | S8-rcp:rcp>mng>ex | Q:con>rul>mng>voc>rul>con | el:chartanswer:3,fill:2,matching:2,correction:2,translation:2,flip:1,dialoggap:1,dictation:1,mc:1 | qel:mc:1,fill:1,chartanswer:1,matching:1,correction:1,translation:1 | reg:10/10
+
+L12 | S1-rul@timeline:rul>ex | S2-rul@chart:rul>con | S3-voc@chart:voc>ex | S4-prn@key:prn>ex | S5-rul@pair:rul>ex | S6-soc@dialog:soc | S7-soc@map:soc | S8-rcp:rcp>ex>ex | Q:con>rul>ex>voc>rul>con | el:fill:2,mc:2,chartanswer:2,correction:2,translation:2,chunks:2,dictation:1,dialoggap:1,map:1 | qel:mc:1,fill:1,chunks:1,chartanswer:1,correction:1,translation:1 | reg:10/10
+
+L13 | S1-mng@chart:mng>ex | S2-con@gloss:con>ex | S3-voc@chart:voc>mng | S4-rul:rul>con | S5-rcp:ex | S6-soc@dialog:soc | S7-mng:ex | Q:con>rul>voc>rul>ex>con | el:mc:2,fill:2,correction:2,translation:2,matching:1,stripgaps:1,dialoggap:1,chartanswer:1,dictation:1 | qel:mc:1,fill:1,chartanswer:1,correction:1,dictation:1,translation:1 | reg:9/9
+
+L14 | S1-rul@timeline:rul>ex | S2-rul@chart:con>ex | S3-mng@gloss:mng>ex | S4-voc@flip:voc>ex | S5-rul:rul>con | S6-soc@dialog:soc | S7-mng:ex>ex | Q:mng>rul>con>voc>ex>mng | el:fill:2,chartanswer:2,mc:2,translation:2,flip:1,correction:1,dialoggap:1,chunks:1,matching:1,dictation:1 | qel:mc:1,fill:1,chartanswer:1,matching:1,dictation:1,translation:1 | reg:9/9
+
+L15 | S1-rul@pos:rul>ex | S2-voc@chart:voc>mng | S3-rul@chart:con>ex | S4-exc@gloss:mng>ex | S5-soc@dialog:soc>ex | S6-rul:rul>con | S7-mng:ex>ex | Q:con>rul>mng>voc>ex>con | el:mc:2,matching:2,chartanswer:2,fill:2,translation:2,chunks:2,dialoggap:1,correction:1,dictation:1 | qel:mc:1,fill:1,chartanswer:1,matching:1,dictation:1,translation:1,chunks:1 | reg:9/9
+
+L16 | S1-rsn@chart:rsn>ex | S2-con@chart:con>ex | S3-voc@gloss:voc>mng | S4-exc:exc>con | S5-soc@map:soc | S6-mng@dialog:mng>ex | S7-rcp:rcp>ex>ex | Q:con>rul>rul>mng>voc>con | el:mc:2,chartanswer:2,matching:2,fill:2,translation:2,map:1,dialoggap:1,chunks:1,correction:1 | qel:mc:1,fill:1,correction:1,chartanswer:1,matching:1,translation:1 | reg:9/9
+
+L17 | S1-rul@chart:rul>ex | S2-con@chart:con>ex | S3-voc@gloss:voc>mng | S4-rul:rul>con | S5-rcp@stripgaps:rcp | S6-soc@dialog:soc>ex | S7-mng:mng>ex>ex | Q:con>rul>voc>mng>ex>con | el:fill:2,chartanswer:2,translation:2,matching:1,correction:1,stripgaps:1,dialoggap:1,chunks:1,mc:1,flip:1,dictation:1 | qel:mc:1,fill:1,chartanswer:1,flip:1,dictation:1,translation:1 | reg:9/9
+
+L18 | S1-rul@chart:rul>ex | S2-mng@chart:mng>ex | S3-voc@gloss:voc>mng | S4-rul:rul>con | S5-soc@dialog:soc>ex | S6-rcp:rcp>ex>ex | Q:con>rul>voc>ex>ex>con | el:mc:2,chartanswer:2,translation:2,chunks:2,matching:1,correction:1,dialoggap:1,fill:1,dictation:1 | qel:mc:1,fill:1,chartanswer:1,chunks:1,dictation:1,translation:1 | reg:8/8
+
+L19 | S1-rul@pos:rul>ex | S2-soc@chart:con>ex | S3-voc@chart:voc>mng | S4-tim:rul>con | S5-soc@dialog:soc>ex | S6-rcp:rcp>ex>ex | Q:con>rul>voc>mng>ex>con | el:mc:2,chartanswer:2,matching:2,translation:2,correction:1,dialoggap:1,chunks:1,fill:1,dictation:1 | qel:mc:1,fill:1,chartanswer:1,matching:1,dictation:1,translation:1 | reg:8/8
+
+L20 | S1-rul@chart:rul>ex | S2-rul@chart:mng>ex | S3-voc@gloss:voc>mng | S4-exc:rul>con | S5-soc@map:soc | S6-soc@dialog:soc>ex | S7-rcp:rcp>ex>ex | Q:mng>rul>con>rul>voc>con | el:mc:2,chartanswer:2,matching:2,correction:2,translation:2,map:1,dialoggap:1,chunks:1,fill:1 | qel:mc:1,fill:1,chartanswer:1,correction:1,matching:1,translation:1 | reg:9/9
+
 
 
