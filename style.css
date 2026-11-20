@@ -901,14 +901,18 @@
         padding-top:8px}
   .cols>*{flex:1 1 var(--cw,220px);min-width:0}
   /* a row is one line, and its direct children are its cells.
-     >>> THE DEFAULT, AND IT DOES NOT MOVE. Every cell of a row takes an EQUAL SHARE of the row —
-         `flex:1 1 0`, basis ZERO, so content never decides a cell's width: a row of two is two halves, a
-         row of three is three thirds, whether one cell holds a chart and the next holds one word. This is
-         the owner's instruction (2026-11-20) and it is a SITE DEFAULT, never a per-page choice.
+     >>> THE DEFAULT, AND IT DOES NOT MOVE. A cell's width comes from WHAT IT HOLDS. `flex:1 1 auto`,
+         basis auto: a cell with more text takes more of the line, a cell with less takes less, and the two
+         columns wrap to similar depths so their heights come out near each other. Content decides the
+         width; nothing else does.
+         This is the owner's instruction (2026-11-20) and it is a SITE DEFAULT, never a per-page choice.
+         DO NOT change this rule to an EQUAL SHARE (`flex:1 1 0`, basis zero). That was tried on
+         2026-11-20 and reverted the same day: basis zero ignores what a cell holds, so a heavy cell and a
+         thin one take the same width and their heights pull further apart, not closer. "Proportional"
+         here means proportional to the content, never 1/n of the row.
          A page that wants a different proportion writes it ON THAT PAGE, as an inline flex on that cell
          (the layout editor's panel does exactly this, and marks the cell red). A request that "this row
-         should be wider/narrower" is answered there. DO NOT change this rule back to content-sized cells;
-         and never read a request about one page's look as a request about this default.
+         should be wider/narrower" is answered there, never by changing this rule.
      THE TWO EXCEPTIONS, and they are the only two: a cell whose whole content is one chart (.chartwrap or
      table.chart alone) keeps the width its contents need (:has rule below), and a cell the page itself
      pins with an inline width. A drawing inside a cell is capped with --map-w; that caps the drawing, not
@@ -917,7 +921,7 @@
      NOTHING WRAPS — a fifth item is a second `.rows`, never a second line inside this one. */
   .content-area{container-type:inline-size}
   .rows{display:flex;flex-wrap:nowrap;gap:var(--flex-gap,26px);align-items:stretch;padding-top:20px}
-  .rows>*{display:flex;flex-direction:column;flex:1 1 0;min-width:calc(25% - 20px)}
+  .rows>*{display:flex;flex-direction:column;flex:1 1 auto;min-width:calc(25% - 20px)}
   .rows>*{min-width:calc(25cqw - 34px)}
   /* a dialog, a player or a comic takes the row's height; the map does not — its frame is drawn on the
      drawing, so it keeps the drawing's own 3:2 box and the cell around it holds the rest */
