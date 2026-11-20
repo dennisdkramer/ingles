@@ -305,7 +305,7 @@
 
    - Focus: Screen dialogue is fast, contracted and full of chunks the dictionary teaches separately, so the job is hearing the ordinary sentence inside the noise.
    - teaches: `sound/contraction-in-speech`, `sound/swallowed-syllable`, `pragmatics/line-vs-words`
-   - Deepens: `axis/written-vs-spoken` - a script is written English performed as speech, so the gap between what is printed and what is said becomes the subject of the lesson.
+   - Deepens: `reduction/gonna-future-mode` - the reductions learned as whole words now arrive mid-sentence and at speed, so the same form has to be caught inside a line rather than recognised alone.
    - Uses: `present-continuous/now`, `past-simple/irregular`, `question/wh-order`, `phrase-verb/default-form`
    - Vocabulary: "whatcha doin'", "gonna", "wanna", "kinda", "you know", "I mean", "look", "come on", "no way", "whatever", "my bad", "long story"
    - Examples: "What are you doing?" spoken as "Whatcha doin'?" / "I'm not going to do that" spoken as "I'm not gonna do that." / "Do you want to get out of here?" spoken as "Wanna get outta here?" / "I've told you a million times." with "I'm out" as the informal note under "I'm leaving"
@@ -367,7 +367,7 @@
    - Focus: An unreal past takes if + had + participle and would have, and the short forms are should have and could have.
    - teaches: `condition/third-would-have`, `modal/should-have`, `modal/could-have`, `mitigation/downgrade`, `pragmatics/understatement`, `discourse/bad-news-order`
    - Deepens: `condition/second-would` - the unreality moves from the present to the past, so the if-clause gains had and the other half gains have.
-   - Uses: `condition/second-would`, `present-perfect/have-participle`, `reduction/wanna-woulda`, `past-simple/irregular`, `hedge/claim-strength`
+   - Uses: `condition/second-would`, `present-perfect/have-participle`, `reduction/wanna-woulda`, `past-simple/irregular`
    - Vocabulary: "if we had", "would have", "should have", "could have", "in hindsight", "looking back", "at the time", mistake, regret, missed, unfortunately, "learn from", "I'm afraid", "a slight delay", "it slipped", "two weeks behind", "keep you posted"
    - Examples: "If we had tested it, we wouldn't have shipped the bug." / "We should have called the client earlier." / "I could have caught that in review." / "In hindsight, the date was too tight." / "I'm afraid the release slipped a little - two weeks." / "Not bad, considering" with "yeah, we screwed up" as the informal note under "we made a mistake"
    - Examples: "If we had tested it, we wouldn't have shipped the bug." / "We should have called the client earlier." / "I could have caught that in review." / "In hindsight, the date was too tight."
@@ -386,9 +386,9 @@
 ## Lesson 39: The same idea in two forms
 
    - Focus: One meaning has a spoken form, a written form and an informal note, and the setting picks the form.
-   - teaches: `axis/phrasal-vs-latinate`, `axis/written-vs-spoken`, `informal/sidenote-pairing`, `nominalisation/verb-to-noun`, `ellipsis/written-answer`
+   - teaches: `axis/phrasal-vs-latinate`, `axis/written-vs-spoken`, `informal/sidenote-pairing`, `nominalisation/verb-to-noun`, `ellipsis/written-answer`, `modal/request-softening`
    - Deepens: `axis/contraction`, `axis/direct-vs-indirect` - the axis now runs between two complete ways of saying the same thing, not only between levels of force on one wording.
-   - Uses: `phrase-verb/default-form`, `axis/contraction`, `axis/direct-vs-indirect`, `modal/request-softening`, `question/embedded-order`
+   - Uses: `phrase-verb/default-form`, `axis/contraction`, `axis/direct-vs-indirect`, `question/embedded-order`
    - Vocabulary: "set up" next to arrange, "go over" next to review, "sort out" next to resolve, "get back to" next to respond, "in writing", casual, tone, "too formal", "too much", "whatever works", "appreciate it", "no worries", confirmation, approval
    - Examples: "Let's set up a call" (speech) against "We will arrange a call" (writing) / "I'll send it over" against "I will forward it" / "Could you confirm the date?" next to "Confirmation of the date would help." / "We'll send it Friday." next to "Sending Friday." / "Fine, that works" with "yeah, whatever" as the informal note under it
    - Real-world relevance: This is the lesson that lets the persona move between a client email, a team chat and a call without changing personality or committing an offence.
@@ -397,9 +397,9 @@
 ## Lesson 40: Pushing back without a fight
 
    - Focus: The objection that ends in an agreement: concede a clause, name the risk, trade one variable for another.
-   - teaches: `concession/even-though-despite`, `condition/trade-off`, `discourse/counter-move`, `discourse/turn-marker`, `report/paraphrase-summary`
-   - Deepens: `concession/partial-agreement` - agreeing with part of a point now becomes a clause of its own, so the concession and the objection share one sentence instead of taking two turns.
-   - Uses: `concession/partial-agreement`, `condition/first-will`, `condition/second-would`, `axis/hedge`, `question/echo-clarify`
+   - teaches: `concession/even-though-despite`, `condition/trade-off`, `discourse/counter-move`, `discourse/turn-marker`, `report/paraphrase-summary`, `concession/partial-agreement`
+   - Deepens: `condition/second-would` - the hypothetical that imagined a situation now becomes the polite way to offer a trade, so the same form carries a proposal instead of a regret.
+   - Uses: `condition/first-will`, `condition/second-would`, `axis/hedge`, `question/echo-clarify`
    - Vocabulary: "I hear you", "even though", "despite", "the catch is", "on the other hand", "trade-off", "what if", "either way", "meet halfway", "not sure that works", "that's a fair point", "can I jump in", "so what you're saying is", "fair enough, though", deal
    - Examples: "Even though the cost works, the timeline is the risk." / "If you move the date, we can deliver the full scope." / "What if we start with phase one and review in March?" / "Can I jump in? So what you're saying is the date can't move." / "Fair enough on the cost - the only thing is the timing." / "So we agree on scope; I'll confirm the date by Friday." with "yeah, that's not gonna fly" as the informal note under "that won't work"
    - Real-world relevance: Scope, date and budget are the three variables of every project conversation, and a professional who cannot trade them is only a messenger.
