@@ -1703,6 +1703,13 @@
     background:var(--paper);color:var(--ink);font:600 .72rem/1.45 var(--sans);
     box-shadow:var(--shadow-2)}
   body.layout-panelled .layout-panel{display:block}
+  .layout-panel .layout-acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+  .layout-panel button{font:600 .68rem var(--sans);padding:3px 9px;cursor:pointer;
+    border:1px solid var(--line);border-radius:99px;background:var(--paper);color:var(--ink)}
+  .layout-panel button:hover{border-color:var(--accent);color:var(--accent)}
+  .layout-panel .layout-w{flex:1 1 9em;min-width:8em;font:600 .68rem var(--sans);
+    padding:3px 8px;border:1px solid var(--line);border-radius:99px;background:var(--paper);
+    color:var(--ink)}
   @media print{.layout-line,.layout-chip,.layout-panel{display:none!important}}
 
   html.kbd .tswitch input:focus-visible~.tsw-track{outline:2px solid var(--tan);

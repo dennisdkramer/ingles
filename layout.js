@@ -147,7 +147,7 @@ window.LayoutEditor = (function () {
     try {
       var cs = getComputedStyle(n);
       if (cs.display === 'flex' || cs.display === 'grid') out.push('display: ' + cs.display + ' · direction: ' + (cs.flexDirection || '-'));
-      out.push('flex: ' + (cs.flex || '-') + ' · min-width: ' + (cs.minWidth || '-'));
+      out.push('flex: ' + (cs.flex || '-') + ' · basis: ' + (cs.flexBasis || '-') + ' · min: ' + (cs.minWidth || '-') + ' · now: ' + (cs.width || '-'));
     } catch (e) { }
     out.push(n.children.length + ' child' + (n.children.length === 1 ? '' : 'ren'));
     return out.join(' — ');
@@ -166,17 +166,82 @@ window.LayoutEditor = (function () {
     if (sel) sel.setAttribute('data-layout-sel', '');
     paintPanel();
   }
+  /* ---- the width actions -------------------------------------------------------------
+     A row's cells are `flex:1 1 auto` with a floor of a quarter of the page (style.css
+     .rows>*), so their widths come from their own content and grow by equal shares: nothing
+     in the sheet ever asks for equal widths, and a cell never collapses to even the heights
+     by itself. These four actions are the repair, and they write only the cell's own inline
+     `flex` — no class, no wrapper, no change to the sheet.
+       even row          every cell in this row at an exact share of the line
+       half / full       this cell fixed at half the line, or on a line of its own
+       auto (clear)      the cell's inline width is REMOVED, so the flow decides again —
+                         the repair for a width the builder hand-wrote. */
+  function setFlex(n, v) {
+    if (!n) return;
+    if (v === null) n.style.removeProperty('flex');
+    else n.style.flex = v;
+    if (!n.getAttribute('style')) n.removeAttribute('style');
+  }
+  function act(what, field) {
+    if (!sel) return;
+    var n = sel, row = n.parentElement;
+    if (what === 'set' && field) {
+      var v = String(field.value || '').trim().replace(/^style\s*=\s*/i, '');
+      if (!v || /^(auto|none|-)$/i.test(v)) what = 'auto';
+      else {
+        /* a bare number is a width; anything else is taken as the flex shorthand it looks like */
+        n.style.flex = /^[\d.]+(%|px|em|rem|vw)?$/.test(v) ? '0 0 ' + v : v;
+        if (!n.getAttribute('style')) n.removeAttribute('style');
+      }
+    }
+    if (what === 'auto') {
+      /* `flex` is a SHORTHAND, and the browser expands it into the three longhands the moment it is
+         set — so removing `flex` alone removes nothing. Every form a builder might have written is
+         cleared here, and a cell left with no style at all loses the attribute entirely. */
+      ['flex', 'flex-grow', 'flex-shrink', 'flex-basis', 'min-width', 'width', 'max-width', 'flex-wrap']
+        .forEach(function (p) { n.style.removeProperty(p); });
+      if (!n.getAttribute('style')) n.removeAttribute('style');
+    } else if (what === 'half') setFlex(n, '0 0 calc(50% - 13px)');
+    else if (what === 'full') setFlex(n, '0 0 100%');
+    else if (what === 'even' && row && row.classList && row.classList.contains('rows')) {
+      var kids = [].filter.call(row.children, function (k) { return k.nodeType === 1; }), c = kids.length;
+      kids.forEach(function (k) { k.style.flex = '0 0 calc((100% - ' + (c - 1) + ' * 26px) / ' + c + ')'; });
+    }
+    markPins(); select(n); paintChip();
+  }
+
   function paintPanel() {
     if (!ON) { if (panelEl) panelEl.style.display = 'none'; document.body.classList.remove('layout-panelled'); return; }
     if (!panelEl) {
       panelEl = document.createElement('div');
       panelEl.className = 'layout-panel';
       panelEl.setAttribute('role', 'status');
+      panelEl.innerHTML = '<div class="layout-facts"></div><div class="layout-acts">' +
+        '<button type="button" data-act="even">even row</button>' +
+        '<button type="button" data-act="half">half</button>' +
+        '<button type="button" data-act="full">full</button>' +
+        '<button type="button" data-act="auto">clear width</button>' +
+        '<input class="layout-w" type="text" placeholder="40% · 320px · 0 0 auto" aria-label="this cell\'s flex">' +
+        '<button type="button" data-act="set">set</button></div>';
+      panelEl.addEventListener('click', function (e) {
+        var b = e.target && e.target.closest ? e.target.closest('[data-act]') : null;
+        if (!b) return;
+        e.preventDefault(); e.stopPropagation();
+        act(b.getAttribute('data-act'), panelEl.querySelector('.layout-w'));
+      });
+      panelEl.addEventListener('keydown', function (e) {
+        if (e.target && e.target.classList && e.target.classList.contains('layout-w') && e.key === 'Enter') {
+          e.preventDefault(); e.stopPropagation(); act('set', e.target);
+        }
+      });
       document.body.appendChild(panelEl);
     }
     document.body.classList.add('layout-panelled');
+    var box = panelEl.querySelector('.layout-facts');
     var txt = facts(sel);
-    if (panelEl.textContent !== txt) panelEl.textContent = txt;
+    if (box && box.textContent !== txt) box.textContent = txt;
+    var w = panelEl.querySelector('.layout-w');
+    if (w && sel && document.activeElement !== w) w.value = sel.getAttribute('style') || '';
   }
 
   /* the chip is the tool's whole control surface: what it is, how many moves, and undo */
