@@ -45,13 +45,13 @@ if (open !== close) fail(`div tags unbalanced: ${open} open / ${close} close`);
 const nested = dom.querySelectorAll('.block .block').length;
 if (nested) fail(`${nested} block(s) nested inside a block — a block is never a second block`);
 
-/* 5 — every key in the map is a key: a radio group whose value carries it, a gap with an answer */
+/* 5 — every key in the map is a key: a radio or checkbox group whose value carries it, a gap with an answer */
 for (const q of dom.querySelectorAll('.qitem[data-a]')) {
-  const vals = [...q.querySelectorAll('input[type=radio]')].map(i => i.value);
+  const vals = [...q.querySelectorAll('input[type=radio], input[type=checkbox]')].map(i => i.value);
   if (!vals.includes(q.getAttribute('data-a'))) {
-    fail(`.qitem data-a="${q.getAttribute('data-a')}" matches no radio value (${vals.join(',') || 'none'})`);
+    fail(`.qitem data-a="${q.getAttribute('data-a')}" matches no option value (${vals.join(',') || 'none'})`);
   }
-  if (!vals.length) fail('.qitem[data-a] holds no radio');
+  if (!vals.length) fail('.qitem[data-a] holds no radio or checkbox');
 }
 for (const el of dom.querySelectorAll('[data-answer]')) {
   if (!el.getAttribute('data-answer').trim()) fail(`${el.tagName.toLowerCase()} carries an empty data-answer`);

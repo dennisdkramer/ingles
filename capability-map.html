@@ -426,21 +426,20 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
        aria-label="everything the drawing shows, named"&gt;…&lt;/svg&gt;
 &lt;/div&gt;</pre>
 <p class="dim">The frame keeps the viewBox's 3:2 box and the cell around it holds the rest; <code>--map-w</code> caps the drawing when it must be smaller than its cell, and <code>aria-label</code> names everything in the drawing, because the drawing is all a screen reader gets. Both forms are drawn above: the display with the visuals, the question at the end of the activities.</p>
-<pre>&lt;!-- as an activity: the same drawing, and one answerable question about it --&gt;
-&lt;div class="block" data-activity="mc"&gt;
+<pre>&lt;!-- as an activity: the same drawing, one tick beside each place it draws, and one key --&gt;
+&lt;div class="block" data-activity="map"&gt;
   &lt;div class="vz-map viz"&gt;…the same svg…&lt;/div&gt;
-  &lt;div class="qitem" data-a="c"&gt;
-    &lt;p class="qstem"&gt;You leave the station and walk east along High Street.
-      What is on the corner where the next street crosses?&lt;/p&gt;
+  &lt;div class="qitem" data-a="bank"&gt;
+    &lt;p class="qstem"&gt;any prose that points at one place&lt;/p&gt;
     &lt;div class="qopts"&gt;
-      &lt;label class="opt"&gt;&lt;input type="radio" name="map1" value="a"&gt;&lt;span&gt;the bank&lt;/span&gt;&lt;/label&gt;
-      &lt;label class="opt"&gt;&lt;input type="radio" name="map1" value="b"&gt;&lt;span&gt;the park&lt;/span&gt;&lt;/label&gt;
-      &lt;label class="opt"&gt;&lt;input type="radio" name="map1" value="c"&gt;&lt;span&gt;the café&lt;/span&gt;&lt;/label&gt;
-      &lt;label class="opt"&gt;&lt;input type="radio" name="map1" value="d"&gt;&lt;span&gt;the market&lt;/span&gt;&lt;/label&gt;
+      &lt;label class="opt"&gt;&lt;input type="checkbox" value="station"&gt;&lt;span&gt;the station&lt;/span&gt;&lt;/label&gt;
+      &lt;label class="opt"&gt;&lt;input type="checkbox" value="cafe"&gt;&lt;span&gt;the café&lt;/span&gt;&lt;/label&gt;
+      …one label per place the drawing shows, its value the place's id…
+      &lt;label class="opt"&gt;&lt;input type="checkbox" value="bank"&gt;&lt;span&gt;the bank&lt;/span&gt;&lt;/label&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</pre>
-<p class="dim">The map is the stem, so the activity is a multiple-choice item: one prompt, one key, every option a place the drawing shows. It may ask for a position (<i>which place is across from the library?</i>), what the place is for (<i>where do you send a letter?</i>) or a route (<i>walk out of the station, turn right, and stop at the second corner — where are you?</i>) — versatile, and always one answer. Without a control it is a display, and the places it draws are the referent for whatever the prose asks.</p>
+<p class="dim">Each place on the drawing gets one checkbox whose <code>value</code> is that place, and the answer is the one place named by <code>data-a</code> on the <code>.qitem</code> — the same key a radio group uses, so engine2 marks it and freezes it on Complete. It is not a choice between four options: every place is present and the student ticks the one. The prose is free and may point at the place any way the lesson teaches — a route (<i>turn right out of the café, then your first left, then back a block — the destination is on your left</i>), a relation (<i>to the left of the café</i>), or its use (<i>where you send a letter</i>) — but the answer is always one place on the drawing. Marking more than one ticks more than one; only the keyed one is marked correct.</p>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #comic · the comic strip</summary><div class="body"><div>
 <pre>&lt;table class="chart"&gt;
@@ -724,7 +723,7 @@ next();
 </div>
 
 <div class="rows">
-<div class="block" data-activity="mc" id="mapq">
+<div class="block" data-activity="map" id="mapq">
 <h3>The map as a question</h3>
 <div class="vz-map viz">
 <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, eight places each drawn with its name on a sign — a station under a canopy with a clock, a café with a striped awning, a park with trees, a bank under a dollar sign, a library wall of books, a post office with a postbox, a bus shelter, and two market awnings">
@@ -788,13 +787,17 @@ next();
   </g>
 </svg>
 </div>
-<div class="qitem" data-a="a">
-<p class="qstem">You just finished eating at the café, took a right out of the building, and then your first left. You went to the end of the street there, but then realized you went too far. You turned around and walked back a block — your destination is on your left. Mark it on the map.</p>
+<div class="qitem" data-a="bank">
+<p class="qstem">You just finished eating at the café, took a right out of the building, and then your first left. You went to the end of the street there, but then realized you went too far. You turned around and walked back a block — your destination is on your left. Tick it on the map.</p>
 <div class="qopts">
-<label class="opt"><input type="radio" name="map2" value="a"><span>the bank</span></label>
-<label class="opt"><input type="radio" name="map2" value="b"><span>the park</span></label>
-<label class="opt"><input type="radio" name="map2" value="c"><span>the café</span></label>
-<label class="opt"><input type="radio" name="map2" value="d"><span>the market</span></label>
+<label class="opt"><input type="checkbox" value="station"><span>the station</span></label>
+<label class="opt"><input type="checkbox" value="cafe"><span>the café</span></label>
+<label class="opt"><input type="checkbox" value="park"><span>the park</span></label>
+<label class="opt"><input type="checkbox" value="bank"><span>the bank</span></label>
+<label class="opt"><input type="checkbox" value="library"><span>the library</span></label>
+<label class="opt"><input type="checkbox" value="post office"><span>the post office</span></label>
+<label class="opt"><input type="checkbox" value="bus stop"><span>the bus stop</span></label>
+<label class="opt"><input type="checkbox" value="market"><span>the market</span></label>
 </div>
 </div>
 </div>

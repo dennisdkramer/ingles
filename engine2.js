@@ -271,7 +271,7 @@ function applyCompleted(on){
  document.querySelectorAll(".qitem[data-a]").forEach(q=>{
   const right=q.getAttribute("data-a");
   q.querySelectorAll(".qopts label").forEach(lab=>{
-   const inp=lab.querySelector('input[type="radio"]');
+   const inp=lab.querySelector('input[type="radio"],input[type="checkbox"]');
    lab.classList.toggle("correct",!!on&&!!inp&&inp.value===right);
   });
  });
@@ -279,7 +279,7 @@ function applyCompleted(on){
   if(el.tagName==="TEXTAREA"&&el.id==="feed")return;
   if(on)el.setAttribute("readonly","readonly");else el.removeAttribute("readonly");
  });
- document.querySelectorAll('input[type="radio"]').forEach(el=>{el.disabled=!!on});
+ document.querySelectorAll('input[type="radio"], .qitem[data-a] input[type="checkbox"]').forEach(el=>{el.disabled=!!on});
 }
 function renderCompleteBtn(){
  const pid=completeId();
