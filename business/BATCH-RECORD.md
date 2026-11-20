@@ -21,5 +21,7 @@ A fenced block is an example and is never read: each lesson's row is written **b
 
 ---
 
+L1 | S1-prn@chart:rsn>ex>voc | S2-rul@key:ex>exc | S3-prn:con>exc | S4-rsn:ex | S5-rul@chart:voc>mng>ex | S6-con:mng>voc | Q:prn>rul>con | el:mc:8,dictation:4,chartanswer:4,matching:5,fill:6,flip:8 | qel:mc:6,matching:4,dictation:3 | reg:7/8
+
 
 
