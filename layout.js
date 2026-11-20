@@ -16,6 +16,7 @@ window.LayoutEditor = (function () {
   'use strict';
 
   var ON = false, CA = null, drag = null, hist = [], moved = 0, line = null, chipEl = null;
+  var sel = null, panelEl = null;
   var THRESH = 4;   /* px of travel before a press counts as a drag, so a click keeps its caret */
 
   var STILL = 'h1,h2,h3';
@@ -110,6 +111,74 @@ window.LayoutEditor = (function () {
     }
   }
 
+  /* ---- the inspector ---------------------------------------------------------------
+     What rows and cells exist right now, named while the layer is on. Every outline and every
+     badge below is CSS on body.layout-on, so the inspector writes NOTHING into the page — the
+     only two attributes it sets (data-layout-pin, data-layout-sel) are stripped by clean() before
+     a save. The panel names the node under the last press: its section, row, cell, tag, its
+     inline style, the flex the sheet resolved, and how many children it holds — which is the
+     answer to "why is this not filling the row?". */
+  function sections() { var c = ca(); return c ? [].filter.call(c.children, function (x) { return x.tagName === 'H2'; }) : []; }
+  function sectionOf(n) {
+    var c = ca(), s = null, e;
+    for (e = n; e && e !== c; e = e.parentElement) {
+      for (var q = e.previousElementSibling; q; q = q.previousElementSibling) if (q.tagName === 'H2') { s = q; break; }
+      if (s) break;
+    }
+    return s;
+  }
+  function pickNode(el) {
+    if (!el || !inside(el)) return null;
+    if (el.matches('.rows')) return el;
+    var cell = el.closest('.rows>*'); if (cell) return cell;
+    var blk = el.closest('.block'); if (blk) return blk;
+    return el;
+  }
+  function facts(n) {
+    if (!n) return 'click a cell or a row to see what it is';
+    var c = ca(), out = [], h2 = sectionOf(n), si = sections().indexOf(h2) + 1;
+    var row = n.closest('.rows'), ri = 0, ci = 0;
+    if (row) { ri = [].indexOf.call(c.querySelectorAll('.rows'), row) + 1; if (n.parentElement === row) ci = [].indexOf.call(row.children, n) + 1; }
+    out.push('S' + (si || '?') + (ri ? ' · R' + ri : '') + (ci ? ' · cell ' + ci : '') + (n.matches('.rows') ? ' (the row)' : ''));
+    out.push(n.tagName.toLowerCase() + (n.id ? '#' + n.id : '') +
+      (typeof n.className === 'string' && n.className.trim() ? '.' + n.className.trim().split(/\s+/).slice(0, 2).join('.') : ''));
+    var st = n.getAttribute('style');
+    out.push(st ? 'inline: ' + st : 'inline: none');
+    try {
+      var cs = getComputedStyle(n);
+      if (cs.display === 'flex' || cs.display === 'grid') out.push('display: ' + cs.display + ' · direction: ' + (cs.flexDirection || '-'));
+      out.push('flex: ' + (cs.flex || '-') + ' · min-width: ' + (cs.minWidth || '-'));
+    } catch (e) { }
+    out.push(n.children.length + ' child' + (n.children.length === 1 ? '' : 'ren'));
+    return out.join(' — ');
+  }
+  function markPins() {
+    var c = ca(); if (!c) return;
+    [].forEach.call(c.querySelectorAll('.rows>*'), function (n) {
+      var st = n.getAttribute('style') || '';
+      if (/flex|min-width|width|max-width/.test(st)) n.setAttribute('data-layout-pin', '');
+      else n.removeAttribute('data-layout-pin');
+    });
+  }
+  function select(n) {
+    if (sel) sel.removeAttribute('data-layout-sel');
+    sel = n || null;
+    if (sel) sel.setAttribute('data-layout-sel', '');
+    paintPanel();
+  }
+  function paintPanel() {
+    if (!ON) { if (panelEl) panelEl.style.display = 'none'; document.body.classList.remove('layout-panelled'); return; }
+    if (!panelEl) {
+      panelEl = document.createElement('div');
+      panelEl.className = 'layout-panel';
+      panelEl.setAttribute('role', 'status');
+      document.body.appendChild(panelEl);
+    }
+    document.body.classList.add('layout-panelled');
+    var txt = facts(sel);
+    if (panelEl.textContent !== txt) panelEl.textContent = txt;
+  }
+
   /* the chip is the tool's whole control surface: what it is, how many moves, and undo */
   function paintChip() {
     if (!ON) { if (chipEl) chipEl.style.display = 'none'; return; }
@@ -147,7 +216,7 @@ window.LayoutEditor = (function () {
     }
     hist.push({ node: n, from: from, rows: dropRows(from.parent) });
     if (hist.length > 40) hist.shift();
-    moved++; paintChip();
+    moved++; markPins(); paintChip();
   }
 
   function undo() {
@@ -173,7 +242,7 @@ window.LayoutEditor = (function () {
     if (!chipEl) paintChip();          /* a save cleaned the chrome away; the press brings it back */
     var n = e.target && e.target.nodeType === 1 ? e.target : null;
     if (!n || !movable(n)) return;
-    drag = { node: n, x: e.clientX, y: e.clientY, on: false, t: null, attr: null };
+    drag = { node: n, x: e.clientX, y: e.clientY, on: false, t: null, attr: null, target: n };
     window.addEventListener('pointermove', move, true);
     window.addEventListener('pointerup', up, true);
     window.addEventListener('pointercancel', up, true);
@@ -212,6 +281,7 @@ window.LayoutEditor = (function () {
       else c.setAttribute('contenteditable', d.attr);
     }
     if (d.on) { applyDrop(d); e.preventDefault(); }
+    else if (d.target) { select(pickNode(d.target)); }   /* a press that never travelled inspects */
   }
 
   function key(e) {
@@ -230,14 +300,19 @@ window.LayoutEditor = (function () {
     line = null;
     if (chipEl && chipEl.parentNode) chipEl.parentNode.removeChild(chipEl);
     chipEl = null;
+    if (panelEl && panelEl.parentNode) panelEl.parentNode.removeChild(panelEl);
+    panelEl = null;
     var c = ca();
     if (c) {
       var d = c.querySelectorAll('.layout-dragging');
       for (var i = 0; i < d.length; i++) d[i].classList.remove('layout-dragging');
+      var m = c.querySelectorAll('[data-layout-sel],[data-layout-pin]');
+      for (var j = 0; j < m.length; j++) { m[j].removeAttribute('data-layout-sel'); m[j].removeAttribute('data-layout-pin'); }
       if (c.getAttribute('contenteditable') === 'false') c.setAttribute('contenteditable', 'true');
     }
+    sel = null;
     drag = null;
-    document.body.classList.remove('layout-drag');
+    document.body.classList.remove('layout-drag', 'layout-panelled');
     if (!ON) document.body.classList.remove('layout-on');
     /* the chip is NOT repainted here: clean() runs immediately before a save, and the chip is
        a body child, so leaving it would put the tool's own chrome into the saved document.
@@ -246,12 +321,12 @@ window.LayoutEditor = (function () {
 
   function enable() {
     if (ON) return;
-    ON = true; CA = null; hist = []; moved = 0;
+    ON = true; CA = null; hist = []; moved = 0; sel = null;
     document.body.classList.add('layout-on');
     var c = ca();
     if (c) c.addEventListener('pointerdown', down, true);
     document.addEventListener('keydown', key, true);
-    paintChip();
+    markPins(); paintChip(); paintPanel();
   }
 
   function disable() {
