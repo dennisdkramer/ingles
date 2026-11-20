@@ -582,7 +582,7 @@ next();
 
 <div class="block" data-look="stripes" data-span="12">
 <h3>Marked activities with controls</h3>
-<p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>An activity is a unit the student completes — never a control on its own.</b> The four controls — a gap, a radio, a checkbox, a written field — are the parts an activity is built from and are chosen by what the student must do; they are not activities themselves. <b>A keyed gap is preferentially carried inside one of the forms below</b> — a dialog turn, a chart row to answer, a strip under its panel, a line to translate, a sentence to correct, a line to write from what they hear — and a lone gap is only ever a component beside other teaching in a block, never an activity in its own right. The rows below hold the forms: numbered chunks, a chart whose cells are answered, a correction, a translation into English and a dictation — the last three for no beginner, and the sentence they ask for always tuned to the lesson's band. The two blocks after this one, side by side, are four options to pick one from and a matching pool. One more at the end of the section is marked <b>IGNORED</b>: it stays on the page for reference and lessons are not using it for now.</p>
+<p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>An activity is a unit the student completes — never a control on its own.</b> The four controls — a gap, a radio, a checkbox, a written field — are the parts an activity is built from and are chosen by what the student must do; they are not activities themselves. <b>A keyed gap is preferentially carried inside one of the forms below</b> — a dialog turn, a chart row to answer, a strip under its panel, a line to translate, a sentence to correct, a line to write from what they hear — and a lone gap is only ever a component beside other teaching in a block, never an activity in its own right. The rows below hold the forms: numbered chunks, a chart whose cells are answered, and under the chunks a correction and a dictation — the last two for no beginner, and the sentence they ask for always tuned to the lesson's band. The two blocks after this one, side by side, are four options to pick one from and a matching pool. One more at the end of the section is marked <b>IGNORED</b>: it stays on the page for reference and lessons are not using it for now.</p>
 <p class="dim"><code>data-answer</code> keys a gap, <code>|</code> separating alternatives; <code>--gap-w</code> is the width the answer needs. A radio group's key is <code>data-a</code> on <code>.qitem</code>; engine2.js marks the right option and writes <code>.ans</code> beside a typed field.</p>
 <p>Each of these can stand as a block of its own or sit inside a block with the prose, the chart or the drawing it accompanies; every row below is the in-block size.</p>
 
@@ -636,6 +636,16 @@ next();
     <span><b style="font-size:.8em">6</b> I got there</span>
   </p>
   <p style="text-align:center"><input class="gap" style="--gap-w:100%"></p>
+<div id="correction" data-activity="correction" style="padding-top:26px">
+<p class="dim">One word is wrong. Write the sentence again.</p>
+<p>He <b>have</b> clocked in early.</p>
+<textarea class="write" rows="2" data-answer="He has clocked in early.|He's clocked in early." placeholder="the sentence, corrected"></textarea>
+</div>
+<div id="dictation" data-activity="dictation" style="padding-top:20px">
+<p class="dim">Listen, then write what you hear.</p>
+<p><button class="listen" type="button" data-say="I clocked in at six forty.">▶</button></p>
+<textarea class="write" rows="2" data-answer="I clocked in at six forty." placeholder="what you hear"></textarea>
+</div>
 </div>
 <div id="stripgaps" data-activity="stripgaps">
   <p>Describe what is happening in each picture, using the <b>past simple</b>.</p>
@@ -655,23 +665,6 @@ next();
 </div>
 </div>
 
-<div class="rows">
-<div id="correction" data-activity="correction">
-<p class="dim">One word is wrong. Write the sentence again.</p>
-<p>He <b>have</b> clocked in early.</p>
-<textarea class="write" rows="2" data-answer="He has clocked in early.|He's clocked in early." placeholder="the sentence, corrected"></textarea>
-</div>
-<div id="translation" data-activity="translation">
-<p class="dim">Say it in English.</p>
-<p class="pt">Ele já tinha saído quando eu cheguei.</p>
-<input class="gap" data-answer="He had already left when I got there|He had already left when I arrived" style="--gap-w:100%">
-</div>
-<div id="dictation" data-activity="dictation">
-<p class="dim">Listen, then write what you hear.</p>
-<p><button class="listen" type="button" data-say="I clocked in at six forty.">▶</button></p>
-<textarea class="write" rows="2" data-answer="I clocked in at six forty." placeholder="what you hear"></textarea>
-</div>
-</div>
 </div>
 
 <div class="rows">
@@ -904,12 +897,6 @@ next();
 
 &lt;!-- the wrong word is marked in the line; the field asks for the whole sentence, so it is .write and not a gap --&gt;
 &lt;!-- data-answer takes the accepted forms separated by | · the placeholder is what makes the field read as filled --&gt;</pre>
-</div></div></details>
-<details class="reveal" open><summary>Markup — #translation · say it in English</summary><div class="body"><div>
-<pre>&lt;p class="pt"&gt;the sentence in Portuguese&lt;/p&gt;
-&lt;input class="gap" style="--gap-w:100%" data-answer="the English|another accepted form"&gt;
-
-&lt;!-- .pt is the Portuguese utility · the answer is produced from meaning, never copied from the line above --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #dictation · listen, then write</summary><div class="body"><div>
 <pre>&lt;button class="listen" type="button"
