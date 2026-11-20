@@ -5,7 +5,7 @@
 //   pass 1 writes the sections (key, subject, device) and their block subjects, and the quiz;
 //   pass 2 appends the elements it built, the quiz's elements, and the register score.
 //
-//   L07 | S1-rul@chart:rsn>ex>con>rul | S2-voc:mng>voc>mng | Q:rul>mng>rul>ex | el:gap:3,mc:1 | qel:mc:1,flip:1 | reg:3/5
+//   L07 | S1-rul@chart:rsn>ex>con>rul | S2-voc:mng>voc>mng | Q:rul>mng>rul>ex | el:dialoggap:3,mc:1 | qel:mc:1,flip:1 | reg:3/5
 //
 // Rules (a window counts the current lesson and the ones before it):
 //   novelty   from lesson 2 — >=1 element the previous 3 lessons did not use
