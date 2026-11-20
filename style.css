@@ -906,12 +906,17 @@
      second line inside this one. Two items that belong together but are each small stack inside ONE cell
      (they are siblings in that cell's div). */
   .content-area{container-type:inline-size}
-  .rows{display:flex;flex-wrap:nowrap;gap:var(--flex-gap,26px);align-items:stretch;padding-top:8px}
+  .rows{display:flex;flex-wrap:nowrap;gap:var(--flex-gap,26px);align-items:stretch;padding-top:20px}
   .rows>*{display:flex;flex-direction:column;flex:1 1 auto;min-width:calc(25% - 20px)}
   .rows>*{min-width:calc(25cqw - 34px)}
   /* a dialog, a player or a comic takes the row's height; the map does not — its frame is drawn on the
      drawing, so it keeps the drawing's own 3:2 box and the cell around it holds the rest */
   .rows>*>:is(.viz,figure.vz-play):not(.vz-map){flex:1 1 auto;min-height:0}
+  /* a chart is its own width: it takes the width its contents need and never collapses into a narrower
+     cell, which would wrap every line inside it. So a cell whose whole content is one chart stops being a
+     flex share and takes its content's width, and the neighbour beside it fills the rest of the row */
+  .rows>div:has(>.chartwrap:only-child),
+  .rows>div:has(>table.chart:only-child){flex:0 0 auto}
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
   .content-area>h2{margin-block:var(--section-gap,34px) 0}
