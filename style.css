@@ -891,12 +891,13 @@
   .cols{display:flex;gap:var(--flex-gap,26px);align-items:flex-start;flex-wrap:wrap;
         padding-top:8px}
   .cols>*{flex:1 1 var(--cw,220px);min-width:0}
-  /* the other case: any number of cells sharing one line, the writer deciding the pairing rather than a
-     wrap. Every cell takes an equal share of the width and the row's height; nothing is measured from
-     what a cell happens to contain. Heights are matched across the row, so a cell is a column and the
-     object inside it — a dialog, a player, a comic — takes the row's height. */
-  .rows{display:flex;flex-wrap:nowrap;gap:var(--flex-gap,26px);align-items:stretch;padding-top:8px}
-  .rows>*{display:flex;flex-direction:column;flex:1 1 0;min-width:0}
+  /* THE PAGE'S DEFAULT LAYOUT: everything a section holds goes into a row, and the row wraps. Two cells a
+     line is the default (--rw:44%); a run of thin items sets --rw:29% or 21% for three or four; the one
+     item that needs the whole line sets --rw:100%. Nothing is measured in the browser and no packer
+     runs — the line breaks where the declared width stops fitting. Heights match across a line, so a
+     cell is a column and the object inside it — a dialog, a player, a comic — takes the line's height. */
+  .rows{display:flex;flex-wrap:wrap;gap:var(--flex-gap,26px);align-items:stretch;padding-top:8px}
+  .rows>*{display:flex;flex-direction:column;flex:1 1 var(--rw,44%);min-width:0}
   /* a dialog, a player or a comic takes the row's height; the map does not — its frame is drawn on the
      drawing, so it keeps the drawing's own 3:2 box and the cell around it holds the rest */
   .rows>*>:is(.viz,figure.vz-play):not(.vz-map){flex:1 1 auto;min-height:0}

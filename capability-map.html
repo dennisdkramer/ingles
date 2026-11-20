@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Capability map — English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=04ac365905">
+<link rel="stylesheet" href="style.css?v=9cc3016bcd">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>VISUAL REFERENCE</span></h1></header>
@@ -20,7 +20,7 @@
 
 <div class="block" data-span="12">
 <h3>Arrange it, and give it a look</h3>
-<p><b>Adjacent things go into one flex row, and that is the default.</b> Two blocks of similar height, and two items beside each other inside a block, are written into one <code>.rows</code>: the cells share the width, match the row's height and need no size of their own. <code>.cols</code> is for interchangeable cells that must wrap, and <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. <b>No width is written on a cell</b> — the flow sizes, and a span or a size is written only where a cell comes out under a quarter of the line or a row is mostly empty. Width is the repair, never the plan.</p>
+<p><b>A section's content goes into one <code>.rows</code>, and that is the default.</b> The row wraps on its own: two cells a line (<code>--rw:44%</code>, the default), three or four for thin items (<code>--rw:29%</code>, <code>--rw:21%</code>), <code>--rw:100%</code> for the one item that needs the whole line. Cells share the width, match the height of their line and need no size of their own. <code>.cols</code> is for interchangeable cells that must wrap, and <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. <b>No width is written on a cell</b>: <code>--rw</code> sits on the row, and a span is written only where a cell comes out under a quarter of the line.</p>
 <p class="dim"><b>Every element below is drawn with the markup that builds it, and the drawing is the default</b>: what the element contains, what text it carries, where that text sits, and whether it carries a title at all. Its item count is the example's own, never a count to copy. A chart takes no title of its own — the sentence beside it names it.</p>
 <p class="dim"><code>data-look</code> is declared on the block, never inferred from what it holds, and changes the paint only.</p>
 </div>
@@ -82,17 +82,17 @@
 </div>
 
 <div class="rows">
-<div id="recipient" style="flex:0 1 auto;justify-content:center">
+<div id="recipient">
 <p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-i" data-side="right">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span> <span class="pos-adj">the</span> <span class="pos-n pos-o">book</span>.</p>
 <p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-o">it</span> <span class="pos-prep">to</span> <span class="pos-n pos-i" data-side="left">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span>.</p>
 </div>
-<div id="key" style="flex:0 1 auto;justify-content:center">
+<div id="key">
 <p>I can't <ruby>record<rp>(</rp><rt>gravar</rt><rp>)</rp></ruby> it tonight.</p>
 </div>
-<div id="key-sound" style="flex:0 1 auto;justify-content:center">
+<div id="key-sound">
 <p>The <ruby>library<rp>(</rp><rt><b>li</b>·<b>br</b><span class="pr-g">e</span><b>ry</b></rt><rp>)</rp></ruby> closes at six.</p>
 </div>
-<div id="gloss" style="flex:0 1 auto;justify-content:center">
+<div id="gloss">
 <p><button type="button" class="glossbtn" popovertarget="d1">Clock in</button> before eight.</p>
 <div class="defcard" popover id="d1"><b>clock in</b>bater o ponto — the punch clock at work, not <i>entrar</i>.</div>
 </div>
@@ -171,7 +171,7 @@
 <p>A chart, a list, a dialog, a drawing, a recording or a strip is a thing of its own. Each sits inside a block with the prose that reads it, or stands outside at its own width.</p>
 <p><code>.viz</code> frames three things: the dialog, the player and the map — a chart and a strip carry a frame of their own. It is never a second <code>.block</code>.</p>
 <div class="rows">
-<div id="chart" style="flex:1 1 auto">
+<div id="chart">
 <p>A chart can stand outside a block or sit inside one, and either way the text beside it has to explain it or point at it — a chart nobody refers to is a picture the student has to guess at. The chart below is that pair: the sentence introduces it, and the chart centres itself in the column it is given.</p>
 <figure class="chartwrap">
 <table class="chart">
@@ -184,7 +184,7 @@
 </table>
 </figure>
 </div>
-<div id="chart-split" style="flex:0 0 auto">
+<div id="chart-split">
 <figure class="chartwrap">
 <table class="chart">
 <tbody>
@@ -653,7 +653,7 @@ next();
 </div>
 </div>
 
-<div class="rows">
+<div class="rows" style="--rw:29%">
 <div id="correction" data-activity="correction">
 <p class="dim">One word is wrong. Write the sentence again.</p>
 <p>He <b>have</b> clocked in early.</p>
