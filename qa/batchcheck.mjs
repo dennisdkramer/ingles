@@ -165,7 +165,11 @@ function pageScan(file, locale) {
   const words = text.match(/[a-zà-ÿ']+/g) || [];
   const ptTokens = words.filter(w => PT_WORDS.has(w)).length;
   const ptElems = area.querySelectorAll('.pt').length;
-  return { els, unattributed, activityBlocks, sections, localeHits: hits, ptTokens, ptElems };
+  // how much of the page is Portuguese: the words inside .pt against every word on the page
+  const count = s => (s.match(/[a-zà-ÿ']+/gi) || []).length;
+  const ptWords = [...area.querySelectorAll('.pt')].reduce((a, e) => a + count(e.textContent), 0);
+  const allWords = count(area.textContent);
+  return { els, unattributed, activityBlocks, sections, localeHits: hits, ptTokens, ptElems, ptWords, allWords };
 }
 
 function readLocale(track) {
@@ -296,6 +300,13 @@ function checkPage(row, scan, where) {
   const list = scan.localeHits.map(h => h.word + '×' + h.n).join(', ');
   if (hits >= 3) fail(where + L, `locale: ${list}`);
   else if (hits === 2) warn(where + L, `locale: ${list}`);
+  // the Portuguese ceiling: no more than 60% of the page's words
+  if (scan.allWords) {
+    const share = scan.ptWords / scan.allWords;
+    const pct = Math.round(share * 100);
+    if (share > 0.6) fail(where + L, `Portuguese carries ${pct}% of the page's words; the cap is 60%`);
+    else if (scan.ptTokens >= 12 && share < 0.05) warn(where + L, `Portuguese appears (${scan.ptTokens} common words) but is not marked .pt — the 60% cap cannot be measured`);
+  }
   if (!row.reg) warn(where + L, 'no register score (reg:good/total)');
   else {
     const r = row.reg.good / Math.max(1, row.reg.total);

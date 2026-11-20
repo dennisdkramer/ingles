@@ -6,7 +6,6 @@ One line per lesson, appended in two phases. It is the only memory: pass 1 of th
 **Pass 2 appends** what it built: `el:<element>[:count]`, `qel:<element>[:count]`, `reg:<sections in voice>/<sections>`.
 
 ```
-L07 | S1-rul@chart:rsn>ex>con>rul | S2-voc:mng>voc>mng | Q:rul>mng>rul>ex | el:dialoggap:3,mc:1 | qel:mc:1,flip:1 | reg:3/5
 ```
 
 - **subject** — what the block or section is *about*: `rul` form · `rsn` reasoning · `ex` worked example · `con` contrast · `exc` exception · `voc` words as a set · `mng` what one means · `prn` how it sounds · `tim` where it sits in time · `soc` when it is said · `rcp` earlier material.
@@ -19,5 +18,4 @@ L07 | S1-rul@chart:rsn>ex>con>rul | S2-voc:mng>voc>mng | Q:rul>mng>rul>ex | el:d
 
 ---
 
-L01 | S1-rul:rul>soc | S2-rul@key:rul>rsn>prn>rul | S3-rul@chart:rul>rsn>con>voc | S4-rul@key:rul>con>prn | S5-voc@chart:voc>mng>con>mng | S6-prn@player:prn>ex>rul>rcp | S7-rcp:rcp | Q:prn>voc>rul>mng>voc>rul | el:mc:2,chartanswer:1,matching:1,flip:1 | qel:mc:5,chartanswer:1 | reg:8/9
 

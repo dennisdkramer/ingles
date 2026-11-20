@@ -10,4 +10,3 @@ Nothing here is fetched at run time: a page that shows one of these files works 
 
 | File | What it is | Source | Author | Licence |
 |---|---|---|---|---|
-| `whole-thing-off.mp3` | lines 47–49 of that sheet's 60, 18.10 s, 436077 bytes — **cut from 183.24 s to 201.40 s**, re-encoded once with a 0.5 s fade at each end, every line placed 1 s before its sheet time | https://www.youtube.com/watch?v=qfu_PD-7EtM | Ella Fitzgerald & Louis Armstrong | **not stated** |
