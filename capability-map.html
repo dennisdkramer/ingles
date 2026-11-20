@@ -426,20 +426,25 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
        aria-label="everything the drawing shows, named"&gt;…&lt;/svg&gt;
 &lt;/div&gt;</pre>
 <p class="dim">The frame keeps the viewBox's 3:2 box and the cell around it holds the rest; <code>--map-w</code> caps the drawing when it must be smaller than its cell, and <code>aria-label</code> names everything in the drawing, because the drawing is all a screen reader gets. Both forms are drawn above: the display with the visuals, the question at the end of the activities.</p>
-<pre>&lt;!-- as an activity: the same drawing, one tick beside each place it draws, and one key --&gt;
+<pre>&lt;!-- as an activity: the same drawing, a tick at each place, and one key --&gt;
 &lt;div class="block" data-activity="map"&gt;
-  &lt;div class="vz-map viz"&gt;…the same svg…&lt;/div&gt;
   &lt;div class="qitem" data-a="bank"&gt;
     &lt;p class="qstem"&gt;any prose that points at one place&lt;/p&gt;
-    &lt;div class="qopts"&gt;
-      &lt;label class="opt"&gt;&lt;input type="checkbox" value="station"&gt;&lt;span&gt;the station&lt;/span&gt;&lt;/label&gt;
-      &lt;label class="opt"&gt;&lt;input type="checkbox" value="cafe"&gt;&lt;span&gt;the café&lt;/span&gt;&lt;/label&gt;
-      …one label per place the drawing shows, its value the place's id…
-      &lt;label class="opt"&gt;&lt;input type="checkbox" value="bank"&gt;&lt;span&gt;the bank&lt;/span&gt;&lt;/label&gt;
+    &lt;div class="vz-map viz"&gt;
+      &lt;svg viewBox="0 0 360 240" …&gt;…the same drawing…&lt;/svg&gt;
+      &lt;div class="qopts"&gt;
+        &lt;label class="opt" style="position:absolute;left:15%;top:25.8%;
+               transform:translate(-50%,-50%)" aria-label="the station"&gt;
+          &lt;input type="checkbox" value="station"&gt;&lt;/label&gt;
+        …one label per place, at that place's point in % of the drawing…
+        &lt;label class="opt" style="position:absolute;left:15%;top:59.2%;
+               transform:translate(-50%,-50%)" aria-label="the bank"&gt;
+          &lt;input type="checkbox" value="bank"&gt;&lt;/label&gt;
+      &lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</pre>
-<p class="dim">Each place on the drawing gets one checkbox whose <code>value</code> is that place, and the answer is the one place named by <code>data-a</code> on the <code>.qitem</code> — the same key a radio group uses, so engine2 marks it and freezes it on Complete. It is not a choice between four options: every place is present and the student ticks the one. The prose is free and may point at the place any way the lesson teaches — a route (<i>turn right out of the café, then your first left, then back a block — the destination is on your left</i>), a relation (<i>to the left of the café</i>), or its use (<i>where you send a letter</i>) — but the answer is always one place on the drawing. Marking more than one ticks more than one; only the keyed one is marked correct.</p>
+<p class="dim">Each place gets its own checkbox, sitting on that place, its <code>value</code> the place, its <code>aria-label</code> the name the drawing shows — and the answer is the one place named by <code>data-a</code> on the <code>.qitem</code>, the same key a radio group uses, so engine2 marks it and freezes it on Complete. It is not a choice between four options: every place has a box and the student ticks the one. The prose is free and may point at the place any way the lesson teaches — a route (<i>turn right out of the café, then your first left, then back a block — the destination is on your left</i>), a relation (<i>to the left of the café</i>), or its use (<i>where you send a letter</i>) — but the answer is always one place on the drawing. Ticking more than one ticks more than one; only the keyed place is marked correct. The tick's position is a percentage of the drawing, so it stays on its place at any width.</p>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #comic · the comic strip</summary><div class="body"><div>
 <pre>&lt;table class="chart"&gt;
@@ -725,6 +730,8 @@ next();
 <div class="rows">
 <div class="block" data-activity="map" id="mapq">
 <h3>The map as a question</h3>
+<div class="qitem" data-a="bank">
+<p class="qstem">You just finished eating at the café, took a right out of the building, and then your first left. You went to the end of the street there, but then realized you went too far. You turned around and walked back a block — your destination is on your left. Tick it on the map.</p>
 <div class="vz-map viz">
 <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, eight places each drawn with its name on a sign — a station under a canopy with a clock, a café with a striped awning, a park with trees, a bank under a dollar sign, a library wall of books, a post office with a postbox, a bus shelter, and two market awnings">
   <rect x="0" y="0" width="360" height="240" style="fill:var(--paper)"></rect>
@@ -786,18 +793,16 @@ next();
     <text transform="translate(270,236) rotate(-90)">Park Lane</text>
   </g>
 </svg>
-</div>
-<div class="qitem" data-a="bank">
-<p class="qstem">You just finished eating at the café, took a right out of the building, and then your first left. You went to the end of the street there, but then realized you went too far. You turned around and walked back a block — your destination is on your left. Tick it on the map.</p>
 <div class="qopts">
-<label class="opt"><input type="checkbox" value="station"><span>the station</span></label>
-<label class="opt"><input type="checkbox" value="cafe"><span>the café</span></label>
-<label class="opt"><input type="checkbox" value="park"><span>the park</span></label>
-<label class="opt"><input type="checkbox" value="bank"><span>the bank</span></label>
-<label class="opt"><input type="checkbox" value="library"><span>the library</span></label>
-<label class="opt"><input type="checkbox" value="post office"><span>the post office</span></label>
-<label class="opt"><input type="checkbox" value="bus stop"><span>the bus stop</span></label>
-<label class="opt"><input type="checkbox" value="market"><span>the market</span></label>
+<label class="opt" style="position:absolute;left:15%;top:25.8%;transform:translate(-50%,-50%)" aria-label="the station"><input type="checkbox" value="station"></label>
+<label class="opt" style="position:absolute;left:52.5%;top:25.8%;transform:translate(-50%,-50%)" aria-label="the café"><input type="checkbox" value="cafe"></label>
+<label class="opt" style="position:absolute;left:87.5%;top:25.8%;transform:translate(-50%,-50%)" aria-label="the park"><input type="checkbox" value="park"></label>
+<label class="opt" style="position:absolute;left:15%;top:59.2%;transform:translate(-50%,-50%)" aria-label="the bank"><input type="checkbox" value="bank"></label>
+<label class="opt" style="position:absolute;left:52.5%;top:59.2%;transform:translate(-50%,-50%)" aria-label="the library"><input type="checkbox" value="library"></label>
+<label class="opt" style="position:absolute;left:87.5%;top:59.2%;transform:translate(-50%,-50%)" aria-label="the post office"><input type="checkbox" value="post office"></label>
+<label class="opt" style="position:absolute;left:15%;top:92.2%;transform:translate(-50%,-50%)" aria-label="the bus stop"><input type="checkbox" value="bus stop"></label>
+<label class="opt" style="position:absolute;left:52.5%;top:92.2%;transform:translate(-50%,-50%)" aria-label="the market"><input type="checkbox" value="market"></label>
+</div>
 </div>
 </div>
 </div>
