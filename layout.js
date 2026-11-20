@@ -69,41 +69,98 @@ window.LayoutEditor = (function () {
         String(cs.flexDirection || '').indexOf('column') < 0) return 'x';
     return 'y';
   }
+  /* how the CONTAINER itself lays its children out — the axis its gaps run across. Asked of the box,
+     not of the box's parent (which is what flow() answers): a row is a flex line whether it sits in a
+     block, in a cell or in the page grid. */
+  function axisOf(box) {
+    var cs;
+    try { cs = getComputedStyle(box); } catch (e) { return 'y'; }
+    if (cs.display === 'flex' || cs.display === 'inline-flex')
+      return String(cs.flexDirection || '').indexOf('column') < 0 ? 'x' : 'y';
+    return 'y';                       /* block flow and the page grid stack downwards */
+  }
+
+  /* the children that take part in a container's flow, with their boxes */
+  function slots(box) {
+    var out = [];
+    for (var c = box.firstElementChild; c; c = c.nextElementSibling) {
+      var r = c.getBoundingClientRect();
+      if (r.width || r.height) out.push({ el: c, r: r });
+    }
+    return out;
+  }
+
+  /* WHERE BETWEEN TWO SIBLINGS the pointer sits, along the container's own axis. One rule for every
+     gap there is: the space between two cells inside a row, the space between two rows inside a
+     parent, and the space between two blocks in the page. The line is drawn at the boundary the drop
+     would land on, and the drop inserts before that sibling (or appends when there is none). */
+  function between(box, x, y) {
+    var ax = axisOf(box), pos = ax === 'x' ? x : y;
+    var list = slots(box), ref = null, host = null, before = false;
+    for (var i = 0; i < list.length; i++) {
+      var r = list[i].r, mid = ax === 'x' ? r.left + r.width / 2 : r.top + r.height / 2;
+      if (pos < mid) { ref = list[i].el; host = list[i].el; before = true; break; }
+    }
+    if (!ref) { var last = list[list.length - 1]; host = last ? last.el : null; before = false; }
+    return { box: box, ref: ref, inside: false, host: host, before: before, ax: ax };
+  }
 
   /* ---- where would the node land? -------------------------------------------------
      Two answers only: BETWEEN two siblings (a line is drawn at the boundary), or INSIDE a
-     container that accepts it (the container is tinted). The middle of a cell is "inside";
-     its edges are "between". Everything is measured at the pointer, so scrolling and a
-     re-flowed row need no bookkeeping. */
+     container that accepts it (the container is tinted). Everything is measured at the pointer,
+     so scrolling and a re-flowed row need no bookkeeping.
+     THREE KINDS OF BETWEEN, and they are told apart in this order:
+       1. the pointer is on a ROW'S OWN AREA — its padding, or the gap between two cells. That
+          used to be read as "inside the row" and the item landed at the END of it; it is now the
+          position between the two cells the pointer sits between.
+       2. the pointer is in the SPACE AROUND A ROW — the top or bottom band of the row, or the
+          parent's own gap between two rows. The item becomes a SIBLING of that row in its parent
+          and never a cell of a neighbouring row.
+       3. an item's own edge inside any other container: between that item and its neighbour.
+     The bands are generous on purpose (a quarter of the row's height, 14–30px): aiming at a gap
+     should not require pixel accuracy. */
   function pick(x, y) {
     var el = document.elementFromPoint(x, y);
     if (!el) return null;
     var n = drag.node;
     while (el && (el === n || n.contains(el))) el = el.parentElement;
     if (!el) return null;
-    if (el === ca()) return { box: ca(), inside: true, host: null };
+    if (el === ca()) return accepts(n, ca()) ? between(ca(), x, y) : null;
     if (!inside(el)) return null;
-    /* BETWEEN TWO ROWS is its own target, and it is the top or bottom band of a row: a cell dropped
-       there leaves the row it came from and stands between rows, instead of joining the next row. */
+
     var row = el.closest ? el.closest('.rows') : null;
-    if (row && row.parentElement) {
-      var rr = row.getBoundingClientRect(), band = Math.min(18, rr.height / 3);
-      if (y < rr.top + band || y > rr.bottom - band) {
-        var rp = row.parentElement;
-        if (accepts(n, rp)) {
-          var before = y < rr.top + rr.height / 2;
-          return { box: rp, ref: before ? row : row.nextElementSibling, inside: false, host: row, before: before };
-        }
+
+    /* (1) the row's own area — its padding, or the gap between two of its cells. The strip ABOVE or
+       BELOW its cells is the space around the row; at the cells' own height it is a position BETWEEN
+       them, which is what a drop in the gap means and what used to land at the end of the row. */
+    if (row) {
+      var cells = slots(row), top = Infinity, bottom = -Infinity;
+      for (var k = 0; k < cells.length; k++) {
+        top = Math.min(top, cells[k].r.top); bottom = Math.max(bottom, cells[k].r.bottom);
+      }
+      var around = cells.length && (y < top || y > bottom);
+      if (around && row.parentElement && accepts(n, row.parentElement)) {
+        return between(row.parentElement, x, y);      /* the space above or below the row: its parent */
+      }
+      if (el === row && accepts(n, row)) return between(row, x, y);   /* the gap between two cells */
+    }
+
+    /* (2) the pointer is over a CONTAINER THAT HOLDS ROWS, in the space between them: that space is the
+       container's, so the item becomes a sibling of the rows — never a cell of the row it is nearest */
+    if (!row && el.children && accepts(n, el)) {
+      for (var q = 0; q < el.children.length; q++) {
+        if (el.children[q].classList && el.children[q].classList.contains('rows')) return between(el, x, y);
       }
     }
-    var r = el.getBoundingClientRect(), f = flow(el), e = 18;
+
+    /* (3) an item's edge, or its middle */
+    var r = el.getBoundingClientRect(), f = flow(el), e = 22;
     var onEdge = f === 'x' ? (x < r.left + e || x > r.right - e)
                            : (y < r.top + e || y > r.bottom - e);
     if (!onEdge && accepts(n, el)) return { box: el, inside: true, host: el };
     var p = el.parentElement;
     if (!p || (!inside(p) && p !== ca()) || !accepts(n, p)) return { box: ca(), inside: true, host: null };
-    var before = f === 'x' ? x < r.left + r.width / 2 : y < r.top + r.height / 2;
-    return { box: p, ref: before ? el : el.nextElementSibling, inside: false, host: el, before: before };
+    return between(p, x, y);
   }
 
   function showLine(t) {
@@ -119,8 +176,16 @@ window.LayoutEditor = (function () {
       return;
     }
     line.className = 'layout-line';
+    if (!t.host) {                      /* an empty container: the drop is inside it */
+      r = t.box.getBoundingClientRect();
+      line.className = 'layout-line is-inside';
+      line.style.left = r.left + 'px'; line.style.top = r.top + 'px';
+      line.style.width = r.width + 'px'; line.style.height = r.height + 'px';
+      return;
+    }
     r = t.host.getBoundingClientRect();
-    if (flow(t.host) === 'x') {
+    var ax = t.ax || (flow(t.host) === 'x' ? 'x' : 'y');
+    if (ax === 'x') {
       line.style.left = ((t.before ? r.left : r.right) - 2) + 'px'; line.style.top = r.top + 'px';
       line.style.width = '4px'; line.style.height = r.height + 'px';
     } else {
