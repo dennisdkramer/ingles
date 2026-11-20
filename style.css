@@ -2719,11 +2719,12 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
 /* index/teacher furniture, promoted out of the fallback layer */
 @layer shell{
   .tadmin-books{display:flex;gap:10px;margin-top:2px;flex-wrap:wrap}
-  .tadmin-books .bookdrop{flex:0 0 380px}
+  .tadmin-books .bookdrop{flex:1 1 calc(33.33% - 7px);min-width:0}
+  .tadmin{width:100%}
   .tadmin-books button{margin:0;white-space:nowrap}
   .bookdrop{position:relative;flex:1 1 0;min-width:0}
-  .bookdrop>.bookbtn{width:100%;margin:0;white-space:nowrap;background:var(--sw);
-    color:var(--ink)}
+  .bookdrop>.bookbtn{width:100%;margin:0;white-space:nowrap;overflow:hidden;
+    text-overflow:ellipsis;background:var(--sw);color:var(--ink)}
   .bookdrop>.bookbtn:hover{filter:brightness(1.05)}
   .bookdrop.locked>.bookbtn{cursor:default}
   .bookdrop.locked .bookitem{pointer-events:none}
@@ -2800,19 +2801,29 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
   .welcome-bar.is-signed .wsep{display:none}
   .welcome-bar.attention{outline:3px solid var(--tan);outline-offset:2px;
     transition:outline-color .2s}
-  .landing-hello{margin:14px 0;border-color:var(--ink);
+  /* .card hugs its content (width:fit-content), which is right for a block inside a lesson and wrong for
+     these two: the welcome band and the teacher's book panel span the content column, so they line up with
+     the track row between them instead of ending wherever their shortest line ends. */
+  .landing-hello{width:100%;margin:14px 0;border-color:var(--ink);
     background:linear-gradient(100deg,rgba(217,193,186,.60),rgba(185,133,76,.30) 55%,
       rgba(29,78,216,.16))}
   .hello-en{font-weight:600;font-size:18px;line-height:1.35}
   .hello-pt{margin-top:4px;font-style:italic;color:#5c5347}
-  .tracks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;width:100%;
-    max-width:1200px;align-items:start;margin:14px auto}
-  .track-card{margin:0}
+  /* THE TRACK BLOCKS are one flex row: three to a line, every card the height of its line, and the
+     control pinned to the bottom — so the book title, its dropdown and the button under it sit on the
+     same lines right across the row instead of each card ending where its own content happens to end.
+     The basis is a third minus the gap share; grow is 1, so a short final line fills the width. */
+  .tracks{display:flex;flex-wrap:wrap;align-items:stretch;gap:15px;width:100%;
+    max-width:1200px;margin:14px auto}
+  .track-card{flex:1 1 calc(33.33% - 11px);min-width:0;margin:0;
+    display:flex;flex-direction:column}
+  .track-card>.bookdrop{flex:0 0 auto;margin-bottom:10px}
   #app h3{font-family:inherit;font-weight:700;font-size:1.17em;color:inherit;margin:1em 0;
     padding-left:0;border-left:0;letter-spacing:normal}
   .track-card>.bookdrop>.bookbtn{--bookfs:calc(14px + 4pt);font-size:var(--bookfs);
     line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .track-card .contbtn{display:block;width:100%;margin:10px 0 0;background:#0f766e}
+  .track-card .contbtn{display:block;width:100%;margin:auto 0 0;background:#0f766e}
+  .track-card .denbtn{margin-top:auto}
   .bookitem{display:flex;align-items:baseline;gap:8px;padding:6px 10px;border-radius:6px;
     font-size:14px;white-space:nowrap}
   .bookitem+.bookitem{border-top:1px dashed rgba(185,133,76,.35)}
