@@ -398,8 +398,9 @@ if (localIn) {
 
   /* NO LICENCE GATE (owner instruction). Every recording is usable: a block plays a few lines of a
      teaching excerpt, which the owner uses as fair use, so the licence is RECORDED and never judged.
-     The block prints no credit line — its italic <h4> names the performer and nothing else — so the
-     provenance row this tool prints is the record of who made the file and under what licence. */
+     The block prints no credit line — the figure's `<h4>` is the song and its `p.dim` names the
+     performer — so the provenance row this tool prints is the record of who made the file and under
+     what licence. */
 
   /* THE VOICE GATE. A tool that measures phrase boundaries cannot tell singing from a guitar — an
      instrumental of "Salley Gardens" cut perfectly into eight whistle phrases and every check passed.
@@ -982,22 +983,24 @@ const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 const songName = arg('title', '') ||
   (title ? title.replace(/^File:/, '').replace(/\.\w+$/, '').replace(/_/g, ' ') : outName);
 
-/* NO CREDIT LINE ABOVE THE PLAYER. The block's <h4> is its credit — who performs it, and nothing
-   else, italicised by the `h4` rule in `style.css` rather than by an `<i>` here — and the figure
-   prints nothing above the <audio>. The licence, the source and
+/* NO CREDIT LINE ABOVE THE PLAYER. The figure's <h4> is the song and its `p.dim` is the performer,
+   and nothing else is printed above the <audio>. The licence, the source and
    the excerpt length stay in the provenance row printed below, and THAT ROW IS THE RECORD of
    attribution: every licence is allowed (owner instruction), and the row carries it with the source
    and the credit in place of a printed line. */
-/* "Performed by" is not printed: the <h4> is the performer's name alone. Commons credits are
+/* "Performed by" is not printed: the `p.dim` is the performer's name alone. Commons credits are
    sometimes a list (Words: …; Music: …; Performance: …), so the performance clause is lifted out for
-   the <h4>; a list with no performance clause is carried whole, because a name is better than none. */
+   that line; a list with no performance clause is carried whole, because a name is better than none. */
 const creditParts = String(credit).split(/;\s*/).map(s => s.trim()).filter(Boolean);
 const perfClause = (creditParts.find(p => /^Performance:/i.test(p)) || '').replace(/^Performance:\s*/i, '');
 const performer = perfClause || String(credit);
 
-/* TWO SHAPES, ONE PIPELINE. `--width=half` is `musicPlayer`: the lines sit in a single list under the
-   player. `--width=full` is `lyricSheet` per [03]: the <h3> is the title, the h4 carries the
-   performer, and the lines and the explainer sit in two columns — because the
+/* ONE FRAME, THE MAP'S. The printed figure is `figure.vz-play viz` — the frame the capability map
+   draws for a player — carrying the song in its `<h4>` and the performer in its `p.dim`. It is not a
+   `.panel` and it carries no `<h3>`: the block it is pasted into supplies the heading, and that
+   heading names what the section teaches, never the song.
+   TWO SHAPES, ONE PIPELINE. `--width=half` is `musicPlayer`: the lines sit in a single list under the
+   player. `--width=full` is `lyricSheet`: the lines and the explainer sit in two columns — because the
    highlight is honest only while a line and a row are the same thing, and a long line in a narrow
    column wraps into three rows under a mark that is supposed to be singing one. */
 const full = /^full/i.test(arg('width', 'half'));
@@ -1008,10 +1011,9 @@ const sheet = [
 ];
 const fig = full
   ? [
-      '<div class="panel" data-kind="teach">',
-      '<h3>' + esc(songName) + '</h3>',
-      '<h4>' + esc(performer) + '</h4>',
-      '<figure class="vz-play">',
+      '<figure class="vz-play viz">',
+      '<h4>' + esc(songName) + '</h4>',
+      '<p class="dim">' + esc(performer) + '</p>',
       '  <audio class="vz-audio" src="../' + destRel + '" data-duration="' + cutM.duration.toFixed(2) +
         '" controls preload="metadata"></audio>',
       '  <div class="vz-controls">',
@@ -1025,14 +1027,12 @@ const fig = full
       '    <p class="dim">ONE PARAGRAPH: what these words are doing (never what the block is)</p>',
       '  </div>',
       '</figure>',
-      '</div>',
-      '<!-- OPTION slot: a second .panel below, holding whatever the lesson adds to this block -->',
+      '<!-- OPTION slot: a .rows beside or below this figure, holding whatever the lesson adds -->',
     ].join('\n')
   : [
-      '<div class="panel" data-kind="teach">',
-      '<h3>' + esc(songName) + '</h3>',
-      '<h4>' + esc(performer) + '</h4>',
-      '<figure class="vz-play">',
+      '<figure class="vz-play viz">',
+      '<h4>' + esc(songName) + '</h4>',
+      '<p class="dim">' + esc(performer) + '</p>',
       '  <audio class="vz-audio" src="../' + destRel + '" data-duration="' + cutM.duration.toFixed(2) +
         '" controls preload="metadata"></audio>',
       '  <div class="vz-controls">',
@@ -1043,10 +1043,9 @@ const fig = full
       '  </div>',
       ...sheet,
       '</figure>',
-      '</div>',
     ].join('\n');
 
-console.log('\n--- paste this into the block (' + (full ? 'the block IS the .panel' : 'inside its .panel') + ') ---\n' + fig);
+console.log('\n--- paste this inside the block, under the block\'s own <h3> — the heading names what the section teaches, never the song ---\n' + fig);
 console.log('\n--- provenance row for assets/README.md ---');
 console.log('| `' + outName + '.mp3` | ' +
   (lrcSel ? 'lines ' + lrcSel.first + '–' + (lrcSel.first + lyrics.length - 1) +

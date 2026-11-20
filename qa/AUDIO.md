@@ -70,7 +70,7 @@ A lesson arrives at a song in one of two ways, and only the second needs a searc
 9. every `data-t` is proved to land on sound — 0.5 s after it (`t+0.1`–`t+0.6`) against 0.25 s before
    (`t−0.35`–`t−0.1`), at least 0.006; a line that lands in a hole stops the run. The "NO SINGING"
    voice-gate warning does not stop a sheet-timed run, because the sheet is direct evidence of the words;
-10. it prints the panel, the figure with its lyric list, and the provenance row.
+10. it prints the player figure with its lyric list, and the provenance row.
 
 ## When the sync is off
 
