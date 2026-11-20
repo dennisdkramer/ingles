@@ -602,7 +602,7 @@ next();
 <div id="dialoggap" data-activity="dialoggap" style="min-width:calc(33% - 13px)">
 <ol class="seq viz" data-mode="turns">
 <li><span class="who">Jess</span><span class="say">Did you post the letter?</span></li>
-<li><span class="who">Mike</span><span class="say">Three times. I <input class="gap" data-answer="have|'ve" style="--gap-w:4em"> already posted it.</span></li>
+<li><span class="who">Mike</span><span class="say" style="position:relative"><span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px">1.</span>Three times. I <input class="gap" data-answer="have|'ve" style="--gap-w:4em"> already posted it.</span></li>
 </ol>
 </div>
 <div id="chartanswer" data-activity="chartanswer">
@@ -610,18 +610,18 @@ next();
 <table class="chart center">
 <thead><tr><th>Time</th><th>What he did</th><th>Which is it?</th></tr></thead>
 <tbody>
-<tr><td><span class="qnum">1.</span> 6:40</td><td>He <b>clocked in</b>.</td>
-<td><div class="opts" data-layout="row">
+<tr><td>6:40</td><td>He <b>clocked in</b>.</td>
+<td style="display:flex;align-items:center;gap:8px"><span class="qnum">1.</span><div class="opts" data-layout="row">
 <label class="opt"><input type="radio" name="m1"><span>routine</span></label>
 <label class="opt"><input type="radio" name="m1"><span>surprise</span></label>
 </div></td></tr>
-<tr><td><span class="qnum">2.</span> 6:44</td><td>The pallet <b>was tipping</b>.</td>
-<td><div class="opts" data-layout="row">
+<tr><td>6:44</td><td>The pallet <b>was tipping</b>.</td>
+<td style="display:flex;align-items:center;gap:8px"><span class="qnum">2.</span><div class="opts" data-layout="row">
 <label class="opt"><input type="checkbox"><span>scene</span></label>
 <label class="opt"><input type="checkbox"><span>event</span></label>
 </div></td></tr>
-<tr><td><span class="qnum">3.</span> 7:10</td><td>Nobody had told the office.</td>
-<td><input class="gap" data-answer="past perfect" style="--gap-w:8em"></td></tr>
+<tr><td>7:10</td><td>Nobody had told the office.</td>
+<td><span class="qnum">3.</span> <input class="gap" data-answer="past perfect" style="--gap-w:8em"></td></tr>
 </tbody></table>
 </figure>
 </div>
@@ -629,7 +629,7 @@ next();
 
 <div class="rows">
 <div id="chunks" data-activity="chunks">
-  <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px">
+  <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px"><span class="qnum" style="margin-right:-10px">1.</span>
     <span><b style="font-size:.8em">1</b> she</span>
     <span><b style="font-size:.8em">2</b> that</span>
     <span><b style="font-size:.8em">3</b> anyone</span>
@@ -637,8 +637,8 @@ next();
     <span><b style="font-size:.8em">5</b> told</span>
     <span><b style="font-size:.8em">6</b> never</span>
   </p>
-  <p style="text-align:center;margin-top:6px"><span class="qnum">1.</span> <input class="gap" style="--gap-w:100%"></p>
-  <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px">
+  <p style="text-align:center;margin-top:6px"><input class="gap" style="--gap-w:100%"></p>
+  <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px"><span class="qnum" style="margin-right:-10px">2.</span>
     <span><b style="font-size:.8em">1</b> he</span>
     <span><b style="font-size:.8em">2</b> when</span>
     <span><b style="font-size:.8em">3</b> already</span>
@@ -646,14 +646,14 @@ next();
     <span><b style="font-size:.8em">5</b> left</span>
     <span><b style="font-size:.8em">6</b> I got there</span>
   </p>
-  <p style="text-align:center;margin-top:6px"><span class="qnum">2.</span> <input class="gap" style="--gap-w:100%"></p>
+  <p style="text-align:center;margin-top:6px"><input class="gap" style="--gap-w:100%"></p>
 <div id="correction" data-activity="correction" style="padding-top:26px">
 <p class="dim" style="text-align:center">One word is wrong. Write the sentence again.</p>
-<p style="text-align:center"><span class="qnum">1.</span> He <b>have</b> clocked in early.</p>
+<p style="text-align:center"><span class="qnum">3.</span> He <b>have</b> clocked in early.</p>
 <input class="gap" data-answer="He has clocked in early.|He's clocked in early." style="--gap-w:100%">
 </div>
 <div id="dictation" data-activity="dictation" style="padding-top:20px">
-<p class="dim" style="display:flex;align-items:center;justify-content:center;gap:10px"><span class="qnum">1.</span> <button class="listen" type="button" data-say="I clocked in at six forty.">▶</button><span>Listen, then write what you hear.</span></p>
+<p class="dim" style="display:flex;align-items:center;justify-content:center;gap:10px"><span class="qnum">4.</span> <button class="listen" type="button" data-say="I clocked in at six forty.">▶</button><span>Listen, then write what you hear.</span></p>
 <textarea class="write" rows="2" style="field-sizing:fixed;--lines:2" data-answer="I clocked in at six forty." placeholder="what you hear"></textarea>
 </div>
 </div>
@@ -661,12 +661,12 @@ next();
 <table class="chart">
   <tbody>
     <tr>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">1.</span> <span class="qnum">2.</span> <span class="qnum">3.</span> <span class="qnum">4.</span> <input class="gap" style="--gap-w:100%"></td>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%"></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">1.</span> <input class="gap" style="--gap-w:100%"></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">2.</span> <input class="gap" style="--gap-w:100%"></td>
     </tr>
     <tr>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><input class="gap" style="--gap-w:100%"></td>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%"></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><span class="qnum">3.</span> <input class="gap" style="--gap-w:100%"></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">4.</span> <input class="gap" style="--gap-w:100%"></td>
     </tr>
   </tbody>
 </table>
@@ -709,10 +709,10 @@ next();
 <figure class="chartwrap">
 <table class="chart">
 <tbody>
-<tr><td><span class="qnum">1.</span> <b>clocked in</b></td><td><input class="gap" data-answer="c" style="--gap-w:3em"></td></tr>
-<tr><td><span class="qnum">2.</span> <b>spilled the tea</b></td><td><input class="gap" data-answer="a" style="--gap-w:3em"></td></tr>
-<tr><td><span class="qnum">3.</span> <b>threw shade</b></td><td><input class="gap" data-answer="e" style="--gap-w:3em"></td></tr>
-<tr><td><span class="qnum">4.</span> <b>bailed</b></td><td><input class="gap" data-answer="b" style="--gap-w:3em"></td></tr>
+<tr><td><b>clocked in</b></td><td><span class="qnum">1.</span> <input class="gap" data-answer="c" style="--gap-w:3em"></td></tr>
+<tr><td><b>spilled the tea</b></td><td><span class="qnum">2.</span> <input class="gap" data-answer="a" style="--gap-w:3em"></td></tr>
+<tr><td><b>threw shade</b></td><td><span class="qnum">3.</span> <input class="gap" data-answer="e" style="--gap-w:3em"></td></tr>
+<tr><td><b>bailed</b></td><td><span class="qnum">4.</span> <input class="gap" data-answer="b" style="--gap-w:3em"></td></tr>
 </tbody>
 </table>
 </figure>
@@ -848,23 +848,25 @@ next();
 </div></div></details>
 <details class="reveal" open><summary>Markup — #dialoggap · a dialog with a gap</summary><div class="body"><div>
 <pre>&lt;li&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;
-    &lt;span class="say"&gt;Three times. I
-      &lt;input class="gap" data-answer="have|'ve" style="--gap-w:4em"&gt;
-      already posted it.&lt;/span&gt;&lt;/li&gt;
+    &lt;span class="say" style="position:relative"&gt;
+      &lt;span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px"&gt;1.&lt;/span&gt;
+      Three times. I &lt;input class="gap" data-answer="have|'ve" style="--gap-w:4em"&gt; already posted it.&lt;/span&gt;&lt;/li&gt;
 
-&lt;!-- an item and the chart beside it: one .rows, each in a cell of its own — neither cell carries a size,
-     the row gives them equal shares, and the chart centres in the half it was given --&gt;</pre>
+&lt;!-- the number sits outside the bubble, to its left: the .say is position:relative and the number is
+     absolute at right:100% — a turn on the right of the dialog numbers the same way --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #chartanswer · a chart whose rows are answered</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes" data-span="12"&gt;
   &lt;table class="chart"&gt;
-    &lt;tr&gt;&lt;td&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt; 6:40&lt;/td&gt;&lt;td&gt;He clocked in.&lt;/td&gt;
-      &lt;td&gt;&lt;div class="opts" data-layout="row"&gt;
+    &lt;tr&gt;&lt;td&gt;6:40&lt;/td&gt;&lt;td&gt;He clocked in.&lt;/td&gt;
+      &lt;td style="display:flex;align-items:center;gap:8px"&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt;
+        &lt;div class="opts" data-layout="row"&gt;
         &lt;label class="opt"&gt;&lt;input type="radio" name="m1"&gt;&lt;span&gt;routine&lt;/span&gt;&lt;/label&gt;
         &lt;label class="opt"&gt;&lt;input type="radio" name="m1"&gt;&lt;span&gt;surprise&lt;/span&gt;&lt;/label&gt;
       &lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;tr&gt;…a checkbox row, a gap row…&lt;/tr&gt;
   &lt;/table&gt;
+  &lt;!-- the number stands beside the control it numbers, never in a column of its own --&gt;
   &lt;!-- one example of each control type is shown — an activity may mix them or use a single type, as its content needs --&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
@@ -885,8 +887,8 @@ next();
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;
     &lt;figure class="chartwrap"&gt;&lt;table class="chart"&gt;
-      &lt;tr&gt;&lt;td&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt; &lt;b&gt;the phrase&lt;/b&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;input class="gap" data-answer="c" style="--gap-w:3em"&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;b&gt;the phrase&lt;/b&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt; &lt;input class="gap" data-answer="c" style="--gap-w:3em"&gt;&lt;/td&gt;&lt;/tr&gt;
       …one row per item…
     &lt;/table&gt;&lt;/figure&gt;
   &lt;/div&gt;
@@ -899,7 +901,7 @@ next();
 </div></div></details>
 <details class="reveal" open><summary>Markup — #correction · one word wrong</summary><div class="body"><div>
 <pre>&lt;p class="dim" style="text-align:center"&gt;One word is wrong. Write the sentence again.&lt;/p&gt;
-&lt;p style="text-align:center"&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt; He &lt;b&gt;have&lt;/b&gt; clocked in early.&lt;/p&gt;
+&lt;p style="text-align:center"&gt;&lt;span class="qnum"&gt;3.&lt;/span&gt; He &lt;b&gt;have&lt;/b&gt; clocked in early.&lt;/p&gt;
 &lt;input class="gap" data-answer="He has clocked in early.|He's clocked in early."
        style="--gap-w:100%"&gt;
 
@@ -911,7 +913,7 @@ next();
 <details class="reveal" open><summary>Markup — #dictation · listen, then write</summary><div class="body"><div>
 <pre>&lt;p class="dim" style="display:flex;align-items:center;
    justify-content:center;gap:10px"&gt;
-  &lt;span class="qnum"&gt;1.&lt;/span&gt;
+  &lt;span class="qnum"&gt;4.&lt;/span&gt;
   &lt;button class="listen" type="button"
           data-say="I clocked in at six forty."&gt;▶&lt;/button&gt;
   &lt;span&gt;Listen, then write what you hear.&lt;/span&gt;&lt;/p&gt;
@@ -928,19 +930,18 @@ next();
 <details class="reveal" open><summary>Markup — #chunks · chunks in the wrong order</summary><div class="body"><div>
 <pre>&lt;p&gt;Unscramble the sentences:&lt;/p&gt;
 &lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
-   justify-content:center;align-items:center;padding-top:4px"&gt;
+   justify-content:center;align-items:center;padding-top:4px"&gt;&lt;span class="qnum" style="margin-right:-10px"&gt;1.&lt;/span&gt;
   &lt;span&gt;&lt;b style="font-size:.8em"&gt;1&lt;/b&gt; she&lt;/span&gt;
   &lt;span&gt;&lt;b style="font-size:.8em"&gt;2&lt;/b&gt; that&lt;/span&gt;
   …
 &lt;/p&gt;
-&lt;p style="text-align:center;margin-top:6px"&gt;
-  &lt;span class="qnum"&gt;1.&lt;/span&gt;&lt;input class="gap" style="--gap-w:100%"&gt;
-&lt;/p&gt;
+&lt;p style="text-align:center;margin-top:6px"&gt;&lt;input class="gap" style="--gap-w:100%"&gt;&lt;/p&gt;
 
 &lt;!-- one set, or as many as the activity needs: a further .chips over its own answer line, one after
      another vertically as here, side by side in a .rows of their own, or mixed with the prose, the chart
      or the strip they are read with. --&gt;
-&lt;!-- every activity carries its instruction line in the block: this one is the line above the chips --&gt;</pre>
+&lt;!-- every activity carries its instruction line in the block: this one is the line above the chips --&gt;
+&lt;!-- the number sits at the head of the words, on their line — never alone on the answer line --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #stripgaps · the strip as an activity</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes"&gt;
@@ -951,7 +952,7 @@ next();
     &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" width="100%" role="img"
                  aria-label="what the panel shows"&gt;…&lt;/svg&gt;
               &lt;span class="qnum"&gt;1.&lt;/span&gt; &lt;input class="gap" style="--gap-w:100%"&gt;&lt;/td&gt;
-        …two panels to a row…
+        …two panels to a row, each with its own number…
     &lt;/tr&gt;
     &lt;tr&gt;…the next two panels…&lt;/tr&gt;
   &lt;/table&gt;
