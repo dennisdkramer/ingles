@@ -220,6 +220,7 @@ window.LayoutEditor = (function () {
         .forEach(function (p) { n.style.removeProperty(p); });
       if (!n.getAttribute('style')) n.removeAttribute('style');
     } else if (what === 'half') setFlex(n, '0 0 calc(50% - 13px)');
+    else if (what === 'min') setFlex(n, '0 1 0');          /* no growth, no basis: the cell drops to the minimum width in the sheet and the row's rest goes to its neighbours */
     else if (what === 'full') setFlex(n, '0 0 100%');
     else if (what === 'even' && row && row.classList && row.classList.contains('rows')) {
       var kids = [].filter.call(row.children, function (k) { return k.nodeType === 1; }), c = kids.length;
@@ -236,6 +237,7 @@ window.LayoutEditor = (function () {
       panelEl.setAttribute('role', 'status');
       panelEl.innerHTML = '<div class="layout-facts"></div><div class="layout-acts">' +
         '<button type="button" data-act="even">even row</button>' +
+        '<button type="button" data-act="min">min</button>' +
         '<button type="button" data-act="half">half</button>' +
         '<button type="button" data-act="full">full</button>' +
         '<button type="button" data-act="auto">clear width</button>' +
