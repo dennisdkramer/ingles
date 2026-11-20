@@ -122,7 +122,7 @@
      is a block too thin for its content, and pass 2 rewrites the headline rather than letting it wrap.
      It is clipped rather than wrapped, so it neither wraps nor scrolls the page — a cut headline is the
      signal that the block is too thin. */
-  .block>h3{white-space:nowrap;overflow:hidden}
+  .block>h3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
   h2{counter-reset:blk}
   h3{counter-increment:blk}
