@@ -819,7 +819,7 @@ next();
 <p><span class="qnum">2.</span> Nobody <input class="gap" data-answer="had" style="--gap-w:5em"> told the office before the shift started.</p>
 <div class="qitem" data-a="b">
 <p class="qstem"><span class="qnum">3.</span> By the time I arrived, the crew <b>___</b> the truck.</p>
-<div class="qopts">
+<div class="opts compact" data-layout="row">
 <label class="opt"><input type="radio" name="fb1" value="a"><span>loaded</span></label>
 <label class="opt"><input type="radio" name="fb1" value="b"><span>had loaded</span></label>
 <label class="opt"><input type="radio" name="fb1" value="c"><span>were loading</span></label>
@@ -828,7 +828,7 @@ next();
 </div>
 <div class="qitem" data-a="a">
 <p class="qstem"><span class="qnum">4.</span> He <b>___</b> the email twice before he sent it.</p>
-<div class="qopts">
+<div class="opts compact" data-layout="row">
 <label class="opt"><input type="radio" name="fb2" value="a"><span>checked</span></label>
 <label class="opt"><input type="radio" name="fb2" value="b"><span>check</span></label>
 <label class="opt"><input type="radio" name="fb2" value="c"><span>checking</span></label>
@@ -986,9 +986,11 @@ next();
        blank, a different activity from the .gap form — the student picks the word instead of typing it.
        A block of nothing but option blanks is recorded as mc; a block that mixes typed and option
        blanks is recorded as fill, because the blank is what the two have in common --&gt;
+  &lt;!-- opts compact with data-layout="row" keeps three or four one-word options on one line: the radio
+       and the padding shrink, the option text does not --&gt;
   &lt;div class="qitem" data-a="b"&gt;
     &lt;p class="qstem"&gt;&lt;span class="qnum"&gt;2.&lt;/span&gt; By the time I arrived, the crew &lt;b&gt;___&lt;/b&gt; the truck.&lt;/p&gt;
-    &lt;div class="qopts"&gt;
+    &lt;div class="opts compact" data-layout="row"&gt;
       &lt;label class="opt"&gt;&lt;input type="radio" name="fb1" value="a"&gt;&lt;span&gt;loaded&lt;/span&gt;&lt;/label&gt;
       …had loaded (the key) · were loading · load — one value each, three or four options…
     &lt;/div&gt;

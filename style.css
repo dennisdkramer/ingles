@@ -1119,6 +1119,12 @@
     box-shadow:var(--shadow-1)}
   .opt input:checked{border-color:var(--accent);background:var(--accent);
     box-shadow:inset 0 0 0 3px var(--surface-2)}
+  /* a compact choice: the same control with less chrome, for three or four one-word options that have to
+     share one line inside a block — `class="opts compact" data-layout="row"` */
+  .opts.compact[data-layout="row"]{gap:5px;margin:2px 0 8px}
+  .opts.compact .opt{padding:2px 8px;gap:6px;font-size:.92em}
+  .opts.compact .opt input[type="radio"]{width:14px;height:14px;border-width:1.5px}
+  .opts.compact .opt input:checked{box-shadow:inset 0 0 0 2px var(--surface-2)}
 }
 
 /* #62 MULTI — same .opt with input[type=checkbox]; any number of answers, ticked with the accent */
