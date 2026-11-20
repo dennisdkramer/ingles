@@ -9,8 +9,6 @@ One line per lesson, appended in two phases. It is the only memory: pass 1 of th
 ```
 A fenced block is an example and is never read: each lesson's row is written **below** this line, outside any fence, because `npm run batchcheck` skips every line inside one.
 
-L1 | S1-rul:rul>con | S2-rul:rul>ex>con@chart | S3-prn:prn>ex>con@key | S4-voc:voc>mng | S5-rul:ex>con | Q:rul>mng>prn
-
 
 
 - **subject** — what the block or section is *about*: `rul` form · `rsn` reasoning · `ex` worked example · `con` contrast · `exc` exception · `voc` words as a set · `mng` what one means · `prn` how it sounds · `tim` where it sits in time · `soc` when it is said · `rcp` earlier material.
