@@ -109,8 +109,8 @@
    - teaches: `noun/count-uncountable`, `article/a-the-zero`, `quantity/some-any-much-many`
    - Deepens: -
    - Uses: `pronoun/possessive`, `be/existence-there`, `clause/skeleton`
-   - Vocabulary: information, advice, feedback, research, money, data, equipment, staff, news, "a few", "a little", "a lot of"
-   - Examples: "I need some information about the project." / "We don't have much time." / "The feedback was useful." / "There are a few issues." / "I have a little time today."
+   - Vocabulary: information, advice, feedback, money, news, water, bread, coffee, time, music, traffic, weather
+   - Examples: "I need some information about the project." / "We don't have much time." / "The feedback is useful." / "There are a few issues." / "I have a little time today."
    - Real-world relevance: The words this persona uses most - information, feedback, data, research, staff - are exactly the ones that refuse a plural and refuse "a".
 
 ## Lesson 12: The past you can point at
@@ -119,7 +119,7 @@
    - teaches: `past-simple/was-were`, `past-simple/regular-ed`, `past-simple/irregular`
    - Deepens: `mode/slot` - the slot stays empty in the affirmative past and only fills when did enters, which is lesson 5's rule pointed at a new time.
    - Uses: `mode/slot`, `mode/negation`, `prep/time-in-on-at`, `sound/vowel-no-fixed`
-   - Vocabulary: leave, meet, take, sell, buy, go, come, yesterday, "last week", "a year ago", "the day before", "on Monday"
+   - Vocabulary: meet, sell, send, call, go, come, eat, buy, watch, play, "last week", "a year ago"
    - Examples: "I sent the file yesterday." / "We were in a meeting all morning." / "She didn't call back." / "Did you get my email?" / "We met the client a year ago." / "I watched the game last night." / "We went to the beach." / "She called me twice."
    - Real-world relevance: Every status update starts with what already happened, and the -ed/did split decides whether the sentence is understood the first time.
 
@@ -129,7 +129,7 @@
    - teaches: `prep/verb-unit`, `prep/contrast-pairs`, `prep/no-translation`
    - Deepens: `prep/to-vs-for` - the same two meanings now attach to specific verbs, and the pair is fixed by the verb rather than by purpose or direction alone.
    - Uses: `prep/location-in-on-at`, `clause/skeleton`, `present-simple/facts-not-now`
-   - Vocabulary: look, listen, depend, focus, rely, complain, "depend on", "listen to", "wait for", "talk about", "look for", "complain about"
+   - Vocabulary: "depend on", "listen to", "wait for", "talk about", "look for", "complain about", "deal with", "work on", "look after", "go out", "wake up", "get on"
    - Examples: "It depends on the budget." / "I'm waiting for the client." / "We talked about the deadline." / "I'm looking for the invoice." / "I listen to the recording on the way home."
    - Real-world relevance: "Depender de", "pensar em" and "esperar por" map onto different English prepositions, and this is the error that survives longest in a Brazilian professional's speech.
 
@@ -139,7 +139,7 @@
    - teaches: `future/gonna-plan`, `future/will-now-decision`, `future/present-arrangement`
    - Deepens: `reduction/gonna-future-mode` - the gonna mode is now set against will and against the present forms, so the student chooses by meaning rather than by habit.
    - Uses: `reduction/gonna-future-mode`, `present-continuous/now`, `present-simple/facts-not-now`, `mode/verb-returns-base`
-   - Vocabulary: tomorrow, "next week", plan, soon, later, "this afternoon", confirm, arrange, invite, move, "by Friday", "the week after"
+   - Vocabulary: confirm, arrange, invite, move, "by Friday", tonight, later, "this weekend", "next week", trip, concert, match
    - Examples: "I'm gonna review it tonight." / "I'll send you the file now." / "I'm meeting the client at ten." / "The call starts at nine tomorrow." / "We're gonna join the call later."
    - Real-world relevance: A professional life is a list of commitments, and the form chosen is the size of the commitment: plan, promise or booking.
 
@@ -149,7 +149,7 @@
    - teaches: `modal/can-could-ability`, `modal/request-ladder`, `modal/may-permission`
    - Deepens: -
    - Uses: `mode/verb-returns-base`, `question/yes-no-order`, `prep/to-vs-for`
-   - Vocabulary: "could you", "would you mind", "of course", sure, possible, able, permission, favour, "let me", "help with", "send me", "no problem"
+   - Vocabulary: "could you", "would you mind", "of course", sure, "no problem", "let me", "help with", "send me", "can I", borrow, lend, favour
    - Examples: "Can I ask a question?" / "Could you send me the file?" / "Would you mind checking this?" / "Of course, no problem." / "Let me check and get back to you."
    - Real-world relevance: Asking a manager, a coworker or a client to do something is the highest-frequency risk in this persona's day.
 
@@ -159,8 +159,8 @@
    - teaches: `connector/cause-result`, `connector/contrast`, `connector/sequence`
    - Deepens: `clause/skeleton` - the skeleton now repeats, and the connector decides the order of the two clauses and which one is subordinate.
    - Uses: `past-simple/regular-ed`, `present-simple/facts-not-now`, `clause/skeleton`
-   - Vocabulary: because, so, but, although, however, while, also, too, then, finally, "in addition", "as a result"
-   - Examples: "We moved the meeting because the client is travelling." / "It's cheap, but it's slow." / "First we test, then we deploy." / "Although the deadline is close, the plan is clear."
+   - Vocabulary: because, so, but, although, however, while, also, then, finally, "that's why", though, anyway
+   - Examples: "We moved the meeting because the client is travelling." / "I like the plan, but the timing is bad." / "First we test, then we deploy." / "Although the deadline is close, the plan is clear."
    - Real-world relevance: Explaining why something changed is the whole content of a status conversation, and the reason-and-result pair is where a Brazilian sentence usually runs out of breath.
 
 ## Lesson 17: More, less, and as ... as
@@ -169,7 +169,7 @@
    - teaches: `compare/er-more-forms`, `compare/as-as`, `compare/degree-adverbs`
    - Deepens: -
    - Uses: `noun/count-uncountable`, `quantity/some-any-much-many`, `number/figure-comparison`
-   - Vocabulary: better, worse, best, cheapest, faster, slower, expensive, cheap, "the same", difference, "a bit", slightly
+   - Vocabulary: better, worse, faster, slower, expensive, cheap, taller, older, hotter, colder, "the same", difference
    - Examples: "This version is faster than the old one." / "It's not as expensive as I thought." / "The new process is much simpler." / "Our numbers are slightly better this month." / "He's taller than me." / "This coffee is better than the one at work." / "My phone is as old as yours."
    - Real-world relevance: Recommending one option over another is this persona's daily output, and the dropped "than" is what makes the recommendation unclear.
 
@@ -179,7 +179,7 @@
    - teaches: `phrase-verb/default-form`, `phrase-verb/root-family-get`, `phrase-verb/particle-meaning`
    - Deepens: `get/wildcard` - the wildcard verb now takes particles that each fix one meaning, so the senses are separated instead of guessed from context.
    - Uses: `get/wildcard`, `mode/verb-returns-base`, `prep/verb-unit`
-   - Vocabulary: "set up", "put off", "call off", "go over", "get back to", "follow up", "wrap up", "sort out", "come up with", "run into", "turn down", "bring up"
+   - Vocabulary: "set up", "put off", "go over", "get back to", "sort out", "follow up", "turn off", "pick up", "run out of", "wake up", "work out", "hang out"
    - Examples: "I'll set up the call." / "They put off the launch." / "Let me get back to you." / "Can we go over the numbers?" / "I'll follow up on Monday." / "Turn it off and on again." / "We ran out of milk." / "She picked me up at the airport."
    - Real-world relevance: Meeting speech is built out of these, and the Latin twin is what the student writes while the phrasal verb is what the room says.
 
@@ -189,7 +189,7 @@
    - teaches: `modal/must-have-to`, `modal/should-advice`, `modal/no-obligation`
    - Deepens: -
    - Uses: `mode/verb-returns-base`, `modal/can-could-ability`, `mode/negation`
-   - Vocabulary: rule, requirement, policy, optional, mandatory, "have to", "need to", "make sure", "be careful", "due date", approve, signature
+   - Vocabulary: "have to", "need to", "make sure", "be careful", "mustn't", rule, policy, approve, "due date", deadline, "sign here", seatbelt
    - Examples: "You have to sign before Friday." / "You should check the numbers again." / "You don't have to come, but you can." / "You mustn't share that file."
    - Real-world relevance: Process, compliance and recommendations are what a manager hands a new team member, and "don't have to" against "mustn't" is a costly confusion.
 
@@ -199,7 +199,7 @@
    - teaches: `axis/direct-vs-indirect`, `axis/hedge`, `axis/contraction`
    - Deepens: `modal/request-ladder` - the ladder is now general: statements, claims and offers move along it too, and hedges and contractions are the other two levers.
    - Uses: `modal/request-ladder`, `modal/should-advice`, `present-continuous/now`
-   - Vocabulary: "I think", "it seems", probably, maybe, "would like", "I'd appreciate", "in my opinion", "to be honest", perhaps, "kind of", "if possible", honestly
+   - Vocabulary: "I think", "I guess", "it seems", probably, maybe, perhaps, "kind of", "sort of", "to be honest", "would like", "if possible", right?
    - Examples: "I'd like to add something." / "It's probably better to wait." / "We'll look into it." / "Maybe we should check that first." / "I don't think that's quite right."
    - Real-world relevance: This axis is reused by every function in the rest of the course; a correct sentence at the wrong force reads as rude, and that is what costs a professional the room.
 
