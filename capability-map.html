@@ -20,7 +20,8 @@
 
 <div class="block" data-span="12">
 <h3>Arrange it, and give it a look</h3>
-<p><b>Adjacent things go into one flex row, and that is the default.</b> Two blocks of similar height, and two items beside each other inside a block, are written into one <code>.rows</code>: the cells share the width, match the row's height and need no size of their own. <code>.cols</code> is for interchangeable cells that must wrap, and <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. <b>No width is written on a cell</b> — the flow sizes, and a span or a size is written only to repair a row the flow got wrong: too tight, an element squeezed under the width it draws at, a lone block with half a line empty beside it. Width is the repair, never the plan.</p>
+<p><b>Adjacent things go into one flex row, and that is the default.</b> Two blocks of similar height, and two items beside each other inside a block, are written into one <code>.rows</code>: the cells share the width, match the row's height and need no size of their own. <code>.cols</code> is for interchangeable cells that must wrap, and <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. <b>No width is written on a cell</b> — the flow sizes, and a span or a size is written only where a cell comes out under a quarter of the line or a row is mostly empty. Width is the repair, never the plan.</p>
+<p class="dim"><b>Every element below is drawn with the markup that builds it, and the drawing is the default</b>: what the element contains, what text it carries, where that text sits, and whether it carries a title at all. Its item count is the example's own, never a count to copy. A chart takes no title of its own — the sentence beside it names it.</p>
 <p class="dim"><code>data-look</code> is declared on the block, never inferred from what it holds, and changes the paint only.</p>
 </div>
 
@@ -397,7 +398,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #chart · the chart, and the split chart</summary><div class="body"><div>
 <pre>&lt;figure class="chartwrap"&gt;
-  &lt;figcaption class="chartcap"&gt;what the chart holds&lt;/figcaption&gt;
   &lt;table class="chart"&gt;…&lt;/table&gt;
 &lt;/figure&gt;</pre>
 <pre>&lt;table class="chart"&gt;
@@ -408,12 +408,11 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
     …
   &lt;/tbody&gt;
 &lt;/table&gt;</pre>
-<p class="dim"><code>figcaption.chartcap</code> names a chart. <code>th.vlab</code> puts a family label outside the chart's edge; <code>tr.bare</code> collapses a nameless header row to a rule. A block takes <code>data-structure="grid"</code> with a <code>thead</code> and optional <code>caption</code>, and <code>tr.note</code> for a remark row. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each. <b>Content beside a chart should flex to fill the row</b>; where it does not, the chart is centred in the space it was given, or the row is spaced around it.</p>
+<p class="dim">A chart carries no title of its own: the sentence beside it names it. <code>th.vlab</code> puts a family label outside the chart's edge; <code>tr.bare</code> collapses a nameless header row to a rule. A block takes <code>data-structure="grid"</code> with a <code>thead</code> and optional <code>caption</code>, and <code>tr.note</code> for a remark row. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each. <b>Content beside a chart should flex to fill the row</b>; where it does not, the chart is centred in the space it was given, or the row is spaced around it.</p>
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;…the sentence, and the chart it reads…&lt;/div&gt;
   &lt;div&gt;
     &lt;figure class="chartwrap"&gt;
-      &lt;figcaption class="chartcap"&gt;the chart's name&lt;/figcaption&gt;
       &lt;table class="chart"&gt;…&lt;/table&gt;
     &lt;/figure&gt;
   &lt;/div&gt;
@@ -679,7 +678,7 @@ next();
 <p>Choose the answer that fits the line.</p>
 <div class="rows">
 <div class="qitem" data-a="b">
-<p class="qstem">The pallet <b>was tipping</b> when I got to the dock.</p>
+<p class="qstem"><span class="qnum">1.</span> The pallet <b>was tipping</b> when I got to the dock.</p>
 <div class="qopts">
 <label class="opt"><input type="radio" name="mc1" value="a"><span>a habit</span></label>
 <label class="opt"><input type="radio" name="mc1" value="b"><span>a scene already going on</span></label>
@@ -688,7 +687,7 @@ next();
 </div>
 </div>
 <div class="qitem" data-a="c">
-<p class="qstem">By the time I clocked in, the crew <b>had loaded</b> the truck.</p>
+<p class="qstem"><span class="qnum">2.</span> By the time I clocked in, the crew <b>had loaded</b> the truck.</p>
 <div class="qopts">
 <label class="opt"><input type="radio" name="mc2" value="a"><span>loading now</span></label>
 <label class="opt"><input type="radio" name="mc2" value="b"><span>loading after I arrived</span></label>
