@@ -66,6 +66,20 @@ for (const t of tracks) {
     const body = fs.readFileSync(path.join(root, t, f), 'utf8');
     if (body.includes('markup-row')) fail(`${t}/${f} carries a markup box — those are build tools, never content`);
     if (!body.includes('id="feed"')) fail(`${t}/${f} has no notebook — the shell was not the frame it was copied from`);
+    /* 6a — a block's letter is drawn from its <h3>: no headline, no letter */
+    const doc = new JSDOM(body).window.document;
+    const num = (f.match(/^lesson(\d+)/i) || [])[1];
+    const ledgerFile = path.join(root, t, 'BATCH-RECORD.md');
+    const ledger = fs.existsSync(ledgerFile) ? fs.readFileSync(ledgerFile, 'utf8') : '';
+    const ledgered = !!num && new RegExp(`^L0*${num}\\s*\\|`, 'm').test(ledger);
+    const noH = [...doc.querySelectorAll('.block')].filter(b => b.firstElementChild && b.firstElementChild.tagName !== 'H3');
+    if (noH.length) {
+      (ledgered ? fail : warn)(`${t}/${f}: ${noH.length} of ${doc.querySelectorAll('.block').length} block(s) open with no <h3> — the block letter is drawn from the headline`);
+    }
+    /* 6b — items are numbered */
+    const unnum = [...doc.querySelectorAll('.block')]
+      .filter(b => b.querySelector('input.gap,textarea.write,input[type=radio]') && !b.querySelector('.qnum'));
+    if (unnum.length) warn(`${t}/${f}: ${unnum.length} block(s) hold answers but carry no .qnum — items are numbered 1., 2. …`);
   }
 }
 

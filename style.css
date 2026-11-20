@@ -1642,7 +1642,10 @@
   .blanks.sent.wide{display:block}
   .blanks.sent>*{display:block;margin:8px 0}
   .blanks.sent>* input.gap{display:inline-block;margin:0 .2em}
-  .dialog-title,.qgrid .qnum,.qgrid .qstem,.bookitem.cur a.ltitle{font-weight:700}
+  .dialog-title,.qnum,.qgrid .qstem,.bookitem.cur a.ltitle{font-weight:700}
+  /* a number beside an item is the item's own number and reads the same wherever it sits:
+     inside a .qgrid, at the head of a chart row, or in front of a lone gap */
+  .qnum{font-variant-numeric:tabular-nums}
   .pt b,.lead b{font-style:normal}
   .chart tr.note td{background:#fff8ea;font-style:italic;color:#5c5347;border-top:0;
     padding:10px 14px}
