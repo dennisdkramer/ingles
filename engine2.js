@@ -91,7 +91,16 @@ document.addEventListener("input",e=>{if(e.target&&e.target.id==="feed"){clearTi
    plus any row whose local write is still in flight. */
 const ansNorm=s=>lineNorm(String(s==null?"":s)).replace(/\s+/g," ").trim();
 function ansQstem(radio){let el=radio&&radio.closest?radio.closest("label"):null;if(!el)return null;
- const opts=el.closest(".qopts");if(opts){const line=opts.previousElementSibling;const st=line?line.querySelector(".qstem"):null;if(st)return st;}
+ const opts=el.closest(".qopts");
+ if(opts){const line=opts.previousElementSibling;
+  /* THE STEM MAY *BE* THAT SIBLING. The documented item is `.qitem > .qstem + .qopts`, so the line before
+     the options is the `<p class="qstem">` itself — and `querySelector(".qstem")` never matches the
+     element it is called on, so the branch below found nothing and every radio in that shape returned
+     null: no anchor, no save, and a chosen option that came back unselected after a refresh. A line that
+     IS the stem is now taken as one; the `.qline` wrapper (a game's own markup) still resolves by
+     searching inside it. */
+  const st=line?((line.classList&&line.classList.contains("qstem"))?line:line.querySelector(".qstem")):null;
+  if(st)return st;}
  let p=el.previousElementSibling;while(p){if(p.classList.contains("qstem"))return p;if(p.classList.contains("qnum"))return null;p=p.previousElementSibling;}
  return null}
 /* THE TEXT A GAP ANSWERS = the nearest ancestor that carries text: its own parent for a normal prompt
@@ -104,7 +113,22 @@ function ansQstem(radio){let el=radio&&radio.closest?radio.closest("label"):null
    node at all, so ansPos gives null and ansRowFor(anchor,null) returns the FIRST row) — the second answer
    used to overwrite the first (B-I12). A text offset is never negative, so an ordinal can never collide with
    one. A normal single-gap prompt keeps its exact old anchor and offset: nothing already saved is re-keyed. */
+/* THE ANCHOR IS THE ITEM, NOT ITS NUMBER. A gap alone in a table cell used to take the CELL's text as its
+   anchor, and the only text in that cell is the item number — so every such gap was keyed "1.", "2." …, the
+   same strings the next block's items carry, and the only thing telling two of them apart was the {b,o}
+   offset. That offset is an INDEX into the page's block list, and engine4 inserts a stage into every game
+   block at load: a row saved while those stages existed is looked up at the next load before they do, the
+   offset misses by a few, the answer does not come back — and then the unload's save wrote the empty field
+   over the row. So a number-only ancestor is SKIPPED and the walk continues to the row/cell that carries
+   the item's own words, which is unique and does not move. */
+function ansNumberOnly(p){const t=ansNorm(p.textContent||"");return /^\d+\.?$/.test(t)}
 function ansAnchorOf(el){let p=el.parentElement;
+ while(p){const t=ansNorm(p.textContent);if(t&&!ansNumberOnly(p))return t;p=p.parentElement}
+ return""}
+/* the anchor the same control had before the rule above (its nearest ancestor, number and all) — read only
+   as a FALLBACK by ansRowFor, so an answer saved under the old key is still found and migrates to the new
+   one the next time the student answers it. Nothing is lost to the change. */
+function ansAnchorLegacy(el){let p=el.parentElement;
  while(p){const t=ansNorm(p.textContent);if(t)return t;p=p.parentElement}
  return""}
 function ansCellPos(el,a){const blk=hlBlockOf(el);if(!blk)return null;
@@ -132,14 +156,23 @@ function ansOf(el){
     page that never adopted the convention keeps the legacy text anchor and nothing it saved moves. */
  const num=(typeof el.name==="string"&&/^a\d+[a-z]\d+(g\d+)?$/.test(el.name))?el.name:null;
  if(num)return{anchor:num,posEl:null,pos:null};
- if(el.matches&&el.matches("input.gap")){const w=el.parentElement;if(!w)return null;return ansGap(el,w)}
- if(el.matches&&el.matches('input[type="radio"]')){const st=ansQstem(el);if(!st)return null;return{anchor:ansNorm(st.textContent),posEl:st}}
+ if(el.matches&&el.matches("input.gap")){const w=el.parentElement;if(!w)return null;return ansWithAlt(el,ansGap(el,w))}
+ if(el.matches&&el.matches('input[type="radio"]')){const st=ansQstem(el);if(!st)return null;
+  /* a choice is keyed by the words of its own question, which are unique on the page and never move */
+  return{anchor:ansNorm(st.textContent),posEl:st}}
  if(el.tagName==="TEXTAREA"&&el.id!=="feed"){const w=el.parentElement;if(!w)return null;
   /* a translation/dictation box follows the same rule as a gap: one control in its cell keeps the
      offset it always had, two of them in the same cell take the ordinal so they cannot overwrite
      each other's row */
-  return ansGap(el,w)||{anchor:ansNorm(w.textContent),posEl:w}}
+  return ansWithAlt(el,ansGap(el,w)||{anchor:ansNorm(w.textContent),posEl:w})}
  return null}
+/* the same control's PREVIOUS anchor (its nearest text ancestor, item number and all) is carried beside the
+   stable one so a row saved under the old key is still found — see ansRowFor */
+function ansWithAlt(el,o){
+ if(!o||!o.anchor)return o;
+ const a=ansAnchorLegacy(el);
+ if(a&&a!==o.anchor)o.alt=a;
+ return o}
 function ansPos(posEl){const blk=hlBlockOf(posEl);if(!blk)return null;
  const b=hlBlocks().indexOf(blk);if(b<0)return null;
  const w=document.createTreeWalker(posEl,NodeFilter.SHOW_TEXT);const n=w.nextNode();
@@ -153,12 +186,18 @@ function ansRows(){
 }
 function ansValueOf(r){if(!r)return"";let j=null;try{j=JSON.parse(String(r.data||"{}"))}catch(e){return String(r.data||"")}
  return(j&&typeof j.v==="string")?j.v:""}
-function ansRowFor(t,pos){const rows=ansRows().filter(r=>r.anchor===t);
+function ansRowFor(t,pos,alt){let rows=ansRows().filter(r=>r.anchor===t);
+ if(!rows.length&&alt&&alt!==t)rows=ansRows().filter(r=>r.anchor===alt);  /* saved before the anchor rule */
  if(!rows.length)return null;
  if(!pos)return rows[0];
- return rows.find(r=>{const p=nbDataPos(r.data);return p&&p.b===pos.b&&p.o===pos.o})||null}
-function ansSet(t,v,pos){
- const cur=ansRowFor(t,pos);
+ const hit=rows.find(r=>{const p=nbDataPos(r.data);return p&&p.b===pos.b&&p.o===pos.o});
+ if(hit)return hit;
+ /* THE OFFSET IS AN INDEX, AND AN INDEX CAN DRIFT between the save and the next load (a game inserts its
+    stage into the page, a block is edited): when the anchor names exactly ONE answer, that row IS this
+    control's answer and a moved offset must not hide it. */
+ return rows.length===1?rows[0]:null}
+function ansSet(t,v,pos,alt){
+ const cur=ansRowFor(t,pos,alt);
  if(v===""){
   if(cur){layer=layer.filter(x=>x.id!==cur.id);ansLocal=ansLocal.filter(r=>r.id!==cur.id);send({action:"del",id:cur.id});}
   return;
@@ -172,7 +211,15 @@ function ansSet(t,v,pos){
  ansLocal=ansLocal.filter(r=>r.id!==id);ansLocal.push(merged);
  send({action:cur?"set":"add",id:id,type:"answer",anchor:t,data:data});
 }
-function ansSaveEl(el){const o=ansOf(el);if(!o||!o.anchor)return;ansSet(o.anchor,el.value,ansPosOf(o));}
+function ansSaveEl(el){const o=ansOf(el);if(!o||!o.anchor)return;ansSet(o.anchor,el.value,ansPosOf(o),o.alt);}
+/* AN EMPTY FIELD IS NOT AN ERASED ANSWER. `ansSaveAll` (the unload flush) used to write EVERY field's
+   current value, so a field the page had simply not restored yet — its row saved under a drifted offset,
+   or read before the page finished building itself — was written back as "" and its row DELETED on the
+   server. That is how the answers went one at a time on successive refreshes (owner report 2026-11-20).
+   Only a field the STUDENT actually edited is saved from here on: `ansDirty` is marked by the input and
+   change handlers, and an untouched field can never overwrite what the server holds. */
+const ansDirty=new WeakSet();
+function ansMarkDirty(el){if(el&&el.nodeType===1)ansDirty.add(el)}
 /* THE DEBOUNCE IS PER FIELD. One shared timer meant that typing in a second field within 800 ms
    cancelled the first field's pending save outright — reported against a block that puts a
    listen-and-write field under each line of the same cell, where the second answer arrived and the
@@ -180,12 +227,13 @@ function ansSaveEl(el){const o=ansOf(el);if(!o||!o.anchor)return;ansSet(o.anchor
 const ansTimers=new WeakMap();
 document.addEventListener("input",e=>{const t=e.target;
  if(t&&t.matches&&(t.matches("input.gap")||(t.tagName==="TEXTAREA"&&t.id!=="feed"))){
+  ansMarkDirty(t);
   clearTimeout(ansTimers.get(t));
   ansTimers.set(t,setTimeout(()=>ansSaveEl(t),800));}});
 /* a gap or a choice finishes its answer when the field is LEFT (blur / Tab / Enter) — a radio saves on
    its own change, and the notebook keeps its own debounce below */
 document.addEventListener("change",e=>{const t=e.target;
- if(t&&t.matches&&(t.matches("input.gap")||t.matches('input[type="radio"]')||(t.tagName==="TEXTAREA"&&t.id!=="feed")))ansSaveEl(t);
+ if(t&&t.matches&&(t.matches("input.gap")||t.matches('input[type="radio"]')||(t.tagName==="TEXTAREA"&&t.id!=="feed"))){ansMarkDirty(t);ansSaveEl(t);}
  else if(t&&t.id==="feed")nbSave();});
 /* re-clicking an already-checked radio DE-SELECTS it (and clears its saved answer). The browser runs the
    PRE-CLICK activation first — it CHECKS the radio (unchecking its group) and only then dispatches the
@@ -212,7 +260,10 @@ document.addEventListener("click",e=>{const t=ansRadioTarget(e.target);if(!t)ret
   const o=ansOf(t);if(o&&o.anchor)ansSet(o.anchor,"",ansPosOf(o));},0);
 });
 /* the leftover global timer and its listener are gone: the per-field debounce above replaced them */
-function ansSaveAll(){document.querySelectorAll("input.gap, textarea").forEach(el=>{if(el.tagName==="TEXTAREA"&&el.id==="feed")return;ansSaveEl(el)});}
+function ansSaveAll(){document.querySelectorAll("input.gap, textarea").forEach(el=>{
+ if(el.tagName==="TEXTAREA"&&el.id==="feed")return;
+ if(!ansDirty.has(el))return;                    /* untouched: it must never erase a row the page could not restore */
+ ansSaveEl(el)});}
 function flushNow(){ansSaveAll();nbSave();scheduleFlush()}
 window.addEventListener("pagehide",flushNow);
 document.addEventListener("visibilitychange",()=>{if(document.hidden)flushNow()});
@@ -226,7 +277,7 @@ const ansResent=new Set();
 function ansResend(o,v,pos){
  if(!o||!o.anchor||ansResent.has(o.anchor))return;
  ansResent.add(o.anchor);
- ansSet(o.anchor,v,pos);
+ ansSet(o.anchor,v,pos,o.alt);
 }
 function renderAnswers(){
  const pending=new Set(ansRows().filter(r=>pendingFor(r.id)).map(r=>r.id));
@@ -234,7 +285,7 @@ function renderAnswers(){
   if(el.tagName==="TEXTAREA"&&el.id==="feed")return;
   const o=ansOf(el);if(!o||!o.anchor)return;
   const pos=ansPosOf(o);
-  const row=ansRowFor(o.anchor,pos);
+  const row=ansRowFor(o.anchor,pos,o.alt);
   if(row&&pending.has(row.id))return;
   if(document.activeElement===el)return;
   if(!row){                                        /* no row: keep what is on the screen, and re-save it */
@@ -247,7 +298,7 @@ function renderAnswers(){
  document.querySelectorAll('input[type="radio"]').forEach(el=>{
   const o=ansOf(el);if(!o||!o.anchor)return;
   const pos=ansPosOf(o);
-  const row=ansRowFor(o.anchor,pos);
+  const row=ansRowFor(o.anchor,pos,o.alt);
   if(row&&pending.has(row.id))return;
   if(!row){                                        /* the same rule for a choice: a checked one is re-sent */
    if(el.checked)ansResend(o,el.value,pos);
