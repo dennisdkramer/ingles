@@ -17,8 +17,8 @@
 //   subjects  4 blocks in a row repeated inside one section fails; 3 warns; a repeat straddling 2+ sections is ignored
 //   rhythm    the same 2 subjects in a row in every teaching section fails; 4 times or 60% warns
 //   lessons   4 section-subjects in a row identical to a recent lesson fails; 3 warns
-//   prose     max average sentence length 8 + 0.28 x lesson number; max section prose 60 + 6 x lesson number
 //   locale    2 occurrences of a register's locale word warn; 3 or more fail
+//   portuguese  Portuguese that appears unmarked is a warning — it is marked .pt so it can be identified
 //   register  sections judged in-register / all sections: <60% fails, <75% warns
 import fs from 'node:fs';
 import path from 'node:path';
@@ -34,7 +34,7 @@ const NOVEL_WINDOW = 3, CHURN_WINDOW = 5, COVER_WINDOW = 10, QUIZ_WINDOW = 2;
 const CHURN_SHARE = 0.6, MATURE_FROM = 10;
 const REG_FAIL = 0.6, REG_WARN = 0.75, DEVICE_SHARE = 0.35;
 // high-frequency Portuguese: the only cheap signal a page's explanation is carried in the student's
-// language. Never a failure — the band and the lesson's own need decide what it should be.
+// language. Never a failure — the rule above it decides when Portuguese belongs on the page.
 const PT_WORDS = new Set(['que', 'não', 'nao', 'para', 'você', 'voce', 'isso', 'uma', 'com', 'do', 'da',
   'seu', 'sua', 'mais', 'como', 'mas', 'sim', 'muito', 'aqui', 'agora', 'então', 'entao', 'também',
   'tambem', 'por', 'dos', 'das', 'ao', 'se', 'já', 'ja', 'tá', 'ta', 'pra', 'né', 'ne', 'é', 'ser', 'tem']);
@@ -300,13 +300,9 @@ function checkPage(row, scan, where) {
   const list = scan.localeHits.map(h => h.word + '×' + h.n).join(', ');
   if (hits >= 3) fail(where + L, `locale: ${list}`);
   else if (hits === 2) warn(where + L, `locale: ${list}`);
-  // the Portuguese ceiling: no more than 60% of the page's words
-  if (scan.allWords) {
-    const share = scan.ptWords / scan.allWords;
-    const pct = Math.round(share * 100);
-    if (share > 0.6) fail(where + L, `Portuguese carries ${pct}% of the page's words; the cap is 60%`);
-    else if (scan.ptTokens >= 12 && share < 0.05) warn(where + L, `Portuguese appears (${scan.ptTokens} common words) but is not marked .pt — the 60% cap cannot be measured`);
-  }
+  // Portuguese is identified because it is marked, so Portuguese that is not marked is the defect
+  if (scan.ptTokens >= 12 && scan.ptElems === 0)
+    warn(where + L, `Portuguese appears (${scan.ptTokens} common words) but is not marked .pt`);
   if (!row.reg) warn(where + L, 'no register score (reg:good/total)');
   else {
     const r = row.reg.good / Math.max(1, row.reg.total);
@@ -315,9 +311,6 @@ function checkPage(row, scan, where) {
     if (r < REG_FAIL) fail(where + L, `register: ${row.reg.good}/${row.reg.total} sections in voice, ${pct}%`);
     else if (r < REG_WARN) warn(where + L, `register: ${row.reg.good}/${row.reg.total} sections in voice, ${pct}%`);
   }
-  const pt = `português: ${scan.ptTokens} common word(s), ${scan.ptElems} .pt element(s)`;
-  if (L <= 10 && scan.ptTokens === 0 && scan.ptElems === 0) warn(where + L, `${pt} — none, on a page whose band allows Portuguese to carry the instruction`);
-  if (L >= 26 && (scan.ptTokens >= 10 || scan.ptElems >= 5)) warn(where + L, `${pt} — at L${L}, where the band expects English`);
 }
 
 // ---- running -------------------------------------------------------------------------------

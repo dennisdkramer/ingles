@@ -886,6 +886,8 @@
     column-gap:var(--col-gap,18px);row-gap:var(--row-gap,22px);align-items:stretch;
     counter-reset:sec}
   .content-area>*{grid-column:span 12;min-width:0;margin-block:0;width:auto}
+  /* legacy only: no current page or lesson writes data-span — layout is rows and flex widths. These four
+     lines stay because kids/lesson44 (written before the flex system) still uses them. */
   .content-area>*[data-span="3"]{grid-column:span 3}
   .content-area>*[data-span="4"]{grid-column:span 4}
   .content-area>*[data-span="6"]{grid-column:span 6}

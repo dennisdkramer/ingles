@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Capability map — English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=a6c2457a81">
+<link rel="stylesheet" href="style.css?v=4fcc864b26">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>VISUAL REFERENCE</span></h1></header>
@@ -12,17 +12,17 @@
 <h1>What we can teach with</h1>
 <p class="lead">The visuals a lesson is built from, each drawn on this page.</p>
 
-<div class="block" data-look="float" data-span="12">
+<div class="block" data-look="float">
 <p><b>Every word inside a block below is example content.</b> What a block contributes is its shape: the markup in the reveal under it, its look, its span.</p>
 </div>
 
 <h2>How a page gets built</h2>
 
-<div class="block" data-span="12">
+<div class="block">
 <h3>Arrange it, and give it a look</h3>
 <div class="rows">
 <div>
-<p><b>A section's content goes into one <code>.rows</code>, and that is the default.</b> A row is one line, and its direct children are its cells: <b>each cell is one item, or two that stack inside it</b>. Every cell starts at the width its content asks for, shares the rest of the line in proportion to what it holds and never drops below <b>a quarter of the page</b>, and text wraps inside whatever width it lands on; every cell is the line's height. Two cells a line by default, three or four when the items are thin, and a fifth item is a second <code>.rows</code> — a row never wraps. <code>.cols</code> is for interchangeable cells that must wrap, and <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. A width is a repair: <code>min-width</code> to raise a floor, <code>flex:0 0 calc(50% - 13px)</code> to fix a cell at half the line, or <code>data-span</code> on a block that stands outside a row.</p>
+<p><b>A section's content goes into one <code>.rows</code>, and that is the default.</b> A row is one line, and its direct children are its cells: <b>each cell is one item, or two that stack inside it</b>. Every cell starts at the width its content asks for, shares the rest of the line in proportion to what it holds and never drops below <b>a quarter of the page</b>, and text wraps inside whatever width it lands on; every cell is the line's height. Two cells a line by default, three or four when the items are thin, and a fifth item is a second <code>.rows</code> — a row never wraps. <code>.cols</code> is for interchangeable cells that must wrap, and <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. A width is a repair: <code>min-width</code> to raise a floor, <code>flex:0 0 calc(50% - 13px)</code> to fix a cell at half the line, or a width on the cell.</p>
 </div>
 <div>
 <p class="dim"><b>Every element below is drawn with the markup that builds it, and the drawing is the default</b>: what the element contains, what text it carries, where that text sits, and whether it carries a title at all. Its item count is the example's own, never a count to copy. A chart takes no title of its own — the sentence beside it names it.</p>
@@ -34,7 +34,7 @@
 
 <p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
 <div class="cols markup-row">
-<details class="reveal" open><summary>Markup — rows · a row, an element on its own, and a span</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — rows · a row, an element on its own, and a width</summary><div class="body"><div>
 <pre>&lt;h2&gt;a section the sheet numbers&lt;/h2&gt;
 
 &lt;div class="rows"&gt;
@@ -44,14 +44,14 @@
 
 &lt;table class="chart"&gt;…nothing purposeful to accompany it, so it stands outside a block…&lt;/table&gt;
 
-&lt;div class="block" data-span="6"&gt;…narrowed because the full line read badly…&lt;/div&gt;</pre>
+&lt;div class="block" style="flex:0 0 calc(50% - 13px)"&gt;…fixed at half the line because the full line read badly…&lt;/div&gt;</pre>
 <p class="dim">Looks, and why each is chosen: <code>float</code> for text that applies to everything in the section and belongs to no single block · <code>tint</code> for content about the track's own voice — how a word taught in that voice compares with the same word in another voice, what it really means or the use cases a slang word has · <code>outline</code> for content important enough to stand out from the page · <code>stripes</code> for an activity the student answers, whose top rule turns red · <code>tape</code> for a note pinned to the page rather than taught in sequence · <code>dark</code> for content that <i>is</i> a night, a screen or a stage. One tint and one outline per section at most. A section is an <code>&lt;h2&gt;</code>: the sheet numbers it, so it is never typed, and it restarts the lettering under it. An unset block is paper with the 2px accent rule. The markup box you are reading is <code>&lt;details class="reveal" open&gt;&lt;summary&gt;…&lt;/summary&gt;&lt;div class="body"&gt;&lt;div&gt;&lt;pre&gt;…&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;/details&gt;</code>.</p>
 </div></div></details>
 </div>
 
 <h2>Choosing a visual</h2>
 
-<div class="block" data-span="12">
+<div class="block">
 <h3>The mapping</h3>
 <div class="rows">
 <div>
@@ -79,7 +79,7 @@
 
 <h2>In-Block Features</h2>
 
-<div class="block" data-span="12">
+<div class="block">
 <h3>Augment existing text</h3>
 <div class="rows">
 <div>
@@ -178,7 +178,7 @@
 <p class="dim">The anchored version: <code>.an</code> marks the word the line pins to, <code>data-tense</code> chooses which point sits under it, one anchor per host.</p>
 
 </div>
-<div class="block" data-span="12">
+<div class="block">
 <h3>Standalone visuals</h3>
 <p>A chart, a list, a dialog, a drawing, a recording or a strip is a thing of its own. Each sits inside a block with the prose that reads it, or stands outside at its own width.</p>
 <p><code>.viz</code> frames three things: the dialog, the player and the map — a chart and a strip carry a frame of their own. It is never a second <code>.block</code>.</p>
@@ -508,9 +508,8 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 <h2>Activities</h2>
 
-<div class="block" data-look="stripes" data-span="12" id="flip" data-activity="flip">
+<div class="block" data-look="stripes" id="flip" data-activity="flip">
 <h3>Training</h3>
-<p>One card per item the lesson has <b>already taught</b> — vocabulary, phrases, the words of an earlier section. The block shows the back of one card and the student turns cards until they find the one it belongs to: a turn tints that card red when it is not the answer and green when it is, any number of cards may be turned in a round, and only the right one turns them all back and brings the next prompt four seconds later. <b>Nothing here is scored and no answer is saved</b>, so it trains and never tests: when a lesson carries one it is the last activity before the quiz, never the quiz.</p>
 <h4 class="flip-ask" style="text-align:center;padding-top:10px" aria-live="polite">…</h4>
 <div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
 <label class="flip" style="--flip-h:112px">
@@ -592,9 +591,9 @@ next();
 </script>
 </div>
 
-<div class="block" data-look="stripes" data-span="12">
+<div class="block" data-look="stripes">
 <h3>Marked activities with controls</h3>
-<p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>An activity is a unit the student completes — never a control on its own.</b> The four controls — a gap, a radio, a checkbox, a written field — are the parts an activity is built from and are chosen by what the student must do; they are not activities themselves. <b>A keyed gap is preferentially carried inside one of the forms below</b> — a dialog turn, a chart row to answer, a strip under its panel, a line to translate, a sentence to correct, a line to write from what they hear — and a lone gap is only ever a component beside other teaching in a block, never an activity in its own right. The rows below hold the forms: numbered chunks, a chart whose cells are answered, and under the chunks a correction and a dictation — the last two for no beginner, and the sentence they ask for always tuned to the lesson's band. The two blocks after this one, side by side, are four options to pick one from and a matching pool. The last block in the section is fill-in-the-blank: a line the student completes — typed into a gap, or picked from three or four options that fill the same blank. <b>Every item the student answers is numbered</b> — <code>&lt;span class="qnum"&gt;1.&lt;/span&gt;</code> beside the control it numbers, and the count runs through the activity block, so another activity starts again at 1 — so a teacher can name the item they mean.</p>
+<p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>An activity is a unit the student completes — never a control on its own.</b> The four controls — a gap, a radio, a checkbox, a written field — are the parts an activity is built from and are chosen by what the student must do; they are not activities themselves. <b>A keyed gap is preferentially carried inside one of the forms below</b> — a dialog turn, a chart row to answer, a strip under its panel, a line to translate, a sentence to correct, a line to write from what they hear — and a lone gap is only ever a component beside other teaching in a block, never an activity in its own right. The rows below hold the forms: numbered chunks, a chart whose cells are answered, and under the chunks a correction and a dictation — the last two for no beginner, and the sentence they ask for always tuned to the lesson's level. The two blocks after this one, side by side, are four options to pick one from and a matching pool. The last block in the section is fill-in-the-blank: a line the student completes — typed into a gap, or picked from three or four options that fill the same blank. <b>Every item the student answers is numbered</b> — <code>&lt;span class="qnum"&gt;1.&lt;/span&gt;</code> beside the control it numbers, and the count runs through the activity block, so another activity starts again at 1 — so a teacher can name the item they mean.</p>
 <p class="dim"><code>data-answer</code> keys a gap, <code>|</code> separating alternatives; <code>--gap-w</code> is the width the answer needs. A radio group's key is <code>data-a</code> on <code>.qitem</code>; engine2.js marks the right option and writes <code>.ans</code> beside a typed field.</p>
 <p>Each of these can stand as a block of its own or sit inside a block with the prose, the chart or the drawing it accompanies; every row below is the in-block size.</p>
 
@@ -843,7 +842,6 @@ next();
 <div class="cols markup-row">
 <details class="reveal" open><summary>Markup — #flip · the cards, the prompt, and the pick</summary><div class="body"><div>
 <pre>&lt;div class="block" id="flip"&gt;
-  &lt;p&gt;what the cards carry, and that this is the last activity before the quiz&lt;/p&gt;
   &lt;h4 class="flip-ask" style="text-align:center;padding-top:10px" aria-live="polite"&gt;…&lt;/h4&gt;
   &lt;div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"&gt;
     &lt;label class="flip" style="--flip-h:112px"&gt;
@@ -861,7 +859,7 @@ next();
 &lt;!-- the prompt is one card's back, in a centred h4, and it is the whole prompt · any number of cards may be turned in a round --&gt;
 &lt;!-- a turn tints red when it is not the answer and green when it is; only the right one turns every card back and brings the next prompt 4 s later --&gt;
 &lt;!-- the script turns the card itself (it cancels the label's own toggle and sets the box), so a click is never doubled · --flip-h is the height both faces share --&gt;
-&lt;!-- training only: no data-answer and no data-a in this block, so no engine marks it and it cannot be the quiz --&gt;</pre>
+&lt;!-- no data-answer and no data-a here: nothing marks this block, so it cannot be a quiz --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #dialoggap · a dialog with a gap</summary><div class="body"><div>
 <pre>&lt;li&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;
@@ -873,7 +871,7 @@ next();
      absolute at right:100% — a turn on the right of the dialog numbers the same way --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #chartanswer · a chart whose rows are answered</summary><div class="body"><div>
-<pre>&lt;div class="block" data-look="stripes" data-span="12"&gt;
+<pre>&lt;div class="block" data-look="stripes"&gt;
   &lt;table class="chart"&gt;
     &lt;tr&gt;&lt;td&gt;6:40&lt;/td&gt;&lt;td&gt;He clocked in.&lt;/td&gt;
       &lt;td style="display:flex;align-items:center;gap:8px"&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt;
@@ -1006,12 +1004,12 @@ next();
 
 <h2>Games</h2>
 
-<div class="block" data-look="float" data-span="12">
+<div class="block" data-look="float">
 <p><b>Don’t add a game just to have one.</b> A game is a skin over an activity the lesson already wanted: the activity is chosen first and the game is how it is presented, so a reskinned game is that element in the ledger and never an element of its own. Nothing counts a game and nothing requires one. A game is a flavour element: it is used occasionally, and only where it fits a particular activity well enough that the activity would be worse without it. A set of items that trains fine as a list stays a list.</p>
 <p class="dim">A <code>.game</code> draws its own edge, so it stands at page level and is never put inside a <code>.block</code>. Every game reads the same content — <code>.game-list &gt; .qitem</code>, each with a <code>.qstem</code> and radio options, <code>data-a</code> marking the right one — so that list is what prints and what the student answers if the script never runs; <code>data-game</code> chooses only the presentation, never the content. A game in a quiz section carries <code>data-retry="0"</code>; a training game carries nothing.</p>
 </div>
 
-<div class="block" data-span="12">
+<div class="block">
 <h3>The thirteen</h3>
 <table class="chart" style="width:100%">
 <thead><tr><th><code>data-game</code></th><th>What it is good for</th><th>The markup it needs</th></tr></thead>
