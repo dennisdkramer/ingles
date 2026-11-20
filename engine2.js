@@ -49,6 +49,74 @@ let savedLive="",nbkVal="";
 function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop,#completebtn,#completerow").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style],b[style],i[style],u[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|px|font-style|background/.test(st))s.removeAttribute("style")});return "<!doctype html>"+cl.outerHTML;}
 function contentAreaHTML(saved){const d=new DOMParser().parseFromString(saved,"text/html");const ca=d.querySelector(".content-area");return ca?ca.innerHTML:saved;}
 function saveContent(){if(!document.querySelector(".content-area"))return;const o={action:"set",id:contentId(),type:"content",anchor:"",data:fullPageHTML(),email:gate.email,lesson:L,author:"prof",track:TRACK};notePending(o);outboxPush(o);scheduleFlush();}
+/* ---- the layout layer, and the two buttons that finish an edit ---------------------------
+   layout.js drags any node inside .content-area; it is loaded only for a teacher and only when
+   edit mode opens, so a student's page never fetches it. The save path never serialises: the
+   page itself is the artifact. "Save to repo" downloads the cleaned document under the page's
+   own filename, and qa/watch-saves.mjs (a local watcher) drops it into <TRACK>/ and pushes.
+   "Clear ink" deletes the rows that describe the OLD page — highlights, notes, answers and the
+   Completed tag — because a moved block leaves them pointing at text that has moved. The
+   notebook is the student's own writing and is kept. */
+let layoutState = 0;   /* 0 = not asked · 1 = script loading · 2 = ready */
+function loadLayout() {
+  if (window.LayoutEditor) { LayoutEditor.enable(); return; }
+  if (layoutState) return;
+  layoutState = 1;
+  const s = document.createElement("script");
+  s.src = "../layout.js";
+  s.onload = function () { layoutState = 2; try { LayoutEditor.enable(); } catch (e) { } };
+  s.onerror = function () { layoutState = 0; toast("Layout tool unavailable."); };
+  document.body.appendChild(s);
+}
+function unloadLayout() {
+  try { if (window.LayoutEditor) LayoutEditor.disable(); } catch (e) { }
+}
+function editingOnly(on) {
+  ["saverepo", "clearink"].forEach(function (id) {
+    const b = document.getElementById(id); if (b) b.hidden = !on;
+  });
+}
+function saveToRepo() {
+  const ca = document.querySelector(".content-area"); if (!ca) return;
+  /* clean() strips the tool's own chrome first: the chip and the drag line are body children, so a
+     clone taken now would carry them into the saved file. */
+  try { if (window.LayoutEditor) LayoutEditor.clean(); } catch (e) { }
+  const html = fullPageHTML();
+  const name = (location.pathname.split("/").pop() || "lesson.html").replace(/[^\w.\-]+/g, "-");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([html], { type: "text/html;charset=utf-8" }));
+  a.download = name;
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); if (a.parentNode) a.remove(); }, 5000);
+  saveContent();                       /* the backend row stays the safety net, exactly as before */
+  toast("Saved to Downloads — the watcher puts it in " + TRACK + "/ and pushes");
+}
+async function clearInk() {
+  const gone = { highlight: 1, note: 1, answer: 1, complete: 1 };
+  const rows = layer.filter(function (r) { return gone[r.type]; });
+  if (!rows.length) { toast("Nothing stored on this page."); return; }
+  const ok = await eodConfirm({
+    title: "Clear this page's ink?",
+    danger: true,
+    body: rows.length + " stored item(s) — highlights, notes, answers and the Completed tag — belong to the old layout and will be deleted. The notebook is kept.",
+    confirm: "Delete", cancel: "Keep"
+  });
+  if (!ok) return;
+  rows.forEach(function (r) { send({ action: "del", id: r.id }); });
+  layer = layer.filter(function (r) { return !gone[r.type]; });
+  sig = layer.map(function (r) { return r.id; }).join(",");
+  document.querySelectorAll("mark.nb").forEach(function (m) { m.remove(); });
+  document.querySelectorAll("input.gap, textarea").forEach(function (el) {
+    if (el.tagName === "TEXTAREA" && el.id === "feed") return;
+    el.value = "";
+  });
+  document.querySelectorAll('input[type="radio"]').forEach(function (el) { el.checked = false; });
+  completeNow = false; renderCompleteBtn();
+  try { hlReflow(); ntReflow(); } catch (e) { }
+  toast("Cleared " + rows.length + " item(s)");
+}
 function toggleEditMode(){
  if(STUDENT!==gate.email){toast("Switch to your own account to edit content.");return;}
  editing=!editing;
@@ -63,10 +131,12 @@ function toggleEditMode(){
   wireListen();
   if(ca)ca.setAttribute("contenteditable","true");
   hlReflow();ntReflow();
+  loadLayout();editingOnly(true);      /* the drag layer rides with edit mode, and only with it */
   if(eb)eb.textContent="✔️ Done";
-  toast("Edit mode — click ✔️ Done to save");
+  toast("Edit mode — drag anything to re-arrange it; ✔️ Done saves");
  }else{
   if(ca)ca.removeAttribute("contenteditable");
+  unloadLayout();editingOnly(false);   /* disable() also strips the chip and the drag line, so the save is clean */
   if(eb)eb.textContent="✏️ Edit";
   saveContent();
   ca.innerHTML=savedLive;
@@ -477,6 +547,10 @@ function renderCompleteBtn(){
  if(gate.teacher){
   const eb=document.createElement("button");eb.type="button";eb.id="editpage";eb.textContent="✏️ Edit";eb.onclick=()=>toggleEditMode();bar.appendChild(eb);
   const rb=document.createElement("button");rb.type="button";rb.id="revertpage";rb.textContent="↩️ Revert";rb.onclick=async()=>{if(!(await eodConfirm({title:"Discard your edits?",danger:true,body:"Discard your saved edits and restore the original content?",confirm:"Revert",cancel:"Keep edits"})))return;send({action:"del",id:contentId()});toast("Reverting…");setTimeout(()=>location.reload(),900)};bar.appendChild(rb);
+  /* the two buttons that finish an edit: they exist only for the teacher and show only inside edit
+     mode, so the bar a reader sees never changes. Save downloads the page; the watcher places it. */
+  const sb=document.createElement("button");sb.type="button";sb.id="saverepo";sb.textContent="💾 Save to repo";sb.hidden=true;sb.onclick=()=>saveToRepo();bar.appendChild(sb);
+  const ib=document.createElement("button");ib.type="button";ib.id="clearink";ib.textContent="🧹 Clear ink";ib.hidden=true;ib.onclick=()=>clearInk();bar.appendChild(ib);
  }
  const selEl=document.getElementById("sel");
  if(gate.teacher&&selEl){selEl.onchange=()=>{
