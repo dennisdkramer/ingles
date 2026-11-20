@@ -9,8 +9,8 @@
    - teaches: `sound/vowel-no-fixed`, `cognate/suffix-code`
    - Deepens: -
    - Uses: -
-   - Vocabulary: meeting, report, project, client, deadline, budget, team, manager, email, schedule, review, task
-   - Examples: "information" / "organization" / "presentation" / "the report" / "my project"
+   - Vocabulary: information, organization, communication, important, different, possible, name, work, house, day, music, video
+   - Examples: "information" / "organization" / "communication" / "the report" / "my project" / "video" / "important"
    - Real-world relevance: The student already reads this vocabulary in their inbox; the lesson shows how much of it they can already decode and why they mispronounce it.
 
 ## Lesson 2: The sentence you already own
@@ -19,7 +19,7 @@
    - teaches: `clause/skeleton`, `be/linking-verb`, `pronoun/subject-object`
    - Deepens: -
    - Uses: `cognate/suffix-code`
-   - Vocabulary: engineer, analyst, developer, designer, company, job, role, live, "work for", local, interesting, difficult
+   - Vocabulary: engineer, analyst, developer, company, job, "work for", live, friend, tired, hungry, music, sport
    - Examples: "I'm an analyst." / "He's a developer." / "She's at the gym." / "We're out of coffee." / "They're here." / "We work for a Brazilian company."
    - Real-world relevance: The first sentence every student needs at work is who they are and what they do; the second is who someone else is.
 
@@ -29,8 +29,8 @@
    - teaches: `clause/dummy-subject`, `be/existence-there`, `pronoun/possessive`
    - Deepens: -
    - Uses: `clause/skeleton`, `be/linking-verb`, `pronoun/subject-object`
-   - Vocabulary: problem, issue, idea, result, option, risk, concern, detail, point, true, useful, important
-   - Examples: "It's important for the client." / "There are two options." / "Our deadline is Friday." / "It takes a week."
+   - Vocabulary: problem, idea, result, option, detail, true, time, city, cold, hungry, weather, traffic
+   - Examples: "It's important for the client." / "There are two options." / "Our deadline is Friday." / "There's a match on Sunday."
    - Real-world relevance: "Está difícil", "é importante", "tem um problema" are constant in work talk, and each one needs an English subject before anything else can be said.
 
 ## Lesson 4: Facts and habits - the -s that carries them
@@ -39,7 +39,7 @@
    - teaches: `present-simple/facts-not-now`, `present-simple/third-person-s`, `present-simple/frequency-position`
    - Deepens: -
    - Uses: `clause/skeleton`, `pronoun/subject-object`, `clause/dummy-subject`
-   - Vocabulary: work, start, finish, check, update, need, use, test, daily, weekly, usually, often
+   - Vocabulary: work, start, finish, check, update, "wake up", eat, sleep, bus, watch, play, rain
    - Examples: "I work for a tech company." / "She checks the numbers every Monday." / "The call starts at nine." / "We usually test on Thursdays." / "My brother works nights." / "The bus leaves at six." / "She never eats breakfast."
    - Real-world relevance: A colleague's first questions are about routine and schedule, and the -s is what separates "I check" from "she checks" in a shared inbox.
 
@@ -49,7 +49,7 @@
    - teaches: `mode/slot`, `mode/verb-returns-base`, `mode/negation`
    - Deepens: -
    - Uses: `present-simple/third-person-s`, `present-simple/facts-not-now`
-   - Vocabulary: do, make, help, call, send, book, pay, order, ask, answer, reply, "on time"
+   - Vocabulary: send, pay, book, order, reply, help, eat, drink, sleep, "on time", cook, travel
    - Examples: "She doesn't send the invoice." / "I don't have the file yet." / "We don't use that system." / "He doesn't answer on Sunday."
    - Real-world relevance: Saying no and correcting a fact is half of a working day, and the -s moves off the verb the moment "doesn't" enters the sentence.
 
@@ -59,7 +59,7 @@
    - teaches: `prep/location-in-on-at`, `prep/time-in-on-at`, `prep/to-vs-for`
    - Deepens: -
    - Uses: `be/existence-there`, `clause/skeleton`
-   - Vocabulary: office, building, floor, room, desk, site, city, morning, week, month, year, door
+   - Vocabulary: office, building, desk, site, meeting, home, kitchen, "bus stop", morning, street, park, beach
    - Examples: "I'm at the office." / "The file is on your desk." / "This is for the client." / "I'm sending it to Ana." / "The meeting is on Monday at nine." / "The keys are on the table." / "I'm waiting at the bus stop." / "My birthday is in July."
    - Real-world relevance: Where things are, when things happen and who a thing is for are the three facts of every work message, and "para" covers all three in Portuguese.
 
@@ -69,7 +69,7 @@
    - teaches: `reduction/gonna-future-mode`, `reduction/wanna-woulda`, `get/wildcard`
    - Deepens: -
    - Uses: `mode/verb-returns-base`, `be/linking-verb`, `clause/skeleton`
-   - Vocabulary: get, arrive, receive, become, understand, ready, tired, late, early, message, "get better", "get there"
+   - Vocabulary: get, arrive, receive, message, understand, ready, tired, late, "get home", hungry, "get better", "get there"
    - Examples: "I'm gonna call the client." / "I'm going to the office." / "I'm gonna go to the office." / "I wanna check one thing." / "I get the idea." / "It gets better."
    - Real-world relevance: Native speech is full of gonna and wanna, and "get" is what a native says where the student currently reaches for four different verbs.
 
@@ -79,8 +79,8 @@
    - teaches: `question/yes-no-order`, `question/wh-order`, `question/tag-check`
    - Deepens: -
    - Uses: `mode/slot`, `mode/verb-returns-base`, `present-simple/third-person-s`, `be/linking-verb`
-   - Vocabulary: what, "what time", where, who, why, how, which, "how many", "how soon", "how much", "how often", whose
-   - Examples: "Does the report include the numbers?" / "When does the meeting start?" / "Who sent this?" / "How long does it take?" / "You sent it, right?"
+   - Vocabulary: what, where, who, why, which, when, "how long", "how much", "how often", weekend, ticket, match
+   - Examples: "Does the report include the numbers?" / "When does the meeting start?" / "Who wants coffee?" / "How long does it take?" / "You're coming, right?"
    - Real-world relevance: Asking is how work gets unblocked, and the question that fails is what keeps a Brazilian professional silent in a meeting.
 
 ## Lesson 9: Right now against in general
@@ -89,7 +89,7 @@
    - teaches: `present-continuous/now`, `present-continuous/vs-simple`, `present-continuous/temporary-change`
    - Deepens: `present-simple/facts-not-now` - the same verb is re-pointed at "now", and the two forms are chosen by meaning rather than by name.
    - Uses: `mode/slot`, `be/linking-verb`, `clause/skeleton`, `present-simple/third-person-s`
-   - Vocabulary: wait, cover, run, write, read, talk, happen, currently, now, "at the moment", "this week", "for now"
+   - Vocabulary: check, write, talk, happen, meeting, cook, rain, wait, wear, "at the moment", "this week", traffic
    - Examples: "I'm checking the numbers right now." / "I check the numbers every Monday." / "Are you using the new system?" / "Costs are going up." / "I'm working from home this week." / "He's cooking dinner." / "It's raining - take a jacket." / "I usually walk, but today I'm taking the bus."
    - Real-world relevance: "Estou estudando" is the sentence that comes out wrong most often; the repair is one contrast, not a new tense.
 
@@ -99,7 +99,7 @@
    - teaches: `number/read-and-group`, `number/date-and-time`, `number/figure-comparison`
    - Deepens: -
    - Uses: `prep/time-in-on-at`, `prep/to-vs-for`, `be/existence-there`
-   - Vocabulary: price, cost, percent, million, thousand, invoice, discount, total, half, quarter, "up from", "go down"
+   - Vocabulary: price, cost, invoice, budget, discount, half, quarter, change, cash, ticket, hotel, "go up"
    - Examples: "Sales are up from 1.2 to 1.5 million." / "The invoice is due on the fifth." / "It's about a quarter of the budget." / "The call is at half past two." / "Costs go down in Q3."
    - Real-world relevance: This persona reads and reports figures every week, and a confidently wrong number is the most expensive mistake in the course.
 
