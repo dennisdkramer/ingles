@@ -361,9 +361,19 @@ function applyCompleted(on){
  document.body.classList.toggle("is-completed",!!on);
  document.querySelectorAll("[data-answer]").forEach(el=>{
   const host=el.parentElement;if(!host)return;
-  let sp=[].slice.call(host.children).filter(c=>c.classList&&c.classList.contains("ans"))[0];
-  if(!on){if(sp)sp.remove();host.classList.remove("has-ans");return;}
-  if(!sp){sp=document.createElement("span");sp.className="ans";host.appendChild(sp);}
+  /* THE PILL IS THE CONTROL'S, NOT THE CELL'S. A cell can hold two fields — a gap and a written field, or
+     two dictation boxes — and a host-wide lookup handed the second field the first one's pill and
+     overwrote it: one answer shown, the other lost. Each control keeps its own pill on itself, and where a
+     host holds more than one control every pill sits right after the control it belongs to; a host with a
+     single control keeps the pill at the end of the cell, exactly as before. */
+  let sp=el.__ans&&host.contains(el.__ans)?el.__ans:null;
+  if(!on){if(sp){sp.remove();el.__ans=null}host.classList.remove("has-ans");return;}
+  if(!sp){
+   sp=document.createElement("span");sp.className="ans";
+   if(host.querySelectorAll("[data-answer]").length>1)el.insertAdjacentElement("afterend",sp);
+   else host.appendChild(sp);
+   el.__ans=sp;
+  }
   host.classList.add("has-ans");
   const v=ansKeyText(el);if(sp.textContent!==v)sp.textContent=v;
  });
