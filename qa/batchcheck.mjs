@@ -8,7 +8,8 @@
 //   L07 | S1-rul@chart:rsn>ex>con>rul | S2-voc:mng>voc>mng | Q:rul>mng>rul>ex | el:dialoggap:3,mc:1 | qel:mc:1,flip:1 | reg:3/5
 //
 // Rules (a window counts the current lesson and the ones before it):
-//   novelty   from lesson 2 — >=1 element the previous 3 lessons did not use
+//   novelty   from lesson 2 — >=1 element the previous 3 lessons did not use; skipped when those
+//             lessons already name the whole palette, since then nothing is fresh and no markup repairs it
 //   churn     from lesson 10 — >=60% of the palette inside any 5 consecutive lessons
 //   coverage  from lesson 10 — every element inside any 10 consecutive lessons
 //   quiz      from lesson 3 — no 3 identical subjects in a row, >=1 element the previous 2 quizzes did not use
@@ -203,7 +204,9 @@ function checkWindows(rows, where) {
     if (prev.length) {
       const used = union(prev, 'el');
       const fresh = Object.keys(row.el).filter(e => !used.has(e));
-      if (!fresh.length) fail(where + row.L, `novelty: no element outside the previous ${prev.length} lessons — ${Object.keys(row.el).join(', ') || 'no elements'}`);
+      // the rule asks for an element the window did not use; a window that already names the whole
+      // palette leaves none to find, so the check is vacuous there and churn/coverage carry freshness
+      if (!fresh.length && used.size < PALETTE.length) fail(where + row.L, `novelty: no element outside the previous ${prev.length} lessons — ${Object.keys(row.el).join(', ') || 'no elements'}`);
     }
     if (i + 1 < MATURE_FROM) return;
     const w5 = rows.slice(Math.max(0, i - CHURN_WINDOW + 1), i + 1);
@@ -344,6 +347,11 @@ function selfTest() {
   const cases = [
     ['novelty fails on a repeat', () => { checkWindows([row(1, { gap: 1 }), row(2, { gap: 1 })], 'T L'); }, 'novelty'],
     ['novelty passes on a new element', () => { checkWindows([row(1, { gap: 1 }), row(2, { mc: 1 })], 'T L'); }, null],
+    ['novelty is vacuous once the window already names the whole palette', () => {
+      const hold = els => Object.fromEntries(els.map(e => [e, 1]));
+      checkWindows([row(1, hold(PALETTE.slice(0, 4))), row(2, hold(PALETTE.slice(4, 8))),
+        row(3, hold(PALETTE.slice(8))), row(4, { fill: 1 })], 'T L');
+    }, null],
     ['novelty window is 3, so the fourth lesson may reuse the first', () => {
       checkWindows([row(1, { gap: 1 }), row(2, { mc: 1 }), row(3, { chunks: 1 }), row(4, { flip: 1 }), row(5, { gap: 1 })], 'T L');
     }, null],

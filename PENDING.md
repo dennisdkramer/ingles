@@ -14,6 +14,12 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 [7] `qa/watch-saves.mjs` + `qa/watch.cmd` + `package.json` — watch Downloads, wait for the write to settle, resolve the target from the page's own `TRACK`/`L`, back the old file up, `build:lessons`, commit that file + `lessons.json`, push
 [8] `PEDAGOGY-MAP.md` — a row carries multiple cells, the count content-aware against its neighbours; stacking is how a cell gets taller; no inline width on a cell unless the flow was wrong; and `FUNCTION.md` — the layout layer mutates the DOM and saves through the content row
 [9] verify (jsdom drags, inspector, save, `node --check`, `qa:liquid`, `qa:check`, `mapcheck`, `batchcheck`, `build:check`), commit, push
+
+## [B3] - the novelty rule no lesson can satisfy "you can adjust batchcheck to advois that problem in the future" — a vacuity guard for a window that already names the palette, a self-test pinning it, and the map line corrected
+[1] `qa/batchcheck.mjs` — `checkWindows` skips novelty when the union of the previous three rows is the whole palette, and the header states the skip
+[2] `qa/batchcheck.mjs --self-test` — a case where three rows spend all twelve elements and the fourth repeats one: no failure
+[3] `capability-map.html` — the novelty item records the guard instead of only the dead end
+[4] verify (`batchcheck:self`, `batchcheck`, `mapcheck`), commit, push
 ---
 
 # PAST BATCHES

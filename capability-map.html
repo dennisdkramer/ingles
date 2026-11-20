@@ -1084,7 +1084,7 @@ next();
 <li><b>A dictation's answer can be a gap.</b> <code>.listen</code> speaks its <code>data-say</code> text and the field that follows it takes <code>data-answer</code>; a one-word answer needs no <code>textarea.write</code>, and the block is still a dictation.</li>
 <li><b>A timeline family is a full-width child of its block.</b> <code>.tlgrid</code> holds one <code>&lt;div&gt;</code> per figure with its <code>&lt;h4&gt;</code> name; inside a half-width row cell the pair is too narrow to read, so it sits under the prose rather than beside it.</li>
 <li><b>The register total counts every <code>&lt;h2&gt;</code> in <code>.content-area</code>.</b> A page with N teaching sections, a quiz section and the notebook reads <code>reg:good/N+2</code>, and a quiz heading that names the check ("The check: …") is still a section, because only <code>quiz</code> or <code>test</code> in the heading unmarks it.</li>
-<li><b>Novelty is arithmetic on the ledger, not a judgement.</b> <code>batchcheck</code> requires one element outside the union of the previous three rows; once three consecutive rows hold all twelve palette elements, the next lesson cannot satisfy the rule and no markup choice repairs it.</li>
+<li><b>Novelty is arithmetic on the ledger, not a judgement.</b> <code>batchcheck</code> requires one element outside the union of the previous three rows, and skips the rule once those rows already hold all twelve palette elements — nothing is fresh then, and no markup choice repairs it — so churn and coverage carry freshness from that point.</li>
 </ul>
 </div>
 </div>
