@@ -900,16 +900,24 @@
   .cols{display:flex;gap:var(--flex-gap,26px);align-items:flex-start;flex-wrap:wrap;
         padding-top:8px}
   .cols>*{flex:1 1 var(--cw,220px);min-width:0}
-  /* a row is one line, and its direct children are its cells. A cell starts at the width its content asks
-     for, then grows or shrinks with the rest, so a heavy paragraph and a thin one share the line in
-     proportion to what they hold, and text wraps inside whatever width it lands on. No cell goes below a
-     QUARTER OF THE PAGE — not a quarter of the row it sits in — so a row inside a narrow block holds fewer
-     cells and nothing is squeezed past reading. NOTHING WRAPS — a fifth item is a second `.rows`, never a
-     second line inside this one. Two items that belong together but are each small stack inside ONE cell
-     (they are siblings in that cell's div). */
+  /* a row is one line, and its direct children are its cells.
+     >>> THE DEFAULT, AND IT DOES NOT MOVE. Every cell of a row takes an EQUAL SHARE of the row —
+         `flex:1 1 0`, basis ZERO, so content never decides a cell's width: a row of two is two halves, a
+         row of three is three thirds, whether one cell holds a chart and the next holds one word. This is
+         the owner's instruction (2026-11-20) and it is a SITE DEFAULT, never a per-page choice.
+         A page that wants a different proportion writes it ON THAT PAGE, as an inline flex on that cell
+         (the layout editor's panel does exactly this, and marks the cell red). A request that "this row
+         should be wider/narrower" is answered there. DO NOT change this rule back to content-sized cells;
+         and never read a request about one page's look as a request about this default.
+     THE TWO EXCEPTIONS, and they are the only two: a cell whose whole content is one chart (.chartwrap or
+     table.chart alone) keeps the width its contents need (:has rule below), and a cell the page itself
+     pins with an inline width. A drawing inside a cell is capped with --map-w; that caps the drawing, not
+     the cell, so it is not a third exception. No cell goes below a QUARTER OF THE PAGE — not a quarter of
+     its row — so a row inside a narrow block holds fewer cells and nothing is squeezed past reading.
+     NOTHING WRAPS — a fifth item is a second `.rows`, never a second line inside this one. */
   .content-area{container-type:inline-size}
   .rows{display:flex;flex-wrap:nowrap;gap:var(--flex-gap,26px);align-items:stretch;padding-top:20px}
-  .rows>*{display:flex;flex-direction:column;flex:1 1 auto;min-width:calc(25% - 20px)}
+  .rows>*{display:flex;flex-direction:column;flex:1 1 0;min-width:calc(25% - 20px)}
   .rows>*{min-width:calc(25cqw - 34px)}
   /* a dialog, a player or a comic takes the row's height; the map does not — its frame is drawn on the
      drawing, so it keeps the drawing's own 3:2 box and the cell around it holds the rest */
