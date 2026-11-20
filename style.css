@@ -917,6 +917,11 @@
            · `flex:0 0 auto` — content width only: the row never fills its container and leaves a gap.
          Never change this line. A page that wants a different proportion writes an inline flex on THAT
          cell (the layout editor's panel does exactly that, and marks the cell red) — never this rule.
+         WHAT "PROPORTIONAL" LOOKS LIKE, so it is not read as a bug: with prose in both cells the bases
+         are both very wide (a paragraph's max-content is the whole paragraph on one line), so the two
+         cells land NEAR EQUAL with a drift toward the text-heavy one — e.g. 598px and 442px. A visibly
+         narrow short column is NOT what this rule produces; that needs widths measured against heights,
+         which no flex value can express.
      THE TWO EXCEPTIONS, and they are the only two: a cell whose whole content is one chart (.chartwrap or
      table.chart alone) keeps the width its contents need (:has rule below), and a cell the page itself
      pins with an inline width. A drawing inside a cell is capped with --map-w; that caps the drawing, not
