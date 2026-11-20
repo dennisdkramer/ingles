@@ -1,0 +1,275 @@
+/* ---- layout editor (layout.js) ------------------------------------------------------
+   Teacher-only, and only while engine2.js has its edit mode open. It drags any node
+   inside .content-area — a block, a .rows cell, a paragraph, a div, a table, a whole
+   .rows — together with its subtree, and drops it before or after any sibling, or inside
+   any container that holds items. Nothing is stored here: the DOM is the only thing this
+   file changes, and edit mode's own Done (engine2.js → saveContent) or Save to repo
+   writes the result.
+   WHAT MAY NOT MOVE — h1/h2 (a section is left alone), a block's h3 (the block letter is
+   drawn from it), and the parts of a control item: a td, a .qopts, a .qstem, a .qnum, an
+   input, a textarea, a button. Those travel only with the item that holds them, so no drop
+   can leave a control answering nothing; a .qitem, a label.flip, a figure or a table moves
+   whole and takes its controls with it.
+   Entry points: LayoutEditor.enable() · .disable() · .undo() · .clean() · .moves()
+   ---------------------------------------------------------------------------------- */
+window.LayoutEditor = (function () {
+  'use strict';
+
+  var ON = false, CA = null, drag = null, hist = [], moved = 0, line = null, chipEl = null;
+  var THRESH = 4;   /* px of travel before a press counts as a drag, so a click keeps its caret */
+
+  var STILL = 'h1,h2,h3';
+  var COMPOSITE = '.qitem,label.flip,figure,table,.seq,.tlgrid,.flip-grid,.chartwrap,.viz';
+  var PARTS = '.qopts,.qstem,.qline,.qnum,input,textarea,button,select,option,td,th,.gap,.write,.listen,.glossbtn,.ans';
+  /* a container that cannot hold an item, because the browser would not have parsed it there */
+  var NOCONTAINER = 'p,span,b,i,u,em,strong,a,small,sup,sub,code,ruby,rt,rp,summary,label,button,input,textarea,select,option,h1,h2,h3,h4,h5,h6,br,img,svg';
+  /* a node that only parses inside one kind of parent */
+  var ONLY = { td: 'tr', th: 'tr', tr: 'tbody,thead,tfoot,table', li: 'ul,ol',
+               thead: 'table', tbody: 'table', tfoot: 'table',
+               option: 'select', legend: 'fieldset', dt: 'dl', dd: 'dl' };
+
+  function ca() { return CA || (CA = document.querySelector('.content-area')); }
+  function inside(n) { var c = ca(); return !!(c && n && n.nodeType === 1 && n !== c && c.contains(n)); }
+  function still(n) { return !!(n.matches && n.matches(STILL)); }
+  function part(n) { return !!(n.matches && n.matches(PARTS)); }
+
+  /* a whole item may move; anything living inside one is a part of it and moves with it */
+  function movable(n) {
+    if (!inside(n) || still(n) || part(n)) return false;
+    if (n.matches(COMPOSITE)) return true;
+    return !(n.closest && n.closest(COMPOSITE));
+  }
+
+  function onlyOk(n, box) {
+    var want = ONLY[n.tagName.toLowerCase()];
+    if (!want) return true;
+    return want.split(',').indexOf(box.tagName.toLowerCase()) > -1;
+  }
+
+  function accepts(n, box) {
+    if (!box || box.nodeType !== 1) return false;
+    if (box === n || n.contains(box)) return false;      /* never into its own subtree */
+    if (still(box) || part(box)) return false;
+    if (box.matches(NOCONTAINER)) return false;
+    if (!onlyOk(n, box)) return false;
+    var c = ca(); return box === c || c.contains(box);
+  }
+
+  /* siblings run left-to-right inside a flex row, and top-to-bottom everywhere else */
+  function flow(el) {
+    var p = el.parentElement; if (!p) return 'y';
+    var cs = getComputedStyle(p);
+    if ((cs.display === 'flex' || cs.display === 'inline-flex' || cs.display === 'grid') &&
+        String(cs.flexDirection || '').indexOf('column') < 0) return 'x';
+    return 'y';
+  }
+
+  /* ---- where would the node land? -------------------------------------------------
+     Two answers only: BETWEEN two siblings (a line is drawn at the boundary), or INSIDE a
+     container that accepts it (the container is tinted). The middle of a cell is "inside";
+     its edges are "between". Everything is measured at the pointer, so scrolling and a
+     re-flowed row need no bookkeeping. */
+  function pick(x, y) {
+    var el = document.elementFromPoint(x, y);
+    if (!el) return null;
+    var n = drag.node;
+    while (el && (el === n || n.contains(el))) el = el.parentElement;
+    if (!el) return null;
+    if (el === ca()) return { box: ca(), inside: true, host: null };
+    if (!inside(el)) return null;
+    var r = el.getBoundingClientRect(), f = flow(el), e = 18;
+    var onEdge = f === 'x' ? (x < r.left + e || x > r.right - e)
+                           : (y < r.top + e || y > r.bottom - e);
+    if (!onEdge && accepts(n, el)) return { box: el, inside: true, host: el };
+    var p = el.parentElement;
+    if (!p || (!inside(p) && p !== ca()) || !accepts(n, p)) return { box: ca(), inside: true, host: null };
+    var before = f === 'x' ? x < r.left + r.width / 2 : y < r.top + r.height / 2;
+    return { box: p, ref: before ? el : el.nextElementSibling, inside: false, host: el, before: before };
+  }
+
+  function showLine(t) {
+    if (!line) { line = document.createElement('div'); line.className = 'layout-line'; document.body.appendChild(line); }
+    if (!t) { line.style.display = 'none'; return; }
+    line.style.display = 'block';
+    var r;
+    if (t.inside) {
+      r = t.box.getBoundingClientRect();
+      line.className = 'layout-line is-inside';
+      line.style.left = r.left + 'px'; line.style.top = r.top + 'px';
+      line.style.width = r.width + 'px'; line.style.height = r.height + 'px';
+      return;
+    }
+    line.className = 'layout-line';
+    r = t.host.getBoundingClientRect();
+    if (flow(t.host) === 'x') {
+      line.style.left = ((t.before ? r.left : r.right) - 2) + 'px'; line.style.top = r.top + 'px';
+      line.style.width = '4px'; line.style.height = r.height + 'px';
+    } else {
+      line.style.top = ((t.before ? r.top : r.bottom) - 2) + 'px'; line.style.left = r.left + 'px';
+      line.style.height = '4px'; line.style.width = r.width + 'px';
+    }
+  }
+
+  /* the chip is the tool's whole control surface: what it is, how many moves, and undo */
+  function paintChip() {
+    if (!ON) { if (chipEl) chipEl.style.display = 'none'; return; }
+    if (!chipEl) {
+      chipEl = document.createElement('button');
+      chipEl.type = 'button'; chipEl.className = 'layout-chip';
+      chipEl.addEventListener('click', function (e) { e.preventDefault(); undo(); });
+      document.body.appendChild(chipEl);
+    }
+    chipEl.style.display = 'block';
+    chipEl.textContent = 'layout · ' + moved + ' move' + (moved === 1 ? '' : 's') +
+      (hist.length ? ' · undo' : '') + ' · Esc to stop';
+  }
+
+  /* ---- the move, and taking it back ----------------------------------------------- */
+  /* an emptied .rows is removed, and remembered, so nothing leaves an empty flex row behind */
+  function dropRows(from) {
+    if (!from || from.nodeType !== 1 || !from.classList || !from.classList.contains('rows')) return [];
+    if (from.children.length) return [];
+    var rec = { row: from, parent: from.parentNode, next: from.nextElementSibling };
+    rec.parent.removeChild(from);
+    return [rec];
+  }
+
+  function applyDrop(d) {
+    var n = d.node, t = d.t;
+    if (!t) return;
+    var from = { parent: n.parentNode, next: n.nextElementSibling };
+    if (t.inside) {
+      if (t.box === from.parent && t.box.lastElementChild === n) return;     /* already there */
+      t.box.appendChild(n);
+    } else {
+      if (t.box === from.parent && (t.ref || null) === from.next) return;     /* already there */
+      t.box.insertBefore(n, t.ref || null);
+    }
+    hist.push({ node: n, from: from, rows: dropRows(from.parent) });
+    if (hist.length > 40) hist.shift();
+    moved++; paintChip();
+  }
+
+  function undo() {
+    var s = hist.pop();
+    if (!s) return false;
+    for (var i = s.rows.length - 1; i >= 0; i--) {
+      var r = s.rows[i];
+      if (r.parent) r.parent.insertBefore(r.row, r.next && r.next.parentNode === r.parent ? r.next : null);
+    }
+    s.from.parent.insertBefore(s.node,
+      s.from.next && s.from.next.parentNode === s.from.parent ? s.from.next : null);
+    moved = Math.max(0, moved - 1);
+    paintChip();
+    return true;
+  }
+
+  /* ---- the gesture -----------------------------------------------------------------
+     A press becomes a drag only after 4px, so a click still places a caret; while a drag
+     is live the area leaves contenteditable, because a live contenteditable starts a text
+     drag of its own and the gesture never arrives. */
+  function down(e) {
+    if (!ON || e.button !== 0) return;
+    if (!chipEl) paintChip();          /* a save cleaned the chrome away; the press brings it back */
+    var n = e.target && e.target.nodeType === 1 ? e.target : null;
+    if (!n || !movable(n)) return;
+    drag = { node: n, x: e.clientX, y: e.clientY, on: false, t: null, attr: null };
+    window.addEventListener('pointermove', move, true);
+    window.addEventListener('pointerup', up, true);
+    window.addEventListener('pointercancel', up, true);
+  }
+
+  function move(e) {
+    if (!drag) return;
+    if (!drag.on) {
+      if (Math.abs(e.clientX - drag.x) < THRESH && Math.abs(e.clientY - drag.y) < THRESH) return;
+      drag.on = true;
+      var c = ca();
+      drag.attr = c ? c.getAttribute('contenteditable') : null;
+      if (c) c.setAttribute('contenteditable', 'false');
+      drag.node.classList.add('layout-dragging');
+      document.body.classList.add('layout-drag');
+    }
+    drag.t = pick(e.clientX, e.clientY);
+    showLine(drag.t);
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  function up(e) {
+    var d = drag;
+    drag = null;
+    window.removeEventListener('pointermove', move, true);
+    window.removeEventListener('pointerup', up, true);
+    window.removeEventListener('pointercancel', up, true);
+    if (!d) return;
+    showLine(null);
+    d.node.classList.remove('layout-dragging');
+    document.body.classList.remove('layout-drag');
+    var c = ca();
+    if (c) {
+      if (d.attr === null) c.removeAttribute('contenteditable');
+      else c.setAttribute('contenteditable', d.attr);
+    }
+    if (d.on) { applyDrop(d); e.preventDefault(); }
+  }
+
+  function key(e) {
+    if (!ON) return;
+    if (e.key === 'Escape') disable();
+    else if (e.key === 'z' && (e.ctrlKey || e.metaKey) && e.altKey) { undo(); e.preventDefault(); }
+  }
+
+  /* ---- on and off ------------------------------------------------------------------
+     clean() is what the save path calls: it strips the tool's own traces from the DOM and
+     nothing else, so a document saved right after it carries no chip, no line and no drag
+     class. The tool stays live — the chip comes back — which is what lets a layout be
+     saved without leaving edit mode. */
+  function clean() {
+    if (line && line.parentNode) line.parentNode.removeChild(line);
+    line = null;
+    if (chipEl && chipEl.parentNode) chipEl.parentNode.removeChild(chipEl);
+    chipEl = null;
+    var c = ca();
+    if (c) {
+      var d = c.querySelectorAll('.layout-dragging');
+      for (var i = 0; i < d.length; i++) d[i].classList.remove('layout-dragging');
+      if (c.getAttribute('contenteditable') === 'false') c.setAttribute('contenteditable', 'true');
+    }
+    drag = null;
+    document.body.classList.remove('layout-drag');
+    if (!ON) document.body.classList.remove('layout-on');
+    /* the chip is NOT repainted here: clean() runs immediately before a save, and the chip is
+       a body child, so leaving it would put the tool's own chrome into the saved document.
+       The next press brings it back (down()). */
+  }
+
+  function enable() {
+    if (ON) return;
+    ON = true; CA = null; hist = []; moved = 0;
+    document.body.classList.add('layout-on');
+    var c = ca();
+    if (c) c.addEventListener('pointerdown', down, true);
+    document.addEventListener('keydown', key, true);
+    paintChip();
+  }
+
+  function disable() {
+    if (!ON) return;
+    ON = false;
+    var c = ca();
+    if (c) c.removeEventListener('pointerdown', down, true);
+    document.removeEventListener('keydown', key, true);
+    if (line) line.style.display = 'none';
+    clean();
+  }
+
+  return {
+    enable: enable,
+    disable: disable,
+    undo: undo,
+    clean: clean,
+    moves: function () { return moved; },
+    active: function () { return ON; }
+  };
+})();
