@@ -190,11 +190,18 @@ function ansRowFor(t,pos,alt){let rows=ansRows().filter(r=>r.anchor===t);
  if(!rows.length&&alt&&alt!==t)rows=ansRows().filter(r=>r.anchor===alt);  /* saved before the anchor rule */
  if(!rows.length)return null;
  if(!pos)return rows[0];
+ /* AN ORDINAL IS THE IDENTITY. Two controls that share one anchor are told apart by the ordinal (-1, -2 …),
+    and the ordinal counts SIBLING CONTROLS, so it does not move when the page around them changes — while
+    `b` beside it is an index into the whole page's block list and does drift (a game inserts its stage at
+    load). So an ordinal row is matched on the ordinal alone: the second field of a cell can neither take
+    the first one's row nor lose its own to a moved index. */
+ if(pos.o<0){
+  const m=rows.filter(r=>{const p=nbDataPos(r.data);return p&&p.o===pos.o});
+  return m.length===1?m[0]:null}
  const hit=rows.find(r=>{const p=nbDataPos(r.data);return p&&p.b===pos.b&&p.o===pos.o});
  if(hit)return hit;
- /* THE OFFSET IS AN INDEX, AND AN INDEX CAN DRIFT between the save and the next load (a game inserts its
-    stage into the page, a block is edited): when the anchor names exactly ONE answer, that row IS this
-    control's answer and a moved offset must not hide it. */
+ /* a text offset can drift too (a block is edited, a game inserts its stage): when the anchor names exactly
+    ONE answer, that row IS this control's answer and a moved offset must not hide it */
  return rows.length===1?rows[0]:null}
 function ansSet(t,v,pos,alt){
  const cur=ansRowFor(t,pos,alt);
