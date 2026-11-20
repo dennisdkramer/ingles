@@ -891,12 +891,14 @@
   .cols{display:flex;gap:var(--flex-gap,26px);align-items:flex-start;flex-wrap:wrap;
         padding-top:8px}
   .cols>*{flex:1 1 var(--cw,220px);min-width:0}
-  /* a row is one line, and its direct children are its cells: every cell the same width, every cell the
-     line's height. NOTHING WRAPS — a fifth item is a second `.rows`, never a second line inside this one.
-     Two items that belong together but are each small stack inside ONE cell (they are siblings in the
-     cell's div), which is the only way a line holds more pieces than it has cells. */
+  /* a row is one line, and its direct children are its cells. A cell starts at the width its content asks
+     for, then grows or shrinks with the rest, so a heavy paragraph and a thin one share the line in
+     proportion to what they hold, and text wraps inside whatever width it lands on. No cell goes below a
+     QUARTER of the line, so four cells always fit and nothing is squeezed past reading. NOTHING WRAPS —
+     a fifth item is a second `.rows`, never a second line inside this one. Two items that belong together
+     but are each small stack inside ONE cell (they are siblings in that cell's div). */
   .rows{display:flex;flex-wrap:nowrap;gap:var(--flex-gap,26px);align-items:stretch;padding-top:8px}
-  .rows>*{display:flex;flex-direction:column;flex:1 1 0;min-width:0}
+  .rows>*{display:flex;flex-direction:column;flex:1 1 auto;min-width:calc(25% - 20px)}
   /* a dialog, a player or a comic takes the row's height; the map does not — its frame is drawn on the
      drawing, so it keeps the drawing's own 3:2 box and the cell around it holds the rest */
   .rows>*>:is(.viz,figure.vz-play):not(.vz-map){flex:1 1 auto;min-height:0}
