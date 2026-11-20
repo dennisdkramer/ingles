@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Capability map — English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=c8a10e770c">
+<link rel="stylesheet" href="style.css?v=83ce2098c9">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>VISUAL REFERENCE</span></h1></header>
@@ -20,7 +20,7 @@
 
 <div class="block" data-span="12">
 <h3>Arrange it, and give it a look</h3>
-<p><b>A section's content goes into one <code>.rows</code>, and that is the default.</b> A row is one line, and its direct children are its cells: <b>each cell is one item, or two that stack inside it</b>. Every cell starts at the width its content asks for, shares the rest of the line in proportion to what it holds and never drops below a quarter of it, and text wraps inside whatever width it lands on; every cell is the line's height. Two cells a line by default, three or four when the items are thin, and a fifth item is a second <code>.rows</code> — a row never wraps. <code>.cols</code> is for interchangeable cells that must wrap, and <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. A width is a repair: a span or an inline basis only where a cell comes out under a quarter of the line.</p>
+<p><b>A section's content goes into one <code>.rows</code>, and that is the default.</b> A row is one line, and its direct children are its cells: <b>each cell is one item, or two that stack inside it</b>. Every cell starts at the width its content asks for, shares the rest of the line in proportion to what it holds and never drops below <b>a quarter of the page</b>, and text wraps inside whatever width it lands on; every cell is the line's height. Two cells a line by default, three or four when the items are thin, and a fifth item is a second <code>.rows</code> — a row never wraps. <code>.cols</code> is for interchangeable cells that must wrap, and <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. A width is a repair: <code>min-width</code> to raise a floor, <code>flex:0 0 calc(50% - 13px)</code> to fix a cell at half the line, or <code>data-span</code> on a block that stands outside a row.</p>
 <p class="dim"><b>Every element below is drawn with the markup that builds it, and the drawing is the default</b>: what the element contains, what text it carries, where that text sits, and whether it carries a title at all. Its item count is the example's own, never a count to copy. A chart takes no title of its own — the sentence beside it names it.</p>
 <p class="dim"><code>data-look</code> is declared on the block, never inferred from what it holds, and changes the paint only.</p>
 </div>
@@ -206,7 +206,7 @@
 
 
 <div class="rows">
-<div id="map" style="min-width:calc(50% - 13px)">
+<div id="map" style="flex:0 0 calc(50% - 13px)">
   <div class="vz-map viz">
   <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, eight places each drawn with its name on a sign — a station under a canopy with a clock, a café with a striped awning, a park with trees, a bank under a dollar sign, a library wall of books, a post office with a postbox, a bus shelter, and two market awnings">
     <rect x="0" y="0" width="360" height="240" style="fill:var(--paper)"></rect>
@@ -271,7 +271,7 @@
   </svg>
   </div>
 </div>
-<div id="comic" style="min-width:calc(50% - 13px)">
+<div id="comic" style="flex:0 0 calc(50% - 13px)">
 <table class="chart" style="width:100%;height:100%;flex:1 1 auto">
   <tbody>
     <tr>
@@ -686,6 +686,8 @@ next();
 <label class="opt"><input type="radio" name="mc1" value="d"><span>a finished count</span></label>
 </div>
 </div>
+</div>
+<div class="rows">
 <div class="qitem" data-a="c">
 <p class="qstem"><span class="qnum">2.</span> By the time I clocked in, the crew <b>had loaded</b> the truck.</p>
 <div class="qopts">
@@ -713,6 +715,8 @@ next();
 </table>
 </figure>
 </div>
+</div>
+<div class="rows">
 <div>
 <ul>
 <li><b>a</b> shared the gossip</li>
