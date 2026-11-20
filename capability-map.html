@@ -644,6 +644,8 @@ next();
     <tr>
       <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%"></td>
       <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%"></td>
+    </tr>
+    <tr>
       <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><input class="gap" style="--gap-w:100%"></td>
       <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><input class="gap" style="--gap-w:100%"></td>
     </tr>
@@ -673,7 +675,7 @@ next();
 </div>
 
 <div class="rows">
-<div class="block" data-look="stripes" id="mc" data-activity="mc" style="min-width:calc(50% - 13px)">
+<div class="block" data-look="stripes" id="mc" data-activity="mc" style="min-width:calc(33% - 13px)">
 <h3>Multiple choice</h3>
 <p>Choose the answer that fits the line.</p>
 <div class="rows">
@@ -731,7 +733,7 @@ next();
 </div>
 
 <div class="rows">
-<div class="block" data-activity="map" id="mapq">
+<div class="block" data-activity="map" id="mapq" style="flex:0 0 calc(50% - 13px)">
 <h3>The map as a question</h3>
 <div class="qitem" data-a="bank">
 <p class="qstem">You just finished eating at the café, took a right out of the building, and then your first left. You went to the end of the street there, but then realized you went too far. You turned around and walked back a block — your destination is on your left. Tick it on the map.</p>
@@ -942,7 +944,9 @@ next();
     &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" width="100%" role="img"
                  aria-label="what the panel shows"&gt;…&lt;/svg&gt;
               &lt;input class="gap" style="--gap-w:100%"&gt;&lt;/td&gt;
-      …
+        …two panels to a row…
+    &lt;/tr&gt;
+    &lt;tr&gt;…the next two panels…&lt;/tr&gt;
   &lt;/table&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
