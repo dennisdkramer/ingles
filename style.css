@@ -1723,6 +1723,10 @@
   .layout-panel button{font:600 .68rem var(--sans);padding:3px 9px;cursor:pointer;
     border:1px solid var(--line);border-radius:99px;background:var(--paper);color:var(--ink)}
   .layout-panel button:hover{border-color:var(--accent);color:var(--accent)}
+  /* an action that cannot apply to what is selected: the selection is a container, a block or a
+     paragraph — a flex value belongs on a cell, so the button is dead rather than misleading */
+  .layout-panel button:disabled{opacity:.38;cursor:not-allowed;border-color:var(--line);color:var(--ink)}
+  .layout-panel button:disabled:hover{border-color:var(--line);color:var(--ink)}
   .layout-panel .layout-w{flex:1 1 9em;min-width:8em;font:600 .68rem var(--sans);
     padding:3px 8px;border:1px solid var(--line);border-radius:99px;background:var(--paper);
     color:var(--ink)}

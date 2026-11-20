@@ -157,7 +157,7 @@ window.LayoutEditor = (function () {
     var c = ca(), out = [], h2 = sectionOf(n), si = sections().indexOf(h2) + 1;
     var row = n.closest('.rows'), ri = 0, ci = 0;
     if (row) { ri = [].indexOf.call(c.querySelectorAll('.rows'), row) + 1; if (n.parentElement === row) ci = [].indexOf.call(row.children, n) + 1; }
-    out.push('S' + (si || '?') + (ri ? ' · R' + ri : '') + (ci ? ' · cell ' + ci : '') + (n.matches('.rows') ? ' (the row)' : ''));
+    out.push('S' + (si || '?') + (ri ? ' · R' + ri : '') + (ci ? ' · cell ' + ci : '') + (n.matches('.rows') ? ' (THE ROW — pick a cell for a width)' : ''));
     out.push(n.tagName.toLowerCase() + (n.id ? '#' + n.id : '') +
       (typeof n.className === 'string' && n.className.trim() ? '.' + n.className.trim().split(/\s+/).slice(0, 2).join('.') : ''));
     var st = n.getAttribute('style');
@@ -200,9 +200,27 @@ window.LayoutEditor = (function () {
     else n.style.flex = v;
     if (!n.getAttribute('style')) n.removeAttribute('style');
   }
+  /* A FLEX VALUE BELONGS ON AN ITEM, NEVER ON A CONTAINER. A cell is a direct child of a .rows; the
+     .rows itself is the panel that lays the cells out, and putting `flex` on it does nothing at all —
+     which is exactly what happens if a press lands on a row's own padding and the row becomes the
+     selection. So every width action below is refused unless the target is a cell, and `even row` is
+     the one action that accepts either the row or one of its cells. */
+  function isItem(n) {
+    return !!(n && n.nodeType === 1 && n.parentElement &&
+      n.parentElement.classList && n.parentElement.classList.contains('rows') &&
+      !n.classList.contains('rows'));
+  }
   function act(what, field) {
     if (!sel) return;
-    var n = sel, row = n.parentElement;
+    var n = sel, row = n.classList.contains('rows') ? n : n.parentElement;
+    if (what === 'even') {
+      if (!row || !row.classList || !row.classList.contains('rows')) return;
+      var kids = [].filter.call(row.children, function (k) { return k.nodeType === 1; }), c = kids.length;
+      kids.forEach(function (k) { k.style.flex = '0 0 calc((100% - ' + (c - 1) + ' * 26px) / ' + c + ')'; });
+      markPins(); select(n); paintChip();
+      return;
+    }
+    if (!isItem(n)) return;            /* a container, a block, a paragraph: never a flex item, never written */
     if (what === 'set' && field) {
       var v = String(field.value || '').trim().replace(/^style\s*=\s*/i, '');
       if (!v || /^(auto|none|-)$/i.test(v)) what = 'auto';
@@ -223,10 +241,6 @@ window.LayoutEditor = (function () {
     else if (what === 'min') setFlex(n, '0 1 0');          /* collapse: no growth, no basis — the cell drops to the sheet's minimum width and its neighbours take the rest */
     else if (what === 'natural') setFlex(n, '0 1 auto');   /* its own content width, no growth: never smaller than its longest line, never inflated by the row */
     else if (what === 'full') setFlex(n, '0 0 100%');
-    else if (what === 'even' && row && row.classList && row.classList.contains('rows')) {
-      var kids = [].filter.call(row.children, function (k) { return k.nodeType === 1; }), c = kids.length;
-      kids.forEach(function (k) { k.style.flex = '0 0 calc((100% - ' + (c - 1) + ' * 26px) / ' + c + ')'; });
-    }
     markPins(); select(n); paintChip();
   }
 
@@ -258,6 +272,13 @@ window.LayoutEditor = (function () {
       });
       document.body.appendChild(panelEl);
     }
+    var item = isItem(sel), isRow = !!(sel && sel.classList && sel.classList.contains('rows'));
+    [].forEach.call(panelEl.querySelectorAll('[data-act]'), function (b) {
+      var a = b.getAttribute('data-act');
+      /* `even row` is the one action that takes a row; the rest need a cell, because a flex value on a
+         container does nothing (and hiding them is what stops it being tried) */
+      b.disabled = (a === 'even') ? !(item || isRow) : !item;
+    });
     document.body.classList.add('layout-panelled');
     var box = panelEl.querySelector('.layout-facts');
     var txt = facts(sel);
