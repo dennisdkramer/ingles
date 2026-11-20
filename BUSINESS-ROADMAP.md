@@ -209,7 +209,7 @@
    - teaches: `noun-phrase/post-modifier`, `apposition/role-statement`, `discourse/question-return`
    - Deepens: `clause/skeleton` - the skeleton now grows inside one slot: the subject is a phrase with its own internal order, so what sits after the noun matters as much as the order of the clause.
    - Uses: `clause/skeleton`, `pronoun/possessive`, `question/wh-order`, `article/a-the-zero`, `prep/verb-unit`
-   - Vocabulary: "in charge of", "part of", "responsible for", "the one who", "on the X side", "I run", "I look after", "report into", "these days", "same as always", "keeping busy", "living the dream"
+   - Vocabulary: "in charge of", "part of", "responsible for", "the one who", "I work in", "on the team", "I look after", "I run", "what do you do", "new here", "these days", "keeping busy"
    - Examples: "I'm Ana - I'm the analyst who owns pricing." / "I look after the models, so I'm on the revenue side." / "I'm in charge of the two APIs nobody wants to touch." / "What do you do?" with "same as always - spreadsheets and coffee" as the informal note under "nothing has changed"
    - Real-world relevance: The first minute decides the rest of the call, and the sentence that stalls is usually a missing "who" or a noun phrase left in Portuguese order.
 
@@ -220,7 +220,7 @@
    - teaches: `reference/anaphora`, `substitution/one-and-do-so`, `question/echo-clarify`
    - Deepens: `clause/dummy-subject` - the same little words now point at something already said instead of filling an empty subject slot, so the student chooses between the two jobs.
    - Uses: `clause/dummy-subject`, `clause/skeleton`, `question/wh-order`, `noun/count-uncountable`
-   - Vocabulary: "that one", "the other one", "so do I", "neither did I", "I thought so", "the same thing", "sorry, the what?", "who did what?", "back to that", "as I said", "long story", "no way"
+   - Vocabulary: "that one", "the other one", "so do I", "neither did I", "I thought so", "the same thing", "sorry, the what?", "what do you mean", "back to that", "long story", "right then", "who said that"
    - Examples: "The new one is faster; the old one still works." / "I've already sent it." - "So have I." / "Sorry, the what now?" / "They moved the date." - "Wait, who moved what?" with "no way" as the informal note under "that is surprising"
    - Real-world relevance: A meeting is mostly pronouns, and the student who loses track of "it" loses the thread even when every word is known.
 
@@ -231,7 +231,7 @@
    - teaches: `prep/until-vs-by`, `prep/ago-vs-for`, `prep/in-vs-within`
    - Deepens: `prep/time-in-on-at` - the time meaning is cut finer here: at, on and in say when, while until, by, for and within say how long and how late.
    - Uses: `prep/time-in-on-at`, `past-simple/regular-ed`, `number/date-and-time`
-   - Vocabulary: until, "by then", ago, during, within, "for a week", "in an hour", "two days ago", "until six", "at the latest", "lead time", rush
+   - Vocabulary: until, "by then", ago, during, within, "for a week", "in an hour", "two days ago", "at the latest", rush, "on time", "the weekend"
    - Examples: "I need it by Friday." / "We waited until six." / "The update takes about an hour." / "It has to be done within two days." / "I sent it two days ago."
    - Real-world relevance: This persona negotiates deadlines all day, and "until" used for "by" is a commitment made by accident.
 
@@ -241,7 +241,7 @@
    - teaches: `question/embedded-order`, `question/embedded-wh`, `question/soft-opener`
    - Deepens: `question/yes-no-order`, `question/wh-order` - the inversion established in lesson 8 is switched off inside a frame, so the same content now takes statement order.
    - Uses: `modal/request-ladder`, `axis/direct-vs-indirect`, `clause/skeleton`
-   - Vocabulary: "could you tell me", "do you know", "I was wondering", "can I ask", "just to check", "quick question", "if you don't mind", "sorry to bother you", "one more thing", "when exactly", "let me know", "appreciate it"
+   - Vocabulary: "could you tell me", "do you know", "I was wondering", "can I ask", "just to check", "quick question", "if you don't mind", "one more thing", "let me know", "how come", "which one", "when exactly"
    - Examples: "Could you tell me where the office is?" / "Do you know when the meeting starts?" / "I was wondering if you have five minutes." / "Just to check, is the file final?"
    - Real-world relevance: This is the difference between sounding like a demand and sounding like a colleague, and it is how a junior asks a director for something.
 
@@ -262,7 +262,7 @@
    - teaches: `present-perfect/have-participle`, `present-perfect/duration-for-since`, `present-perfect/since-point`
    - Deepens: `past-simple/irregular` - the third form of the irregular verb now has a second job as the participle after have, so the same list is reused rather than re-taught.
    - Uses: `past-simple/irregular`, `mode/slot`, `prep/time-in-on-at`, `prep/until-vs-by`
-   - Vocabulary: join, remain, stay, period, decade, growth, trend, "this year", "for five years", "since 2019", "how long", "up to now"
+   - Vocabulary: join, stay, know, have, live, change, grow, "how long", "for five years", "since 2019", "up to now", "this year"
    - Examples: "I've worked here for five years." / "She's been in the role since March." / "We've used this system for a decade." / "How long have you been at the company?" / "I've lived here for ten years." / "She's been sick since Monday."
    - Real-world relevance: "Trabalho aqui há cinco anos" is the sentence a Brazilian professional most often gets wrong in an interview, and this lesson is the reason the course exists.
 
@@ -282,7 +282,7 @@
    - teaches: `pattern/verb-to-infinitive`, `pattern/verb-ing`, `pattern/meaning-change`
    - Deepens: -
    - Uses: `mode/verb-returns-base`, `prep/to-vs-for`, `connector/cause-result`
-   - Vocabulary: decide, try, promise, suggest, avoid, mind, enjoy, offer, hope, keep, refuse, manage
+   - Vocabulary: decide, try, promise, suggest, avoid, mind, enjoy, offer, hope, start, stop, forget
    - Examples: "We decided to move the launch." / "I suggest checking the numbers first." / "Do you mind waiting five minutes?" / "I managed to finish it on time."
    - Real-world relevance: A sentence with two verbs is where the student's structure collapses, and "suggest me to" is the signature error of a Portuguese speaker in a meeting.
 
@@ -292,7 +292,7 @@
    - teaches: `condition/zero-fact`, `condition/first-will`, `condition/unless-when`
    - Deepens: -
    - Uses: `present-simple/facts-not-now`, `future/will-now-decision`, `future/gonna-plan`, `modal/should-advice`
-   - Vocabulary: if, unless, when, "as soon as", "in case", "even if", "as long as", otherwise, condition, agree, cancel, prepare
+   - Vocabulary: if, unless, when, "as soon as", "in case", "even if", "as long as", otherwise, agree, cancel, rain, traffic
    - Examples: "If the client confirms, we'll start on Monday." / "If you press this, it saves automatically." / "Unless the client confirms, we can't start." / "As soon as I get it, I'll send it to you."
    - Real-world relevance: Every plan in this persona's week hangs on a condition, and "will" inside the if-clause is the error that marks a non-native speaker immediately.
 
@@ -302,7 +302,7 @@
    - teaches: `data/trend-verb`, `data/change-rate`, `data/forecast`, `hedge/data-limitation`, `discourse/framing-marker`
    - Deepens: `number/figure-comparison` - a single comparison becomes a movement over time, and the verb now carries direction and speed instead of up and down doing the work.
    - Uses: `number/figure-comparison`, `compare/degree-adverbs`, `connector/contrast`, `past-simple/regular-ed`, `axis/hedge`
-   - Vocabulary: increase, decrease, rise, drop, grow, peak, plateau, double, average, forecast, target, share, "too early to say", "on this sample", roughly, "at most", ballpark, noise
+   - Vocabulary: increase, drop, rise, double, average, target, forecast, share, roughly, "at most", "ballpark figure", "too early to say"
    - Examples: "Revenue grew by 8 percent to 2.4 million." / "Costs peaked in March and then plateaued." / "We expect the share to double by Q4." / "Sales dropped slightly last quarter." / "On twelve responses, that's noise." / "It's up roughly 8 percent - too early to call it a trend." with "we're guessing, honestly" as the informal note under "the evidence is thin"
    - Real-world relevance: Describing a chart without a script is precisely this persona's output, and it is the honest test of whether block 1's numbers became usable.
 
