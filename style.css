@@ -924,15 +924,27 @@
      its row — so a row inside a narrow block holds fewer cells and nothing is squeezed past reading.
      NOTHING WRAPS — a fifth item is a second `.rows`, never a second line inside this one.
      >>> THE PANEL ITSELF. DO NOT CHANGE THESE VALUES EITHER. A `.rows` is a cell when it sits inside
-         another `.rows` (or inside `.cols`), and then it is a FLEX ITEM and needs the same three values
+         another `.rows` or inside `.cols`, and then it is a FLEX ITEM and needs the same three values
          spelled for a container: `flex:1 0 auto` — it GROWS to fill the line it was given, it does NOT
          SHRINK, and it does not sit at its own content width (grow takes it to the line). Before this was
          stated, a nested row stayed at its content width and its own cells had nothing to share out, so
-         every width in it looked wrong. Outside a flex parent (a section, a `.block`, the page grid) the
-         three values are inert, so the same declaration is safe everywhere. */
+         every width in it looked wrong.
+     >>> BOTH RULES COVER EVERY CONTEXT, BY SELECTOR, NOT BY LUCK. A row is the same row whether it sits
+         straight in the page grid, in a `<section>`, inside a `.block`, inside a `.cols`, or inside
+         another row — so both rules below name each of those contexts. That is not decoration: the
+         competing rules are `.content-area>*` (the page grid), `.cols>*` (which gives its children
+         `flex:1 1 var(--cw,220px)` — a shrinking 220px basis, the wrong values for a row), and the cell
+         rule itself, which turns a nested row into a column. Every selector in the two lists below is at
+         least as specific as those, so no context can win. A row added in a context nobody listed here
+         would be the only way to break this — add the context to the list, never a bare `.rows` rule.
+         `qa:rowctx` proves the list wins in all five contexts. */
   .content-area{container-type:inline-size}
-  .rows>*{display:flex;flex-direction:column;flex:1 1 auto;min-width:calc(25% - 20px)}
-  .rows>*{min-width:calc(25cqw - 34px)}
+  /* THE CELL: grow 1, shrink 1, basis auto, floored at a quarter of the page. The column direction is
+     what stacks the items a cell holds (a paragraph, then its .dim line, then a figure) — a cell is a
+     small column, and only the ROW below is a line. */
+  .rows>*,.rows .rows>*,.block .rows>*,.cols>.rows>*,.content-area>.rows>*,.content-area>section>.rows>*{
+    display:flex;flex-direction:column;flex:1 1 auto;
+    min-width:calc(25% - 20px);min-width:calc(25cqw - 34px)}   /* the second wins where cqw is supported */
   /* a dialog, a player or a comic takes the row's height; the map does not — its frame is drawn on the
      drawing, so it keeps the drawing's own 3:2 box and the cell around it holds the rest */
   .rows>*>:is(.viz,figure.vz-play):not(.vz-map){flex:1 1 auto;min-height:0}
@@ -941,11 +953,10 @@
      flex share and takes its content's width, and the neighbour beside it fills the rest of the row */
   .rows>div:has(>.chartwrap:only-child),
   .rows>div:has(>table.chart:only-child){flex:0 0 auto}
-  /* THE PANEL, after the cell rules on purpose: a `.rows` that is itself a cell must beat `.rows>*`
-     (same specificity, so this has to come second) and must undo the column direction that rule gives
-     every cell — otherwise a row nested in a row stacks its own cells. */
-  .rows{display:flex;flex-direction:row;flex-wrap:nowrap;flex:1 0 auto;
-        gap:var(--flex-gap,26px);align-items:stretch;padding-top:20px}
+  /* THE PANEL: grow 1, shrink 0, and row direction — in every context, including inside another row */
+  .rows,.rows .rows,.block .rows,.cols>.rows,.content-area>.rows,.content-area>section>.rows{
+    display:flex;flex-direction:row;flex-wrap:nowrap;flex:1 0 auto;
+    gap:var(--flex-gap,26px);align-items:stretch;padding-top:20px}
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
   .content-area>h2{margin-block:var(--section-gap,34px) 0}

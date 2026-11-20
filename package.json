@@ -12,6 +12,7 @@
     "qa:games": "node qa/run.mjs games",
     "qa:live": "node qa/run.mjs live",
     "qa:liquid": "node qa/run.mjs liquid",
+    "qa:rowctx": "node qa/run.mjs rowctx",
     "build:dict": "node build-dictionary.mjs",
     "mapcheck": "node qa/mapcheck.mjs",
     "batchcheck": "node qa/batchcheck.mjs",
