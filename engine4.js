@@ -685,6 +685,28 @@ window.GAMES4 = (function () {
     if (this.itemTime) stage.appendChild(bar);
     this.bar = bar; this.barFill = bar.querySelector('i');
     this.stage = stage; this.hudEl = hud;
+    /* THE QUESTION CAN BE A SOUND (owner report 2026-11-20): an item whose `.listen` carries `data-say`
+       asks the student to recognise what they HEAR, not what they read — lesson 1 of a sound lesson has
+       no other way to ask it. The authored list is hidden for the length of a run, so the clip had
+       nowhere to play from and every such round opened in silence, with the ▶ the page drew sitting in
+       the hidden list. The runner therefore says the item's own `data-say` once, on the frame the round
+       opens (`speakItem`, called from `step`), and leaves the button below on the HUD to hear it again.
+       `data-sound="0"` on the block mutes both, because it is the same lever every cue on the stage
+       answers to; a presentation that times its own clip sets `PLUGINS.<game>.ownClip`. */
+    var hear = el('button', 'g4-hear', '🔊');
+    hear.type = 'button';
+    hear.title = 'Hear it again';
+    hear.setAttribute('aria-label', 'Hear it again');
+    hear.style.cssText = 'display:none;margin:0;padding:2px 10px;font:inherit;font-size:17px;line-height:1.25;'
+      + 'background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:12px;'
+      + 'box-shadow:3px 3px 0 var(--tan);cursor:pointer';
+    hear.addEventListener('click', function (e) {
+      e.preventDefault(); e.stopPropagation();      /* a press on the HUD is never an answer */
+      var it = self.queue[0];
+      if (it && it.say) say(it.say);
+    });
+    hud.appendChild(hear);                           /* the HUD is row-reverse: this lands left of the clock */
+    this.hearBtn = hear;
     /* the runner’s own furniture: the scene, the HUD, the score line, the deadline bar and the intro are NOT
        part of the picture that fades on a hand-over — only the presentation’s own nodes are */
     this.ownNodes = [scene, hud, prev, bar, intro];
@@ -945,6 +967,16 @@ window.GAMES4 = (function () {
     }, XFADE + 60);
   };
 
+  /* SPEAK THE ROUND'S OWN CLIP — once, when the round opens. An item with no `.listen`/`data-say` is a
+     written question and this does nothing but keep the replay button off the HUD, so it runs for every
+     game in the engine and only a SPOKEN item hears anything. A presentation that times its own clip
+     (`PLUGINS.<game>.ownClip`, bingoCard) is left alone entirely. */
+  Runner.prototype.speakItem = function (it) {
+    var clip = it && it.say;
+    var mine = !!(this.plugin && this.plugin.ownClip);
+    if (this.hearBtn) this.hearBtn.style.display = (clip && !mine) ? '' : 'none';
+    if (clip && !mine && this.sound) say(clip);
+  };
   /* THE OPTIONS ARRIVE WITH THEIR QUESTION (qa/NOTES.md 28, and item [40] for the timing): the options are
      built in the frame their own prompt goes up — the picture that was there a moment ago is a fading ghost
      over them, so an option can never be read off the question before its own */
@@ -957,6 +989,7 @@ window.GAMES4 = (function () {
        HUD line would print the same words twice on one stage: the HUD copy is simply not made. */
     var owns = !!(this.view && this.view.ownsPrompt);
     this.setPrompt(owns ? '' : it.prompt, !owns);
+    this.speakItem(it);          /* a spoken item opens with its own sound, and the HUD keeps the replay */
     this.hud();
     var arrive = function () {
       if (self.phase !== 'play' || self.queue[0] !== it) return;
@@ -2085,7 +2118,13 @@ window.GAMES4 = (function () {
 
 function say(text, lang) {
     try {
-      if (!text || !window.speechSynthesis) return false;
+      if (!text) return false;
+      /* THE PAGE'S OWN VOICE FIRST: engine2 exposes `playSay`, which speaks with the voice the student
+         picked for every other ▶ on the page (and stops whatever was already speaking). A game that
+         spoke in the browser's default voice would sound like a different speaker in the same lesson.
+         The local utterance below is the fallback for a page that loads engine4 without engine2. */
+      if (typeof window.playSay === "function") { window.playSay(String(text)); return true; }
+      if (!window.speechSynthesis) return false;
       var u = new SpeechSynthesisUtterance(String(text));
       u.lang = lang || 'en-US';
       u.rate = 0.92;
@@ -3659,6 +3698,10 @@ PLUGINS.echoPads.startText = 'Build a sentence - Dont get distracted by similar 
        word, so a card at the top would be the instruction printed over a word nobody reads */
     return { show: show, mark: mark, clear: clear, ownsPrompt: true };
   };
+  /* bingoCard times its OWN clip: the word is not said until the student presses Begin (see above), so the
+     runner must not say it on the frame the round opens. This is the one lever a presentation has for
+     owning its clip — every other game takes the runner's automatic one. */
+  PLUGINS.bingoCard.ownClip = true;
 
 
   /* ---------------- ladderRun: climb the ladder, one rung per right answer ----------------

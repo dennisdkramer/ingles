@@ -109,14 +109,20 @@ function ansAnchorOf(el){let p=el.parentElement;
  return""}
 function ansCellPos(el,a){const blk=hlBlockOf(el);if(!blk)return null;
  const b=hlBlocks().indexOf(blk);if(b<0)return null;
- let k=0;const gs=blk.querySelectorAll("input.gap");
+ let k=0;const gs=blk.querySelectorAll("input.gap, textarea");
  for(let i=0;i<gs.length;i++){const g=gs[i];
+  if(g.id==="feed")continue;                     /* the notebook is not an item, so it is not counted */
   if(g===el)break;
   if(ansAnchorOf(g)===a)k++;}
  return{b:b,o:-1-k}}
+/* TWO CONTROLS IN ONE CELL SHARE AN ANCHOR **and** a text offset (the cell's first text node), so they
+   were written to the SAME row and the second answer silently replaced the first. The ordinal is
+   therefore taken whenever the wrapper holds more than one control of EITHER kind — a gap or a
+   textarea — not only more than one gap. A wrapper with a single control keeps the exact offset it
+   always had, so nothing already saved is re-keyed. */
 function ansGap(el,w){
  const a=ansAnchorOf(el);if(!a)return null;
- const many=w.querySelectorAll&&w.querySelectorAll("input.gap").length>1;
+ const many=w.querySelectorAll&&w.querySelectorAll("input.gap, textarea").length>1;
  if(!many&&ansNorm(w.textContent))return{anchor:a,posEl:w};
  return{anchor:a,posEl:w,pos:ansCellPos(el,a)}}
 function ansPosOf(o){return(o&&o.pos)?o.pos:ansPos(o&&o.posEl)}
@@ -128,7 +134,11 @@ function ansOf(el){
  if(num)return{anchor:num,posEl:null,pos:null};
  if(el.matches&&el.matches("input.gap")){const w=el.parentElement;if(!w)return null;return ansGap(el,w)}
  if(el.matches&&el.matches('input[type="radio"]')){const st=ansQstem(el);if(!st)return null;return{anchor:ansNorm(st.textContent),posEl:st}}
- if(el.tagName==="TEXTAREA"&&el.id!=="feed"){const w=el.parentElement;if(!w)return null;return{anchor:ansNorm(w.textContent),posEl:w}}
+ if(el.tagName==="TEXTAREA"&&el.id!=="feed"){const w=el.parentElement;if(!w)return null;
+  /* a translation/dictation box follows the same rule as a gap: one control in its cell keeps the
+     offset it always had, two of them in the same cell take the ordinal so they cannot overwrite
+     each other's row */
+  return ansGap(el,w)||{anchor:ansNorm(w.textContent),posEl:w}}
  return null}
 function ansPos(posEl){const blk=hlBlockOf(posEl);if(!blk)return null;
  const b=hlBlocks().indexOf(blk);if(b<0)return null;
@@ -163,7 +173,17 @@ function ansSet(t,v,pos){
  send({action:cur?"set":"add",id:id,type:"answer",anchor:t,data:data});
 }
 function ansSaveEl(el){const o=ansOf(el);if(!o||!o.anchor)return;ansSet(o.anchor,el.value,ansPosOf(o));}
-let ansTimer=null;
+/* THE DEBOUNCE IS PER FIELD. One shared timer meant that typing in a second field within 800 ms
+   cancelled the first field's pending save outright — reported against a block that puts a
+   listen-and-write field under each line of the same cell, where the second answer arrived and the
+   first never did. Each field now carries its own timer, so nothing can cancel anything else. */
+const ansTimers=new WeakMap();
+document.addEventListener("input",e=>{const t=e.target;
+ if(t&&t.matches&&(t.matches("input.gap")||(t.tagName==="TEXTAREA"&&t.id!=="feed"))){
+  clearTimeout(ansTimers.get(t));
+  ansTimers.set(t,setTimeout(()=>ansSaveEl(t),800));}});
+/* a gap or a choice finishes its answer when the field is LEFT (blur / Tab / Enter) — a radio saves on
+   its own change, and the notebook keeps its own debounce below */
 document.addEventListener("change",e=>{const t=e.target;
  if(t&&t.matches&&(t.matches("input.gap")||t.matches('input[type="radio"]')||(t.tagName==="TEXTAREA"&&t.id!=="feed")))ansSaveEl(t);
  else if(t&&t.id==="feed")nbSave();});
@@ -191,28 +211,49 @@ document.addEventListener("click",e=>{const t=ansRadioTarget(e.target);if(!t)ret
  setTimeout(()=>{if(!t.checked)return;t.checked=false;
   const o=ansOf(t);if(o&&o.anchor)ansSet(o.anchor,"",ansPosOf(o));},0);
 });
-document.addEventListener("input",e=>{const t=e.target;
- if(t&&t.matches&&(t.matches("input.gap")||(t.tagName==="TEXTAREA"&&t.id!=="feed"))){clearTimeout(ansTimer);ansTimer=setTimeout(()=>ansSaveEl(t),800)}});
+/* the leftover global timer and its listener are gone: the per-field debounce above replaced them */
 function ansSaveAll(){document.querySelectorAll("input.gap, textarea").forEach(el=>{if(el.tagName==="TEXTAREA"&&el.id==="feed")return;ansSaveEl(el)});}
 function flushNow(){ansSaveAll();nbSave();scheduleFlush()}
 window.addEventListener("pagehide",flushNow);
 document.addEventListener("visibilitychange",()=>{if(document.hidden)flushNow()});
+/* A VIEW IS NOT A SAVE. A snapshot that arrives WITHOUT this control's row used to erase whatever the
+   student had typed: the write may have been answered and then dropped by the backend, the row may have
+   been deleted on another device, or the page may have been re-edited so the anchor moved. The value on
+   the screen is still the student's answer, so it is written again instead of being wiped — once per
+   anchor for the life of the page, so a genuinely deleted row cannot be resurrected in a loop and a
+   second miss hands the snapshot the last word, exactly as before. */
+const ansResent=new Set();
+function ansResend(o,v,pos){
+ if(!o||!o.anchor||ansResent.has(o.anchor))return;
+ ansResent.add(o.anchor);
+ ansSet(o.anchor,v,pos);
+}
 function renderAnswers(){
  const pending=new Set(ansRows().filter(r=>pendingFor(r.id)).map(r=>r.id));
  document.querySelectorAll("input.gap, textarea").forEach(el=>{
   if(el.tagName==="TEXTAREA"&&el.id==="feed")return;
   const o=ansOf(el);if(!o||!o.anchor)return;
-  const row=ansRowFor(o.anchor,ansPosOf(o));
+  const pos=ansPosOf(o);
+  const row=ansRowFor(o.anchor,pos);
   if(row&&pending.has(row.id))return;
   if(document.activeElement===el)return;
-  const want=row?ansValueOf(row):"";
+  if(!row){                                        /* no row: keep what is on the screen, and re-save it */
+   if(el.value!=="")ansResend(o,el.value,pos);
+   return;
+  }
+  const want=ansValueOf(row);
   if(el.value!==want)el.value=want;
  });
  document.querySelectorAll('input[type="radio"]').forEach(el=>{
   const o=ansOf(el);if(!o||!o.anchor)return;
-  const row=ansRowFor(o.anchor,ansPosOf(o));
+  const pos=ansPosOf(o);
+  const row=ansRowFor(o.anchor,pos);
   if(row&&pending.has(row.id))return;
-  const want=row?ansValueOf(row):null;
+  if(!row){                                        /* the same rule for a choice: a checked one is re-sent */
+   if(el.checked)ansResend(o,el.value,pos);
+   return;
+  }
+  const want=ansValueOf(row);
   const should=(want!=null&&el.value===want);
   if(el.checked!==should)el.checked=should;
  });
@@ -413,9 +454,20 @@ function renderCompleteBtn(){
 }catch(e){let b=document.getElementById("errb");if(b)b.innerHTML+=" · control bar: "+e.message}})();
 
 async function loadLayer(){
- let rows=[];
- try{const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L+"&ver="+LAYER_VER+"&t="+Date.now());rows=(await r.json()).rows||[];}catch(e){rows=[];}
- /* Server is the source of truth: rebuild layer from scratch every sync. */
+ let rows=null;
+ try{
+  const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L+"&ver="+LAYER_VER+"&t="+Date.now());
+  if(r&&r.ok){const j=await r.json();if(j&&Array.isArray(j.rows))rows=j.rows;}
+ }catch(e){rows=null;}
+ /* A FAILED READ IS NOT AN EMPTY SERVER (owner report 2026-11-20: "the answers disappear from the page
+    after about ten seconds"). The poll runs every second while the student works, so ONE dropped
+    request — an Apps Script hiccup, a tunnel, a moment offline, a gateway page that is not JSON — used
+    to arrive here as `rows=[]`, and `layer` was then rebuilt "from the server" as nothing: every field
+    on the page blanked, and the render that follows is not undoable. Nothing is committed unless the
+    snapshot was actually READ: on a failure `layer` keeps exactly what it had, no signature is touched,
+    nothing re-renders, and the next poll (1s away) asks again. The server is still the source of truth
+    — a successful read that is genuinely empty empties the page, as it must. */
+ if(rows===null)return;
  layer=rows;
   const s=layer.map(x=>x.id).join(",");
   /* a change (add/del/edit/recolour) keeps the adaptive poll fast while the student watches */
