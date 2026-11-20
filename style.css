@@ -901,18 +901,22 @@
         padding-top:8px}
   .cols>*{flex:1 1 var(--cw,220px);min-width:0}
   /* a row is one line, and its direct children are its cells.
-     >>> THE DEFAULT, AND IT DOES NOT MOVE. A CELL'S WIDTH IS INDEPENDENT OF THE TEXT INSIDE IT.
-         `flex:1 1 0` — basis ZERO — so every cell takes an equal share of the row and the text wraps
-         inside whatever width it is given. A cell holding one word and a cell holding three paragraphs
-         are the same width. A text-only cell is free to collapse down to the minimum width below, and
-         its text wraps to fill it. NOTHING A CELL CONTAINS MAY WIDEN IT.
-         This is the owner's instruction (2026-11-20, restated twice after it was broken). The rule was
-         put back to `flex:1 1 auto` — content-based widths — on that date and had to be restored the
-         same day. DO NOT change this to `flex:1 1 auto` again: content-proportional width lets a wall of
-         text hold a cell open and its neighbour starve, which is the defect this rule exists to stop.
-         And never read a request about one page's look as a request about this default.
-         A page that wants a different proportion writes it ON THAT PAGE, as an inline flex on that cell
-         (the layout editor's panel does exactly this, and marks the cell red).
+     >>> THE DEFAULT. FINAL. DO NOT CHANGE THESE VALUES.
+         `.rows>*{flex:1 1 auto; min-width:…}` — grow 1, shrink 1, basis auto:
+           · the row FILLS: free width is shared out, so the cells expand to the line;
+           · the cells COLLAPSE when the line is short — each shrinks in proportion to what it holds;
+           · a cell with more text TAKES MORE WIDTH and a cell with less takes less, because the basis is
+             the content's own size; that is what evens the columns up. Heights are NOT forced equal and
+             nothing here tries to force them;
+           · a cell holding only text stops at the GLOBAL MINIMUM WIDTH below and can never collapse past
+             it.
+         The owner has stated this four times on 2026-11-20. It has been broken twice that session by
+         "fixing" it to one of its two false readings, and BOTH ARE WRONG:
+           · `flex:1 1 0` — equal shares: text is ignored, a heavy cell and a thin one are the same width,
+             and the columns pull apart instead of evening up.
+           · `flex:0 0 auto` — content width only: the row never fills its container and leaves a gap.
+         Never change this line. A page that wants a different proportion writes an inline flex on THAT
+         cell (the layout editor's panel does exactly that, and marks the cell red) — never this rule.
      THE TWO EXCEPTIONS, and they are the only two: a cell whose whole content is one chart (.chartwrap or
      table.chart alone) keeps the width its contents need (:has rule below), and a cell the page itself
      pins with an inline width. A drawing inside a cell is capped with --map-w; that caps the drawing, not
@@ -921,7 +925,7 @@
      NOTHING WRAPS — a fifth item is a second `.rows`, never a second line inside this one. */
   .content-area{container-type:inline-size}
   .rows{display:flex;flex-wrap:nowrap;gap:var(--flex-gap,26px);align-items:stretch;padding-top:20px}
-  .rows>*{display:flex;flex-direction:column;flex:1 1 0;min-width:calc(25% - 20px)}
+  .rows>*{display:flex;flex-direction:column;flex:1 1 auto;min-width:calc(25% - 20px)}
   .rows>*{min-width:calc(25cqw - 34px)}
   /* a dialog, a player or a comic takes the row's height; the map does not — its frame is drawn on the
      drawing, so it keeps the drawing's own 3:2 box and the cell around it holds the rest */
