@@ -1,6 +1,6 @@
 # BUSINESS-ROADMAP — the language of meetings, mail and money, and enough of the rest of the world to hold a conversation
 
-*Vocabulary mix — the same ratio in every lesson and across the track: about half the track's own working words, a quarter everyday life, a quarter from the wider world (culture, sport, travel, food, weather, news). No lesson is all invoices: a student who can follow a meeting but not a sitcom has learned half the language.*
+*Vocabulary mix — about half the track's own working words, a quarter everyday life, a quarter from the wider world (culture, sport, travel, food, weather, news) — and always after the more important word: a basic the student will use tomorrow outranks a flavour word that illustrates the lesson. No lesson is all workplace, and the first lessons are the basics first.*
 
 ## Lesson 1: Welcome - how this track works
 
@@ -9,7 +9,7 @@
    - teaches: `sound/vowel-no-fixed`, `cognate/suffix-code`
    - Deepens: -
    - Uses: -
-   - Vocabulary: information, organization, communication, important, different, possible, name, work, house, day, music, video
+   - Vocabulary: name, day, work, home, water, food, friend, good, like, want, go, have
    - Examples: "information" / "organization" / "communication" / "the report" / "my project" / "video" / "important"
    - Real-world relevance: The student already reads this vocabulary in their inbox; the lesson shows how much of it they can already decode and why they mispronounce it.
 
@@ -19,7 +19,7 @@
    - teaches: `clause/skeleton`, `be/linking-verb`, `pronoun/subject-object`
    - Deepens: -
    - Uses: `cognate/suffix-code`
-   - Vocabulary: engineer, analyst, developer, company, job, "work for", live, friend, tired, hungry, music, sport
+   - Vocabulary: I, you, he, she, it, we, they, my, your, name, job, friend
    - Examples: "I'm an analyst." / "He's a developer." / "She's at the gym." / "We're out of coffee." / "They're here." / "We work for a Brazilian company."
    - Real-world relevance: The first sentence every student needs at work is who they are and what they do; the second is who someone else is.
 
@@ -29,7 +29,7 @@
    - teaches: `clause/dummy-subject`, `be/existence-there`, `pronoun/possessive`
    - Deepens: -
    - Uses: `clause/skeleton`, `be/linking-verb`, `pronoun/subject-object`
-   - Vocabulary: problem, idea, result, option, detail, true, time, city, cold, hungry, weather, traffic
+   - Vocabulary: this, that, here, there, time, money, problem, idea, cold, hot, tired, hungry
    - Examples: "It's important for the client." / "There are two options." / "Our deadline is Friday." / "There's a match on Sunday."
    - Real-world relevance: "Está difícil", "é importante", "tem um problema" are constant in work talk, and each one needs an English subject before anything else can be said.
 
@@ -39,7 +39,7 @@
    - teaches: `present-simple/facts-not-now`, `present-simple/third-person-s`, `present-simple/frequency-position`
    - Deepens: -
    - Uses: `clause/skeleton`, `pronoun/subject-object`, `clause/dummy-subject`
-   - Vocabulary: work, start, finish, check, update, "wake up", eat, sleep, bus, watch, play, rain
+   - Vocabulary: work, live, like, want, need, go, eat, sleep, start, finish, always, usually
    - Examples: "I work for a tech company." / "She checks the numbers every Monday." / "The call starts at nine." / "We usually test on Thursdays." / "My brother works nights." / "The bus leaves at six." / "She never eats breakfast."
    - Real-world relevance: A colleague's first questions are about routine and schedule, and the -s is what separates "I check" from "she checks" in a shared inbox.
 
@@ -49,7 +49,7 @@
    - teaches: `mode/slot`, `mode/verb-returns-base`, `mode/negation`
    - Deepens: -
    - Uses: `present-simple/third-person-s`, `present-simple/facts-not-now`
-   - Vocabulary: send, pay, book, order, reply, help, eat, drink, sleep, "on time", cook, travel
+   - Vocabulary: do, don't, doesn't, have, need, want, like, work, live, eat, drink, help
    - Examples: "She doesn't send the invoice." / "I don't have the file yet." / "We don't use that system." / "He doesn't answer on Sunday."
    - Real-world relevance: Saying no and correcting a fact is half of a working day, and the -s moves off the verb the moment "doesn't" enters the sentence.
 
@@ -59,7 +59,7 @@
    - teaches: `prep/location-in-on-at`, `prep/time-in-on-at`, `prep/to-vs-for`
    - Deepens: -
    - Uses: `be/existence-there`, `clause/skeleton`
-   - Vocabulary: office, building, desk, site, meeting, home, kitchen, "bus stop", morning, street, park, beach
+   - Vocabulary: in, on, at, to, for, home, work, office, bus, morning, night, street
    - Examples: "I'm at the office." / "The file is on your desk." / "This is for the client." / "I'm sending it to Ana." / "The meeting is on Monday at nine." / "The keys are on the table." / "I'm waiting at the bus stop." / "My birthday is in July."
    - Real-world relevance: Where things are, when things happen and who a thing is for are the three facts of every work message, and "para" covers all three in Portuguese.
 
@@ -69,7 +69,7 @@
    - teaches: `reduction/gonna-future-mode`, `reduction/wanna-woulda`, `get/wildcard`
    - Deepens: -
    - Uses: `mode/verb-returns-base`, `be/linking-verb`, `clause/skeleton`
-   - Vocabulary: get, arrive, receive, message, understand, ready, tired, late, "get home", hungry, "get better", "get there"
+   - Vocabulary: go, get, want, gonna, wanna, home, there, tired, late, ready, message, better
    - Examples: "I'm gonna call the client." / "I'm going to the office." / "I'm gonna go to the office." / "I wanna check one thing." / "I get the idea." / "It gets better."
    - Real-world relevance: Native speech is full of gonna and wanna, and "get" is what a native says where the student currently reaches for four different verbs.
 
@@ -79,7 +79,7 @@
    - teaches: `question/yes-no-order`, `question/wh-order`, `question/tag-check`
    - Deepens: -
    - Uses: `mode/slot`, `mode/verb-returns-base`, `present-simple/third-person-s`, `be/linking-verb`
-   - Vocabulary: what, where, who, why, which, when, "how long", "how much", "how often", weekend, ticket, match
+   - Vocabulary: what, where, when, who, why, how, which, name, time, work, home, bus
    - Examples: "Does the report include the numbers?" / "When does the meeting start?" / "Who wants coffee?" / "How long does it take?" / "You're coming, right?"
    - Real-world relevance: Asking is how work gets unblocked, and the question that fails is what keeps a Brazilian professional silent in a meeting.
 
@@ -89,7 +89,7 @@
    - teaches: `present-continuous/now`, `present-continuous/vs-simple`, `present-continuous/temporary-change`
    - Deepens: `present-simple/facts-not-now` - the same verb is re-pointed at "now", and the two forms are chosen by meaning rather than by name.
    - Uses: `mode/slot`, `be/linking-verb`, `clause/skeleton`, `present-simple/third-person-s`
-   - Vocabulary: check, write, talk, happen, meeting, cook, rain, wait, wear, "at the moment", "this week", traffic
+   - Vocabulary: now, work, do, eat, wait, rain, live, stay, today, "this week", usually, still
    - Examples: "I'm checking the numbers right now." / "I check the numbers every Monday." / "Are you using the new system?" / "Costs are going up." / "I'm working from home this week." / "He's cooking dinner." / "It's raining - take a jacket." / "I usually walk, but today I'm taking the bus."
    - Real-world relevance: "Estou estudando" is the sentence that comes out wrong most often; the repair is one contrast, not a new tense.
 
@@ -99,7 +99,7 @@
    - teaches: `number/read-and-group`, `number/date-and-time`, `number/figure-comparison`
    - Deepens: -
    - Uses: `prep/time-in-on-at`, `prep/to-vs-for`, `be/existence-there`
-   - Vocabulary: price, cost, invoice, budget, discount, half, quarter, change, cash, ticket, hotel, "go up"
+   - Vocabulary: hundred, thousand, million, half, quarter, hour, minute, day, week, month, year, price
    - Examples: "Sales are up from 1.2 to 1.5 million." / "The invoice is due on the fifth." / "It's about a quarter of the budget." / "The call is at half past two." / "Costs go down in Q3."
    - Real-world relevance: This persona reads and reports figures every week, and a confidently wrong number is the most expensive mistake in the course.
 
@@ -139,7 +139,7 @@
    - teaches: `future/gonna-plan`, `future/will-now-decision`, `future/present-arrangement`
    - Deepens: `reduction/gonna-future-mode` - the gonna mode is now set against will and against the present forms, so the student chooses by meaning rather than by habit.
    - Uses: `reduction/gonna-future-mode`, `present-continuous/now`, `present-simple/facts-not-now`, `mode/verb-returns-base`
-   - Vocabulary: confirm, arrange, invite, move, "by Friday", tonight, later, "this weekend", "next week", trip, concert, match
+   - Vocabulary: tomorrow, soon, plan, want, call, meet, tonight, later, "this weekend", "next week", "by Friday", move
    - Examples: "I'm gonna review it tonight." / "I'll send you the file now." / "I'm meeting the client at ten." / "The call starts at nine tomorrow." / "We're gonna join the call later."
    - Real-world relevance: A professional life is a list of commitments, and the form chosen is the size of the commitment: plan, promise or booking.
 
@@ -189,7 +189,7 @@
    - teaches: `modal/must-have-to`, `modal/should-advice`, `modal/no-obligation`
    - Deepens: -
    - Uses: `mode/verb-returns-base`, `modal/can-could-ability`, `mode/negation`
-   - Vocabulary: "have to", "need to", "make sure", "be careful", "mustn't", rule, policy, approve, "due date", deadline, "sign here", seatbelt
+   - Vocabulary: "have to", "need to", must, "mustn't", should, "can't", "make sure", "be careful", rule, late, early, "on time"
    - Examples: "You have to sign before Friday." / "You should check the numbers again." / "You don't have to come, but you can." / "You mustn't share that file."
    - Real-world relevance: Process, compliance and recommendations are what a manager hands a new team member, and "don't have to" against "mustn't" is a costly confusion.
 
@@ -209,7 +209,7 @@
    - teaches: `noun-phrase/post-modifier`, `apposition/role-statement`, `discourse/question-return`
    - Deepens: `clause/skeleton` - the skeleton now grows inside one slot: the subject is a phrase with its own internal order, so what sits after the noun matters as much as the order of the clause.
    - Uses: `clause/skeleton`, `pronoun/possessive`, `question/wh-order`, `article/a-the-zero`, `prep/verb-unit`
-   - Vocabulary: "in charge of", "part of", "responsible for", "the one who", "I work in", "on the team", "I look after", "I run", "what do you do", "new here", "these days", "keeping busy"
+   - Vocabulary: "in charge of", "part of", "responsible for", "the one who", "I work in", "on the team", "I look after", "I run", "what do you do", boss, colleague, "these days"
    - Examples: "I'm Ana - I'm the analyst who owns pricing." / "I look after the models, so I'm on the revenue side." / "I'm in charge of the two APIs nobody wants to touch." / "What do you do?" with "same as always - spreadsheets and coffee" as the informal note under "nothing has changed"
    - Real-world relevance: The first minute decides the rest of the call, and the sentence that stalls is usually a missing "who" or a noun phrase left in Portuguese order.
 
