@@ -20,9 +20,15 @@
 
 <div class="block" data-span="12">
 <h3>Arrange it, and give it a look</h3>
+<div class="rows">
+<div>
 <p><b>A section's content goes into one <code>.rows</code>, and that is the default.</b> A row is one line, and its direct children are its cells: <b>each cell is one item, or two that stack inside it</b>. Every cell starts at the width its content asks for, shares the rest of the line in proportion to what it holds and never drops below <b>a quarter of the page</b>, and text wraps inside whatever width it lands on; every cell is the line's height. Two cells a line by default, three or four when the items are thin, and a fifth item is a second <code>.rows</code> — a row never wraps. <code>.cols</code> is for interchangeable cells that must wrap, and <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. A width is a repair: <code>min-width</code> to raise a floor, <code>flex:0 0 calc(50% - 13px)</code> to fix a cell at half the line, or <code>data-span</code> on a block that stands outside a row.</p>
+</div>
+<div>
 <p class="dim"><b>Every element below is drawn with the markup that builds it, and the drawing is the default</b>: what the element contains, what text it carries, where that text sits, and whether it carries a title at all. Its item count is the example's own, never a count to copy. A chart takes no title of its own — the sentence beside it names it.</p>
 <p class="dim"><code>data-look</code> is declared on the block, never inferred from what it holds, and changes the paint only.</p>
+</div>
+</div>
 </div>
 
 
@@ -47,7 +53,12 @@
 
 <div class="block" data-span="12">
 <h3>The mapping</h3>
-<table class="chart" style="width:100%">
+<div class="rows">
+<div>
+<p class="dim">The first column is the occasion, the second the visual that answers it, and every name opens it drawn. A concept with no row is one no visual shows yet. <b>None of these items is mandatory or even preferred: a text-only explanation is equally valid if it accomplishes the teaching goal of its block.</b> The lesson teaches; a visual is one of the ways its example is drawn. <b>The order of the items here means nothing</b> — it is not a ranking, a precedence or a sequence, and nothing is more important for coming first.</p>
+</div>
+<div style="flex:0 0 50%">
+<table class="chart">
 <thead><tr><th>Concept</th><th>Visual</th></tr></thead>
 <tbody>
 <tr><td>word order and the jobs inside a sentence</td><td><a href="#pos">parts-of-speech marking</a></td></tr>
@@ -61,7 +72,8 @@
 <tr><td>the student writes the sentence a panel shows</td><td><a href="#stripgaps">the strip with a gap under each panel</a></td></tr>
 </tbody>
 </table>
-<p class="dim">The first column is the occasion, the second the visual that answers it, and every name opens it drawn. A concept with no row is one no visual shows yet. <b>None of these items is mandatory or even preferred: a text-only explanation is equally valid if it accomplishes the teaching goal of its block.</b> The lesson teaches; a visual is one of the ways its example is drawn. <b>The order of the items here means nothing</b> — it is not a ranking, a precedence or a sequence, and nothing is more important for coming first.</p>
+</div>
+</div>
 </div>
 
 
@@ -582,7 +594,7 @@ next();
 
 <div class="block" data-look="stripes" data-span="12">
 <h3>Marked activities with controls</h3>
-<p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>An activity is a unit the student completes — never a control on its own.</b> The four controls — a gap, a radio, a checkbox, a written field — are the parts an activity is built from and are chosen by what the student must do; they are not activities themselves. <b>A keyed gap is preferentially carried inside one of the forms below</b> — a dialog turn, a chart row to answer, a strip under its panel, a line to translate, a sentence to correct, a line to write from what they hear — and a lone gap is only ever a component beside other teaching in a block, never an activity in its own right. The rows below hold the forms: numbered chunks, a chart whose cells are answered, and under the chunks a correction and a dictation — the last two for no beginner, and the sentence they ask for always tuned to the lesson's band. The two blocks after this one, side by side, are four options to pick one from and a matching pool. One more at the end of the section is marked <b>IGNORED</b>: it stays on the page for reference and lessons are not using it for now.</p>
+<p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>An activity is a unit the student completes — never a control on its own.</b> The four controls — a gap, a radio, a checkbox, a written field — are the parts an activity is built from and are chosen by what the student must do; they are not activities themselves. <b>A keyed gap is preferentially carried inside one of the forms below</b> — a dialog turn, a chart row to answer, a strip under its panel, a line to translate, a sentence to correct, a line to write from what they hear — and a lone gap is only ever a component beside other teaching in a block, never an activity in its own right. The rows below hold the forms: numbered chunks, a chart whose cells are answered, and under the chunks a correction and a dictation — the last two for no beginner, and the sentence they ask for always tuned to the lesson's band. The two blocks after this one, side by side, are four options to pick one from and a matching pool. The last block in the section is fill-in-the-blank: a line the student completes with words of their own.</p>
 <p class="dim"><code>data-answer</code> keys a gap, <code>|</code> separating alternatives; <code>--gap-w</code> is the width the answer needs. A radio group's key is <code>data-a</code> on <code>.qitem</code>; engine2.js marks the right option and writes <code>.ans</code> beside a typed field.</p>
 <p>Each of these can stand as a block of its own or sit inside a block with the prose, the chart or the drawing it accompanies; every row below is the in-block size.</p>
 
@@ -617,7 +629,6 @@ next();
 
 <div class="rows">
 <div id="chunks" data-activity="chunks">
-  <p>Unscramble the sentences:</p>
   <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px">
     <span><b style="font-size:.8em">1</b> she</span>
     <span><b style="font-size:.8em">2</b> that</span>
@@ -639,7 +650,7 @@ next();
 <div id="correction" data-activity="correction" style="padding-top:26px">
 <p class="dim" style="text-align:center">One word is wrong. Write the sentence again.</p>
 <p style="text-align:center">He <b>have</b> clocked in early.</p>
-<textarea class="write" rows="2" data-answer="He has clocked in early.|He's clocked in early." placeholder="the sentence, corrected"></textarea>
+<input class="gap" data-answer="He has clocked in early.|He's clocked in early." style="--gap-w:100%">
 </div>
 <div id="dictation" data-activity="dictation" style="padding-top:20px">
 <p class="dim" style="display:flex;align-items:center;justify-content:center;gap:10px"><button class="listen" type="button" data-say="I clocked in at six forty.">▶</button><span>Listen, then write what you hear.</span></p>
@@ -647,7 +658,6 @@ next();
 </div>
 </div>
 <div id="stripgaps" data-activity="stripgaps">
-  <p>Describe what is happening in each picture, using the <b>past simple</b>.</p>
 <table class="chart">
   <tbody>
     <tr>
@@ -660,7 +670,6 @@ next();
     </tr>
   </tbody>
 </table>
-  <p class="dim">The gap is under its panel: the panel is the question and there is no separate stem.</p>
 </div>
 </div>
 
@@ -669,7 +678,6 @@ next();
 <div class="rows">
 <div class="block" data-look="stripes" id="mc" data-activity="mc" style="min-width:calc(33% - 13px)">
 <h3>Multiple choice</h3>
-<p>Choose the answer that fits the line.</p>
 <div class="rows">
 <div class="qitem" data-a="b">
 <p class="qstem"><span class="qnum">1.</span> The pallet <b>was tipping</b> when I got to the dock.</p>
@@ -727,7 +735,7 @@ next();
 <div class="rows">
 <div class="block" data-activity="map" id="mapq" style="flex:0 0 calc(50% - 13px)">
 <h3>The map as a question</h3>
-<div class="qitem" data-a="bank">
+<div class="qitem" data-a="bank" style="padding-top:12px">
 <p class="qstem">You just finished eating at the café, took a right out of the building, and then your first left. You went to the end of the street there, but then realized you went too far. You turned around and walked back a block — your destination is on your left. Tick it on the map.</p>
 <div class="vz-map viz">
 <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, eight places each drawn with its name on a sign — a station under a canopy with a clock, a café with a striped awning, a park with trees, a bank under a dollar sign, a library wall of books, a post office with a postbox, a bus shelter, and two market awnings">
@@ -804,10 +812,11 @@ next();
 </div>
 </div>
 
-<div class="block" data-look="stripes" data-state="done">
-<h3>A block that reports its own state <span class="dim">— IGNORED</span></h3>
+<div class="block" data-look="stripes" id="fill" data-activity="fill">
+<h3>Fill in the blank</h3>
+<p>Complete each line with the word that fits.</p>
 <p>Mike <input class="gap" data-answer="has" style="--gap-w:5em"> already posted it.</p>
-<p class="dim">The block reports itself with <code>data-state</code>; the border and halo turn green.</p>
+<p>Nobody <input class="gap" data-answer="had" style="--gap-w:5em"> told the office before the shift started.</p>
 </div>
 </div>
 
@@ -891,12 +900,13 @@ next();
 <details class="reveal" open><summary>Markup — #correction · one word wrong</summary><div class="body"><div>
 <pre>&lt;p class="dim" style="text-align:center"&gt;One word is wrong. Write the sentence again.&lt;/p&gt;
 &lt;p style="text-align:center"&gt;He &lt;b&gt;have&lt;/b&gt; clocked in early.&lt;/p&gt;
-&lt;textarea class="write" rows="2"
-          data-answer="He has clocked in early.|He's clocked in early."
-          placeholder="the sentence, corrected"&gt;&lt;/textarea&gt;
+&lt;input class="gap" data-answer="He has clocked in early.|He's clocked in early."
+       style="--gap-w:100%"&gt;
 
-&lt;!-- the wrong word is marked in the line; the field asks for the whole sentence, so it is .write and not a gap --&gt;
-&lt;!-- data-answer takes the accepted forms separated by | · the placeholder is what makes the field read as filled --&gt;</pre>
+&lt;!-- the wrong word is marked in the line; a single-line .gap takes the corrected sentence --&gt;
+&lt;!-- made a .write instead, it asks for more than a line · data-answer takes the forms, | between them --&gt;
+&lt;!-- used as a translation, the line above is Portuguese and the gap holds the English: the block is then
+     recorded as a translation activity (data-activity="translation") and not as a correction --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #dictation · listen, then write</summary><div class="body"><div>
 <pre>&lt;p class="dim" style="display:flex;align-items:center;
@@ -908,10 +918,13 @@ next();
           placeholder="what you hear"&gt;&lt;/textarea&gt;
 
 &lt;!-- .listen is wired by engine2 and speaks its data-say text, so dictation needs no recording --&gt;
-&lt;!-- with a .vz-play player in the block instead, the same field is the dictation --&gt;</pre>
+&lt;!-- with a .vz-play player in the block instead, the same field is the dictation --&gt;
+&lt;!-- as a translation it is the same field: data-say carries the Portuguese (or the English) and the answer
+     is the other language — record the block as data-activity="translation", not as dictation --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #chunks · chunks in the wrong order</summary><div class="body"><div>
-<pre>&lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
+<pre>&lt;p&gt;Unscramble the sentences:&lt;/p&gt;
+&lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
    justify-content:center;align-items:center;padding-top:4px"&gt;
   &lt;span&gt;&lt;b style="font-size:.8em"&gt;1&lt;/b&gt; she&lt;/span&gt;
   &lt;span&gt;&lt;b style="font-size:.8em"&gt;2&lt;/b&gt; that&lt;/span&gt;
@@ -923,7 +936,8 @@ next();
 
 &lt;!-- one set, or as many as the activity needs: a further .chips over its own answer line, one after
      another vertically as here, side by side in a .rows of their own, or mixed with the prose, the chart
-     or the strip they are read with. --&gt;</pre>
+     or the strip they are read with. --&gt;
+&lt;!-- every activity carries its instruction line in the block: this one is the line above the chips --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #stripgaps · the strip as an activity</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes"&gt;
@@ -940,11 +954,15 @@ next();
   &lt;/table&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — the block that reports itself done</summary><div class="body"><div>
-<pre>&lt;div class="block" data-look="stripes" data-state="done"&gt;
-  …the activity…
-&lt;/div&gt;</pre>
-<p class="dim">The values are <code>correct</code>, <code>wrong</code>, <code>odd</code> and <code>done</code>, on <code>.opt</code>, <code>.side</code>, <code>.qitem</code> or the block, and the mark is <code>&lt;i class="mark"></code>; <code>--ok</code>, <code>--err</code> and <code>--warn</code> are the colours. In the sheet and unused: <code>data-reactive</code> with <code>.meter</code>. No shipped script writes a state; whatever marks the block sets it.</p>
+<details class="reveal" open><summary>Markup — #fill · fill in the blank</summary><div class="body"><div>
+<pre>&lt;div class="block" data-look="stripes" id="fill" data-activity="fill"&gt;
+  &lt;h3&gt;Fill in the blank&lt;/h3&gt;
+  &lt;p&gt;what the line asks the student to complete&lt;/p&gt;
+  &lt;p&gt;Mike &lt;input class="gap" data-answer="has" style="--gap-w:5em"&gt; already posted it.&lt;/p&gt;
+
+&lt;!-- a gap inside the sentence the block already carries: the line is the stem, so there is no separate stem --&gt;
+&lt;!-- --gap-w is the width the answer needs · data-answer takes the accepted forms, | between them --&gt;
+&lt;!-- one gap or several lines, whichever the content needs; each gap is keyed on its own --&gt;</pre>
 </div></div></details>
 </div>
 

@@ -28,7 +28,7 @@ const ROOT = process.cwd();
 // the palette is the map's own element ids: a lesson names the element it built, and the markup box
 // it copied is the same name. A game is a skin over one of these, never an element of its own.
 const PALETTE = ['chunks', 'stripgaps', 'chartanswer', 'dialoggap', 'mc', 'matching',
-  'correction', 'translation', 'dictation', 'flip', 'map'];
+  'correction', 'fill', 'translation', 'dictation', 'flip', 'map'];
 const SUBJECTS = ['rul', 'rsn', 'ex', 'con', 'exc', 'voc', 'mng', 'prn', 'tim', 'soc', 'rcp'];
 const NOVEL_WINDOW = 3, CHURN_WINDOW = 5, COVER_WINDOW = 10, QUIZ_WINDOW = 2;
 const CHURN_SHARE = 0.6, MATURE_FROM = 10;
