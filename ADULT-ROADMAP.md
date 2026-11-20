@@ -1,5 +1,7 @@
 # ADULT-ROADMAP — real life, self-expression, and the language people actually speak
 
+*Vocabulary mix — the same ratio in every lesson and across the track: about half the track's own working words, a quarter everyday life, a quarter from the wider world (culture, sport, travel, food, weather, news). No lesson is all workplace.*
+
 ## [1] - `sound/letter-vs-sound`, `sound/cognate-suffix-code`, `sound/reduction-preview` · nation, natural, television · "This restaurant is a f---in' rip-off, bro."
 
    - Focus: open the track, show that English vowels have no fixed sound, and prove that Portuguese already hands you thousands of English words.

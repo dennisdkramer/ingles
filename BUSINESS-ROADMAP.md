@@ -1,4 +1,9 @@
+# BUSINESS-ROADMAP — the language of meetings, mail and money, and enough of the rest of the world to hold a conversation
+
+*Vocabulary mix — the same ratio in every lesson and across the track: about half the track's own working words, a quarter everyday life, a quarter from the wider world (culture, sport, travel, food, weather, news). No lesson is all invoices: a student who can follow a meeting but not a sitcom has learned half the language.*
+
 ## Lesson 1: Welcome - how this track works
+
 
    - Focus: An introduction to how these lessons work and to English in general — the two ideas the whole course stands on: English vowels have no fixed sound, and the Portuguese suffix code already hands you thousands of English words.
    - teaches: `sound/vowel-no-fixed`, `cognate/suffix-code`
