@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Capability map — English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=83ce2098c9">
+<link rel="stylesheet" href="style.css?v=33f25b8cc4">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>VISUAL REFERENCE</span></h1></header>
@@ -637,7 +637,7 @@ next();
     <span><b style="font-size:.8em">5</b> told</span>
     <span><b style="font-size:.8em">6</b> never</span>
   </p>
-  <p style="text-align:center"><input class="gap" style="--gap-w:100%"></p>
+  <p style="text-align:center;margin-top:6px"><input class="gap" style="--gap-w:100%"></p>
   <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px">
     <span><b style="font-size:.8em">1</b> he</span>
     <span><b style="font-size:.8em">2</b> when</span>
@@ -646,7 +646,7 @@ next();
     <span><b style="font-size:.8em">5</b> left</span>
     <span><b style="font-size:.8em">6</b> I got there</span>
   </p>
-  <p style="text-align:center"><input class="gap" style="--gap-w:100%"></p>
+  <p style="text-align:center;margin-top:6px"><input class="gap" style="--gap-w:100%"></p>
 <div id="correction" data-activity="correction" style="padding-top:26px">
 <p class="dim" style="text-align:center">One word is wrong. Write the sentence again.</p>
 <p style="text-align:center">He <b>have</b> clocked in early.</p>
@@ -654,7 +654,7 @@ next();
 </div>
 <div id="dictation" data-activity="dictation" style="padding-top:20px">
 <p class="dim" style="display:flex;align-items:center;justify-content:center;gap:10px"><button class="listen" type="button" data-say="I clocked in at six forty.">▶</button><span>Listen, then write what you hear.</span></p>
-<textarea class="write" rows="2" data-answer="I clocked in at six forty." placeholder="what you hear"></textarea>
+<textarea class="write" rows="2" style="field-sizing:fixed;--lines:2" data-answer="I clocked in at six forty." placeholder="what you hear"></textarea>
 </div>
 </div>
 <div id="stripgaps" data-activity="stripgaps" style="flex:0 0 calc(50% - 13px)">
@@ -914,10 +914,12 @@ next();
   &lt;button class="listen" type="button"
           data-say="I clocked in at six forty."&gt;▶&lt;/button&gt;
   &lt;span&gt;Listen, then write what you hear.&lt;/span&gt;&lt;/p&gt;
-&lt;textarea class="write" rows="2" data-answer="I clocked in at six forty."
+&lt;textarea class="write" rows="2" style="--lines:2" data-answer="I clocked in at six forty."
           placeholder="what you hear"&gt;&lt;/textarea&gt;
 
 &lt;!-- .listen is wired by engine2 and speaks its data-say text, so dictation needs no recording --&gt;
+&lt;!-- --lines is how many text lines tall the box is, set here to 2: the page sizes every field and the
+     student cannot drag it bigger --&gt;
 &lt;!-- with a .vz-play player in the block instead, the same field is the dictation --&gt;
 &lt;!-- as a translation it is the same field: data-say carries the Portuguese (or the English) and the answer
      is the other language — record the block as data-activity="translation", not as dictation --&gt;</pre>
@@ -930,7 +932,7 @@ next();
   &lt;span&gt;&lt;b style="font-size:.8em"&gt;2&lt;/b&gt; that&lt;/span&gt;
   …
 &lt;/p&gt;
-&lt;p style="text-align:center"&gt;
+&lt;p style="text-align:center;margin-top:6px"&gt;
   &lt;input class="gap" style="--gap-w:100%"&gt;
 &lt;/p&gt;
 
