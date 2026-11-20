@@ -18,3 +18,6 @@ L07 | S1-rul@chart:rsn>ex>con>rul | S2-voc:mng>voc>mng | Q:rul>mng>rul>ex | el:d
 **Before finishing a lesson**, run `npm run batchcheck` after appending the row.
 
 ---
+
+L01 | S1-rul:rul>soc | S2-rul@key:rul>rsn>prn>rul | S3-rul@chart:rul>rsn>con>voc | S4-rul@key:rul>con>prn | S5-voc@chart:voc>mng>con>mng | S6-prn@player:prn>ex>rul>rcp | S7-rcp:rcp | Q:prn>voc>rul>mng>voc>rul | el:mc:2,chartanswer:1,matching:1,flip:1 | qel:mc:5,chartanswer:1 | reg:8/9
+
