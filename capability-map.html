@@ -1065,6 +1065,24 @@ next();
 </div></div></details>
 </div>
 
+<h2>Learned during build generation</h2>
+
+<div class="rows">
+<div class="block" data-look="float">
+<h3>What building a lesson has taught the build</h3>
+<p><b>Every line here is a mechanism of this site, learned by building a lesson on it, and it holds for the next lesson as much as for the one that found it.</b> A line states what the machine does or what the build must do — never a fault, a session or a date. Read the block at the start of every lesson; the lesson that teaches one more line adds it here before its own row is closed.</p>
+<ul>
+<li><b>The control's <code>name</code> is its key, and the key is a number</b> — <code>a&lt;section&gt;c&lt;block letter&gt;&lt;item&gt;</code> (<code>a7c2</code> is section 7's third block, second item), one number for a whole radio group. A control left unnamed falls back to the words around it plus a <code>{block, offset}</code> position.</li>
+<li><b>That <code>offset</code> counts blocks on the page, and a game inserts its stage into its own block when it loads</b> — so a position saved before a game ran and read after it can be off by that stage. A number does not move; a position can.</li>
+<li><b>Two controls in one cell take two numbers.</b> Both share the cell's words and its first offset, and Complete draws one key pill per control: two fields in one cell need two numbers, or one answer is drawn over the other.</li>
+<li><b>The index files are build artifacts that ship with the page.</b> <code>npm run build:lessons</code> writes <code>lessons.json</code> and <code>tracks.json</code> from the page filenames, and <code>--check</code> refuses a stale pair; a lesson pushed without that run is live but unlisted.</li>
+<li><b>A lesson page stamps nothing.</b> It links <code>../style.css</code> and the shell's script slot already lists every engine, so a changed engine reaches the browser at the next revalidation: testing one starts with a hard refresh, and no lesson adds a version of its own.</li>
+<li><b>This map is built to be extended.</b> Every direct child of <code>.content-area</code> is a row cell and its <code>data-span</code> sums to 12 (12 when unset); a <code>pre</code> in a markup box holds escaped tags only, because a real one inside it is parsed as markup; <code>node qa/cmcheck.mjs</code> checks both, and the dead links.</li>
+</ul>
+</div>
+</div>
+
+
 </div>
 <footer>MATERIAIS SIMPLES E INOVADORES · INGLES CERTO EUA</footer>
 </div>
