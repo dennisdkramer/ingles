@@ -333,7 +333,7 @@
    - teaches: `passive/be-participle`, `passive/process-subject`, `passive/reporting`
    - Deepens: `present-perfect/have-participle` - the participle now follows be instead of have, and the subject is no longer the doer of the action.
    - Uses: `present-perfect/have-participle`, `past-simple/irregular`, `mode/slot`, `phrase-verb/default-form`
-   - Vocabulary: submit, deliver, implement, assign, publish, verify, complete, handle, require, process, standard, system
+   - Vocabulary: submit, deliver, complete, handle, fix, check, clean, book, cook, print, "sign off", "on time"
    - Examples: "The invoice was sent on Monday." / "All changes are verified before the release." / "It was agreed that we'd move the date." / "The tests are run nightly."
    - Real-world relevance: Reports, processes and audit trails are written in the passive, and reading them without it is a daily handicap at this level.
 
@@ -343,7 +343,7 @@
    - teaches: `condition/second-would`, `condition/if-i-were-you`, `modal/would-offer`
    - Deepens: `condition/first-will` - the same if-structure now carries something unreal, and the past form is the marker of unreality rather than of time.
    - Uses: `condition/first-will`, `past-simple/irregular`, `modal/request-ladder`, `axis/hedge`
-   - Vocabulary: "if I had", "I would", "in that case", imagine, suppose, unlikely, chance, opportunity, alternative, scenario, affordable, worth
+   - Vocabulary: "if I had", "I would", imagine, suppose, unlikely, chance, worth, alternative, holiday, rent, weather, "in that case"
    - Examples: "If I had the budget, I'd hire another analyst." / "If I were you, I'd raise it in the meeting." / "Would that work for you?" / "In that case, we'd need two more weeks."
    - Real-world relevance: Every negotiation opens with an unreal version of the plan, and this is how a professional proposes without demanding.
 
