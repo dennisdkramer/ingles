@@ -31,5 +31,15 @@ L4 | S1-rul@timeline:rul>ex>con | S2-voc@key:voc>mng>prn | S3-rul@chart:rul>con>
 
 L5 | S1-rsn@chart:rsn>ex>con | S2-voc@key:voc>prn>mng | S3-rul@timeline:rul>ex>rsn | S4-con@chart:con>exc>ex | S5-mng:mng>con>exc | S6-soc@dialog:soc>ex>mng | S7-voc@flip:voc>mng | S8-rul:ex | Q:rul>con>mng | el:chunks:1,fill:2,mc:2,correction:2,dialoggap:1,flip:1,translation:1,dictation:1 | qel:mc:1,fill:1,correction:1,chunks:1,translation:1,dictation:1 | reg:9/10
 
+L6 | S1-rul@chart:rul>ex | S2-rsn@pos:mng>ex | S3-rul@gloss:rul>exc>ex | S4-con:con>ex>ex | S5-voc@chart:voc>mng | S6-mng@comic:ex>ex | S7-soc@dialog:soc>ex>ex | Q:rul>ex>con | el:fill:2,chartanswer:2,mc:1,correction:2,translation:2,chunks:1,dialoggap:2,dictation:1 | qel:mc:1,dialoggap:1,fill:1,translation:1,correction:1 | reg:9/9
+
+L7 | S1-prn@key:prn>rul>ex | S2-rul@timeline:rul>ex>ex | S3-mng@dialog:mng>ex | S4-con@pair:con>ex | S5-voc@chart:voc>ex | S6-rul@flip:rul>mng | S7-soc@player:soc>ex>ex | Q:prn>rul>voc | el:dictation:2,fill:1,dialoggap:1,correction:2,matching:1,flip:1,chartanswer:1,mc:1,translation:1 | qel:mc:1,chartanswer:1,translation:1,correction:1 | reg:9/9
+
+L8 | S1-rul@pos:rul>ex>ex | S2-rsn@chart:rul>ex | S3-exc@pair:con>ex | S4-mng@gloss:mng>ex | S5-soc@dialog:soc>ex>mng | S6-soc@map:soc>ex | Q:rul>exc>ex | el:correction:2,fill:2,mc:2,matching:2,dialoggap:1,map:1,translation:1 | qel:mc:1,fill:1,matching:1,correction:1,translation:1 | reg:8/8
+
+L9 | S1-rul@timeline:rul>ex>mng | S2-rul@chart:rul>ex | S3-con@chart:con>ex | S4-soc@dialog:soc>ex | S5-mng@gloss:mng>ex | S6-exc@pair:exc>ex | S7-rcp:ex | Q:rul>ex>con | el:fill:2,chartanswer:1,dialoggap:1,mc:2,correction:2,stripgaps:1,dictation:1,translation:1 | qel:mc:1,fill:1,dictation:1,correction:1,translation:1 | reg:9/9
+
+L10 | S1-rul@chart:rul>ex>ex | S2-rul@chart:rul>ex | S3-mng@gloss:mng>ex | S4-voc:voc>ex | S5-rsn:rsn>ex | S6-rcp:ex | Q:rul>voc>ex | el:fill:2,chartanswer:2,mc:2,translation:2,dictation:1,chunks:1,correction:1 | qel:mc:1,fill:1,chartanswer:1,translation:1,correction:1 | reg:8/8
+
 
 
