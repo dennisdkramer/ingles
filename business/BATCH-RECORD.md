@@ -23,5 +23,13 @@ A fenced block is an example and is never read: each lesson's row is written **b
 
 L1 | S1-prn@chart:rsn>ex>voc | S2-rul@key:ex>exc | S3-prn:con>exc | S4-rsn:ex | S5-rul@chart:voc>mng>ex | S6-con:mng>voc | Q:prn>rul>con | el:mc:8,dictation:4,chartanswer:4,matching:5,fill:6,flip:8 | qel:mc:6,matching:4,dictation:3 | reg:7/8
 
+L2 | S1-rul@pos:rul>ex>con | S2-rul@chart:rsn>voc>ex | S3-rul@timeline:rsn>ex>con | S4-voc@chart:voc>mng>ex | S5-voc:rsn>con>exc | S6-soc:voc>prn>mng>ex | S7-prn@player:soc>ex>mng | S8-rul:ex | Q:rul>voc>con>mng | el:chunks:1,fill:2,chartanswer:1,mc:2,dialoggap:1,translation:2,dictation:2,matching:1 | qel:mc:1,fill:1,matching:1,translation:1,dictation:1 | reg:9/10
+
+L3 | S1-con@chart:rul>ex>con | S2-rul@pos:rsn>ex>mng | S3-rul:rul>voc>ex | S4-con@pair:con>voc>ex | S5-rul@chart:voc>con>exc | S6-mng:mng>con>ex | S7-voc:ex>exc | S8-rul:ex | Q:rul>con>voc | el:mc:2,fill:3,chartanswer:2,correction:1,stripgaps:1,translation:2,matching:1 | qel:mc:1,fill:1,chartanswer:1,matching:1,translation:1 | reg:9/10
+
+L4 | S1-rul@timeline:rul>ex>con | S2-voc@key:voc>mng>prn | S3-rul@chart:rul>con>ex | S4-prn@key:rul>prn>ex | S5-rul:rul>con>exc | S6-soc@player:ex>mng>soc | S7-soc:ex>rul>ex | S8-soc@map:ex>con | S9-prn:ex | Q:rul>voc>con | el:fill:2,chartanswer:2,mc:2,dictation:2,dialoggap:1,map:1,translation:1,correction:1 | qel:mc:1,fill:1,chartanswer:1,correction:1,dictation:1,translation:1 | reg:10/11
+
+L5 | S1-rsn@chart:rsn>ex>con | S2-voc@key:voc>prn>mng | S3-rul@timeline:rul>ex>rsn | S4-con@chart:con>exc>ex | S5-mng:mng>con>exc | S6-soc@dialog:soc>ex>mng | S7-voc@flip:voc>mng | S8-rul:ex | Q:rul>con>mng | el:chunks:1,fill:2,mc:2,correction:2,dialoggap:1,flip:1,translation:1,dictation:1 | qel:mc:1,fill:1,correction:1,chunks:1,translation:1,dictation:1 | reg:9/10
+
 
 

@@ -1078,6 +1078,9 @@ next();
 <li><b>The index files are build artifacts that ship with the page.</b> <code>npm run build:lessons</code> writes <code>lessons.json</code> and <code>tracks.json</code> from the page filenames, and <code>--check</code> refuses a stale pair; a lesson pushed without that run is live but unlisted.</li>
 <li><b>A lesson page stamps nothing.</b> It links <code>../style.css</code> and the shell's script slot already lists every engine, so a changed engine reaches the browser at the next revalidation: testing one starts with a hard refresh, and no lesson adds a version of its own.</li>
 <li><b>This map is built to be extended.</b> Every direct child of <code>.content-area</code> is a row cell and its <code>data-span</code> sums to 12 (12 when unset); a <code>pre</code> in a markup box holds escaped tags only, because a real one inside it is parsed as markup; <code>node qa/cmcheck.mjs</code> checks both, and the dead links.</li>
+<li><b>A chart row is answered by a keyed gap.</b> The typed form of <code>chartanswer</code> carries <code>data-answer</code> in the row's answer cell with its <code>.qnum</code> beside it; a row of options is markable only when its cell holds a <code>.qitem</code> with <code>data-a</code>, so a chart of bare radios has no key the engine can read.</li>
+<li><b>A game records the control under it, not its own name.</b> Items answered with options are <code>mc</code> in the ledger; items answered by typing a word are <code>fill</code>, because the field is what the student writes in.</li>
+<li><b>The map redraws inside every <code>.qitem</code>.</b> Two questions about one map are two drawings, and each checkbox keeps its place because its position is a percentage of the drawing, not of the cell.</li>
 </ul>
 </div>
 </div>

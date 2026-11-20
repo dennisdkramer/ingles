@@ -10,3 +10,5 @@ Nothing here is fetched at run time: a page that shows one of these files works 
 
 | File | What it is | Source | Author | Licence |
 |---|---|---|---|---|
+| `believer.mp3` | lines 6–9 of that sheet's 31, 27.26 s, 655533 bytes — **cut from 24.26 s to 51.56 s**, re-encoded once with a 0.5 s fade at each end, every line placed 1 s before its sheet time | https://www.youtube.com/watch?v=5tpxXDILZHs | The Monkees | **not stated** |
+| `works-hard.mp3` | lines 1–4 of that sheet's 64, 18.76 s, 451629 bytes — **cut from 21.77 s to 40.57 s**, re-encoded once with a 0.5 s fade at each end, every line placed 1 s before its sheet time | https://www.youtube.com/watch?v=3STBh9adlNk | Donna Summer | **not stated** |
