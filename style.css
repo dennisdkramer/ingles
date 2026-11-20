@@ -961,14 +961,9 @@
   :is(.block,.panel,.card,.dialog)>:is(p,table,figure,.chartwrap){margin-top:14px}
   :is(.block,.panel,.card,.dialog)>.cols,
   :is(.block,.panel,.card,.dialog)>.rows{margin-top:12px}
-  /* a second row in the same frame sits closer to the one above it than to the paragraph before the pair */
-  :is(.block,.panel,.card,.dialog)>.rows+.rows{margin-top:6px}
   :is(.block,.panel,.card,.dialog)>p.dim{margin-top:7px;padding:0 6px 4px}
   :is(.cols,.rows)>div>:first-child{margin-top:0}
-  :is(.cols,.rows)>div>:is(p,.cols,table,figure):not(:first-child){margin-top:10px}
-  /* a row inside a cell follows the same rhythm as a row in a frame: 12px above the first, 6px between */
-  :is(.cols,.rows)>div>.rows{margin-top:12px}
-  :is(.cols,.rows)>div>.rows+.rows{margin-top:6px}
+  :is(.cols,.rows)>div>:is(p,.cols,.rows,table,figure):not(:first-child){margin-top:10px}
   :is(.cols,.rows)>div>p.dim:not(:first-child){margin-top:7px;padding:0 6px 4px}
 
   /* prose — --measure (length, 68ch) */
