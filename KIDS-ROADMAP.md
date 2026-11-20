@@ -2,7 +2,7 @@
 
 *Vocabulary mix — about half the track's own working words, a quarter everyday life, a quarter from the wider world (games, animals, cartoons, sport, travel, food) — and always after the more important word: a basic the student will use tomorrow outranks a flavour word that illustrates the lesson. The first lessons are the basics first.*
 
-## [1] - `sound/vowel-no-fixed`, `cognate/suffix-codes`, `method/one-rule-then-drill` · video, computer, music · "video is vii-dee-oh, not vee-dee-oh"
+## [1] - `sound/vowel-no-fixed`, `cognate/suffix-codes`, `method/one-rule-then-drill` · name, day, school, home, mum, dad, friend, play, good, water · "video is vii-dee-oh, not vee-dee-oh"
 
    - Focus: What this track is and the two codes that make English readable: letters are not sounds, and a cognate's ending tells you how to say it.
    - Deepens: none - lesson 1 has nothing behind it to deepen.

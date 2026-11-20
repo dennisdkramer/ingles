@@ -2,7 +2,7 @@
 
 *Vocabulary mix — about half the track's own working words, a quarter everyday life, a quarter from the wider world (culture, sport, travel, food, weather, news) — and always after the more important word: a basic the student will use tomorrow outranks a flavour word that illustrates the lesson. No lesson is all workplace, and the first lessons are the basics first.*
 
-## [1] - `sound/letter-vs-sound`, `sound/cognate-suffix-code`, `sound/reduction-preview` · nation, natural, television · "This restaurant is a f---in' rip-off, bro."
+## [1] - `sound/letter-vs-sound`, `sound/cognate-suffix-code`, `sound/reduction-preview` · name, day, work, home, water, food, friend, good, like, want · "This restaurant is a f---in' rip-off, bro."
 
    - Focus: open the track, show that English vowels have no fixed sound, and prove that Portuguese already hands you thousands of English words.
    - Deepens: —
