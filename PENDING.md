@@ -111,6 +111,11 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 [3] ✔ `PEDAGOGY-MAP.md` — the authoring rule beside the multiple-choice shuffle: a matching's rows and an unscramble's chips are fully shuffled, never the answer order with one item moved
 [4] ✔ 21 matchings in 18 files and 29 chunk sentences in 12 files (all business) — the phrase/answer pairs moved across the numbered rows (the numbers stay put on the page's sequence), the chips re-dealt and renumbered in display order; every order is a derangement and no deal is the old order or a disguised ascending run; the two 3-chip sets (whose only derangements are the two rotations) allowed their rotation
 [5] ✔ verify — `--verify` re-reads every block: 0 in place, 0 unsegmented; the case-duplicate words ("The"/"the") are matched case-exact first, so a lowercase chip is never credited with the capital's position; `qa/check` business 2, 10, 13, 16, 19, 20 pass; `mapcheck`, `cmcheck`, `batchcheck`, `qa:liquid`, `build:check` pass; commit, push
+## [B16] - the hover highlight is the outline look's moving wash, not a ring "i wanted the mouseover highlights on buttons etc that you did before to apply the outline looks's animated background, not a border" — the gradient and the 1s --grad turn on the same controls, the ring gone
+[1] `style.css` — `#64 HOVER`: the outline is removed; the same controls carry `--grad` and the 1s transition, and on hover take the outline look's own gradient (accent at 15%, transparent at 62%) with `--grad:180deg`, so the wash rises; at rest the control keeps its own background; the flip card paints the wash on its `.face`, which covers the label
+[2] ✔ verify — Chrome: at rest `background-image:none`, `--grad:0deg`; on hover the look's gradient with `--grad` visibly interpolating 13° → 127° → 180° over 1s on the control-bar button, the `.opt` pill, a `.qopts` label, the flip's `.face` and the radio dot; `outline:none` everywhere (the ring is gone); the bar button re-sampled after a 4s settle holds 180° (its first run lost the hover to the control bar's own render at load); the unchecked controls are untouched at rest and a checked `.opt`/dot keeps its accent fill; `qa:rowctx`, `qa:check` business 20, `cmcheck`, `mapcheck`, `batchcheck`, `qa:liquid`, `build:check` pass; commit, push
+
+
 
 
 

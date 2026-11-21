@@ -1126,7 +1126,7 @@
     transition:border-color .15s,background .15s,box-shadow .15s}
   .opt input[type="radio"]{appearance:none;flex:0 0 auto;width:18px;height:18px;margin:0;
     border:2px solid var(--line);border-radius:50%;background:transparent;
-    transition:border-color .15s,background .15s,box-shadow .15s}
+    transition:--grad 1s ease,border-color .15s,background .15s,box-shadow .15s}
   .opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft);
     box-shadow:var(--shadow-1)}
   .opt input:checked{border-color:var(--accent);background:var(--accent);
@@ -1143,7 +1143,7 @@
 @layer control{
   .opt input[type="checkbox"]{appearance:none;flex:0 0 auto;width:18px;height:18px;margin:0;
     border:2px solid var(--line);border-radius:5px;display:grid;place-content:center;
-    transition:border-color .15s,background .15s}
+    transition:--grad 1s ease,border-color .15s,background .15s}
   .opt input[type="checkbox"]::after{content:"";width:5px;height:9px;translate:0 -1px;
     border:2px solid var(--surface);border-top:0;border-left:0;rotate:45deg;scale:0;
     transition:scale .16s}
@@ -1151,20 +1151,27 @@
   .opt input[type="checkbox"]:checked::after{scale:1}
 }
 
-/* #64 HOVER — a button, a radio, a checkbox and an option take the pointer, and on hover each wears the
-   outline look's edge: the accent edge a `data-look="outline"` block wears (2px, --edge-w), as an
-   outline so nothing moves. The ring is the highlight; the older brightness, lift and accent fill are gone.
-   CALL button, input[type=radio], input[type=checkbox], .opt; VARY --edge-w, --accent-h */
+/* #64 HOVER — a button, a radio, a checkbox and an option take the pointer, and on hover each takes
+   the outline look's own background: the accent at 15% over its surface, drawn by --grad and turned
+   0→180deg in 1s exactly as .block[data-look="outline"] does. No border and no ring — the moving wash
+   is the highlight, and at rest nothing is painted over the control's own background. A flip card
+   paints the wash on its .face, because the face covers the label.
+   CALL button, input[type=radio], input[type=checkbox], .opt, the label that owns one; VARY --accent-h */
 @layer control{
   button:not(:disabled),input[type="radio"],input[type="checkbox"],.opt,
-  label:has(>input[type="radio"]),label:has(>input[type="checkbox"]){cursor:pointer}
+  label:has(>input[type="radio"]):not(.flip),label:has(>input[type="checkbox"]):not(.flip){cursor:pointer}
   button:disabled,button.locked{cursor:default}
-  button:not(:disabled):not(.locked):hover,input[type="radio"]:hover,
-  input[type="checkbox"]:hover,.opt:hover,
-  label:has(>input[type="radio"]):hover,label:has(>input[type="checkbox"]):hover{
-    outline:var(--edge-w) solid var(--accent);outline-offset:2px}
-  /* the label that owns the control is the hit area, so the dot takes no second ring */
-  label>input[type="radio"]:hover,label>input[type="checkbox"]:hover{outline:none}
+  button:not(:disabled):not(.locked),input[type="radio"],input[type="checkbox"],.opt,
+  label:has(>input[type="radio"]):not(.flip),label:has(>input[type="checkbox"]):not(.flip),.flip .face{
+    --grad:0deg;
+    transition:--grad 1s ease,border-color .15s,background-color .15s,background .15s,
+      box-shadow .15s,translate .15s,transform .09s ease,filter .12s ease}
+  button:not(:disabled):not(.locked):hover,input[type="radio"]:hover,input[type="checkbox"]:hover,
+  .opt:hover,label:has(>input[type="radio"]):not(.flip):hover,
+  label:has(>input[type="checkbox"]):not(.flip):hover,.flip:hover .face{
+    --grad:180deg;
+    background-image:linear-gradient(var(--grad),
+      color-mix(in oklab,var(--accent) 15%,transparent),transparent 62%)}
 }
 
 /* #63 WRITE — <textarea class="write" rows="n">; grows with content. Vary: --lines (integer, 4) */
@@ -1364,11 +1371,11 @@
   .flip>input:focus-visible+.card3d{outline:2.5px solid var(--accent);outline-offset:3px;
     border-radius:var(--r1)}
   .flip .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--r1);
-    border:1px solid var(--line-2);background:var(--surface-2);padding:14px 16px;
+    border:1px solid var(--line-2);background-color:var(--surface-2);padding:14px 16px;
     display:grid;align-content:center;gap:6px;box-shadow:var(--shadow-1)}
   .flip .face::after{content:"↻";position:absolute;right:10px;bottom:8px;color:var(--ink-2);
     font-family:var(--sans);opacity:.6}
-  .flip .back{rotate:y 180deg;background:var(--accent-soft);border-color:var(--accent-line)}
+  .flip .back{rotate:y 180deg;background-color:var(--accent-soft);border-color:var(--accent-line)}
   /* the card block's prompt: the h4 is the sentence the student answers, so it reads 4px larger than
      every other h4 on the page — this one selector and nowhere else */
   .flip-ask{font-size:calc(var(--s-1) + 6px)}
@@ -1414,9 +1421,9 @@
     align-items:center;justify-content:center;padding:8px 14px;font-family:var(--sans);
     font-size:13px;text-align:center;user-select:none;-webkit-user-select:none}
   .brand .control-bar{width:auto;margin:10px 0 0}
-  .control-bar button,.welcome-bar #logout{border:1px solid var(--line);background:var(--surface-2);color:var(--ink);
+  .control-bar button,.welcome-bar #logout{border:1px solid var(--line);background-color:var(--surface-2);color:var(--ink);
     border-radius:99px;padding:7px 15px;font:600 .82rem var(--sans);cursor:pointer;
-    transition:border-color .15s,background .15s,translate .15s}
+    transition:--grad 1s ease,border-color .15s,background-color .15s,translate .15s}
   footer{text-align:center;font:600 .68rem var(--sans);letter-spacing:.22em;
     color:var(--ink-2);padding:30px 0 34px;text-transform:uppercase;
     user-select:none;-webkit-user-select:none}
