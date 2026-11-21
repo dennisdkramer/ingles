@@ -960,9 +960,10 @@
    Never a second .block. Vary: --h (hue 0-360), --viz-pad (length, 10px 12px) */
 @layer structure{
   /* one object on the page: the edge is a 2px outline and a short shadow, so the thing reads as drawn rather
-     than as another frame. The edge is the track's rule hue and the shadow is the same hue at half the
-     lightness a chart's shadow uses — the object is ours, so it wears the track rather than the ink */
-  .viz{--viz-pad:10px 12px;--viz-edge:var(--track-rule);--viz-shade:oklch(22.4% .04 var(--track-h) / .55);
+     than as another frame. The edge is the track's rule hue held at 60% and the shadow is the same hue at
+     half the lightness a chart's shadow uses — the object is ours, so it wears the track rather than the ink */
+  .viz{--viz-pad:10px 12px;--viz-edge:color-mix(in oklab,var(--track-rule) 60%,transparent);
+    --viz-shade:oklch(22.4% .04 var(--track-h) / .55);
     background:var(--paper);border-radius:3px;padding:var(--viz-pad);
     box-shadow:0 0 0 2px var(--viz-edge), -3px 3px 8px -2px var(--viz-shade)}
   /* a list is a grid with its own padding reset, so the frame's inset is restated for it */
