@@ -4,6 +4,16 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 ---
 
 # [CURRENT]
+## [B8] - a page that loads the solver is hidden until its rows are sized "put the page in a loading state until it is solved and fade in the content ... go with (a) as described" — the reveal after fonts/timeout, a CSS fallback, the page marker, and the solver's own stamp
+[1] ✔ `equalize.js` — `eq-ready` after the first solve following `document.fonts.ready` or 600ms, whichever first; `load` re-solves; a `try/finally` always reveals; `clean()` strips `eq-ready` from the saved `<html>` and keeps the page's `data-eq`
+[2] ✔ `style.css` — `html[data-eq]:not(.eq-ready) .content-area` hidden with a 2.5s CSS reveal fallback; `html.eq-ready` fades in; `body.layout-on` / `body.editing` always visible
+[3] ✔ 20 business lessons, `capability-map.html`, `_shell.html`, `_shell-preview.html` — `data-eq` on `<html>`
+[4] ✔ `build-lessons.mjs` — `equalize.js?v=8cef9f9982` stamped on the 23 pages that load it, the hash over LF text; `build:check` catches a stale solver
+[5] ✔ `capability-map.html` + `PEDAGOGY-MAP.md` — the loading mechanism and the solver stamp stated
+[6] ✔ verify — `node --check` clean; Chrome: `DCL` hidden / `eq-ready` visible, 2.5s fallback reveals, `body.layout-on` and `body.editing` visible, saved clone loses `eq-ready` and keeps `data-eq`, row widths unchanged (`business` R1 528/592, R5 219/901, R12 920/200; map R5 468/200/200/200), unmarked `index.html` never hidden; `qa/rowctx`, `qa/check` business 20, `qa/cmcheck`, `qa/mapcheck`, `qa/batchcheck`, `qa/liquid`, `build:check` pass; committed and pushed
+---
+
+
 ## [B7] - the fixed-width row solver "I want to make some changes to the formatting of our pages ... implement into our project ... all at the root and effecting all pages, not scoped" — one root solver over every `.rows`, the sheet's media rule, and the runtime widths kept out of saved pages
 [1] ✔ `equalize.js` — every `.content-area .rows` (`.markup-row` build tools excluded) sized at load: a table's floor is its widest nowrap row, `img` and `svg[width="100%"]` never pass their own width, prose never below 200px, heights read with `align-self:start` because the sheet stretches every cell, widths fitted to the row without exceeding a media cap; re-runs on fonts and load; `EqualizeRows.clean(root)` strips the runtime `flex`/`width` for the save path
 [2] ✔ `style.css` — a row's media (`img`, `svg[width="100%"]`) scales down with its cell and never past its own size; `flex:1` stays the no-JS start state

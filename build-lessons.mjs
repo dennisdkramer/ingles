@@ -96,6 +96,12 @@ const cssText = fs.readFileSync(path.join(ROOT, 'style.css'), 'utf8').replace(/\
 const cssHash = createHash('sha256').update(cssText).digest('hex').slice(0, 10);
 const cssUrl = 'style.css?v=' + cssHash;
 const linkRe = /<link rel="stylesheet" href="((?:\.\.\/)?)style\.css(?:\?v=[0-9a-f]*)?"/;
+// The solver is stamped the same way: a cached equalize.js would leave a page hidden waiting for a
+// script that never ran, and a changed solver would measure against the widths it wrote last time.
+const jsText = fs.readFileSync(path.join(ROOT, 'equalize.js'), 'utf8').replace(/\r\n/g, '\n');
+const jsHash = createHash('sha256').update(jsText).digest('hex').slice(0, 10);
+const jsUrl = 'equalize.js?v=' + jsHash;
+const scriptRe = /<script src="((?:\.\.\/)?)equalize\.js(?:\?v=[0-9a-f]*)?"/;
 /* every page that links the sheet carries the same stamp: the root pages draw the menu and the map, and a
    lesson page must not keep a cached sheet after the sheet changes. */
 const stampedPages = ['index.html', 'capability-map.html', '_shell.html', '_shell-preview.html'];
@@ -113,10 +119,18 @@ for (const page of stampedPages) {
     process.exitCode = 1;
     continue;
   }
+  let next = htmlNow;
+  let changed = false;
   const wanted = '<link rel="stylesheet" href="' + link[1] + cssUrl + '"';
-  if (link[0] !== wanted && emit(page, htmlNow.replace(linkRe, wanted))) stamped++;
+  if (link[0] !== wanted) { next = next.replace(linkRe, wanted); changed = true; }
+  const script = next.match(scriptRe);
+  if (script) {
+    const jsWanted = '<script src="' + script[1] + jsUrl + '"';
+    if (script[0] !== jsWanted) { next = next.replace(scriptRe, jsWanted); changed = true; }
+  }
+  if (changed && emit(page, next)) stamped++;
 }
-if (!CHECK && stamped) console.log(stamped + ' page stylesheet link(s) stamped -> ' + cssUrl);
+if (!CHECK && stamped) console.log(stamped + ' page link(s) stamped -> ' + cssUrl + ' / ' + jsUrl);
 
 if (CHECK) {
   if (drift.length) {

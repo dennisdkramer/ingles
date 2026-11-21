@@ -903,6 +903,16 @@
      VARY none */
   .rows :is(img,svg[width="100%"]){display:block;max-width:100%;max-height:100%;
     width:auto;height:auto;object-fit:contain}
+  /* #41 LOAD — a page that loads equalize.js is held hidden until its rows are sized.
+     CALL html[data-eq]; USE a solver page; VARY none */
+  html[data-eq]:not(.eq-ready) .content-area{opacity:0;visibility:hidden;
+    animation:eq-reveal 0s 2.5s forwards}
+  html.eq-ready .content-area{opacity:1;visibility:visible;transition:opacity .18s;animation:none}
+  body.layout-on .content-area,body.editing .content-area{opacity:1!important;visibility:visible!important;
+    animation:none!important}
+  @keyframes eq-reveal{to{opacity:1;visibility:visible}}
+  @media (prefers-reduced-motion:reduce){html.eq-ready .content-area{transition:none}}
+
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
   .content-area>h2{margin-block:var(--section-gap,34px) 0}

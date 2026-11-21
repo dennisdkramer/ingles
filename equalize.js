@@ -158,7 +158,11 @@
 
   /* the save path clones the document and asks for the authored page back */
   function clean(root) {
-    Array.prototype.forEach.call((root || document).querySelectorAll("[data-eq]"), function (el) {
+    var r = root || document;
+    /* a saved page must not inherit the runtime reveal state */
+    if (r.nodeType === 9 && r.documentElement) r.documentElement.classList.remove("eq-ready");
+    else if (r.classList) r.classList.remove("eq-ready");
+    Array.prototype.forEach.call(r.querySelectorAll("[data-eq]"), function (el) {
       el.style.removeProperty("flex");
       el.style.removeProperty("width");
       el.style.removeProperty("align-self");
@@ -170,8 +174,33 @@
   window.EqualizeRows = { run: run, solve: solveFixedRow, clean: clean };
 
   function all() { run(); }
+
+  /* a page that loads this file is marked `data-eq`; the sheet holds its content area at
+     `visibility:hidden` until `eq-ready`. the first solve runs while hidden; the reveal
+     then waits for the fonts or 600ms, whichever comes first, and `load` re-solves for
+     the image widths. the sheet's 2.5s animation reveals a page whose script never ran. */
+  var revealed = false;
+  function reveal() {
+    if (revealed) return;
+    revealed = true;
+    try { run(); } finally { document.documentElement.classList.add("eq-ready"); }
+  }
+
+  function ready() {
+    if (!document.documentElement.hasAttribute("data-eq")) return;
+    var timer = setTimeout(reveal, 600);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () {
+        clearTimeout(timer);
+        if (revealed) all();
+        else reveal();
+      });
+    }
+  }
+
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", all);
   else all();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(all);
   window.addEventListener("load", all);
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ready);
+  else ready();
 })();
