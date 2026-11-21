@@ -97,13 +97,14 @@
   /* the body is justified for prose only: a heading is a label, and a label whose line is stretched
      reads as a title set across a width it does not fill. The page title re-centres itself in #41 */
   h1,h2,h3{text-align:left}
-  h1{font-family:var(--display);font-size:var(--s4);letter-spacing:.14em;margin:8px 0 0}
+  h1{font-family:var(--display);font-size:calc(var(--s4) + 4pt);letter-spacing:.14em;margin:8px 0 0;
+    font-weight:700}
   /* the section rule fades over 8px at each end; the 2px border stays in the box (transparent) so the
      heading's height and the flow under it do not change */
-  h2{font-family:var(--display);font-size:calc(var(--s3) + 2pt);border-bottom:2px solid transparent;
+  h2{font-family:var(--display);font-size:calc(var(--s3) + 6pt);border-bottom:2px solid transparent;
     background:linear-gradient(90deg,transparent 0,var(--rose) 8px,
       var(--rose) calc(100% - 8px),transparent 100%) bottom left/100% 2px no-repeat border-box;
-    padding-bottom:6px;margin:1.6em 0 .3em}
+    padding-bottom:6px;margin:1.6em 0 .3em;font-weight:700}
   h3{font-family:var(--display);font-size:calc(var(--s1) + 7pt);color:var(--track-ink);
     position:relative;
     padding-bottom:6px;margin:22px 0 0;
@@ -130,10 +131,10 @@
      so a section heading carries no number of its own and a margin note above it shifts nothing.
      The notebook the shell appends is the page's chrome, not a lesson section, so it takes no number */
   h2{counter-increment:sec}
-  /* the number is the heading's own type at the heading's own size — only its colour differs, so it reads
-     as "1." and not as a footnote marker sitting beside a title */
+  /* the number is the heading's own type at the heading's own size — it is set in black, so it reads as
+     "1." and not as a footnote marker sitting beside a title */
   h2::before{content:counter(sec) ". ";display:inline-block;padding-right:.45em;
-    font-weight:700;color:var(--track-ink)}
+    font-weight:700;color:#000}
   .content-area>h2:has(+#feed){counter-increment:none}
   .content-area>h2:has(+#feed)::before{content:none}
   /* inline-block keeps the lettered prefix out of the heading's underline: a decoration propagates to
