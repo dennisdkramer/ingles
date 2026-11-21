@@ -28,9 +28,9 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 ---
 
 ## [B5] - `.cols` is gone, and a row is the only container "is there anywhere that .col is being applied? i thought we were not using columns anywhere" — the class deleted from the sheet, its four clients moved to `.rows`, and the spacing selectors left naming one container
-[1] `capability-map.html` — the four `class="cols markup-row"` rows are `class="rows markup-row"`; the row paragraph no longer offers `.cols` as a second container
-[2] `style.css` — `.cols` removed from the cell rule (899), the container rule (900) and deleted at 902; dropped from the four `:is(.cols,.rows)` groups (945, 955, 956, 957, 1538) and from the `>.cols` selector at 952; `.markup-row` takes `flex-wrap:wrap`, which is the one behaviour `.cols` was giving those four rows
-[3] verify (`qa:rowctx`, `mapcheck`, `cmcheck`, `batchcheck`, `build:check`, `qa:liquid`), commit, push
+[1] ✔ `capability-map.html` — the four `class="cols markup-row"` rows are `class="rows markup-row"`; the row paragraph no longer offers `.cols` as a second container
+[2] ✔ `style.css` — `.cols` removed from the cell rule (899), the container rule (900) and deleted at 902; dropped from the four `:is(.cols,.rows)` groups (945, 955, 956, 957, 1538) and from the `>.cols` selector at 952; `.markup-row` keeps `gap:10px` only, so its boxes sit on one line with every other row — the owner wants no wrapping anywhere
+[3] ✔ verify (`qa:rowctx`, `mapcheck`, `cmcheck`, `batchcheck`, `build:check`, `qa:liquid`), commit, push — `30151ef`
 
 # PAST BATCHES
 ## [B1] - the answer pill a second field loses, and a home for what a build teaches "integrate learned info into guidance ... add a block near the bottom of capability map thats like 'Learned during Build generation' and wire up part of the generation process to add and update notes there" — one pill per control, a map section of definitive items, and the loop step that maintains it

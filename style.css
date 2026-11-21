@@ -1157,7 +1157,7 @@
    is the pointer naming the element the box draws. A box hugs its label and the row fills the line; a
    label too long for its share ellipsizes rather than wrapping to a second line. Vary: --cw (length) */
 @layer control{
-  .markup-row{gap:10px;flex-wrap:wrap}
+  .markup-row{gap:10px}
   .markup-row>details.reveal{flex:1 1 auto;min-width:0;margin:0}
   .markup-row>details.reveal>summary{padding:6px 10px;white-space:nowrap;overflow:hidden;
     text-overflow:ellipsis}
