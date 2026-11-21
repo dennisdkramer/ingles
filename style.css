@@ -1032,10 +1032,12 @@
   .seq[data-mode="turns"]>li{display:grid;gap:3px;justify-items:start}
   .seq[data-mode="turns"] .who{display:block;font:600 .88rem/1.4 var(--sans);
     text-transform:uppercase;letter-spacing:.08em;color:var(--ink-2)}
-  /* a turn on the left is the plain bubble, and it is set on a 20% grey rather than on the page's paper:
-     against paper a white bubble all but disappears, and the two speakers have to be told apart at a glance */
+  /* a turn on the left is the plain bubble, set on a 10% grey rather than on the page's paper: against paper a
+     white bubble all but disappears, and the two speakers have to be told apart at a glance. Its edge is a 40%
+     grey; the right-hand bubble replaces both with the accent */
   .seq[data-mode="turns"] .say{display:block;width:fit-content;max-width:80%;padding:9px 13px;
-    border-radius:16px 16px 16px 5px;background:color-mix(in srgb,#000 20%,#fff);border:1px solid var(--line-2);
+    border-radius:16px 16px 16px 5px;background:color-mix(in srgb,#000 10%,#fff);
+    border:1px solid color-mix(in srgb,#000 40%,#fff);
     box-shadow:var(--shadow-1)}
   /* a turn's side comes from WHO speaks, never from its place in the list: every turn of a turns dialog
      carries data-side="left" or data-side="right", the speaker who opens the dialog takes the left, and a
