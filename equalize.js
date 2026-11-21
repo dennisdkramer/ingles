@@ -9,6 +9,7 @@
   var MIN_CELL = 120;        /* no cell below this */
   var PROSE_FLOOR = 200;     /* a prose cell never reads narrower */
   var STEPS = 24;
+  var CENTER_MIN = 12;       /* a 2-cell row centers its shorter cell once the gap reads as one */
 
   function visibleCells(row) {
     return Array.prototype.filter.call(row.children, function (el) {
@@ -165,6 +166,20 @@
       widths = fit(next);
     }
     apply(widths);
+
+    /* a 2-cell row that cannot be equalized: center the shorter cell's content instead of
+       leaving the whole gap below it. three or more cells stay top-aligned so their lines
+       agree. the cells are still at their own height here, so these heights are their
+       content's, not the row's. the previous run's decision is cleared first, because a
+       photo that loads late can change the gap the next run sees. */
+    cols.forEach(function (c) { c.style.removeProperty("justify-content"); });
+    if (cols.length === 2) {
+      var lastH = cols.map(function (c) { return c.getBoundingClientRect().height; });
+      var lo = Math.min.apply(null, lastH), hi = Math.max.apply(null, lastH);
+      if (hi - lo > CENTER_MIN) {
+        cols[lastH[0] <= lastH[1] ? 0 : 1].style.justifyContent = "center";
+      }
+    }
 
     cols.forEach(function (c, i) {
       if (prevAlign[i]) c.style.alignSelf = prevAlign[i];

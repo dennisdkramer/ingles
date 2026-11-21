@@ -98,5 +98,11 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 ## [B13] - the pointer and the outline look's edge on hover "make the mouseover for buttons, radios, checkboxes use the pointer, and have a mouseover highlight that uses the same visual as the outline look" — the ring on the three control types, the older hover effects retired
 [1] `style.css` — `button`, `input[type=radio]`, `input[type=checkbox]`, `.opt` take the pointer (disabled/locked default); on hover each wears the outline look's edge, `outline: var(--edge-w) solid var(--accent)`, 2px offset; the generic button's brightness/lift, the control bar/welcome bar's accent fill and the `.opt`'s border hover retired
 [2] ✔ verify — computed in Chrome: a control-bar button and a lesson-20 button (idle `outline:none`, hover `2px solid oklch(.58 .14 210)` at offset 2), an `.opt` pill (the block's own accent, hue 65), a `.qopts` label and a `.flip` card (hue 65) all ring; the dot inside its label takes none; every cursor is `pointer`; `label:has(>input)` makes the label the hit area for the bare radios and the flip checkbox; `qa:rowctx`, `qa:check` business 20/1, `cmcheck`, `mapcheck`, `batchcheck`, `qa:liquid`, `build:check` pass (`qa:check` business 11 reports 30 answer controls with no anchor — content, present on the previous commit too, not the sheet)
+## [B14] - the 2-cell vertical centering returns "it looks like the vertical centering (center the shorter item in a 2 cell row when their heights cant be equalized) was removed, i want it back" — the solver centers the shorter cell again, at the gap the flush now leaves
+[1] `equalize.js` — after the last `apply`, a 2-cell row whose content heights still differ by more than `CENTER_MIN` (12) centers the shorter cell's content (`justify-content:center`); the previous decision is cleared first on every run; 3+ cell rows stay top-aligned; `clean()` already strips it
+[2] `capability-map.html` — the level-gap item records the centering and its 12px gate
+[3] verify — the four lesson-20 blocks before/after (3B 16, 8E 17, 5A 25 center; 4B 8 stays flush), QA, commit, push
+
+
 
 
