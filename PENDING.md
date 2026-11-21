@@ -124,3 +124,9 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 
 
 
+## [B18] - the chart frame and header rule fade, the column headers centre and grow 3pt, and h1/h2 take h3's font "at the root, reduce chart border opacity by 20%, center chart column headers, increase their font size by 3pt and set their opacity to 80%, set H1 and H2 font to the current font of h3 but dont change any of their other properties" + "the outer 2px frame. Also reduce the line below the header row to 1px and make it 80% opacity"
+[1] ✔ `style.css` — the `.chart` frame ring 2px at 80% of its colour (`:1567-1571`); `.chart thead th` centred, `calc(1em + 3pt)`, `opacity:.8`, and its bottom rule 1px ink at full paint so it renders at the header's 80% (`:1582-1585`)
+[2] ✔ `style.css` — the `h1` and `h2` base rules take `var(--display)`, the family `h3` uses (`:100`, `:103`); size, letter-spacing, margin, rule and decoration untouched; the header logotype (`.brand h1`) keeps its own font
+[3] ✔ computed — `thead th` 21px (17px + 3pt), `text-align:center`, `opacity:0.8`, rule `1px` ink; frame ring `oklab(… / 0.8) 0 0 0 2px`; `h1`/`h2`/`h3` all `"Cormorant Garamond", Georgia, serif`, with `h1` still 38px / 5.32px tracking and `h2` 28.67px; build stamped, commit, push
+
+

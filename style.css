@@ -97,10 +97,10 @@
   /* the body is justified for prose only: a heading is a label, and a label whose line is stretched
      reads as a title set across a width it does not fill. The page title re-centres itself in #41 */
   h1,h2,h3{text-align:left}
-  h1{font-family:var(--playfair);font-size:var(--s4);letter-spacing:.14em;margin:8px 0 0}
+  h1{font-family:var(--display);font-size:var(--s4);letter-spacing:.14em;margin:8px 0 0}
   /* the section rule fades over 8px at each end; the 2px border stays in the box (transparent) so the
      heading's height and the flow under it do not change */
-  h2{font-family:var(--playfair);font-size:calc(var(--s3) + 2pt);border-bottom:2px solid transparent;
+  h2{font-family:var(--display);font-size:calc(var(--s3) + 2pt);border-bottom:2px solid transparent;
     background:linear-gradient(90deg,transparent 0,var(--rose) 8px,
       var(--rose) calc(100% - 8px),transparent 100%) bottom left/100% 2px no-repeat border-box;
     padding-bottom:6px;margin:1.6em 0 .3em}
@@ -1561,9 +1561,12 @@
   .complete-btn.is-done{background:#0f766e;box-shadow:3px 3px 0 var(--tan)}
   .loadwrap{display:flex;align-items:center;justify-content:center;grid-column:1/-1;
     width:100%;padding:46px 0}
+  /* the frame is the chart's border: 2px of the ink-2/paper mix, painted at 80% of that colour so the
+     frame sits lighter than the grid without moving a pixel (a border would have taken 2px out of the
+     table's own box) */
   .chart{border-collapse:collapse;width:100%;max-width:100%;margin:14px 0;background:var(--paper);
     border:0;border-radius:3px;overflow:hidden;translate:0 3px;
-    box-shadow:0 0 0 2px color-mix(in oklab,var(--ink-2) 72%,var(--paper)),
+    box-shadow:0 0 0 2px color-mix(in oklab,color-mix(in oklab,var(--ink-2) 72%,var(--paper)) 80%,transparent),
       -3px 3px 8px -2px color-mix(in oklab,var(--ink-2) 55%,transparent)}
   /* a collapsed table ignores border-radius at the corners, so the four corner cells carry it */
   .chart tr:first-child>:first-child{border-top-left-radius:3px}
@@ -1573,9 +1576,12 @@
   .panel .chart,.card .chart,.game .chart,.dialog .chart{margin:0}
   .chart th,.chart td{border:1px solid var(--tan);padding:8px 12px;text-align:left}
   /* a column header is written the way a book title is: the words that carry meaning take a capital and
-     of / the / and do not. The sheet sets no case of its own, so what is written is what prints. */
+     of / the / and do not. The sheet sets no case of its own, so what is written is what prints.
+     The header is centred and set 3pt larger than its cell's text, and the whole cell is painted at 80%:
+     the 1px rule under it is painted solid and lands at 80% with everything else in the header */
   .chart thead th{background:var(--sunken);color:var(--ink);font-weight:700;letter-spacing:normal;
-    border-bottom:2px solid var(--ink)}
+    font-size:calc(1em + 3pt);text-align:center;opacity:.8;
+    border-bottom:1px solid var(--ink)}
   /* no column needs a name: <thead><tr class="bare"><th colspan="N"></th></tr></thead> — the row merges and
      collapses to a 3px rule, so the chart keeps a top edge and says nothing it does not need to say */
   .chart tr.bare th{height:3px;padding:0;font-size:0;line-height:0;border:0;
