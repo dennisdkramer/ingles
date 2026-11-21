@@ -1040,9 +1040,10 @@
     border:1px solid color-mix(in srgb,#000 40%,#fff);
     box-shadow:var(--shadow-1)}
   /* a turn's side comes from WHO speaks, never from its place in the list: every turn of a turns dialog
-     carries data-side="left" or data-side="right", the speaker who opens the dialog takes the left, and a
-     speaker keeps one side for the whole dialog — so a speaker who answers twice stays where they were
-     instead of flipping over, and the other speaker always answers from the right */
+     carries data-side="left" or data-side="right", the speaker who opens the dialog takes the left, the
+     second speaker takes the right, and any further speaker joins the first on the left. A speaker keeps
+     that side for the whole dialog — so a speaker who answers twice stays where they were instead of
+     flipping over */
   .seq[data-mode="turns"]>li[data-side="right"]{justify-items:end;text-align:right}
   .seq[data-mode="turns"]>li[data-side="right"] .say{border-radius:16px 16px 5px 16px;
     background:var(--accent-soft);border-color:var(--accent-line)}
