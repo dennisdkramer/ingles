@@ -27,6 +27,11 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 [8] verify (`qa:rowctx`, `qa:rowctx --self-test`, `qa:check`, `mapcheck`, `batchcheck`, `cmcheck`, `build:check`), commit, push
 ---
 
+## [B6] - capability-map's cells obey the row rule "make sure there is no hand-written css affecting the stuff we're working on now" — 17 inline layout styles stripped, so no cell on the map carries a width of its own
+[1] ✔ `capability-map.html` — 15 cell styles removed (`justify-content:center` ×1, `flex:0 1 auto;justify-content:center` ×4, `flex:1 1 auto`, `flex:0 0 auto`, `flex:0 0 calc(50% - 13px)` ×4, `min-width:calc(33% - 13px)` ×3, `min-width:calc(50% - 13px)` ×1) and 2 table styles (`width:100%;height:100%;flex:1 1 auto`, `width:100%`); the map now has 0 cells with an inline style and div 150/150
+[2] verify (`cmcheck`, `mapcheck`, `batchcheck`, `build:check`), commit, push
+[3] answer the mechanism — `flex:1` is basis `0%`, so content contributes nothing to width and every cell takes an equal share; `align-items:stretch` makes the boxes equal height while a short cell's content keeps its own height
+
 ## [B5] - `.cols` is gone, and a row is the only container "is there anywhere that .col is being applied? i thought we were not using columns anywhere" — the class deleted from the sheet, its four clients moved to `.rows`, and the spacing selectors left naming one container
 [1] ✔ `capability-map.html` — the four `class="cols markup-row"` rows are `class="rows markup-row"`; the row paragraph no longer offers `.cols` as a second container
 [2] ✔ `style.css` — `.cols` removed from the cell rule (899), the container rule (900) and deleted at 902; dropped from the four `:is(.cols,.rows)` groups (945, 955, 956, 957, 1538) and from the `>.cols` selector at 952; `.markup-row` keeps `gap:10px` only, so its boxes sit on one line with every other row — the owner wants no wrapping anywhere
