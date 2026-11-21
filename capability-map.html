@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Capability map — English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=5cc443f602">
+<link rel="stylesheet" href="style.css?v=685ecdd0d6">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>VISUAL REFERENCE</span></h1></header>
@@ -22,7 +22,7 @@
 <h3>Arrange it, and give it a look</h3>
 <div class="rows">
 <div>
-<p><b>A section's content goes into one <code>.rows</code>, and that is the default.</b> A row is one line, and its direct children are its cells: <b>each cell is one item, or two that stack inside it</b>. A cell is an equal share of its line — <code>flex:1;min-width:0</code> — so two cells are two halves and three are three thirds, whatever each one holds, and every cell is the line's height. Two cells a line by default, three or four when the items are thin, and a fifth item is a second <code>.rows</code> — a row never wraps. <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. A width is a repair and belongs on the cell that needs it: <code>min-width</code> for a floor, <code>flex:0 0 calc(50% - 13px)</code> to fix a cell at half the line. No cell is sized for the type of thing it holds.</p>
+<p><b>A section's content goes into one <code>.rows</code>, and that is the default.</b> A row is one line, and its direct children are its cells: <b>each cell is one item, or two that stack inside it</b>. A cell starts as an equal share of its line — <code>flex:1;min-width:0</code> — so two cells are two halves and three are three thirds before the page loads; <code>equalize.js</code> then sizes the line to its content: a table takes the width of its widest row, a drawing its own width, and prose trades width for height. Every cell is the line's height. Two cells a line by default, three or four when the items are thin, and a fifth item is a second <code>.rows</code> — a row never wraps. <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. No width is written on a cell: an authored <code>flex</code> or <code>width</code> is stale and the solver overwrites it.</p>
 </div>
 <div>
 <p class="dim"><b>Every element below is drawn with the markup that builds it, and the drawing is the default</b>: what the element contains, what text it carries, where that text sits, and whether it carries a title at all. Its item count is the example's own, never a count to copy. A chart takes no title of its own — the sentence beside it names it.</p>
@@ -34,7 +34,7 @@
 
 <p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
 <div class="rows markup-row">
-<details class="reveal" open><summary>Markup — rows · a row, an element on its own, and a width</summary><div class="body"><div>
+<details class="reveal" open><summary>Markup — rows · a row, and an element on its own</summary><div class="body"><div>
 <pre>&lt;h2&gt;a section the sheet numbers&lt;/h2&gt;
 
 &lt;div class="rows"&gt;
@@ -44,7 +44,7 @@
 
 &lt;table class="chart"&gt;…nothing purposeful to accompany it, so it stands outside a block…&lt;/table&gt;
 
-&lt;div class="block" style="flex:0 0 calc(50% - 13px)"&gt;…fixed at half the line because the full line read badly…&lt;/div&gt;</pre>
+&lt;div class="block"&gt;…a block on its own, with no width of its own…&lt;/div&gt;</pre>
 <p class="dim">Looks, and why each is chosen: <code>float</code> for text that applies to everything in the section and belongs to no single block · <code>tint</code> for content about the track's own voice — how a word taught in that voice compares with the same word in another voice, what it really means or the use cases a slang word has · <code>outline</code> for content important enough to stand out from the page · <code>stripes</code> for an activity the student answers, whose top rule turns red · <code>tape</code> for a note pinned to the page rather than taught in sequence · <code>dark</code> for content that <i>is</i> a night, a screen or a stage. One tint and one outline per section at most. A section is an <code>&lt;h2&gt;</code>: the sheet numbers it, so it is never typed, and it restarts the lettering under it. An unset block is paper with the 2px accent rule. The markup box you are reading is <code>&lt;details class="reveal" open&gt;&lt;summary&gt;…&lt;/summary&gt;&lt;div class="body"&gt;&lt;div&gt;&lt;pre&gt;…&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;/details&gt;</code>.</p>
 </div></div></details>
 </div>
@@ -1072,11 +1072,12 @@ next();
 <h3>What building a lesson has taught the build</h3>
 <p><b>Every line here is a mechanism of this site, learned by building a lesson on it, and it holds for the next lesson as much as for the one that found it.</b> A line states what the machine does or what the build must do — never a fault, a session or a date. Read the block at the start of every lesson; the lesson that teaches one more line adds it here before its own row is closed.</p>
 <ul>
+<li><b>A row is sized at load, not authored.</b> <code>equalize.js</code> writes the widths: a table keeps its widest row, a drawing never passes its own size, and prose takes the remainder above 200px. An authored <code>flex</code> or <code>width</code> on a cell is stale and the solver overwrites it.</li>
 <li><b>The control's <code>name</code> is its key, and the key is a number</b> — <code>a&lt;section&gt;c&lt;block letter&gt;&lt;item&gt;</code> (<code>a7c2</code> is section 7's third block, second item), one number for a whole radio group. A control left unnamed falls back to the words around it plus a <code>{block, offset}</code> position.</li>
 <li><b>That <code>offset</code> counts blocks on the page, and a game inserts its stage into its own block when it loads</b> — so a position saved before a game ran and read after it can be off by that stage. A number does not move; a position can.</li>
 <li><b>Two controls in one cell take two numbers.</b> Both share the cell's words and its first offset, and Complete draws one key pill per control: two fields in one cell need two numbers, or one answer is drawn over the other.</li>
 <li><b>The index files are build artifacts that ship with the page.</b> <code>npm run build:lessons</code> writes <code>lessons.json</code> and <code>tracks.json</code> from the page filenames, and <code>--check</code> refuses a stale pair; a lesson pushed without that run is live but unlisted.</li>
-<li><b>A lesson page stamps nothing.</b> It links <code>../style.css</code> and the shell's script slot already lists every engine, so a changed engine reaches the browser at the next revalidation: testing one starts with a hard refresh, and no lesson adds a version of its own.</li>
+<li><b>Every page carries the sheet's stamp.</b> <code>build-lessons.mjs</code> writes <code>../style.css?v=…</code> into every lesson page and <code>style.css?v=…</code> into the root pages — the hash of the sheet itself — so a changed stylesheet is fetched on the next load and a stale stamp fails <code>build:check</code>. The shell's script slot lists the engines; a changed engine still needs a hard refresh.</li>
 <li><b>This map is built to be extended.</b> Every direct child of <code>.content-area</code> is a row cell and its <code>data-span</code> sums to 12 (12 when unset); a <code>pre</code> in a markup box holds escaped tags only, because a real one inside it is parsed as markup; <code>node qa/cmcheck.mjs</code> checks both, and the dead links.</li>
 <li><b>A chart row is answered by a keyed gap.</b> The typed form of <code>chartanswer</code> carries <code>data-answer</code> in the row's answer cell with its <code>.qnum</code> beside it; a row of options is markable only when its cell holds a <code>.qitem</code> with <code>data-a</code>, so a chart of bare radios has no key the engine can read.</li>
 <li><b>A game records the control under it, not its own name.</b> Items answered with options are <code>mc</code> in the ledger; items answered by typing a word are <code>fill</code>, because the field is what the student writes in.</li>
@@ -1098,4 +1099,5 @@ next();
 </div>
 </main>
 <script src="player.js"></script>
+<script src="equalize.js"></script>
 </body></html>

@@ -1,4 +1,4 @@
-// build-lessons.mjs — what each lesson page IS, taken from its filename. No page is read.
+// build-lessons.mjs — what each lesson page IS, taken from its filename, and the sheet stamp every page carries.
 // Run: node build-lessons.mjs          write the derived files
 //      node build-lessons.mjs --check  write nothing; exit 1 if any of them is out of date
 // A page is `lesson<N>-<Title>.html`: the number is its position in the book and the rest is its name, so
@@ -63,8 +63,8 @@ for (const meta of TRACKS) {
   const entries = [];
   if (fs.existsSync(dir)) {
     for (const name of fs.readdirSync(dir)) {
-      /* THE FILENAME IS THE TITLE: `lesson<N>-<Title>.html`. No page is read — a build that reads a page
-         to learn its own name is reading content it has no business in. */
+      /* THE FILENAME IS THE TITLE: `lesson<N>-<Title>.html`. No page is read to learn its own name — the
+         stylesheet stamp at the foot of this file is the one edit the build makes inside a page. */
       const m = name.match(/^lesson(\d+)(?:-(.*))?\.html$/);
       if (!m) continue;
       const n = Number(m[1]);
@@ -84,35 +84,39 @@ const wroteLessons = emit('lessons.json', JSON.stringify(manifest, null, 2) + '\
 const trackList = TRACKS.map(m => ({ name: m.name, label: m.label, icon: m.icon, order: m.order }));
 const wroteTracks = emit('tracks.json', JSON.stringify(trackList, null, 2) + '\n');
 
-// The stylesheet's version stamp is BAKED INTO index.html by this build, never applied at runtime. It used to be
-// swapped in by JS at load, which changed <link>.href while the first fetch was still in flight: the browser
+// The stylesheet's version stamp is BAKED INTO EVERY PAGE by this build, never applied at runtime. It used to
+// be swapped in by JS at load, which changed <link>.href while the first fetch was still in flight: the browser
 // aborted and restarted the fetch, painted the document unstyled, then repainted — the page "decomposed", the
 // logo flashed left, and it redrew centred (owner report 2026-11-09). A href present in the HTML is
 // render-blocking, so there is nothing to paint early. The stamp is the file's own hash, so it changes exactly
 // when style.css changes, and a stale stamp is a harness failure rather than an invisible cache miss.
-const cssUrl = 'style.css?v=' + createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'style.css'))).digest('hex').slice(0, 10);
-const linkRe = /<link rel="stylesheet" href="style\.css(?:\?v=[0-9a-f]*)?"/;
-/* every hand-built page that links the sheet carries the same stamp: index.html draws the menu and
-   capability-map.html is read while the sheet is being changed, so both would otherwise show a
-   cached stylesheet and a change would look like it never happened. */
-for (const page of ['index.html', 'capability-map.html']) {
+// The hash is taken over the LF text: the checkout's line endings are not the sheet's content, and a Windows
+// CRLF copy must stamp the same URL a Linux copy does.
+const cssText = fs.readFileSync(path.join(ROOT, 'style.css'), 'utf8').replace(/\r\n/g, '\n');
+const cssHash = createHash('sha256').update(cssText).digest('hex').slice(0, 10);
+const cssUrl = 'style.css?v=' + cssHash;
+const linkRe = /<link rel="stylesheet" href="((?:\.\.\/)?)style\.css(?:\?v=[0-9a-f]*)?"/;
+/* every page that links the sheet carries the same stamp: the root pages draw the menu and the map, and a
+   lesson page must not keep a cached sheet after the sheet changes. */
+const stampedPages = ['index.html', 'capability-map.html', '_shell.html', '_shell-preview.html'];
+for (const [track, entries] of Object.entries(manifest)) {
+  for (const entry of entries) stampedPages.push(track + '/' + entry.file);
+}
+let stamped = 0;
+for (const page of stampedPages) {
   const pagePath = path.join(ROOT, page);
   if (!fs.existsSync(pagePath)) continue;
   const htmlNow = fs.readFileSync(pagePath, 'utf8');
-  if (!linkRe.test(htmlNow)) {
-    if (page === 'index.html') {
-      console.error('ERROR: index.html has no <link rel="stylesheet" href="style.css"> for the build to stamp.');
-      process.exitCode = 1;
-    }
+  const link = htmlNow.match(linkRe);
+  if (!link) {
+    drift.push(page + ' (no stylesheet link)');
+    process.exitCode = 1;
     continue;
   }
-  const before = htmlNow.match(linkRe)[0];
-  const wanted = '<link rel="stylesheet" href="' + cssUrl + '"';
-  if (before !== wanted) {
-    emit(page, htmlNow.replace(linkRe, wanted));
-    if (!CHECK) console.log(page + ' stylesheet stamped -> ' + cssUrl);
-  }
+  const wanted = '<link rel="stylesheet" href="' + link[1] + cssUrl + '"';
+  if (link[0] !== wanted && emit(page, htmlNow.replace(linkRe, wanted))) stamped++;
 }
+if (!CHECK && stamped) console.log(stamped + ' page stylesheet link(s) stamped -> ' + cssUrl);
 
 if (CHECK) {
   if (drift.length) {

@@ -4,6 +4,17 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 ---
 
 # [CURRENT]
+## [B7] - the fixed-width row solver "I want to make some changes to the formatting of our pages ... implement into our project ... all at the root and effecting all pages, not scoped" — one root solver over every `.rows`, the sheet's media rule, and the runtime widths kept out of saved pages
+[1] ✔ `equalize.js` — every `.content-area .rows` (`.markup-row` build tools excluded) sized at load: a table's floor is its widest nowrap row, `img` and `svg[width="100%"]` never pass their own width, prose never below 200px, heights read with `align-self:start` because the sheet stretches every cell, widths fitted to the row without exceeding a media cap; re-runs on fonts and load; `EqualizeRows.clean(root)` strips the runtime `flex`/`width` for the save path
+[2] ✔ `style.css` — a row's media (`img`, `svg[width="100%"]`) scales down with its cell and never past its own size; `flex:1` stays the no-JS start state
+[3] ✔ `business/lesson20-Needs-haves-and-shoulds.html` and the other 19 business lessons — the 54 authored cell `flex` styles deleted (superseded by the solver); the solver script tagged
+[4] ✔ `_shell.html`, `_shell-preview.html`, 20 business lessons, `capability-map.html` — the solver script tagged on every page that carries a `.rows`
+[5] ✔ `build-lessons.mjs` + every page — the sheet stamp (`style.css?v=<hash>`) written into every lesson page, the shell and the root pages, so a changed sheet is fetched on the next load; the hash is taken over LF text so a Windows and a Linux checkout stamp the same URL; the map's "a lesson page stamps nothing" line restated
+[6] ✔ `engine2.js` — `fullPageHTML` calls `EqualizeRows.clean(cl)` so a saved page never carries the solver's widths
+[7] ✔ verify (`node --check equalize.js`, Chrome geometry before/after on both reference pages, `qa:rowctx`, `qa:rowctx --self-test`, `qa:check` business 20 / adult 40 / kids 44, `cmcheck`, `mapcheck`, `batchcheck`, `build:check`, `qa:liquid`) — all pass; commit, push
+---
+
+
 ## [B2] - the layout tool and the save path that lands a page in the repo "i want to be able to move elements at any level ... a local script that hears a lesson file fall in downloads ... for that same script to run a git push" — drag any node in edit mode, an inspector over rows and cells, and a watcher that places the page
 [1] ✔ `layout.js` + `style.css` — drag any node inside `.content-area` (block, cell, paragraph, div, table) with its subtree; insertion line, undo, `clean()`
 [2] ✔ `engine2.js` — the layer loads with edit mode; **Save to repo** downloads the cleaned document under the page's own filename; **Clear page ink** deletes highlight/note/answer/complete for this track+lesson (notebook kept)
