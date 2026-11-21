@@ -1270,7 +1270,7 @@
      under the content, so a chart, a flash card, a bubble or a panel inside the block keeps its own paper
      without being given a colour of its own */
   .block[data-look="stripes"]{background-image:repeating-linear-gradient(-45deg,
-    rgb(26 33 48/.04) 0 2px, transparent 2px 8px)}
+    rgb(26 33 48/.025) 0 2px, transparent 2px 8px)}
 
   .block[data-look="tape"]::before{content:"";position:absolute;top:-10px;left:50%;
     translate:-50% 0;width:112px;height:21px;rotate:-2deg;z-index:2;
@@ -1285,7 +1285,10 @@
 
   /* the top rule is the only place a look spends colour, and only the top edge changes:
      an activity is red, a taped note is dark yellow, a tint keeps the track's own hue */
-  .block[data-look="stripes"]{border-top-color:var(--err)}
+  /* the stripes' frame carries the same red as its top rule: the sides and the bottom at 1px and 70%, the
+     top at full strength — the look's colour lives on the top edge and only softens on the other three */
+  .block[data-look="stripes"]{border-color:color-mix(in oklab,var(--err) 70%,transparent);
+    border-top-color:var(--err)}
   .block[data-look="tape"]{border-top-color:color-mix(in oklab,var(--warn) 70%,var(--dkblue))}
 
   .block[data-look="dark"]{--ink:#f2ece1;--ink-2:#b7ab97;--line:#3d372f;--line-2:#2b2620;
