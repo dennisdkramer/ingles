@@ -166,18 +166,6 @@
     }
     apply(widths);
 
-    /* a 2-cell row that cannot be equalized: center the shorter cell's content instead of
-       leaving the whole gap below it. three or more cells stay top-aligned so their lines agree. */
-    if (cols.length === 2) {
-      var lastH = cols.map(function (c) { return c.getBoundingClientRect().height; });
-      var lo = Math.min.apply(null, lastH), hi = Math.max.apply(null, lastH);
-      if (hi - lo > 24) {
-        var short = lastH[0] <= lastH[1] ? 0 : 1;
-        cols[short].style.justifyContent = "center";
-        cols[short].setAttribute("data-eq", "");
-      }
-    }
-
     cols.forEach(function (c, i) {
       if (prevAlign[i]) c.style.alignSelf = prevAlign[i];
       else c.style.removeProperty("align-self");

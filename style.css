@@ -25,7 +25,7 @@
 @property --i-draw   { syntax: '<percentage>';inherits: false; initial-value: 50% }
 @property --i-keep   { syntax: '<percentage>';inherits: false; initial-value: 100% }
 
-@layer legacy, reset, tokens, base, perf, layout, structure, control, look, state, motion, print, shell, u, rx;
+@layer legacy, reset, tokens, base, perf, layout, structure, control, look, state, motion, print, shell, u, rx, spacing;
 
 /* #10 TOKENS — colour, spacing, type, depth. Set a token on any element; unset falls back to :root.
      Vary: --accent-h (hue 0-360), --sp, --r1/--r2, --edge-w (length) */
@@ -38,7 +38,7 @@
     --orange:#c2601a; --purple:#8c3b2f; --green:#2f9e44; --greenbg:#e8f7ee;
     --surface:var(--cream); --surface-2:var(--paper); --sunken:#efe6d6;
     --ink-2:#5c5347; --line:var(--rose); --line-2:#e7dbc9; --dim:#6b6154; --lead:#5c5347;
-    --para-gap:8px;
+    --para-gap:8px; --level-gap:20px; --cell-gap:14px;
     --teach-h:65; --train-h:28; --show-h:350; --game-h:96;
     /* the word-mark colours for #94 POS. Loud on purpose: these marks carry meaning, so they are
        the one place a cool hue is allowed to appear in the warm scheme. Change a mark's colour here. */
@@ -885,7 +885,7 @@
      is a choice made by looking at its content, and the choice is written on the element: nothing is
      inferred in the browser and no packer runs. Vary: --col-gap, --row-gap, --section-gap */
   .content-area{display:grid;grid-template-columns:repeat(12,1fr);
-    column-gap:var(--col-gap,18px);row-gap:var(--row-gap,22px);align-items:stretch;
+    column-gap:var(--col-gap,18px);row-gap:var(--level-gap,20px);align-items:stretch;
     counter-reset:sec}
   .content-area>*{grid-column:span 12;min-width:0;margin-block:0;width:auto}
   /* legacy only: no current page or lesson writes data-span — layout is rows and flex widths. These four
@@ -900,7 +900,7 @@
   /* #41 ROW — one flex line, and its cells are equal shares. Vary: --flex-gap (length) */
   .rows>*{flex:1;min-width:0;display:flex;flex-direction:column}
   .rows{display:flex;gap:var(--flex-gap,26px);align-items:stretch}
-  .rows{flex-direction:row;flex-wrap:nowrap;padding-top:20px}
+  .rows{flex-direction:row;flex-wrap:nowrap}
   /* #41 MEDIA — a row's drawing. CALL img, svg[width="100%"]; USE a visual beside prose;
      VARY none */
   .rows :is(img,svg[width="100%"]){display:block;max-width:100%;max-height:100%;
@@ -963,7 +963,6 @@
      lightness a chart's shadow uses — the object is ours, so it wears the track rather than the ink */
   .viz{--viz-pad:10px 12px;--viz-edge:var(--track-rule);--viz-shade:oklch(22.4% .04 var(--track-h) / .55);
     background:var(--paper);border-radius:3px;padding:var(--viz-pad);
-    translate:0 3px;
     box-shadow:0 0 0 2px var(--viz-edge), -3px 3px 8px -2px var(--viz-shade)}
   /* a list is a grid with its own padding reset, so the frame's inset is restated for it */
   .seq.viz{padding:var(--viz-pad)}
@@ -979,35 +978,21 @@
     background:var(--paper);border:1px solid var(--line);border-top:2px solid var(--accent);
     border-radius:var(--r2);box-shadow:2px 2px 0 var(--line-2),var(--shadow-1);
     padding:12px 26px 26px;margin:0}
-  /* the frame has no top padding: its first child brings the space, 14px like every other child */
-  .block>:first-child,.panel>:first-child,.card>:first-child{margin-top:14px}
-  .game>:is(h3,h4):first-child,.dialog>:is(h3,h4):first-child{margin-top:0}
-  /* text that sits directly in a frame keeps 3px of its own on every side, so a paragraph or a list never
-     runs flush against the frame's inner edge. Only direct children are touched: text nested inside a chart,
-     a game, a dialogue or any other component keeps its own spacing, and headings keep theirs
-     (their rule is measured from their padding) */
-  :is(.block,.panel,.card,.dialog)>:is(p,ul,ol,dl,blockquote){padding:3px}
+  .game>:is(h3,h4):first-child{margin-top:0}
+  /* text that sits directly in a frame keeps 3px at its sides, so a paragraph or a list never runs flush
+     against the frame's inner edge; the vertical gap is the level's, in #44 FLOW */
+  :is(.block,.panel,.card,.dialog)>:is(p,ul,ol,dl,blockquote){padding-inline:3px}
   /* a list needs its marker gutter back: with the 3px above, the bullets hang outside the frame's
      own padding and read as if they were in the margin */
   :is(.block,.panel,.card,.dialog)>:is(ul,ol){padding-left:1.6em}
   /* the same gutter inside a flex cell, where the cell is narrower than a frame */
   .rows>div>:is(ul,ol){padding-left:1.2em}
 
-  /* #43 RHYTHM — the space between things in a frame is the margin ABOVE each one: a paragraph, a flex
-     row or a chart that follows another takes 14px. A list item keeps its own bottom margin (li, in base),
-     and inside a flex row the row carries the space, so a cell's first item adds none and the rest add 10.
-     Vary: these numbers. */
-  :is(.block,.panel,.card,.dialog)>:is(p,table,figure,.chartwrap){margin-top:14px}
-  :is(.block,.panel,.card,.dialog)>.rows{margin-top:12px}
-  :is(.block,.panel,.card,.dialog)>p.dim{margin-top:7px;padding:0 6px 4px}
-  .rows>div>:first-child{margin-top:0}
-  .rows>div>:is(p,.rows,table,figure):not(:first-child){margin-top:10px}
-  .rows>div>p.dim:not(:first-child){margin-top:7px;padding:0 6px 4px}
+  /* the gap between two children is their container's, in #44 FLOW at the foot of the sheet */
 
   /* prose — --measure (length, 68ch) */
   .block[data-structure="prose"]{line-height:1.72}
   .block[data-structure="prose"]>:is(p,ul,ol,blockquote){max-width:var(--measure,68ch)}
-  .block[data-structure="prose"]>h4{margin-bottom:.5em}
 
   /* set — <ul class="set"><li>; --cols (integer, 2) */
   .set{list-style:none;margin:0;padding:0;display:grid;align-content:start;
@@ -1132,9 +1117,6 @@
 /* #61 CHOICE — .opts > label.opt > input[type=radio] + span; one answer. Unset: options stack. Vary: data-layout="row" */
 @layer control{
   .opts{display:grid;align-content:start;gap:7px;margin:2px 0 calc(18px + var(--para-gap))}
-  /* a prompt keeps its original gap to the options it introduces: the extra paragraph rhythm belongs
-     between paragraphs, not between a question and its answers */
-  p:has(+.opts){margin-bottom:.7em}
   .opts[data-layout="row"]{grid-auto-flow:column;grid-auto-columns:max-content;gap:10px}
   /* options that sit in a table cell use the cell's width: the choices spread across it instead of
      hugging its left edge, so a cell holding two options does not read as a cell holding one */
@@ -1429,7 +1411,7 @@
     font:400 14px/1.55 var(--serif);color:var(--ink);user-select:none;-webkit-user-select:none}
   .brand .barhelp{width:auto;margin:2px 0 8px}
   .barhelp b{color:var(--ink);font-weight:600}
-  #feed{display:block;width:100%;min-height:150px;margin:6px 0 0;resize:none;
+  #feed{display:block;width:100%;min-height:150px;margin:0;resize:none;
     border:1.5px solid var(--line);border-radius:var(--r1);background:var(--surface-2);
     padding:10px 12px;font:inherit;line-height:1.55;
     transition:border-color .15s,box-shadow .15s}
@@ -2926,3 +2908,20 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
   .denbtn[disabled]{opacity:.6;cursor:default;border-style:solid;color:#8a8072;
     background:var(--paper)}
 }
+
+/* #44 FLOW — the vertical gap between two children belongs to their container, at one value per
+   level: the content area's row gap, a frame's children, a cell's children. An element carries no
+   top or bottom of its own at those levels. CALL .content-area, .block/.panel/.card/.dialog,
+   .rows>div; VARY --level-gap, --cell-gap */
+@layer spacing{
+  /* level 1 is the content area's own row gap (see --level-gap on .content-area) */
+  .content-area>:not(h1):not(h2){margin-block:0}
+  /* level 2: a frame's children */
+  :is(.block,.panel,.card,.dialog)>*{margin-block:var(--level-gap) 0}
+  /* level 3: a cell's children; the first starts flush and a field stays with its question */
+  .rows>div>*{margin-block:var(--cell-gap) 0}
+  .rows>div>:first-child{margin-block-start:0}
+  :is(.block,.panel,.card,.dialog)>:is(input,textarea,select,button),
+  .rows>div>:is(input,textarea,select,button){margin-block-start:0}
+}
+
