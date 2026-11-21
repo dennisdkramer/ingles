@@ -221,9 +221,13 @@
   /* the button carries its own edge: a 1px box at 40% so it reads as a hint, not a link, and the word keeps
      its room inside it (the padding is the word's, the border is the button's) */
   .glossbtn{background:none;padding:0 6px;font:inherit;color:var(--accent);cursor:pointer;
+    --grad:0deg;transition:--grad 1s ease,border-color .15s;
     border:1px solid color-mix(in oklab,var(--accent-line) 40%,transparent)}
-  /* the button's edge is already solid, so the old hover that straightened the dashes has nothing left to do */
-  .glossbtn:hover{color:var(--ink)}
+  /* the same hover every other button takes: the outline look's accent wash, turned 0→180deg in 1s. It has to
+     be written here, in this layer, because `background:none` above outranks the shared #64 rule */
+  .glossbtn:hover{--grad:180deg;
+    background-image:linear-gradient(var(--grad),
+      color-mix(in oklab,var(--accent) 15%,transparent),transparent 62%)}
   /* a popover's invoker IS its implicit anchor, so position-area needs no per-card id or script;
      flip-block keeps a word near the page's foot readable */
   .defcard{position:fixed;inset:auto;margin:0 0 7px;width:max-content;max-width:min(320px,80vw);
