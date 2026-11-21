@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Capability map — English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=9baeadb7f1">
+<link rel="stylesheet" href="style.css?v=d105f083e2">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>VISUAL REFERENCE</span></h1></header>
@@ -1072,8 +1072,8 @@ next();
 <h3>What building a lesson has taught the build</h3>
 <p><b>Every line here is a mechanism of this site, learned by building a lesson on it, and it holds for the next lesson as much as for the one that found it.</b> A line states what the machine does or what the build must do — never a fault, a session or a date. Read the block at the start of every lesson; the lesson that teaches one more line adds it here before its own row is closed.</p>
 <ul>
-<li><b>A row is sized at load, not authored.</b> <code>equalize.js</code> writes the widths: a table keeps its widest row, a drawing never passes its own size, and prose takes the remainder above 200px. An authored <code>flex</code> or <code>width</code> on a cell is stale and the solver overwrites it.</li>
-<li><b>A page that loads the solver is hidden until its rows are sized.</b> <code>data-eq</code> on <code>&lt;html&gt;</code> makes the sheet hold <code>.content-area</code> at <code>visibility:hidden</code>; <code>equalize.js</code> solves once, then writes <code>eq-ready</code> when the fonts settle or after 600ms, and a 2.5s CSS reveal covers a missing script. The editor's <code>body.layout-on</code> and <code>body.editing</code> stay visible.</li>
+<li><b>A row is sized at load, not authored.</b> <code>equalize.js</code> writes the widths: a table keeps its widest row, a drawing never passes its own size, and prose takes the remainder above 200px — but beside a table or a drawing the prose stops at its widest line, and that cell takes the slack. A two-cell row centers the shorter content when the heights still differ. An authored <code>flex</code> or <code>width</code> on a cell is stale and the solver overwrites it.</li>
+<li><b>A page that loads the solver is hidden until its rows are sized.</b> <code>data-eq</code> on <code>&lt;html&gt;</code> makes the sheet hold <code>.content-area</code> at <code>visibility:hidden</code>; <code>equalize.js</code> solves once, then writes <code>eq-ready</code> when the fonts settle or after 1.5s. The sheet then fades a 30% veil over the whole page evenly for 1s, and reveals the content with a paper curtain moving top-to-bottom over 1s, starting at 0.8s (1.8s). A 4s/5s CSS fallback shows a page whose script never ran; the editor's <code>body.layout-on</code> and <code>body.editing</code> stay visible.</li>
 <li><b>The control's <code>name</code> is its key, and the key is a number</b> — <code>a&lt;section&gt;c&lt;block letter&gt;&lt;item&gt;</code> (<code>a7c2</code> is section 7's third block, second item), one number for a whole radio group. A control left unnamed falls back to the words around it plus a <code>{block, offset}</code> position.</li>
 <li><b>That <code>offset</code> counts blocks on the page, and a game inserts its stage into its own block when it loads</b> — so a position saved before a game ran and read after it can be off by that stage. A number does not move; a position can.</li>
 <li><b>Two controls in one cell take two numbers.</b> Both share the cell's words and its first offset, and Complete draws one key pill per control: two fields in one cell need two numbers, or one answer is drawn over the other.</li>
@@ -1100,5 +1100,5 @@ next();
 </div>
 </main>
 <script src="player.js"></script>
-<script src="equalize.js?v=8cef9f9982"></script>
+<script src="equalize.js?v=f7a067fb1b"></script>
 </body></html>

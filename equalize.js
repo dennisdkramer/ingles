@@ -67,6 +67,19 @@
     return naturalW + (col.offsetWidth - col.clientWidth) + chromeTo(el, col);
   }
 
+  /* prose only: the width at which its longest line stops needing more. beyond it a cell
+     is blank space, and the row's tables and drawings should take the slack instead. */
+  function getProseMaxWidth(col) {
+    if (col.querySelector("table") || visual(col)) return Infinity;
+    var clone = col.cloneNode(true);
+    clone.style.cssText = "position:absolute;left:-9999px;top:0;visibility:hidden;" +
+      "width:max-content;max-width:none;flex:none";
+    col.parentElement.appendChild(clone);
+    var w = clone.getBoundingClientRect().width;
+    clone.parentElement.removeChild(clone);
+    return w;
+  }
+
   function solveFixedRow(row) {
     var cols = visibleCells(row);
     if (cols.length < 2) return;
@@ -77,8 +90,16 @@
     if (avail <= 0) return;
 
     var minW = cols.map(getTableFloor);
-    var maxW = cols.map(getMediaMaxWidth);
     var media = cols.map(visual);
+    /* a table or a drawing is the row's absorber; the prose beside it stops at its own content
+       width, so the absorber takes the slack instead of the prose becoming blank space */
+    var hasAbsorber = cols.some(function (c) { return c.querySelector("table") || visual(c); });
+    var maxW = cols.map(function (c, i) {
+      var mediaCap = getMediaMaxWidth(c);
+      if (mediaCap !== Infinity || !hasAbsorber) return mediaCap;
+      if (c.querySelector("table") || media[i]) return Infinity;
+      return Math.max(PROSE_FLOOR, getProseMaxWidth(c));
+    });
 
     /* align-items:stretch makes every cell the row's height, so a measured height says
        nothing about its content. Read each cell at its own height while solving. */
@@ -145,6 +166,18 @@
     }
     apply(widths);
 
+    /* a 2-cell row that cannot be equalized: center the shorter cell's content instead of
+       leaving the whole gap below it. three or more cells stay top-aligned so their lines agree. */
+    if (cols.length === 2) {
+      var lastH = cols.map(function (c) { return c.getBoundingClientRect().height; });
+      var lo = Math.min.apply(null, lastH), hi = Math.max.apply(null, lastH);
+      if (hi - lo > 24) {
+        var short = lastH[0] <= lastH[1] ? 0 : 1;
+        cols[short].style.justifyContent = "center";
+        cols[short].setAttribute("data-eq", "");
+      }
+    }
+
     cols.forEach(function (c, i) {
       if (prevAlign[i]) c.style.alignSelf = prevAlign[i];
       else c.style.removeProperty("align-self");
@@ -166,6 +199,7 @@
       el.style.removeProperty("flex");
       el.style.removeProperty("width");
       el.style.removeProperty("align-self");
+      el.style.removeProperty("justify-content");
       if (!el.getAttribute("style")) el.removeAttribute("style");
       el.removeAttribute("data-eq");
     });
@@ -177,8 +211,8 @@
 
   /* a page that loads this file is marked `data-eq`; the sheet holds its content area at
      `visibility:hidden` until `eq-ready`. the first solve runs while hidden; the reveal
-     then waits for the fonts or 600ms, whichever comes first, and `load` re-solves for
-     the image widths. the sheet's 2.5s animation reveals a page whose script never ran. */
+     then waits for the fonts or 1.5s, whichever comes first, and `load` re-solves for
+     the image widths. the sheet's fallback reveals a page whose script never ran. */
   var revealed = false;
   function reveal() {
     if (revealed) return;
@@ -188,7 +222,7 @@
 
   function ready() {
     if (!document.documentElement.hasAttribute("data-eq")) return;
-    var timer = setTimeout(reveal, 600);
+    var timer = setTimeout(reveal, 1500);
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(function () {
         clearTimeout(timer);

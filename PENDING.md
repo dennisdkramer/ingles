@@ -11,6 +11,16 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 [4] ✔ `build-lessons.mjs` — `equalize.js?v=8cef9f9982` stamped on the 23 pages that load it, the hash over LF text; `build:check` catches a stale solver
 [5] ✔ `capability-map.html` + `PEDAGOGY-MAP.md` — the loading mechanism and the solver stamp stated
 [6] ✔ verify — `node --check` clean; Chrome: `DCL` hidden / `eq-ready` visible, 2.5s fallback reveals, `body.layout-on` and `body.editing` visible, saved clone loses `eq-ready` and keeps `data-eq`, row widths unchanged (`business` R1 528/592, R5 219/901, R12 920/200; map R5 468/200/200/200), unmarked `index.html` never hidden; `qa/rowctx`, `qa/check` business 20, `qa/cmcheck`, `qa/mapcheck`, `qa/batchcheck`, `qa/liquid`, `build:check` pass; committed and pushed
+## [B9] - the veil is a whole-page 30% fade and the row solver stops widening a prose cell past its content "veil fade away evenly ... content area fade in as a wipe from top to bottom ... start at .8s (1.8s total)" + 8E "a cells width should never be arbitrarily more than what it contains" — the veil, the content wipe, the prose max-content cap, and 2-cell centering
+[1] ✔ `equalize.js` — reveal at fonts or 1.5s; a prose cell in a row that has a table or media is capped at its `width:max-content` clone, so the table takes the slack (8E UL 772→447, table 348→673; 3B 366→601 / 754→519); a 2-cell row centers the shorter cell's content when the heights still differ (3B, 5A, 8E; 6A and 8C too; 4B's 10px stays top-aligned); `clean()` strips `justify-content`
+[2] ✔ `style.css` — `body::after` 30% veil fades evenly (`linear`) over 1s at `eq-ready`; `.content-area::after` paper curtain reveals top-to-bottom over 1s starting at .8s (veil at ~20%, 200ms overlap); the wipe runs `linear`; a 4s/5s CSS fallback; the editor exempt
+[3] ✔ verify — Chrome timeline: `eq-ready` at 1.098s, veil 0 at 2.165s, curtain first moves at 1.965s, off at 2.954s (1.8s from `eq-ready`); no-script page: veil fades 4s→5.4s and the content appears at 5.4s; editor: veil/curtain `none`, content visible; saved clone loses `eq-ready`, keeps `data-eq`, 0 `justify-content`; `qa/rowctx`, `qa/check` business 20, `cmcheck`, `mapcheck`, `batchcheck`, `qa/liquid`, `build:check` pass
+[4] ✔ report — the 8E cause (a prose cell's `maxW` was Infinity, so `fit` handed it the row's surplus) and the 4B answer (a `qnum` is inline; its top padding adds no line height; the lever is a prose floor + block spacing)
+
+## [B10] - sheet-wide spacing: internal margins become padding, and question spacing is a default "we should remove margins from internal elements and instead use padding to space them" + 4B "the proper solution would be to add spacing between the questions" — a separate batch after [B9], with sign-off
+[1] `style.css` — `p`, `li`, `figure` and `.rows>div>…` margins → padding; the first/last-child rules restated; `--para-gap`; a visual pass over every track
+[2] 4B — a readable prose floor in the solver and a question-spacing rule (never top padding on `span.qnum`, which is inline); the exact floor needs sign-off
+
 ---
 
 
