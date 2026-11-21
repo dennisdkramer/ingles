@@ -867,11 +867,13 @@
      mistaken for feedback. The grain is the `grain` look's dot, at page scale and stronger, because at
      3px it is otherwise too faint to see. */
   .page-container{position:absolute;left:15px;width:1400px;margin:0;padding:0;
-    background-color:var(--paper);
-    background-image:radial-gradient(rgb(74 60 40/.065) 1px, transparent 1px);
-    background-size:3px 3px;
     border:2px solid var(--ink);border-radius:var(--r2);
     box-shadow:4px 4px 0 color-mix(in oklab,var(--ink) 12%,transparent)}
+  /* the paper + grain is a layer of its own, so a page can fade it in before its contents */
+  .page-container::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;
+    background-color:var(--paper);
+    background-image:radial-gradient(rgb(74 60 40/.065) 1px, transparent 1px);
+    background-size:3px 3px}
   /* the rounded grey frame belongs to the page body, inset from the ink edge — not to the 1200px column */
   .page-container::before{content:"";position:absolute;inset:6px;pointer-events:none;
     border:2px solid color-mix(in oklab,var(--ink-2) 50%,var(--paper));border-radius:14px}
@@ -903,28 +905,49 @@
      VARY none */
   .rows :is(img,svg[width="100%"]){display:block;max-width:100%;max-height:100%;
     width:auto;height:auto;object-fit:contain}
-  /* #41 LOAD — the veil over the whole page and the paper curtain over the content.
+  /* #41 LOAD — a 50% veil over the whole page; the page, the header and the content fade on their own.
      CALL html[data-eq]; USE a solver page; VARY none */
   html[data-eq]:not(.eq-ready) body::after{content:"";position:fixed;inset:0;z-index:99999;
-    background:rgb(0 0 0/.3);pointer-events:none;animation:eq-veil-fallback 1s 4s forwards}
+    background:#000;opacity:.5;pointer-events:none;animation:eq-veil-fallback 1s 4s forwards}
   html.eq-ready body::after{content:"";position:fixed;inset:0;z-index:99999;
-    background:rgb(0 0 0/.3);pointer-events:none;opacity:0;transition:opacity 1s linear}
+    background:#000;pointer-events:none;opacity:0;transition:opacity 1s linear}
   body.layout-on::after,body.editing::after{display:none!important}
-  html[data-eq]:not(.eq-ready) .content-area{visibility:hidden;
+  html[data-eq]:not(.eq-ready) .page-container{border-color:transparent;
+    box-shadow:4px 4px 0 transparent;animation:eq-page-fallback 0s 5s forwards}
+  html[data-eq]:not(.eq-ready) .page-container::after{opacity:0;animation:eq-paper-fallback 0s 5s forwards}
+  html[data-eq]:not(.eq-ready) .page-container::before{border-color:transparent;
+    animation:eq-frame-fallback 0s 5s forwards}
+  html[data-eq]:not(.eq-ready) .brand{opacity:0;animation:eq-head-fallback 0s 5s forwards}
+  html[data-eq]:not(.eq-ready) .content-area{opacity:0;visibility:hidden;
     animation:eq-content-fallback 0s 5s forwards}
-  html.eq-ready .content-area{visibility:visible}
-  html.eq-ready .content-area::after{content:"";position:absolute;left:0;right:0;top:-18rem;
-    height:calc(100% + 18rem);z-index:5;pointer-events:none;
-    background:linear-gradient(to bottom,transparent 0,var(--paper) 18rem);
-    animation:eq-wipe 1s linear .8s both}
-  body.layout-on .content-area,body.editing .content-area{visibility:visible!important;
+  html.eq-ready .page-container{border-color:var(--ink);
+    box-shadow:4px 4px 0 color-mix(in oklab,var(--ink) 12%,transparent);
+    transition:border-color 1s linear,box-shadow 1s linear}
+  html.eq-ready .page-container::after{opacity:1;transition:opacity 1s linear}
+  html.eq-ready .page-container::before{border-color:color-mix(in oklab,var(--ink-2) 50%,var(--paper));
+    transition:border-color 1s linear}
+  html.eq-ready .brand{opacity:1;transition:opacity 1s linear}
+  html.eq-ready .content-area{opacity:1;visibility:visible;
+    transition:opacity 1s linear .8s}
+  body.layout-on .brand,body.editing .brand,
+  body.layout-on .page-container::after,body.editing .page-container::after,
+  body.layout-on .content-area,body.editing .content-area{opacity:1!important;visibility:visible!important;
     animation:none!important}
-  body.layout-on .content-area::after,body.editing .content-area::after{display:none}
-  @keyframes eq-wipe{from{transform:translateY(0)}to{transform:translateY(100%)}}
+  body.layout-on .page-container,body.editing .page-container{border-color:var(--ink)!important;
+    box-shadow:4px 4px 0 color-mix(in oklab,var(--ink) 12%,transparent)!important}
+  body.layout-on .page-container::before,body.editing .page-container::before{
+    border-color:color-mix(in oklab,var(--ink-2) 50%,var(--paper))!important}
   @keyframes eq-veil-fallback{to{opacity:0}}
-  @keyframes eq-content-fallback{to{visibility:visible}}
+  @keyframes eq-page-fallback{to{border-color:var(--ink);
+    box-shadow:4px 4px 0 color-mix(in oklab,var(--ink) 12%,transparent)}}
+  @keyframes eq-paper-fallback{to{opacity:1}}
+  @keyframes eq-frame-fallback{to{border-color:color-mix(in oklab,var(--ink-2) 50%,var(--paper))}}
+  @keyframes eq-head-fallback{to{opacity:1}}
+  @keyframes eq-content-fallback{to{opacity:1;visibility:visible}}
   @media (prefers-reduced-motion:reduce){
-    html.eq-ready .content-area::after{animation-duration:0s;animation-delay:0s}}
+    html.eq-ready body::after,html.eq-ready .page-container,html.eq-ready .page-container::after,
+    html.eq-ready .page-container::before,html.eq-ready .brand,
+    html.eq-ready .content-area{transition:none}}
 
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
