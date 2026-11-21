@@ -986,7 +986,10 @@
     --accent-line:color-mix(in oklab, var(--accent) 42%, var(--line));
     background:var(--paper);border:1px solid var(--line);border-top:2px solid var(--accent);
     border-radius:var(--r2);box-shadow:2px 2px 0 var(--line-2),var(--shadow-1);
-    padding:12px 26px 26px;margin:0}
+    padding:12px 26px 26px;margin:0;
+    /* the block reports itself (data-state="done") by colour alone, so the frame fades into the report
+       and back out of it instead of snapping; both lists hold two shadows, so they interpolate */
+    transition:border-color .5s ease,box-shadow .5s ease}
   .game>:is(h3,h4):first-child{margin-top:0}
   /* text that sits directly in a frame keeps 3px at its sides, so a paragraph or a list never runs flush
      against the frame's inner edge; the vertical gap is the level's, in #44 FLOW */
@@ -1357,7 +1360,7 @@
 
 /* #81 REACTIVE — .block[data-reactive] style="--score:0-1"; .meter>i reads it. Engine writes the number only. Vary: --meter-h (length) */
 @layer state{
-  .block[data-reactive]{--score:0;transition:--score .55s ease,background .55s ease;
+  .block[data-reactive]{--score:0;transition:--score .55s ease,background .55s ease,border-color .5s ease,box-shadow .5s ease;
     background:color-mix(in oklab,var(--accent) calc(var(--score) * 16%),var(--paper))}
   .meter{height:var(--meter-h,8px);border-radius:99px;background:var(--sunken);
     overflow:hidden;margin:10px 0 4px}
@@ -1388,7 +1391,7 @@
   .block{animation:rise-in var(--dur,.45s) ease both}
 
   /* outline: hover rotates --grad 0-180deg */
-  .block[data-look="outline"]{--grad:0deg;transition:--grad 1s ease;
+  .block[data-look="outline"]{--grad:0deg;transition:--grad 1s ease,border-color .5s ease,box-shadow .5s ease;
     background-image:linear-gradient(var(--grad),
       color-mix(in oklab,var(--accent) 15%,transparent),transparent 62%)}
   .block[data-look="outline"]:hover{--grad:180deg}
