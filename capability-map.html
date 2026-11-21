@@ -22,7 +22,7 @@
 <h3>Arrange it, and give it a look</h3>
 <div class="rows">
 <div>
-<p><b>A section's content goes into one <code>.rows</code>, and that is the default.</b> A row is one line, and its direct children are its cells: <b>each cell is one item, or two that stack inside it</b>. A cell starts as an equal share of its line — <code>flex:1;min-width:0</code> — so two cells are two halves and three are three thirds before the page loads; <code>equalize.js</code> then sizes the line to its content: a table takes the width of its widest row, a drawing its own width, and prose trades width for height. Every cell is the line's height. Two cells a line by default, three or four when the items are thin, and a fifth item is a second <code>.rows</code> — a row never wraps. <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. No width is written on a cell: an authored <code>flex</code> or <code>width</code> is stale and the solver overwrites it.</p>
+<p><b>A section's content is arranged however its teaching needs it.</b> A row is one line, and its direct children are its cells; a cell holds as many items as its content needs — one, two or several — and its share of the line is settled by that content against the cells beside it when the page loads. A section can hold as many rows as it asks for, or none: a block, a chart or a paragraph can stand directly in it. <code>.row</code> is only the utility for a line of chips or buttons — never a layout row.</p>
 </div>
 <div>
 <p class="dim"><b>Every element below is drawn with the markup that builds it, and the drawing is the default</b>: what the element contains, what text it carries, where that text sits, and whether it carries a title at all. Its item count is the example's own, never a count to copy. A chart takes no title of its own — the sentence beside it names it.</p>
@@ -629,21 +629,21 @@ next();
 <div class="rows">
 <div id="chunks" data-activity="chunks">
   <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px"><span class="qnum" style="margin-right:-10px">1.</span>
-    <span><b style="font-size:.8em">1</b> she</span>
+    <span><b style="font-size:.8em">1</b> never</span>
     <span><b style="font-size:.8em">2</b> that</span>
-    <span><b style="font-size:.8em">3</b> anyone</span>
-    <span><b style="font-size:.8em">4</b> has</span>
-    <span><b style="font-size:.8em">5</b> told</span>
-    <span><b style="font-size:.8em">6</b> never</span>
+    <span><b style="font-size:.8em">3</b> has</span>
+    <span><b style="font-size:.8em">4</b> anyone</span>
+    <span><b style="font-size:.8em">5</b> she</span>
+    <span><b style="font-size:.8em">6</b> told</span>
   </p>
   <p style="text-align:center;margin-top:6px"><input class="gap" style="--gap-w:100%"></p>
   <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px"><span class="qnum" style="margin-right:-10px">2.</span>
-    <span><b style="font-size:.8em">1</b> he</span>
-    <span><b style="font-size:.8em">2</b> when</span>
-    <span><b style="font-size:.8em">3</b> already</span>
-    <span><b style="font-size:.8em">4</b> had</span>
-    <span><b style="font-size:.8em">5</b> left</span>
-    <span><b style="font-size:.8em">6</b> I got there</span>
+    <span><b style="font-size:.8em">1</b> when</span>
+    <span><b style="font-size:.8em">2</b> I got there</span>
+    <span><b style="font-size:.8em">3</b> he</span>
+    <span><b style="font-size:.8em">4</b> already</span>
+    <span><b style="font-size:.8em">5</b> had</span>
+    <span><b style="font-size:.8em">6</b> left</span>
   </p>
   <p style="text-align:center;margin-top:6px"><input class="gap" style="--gap-w:100%"></p>
 <div id="correction" data-activity="correction" style="padding-top:26px">
@@ -702,7 +702,7 @@ next();
 </div>
 <div class="block" data-look="stripes" id="matching" data-activity="matching">
 <h3>Matching</h3>
-<p>Write the letter of the meaning beside each phrase. One letter is left over.</p>
+<p>Write the letter of the meaning beside each phrase. One letter is left over. The phrases are in no order.</p>
 <div class="rows">
 <div>
 <figure class="chartwrap">
@@ -912,6 +912,8 @@ next();
 
 &lt;!-- the pool of letters is visible beside the items, and that shared pool is what makes it matching --&gt;
 &lt;!-- one meaning more than there are items, so the last answer cannot be reached by elimination --&gt;
+&lt;!-- the phrases are in a full shuffle: no row's letter is the meaning at that row's place in the pool,
+     and one swapped pair is not a shuffle — the whole order is re-dealt --&gt;
 &lt;!-- each .gap keys the letter it expects; engine2 marks them on Complete --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #correction · one word wrong</summary><div class="body"><div>
@@ -946,7 +948,7 @@ next();
 <pre>&lt;p&gt;Unscramble the sentences:&lt;/p&gt;
 &lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
    justify-content:center;align-items:center;padding-top:4px"&gt;&lt;span class="qnum" style="margin-right:-10px"&gt;1.&lt;/span&gt;
-  &lt;span&gt;&lt;b style="font-size:.8em"&gt;1&lt;/b&gt; she&lt;/span&gt;
+  &lt;span&gt;&lt;b style="font-size:.8em"&gt;1&lt;/b&gt; never&lt;/span&gt;
   &lt;span&gt;&lt;b style="font-size:.8em"&gt;2&lt;/b&gt; that&lt;/span&gt;
   …
 &lt;/p&gt;
@@ -956,6 +958,8 @@ next();
      another vertically as here, side by side in a .rows of their own, or mixed with the prose, the chart
      or the strip they are read with. --&gt;
 &lt;!-- every activity carries its instruction line in the block: this one is the line above the chips --&gt;
+&lt;!-- the chips are in a full shuffle: no chip sits at its own place in the sentence, and one moved chip
+     is not a shuffle — the whole order is re-dealt. the number is the display order, never the answer --&gt;
 &lt;!-- the number sits at the head of the words, on their line — never alone on the answer line --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #stripgaps · the strip as an activity</summary><div class="body"><div>

@@ -105,4 +105,12 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 
 
 
+## [B15] - a full shuffle for matching and unscramble, and section 1 told straight "matching answers and unscramble words MUST be scrambled/randomized. one item being switched is insufficient, they need to be completely shuffled" + "rewrite section 1 ... a sections content does not HAVE TO go into a row ... a cell doesnt have to be one or two items ... no width is written on the cell is the ONLY part that is true" — the rule wherever it belongs, the map's own examples, and every authored item deranged
+[1] ✔ `capability-map.html` section 1 — the first paragraph rewritten: a section's content is arranged by what it teaches; a row is a line whose children are its cells; a cell holds whatever its content needs and its share is settled against its neighbours; any number of rows, or none; the false width/table/equalize claims and the "one row, one or two items" prescriptions gone
+[2] ✔ `capability-map.html` — the `#matching` and `#chunks` markup blocks state the rule; the `#chunks` specimen's chips re-dealt (never, that, has, anyone, she, told / when, I got there, he, already, had, left), the `#matching` specimen checked (already deranged) and its instruction now says the phrases are in no order
+[3] ✔ `PEDAGOGY-MAP.md` — the authoring rule beside the multiple-choice shuffle: a matching's rows and an unscramble's chips are fully shuffled, never the answer order with one item moved
+[4] ✔ 21 matchings in 18 files and 29 chunk sentences in 12 files (all business) — the phrase/answer pairs moved across the numbered rows (the numbers stay put on the page's sequence), the chips re-dealt and renumbered in display order; every order is a derangement and no deal is the old order or a disguised ascending run; the two 3-chip sets (whose only derangements are the two rotations) allowed their rotation
+[5] ✔ verify — `--verify` re-reads every block: 0 in place, 0 unsegmented; the case-duplicate words ("The"/"the") are matched case-exact first, so a lowercase chip is never credited with the capital's position; `qa/check` business 2, 10, 13, 16, 19, 20 pass; `mapcheck`, `cmcheck`, `batchcheck`, `qa:liquid`, `build:check` pass; commit, push
+
+
 

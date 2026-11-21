@@ -91,6 +91,7 @@ Withheld — nothing outside this list is an input: not `style.css`, not `HANDOF
 - Every (new word/form/concept) the student must understand is presented before it is used; if a block wants the student to *infer*, the page says so. 
 - Teach the rule, the reasoning (the mental model), and its direct consequences.
 - Multiple-choice options are shuffled so the right one is not always in the same slot. No copy-exercises: the student produces from memory or meaning,
+- **A matching and an unscramble are dealt in a full shuffle.** In a matching, no row's letter is the meaning at that row's place in the pool; in an unscramble, no chip (word or phrase) sits at its own place in the sentence. Moving one item is not a shuffle — the whole order is re-dealt, so the answer is the only order the items are not in. The number on a chip is the display order, never the answer's order.
 - **An item never asks for a judgement on an axis the page has not defined before the item**, and no invented terminology is used to name or classify a form: a term the student has not met is taught before it is used, and a term nobody outside a textbook uses is not used at all.
 - **The options of an item match the lesson in concept and the level in length and linguistic complexity**: a one-word answer is not offered beside three-word distractors, and a distractor is wrong for a reason the page has already covered — never because it is absurd, foreign to the scene or obviously the odd one out.
 ## [COVERAGE] — the roadmap section is a floor, not a summary
