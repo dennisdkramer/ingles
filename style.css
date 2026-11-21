@@ -897,7 +897,6 @@
   .content-area>*[data-rows="3"]{grid-row:span 3}
   /* #41 ROW — one flex line, and its cells are equal shares. Vary: --flex-gap (length) */
   .rows>*,.cols>*{flex:1;min-width:0;display:flex;flex-direction:column}
-  .rows>*>:only-child,.cols>*>:only-child{flex:1 1 auto;min-height:0}
   .rows,.cols{display:flex;gap:var(--flex-gap,26px);align-items:stretch}
   .rows{flex-direction:row;flex-wrap:nowrap;padding-top:20px}
   .cols{flex-wrap:wrap;padding-top:8px}
@@ -1511,7 +1510,7 @@
   .complete-btn.is-done{background:#0f766e;box-shadow:3px 3px 0 var(--tan)}
   .loadwrap{display:flex;align-items:center;justify-content:center;grid-column:1/-1;
     width:100%;padding:46px 0}
-  .chart{border-collapse:collapse;width:fit-content;max-width:100%;margin:14px 0;background:var(--paper);
+  .chart{border-collapse:collapse;width:100%;max-width:100%;margin:14px 0;background:var(--paper);
     border:0;border-radius:3px;overflow:hidden;translate:0 3px;
     box-shadow:0 0 0 2px color-mix(in oklab,var(--ink-2) 72%,var(--paper)),
       -3px 3px 8px -2px color-mix(in oklab,var(--ink-2) 55%,transparent)}
@@ -1532,7 +1531,7 @@
     background:color-mix(in srgb,var(--tan) 26%,var(--paper))}
   /* a line naming what the chart is: outside the chart, above its collapsed row. The wrapper hugs the table
      so the line is centred on the chart rather than on the column it happens to sit in */
-  .chartwrap{width:fit-content;max-width:100%;margin:0}
+  .chartwrap{width:100%;max-width:100%;margin:0}
   /* a chart that sits in a cell beside another element, or under other content, is centred in that cell:
      it never hugs one edge with the slack piled on the other. A chart standing as its own frame is not
      affected — it is the cell, so it has nothing to centre within */

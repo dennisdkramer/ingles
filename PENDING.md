@@ -22,7 +22,9 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 [3] ✔ `PEDAGOGY-MAP.md` — [2] "a cell never drops below a quarter of the page" and [1b] "widths are floors or exact halves" restated: cells are equal shares, an inline flex is the only repair
 [4] ✔ `capability-map.html` — the row paragraph and its "mixed row always needs the repair" sentence state the equal-share model
 [5] ✔ `business/lesson11-20` — the twenty inline `flex:0 0 calc(50% - 13px)` halves from the previous batch removed; the root model governs
-[6] verify (`qa:rowctx`, `qa:rowctx --self-test`, `qa:check`, `mapcheck`, `batchcheck`, `cmcheck`, `build:check`), commit, push
+[6] ✔ uniformity — the `>:only-child{flex:1 1 auto}` line removed, so no child of a cell carries a flex of its own; and the two width huggers went too: `.chart{width:100%}` and `.chartwrap{width:100%}`, so a chart fills its cell like any prose
+[7] ✔ `business/lesson19-People-in-a-building.html` — the five hand-written `flex:0 0 auto` cells removed; the page has 18 rows and 0 cells carrying an inline style
+[8] verify (`qa:rowctx`, `qa:rowctx --self-test`, `qa:check`, `mapcheck`, `batchcheck`, `cmcheck`, `build:check`), commit, push
 
 # PAST BATCHES
 ## [B1] - the answer pill a second field loses, and a home for what a build teaches "integrate learned info into guidance ... add a block near the bottom of capability map thats like 'Learned during Build generation' and wire up part of the generation process to add and update notes there" — one pill per control, a map section of definitive items, and the loop step that maintains it
