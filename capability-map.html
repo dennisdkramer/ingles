@@ -868,8 +868,15 @@ next();
       &lt;span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px"&gt;1.&lt;/span&gt;
       Three times. I &lt;input class="gap" data-answer="have|'ve" style="--gap-w:4em"&gt; already posted it.&lt;/span&gt;&lt;/li&gt;
 
-&lt;!-- the number sits outside the bubble, to its left: the .say is position:relative and the number is
-     absolute at right:100% — a turn on the right of the dialog numbers the same way --&gt;</pre>
+&lt;li&gt;&lt;span class="who"&gt;Jess&lt;/span&gt;
+    &lt;span class="say" style="position:relative"&gt;
+      &lt;span class="qnum" style="position:absolute;left:calc(100% + 8px);top:2px"&gt;2.&lt;/span&gt;
+      Not yet — I need &lt;input class="gap" data-answer="two days" style="--gap-w:5em"&gt; to read it.&lt;/span&gt;&lt;/li&gt;
+
+&lt;!-- the number sits outside the bubble, on the side that faces the middle of the dialog: the .say is
+     position:relative and the number is absolute at right:calc(100% + 8px) on a turn of the RIGHT-hand
+     speaker, and at left:calc(100% + 8px) on a turn of the LEFT-hand speaker. On a left-hand bubble a
+     number at right:100% hangs outside the dialog's own edge --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #chartanswer · a chart whose rows are answered</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes"&gt;

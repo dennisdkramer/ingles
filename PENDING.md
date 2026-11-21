@@ -1,6 +1,7 @@
 # [HANDLING]
 Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 `## [Bn] - <the overarching thing getting done> <The user's words that guide this task compressed to 1 sentence> <artifact produced>`
+A batch and its steps must be removed from this file when all of the batch's steps are completed. Any batch or step which is stale must be deleted.
 ---
 
 # [CURRENT]
@@ -136,5 +137,12 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 [3] ✔ `style.css` — `.chart tr.bare th` keeps `opacity:1`, so a collapsed row is the full 3px rule and not the header's 80%
 [4] ✔ 33 business headers collapsed (lesson4 2, lesson6 2, lesson11 3, lesson13 4, lesson14 1, lesson15 4, lesson16 2, lesson17 2, lesson18 4, lesson19 4, lesson20 5); 35 kept because a header names a contrast/category the lesson teaches (Written/Said, Now/Past, Around now/In general, Which one?, Where it sits, Both orders work/Or only one, With the doer/Without it, Strength/Where it comes from, Rung/Who it is for, Portuguese/English and the conjugation tables)
 [5] ✔ verify — the sweep re-read every business thead: 35 left, all informative; `mapcheck` clean (existing kids warning), `cmcheck` OK, `batchcheck` passes, `qa:liquid` clean, `qa:check` business 13/17/20 pass (11 fails on its pre-existing "30 answer controls resolve no anchor"), `build:check` clean, commit, push
+
+
+## [B20] - a dialog turn's number sits on the side that faces the middle of the dialog "dialog items which are on the left side of the dialog that have gap inputs need to have their qnum moved to the right size of the dialog bubble"
+[1] ✔ 33 left-hand turns across 18 pages — the qnum's authored `right:calc(100% + 8px)` became `left:calc(100% + 8px)`, so the number sits outside the bubble's right edge instead of hanging off the dialog's own left edge; the 42 right-hand turns keep `right:calc(100% + 8px)`
+[2] ✔ `capability-map.html` — the `#dialoggap` markup box shows both turns (right speaker `right:calc(100% + 8px)`, left speaker `left:calc(100% + 8px)`) and says why; the specimen keeps the right-hand case
+[3] ✔ `PEDAGOGY-MAP.md:58` — the rule: the number sits outside the bubble on the side facing the dialog's middle
+[4] ✔ verify — a read-only sweep of every `data-mode="turns"` dialog: odd+gap 33 → 0 left on the old side, 42 right turns unchanged; `cmcheck` OK, `mapcheck` clean, `batchcheck` passes, `qa:liquid` clean, `qa:check` business 12/16 pass, `build:check` clean, commit, push
 
 
