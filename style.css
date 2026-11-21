@@ -218,8 +218,10 @@
 /* #91 GLOSS — <button class="glossbtn" popovertarget="ID">word</button> + <div class="defcard" popover id="ID">…</div>.
      USE: a new word, or a PT literal that is not its meaning or its use. One id per card. Vary: none */
 @layer rx{
-  .glossbtn{background:none;border:0;padding:0 1px;font:inherit;color:var(--accent);cursor:pointer;
-    border-bottom:1.5px dashed var(--accent-line)}
+  /* the padding is the word's own room: 4px each side so the underline clears the first and last letter by
+     six pixels over the word, and the dashed rule under it is held at 40% so it reads as a hint, not a link */
+  .glossbtn{background:none;border:0;padding:0 4px;font:inherit;color:var(--accent);cursor:pointer;
+    border-bottom:1.5px dashed color-mix(in oklab,var(--accent-line) 40%,transparent)}
   .glossbtn:hover{border-bottom-style:solid}
   /* a popover's invoker IS its implicit anchor, so position-area needs no per-card id or script;
      flip-block keeps a word near the page's foot readable */
