@@ -218,11 +218,12 @@
 /* #91 GLOSS — <button class="glossbtn" popovertarget="ID">word</button> + <div class="defcard" popover id="ID">…</div>.
      USE: a new word, or a PT literal that is not its meaning or its use. One id per card. Vary: none */
 @layer rx{
-  /* the padding is the word's own room: 4px each side so the underline clears the first and last letter by
-     six pixels over the word, and the dashed rule under it is held at 40% so it reads as a hint, not a link */
-  .glossbtn{background:none;border:0;padding:0 4px;font:inherit;color:var(--accent);cursor:pointer;
-    border-bottom:1.5px dashed color-mix(in oklab,var(--accent-line) 40%,transparent)}
-  .glossbtn:hover{border-bottom-style:solid}
+  /* the button carries its own edge: a 1px box at 40% so it reads as a hint, not a link, and the word keeps
+     its room inside it (the padding is the word's, the border is the button's) */
+  .glossbtn{background:none;padding:0 6px;font:inherit;color:var(--accent);cursor:pointer;
+    border:1px solid color-mix(in oklab,var(--accent-line) 40%,transparent)}
+  /* the button's edge is already solid, so the old hover that straightened the dashes has nothing left to do */
+  .glossbtn:hover{color:var(--ink)}
   /* a popover's invoker IS its implicit anchor, so position-area needs no per-card id or script;
      flip-block keeps a word near the page's foot readable */
   .defcard{position:fixed;inset:auto;margin:0 0 7px;width:max-content;max-width:min(320px,80vw);
