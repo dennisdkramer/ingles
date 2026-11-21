@@ -895,73 +895,12 @@
   .content-area>*[data-span="9"]{grid-column:span 9}
   .content-area>*[data-rows="2"]{grid-row:span 2}
   .content-area>*[data-rows="3"]{grid-row:span 3}
-  /* parallel items inside one block: one flex row, evenly spaced, never a second grid.
-     Its gap is wider than the grid's, and the row carries its own opening space above and below. */
-  .cols{display:flex;gap:var(--flex-gap,26px);align-items:flex-start;flex-wrap:wrap;
-        padding-top:8px}
-  .cols>*{flex:1 1 var(--cw,220px);min-width:0}
-  /* a row is one line, and its direct children are its cells.
-     >>> THE DEFAULT. FINAL. DO NOT CHANGE THESE VALUES.
-         `.rows>*{flex:1 1 auto; min-width:…}` — grow 1, shrink 1, basis auto:
-           · the row FILLS: free width is shared out, so the cells expand to the line;
-           · the cells COLLAPSE when the line is short — each shrinks in proportion to what it holds;
-           · a cell with more text TAKES MORE WIDTH and a cell with less takes less, because the basis is
-             the content's own size; that is what evens the columns up. Heights are NOT forced equal and
-             nothing here tries to force them;
-           · a cell holding only text stops at the GLOBAL MINIMUM WIDTH below and can never collapse past
-             it.
-         The owner has stated this four times on 2026-11-20. It has been broken twice that session by
-         "fixing" it to one of its two false readings, and BOTH ARE WRONG:
-           · `flex:1 1 0` — equal shares: text is ignored, a heavy cell and a thin one are the same width,
-             and the columns pull apart instead of evening up.
-           · `flex:0 0 auto` — content width only: the row never fills its container and leaves a gap.
-         Never change this line. A page that wants a different proportion writes an inline flex on THAT
-         cell (the layout editor's panel does exactly that, and marks the cell red) — never this rule.
-         WHAT "PROPORTIONAL" LOOKS LIKE, so it is not read as a bug: with prose in both cells the bases
-         are both very wide (a paragraph's max-content is the whole paragraph on one line), so the two
-         cells land NEAR EQUAL with a drift toward the text-heavy one — e.g. 598px and 442px. A visibly
-         narrow short column is NOT what this rule produces; that needs widths measured against heights,
-         which no flex value can express.
-     THE TWO EXCEPTIONS, and they are the only two: a cell whose whole content is one chart (.chartwrap or
-     table.chart alone) keeps the width its contents need (:has rule below), and a cell the page itself
-     pins with an inline width. A drawing inside a cell is capped with --map-w; that caps the drawing, not
-     the cell, so it is not a third exception. No cell goes below a QUARTER OF THE PAGE — not a quarter of
-     its row — so a row inside a narrow block holds fewer cells and nothing is squeezed past reading.
-     NOTHING WRAPS — a fifth item is a second `.rows`, never a second line inside this one.
-     >>> THE PANEL ITSELF. DO NOT CHANGE THESE VALUES EITHER. A `.rows` is a cell when it sits inside
-         another `.rows` or inside `.cols`, and then it is a FLEX ITEM and needs the same three values
-         spelled for a container: `flex:1 0 auto` — it GROWS to fill the line it was given, it does NOT
-         SHRINK, and it does not sit at its own content width (grow takes it to the line). Before this was
-         stated, a nested row stayed at its content width and its own cells had nothing to share out, so
-         every width in it looked wrong.
-     >>> BOTH RULES COVER EVERY CONTEXT, BY SELECTOR, NOT BY LUCK. A row is the same row whether it sits
-         straight in the page grid, in a `<section>`, inside a `.block`, inside a `.cols`, or inside
-         another row — so both rules below name each of those contexts. That is not decoration: the
-         competing rules are `.content-area>*` (the page grid), `.cols>*` (which gives its children
-         `flex:1 1 var(--cw,220px)` — a shrinking 220px basis, the wrong values for a row), and the cell
-         rule itself, which turns a nested row into a column. Every selector in the two lists below is at
-         least as specific as those, so no context can win. A row added in a context nobody listed here
-         would be the only way to break this — add the context to the list, never a bare `.rows` rule.
-         `qa:rowctx` proves the list wins in all five contexts. */
-  .content-area{container-type:inline-size}
-  /* THE CELL: grow 1, shrink 1, basis auto, floored at a quarter of the page. The column direction is
-     what stacks the items a cell holds (a paragraph, then its .dim line, then a figure) — a cell is a
-     small column, and only the ROW below is a line. */
-  .rows>*,.rows .rows>*,.block .rows>*,.cols>.rows>*,.content-area>.rows>*,.content-area>section>.rows>*{
-    display:flex;flex-direction:column;flex:1 1 auto;
-    min-width:calc(25% - 20px);min-width:calc(25cqw - 34px)}   /* the second wins where cqw is supported */
-  /* a dialog, a player or a comic takes the row's height; the map does not — its frame is drawn on the
-     drawing, so it keeps the drawing's own 3:2 box and the cell around it holds the rest */
-  .rows>*>:is(.viz,figure.vz-play):not(.vz-map){flex:1 1 auto;min-height:0}
-  /* a chart is its own width: it takes the width its contents need and never collapses into a narrower
-     cell, which would wrap every line inside it. So a cell whose whole content is one chart stops being a
-     flex share and takes its content's width, and the neighbour beside it fills the rest of the row */
-  .rows>div:has(>.chartwrap:only-child),
-  .rows>div:has(>table.chart:only-child){flex:0 0 auto}
-  /* THE PANEL: grow 1, shrink 0, and row direction — in every context, including inside another row */
-  .rows,.rows .rows,.block .rows,.cols>.rows,.content-area>.rows,.content-area>section>.rows{
-    display:flex;flex-direction:row;flex-wrap:nowrap;flex:1 0 auto;
-    gap:var(--flex-gap,26px);align-items:stretch;padding-top:20px}
+  /* #41 ROW — one flex line, and its cells are equal shares. Vary: --flex-gap (length) */
+  .rows>*,.cols>*{flex:1;min-width:0;display:flex;flex-direction:column}
+  .rows>*>:only-child,.cols>*>:only-child{flex:1 1 auto;min-height:0}
+  .rows,.cols{display:flex;gap:var(--flex-gap,26px);align-items:stretch}
+  .rows{flex-direction:row;flex-wrap:nowrap;padding-top:20px}
+  .cols{flex-wrap:wrap;padding-top:8px}
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
   .content-area>h2{margin-block:var(--section-gap,34px) 0}

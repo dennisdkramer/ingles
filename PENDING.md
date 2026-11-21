@@ -16,6 +16,14 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 [9] verify (jsdom drags, inspector, save, `node --check`, `qa:liquid`, `qa:check`, `mapcheck`, `batchcheck`, `build:check`), commit, push
 ---
 
+## [B4] - the row is one flex line of equal cells, and the sheet stops explaining itself "ignore my prior guidance not to change that part of the css, remove all the guidance, every style in the .css that relates to rows, flexbox, stretch, alignment - set it back to the default, then apply the style that i just suggested at the root" — the row/cell machinery and its comment block deleted, three root rules in their place, the guard and the docs restated to match
+[1] ✔ `style.css` — lines 898–964 gone (`.cols` flex pair, the 43-line "DO NOT CHANGE" block, the quarter-of-the-page cell floor, the `.viz`/`.vz-map` stretch exception, the `:has(.chartwrap)` chart exception, the six-selector panel rule, `container-type:inline-size`); in their place `.rows>*,.cols>*{flex:1;min-width:0;display:flex;flex-direction:column}` then `.rows,.cols{display:flex;gap;align-items:stretch}` — cells equal, order puts the container last so a nested row is a row
+[2] ✔ `qa/rowctx.mjs` — `WANT` becomes the new row values, the cell must resolve `flex:1`, `min-width:0`, the chart-cell and quarter-floor assertions removed, and the self-test plants `.rows>*{flex:1 1 auto}` to prove a stale rule is caught
+[3] ✔ `PEDAGOGY-MAP.md` — [2] "a cell never drops below a quarter of the page" and [1b] "widths are floors or exact halves" restated: cells are equal shares, an inline flex is the only repair
+[4] ✔ `capability-map.html` — the row paragraph and its "mixed row always needs the repair" sentence state the equal-share model
+[5] ✔ `business/lesson11-20` — the twenty inline `flex:0 0 calc(50% - 13px)` halves from the previous batch removed; the root model governs
+[6] verify (`qa:rowctx`, `qa:rowctx --self-test`, `qa:check`, `mapcheck`, `batchcheck`, `cmcheck`, `build:check`), commit, push
+
 # PAST BATCHES
 ## [B1] - the answer pill a second field loses, and a home for what a build teaches "integrate learned info into guidance ... add a block near the bottom of capability map thats like 'Learned during Build generation' and wire up part of the generation process to add and update notes there" — one pill per control, a map section of definitive items, and the loop step that maintains it
 [1] engine2.js — `applyCompleted` gives each control its own `.ans` pill, so a cell with two fields shows two answers (7c1)

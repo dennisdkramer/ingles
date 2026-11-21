@@ -128,13 +128,14 @@ const CONTEXTS = [
   ['cols', '<div class="content-area"><div class="cols"><div class="rows" id="row"><div class="a"></div><div class="b"></div></div></div></div>'],
   ['inside a row', '<div class="content-area"><div class="rows"><div class="rows" id="row"><div class="a"></div><div class="b"></div></div></div></div>']
 ];
-const WANT = { 'flex-direction': 'row', 'flex-wrap': 'nowrap', flex: '1 0 auto' };
+const WANT = { display: 'flex', 'flex-direction': 'row', 'flex-wrap': 'nowrap' };
+const CELL = { flex: '1', 'min-width': '0', 'flex-direction': 'column' };
 const norm = v => String(v == null ? '' : v).replace(/\s+/g, ' ').trim().toLowerCase();
 
 let bad = 0;
 const SELF = process.argv.includes('--self-test');
-if (SELF) rules.push({ sel: '.cols>.rows', decls: { flex: '1 1 var(--cw,220px)' }, layer: 'layout', inMedia: false, order: rules.length });
-console.log('rowctx - the row and cell rules in every context' + (SELF ? '  [self-test: a stale rule is planted]' : '') + '\n');
+if (SELF) rules.push({ sel: '.rows>*', decls: { flex: '1 1 auto' }, layer: 'layout', inMedia: false, order: rules.length });
+console.log('rowctx - the row and cell rules in every context' + (SELF ? '  [self-test: a stale cell rule is planted]' : '') + '\n');
 console.log('  rules read:', rules.length, '| layers:', layerOrder.length, '\n');
 for (const [name, html] of CONTEXTS) {
   const dom = new JSDOM('<div>' + html + '</div>');
@@ -146,11 +147,11 @@ for (const [name, html] of CONTEXTS) {
     if (!ok) bad++;
     out.push(prop + (ok ? ' ok' : ' FAIL ' + (got ? got.val : '(none)') + ' want ' + want));
   }
-  const cf = winner(cell, 'flex'), cfOk = !!cf && norm(cf.val) === '1 1 auto';
-  if (!cfOk) bad++;
-  out.push('cell flex ' + (cfOk ? 'ok' : 'FAIL ' + (cf ? cf.val : '(none)')));
-  const mw = winner(cell, 'min-width');
-  out.push('min-width ' + (mw ? norm(mw.val) : '(none)'));
+  for (const [prop, want] of Object.entries(CELL)) {
+    const got = winner(cell, prop), ok = !!got && norm(got.val) === want;
+    if (!ok) bad++;
+    out.push('cell ' + prop + (ok ? ' ok' : ' FAIL ' + (got ? got.val : '(none)') + ' want ' + want));
+  }
   console.log('  ' + (name + ':').padEnd(15) + out.join(' | '));
   dom.window.close();
 }
@@ -158,19 +159,12 @@ for (const [name, html] of CONTEXTS) {
 try {
   const dom = new JSDOM('<div class="content-area"><div class="block"><div class="rows"><div id="c"><figure class="chartwrap"></figure></div></div></div></div>');
   const got = winner(dom.window.document.getElementById('c'), 'flex');
-  const ok = !!got && norm(got.val) === '0 0 auto';
+  const ok = !!got && norm(got.val) === '1';
   if (!ok) bad++;
-  console.log('  ' + 'chart cell:'.padEnd(15) + 'flex ' + (ok ? 'ok 0 0 auto' : 'FAIL ' + (got ? got.val : '(none)')));
+  console.log('  ' + 'chart cell:'.padEnd(15) + 'flex ' + (ok ? 'ok 1 (no exception)' : 'FAIL ' + (got ? got.val : '(none)')));
   dom.window.close();
 } catch (e) {
   console.log('  chart cell:    not exercised (:has unsupported here)');
-}
-
-{
-  const dom = new JSDOM(CONTEXTS[0][1]);
-  const got = winner(dom.window.document.querySelector('#row > .a'), 'flex-direction');
-  console.log('  ' + 'cell direction:'.padEnd(15) + (got ? got.val : '(none)') + ' (column: a cell stacks what it holds)');
-  dom.window.close();
 }
 
 console.log('\n' + (bad ? 'RESULT: ' + bad + ' check(s) do not resolve to the row rules' : 'RESULT: every context resolves to the row rules'));
