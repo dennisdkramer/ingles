@@ -1119,7 +1119,9 @@
   .pair-stack .side>p{margin:0;font-size:1rem}
 }
 
-/* #60 GAP — <input class="gap" data-answer="a|b"> inside a sentence; data-answer is the key, unset = no key. Vary: --gap-w (length, 9em) */
+/* #60 GAP — <input class="gap" data-answer="a|b"> inside a sentence; data-answer is the key, unset = no key.
+   Vary: --gap-w — 1.3× the longest accepted answer (the field's own padding included), in em; never 100%,
+   never calc(), because a field as wide as its block stops showing its answer and drops onto its own line */
 @layer control{
   .gap{display:inline-block;width:var(--gap-w,9em);max-width:100%;border:0;
     border-bottom:2px solid var(--accent-line);border-radius:0;

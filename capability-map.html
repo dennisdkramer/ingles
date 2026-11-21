@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Capability map — English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=e8044e2a82">
+<link rel="stylesheet" href="style.css?v=1396e87b49">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>VISUAL REFERENCE</span></h1>
@@ -600,14 +600,14 @@ next();
 <div class="block" data-look="stripes">
 <h3>Marked activities with controls</h3>
 <p>An activity is a block the student writes in, and it carries its own instruction in the block. <b>An activity is a unit the student completes — never a control on its own.</b> The four controls — a gap, a radio, a checkbox, a written field — are the parts an activity is built from and are chosen by what the student must do; they are not activities themselves. <b>A keyed gap is preferentially carried inside one of the forms below</b> — a dialog turn, a chart row to answer, a strip under its panel, a line to translate, a sentence to correct, a line to write from what they hear — and a lone gap is only ever a component beside other teaching in a block, never an activity in its own right. The rows below hold the forms: numbered chunks, a chart whose cells are answered, and under the chunks a correction and a dictation — the last two for no beginner, and the sentence they ask for always tuned to the lesson's level. The two blocks after this one, side by side, are four options to pick one from and a matching pool. The last block in the section is fill-in-the-blank: a line the student completes — typed into a gap, or picked from three or four options that fill the same blank. <b>Every item the student answers is numbered</b> — <code>&lt;span class="qnum"&gt;1.&lt;/span&gt;</code> beside the control it numbers, and the count runs through the activity block, so another activity starts again at 1 — so a teacher can name the item they mean.</p>
-<p class="dim"><code>data-answer</code> keys a gap, <code>|</code> separating alternatives; <code>--gap-w</code> is the width the answer needs. A radio group's key is <code>data-a</code> on <code>.qitem</code>; engine2.js marks the right option and writes <code>.ans</code> beside a typed field.</p>
+<p class="dim"><code>data-answer</code> keys a gap, <code>|</code> separating alternatives; <b><code>--gap-w</code> is 1.3× the width of the longest accepted answer</b>, the field's own padding included, written in <code>em</code> — a gap with no key takes 1.3× the prompt written beside it, or <code>9em</code>. Never <code>100%</code> and never <code>calc()</code>: a field as wide as its block has stopped showing its answer, and on its own line it stops being a gap. A radio group's key is <code>data-a</code> on <code>.qitem</code>; engine2.js marks the right option and writes <code>.ans</code> beside a typed field.</p>
 <p>Each of these can stand as a block of its own or sit inside a block with the prose, the chart or the drawing it accompanies; every row below is the in-block size.</p>
 
 <div class="rows">
 <div id="dialoggap" data-activity="dialoggap">
 <ol class="seq viz" data-mode="turns">
 <li data-side="left"><span class="who">Jess</span><span class="say">Did you post the letter?</span></li>
-<li data-side="right"><span class="who">Mike</span><span class="say" style="position:relative"><span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px">1.</span>Three times. I <input class="gap" data-answer="have|'ve" style="--gap-w:4em"> already posted it.</span></li>
+<li data-side="right"><span class="who">Mike</span><span class="say" style="position:relative"><span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px">1.</span>Three times. I <input class="gap" data-answer="have|'ve" style="--gap-w:3.5em"> already posted it.</span></li>
 </ol>
 </div>
 <div id="chartanswer" data-activity="chartanswer">
@@ -626,7 +626,7 @@ next();
 <label class="opt"><input type="checkbox"><span>event</span></label>
 </div></td></tr>
 <tr><td>7:10</td><td>Nobody had told the office.</td>
-<td><span class="qnum">3.</span> <input class="gap" data-answer="past perfect" style="--gap-w:8em"></td></tr>
+<td><span class="qnum">3.</span> <input class="gap" data-answer="past perfect" style="--gap-w:8.3em"></td></tr>
 </tbody></table>
 </figure>
 </div>
@@ -642,7 +642,7 @@ next();
     <span><b style="font-size:.8em">5</b> she</span>
     <span><b style="font-size:.8em">6</b> told</span>
   </p>
-  <p style="text-align:center;margin-top:6px"><input class="gap" style="--gap-w:100%"></p>
+  <p style="text-align:center;margin-top:6px"><input class="gap" style="--gap-w:9em"></p>
   <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px"><span class="qnum" style="margin-right:-10px">2.</span>
     <span><b style="font-size:.8em">1</b> when</span>
     <span><b style="font-size:.8em">2</b> I got there</span>
@@ -651,11 +651,11 @@ next();
     <span><b style="font-size:.8em">5</b> had</span>
     <span><b style="font-size:.8em">6</b> left</span>
   </p>
-  <p style="text-align:center;margin-top:6px"><input class="gap" style="--gap-w:100%"></p>
+  <p style="text-align:center;margin-top:6px"><input class="gap" style="--gap-w:9em"></p>
 <div id="correction" data-activity="correction" style="padding-top:26px">
 <p class="dim" style="text-align:center">One word is wrong. Write the sentence again.</p>
 <p style="text-align:center"><span class="qnum">3.</span> He <b>have</b> clocked in early.</p>
-<input class="gap" data-answer="He has clocked in early.|He's clocked in early." style="--gap-w:100%">
+<input class="gap" data-answer="He has clocked in early.|He's clocked in early." style="--gap-w:16.2em">
 </div>
 <div id="dictation" data-activity="dictation" style="padding-top:20px">
 <p class="dim" style="display:flex;align-items:center;justify-content:center;gap:10px"><span class="qnum">4.</span> <button class="listen" type="button" data-say="I clocked in at six forty.">▶</button><span>Listen, then write what you hear.</span></p>
@@ -666,12 +666,12 @@ next();
 <table class="chart">
   <tbody>
     <tr>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">1.</span> <input class="gap" style="--gap-w:calc(100% - 2.2em)"></td>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">2.</span> <input class="gap" style="--gap-w:calc(100% - 2.2em)"></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">1.</span> <input class="gap" style="--gap-w:9em"></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">2.</span> <input class="gap" style="--gap-w:9em"></td>
     </tr>
     <tr>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><span class="qnum">3.</span> <input class="gap" style="--gap-w:calc(100% - 2.2em)"></td>
-      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">4.</span> <input class="gap" style="--gap-w:calc(100% - 2.2em)"></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><span class="qnum">3.</span> <input class="gap" style="--gap-w:9em"></td>
+      <td><svg viewBox="0 0 120 64" width="100%" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">4.</span> <input class="gap" style="--gap-w:9em"></td>
     </tr>
   </tbody>
 </table>
@@ -820,8 +820,8 @@ next();
 <div class="block" data-look="stripes" id="fill" data-activity="fill">
 <h3>Fill in the blank</h3>
 <p>Complete each line with the word that fits.</p>
-<p><span class="qnum">1.</span> Mike <input class="gap" data-answer="has" style="--gap-w:5em"> already posted it.</p>
-<p><span class="qnum">2.</span> Nobody <input class="gap" data-answer="had" style="--gap-w:5em"> told the office before the shift started.</p>
+<p><span class="qnum">1.</span> Mike <input class="gap" data-answer="has" style="--gap-w:3em"> already posted it.</p>
+<p><span class="qnum">2.</span> Nobody <input class="gap" data-answer="had" style="--gap-w:3em"> told the office before the shift started.</p>
 <div class="qitem" data-a="b">
 <p class="qstem"><span class="qnum">3.</span> By the time I arrived, the crew <b>___</b> the truck.</p>
 <div class="opts compact" data-layout="row">
@@ -935,7 +935,7 @@ next();
 <pre>&lt;p class="dim" style="text-align:center"&gt;One word is wrong. Write the sentence again.&lt;/p&gt;
 &lt;p style="text-align:center"&gt;&lt;span class="qnum"&gt;3.&lt;/span&gt; He &lt;b&gt;have&lt;/b&gt; clocked in early.&lt;/p&gt;
 &lt;input class="gap" data-answer="He has clocked in early.|He's clocked in early."
-       style="--gap-w:100%"&gt;
+       style="--gap-w:16.2em"&gt;
 
 &lt;!-- the wrong word is marked in the line; a single-line .gap takes the corrected sentence --&gt;
 &lt;!-- made a .write instead, it asks for more than a line · data-answer takes the forms, | between them --&gt;
@@ -967,7 +967,7 @@ next();
   &lt;span&gt;&lt;b style="font-size:.8em"&gt;2&lt;/b&gt; that&lt;/span&gt;
   …
 &lt;/p&gt;
-&lt;p style="text-align:center;margin-top:6px"&gt;&lt;input class="gap" style="--gap-w:100%"&gt;&lt;/p&gt;
+&lt;p style="text-align:center;margin-top:6px"&gt;&lt;input class="gap" style="--gap-w:9em"&gt;&lt;/p&gt;
 
 &lt;!-- one set, or as many as the activity needs: a further .chips over its own answer line, one after
      another vertically as here, side by side in a .rows of their own, or mixed with the prose, the chart
@@ -985,7 +985,7 @@ next();
   &lt;table class="chart"&gt;
     &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" width="100%" role="img"
                  aria-label="what the panel shows"&gt;…&lt;/svg&gt;
-              &lt;span class="qnum"&gt;1.&lt;/span&gt; &lt;input class="gap" style="--gap-w:calc(100% - 2.2em)"&gt;&lt;/td&gt;
+              &lt;span class="qnum"&gt;1.&lt;/span&gt; &lt;input class="gap" style="--gap-w:9em"&gt;&lt;/td&gt;
         …two panels to a row, each with its own number…
     &lt;/tr&gt;
     &lt;tr&gt;…the next two panels…&lt;/tr&gt;
@@ -1015,7 +1015,7 @@ next();
 &lt;/div&gt;
 
 &lt;!-- a gap inside the sentence the block already carries: the line is the stem, so there is no separate stem --&gt;
-&lt;!-- --gap-w is the width the answer needs · data-answer takes the accepted forms, | between them --&gt;
+&lt;!-- --gap-w is 1.3× the longest accepted answer, its own padding included, in em (never 100%, never calc) · data-answer takes the accepted forms, | between them --&gt;
 &lt;!-- one gap or several lines, whichever the content needs; each gap is keyed on its own --&gt;
 &lt;!-- the count runs through the block: typed blanks and option blanks continue one sequence --&gt;</pre>
 </div></div></details>

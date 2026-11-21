@@ -35,11 +35,13 @@ A batch and its steps must be removed from this file when all of the batch's ste
 - **Every numbered item is answerable**: the `gap`/`opts` count equals the `qnum` count in all 32 multi-item cells. A cell with a single question has nothing to space and is left alone.
 - **The user's marker caveat**: "not every question is a `<p>` ... there are some numbered items that shouldnt be height spaced, so the span class isnt a guarantee just a marker." So the test is structural — an item is a direct child of the cell that carries a `.qnum` **and** the answer control it introduces (inside it, or the `input.gap`/`.opts` immediately after it) — never the class name alone.
 
-### [NOW] the failure this batch fixes, measured at 1400px on `business/lesson20-Needs-haves-and-shoulds.html`
+### [NOW] the failure this batch fixes, measured at 1400px on `business/lesson20-Needs-haves-and-shoulds.html` (re-measured after B19 collapsed the chart headers, which made the gaps bigger)
 - **4B** (`:233-247`) — the row is 2 cells 236 / 884 (row 1146, gap 26). `#15` **wraps** ("She shoulds check / the numbers.") because the solver narrowed the cell to 236 to buy height; the second cell measures 162 and the first 170, so the 8px gap is under `CENTER_MIN` and nothing centers it. The correct fix is the width floor + spacing, not a wider wrap.
-- **3B** (`:187-213`) — list cell 519 wide with 6 meanings + a `.dim`, content 300; chart 284 and its rows are single-line, so no width change adds height. Today the 16px gap is centered (B14); with list spacing it compresses instead (−3.2px on each of 5 gaps).
-- **8E** (`:464-489`) — same shape, content 236 (table) vs 253 (list) → −3.4px per gap.
-- **5A** (`:253-331`) — no question or list cell, so it keeps today's behaviour (the prose centers its 25px gap). It is the control case: B12 must not change it.
+- **3B** (`:187-213`) — cells 543 / 577, both 300 tall; the chart's content is **241** and the list's **300**, so the gap is **59px** (centred today by B14). With list spacing it compresses instead: 59px over 5 gaps = **−11.8px each**, from the sheet's ~19.9px pitch to ~8px.
+- **8E** (`:464-489`) — cells 685 / 435; chart content **193**, list **253** → a **60px** gap, same 5 gaps → **−12px each**.
+- **5A** (`:253-331`) — no question or list cell, so it keeps today's behaviour (prose content 215 vs map 240 → the 25px gap is centred). It is the control case: B12 must not change it.
+- **A caution the compression numbers raise**: at 3B/8E the list has to lose 12px per item out of a ~20px pitch, so the compressed list reads as tight lines. If that is too tight, the answer is a smaller `--para-gap`/`li` pitch in the sheet (a `style.css` change), not the solver refusing to compress — decide it with the user when 3B/8E are looked at.
+- **9B of lesson 5** (`business/lesson5-Doesnt-TheLittleVerb.html:461-465`) is the authoring fault that is now fixed: its gaps were `--gap-w:100%` and are now 7.4–11.3em, so each gap sits on its sentence's line instead of on a line of its own. Its cell is still 453 wide and three of the five sentences wrap at that width — B12's width floor is what stops that.
 
 
 ### [RULES] what the solver does, as agreed in the earlier turns
