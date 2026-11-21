@@ -1124,7 +1124,6 @@
   .opt{display:flex;align-items:center;gap:9px;padding:7px 11px;cursor:pointer;
     border:1.5px solid var(--line);border-radius:var(--r1);background:var(--surface-2);
     transition:border-color .15s,background .15s,box-shadow .15s}
-  .opt:hover{border-color:var(--accent-line)}
   .opt input[type="radio"]{appearance:none;flex:0 0 auto;width:18px;height:18px;margin:0;
     border:2px solid var(--line);border-radius:50%;background:transparent;
     transition:border-color .15s,background .15s,box-shadow .15s}
@@ -1150,6 +1149,22 @@
     transition:scale .16s}
   .opt input[type="checkbox"]:checked{border-color:var(--accent);background:var(--accent)}
   .opt input[type="checkbox"]:checked::after{scale:1}
+}
+
+/* #64 HOVER — a button, a radio, a checkbox and an option take the pointer, and on hover each wears the
+   outline look's edge: the accent edge a `data-look="outline"` block wears (2px, --edge-w), as an
+   outline so nothing moves. The ring is the highlight; the older brightness, lift and accent fill are gone.
+   CALL button, input[type=radio], input[type=checkbox], .opt; VARY --edge-w, --accent-h */
+@layer control{
+  button:not(:disabled),input[type="radio"],input[type="checkbox"],.opt,
+  label:has(>input[type="radio"]),label:has(>input[type="checkbox"]){cursor:pointer}
+  button:disabled,button.locked{cursor:default}
+  button:not(:disabled):not(.locked):hover,input[type="radio"]:hover,
+  input[type="checkbox"]:hover,.opt:hover,
+  label:has(>input[type="radio"]):hover,label:has(>input[type="checkbox"]):hover{
+    outline:var(--edge-w) solid var(--accent);outline-offset:2px}
+  /* the label that owns the control is the hit area, so the dot takes no second ring */
+  label>input[type="radio"]:hover,label>input[type="checkbox"]:hover{outline:none}
 }
 
 /* #63 WRITE — <textarea class="write" rows="n">; grows with content. Vary: --lines (integer, 4) */
@@ -1402,8 +1417,6 @@
   .control-bar button,.welcome-bar #logout{border:1px solid var(--line);background:var(--surface-2);color:var(--ink);
     border-radius:99px;padding:7px 15px;font:600 .82rem var(--sans);cursor:pointer;
     transition:border-color .15s,background .15s,translate .15s}
-  .control-bar button:hover,.welcome-bar #logout:hover{border-color:var(--accent);background:var(--accent-soft);
-    translate:0 -1px}
   footer{text-align:center;font:600 .68rem var(--sans);letter-spacing:.22em;
     color:var(--ink-2);padding:30px 0 34px;text-transform:uppercase;
     user-select:none;-webkit-user-select:none}
@@ -1462,7 +1475,6 @@
   button{background:var(--track-ink);color:var(--cream);border:0;border-radius:10px;padding:8px 14px;
     margin:4px 4px 4px 0;font:600 14px var(--serif);cursor:pointer;
     box-shadow:3px 3px 0 var(--tan);transition:transform .09s ease,filter .12s ease}
-  button:hover:not(:disabled):not(.locked){filter:brightness(1.14);transform:translateY(-1px)}
   button:active:not(:disabled):not(.locked){filter:brightness(1.04);transform:translate(2px,2px);
     transition-duration:.04s}
   #printRoot{display:none}

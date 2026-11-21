@@ -95,3 +95,8 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 [3] `capability-map.html` — the novelty item records the guard instead of only the dead end
 [4] verify (`batchcheck:self`, `batchcheck`, `mapcheck`, `cmcheck`), commit, push — `02db153`
 
+## [B13] - the pointer and the outline look's edge on hover "make the mouseover for buttons, radios, checkboxes use the pointer, and have a mouseover highlight that uses the same visual as the outline look" — the ring on the three control types, the older hover effects retired
+[1] `style.css` — `button`, `input[type=radio]`, `input[type=checkbox]`, `.opt` take the pointer (disabled/locked default); on hover each wears the outline look's edge, `outline: var(--edge-w) solid var(--accent)`, 2px offset; the generic button's brightness/lift, the control bar/welcome bar's accent fill and the `.opt`'s border hover retired
+[2] ✔ verify — computed in Chrome: a control-bar button and a lesson-20 button (idle `outline:none`, hover `2px solid oklch(.58 .14 210)` at offset 2), an `.opt` pill (the block's own accent, hue 65), a `.qopts` label and a `.flip` card (hue 65) all ring; the dot inside its label takes none; every cursor is `pointer`; `label:has(>input)` makes the label the hit area for the bare radios and the flip checkbox; `qa:rowctx`, `qa:check` business 20/1, `cmcheck`, `mapcheck`, `batchcheck`, `qa:liquid`, `build:check` pass (`qa:check` business 11 reports 30 answer controls with no anchor — content, present on the previous commit too, not the sheet)
+
+
