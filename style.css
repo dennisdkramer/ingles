@@ -1037,8 +1037,12 @@
   .seq[data-mode="turns"] .say{display:block;width:fit-content;max-width:80%;padding:9px 13px;
     border-radius:16px 16px 16px 5px;background:color-mix(in srgb,#000 20%,#fff);border:1px solid var(--line-2);
     box-shadow:var(--shadow-1)}
-  .seq[data-mode="turns"]>li:nth-child(even){justify-items:end;text-align:right}
-  .seq[data-mode="turns"]>li:nth-child(even) .say{border-radius:16px 16px 5px 16px;
+  /* a turn's side comes from WHO speaks, never from its place in the list: every turn of a turns dialog
+     carries data-side="left" or data-side="right", the speaker who opens the dialog takes the left, and a
+     speaker keeps one side for the whole dialog — so a speaker who answers twice stays where they were
+     instead of flipping over, and the other speaker always answers from the right */
+  .seq[data-mode="turns"]>li[data-side="right"]{justify-items:end;text-align:right}
+  .seq[data-mode="turns"]>li[data-side="right"] .say{border-radius:16px 16px 5px 16px;
     background:var(--accent-soft);border-color:var(--accent-line)}
 
   .seq[data-mode="numbered"]{counter-reset:n}

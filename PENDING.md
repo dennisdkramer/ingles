@@ -146,3 +146,11 @@ A batch and its steps must be removed from this file when all of the batch's ste
 [4] ✔ verify — a read-only sweep of every `data-mode="turns"` dialog: odd+gap 33 → 0 left on the old side, 42 right turns unchanged; `cmcheck` OK, `mapcheck` clean, `batchcheck` passes, `qa:liquid` clean, `qa:check` business 12/16 pass, `build:check` clean, commit, push
 
 
+## [B21] - a dialog turn's side is its speaker's, not its place in the list "make the side (and appearance) of the dialog items depend on the name, not alternating ... jess' messages should be on the left, mikes on the right ... make sure this is the global rule for dialogs"
+[1] ✔ 202 turns in 35 dialogs across 23 pages — every `<li>` carries `data-side="left|right"`, set from the speaker's order of first appearance (the opener takes the left); 15 turns changed side: the speakers who answer twice (lesson14 4, lesson16 2, lesson17 3, lesson19 3, lesson20 3) now stay where they were
+[2] ✔ `style.css` — the `nth-child(even)` rules are gone; `li[data-side="right"]` carries the side and the accent bubble, so the sheet alternates nothing
+[3] ✔ 10 qnum placements flipped with the side, so a bubble's number is still on the side facing the middle (75 numbered turns: 0 on the wrong side)
+[4] ✔ `capability-map.html` — both specimens and both markup boxes carry `data-side`, and the boxes say the side is the speaker's; `PEDAGOGY-MAP.md:59` states the rule
+[5] ✔ verify — a read-only re-read of all 35 dialogs: 0 turns without `data-side`, 0 numbered turns on the wrong side; `cmcheck` OK, `mapcheck` clean, `batchcheck` passes, `qa:liquid` clean, `qa:check` business 20 / kids 44 / adult 33 pass, `build:check` clean, commit, push
+
+
