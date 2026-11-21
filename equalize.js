@@ -10,6 +10,8 @@
   var PROSE_FLOOR = 200;     /* a prose cell never reads narrower */
   var STEPS = 24;
   var CENTER_MIN = 12;       /* a 2-cell row centers its shorter cell once the gap reads as one */
+  var SPACE_CAP = 48;        /* a question's or a list item's own gap opens by at most this much */
+  var SPACE_MIN = 6;         /* and never closes below this: the items stay visibly apart */
 
   function visibleCells(row) {
     return Array.prototype.filter.call(row.children, function (el) {
@@ -81,7 +83,87 @@
     return w;
   }
 
+  /* the widest authored line: the cell at `max-content`, so an authored <br> and the sheet's own
+     wrapping are kept and an authored max-width stays in place. this is a spacing cell's floor —
+     the page never narrows a question below the line it was written on. */
+  function getAuthoredFloor(col) {
+    var clone = col.cloneNode(true);
+    clone.style.cssText = "position:absolute;left:-9999px;top:0;visibility:hidden;" +
+      "width:max-content;flex:none";
+    col.parentElement.appendChild(clone);
+    var w = clone.getBoundingClientRect().width;
+    clone.parentElement.removeChild(clone);
+    return Math.max(PROSE_FLOOR, w);
+  }
+
+  /* an item is a direct child of the cell that carries a `.qnum` and introduces an answer: the
+     control is inside it, or the gap/options it opens sit immediately after it. the class is a
+     marker, never the test — not every question is a <p>, and a numbered row in a table is not
+     a question the cell can space. */
+  function isItem(el, next) {
+    if (!el.querySelector || !el.querySelector(".qnum")) return false;
+    if (el.querySelector("table, .seq, .chips, img, svg")) return false;
+    if (el.querySelector("input, textarea, select, .opts, .qopts")) return true;
+    return !!(next && next.matches && next.matches("input.gap, .opts, .qopts"));
+  }
+
+  /* a cell the solver may space, with the elements that take the gap: a question cell is one whose
+     direct children hold two or more items (each after the first takes the gap); a list cell is
+     one whose direct child is a ul/ol of two or more li (each but the last). never the row itself,
+     and never a cell that holds a table, a figure, a dialog, a chip run, an image or a drawing. */
+  function getSpacingCell(col) {
+    if (col.querySelector("table, figure, .seq, .chips, img, svg")) return null;
+    var list = null;
+    Array.prototype.forEach.call(col.children, function (el) {
+      if (!list && /^(ul|ol)$/i.test(el.tagName) && !el.classList.contains("seq")) list = el;
+    });
+    if (list) {
+      var lis = Array.prototype.filter.call(list.children, function (el) {
+        return /^li$/i.test(el.tagName);
+      });
+      if (lis.length >= 2) return { items: lis, prop: "marginBottom" };
+    }
+    var kids = Array.prototype.filter.call(col.children, function (el) {
+      return !/^(ul|ol)$/i.test(el.tagName);
+    });
+    var items = kids.filter(function (el, i) { return isItem(el, kids[i + 1]); });
+    if (items.length >= 2) return { items: items, prop: "marginTop" };
+    return null;
+  }
+
+  /* spread a cell's own gaps to meet `target`: the signed delta is this cell's height difference
+     divided by its gaps, clamped to 6px … its authored gap + SPACE_CAP. expanding and compressing
+     are the same line of code. */
+  function spread(col, spec, height, target) {
+    var items = spec.items, gaps = items.length - 1;
+    if (gaps < 1) return;
+    var delta = (target - height) / gaps;
+    if (Math.abs(delta) < 0.5) return;
+    var from = spec.prop === "marginTop" ? 1 : 0;
+    var to = spec.prop === "marginTop" ? items.length : items.length - 1;
+    for (var i = from; i < to; i++) {
+      var el = items[i];
+      var base = parseFloat(getComputedStyle(el)[spec.prop]) || 0;
+      var gap = Math.max(SPACE_MIN, Math.min(base + SPACE_CAP, base + delta));
+      el.setAttribute("data-eq", "");
+      el.style[spec.prop] = gap + "px";
+    }
+  }
+
+  /* every run starts from the authored page: the previous run's gaps go before anything measures */
+  function clearSpacing(row) {
+    Array.prototype.forEach.call(row.querySelectorAll("[data-eq]"), function (el) {
+      if (!el.style.marginTop && !el.style.marginBottom) return;
+      el.style.removeProperty("margin-top");
+      el.style.removeProperty("margin-bottom");
+      if (!el.getAttribute("style")) el.removeAttribute("style");
+    });
+  }
+
   function solveFixedRow(row) {
+    /* the previous run's gaps come off before anything is measured or sized */
+    clearSpacing(row);
+
     var cols = visibleCells(row);
     if (cols.length < 2) return;
 
@@ -90,7 +172,19 @@
     var avail = row.clientWidth - gap * (cols.length - 1);
     if (avail <= 0) return;
 
-    var minW = cols.map(getTableFloor);
+    /* the cells the solver may space, and their width floor: a question cell is never narrowed
+       past its widest authored line. the floor is honoured only where the row can hold it — if
+       the authored widths together do not fit, the row keeps the widths it would have had. */
+    var spacing = cols.map(getSpacingCell);
+    var baseW = cols.map(getTableFloor);
+    var authored = cols.map(function (c, i) { return spacing[i] ? Math.min(avail, getAuthoredFloor(c)) : 0; });
+    var wantSum = 0;
+    authored.forEach(function (w, i) { wantSum += Math.max(baseW[i], w); });
+    var honourFloor = wantSum <= avail + 0.5;
+    var minW = baseW.map(function (w, i) {
+      if (!spacing[i] || !honourFloor) return w;
+      return Math.max(w, authored[i]);
+    });
     var media = cols.map(visual);
     /* a table or a drawing is the row's absorber; the prose beside it stops at its own content
        width, so the absorber takes the slack instead of the prose becoming blank space */
@@ -167,6 +261,19 @@
     }
     apply(widths);
 
+    /* spacing is the height lever: once the widths settle, each cell that can space opens or
+       closes its own gaps until it meets the tallest cell that cannot (or, when every cell can
+       space, the tallest cell — so the shorter one opens). the heights are the content's, read
+       once before any gap moves, and every cell is still at align-self:flex-start. */
+    if (spacing.some(function (s) { return !!s; })) {
+      var preH = cols.map(function (c) { return c.getBoundingClientRect().height; });
+      var fixedH = preH.filter(function (h, i) { return !spacing[i]; });
+      var spaceTarget = fixedH.length ? Math.max.apply(null, fixedH) : Math.max.apply(null, preH);
+      cols.forEach(function (c, i) {
+        if (spacing[i]) spread(c, spacing[i], preH[i], spaceTarget);
+      });
+    }
+
     /* a 2-cell row that cannot be equalized: center the shorter cell's content instead of
        leaving the whole gap below it. three or more cells stay top-aligned so their lines
        agree. the cells are still at their own height here, so these heights are their
@@ -203,6 +310,8 @@
       el.style.removeProperty("width");
       el.style.removeProperty("align-self");
       el.style.removeProperty("justify-content");
+      el.style.removeProperty("margin-top");
+      el.style.removeProperty("margin-bottom");
       if (!el.getAttribute("style")) el.removeAttribute("style");
       el.removeAttribute("data-eq");
     });
