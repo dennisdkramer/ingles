@@ -115,6 +115,11 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 [1] `style.css` — `#64 HOVER`: the outline is removed; the same controls carry `--grad` and the 1s transition, and on hover take the outline look's own gradient (accent at 15%, transparent at 62%) with `--grad:180deg`, so the wash rises; at rest the control keeps its own background; the flip card paints the wash on its `.face`, which covers the label
 [2] ✔ verify — Chrome: at rest `background-image:none`, `--grad:0deg`; on hover the look's gradient with `--grad` visibly interpolating 13° → 127° → 180° over 1s on the control-bar button, the `.opt` pill, a `.qopts` label, the flip's `.face` and the radio dot; `outline:none` everywhere (the ring is gone); the bar button re-sampled after a 4s settle holds 180° (its first run lost the hover to the control bar's own render at load); the unchecked controls are untouched at rest and a checked `.opt`/dot keeps its accent fill; `qa:rowctx`, `qa:check` business 20, `cmcheck`, `mapcheck`, `batchcheck`, `qa:liquid`, `build:check` pass; commit, push
 
+## [B17] - the re-deal tool is kept in qa/, unwired "keep the re-deal script in qa/ for future use but dont wire it to anything now" — a qa/ tool, no npm script, no run.mjs member, no build hook, no doc reference
+[1] ✔ `qa/deal.mjs` — the working script with a header (what it does, the three modes, the rule it serves, that it is manual), the root resolved from the file, and the page's own line ending preserved when it writes
+[2] ✔ verify — `node --check` clean; `node qa/deal.mjs --verify` from the repo root reads all 50 activities (21 matchings, 29 chip sets), 0 in place, 0 unsegmented; `package.json` and `qa/run.mjs` hold 0 references to it, the build never calls it; commit, push
+
+
 
 
 
