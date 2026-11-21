@@ -1585,7 +1585,7 @@
     border-bottom:1px solid var(--ink)}
   /* no column needs a name: <thead><tr class="bare"><th colspan="N"></th></tr></thead> — the row merges and
      collapses to a 3px rule, so the chart keeps a top edge and says nothing it does not need to say */
-  .chart tr.bare th{height:3px;padding:0;font-size:0;line-height:0;border:0;
+  .chart tr.bare th{height:3px;padding:0;font-size:0;line-height:0;border:0;opacity:1;
     background:color-mix(in srgb,var(--tan) 26%,var(--paper))}
   /* a line naming what the chart is: outside the chart, above its collapsed row. The wrapper hugs the table
      so the line is centred on the chart rather than on the column it happens to sit in */

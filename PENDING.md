@@ -130,3 +130,11 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 [3] ✔ computed — `thead th` 21px (17px + 3pt), `text-align:center`, `opacity:0.8`, rule `1px` ink; frame ring `oklab(… / 0.8) 0 0 0 2px`; `h1`/`h2`/`h3` all `"Cormorant Garamond", Georgia, serif`, with `h1` still 38px / 5.32px tracking and `h2` 28.67px; build stamped, commit, push
 
 
+## [B19] - a chart header must teach, so the ones that only name what a column plainly holds are collapsed "table headers like Form / What it means / The sentence are not materially useful ... remove the column header text from the first chart and collapse the header just like the other table examples ... write into the guidance ... sweep the current business lessons and collapse all headings that should be collapsed"
+[1] ✔ `capability-map.html` — the first chart (the Concept/Visual index) is collapsed to the 3px row; the `#chart` guidance carries the rule: a header is written only when it names a contrast, a category, or the question the column answers, and a header that only names what a column obviously holds is removed
+[2] ✔ `PEDAGOGY-MAP.md:63` — the same rule beside "the tests are the gate", with the bare-thead markup
+[3] ✔ `style.css` — `.chart tr.bare th` keeps `opacity:1`, so a collapsed row is the full 3px rule and not the header's 80%
+[4] ✔ 33 business headers collapsed (lesson4 2, lesson6 2, lesson11 3, lesson13 4, lesson14 1, lesson15 4, lesson16 2, lesson17 2, lesson18 4, lesson19 4, lesson20 5); 35 kept because a header names a contrast/category the lesson teaches (Written/Said, Now/Past, Around now/In general, Which one?, Where it sits, Both orders work/Or only one, With the doer/Without it, Strength/Where it comes from, Rung/Who it is for, Portuguese/English and the conjugation tables)
+[5] ✔ verify — the sweep re-read every business thead: 35 left, all informative; `mapcheck` clean (existing kids warning), `cmcheck` OK, `batchcheck` passes, `qa:liquid` clean, `qa:check` business 13/17/20 pass (11 fails on its pre-existing "30 answer controls resolve no anchor"), `build:check` clean, commit, push
+
+
