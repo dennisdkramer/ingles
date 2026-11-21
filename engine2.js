@@ -46,7 +46,7 @@ document.querySelectorAll("[contenteditable]").forEach(function(n){n.removeAttri
 /* ---- content edit mode (teacher): a separate editable copy; live page + marks stay untouched ---- */
 const contentId=()=>"content_"+TRACK+"_"+L;
 let savedLive="",nbkVal="";
-function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop,#completebtn,#completerow").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style],b[style],i[style],u[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|px|font-style|background/.test(st))s.removeAttribute("style")});try{if(window.EqualizeRows)window.EqualizeRows.clean(cl);}catch(e){}return "<!doctype html>"+cl.outerHTML;}
+function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop,#completebtn,#completerow").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style],b[style],i[style],u[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|px|font-style|background/.test(st))s.removeAttribute("style")});cl.querySelectorAll(".content-area .block[data-state]").forEach(n=>n.removeAttribute("data-state"));try{if(window.EqualizeRows)window.EqualizeRows.clean(cl);}catch(e){}return "<!doctype html>"+cl.outerHTML;}
 function contentAreaHTML(saved){const d=new DOMParser().parseFromString(saved,"text/html");const ca=d.querySelector(".content-area");return ca?ca.innerHTML:saved;}
 function saveContent(){if(!document.querySelector(".content-area"))return;const o={action:"set",id:contentId(),type:"content",anchor:"",data:fullPageHTML(),email:gate.email,lesson:L,author:"prof",track:TRACK};notePending(o);outboxPush(o);scheduleFlush();}
 /* ---- the layout layer, and the two buttons that finish an edit ---------------------------
@@ -113,6 +113,7 @@ async function clearInk() {
     el.value = "";
   });
   document.querySelectorAll('input[type="radio"]').forEach(function (el) { el.checked = false; });
+  doneBlocks();
   completeNow = false; renderCompleteBtn();
   try { hlReflow(); ntReflow(); } catch (e) { }
   toast("Cleared " + rows.length + " item(s)");
@@ -385,7 +386,49 @@ function renderAnswers(){
   const should=(want!=null&&el.value===want);
   if(el.checked!==should)el.checked=should;
  });
+ doneBlocks();
 }
+/* ---- a block reports its own progress (owner 2026-11-21) ------------------------------------
+   EVERY QUESTION IN THE BLOCK HAS AN ANSWER ON IT — a gap with at least one character, a written
+   field with text, one option picked in each radio group, at least one box ticked in each group of
+   checkboxes — and the block carries data-state="done", which the sheet draws as its green frame
+   (#80 STATE). A question that empties takes the state away again, so the block returns to its own
+   look (red on a stripes block). A block is a question group this way: each `input.gap` and
+   `textarea` is one on its own, a radio group is one (keyed by `name`), and a run of checkboxes is
+   one (keyed by the `.qopts` / `.qitem` / `.opts` that holds them).
+   Opted in per page by <html data-done>; an authored data-state on a block is kept and restored.
+   fullPageHTML strips the state from the saved clone, so a file never keeps the report of the
+   student who saved it. */
+const doneAuthored=new WeakMap();
+function doneUsed(el){
+  if(el.type==="radio"){
+    const n=el.getAttribute("name");
+    const g=n?el.ownerDocument.querySelectorAll('input[type="radio"][name="'+n.replace(/(["\\])/g,"\\$1")+'"]'):[el];
+    return [].some.call(g,function(x){return x.checked;});
+  }
+  if(el.type==="checkbox"){
+    const box=el.closest(".qopts,.qitem,.opts")||el.parentElement;
+    return [].some.call(box.querySelectorAll('input[type="checkbox"]'),function(x){return x.checked;});
+  }
+  return String(el.value||"").trim()!=="";
+}
+function doneBlocks(){
+  if(!document.documentElement.hasAttribute("data-done"))return;
+  document.querySelectorAll(".content-area .block").forEach(function(b){
+    const ctrls=[].filter.call(b.querySelectorAll('input.gap,textarea,input[type="radio"],input[type="checkbox"]'),
+      function(el){return !(el.tagName==="TEXTAREA"&&el.id==="feed");});
+    if(!ctrls.length)return;
+    if(!doneAuthored.has(b))doneAuthored.set(b,b.getAttribute("data-state"));
+    const ok=ctrls.every(doneUsed);
+    const orig=doneAuthored.get(b);
+    if(ok){if(b.getAttribute("data-state")!=="done")b.setAttribute("data-state","done");}
+    else if(b.getAttribute("data-state")==="done"){if(orig)b.setAttribute("data-state",orig);else b.removeAttribute("data-state");}
+  });
+}
+["input","change"].forEach(function(ev){document.addEventListener(ev,function(){doneBlocks();});});
+/* a re-click de-selects a radio after the browser's own activation, so the report is taken once the
+   whole click (and that timeout) has run */
+document.addEventListener("click",function(){setTimeout(doneBlocks,0);});
 /* "Complete?" tag button (2026-10-22): a per-student+track+lesson tag with no other effect.
    Rendered for BOTH students and teachers; for a teacher it tags the currently selected student. */
 function completeId(){return "complete_"+STUDENT+"_"+TRACK+"_"+L;}
