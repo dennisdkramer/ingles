@@ -1403,9 +1403,9 @@
   }
 }
 
-/* #98 SHELL — .brand, .control-bar, .welcome-bar, .barhelp, footer, #feed. Vary: --brand-h (length) */
+/* #98 SHELL — .brand (header wrapper: brand, .control-bar, .barhelp), .welcome-bar, footer, #feed. Vary: --brand-h (length) */
 @layer shell{
-  .brand{width:1400px;margin-left:15px;padding:20px 14px 0;text-align:center;
+  .brand{width:1400px;margin-left:15px;padding:20px 0 0;text-align:center;
     display:block;user-select:none;-webkit-user-select:none}
   .brand img{display:block;margin:0 auto;width:140px;height:auto;border-radius:0;
     object-fit:initial;filter:drop-shadow(3px 4px 0 var(--rose))}
@@ -1416,6 +1416,7 @@
   .control-bar{width:1400px;margin:10px 0 0 15px;display:flex;flex-wrap:wrap;gap:8px;
     align-items:center;justify-content:center;padding:8px 14px;font-family:var(--sans);
     font-size:13px;text-align:center;user-select:none;-webkit-user-select:none}
+  .brand .control-bar{width:auto;margin:10px 0 0}
   .control-bar button,.welcome-bar #logout{border:1px solid var(--line);background:var(--surface-2);color:var(--ink);
     border-radius:99px;padding:7px 15px;font:600 .82rem var(--sans);cursor:pointer;
     transition:border-color .15s,background .15s,translate .15s}
@@ -1426,6 +1427,7 @@
     user-select:none;-webkit-user-select:none}
   .barhelp{width:1400px;margin:2px 0 8px 15px;padding:0 14px;text-align:center;
     font:400 14px/1.55 var(--serif);color:var(--ink);user-select:none;-webkit-user-select:none}
+  .brand .barhelp{width:auto;margin:2px 0 8px}
   .barhelp b{color:var(--ink);font-weight:600}
   #feed{display:block;width:100%;min-height:150px;margin:6px 0 0;resize:none;
     border:1.5px solid var(--line);border-radius:var(--r1);background:var(--surface-2);

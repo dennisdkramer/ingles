@@ -20,6 +20,14 @@ Author ([Bn]=(Batch), [Sn]=(Step)) two lines below [CURRENT], format as follows:
 ## [B10] - sheet-wide spacing: internal margins become padding, and question spacing is a default "we should remove margins from internal elements and instead use padding to space them" + 4B "the proper solution would be to add spacing between the questions" — a separate batch after [B9], with sign-off
 [1] `style.css` — `p`, `li`, `figure` and `.rows>div>…` margins → padding; the first/last-child rules restated; `--para-gap`; a visual pass over every track
 [2] 4B — a readable prose floor in the solver and a question-spacing rule (never top padding on `span.qnum`, which is inline); the exact floor needs sign-off
+## [B11] - the control bar and its legend are part of the header "put them inside the header wrapper so whenever I say anything about the header, they are included ... part of the header fade in" — the header wrapper on every page that has the pattern
+[1] ✔ 98 tracked pages — the two divs moved inside `<header class="brand">`; the ignored `.old/` copies were moved too but are not in the commit; `index.html` and `preview-vehicles.html` carry no control bar
+[2] ✔ `style.css` — `.brand` loses its 14px side padding; `.brand .control-bar` and `.brand .barhelp` fill the header (both stay at left 15, width 1400); the `#98 SHELL` header comment
+[3] ✔ `capability-map.html` — the header wrapper holds the brand, the control bar and its legend
+[4] ✔ `build-lessons.mjs` — every page in the tree that links the sheet now carries its stamp, not only the manifest pages (99 stamped)
+[5] ✔ verify — `containsCb`/`containsBh` true on business 20, the map, adult 29 and kids 1; control bar 15/1400 and legend 15/1400 on all four; header 318 tall, content top 336 (unchanged); fade still holds header at 0 then 1 with the controls inside; fallback/editing/save pass; `qa:rowctx`, `qa:check` business 20 + adult 29 + kids 1, `cmcheck`, `mapcheck`, `batchcheck`, `qa:liquid`, `build:check` pass
+
+
 
 ---
 

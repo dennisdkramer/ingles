@@ -103,10 +103,27 @@ const jsHash = createHash('sha256').update(jsText).digest('hex').slice(0, 10);
 const jsUrl = 'equalize.js?v=' + jsHash;
 const scriptRe = /<script src="((?:\.\.\/)?)equalize\.js(?:\?v=[0-9a-f]*)?"/;
 /* every page that links the sheet carries the same stamp: the root pages draw the menu and the map, and a
-   lesson page must not keep a cached sheet after the sheet changes. */
-const stampedPages = ['index.html', 'capability-map.html', '_shell.html', '_shell-preview.html'];
+   lesson page must not keep a cached sheet after the sheet changes. The manifest cannot list every page —
+   a lesson folder may hold pages the book does not list — so the rest are found in the tree. */
+const stampedPages = new Set(['index.html', 'capability-map.html', '_shell.html', '_shell-preview.html']);
 for (const [track, entries] of Object.entries(manifest)) {
-  for (const entry of entries) stampedPages.push(track + '/' + entry.file);
+  for (const entry of entries) stampedPages.add(track + '/' + entry.file);
+}
+function walkHtml(dir, out = []) {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (e.isDirectory()) {
+      if (e.name[0] === '.' || e.name === 'node_modules' || e.name === 'qa' || e.name === 'assets') continue;
+      walkHtml(path.join(dir, e.name), out);
+    } else if (/\.html$/i.test(e.name)) out.push(path.join(dir, e.name));
+  }
+  return out;
+}
+for (const file of walkHtml(ROOT)) {
+  const rel = path.relative(ROOT, file).split(path.sep).join('/');
+  if (stampedPages.has(rel)) continue;
+  if (/\.old\.html$/i.test(rel)) continue;
+  if (!/<link rel="stylesheet" href="(?:\.\.\/)?style\.css/.test(fs.readFileSync(file, 'utf8'))) continue;
+  stampedPages.add(rel);
 }
 let stamped = 0;
 for (const page of stampedPages) {
