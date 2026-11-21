@@ -25,7 +25,7 @@ for (const a of dom.querySelectorAll('a[href]')) {
 }
 
 /* 2 — every #id named in a markup-stub label resolves */
-const stubs = [...dom.querySelectorAll('.cols.markup-row summary')];
+const stubs = [...dom.querySelectorAll('.rows.markup-row summary')];
 if (!stubs.length) fail('no markup stubs found — the row selector changed');
 for (const s of stubs) {
   for (const h of (s.textContent.match(/#[a-z0-9][a-z0-9-]*/g) || [])) {

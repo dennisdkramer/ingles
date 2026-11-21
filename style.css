@@ -896,10 +896,9 @@
   .content-area>*[data-rows="2"]{grid-row:span 2}
   .content-area>*[data-rows="3"]{grid-row:span 3}
   /* #41 ROW — one flex line, and its cells are equal shares. Vary: --flex-gap (length) */
-  .rows>*,.cols>*{flex:1;min-width:0;display:flex;flex-direction:column}
-  .rows,.cols{display:flex;gap:var(--flex-gap,26px);align-items:stretch}
+  .rows>*{flex:1;min-width:0;display:flex;flex-direction:column}
+  .rows{display:flex;gap:var(--flex-gap,26px);align-items:stretch}
   .rows{flex-direction:row;flex-wrap:nowrap;padding-top:20px}
-  .cols{flex-wrap:wrap;padding-top:8px}
 
   .content-area>h1{margin:0 0 .35em;text-align:center}
   .content-area>h2{margin-block:var(--section-gap,34px) 0}
@@ -942,19 +941,18 @@
      own padding and read as if they were in the margin */
   :is(.block,.panel,.card,.dialog)>:is(ul,ol){padding-left:1.6em}
   /* the same gutter inside a flex cell, where the cell is narrower than a frame */
-  :is(.cols,.rows)>div>:is(ul,ol){padding-left:1.2em}
+  .rows>div>:is(ul,ol){padding-left:1.2em}
 
   /* #43 RHYTHM — the space between things in a frame is the margin ABOVE each one: a paragraph, a flex
      row or a chart that follows another takes 14px. A list item keeps its own bottom margin (li, in base),
      and inside a flex row the row carries the space, so a cell's first item adds none and the rest add 10.
      Vary: these numbers. */
   :is(.block,.panel,.card,.dialog)>:is(p,table,figure,.chartwrap){margin-top:14px}
-  :is(.block,.panel,.card,.dialog)>.cols,
   :is(.block,.panel,.card,.dialog)>.rows{margin-top:12px}
   :is(.block,.panel,.card,.dialog)>p.dim{margin-top:7px;padding:0 6px 4px}
-  :is(.cols,.rows)>div>:first-child{margin-top:0}
-  :is(.cols,.rows)>div>:is(p,.cols,.rows,table,figure):not(:first-child){margin-top:10px}
-  :is(.cols,.rows)>div>p.dim:not(:first-child){margin-top:7px;padding:0 6px 4px}
+  .rows>div>:first-child{margin-top:0}
+  .rows>div>:is(p,.rows,table,figure):not(:first-child){margin-top:10px}
+  .rows>div>p.dim:not(:first-child){margin-top:7px;padding:0 6px 4px}
 
   /* prose — --measure (length, 68ch) */
   .block[data-structure="prose"]{line-height:1.72}
@@ -1153,13 +1151,13 @@
 }
 
 /* #65 MARKUP ROW — every markup box a builder copies, taken out of the teaching flow and gathered at
-   the foot of its section as one line each: .cols.markup-row > details.reveal. Each box is OPEN, so
+   the foot of its section as one line each: .rows.markup-row > details.reveal. Each box is OPEN, so
    its code is rendered and read by whatever reads the page — the markup the builder is handed — while
    the body is folded shut by the rule below, so the page shows the label and nothing else. The label
    is the pointer naming the element the box draws. A box hugs its label and the row fills the line; a
    label too long for its share ellipsizes rather than wrapping to a second line. Vary: --cw (length) */
 @layer control{
-  .markup-row{gap:10px}
+  .markup-row{gap:10px;flex-wrap:wrap}
   .markup-row>details.reveal{flex:1 1 auto;min-width:0;margin:0}
   .markup-row>details.reveal>summary{padding:6px 10px;white-space:nowrap;overflow:hidden;
     text-overflow:ellipsis}
@@ -1535,7 +1533,7 @@
   /* a chart that sits in a cell beside another element, or under other content, is centred in that cell:
      it never hugs one edge with the slack piled on the other. A chart standing as its own frame is not
      affected — it is the cell, so it has nothing to centre within */
-  :is(.cols,.rows)>div>.chartwrap{margin-inline:auto}
+  .rows>div>.chartwrap{margin-inline:auto}
   .chartwrap>.chart{margin:0}
   .chartcap{font-size:calc(var(--s0) + 2pt);font-weight:300;color:var(--ink-2);text-align:center;
     letter-spacing:normal;margin:0 0 6px}

@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Capability map — English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=59a463a519">
+<link rel="stylesheet" href="style.css?v=cfcbe0a8b9">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>VISUAL REFERENCE</span></h1></header>
@@ -22,7 +22,7 @@
 <h3>Arrange it, and give it a look</h3>
 <div class="rows">
 <div>
-<p><b>A section's content goes into one <code>.rows</code>, and that is the default.</b> A row is one line, and its direct children are its cells: <b>each cell is one item, or two that stack inside it</b>. A cell is an equal share of its line — <code>flex:1;min-width:0</code> — so two cells are two halves and three are three thirds, whatever each one holds, and every cell is the line's height. Two cells a line by default, three or four when the items are thin, and a fifth item is a second <code>.rows</code> — a row never wraps. <code>.cols</code> is the same rule for cells that must wrap, and <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. A width is a repair and belongs on the cell that needs it: <code>min-width</code> for a floor, <code>flex:0 0 calc(50% - 13px)</code> to fix a cell at half the line. No cell is sized for the type of thing it holds.</p>
+<p><b>A section's content goes into one <code>.rows</code>, and that is the default.</b> A row is one line, and its direct children are its cells: <b>each cell is one item, or two that stack inside it</b>. A cell is an equal share of its line — <code>flex:1;min-width:0</code> — so two cells are two halves and three are three thirds, whatever each one holds, and every cell is the line's height. Two cells a line by default, three or four when the items are thin, and a fifth item is a second <code>.rows</code> — a row never wraps. <code>.row</code> is only the utility for a line of chips or buttons — never a layout row. A width is a repair and belongs on the cell that needs it: <code>min-width</code> for a floor, <code>flex:0 0 calc(50% - 13px)</code> to fix a cell at half the line. No cell is sized for the type of thing it holds.</p>
 </div>
 <div>
 <p class="dim"><b>Every element below is drawn with the markup that builds it, and the drawing is the default</b>: what the element contains, what text it carries, where that text sits, and whether it carries a title at all. Its item count is the example's own, never a count to copy. A chart takes no title of its own — the sentence beside it names it.</p>
@@ -33,7 +33,7 @@
 
 
 <p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
-<div class="cols markup-row">
+<div class="rows markup-row">
 <details class="reveal" open><summary>Markup — rows · a row, an element on its own, and a width</summary><div class="body"><div>
 <pre>&lt;h2&gt;a section the sheet numbers&lt;/h2&gt;
 
@@ -333,7 +333,7 @@
 
 
 <p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
-<div class="cols markup-row">
+<div class="rows markup-row">
 <details class="reveal" open><summary>Markup — #pair · one sentence, two versions</summary><div class="body"><div>
 <pre>&lt;div class="pair-stack"&gt;
   &lt;div class="side" data-state="wrong"&gt;&lt;p&gt;&lt;i class="mark"&gt;&lt;/i&gt; the sentence that is wrong&lt;/p&gt;&lt;/div&gt;
@@ -839,7 +839,7 @@ next();
 
 
 <p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
-<div class="cols markup-row">
+<div class="rows markup-row">
 <details class="reveal" open><summary>Markup — #flip · the cards, the prompt, and the pick</summary><div class="body"><div>
 <pre>&lt;div class="block" id="flip"&gt;
   &lt;h4 class="flip-ask" style="text-align:center;padding-top:10px" aria-live="polite"&gt;…&lt;/h4&gt;
@@ -1035,7 +1035,7 @@ next();
 
 
 <p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
-<div class="cols markup-row">
+<div class="rows markup-row">
 <details class="reveal" open><summary>Markup — 6 · a game, and the levers on it</summary><div class="body"><div>
 <pre>&lt;div class="game" data-game="skeetRange" data-time="6000" data-kind="train"&gt;
   &lt;p class="game-how"&gt;one line: how to play&lt;/p&gt;

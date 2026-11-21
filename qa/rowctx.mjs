@@ -1,7 +1,7 @@
 /**
  * qa/rowctx.mjs — prove the ROW and CELL rules win in every context, by cascade rather than by eye.
  *
- * Why: the two rules were once a bare `.rows` and a bare `.rows>*`, so a row inside `.cols` (whose `>*`
+ * Why: the two rules were once a bare `.rows` and a bare `.rows>*`, so a row inside a wrapper (whose `>*`
  * rule sets `flex:1 1 var(--cw,220px)`), inside another row (whose cells are columns), or in the page grid
  * did not resolve like a row in a `.block`. style.css now names each context on both rules. This check
  * reads the sheet, matches EVERY rule against a small DOM per context, and prints the value that actually
@@ -125,7 +125,7 @@ const CONTEXTS = [
   ['page grid', '<div class="content-area"><div class="rows" id="row"><div class="a"></div><div class="b"></div></div></div>'],
   ['section', '<div class="content-area"><section><div class="rows" id="row"><div class="a"></div><div class="b"></div></div></section></div>'],
   ['block', '<div class="content-area"><section><div class="block"><div class="rows" id="row"><div class="a"></div><div class="b"></div></div></div></section></div>'],
-  ['cols', '<div class="content-area"><div class="cols"><div class="rows" id="row"><div class="a"></div><div class="b"></div></div></div></div>'],
+  ['card', '<div class="content-area"><div class="card"><div class="rows" id="row"><div class="a"></div><div class="b"></div></div></div></div>'],
   ['inside a row', '<div class="content-area"><div class="rows"><div class="rows" id="row"><div class="a"></div><div class="b"></div></div></div></div>']
 ];
 const WANT = { display: 'flex', 'flex-direction': 'row', 'flex-wrap': 'nowrap' };
