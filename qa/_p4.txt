@@ -1,0 +1,10 @@
+grid: 28 rows, 28 children, bad=0
+blocks=14 bare-charts=0 panels=0 data-step=0 reveals=24
+h2 sections=6: How a page gets built | Choosing a visual | In-Block Features | Activities | Games | Learned during build generation
+h3 headings=12
+ids: toast, controlbar, barhelp, page, pos, pair, recipient, key, key-sound, gloss, d1, axis, chart, chart-split, map, comic, audio, dialog, flip, dialoggap, chartanswer, chunks, correction, dictation, stripgaps, mc, matching, mapq, fill
+pre specimens=28
+audio: assets/california.mp3 li=4
+tlw figures=8 tenses=present-perfect,simple-past,past-perfect,past-continuous,simple-present,present-continuous,going-to,future-perfect tlx=0
+
+OK: no structural failures

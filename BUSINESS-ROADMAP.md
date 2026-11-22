@@ -25,7 +25,7 @@
 
 ## Lesson 3: It, there, and the subject English refuses to drop
 
-   - Focus: English always has a subject, so `it` and `there` fill the slot Portuguese leaves empty.
+   - Focus: English always has a subject, so `it` and `there` fill the position Portuguese leaves empty.
    - teaches: `clause/dummy-subject`, `be/existence-there`, `pronoun/possessive`
    - Deepens: -
    - Uses: `clause/skeleton`, `be/linking-verb`, `pronoun/subject-object`
@@ -33,7 +33,7 @@
    - Examples: "It's important for the client." / "There are two options." / "Our deadline is Friday." / "There's a match on Sunday."
    - Real-world relevance: "Está difícil", "é importante", "tem um problema" are constant in work talk, and each one needs an English subject before anything else can be said.
 
-## Lesson 4: Facts and habits - the -s that carries them
+## Lesson 4: Facts and habits - the -s on the third person
 
    - Focus: The simple present states facts and habits, and -s is the whole tense in the third person.
    - teaches: `present-simple/facts-not-now`, `present-simple/third-person-s`, `present-simple/frequency-position`
@@ -43,9 +43,9 @@
    - Examples: "I work for a tech company." / "She checks the numbers every Monday." / "The call starts at nine." / "We usually test on Thursdays." / "My brother works nights." / "The bus leaves at six." / "She never eats breakfast."
    - Real-world relevance: A colleague's first questions are about routine and schedule, and the -s is what separates "I check" from "she checks" in a shared inbox.
 
-## Lesson 5: The mode indicator that carries the tense - one rule under all of them
+## Lesson 5: Do and does - the mode indicator and who the tense belongs to
 
-   - Focus: The auxiliary slot carries the tense, and the main verb returns to base when the slot is filled.
+   - Focus: Do and does carry the tense and the person, and the main verb returns to its base form when they are there.
    - teaches: `mode/slot`, `mode/verb-returns-base`, `mode/negation`
    - Deepens: -
    - Uses: `present-simple/third-person-s`, `present-simple/facts-not-now`
@@ -113,7 +113,7 @@
    - Examples: "I need some information about the project." / "We don't have much time." / "The feedback is useful." / "There are a few issues." / "I have a little time today."
    - Real-world relevance: The words this persona uses most - information, feedback, data, research, staff - are exactly the ones that refuse a plural and refuse "a".
 
-## Lesson 12: The past you can point at
+## Lesson 12: The past - saying when it happened
 
    - Focus: was/were, -ed, and the irregular verbs that carry the past with no ending.
    - teaches: `past-simple/was-were`, `past-simple/regular-ed`, `past-simple/irregular`
@@ -145,7 +145,7 @@
 
 ## Lesson 15: Can, could, would - getting people to act
 
-   - Focus: Ability, permission, and the ladder that makes a request land.
+   - Focus: Ability, permission, and the three forms that make a request more polite.
    - teaches: `modal/can-could-ability`, `modal/request-ladder`, `modal/may-permission`
    - Deepens: -
    - Uses: `mode/verb-returns-base`, `question/yes-no-order`, `prep/to-vs-for`
@@ -155,7 +155,7 @@
 
 ## Lesson 16: Because, so, but, although
 
-   - Focus: Two clauses, and the word that decides which one carries the reason, the result or the contrast.
+   - Focus: Two clauses, and the word that decides which one gives the reason, the result or the contrast.
    - teaches: `connector/cause-result`, `connector/contrast`, `connector/sequence`
    - Deepens: `clause/skeleton` - the skeleton now repeats, and the connector decides the order of the two clauses and which one is subordinate.
    - Uses: `past-simple/regular-ed`, `present-simple/facts-not-now`, `clause/skeleton`
@@ -197,35 +197,35 @@
 
    - Focus: One message has a direct form and a soft form, and three levers move it along that line.
    - teaches: `axis/direct-vs-indirect`, `axis/hedge`, `axis/contraction`
-   - Deepens: `modal/request-ladder` - the ladder is now general: statements, claims and offers move along it too, and hedges and contractions are the other two levers.
+   - Deepens: `modal/request-ladder` - the same choice now applies to statements, claims and offers, and hedges and contractions are the other two ways to soften them.
    - Uses: `modal/request-ladder`, `modal/should-advice`, `present-continuous/now`
    - Vocabulary: "I think", "I guess", "it seems", probably, maybe, perhaps, "kind of", "sort of", "to be honest", "would like", "if possible", right?
    - Examples: "I'd like to add something." / "It's probably better to wait." / "We'll look into it." / "Maybe we should check that first." / "I don't think that's quite right."
    - Real-world relevance: This axis is reused by every function in the rest of the course; a correct sentence at the wrong force reads as rude, and that is what costs a professional the room.
 
-## Lesson 21: Introducing yourself and your work
+## Lesson 21: Your role is a noun, and the words after it say which one
 
-   - Focus: A role is a noun phrase - a head word and what hangs off it - and the apposition that names you is what makes the first minute land.
+   - Focus: A role is a noun phrase: a noun and the words after it. The name and the role, said one after the other, are what an introduction needs.
    - teaches: `noun-phrase/post-modifier`, `apposition/role-statement`, `discourse/question-return`
-   - Deepens: `clause/skeleton` - the skeleton now grows inside one slot: the subject is a phrase with its own internal order, so what sits after the noun matters as much as the order of the clause.
+   - Deepens: `clause/skeleton` - the clause now holds a phrase inside the subject position: the subject has its own internal order, so the words after the noun matter as much as the order of the clause.
    - Uses: `clause/skeleton`, `pronoun/possessive`, `question/wh-order`, `article/a-the-zero`, `prep/verb-unit`
    - Vocabulary: "in charge of", "part of", "responsible for", "the one who", "I work in", "on the team", "I look after", "I run", "what do you do", boss, colleague, "these days"
-   - Examples: "I'm Ana - I'm the analyst who owns pricing." / "I look after the models, so I'm on the revenue side." / "I'm in charge of the two APIs nobody wants to touch." / "What do you do?" with "same as always - spreadsheets and coffee" as the informal note under "nothing has changed"
+   - Examples: "I'm Ana - I'm the analyst in the pricing team." / "I look after the models, so I'm on the revenue side." / "I'm in charge of the two pricing models." / "What do you do?" with "same as always" as the informal note under "nothing has changed"
    - Real-world relevance: The first minute decides the rest of the call, and the sentence that stalls is usually a missing "who" or a noun phrase left in Portuguese order.
 
 
-## Lesson 22: It, that, and the one - what a conversation points at
+## Lesson 22: It, that and one - what each one replaces
 
-   - Focus: Talk is held together by pointing: it and that refer back, one and do so replace a whole noun, and an echo question asks about a single word you missed.
+   - Focus: English repeats words rarely: it and that replace something already said, one replaces a noun, and an echo question asks about the one word you missed.
    - teaches: `reference/anaphora`, `substitution/one-and-do-so`, `question/echo-clarify`
-   - Deepens: `clause/dummy-subject` - the same little words now point at something already said instead of filling an empty subject slot, so the student chooses between the two jobs.
+   - Deepens: `clause/dummy-subject` - the same words now replace something already said instead of filling an empty subject position, so the student chooses between the two jobs.
    - Uses: `clause/dummy-subject`, `clause/skeleton`, `question/wh-order`, `noun/count-uncountable`
    - Vocabulary: "that one", "the other one", "so do I", "neither did I", "I thought so", "the same thing", "sorry, the what?", "what do you mean", "back to that", "long story", "right then", "who said that"
    - Examples: "The new one is faster; the old one still works." / "I've already sent it." - "So have I." / "Sorry, the what now?" / "They moved the date." - "Wait, who moved what?" with "no way" as the informal note under "that is surprising"
-   - Real-world relevance: A meeting is mostly pronouns, and the student who loses track of "it" loses the thread even when every word is known.
+   - Real-world relevance: A meeting repeats fewer words than it seems, and the student who loses track of "it" loses the conversation even when every word is known.
 
 
-## Lesson 23: Until, by, ago - the words deadlines live on
+## Lesson 23: Until, by, within and ago - the four words a deadline uses
 
    - Focus: A point in time, a deadline, a duration and a window are four different things.
    - teaches: `prep/until-vs-by`, `prep/ago-vs-for`, `prep/in-vs-within`
@@ -235,7 +235,7 @@
    - Examples: "I need it by Friday." / "We waited until six." / "The update takes about an hour." / "It has to be done within two days." / "I sent it two days ago."
    - Real-world relevance: This persona negotiates deadlines all day, and "until" used for "by" is a commitment made by accident.
 
-## Lesson 24: Could you tell me ... - the question inside the question
+## Lesson 24: Could you tell me - the question inside the question
 
    - Focus: Inside a polite frame the question stops inverting, and that is what makes it sound professional.
    - teaches: `question/embedded-order`, `question/embedded-wh`, `question/soft-opener`
@@ -260,7 +260,7 @@
 
    - Focus: The present perfect for something that started in the past and continues now.
    - teaches: `present-perfect/have-participle`, `present-perfect/duration-for-since`, `present-perfect/since-point`
-   - Deepens: `past-simple/irregular` - the third form of the irregular verb now has a second job as the participle after have, so the same list is reused rather than re-taught.
+   - Deepens: `past-simple/irregular` - the past participle of the irregular verb now also follows have, so the same list is reused rather than re-taught.
    - Uses: `past-simple/irregular`, `mode/slot`, `prep/time-in-on-at`, `prep/until-vs-by`
    - Vocabulary: join, stay, know, have, live, change, grow, "how long", "for five years", "since 2019", "up to now", "this year"
    - Examples: "I've worked here for five years." / "She's been in the role since March." / "We've used this system for a decade." / "How long have you been at the company?" / "I've lived here for ten years." / "She's been sick since Monday."

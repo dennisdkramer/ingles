@@ -60,15 +60,8 @@ L18 | S1-rul@chart:rul>ex | S2-mng@chart:mng>ex | S3-voc@gloss:voc>mng | S4-rul:
 L19 | S1-rul@pos:rul>ex | S2-soc@chart:con>ex | S3-voc@chart:voc>mng | S4-tim:rul>con | S5-soc@dialog:soc>ex | S6-rcp:rcp>ex>ex | Q:con>rul>voc>mng>ex>con | el:mc:2,chartanswer:2,matching:2,translation:2,correction:1,dialoggap:1,chunks:1,fill:1,dictation:1 | qel:mc:1,fill:1,chartanswer:1,matching:1,dictation:1,translation:1 | reg:8/8
 
 L20 | S1-rul@chart:rul>ex | S2-rul@chart:mng>ex | S3-voc@gloss:voc>mng | S4-exc:rul>con | S5-soc@map:soc | S6-soc@dialog:soc>ex | S7-rcp:rcp>ex>ex | Q:mng>rul>con>rul>voc>con | el:mc:2,chartanswer:2,matching:2,correction:2,translation:2,map:1,dialoggap:1,chunks:1,fill:1 | qel:mc:1,fill:1,chartanswer:1,correction:1,matching:1,translation:1 | reg:9/9
-
-
-
-L21 | S1-rul@chart:rul>ex | S2-rul@pos:rul>ex | S3-voc@gloss:voc>mng | S4-mng@chart:mng>ex | S5-soc@dialog:soc>ex | S6-rcp:rcp>ex>ex | Q:con>rul>voc>mng>ex>con | el:fill:2,mc:2,flip:1,matching:1,dialoggap:1,translation:2,chunks:2 | qel:chunks:1,mc:1,fill:1,translation:1 | reg:8/8
-
-L22 | S1-rul@chart:rul>ex | S2-voc@gloss:voc>mng | S3-rul@pos:rul>con | S4-mng@pair:mng>ex | S5-soc@dialog:soc>ex | S6-mng@audio:mng>ex | S7-rcp:rcp>ex>ex | Q:con>rul>mng>voc>ex>con | el:mc:3,fill:2,matching:1,dialoggap:1,flip:1,dictation:2,stripgaps:1,translation:2,correction:1 | qel:mc:1,fill:1,correction:1,dictation:1 | reg:9/9
-
-L23 | S1-rul@chart:rul>ex | S2-voc:voc>mng | S3-exc@gloss:mng>ex | S4-mng@pair:mng>ex | S5-soc@dialog:soc>ex | S6-rcp:rcp>ex>ex | Q:con>rul>voc>ex>con | el:mc:2,fill:3,chartanswer:1,matching:2,correction:2,dialoggap:1,translation:1,chunks:1 | qel:mc:1,fill:1,correction:1,matching:1 | reg:8/8
-
-L24 | S1-rul@pos:rul>ex | S2-mng@chart:mng>ex | S3-voc@gloss:voc>mng | S4-exc@pair:exc>con | S5-soc@dialog:soc>ex | S6-mng@audio:mng>ex | S7-rcp:rcp>ex>ex | Q:con>rul>voc>mng>ex>con | el:mc:2,fill:2,matching:2,correction:2,dialoggap:1,dictation:1,translation:2,map:1 | qel:mc:1,fill:1,matching:1,correction:1,translation:1 | reg:8/8
-
-L25 | S1-exc:exc>ex | S2-rcp:rcp>ex | S3-rcp:rcp>ex | S4-exc:exc>ex | Q:con>rul>voc>mng>ex>con | el:mc:2,matching:1,correction:2,dialoggap:2,chartanswer:1,chunks:1,fill:1,translation:1,stripgaps:1,dictation:1,map:1 | qel:mc:1,chunks:1,map:1 | reg:5/5
+L21 | S1-rul@chart:rul>ex | S2-voc@gloss:voc>mng | S3-soc@dialog:soc>ex | Q:con>rul>voc>ex>con | el:fill:1,mc:3,flip:1,matching:1,dialoggap:2,translation:1,chunks:1 | qel:mc:1,chunks:1 | reg:5/5
+L22 | S1-rul@chart:rul>ex | S2-voc@gloss:voc>mng | S3-rul@pos:rul>con | S4-mng@audio:mng>ex | sep:S4 - the song is the only place the two orders are heard, so the listening block stays apart | Q:con>rul>mng>voc>ex>con | el:mc:3,fill:2,matching:1,dialoggap:1,flip:1,dictation:2,stripgaps:1,translation:2,correction:1 | qel:mc:1,fill:1,correction:1,dictation:1 | reg:6/6
+L23 | S1-rul@chart:rul>ex | S2-voc:voc>mng | S3-soc@dialog:soc>ex | Q:con>rul>voc>ex>con | el:mc:2,fill:3,chartanswer:1,matching:1,correction:2,dialoggap:1,translation:1,chunks:1 | qel:mc:1,fill:1,correction:1,matching:1 | reg:5/5
+L24 | S1-rul@pos:rul>ex | S2-voc@gloss:voc>mng | S3-soc@dialog:soc>ex | Q:con>rul>voc>mng>ex>con | el:mc:2,fill:2,matching:2,correction:2,dialoggap:1,dictation:1,translation:2,map:1 | qel:mc:1,fill:1,matching:1,correction:1,translation:1 | reg:5/5
+| reg:5/5

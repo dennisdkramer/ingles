@@ -42,6 +42,7 @@ const PT_WORDS = new Set(['que', 'não', 'nao', 'para', 'você', 'voce', 'isso',
 
 const fails = [];
 const warns = [];
+const sepOpen = [];
 const fail = (where, msg) => fails.push(`${where} — ${msg}`);
 const warn = (where, msg) => warns.push(`${where} — ${msg}`);
 
@@ -60,7 +61,7 @@ function parseRow(line) {
   const head = parts.shift();
   const m = /^L(\d+)$/.exec(head);
   if (!m) return null;
-  const row = { L: Number(m[1]), sections: [], quiz: null, el: {}, qel: {}, reg: null, raw: line };
+  const row = { L: Number(m[1]), sections: [], quiz: null, el: {}, qel: {}, reg: null, sep: [], raw: line };
   for (const seg of parts) {
     if (seg.startsWith('el:')) { row.el = parseEls(seg.slice(3)); continue; }
     if (seg.startsWith('qel:')) { row.qel = parseEls(seg.slice(4)); continue; }
@@ -72,6 +73,10 @@ function parseRow(line) {
     }
     const q = /^Q:(.+)$/.exec(seg);
     if (q) { row.quiz = { blocks: q[1].split('>').map(s => s.trim()).filter(Boolean) }; continue; }
+    if (seg.startsWith('sep:')) {
+      row.sep = (row.sep || []).concat(seg.slice(4).trim());
+      continue;
+    }
     const s = /^S(\d+)-([a-z]{3})(?:@([a-z-]+))?:(.+)$/.exec(seg);
     if (!s) { warn(`L${row.L}`, `segment not understood: "${seg}"`); continue; }
     if (!SUBJECTS.includes(s[2])) warn(`L${row.L}`, `unknown subject "${s[2]}" in ${seg}`);
@@ -201,7 +206,9 @@ function longestRun(a, b) {
 function checkWindows(rows, where) {
   rows.forEach((row, i) => {
     const prev = rows.slice(Math.max(0, i - NOVEL_WINDOW), i);
-    if (prev.length) {
+    // an exam is written to reuse what the block taught; novelty and quiz-novelty are for teaching pages
+    const isExam = row.sections.length > 1 && row.sections.every(s => s.subject === 'exc');
+    if (prev.length && !isExam) {
       const used = union(prev, 'el');
       const fresh = Object.keys(row.el).filter(e => !used.has(e));
       // the rule asks for an element the window did not use; a window that already names the whole
@@ -232,7 +239,8 @@ function checkQuiz(rows, where) {
       if (t[k] === t[k - 1] && t[k] === t[k - 2]) fail(where + row.L, `quiz: "${t[k]}" three times in a row`);
     }
     const prev = rows.slice(Math.max(0, i - QUIZ_WINDOW), i).flatMap(r => Object.keys(r.qel || {}));
-    if (prev.length) {
+    const isExam = row.sections.length > 1 && row.sections.every(s => s.subject === 'exc');
+    if (prev.length && !isExam) {
       const fresh = Object.keys(row.qel).filter(e => !prev.includes(e));
       if (!fresh.length) fail(where + row.L, `quiz: no element outside the previous ${QUIZ_WINDOW} quizzes`);
     }
@@ -246,6 +254,9 @@ function checkBlocks(rows, where) {
       if (n > Math.ceil(total / 2)) fail(where + row.L, `dominance: ${name} is ${n} of ${total} activity blocks`);
     }
     const teaching = row.sections.length;
+    if (teaching > 3 && !(row.sep && row.sep.length)) {
+      sepOpen.push(where + 'L' + row.L + ' (' + teaching + ')');
+    }
     const cap = Math.max(1, Math.floor(DEVICE_SHARE * teaching));
     const devs = {};
     for (const s of row.sections) if (s.device) devs[s.device] = (devs[s.device] || 0) + 1;
@@ -286,8 +297,10 @@ function checkBlocks(rows, where) {
   });
   rows.forEach((row, i) => {
     const seq = row.sections.map(s => s.subject);
+    const exam = seq.length > 1 && seq.every(s => s === 'exc');
     for (const prev of rows.slice(Math.max(0, i - 3), i)) {
       const run = longestRun(seq, prev.sections.map(s => s.subject));
+      if (exam) continue;   // an exam's parts are fixed by the roadmap, not chosen for variety
       if (run >= 4) fail(where + row.L, `order: ${run} section subjects in a row as in L${prev.L}`);
       else if (run === 3) warn(where + row.L, `order: 3 section subjects in a row as in L${prev.L}`);
     }
@@ -403,6 +416,10 @@ if (process.argv.includes('--self-test')) {
   process.exitCode = selfTest() ? 1 : 0;
 } else {
   for (const t of tracks) runTrack(t);
+  if (sepOpen.length) {
+    console.log(`\nnote  ${sepOpen.length} lesson(s) teach more than 3 sections with no sep: defence — the default is 3:`);
+    console.log('      ' + sepOpen.join(', '));
+  }
   if (warns.length) { console.log(`\n${warns.length} warning(s):`); for (const w of warns) console.log('  warn  ' + w); }
   if (fails.length) { console.log(`\n${fails.length} failure(s):`); for (const f of fails) console.log('  FAIL  ' + f); }
   console.log(fails.length ? '\nbatchcheck: fails' : '\nbatchcheck: passes');

@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>business · Lesson 4 — English Opens Doors</title>
-<link rel="stylesheet" href="../style.css?v=16fbe6f2c7">
+<link rel="stylesheet" href="../style.css?v=b831bb40d4">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="../logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>BUSINESS <span>LESSON 4</span></h1>
@@ -331,144 +331,540 @@
 <div class="qitem" data-a="cafe" style="padding-top:12px">
 <p class="qstem"><span class="qnum">1.</span> Rafa starts at five in the morning. He makes coffee and serves breakfast to people on their way to work, and he finishes at two in the afternoon. Tick the place where Rafa works.</p>
 <div class="vz-map viz">
-<svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, eight places each drawn with its name on a sign — a station under a canopy with a clock, a café with a striped awning, a park with trees, a bank under a dollar sign, a library wall of books, a post office with a postbox, a bus shelter, and two market awnings">
+<svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, with nine places, each named on a sign in the drawing — a station with a canopy and a platform clock, a café with a striped awning and two tables outside, a park with trees behind railings, a bank with a columned front and steps, a library with tall windows, a post office with a postbox on the pavement, a bus stop with a shelter and a bench, a market with two stalls, and a hotel with a door canopy">
+  <!-- MAP GEOMETRY — THE ONE TABLE. The drawing below and every tick a lesson lays over it read
+       from these numbers, so a tick can never sit off its building.
+         canvas      360 x 240
+         columns     left x 4-112 · Mill Lane x 116-128 · middle x 132-244 · Park Lane x 248-260 · right x 264-356
+         rows        top y 6-76 · High Street y 80-92 · middle y 96-160 · Low Street y 164-176 · bottom y 180-234
+         tick %      left 16% · middle 52% · right 86%    top 17% · middle 53% · bottom 86%
+       THE NINE PLACES, by column and row:
+         top     station (left)   café (middle)     park (right)
+         middle  bank (left)      library (middle)  post office (right)
+         bottom  bus stop (left)  market (middle)   hotel (right)
+       A lesson copies this drawing verbatim — viewBox, streets, nine places, signs, labels and the
+       table above — and writes only its own question and its own tick labels. No page draws its own map. -->
   <rect x="0" y="0" width="360" height="240" style="fill:var(--paper)"></rect>
+
   <g style="fill:var(--tan);opacity:.45">
-    <rect x="0" y="78" width="360" height="16"></rect>
-    <rect x="0" y="160" width="360" height="16"></rect>
-    <rect x="104" y="0" width="16" height="240"></rect>
-    <rect x="258" y="0" width="16" height="240"></rect>
+    <rect x="0" y="80" width="360" height="12"></rect>
+    <rect x="0" y="164" width="360" height="12"></rect>
+    <rect x="116" y="0" width="12" height="240"></rect>
+    <rect x="248" y="0" width="12" height="240"></rect>
   </g>
-  <g style="stroke:var(--ink);stroke-width:2;fill:var(--paper)">
-    <rect x="14" y="20" width="80" height="52"></rect>
-    <rect x="130" y="24" width="118" height="48"></rect>
-    <rect x="282" y="22" width="66" height="50"></rect>
-    <rect x="14" y="100" width="80" height="54"></rect>
-    <rect x="130" y="100" width="118" height="54"></rect>
-    <rect x="282" y="100" width="66" height="54"></rect>
-    <rect x="14" y="180" width="80" height="54"></rect>
-    <rect x="130" y="180" width="118" height="54"></rect>
+  <g style="stroke:var(--ink);stroke-width:.8;opacity:.4;fill:none">
+    <path d="M0 80h360M0 92h360M0 164h360M0 176h360M116 0v240M128 0v240M248 0v240M260 0v240"></path>
+  </g>
+  <g style="stroke:var(--paper);stroke-width:1.4;stroke-dasharray:6 7;opacity:.95;fill:none">
+    <path d="M0 86h138M196 86h56M0 170h360M122 0v70M122 104v136M254 0v70M254 104v136"></path>
+  </g>
+  <g style="fill:var(--paper);opacity:.95">
+    <rect x="152" y="81" width="4" height="10"></rect>
+    <rect x="160" y="81" width="4" height="10"></rect>
+    <rect x="168" y="81" width="4" height="10"></rect>
+    <rect x="176" y="81" width="4" height="10"></rect>
+    <rect x="184" y="81" width="4" height="10"></rect>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="300" y="82" width="22" height="8" rx="2"></rect>
+    <rect x="176" y="166" width="20" height="8" rx="2"></rect>
+  </g>
+  <g style="fill:var(--ink);opacity:.85">
+    <circle cx="180" cy="177" r="1.6"></circle>
+    <circle cx="192" cy="177" r="1.6"></circle>
+    <circle cx="304" cy="91" r="1.6"></circle>
+    <circle cx="318" cy="91" r="1.6"></circle>
+  </g>
+
+  <g style="fill:var(--ink);opacity:.07">
+    <rect x="12.5" y="32.5" width="94" height="44"></rect>
+    <rect x="140.5" y="36.5" width="100" height="40"></rect>
+    <rect x="16.5" y="114.5" width="88" height="34"></rect>
+    <rect x="138.5" y="102.5" width="80" height="52"></rect>
+    <rect x="272.5" y="104.5" width="80" height="46"></rect>
+    <rect x="272.5" y="186.5" width="82" height="44"></rect>
+  </g>
+
+  <!-- STATION — left, top -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="10" y="30" width="94" height="44"></rect>
+    <path d="M6 30h102v-7H6z"></path>
+  </g>
+  <g style="fill:var(--ink);opacity:.55">
+    <path d="M8 25h20v2H8zM34 25h20v2H34zM60 25h20v2H60zM86 25h20v2H86z"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.3;fill:none">
+    <circle cx="92" cy="42" r="5.5"></circle>
+    <path d="M92 42v-3M92 42h2.2"></path>
+    <path d="M16 42h12v10H16zM34 42h12v10H34zM52 42h12v10H52z"></path>
+    <path d="M20 74v-9h12v9"></path>
+    <path d="M10 74h94"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="14" y="32" width="40" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="34" y="38.4">STATION</text>
+  </g>
+
+  <!-- CAFÉ — middle, top -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="138" y="34" width="100" height="40"></rect>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1.4">
+    <path d="M134 34h108l-5-9h-98z"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:.9;opacity:.5;fill:none">
+    <path d="M146 25v9M158 25v9M170 25v9M182 25v9M194 25v9M206 25v9M218 25v9M230 25v9"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.3;fill:none">
+    <path d="M146 48h20v12h-20z"></path>
+    <path d="M176 48h28v10h-28z"></path>
+    <path d="M216 48v26M216 48h14v18h-14"></path>
+    <path d="M148 74h84"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="184" y="36" width="26" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="197" y="42.4">CAFÉ</text>
+  </g>
+
+  <!-- PARK — right, top -->
+  <g style="fill:var(--green);opacity:.2">
+    <rect x="266" y="10" width="88" height="58"></rect>
+  </g>
+  <g style="fill:var(--green);opacity:.5;stroke:var(--ink);stroke-width:1.2">
+    <circle cx="286" cy="44" r="9"></circle>
+    <circle cx="306" cy="50" r="8"></circle>
+    <circle cx="330" cy="42" r="10"></circle>
   </g>
   <g style="stroke:var(--ink);stroke-width:1.5;fill:none">
-    <path d="M14 20h80"></path>
-    <circle cx="76" cy="28" r="5"></circle>
-    <path d="M76 28v-3M76 28h2"></path>
-    <path d="M14 66h80"></path>
-    <path d="M14 28h66v6H14z"></path>
-    <path d="M130 60h118"></path>
-    <path d="M134 40h40v8h-40z"></path>
-    <path d="M174 42a4 4 0 0 1 0 4"></path>
-    <path d="M300 46c4-9 9-9 13 0M316 46c4-9 9-9 13 0"></path>
-    <path d="M290 64h50"></path>
-    <path d="M14 100l40-18 40 18"></path>
-    <path d="M24 100v20M36 100v20M48 100v20M60 100v20M72 100v20M14 120h80"></path>
-    <path d="M134 108v18M142 108v18M150 108v18M158 108v18M166 108v18M174 108v18M182 108v18M190 108v18M198 108v18M206 108v18M214 108v18M222 108v18M230 108v18M238 108v18"></path>
-    <path d="M282 108h66"></path>
-    <path d="M290 132h34v14h-34zM290 132l17 8 17-8"></path>
-    <path d="M290 118v-10h10v10"></path>
-    <path d="M300 182v18M312 182v18"></path>
-    <path d="M294 200h24v4h-24z"></path>
-    <path d="M134 186h106"></path>
-    <path d="M138 186h20v10h-20zM162 186h20v10h-20zM186 186h20v10h-20zM210 186h20v10h-20z"></path>
+    <path d="M286 53v8M306 58v5M330 52v9"></path>
+    <path d="M266 66h88"></path>
+    <path d="M270 66v8M278 66v8M286 66v8M294 66v8M302 66v8M310 66v8M318 66v8M326 66v8M334 66v8M342 66v8M350 66v8"></path>
   </g>
-  <g style="fill:var(--ink);font-size:11.5px;paint-order:stroke;stroke:var(--paper);stroke-width:4px;stroke-linejoin:round">
-    <text x="54" y="25" text-anchor="middle" dominant-baseline="hanging">STATION</text>
-    <text x="189" y="29" text-anchor="middle" dominant-baseline="hanging">CAFÉ</text>
-    <text x="315" y="27" text-anchor="middle" dominant-baseline="hanging">PARK</text>
-    <text x="54" y="105" text-anchor="middle" dominant-baseline="hanging">$ BANK</text>
-    <text x="189" y="105" text-anchor="middle" dominant-baseline="hanging">LIBRARY</text>
-    <text x="315" y="105" text-anchor="middle" dominant-baseline="hanging" textLength="62" lengthAdjust="spacingAndGlyphs">POST OFFICE</text>
-    <text x="54" y="185" text-anchor="middle" dominant-baseline="hanging">BUS STOP</text>
-    <text x="189" y="185" text-anchor="middle" dominant-baseline="hanging">MARKET</text>
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1">
+    <rect x="272" y="12" width="20" height="8" rx="1"></rect>
+    <path d="M282 20v6"></path>
   </g>
-  <g style="fill:var(--ink);font-size:13px;font-style:italic">
-    <text x="180" y="90" text-anchor="middle">High Street</text>
-    <text x="180" y="172" text-anchor="middle">Low Street</text>
-    <text transform="translate(116,120) rotate(-90)" text-anchor="middle">Mill Lane</text>
-    <text transform="translate(270,120) rotate(-90)" text-anchor="middle">Park Lane</text>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="282" y="18.4">PARK</text>
+  </g>
+
+  <!-- BANK — left, middle -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <path d="M12 112l46-12 46 12z"></path>
+    <rect x="14" y="112" width="88" height="34"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:2;fill:none">
+    <path d="M26 118v22M44 118v22M62 118v22M80 118v22M92 118v22"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.4;fill:none">
+    <path d="M10 146h96M6 152h104"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="26" y="100" width="34" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="43" y="106.4">BANK</text>
+  </g>
+
+  <!-- LIBRARY — middle, middle -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="136" y="100" width="80" height="52"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.2;fill:var(--paper)">
+    <rect x="144" y="118" width="10" height="30"></rect>
+    <rect x="160" y="118" width="10" height="30"></rect>
+    <rect x="176" y="118" width="10" height="30"></rect>
+    <rect x="192" y="118" width="10" height="30"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.4;fill:none">
+    <path d="M136 152h80M132 157h88"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="152" y="104" width="48" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="176" y="110.4">LIBRARY</text>
+  </g>
+
+  <!-- POST OFFICE — right, middle -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="270" y="102" width="80" height="46"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.2;fill:var(--paper)">
+    <rect x="278" y="120" width="16" height="12"></rect>
+    <rect x="300" y="120" width="16" height="12"></rect>
+    <path d="M320 134v14h12v-14"></path>
+  </g>
+  <g style="fill:var(--blue);stroke:var(--ink);stroke-width:1.3">
+    <rect x="340" y="126" width="12" height="22" rx="2"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1;fill:none">
+    <path d="M342 133h8M340 130h12"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="278" y="104" width="52" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:5.8px;font-family:var(--sans);letter-spacing:.2px;text-anchor:middle">
+    <text x="304" y="110.2">POST OFFICE</text>
+  </g>
+
+  <!-- BUS STOP — left, bottom -->
+  <g style="stroke:var(--ink);stroke-width:1.6;fill:none">
+    <path d="M10 190h56"></path>
+    <path d="M14 190v40M62 190v40"></path>
+    <path d="M22 208h34v5H22z"></path>
+    <path d="M26 213v8M52 213v8"></path>
+  </g>
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.4">
+    <rect x="74" y="194" width="18" height="22" rx="2"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:.9;opacity:.6;fill:none">
+    <path d="M78 200h10M78 205h10M78 210h10"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="14" y="182" width="34" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6px;font-family:var(--sans);letter-spacing:.4px;text-anchor:middle">
+    <text x="31" y="188.2">BUS STOP</text>
+  </g>
+
+  <!-- MARKET — middle, bottom -->
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1.4">
+    <path d="M134 196l24-10 24 10z"></path>
+    <path d="M186 196l24-10 24 10z"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.3;fill:none">
+    <path d="M140 196v30M176 196v30M192 196v30M228 196v30"></path>
+    <path d="M140 214h36M192 214h36"></path>
+  </g>
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1">
+    <circle cx="150" cy="205" r="3"></circle>
+    <circle cx="164" cy="205" r="3"></circle>
+    <circle cx="202" cy="205" r="3"></circle>
+    <circle cx="216" cy="205" r="3"></circle>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="158" y="184" width="34" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="175" y="190.4">MARKET</text>
+  </g>
+
+  <!-- HOTEL — right, bottom -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="270" y="184" width="82" height="44"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.2;fill:var(--paper)">
+    <rect x="276" y="202" width="12" height="10"></rect>
+    <rect x="294" y="202" width="12" height="10"></rect>
+    <rect x="330" y="202" width="12" height="10"></rect>
+    <path d="M310 210v18h14v-18"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1.3">
+    <path d="M306 210h22l-4-7h-14z"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="280" y="186" width="30" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="295" y="192.4">HOTEL</text>
+  </g>
+
+  <g style="fill:var(--ink);font-size:7.5px;font-style:italic;font-family:var(--serif);text-anchor:middle;paint-order:stroke;stroke:var(--paper);stroke-width:2.4px;stroke-linejoin:round">
+    <text x="66" y="89.4">High Street</text>
+    <text x="300" y="89.4">High Street</text>
+    <text x="120" y="173.4">Low Street</text>
+    <text x="220" y="173.4">Low Street</text>
+    <text transform="translate(122,58) rotate(-90)" text-anchor="middle">Mill Lane</text>
+    <text transform="translate(122,206) rotate(-90)" text-anchor="middle">Mill Lane</text>
+    <text transform="translate(254,58) rotate(-90)" text-anchor="middle">Park Lane</text>
+    <text transform="translate(254,206) rotate(-90)" text-anchor="middle">Park Lane</text>
   </g>
 </svg>
 <div class="qopts">
-<label class="opt" style="position:absolute;left:15%;top:25.8%;transform:translate(-50%,-50%)" aria-label="the station"><input type="checkbox" value="station"></label>
-<label class="opt" style="position:absolute;left:52.5%;top:25.8%;transform:translate(-50%,-50%)" aria-label="the café"><input type="checkbox" value="cafe"></label>
-<label class="opt" style="position:absolute;left:87.5%;top:25.8%;transform:translate(-50%,-50%)" aria-label="the park"><input type="checkbox" value="park"></label>
-<label class="opt" style="position:absolute;left:15%;top:59.2%;transform:translate(-50%,-50%)" aria-label="the bank"><input type="checkbox" value="bank"></label>
-<label class="opt" style="position:absolute;left:52.5%;top:59.2%;transform:translate(-50%,-50%)" aria-label="the library"><input type="checkbox" value="library"></label>
-<label class="opt" style="position:absolute;left:87.5%;top:59.2%;transform:translate(-50%,-50%)" aria-label="the post office"><input type="checkbox" value="post office"></label>
-<label class="opt" style="position:absolute;left:15%;top:92.2%;transform:translate(-50%,-50%)" aria-label="the bus stop"><input type="checkbox" value="bus stop"></label>
-<label class="opt" style="position:absolute;left:52.5%;top:92.2%;transform:translate(-50%,-50%)" aria-label="the market"><input type="checkbox" value="market"></label>
+<label class="opt" style="position:absolute;left:16%;top:17%;transform:translate(-50%,-50%)" aria-label="the station"><input type="checkbox" value="station"></label>
+<label class="opt" style="position:absolute;left:52%;top:17%;transform:translate(-50%,-50%)" aria-label="the café"><input type="checkbox" value="cafe"></label>
+<label class="opt" style="position:absolute;left:86%;top:17%;transform:translate(-50%,-50%)" aria-label="the park"><input type="checkbox" value="park"></label>
+<label class="opt" style="position:absolute;left:16%;top:53%;transform:translate(-50%,-50%)" aria-label="the bank"><input type="checkbox" value="bank"></label>
+<label class="opt" style="position:absolute;left:52%;top:53%;transform:translate(-50%,-50%)" aria-label="the library"><input type="checkbox" value="library"></label>
+<label class="opt" style="position:absolute;left:86%;top:53%;transform:translate(-50%,-50%)" aria-label="the post office"><input type="checkbox" value="post office"></label>
+<label class="opt" style="position:absolute;left:16%;top:86%;transform:translate(-50%,-50%)" aria-label="the bus stop"><input type="checkbox" value="bus stop"></label>
+<label class="opt" style="position:absolute;left:52%;top:86%;transform:translate(-50%,-50%)" aria-label="the market"><input type="checkbox" value="market"></label>
+<label class="opt" style="position:absolute;left:86%;top:86%;transform:translate(-50%,-50%)" aria-label="the hotel"><input type="checkbox" value="hotel"></label>
 </div>
 </div>
 </div>
 <div class="qitem" data-a="post office" style="padding-top:12px">
 <p class="qstem"><span class="qnum">2.</span> Lia works nights. She sorts the letters and the parcels that arrive after six, and she leaves at two in the morning. Tick the place where Lia works.</p>
 <div class="vz-map viz">
-<svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, eight places each drawn with its name on a sign — a station under a canopy with a clock, a café with a striped awning, a park with trees, a bank under a dollar sign, a library wall of books, a post office with a postbox, a bus shelter, and two market awnings">
+<svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, with nine places, each named on a sign in the drawing — a station with a canopy and a platform clock, a café with a striped awning and two tables outside, a park with trees behind railings, a bank with a columned front and steps, a library with tall windows, a post office with a postbox on the pavement, a bus stop with a shelter and a bench, a market with two stalls, and a hotel with a door canopy">
+  <!-- MAP GEOMETRY — THE ONE TABLE. The drawing below and every tick a lesson lays over it read
+       from these numbers, so a tick can never sit off its building.
+         canvas      360 x 240
+         columns     left x 4-112 · Mill Lane x 116-128 · middle x 132-244 · Park Lane x 248-260 · right x 264-356
+         rows        top y 6-76 · High Street y 80-92 · middle y 96-160 · Low Street y 164-176 · bottom y 180-234
+         tick %      left 16% · middle 52% · right 86%    top 17% · middle 53% · bottom 86%
+       THE NINE PLACES, by column and row:
+         top     station (left)   café (middle)     park (right)
+         middle  bank (left)      library (middle)  post office (right)
+         bottom  bus stop (left)  market (middle)   hotel (right)
+       A lesson copies this drawing verbatim — viewBox, streets, nine places, signs, labels and the
+       table above — and writes only its own question and its own tick labels. No page draws its own map. -->
   <rect x="0" y="0" width="360" height="240" style="fill:var(--paper)"></rect>
+
   <g style="fill:var(--tan);opacity:.45">
-    <rect x="0" y="78" width="360" height="16"></rect>
-    <rect x="0" y="160" width="360" height="16"></rect>
-    <rect x="104" y="0" width="16" height="240"></rect>
-    <rect x="258" y="0" width="16" height="240"></rect>
+    <rect x="0" y="80" width="360" height="12"></rect>
+    <rect x="0" y="164" width="360" height="12"></rect>
+    <rect x="116" y="0" width="12" height="240"></rect>
+    <rect x="248" y="0" width="12" height="240"></rect>
   </g>
-  <g style="stroke:var(--ink);stroke-width:2;fill:var(--paper)">
-    <rect x="14" y="20" width="80" height="52"></rect>
-    <rect x="130" y="24" width="118" height="48"></rect>
-    <rect x="282" y="22" width="66" height="50"></rect>
-    <rect x="14" y="100" width="80" height="54"></rect>
-    <rect x="130" y="100" width="118" height="54"></rect>
-    <rect x="282" y="100" width="66" height="54"></rect>
-    <rect x="14" y="180" width="80" height="54"></rect>
-    <rect x="130" y="180" width="118" height="54"></rect>
+  <g style="stroke:var(--ink);stroke-width:.8;opacity:.4;fill:none">
+    <path d="M0 80h360M0 92h360M0 164h360M0 176h360M116 0v240M128 0v240M248 0v240M260 0v240"></path>
+  </g>
+  <g style="stroke:var(--paper);stroke-width:1.4;stroke-dasharray:6 7;opacity:.95;fill:none">
+    <path d="M0 86h138M196 86h56M0 170h360M122 0v70M122 104v136M254 0v70M254 104v136"></path>
+  </g>
+  <g style="fill:var(--paper);opacity:.95">
+    <rect x="152" y="81" width="4" height="10"></rect>
+    <rect x="160" y="81" width="4" height="10"></rect>
+    <rect x="168" y="81" width="4" height="10"></rect>
+    <rect x="176" y="81" width="4" height="10"></rect>
+    <rect x="184" y="81" width="4" height="10"></rect>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="300" y="82" width="22" height="8" rx="2"></rect>
+    <rect x="176" y="166" width="20" height="8" rx="2"></rect>
+  </g>
+  <g style="fill:var(--ink);opacity:.85">
+    <circle cx="180" cy="177" r="1.6"></circle>
+    <circle cx="192" cy="177" r="1.6"></circle>
+    <circle cx="304" cy="91" r="1.6"></circle>
+    <circle cx="318" cy="91" r="1.6"></circle>
+  </g>
+
+  <g style="fill:var(--ink);opacity:.07">
+    <rect x="12.5" y="32.5" width="94" height="44"></rect>
+    <rect x="140.5" y="36.5" width="100" height="40"></rect>
+    <rect x="16.5" y="114.5" width="88" height="34"></rect>
+    <rect x="138.5" y="102.5" width="80" height="52"></rect>
+    <rect x="272.5" y="104.5" width="80" height="46"></rect>
+    <rect x="272.5" y="186.5" width="82" height="44"></rect>
+  </g>
+
+  <!-- STATION — left, top -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="10" y="30" width="94" height="44"></rect>
+    <path d="M6 30h102v-7H6z"></path>
+  </g>
+  <g style="fill:var(--ink);opacity:.55">
+    <path d="M8 25h20v2H8zM34 25h20v2H34zM60 25h20v2H60zM86 25h20v2H86z"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.3;fill:none">
+    <circle cx="92" cy="42" r="5.5"></circle>
+    <path d="M92 42v-3M92 42h2.2"></path>
+    <path d="M16 42h12v10H16zM34 42h12v10H34zM52 42h12v10H52z"></path>
+    <path d="M20 74v-9h12v9"></path>
+    <path d="M10 74h94"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="14" y="32" width="40" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="34" y="38.4">STATION</text>
+  </g>
+
+  <!-- CAFÉ — middle, top -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="138" y="34" width="100" height="40"></rect>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1.4">
+    <path d="M134 34h108l-5-9h-98z"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:.9;opacity:.5;fill:none">
+    <path d="M146 25v9M158 25v9M170 25v9M182 25v9M194 25v9M206 25v9M218 25v9M230 25v9"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.3;fill:none">
+    <path d="M146 48h20v12h-20z"></path>
+    <path d="M176 48h28v10h-28z"></path>
+    <path d="M216 48v26M216 48h14v18h-14"></path>
+    <path d="M148 74h84"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="184" y="36" width="26" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="197" y="42.4">CAFÉ</text>
+  </g>
+
+  <!-- PARK — right, top -->
+  <g style="fill:var(--green);opacity:.2">
+    <rect x="266" y="10" width="88" height="58"></rect>
+  </g>
+  <g style="fill:var(--green);opacity:.5;stroke:var(--ink);stroke-width:1.2">
+    <circle cx="286" cy="44" r="9"></circle>
+    <circle cx="306" cy="50" r="8"></circle>
+    <circle cx="330" cy="42" r="10"></circle>
   </g>
   <g style="stroke:var(--ink);stroke-width:1.5;fill:none">
-    <path d="M14 20h80"></path>
-    <circle cx="76" cy="28" r="5"></circle>
-    <path d="M76 28v-3M76 28h2"></path>
-    <path d="M14 66h80"></path>
-    <path d="M14 28h66v6H14z"></path>
-    <path d="M130 60h118"></path>
-    <path d="M134 40h40v8h-40z"></path>
-    <path d="M174 42a4 4 0 0 1 0 4"></path>
-    <path d="M300 46c4-9 9-9 13 0M316 46c4-9 9-9 13 0"></path>
-    <path d="M290 64h50"></path>
-    <path d="M14 100l40-18 40 18"></path>
-    <path d="M24 100v20M36 100v20M48 100v20M60 100v20M72 100v20M14 120h80"></path>
-    <path d="M134 108v18M142 108v18M150 108v18M158 108v18M166 108v18M174 108v18M182 108v18M190 108v18M198 108v18M206 108v18M214 108v18M222 108v18M230 108v18M238 108v18"></path>
-    <path d="M282 108h66"></path>
-    <path d="M290 132h34v14h-34zM290 132l17 8 17-8"></path>
-    <path d="M290 118v-10h10v10"></path>
-    <path d="M300 182v18M312 182v18"></path>
-    <path d="M294 200h24v4h-24z"></path>
-    <path d="M134 186h106"></path>
-    <path d="M138 186h20v10h-20zM162 186h20v10h-20zM186 186h20v10h-20zM210 186h20v10h-20z"></path>
+    <path d="M286 53v8M306 58v5M330 52v9"></path>
+    <path d="M266 66h88"></path>
+    <path d="M270 66v8M278 66v8M286 66v8M294 66v8M302 66v8M310 66v8M318 66v8M326 66v8M334 66v8M342 66v8M350 66v8"></path>
   </g>
-  <g style="fill:var(--ink);font-size:11.5px;paint-order:stroke;stroke:var(--paper);stroke-width:4px;stroke-linejoin:round">
-    <text x="54" y="25" text-anchor="middle" dominant-baseline="hanging">STATION</text>
-    <text x="189" y="29" text-anchor="middle" dominant-baseline="hanging">CAFÉ</text>
-    <text x="315" y="27" text-anchor="middle" dominant-baseline="hanging">PARK</text>
-    <text x="54" y="105" text-anchor="middle" dominant-baseline="hanging">$ BANK</text>
-    <text x="189" y="105" text-anchor="middle" dominant-baseline="hanging">LIBRARY</text>
-    <text x="315" y="105" text-anchor="middle" dominant-baseline="hanging" textLength="62" lengthAdjust="spacingAndGlyphs">POST OFFICE</text>
-    <text x="54" y="185" text-anchor="middle" dominant-baseline="hanging">BUS STOP</text>
-    <text x="189" y="185" text-anchor="middle" dominant-baseline="hanging">MARKET</text>
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1">
+    <rect x="272" y="12" width="20" height="8" rx="1"></rect>
+    <path d="M282 20v6"></path>
   </g>
-  <g style="fill:var(--ink);font-size:13px;font-style:italic">
-    <text x="180" y="90" text-anchor="middle">High Street</text>
-    <text x="180" y="172" text-anchor="middle">Low Street</text>
-    <text transform="translate(116,120) rotate(-90)" text-anchor="middle">Mill Lane</text>
-    <text transform="translate(270,120) rotate(-90)" text-anchor="middle">Park Lane</text>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="282" y="18.4">PARK</text>
+  </g>
+
+  <!-- BANK — left, middle -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <path d="M12 112l46-12 46 12z"></path>
+    <rect x="14" y="112" width="88" height="34"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:2;fill:none">
+    <path d="M26 118v22M44 118v22M62 118v22M80 118v22M92 118v22"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.4;fill:none">
+    <path d="M10 146h96M6 152h104"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="26" y="100" width="34" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="43" y="106.4">BANK</text>
+  </g>
+
+  <!-- LIBRARY — middle, middle -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="136" y="100" width="80" height="52"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.2;fill:var(--paper)">
+    <rect x="144" y="118" width="10" height="30"></rect>
+    <rect x="160" y="118" width="10" height="30"></rect>
+    <rect x="176" y="118" width="10" height="30"></rect>
+    <rect x="192" y="118" width="10" height="30"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.4;fill:none">
+    <path d="M136 152h80M132 157h88"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="152" y="104" width="48" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="176" y="110.4">LIBRARY</text>
+  </g>
+
+  <!-- POST OFFICE — right, middle -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="270" y="102" width="80" height="46"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.2;fill:var(--paper)">
+    <rect x="278" y="120" width="16" height="12"></rect>
+    <rect x="300" y="120" width="16" height="12"></rect>
+    <path d="M320 134v14h12v-14"></path>
+  </g>
+  <g style="fill:var(--blue);stroke:var(--ink);stroke-width:1.3">
+    <rect x="340" y="126" width="12" height="22" rx="2"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1;fill:none">
+    <path d="M342 133h8M340 130h12"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="278" y="104" width="52" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:5.8px;font-family:var(--sans);letter-spacing:.2px;text-anchor:middle">
+    <text x="304" y="110.2">POST OFFICE</text>
+  </g>
+
+  <!-- BUS STOP — left, bottom -->
+  <g style="stroke:var(--ink);stroke-width:1.6;fill:none">
+    <path d="M10 190h56"></path>
+    <path d="M14 190v40M62 190v40"></path>
+    <path d="M22 208h34v5H22z"></path>
+    <path d="M26 213v8M52 213v8"></path>
+  </g>
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.4">
+    <rect x="74" y="194" width="18" height="22" rx="2"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:.9;opacity:.6;fill:none">
+    <path d="M78 200h10M78 205h10M78 210h10"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="14" y="182" width="34" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6px;font-family:var(--sans);letter-spacing:.4px;text-anchor:middle">
+    <text x="31" y="188.2">BUS STOP</text>
+  </g>
+
+  <!-- MARKET — middle, bottom -->
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1.4">
+    <path d="M134 196l24-10 24 10z"></path>
+    <path d="M186 196l24-10 24 10z"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.3;fill:none">
+    <path d="M140 196v30M176 196v30M192 196v30M228 196v30"></path>
+    <path d="M140 214h36M192 214h36"></path>
+  </g>
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1">
+    <circle cx="150" cy="205" r="3"></circle>
+    <circle cx="164" cy="205" r="3"></circle>
+    <circle cx="202" cy="205" r="3"></circle>
+    <circle cx="216" cy="205" r="3"></circle>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="158" y="184" width="34" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="175" y="190.4">MARKET</text>
+  </g>
+
+  <!-- HOTEL — right, bottom -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="270" y="184" width="82" height="44"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.2;fill:var(--paper)">
+    <rect x="276" y="202" width="12" height="10"></rect>
+    <rect x="294" y="202" width="12" height="10"></rect>
+    <rect x="330" y="202" width="12" height="10"></rect>
+    <path d="M310 210v18h14v-18"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1.3">
+    <path d="M306 210h22l-4-7h-14z"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="280" y="186" width="30" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="295" y="192.4">HOTEL</text>
+  </g>
+
+  <g style="fill:var(--ink);font-size:7.5px;font-style:italic;font-family:var(--serif);text-anchor:middle;paint-order:stroke;stroke:var(--paper);stroke-width:2.4px;stroke-linejoin:round">
+    <text x="66" y="89.4">High Street</text>
+    <text x="300" y="89.4">High Street</text>
+    <text x="120" y="173.4">Low Street</text>
+    <text x="220" y="173.4">Low Street</text>
+    <text transform="translate(122,58) rotate(-90)" text-anchor="middle">Mill Lane</text>
+    <text transform="translate(122,206) rotate(-90)" text-anchor="middle">Mill Lane</text>
+    <text transform="translate(254,58) rotate(-90)" text-anchor="middle">Park Lane</text>
+    <text transform="translate(254,206) rotate(-90)" text-anchor="middle">Park Lane</text>
   </g>
 </svg>
 <div class="qopts">
-<label class="opt" style="position:absolute;left:15%;top:25.8%;transform:translate(-50%,-50%)" aria-label="the station"><input type="checkbox" value="station"></label>
-<label class="opt" style="position:absolute;left:52.5%;top:25.8%;transform:translate(-50%,-50%)" aria-label="the café"><input type="checkbox" value="cafe"></label>
-<label class="opt" style="position:absolute;left:87.5%;top:25.8%;transform:translate(-50%,-50%)" aria-label="the park"><input type="checkbox" value="park"></label>
-<label class="opt" style="position:absolute;left:15%;top:59.2%;transform:translate(-50%,-50%)" aria-label="the bank"><input type="checkbox" value="bank"></label>
-<label class="opt" style="position:absolute;left:52.5%;top:59.2%;transform:translate(-50%,-50%)" aria-label="the library"><input type="checkbox" value="library"></label>
-<label class="opt" style="position:absolute;left:87.5%;top:59.2%;transform:translate(-50%,-50%)" aria-label="the post office"><input type="checkbox" value="post office"></label>
-<label class="opt" style="position:absolute;left:15%;top:92.2%;transform:translate(-50%,-50%)" aria-label="the bus stop"><input type="checkbox" value="bus stop"></label>
-<label class="opt" style="position:absolute;left:52.5%;top:92.2%;transform:translate(-50%,-50%)" aria-label="the market"><input type="checkbox" value="market"></label>
+<label class="opt" style="position:absolute;left:16%;top:17%;transform:translate(-50%,-50%)" aria-label="the station"><input type="checkbox" value="station"></label>
+<label class="opt" style="position:absolute;left:52%;top:17%;transform:translate(-50%,-50%)" aria-label="the café"><input type="checkbox" value="cafe"></label>
+<label class="opt" style="position:absolute;left:86%;top:17%;transform:translate(-50%,-50%)" aria-label="the park"><input type="checkbox" value="park"></label>
+<label class="opt" style="position:absolute;left:16%;top:53%;transform:translate(-50%,-50%)" aria-label="the bank"><input type="checkbox" value="bank"></label>
+<label class="opt" style="position:absolute;left:52%;top:53%;transform:translate(-50%,-50%)" aria-label="the library"><input type="checkbox" value="library"></label>
+<label class="opt" style="position:absolute;left:86%;top:53%;transform:translate(-50%,-50%)" aria-label="the post office"><input type="checkbox" value="post office"></label>
+<label class="opt" style="position:absolute;left:16%;top:86%;transform:translate(-50%,-50%)" aria-label="the bus stop"><input type="checkbox" value="bus stop"></label>
+<label class="opt" style="position:absolute;left:52%;top:86%;transform:translate(-50%,-50%)" aria-label="the market"><input type="checkbox" value="market"></label>
+<label class="opt" style="position:absolute;left:86%;top:86%;transform:translate(-50%,-50%)" aria-label="the hotel"><input type="checkbox" value="hotel"></label>
 </div>
 </div>
 </div>

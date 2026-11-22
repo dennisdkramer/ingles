@@ -1,0 +1,12 @@
+rowctx - the row and cell rules in every context
+
+  rules read: 1520 | layers: 16 
+
+  page grid:     display ok | flex-direction ok | flex-wrap ok | cell flex ok | cell min-width ok | cell flex-direction ok
+  section:       display ok | flex-direction ok | flex-wrap ok | cell flex ok | cell min-width ok | cell flex-direction ok
+  block:         display ok | flex-direction ok | flex-wrap ok | cell flex ok | cell min-width ok | cell flex-direction ok
+  card:          display ok | flex-direction ok | flex-wrap ok | cell flex ok | cell min-width ok | cell flex-direction ok
+  inside a row:  display ok | flex-direction ok | flex-wrap ok | cell flex ok | cell min-width ok | cell flex-direction ok
+  chart cell:    flex ok 1 (no exception)
+
+RESULT: every context resolves to the row rules

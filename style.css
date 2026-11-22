@@ -1636,6 +1636,16 @@
      affected — it is the cell, so it has nothing to centre within */
   .rows>div>.chartwrap{margin-inline:auto}
   .chartwrap>.chart{margin:0}
+  /* #STRIP — A COMIC PANEL. Two sizes, chosen independently. THE FRAME is the cell: its width comes from
+     the table's columns (or --strip-w), its height from the row (or --strip-h). THE DRAWING keeps its own
+     aspect and is centred both ways; it is never stretched, so a frame that grows in WIDTH only moves the
+     picture's margins, and a frame that grows in HEIGHT only does the same. When the frame grows in both
+     directions the drawing grows with it, because its height follows the frame's (height:100%, width:auto)
+     and the ratio does the rest. The svg's own width/height attributes are the floor it can never sink
+     below. Markup: <td class="strip"><svg viewBox="0 0 160 74" width="160" height="74">…</svg> */
+  .strip{display:flex;align-items:center;justify-content:center;
+    width:var(--strip-w,100%);min-height:var(--strip-h,0);height:var(--strip-h,auto)}
+  .strip>svg{display:block;flex:0 0 auto;height:100%;width:auto;max-width:100%}
   .chartcap{font-size:calc(var(--s0) + 2pt);font-weight:300;color:var(--ink-2);text-align:center;
     letter-spacing:normal;margin:0 0 6px}
   /* a label for more than one column draws no column: its cell is zero wide, its borders are gone, and the
@@ -1669,11 +1679,13 @@
   .vz-play{display:block;margin:0}
   .vz-audio{display:block;width:100%}
   /* An in-block drawing is the builder's to size: `--map-w` caps the wrapper's width (any CSS length),
-     and unset it is the host's own width — the size the map has always been drawn at. It is a cap and
-     not a width so a drawing can never overflow the host that holds it; a builder wanting it larger
-     gives it a wider host. The wrapper hugs the drawing (the svg is the only thing that gives the wrapper
-     its height) so the tick labels laid over it in % stay on their places at every width. */
-  .vz-map{position:relative;width:var(--map-w,100%);max-width:100%}
+     and unset it is the host's own width. It is a cap and not a width so a drawing can never overflow the
+     host that holds it. THE STREET MAP HAS A FIXED CAP: half of an in-block row, measured in Chrome at
+     the standard 1200px content width (.block>.rows is 1146px there), so max-width is 573px. Below that
+     the drawing is as wide as its host, so a narrow screen shrinks it rather than clipping it. The wrapper
+     hugs the drawing (the svg is the only thing that gives the wrapper its height) so the tick labels laid
+     over it in % stay on their places at every width. */
+  .vz-map{position:relative;width:var(--map-w,100%);max-width:min(100%,573px)}
   .vz-map>svg{display:block;width:100%;height:auto}
   .vz-controls{display:none;align-items:center;gap:10px;margin:8px 0 10px}
   .vz-play.is-enhanced .vz-controls{display:flex}
