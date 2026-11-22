@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Capability map — English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=845b159101">
+<link rel="stylesheet" href="style.css?v=16fbe6f2c7">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>VISUAL REFERENCE</span></h1>
@@ -187,6 +187,7 @@
 <div id="chart">
 <p>A chart can stand outside a block or sit inside one, and either way the text beside it has to explain it or point at it — a chart nobody refers to is a picture the student has to guess at. The chart below is that pair: the sentence introduces it, and the chart centres itself in the column it is given.</p>
 <p><b>A column header is content, and it earns its row the way every other word does: it must name something the student has to tell apart</b> — a contrast, a category, or the question a column answers (<i>Written / Said</i>, <i>Now / Past</i>, <i>Which one?</i>). A header that only says what a column obviously holds — <i>The sentence</i>, <i>What it means</i>, <i>The form</i>, <i>The piece</i>, <i>Letter</i> — says nothing and is not written: the header row is collapsed to the same 3px rule the chart below uses.</p>
+<p class="dim">The stylesheet carries the same note, above its collapsed-header rule, because every chart on the site is held to it: <b>no heading is the default</b>, and an omitted header row is <b>collapsed, never deleted</b> — <code>&lt;thead&gt;&lt;tr class="bare"&gt;&lt;th colspan="N"&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</code>, where N is the table's real column count. The chart keeps its top edge, and the row says nothing it does not need to say.</p>
 <figure class="chartwrap">
 <table class="chart">
 <thead><tr class="bare"><th colspan="3"></th></tr></thead>

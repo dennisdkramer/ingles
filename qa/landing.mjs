@@ -288,11 +288,16 @@ ok('a granted new track is live, not locked', !!adv && !adv.classList.contains('
 ok('its lessons are listed from lessons.json', !!adv && adv.querySelectorAll('a.ltitle').length === 2);
 w.eval('teacher=true;QUEUE={pending:[],approved:[{email:"s@x.y",name:"Sol",'
   + 'tracks:[{track:"business",lastCompleted:1}]}]};document.getElementById("app").innerHTML=approvedHTML();');
+const css = fs.readFileSync('style.css', 'utf8');
 const advSw = [...d.querySelectorAll('#app .tswitch')].find(x => /Advanced/.test(x.getAttribute('title') || ''));
 ok('teacher: the new track gets a switch even though nobody holds it', !!advSw && !advSw.classList.contains('on'));
+/* the switch takes its hue from the track's own class (`.t-<track>` sets `--track-h`), and `.bookbtn,.tswitch`
+   falls back to a hue when a new track has no class of its own yet — a track that arrives next year still gets
+   a colour to turn ON in. */
 ok('teacher: the new track switch has a colour to turn ON in',
-  !!advSw && /--sw:#[0-9a-f]{6}/i.test(advSw.getAttribute('style') || ''),
-  advSw ? advSw.getAttribute('style') : 'none');
+  !!advSw && advSw.classList.contains('t-advanced') &&
+  /\.bookbtn,\.tswitch\{--sw:oklch\([^)]*var\(--track-h,/.test(css),
+  advSw ? advSw.getAttribute('class') : 'none');
 
 /* the owner's speed/security report (2026-11-09): the "Carregando" line is a centred spiral; an expired
    credential is refused BEFORE anything protected is painted; a rejected session lands on the login card in
@@ -301,7 +306,7 @@ const spin = w.eval('spinnerHTML()');
 ok('the loading state is a centred spiral, not a "Carregando" line',
   /class="loadwrap"/.test(spin) && /class="spinner"/.test(spin) && !/Carregando…/.test(d.body.innerHTML),
   spin.slice(0, 46));
-const css = fs.readFileSync('style.css', 'utf8');
+const cssFocus = css;
 ok('the spiral is centred and animated',
   /\.loadwrap\{[^}]*justify-content:center/.test(css) && /\.spinner\{[^}]*animation:spin/.test(css));
 w.localStorage.setItem('eod_session',
@@ -328,7 +333,6 @@ key('Tab');
 ok('Tab turns focus rings on', d.documentElement.classList.contains('kbd'));
 d.body.dispatchEvent(new w.MouseEvent('mousedown', { bubbles: true }));
 ok('a pointer press turns focus rings off again', !d.documentElement.classList.contains('kbd'));
-const cssFocus = fs.readFileSync('style.css', 'utf8');
 const ringRules = [...cssFocus.matchAll(/(?:^|\n)([^\n{}]*:focus-visible[^\n{}]*)\{/g)].map(m => m[1].trim());
 ok('every focus-ring rule in style.css is gated by html.kbd',
   ringRules.length >= 6 && ringRules.every(r => /^html\.kbd\b/.test(r)),
@@ -349,11 +353,17 @@ ok('the card trigger is 4pt larger than a button, and never wraps',
 ok('a too-long label is SHRUNK to fit, never wrapped or clipped',
   /function fitBookText\(\)/.test(html) && /scrollWidth>b\.clientWidth/.test(html) && /fs>11/.test(html),
   'index.html');
-/* EXACTLY THREE per row: a fixed count cannot reflow when tracks.json lands or the window moves */
-ok('the track grid is a fixed three columns, not auto-fit',
-  /\.tracks\{[^}]*grid-template-columns:repeat\(3,/.test(css) && !/\.tracks\{[^}]*repeat\(auto-fit/.test(css),
+/* THREE PER ROW, and no reflow: the row is a wrapping flex, and every card takes a third of it
+   (`flex-basis: calc(33.33% - …)`), so the count cannot change when tracks.json lands or the window moves. */
+ok('the track row keeps three cards per row, from a one-third basis',
+  /\.tracks\{[^}]*display:flex[^}]*flex-wrap:wrap/.test(css) &&
+  /\.track-card\{[^}]*flex:1 1 calc\(33\.33% -/.test(css) &&
+  !/grid-template-columns:repeat\(auto-fit/.test(css),
   (css.match(/\.tracks\{[^}]*/) || [''])[0]);
-const cssHash = crypto.createHash('sha256').update(fs.readFileSync('style.css')).digest('hex').slice(0, 10);
+/* the stamp is the file's own hash with CRLF folded to LF, exactly as build-lessons.mjs computes it — a
+   Windows checkout must pass the same assertion a Linux one does. */
+const cssHash = crypto.createHash('sha256')
+  .update(fs.readFileSync('style.css', 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 10);
 const linkTag = (html.match(/<link rel="stylesheet" href="style\.css[^"]*"/) || [''])[0];
 ok('the stylesheet stamp is in the HTML, not applied by JS',
   linkTag === '<link rel="stylesheet" href="style.css?v=' + cssHash + '"', linkTag);
