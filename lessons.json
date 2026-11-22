@@ -174,13 +174,13 @@
     },
     {
       "n": 2,
-      "title": "The English sentence: who, then the verb, then the rest",
-      "file": "lesson2-TheSentenceAndBe.html"
+      "title": "Word order, be, and the pronouns: your first sentence at work",
+      "file": "lesson2-Word-order-be-and-the-pronouns-your-first-sentence-at-work.html"
     },
     {
       "n": 3,
-      "title": "It, there, and the subject English refuses to drop",
-      "file": "lesson3-ItThereAndTheSubject.html"
+      "title": "It and there: the subject every English sentence needs",
+      "file": "lesson3-It-and-there-the-subject-every-English-sentence-needs.html"
     },
     {
       "n": 4,
@@ -189,23 +189,23 @@
     },
     {
       "n": 5,
-      "title": "The mode indicator that carries the tense: don't and doesn't",
-      "file": "lesson5-TheModeIndicatorThatCarriesTheTense.html"
+      "title": "Do and does: the mode indicator that carries the tense",
+      "file": "lesson5-Do-and-does-the-mode-indicator-that-carries-the-tense.html"
     },
     {
       "n": 6,
-      "title": "Prepositions that mean something",
-      "file": "lesson6-Prepositions-that-mean-something.html"
+      "title": "Prepositions: the meaning each one adds",
+      "file": "lesson6-Prepositions-the-meaning-each-one-adds.html"
     },
     {
       "n": 7,
-      "title": "Gonna, wanna, woulda and get",
-      "file": "lesson7-Gonna-wanna-woulda-and-get.html"
+      "title": "Gonna, wanna, woulda - and the meanings of get",
+      "file": "lesson7-Gonna-wanna-woulda-and-the-meanings-of-get.html"
     },
     {
       "n": 8,
-      "title": "Asking so people answer",
-      "file": "lesson8-Asking-so-people-answer.html"
+      "title": "Questions: the word order that gets an answer",
+      "file": "lesson8-Questions-the-word-order-that-gets-an-answer.html"
     },
     {
       "n": 9,
@@ -229,8 +229,8 @@
     },
     {
       "n": 13,
-      "title": "Verb + preposition is one word in your head",
-      "file": "lesson13-Verb-plus-preposition-is-one-word.html"
+      "title": "Verb + preposition: the preposition each verb takes",
+      "file": "lesson13-Verb-plus-preposition-the-preposition-each-verb-takes.html"
     },
     {
       "n": 14,
@@ -239,8 +239,8 @@
     },
     {
       "n": 15,
-      "title": "Can, could, would — getting people to act",
-      "file": "lesson15-Can-could-would-getting-people-to-act.html"
+      "title": "Can, could, would: ability, permission and polite requests",
+      "file": "lesson15-Can-could-would-ability-permission-and-polite-requests.html"
     },
     {
       "n": 16,
@@ -254,18 +254,18 @@
     },
     {
       "n": 18,
-      "title": "The small word that changes the verb",
-      "file": "lesson18-The-small-word-that-changes-the-verb.html"
+      "title": "Phrasal verbs: the verb and the particle as one meaning",
+      "file": "lesson18-Phrasal-verbs-the-verb-and-the-particle-as-one-meaning.html"
     },
     {
       "n": 19,
-      "title": "People in a building",
-      "file": "lesson19-People-in-a-building.html"
+      "title": "Must, have to, should: obligation and advice",
+      "file": "lesson19-Must-have-to-should-obligation-and-advice.html"
     },
     {
       "n": 20,
-      "title": "What you need to do, and what you have to do",
-      "file": "lesson20-Needs-haves-and-shoulds.html"
+      "title": "Polite and direct: the three ways to soften a sentence",
+      "file": "lesson20-Polite-and-direct-the-three-ways-to-soften-a-sentence.html"
     },
     {
       "n": 21,
@@ -279,8 +279,8 @@
     },
     {
       "n": 23,
-      "title": "Until, by, within and ago: the four words a deadline uses",
-      "file": "lesson23-Until-by-within-and-ago-the-four-words-a-deadline-uses.html"
+      "title": "Until, by, within and ago: the four words for a deadline",
+      "file": "lesson23-Until-by-within-and-ago-the-four-words-for-a-deadline.html"
     },
     {
       "n": 24,
@@ -291,6 +291,11 @@
       "n": 25,
       "title": "EXAM — a workday in English, start to finish",
       "file": "lesson25-EXAM-a-workday-in-English-start-to-finish.html"
+    },
+    {
+      "n": 33,
+      "title": "The passive: what was done, and who did it",
+      "file": "lesson33-The-passive-what-was-done-and-who-did-it.html"
     }
   ],
   "adult": [

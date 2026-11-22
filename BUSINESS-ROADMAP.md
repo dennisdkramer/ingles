@@ -5,7 +5,7 @@
 ## Lesson 1: Welcome - how this track works
 
 
-   - Focus: An introduction to how these lessons work and to English in general — the two ideas the whole course stands on: English vowels have no fixed sound, and the Portuguese suffix code already hands you thousands of English words.
+   - Focus: An introduction to how these lessons work and to English in general — the two ideas every later lesson uses: English vowels have no fixed sound, and the Portuguese suffix code already gives you thousands of English words.
    - teaches: `sound/vowel-no-fixed`, `cognate/suffix-code`
    - Deepens: -
    - Uses: -
@@ -13,85 +13,85 @@
    - Examples: "information" / "organization" / "communication" / "the report" / "my project" / "video" / "important"
    - Real-world relevance: The student already reads this vocabulary in their inbox; the lesson shows how much of it they can already decode and why they mispronounce it.
 
-## Lesson 2: The sentence you already own
+## Lesson 2: Word order, be, and the pronouns: your first sentence at work
 
    - Focus: The fixed order of an English sentence, and `be` as the first verb in it.
-   - teaches: `clause/skeleton`, `be/linking-verb`, `pronoun/subject-object`
+   - teaches: `clause/word-order`, `be/linking-verb`, `pronoun/subject-object`
    - Deepens: -
    - Uses: `cognate/suffix-code`
    - Vocabulary: I, you, he, she, it, we, they, my, your, name, job, friend
    - Examples: "I'm an analyst." / "He's a developer." / "She's at the gym." / "We're out of coffee." / "They're here." / "We work for a Brazilian company."
    - Real-world relevance: The first sentence every student needs at work is who they are and what they do; the second is who someone else is.
 
-## Lesson 3: It, there, and the subject English refuses to drop
+## Lesson 3: It and there: the subject every English sentence needs
 
    - Focus: English always has a subject, so `it` and `there` fill the position Portuguese leaves empty.
    - teaches: `clause/dummy-subject`, `be/existence-there`, `pronoun/possessive`
    - Deepens: -
-   - Uses: `clause/skeleton`, `be/linking-verb`, `pronoun/subject-object`
+   - Uses: `clause/word-order`, `be/linking-verb`, `pronoun/subject-object`
    - Vocabulary: this, that, here, there, time, money, problem, idea, cold, hot, tired, hungry
    - Examples: "It's important for the client." / "There are two options." / "Our deadline is Friday." / "There's a match on Sunday."
    - Real-world relevance: "Está difícil", "é importante", "tem um problema" are constant in work talk, and each one needs an English subject before anything else can be said.
 
 ## Lesson 4: Facts and habits - the -s on the third person
 
-   - Focus: The simple present states facts and habits, and -s is the whole tense in the third person.
+   - Focus: The simple present states facts and habits, and in the third person singular the verb adds -s.
    - teaches: `present-simple/facts-not-now`, `present-simple/third-person-s`, `present-simple/frequency-position`
    - Deepens: -
-   - Uses: `clause/skeleton`, `pronoun/subject-object`, `clause/dummy-subject`
+   - Uses: `clause/word-order`, `pronoun/subject-object`, `clause/dummy-subject`
    - Vocabulary: work, live, like, want, need, go, eat, sleep, start, finish, always, usually
    - Examples: "I work for a tech company." / "She checks the numbers every Monday." / "The call starts at nine." / "We usually test on Thursdays." / "My brother works nights." / "The bus leaves at six." / "She never eats breakfast."
    - Real-world relevance: A colleague's first questions are about routine and schedule, and the -s is what separates "I check" from "she checks" in a shared inbox.
 
-## Lesson 5: Do and does - the mode indicator and who the tense belongs to
+## Lesson 5: Do and does: the mode indicator that carries the tense
 
    - Focus: Do and does carry the tense and the person, and the main verb returns to its base form when they are there.
-   - teaches: `mode/slot`, `mode/verb-returns-base`, `mode/negation`
+   - teaches: `mode/place`, `mode/verb-returns-base`, `mode/negation`
    - Deepens: -
    - Uses: `present-simple/third-person-s`, `present-simple/facts-not-now`
    - Vocabulary: do, don't, doesn't, have, need, want, like, work, live, eat, drink, help
    - Examples: "She doesn't send the invoice." / "I don't have the file yet." / "We don't use that system." / "He doesn't answer on Sunday."
    - Real-world relevance: Saying no and correcting a fact is half of a working day, and the -s moves off the verb the moment "doesn't" enters the sentence.
 
-## Lesson 6: Prepositions that mean something
+## Lesson 6: Prepositions: the meaning each one adds
 
    - Focus: in, on and at mean something in themselves, and Portuguese "para" splits into to and for.
    - teaches: `prep/location-in-on-at`, `prep/time-in-on-at`, `prep/to-vs-for`
    - Deepens: -
-   - Uses: `be/existence-there`, `clause/skeleton`
+   - Uses: `be/existence-there`, `clause/word-order`
    - Vocabulary: in, on, at, to, for, home, work, office, bus, morning, night, street
    - Examples: "I'm at the office." / "The file is on your desk." / "This is for the client." / "I'm sending it to Ana." / "The meeting is on Monday at nine." / "The keys are on the table." / "I'm waiting at the bus stop." / "My birthday is in July."
    - Real-world relevance: Where things are, when things happen and who a thing is for are the three facts of every work message, and "para" covers all three in Portuguese.
 
-## Lesson 7: Gonna, wanna, woulda - and get, the word that does everything
+## Lesson 7: Gonna, wanna, woulda - and the meanings of get
 
-   - Focus: The spoken reductions, and `get` as the verb that covers a dozen daily meanings.
-   - teaches: `reduction/gonna-future-mode`, `reduction/wanna-woulda`, `get/wildcard`
+   - Focus: The three spoken reductions, and the meaning `get` has in each phrase it appears in.
+   - teaches: `reduction/gonna-future-mode`, `reduction/wanna-woulda`, `get/meaning-changes`
    - Deepens: -
-   - Uses: `mode/verb-returns-base`, `be/linking-verb`, `clause/skeleton`
+   - Uses: `mode/verb-returns-base`, `be/linking-verb`, `clause/word-order`
    - Vocabulary: go, get, want, gonna, wanna, home, there, tired, late, ready, message, better
    - Examples: "I'm gonna call the client." / "I'm going to the office." / "I'm gonna go to the office." / "I wanna check one thing." / "I get the idea." / "It gets better."
-   - Real-world relevance: Native speech is full of gonna and wanna, and "get" is what a native says where the student currently reaches for four different verbs.
+   - Real-world relevance: Native speech uses gonna and wanna constantly, and English uses `get` in many everyday phrases where Portuguese uses a different verb for each.
 
-## Lesson 8: Asking so people answer
+## Lesson 8: Questions: the word order that gets an answer
 
    - Focus: The mode goes first in a question, and the wh-word goes before the mode.
    - teaches: `question/yes-no-order`, `question/wh-order`, `question/tag-check`
    - Deepens: -
-   - Uses: `mode/slot`, `mode/verb-returns-base`, `present-simple/third-person-s`, `be/linking-verb`
+   - Uses: `mode/place`, `mode/verb-returns-base`, `present-simple/third-person-s`, `be/linking-verb`
    - Vocabulary: what, where, when, who, why, how, which, name, time, work, home, bus
    - Examples: "Does the report include the numbers?" / "When does the meeting start?" / "Who wants coffee?" / "How long does it take?" / "You're coming, right?"
-   - Real-world relevance: Asking is how work gets unblocked, and the question that fails is what keeps a Brazilian professional silent in a meeting.
+   - Real-world relevance: Work moves forward by asking, and a question the student cannot form is the reason a Brazilian professional stays silent in a meeting.
 
 ## Lesson 9: Right now against in general
 
    - Focus: am/is/are + -ing means now, and the same verb in the simple present means in general.
    - teaches: `present-continuous/now`, `present-continuous/vs-simple`, `present-continuous/temporary-change`
-   - Deepens: `present-simple/facts-not-now` - the same verb is re-pointed at "now", and the two forms are chosen by meaning rather than by name.
-   - Uses: `mode/slot`, `be/linking-verb`, `clause/skeleton`, `present-simple/third-person-s`
+   - Deepens: `present-simple/facts-not-now` - the same verb, with be and -ing, describes an action in progress at the moment of speaking, and the two forms are chosen by meaning rather than by name.
+   - Uses: `mode/place`, `be/linking-verb`, `clause/word-order`, `present-simple/third-person-s`
    - Vocabulary: now, work, do, eat, wait, rain, live, stay, today, "this week", usually, still
    - Examples: "I'm checking the numbers right now." / "I check the numbers every Monday." / "Are you using the new system?" / "Costs are going up." / "I'm working from home this week." / "He's cooking dinner." / "It's raining - take a jacket." / "I usually walk, but today I'm taking the bus."
-   - Real-world relevance: "Estou estudando" is the sentence that comes out wrong most often; the repair is one contrast, not a new tense.
+   - Real-world relevance: "Estou estudando" is the sentence that comes out wrong most often; one contrast between two forms, not a new tense, is what it needs.
 
 ## Lesson 10: Numbers, dates, money and data
 
@@ -101,67 +101,67 @@
    - Uses: `prep/time-in-on-at`, `prep/to-vs-for`, `be/existence-there`
    - Vocabulary: hundred, thousand, million, half, quarter, hour, minute, day, week, month, year, price
    - Examples: "Sales are up from 1.2 to 1.5 million." / "The invoice is due on the fifth." / "It's about a quarter of the budget." / "The call is at half past two." / "Costs go down in Q3."
-   - Real-world relevance: This persona reads and reports figures every week, and a confidently wrong number is the most expensive mistake in the course.
+   - Real-world relevance: The student reads and reports figures every week, and a number reported wrongly costs money, and it is reported with confidence in most cases.
 
 ## Lesson 11: What you can count and what you cannot
 
    - Focus: Countable and uncountable nouns, and the articles and quantity words that follow them.
    - teaches: `noun/count-uncountable`, `article/a-the-zero`, `quantity/some-any-much-many`
    - Deepens: -
-   - Uses: `pronoun/possessive`, `be/existence-there`, `clause/skeleton`
+   - Uses: `pronoun/possessive`, `be/existence-there`, `clause/word-order`
    - Vocabulary: information, advice, feedback, money, news, water, bread, coffee, time, music, traffic, weather
    - Examples: "I need some information about the project." / "We don't have much time." / "The feedback is useful." / "There are a few issues." / "I have a little time today."
-   - Real-world relevance: The words this persona uses most - information, feedback, data, research, staff - are exactly the ones that refuse a plural and refuse "a".
+   - Real-world relevance: The words the student uses most - information, feedback, data, research, staff - are the ones that take no plural and no "a".
 
 ## Lesson 12: The past - saying when it happened
 
-   - Focus: was/were, -ed, and the irregular verbs that carry the past with no ending.
+   - Focus: was/were, -ed, and the irregular verbs whose past form has no ending.
    - teaches: `past-simple/was-were`, `past-simple/regular-ed`, `past-simple/irregular`
-   - Deepens: `mode/slot` - the slot stays empty in the affirmative past and only fills when did enters, which is lesson 5's rule pointed at a new time.
-   - Uses: `mode/slot`, `mode/negation`, `prep/time-in-on-at`, `sound/vowel-no-fixed`
+   - Deepens: `mode/place` - the place stays empty in the affirmative past and only fills when did enters, which is lesson 5's rule at a new time.
+   - Uses: `mode/place`, `mode/negation`, `prep/time-in-on-at`, `sound/vowel-no-fixed`
    - Vocabulary: meet, sell, send, call, go, come, eat, buy, watch, play, "last week", "a year ago"
    - Examples: "I sent the file yesterday." / "We were in a meeting all morning." / "She didn't call back." / "Did you get my email?" / "We met the client a year ago." / "I watched the game last night." / "We went to the beach." / "She called me twice."
-   - Real-world relevance: Every status update starts with what already happened, and the -ed/did split decides whether the sentence is understood the first time.
+   - Real-world relevance: Every status update starts with what already happened, and choosing -ed or did is what makes the sentence clear the first time.
 
-## Lesson 13: Verb + preposition is one word in your head
+## Lesson 13: Verb + preposition: the preposition each verb takes
 
-   - Focus: The preposition belongs to the verb, and changing it changes the meaning.
+   - Focus: Each verb takes its own preposition, and a different preposition gives a different meaning.
    - teaches: `prep/verb-unit`, `prep/contrast-pairs`, `prep/no-translation`
    - Deepens: `prep/to-vs-for` - the same two meanings now attach to specific verbs, and the pair is fixed by the verb rather than by purpose or direction alone.
-   - Uses: `prep/location-in-on-at`, `clause/skeleton`, `present-simple/facts-not-now`
+   - Uses: `prep/location-in-on-at`, `clause/word-order`, `present-simple/facts-not-now`
    - Vocabulary: "depend on", "listen to", "wait for", "talk about", "look for", "complain about", "deal with", "work on", "look after", "go out", "wake up", "get on"
    - Examples: "It depends on the budget." / "I'm waiting for the client." / "We talked about the deadline." / "I'm looking for the invoice." / "I listen to the recording on the way home."
    - Real-world relevance: "Depender de", "pensar em" and "esperar por" map onto different English prepositions, and this is the error that survives longest in a Brazilian professional's speech.
 
 ## Lesson 14: The future without a future tense
 
-   - Focus: Intentions, decisions and arrangements, each with the form that actually carries it.
+   - Focus: Intentions, decisions and arrangements, each with the form English uses for it.
    - teaches: `future/gonna-plan`, `future/will-now-decision`, `future/present-arrangement`
    - Deepens: `reduction/gonna-future-mode` - the gonna mode is now set against will and against the present forms, so the student chooses by meaning rather than by habit.
    - Uses: `reduction/gonna-future-mode`, `present-continuous/now`, `present-simple/facts-not-now`, `mode/verb-returns-base`
    - Vocabulary: tomorrow, soon, plan, want, call, meet, tonight, later, "this weekend", "next week", "by Friday", move
    - Examples: "I'm gonna review it tonight." / "I'll send you the file now." / "I'm meeting the client at ten." / "The call starts at nine tomorrow." / "We're gonna join the call later."
-   - Real-world relevance: A professional life is a list of commitments, and the form chosen is the size of the commitment: plan, promise or booking.
+   - Real-world relevance: A professional life is a list of commitments, and the form chosen says how firm the commitment is: plan, promise or booking.
 
-## Lesson 15: Can, could, would - getting people to act
+## Lesson 15: Can, could, would: ability, permission and polite requests
 
    - Focus: Ability, permission, and the three forms that make a request more polite.
-   - teaches: `modal/can-could-ability`, `modal/request-ladder`, `modal/may-permission`
+   - teaches: `modal/can-could-ability`, `modal/politeness-levels`, `modal/may-permission`
    - Deepens: -
    - Uses: `mode/verb-returns-base`, `question/yes-no-order`, `prep/to-vs-for`
    - Vocabulary: "could you", "would you mind", "of course", sure, "no problem", "let me", "help with", "send me", "can I", borrow, lend, favour
    - Examples: "Can I ask a question?" / "Could you send me the file?" / "Would you mind checking this?" / "Of course, no problem." / "Let me check and get back to you."
-   - Real-world relevance: Asking a manager, a coworker or a client to do something is the highest-frequency risk in this persona's day.
+   - Real-world relevance: Asking a manager, a coworker or a client to do something is the highest-frequency risk in the student's day.
 
 ## Lesson 16: Because, so, but, although
 
-   - Focus: Two clauses, and the word that decides which one gives the reason, the result or the contrast.
+   - Focus: Two clauses, and the word that shows which one gives the reason, the result or the contrast.
    - teaches: `connector/cause-result`, `connector/contrast`, `connector/sequence`
-   - Deepens: `clause/skeleton` - the skeleton now repeats, and the connector decides the order of the two clauses and which one is subordinate.
-   - Uses: `past-simple/regular-ed`, `present-simple/facts-not-now`, `clause/skeleton`
+   - Deepens: `clause/word-order` - the clause now appears twice, and the connector fixes the order of the two clauses and marks which one is subordinate.
+   - Uses: `past-simple/regular-ed`, `present-simple/facts-not-now`, `clause/word-order`
    - Vocabulary: because, so, but, although, however, while, also, then, finally, "that's why", though, anyway
    - Examples: "We moved the meeting because the client is travelling." / "I like the plan, but the timing is bad." / "First we test, then we deploy." / "Although the deadline is close, the plan is clear."
-   - Real-world relevance: Explaining why something changed is the whole content of a status conversation, and the reason-and-result pair is where a Brazilian sentence usually runs out of breath.
+   - Real-world relevance: A status conversation asks why something changed, and a Brazilian sentence most often stops before the second half of the reason-and-result pair.
 
 ## Lesson 17: More, less, and as ... as
 
@@ -171,17 +171,17 @@
    - Uses: `noun/count-uncountable`, `quantity/some-any-much-many`, `number/figure-comparison`
    - Vocabulary: better, worse, faster, slower, expensive, cheap, taller, older, hotter, colder, "the same", difference
    - Examples: "This version is faster than the old one." / "It's not as expensive as I thought." / "The new process is much simpler." / "Our numbers are slightly better this month." / "He's taller than me." / "This coffee is better than the one at work." / "My phone is as old as yours."
-   - Real-world relevance: Recommending one option over another is this persona's daily output, and the dropped "than" is what makes the recommendation unclear.
+   - Real-world relevance: Recommending one option over another is the student's daily output, and the dropped "than" is what makes the recommendation unclear.
 
-## Lesson 18: Phrasal verbs are the normal word
+## Lesson 18: Phrasal verbs: the verb and the particle as one meaning
 
-   - Focus: The phrasal verb is the default in speech, and the particle carries a direction.
+   - Focus: The phrasal verb is the usual choice in speech, and each particle adds one meaning of its own.
    - teaches: `phrase-verb/default-form`, `phrase-verb/root-family-get`, `phrase-verb/particle-meaning`
-   - Deepens: `get/wildcard` - the wildcard verb now takes particles that each fix one meaning, so the senses are separated instead of guessed from context.
-   - Uses: `get/wildcard`, `mode/verb-returns-base`, `prep/verb-unit`
+   - Deepens: `get/meaning-changes` - the same verb now takes a particle, and each particle fixes one meaning instead of leaving the meaning to context.
+   - Uses: `get/meaning-changes`, `mode/verb-returns-base`, `prep/verb-unit`
    - Vocabulary: "set up", "put off", "go over", "get back to", "sort out", "follow up", "turn off", "pick up", "run out of", "wake up", "work out", "hang out"
    - Examples: "I'll set up the call." / "They put off the launch." / "Let me get back to you." / "Can we go over the numbers?" / "I'll follow up on Monday." / "Turn it off and on again." / "We ran out of milk." / "She picked me up at the airport."
-   - Real-world relevance: Meeting speech is built out of these, and the Latin twin is what the student writes while the phrasal verb is what the room says.
+   - Real-world relevance: Meeting speech is built out of these, and the student writes the Latin verb while the room says the phrasal one.
 
 ## Lesson 19: Must, have to, should - rules and advice
 
@@ -191,27 +191,27 @@
    - Uses: `mode/verb-returns-base`, `modal/can-could-ability`, `mode/negation`
    - Vocabulary: "have to", "need to", must, "mustn't", should, "can't", "make sure", "be careful", rule, late, early, "on time"
    - Examples: "You have to sign before Friday." / "You should check the numbers again." / "You don't have to come, but you can." / "You mustn't share that file."
-   - Real-world relevance: Process, compliance and recommendations are what a manager hands a new team member, and "don't have to" against "mustn't" is a costly confusion.
+   - Real-world relevance: Process, compliance and recommendations are what a manager gives a new team member, and "don't have to" against "mustn't" is a costly confusion.
 
-## Lesson 20: Polite without sounding weak
+## Lesson 20: Polite and direct: the three ways to soften a sentence
 
-   - Focus: One message has a direct form and a soft form, and three levers move it along that line.
+   - Focus: The same message has a direct form and a polite form, and three changes make it politer.
    - teaches: `axis/direct-vs-indirect`, `axis/hedge`, `axis/contraction`
-   - Deepens: `modal/request-ladder` - the same choice now applies to statements, claims and offers, and hedges and contractions are the other two ways to soften them.
-   - Uses: `modal/request-ladder`, `modal/should-advice`, `present-continuous/now`
+   - Deepens: `modal/politeness-levels` - the same choice now applies to statements, claims and offers, and hedges and contractions are the other two ways to soften them.
+   - Uses: `modal/politeness-levels`, `modal/should-advice`, `present-continuous/now`
    - Vocabulary: "I think", "I guess", "it seems", probably, maybe, perhaps, "kind of", "sort of", "to be honest", "would like", "if possible", right?
    - Examples: "I'd like to add something." / "It's probably better to wait." / "We'll look into it." / "Maybe we should check that first." / "I don't think that's quite right."
-   - Real-world relevance: This axis is reused by every function in the rest of the course; a correct sentence at the wrong force reads as rude, and that is what costs a professional the room.
+   - Real-world relevance: The same three changes are used by every function in the rest of the course; a correct sentence at the wrong level of politeness reads as rude, and that is what makes a colleague take offence.
 
 ## Lesson 21: Your role is a noun, and the words after it say which one
 
    - Focus: A role is a noun phrase: a noun and the words after it. The name and the role, said one after the other, are what an introduction needs.
    - teaches: `noun-phrase/post-modifier`, `apposition/role-statement`, `discourse/question-return`
-   - Deepens: `clause/skeleton` - the clause now holds a phrase inside the subject position: the subject has its own internal order, so the words after the noun matter as much as the order of the clause.
-   - Uses: `clause/skeleton`, `pronoun/possessive`, `question/wh-order`, `article/a-the-zero`, `prep/verb-unit`
+   - Deepens: `clause/word-order` - the clause now contains a phrase inside the subject position: the subject has its own internal order, so the words after the noun matter as much as the order of the clause.
+   - Uses: `clause/word-order`, `pronoun/possessive`, `question/wh-order`, `article/a-the-zero`, `prep/verb-unit`
    - Vocabulary: "in charge of", "part of", "responsible for", "the one who", "I work in", "on the team", "I look after", "I run", "what do you do", boss, colleague, "these days"
-   - Examples: "I'm Ana - I'm the analyst in the pricing team." / "I look after the models, so I'm on the revenue side." / "I'm in charge of the two pricing models." / "What do you do?" with "same as always" as the informal note under "nothing has changed"
-   - Real-world relevance: The first minute decides the rest of the call, and the sentence that stalls is usually a missing "who" or a noun phrase left in Portuguese order.
+   - Examples: "I'm Ana - I'm the analyst who prepares the forecast." / "I prepare the forecast, and I work with the sales team." / "I'm in charge of the monthly report." / "What do you do?" / "Nothing has changed." / "Same as always."
+   - Real-world relevance: A call opens with introductions, and the sentence that stalls is usually missing "who" or keeps the Portuguese word order.
 
 
 ## Lesson 22: It, that and one - what each one replaces
@@ -219,13 +219,13 @@
    - Focus: English repeats words rarely: it and that replace something already said, one replaces a noun, and an echo question asks about the one word you missed.
    - teaches: `reference/anaphora`, `substitution/one-and-do-so`, `question/echo-clarify`
    - Deepens: `clause/dummy-subject` - the same words now replace something already said instead of filling an empty subject position, so the student chooses between the two jobs.
-   - Uses: `clause/dummy-subject`, `clause/skeleton`, `question/wh-order`, `noun/count-uncountable`
+   - Uses: `clause/dummy-subject`, `clause/word-order`, `question/wh-order`, `noun/count-uncountable`
    - Vocabulary: "that one", "the other one", "so do I", "neither did I", "I thought so", "the same thing", "sorry, the what?", "what do you mean", "back to that", "long story", "right then", "who said that"
    - Examples: "The new one is faster; the old one still works." / "I've already sent it." - "So have I." / "Sorry, the what now?" / "They moved the date." - "Wait, who moved what?" with "no way" as the informal note under "that is surprising"
-   - Real-world relevance: A meeting repeats fewer words than it seems, and the student who loses track of "it" loses the conversation even when every word is known.
+   - Real-world relevance: A meeting repeats fewer nouns than it seems, and a student who cannot say which noun "it" replaces cannot follow the conversation even when every word is known.
 
 
-## Lesson 23: Until, by, within and ago - the four words a deadline uses
+## Lesson 23: Until, by, within and ago - the four words for a deadline
 
    - Focus: A point in time, a deadline, a duration and a window are four different things.
    - teaches: `prep/until-vs-by`, `prep/ago-vs-for`, `prep/in-vs-within`
@@ -233,14 +233,14 @@
    - Uses: `prep/time-in-on-at`, `past-simple/regular-ed`, `number/date-and-time`
    - Vocabulary: until, "by then", ago, during, within, "for a week", "in an hour", "two days ago", "at the latest", rush, "on time", "the weekend"
    - Examples: "I need it by Friday." / "We waited until six." / "The update takes about an hour." / "It has to be done within two days." / "I sent it two days ago."
-   - Real-world relevance: This persona negotiates deadlines all day, and "until" used for "by" is a commitment made by accident.
+   - Real-world relevance: The student negotiates deadlines all day, and "until" used for "by" is a commitment made by accident.
 
 ## Lesson 24: Could you tell me - the question inside the question
 
    - Focus: Inside a polite frame the question stops inverting, and that is what makes it sound professional.
    - teaches: `question/embedded-order`, `question/embedded-wh`, `question/soft-opener`
    - Deepens: `question/yes-no-order`, `question/wh-order` - the inversion established in lesson 8 is switched off inside a frame, so the same content now takes statement order.
-   - Uses: `modal/request-ladder`, `axis/direct-vs-indirect`, `clause/skeleton`
+   - Uses: `modal/politeness-levels`, `axis/direct-vs-indirect`, `clause/word-order`
    - Vocabulary: "could you tell me", "do you know", "I was wondering", "can I ask", "just to check", "quick question", "if you don't mind", "one more thing", "let me know", "how come", "which one", "when exactly"
    - Examples: "Could you tell me where the office is?" / "Do you know when the meeting starts?" / "I was wondering if you have five minutes." / "Just to check, is the file final?"
    - Real-world relevance: This is the difference between sounding like a demand and sounding like a colleague, and it is how a junior asks a director for something.
@@ -250,7 +250,7 @@
    - Focus: Test whether the student can run a simple workday unaided: say who they are, describe a routine and a current task, ask for something politely, put something in the past, and commit to a date.
    - teaches: -
    - Deepens: -
-   - Uses: `clause/skeleton`, `be/linking-verb`, `clause/dummy-subject`, `present-simple/facts-not-now`, `present-simple/third-person-s`, `mode/slot`, `mode/negation`, `prep/location-in-on-at`, `prep/time-in-on-at`, `prep/to-vs-for`, `reduction/gonna-future-mode`, `get/wildcard`, `question/yes-no-order`, `question/wh-order`, `present-continuous/now`, `present-continuous/vs-simple`, `number/read-and-group`, `number/figure-comparison`, `noun/count-uncountable`, `article/a-the-zero`, `past-simple/was-were`, `past-simple/irregular`, `prep/verb-unit`, `prep/contrast-pairs`, `future/gonna-plan`, `future/present-arrangement`, `modal/request-ladder`, `connector/cause-result`, `compare/er-more-forms`, `phrase-verb/default-form`, `modal/must-have-to`, `modal/no-obligation`, `axis/direct-vs-indirect`, `axis/hedge`, `noun-phrase/post-modifier`, `reference/anaphora`, `question/echo-clarify`, `prep/until-vs-by`, `question/embedded-order`
+   - Uses: `clause/word-order`, `be/linking-verb`, `clause/dummy-subject`, `present-simple/facts-not-now`, `present-simple/third-person-s`, `mode/place`, `mode/negation`, `prep/location-in-on-at`, `prep/time-in-on-at`, `prep/to-vs-for`, `reduction/gonna-future-mode`, `get/meaning-changes`, `question/yes-no-order`, `question/wh-order`, `present-continuous/now`, `present-continuous/vs-simple`, `number/read-and-group`, `number/figure-comparison`, `noun/count-uncountable`, `article/a-the-zero`, `past-simple/was-were`, `past-simple/irregular`, `prep/verb-unit`, `prep/contrast-pairs`, `future/gonna-plan`, `future/present-arrangement`, `modal/politeness-levels`, `connector/cause-result`, `compare/er-more-forms`, `phrase-verb/default-form`, `modal/must-have-to`, `modal/no-obligation`, `axis/direct-vs-indirect`, `axis/hedge`, `noun-phrase/post-modifier`, `reference/anaphora`, `question/echo-clarify`, `prep/until-vs-by`, `question/embedded-order`
    - Vocabulary: -
    - Examples: -
    - Exam format: 50 questions, hand-written, in four sections of related concepts — forms (12: multiple choice, a matching pool, corrections), fill (13: a dialog with a gap, a chart whose rows are answered, chunks), say it (12: translation, a strip with gaps, corrections rewritten), hear and read (13: dictation from the player, a map tick, a gapped dialog, comprehension). No timer, no pass mark, no randomisation: engine2 marks each item and the teacher counts. Every concept in `Uses` appears at least once, every form used was taught in lessons 1–24, and the sentences are written at lesson 25's level even when the concept is from lesson 3; contexts come from the whole course rather than one meeting. No teaching in the sections: instructions and items only.
@@ -261,16 +261,16 @@
    - Focus: The present perfect for something that started in the past and continues now.
    - teaches: `present-perfect/have-participle`, `present-perfect/duration-for-since`, `present-perfect/since-point`
    - Deepens: `past-simple/irregular` - the past participle of the irregular verb now also follows have, so the same list is reused rather than re-taught.
-   - Uses: `past-simple/irregular`, `mode/slot`, `prep/time-in-on-at`, `prep/until-vs-by`
+   - Uses: `past-simple/irregular`, `mode/place`, `prep/time-in-on-at`, `prep/until-vs-by`
    - Vocabulary: join, stay, know, have, live, change, grow, "how long", "for five years", "since 2019", "up to now", "this year"
    - Examples: "I've worked here for five years." / "She's been in the role since March." / "We've used this system for a decade." / "How long have you been at the company?" / "I've lived here for ten years." / "She's been sick since Monday."
-   - Real-world relevance: "Trabalho aqui há cinco anos" is the sentence a Brazilian professional most often gets wrong in an interview, and this lesson is the reason the course exists.
+   - Real-world relevance: "Trabalho aqui há cinco anos" is the sentence a Brazilian professional most often gets wrong in an interview, and this is the first sentence an interview asks for.
 
 ## Lesson 27: Have you ever ...? - experience against finished time
 
    - Focus: Finished time forces the past simple, and unfinished time allows the perfect.
    - teaches: `present-perfect/vs-past-simple`, `present-perfect/experience-vs-news`, `present-perfect/been-vs-gone`
-   - Deepens: `present-perfect/duration-for-since` - the perfect now also carries experience and news, and the real lesson is choosing between it and the past simple.
+   - Deepens: `present-perfect/duration-for-since` - the perfect also covers experience and news, and the real lesson is choosing between it and the past simple.
    - Uses: `present-perfect/duration-for-since`, `past-simple/regular-ed`, `past-simple/irregular`, `prep/ago-vs-for`
    - Vocabulary: already, yet, ever, never, recently, just, "last year", "five minutes ago", "have you ever", "twice", once, "so far"
    - Examples: "Have you ever worked with this tool?" / "I've just sent it." / "I sent it five minutes ago." / "She's been to the Berlin office." / "We haven't finished yet."
@@ -278,13 +278,13 @@
 
 ## Lesson 28: Two verbs in a row
 
-   - Focus: The first verb decides whether the second one takes to or -ing.
+   - Focus: The first verb fixes whether the second one takes to or -ing.
    - teaches: `pattern/verb-to-infinitive`, `pattern/verb-ing`, `pattern/meaning-change`
    - Deepens: -
    - Uses: `mode/verb-returns-base`, `prep/to-vs-for`, `connector/cause-result`
    - Vocabulary: decide, try, promise, suggest, avoid, mind, enjoy, offer, hope, start, stop, forget
    - Examples: "We decided to move the launch." / "I suggest checking the numbers first." / "Do you mind waiting five minutes?" / "I managed to finish it on time."
-   - Real-world relevance: A sentence with two verbs is where the student's structure collapses, and "suggest me to" is the signature error of a Portuguese speaker in a meeting.
+   - Real-world relevance: A sentence with two verbs is where the student's word order breaks first, and "suggest me to" is the error Portuguese speakers make most often in a meeting.
 
 ## Lesson 29: If it rains, we'll move it
 
@@ -294,37 +294,37 @@
    - Uses: `present-simple/facts-not-now`, `future/will-now-decision`, `future/gonna-plan`, `modal/should-advice`
    - Vocabulary: if, unless, when, "as soon as", "in case", "even if", "as long as", otherwise, agree, cancel, rain, traffic
    - Examples: "If the client confirms, we'll start on Monday." / "If you press this, it saves automatically." / "Unless the client confirms, we can't start." / "As soon as I get it, I'll send it to you."
-   - Real-world relevance: Every plan in this persona's week hangs on a condition, and "will" inside the if-clause is the error that marks a non-native speaker immediately.
+   - Real-world relevance: Most plans in the student's week depend on a condition, and "will" inside the if-clause is the error that marks a non-native speaker immediately.
 
-## Lesson 30: Numbers that move - describing data and trends
+## Lesson 30: Describing data: the verbs for a figure that changes
 
    - Focus: A figure changing over time, described with the verb for its direction and speed.
    - teaches: `data/trend-verb`, `data/change-rate`, `data/forecast`, `hedge/data-limitation`, `discourse/framing-marker`
-   - Deepens: `number/figure-comparison` - a single comparison becomes a movement over time, and the verb now carries direction and speed instead of up and down doing the work.
+   - Deepens: `number/figure-comparison` - a single comparison becomes a movement over time, and the verb now states direction and speed instead of `up` and `down` alone saying it.
    - Uses: `number/figure-comparison`, `compare/degree-adverbs`, `connector/contrast`, `past-simple/regular-ed`, `axis/hedge`
    - Vocabulary: increase, drop, rise, double, average, target, forecast, share, roughly, "at most", "ballpark figure", "too early to say"
    - Examples: "Revenue grew by 8 percent to 2.4 million." / "Costs peaked in March and then plateaued." / "We expect the share to double by Q4." / "Sales dropped slightly last quarter." / "On twelve responses, that's noise." / "It's up roughly 8 percent - too early to call it a trend." with "we're guessing, honestly" as the informal note under "the evidence is thin"
-   - Real-world relevance: Describing a chart without a script is precisely this persona's output, and it is the honest test of whether block 1's numbers became usable.
+   - Real-world relevance: Describing a chart without a script is precisely the student's output, and it tests whether block 1's numbers can be used.
 
-## Lesson 31: Movies and series - what they really say
+## Lesson 31: Films and series: understanding fast dialogue
 
-   - Focus: Screen dialogue is fast, contracted and full of chunks the dictionary teaches separately, so the job is hearing the ordinary sentence inside the noise.
+   - Focus: Screen dialogue is fast, contracted and full of chunks the dictionary teaches separately, so the work is recognising the ordinary sentence in fast speech.
    - teaches: `sound/contraction-in-speech`, `sound/swallowed-syllable`, `pragmatics/line-vs-words`
-   - Deepens: `reduction/gonna-future-mode` - the reductions learned as whole words now arrive mid-sentence and at speed, so the same form has to be caught inside a line rather than recognised alone.
+   - Deepens: `reduction/gonna-future-mode` - the reductions learned as whole words now arrive mid-sentence and at speed, so the same form has to be recognised inside a line rather than on its own.
    - Uses: `present-continuous/now`, `past-simple/irregular`, `question/wh-order`, `phrase-verb/default-form`
    - Vocabulary: "whatcha doin'", "gonna", "wanna", "kinda", "you know", "I mean", "look", "come on", "no way", "whatever", "my bad", "long story"
    - Examples: "What are you doing?" spoken as "Whatcha doin'?" / "I'm not going to do that" spoken as "I'm not gonna do that." / "Do you want to get out of here?" spoken as "Wanna get outta here?" / "I've told you a million times." with "I'm out" as the informal note under "I'm leaving"
-   - Real-world relevance: Films and series are where this persona actually meets English outside work, and a line understood at speed is the difference between following a scene and reading the subtitles.
+   - Real-world relevance: Films and series are where the student actually meets English outside work, and a line understood at speed is the difference between following a scene and reading the subtitles.
 
 ## Lesson 32: Sports and games - the language of winning and losing
 
-   - Focus: Game talk is the metaphor layer of everyday English: the same phrases describe a match, a project and a week.
+   - Focus: Sports phrases are used away from sport: the same words describe a match, a project and a week.
    - teaches: `idiom/game-metaphor`, `idiom/result-words`, `phrase-verb/score-family`
-   - Deepens: `phrase-verb/default-form` - the particle now decides who won, so "drop out" and "drop by" stop being the same verb wearing a different hat.
+   - Deepens: `phrase-verb/default-form` - the particle gives each phrase its own meaning, so "drop out" and "drop by" are two different meanings of one verb.
    - Uses: `phrase-verb/default-form`, `past-simple/irregular`, `compare/as-as`, `present-perfect/experience-vs-news`
    - Vocabulary: "on a roll", "dropped the ball", "a level playing field", "out of left field", "the ball's in your court", "step up", "score", "beat", "tie", "win by", "call it", "the final whistle"
    - Examples: "We dropped the ball on the delivery." / "Two wins in a row - we're on a roll." / "It's not a level playing field; they have twice the budget." / "That came out of left field." with "we got smoked" as the informal note under "we lost badly"
-   - Real-world relevance: Every standup, group chat and bar conversation borrows from sport, and a student who doesn't know the metaphor hears a literal game.
+   - Real-world relevance: Every standup, group chat and bar conversation borrows from sport, and a student who does not know these phrases hears a literal game.
 
 
 ## Lesson 33: What was done, by whom - the passive
@@ -332,17 +332,17 @@
    - Focus: The thing acted on becomes the subject, and the doer can disappear.
    - teaches: `passive/be-participle`, `passive/process-subject`, `passive/reporting`
    - Deepens: `present-perfect/have-participle` - the participle now follows be instead of have, and the subject is no longer the doer of the action.
-   - Uses: `present-perfect/have-participle`, `past-simple/irregular`, `mode/slot`, `phrase-verb/default-form`
+   - Uses: `present-perfect/have-participle`, `past-simple/irregular`, `mode/place`, `phrase-verb/default-form`
    - Vocabulary: submit, deliver, complete, handle, fix, check, clean, book, cook, print, "sign off", "on time"
    - Examples: "The invoice was sent on Monday." / "All changes are verified before the release." / "It was agreed that we'd move the date." / "The tests are run nightly."
    - Real-world relevance: Reports, processes and audit trails are written in the passive, and reading them without it is a daily handicap at this level.
 
-## Lesson 34: If I had the budget - hypotheticals that stay polite
+## Lesson 34: If I had the budget: the second conditional
 
    - Focus: An unreal present takes if + past and would + base, and the past form does not mean past time.
    - teaches: `condition/second-would`, `condition/if-i-were-you`, `modal/would-offer`
-   - Deepens: `condition/first-will` - the same if-structure now carries something unreal, and the past form is the marker of unreality rather than of time.
-   - Uses: `condition/first-will`, `past-simple/irregular`, `modal/request-ladder`, `axis/hedge`
+   - Deepens: `condition/first-will` - the same if-structure now states something unreal, and the past form is the marker of unreality rather than of time.
+   - Uses: `condition/first-will`, `past-simple/irregular`, `modal/politeness-levels`, `axis/hedge`
    - Vocabulary: "if I had", "I would", imagine, suppose, unlikely, chance, worth, alternative, holiday, rent, weather, "in that case"
    - Examples: "If I had the budget, I'd hire another analyst." / "If I were you, I'd raise it in the meeting." / "Would that work for you?" / "In that case, we'd need two more weeks."
    - Real-world relevance: Every negotiation opens with an unreal version of the plan, and this is how a professional proposes without demanding.
@@ -352,14 +352,14 @@
    - Focus: A clause that describes a noun, and when the link word can disappear.
    - teaches: `relative/who-which-that`, `relative/omitting-object`, `relative/where-whose`
    - Deepens: -
-   - Uses: `clause/skeleton`, `article/a-the-zero`, `pronoun/subject-object`, `noun/count-uncountable`
+   - Uses: `clause/word-order`, `article/a-the-zero`, `pronoun/subject-object`, `noun/count-uncountable`
    - Vocabulary: person, supplier, document, "the one", "the only", "something", "everything", "nothing", "anyone", "someone", "the person in charge", "such as"
    - Examples: "The person who runs the tests is on holiday." / "This is the document you asked for." / "That's the supplier whose invoice was late." / "The room where we meet is on the second floor."
-   - Real-world relevance: Identifying which report, which supplier or which person is half of what a meeting does, and without this clause the student repeats the noun instead.
+   - Real-world relevance: A meeting spends much of its time identifying which report, which supplier or which person, and without this clause the student repeats the noun instead.
 
 ## Lesson 36: He said the launch was delayed
 
-   - Focus: Reporting what someone said, with say and tell kept apart and the verb stepped back.
+   - Focus: Reporting what someone said, with say and tell kept apart and the verb one tense back.
    - teaches: `report/say-vs-tell`, `report/backshift`, `report/time-shift`
    - Deepens: -
    - Uses: `past-simple/irregular`, `present-perfect/have-participle`, `future/will-now-decision`, `phrase-verb/default-form`
@@ -375,39 +375,38 @@
    - Uses: `condition/second-would`, `present-perfect/have-participle`, `reduction/wanna-woulda`, `past-simple/irregular`
    - Vocabulary: "if we had", "would have", "should have", "could have", "in hindsight", "looking back", "at the time", mistake, regret, missed, unfortunately, "learn from", "I'm afraid", "a slight delay", "it slipped", "two weeks behind", "keep you posted"
    - Examples: "If we had tested it, we wouldn't have shipped the bug." / "We should have called the client earlier." / "I could have caught that in review." / "In hindsight, the date was too tight." / "I'm afraid the release slipped a little - two weeks." / "Not bad, considering" with "yeah, we screwed up" as the informal note under "we made a mistake"
-   - Examples: "If we had tested it, we wouldn't have shipped the bug." / "We should have called the client earlier." / "I could have caught that in review." / "In hindsight, the date was too tight."
-   - Real-world relevance: The most useful sentence a professional says after a failure is a clean past hypothetical, and the woulda form is already in the student's ear from lesson 7.
+   - Real-world relevance: The most useful sentence a professional says after a failure is a clean past hypothetical, and the student has already heard the woulda form in lesson 7.
 
 ## Lesson 38: He asked me to send it - reported questions and requests
 
    - Focus: Reporting a question loses the inversion, and reporting a request turns the order into asked or told plus to.
    - teaches: `report/question-shift`, `report/ask-request`, `report/pronoun-shift`
    - Deepens: `report/backshift` - the same step back now applies inside questions, where the inversion has to disappear as well as the tense.
-   - Uses: `report/backshift`, `question/embedded-order`, `question/wh-order`, `modal/request-ladder`
+   - Uses: `report/backshift`, `question/embedded-order`, `question/wh-order`, `modal/politeness-levels`
    - Vocabulary: "asked me to", "wanted to know", whether, remind, warn, request, insist, clarify, "pass on", "check with", "update you", "in person"
    - Examples: "He asked me to send the file." / "She wanted to know whether we were ready." / "They asked if the date had moved." / "I'll pass that on and update you tomorrow."
-   - Real-world relevance: Carrying a message accurately between a client and a team is what separates a reliable professional from a fast one, and a dropped pronoun is how the wrong person takes the blame.
+   - Real-world relevance: Passing a message accurately between a client and a team is what separates a reliable professional from a fast one, and a pronoun reported wrongly puts the blame on the wrong person.
 
-## Lesson 39: The same idea in two forms
+## Lesson 39: Spoken and written English: the same message in two registers
 
    - Focus: One meaning has a spoken form, a written form and an informal note, and the setting picks the form.
    - teaches: `axis/phrasal-vs-latinate`, `axis/written-vs-spoken`, `informal/sidenote-pairing`, `nominalisation/verb-to-noun`, `ellipsis/written-answer`, `modal/request-softening`
-   - Deepens: `axis/contraction`, `axis/direct-vs-indirect` - the axis now runs between two complete ways of saying the same thing, not only between levels of force on one wording.
+   - Deepens: `axis/contraction`, `axis/direct-vs-indirect` - the difference is now between two complete ways of saying the same thing, not only between levels of politeness in one wording.
    - Uses: `phrase-verb/default-form`, `axis/contraction`, `axis/direct-vs-indirect`, `question/embedded-order`
    - Vocabulary: "set up" next to arrange, "go over" next to review, "sort out" next to resolve, "get back to" next to respond, "in writing", casual, tone, "too formal", "too much", "whatever works", "appreciate it", "no worries", confirmation, approval
    - Examples: "Let's set up a call" (speech) against "We will arrange a call" (writing) / "I'll send it over" against "I will forward it" / "Could you confirm the date?" next to "Confirmation of the date would help." / "We'll send it Friday." next to "Sending Friday." / "Fine, that works" with "yeah, whatever" as the informal note under it
-   - Real-world relevance: This is the lesson that lets the persona move between a client email, a team chat and a call without changing personality or committing an offence.
+   - Real-world relevance: This is the lesson that lets the student write a client email, a team chat and a call script in one voice, and be polite in each.
 
 
-## Lesson 40: Pushing back without a fight
+## Lesson 40: Disagreeing: the forms that push back politely
 
    - Focus: The objection that ends in an agreement: concede a clause, name the risk, trade one variable for another.
    - teaches: `concession/even-though-despite`, `condition/trade-off`, `discourse/counter-move`, `discourse/turn-marker`, `report/paraphrase-summary`, `concession/partial-agreement`
-   - Deepens: `condition/second-would` - the hypothetical that imagined a situation now becomes the polite way to offer a trade, so the same form carries a proposal instead of a regret.
+   - Deepens: `condition/second-would` - the hypothetical that imagined a situation now becomes the polite way to offer a trade, so the same form states a proposal instead of a regret.
    - Uses: `condition/first-will`, `condition/second-would`, `axis/hedge`, `question/echo-clarify`
    - Vocabulary: "I hear you", "even though", "despite", "the catch is", "on the other hand", "trade-off", "what if", "either way", "meet halfway", "not sure that works", "that's a fair point", "can I jump in", "so what you're saying is", "fair enough, though", deal
    - Examples: "Even though the cost works, the timeline is the risk." / "If you move the date, we can deliver the full scope." / "What if we start with phase one and review in March?" / "Can I jump in? So what you're saying is the date can't move." / "Fair enough on the cost - the only thing is the timing." / "So we agree on scope; I'll confirm the date by Friday." with "yeah, that's not gonna fly" as the informal note under "that won't work"
-   - Real-world relevance: Scope, date and budget are the three variables of every project conversation, and a professional who cannot trade them is only a messenger.
+   - Real-world relevance: Scope, date and budget are the three variables of every project conversation, and a professional who cannot trade them can only pass the decision on.
 
 
 ## Lesson 41: Directions and places - how you get there
@@ -418,22 +417,22 @@
    - Uses: `prep/location-in-on-at`, `prep/to-vs-for`, `question/wh-order`
    - Vocabulary: "across from", "next to", "on the corner", "at the end of", "take a left", "your first right", "go straight", "past the", "block", "walk back", "it's on your left", "can't miss it"
    - Examples: "Go straight, take your first left, and it's on your right." / "The bank is across from the library." / "It's on the corner of High Street and Mill Lane." / "You've gone too far - turn around and walk back a block." with "can't miss it" as the informal note under "it's easy to find"
-   - Real-world relevance: Getting somewhere is the first English a visitor has to do out loud, and a wrong preposition here is a wrong street.
+   - Real-world relevance: Asking for directions is the first English a visitor uses out loud, and a wrong preposition sends them down the wrong street.
 
-## Lesson 42: Small talk that goes somewhere
+## Lesson 42: Small talk: opening, keeping and closing a conversation
 
-   - Focus: The first minute of a conversation is a handful of safe topics and one move that turns it into a real one.
+   - Focus: The first minute of a conversation uses a small set of safe topics, and one question moves it past them.
    - teaches: `discourse/small-talk-open`, `question/follow-up`, `register/safe-topics`
-   - Deepens: `question/tag-check` - a tag is what turns a statement into an invitation to answer, so the small talk gets a second turn instead of stopping dead.
+   - Deepens: `question/tag-check` - a tag makes a statement into a question, so the small talk gets an answer instead of stopping.
    - Uses: `question/tag-check`, `present-continuous/now`, `connector/cause-result`, `axis/hedge`
    - Vocabulary: "how's it going", "what have you been up to", "any plans for the weekend", "how was the traffic", "crazy weather", "same here", "speaking of", "anyway", "I should get going", "let's catch up", "say hi to"
    - Examples: "How's it going? - Can't complain." / "Any plans for the weekend? - Nothing much, you?" / "Crazy weather, huh?" / "Anyway, I should get going - good talking to you." with "catch you later" as the informal note under "see you"
-   - Real-world relevance: Work and life both begin with ninety seconds of nothing in particular, and a student who can only talk about tasks cannot start anything.
+   - Real-world relevance: Work and life both begin with a short exchange that is not about tasks, and a student who can only talk about tasks cannot start either.
 
 
-## Lesson 43: Have it fixed - causatives, and must when it is not an order
+## Lesson 43: Have it fixed: causatives, and the two meanings of must
 
-   - Focus: Two forms this persona does not own yet: have/get something done, which keeps the actor out of the subject slot, and must/might/can't doing the work of reasoning rather than of commanding.
+   - Focus: Two forms the student does not own yet: have/get something done, which leaves the doer out of the subject position, and must/might/can't stating a deduction rather than an order.
    - teaches: `causative/have-get-done`, `modal/deduction-must-might`, `politeness/downgrade-adverb`
    - Deepens: `passive/reporting` - the passive took the actor out of the clause entirely; the causative keeps it, in an agent phrase at the end, so the same fact can be told with the person more or less visible.
    - Uses: `passive/reporting`, `modal/should-advice`, `axis/hedge`, `axis/direct-vs-indirect`
@@ -442,7 +441,7 @@
    - Real-world relevance: The person who handles a complaint well is not the one who apologises more - it is the one who can say who did what without naming them, and how sure they are without claiming certainty.
 
 
-## Lesson 44: What I have been doing - the perfect continuous, and how sure you sound
+## Lesson 44: What I have been doing: the perfect continuous, and how certain each form is
 
    - Focus: A duration that runs up to now needs have been + -ing, and the same claim gets stronger or weaker with one adverb in front of it.
    - teaches: `aspect/perfect-continuous`, `stance/booster-vs-hedge`, `discourse/evidence-then-result`, `hedge/claim-strength`
@@ -450,7 +449,7 @@
    - Uses: `present-perfect/duration-for-since`, `present-perfect/vs-past-simple`, `past-simple/regular-ed`, `compare/degree-adverbs`
    - Vocabulary: "I've been running", "I've been dealing with", "since then", "up to now", "I'd say", fairly, pretty, "no doubt", arguably, "to be fair", "hands down", "kind of"
    - Examples: "I've been running the pricing models since 2022." / "I'd say it's fairly close, honestly." / "Hands down the hardest part was the migration." / "I've been doing this a while" with "yeah, I've been at it for ages" as the informal note under "I have a lot of experience"
-   - Real-world relevance: The answer that lands in an interview names what is still true rather than what was once true, and the booster is what turns a list of duties into a claim.
+   - Real-world relevance: The answer an interview needs names what is still true rather than what was once true, and the booster adverb makes a claim stronger or weaker.
 
 
 ## Lesson 45: EXAM - block 2
@@ -458,21 +457,21 @@
    - Focus: Test whether the student can handle time depth, unreality, reported words and multi-clause output in a work exchange: report what someone said, deliver a delay, negotiate a change, and describe a trend.
    - teaches: -
    - Deepens: -
-   - Uses: `present-perfect/duration-for-since`, `present-perfect/vs-past-simple`, `pattern/verb-ing`, `pattern/verb-to-infinitive`, `condition/first-will`, `condition/second-would`, `condition/third-would-have`, `modal/should-have`, `data/trend-verb`, `data/change-rate`, `data/forecast`, `nominalisation/verb-to-noun`, `modal/request-softening`, `discourse/turn-marker`, `concession/partial-agreement`, `report/paraphrase-summary`, `passive/be-participle`, `passive/reporting`, `relative/who-which-that`, `relative/omitting-object`, `report/say-vs-tell`, `report/backshift`, `report/question-shift`, `report/ask-request`, `axis/phrasal-vs-latinate`, `axis/written-vs-spoken`, `informal/sidenote-pairing`, `concession/even-though-despite`, `condition/trade-off`, `discourse/counter-move`, `hedge/claim-strength`, `hedge/data-limitation`, `mitigation/downgrade`, `discourse/bad-news-order`, `causative/have-get-done`, `politeness/downgrade-adverb`, `aspect/perfect-continuous`, `question/embedded-order`, `modal/request-ladder`, `prep/until-vs-by`, `question/echo-clarify`, `axis/hedge`, `phrase-verb/default-form`, `compare/er-more-forms`, `connector/contrast`
+   - Uses: `present-perfect/duration-for-since`, `present-perfect/vs-past-simple`, `pattern/verb-ing`, `pattern/verb-to-infinitive`, `condition/first-will`, `condition/second-would`, `condition/third-would-have`, `modal/should-have`, `data/trend-verb`, `data/change-rate`, `data/forecast`, `nominalisation/verb-to-noun`, `modal/request-softening`, `discourse/turn-marker`, `concession/partial-agreement`, `report/paraphrase-summary`, `passive/be-participle`, `passive/reporting`, `relative/who-which-that`, `relative/omitting-object`, `report/say-vs-tell`, `report/backshift`, `report/question-shift`, `report/ask-request`, `axis/phrasal-vs-latinate`, `axis/written-vs-spoken`, `informal/sidenote-pairing`, `concession/even-though-despite`, `condition/trade-off`, `discourse/counter-move`, `hedge/claim-strength`, `hedge/data-limitation`, `mitigation/downgrade`, `discourse/bad-news-order`, `causative/have-get-done`, `politeness/downgrade-adverb`, `aspect/perfect-continuous`, `question/embedded-order`, `modal/politeness-levels`, `prep/until-vs-by`, `question/echo-clarify`, `axis/hedge`, `phrase-verb/default-form`, `compare/er-more-forms`, `connector/contrast`
    - Vocabulary: -
    - Examples: -
    - Exam format: 50 questions, hand-written, in four sections of related concepts — forms (12: multiple choice, a matching pool, corrections), fill (13: a dialog with a gap, a chart whose rows are answered, chunks), say it (12: translation, a strip with gaps, corrections rewritten), hear and read (13: dictation from the player, a map tick, a gapped dialog, comprehension). No timer, no pass mark, no randomisation: engine2 marks each item and the teacher counts. Every concept in `Uses` appears at least once, every form used was taught in lessons 26–44, and the sentences are written at lesson 45's level even when the concept is from lesson 26; contexts come from the whole course rather than one meeting. No teaching in the sections: instructions and items only.
-   - Real-world relevance: This is the exam that matches the persona's real week: a client call and an internal review, both of which need the whole of block 1 as a floor.
+   - Real-world relevance: This is the exam that matches the student's real week: a client call and an internal review, both of which need the whole of block 1 as a floor.
 
 ## Lesson 46: The story of a project - narrative tenses
 
-   - Focus: Setting a scene, marking what happened earlier, and ordering the jumps.
+   - Focus: Setting a scene, marking what happened earlier, and ordering the switches between times.
    - teaches: `narrative/past-continuous`, `narrative/past-perfect`, `narrative/sequence-markers`
    - Deepens: -
    - Uses: `past-simple/regular-ed`, `past-simple/irregular`, `connector/sequence`, `prep/ago-vs-for`
    - Vocabulary: "at the same time", meanwhile, suddenly, "back then", originally, eventually, "in the end", "before that", "at first", "right after", "by the time", "in the meantime"
    - Examples: "I was testing the release when the server went down." / "We had already sent the file, so we waited." / "At first we blamed the API; eventually we found the config error." / "By the time the client called, we had fixed it."
-   - Real-world relevance: This persona retells incidents in post-mortems, stand-ups and interviews, and a story told in flat past simple loses the cause and the lesson.
+   - Real-world relevance: The student retells incidents in post-mortems, stand-ups and interviews, and a story told only in the past simple loses the cause.
 
 ## Lesson 47: Wish, rather, and if only
 
@@ -482,36 +481,36 @@
    - Uses: `condition/second-would`, `past-simple/irregular`, `axis/hedge`, `modal/should-have`
    - Vocabulary: wish, "if only", "would rather", "I'd prefer", "supposed to", ideally, "it's a shame", "too bad", "make up for", "next time", "in a perfect world", "settle for"
    - Examples: "I wish the deadline were later." / "I'd rather send it Monday." / "If only we had more budget." / "Ideally, we'd start now."
-   - Real-world relevance: Preference is how a professional says no without refusing, and the past form is what stops it sounding like a demand.
+   - Real-world relevance: A stated preference expresses a refusal without the word no, and the past form keeps it from sounding like a demand.
 
 ## Lesson 48: Fast speech, weak forms, and intonation
 
    - Focus: Why fast native speech is inaudible even when the words are known.
    - teaches: `sound/weak-form`, `sound/linking`, `sound/intonation-politeness`
-   - Deepens: `sound/vowel-no-fixed` - a single sound is now the behaviour of whole phrases, where unstressed words collapse and neighbouring words join.
+   - Deepens: `sound/vowel-no-fixed` - a single sound is now the behaviour of whole phrases, where unstressed words are said with a weak vowel and neighbouring words join.
    - Uses: `sound/vowel-no-fixed`, `reduction/wanna-woulda`, `reduction/gonna-future-mode`
    - Vocabulary: "weak form", stress, rhythm, linking, "sentence stress", intonation, pause, clear, "say again", "slow down", "sounds like", "native speed"
-   - Examples: "Could you say that again a bit slower?" / "It sounds like gonna but it's written going to." / "The stressed word carries the new information." / "I can hear the words separately now."
-   - Real-world relevance: This persona sits in calls with fast native speech and misses content not because of vocabulary but because unstressed words are the ones that vanish.
+   - Examples: "Could you say that again a bit slower?" / "It sounds like gonna but it's written going to." / "The stressed word is the new information." / "I can hear the words separately now."
+   - Real-world relevance: The student sits in calls with fast native speech and misses content not because of vocabulary but because unstressed words are the ones that vanish.
 
-## Lesson 49: Idioms - what is frozen, what bends, and where it is allowed
+## Lesson 49: Idioms: fixed words, the parts that change, and where they are used
 
-   - Focus: Some blocks cannot change a word, some change one, and the register of the room decides whether the idiom is charm or a mistake.
+   - Focus: In some idioms no word can change, in others one word can, and whether an idiom is acceptable depends on who is in the room.
    - teaches: `idiom/frozen-form`, `idiom/idiom-vs-phrasal`, `idiom/register-split`
-   - Deepens: `phrase-verb/particle-meaning` - the particle that used to change a verb now appears in a block where no part may change at all, so the student draws the line between a verb they can bend and a block they cannot.
+   - Deepens: `phrase-verb/particle-meaning` - the particle that used to change a verb now appears in a block where no part may change at all, so the student can tell a verb whose particle may change from a fixed block none of which may change.
    - Uses: `phrase-verb/default-form`, `phrase-verb/particle-meaning`, `axis/phrasal-vs-latinate`, `informal/sidenote-pairing`
    - Vocabulary: "cut corners", "on the same page", "ballpark figure", "in the loop", "touch base", "bite the bullet", "under the radar", "back to square one", "swing by", "low-hanging fruit", "circle back", "drop the ball"
    - Examples: "We're on the same page" / "we're aligned" / "we're reading the same book" - and only the first one is safe in a client email. / "Let's touch base Friday." spoken, against "Let's speak on Friday." written. / "I dropped the ball on that one" with "my bad, that's on me" as the informal note under "I made the mistake".
-   - Real-world relevance: The idiom is the fastest way into a room and the fastest way out of it, so the persona needs the ones that survive a client email apart from the ones that only work at the coffee machine.
+   - Real-world relevance: An idiom marks which group the speaker belongs to, so the student needs the ones that are acceptable in a client email separately from the ones that are only acceptable at the coffee machine.
 
 
-## Lesson 50: Sarcasm, hype and text-speak - reading what was not said
+## Lesson 50: Sarcasm, hype and text-speak: how to read them
 
-   - Focus: Sarcasm is carried by pitch and by the mismatch between the words and the fact, exaggeration has a scale of its own, and chat drops the vowels the sound can do without.
+   - Focus: Sarcasm is made by pitch and by the difference between the words and the fact, exaggeration has a scale of its own, and chat writing leaves out vowels.
    - teaches: `sarcasm/markers`, `hyperbole/exaggeration`, `reduction/text-speak`
    - Deepens: `sound/intonation-politeness` - intonation now reverses the meaning instead of softening it, so the same rising contour is either a polite question or a flat contradiction.
    - Uses: `sound/intonation-politeness`, `sound/weak-form`, `informal/sidenote-pairing`, `idiom/frozen-form`
    - Vocabulary: "oh great", "sure, yeah right", "I'm dead", literally, "no way", "as if", "not even", lowkey, "nvm", "brb", "tbh", "stop"
    - Examples: "Oh great, another meeting." - the words say good, the pitch says the opposite. / "I've told you a million times." - the number is the exaggeration, not the count. / "nvm", "tbh", "brb" in a chat against the full form in an email. / "That went well" with "well, that was a disaster" as the informal note under "it went badly"
-   - Real-world relevance: A persona who cannot hear the joke takes every sentence literally, and one who cannot tell chat from email sounds either cold or careless in exactly the wrong room.
+   - Real-world relevance: A student who misses the irony reads every sentence literally, and one who cannot tell chat from email sounds either cold or careless in the wrong situation.
 

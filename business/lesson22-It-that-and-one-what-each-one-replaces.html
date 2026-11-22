@@ -82,7 +82,7 @@
 <div class="rows">
 <div>
 <p>These are the phrases a meeting runs on. None of them names a thing: each one replaces what someone already said, or asks them to say it again.</p>
-<p>Three carry a card, because their Portuguese looks closer than their meaning: <button type="button" class="glossbtn" popovertarget="h1">I thought so</button>, <button type="button" class="glossbtn" popovertarget="h2">long story</button>, <button type="button" class="glossbtn" popovertarget="h3">back to that</button>.</p>
+<p>Three open a card, because their Portuguese looks closer than their meaning: <button type="button" class="glossbtn" popovertarget="h1">I thought so</button>, <button type="button" class="glossbtn" popovertarget="h2">long story</button>, <button type="button" class="glossbtn" popovertarget="h3">back to that</button>.</p>
 <p class="pt"><i>I thought so</i> não é <i>eu pensei isso</i> no sentido de opinião: é <i>eu imaginei</i>, <i>bem que eu suspeitava</i>. <i>Long story</i> é <i>é uma longa história</i> — e a resposta certa é não contar.</p>
 </div>
 <div>
@@ -221,6 +221,282 @@ next();
 </div>
 </div>
 
+<div class="block" data-look="stripes" data-activity="map">
+<h3>Find the one the sentence means</h3>
+<p>Each sentence names a place by where it is, and the word <b>one</b> stands for that place. Read the map, then write the name that is on the place's own sign.</p>
+<div class="vz-map viz">
+  <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, with nine places, each named on a sign in the drawing — a station with a canopy and a platform clock, a café with a striped awning and two tables outside, a park with trees behind railings, a bank with a columned front and steps, a library with tall windows, a post office with a postbox on the pavement, a bus stop with a shelter and a bench, a market with two stalls, and a hotel with a door canopy">
+  <!-- MAP GEOMETRY — THE ONE TABLE. The drawing below and every tick a lesson lays over it read
+       from these numbers, so a tick can never sit off its building.
+         canvas      360 x 240
+         columns     left x 4-112 · Mill Lane x 116-128 · middle x 132-244 · Park Lane x 248-260 · right x 264-356
+         rows        top y 6-76 · High Street y 80-92 · middle y 96-160 · Low Street y 164-176 · bottom y 180-234
+         tick %      left 16% · middle 52% · right 86%    top 17% · middle 53% · bottom 86%
+       THE NINE PLACES, by column and row:
+         top     station (left)   café (middle)     park (right)
+         middle  bank (left)      library (middle)  post office (right)
+         bottom  bus stop (left)  market (middle)   hotel (right)
+       A lesson copies this drawing verbatim — viewBox, streets, nine places, signs, labels and the
+       table above — and writes only its own question and its own tick labels. No page draws its own map. -->
+  <rect x="0" y="0" width="360" height="240" style="fill:var(--paper)"></rect>
+
+  <g style="fill:var(--tan);opacity:.45">
+    <rect x="0" y="80" width="360" height="12"></rect>
+    <rect x="0" y="164" width="360" height="12"></rect>
+    <rect x="116" y="0" width="12" height="240"></rect>
+    <rect x="248" y="0" width="12" height="240"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:.8;opacity:.4;fill:none">
+    <path d="M0 80h360M0 92h360M0 164h360M0 176h360M116 0v240M128 0v240M248 0v240M260 0v240"></path>
+  </g>
+  <g style="stroke:var(--paper);stroke-width:1.4;stroke-dasharray:6 7;opacity:.95;fill:none">
+    <path d="M0 86h138M196 86h56M0 170h360M122 0v70M122 104v136M254 0v70M254 104v136"></path>
+  </g>
+  <g style="fill:var(--paper);opacity:.95">
+    <rect x="152" y="81" width="4" height="10"></rect>
+    <rect x="160" y="81" width="4" height="10"></rect>
+    <rect x="168" y="81" width="4" height="10"></rect>
+    <rect x="176" y="81" width="4" height="10"></rect>
+    <rect x="184" y="81" width="4" height="10"></rect>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="300" y="82" width="22" height="8" rx="2"></rect>
+    <rect x="176" y="166" width="20" height="8" rx="2"></rect>
+  </g>
+  <g style="fill:var(--ink);opacity:.85">
+    <circle cx="180" cy="177" r="1.6"></circle>
+    <circle cx="192" cy="177" r="1.6"></circle>
+    <circle cx="304" cy="91" r="1.6"></circle>
+    <circle cx="318" cy="91" r="1.6"></circle>
+  </g>
+
+  <g style="fill:var(--ink);opacity:.07">
+    <rect x="12.5" y="32.5" width="94" height="44"></rect>
+    <rect x="140.5" y="36.5" width="100" height="40"></rect>
+    <rect x="16.5" y="114.5" width="88" height="34"></rect>
+    <rect x="138.5" y="102.5" width="80" height="52"></rect>
+    <rect x="272.5" y="104.5" width="80" height="46"></rect>
+    <rect x="272.5" y="186.5" width="82" height="44"></rect>
+  </g>
+
+  <!-- STATION — left, top -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="10" y="30" width="94" height="44"></rect>
+    <path d="M6 30h102v-7H6z"></path>
+  </g>
+  <g style="fill:var(--ink);opacity:.55">
+    <path d="M8 25h20v2H8zM34 25h20v2H34zM60 25h20v2H60zM86 25h20v2H86z"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.3;fill:none">
+    <circle cx="92" cy="42" r="5.5"></circle>
+    <path d="M92 42v-3M92 42h2.2"></path>
+    <path d="M16 42h12v10H16zM34 42h12v10H34zM52 42h12v10H52z"></path>
+    <path d="M20 74v-9h12v9"></path>
+    <path d="M10 74h94"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="14" y="32" width="40" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="34" y="38.4">STATION</text>
+  </g>
+
+  <!-- CAFÉ — middle, top -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="138" y="34" width="100" height="40"></rect>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1.4">
+    <path d="M134 34h108l-5-9h-98z"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:.9;opacity:.5;fill:none">
+    <path d="M146 25v9M158 25v9M170 25v9M182 25v9M194 25v9M206 25v9M218 25v9M230 25v9"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.3;fill:none">
+    <path d="M146 48h20v12h-20z"></path>
+    <path d="M176 48h28v10h-28z"></path>
+    <path d="M216 48v26M216 48h14v18h-14"></path>
+    <path d="M148 74h84"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="184" y="36" width="26" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="197" y="42.4">CAFÉ</text>
+  </g>
+
+  <!-- PARK — right, top -->
+  <g style="fill:var(--green);opacity:.2">
+    <rect x="266" y="10" width="88" height="58"></rect>
+  </g>
+  <g style="fill:var(--green);opacity:.5;stroke:var(--ink);stroke-width:1.2">
+    <circle cx="286" cy="44" r="9"></circle>
+    <circle cx="306" cy="50" r="8"></circle>
+    <circle cx="330" cy="42" r="10"></circle>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.5;fill:none">
+    <path d="M286 53v8M306 58v5M330 52v9"></path>
+    <path d="M266 66h88"></path>
+    <path d="M270 66v8M278 66v8M286 66v8M294 66v8M302 66v8M310 66v8M318 66v8M326 66v8M334 66v8M342 66v8M350 66v8"></path>
+  </g>
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1">
+    <rect x="272" y="12" width="20" height="8" rx="1"></rect>
+    <path d="M282 20v6"></path>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="282" y="18.4">PARK</text>
+  </g>
+
+  <!-- BANK — left, middle -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <path d="M12 112l46-12 46 12z"></path>
+    <rect x="14" y="112" width="88" height="34"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:2;fill:none">
+    <path d="M26 118v22M44 118v22M62 118v22M80 118v22M92 118v22"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.4;fill:none">
+    <path d="M10 146h96M6 152h104"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="26" y="100" width="34" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="43" y="106.4">BANK</text>
+  </g>
+
+  <!-- LIBRARY — middle, middle -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="136" y="100" width="80" height="52"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.2;fill:var(--paper)">
+    <rect x="144" y="118" width="10" height="30"></rect>
+    <rect x="160" y="118" width="10" height="30"></rect>
+    <rect x="176" y="118" width="10" height="30"></rect>
+    <rect x="192" y="118" width="10" height="30"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.4;fill:none">
+    <path d="M136 152h80M132 157h88"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="152" y="104" width="48" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="176" y="110.4">LIBRARY</text>
+  </g>
+
+  <!-- POST OFFICE — right, middle -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="270" y="102" width="80" height="46"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.2;fill:var(--paper)">
+    <rect x="278" y="120" width="16" height="12"></rect>
+    <rect x="300" y="120" width="16" height="12"></rect>
+    <path d="M320 134v14h12v-14"></path>
+  </g>
+  <g style="fill:var(--blue);stroke:var(--ink);stroke-width:1.3">
+    <rect x="340" y="126" width="12" height="22" rx="2"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1;fill:none">
+    <path d="M342 133h8M340 130h12"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="278" y="104" width="52" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:5.8px;font-family:var(--sans);letter-spacing:.2px;text-anchor:middle">
+    <text x="304" y="110.2">POST OFFICE</text>
+  </g>
+
+  <!-- BUS STOP — left, bottom -->
+  <g style="stroke:var(--ink);stroke-width:1.6;fill:none">
+    <path d="M10 190h56"></path>
+    <path d="M14 190v40M62 190v40"></path>
+    <path d="M22 208h34v5H22z"></path>
+    <path d="M26 213v8M52 213v8"></path>
+  </g>
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.4">
+    <rect x="74" y="194" width="18" height="22" rx="2"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:.9;opacity:.6;fill:none">
+    <path d="M78 200h10M78 205h10M78 210h10"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="14" y="182" width="34" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6px;font-family:var(--sans);letter-spacing:.4px;text-anchor:middle">
+    <text x="31" y="188.2">BUS STOP</text>
+  </g>
+
+  <!-- MARKET — middle, bottom -->
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1.4">
+    <path d="M134 196l24-10 24 10z"></path>
+    <path d="M186 196l24-10 24 10z"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.3;fill:none">
+    <path d="M140 196v30M176 196v30M192 196v30M228 196v30"></path>
+    <path d="M140 214h36M192 214h36"></path>
+  </g>
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1">
+    <circle cx="150" cy="205" r="3"></circle>
+    <circle cx="164" cy="205" r="3"></circle>
+    <circle cx="202" cy="205" r="3"></circle>
+    <circle cx="216" cy="205" r="3"></circle>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="158" y="184" width="34" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="175" y="190.4">MARKET</text>
+  </g>
+
+  <!-- HOTEL — right, bottom -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="270" y="184" width="82" height="44"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.2;fill:var(--paper)">
+    <rect x="276" y="202" width="12" height="10"></rect>
+    <rect x="294" y="202" width="12" height="10"></rect>
+    <rect x="330" y="202" width="12" height="10"></rect>
+    <path d="M310 210v18h14v-18"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1.3">
+    <path d="M306 210h22l-4-7h-14z"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="280" y="186" width="30" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="295" y="192.4">HOTEL</text>
+  </g>
+
+  <g style="fill:var(--ink);font-size:7.5px;font-style:italic;font-family:var(--serif);text-anchor:middle;paint-order:stroke;stroke:var(--paper);stroke-width:2.4px;stroke-linejoin:round">
+    <text x="66" y="89.4">High Street</text>
+    <text x="300" y="89.4">High Street</text>
+    <text x="120" y="173.4">Low Street</text>
+    <text x="220" y="173.4">Low Street</text>
+    <text transform="translate(122,58) rotate(-90)" text-anchor="middle">Mill Lane</text>
+    <text transform="translate(122,206) rotate(-90)" text-anchor="middle">Mill Lane</text>
+    <text transform="translate(254,58) rotate(-90)" text-anchor="middle">Park Lane</text>
+    <text transform="translate(254,206) rotate(-90)" text-anchor="middle">Park Lane</text>
+  </g>
+</svg>
+</div>
+<div class="rows">
+<div>
+<p><span class="qnum">1.</span> It's the one between the bank and the post office.
+<input class="gap" data-answer="library|the library" style="--gap-w:10.4em" name="a2a1"></p>
+<p><span class="qnum">2.</span> It's the one opposite the station.
+<input class="gap" data-answer="café|cafe|the café|the cafe" style="--gap-w:10.4em" name="a2a2"></p>
+</div>
+<div>
+<p><span class="qnum">3.</span> It's the one below the bank.
+<input class="gap" data-answer="bus stop|the bus stop" style="--gap-w:13em" name="a2a3"></p>
+<p><span class="qnum">4.</span> It's the one opposite the library.
+<input class="gap" data-answer="post office|the post office" style="--gap-w:16.9em" name="a2a4"></p>
+</div>
+</div>
+</div>
+
+
 <h2>The answer repeats the mode, not the verb</h2>
 
 <div class="rows">
@@ -283,7 +559,7 @@ next();
 <li data-side="left"><span class="who">Jess</span><span class="say">The client moved the date. Not us.</span></li>
 <li data-side="right"><span class="who">Bruno</span><span class="say">Right then. Understood.</span></li>
 </ol>
-<p class="dim"><b>No way</b> is what a colleague says when the news is surprising: <i>They moved the date — no way.</i> Keep it for a peer; <b>that is surprising</b> is the careful version.</p>
+<p class="dim"><b>No way</b> is what a colleague says when they hear something surprising: <i>They moved the date — no way.</i> Keep it for a peer; <b>that is surprising</b> is the careful version.</p>
 </div>
 </div>
 
@@ -347,7 +623,7 @@ next();
 <h3>The song says "I want it that way" — so what is "it"?</h3>
 <p>Before you press play, decide: in <b>I want it that way</b>, is <b>it</b> a thing you could hold, or something already said?</p>
 <p>Listen once. Then read the line and look at the two replacements in it: <b>it</b> stands for the thing already named, and <b>that way</b> stands for the way already described. Neither word adds information; both keep the sentence from repeating it.</p>
-<p>The last line of the clip says the same sentence with a word in front — <b>That I want it that way</b> — and adds nothing but the join. The two words are doing the work of the sentence, and nothing is repeated.</p>
+<p>The last line of the clip says the same sentence with a word in front — <b>That I want it that way</b> — and the only addition is <i>that</i>, which refers to what was said before it. The two replacement words keep the sentence short: neither the thing nor the way is named again.</p>
 <figure class="vz-play viz">
 <h4>Backstreet Boys - I Want It That Way</h4>
 <p class="dim">Backstreet Boys</p>
@@ -408,7 +684,7 @@ next();
 <h3>Say it in English</h3>
 <p>Write the whole sentence. Keep the word the Portuguese does not use.</p>
 <p><span class="qnum">5.</span> O notebook novo chegou. O antigo ainda funciona.</p>
-<input class="gap" data-answer="The new laptop arrived. The old one still works.|The new laptop has arrived. The old one still works." style="--gap-w:35em" name="a7b1">
+<input class="gap" data-answer="The new laptop arrived. The old one still works.|The new laptop has arrived. The old one still works." style="--gap-w:62.4em" name="a7b1">
 <p><span class="qnum">6.</span> Já mandei o arquivo. — Eu também.</p>
 <input class="gap" data-answer="I've already sent the file. — So have I.|I have already sent the file. — So have I." style="--gap-w:26.8em" name="a7b2">
 <p><span class="qnum">7.</span> Eles mudaram a data. — Isso é um problema.</p>

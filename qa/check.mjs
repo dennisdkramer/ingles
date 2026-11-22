@@ -57,18 +57,28 @@ const mockFetch = () => {
 const norm = s => String(s || '').toLowerCase()
   .replace(/[’‘]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim();
 
-/** the items on one `- Vocabulary:` / `- Examples:` line, in the order the roadmap lists them */
+/* the items on one `- Vocabulary:` / `- Examples:` line, in the order the roadmap lists them.
+   The roadmaps use two heading shapes: `## [21] - ...` (adult, kids) and `## Lesson 21: ...` (business). */
 function roadmap(track, n) {
   const f = path.join(ROOT, track.toUpperCase() + '-ROADMAP.md');
   if (!fs.existsSync(f)) return null;
   const lines = fs.readFileSync(f, 'utf8').split(/\r?\n/);
-  const start = lines.findIndex(l => new RegExp('^##\\s*\\[' + n + '\\]').test(l));
+  const num = l => {
+    const m = l.match(/^## (?:\[(\d+)\]|Lesson (\d+))/);
+    return m ? Number(m[1] || m[2]) : null;
+  };
+  const start = lines.findIndex(l => num(l) === n);
   if (start < 0) return null;
   const body = [];
-  for (let i = start + 1; i < lines.length && !/^##\s*\[/.test(lines[i]); i++) body.push(lines[i]);
+  for (let i = start + 1; i < lines.length && !lines[i].startsWith('## '); i++) body.push(lines[i]);
   const grab = label => {
     const line = body.find(l => new RegExp('^\\s*-\\s*' + label + '\\s*:', 'i').test(l));
-    return line ? [...line.matchAll(/"([^"]+)"/g)].map(m => m[1]) : [];
+    if (!line) return [];
+    const quoted = [...line.matchAll(/"([^"]+)"/g)].map(m => m[1]);
+    /* what is left outside the quotes is the rest of a mixed list (`until, "by then", ago, ...`) */
+    const rest = line.replace(/"[^"]*"/g, ',').replace(/^\s*-\s*[A-Za-z]+\s*:/, '');
+    const bare = rest.split(',').map(s => s.trim().replace(/^`+|`+$/g, '')).filter(s => s.length > 1);
+    return quoted.concat(bare);
   };
   const vocab = grab('vocabulary'), examples = grab('examples');
   return { vocab, examples, items: vocab.concat(examples) };
@@ -78,6 +88,7 @@ function roadmap(track, n) {
  *  "shi-" finds "shi-" or "shit", and an item quoted with `f---in'` finds either mask or spelling. */
 function rx(item) {
   const body = norm(item)
+    .replace(/[.!?]+$/, '')
     .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
     .replace(/-+/g, '\\S*')
     .replace(/ /g, '\\s+');
@@ -191,7 +202,9 @@ async function inspect(base, track, n) {
     clone.querySelectorAll('input[data-answer]').forEach(el => {
       el.replaceWith(d.createTextNode(' ' + (el.getAttribute('data-answer') || '') + ' '));
     });
-    text = norm(clone.textContent);
+    clone.querySelectorAll('script, style').forEach(el => el.remove());
+    /* tags become a space, so two cells side by side do not glue into one word (`now` + `in an hour`) */
+    text = norm(clone.innerHTML.replace(/<[^>]*>/g, ' '));
   }
   /* claims: prose the student reads as fact, dialogue excluded because a character may be wrong on purpose */
   const hits = [];

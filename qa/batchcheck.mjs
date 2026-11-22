@@ -78,7 +78,7 @@ function parseRow(line) {
       row.sep = (row.sep || []).concat(seg.slice(4).trim());
       continue;
     }
-    const s = /^S(\d+)-([a-z]{3})(?:@([a-z-]+))?:(.+)$/.exec(seg);
+    const s = /^S(\d+)-([a-z]{2,3})(?:@([a-z-]+))?:(.+)$/.exec(seg);
     if (!s) { warn(`L${row.L}`, `segment not understood: "${seg}"`); continue; }
     if (!SUBJECTS.includes(s[2])) warn(`L${row.L}`, `unknown subject "${s[2]}" in ${seg}`);
     row.sections.push({
@@ -238,11 +238,13 @@ function checkQuiz(rows, where, inScope = () => true) {
     if (!inScope(row)) return;
     if (!row.quiz) { warn(where + row.L, 'no quiz line (Q:…)'); return; }
     const t = row.quiz.blocks;
-    for (let k = 2; k < t.length; k++) {
+    const isExam = row.sections.length > 1 && row.sections.every(s => s.subject === 'exc');
+    // an exam's quiz is written to its sections' own headings, so its subject line repeats on purpose;
+    // the repeat rule is about teaching subjects and does not apply to an exam
+    if (!isExam) for (let k = 2; k < t.length; k++) {
       if (t[k] === t[k - 1] && t[k] === t[k - 2]) fail(where + row.L, `quiz: "${t[k]}" three times in a row`);
     }
     const prev = rows.slice(Math.max(0, i - QUIZ_WINDOW), i).flatMap(r => Object.keys(r.qel || {}));
-    const isExam = row.sections.length > 1 && row.sections.every(s => s.subject === 'exc');
     if (prev.length && !isExam) {
       const fresh = Object.keys(row.qel).filter(e => !prev.includes(e));
       if (!fresh.length) fail(where + row.L, `quiz: no element outside the previous ${QUIZ_WINDOW} quizzes`);
