@@ -14,10 +14,14 @@
  *   · an answer control resolving no anchor (the answer is never saved) · a .game block engine4 never
  *   wired · a console error
  *
- * PRINTED, never failed: half of the lesson's roadmap items (vocabulary + examples), the register tiers
- * the page hits, the formal/locale words it uses, the <h1> length. A legacy page that predates a rule
- * would otherwise red for a bar nobody was writing to, and a red that is really a policy is how a
- * report stops being read. The coverage line states the bar it is measured against: `need N`.
+ * WARN — printed, never failed: roadmap coverage under half of the lesson's own items (vocabulary +
+ * examples), the register tiers the page hits, the formal/locale words it uses, the <h1> length. A
+ * legacy page that predates a rule would otherwise red for a bar nobody was writing to, and a red that
+ * is really a policy is how a report stops being read. The coverage line states the bar it is measured
+ * against: `need N`, and a WARN below it.
+ *
+ * FAIL — complete mismatch: a page that names NONE of the items its own roadmap block lists is not that
+ * lesson, however well it loads. business 19 shipped teaching the passive (roadmap 33) and went green.
  *
  * SCOPE: no flag = the pages the working tree or last commit touched; --track=<t> [n …] names pages;
  * --all sweeps every page. A number that exists in no track is a hard error, so a typo cannot pass.
@@ -238,7 +242,8 @@ await new Promise(r => server.listen(0, r));
 const base = 'http://localhost:' + server.address().port;
 mockFetch();
 
-let failed = 0, pages = 0;
+let failed = 0, warned = 0, pages = 0;
+const warns = [];
 for (const track of tracks) {
   const list = pickVoiceLessons(track, scope);
   if (!list.length) {
@@ -254,18 +259,30 @@ for (const track of tracks) {
     const r = await inspect(base, track, n);
     const fails = r.fails.slice();
 
-    /* half of the lesson's own roadmap block: vocabulary items + example strings, any mix */
+    /* half of the lesson's own roadmap block: vocabulary items + example strings, any mix.
+       Under the bar is a WARN — printed, not failed: a page that half-covers its lesson still teaches
+       it. NONE of the items is a FAIL: the page is then not this lesson at all, which is what a page
+       numbered for one roadmap entry but authored from another looks like. */
     const rm = roadmap(track, n);
-    let cover;
-    if (!rm) cover = 'roadmap: no [' + n + '] block';
+    let cover, warn = '';
+    if (!rm) { cover = 'roadmap: no [' + n + '] block'; warn = 'no roadmap block — not measured'; }
     else {
       const hit = rm.items.filter(i => rx(i).test(r.text));
       const need = Math.ceil(rm.items.length / 2);
       const miss = rm.items.filter(i => hit.indexOf(i) < 0);
       cover = 'items ' + hit.length + '/' + rm.items.length + ' (need ' + need + ')'
         + (miss.length ? ' · missing ' + miss.map(m => '"' + m + '"').join(' ') : '');
-  if (hit.length < need) cover += '  ← under the bar';
+      /* an exam entry lists `- Vocabulary: -` and `- Examples: -`: nothing to measure, not a mismatch */
+      if (!rm.items.length) { cover = 'roadmap: this entry lists no items to measure'; warn = 'no items to measure'; }
+      else if (!hit.length) {
+        cover += '  ← none of this lesson';
+        fails.push('roadmap: 0/' + rm.items.length + ' items — the page does not teach lesson ' + n);
+      } else if (hit.length < need) {
+        cover += '  ← under the bar (warn)';
+        warn = 'under the bar — items ' + hit.length + '/' + rm.items.length + ' (need ' + need + ')';
+      }
     }
+    if (warn) warns.push(track + '/lesson' + n + ': ' + warn);
 
     /* the register, printed tier by tier: evidence for the reader, never a verdict */
     const reg = [];
@@ -289,11 +306,14 @@ for (const track of tracks) {
       + (r.claims.length ? ' · claims ' + r.claims.length + ': ' + r.claims.slice(0, 2).join(' · ') : '')
       + (r.h1 ? ' · h1 ' + r.h1.length : '')).trim();
     if (fails.length) { failed++; console.log('❌ ' + track + '/lesson' + n + '\n     ' + line); fails.forEach(f => console.log('     - ' + f)); }
+    else if (warn) { warned++; console.log('⚠ ' + track + '/lesson' + n + '\n     ' + line); }
     else console.log('✅ ' + track + '/lesson' + n + '\n     ' + line);
   }
 }
 server.close();
+if (warns.length) console.log('\n⚠ ' + warned + ' page(s) warned, not failed:\n   ' + warns.join('\n   '));
 console.log('\n' + (failed
-  ? '❌ ' + failed + ' of ' + pages + ' page(s) failed'
-  : '✅ ' + pages + ' page(s): loads, saves every answer; roadmap coverage and register are printed above'));
+  ? '❌ ' + failed + ' of ' + pages + ' page(s) failed' + (warned ? ' · ' + warned + ' warned' : '')
+  : '✅ ' + pages + ' page(s): loads, saves every answer' + (warned ? ' · ' + warned + ' warned' : '')
+    + '; roadmap coverage and register are printed above'));
 process.exit(failed ? 1 : 0);
