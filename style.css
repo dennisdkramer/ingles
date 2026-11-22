@@ -1615,8 +1615,13 @@
   .chart thead th{background:var(--sunken);color:var(--ink);font-weight:700;letter-spacing:normal;
     font-size:calc(1em + 3pt);text-align:center;opacity:.8;
     border-bottom:1px solid var(--ink)}
-  /* no column needs a name: <thead><tr class="bare"><th colspan="N"></th></tr></thead> — the row merges and
-     collapses to a 3px rule, so the chart keeps a top edge and says nothing it does not need to say */
+  /* A COLUMN GETS A HEADING ONLY IF THE STUDENT NEEDS IT. A header that only names what the column
+     obviously holds — a pronoun, an example, the sentence itself — costs a row of height and teaches
+     nothing, so it is omitted. An omitted header row is COLLAPSED TO THIS SHAPE, never deleted: the
+     chart keeps its top edge.
+       <thead><tr class="bare"><th colspan="N"></th></tr></thead>
+     N is the table's real column count. The row merges and collapses to a 3px rule, so what is left
+     says nothing it does not need to say. */
   .chart tr.bare th{height:3px;padding:0;font-size:0;line-height:0;border:0;opacity:1;
     background:color-mix(in srgb,var(--tan) 26%,var(--paper))}
   /* a line naming what the chart is: outside the chart, above its collapsed row. The wrapper hugs the table

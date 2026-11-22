@@ -44,7 +44,7 @@ const cards = [...d.querySelectorAll('.tracks .track-card')];
 ok('one column per track', cards.length === w.eval('TRACKSALL.length'),
   cards.length + ' cards for ' + w.eval('TRACKSALL.join("+")'));
 const byTrack = t => cards.find(c => ((c.querySelector('.bookbtn') || {}).textContent || '').includes(t));
-const biz = byTrack('Business'), kids = byTrack('Kids'), adult = byTrack('Adulto');
+const biz = byTrack('Business'), kids = byTrack('Kids'), adult = byTrack('Adult');
 ok('business card is active', biz && !biz.classList.contains('locked'));
 ok('kids card is locked', kids && kids.classList.contains('locked'));
 ok('adult card is locked', adult && adult.classList.contains('locked'));
@@ -129,7 +129,7 @@ const swOf = re => sw.find(x => re.test(x.getAttribute('title') || ''));
 ok('teacher: one switch per track', sw.length === w.eval('TRACKSALL.length'), sw.length + ' switches');
 ok('teacher: the switches are the SECOND line', !!row && row.children[1].classList.contains('tswitches'));
 ok('teacher: a held track reads ON', !!swOf(/Kids/) && swOf(/Kids/).classList.contains('on'));
-ok('teacher: an unheld track reads OFF', !!swOf(/Adulto/) && !swOf(/Adulto/).classList.contains('on'));
+ok('teacher: an unheld track reads OFF', !!swOf(/Adult/) && !swOf(/Adult/).classList.contains('on'));
 ok('teacher: each switch carries its track class (the hue lives in style.css)',
   sw.every(x => /(^|\s)t-[a-z-]+(\s|$)/.test(String(x.className))),
   sw.map(x => (String(x.className).match(/t-[a-z-]+/) || ['-'])[0]).join(' '));
@@ -137,7 +137,7 @@ ok('teacher: the thumb carries the track icon',
   !!swOf(/Kids/) && /🛹/.test(swOf(/Kids/).querySelector('.tsw-thumb').textContent));
 ok('teacher: the checkbox is the state',
   !!swOf(/Kids/) && swOf(/Kids/).querySelector('input').checked === true &&
-  !!swOf(/Adulto/) && swOf(/Adulto/).querySelector('input').checked === false);
+  !!swOf(/Adult/) && swOf(/Adult/).querySelector('input').checked === false);
 ok('teacher: no per-book jump or per-book removal remains',
   approved.querySelectorAll('.jumpbtn').length === 0 && !/× Kids/.test(approved.innerHTML));
 /* line 1: the link sits OUTSIDE the box that truncates, so no name or email length can ever reach it */
@@ -159,13 +159,13 @@ w.fetch = async (u, o) => {
   inFlight--;
   return { ok: true, json: async () => ({ result: 'ok', tracks: body.tracks }) };
 };
-const adultInput = swOf(/Adulto/).querySelector('input');
+const adultInput = swOf(/Adult/).querySelector('input');
 const kidsInput = swOf(/Kids/).querySelector('input');
 const bizInput = swOf(/Business/).querySelector('input');
 adultInput.checked = true; w.toggleTrack(adultInput, 's@x.y', 'adult');
 ok('a flip marks only THAT switch as pending',
-  swOf(/Adulto/).classList.contains('pending') && adultInput.disabled === true,
-  'adult pending=' + swOf(/Adulto/).classList.contains('pending'));
+  swOf(/Adult/).classList.contains('pending') && adultInput.disabled === true,
+  'adult pending=' + swOf(/Adult/).classList.contains('pending'));
 ok('the books nobody touched stay live',
   swOf(/Kids/).classList.contains('pending') === false && kidsInput.disabled === false &&
   swOf(/Business/).classList.contains('pending') === false && bizInput.disabled === false);
@@ -178,10 +178,10 @@ ok('the request carries the whole desired set, not one delta',
   !!sent[0] && sent[0].action === 'accessSet' && sent[0].tracks.indexOf('adult') >= 0 &&
   sent[0].tracks.indexOf('kids') < 0, JSON.stringify(sent[0] || {}));
 ok('both switches show what was flipped',
-  swOf(/Adulto/).classList.contains('on') && !swOf(/Kids/).classList.contains('on'));
+  swOf(/Adult/).classList.contains('on') && !swOf(/Kids/).classList.contains('on'));
 ok('the row is re-enabled once saved',
   adultInput.disabled === false && kidsInput.disabled === false &&
-  !swOf(/Adulto/).classList.contains('pending') && !swOf(/Kids/).classList.contains('pending'));
+  !swOf(/Adult/).classList.contains('pending') && !swOf(/Kids/).classList.contains('pending'));
 /* two students flipped at once are still written one at a time — the backend holds one script lock */
 sent.length = 0; maxInFlight = 0;
 w.eval('DES.clear();ACQ.clear();'
@@ -213,7 +213,7 @@ ok('an older deployment falls back to per-track calls',
 w.fetch = async (u) => ({ ok: true, json: async () => (/access\.json/.test(String(u)) ? { teachers: ['t@x.y'] } : { pending: [], approved: [] }) });
 w.eval('profile={email:"t@x.y",name:"Tee"};'
   + 'localStorage.setItem("eod_role_t@x.y",JSON.stringify("teacher"));'
-  + 'localStorage.setItem("eod_tracks",JSON.stringify([{name:"kids",label:"Kids",icon:"🛹",order:1},{name:"business",label:"Business",icon:"💼",order:2},{name:"adult",label:"Adulto",icon:"🔞",order:3}]));'
+  + 'localStorage.setItem("eod_tracks",JSON.stringify([{name:"kids",label:"Kids",icon:"🛹",order:1},{name:"business",label:"Business",icon:"💼",order:2},{name:"adult",label:"Adult",icon:"🔞",order:3}]));'
   + 'localStorage.setItem("eod_queue_t@x.y",JSON.stringify({pending:[],approved:[{email:"s@x.y",name:"Sol",tracks:[{track:"kids"}]}]}));'
   + 'document.getElementById("app").innerHTML="";');
 const booting = w.start();
@@ -274,7 +274,7 @@ await cold;
 w.eval('LESSONS={business:[{n:1,title:"First Talk & the Sentence Skeleton",file:"lesson1-First Talk & the Sentence Skeleton.html"}],kids:[],adult:[],'
   + 'advanced:[{n:1,title:"Advanced opener",file:"lesson1-Advanced opener.html"},{n:2,title:"Advanced two",file:"lesson2-Advanced two.html"}]};'
   + 'applyTracks([{name:"kids",label:"Kids",icon:"🛹",order:1},{name:"business",label:"Business",icon:"💼",order:2},'
-  + '{name:"adult",label:"Adulto",icon:"🔞",order:3},{name:"advanced",label:"Advanced",icon:"🚀",order:4}]);'
+  + '{name:"adult",label:"Adult",icon:"🔞",order:3},{name:"advanced",label:"Advanced",icon:"🚀",order:4}]);'
   + 'renderStudent(["business","advanced"],"Ana");');
 const cards4 = [...d.querySelectorAll('.tracks .track-card')];
 ok('a track that exists in no folder gets its own column',
