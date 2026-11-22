@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Capability map — English Opens Doors</title>
-<link rel="stylesheet" href="style.css?v=8aadb7c18e">
+<link rel="stylesheet" href="style.css?v=40f1bded05">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>CAPABILITY MAP <span>VISUAL REFERENCE</span></h1>
@@ -1301,7 +1301,8 @@ next();
 &lt;/div&gt;
 
 &lt;!-- data-a on the .qitem is the key and matches the value of the right input · one .qitem per item --&gt;
-&lt;!-- a set of items gets its own name per item (mc1, mc2), so two items never share one radio group --&gt;</pre>
+&lt;!-- a set of items gets its own name per item (mc1, mc2), so two items never share one radio group --&gt;
+&lt;!-- the set's shape follows the length of its options: data-layout="row" holds one- and two-word options on one line, data-layout="grid" style="--cols:2" sets three- and four-word options two by two, and a set with neither stacks phrases one per line — the stem and its options stay in the same cell --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #matching · a pool of meanings</summary><div class="body"><div>
 <pre>&lt;div class="rows"&gt;
@@ -1501,6 +1502,8 @@ next();
 <li><b>A section subject is exactly three letters.</b> The section pattern is <code>^S\d+-([a-z]{3})</code>, so <code>ex</code> can head a block but never a section: a production section is recorded as <code>rcp</code> or <code>mng</code>, and an unparsed segment is reported as <i>segment not understood</i> rather than guessed at.</li>
 <li><b>The quiz's freshness is counted separately.</b> <code>qel</code> is compared with the previous two quizzes, not with the page's three-row window, so a quiz needs one element that neither of the last two quizzes used even when the page already satisfies churn.</li>
 <li><b>Order is a run-length check, not a rule about shape.</b> The section subjects are compared with the previous three rows: three in a row warns and four fails. The repair is a subject that is honest about what the section does — a rules section with an exception is <code>exc</code>, a tenses section is <code>tim</code> — never a reshuffle of the page to dodge the count.</li>
+<li><b>An option set is reflowed by its own attribute.</b> <code>data-layout="row"</code> on a <code>.qopts</code> set holds the set on one line, <code>data-layout="grid"</code> with <code>style="--cols:2"</code> wraps it into two columns, and a set with neither stacks one option per line — so four short options read as 4×1, 2×2 or 1×4 by the length of the words rather than by habit, and the stem and its options stay in one cell. The rule is written after the <code>.qgrid</code> rules it refines, so it wins on source order at equal specificity.</li>
+<li><b>A flip card's prompt is its back.</b> The deck prints the text of the flipped face in <code>.flip-ask</code>, so the student reads the back's words and turns the card whose front matches them; the instruction states that direction, and the pairs are chosen for the decision they force rather than for the rule they repeat.</li>
 </ul>
 </div>
 </div>

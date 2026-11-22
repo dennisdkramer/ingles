@@ -1755,6 +1755,16 @@
   .qgrid.stack .qline{display:flex;align-items:baseline;gap:8px}
   .qgrid.stack .qline .qnum{flex:0 0 auto}
   .qgrid.stack .qopts{margin-top:4px}
+  /* #45 OPTION REFLOW — a .qopts set is laid out by the length of its options: unset it stacks one
+     per line, data-layout="row" holds the whole set on one line, and data-layout="grid" wraps it
+     into --cols columns (2 by default). USE: <div class="qopts" data-layout="grid" style="--cols:2">.
+     Written after the .qgrid rules so it wins on source order at equal specificity. */
+  .qopts[data-layout="row"],.qgrid .qopts[data-layout="row"],
+  .qgrid.stack .qopts[data-layout="row"]{display:flex;flex-wrap:wrap;justify-content:flex-start;
+    gap:6px 24px}
+  .qopts[data-layout="grid"],.qgrid .qopts[data-layout="grid"],
+  .qgrid.stack .qopts[data-layout="grid"]{display:grid;
+    grid-template-columns:repeat(var(--cols,2),minmax(0,1fr));gap:7px 18px}
   .blanks.sent.wide{display:block}
   .blanks.sent>*{display:block;margin:8px 0}
   .blanks.sent>* input.gap{display:inline-block;margin:0 .2em}
