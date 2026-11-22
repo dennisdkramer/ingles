@@ -43,7 +43,7 @@
    - Examples: "I work for a tech company." / "She checks the numbers every Monday." / "The call starts at nine." / "We usually test on Thursdays." / "My brother works nights." / "The bus leaves at six." / "She never eats breakfast."
    - Real-world relevance: A colleague's first questions are about routine and schedule, and the -s is what separates "I check" from "she checks" in a shared inbox.
 
-## Lesson 5: The little verb that carries the tense - one rule under all of them
+## Lesson 5: The mode indicator that carries the tense - one rule under all of them
 
    - Focus: The auxiliary slot carries the tense, and the main verb returns to base when the slot is filled.
    - teaches: `mode/slot`, `mode/verb-returns-base`, `mode/negation`
