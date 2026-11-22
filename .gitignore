@@ -9,3 +9,4 @@ qa/.css-baseline.json
 qa/_audio-analysis*.tmp.html
 assets/_audio-src-*.mp3
 .old/
+qa/_*.txt

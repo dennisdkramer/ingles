@@ -151,17 +151,72 @@ function gitPagePaths(args) {
  * batch just committed looks like, since the workflow audits after committing). Pages that no longer
  * exist on disk are dropped, so a deleted stub is not asked for.
  */
+/**
+ * A page that differs from HEAD only in a `?v=<hash>` stamp is NOT being authored: the build restamps
+ * every page when the sheet changes, and a gate that treated those as authored would drag the whole
+ * site back into every run. Compared after the two stamps are removed.
+ */
+function stampedOnly(file) {
+  const rel = path.relative(ROOT, file).split(path.sep).join('/');
+  const old = spawnSync('git', ['show', 'HEAD:' + rel], { cwd: ROOT, encoding: 'utf8', windowsHide: true });
+  if (old.error || old.status !== 0 || typeof old.stdout !== 'string') return false;
+  let now = '';
+  try { now = fs.readFileSync(file, 'utf8'); } catch (e) { return false; }
+  const strip = s => s.replace(/\r\n/g, '\n').replace(/(style\.css|equalize\.js)\?v=[0-9a-f]+/g, '$1');
+  return strip(old.stdout) === strip(now);
+}
+
 export function touchedScope() {
   const seen = [...gitPagePaths(['show', '--name-only', '--pretty=format:', 'HEAD']),
     ...gitPagePaths(['status', '--porcelain'])];
   const byTrack = new Map();
   for (const p of seen) {
     if (!lessonsOnDisk(p.track).includes(p.n)) continue;
+    const file = lessonFile(p.track, p.n);
+    if (file && stampedOnly(file)) continue;
     if (!byTrack.has(p.track)) byTrack.set(p.track, new Set());
     byTrack.get(p.track).add(p.n);
   }
   if (!byTrack.size) return null;
   return { tracks: TRACKS.filter(t => byTrack.has(t)), numbers: byTrack };
+}
+
+/** the lesson numbers on a `--lessons=` flag (`--lessons=21-25,30`), or null when the flag is absent */
+export function pickLessonsFlag(argv = process.argv.slice(2)) {
+  const a = argv.find(s => s.startsWith('--lessons='));
+  if (!a) return null;
+  const out = new Set();
+  for (const part of a.slice('--lessons='.length).split(',').map(s => s.trim()).filter(Boolean)) {
+    const range = /^(\d+)-(\d+)$/.exec(part);
+    if (range) {
+      const [from, to] = [Number(range[1]), Number(range[2])];
+      for (let n = Math.min(from, to); n <= Math.max(from, to); n++) out.add(n);
+    } else if (/^\d+$/.test(part)) out.add(Number(part));
+  }
+  return [...out].sort((x, y) => x - y);
+}
+
+/**
+ * THE LESSONS A GATE AUDITS: the pages being authored, not the track's history.
+ *
+ *   (no flag)                what the task touches - the working tree union the last commit, so a page
+ *                            being written and a batch just committed are both in scope, and a track
+ *                            nobody is writing audits nothing (which passes)
+ *   --lessons=21-25,30       exactly those
+ *   21 22 25  (bare)         exactly those
+ *   --all                    every page on disk, the full sweep, said out loud
+ *
+ * A gate that audits 200 pages nobody touched buries the one page that is broken; the full sweep stays
+ * one flag away for the day it is wanted.
+ */
+export function authoredLessons(track, argv = process.argv.slice(2)) {
+  const named = pickNumbers(argv);
+  if (named.length) return named;
+  const flagged = pickLessonsFlag(argv);
+  if (flagged && flagged.length) return flagged;
+  if (hasAllFlag(argv)) return lessonsOnDisk(track);
+  const scope = touchedScope();
+  return scope && scope.numbers.has(track) ? [...scope.numbers.get(track)].sort((a, b) => a - b) : [];
 }
 
 /** the tracks a voice detector covers: an explicit `--track` wins, then `--all`, then what was touched */
@@ -171,10 +226,7 @@ export function pickVoiceTracks(argv = process.argv.slice(2)) {
   return s ? s.tracks : [];
 }
 
-/** the pages of one track a voice detector covers (named numbers > touched > every page on disk) */
+/** the pages of one track a voice detector covers (named numbers > --lessons > touched > none) */
 export function pickVoiceLessons(track, scope, argv = process.argv.slice(2)) {
-  const named = pickNumbers(argv);
-  if (named.length) return named;
-  if (scope && scope.numbers.has(track)) return [...scope.numbers.get(track)].sort((a, b) => a - b);
-  return lessonsOnDisk(track);
+  return authoredLessons(track, argv);
 }

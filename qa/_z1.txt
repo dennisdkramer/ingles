@@ -1,2 +1,0 @@
-103 page link(s) stamped -> style.css?v=a5f8d14b21 / equalize.js?v=fc0b40ee4d
-lessons.json and tracks.json already correct — nothing written

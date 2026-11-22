@@ -978,6 +978,71 @@ if (cutM.probes && cutM.probes.length) {
   }
 }
 
+/* ---- 4b. DOES THE PAGE AGREE WITH THIS RUN? -------------------------------------------------
+   The one fault no earlier check could see: a clip and a page built by two DIFFERENT runs. The
+   audio was cut in one session and the block pasted in another, so the file opened seven seconds
+   from the first highlight and every other number was self-consistent. Nothing in the tool was
+   wrong and nothing compared the two artefacts.
+   `--verify=<page.html>` reads the page's `data-duration` and every `data-t`, and compares them to
+   the numbers this run just measured and proved. A different duration means the page plays a
+   different file; a shifted `data-t` means a different take of the timings. Both are named with the
+   offset, so the repair is arithmetic instead of a listening session. */
+const verifyArg = arg('verify', '');
+const pagesReferencing = () => {
+  const asset = 'assets/' + outName + '.mp3';
+  const hits = [];
+  const walk = dir => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (e.name === 'node_modules' || e.name === '.git' || e.name.startsWith('_')) continue;
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) { walk(p); continue; }
+      if (!e.name.endsWith('.html')) continue;
+      if (fs.readFileSync(p, 'utf8').includes(asset)) hits.push(path.relative(ROOT, p));
+    }
+  };
+  walk(ROOT);
+  return hits;
+};
+/* A PAGE THAT PLAYS THIS CLIP IS VERIFIED WITHOUT BEING ASKED. The fault this prevents is the one that
+   shipped: a clip cut in one run and a block pasted in another, seven seconds apart and self-consistent
+   in both. `--verify` names a page; with no flag, every page that plays `assets/<out>.mp3` is checked
+   (plus the `--verify` ones when both are given). */
+const verifyPaths = [...new Set([...(verifyArg ? verifyArg.split(',').map(s => s.trim()).filter(Boolean) : []),
+  ...pagesReferencing()])];
+if (verifyPaths.length) console.log('  pages that play assets/' + outName + '.mp3: ' + verifyPaths.join(', '));
+for (const verifyPath of verifyPaths) {
+  const abs = path.isAbsolute(verifyPath) ? verifyPath : path.join(ROOT, verifyPath);
+  if (!fs.existsSync(abs)) die('page check: no such page (' + verifyPath + ')');
+  const page = fs.readFileSync(abs, 'utf8');
+  const pageDur = (page.match(/data-duration="([\d.]+)"/) || [])[1];
+  const pageTs = [...page.matchAll(/<li data-t="([\d.]+)"/g)].map(m => Number(m[1]));
+  if (!pageDur) die('page check: ' + verifyPath + ' carries no `data-duration` — is that the player figure?');
+  const dDur = Number(pageDur) - cutM.duration;
+  if (Math.abs(dDur) > 0.25) {
+    die('page check: ' + verifyPath + ' expects ' + pageDur + ' s but this clip decodes to ' + cutM.duration.toFixed(2) +
+      ' s (' + (dDur > 0 ? '+' : '') + dDur.toFixed(2) + ' s). The page plays a different file from the one ' +
+      'this run measured — re-cut, or re-paste the block this run printed.');
+  }
+  if (!pageTs.length) {
+    console.log('  verify: duration agrees, the page shows no lyric lines · ' + path.basename(abs));
+    continue;
+  }
+  if (pageTs.length !== starts.length) {
+    die('page check: ' + verifyPath + ' has ' + pageTs.length + ' lyric lines and this run placed ' + starts.length +
+      ' — the page and the clip are not the same excerpt');
+  }
+  const deltas = pageTs.map((t, i) => +(t - starts[i]).toFixed(2));
+  const worst = deltas.reduce((a, d) => (Math.abs(d) > Math.abs(a) ? d : a), 0);
+  if (Math.abs(worst) > 0.35) {
+    die('page check: ' + verifyPath + ' `data-t`s are up to ' + worst.toFixed(2) + ' s from this run\'s (' +
+      deltas.join(', ') + '). Re-paste the block; a shift of this size means the two numbers came from ' +
+      'different takes of the timings' + (Math.abs(worst) > 0.9 ? ' — note that --cue-shift moves every `data-t`' : '') + '.');
+  }
+  console.log('  verify: the page agrees — duration ' + pageDur + ' s, ' + pageTs.length +
+    ' lines, worst offset ' + worst.toFixed(2) + ' s · ' + path.basename(abs));
+}
+console.log('LYRIC DATA data-duration=' + cutM.duration.toFixed(2) + ' data-t=' + starts.join(','));
+
 /* ---- 5. what a build pastes --------------------------------------------------------------- */
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const songName = arg('title', '') ||

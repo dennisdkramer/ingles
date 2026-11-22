@@ -219,7 +219,7 @@ if (!tracks.length) { console.log('✅ nothing touched — name a track (--track
 const ghosts = missingTargets(tracks, named);
 if (ghosts.length) { console.log('❌ lesson ' + ghosts.join(', ') + ' does not exist in ' + scopeLabel(tracks)); process.exit(1); }
 
-const scope = hasTrackFlag() || hasAllFlag() ? null : touchedScope();
+const scope = hasAllFlag() ? null : touchedScope();
 const server = serve();
 await new Promise(r => server.listen(0, r));
 const base = 'http://localhost:' + server.address().port;
@@ -228,7 +228,10 @@ mockFetch();
 let failed = 0, pages = 0;
 for (const track of tracks) {
   const list = pickVoiceLessons(track, scope);
-  if (!list.length) continue;
+  if (!list.length) {
+    console.log('— ' + track + ': nothing authored in this run (name lessons, --lessons=21-25, or --all)');
+    continue;
+  }
   console.log('— ' + track + ' ' + list.join(', '));
   const T = tells(track);
   for (const n of list) {

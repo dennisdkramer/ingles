@@ -1,1 +1,0 @@
-lessons.json written: {"kids":33,"business":25,"adult":40,"advanced-stem":0,"advanced-aave":0,"memelord-mogger":0,"english-basic-portuguese":0,"gramatica-redacao":0,"linguagem-figurativa-giria":0}

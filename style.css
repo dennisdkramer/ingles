@@ -1636,16 +1636,27 @@
      affected — it is the cell, so it has nothing to centre within */
   .rows>div>.chartwrap{margin-inline:auto}
   .chartwrap>.chart{margin:0}
-  /* #STRIP — A COMIC PANEL. Two sizes, chosen independently. THE FRAME is the cell: its width comes from
-     the table's columns (or --strip-w), its height from the row (or --strip-h). THE DRAWING keeps its own
-     aspect and is centred both ways; it is never stretched, so a frame that grows in WIDTH only moves the
-     picture's margins, and a frame that grows in HEIGHT only does the same. When the frame grows in both
-     directions the drawing grows with it, because its height follows the frame's (height:100%, width:auto)
-     and the ratio does the rest. The svg's own width/height attributes are the floor it can never sink
-     below. Markup: <td class="strip"><svg viewBox="0 0 160 74" width="160" height="74">…</svg> */
-  .strip{display:flex;align-items:center;justify-content:center;
-    width:var(--strip-w,100%);min-height:var(--strip-h,0);height:var(--strip-h,auto)}
-  .strip>svg{display:block;flex:0 0 auto;height:100%;width:auto;max-width:100%}
+  /* #STRIP — A COMIC PANEL, AND THE COMIC AROUND IT. A comic is a TABLE: `table.comic` with two columns,
+     one `td.strip` per panel, so the panels are always a 2 x 2 grid and a resize never re-arranges them.
+     TWO SIZES, CHOSEN SEPARATELY. THE FRAME is the cell: its width is the table's column, its height is
+     `--strip-h` — set once on the table, so every panel of one comic is the same height. THE DRAWING is
+     the svg, written with a `viewBox` and NO width/height attributes: `width:100%;height:100%` plus the
+     svg's default `preserveAspectRatio="xMidYMid meet"` scales it UNIFORMLY to fit the frame and centres
+     it, so a frame that grows in WIDTH only adds margins left and right, a frame that grows in HEIGHT only
+     adds them above and below, and a frame that grows in both makes the drawing bigger — and it never
+     stretches, reflows or spills. One drawing per panel; the 2 x 2 is the table's, never the svg's. */
+  table.comic{width:100%;max-width:min(100%,573px);margin-inline:auto;
+    table-layout:fixed;border-collapse:separate;border-spacing:8px}
+  /* the CELL IS THE FRAME and it stays a table cell: `display:table-cell`, 50% of the table, height set by
+     `--comic-h`. A cell that is declared `display:block` stops being a row cell and the four panels stack,
+     which is the layout change this rule exists to prevent. */
+  table.comic td.strip{display:table-cell;width:50%;padding:0;text-align:center;vertical-align:middle}
+  /* THE DRAWING IS AN SVG WITH width:100% AND THE FRAME'S HEIGHT, and nothing else: its viewBox plus the
+     default `preserveAspectRatio="xMidYMid meet"` scale it uniformly inside that box and centre it, so a
+     frame that grows in width only adds margins left and right, one that grows in height only adds them
+     above and below, and one that grows in both makes the drawing bigger. Never write width/height
+     attributes on the svg: they win over these two lines and the picture stops fitting its frame. */
+  .strip>svg{display:block;width:100%;height:var(--strip-h,var(--comic-h,96px));margin-inline:auto}
   .chartcap{font-size:calc(var(--s0) + 2pt);font-weight:300;color:var(--ink-2);text-align:center;
     letter-spacing:normal;margin:0 0 6px}
   /* a label for more than one column draws no column: its cell is zero wide, its borders are gone, and the

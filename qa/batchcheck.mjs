@@ -24,6 +24,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { JSDOM } from 'jsdom';
+import { authoredLessons } from './track.mjs';
 
 const ROOT = process.cwd();
 // the palette is the map's own element ids: a lesson names the element it built, and the markup box
@@ -203,8 +204,9 @@ function longestRun(a, b) {
   return best;
 }
 
-function checkWindows(rows, where) {
+function checkWindows(rows, where, inScope = () => true) {
   rows.forEach((row, i) => {
+    if (!inScope(row)) return;
     const prev = rows.slice(Math.max(0, i - NOVEL_WINDOW), i);
     // an exam is written to reuse what the block taught; novelty and quiz-novelty are for teaching pages
     const isExam = row.sections.length > 1 && row.sections.every(s => s.subject === 'exc');
@@ -231,8 +233,9 @@ function checkWindows(rows, where) {
   });
 }
 
-function checkQuiz(rows, where) {
+function checkQuiz(rows, where, inScope = () => true) {
   rows.forEach((row, i) => {
+    if (!inScope(row)) return;
     if (!row.quiz) { warn(where + row.L, 'no quiz line (Q:…)'); return; }
     const t = row.quiz.blocks;
     for (let k = 2; k < t.length; k++) {
@@ -247,8 +250,9 @@ function checkQuiz(rows, where) {
   });
 }
 
-function checkBlocks(rows, where) {
+function checkBlocks(rows, where, inScope = () => true) {
   rows.forEach(row => {
+    if (!inScope(row)) return;
     const total = Object.values(row.el).reduce((a, b) => a + b, 0);
     for (const [name, n] of Object.entries(row.el)) {
       if (n > Math.ceil(total / 2)) fail(where + row.L, `dominance: ${name} is ${n} of ${total} activity blocks`);
@@ -296,6 +300,7 @@ function checkBlocks(rows, where) {
     }
   });
   rows.forEach((row, i) => {
+    if (!inScope(row)) return;
     const seq = row.sections.map(s => s.subject);
     const exam = seq.length > 1 && seq.every(s => s === 'exc');
     for (const prev of rows.slice(Math.max(0, i - 3), i)) {
@@ -337,21 +342,28 @@ function runTrack(track) {
   const rows = readLedger(ledger);
   const where = `${track} L`;
   const locale = readLocale(track);
-  checkWindows(rows, where);
-  checkQuiz(rows, where);
-  checkBlocks(rows, where);
+  const scope = new Set(authoredLessons(track));
+  const inScope = row => scope.has(row.L);
+  checkWindows(rows, where, inScope);
+  checkQuiz(rows, where, inScope);
+  checkBlocks(rows, where, inScope);
   for (const row of rows) {
+    if (!inScope(row)) continue;
     const page = fs.readdirSync(dir).find(f => new RegExp(`^lesson0*${row.L}-.+\\.html$`).test(f));
     if (!page) { warn(where + row.L, 'no page for this row'); continue; }
     checkPage(row, pageScan(path.join(dir, page), locale), where);
   }
   const pages = fs.readdirSync(dir).filter(f => /^lesson\d+-.*\.html$/.test(f));
   const ledgered = new Set(rows.map(r => r.L));
-  const orphans = pages.filter(f => !ledgered.has(Number(/^lesson(\d+)-/.exec(f)[1])));
-  if (orphans.length) warn(track, `${orphans.length} page(s) with no row in the ledger (e.g. ${orphans[0]})`);
+  const orphans = pages.filter(f => !ledgered.has(Number(/^lesson(\d+)-/.exec(f)[1])))
+    .filter(f => inScope({ L: Number(/^lesson(\d+)-/.exec(f)[1]) }));
+  if (orphans.length) warn(track, `${orphans.length} authored page(s) with no row in the ledger (e.g. ${orphans[0]})`);
   const used = union([{ el: Object.assign({}, ...rows.map(r => r.el)) }], 'el');
   const unused = PALETTE.filter(e => !used.has(e));
-  console.log(`${track.padEnd(24)} ${String(rows.length).padStart(2)} rows · ${used.size}/${PALETTE.length} elements` + (unused.length ? ` · never used: ${unused.join(', ')}` : ''));
+  const scoped = rows.filter(inScope).map(r => "L" + r.L).join(" ");
+  console.log(`${track.padEnd(24)} ${String(rows.length).padStart(2)} rows · ${used.size}/${PALETTE.length} elements`
+    + (unused.length ? ` · never used: ${unused.join(", ")}` : "")
+    + ` · in scope: ${scoped || "none (name lessons, --lessons=21-25, or --all)"}`);
 }
 
 function selfTest() {
