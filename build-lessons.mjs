@@ -57,18 +57,42 @@ for (const d of fs.readdirSync(ROOT, { withFileTypes: true })) {
 }
 
 const manifest = {};
+/* a title is READABLE OR IT IS NOT A TITLE. `lesson<N>-<Title>.html` is the page's ADDRESS; the name the
+   student reads is the page's own <h1>, because a filename cannot carry a space, an apostrophe or a colon —
+   `Doesnt-TheLittleVerb` and `TheModeIndicatorThatCarriesTheTense` are not what the lesson is called. The
+   slug is still the fallback (de-dashed) for a page with no headline, so a new page lists the moment it
+   exists and is named the moment it has an <h1>. */
+const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', mdash: '—', ndash: '–', hellip: '…', rsquo: '’', lsquo: '‘', ldquo: '“', rdquo: '”' };
+function pageTitle(abs, slug) {
+  let html = '';
+  try { html = fs.readFileSync(abs, 'utf8'); } catch (e) { return slug; }
+  /* the LAST <h1> is the lesson's own headline: the sheet's brand bar is a <header> holding its own <h1>
+     (`BUSINESS LESSON 5`), which names the book, not the lesson. */
+  const all = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)];
+  if (!all.length) return slug;
+  const m = all[all.length - 1];
+  const text = m[1].replace(/<[^>]*>/g, ' ')
+    .replace(/&(#\d+|#x[0-9a-f]+|[a-z]+);/gi, (all, e) => {
+      if (e[0] === '#') return String.fromCodePoint(e[1] === 'x' || e[1] === 'X' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10));
+      return ENTITIES[e.toLowerCase()] !== undefined ? ENTITIES[e.toLowerCase()] : all;
+    })
+    .replace(/\s+/g, ' ').replace(/\s+([,;:.!?])/g, '$1').trim();
+  return text || slug;
+}
 for (const meta of TRACKS) {
   const track = meta.name;
   const dir = path.join(ROOT, track);
   const entries = [];
   if (fs.existsSync(dir)) {
     for (const name of fs.readdirSync(dir)) {
-      /* THE FILENAME IS THE TITLE: `lesson<N>-<Title>.html`. No page is read to learn its own name — the
-         stylesheet stamp at the foot of this file is the one edit the build makes inside a page. */
+      /* THE FILENAME IS THE ADDRESS: `lesson<N>-<Title>.html` decides the number and the file served. The
+         headline inside the page is the name. No other page is read — the stylesheet stamp at the foot of
+         this file is the one edit the build makes inside a page. */
       const m = name.match(/^lesson(\d+)(?:-(.*))?\.html$/);
       if (!m) continue;
       const n = Number(m[1]);
-      entries.push({ n, title: m[2] ? m[2] : 'Lesson ' + n, file: name });
+      const slug = m[2] ? m[2].replace(/-+/g, ' ').trim() : '';
+      entries.push({ n, title: pageTitle(path.join(dir, name), slug || 'Lesson ' + n), file: name });
     }
   }
   entries.sort((a, b) => a.n - b.n);
