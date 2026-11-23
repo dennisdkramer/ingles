@@ -3034,10 +3034,11 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
    THREE LEVELS, AND THE THIRD ONE IS SILENT. A page is authored three rows deep (PEDAGOGY-MAP
    [1A]): the section's row, the row inside a cell, and the row inside that cell, whose only job is
    to let two short things stand side by side. Level 1 and level 2 carry the spacing, level 3
-   carries NONE — a third-level row and its cells are a positioning device and a page that gained
-   a gap when one was added would be a page whose layout changed for no reason. The rule at the end
-   of this layer is the whole of that: margins are zeroed once a row is three deep, which is
-   expressible without any marker because the depth is the nesting.
+   carries NONE of it — a third-level row and its cells are a positioning device, and a page that
+   gained a gap when one was added would be a page whose layout changed for no reason. Its margins
+   are zeroed and its gap is the cell's own (`--cell-gap`, not `--flex-gap`), so two items placed
+   side by side at level 3 sit exactly as far apart as they did stacked; both rules are expressible
+   without any marker, because the depth is the nesting.
    WHAT THIS FORBIDS: a rule that styles `.rows` or `.rows>*` "at the root" — every row in the
    document would take it, including the third level, and depth scoping would have to be undone by
    the next author. A rule that belongs to rows writes its depth (level 1/2 in the selectors above,
@@ -3056,5 +3057,10 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
      children take no margins at all: two short items side by side are placed, not spaced. Deeper
      than three is the same rule, because a fourth level cannot exist in an authored page. */
   .rows .rows .rows>*>*{margin-block:0}
+  /* and its GAP is the cell's own, not a row's. The items inside a third-level row were stacked in
+     a cell before they were placed side by side, so two of them must sit the same distance apart
+     across as they did down — otherwise adding a third-level row changes the spacing of the page,
+     which is the one thing the level is not allowed to do. */
+  .rows .rows .rows{gap:var(--cell-gap)}
 }
 
