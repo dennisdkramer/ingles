@@ -554,6 +554,25 @@ window.LayoutEditor = (function () {
     return row;
   }
 
+  /* THE ROW A MERGED CHILD NEEDS. A cell's children entering another cell are the cells of the row
+     the dropped cell used to be — so a bare paragraph arriving beside a .block would be a shape the
+     page does not have (an item and a box sharing one cell, one of them unable to be dragged
+     independently). Each item that is not already a row, and not the block that owns its own
+     content, is given the row it would have had where it came from: level 2 inside a level-1 cell,
+     level 3 inside a level-2 one — the deepest a cell's content may go. */
+  function mergeRow(k) {
+    if (!k || k.nodeType !== 1) return null;
+    if (isRow(k)) return null;                                  /* already a row */
+    if (!k.classList || k.classList.contains('block')) return null;   /* a block owns its content */
+    if (still(k) || part(k)) return null;                       /* a heading, a control's part */
+    var row = document.createElement('div');
+    row.className = 'rows';
+    var cell = document.createElement('div');
+    row.appendChild(cell);
+    cell.appendChild(k);
+    return row;
+  }
+
   function applyDrop(d) {
     var n = d.node, t = d.t;
     if (!t) return;
@@ -566,9 +585,13 @@ window.LayoutEditor = (function () {
     if (t.insert === 'merge') {
       var dest = t.merge, kids = [].slice.call(n.children);
       if (!kids.length) return;
-      var at = t.ref || null;
-      for (var i = 0; i < kids.length; i++) dest.insertBefore(kids[i], at);
-      back = { cell: n, kids: kids };
+      var at = t.ref || null, moves = [];
+      for (var i = 0; i < kids.length; i++) {
+        var row = mergeRow(kids[i]);
+        moves.push({ item: kids[i], row: row });
+        dest.insertBefore(row || kids[i], at);
+      }
+      back = { cell: n, moves: moves };
     } else {
       if (t.inside) {
         if (t.box === from.parent && t.box.lastElementChild === n) return;   /* already there */
@@ -621,8 +644,18 @@ window.LayoutEditor = (function () {
     }
     s.from.parent.insertBefore(s.node,
       s.from.next && s.from.next.parentNode === s.from.parent ? s.from.next : null);
-    /* a merge takes a cell apart, so its children come home before the cell does */
-    if (s.back) s.back.kids.forEach(function (k) { s.back.cell.appendChild(k); });
+    /* a merge takes a cell apart, so its children come home before the cell does — and the row a
+       child was carried in comes out with it, so the cell goes back to holding what it held */
+    if (s.back) {
+      if (s.back.moves) {
+        s.back.moves.forEach(function (m) {
+          s.back.cell.appendChild(m.item);
+          if (m.row && m.row.parentNode) m.row.parentNode.removeChild(m.row);
+        });
+      } else {
+        (s.back.kids || []).forEach(function (k) { s.back.cell.appendChild(k); });
+      }
+    }
     for (var j = (s.wraps || []).length - 1; j >= 0; j--) unwrap(s.wraps[j]);
     moved = Math.max(0, moved - 1);
     markPins(); markGrains(); paintChip();
@@ -656,7 +689,11 @@ window.LayoutEditor = (function () {
        nothing and the page stays where it is. */
     if (isRow(n) && levelOf(n) >= 3) return;
     drag = { node: n, x: e.clientX, y: e.clientY, on: false, t: null, attr: null, target: n,
-             kind: kindOf(n), cell: isItem(n) };
+             kind: kindOf(n), cell: isItem(n),
+             /* whether the node carried a class attribute at all: a drag adds `layout-dragging`
+                and takes it away again, and a div that never had a class must not be left with
+                class="" in the page a save writes */
+             hadClass: n.hasAttribute('class') };
     window.addEventListener('pointermove', move, true);
     window.addEventListener('pointerup', up, true);
     window.addEventListener('pointercancel', up, true);
@@ -697,6 +734,8 @@ window.LayoutEditor = (function () {
     if (!d) return;
     showLine(null);
     d.node.classList.remove('layout-dragging');
+    /* a node that carried no class attribute keeps none: the drag's own class was the only one */
+    if (!d.hadClass && !d.node.getAttribute('class')) d.node.removeAttribute('class');
     document.body.classList.remove('layout-drag');
     /* ONLY A PRESS THAT TRAVELLED TOUCHES THE PAGE'S EDITABILITY. A Shift+click is an inspection,
        and taking `contenteditable` away from it is what used to lock the caret out of the page. */
