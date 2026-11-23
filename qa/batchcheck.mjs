@@ -4,7 +4,7 @@
 // The ledger is <track>/BATCH-RECORD.md. One line per lesson, appended in three phases:
 //   pass 1 writes the sections (key, subject, device) and the quiz, before any block exists;
 //   pass 2 fills in each section's block subjects and appends the elements it built and the quiz's;
-//   the checks append the register score.
+//   verify appends the register score, once the page and its section list are final.
 //
 //   L07 | S1-rul@chart:rsn>ex>con>rul | S2-voc:mng>voc>mng | Q:rul>mng>rul>ex | el:dialoggap:3,mc:1 | qel:mc:1,flip:1 | reg:3/5
 //

@@ -2,9 +2,9 @@
 
 One line per lesson, appended in three phases. It is the only memory: pass 1 of the next lesson reads the last rows, and `npm run batchcheck` reads all of them and the pages.
 
-**Pass 1 writes** the sections and the quiz: `S<number>-<subject>[@<device>]` for each section, and `Q:<block subjects>`.
-**Pass 2 fills in** each section's block subjects — `S<number>-<subject>[@<device>]:<block subjects>` — and appends the elements it built: `el:<element>[:count]`, `qel:<element>[:count]`.
-**The checks append** the register score, judged section by section: `reg:<sections in voice>/<sections>`.
+**Pass 1 writes** the sections (one or more) as it writes the lesson, and the quiz: `S<number>-<subject>[@<device>]` for each section in page order, and `Q:<block subjects>`. The number is the row's own and is never printed on the page.
+**Pass 2 fills in** each section's block subjects — `S<number>-<subject>[@<device>]:<block subjects>` — appends the elements it built: `el:<element>[:count]`, `qel:<element>[:count]`, and corrects the section list to the page it built: a section it split, merged, renamed, added or dropped is rewritten in the row before the row is finished. The row records the page, not the plan.
+**Verify appends** the register score, judged on the built page, section by section: `reg:<sections in voice>/<sections>`. The denominator is the page's section count.
 
 ```
 ```
@@ -12,7 +12,7 @@ A fenced block is an example and is never read: each lesson's row is written **b
 
 
 
-- **subject** — what the block or section is *about*: `rul` form · `rsn` reasoning · `ex` worked example · `con` contrast · `exc` exception · `voc` words as a set · `mng` what one means · `prn` how it sounds · `tim` where it sits in time · `soc` when it is said · `rcp` earlier material.
+- **subject** — what the block or section is *about*: `rul` form · `rsn` reasoning · `ex` worked example · `con` contrast · `exc` exception · `voc` the words as a set, only when the set itself is the subject · `mng` what one means · `prn` how it sounds · `tim` where it sits in time · `soc` when it is said · `rcp` earlier material.
 - **device** — the element doing the teaching in that section, if any (`chart`, `timeline`, `pos`, `comic`, `map`, `key`…). Leave it off when the prose teaches.
 - **element** — the id of the markup box you copied: `chunks` `stripgaps` `chartanswer` `dialoggap` `mc` `matching` `correction` `fill` `dictation` — and `translation` is the correction or the dictation asking for a translation, recorded as `translation` `flip` `map`. Count every unit that holds a control and is one of these forms — a bare keyed gap is a component, not a unit, not every kind once. The unit carries `data-activity="<the same id>"`; a game is a skin and records the element underneath it. A keyed gap is not an element: it is carried inside one of these forms, and a lone gap is a component beside other teaching, never an activity.
 
