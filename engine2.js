@@ -5,6 +5,10 @@ const LAYER_VER="v4-server-truth-20261006"; /* Bump to mark a fresh data era */
    the root (""). Read from this script's own address, so a page at any depth — and the repo served under
    /<repo>/ on GitHub Pages — resolves to the same place. */
 const SITE=new URL(".",(document.currentScript&&document.currentScript.src)||location.href).pathname;
+/* AN OPEN PAGE READS NOTHING FROM THE SERVER: a demo on the extra track has no student, so the layer, the
+   poll and the student list would be requests for rows that cannot exist. The page answers, marks and
+   edits locally, and "Save to repo" is how a demo page is kept. */
+const OPENPAGE=!!window.OPEN;
 let wipeGuard=0; /* a Clear-page wipe in flight: the poll must not resurrect the rows it is deleting */
 let lastPollChange=Date.now(); /* last time the poll saw a change — keeps the poll fast while the student watches */
 let lastFull=""; /* the layer content signature used to detect that change */
@@ -626,7 +630,7 @@ function renderCompleteBtn(){
   if(gate.name)document.querySelectorAll(".stuname").forEach(el=>el.textContent=gate.name);
   loadLayer();
 };}
- if(gate.teacher){
+ if(gate.teacher&&!OPENPAGE){
   (async()=>{
    let st=[];
    try{
@@ -649,6 +653,7 @@ function renderCompleteBtn(){
   let lastUserActivity=Date.now(),pollTimer=null;
   const pollDelay=()=>(Date.now()-Math.max(lastUserActivity,lastPollChange)>60000)?5000:1000;
  const schedulePoll=()=>{
+  if(OPENPAGE)return;
   clearTimeout(pollTimer);pollTimer=null;
   if(document.hidden)return;
   pollTimer=setTimeout(async()=>{pollTimer=null;await loadLayer();schedulePoll();},pollDelay());
@@ -659,6 +664,7 @@ function renderCompleteBtn(){
 }catch(e){let b=document.getElementById("errb");if(b)b.innerHTML+=" · control bar: "+e.message}})();
 
 async function loadLayer(){
+ if(OPENPAGE)return;
  let rows=null;
  try{
   const r=await fetch(BACKPACK+"?action=layer&email="+encodeURIComponent(STUDENT)+"&lesson="+L+"&ver="+LAYER_VER+"&t="+Date.now());

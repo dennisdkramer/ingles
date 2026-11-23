@@ -15,12 +15,16 @@ import fs from 'fs';
 import path from 'path';
 import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
+import { isDemo } from './demo.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 /** A TRACK IS A FOLDER: one holding at least one lesson page, or a track.json (so a track can exist — and
  *  audit as an empty passing state — before its first lesson is written). Discovered, never listed: a track
- *  created months from now is in scope, and `--track=<it>` is a valid narrowing, with no edit to this file. */
+ *  created months from now is in scope, and `--track=<it>` is a valid narrowing, with no edit to this file.
+ *  A folder whose track.json says `{"demo": true}` is a DEMO, not a track of the book: anyone may open its
+ *  pages without a login, so it is not audited, not indexed and never named by `--track`. The test lives in
+ *  qa/demo.mjs, so a new demo folder excludes itself here without an edit. */
 function discoverTracks() {
   const out = [];
   let dirs = [];
@@ -29,6 +33,7 @@ function discoverTracks() {
     if (!d.isDirectory() || d.name[0] === '.' || d.name === 'node_modules') continue;
     let files = [];
     try { files = fs.readdirSync(path.join(ROOT, d.name)); } catch (e) { continue; }
+    if (isDemo(ROOT, d.name)) continue;
     if (files.some(f => /^lesson\d+.*\.html$/.test(f)) || files.indexOf('track.json') >= 0) out.push(d.name);
   }
   return out.sort();

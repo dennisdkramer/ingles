@@ -5,6 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {JSDOM} from 'jsdom';
+import { isDemo } from './demo.mjs';
 
 const root = process.cwd();
 const read = f => fs.readFileSync(path.join(root, f), 'utf8');
@@ -57,10 +58,13 @@ for (const el of dom.querySelectorAll('[data-answer]')) {
   if (!el.getAttribute('data-answer').trim()) fail(`${el.tagName.toLowerCase()} carries an empty data-answer`);
 }
 
-/* 6 — a markup box never leaks into a lesson, and no lesson is empty */
+/* 6 — a markup box never leaks into a lesson, and no lesson is empty. A DEMO folder (track.json says
+   {"demo":true}) is not a lesson track: its pages are open, hand-organised examples, so they are not
+   held to the lesson rules here. */
 const tracks = fs.readdirSync(root, {withFileTypes: true})
   .filter(d => d.isDirectory() && fs.existsSync(path.join(root, d.name, 'track.json')))
-  .map(d => d.name);
+  .map(d => d.name)
+  .filter(d => !isDemo(root, d));
 for (const t of tracks) {
   for (const f of fs.readdirSync(path.join(root, t)).filter(f => f.endsWith('.html'))) {
     const body = fs.readFileSync(path.join(root, t, f), 'utf8');

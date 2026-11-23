@@ -25,6 +25,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { JSDOM } from 'jsdom';
 import { authoredLessons } from './track.mjs';
+import { isDemo } from './demo.mjs';
 
 const ROOT = process.cwd();
 // the palette is the map's own element ids: a lesson names the element it built, and the markup box
@@ -425,7 +426,7 @@ function selfTest() {
   return bad;
 }
 
-const tracks = fs.readdirSync(ROOT).filter(d => fs.existsSync(path.join(ROOT, d, 'track.json')));
+const tracks = fs.readdirSync(ROOT).filter(d => fs.existsSync(path.join(ROOT, d, 'track.json')) && !isDemo(ROOT, d));
 if (process.argv.includes('--self-test')) {
   process.exitCode = selfTest() ? 1 : 0;
 } else {

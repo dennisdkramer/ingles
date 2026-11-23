@@ -11,6 +11,10 @@ import fs from 'fs';
 import { createHash } from 'crypto';
 import path from 'path';
 import { fileURLToPath } from 'url';
+/* A DEMO FOLDER NAMES ITSELF (extra/track.json holds {"demo":true}): its pages are opened by anyone, so it
+   is not a book track — no index entry, no lessons.json row, and no audit. The test is qa/demo.mjs, the one
+   place the harnesses ask too. */
+import { isDemo } from './qa/demo.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const CHECK = process.argv.includes('--check');
@@ -49,6 +53,7 @@ const TRACKS = [
 for (const d of fs.readdirSync(ROOT, { withFileTypes: true })) {
   if (!d.isDirectory() || d.name[0] === '.' || d.name === 'node_modules') continue;
   if (TRACKS.some(t => t.name === d.name)) continue;
+  if (isDemo(ROOT, d.name)) continue;
   let files = [];
   try { files = fs.readdirSync(path.join(ROOT, d.name)); } catch (e) { continue; }
   if (files.some(f => /^lesson\d+.*\.html$/.test(f))) {

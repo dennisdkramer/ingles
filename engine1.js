@@ -25,6 +25,13 @@ const lineNorm=s=>String(s==null?"":s).replace(/[\r\n]/g," "); /* newline -> spa
    a page at any depth — and the repo served under /<repo>/ on GitHub Pages — resolves to the same place. */
 const E1_SITE=new URL(".",(document.currentScript&&document.currentScript.src)||location.href).pathname;
 let gate=null;try{gate=JSON.parse(sessionStorage.gate)}catch(e){}
+/* AN OPEN PAGE HAS NO LOGIN. A demo page on the extra track sets window.OPEN before this file loads; the
+   identity the engines expect is written here, so the bar, the notebook and edit mode all find what they
+   ask for, and nothing is read from a session that was never opened. */
+if(window.OPEN&&(!gate||!gate.email)){
+ gate={email:"demo@"+String(TRACK||"extra"),track:TRACK,teacher:true,name:"Demo"};
+ gate.sig=h(gate.email+gate.track+SECRET);
+}
 if(!gate||h(gate.email+gate.track+SECRET)!==gate.sig||(!gate.teacher&&gate.track!==TRACK))location.replace(E1_SITE+"index.html");
 /* student-name recording prompts (B-I7): the index page stores the logged-in student's name in the gate.
    Replace any .stuname placeholder with it; a missing/empty name (incl. teachers) keeps the authored
@@ -145,6 +152,7 @@ async function sendOne(op){
   }catch(e){return false;}
 }
 async function flush(){
+  if(window.OPEN){flushing=false;return;}   /* an open demo page never writes: nothing is queued for it */
   if(flushing||!outbox.length)return;
   flushing=true;
   while(outbox.length){
@@ -163,6 +171,9 @@ async function flush(){
   flushing=false;
 }
 function send(o){
+  /* an open demo page has no server to write to: the outbox would retry for ever against a sheet that
+     does not want a demo identity, so the page keeps what it did and stops here */
+  if(window.OPEN)return;
   o.email=STUDENT;o.lesson=L;o.author=who();
   if(o.action!=="del"&&!o.id)o.id=Date.now()+"_"+Math.floor(Math.random()*9999);
   /* the UI already applied this change before send(); queue it in the outbox and flush (network last) */

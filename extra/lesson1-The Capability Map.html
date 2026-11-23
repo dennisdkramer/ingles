@@ -1,0 +1,1538 @@
+<!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Extra · Lesson 1 — The Capability Map</title>
+<link rel="stylesheet" href="../style.css?v=40f1bded05">
+</head><body>
+<div id="toast"></div>
+<header class="brand"><img src="../logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>EXTRA <span>DEMO 1</span></h1>
+<div id="controlbar" class="control-bar"></div>
+<div id="barhelp" class="barhelp">An open page — no login. What a page may be built with: the prose, the visuals, and a block of each in use. Edit mode drags any block; <b>Save to repo</b> keeps the result.</div></header>
+<main id="page"><div class="page-container"><div class="content-area">
+
+<h1>What we can teach with</h1>
+<p class="lead">The visuals a lesson is built from, each drawn on this page.</p>
+
+<div class="block" data-look="float">
+<p><b>Every word inside a block below is example content.</b> What a block contributes is its shape: the markup in the reveal under it, its look, its span.</p>
+</div>
+
+<h2>How a page gets built</h2>
+
+<div class="block">
+<h3>Arrange it, and give it a look</h3>
+<div class="rows">
+<div>
+<p><b>A section's content is arranged however its teaching needs it.</b> A row is one line, and its direct children are its cells; a cell holds as many items as its content needs — one, two or several — and its share of the line is settled by that content against the cells beside it when the page loads. A section can hold as many rows as it asks for, or none: a block, a chart or a paragraph can stand directly in it. <code>.row</code> is only the utility for a line of chips or buttons — never a layout row.</p>
+<p><b>A section can contain multiple ideas, a block can contain multiple activities, teaching elements and rows of content. Division without need is noise.</b> A division earns its place by helping the student read the page — which can mean setting elements apart so they are seen as distinct, two tenses side by side or a contrast — and never by separating elements that need no separation.</p>
+</div>
+<div>
+<p class="dim"><b>Every element below is drawn with the markup that builds it, and the drawing is the default</b>: what the element contains, what text it carries, where that text sits, and whether it carries a title at all. Its item count is the example's own, never a count to copy. A chart takes no title of its own — the sentence beside it names it.</p>
+<p class="dim"><code>data-look</code> is declared on the block, never inferred from what it holds, and changes the paint only.</p>
+</div>
+</div>
+</div>
+
+
+<p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
+<div class="rows markup-row">
+<details class="reveal" open><summary>Markup — rows · a row, and an element on its own</summary><div class="body"><div>
+<pre>&lt;h2&gt;a section the sheet numbers&lt;/h2&gt;
+
+&lt;div class="rows"&gt;
+  &lt;div&gt;&lt;p&gt;the rule this section teaches&lt;/p&gt;&lt;/div&gt;
+  &lt;div&gt;&lt;figure class="chartwrap"&gt;…the chart the rule is read with…&lt;/figure&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;table class="chart"&gt;…nothing purposeful to accompany it, so it stands outside a block…&lt;/table&gt;
+
+&lt;div class="block"&gt;…a block on its own, with no width of its own…&lt;/div&gt;</pre>
+<p class="dim">Looks, and why each is chosen: <code>float</code> for text that applies to everything in the section and belongs to no single block · <code>tint</code> for content about the track's own voice — how a word taught in that voice compares with the same word in another voice, what it really means or the use cases a slang word has · <code>outline</code> for content important enough to stand out from the page · <code>stripes</code> for an activity the student answers, whose top rule turns red · <code>tape</code> for a note pinned to the page rather than taught in sequence · <code>dark</code> for content that <i>is</i> a night, a screen or a stage. One tint and one outline per section at most. A section is an <code>&lt;h2&gt;</code>: the sheet numbers it, so it is never typed, and it restarts the lettering under it. An unset block is paper with the 2px accent rule. The markup box you are reading is <code>&lt;details class="reveal" open&gt;&lt;summary&gt;…&lt;/summary&gt;&lt;div class="body"&gt;&lt;div&gt;&lt;pre&gt;…&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;/details&gt;</code>.</p>
+</div></div></details>
+</div>
+
+<h2>Choosing a visual</h2>
+
+<div class="block">
+<h3>The mapping</h3>
+<div class="rows">
+<div>
+<p class="dim">The first column is the occasion, the second the visual that answers it, and every name opens it drawn. A concept with no row is one no visual shows yet. <b>None of these items is mandatory or even preferred: a text-only explanation is equally valid if it accomplishes the teaching goal of its block.</b> The lesson teaches; a visual is one of the ways its example is drawn. <b>The order of the items here means nothing</b> — it is not a ranking, a precedence or a sequence, and nothing is more important for coming first.</p>
+</div>
+<div>
+<table class="chart">
+<thead><tr class="bare"><th colspan="2"></th></tr></thead>
+<tbody>
+<tr><td>word order and the jobs inside a sentence</td><td><a href="#pos">parts-of-speech marking</a></td></tr>
+<tr><td>teach english use of indirect object</td><td><a href="#recipient">the recipient and its arrow</a></td></tr>
+<tr><td>teach verb tenses - timelines anchored to phrases</td><td><a href="#axis">the timeline</a></td></tr>
+<tr><td>chart for bulk vocabulary, definitions/translations/etc</td><td><a href="#chart">a chart</a></td></tr>
+<tr><td>standout note for special case words/phrases</td><td><a href="#gloss">a card at the word</a></td></tr>
+<tr><td>how one word is said</td><td><a href="#key-sound">the pronunciation key, above the word</a></td></tr>
+<tr><td>include music w/ relevant lyrics - script fetch &amp; audio player</td><td><a href="#audio">the player</a></td></tr>
+<tr><td>locations, directions, relative positions</td><td><a href="#map">the street map</a></td></tr>
+<tr><td>the student writes the sentence a panel shows</td><td><a href="#stripgaps">the strip with a gap under each panel</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+<h2>In-Block Features</h2>
+
+<div class="block">
+<h3>Augment existing text</h3>
+<div class="rows">
+<div>
+<p class="pos" id="pos"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p>
+</div>
+<div id="pair">
+<div class="pair-stack">
+<div class="side" data-state="wrong"><p><i class="mark"></i> I <b>am knowing</b> the answer.</p></div>
+<div class="side" data-state="correct"><p><i class="mark"></i> I <b>know</b> the answer.</p></div>
+</div>
+</div>
+</div>
+
+<div class="rows">
+<div id="recipient">
+<p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-i" data-side="right">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span> <span class="pos-adj">the</span> <span class="pos-n pos-o">book</span>.</p>
+<p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-o">it</span> <span class="pos-prep">to</span> <span class="pos-n pos-i" data-side="left">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span>.</p>
+</div>
+<div id="key">
+<p>I can't <ruby>record<rp>(</rp><rt>gravar</rt><rp>)</rp></ruby> it tonight.</p>
+</div>
+<div id="key-sound">
+<p>The <ruby>library<rp>(</rp><rt><b>li</b>·<b>br</b><span class="pr-g">e</span><b>ry</b></rt><rp>)</rp></ruby> closes at six.</p>
+</div>
+<div id="gloss">
+<p><button type="button" class="glossbtn" popovertarget="d1">Clock in</button> before eight.</p>
+<div class="defcard" popover id="d1"><b>clock in</b>bater o ponto — the punch clock at work, not <i>entrar</i>.</div>
+</div>
+</div>
+<div class="tlgrid" id="axis">
+<div>
+<h4>present perfect</h4>
+<figure class="tlw" data-tense="present-perfect" style="margin-inline:auto">
+  <p class="tlw-say"><span class="pos-n pos-subj">I</span> <span class="pos-m an">have</span> <span class="pos-v">written</span> <span class="pos-n">three songs</span>.</p>
+  <i class="tln-link" data-mark="dot" aria-hidden="true"><i class="tln-fly"><svg class="tln-tail" viewBox="0 0 4 10" preserveAspectRatio="none"><path d="M1.4 0 L2.6 0 L3.4 10 L0.6 10Z"/></svg><svg class="tln-tip" viewBox="0 0 11 7"><path d="M5.5 7 L0 0 C2.2 2.2 3.6 2.6 5.5 2.6 C7.4 2.6 8.8 2.2 11 0Z"/></svg></i></i>
+  <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b><i class="tln-span"></i></div>
+</figure>
+</div>
+<div>
+<h4>simple past</h4>
+<figure class="tlw" data-tense="simple-past" style="margin-inline:auto">
+  <p class="tlw-say"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v an">wrote</span> <span class="pos-n">three songs</span> <span class="pos-prep">in</span> <span class="pos-n">2022</span>.</p>
+  <i class="tln-link" data-mark="dot" aria-hidden="true"><i class="tln-fly"><svg class="tln-tail" viewBox="0 0 4 10" preserveAspectRatio="none"><path d="M1.4 0 L2.6 0 L3.4 10 L0.6 10Z"/></svg><svg class="tln-tip" viewBox="0 0 11 7"><path d="M5.5 7 L0 0 C2.2 2.2 3.6 2.6 5.5 2.6 C7.4 2.6 8.8 2.2 11 0Z"/></svg></i></i>
+  <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
+</figure>
+</div>
+<div>
+<h4>past perfect</h4>
+<figure class="tlw" data-tense="past-perfect" style="margin-inline:auto">
+  <p class="tlw-say"><span class="pos-n pos-subj">I</span> <span class="pos-m an">had</span><span class="pos-m">n't</span> <span class="pos-v">been</span> <span class="pos-adv">there</span>.</p>
+  <i class="tln-link" data-mark="dot" aria-hidden="true"><i class="tln-fly"><svg class="tln-tail" viewBox="0 0 4 10" preserveAspectRatio="none"><path d="M1.4 0 L2.6 0 L3.4 10 L0.6 10Z"/></svg><svg class="tln-tip" viewBox="0 0 11 7"><path d="M5.5 7 L0 0 C2.2 2.2 3.6 2.6 5.5 2.6 C7.4 2.6 8.8 2.2 11 0Z"/></svg></i></i>
+  <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b><i class="tln-that"><b>that</b></i><i class="tln-sweep"></i></div>
+</figure>
+</div>
+<div>
+<h4>past continuous</h4>
+<figure class="tlw" data-tense="past-continuous" style="margin-inline:auto">
+  <p class="tlw-say"><span class="pos-n pos-subj">I</span> <span class="pos-m an">was</span> <span class="pos-v">walking</span> <span class="pos-n">home</span>.</p>
+  <i class="tln-link" aria-hidden="true"><i class="tln-fly"><svg class="tln-tail" viewBox="0 0 4 10" preserveAspectRatio="none"><path d="M1.4 0 L2.6 0 L3.4 10 L0.6 10Z"/></svg><svg class="tln-tip" viewBox="0 0 11 7"><path d="M5.5 7 L0 0 C2.2 2.2 3.6 2.6 5.5 2.6 C7.4 2.6 8.8 2.2 11 0Z"/></svg></i></i>
+  <i class="tln-bar" aria-hidden="true"></i>
+  <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
+</figure>
+</div>
+<div>
+<h4>simple present</h4>
+<figure class="tlw" data-tense="simple-present" style="margin-inline:auto">
+  <p class="tlw-say"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v an">work</span> <span class="pos-prep">at</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>.</p>
+  <i class="tln-arc" data-arc="l" aria-hidden="true"><i class="tln-fly"><svg class="tln-curve" viewBox="0 0 24 21" preserveAspectRatio="none"><path pathLength="100" d="M24 0 Q 14 10 5 21"/></svg></i></i>
+  <i class="tln-arc" data-arc="r" aria-hidden="true"><i class="tln-fly"><svg class="tln-curve" viewBox="0 0 24 21" preserveAspectRatio="none"><path pathLength="100" d="M24 0 Q 14 10 5 21"/></svg></i></i>
+  <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b><i class="tln-out" data-dir="l"></i><i class="tln-out" data-dir="r"></i><span class="tln-gloss" data-at="before">sempre assim</span><span class="tln-gloss" data-at="now">descreve</span><span class="tln-gloss" data-at="then">fato</span></div>
+</figure>
+</div>
+<div>
+<h4>present continuous</h4>
+<figure class="tlw" data-tense="present-continuous" style="margin-inline:auto">
+  <p class="tlw-say"><span class="pos-n pos-subj">I</span><span class="pos-m an">'m</span> <span class="pos-v">working</span> <span class="pos-adj">late</span>.</p>
+  <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b><span class="tln-gloss" data-at="now">agora mesmo</span><span class="tln-gloss" data-at="then">planejado</span><i class="tln-mark" data-at="then"></i></div>
+</figure>
+</div>
+<div>
+<h4>going to (future)</h4>
+<figure class="tlw" data-tense="going-to" style="margin-inline:auto">
+  <p class="tlw-say"><span class="pos-n pos-subj">I</span><span class="pos-m">'m</span> <span class="pos-m">gonna</span> <span class="pos-v an">hit</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">hay</span>.</p>
+  <i class="tln-link" data-mark="dot" aria-hidden="true"><i class="tln-fly"><svg class="tln-tail" viewBox="0 0 4 10" preserveAspectRatio="none"><path d="M1.4 0 L2.6 0 L3.4 10 L0.6 10Z"/></svg><svg class="tln-tip" viewBox="0 0 11 7"><path d="M5.5 7 L0 0 C2.2 2.2 3.6 2.6 5.5 2.6 C7.4 2.6 8.8 2.2 11 0Z"/></svg></i></i>
+  <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b></div>
+</figure>
+</div>
+<div>
+<h4>future perfect</h4>
+<figure class="tlw" data-tense="future-perfect" style="margin-inline:auto">
+  <p class="tlw-say"><span class="pos-n pos-subj">He</span><span class="pos-m">'ll</span> <span class="pos-m an">have</span> <span class="pos-v">done</span> <span class="pos-n pos-o">it</span> <span class="pos-prep">by</span> <span class="pos-n">Friday</span>.</p>
+  <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"/></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"/></svg></i><b class="tln-then">then</b><i class="tln-span"></i><i class="tln-mark" data-at="then"></i></div>
+</figure>
+</div>
+</div>
+<p class="dim">The anchored version: <code>.an</code> marks the word the line pins to, <code>data-tense</code> chooses which point sits under it, one anchor per host.</p>
+
+</div>
+<div class="block">
+<h3>Standalone visuals</h3>
+<p>A chart, a list, a dialog, a drawing, a recording or a strip is a thing of its own. Each sits inside a block with the prose that reads it, or stands outside at its own width.</p>
+<p><code>.viz</code> frames three things: the dialog, the player and the map — a chart and a strip carry a frame of their own. It is never a second <code>.block</code>.</p>
+<div class="rows">
+<div id="chart">
+<p>A chart can stand outside a block or sit inside one, and either way the text beside it has to explain it or point at it — a chart nobody refers to is a picture the student has to guess at. The chart below is that pair: the sentence introduces it, and the chart centres itself in the column it is given.</p>
+<p><b>A column header is content, and it earns its row the way every other word does: it must name something the student has to tell apart</b> — a contrast, a category, or the question a column answers (<i>Written / Said</i>, <i>Now / Past</i>, <i>Which one?</i>). A header that only says what a column obviously holds — <i>The sentence</i>, <i>What it means</i>, <i>The form</i>, <i>The piece</i>, <i>Letter</i> — says nothing and is not written: the header row is collapsed to the same 3px rule the chart below uses.</p>
+<p class="dim">The stylesheet carries the same note, above its collapsed-header rule, because every chart on the site is held to it: <b>no heading is the default</b>, and an omitted header row is <b>collapsed, never deleted</b> — <code>&lt;thead&gt;&lt;tr class="bare"&gt;&lt;th colspan="N"&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</code>, where N is the table's real column count. The chart keeps its top edge, and the row says nothing it does not need to say.</p>
+<figure class="chartwrap">
+<table class="chart">
+<thead><tr class="bare"><th colspan="3"></th></tr></thead>
+<tbody>
+<tr><td><b>borrow</b></td><td>take something, give it back later</td><td><span class="pt">emprestar</span> also covers <i>lend</i></td></tr>
+<tr><td><b>lend</b></td><td>give something, get it back later</td><td>one Portuguese word for both directions</td></tr>
+<tr><td><b>owe</b></td><td>still have to give it back</td><td><span class="pt">dever</span> also means <i>must</i></td></tr>
+</tbody>
+</table>
+</figure>
+</div>
+<div id="chart-split">
+<figure class="chartwrap">
+<table class="chart">
+<tbody>
+<tr class="bare"><th colspan="3"></th></tr>
+<tr><th class="vlab" rowspan="3"><span>Regular</span></th><td>walk</td><td>walked</td></tr>
+<tr><td>call</td><td>called</td></tr>
+<tr><td>start</td><td>started</td></tr>
+</tbody>
+<tbody>
+<tr class="bare"><th colspan="3"></th></tr>
+<tr><th class="vlab" rowspan="3"><span>Irregular</span></th><td>go</td><td>went</td></tr>
+<tr><td>take</td><td>took</td></tr>
+<tr><td>buy</td><td>bought</td></tr>
+</tbody>
+</table>
+</figure>
+</div>
+</div>
+
+
+<div class="rows">
+<div id="map">
+  <div class="vz-map viz">
+  <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, with nine places, each named on a sign in the drawing — a station with a canopy and a platform clock, a café with a striped awning and two tables outside, a park with trees behind railings, a bank with a columned front and steps, a library with tall windows, a post office with a postbox on the pavement, a bus stop with a shelter and a bench, a market with two stalls, and a hotel with a door canopy">
+  <!-- MAP GEOMETRY — THE ONE TABLE. The drawing below and every tick a lesson lays over it read
+       from these numbers, so a tick can never sit off its building.
+         canvas      360 x 240
+         columns     left x 4-112 · Mill Lane x 116-128 · middle x 132-244 · Park Lane x 248-260 · right x 264-356
+         rows        top y 6-76 · High Street y 80-92 · middle y 96-160 · Low Street y 164-176 · bottom y 180-234
+         tick %      left 16% · middle 52% · right 86%    top 17% · middle 53% · bottom 86%
+       THE NINE PLACES, by column and row:
+         top     station (left)   café (middle)     park (right)
+         middle  bank (left)      library (middle)  post office (right)
+         bottom  bus stop (left)  market (middle)   hotel (right)
+       A lesson copies this drawing verbatim — viewBox, streets, nine places, signs, labels and the
+       table above — and writes only its own question and its own tick labels. No page draws its own map. -->
+  <rect x="0" y="0" width="360" height="240" style="fill:var(--paper)"></rect>
+
+  <g style="fill:var(--tan);opacity:.45">
+    <rect x="0" y="80" width="360" height="12"></rect>
+    <rect x="0" y="164" width="360" height="12"></rect>
+    <rect x="116" y="0" width="12" height="240"></rect>
+    <rect x="248" y="0" width="12" height="240"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:.8;opacity:.4;fill:none">
+    <path d="M0 80h360M0 92h360M0 164h360M0 176h360M116 0v240M128 0v240M248 0v240M260 0v240"></path>
+  </g>
+  <g style="stroke:var(--paper);stroke-width:1.4;stroke-dasharray:6 7;opacity:.95;fill:none">
+    <path d="M0 86h138M196 86h56M0 170h360M122 0v70M122 104v136M254 0v70M254 104v136"></path>
+  </g>
+  <g style="fill:var(--paper);opacity:.95">
+    <rect x="152" y="81" width="4" height="10"></rect>
+    <rect x="160" y="81" width="4" height="10"></rect>
+    <rect x="168" y="81" width="4" height="10"></rect>
+    <rect x="176" y="81" width="4" height="10"></rect>
+    <rect x="184" y="81" width="4" height="10"></rect>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="300" y="82" width="22" height="8" rx="2"></rect>
+    <rect x="176" y="166" width="20" height="8" rx="2"></rect>
+  </g>
+  <g style="fill:var(--ink);opacity:.85">
+    <circle cx="180" cy="177" r="1.6"></circle>
+    <circle cx="192" cy="177" r="1.6"></circle>
+    <circle cx="304" cy="91" r="1.6"></circle>
+    <circle cx="318" cy="91" r="1.6"></circle>
+  </g>
+
+  <g style="fill:var(--ink);opacity:.07">
+    <rect x="12.5" y="32.5" width="94" height="44"></rect>
+    <rect x="140.5" y="36.5" width="100" height="40"></rect>
+    <rect x="16.5" y="114.5" width="88" height="34"></rect>
+    <rect x="138.5" y="102.5" width="80" height="52"></rect>
+    <rect x="272.5" y="104.5" width="80" height="46"></rect>
+    <rect x="272.5" y="186.5" width="82" height="44"></rect>
+  </g>
+
+  <!-- STATION — left, top -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="10" y="30" width="94" height="44"></rect>
+    <path d="M6 30h102v-7H6z"></path>
+  </g>
+  <g style="fill:var(--ink);opacity:.55">
+    <path d="M8 25h20v2H8zM34 25h20v2H34zM60 25h20v2H60zM86 25h20v2H86z"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.3;fill:none">
+    <circle cx="92" cy="42" r="5.5"></circle>
+    <path d="M92 42v-3M92 42h2.2"></path>
+    <path d="M16 42h12v10H16zM34 42h12v10H34zM52 42h12v10H52z"></path>
+    <path d="M20 74v-9h12v9"></path>
+    <path d="M10 74h94"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="14" y="32" width="40" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="34" y="38.4">STATION</text>
+  </g>
+
+  <!-- CAFÉ — middle, top -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="138" y="34" width="100" height="40"></rect>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1.4">
+    <path d="M134 34h108l-5-9h-98z"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:.9;opacity:.5;fill:none">
+    <path d="M146 25v9M158 25v9M170 25v9M182 25v9M194 25v9M206 25v9M218 25v9M230 25v9"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.3;fill:none">
+    <path d="M146 48h20v12h-20z"></path>
+    <path d="M176 48h28v10h-28z"></path>
+    <path d="M216 48v26M216 48h14v18h-14"></path>
+    <path d="M148 74h84"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="184" y="36" width="26" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="197" y="42.4">CAFÉ</text>
+  </g>
+
+  <!-- PARK — right, top -->
+  <g style="fill:var(--green);opacity:.2">
+    <rect x="266" y="10" width="88" height="58"></rect>
+  </g>
+  <g style="fill:var(--green);opacity:.5;stroke:var(--ink);stroke-width:1.2">
+    <circle cx="286" cy="44" r="9"></circle>
+    <circle cx="306" cy="50" r="8"></circle>
+    <circle cx="330" cy="42" r="10"></circle>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.5;fill:none">
+    <path d="M286 53v8M306 58v5M330 52v9"></path>
+    <path d="M266 66h88"></path>
+    <path d="M270 66v8M278 66v8M286 66v8M294 66v8M302 66v8M310 66v8M318 66v8M326 66v8M334 66v8M342 66v8M350 66v8"></path>
+  </g>
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1">
+    <rect x="272" y="12" width="20" height="8" rx="1"></rect>
+    <path d="M282 20v6"></path>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="282" y="18.4">PARK</text>
+  </g>
+
+  <!-- BANK — left, middle -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <path d="M12 112l46-12 46 12z"></path>
+    <rect x="14" y="112" width="88" height="34"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:2;fill:none">
+    <path d="M26 118v22M44 118v22M62 118v22M80 118v22M92 118v22"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.4;fill:none">
+    <path d="M10 146h96M6 152h104"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="26" y="100" width="34" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="43" y="106.4">BANK</text>
+  </g>
+
+  <!-- LIBRARY — middle, middle -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="136" y="100" width="80" height="52"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.2;fill:var(--paper)">
+    <rect x="144" y="118" width="10" height="30"></rect>
+    <rect x="160" y="118" width="10" height="30"></rect>
+    <rect x="176" y="118" width="10" height="30"></rect>
+    <rect x="192" y="118" width="10" height="30"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.4;fill:none">
+    <path d="M136 152h80M132 157h88"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="152" y="104" width="48" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="176" y="110.4">LIBRARY</text>
+  </g>
+
+  <!-- POST OFFICE — right, middle -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="270" y="102" width="80" height="46"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.2;fill:var(--paper)">
+    <rect x="278" y="120" width="16" height="12"></rect>
+    <rect x="300" y="120" width="16" height="12"></rect>
+    <path d="M320 134v14h12v-14"></path>
+  </g>
+  <g style="fill:var(--blue);stroke:var(--ink);stroke-width:1.3">
+    <rect x="340" y="126" width="12" height="22" rx="2"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1;fill:none">
+    <path d="M342 133h8M340 130h12"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="278" y="104" width="52" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:5.8px;font-family:var(--sans);letter-spacing:.2px;text-anchor:middle">
+    <text x="304" y="110.2">POST OFFICE</text>
+  </g>
+
+  <!-- BUS STOP — left, bottom -->
+  <g style="stroke:var(--ink);stroke-width:1.6;fill:none">
+    <path d="M10 190h56"></path>
+    <path d="M14 190v40M62 190v40"></path>
+    <path d="M22 208h34v5H22z"></path>
+    <path d="M26 213v8M52 213v8"></path>
+  </g>
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.4">
+    <rect x="74" y="194" width="18" height="22" rx="2"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:.9;opacity:.6;fill:none">
+    <path d="M78 200h10M78 205h10M78 210h10"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="14" y="182" width="34" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6px;font-family:var(--sans);letter-spacing:.4px;text-anchor:middle">
+    <text x="31" y="188.2">BUS STOP</text>
+  </g>
+
+  <!-- MARKET — middle, bottom -->
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1.4">
+    <path d="M134 196l24-10 24 10z"></path>
+    <path d="M186 196l24-10 24 10z"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.3;fill:none">
+    <path d="M140 196v30M176 196v30M192 196v30M228 196v30"></path>
+    <path d="M140 214h36M192 214h36"></path>
+  </g>
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1">
+    <circle cx="150" cy="205" r="3"></circle>
+    <circle cx="164" cy="205" r="3"></circle>
+    <circle cx="202" cy="205" r="3"></circle>
+    <circle cx="216" cy="205" r="3"></circle>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="158" y="184" width="34" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="175" y="190.4">MARKET</text>
+  </g>
+
+  <!-- HOTEL — right, bottom -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="270" y="184" width="82" height="44"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.2;fill:var(--paper)">
+    <rect x="276" y="202" width="12" height="10"></rect>
+    <rect x="294" y="202" width="12" height="10"></rect>
+    <rect x="330" y="202" width="12" height="10"></rect>
+    <path d="M310 210v18h14v-18"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1.3">
+    <path d="M306 210h22l-4-7h-14z"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="280" y="186" width="30" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="295" y="192.4">HOTEL</text>
+  </g>
+
+  <g style="fill:var(--ink);font-size:7.5px;font-style:italic;font-family:var(--serif);text-anchor:middle;paint-order:stroke;stroke:var(--paper);stroke-width:2.4px;stroke-linejoin:round">
+    <text x="66" y="89.4">High Street</text>
+    <text x="300" y="89.4">High Street</text>
+    <text x="120" y="173.4">Low Street</text>
+    <text x="220" y="173.4">Low Street</text>
+    <text transform="translate(122,58) rotate(-90)" text-anchor="middle">Mill Lane</text>
+    <text transform="translate(122,206) rotate(-90)" text-anchor="middle">Mill Lane</text>
+    <text transform="translate(254,58) rotate(-90)" text-anchor="middle">Park Lane</text>
+    <text transform="translate(254,206) rotate(-90)" text-anchor="middle">Park Lane</text>
+  </g>
+</svg>
+  </div>
+</div>
+<div id="comic">
+<table class="chart">
+  <tbody>
+    <tr>
+      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0;text-align:center">Ana waited at the stop in the rain.</p></td>
+      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0;text-align:center">A bus came down the road.</p></td>
+    </tr>
+    <tr>
+      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><p style="margin:6px 0 0;text-align:center">She ran to catch it.</p></td>
+      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0;text-align:center">It pulled away without her.</p></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+<div class="rows">
+<div id="audio">
+<figure class="vz-play viz">
+<h4>I Love You, California</h4>
+<p class="dim">Knickerbocker Quartet and Elizabeth Spencer</p>
+<audio class="vz-audio" src="../assets/california.mp3" data-duration="35.87" controls preload="metadata"></audio>
+<div class="vz-controls"><button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>
+<span class="vz-time" data-now>0:00</span>
+<div class="vz-bar" role="slider" tabindex="0" aria-label="Play position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="vz-fill"></span><span class="vz-knob"></span></div>
+<span class="vz-time" data-dur>0:00</span></div>
+<ol class="vz-lyrics">
+<li data-t="0.02">I love you, California, you’re the greatest state of all.</li>
+<li data-t="8.42">I love you in the winter, summer, spring and in the fall.</li>
+<li data-t="16.12">I love your fertile valleys; your dear mountains I adore.</li>
+<li data-t="26.82">I love your grand old ocean and I love her rugged shore.</li>
+</ol>
+</figure>
+</div>
+<div id="dialog">
+<ol class="seq viz" data-mode="turns">
+<li data-side="left"><span class="who">Jess</span><span class="say">Did you post the letter?</span></li>
+<li data-side="right"><span class="who">Mike</span><span class="say">Three times. I keep thinking I forgot.</span></li>
+<li data-side="left"><span class="who">Jess</span><span class="say">Then photograph it next time.</span></li>
+</ol>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+<p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
+<div class="rows markup-row">
+<details class="reveal" open><summary>Markup — #pair · one sentence, two versions</summary><div class="body"><div>
+<pre>&lt;div class="pair-stack"&gt;
+  &lt;div class="side" data-state="wrong"&gt;&lt;p&gt;&lt;i class="mark"&gt;&lt;/i&gt; the sentence that is wrong&lt;/p&gt;&lt;/div&gt;
+  &lt;div class="side" data-state="correct"&gt;&lt;p&gt;&lt;i class="mark"&gt;&lt;/i&gt; the sentence that is right&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- the two versions stack, one above the other, and each is only as wide as its own sentence --&gt;
+&lt;!-- data-state colours the side and draws the glyph; the .mark element is what draws it --&gt;
+&lt;!-- .sides (two columns) is the other shape, for a block whose whole content is the pair --&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #pos · the job each word carries, and the fence</summary><div class="body"><div>
+<pre>&lt;p class="pos"&gt;
+  &lt;span class="pos-adj"&gt;The old&lt;/span&gt;
+  &lt;span class="pos-n pos-subj"&gt;man&lt;/span&gt;
+  &lt;span class="pos-m"&gt;can&lt;/span&gt;
+  &lt;span class="pos-v"&gt;carry&lt;/span&gt;
+  &lt;span class="pos-n pos-o"&gt;the box&lt;/span&gt;
+  …, &lt;span class="pos-join" data-rel="contrast"&gt;but&lt;/span&gt; …
+&lt;/p&gt;
+
+&lt;table class="poschart"&gt;…one column per group…&lt;/table&gt;</pre>
+<p class="dim">The marks are pasted from <code>node qa/pos.mjs "…"</code>, never written by hand. <code>data-rel</code>: add · contrast · alternative · cause · condition · time · place · comparison · content.</p>
+<p class="dim">For now the marks are applied to the modal, the verb, the noun and the preposition only. The other groups the tagger knows exist, and lessons leave them alone.</p>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #recipient · the recipient and its arrow</summary><div class="body"><div>
+<pre>&lt;!-- the recipient: no line of its own, an arrow from the side the object sits on --&gt;
+I gave &lt;span class="pos-n pos-i" data-side="right"&gt;her
+  &lt;i class="pos-i-arr" aria-hidden="true"&gt;
+    &lt;svg viewBox="0 0 20 18" fill="none"&gt;
+      &lt;path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"/&gt;
+      &lt;path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"/&gt;
+    &lt;/svg&gt;
+  &lt;/i&gt;&lt;/span&gt; the book.
+
+I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #key · a word and the text above it</summary><div class="body"><div>
+<pre>&lt;p&gt;I can't
+  &lt;ruby&gt;record&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;gravar&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
+  it tonight.&lt;/p&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #key-sound · a word and the dictionary's key</summary><div class="body"><div>
+<pre>&lt;ruby&gt;library&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;
+  &lt;b&gt;li&lt;/b&gt;·&lt;b&gt;br&lt;/b&gt;&lt;span class="pr-g"&gt;e&lt;/span&gt;&lt;b&gt;ry&lt;/b&gt;
+&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
+
+dictionary.json:  "library": "li-br[e]ry"
+PronKey.render("li-br[e]ry") → the rt above</pre>
+<p class="dim">The key is the entry in <code>dictionary.json</code>, rendered by <code>PronKey.render</code>: <code>-</code> a syllable break, a greyed letter written and not said, <code>ə</code> the schwa. <code>rp</code> is never omitted.</p>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #gloss · a word and its card</summary><div class="body"><div>
+<pre>&lt;p&gt;
+  &lt;button class="glossbtn" popovertarget="d1"&gt;Clock in&lt;/button&gt;
+  before eight.&lt;/p&gt;
+
+&lt;div class="defcard" popover id="d1"&gt;
+  &lt;b&gt;clock in&lt;/b&gt;bater o ponto — the punch clock at work,
+  not &lt;i&gt;entrar&lt;/i&gt;.
+&lt;/div&gt;</pre>
+<p class="dim">One card per <code>id</code>, opened at its word by <code>popovertarget</code>.</p>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #axis · the timeline</summary><div class="body"><div>
+<pre>&lt;figure class="tlw" data-tense="simple-past"&gt;
+  &lt;p class="tlw-say"&gt;I &lt;span class="pos-m pos-v an"&gt;wrote&lt;/span&gt; it.&lt;/p&gt;
+  &lt;i class="tln-link" data-mark="dot"&gt;…tapered tail, swept barb…&lt;/i&gt;
+  &lt;div class="tln"&gt;
+    &lt;b class="tln-before"&gt;before&lt;/b&gt;&lt;i class="tln-past"&gt;&lt;/i&gt;
+    &lt;i class="tln-head"&gt;…star…&lt;b&gt;now&lt;/b&gt;&lt;/i&gt;
+    &lt;i class="tln-ahead"&gt;&lt;/i&gt;&lt;i class="tln-end"&gt;…double chevron…&lt;/i&gt;
+    &lt;b class="tln-then"&gt;then&lt;/b&gt;
+  &lt;/div&gt;
+&lt;/figure&gt;</pre>
+<p class="dim">One timeline per tense; <code>.tlgrid</code> holds a family, <code>&lt;h4&gt;</code> names a cell. A bare <code>.tln</code> with no <code>.tlw</code> draws the line alone. <code>data-grow="1"</code> fills the container, <code>data-grow="2"</code> takes the anchor string's width. Marks: <code>tln-span</code> · <code>tln-that</code> · <code>tln-bar</code> · <code>tln-gloss</code>. <code>data-tense</code>: simple-present · present-continuous · present-perfect · simple-past · past-continuous · past-perfect · going-to · future-perfect.</p>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #chart · the chart, and the split chart</summary><div class="body"><div>
+<pre>&lt;figure class="chartwrap"&gt;
+  &lt;table class="chart"&gt;…&lt;/table&gt;
+&lt;/figure&gt;</pre>
+<pre>&lt;table class="chart"&gt;
+  &lt;tbody&gt;
+    &lt;tr class="bare"&gt;&lt;th colspan="3"&gt;&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;th class="vlab" rowspan="3"&gt;&lt;span&gt;Regular&lt;/span&gt;&lt;/th&gt;
+        &lt;td&gt;walk&lt;/td&gt;&lt;td&gt;walked&lt;/td&gt;&lt;/tr&gt;
+    …
+  &lt;/tbody&gt;
+&lt;/table&gt;</pre>
+<p class="dim">A chart carries no title of its own: the sentence beside it names it. <code>th.vlab</code> puts a family label outside the chart's edge; <code>tr.bare</code> collapses a nameless header row to a rule. A block takes <code>data-structure="grid"</code> with a <code>thead</code> and optional <code>caption</code>, and <code>tr.note</code> for a remark row. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each. <b>Content beside a chart should flex to fill the row</b>; where it does not, the chart is centred in the space it was given, or the row is spaced around it.</p>
+<pre>&lt;div class="rows"&gt;
+  &lt;div&gt;…the sentence, and the chart it reads…&lt;/div&gt;
+  &lt;div&gt;
+    &lt;figure class="chartwrap"&gt;
+      &lt;table class="chart"&gt;…&lt;/table&gt;
+    &lt;/figure&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #map · the street map</summary><div class="body"><div>
+<pre>&lt;!-- as a display: THE DRAWING, COPIED WHOLE. A lesson never draws its own streets: it copies this
+     viewBox, these two roads and two lanes, all nine places and the MAP GEOMETRY table that goes with
+     them, and writes nothing of its own inside the svg. --&gt;
+&lt;div class="vz-map viz"&gt;
+  &lt;svg viewBox="0 0 360 240" width="100%" role="img"
+       aria-label="everything the drawing shows, named"&gt;…the same drawing, all nine places…&lt;/svg&gt;
+&lt;/div&gt;</pre>
+<p class="dim">The frame keeps the viewBox's 3:2 box and the cell around it holds the rest. <b>The drawing is capped at 573px</b> — half of an in-block row, measured at the sheet's own 1200px content width — so it never grows to a comic width beside a paragraph; below that it is as wide as its cell, so a narrow screen shrinks it instead of clipping it (the cap lives in <code>style.css</code>, on <code>.vz-map</code>, and a single drawing may still be capped smaller with <code>--map-w</code>). <code>aria-label</code> names everything in the drawing, because the drawing is all a screen reader gets. <b>Nine places, and the table that places them:</b> left column 16%, middle 52%, right 86% of the width; top row 17%, middle 53%, bottom 86% of the height. Station, café and park on the top row; bank, library and post office in the middle; bus stop, market and hotel on the bottom. A page that needs a place the drawing does not show asks about one that it does, and a new place means redrawing this one drawing for every page — never a second map. Both forms are drawn above: the display with the visuals, the question at the end of the activities.</p>
+<pre>&lt;!-- as an activity: the same drawing, a tick at each place, and one key --&gt;
+&lt;div class="block" data-activity="map"&gt;
+  &lt;div class="qitem" data-a="bank"&gt;
+    &lt;p class="qstem"&gt;any prose that points at one place&lt;/p&gt;
+    &lt;div class="vz-map viz"&gt;
+      &lt;svg viewBox="0 0 360 240" …&gt;…the same drawing, all nine places…&lt;/svg&gt;
+      &lt;div class="qopts"&gt;
+        &lt;label class="opt" style="position:absolute;left:16%;top:17%;
+               transform:translate(-50%,-50%)" aria-label="the station"&gt;
+          &lt;input type="checkbox" value="station"&gt;&lt;/label&gt;
+        …one label per place, at that place's point in % of the drawing…
+        &lt;label class="opt" style="position:absolute;left:86%;top:86%;
+               transform:translate(-50%,-50%)" aria-label="the hotel"&gt;
+          &lt;input type="checkbox" value="hotel"&gt;&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+<p class="dim">Each place gets its own checkbox, sitting on that place, its <code>value</code> the place, its <code>aria-label</code> the name the drawing shows — and the answer is the one place named by <code>data-a</code> on the <code>.qitem</code>, the same key a radio group uses, so engine2 marks it and freezes it on Complete. It is not a choice between four options: every place has a box and the student ticks the one. The prose is free and may point at the place any way the lesson teaches — a route (<i>turn right out of the café, then your first left, then back a block — the destination is on your left</i>), a relation (<i>to the left of the café</i>), or its use (<i>where you send a letter</i>) — but the answer is always one place on the drawing. Ticking more than one ticks more than one; only the keyed place is marked correct. The tick's position is a percentage of the drawing, so it stays on its place at any width.</p>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #comic · the comic strip</summary><div class="body"><div>
+<pre>&lt;table class="chart"&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td class="strip"&gt;
+          &lt;svg viewBox="0 0 120 64" width="120" height="64" role="img"
+               aria-label="what the panel shows"&gt;…&lt;/svg&gt;
+          &lt;p style="margin:6px 0 0;text-align:center"&gt;the sentence under the panel&lt;/p&gt;&lt;/td&gt;
+        &lt;td class="strip"&gt;…the second panel…&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td class="strip"&gt;…the third panel…&lt;/td&gt;
+        &lt;td class="strip"&gt;…the fourth panel…&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</pre>
+<p class="dim"><b>The frame and the drawing are two sizes, chosen independently.</b> The frame is the <code>td</code> — <code>.strip</code> — and it takes whatever width the table's columns give it and whatever height the row needs, or <code>--strip-h</code> when a panel must be taller; <code>--strip-w</code> on the cell does the same for a wider frame. The drawing keeps its own size, <b>120×64 written as real attributes</b> and never <code>width="100%"</code>: it is centred in the frame, vertically and horizontally, so a wider cell shows the same picture with more room around it and a taller one does the same. Both dimensions must be written on the <code>svg</code>, because that pair is what stops the drawing from stretching when only one of them changes — the panel whose frame grows in width and height together grows its drawing with it, and the panel whose frame grows one way only keeps its drawing and centres it. Two panels a row, two rows; one <code>&lt;tr&gt;</code> holding all four makes it 4×1. Beside a taller neighbour the strip fills the row, and its rows split the height it was given.</p>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #audio · the recording</summary><div class="body"><div>
+<pre>&lt;figure class="vz-play viz"&gt;
+  &lt;h4&gt;the song's own name&lt;/h4&gt;
+  &lt;p class="dim"&gt;the performer&lt;/p&gt;
+  &lt;audio class="vz-audio" src="../assets/&lt;name&gt;.mp3" data-duration="35.87"
+         controls preload="metadata"&gt;&lt;/audio&gt;
+  &lt;div class="vz-controls"&gt;
+    &lt;button class="vz-btn" type="button" aria-label="play"
+            aria-pressed="false"&gt;▶&lt;/button&gt;
+    &lt;span class="vz-time" data-now&gt;0:00&lt;/span&gt;
+    &lt;div class="vz-bar" role="slider" tabindex="0" aria-valuemin="0"
+         aria-valuemax="100" aria-valuenow="0"&gt;
+      &lt;span class="vz-fill"&gt;&lt;/span&gt;&lt;span class="vz-knob"&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;span class="vz-time" data-dur&gt;0:00&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;ol class="vz-lyrics"&gt;
+    &lt;li data-t="0.02"&gt;one line of the song&lt;/li&gt;
+    …
+  &lt;/ol&gt;
+  &lt;p&gt;one paragraph explaining the words, never the block&lt;/p&gt;
+&lt;/figure&gt;</pre>
+<p class="dim"><code>data-t</code> and <code>data-duration</code> come from <code>qa/audio.mjs</code>, never typed by eye. The song's own name is the <code>h4</code>, the performer the credit line under it.</p>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #dialog · a dialog</summary><div class="body"><div>
+<pre>&lt;ol class="seq viz" data-mode="turns"&gt;
+  &lt;li data-side="left"&gt;&lt;span class="who"&gt;Jess&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
+  &lt;li data-side="right"&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
+
+&lt;!-- a turn's side is its SPEAKER's side, never its place in the list: every turn carries data-side; the
+     speaker who opens the dialog takes the left, the second speaker takes the right, and any further speaker
+     joins the first on the left — so Mike answers from the right however many turns he holds. A turn that
+     follows another by the SAME speaker keeps its .who and the sheet hides it, so a run of two bubbles
+     carries the name once --&gt;</pre>
+<p class="dim">A dialog is an example of content the page already taught, never the way a lesson opens.</p>
+</div></div></details>
+</div>
+
+<h2>Activities</h2>
+
+<div class="block" data-look="stripes" id="flip" data-activity="flip">
+<h3>Training</h3>
+<h4 class="flip-ask" style="text-align:center;padding-top:10px" aria-live="polite">…</h4>
+<div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>borrow</b><span class="dim">the verb</span></span>
+<span class="face back" style="text-align:center"><b>take it now, give it back later</b></span>
+</span>
+</label>
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>lend</b><span class="dim">the verb</span></span>
+<span class="face back" style="text-align:center"><b>give it now, get it back later</b></span>
+</span>
+</label>
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>owe</b><span class="dim">the verb</span></span>
+<span class="face back" style="text-align:center"><b>you still have to give it back</b></span>
+</span>
+</label>
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>spill the tea</b><span class="dim">the phrase</span></span>
+<span class="face back" style="text-align:center"><b>share the gossip</b></span>
+</span>
+</label>
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>throw shade</b><span class="dim">the phrase</span></span>
+<span class="face back" style="text-align:center"><b>insult someone indirectly</b></span>
+</span>
+</label>
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>clock in</b><span class="dim">the phrase</span></span>
+<span class="face back" style="text-align:center"><b>record the time you get to work</b></span>
+</span>
+</label>
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>hang out</b><span class="dim">the phrase</span></span>
+<span class="face back" style="text-align:center"><b>spend time somewhere with people</b></span>
+</span>
+</label>
+<label class="flip" style="--flip-h:112px">
+<input type="checkbox">
+<span class="card3d">
+<span class="face" style="text-align:center"><b>bail</b><span class="dim">the verb</span></span>
+<span class="face back" style="text-align:center"><b>get out of a situation you don't want</b></span>
+</span>
+</label>
+</div>
+<script>
+(function(){
+var B=document.currentScript.closest('#flip'),A=B.querySelector('.flip-ask'),
+C=[].slice.call(B.querySelectorAll('.flip')),P=[],T=-1,done=0,
+M=C.map(function(c){return c.querySelector('.back').textContent.replace(/\s+/g,' ').trim();});
+function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function next(){if(!P.length)P=sh(C.map(function(_,i){return i;}));T=P.pop();A.textContent=M[T];}
+function clear(){C.forEach(function(c){c.querySelector('input').checked=false;c.querySelector('.back').style.background='';});done=0;}
+C.forEach(function(c,i){c.addEventListener('click',function(e){
+e.preventDefault();
+if(done)return;
+c.querySelector('input').checked=true;
+c.querySelector('.back').style.background='color-mix(in oklab, var('+(i===T?'--ok':'--err')+') 26%, var(--paper))';
+if(i!==T)return;
+done=1;
+setTimeout(function(){clear();next();},4000);
+});});
+next();
+})();
+</script>
+</div>
+
+<div class="block" data-look="stripes">
+<h3>Marked activities with controls</h3>
+<p>An activity is the part of a page the student writes in, and it carries its own instruction in whatever block holds it. <b>An activity is a unit the student completes — never a control on its own.</b> The four controls — a gap, a radio, a checkbox, a written field — are the parts an activity is built from and are chosen by what the student must do; they are not activities themselves. <b>A keyed gap is preferentially carried inside one of the forms below</b> — a dialog turn, a chart row to answer, a strip under its panel, a line to translate, a sentence to correct, a line to write from what they hear — and a lone gap is only ever a component beside other teaching in a block, never an activity in its own right. The rows below hold the forms: numbered chunks, a chart whose cells are answered, and under the chunks a correction and a dictation — the last two for no beginner, and the sentence they ask for always tuned to the lesson's level. The two blocks after this one, side by side, are four options to pick one from and a matching pool. The last block in the section is fill-in-the-blank: a line the student completes — typed into a gap, or picked from three or four options that fill the same blank. <b>Every item the student answers is numbered</b> — <code>&lt;span class="qnum"&gt;1.&lt;/span&gt;</code> beside the control it numbers, and the count runs through the activity block, so another activity starts again at 1 — so a teacher can name the item they mean.</p>
+<p class="dim"><code>data-answer</code> keys a gap, <code>|</code> separating alternatives; <b><code>--gap-w</code> is 1.3× the width of the longest accepted answer</b>, the field's own padding included, written in <code>em</code> — a gap with no key takes 1.3× the prompt written beside it, or <code>9em</code>. Never <code>100%</code> and never <code>calc()</code>: a field as wide as its block has stopped showing its answer, and on its own line it stops being a gap. A radio group's key is <code>data-a</code> on <code>.qitem</code>; engine2.js marks the right option and writes <code>.ans</code> beside a typed field.</p>
+<p>Each of these can stand as a block of its own or sit inside a block with the prose, the chart or the drawing it accompanies; every row below is the in-block size. <b>A block may carry more than one of them, and any mix of teaching, activity and content: division without need is noise.</b></p>
+
+<div class="rows">
+<div id="dialoggap" data-activity="dialoggap">
+<ol class="seq viz" data-mode="turns">
+<li data-side="left"><span class="who">Jess</span><span class="say">Did you post the letter?</span></li>
+<li data-side="right"><span class="who">Mike</span><span class="say" style="position:relative"><span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px">1.</span>Three times. I <input class="gap" data-answer="have|'ve" style="--gap-w:3.5em"> already posted it.</span></li>
+</ol>
+</div>
+<div id="chartanswer" data-activity="chartanswer">
+<figure class="chartwrap">
+<table class="chart center">
+<thead><tr><th>Time</th><th>What he did</th><th>Which is it?</th></tr></thead>
+<tbody>
+<tr><td>6:40</td><td>He <b>clocked in</b>.</td>
+<td style="display:flex;align-items:center;gap:8px"><span class="qnum">1.</span><div class="opts" data-layout="row">
+<label class="opt"><input type="radio" name="m1"><span>routine</span></label>
+<label class="opt"><input type="radio" name="m1"><span>surprise</span></label>
+</div></td></tr>
+<tr><td>6:44</td><td>The pallet <b>was tipping</b>.</td>
+<td style="display:flex;align-items:center;gap:8px"><span class="qnum">2.</span><div class="opts" data-layout="row">
+<label class="opt"><input type="checkbox"><span>scene</span></label>
+<label class="opt"><input type="checkbox"><span>event</span></label>
+</div></td></tr>
+<tr><td>7:10</td><td>Nobody had told the office.</td>
+<td><span class="qnum">3.</span> <input class="gap" data-answer="past perfect" style="--gap-w:8.3em"></td></tr>
+</tbody></table>
+</figure>
+</div>
+</div>
+
+<div class="rows">
+<div id="chunks" data-activity="chunks">
+  <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px"><span class="qnum" style="margin-right:-10px">1.</span>
+    <span><b style="font-size:.8em">1</b> never</span>
+    <span><b style="font-size:.8em">2</b> that</span>
+    <span><b style="font-size:.8em">3</b> has</span>
+    <span><b style="font-size:.8em">4</b> anyone</span>
+    <span><b style="font-size:.8em">5</b> she</span>
+    <span><b style="font-size:.8em">6</b> told</span>
+  </p>
+  <p style="text-align:center;margin-top:6px"><input class="gap" style="--gap-w:9em"></p>
+  <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px"><span class="qnum" style="margin-right:-10px">2.</span>
+    <span><b style="font-size:.8em">1</b> when</span>
+    <span><b style="font-size:.8em">2</b> I got there</span>
+    <span><b style="font-size:.8em">3</b> he</span>
+    <span><b style="font-size:.8em">4</b> already</span>
+    <span><b style="font-size:.8em">5</b> had</span>
+    <span><b style="font-size:.8em">6</b> left</span>
+  </p>
+  <p style="text-align:center;margin-top:6px"><input class="gap" style="--gap-w:9em"></p>
+<div id="correction" data-activity="correction" style="padding-top:26px">
+<p class="dim" style="text-align:center">One word is wrong. Write the sentence again.</p>
+<p style="text-align:center"><span class="qnum">3.</span> He <b>have</b> clocked in early.</p>
+<input class="gap" data-answer="He has clocked in early.|He's clocked in early." style="--gap-w:16.2em;margin-inline:auto">
+</div>
+<div id="dictation" data-activity="dictation" style="padding-top:20px">
+<p class="dim" style="display:flex;align-items:center;justify-content:center;gap:10px"><span class="qnum">4.</span> <button class="listen" type="button" data-say="I clocked in at six forty.">▶</button><span>Listen, then write what you hear.</span></p>
+<textarea class="write" rows="2" style="field-sizing:fixed;--lines:2" data-answer="I clocked in at six forty." placeholder="what you hear"></textarea>
+</div>
+</div>
+<div id="stripgaps" data-activity="stripgaps">
+<table class="chart">
+  <tbody>
+    <tr>
+      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">1.</span> <input class="gap" style="--gap-w:9em"></td>
+      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">2.</span> <input class="gap" style="--gap-w:9em"></td>
+    </tr>
+    <tr>
+      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><span class="qnum">3.</span> <input class="gap" style="--gap-w:9em"></td>
+      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">4.</span> <input class="gap" style="--gap-w:9em"></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+<div class="rows">
+<div class="block" data-look="stripes" id="mc" data-activity="mc">
+<h3>Multiple choice</h3>
+<div class="rows">
+<div class="qitem" data-a="b">
+<p class="qstem"><span class="qnum">1.</span> The pallet <b>was tipping</b> when I got to the dock.</p>
+<div class="qopts">
+<label class="opt"><input type="radio" name="mc1" value="a"><span>a habit</span></label>
+<label class="opt"><input type="radio" name="mc1" value="b"><span>a scene already going on</span></label>
+<label class="opt"><input type="radio" name="mc1" value="c"><span>a promise about later</span></label>
+<label class="opt"><input type="radio" name="mc1" value="d"><span>a finished count</span></label>
+</div>
+</div>
+</div>
+<div class="rows">
+<div class="qitem" data-a="c">
+<p class="qstem"><span class="qnum">2.</span> By the time I clocked in, the crew <b>had loaded</b> the truck.</p>
+<div class="qopts">
+<label class="opt"><input type="radio" name="mc2" value="a"><span>loading now</span></label>
+<label class="opt"><input type="radio" name="mc2" value="b"><span>loading after I arrived</span></label>
+<label class="opt"><input type="radio" name="mc2" value="c"><span>done before I arrived</span></label>
+<label class="opt"><input type="radio" name="mc2" value="d"><span>not loaded yet</span></label>
+</div>
+</div>
+</div>
+</div>
+<div class="block" data-look="stripes" id="matching" data-activity="matching">
+<h3>Matching</h3>
+<p>Write the letter of the meaning beside each phrase. One letter is left over. The phrases are in no order.</p>
+<div class="rows">
+<div>
+<figure class="chartwrap">
+<table class="chart">
+<tbody>
+<tr><td><b>clocked in</b></td><td><span class="qnum">1.</span> <input class="gap" data-answer="c" style="--gap-w:3em"></td></tr>
+<tr><td><b>spilled the tea</b></td><td><span class="qnum">2.</span> <input class="gap" data-answer="a" style="--gap-w:3em"></td></tr>
+<tr><td><b>threw shade</b></td><td><span class="qnum">3.</span> <input class="gap" data-answer="e" style="--gap-w:3em"></td></tr>
+<tr><td><b>bailed</b></td><td><span class="qnum">4.</span> <input class="gap" data-answer="b" style="--gap-w:3em"></td></tr>
+</tbody>
+</table>
+</figure>
+</div>
+</div>
+<div class="rows">
+<div>
+<ul>
+<li><b>a</b> shared the gossip</li>
+<li><b>b</b> got out of a situation</li>
+<li><b>c</b> recorded the time you got to work</li>
+<li><b>d</b> paid for everyone</li>
+<li><b>e</b> insulted someone indirectly</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div class="rows">
+<div class="block" data-activity="map" id="mapq">
+<h3>The map as a question</h3>
+<div class="qitem" data-a="bank" style="padding-top:12px">
+<p class="qstem"><span class="qnum">1.</span> You just finished eating at the café, took a right out of the building, and then your first left. You went to the end of the street there, but then realized you went too far. You turned around and walked back a block — your destination is on your left. Tick it on the map.</p>
+<div class="vz-map viz">
+<svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, with nine places, each named on a sign in the drawing — a station with a canopy and a platform clock, a café with a striped awning and two tables outside, a park with trees behind railings, a bank with a columned front and steps, a library with tall windows, a post office with a postbox on the pavement, a bus stop with a shelter and a bench, a market with two stalls, and a hotel with a door canopy">
+  <!-- MAP GEOMETRY — THE ONE TABLE. The drawing below and every tick a lesson lays over it read
+       from these numbers, so a tick can never sit off its building.
+         canvas      360 x 240
+         columns     left x 4-112 · Mill Lane x 116-128 · middle x 132-244 · Park Lane x 248-260 · right x 264-356
+         rows        top y 6-76 · High Street y 80-92 · middle y 96-160 · Low Street y 164-176 · bottom y 180-234
+         tick %      left 16% · middle 52% · right 86%    top 17% · middle 53% · bottom 86%
+       THE NINE PLACES, by column and row:
+         top     station (left)   café (middle)     park (right)
+         middle  bank (left)      library (middle)  post office (right)
+         bottom  bus stop (left)  market (middle)   hotel (right)
+       A lesson copies this drawing verbatim — viewBox, streets, nine places, signs, labels and the
+       table above — and writes only its own question and its own tick labels. No page draws its own map. -->
+  <rect x="0" y="0" width="360" height="240" style="fill:var(--paper)"></rect>
+
+  <g style="fill:var(--tan);opacity:.45">
+    <rect x="0" y="80" width="360" height="12"></rect>
+    <rect x="0" y="164" width="360" height="12"></rect>
+    <rect x="116" y="0" width="12" height="240"></rect>
+    <rect x="248" y="0" width="12" height="240"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:.8;opacity:.4;fill:none">
+    <path d="M0 80h360M0 92h360M0 164h360M0 176h360M116 0v240M128 0v240M248 0v240M260 0v240"></path>
+  </g>
+  <g style="stroke:var(--paper);stroke-width:1.4;stroke-dasharray:6 7;opacity:.95;fill:none">
+    <path d="M0 86h138M196 86h56M0 170h360M122 0v70M122 104v136M254 0v70M254 104v136"></path>
+  </g>
+  <g style="fill:var(--paper);opacity:.95">
+    <rect x="152" y="81" width="4" height="10"></rect>
+    <rect x="160" y="81" width="4" height="10"></rect>
+    <rect x="168" y="81" width="4" height="10"></rect>
+    <rect x="176" y="81" width="4" height="10"></rect>
+    <rect x="184" y="81" width="4" height="10"></rect>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="300" y="82" width="22" height="8" rx="2"></rect>
+    <rect x="176" y="166" width="20" height="8" rx="2"></rect>
+  </g>
+  <g style="fill:var(--ink);opacity:.85">
+    <circle cx="180" cy="177" r="1.6"></circle>
+    <circle cx="192" cy="177" r="1.6"></circle>
+    <circle cx="304" cy="91" r="1.6"></circle>
+    <circle cx="318" cy="91" r="1.6"></circle>
+  </g>
+
+  <g style="fill:var(--ink);opacity:.07">
+    <rect x="12.5" y="32.5" width="94" height="44"></rect>
+    <rect x="140.5" y="36.5" width="100" height="40"></rect>
+    <rect x="16.5" y="114.5" width="88" height="34"></rect>
+    <rect x="138.5" y="102.5" width="80" height="52"></rect>
+    <rect x="272.5" y="104.5" width="80" height="46"></rect>
+    <rect x="272.5" y="186.5" width="82" height="44"></rect>
+  </g>
+
+  <!-- STATION — left, top -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="10" y="30" width="94" height="44"></rect>
+    <path d="M6 30h102v-7H6z"></path>
+  </g>
+  <g style="fill:var(--ink);opacity:.55">
+    <path d="M8 25h20v2H8zM34 25h20v2H34zM60 25h20v2H60zM86 25h20v2H86z"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.3;fill:none">
+    <circle cx="92" cy="42" r="5.5"></circle>
+    <path d="M92 42v-3M92 42h2.2"></path>
+    <path d="M16 42h12v10H16zM34 42h12v10H34zM52 42h12v10H52z"></path>
+    <path d="M20 74v-9h12v9"></path>
+    <path d="M10 74h94"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="14" y="32" width="40" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="34" y="38.4">STATION</text>
+  </g>
+
+  <!-- CAFÉ — middle, top -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="138" y="34" width="100" height="40"></rect>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1.4">
+    <path d="M134 34h108l-5-9h-98z"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:.9;opacity:.5;fill:none">
+    <path d="M146 25v9M158 25v9M170 25v9M182 25v9M194 25v9M206 25v9M218 25v9M230 25v9"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.3;fill:none">
+    <path d="M146 48h20v12h-20z"></path>
+    <path d="M176 48h28v10h-28z"></path>
+    <path d="M216 48v26M216 48h14v18h-14"></path>
+    <path d="M148 74h84"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="184" y="36" width="26" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="197" y="42.4">CAFÉ</text>
+  </g>
+
+  <!-- PARK — right, top -->
+  <g style="fill:var(--green);opacity:.2">
+    <rect x="266" y="10" width="88" height="58"></rect>
+  </g>
+  <g style="fill:var(--green);opacity:.5;stroke:var(--ink);stroke-width:1.2">
+    <circle cx="286" cy="44" r="9"></circle>
+    <circle cx="306" cy="50" r="8"></circle>
+    <circle cx="330" cy="42" r="10"></circle>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.5;fill:none">
+    <path d="M286 53v8M306 58v5M330 52v9"></path>
+    <path d="M266 66h88"></path>
+    <path d="M270 66v8M278 66v8M286 66v8M294 66v8M302 66v8M310 66v8M318 66v8M326 66v8M334 66v8M342 66v8M350 66v8"></path>
+  </g>
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1">
+    <rect x="272" y="12" width="20" height="8" rx="1"></rect>
+    <path d="M282 20v6"></path>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="282" y="18.4">PARK</text>
+  </g>
+
+  <!-- BANK — left, middle -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <path d="M12 112l46-12 46 12z"></path>
+    <rect x="14" y="112" width="88" height="34"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:2;fill:none">
+    <path d="M26 118v22M44 118v22M62 118v22M80 118v22M92 118v22"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.4;fill:none">
+    <path d="M10 146h96M6 152h104"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="26" y="100" width="34" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="43" y="106.4">BANK</text>
+  </g>
+
+  <!-- LIBRARY — middle, middle -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="136" y="100" width="80" height="52"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.2;fill:var(--paper)">
+    <rect x="144" y="118" width="10" height="30"></rect>
+    <rect x="160" y="118" width="10" height="30"></rect>
+    <rect x="176" y="118" width="10" height="30"></rect>
+    <rect x="192" y="118" width="10" height="30"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.4;fill:none">
+    <path d="M136 152h80M132 157h88"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="152" y="104" width="48" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="176" y="110.4">LIBRARY</text>
+  </g>
+
+  <!-- POST OFFICE — right, middle -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="270" y="102" width="80" height="46"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.2;fill:var(--paper)">
+    <rect x="278" y="120" width="16" height="12"></rect>
+    <rect x="300" y="120" width="16" height="12"></rect>
+    <path d="M320 134v14h12v-14"></path>
+  </g>
+  <g style="fill:var(--blue);stroke:var(--ink);stroke-width:1.3">
+    <rect x="340" y="126" width="12" height="22" rx="2"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1;fill:none">
+    <path d="M342 133h8M340 130h12"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="278" y="104" width="52" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:5.8px;font-family:var(--sans);letter-spacing:.2px;text-anchor:middle">
+    <text x="304" y="110.2">POST OFFICE</text>
+  </g>
+
+  <!-- BUS STOP — left, bottom -->
+  <g style="stroke:var(--ink);stroke-width:1.6;fill:none">
+    <path d="M10 190h56"></path>
+    <path d="M14 190v40M62 190v40"></path>
+    <path d="M22 208h34v5H22z"></path>
+    <path d="M26 213v8M52 213v8"></path>
+  </g>
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.4">
+    <rect x="74" y="194" width="18" height="22" rx="2"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:.9;opacity:.6;fill:none">
+    <path d="M78 200h10M78 205h10M78 210h10"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="14" y="182" width="34" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6px;font-family:var(--sans);letter-spacing:.4px;text-anchor:middle">
+    <text x="31" y="188.2">BUS STOP</text>
+  </g>
+
+  <!-- MARKET — middle, bottom -->
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1.4">
+    <path d="M134 196l24-10 24 10z"></path>
+    <path d="M186 196l24-10 24 10z"></path>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.3;fill:none">
+    <path d="M140 196v30M176 196v30M192 196v30M228 196v30"></path>
+    <path d="M140 214h36M192 214h36"></path>
+  </g>
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1">
+    <circle cx="150" cy="205" r="3"></circle>
+    <circle cx="164" cy="205" r="3"></circle>
+    <circle cx="202" cy="205" r="3"></circle>
+    <circle cx="216" cy="205" r="3"></circle>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="158" y="184" width="34" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="175" y="190.4">MARKET</text>
+  </g>
+
+  <!-- HOTEL — right, bottom -->
+  <g style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6">
+    <rect x="270" y="184" width="82" height="44"></rect>
+  </g>
+  <g style="stroke:var(--ink);stroke-width:1.2;fill:var(--paper)">
+    <rect x="276" y="202" width="12" height="10"></rect>
+    <rect x="294" y="202" width="12" height="10"></rect>
+    <rect x="330" y="202" width="12" height="10"></rect>
+    <path d="M310 210v18h14v-18"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1.3">
+    <path d="M306 210h22l-4-7h-14z"></path>
+  </g>
+  <g style="fill:var(--tan);stroke:var(--ink);stroke-width:1">
+    <rect x="280" y="186" width="30" height="8" rx="1"></rect>
+  </g>
+  <g style="fill:var(--ink);font-size:6.4px;font-family:var(--sans);letter-spacing:.5px;text-anchor:middle">
+    <text x="295" y="192.4">HOTEL</text>
+  </g>
+
+  <g style="fill:var(--ink);font-size:7.5px;font-style:italic;font-family:var(--serif);text-anchor:middle;paint-order:stroke;stroke:var(--paper);stroke-width:2.4px;stroke-linejoin:round">
+    <text x="66" y="89.4">High Street</text>
+    <text x="300" y="89.4">High Street</text>
+    <text x="120" y="173.4">Low Street</text>
+    <text x="220" y="173.4">Low Street</text>
+    <text transform="translate(122,58) rotate(-90)" text-anchor="middle">Mill Lane</text>
+    <text transform="translate(122,206) rotate(-90)" text-anchor="middle">Mill Lane</text>
+    <text transform="translate(254,58) rotate(-90)" text-anchor="middle">Park Lane</text>
+    <text transform="translate(254,206) rotate(-90)" text-anchor="middle">Park Lane</text>
+  </g>
+</svg>
+<div class="qopts">
+<label class="opt" style="position:absolute;left:16%;top:17%;transform:translate(-50%,-50%)" aria-label="the station"><input type="checkbox" value="station"></label>
+<label class="opt" style="position:absolute;left:52%;top:17%;transform:translate(-50%,-50%)" aria-label="the café"><input type="checkbox" value="cafe"></label>
+<label class="opt" style="position:absolute;left:86%;top:17%;transform:translate(-50%,-50%)" aria-label="the park"><input type="checkbox" value="park"></label>
+<label class="opt" style="position:absolute;left:16%;top:53%;transform:translate(-50%,-50%)" aria-label="the bank"><input type="checkbox" value="bank"></label>
+<label class="opt" style="position:absolute;left:52%;top:53%;transform:translate(-50%,-50%)" aria-label="the library"><input type="checkbox" value="library"></label>
+<label class="opt" style="position:absolute;left:86%;top:53%;transform:translate(-50%,-50%)" aria-label="the post office"><input type="checkbox" value="post office"></label>
+<label class="opt" style="position:absolute;left:16%;top:86%;transform:translate(-50%,-50%)" aria-label="the bus stop"><input type="checkbox" value="bus stop"></label>
+<label class="opt" style="position:absolute;left:52%;top:86%;transform:translate(-50%,-50%)" aria-label="the market"><input type="checkbox" value="market"></label>
+<label class="opt" style="position:absolute;left:86%;top:86%;transform:translate(-50%,-50%)" aria-label="the hotel"><input type="checkbox" value="hotel"></label>
+</div>
+</div>
+</div>
+</div>
+
+<div class="block" data-look="stripes" id="fill" data-activity="fill">
+<h3>Fill in the blank</h3>
+<p>Complete each line with the word that fits.</p>
+<p><span class="qnum">1.</span> Mike <input class="gap" data-answer="has" style="--gap-w:3em"> already posted it.</p>
+<p><span class="qnum">2.</span> Nobody <input class="gap" data-answer="had" style="--gap-w:3em"> told the office before the shift started.</p>
+<div class="qitem" data-a="b">
+<p class="qstem"><span class="qnum">3.</span> By the time I arrived, the crew <b>___</b> the truck.</p>
+<div class="opts compact" data-layout="row">
+<label class="opt"><input type="radio" name="fb1" value="a"><span>loaded</span></label>
+<label class="opt"><input type="radio" name="fb1" value="b"><span>had loaded</span></label>
+<label class="opt"><input type="radio" name="fb1" value="c"><span>were loading</span></label>
+<label class="opt"><input type="radio" name="fb1" value="d"><span>load</span></label>
+</div>
+</div>
+<div class="qitem" data-a="a">
+<p class="qstem"><span class="qnum">4.</span> He <b>___</b> the email twice before he sent it.</p>
+<div class="opts compact" data-layout="row">
+<label class="opt"><input type="radio" name="fb2" value="a"><span>checked</span></label>
+<label class="opt"><input type="radio" name="fb2" value="b"><span>check</span></label>
+<label class="opt"><input type="radio" name="fb2" value="c"><span>checking</span></label>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
+<div class="rows markup-row">
+<details class="reveal" open><summary>Markup — #flip · the cards, the prompt, and the pick</summary><div class="body"><div>
+<pre>&lt;div class="block" id="flip"&gt;
+  &lt;h4 class="flip-ask" style="text-align:center;padding-top:10px" aria-live="polite"&gt;…&lt;/h4&gt;
+  &lt;div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"&gt;
+    &lt;label class="flip" style="--flip-h:112px"&gt;
+      &lt;input type="checkbox"&gt;
+      &lt;span class="card3d"&gt;
+        &lt;span class="face" style="text-align:center"&gt;&lt;b&gt;the item&lt;/b&gt;&lt;span class="dim"&gt;what it is&lt;/span&gt;&lt;/span&gt;
+        &lt;span class="face back" style="text-align:center"&gt;&lt;b&gt;what it means&lt;/b&gt;&lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/label&gt;
+    …eight cards, four to a row, two rows…
+  &lt;/div&gt;
+  &lt;script&gt;…below, inside the same block…&lt;/script&gt;
+&lt;/div&gt;
+
+&lt;!-- the prompt is one card's back, in a centred h4, and it is the whole prompt · any number of cards may be turned in a round --&gt;
+&lt;!-- a turn tints red when it is not the answer and green when it is; only the right one turns every card back and brings the next prompt 4 s later --&gt;
+&lt;!-- the script turns the card itself (it cancels the label's own toggle and sets the box), so a click is never doubled · --flip-h is the height both faces share --&gt;
+&lt;!-- no data-answer and no data-a here: nothing marks this block, so it cannot be a quiz --&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #dialoggap · a dialog with a gap</summary><div class="body"><div>
+<pre>&lt;li data-side="right"&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;
+    &lt;span class="say" style="position:relative"&gt;
+      &lt;span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px"&gt;1.&lt;/span&gt;
+      Three times. I &lt;input class="gap" data-answer="have|'ve" style="--gap-w:4em"&gt; already posted it.&lt;/span&gt;&lt;/li&gt;
+
+&lt;li data-side="left"&gt;&lt;span class="who"&gt;Jess&lt;/span&gt;
+    &lt;span class="say" style="position:relative"&gt;
+      &lt;span class="qnum" style="position:absolute;left:calc(100% + 8px);top:2px"&gt;2.&lt;/span&gt;
+      Not yet — I need &lt;input class="gap" data-answer="two days" style="--gap-w:5em"&gt; to read it.&lt;/span&gt;&lt;/li&gt;
+
+&lt;!-- data-side is the SPEAKER's side, not the turn's place: Jess opens the dialog and keeps the left;
+     Mike answers from the right and keeps the right wherever he answers again.
+     The number sits outside the bubble, on the side that faces the middle of the dialog: the .say is
+     position:relative and the number is absolute at right:calc(100% + 8px) on a RIGHT-hand turn and at
+     left:calc(100% + 8px) on a LEFT-hand turn. On a left-hand bubble a number at right:100% hangs outside
+     the dialog's own edge --&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #chartanswer · a chart whose rows are answered</summary><div class="body"><div>
+<pre>&lt;div class="block" data-look="stripes"&gt;
+  &lt;table class="chart"&gt;
+    &lt;tr&gt;&lt;td&gt;6:40&lt;/td&gt;&lt;td&gt;He clocked in.&lt;/td&gt;
+      &lt;td style="display:flex;align-items:center;gap:8px"&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt;
+        &lt;div class="opts" data-layout="row"&gt;
+        &lt;label class="opt"&gt;&lt;input type="radio" name="m1"&gt;&lt;span&gt;routine&lt;/span&gt;&lt;/label&gt;
+        &lt;label class="opt"&gt;&lt;input type="radio" name="m1"&gt;&lt;span&gt;surprise&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;…a checkbox row, a gap row…&lt;/tr&gt;
+  &lt;/table&gt;
+  &lt;!-- the number stands beside the control it numbers, never in a column of its own --&gt;
+  &lt;!-- one example of each control type is shown — an activity may mix them or use a single type, as its content needs --&gt;
+&lt;/div&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #mc · four options, one answer</summary><div class="body"><div>
+<pre>&lt;div class="qitem" data-a="b"&gt;
+  &lt;p class="qstem"&gt;the line the student reads&lt;/p&gt;
+  &lt;div class="qopts"&gt;
+    &lt;label class="opt"&gt;&lt;input type="radio" name="mc1" value="a"&gt;&lt;span&gt;option&lt;/span&gt;&lt;/label&gt;
+    &lt;label class="opt"&gt;&lt;input type="radio" name="mc1" value="b"&gt;&lt;span&gt;option&lt;/span&gt;&lt;/label&gt;
+    …four, each with its own value…
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- data-a on the .qitem is the key and matches the value of the right input · one .qitem per item --&gt;
+&lt;!-- a set of items gets its own name per item (mc1, mc2), so two items never share one radio group --&gt;
+&lt;!-- the set's shape follows the length of its options: data-layout="row" holds one- and two-word options on one line, data-layout="grid" style="--cols:2" sets three- and four-word options two by two, and a set with neither stacks phrases one per line — the stem and its options stay in the same cell --&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #matching · a pool of meanings</summary><div class="body"><div>
+<pre>&lt;div class="rows"&gt;
+  &lt;div&gt;
+    &lt;figure class="chartwrap"&gt;&lt;table class="chart"&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;b&gt;the phrase&lt;/b&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt; &lt;input class="gap" data-answer="c" style="--gap-w:3em"&gt;&lt;/td&gt;&lt;/tr&gt;
+      …one row per item…
+    &lt;/table&gt;&lt;/figure&gt;
+  &lt;/div&gt;
+  &lt;div&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;a&lt;/b&gt; the first meaning&lt;/li&gt;…&lt;/ul&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- the pool of letters is visible beside the items, and that shared pool is what makes it matching --&gt;
+&lt;!-- one meaning more than there are items, so the last answer cannot be reached by elimination --&gt;
+&lt;!-- the phrases are in a full shuffle: no row's letter is the meaning at that row's place in the pool,
+     and one swapped pair is not a shuffle — the whole order is re-dealt --&gt;
+&lt;!-- each .gap keys the letter it expects; engine2 marks them on Complete --&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #correction · one word wrong</summary><div class="body"><div>
+<pre>&lt;p class="dim" style="text-align:center"&gt;One word is wrong. Write the sentence again.&lt;/p&gt;
+&lt;p style="text-align:center"&gt;&lt;span class="qnum"&gt;3.&lt;/span&gt; He &lt;b&gt;have&lt;/b&gt; clocked in early.&lt;/p&gt;
+&lt;input class="gap" data-answer="He has clocked in early.|He's clocked in early."
+       style="--gap-w:16.2em"&gt;
+
+&lt;!-- the wrong word is marked in the line; a single-line .gap takes the corrected sentence --&gt;
+&lt;!-- made a .write instead, it asks for more than a line · data-answer takes the forms, | between them --&gt;
+&lt;!-- used as a translation, the line above is Portuguese and the gap holds the English: the block is then
+     recorded as a translation activity (data-activity="translation") and not as a correction --&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #dictation · listen, then write</summary><div class="body"><div>
+<pre>&lt;p class="dim" style="display:flex;align-items:center;
+   justify-content:center;gap:10px"&gt;
+  &lt;span class="qnum"&gt;4.&lt;/span&gt;
+  &lt;button class="listen" type="button"
+          data-say="I clocked in at six forty."&gt;▶&lt;/button&gt;
+  &lt;span&gt;Listen, then write what you hear.&lt;/span&gt;&lt;/p&gt;
+&lt;textarea class="write" rows="2" style="--lines:2" data-answer="I clocked in at six forty."
+          placeholder="what you hear"&gt;&lt;/textarea&gt;
+
+&lt;!-- .listen is wired by engine2 and speaks its data-say text, so dictation needs no recording --&gt;
+&lt;!-- --lines is how many text lines tall the box is, set here to 2: the page sizes every field and the
+     student cannot drag it bigger --&gt;
+&lt;!-- with a .vz-play player in the block instead, the same field is the dictation --&gt;
+&lt;!-- as a translation it is the same field: data-say carries the Portuguese (or the English) and the answer
+     is the other language — record the block as data-activity="translation", not as dictation --&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #chunks · chunks in the wrong order</summary><div class="body"><div>
+<pre>&lt;p&gt;Unscramble the sentences:&lt;/p&gt;
+&lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
+   justify-content:center;align-items:center;padding-top:4px"&gt;&lt;span class="qnum" style="margin-right:-10px"&gt;1.&lt;/span&gt;
+  &lt;span&gt;&lt;b style="font-size:.8em"&gt;1&lt;/b&gt; never&lt;/span&gt;
+  &lt;span&gt;&lt;b style="font-size:.8em"&gt;2&lt;/b&gt; that&lt;/span&gt;
+  …
+&lt;/p&gt;
+&lt;p style="text-align:center;margin-top:6px"&gt;&lt;input class="gap" style="--gap-w:9em"&gt;&lt;/p&gt;
+
+&lt;!-- one set, or as many as the activity needs: a further .chips over its own answer line, one after
+     another vertically as here, side by side in a .rows of their own, or mixed with the prose, the chart
+     or the strip they are read with. --&gt;
+&lt;!-- every activity carries its instruction line in the block: this one is the line above the chips --&gt;
+&lt;!-- the chips are in a full shuffle: no chip sits at its own place in the sentence, and one moved chip
+     is not a shuffle — the whole order is re-dealt. the number is the display order, never the answer --&gt;
+&lt;!-- the number sits at the head of the words, on their line — never alone on the answer line --&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #stripgaps · the strip as an activity</summary><div class="body"><div>
+<pre>&lt;div class="block" data-look="stripes"&gt;
+  &lt;h3&gt;the task the panels set&lt;/h3&gt;
+  &lt;p&gt;Describe what is happening in each picture,
+     using the &lt;b&gt;past simple&lt;/b&gt;.&lt;/p&gt;
+  &lt;table class="chart"&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" width="100%" role="img"
+                 aria-label="what the panel shows"&gt;…&lt;/svg&gt;
+              &lt;span class="qnum"&gt;1.&lt;/span&gt; &lt;input class="gap" style="--gap-w:9em"&gt;&lt;/td&gt;
+        …two panels to a row, each with its own number…
+    &lt;/tr&gt;
+    &lt;tr&gt;…the next two panels…&lt;/tr&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</pre>
+</div></div></details>
+<details class="reveal" open><summary>Markup — #fill · fill in the blank</summary><div class="body"><div>
+<pre>&lt;div class="block" data-look="stripes" id="fill" data-activity="fill"&gt;
+  &lt;h3&gt;Fill in the blank&lt;/h3&gt;
+  &lt;p&gt;what the line asks the student to complete&lt;/p&gt;
+  &lt;p&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt; Mike &lt;input class="gap" data-answer="has" style="--gap-w:5em"&gt; already posted it.&lt;/p&gt;
+
+  &lt;!-- the same blank with options instead of a field: a .qitem, the blank written ___ in the stem, and
+       3 or 4 options of one or two words that could fill it. This is the multiple-choice form of the
+       blank, a different activity from the .gap form — the student picks the word instead of typing it.
+       A block of nothing but option blanks is recorded as mc; a block that mixes typed and option
+       blanks is recorded as fill, because the blank is what the two have in common --&gt;
+  &lt;!-- opts compact with data-layout="row" keeps three or four one-word options on one line: the radio
+       and the padding shrink, the option text does not --&gt;
+  &lt;div class="qitem" data-a="b"&gt;
+    &lt;p class="qstem"&gt;&lt;span class="qnum"&gt;2.&lt;/span&gt; By the time I arrived, the crew &lt;b&gt;___&lt;/b&gt; the truck.&lt;/p&gt;
+    &lt;div class="opts compact" data-layout="row"&gt;
+      &lt;label class="opt"&gt;&lt;input type="radio" name="fb1" value="a"&gt;&lt;span&gt;loaded&lt;/span&gt;&lt;/label&gt;
+      …had loaded (the key) · were loading · load — one value each, three or four options…
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- a gap inside the sentence the block already carries: the line is the stem, so there is no separate stem --&gt;
+&lt;!-- --gap-w is 1.3× the longest accepted answer, its own padding included, in em (never 100%, never calc) · data-answer takes the accepted forms, | between them --&gt;
+&lt;!-- one gap or several lines, whichever the content needs; each gap is keyed on its own --&gt;
+&lt;!-- the count runs through the block: typed blanks and option blanks continue one sequence --&gt;</pre>
+</div></div></details>
+</div>
+
+<h2>Games</h2>
+
+<div class="block" data-look="float">
+<p><b>Don’t add a game just to have one.</b> A game is a skin over an activity the lesson already wanted: the activity is chosen first and the game is how it is presented, so a reskinned game is that element in the ledger and never an element of its own. Nothing counts a game and nothing requires one. A game is a flavour element: it is used occasionally, and only where it fits a particular activity well enough that the activity would be worse without it. A set of items that trains fine as a list stays a list.</p>
+<p class="dim">A <code>.game</code> draws its own edge, so it stands at page level and is never put inside a <code>.block</code>. Every game reads the same content — <code>.game-list &gt; .qitem</code>, each with a <code>.qstem</code> and radio options, <code>data-a</code> marking the right one — so that list is what prints and what the student answers if the script never runs; <code>data-game</code> chooses only the presentation, never the content. A game in a quiz section carries <code>data-retry="0"</code>; a training game carries nothing. <b>A <code>.listen</code> in the item's stem makes the round SPOKEN</b>: the runner says its <code>data-say</code> on the frame the round opens and keeps a 🔊 replay on the HUD, so a game can ask "which word did you hear?" — <code>data-sound="0"</code> mutes both, and <code>bingoCard</code> is the one presentation that times its own clip and is left alone.</p>
+</div>
+
+<div class="block">
+<h3>The thirteen</h3>
+<table class="chart">
+<thead><tr><th><code>data-game</code></th><th>What it is good for</th><th>The markup it needs</th></tr></thead>
+<tbody>
+<tr><td><code>skeetRange</code></td><td>telling the right word from near misses, fast: every option is a target thrown across the range</td><td><code>.qitem</code> per item, 2–4 options; <code>data-a</code>; <code>data-time</code> is both the deadline and the flight time (0 = no clock)</td></tr>
+<tr><td><code>whackMole</code></td><td>recognition under a clock, one option per mole, hit before it ducks</td><td><code>.qitem</code> per item, one option per mole; <code>data-time</code></td></tr>
+<tr><td><code>catchBasket</code></td><td>sorting: each card dragged into the pot it belongs in, and a right one grows a flower</td><td><code>.qitem</code> per card, the pots are the option labels or <code>data-buckets="left|right"</code></td></tr>
+<tr><td><code>stackDrop</code></td><td>telling the right phrase from the wrong one, built into a tower that reaches a roof</td><td>6–10 <code>.qitem</code>, options are the blocks; <code>data-time</code> per block</td></tr>
+<tr><td><code>flapGate</code></td><td>choice at speed: fly through the gap whose meaning fits the clue — the wall is the clock</td><td><code>.qitem</code> per item, one option per gap; <code>data-time</code> is not used</td></tr>
+<tr><td><code>mineGrid</code></td><td>one answer per item among four doors; three snakes end the run</td><td>one <code>.qitem</code> per question, <b>exactly four</b> options</td></tr>
+<tr><td><code>wordleBoard</code></td><td>spelling a word letter by letter with feedback, from its clue</td><td><code>data-answer="&lt;word&gt;"</code> per item plus <code>.qstem</code>; <code>data-lives</code> (2)</td></tr>
+<tr><td><code>crosswordBoard</code></td><td>a set of words that cross, each clued — the letters are shared</td><td><code>data-answer="&lt;word&gt;"</code> on every item plus <code>.qstem</code></td></tr>
+<tr><td><code>echoPads</code></td><td>building one sentence word by word, each word chosen from pads</td><td><code>data-first</code> the opening, <code>data-lives</code> (3), one <code>.qitem</code> per word, four single-word pads, order is the sentence</td></tr>
+<tr><td><code>bingoCard</code></td><td>hearing a word once and finding it on a card before the curtain falls</td><td><code>.qitem</code> per item, <code>data-a</code> the right option (or a <code>.listen</code> clip); leave <code>data-time</code> at 0</td></tr>
+<tr><td><code>ladderRun</code></td><td>climbing to the question itself, one rung per right answer, sliding back on a miss</td><td><code>.qitem</code> per rung, options the answers</td></tr>
+<tr><td><code>bossRaid</code></td><td>a long drill with a fight around it: every right answer is the fighter's attack</td><td><code>.qitem</code> per question, options are the answers; <code>data-time</code></td></tr>
+<tr><td><code>trainOrder</code></td><td>loading one train per group of items, a car per answer</td><td><code>data-train</code> grouping the items of one train, <code>.qitem</code> per car</td></tr>
+</tbody>
+</table>
+</div>
+
+
+
+
+<p class="dim">Markup — the code to copy for the elements above, one line each. These boxes are build tools and never content: no lesson page carries one, and nothing here belongs on a lesson page.</p>
+<div class="rows markup-row">
+<details class="reveal" open><summary>Markup — 6 · a game, and the levers on it</summary><div class="body"><div>
+<pre>&lt;div class="game" data-game="skeetRange" data-time="6000" data-kind="train"&gt;
+  &lt;p class="game-how"&gt;one line: how to play&lt;/p&gt;
+  &lt;div class="game-list"&gt;
+    &lt;div class="qitem" data-a="a"&gt;
+      &lt;div class="qline"&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt;
+        &lt;span class="qstem"&gt;the prompt&lt;/span&gt;&lt;/div&gt;
+      &lt;div class="qopts"&gt;
+        &lt;label&gt;&lt;input type="radio" name="g1" value="a"&gt;borrow&lt;/label&gt;
+        …one label per option…
+      &lt;/div&gt;
+    &lt;/div&gt;
+    …one .qitem per item…
+  &lt;/div&gt;
+  &lt;button class="game-start" type="button"&gt;▶ Play&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- levers on .game: data-game · data-time (ms per item, 0 = none) · data-limit · data-retry
+     · data-shuffle · data-rounds · data-prompt · data-sound · data-skin --&gt;</pre>
+<pre>&lt;!-- the question can be a spoken word instead of a written stem --&gt;
+&lt;div class="qline"&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt;
+  &lt;span class="qstem"&gt;&lt;button class="listen" type="button" data-say="borrow"&gt;▶&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;
+
+&lt;!-- with a .listen chip the item may leave data-a off: the option whose text the clip speaks is the
+     answer (engine4 matches it against data-say) --&gt;</pre>
+<p class="dim">Words the game needs on the item, not on the block: <code>data-answer="&lt;word&gt;"</code> for <code>wordleBoard</code> and <code>crosswordBoard</code>, <code>data-first</code> and <code>data-lives</code> for <code>echoPads</code>, <code>data-train</code> for <code>trainOrder</code>, <code>data-buckets</code> for <code>catchBasket</code>. Every game answers with the same radios, so engine4 checks the option and the page's own marking still saves it.</p>
+</div></div></details>
+</div>
+
+<h2>Learned during build generation</h2>
+
+<div class="rows">
+<div class="block" data-look="float">
+<h3>What building a lesson has taught the build</h3>
+<p><b>Every line here is a mechanism of this site, learned by building a lesson on it, and it holds for the next lesson as much as for the one that found it.</b> A line states what the machine does or what the build must do — never a fault, a session or a date. Read the block at the start of every lesson; the lesson that teaches one more line adds it here before its own row is closed.</p>
+<ul>
+<li><b>A row is sized at load, not authored.</b> <code>equalize.js</code> writes the widths: a table keeps its widest row, a drawing never passes its own size, and prose takes the remainder above 200px — but beside a table or a drawing the prose stops at its widest line, and that cell takes the slack. An authored <code>flex</code> or <code>width</code> on a cell is stale and the solver overwrites it. A question cell or a list cell also keeps a floor at its widest authored item, and it is spaced at load: the gaps between its numbered items (or between its list's items) are opened or closed until the cell meets the row's tallest cell that cannot space, each gap held between 6px and its authored gap + 48px. The solver strips that spacing from the saved clone only; the live page keeps it.</li>
+<li><b>Every vertical gap is its container's, at one value per level.</b> <code>@layer spacing</code> gives the content area's grid a 20px row gap, a frame's direct children 20px, and a cell's direct children 14px; a cell's first child and its answer fields are 0, so every cell starts flush and a short cell's blank sits below its content — except in a two-cell row, where a gap of more than 12px that width cannot close centers the shorter cell's content instead — and a question cell's or a list cell's own gaps are spread or compressed before that decision, so centering decides only what spacing cannot close. No element carries a vertical margin or padding of its own at those levels; <code>h1</code> and <code>h2</code> keep theirs.</li>
+<li><b>A row's authored balance can only be read before the solver runs.</b> <code>equalize.js</code> equalizes a row by redistributing widths, then by spreading a question cell's own gaps, then by centring a two-cell row's shorter cell — so a height measured on the finished page reports the solver's work, not the author's. <code>EqualizeRows.clean()</code> restores the authored page (widths, <code>align-self</code>, <code>justify-content</code>, the spacing lever's margins); with every cell held at <code>align-self:flex-start</code> each rect is that cell's own content, and two cells differing by more than 30px there are a row whose shorter cell is missing content. <code>npm run align</code> reads it at 1280 and 1024px.</li>
+<li><b>A squeeze is read in the solved state, a height in the authored one.</b> The solver hands width to whatever needs it — a table keeps its widest row, a drawing never passes its own size — so a chip run or an answer line in the cell beside them can be left narrower than its content and wrap. <code>npm run align</code> reads the page twice: the solved widths first (<code>~~</code>, <code>wants 479px in 189px (chips on 6 rows)</code>), then <code>clean()</code> for the authored heights. A squeeze is repaired by the structure — the row broken, the wide cell given the line — and never by an item, which answers a shortage of content and not of width.</li>
+<li><b>A page that loads the solver is hidden until its rows are sized.</b> <code>data-eq</code> on <code>&lt;html&gt;</code> makes the sheet hold <code>.content-area</code> at <code>visibility:hidden</code>; <code>equalize.js</code> solves once, then writes <code>eq-ready</code> when the fonts settle or after 1.5s. The page loads under a 50% veil with its paper, frame, header and content transparent; at <code>eq-ready</code> the veil fades evenly for 1s while the paper, frame and header fade in, and at 0.8s the content begins its own 1s fade (1.8s). A 4s/5s CSS fallback shows a page whose script never ran; the editor's <code>body.layout-on</code> and <code>body.editing</code> stay visible. The header wrapper holds the brand, the control bar and its legend, so the fade and every header rule reach all three.</li>
+<li><b>A block reports its own progress.</b> <code>data-state="done"</code> on a <code>.block</code> is the sheet's green frame (<code>#80 STATE</code>), and on a page whose <code>&lt;html&gt;</code> carries <code>data-done</code> engine2.js writes it: every question in the block has an answer on it — a gap with at least one character, a written field with text, one option picked in each radio group, at least one box ticked in each group of checkboxes — and a question emptied takes the state away again. A teaching block holds no control and never reports. The saved clone strips the state, so a file never keeps the report of the student who saved it.</li>
+<li><b>The control's <code>name</code> is its key, and the key is a number</b> — <code>a&lt;section&gt;c&lt;block letter&gt;&lt;item&gt;</code> (<code>a7c2</code> is section 7's third block, second item), one number for a whole radio group. A control left unnamed falls back to the words around it plus a <code>{block, offset}</code> position.</li>
+<li><b>That <code>offset</code> counts blocks on the page, and a game inserts its stage into its own block when it loads</b> — so a position saved before a game ran and read after it can be off by that stage. A number does not move; a position can.</li>
+<li><b>Two controls in one cell take two numbers.</b> Both share the cell's words and its first offset, and Complete draws one key pill per control: two fields in one cell need two numbers, or one answer is drawn over the other.</li>
+<li><b>The index files are build artifacts that ship with the page.</b> <code>npm run build:lessons</code> writes <code>lessons.json</code> and <code>tracks.json</code> from the page filenames, and <code>--check</code> refuses a stale pair; a lesson pushed without that run is live but unlisted.</li>
+<li><b>Every page carries the sheet's stamp, and a solver page carries the solver's too.</b> <code>build-lessons.mjs</code> writes the sheet's stamp into every page that links it — the lesson pages and the root pages, and any page the manifest does not list — and <code>equalize.js?v=…</code> into every page that loads it — the hash of the file itself — so a changed stylesheet or solver is fetched on the next load and a stale stamp fails <code>build:check</code>. The shell's script slot lists the other engines; a changed engine still needs a hard refresh.</li>
+<li><b>This map is built to be extended.</b> Every direct child of <code>.content-area</code> is a row cell and its <code>data-span</code> sums to 12 (12 when unset); a <code>pre</code> in a markup box holds escaped tags only, because a real one inside it is parsed as markup; <code>node qa/cmcheck.mjs</code> checks both, and the dead links.</li>
+<li><b>A chart row is answered by a keyed gap.</b> The typed form of <code>chartanswer</code> carries <code>data-answer</code> in the row's answer cell with its <code>.qnum</code> beside it; a row of options is markable only when its cell holds a <code>.qitem</code> with <code>data-a</code>, so a chart of bare radios has no key the engine can read.</li>
+<li><b>A game records the control under it, not its own name.</b> Items answered with options are <code>mc</code> in the ledger; items answered by typing a word are <code>fill</code>, because the field is what the student writes in.</li>
+<li><b>The map redraws inside every <code>.qitem</code>.</b> Two questions about one map are two drawings, and each checkbox keeps its place because its position is a percentage of the drawing, not of the cell.</li>
+<li><b>A dictation's answer can be a gap.</b> <code>.listen</code> speaks its <code>data-say</code> text and the field that follows it takes <code>data-answer</code>; a one-word answer needs no <code>textarea.write</code>, and the block is still a dictation.</li>
+<li><b>A timeline family is a full-width child of its block.</b> <code>.tlgrid</code> holds one <code>&lt;div&gt;</code> per figure with its <code>&lt;h4&gt;</code> name; inside a half-width row cell the pair is too narrow to read, so it sits under the prose rather than beside it.</li>
+<li><b>The register total counts every <code>&lt;h2&gt;</code> in <code>.content-area</code>.</b> A page with N teaching sections, a quiz section and the notebook reads <code>reg:good/N+2</code>, and a quiz heading that names the check ("The check: …") is still a section, because only <code>quiz</code> or <code>test</code> in the heading unmarks it.</li>
+<li><b>Novelty is arithmetic on the ledger, not a judgement.</b> <code>batchcheck</code> requires one element outside the union of the previous three rows, and skips the rule once those rows already hold all twelve palette elements — nothing is fresh then, and no markup choice repairs it — so churn and coverage carry freshness from that point.</li>
+<li><b>A section subject is exactly three letters.</b> The section pattern is <code>^S\d+-([a-z]{3})</code>, so <code>ex</code> can head a block but never a section: a production section is recorded as <code>rcp</code> or <code>mng</code>, and an unparsed segment is reported as <i>segment not understood</i> rather than guessed at.</li>
+<li><b>The quiz's freshness is counted separately.</b> <code>qel</code> is compared with the previous two quizzes, not with the page's three-row window, so a quiz needs one element that neither of the last two quizzes used even when the page already satisfies churn.</li>
+<li><b>Order is a run-length check, not a rule about shape.</b> The section subjects are compared with the previous three rows: three in a row warns and four fails. The repair is a subject that is honest about what the section does — a rules section with an exception is <code>exc</code>, a tenses section is <code>tim</code> — never a reshuffle of the page to dodge the count.</li>
+<li><b>An option set is reflowed by its own attribute.</b> <code>data-layout="row"</code> on a <code>.qopts</code> set holds the set on one line, <code>data-layout="grid"</code> with <code>style="--cols:2"</code> wraps it into two columns, and a set with neither stacks one option per line — so four short options read as 4×1, 2×2 or 1×4 by the length of the words rather than by habit, and the stem and its options stay in one cell. The rule is written after the <code>.qgrid</code> rules it refines, so it wins on source order at equal specificity.</li>
+<li><b>A flip card's prompt is its back.</b> The deck prints the text of the flipped face in <code>.flip-ask</code>, so the student reads the back's words and turns the card whose front matches them; the instruction states that direction, and the pairs are chosen for the decision they force rather than for the rule they repeat.</li>
+</ul>
+</div>
+</div>
+
+
+
+<h2>📒 Caderno compartilhado</h2><textarea id="feed" rows="8"></textarea>
+
+</div>
+<footer>MATERIAIS SIMPLES E INOVADORES · INGLES CERTO EUA</footer>
+</div>
+</main>
+<script>
+const BACKPACK="https://script.google.com/macros/s/AKfycbxSR8UmOwosLIgn1-AGKhgXJvdqOVkzMqrTwdlWNF9kOkt-256TqTacOsQlo6JyHplR/exec";
+const SECRET="abreportas2025", TRACK="extra", L=1;
+/* OPEN: no gate, no server. Anyone may read and re-arrange this page; nothing is written anywhere. */
+window.OPEN=true;
+</script>
+<script src="../pronkey.js"></script>
+<script src="../engine1.js"></script>
+<script src="../engine2.js"></script>
+<script src="../engine4.js"></script>
+<!-- BLOCK SCRIPTS ARE DECLARED BY THE HEADER OF THE CSS THEY USE -->
+<script src="../player.js"></script>
+<script src="../equalize.js?v=fc0b40ee4d"></script>
+<script>
+if(!window.__A)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine1.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');
+else if(!window.__B)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine2.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');
+</script>
+</body></html>
