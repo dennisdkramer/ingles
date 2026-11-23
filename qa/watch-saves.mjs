@@ -29,10 +29,31 @@ const ONCE = argv.includes('--import');
 const PUSH = !argv.includes('--no-push');
 const DRY = argv.includes('--dry-run');
 const ALL = argv.includes('--all');
+/* `--diff` says WHAT a save would change, without writing it: the count of lines the page gains and
+   loses, and the first few of each. A save that reports 300 changed lines is the browser's
+   re-serialisation leaking through, and a save that reports one changed line is an edit. */
+const DIFF = argv.includes('--diff');
 /* a page you just saved is minutes old. An old download with the same name is a different version of
    the page, and landing it would undo whatever the repo has learned since — so import takes only what
    is recent, and `--all` is the deliberate sweep. */
 const FRESH_MS = 20 * 60 * 1000;
+/* A LOG FILE IS THE WATCHER'S OWN WRITE. The login task starts node through wscript with no
+   console: stdout has nowhere to go, and a process writing to a closed handle is a process that
+   can die on its own first line. So `--log <path>` (or `--log=<path>`) appends every line to that
+   file and writes to the console only when there is a terminal to write to. That file is how a
+   save that failed at the push is read back the next morning. */
+const LOGI = argv.findIndex(s => s === '--log' || s.startsWith('--log='));
+const LOGFILE = LOGI < 0 ? null : (argv[LOGI].includes('=') ? argv[LOGI].slice(argv[LOGI].indexOf('=') + 1) : argv[LOGI + 1]);
+if (LOGFILE) {
+  const stamp = () => new Date().toISOString().replace('T', ' ').slice(0, 19) + '  ';
+  const say = tag => (...a) => {
+    const line = stamp() + tag + a.map(String).join(' ') + '\n';
+    try { fs.appendFileSync(LOGFILE, line); } catch (e) { }
+    try { if (process.stdout.isTTY) process.stdout.write(tag + a.join(' ') + '\n'); } catch (e) { }
+  };
+  console.log = say('');
+  console.error = say('ERROR ');
+}
 /* folders that hold no authored page */
 const SKIP = new Set(['qa', 'assets', 'node_modules', '.git', '.old']);
 
@@ -66,12 +87,67 @@ function pageIndex() {
      · `<path …></path>` — an empty element written as a pair. Closed as `<path …/>`.
      · `<details>` — the browser says whether it is open NOW, and the specimens are authored open.
        The destination's `<details>` are matched by position, and the authored `open` is put back. */
-const VOID = 'path|circle|rect|line|polyline|polygon|ellipse|use|stop|image|br|hr|img|input|meta|link';
+/* WHAT A BROWSER WRITES THAT AN AUTHORED FILE DOES NOT. A serialised DOM spells every attribute it
+   holds, reports the STATE of a control instead of the state the page was authored with, and picks
+   one spelling for an empty element. quiet() puts a save back into the shape the FILE is written in:
+     · `class=""`, `style=""`, `popover=""` — attributes the page never set. Dropped.
+     · `open=""` — the browser's spelling of a boolean attribute the file writes bare.
+     · two spaces left inside a tag where an empty attribute was dropped.
+     · `<path …/>` or `<path …></path>` — the same node. Chrome always writes the pair, and a file
+       writes either one, so each element is put back into the spelling the destination used FOR
+       THAT ELEMENT. Conforming the whole file to one spelling instead moved 390 lines of the map.
+     · `<details>` — the browser says whether it is open NOW, and the specimens are authored open.
+       The destination's `<details>` are matched by position, and the authored `open` is put back. */
+const SVGEMPTY = 'path|circle|rect|line|polyline|polygon|ellipse|use|stop|image';
+/* every empty SVG element, in document order, with the spelling this text gives it */
+function empties(html) {
+  const re = new RegExp('<(' + SVGEMPTY + ')\\b([^>]*)>', 'gi');
+  const out = []; let m;
+  while ((m = re.exec(html))) {
+    const raw = m[2];
+    const self = /\/\s*$/.test(raw);
+    const attrs = raw.replace(/\/\s*$/, '').trim();
+    const after = html.slice(m.index + m[0].length);
+    const pair = !self && new RegExp('^</(?:' + SVGEMPTY + ')\\s*>', 'i').test(after);
+    const closeLen = pair ? (/^<\/[a-z]+\s*>/i.exec(after) || [''])[0].length : 0;
+    out.push({ start: m.index, end: m.index + m[0].length + closeLen, tag: m[1], attrs, self, pair });
+  }
+  return out;
+}
+/* one tag, tidied: repeated spaces collapsed OUTSIDE quotes only, and the space an author leaves
+   before `>` removed. Attribute values keep every space they were written with. */
+function tidyTag(body) {
+  let out = '', q = null, space = false;
+  for (const ch of body) {
+    if (q) { out += ch; if (ch === q) q = null; continue; }
+    if (ch === '"' || ch === "'") { q = ch; out += ch; space = false; continue; }
+    if (ch === ' ' || ch === '\t' || ch === '\n' || ch === '\r') { if (!space) out += ' '; space = true; continue; }
+    out += ch; space = false;
+  }
+  const selfClose = /\/$/.test(out.trim());
+  const b = out.replace(/\/\s*$/, '').trim();
+  return '<' + b + (selfClose && b ? '/' : '') + '>';
+}
 function quiet(inner, destInner) {
   let out = inner
     .replace(/ (?:class|style|popover)=""/g, ' ')
-    .replace(new RegExp('<(?:' + VOID + ')(\\b[^>]*[^/])></(?:' + VOID + ')>', 'g'), m => m.replace(/></, '/><'))
-    .replace(/ +>/g, '>');
+    .replace(/ (open|hidden|disabled|checked|selected|required|multiple|readonly|autofocus)=""/gi, ' $1')
+    .replace(/<([^<>]*)>/g, (m, body) => tidyTag(body));
+  /* the empty elements, in the destination's own spelling, element by element — and only when the
+     two texts hold the same elements in the same order, because otherwise the page was edited and
+     the spelling is the least interesting difference between them */
+  const mine = empties(out), theirs = empties(destInner || '');
+  const alike = mine.length === theirs.length &&
+    mine.every((e, i) => e.tag.toLowerCase() === theirs[i].tag.toLowerCase() && e.attrs === theirs[i].attrs);
+  if (alike) {
+    for (let k = mine.length - 1; k >= 0; k--) {
+      const e = mine[k], want = theirs[k];
+      if (want.self === e.self) continue;
+      const text = want.self ? '<' + e.tag + (e.attrs ? ' ' + e.attrs : '') + '/>'
+        : '<' + e.tag + (e.attrs ? ' ' + e.attrs : '') + '></' + e.tag + '>';
+      out = out.slice(0, e.start) + text + out.slice(e.end);
+    }
+  }
   const destOpen = [...(destInner || '').matchAll(/<details\b([^>]*)>/g)].map(m => /\bopen\b/.test(m[1]));
   let i = 0;
   out = out.replace(/<details\b([^>]*)>/g, (m, attrs) => {
@@ -113,25 +189,48 @@ function land(file, by) {
   const rel = by.get(name);
   if (!rel) return 'no page has that name';
   const dest = path.join(ROOT, rel);
-  const saved = contentInner(fs.readFileSync(file, 'utf8'));
-  if (!saved) return 'the download holds no .content-area';
   const current = fs.readFileSync(dest, 'utf8');
   const now = contentInner(current);
   if (!now) return rel + ' has no .content-area';
+  /* LINE ENDINGS FOLLOW THE FILE. The working tree is CRLF under core.autocrlf; the browser writes
+     LF. Splicing one into the other leaves a file with two conventions inside it, and every line of
+     the content then counts as changed in a diff read from the working tree. */
+  let saved = contentInner(fs.readFileSync(file, 'utf8'));
+  if (!saved) return 'the download holds no .content-area';
+  const crlf = /\r\n/.test(current);
+  saved = { inner: crlf ? saved.inner.replace(/\r?\n/g, '\r\n') : saved.inner.replace(/\r\n/g, '\n') };
   /* the browser writes `class=""`, `style=""`, `popover=""`, closes empty SVG elements as pairs and
      reports a details' open state: quiet() puts all three back into the shape the file is written in */
   const inner = quiet(saved.inner, now.inner);
   const same = inner.replace(/\s+/g, ' ').trim() === now.inner.replace(/\s+/g, ' ').trim();
   if (same) return 'unchanged — ' + rel + ' already holds this content';
+  if (DIFF) {
+    const bag = s => { const m = new Map(); for (const l of s.split('\n')) { const k = l.trim(); m.set(k, (m.get(k) || 0) + 1); } return m; };
+    const A = bag(now.inner), B = bag(inner);
+    const gone = [], came = [];
+    for (const [k, n] of A) { const d = n - (B.get(k) || 0); for (let i = 0; i < d; i++) gone.push(k); }
+    for (const [k, n] of B) { const d = n - (A.get(k) || 0); for (let i = 0; i < d; i++) came.push(k); }
+    console.log('  diff against ' + rel + ': ' + came.length + ' line(s) added, ' + gone.length + ' removed');
+    came.slice(0, 12).forEach(l => console.log('    + ' + l.slice(0, 150)));
+    gone.slice(0, 12).forEach(l => console.log('    - ' + l.slice(0, 150)));
+    if (came.length + gone.length > 24) console.log('    … ' + (came.length + gone.length - 24) + ' more');
+  }
   if (DRY) return 'would land in ' + rel + ' — dry run, nothing written';
   const next = splice(current, inner);
   if (!next) return 'could not splice ' + rel;
   fs.writeFileSync(dest, next);
   git(['add', '--', rel]);
   git(['commit', '-m', 'save: ' + rel + ' (edit mode, ' + new Date().toISOString().slice(0, 16).replace('T', ' ') + ')']);
-  if (PUSH) git(['push']);
+  /* A PUSH THAT FAILS IS NOT A SAVE THAT FAILS. The content is already committed, so the download
+     has done its job; the commit rides out with the next successful push. Reporting it as a failure
+     and keeping the file would land the same content twice. */
+  let pushed = false;
+  if (PUSH) {
+    try { git(['push']); pushed = true; }
+    catch (e) { fs.unlinkSync(file); return 'committed ' + rel + ' - push failed: ' + (e.message || e); }
+  }
   fs.unlinkSync(file);
-  return 'landed in ' + rel + (PUSH ? ' and pushed' : ' (committed, not pushed)');
+  return 'landed in ' + rel + (pushed ? ' and pushed' : ' (committed, not pushed)');
 }
 
 const by = pageIndex();
@@ -141,17 +240,21 @@ if (!fs.existsSync(DL)) { console.error('saves: no Downloads folder at ' + DL); 
 const started = Date.now();
 const done = new Set();
 function scan() {
-  let found = 0;
-  for (const f of fs.readdirSync(DL)) {
+  let found = 0, files = [];
+  try { files = fs.readdirSync(DL); } catch (e) { console.error('saves: cannot read ' + DL + ' - ' + e.message); return 0; }
+  for (const f of files) {
     if (!/\.html$/i.test(f)) continue;
     const full = path.join(DL, f);
-    const st = fs.statSync(full);
+    let st;
+    try { st = fs.statSync(full); } catch (e) { continue; }
     if (!ONCE && st.mtimeMs < started) continue;      /* only what you saved after the watcher started */
     if (ONCE && !ALL && Date.now() - st.mtimeMs > FRESH_MS) continue;   /* an old download is old content */
     const key = f + ':' + st.mtimeMs;
     if (done.has(key)) continue;
     done.add(key);
-    const verdict = land(full, by);
+    let verdict;
+    try { verdict = land(full, by); }
+    catch (e) { verdict = 'FAILED - ' + (e && e.message ? e.message : e); }
     if (verdict === 'no page has that name') { done.delete(key); continue; }
     found++;
     console.log('  ' + f + ' → ' + verdict);
@@ -159,9 +262,16 @@ function scan() {
   return found;
 }
 
-scan();
+/* A BACKGROUND WATCHER OUTLIVES ITS MISTAKES. The task runs it at every login with no window and
+   nobody reading, so one unreadable file or one rejected push must not end the watch: the error is
+   written to the log and the next tick tries again. A save that failed at the push is still
+   committed, so the next successful push carries it. */
+process.on('uncaughtException', e => console.error('uncaught - ' + (e && e.stack ? e.stack : e)));
+process.on('unhandledRejection', e => console.error('unhandled - ' + e));
+
+try { scan(); } catch (e) { console.error('first scan - ' + e.message); }
 if (ONCE) {
   if (!done.size) console.log('saves: nothing in Downloads is a page of this repo');
   process.exit(0);
 }
-setInterval(scan, 1500);
+setInterval(() => { try { scan(); } catch (e) { console.error('scan - ' + e.message); } }, 1500);

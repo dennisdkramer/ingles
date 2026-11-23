@@ -155,6 +155,18 @@ window.LayoutEditor = (function () {
       }
     }
 
+    /* (2b) A CELL IS A CONTAINER. A drop in the body of an occupied cell adds the item to that cell,
+       under what is already there, so two blocks can share one column. It used to descend into the
+       block under the pointer and append inside its border, which made a second block impossible to
+       place beside the first. The cell's own edges stay "between the cells" (1) and its outer band
+       stays "around the row" (the block above), so nothing here changes a row's shape. */
+    var cell = el.closest ? el.closest('.rows>*') : null;
+    if (cell && cell !== el) {
+      var cr = cell.getBoundingClientRect();
+      var edge = x < cr.left + 14 || x > cr.right - 14 || y < cr.top + 10 || y > cr.bottom - 10;
+      if (!edge && accepts(n, cell)) return { box: cell, inside: true, host: cell };
+    }
+
     /* (3) an item's edge, or its middle */
     var r = el.getBoundingClientRect(), f = flow(el), e = 22;
     var onEdge = f === 'x' ? (x < r.left + e || x > r.right - e)
@@ -280,6 +292,7 @@ window.LayoutEditor = (function () {
   function act(what, field) {
     if (!sel) return;
     var n = sel, row = n.classList.contains('rows') ? n : n.parentElement;
+    if (what === 'del') { remove(n); return; }
     if (what === 'even') {
       if (!row || !row.classList || !row.classList.contains('rows')) return;
       var kids = [].filter.call(row.children, function (k) { return k.nodeType === 1; }), c = kids.length;
@@ -324,6 +337,7 @@ window.LayoutEditor = (function () {
         '<button type="button" data-act="half">half</button>' +
         '<button type="button" data-act="full">full</button>' +
         '<button type="button" data-act="auto">clear width</button>' +
+        '<button type="button" data-act="del" class="layout-del">delete</button>' +
         '<input class="layout-w" type="text" placeholder="40% · 320px · 0 0 auto" aria-label="this cell\'s flex">' +
         '<button type="button" data-act="set">set</button></div>';
       panelEl.addEventListener('click', function (e) {
@@ -342,9 +356,12 @@ window.LayoutEditor = (function () {
     var item = isItem(sel), isRow = !!(sel && sel.classList && sel.classList.contains('rows'));
     [].forEach.call(panelEl.querySelectorAll('[data-act]'), function (b) {
       var a = b.getAttribute('data-act');
-      /* `even row` is the one action that takes a row; the rest need a cell, because a flex value on a
-         container does nothing (and hiding them is what stops it being tried) */
-      b.disabled = (a === 'even') ? !(item || isRow) : !item;
+      /* `delete` takes anything the drag may pick up, including a row; `even row` takes a row or a
+         cell; the width actions need a cell, because a flex value on a container does nothing (and
+         hiding them is what stops it being tried) */
+      if (a === 'del') b.disabled = !(sel && sel !== ca() && !still(sel) && inside(sel));
+      else if (a === 'even') b.disabled = !(item || isRow);
+      else b.disabled = !item;
     });
     document.body.classList.add('layout-panelled');
     var box = panelEl.querySelector('.layout-facts');
@@ -364,7 +381,7 @@ window.LayoutEditor = (function () {
       document.body.appendChild(chipEl);
     }
     chipEl.style.display = 'block';
-    chipEl.textContent = 'Shift+drag a block · ' + moved + ' move' + (moved === 1 ? '' : 's') +
+    chipEl.textContent = 'Shift+drag a block · ' + moved + ' change' + (moved === 1 ? '' : 's') +
       (hist.length ? ' · undo' : '') + ' · Esc to stop';
   }
 
@@ -378,6 +395,31 @@ window.LayoutEditor = (function () {
     return [rec];
   }
 
+  /* EVERY BLOCK LIVES IN A ROW. A node dropped at section level used to become a bare child of
+     .content-area — full width, and nothing could ever be placed beside it, because a row is the only
+     thing that holds more than one cell. It is wrapped in a fresh .rows with one cell instead, so the
+     next drop on that row's area has a cell to become.
+     WHY A CELL DIV AND NOT THE NODE ITSELF: `.rows>*` is `display:flex;flex-direction:column`, so
+     whatever is made a cell is forced into a flex column. A .block already is one; a table, a
+     paragraph or a list is not, and turning one into a flex container breaks its own layout. */
+  var CELLSAFE = '.block,div,aside,section,details,article,nav';
+  function wrap(n) {
+    if (!n || !n.parentNode || (n.closest && n.closest('.rows'))) return null;
+    if (!n.matches || !n.matches(CELLSAFE)) return null;
+    var row = document.createElement('div');
+    row.className = 'rows';
+    var cell = document.createElement('div');
+    n.parentNode.insertBefore(row, n);
+    row.appendChild(cell);
+    cell.appendChild(n);
+    return row;
+  }
+  function unwrap(w) {
+    if (!w || !w.parentNode) return;
+    if (w.textContent.trim() || w.querySelector('input,img,svg,table,audio,textarea')) return;
+    w.parentNode.removeChild(w);
+  }
+
   function applyDrop(d) {
     var n = d.node, t = d.t;
     if (!t) return;
@@ -389,9 +431,26 @@ window.LayoutEditor = (function () {
       if (t.box === from.parent && (t.ref || null) === from.next) return;     /* already there */
       t.box.insertBefore(n, t.ref || null);
     }
-    hist.push({ node: n, from: from, rows: dropRows(from.parent) });
+    var row = wrap(n);
+    hist.push({ node: n, from: from, rows: dropRows(from.parent), wrap: row });
     if (hist.length > 40) hist.shift();
     moved++; markPins(); paintChip();
+  }
+
+  /* DELETE IS A MOVE, AND IT UNDOES LIKE ONE. The node leaves the page and the record of where it came
+     from goes on the same stack as a drag, so one click on the chip puts it back — which is the whole
+     reason the tool needs no confirmation dialog. */
+  function remove(n) {
+    if (!n || !inside(n) || still(n)) return false;
+    var parent = n.parentNode;
+    if (!parent) return false;
+    var rec = { node: n, from: { parent: parent, next: n.nextElementSibling }, rows: [], wrap: null };
+    parent.removeChild(n);
+    rec.rows = dropRows(parent);
+    hist.push(rec);
+    if (hist.length > 40) hist.shift();
+    moved++; markPins(); select(null); paintChip();
+    return true;
   }
 
   function undo() {
@@ -403,6 +462,7 @@ window.LayoutEditor = (function () {
     }
     s.from.parent.insertBefore(s.node,
       s.from.next && s.from.next.parentNode === s.from.parent ? s.from.next : null);
+    unwrap(s.wrap);
     moved = Math.max(0, moved - 1);
     paintChip();
     return true;
