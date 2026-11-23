@@ -1,0 +1,46 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>rows three deep — the four drop shapes</title>
+<link rel="stylesheet" href="../../style.css">
+<script src="../../layout.js"></script>
+</head><body>
+<main id="page"><div class="page-container"><div class="content-area">
+
+<h2>a cell dropped on the band between two rows</h2>
+<div class="rows"><div id="host">
+  <div class="rows" id="r1" style="height:170px">
+    <div id="dragcell" style="align-self:flex-start;padding-bottom:24px"><p>the cell that travels</p></div>
+    <div id="stays" style="align-self:flex-start"><p>stays behind</p></div>
+  </div>
+  <div class="rows" id="r2"><div id="below"><p>the row below</p></div></div>
+</div></div>
+
+<h2>a cell merged into a cell</h2>
+<div class="rows">
+  <div id="target" style="padding-bottom:40px"><div class="block"><h3>a block</h3>
+    <div class="rows"><div><p>the block's own prose</p></div></div></div></div>
+  <div id="mergeme" style="padding-bottom:40px"><p>a bare paragraph with a cell of its own</p></div>
+</div>
+
+<h2>an item dropped on a level-3 cell's side band</h2>
+<div class="rows"><div>
+  <div class="rows"><div id="l3cell">
+    <div class="rows" id="l3">
+      <div id="l3a"><p>first</p></div>
+      <div id="l3b"><p>second</p></div>
+    </div>
+    <p id="banditem" style="padding-bottom:20px">an item that travels sideways</p>
+  </div></div>
+</div></div>
+
+<h2>an item dropped in a level-3 cell's middle</h2>
+<div class="rows"><div>
+  <div class="rows"><div id="midcell">
+    <p id="miditem" style="padding-bottom:20px">an item that travels to a row of its own</p>
+    <div class="rows" id="l3m">
+      <div id="m1"><p>left</p></div>
+    </div>
+  </div></div>
+</div></div>
+
+</div></div></main>
+</body></html>

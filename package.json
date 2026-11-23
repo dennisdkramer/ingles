@@ -13,6 +13,7 @@
     "qa:live": "node qa/run.mjs live",
     "qa:liquid": "node qa/run.mjs liquid",
     "qa:rowctx": "node qa/run.mjs rowctx",
+    "qa:rows3": "node qa/run.mjs rows3",
     "build:dict": "node build-dictionary.mjs",
     "mapcheck": "node qa/mapcheck.mjs",
     "batchcheck": "node qa/batchcheck.mjs",

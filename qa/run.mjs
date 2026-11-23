@@ -44,6 +44,8 @@ const MEMBERS = {
               what: 'the .md GitHub renders as pages: a Liquid opener left unclosed kills the Pages build' },
   rowctx:   { file: 'qa/rowctx.mjs',     scope: false,
               what: 'the row and cell rules resolve to the SAME values in every context — page grid, <section>, .block, .card, inside a row (--self-test: plants the stale rule and must catch it)' },
+  rows3:    { file: 'qa/rows3.mjs',      scope: false,
+              what: 'the four drop shapes of the layout editor in real Chrome — a cell on the band between rows, a cell merged into a cell, an item on a level-3 side band, an item in a level-3 middle — and undo after each' },
 };
 
 /** an argument that narrows a run: a track, the full sweep spoken aloud, or a lesson number */
