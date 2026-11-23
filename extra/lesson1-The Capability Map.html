@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Extra · Lesson 1 — The Capability Map</title>
-<link rel="stylesheet" href="../style.css?v=320d4f21e7">
+<link rel="stylesheet" href="../style.css?v=d9d4499dac">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="../logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>EXTRA <span>DEMO 1</span></h1>
@@ -735,7 +735,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;svg viewBox="0 0 360 240" role="img"
        aria-label="everything the drawing shows, named"&gt;…the same drawing, all nine places…&lt;/svg&gt;
 &lt;/div&gt;</pre>
-<p class="dim">The frame keeps the viewBox's 3:2 box and the cell around it holds the rest. <b>The drawing is capped at half the width of the cell that holds it</b> (the cap lives in <code>style.css</code>, on <code>.vz-map</code>), so it never grows to full width beside a paragraph; below that it is as wide as its cell, so a narrow screen shrinks it instead of clipping it, and a single drawing may still be capped smaller with <code>--map-w</code>. <code>aria-label</code> names everything in the drawing, because the drawing is all a screen reader gets. <b>The drawing carries its own geometry table — canvas, road positions, the tick percentages and the nine places by column and row — and a lesson copies all of it verbatim.</b> A page that needs a place the drawing does not show asks about one that it does, and a new place means redrawing this one drawing for every page — never a second map. Both versions are drawn above: the display with the visuals, the question at the end of the activities.</p>
+<p class="dim">The frame keeps the viewBox's 3:2 box and the cell around it holds the rest. <b>The drawing is 573px wide — half the in-block width, measured on the 1200px content the sheet is built for — and the wrapper is exactly that size, never wider than the drawing.</b> On a narrower screen it takes the screen's width instead, so a small display shrinks it rather than clipping it, and <code>--map-w</code> replaces the default for a single drawing. <code>aria-label</code> names everything in the drawing, because the drawing is all a screen reader gets. <b>The drawing carries its own geometry table — canvas, road positions, the tick percentages and the nine places by column and row — and a lesson copies all of it verbatim.</b> A page that needs a place the drawing does not show asks about one that it does, and a new place means redrawing this one drawing for every page — never a second map. Both versions are drawn above: the display with the visuals, the question at the end of the activities.</p>
 <pre>&lt;!-- as an activity: the same drawing, a tick at each place, and one key --&gt;
 &lt;div class="block" data-activity="map"&gt;
   &lt;div class="qitem" data-a="bank"&gt;
@@ -758,7 +758,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #comic · the comic strip</summary><div class="body"><div>
 <pre>&lt;table class="chart comic"&gt;
-  &lt;!-- --comic-h:96px is the height of every panel; --strip-h on one td overrides it --&gt;
+  &lt;!-- --comic-h:187px is the height of every panel (four panels fill the map's 573 x 382 box); --strip-h on one td overrides it --&gt;
   &lt;tbody&gt;
     &lt;tr&gt;&lt;td class="strip"&gt;
           &lt;svg viewBox="0 0 120 64" role="img"
@@ -769,7 +769,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
         &lt;td class="strip"&gt;…the fourth panel…&lt;/td&gt;&lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;</pre>
-<p class="dim"><b>The frame and the drawing are two sizes, chosen independently.</b> The frame is the <code>td</code> — <code>.strip</code> — and it takes whatever width the table's columns give it and whatever height the row needs. <b><code>--comic-h</code> sets the drawing's height for every panel of one comic</b> — <code>96px</code> unless the table sets it — and <code>--strip-h</code> overrides it for a single panel: a taller one is <code>&lt;td class="strip" style="--strip-h:120px"&gt;</code>, and the table takes <code>--comic-h</code> the same way. <b>Write no <code>width</code> and no <code>height</code> on the <code>svg</code></b>: the sheet gives it the frame's width and that height, so a size written by hand is a second size the sheet has to fight. The drawing is centred in the frame, so a wider cell shows the same picture with more room around it. <b>A comic is capped at half the width of the cell that holds it</b>, the same default as the map, and a panel that must be taller than its neighbour fills the row it was given.</p>
+<p class="dim"><b>The frame and the drawing are two sizes, chosen independently.</b> The frame is the <code>td</code> — <code>.strip</code> — and it takes whatever width the table's columns give it and whatever height the row needs. <b><code>--comic-h</code> sets the drawing's height for every panel of one comic</b> — <code>187px</code> by default, so the four drawings fill the <code>573 × 382</code> box the map uses at its default width and both elements share one aspect ratio — and <code>--strip-h</code> overrides it for a single panel: a taller one is <code>&lt;td class="strip" style="--strip-h:240px"&gt;</code>, and the table takes <code>--comic-h</code> the same way. <b>Write no <code>width</code> and no <code>height</code> on the <code>svg</code></b>: the sheet gives it the frame's width and that height, so a size written by hand is a second size the sheet has to fight. The drawing is centred in the frame, so a wider cell shows the same picture with more room around it. <b>A comic is 573px wide, exactly the width of its drawing</b> — the same box as the map — and a panel that must be taller than its neighbour fills the row it was given.</p>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #audio · the recording</summary><div class="body"><div>
 <pre>&lt;figure class="vz-play viz"&gt;
@@ -1499,7 +1499,7 @@ next();
   &lt;p&gt;Describe what is happening in each picture,
      using the &lt;b&gt;past simple&lt;/b&gt;.&lt;/p&gt;
   &lt;table class="chart"&gt;
-    &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" role="img"
+    &lt;tr&gt;&lt;td class="strip"&gt;&lt;svg viewBox="0 0 120 64" role="img"
                  aria-label="what the panel shows"&gt;…&lt;/svg&gt;
               &lt;span class="qnum"&gt;1.&lt;/span&gt; &lt;input class="gap" style="--gap-w:9em"&gt;&lt;/td&gt;
         …two panels to a row, each with its own number…
