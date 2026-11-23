@@ -387,6 +387,9 @@ function scan() {
     list.sort((a, b) => b.st.mtimeMs - a.st.mtimeMs);
     const newest = list[0];
     for (const old of list.slice(1)) {
+      const oldKey = 'old:' + old.f + ':' + old.st.mtimeMs;
+      if (done.has(oldKey)) continue;
+      done.add(oldKey);
       if (DRY) { console.log('  ' + old.f + ' → superseded by ' + newest.f + ' (dry run, kept)'); continue; }
       try { fs.unlinkSync(old.full); } catch (e) { }
       console.log('  ' + old.f + ' → superseded by ' + newest.f + ', deleted');
