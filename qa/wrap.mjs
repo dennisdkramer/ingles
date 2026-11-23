@@ -58,15 +58,19 @@ export function parse(src) {
       const j = end < 0 ? src.length : end + 1;
       text(src.slice(lt, j)); i = j; continue;
     }
-    /* a closing tag belongs to the nearest matching element still open */
+    /* a closing tag belongs to the nearest matching element still open. A closer with nothing to
+       close is kept as text, verbatim: it is the page's own defect, and a scanner that silently
+       drops it would "fix" a file it was only asked to wrap. */
     if (src[lt + 1] === '/') {
       const end = src.indexOf('>', lt);
       const j = end < 0 ? src.length : end + 1;
       const tag = src.slice(lt + 2, end).trim().toLowerCase();
+      let closed = false;
       for (let k = stack.length - 1; k > 0; k--) {
-        if (stack[k].tag === tag) { stack[k].close = src.slice(lt, j); stack.length = k; break; }
+        if (stack[k].tag === tag) { stack[k].close = src.slice(lt, j); stack.length = k; closed = true; break; }
       }
-      i = j; continue;
+      if (closed) { i = j; continue; }
+      text(src.slice(lt, j)); i = j; continue;
     }
     /* an opening tag: its raw text is taken whole, quotes honoured, so `onerror="…'…'"` survives */
     let j = lt + 1, q = null;
@@ -143,6 +147,13 @@ function wrapPage(src) {
   const before = countRows(all);
   const rowsAt = level => all.filter(n => isRow(n) && n._depth === level - 1);
   const targets = [];   /* [container, predicate] — the whole list is taken before anything moves */
+
+  /* level 1 — a node standing directly under .content-area. A section heading, a block's own
+     <script>, the notebook and an existing row stand alone; anything else (a paragraph, a chart, a
+     block authored at page level) is given the row it must have, so nothing on the page is a bare
+     leaf the editor cannot place. */
+  targets.push([ca, n => n.kind === 'el' && !HEADING.has(n.tag) && !CONTROL.has(n.tag)
+    && n.tag !== 'textarea' && !isRow(n)]);
 
   /* level 2 — a block's own children: not in a cell at all, so each one is given the row it must
      have. A block's content is a row per child, whatever the count. */
