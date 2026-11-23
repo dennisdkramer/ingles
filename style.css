@@ -1817,6 +1817,13 @@
     padding:0 4px;border-radius:3px;z-index:3;opacity:.9;pointer-events:none}
   body.layout-on .content-area :is([data-layout-pin]){outline:2px solid var(--err);outline-offset:-2px}
   body.layout-on .content-area :is([data-layout-sel]){outline:3px solid var(--blue);outline-offset:3px}
+  /* THE GRAINS, SHOWN BEFORE A PRESS. Every unit a drag would pick up separately has a dotted frame,
+     so the divisions are visible while the page is still a page. A cell keeps its own solid green
+     frame (above), so a cell is not dotted — the dotted line is for what stands inside one. */
+  body.layout-on .content-area [data-layout-grain]{
+    outline:1px dotted color-mix(in oklab,var(--ink) 32%,transparent);outline-offset:3px}
+  body.layout-shift .content-area [data-layout-grain]:hover{
+    outline:2px dotted var(--accent);outline-offset:3px}
   .layout-panel{position:fixed;right:16px;bottom:16px;z-index:9999;display:none;
     max-width:min(52ch,44vw);padding:8px 12px;border:1px solid var(--line);border-radius:10px;
     background:var(--paper);color:var(--ink);font:600 .72rem/1.45 var(--sans);

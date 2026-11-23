@@ -155,16 +155,25 @@ window.LayoutEditor = (function () {
       }
     }
 
-    /* (2b) A CELL IS A CONTAINER. A drop in the body of an occupied cell adds the item to that cell,
-       under what is already there, so two blocks can share one column. It used to descend into the
-       block under the pointer and append inside its border, which made a second block impossible to
-       place beside the first. The cell's own edges stay "between the cells" (1) and its outer band
-       stays "around the row" (the block above), so nothing here changes a row's shape. */
+    /* (2b) A CELL IS A CONTAINER, AND ITS OWN CHILDREN ARE ITS ITEMS. A drop in the body of an occupied
+       cell adds the item to that cell, and it lands ABOVE OR BELOW THE CHILD UNDER THE POINTER rather
+       than always at the cell's end — the cell now positions what it holds the way a row positions its
+       cells. The child aimed at is the one that belongs directly to the cell, never something deeper,
+       so a drop inside a question's own options still reads as a drop into the cell that holds them.
+       A cell whose only child is the thing under the pointer appends above or below that child, which
+       is how a second block joins the first in one column. The cell's own edges stay "between the
+       cells" (1) and its outer band stays "around the row", so nothing here changes a row's shape. */
     var cell = el.closest ? el.closest('.rows>*') : null;
     if (cell && cell !== el) {
       var cr = cell.getBoundingClientRect();
       var edge = x < cr.left + 14 || x > cr.right - 14 || y < cr.top + 10 || y > cr.bottom - 10;
-      if (!edge && accepts(n, cell)) return { box: cell, inside: true, host: cell };
+      if (!edge && accepts(n, cell)) {
+        var kid = el;
+        while (kid && kid.parentElement && kid.parentElement !== cell) kid = kid.parentElement;
+        if (kid && kid.parentElement === cell && kid !== n && !n.contains(kid) && movable(kid))
+          return between(cell, x, y);
+        return { box: cell, inside: true, host: cell };
+      }
     }
 
     /* (3) an item's edge, or its middle */
@@ -255,6 +264,20 @@ window.LayoutEditor = (function () {
       var st = n.getAttribute('style') || '';
       if (/flex|min-width|width|max-width/.test(st)) n.setAttribute('data-layout-pin', '');
       else n.removeAttribute('data-layout-pin');
+    });
+  }
+  /* WHAT A PRESS WOULD PICK UP IS SHOWN BEFORE THE PRESS. Every grain a drag would take — a paragraph,
+     a list, a chart, a question, a whole block, each one separately — carries a dotted frame while the
+     layer is on, so the divisions the drag will honour are visible before anything moves. An attribute
+     like every other trace of the tool, so clean() takes it out of the page before a save. */
+  function markGrains() {
+    var c = ca(); if (!c) return;
+    [].forEach.call(c.querySelectorAll('[data-layout-grain]'), function (n) { n.removeAttribute('data-layout-grain'); });
+    if (!ON) return;
+    [].forEach.call(c.querySelectorAll(GRAIN + ',' + COMPOSITE), function (n) {
+      if (!movable(n) || isItem(n)) return;      /* a cell already has a frame of its own */
+      if (!n.closest('.rows>*')) return;         /* only what stands inside a cell is content */
+      n.setAttribute('data-layout-grain', '');
     });
   }
   function select(n) {
@@ -386,30 +409,54 @@ window.LayoutEditor = (function () {
   }
 
   /* ---- the move, and taking it back ----------------------------------------------- */
-  /* an emptied .rows is removed, and remembered, so nothing leaves an empty flex row behind */
+  /* an emptied .rows is removed, and remembered, so nothing leaves an empty flex row behind.
+     A node's parent may be the ROW it left or the CELL it left inside one, so both are read here. */
+  function rowOf(from) {
+    if (!from || from.nodeType !== 1) return null;
+    if (from.classList && from.classList.contains('rows')) return from;
+    var p = from.parentElement;
+    return p && p.classList && p.classList.contains('rows') ? p : null;
+  }
   function dropRows(from) {
-    if (!from || from.nodeType !== 1 || !from.classList || !from.classList.contains('rows')) return [];
-    if (from.children.length) return [];
-    var rec = { row: from, parent: from.parentNode, next: from.nextElementSibling };
-    rec.parent.removeChild(from);
+    var row = rowOf(from);
+    if (!row || row.children.length) return [];
+    var rec = { row: row, parent: row.parentNode, next: row.nextElementSibling };
+    if (rec.parent) rec.parent.removeChild(row);
     return [rec];
+  }
+
+  /* AN EMPTY CELL PRUNES ITSELF. A cell whose last item has been dragged or deleted out of it is not
+     a place anything can be dropped into once it is invisible, so it goes, and the row with it when
+     it was the last cell. Both are remembered on the same stack as the move, in the order they must
+     come back: the row first, because the cell has to have a parent to be put back into. */
+  function pruneCells(from) {
+    var out = [], row = rowOf(from);
+    if (!row) return out;
+    [].slice.call(row.children).forEach(function (k) {
+      if (k.children.length || (k.textContent || '').trim()) return;
+      out.push({ cell: k, parent: row, next: k.nextElementSibling });
+      row.removeChild(k);
+    });
+    return out;
   }
 
   /* EVERY BLOCK LIVES IN A ROW. A node dropped at section level used to become a bare child of
      .content-area — full width, and nothing could ever be placed beside it, because a row is the only
      thing that holds more than one cell. It is wrapped in a fresh .rows with one cell instead, so the
-     next drop on that row's area has a cell to become.
+     next drop on that row's area has a cell to become. A node that was ITSELF a cell needs no second
+     cell: the new row is the shape it already had.
      WHY A CELL DIV AND NOT THE NODE ITSELF: `.rows>*` is `display:flex;flex-direction:column`, so
      whatever is made a cell is forced into a flex column. A .block already is one; a table, a
      paragraph or a list is not, and turning one into a flex container breaks its own layout. */
-  var CELLSAFE = '.block,div,aside,section,details,article,nav';
-  function wrap(n) {
-    if (!n || !n.parentNode || (n.closest && n.closest('.rows'))) return null;
-    if (!n.matches || !n.matches(CELLSAFE)) return null;
+  function wrap(n, wasCell) {
+    if (!n || !n.parentNode) return null;
+    if (n.closest && n.closest('.rows')) return null;      /* already a cell's content */
+    if (!n.matches || still(n)) return null;
     var row = document.createElement('div');
     row.className = 'rows';
-    var cell = document.createElement('div');
     n.parentNode.insertBefore(row, n);
+    if (wasCell) { row.appendChild(n); return row; }
+    var cell = document.createElement('div');
     row.appendChild(cell);
     cell.appendChild(n);
     return row;
@@ -431,10 +478,11 @@ window.LayoutEditor = (function () {
       if (t.box === from.parent && (t.ref || null) === from.next) return;     /* already there */
       t.box.insertBefore(n, t.ref || null);
     }
-    var row = wrap(n);
-    hist.push({ node: n, from: from, rows: dropRows(from.parent), wrap: row });
+    var row = wrap(n, d.cell);
+    var cells = pruneCells(from.parent);
+    hist.push({ node: n, from: from, cells: cells, rows: dropRows(from.parent), wrap: row });
     if (hist.length > 40) hist.shift();
-    moved++; markPins(); paintChip();
+    moved++; markPins(); markGrains(); paintChip();
   }
 
   /* DELETE IS A MOVE, AND IT UNDOES LIKE ONE. The node leaves the page and the record of where it came
@@ -444,27 +492,34 @@ window.LayoutEditor = (function () {
     if (!n || !inside(n) || still(n)) return false;
     var parent = n.parentNode;
     if (!parent) return false;
-    var rec = { node: n, from: { parent: parent, next: n.nextElementSibling }, rows: [], wrap: null };
+    var rec = { node: n, from: { parent: parent, next: n.nextElementSibling }, cells: [], rows: [], wrap: null };
     parent.removeChild(n);
+    rec.cells = pruneCells(parent);
     rec.rows = dropRows(parent);
     hist.push(rec);
     if (hist.length > 40) hist.shift();
-    moved++; markPins(); select(null); paintChip();
+    moved++; markPins(); markGrains(); select(null); paintChip();
     return true;
   }
 
   function undo() {
     var s = hist.pop();
     if (!s) return false;
+    /* the row comes back first, then the cell, then the node that lived in it — the order the page
+       was taken apart in, reversed */
     for (var i = s.rows.length - 1; i >= 0; i--) {
       var r = s.rows[i];
       if (r.parent) r.parent.insertBefore(r.row, r.next && r.next.parentNode === r.parent ? r.next : null);
+    }
+    for (var j = (s.cells || []).length - 1; j >= 0; j--) {
+      var k = s.cells[j];
+      if (k.parent) k.parent.insertBefore(k.cell, k.next && k.next.parentNode === k.parent ? k.next : null);
     }
     s.from.parent.insertBefore(s.node,
       s.from.next && s.from.next.parentNode === s.from.parent ? s.from.next : null);
     unwrap(s.wrap);
     moved = Math.max(0, moved - 1);
-    paintChip();
+    markPins(); markGrains(); paintChip();
     return true;
   }
 
@@ -472,14 +527,15 @@ window.LayoutEditor = (function () {
      ONE MODIFIER DECIDES WHAT A PRESS DOES. Without Shift the press belongs to the text: the
      area is contenteditable while edit mode is open, so a click places a caret and the teacher
      types. With Shift the press belongs to this file: a drag moves the node, a shift-click that
-     never travels selects it for the width panel. A press that becomes a drag still takes the
-     area out of contenteditable, because a live contenteditable starts a text drag of its own
-     and the gesture never arrives. */
+     never travels selects it for the width panel.
+     THE CARET IS NOT TAKEN AWAY BY SHIFT. The press is not cancelled, so a Shift+click still lands
+     a caret and typing still works; only a press that TRAVELS becomes a drag, and only then is the
+     area taken out of contenteditable (a live contenteditable starts a text drag of its own) and
+     the text selection cleared. */
   function down(e) {
     if (!ON || e.button !== 0) return;
     if (!e.shiftKey) return;           /* the caret's press, not the layout's */
-    e.preventDefault();                /* a shift-press must not also extend a text selection */
-    if (!chipEl) paintChip();          /* a save cleaned the chrome away; the press brings it back */
+    if (!chipEl) { paintChip(); markGrains(); }   /* a save cleaned the chrome away; the press brings it back */
     var n = e.target && e.target.nodeType === 1 ? e.target : null;
     if (!n) return;
     /* walk up to the nearest thing that may be picked up: a word becomes its paragraph, a chart's cell
@@ -489,7 +545,8 @@ window.LayoutEditor = (function () {
       n = n.parentElement;
     }
     if (!n) return;
-    drag = { node: n, x: e.clientX, y: e.clientY, on: false, t: null, attr: null, target: n };
+    drag = { node: n, x: e.clientX, y: e.clientY, on: false, t: null, attr: null, target: n,
+             cell: isItem(n) };
     window.addEventListener('pointermove', move, true);
     window.addEventListener('pointerup', up, true);
     window.addEventListener('pointercancel', up, true);
@@ -502,6 +559,9 @@ window.LayoutEditor = (function () {
       drag.on = true;
       var c = ca();
       drag.attr = c ? c.getAttribute('contenteditable') : null;
+      /* the Shift press left a selection behind, because the caret kept its rights; a drag does not
+         want one, and nothing may be dragged as text while a node is being moved */
+      try { var sel = window.getSelection(); if (sel) sel.removeAllRanges(); } catch (err) { }
       if (c) c.setAttribute('contenteditable', 'false');
       drag.node.classList.add('layout-dragging');
       document.body.classList.add('layout-drag');
@@ -522,12 +582,16 @@ window.LayoutEditor = (function () {
     showLine(null);
     d.node.classList.remove('layout-dragging');
     document.body.classList.remove('layout-drag');
-    var c = ca();
-    if (c) {
-      if (d.attr === null) c.removeAttribute('contenteditable');
-      else c.setAttribute('contenteditable', d.attr);
+    /* ONLY A PRESS THAT TRAVELLED TOUCHES THE PAGE'S EDITABILITY. A Shift+click is an inspection,
+       and taking `contenteditable` away from it is what used to lock the caret out of the page. */
+    if (d.on) {
+      var c = ca();
+      if (c) {
+        if (d.attr === null) c.removeAttribute('contenteditable');
+        else c.setAttribute('contenteditable', d.attr);
+      }
+      applyDrop(d); e.preventDefault();
     }
-    if (d.on) { applyDrop(d); e.preventDefault(); }
     else if (d.target) { select(pickNode(d.target)); }   /* a press that never travelled inspects */
   }
 
@@ -544,31 +608,46 @@ window.LayoutEditor = (function () {
     else if (e.key === 'z' && (e.ctrlKey || e.metaKey) && e.altKey) { undo(); e.preventDefault(); }
   }
   function blurShift() { document.body.classList.remove('layout-shift'); }
+  /* a browser drag of selected text would swallow the pointer events a layout drag needs; while
+     Shift is held (or a node is already moving) the native drag is refused */
+  function noNativeDrag(e) {
+    if (!ON) return;
+    if (drag || document.body.classList.contains('layout-shift')) { e.preventDefault(); e.stopPropagation(); }
+  }
+
 
   /* ---- on and off ------------------------------------------------------------------
      clean() is what the save path calls: it strips the tool's own traces from the DOM and
      nothing else, so a document saved right after it carries no chip, no line and no drag
      class. The tool stays live — the chip comes back — which is what lets a layout be
      saved without leaving edit mode. */
-  function clean() {
+  function clean(root) {
     if (line && line.parentNode) line.parentNode.removeChild(line);
     line = null;
     if (chipEl && chipEl.parentNode) chipEl.parentNode.removeChild(chipEl);
     chipEl = null;
     if (panelEl && panelEl.parentNode) panelEl.parentNode.removeChild(panelEl);
     panelEl = null;
-    var c = ca();
-    if (c) {
+    /* THE SAVE PATH CLEANS A CLONE, NOT THE PAGE. engine2.js hands fullPageHTML() a detached copy of
+       the document, so the sweep has to run inside whatever root it is given — otherwise the copy
+       keeps every data-layout-* attribute and the file writes them down. No root means the live page,
+       which is what Done uses. */
+    var scope = root && root.querySelector ? root.querySelector('.content-area') : null;
+    [ca(), scope].forEach(function (c) {
+      if (!c) return;
       var d = c.querySelectorAll('.layout-dragging');
       for (var i = 0; i < d.length; i++) d[i].classList.remove('layout-dragging');
-      var m = c.querySelectorAll('[data-layout-sel],[data-layout-pin]');
-      for (var j = 0; j < m.length; j++) { m[j].removeAttribute('data-layout-sel'); m[j].removeAttribute('data-layout-pin'); }
-      if (c.getAttribute('contenteditable') === 'false') c.setAttribute('contenteditable', 'true');
-    }
+      var m = c.querySelectorAll('[data-layout-sel],[data-layout-pin],[data-layout-grain]');
+      for (var j = 0; j < m.length; j++) { m[j].removeAttribute('data-layout-sel'); m[j].removeAttribute('data-layout-pin'); m[j].removeAttribute('data-layout-grain'); }
+      if (c.getAttribute && c.getAttribute('contenteditable') === 'false') c.setAttribute('contenteditable', 'true');
+    });
     sel = null;
     drag = null;
     document.body.classList.remove('layout-drag', 'layout-panelled', 'layout-shift');
     if (!ON) document.body.classList.remove('layout-on');
+    /* the frames belong to the layer, not to the save: a save made while editing cleans the copy it
+       writes and leaves the teacher's page as it was, frames and all. No-op once the layer is off. */
+    markGrains();
     /* the chip is NOT repainted here: clean() runs immediately before a save, and the chip is
        a body child, so leaving it would put the tool's own chrome into the saved document.
        The next press brings it back (down()). */
@@ -582,8 +661,9 @@ window.LayoutEditor = (function () {
     if (c) c.addEventListener('pointerdown', down, true);
     document.addEventListener('keydown', key, true);
     document.addEventListener('keyup', key, true);
+    document.addEventListener('dragstart', noNativeDrag, true);
     window.addEventListener('blur', blurShift);
-    markPins(); paintChip(); paintPanel();
+    markPins(); markGrains(); paintChip(); paintPanel();
   }
 
   function disable() {
@@ -593,6 +673,7 @@ window.LayoutEditor = (function () {
     if (c) c.removeEventListener('pointerdown', down, true);
     document.removeEventListener('keydown', key, true);
     document.removeEventListener('keyup', key, true);
+    document.removeEventListener('dragstart', noNativeDrag, true);
     window.removeEventListener('blur', blurShift);
     if (line) line.style.display = 'none';
     clean();
