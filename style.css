@@ -1645,18 +1645,26 @@
      it, so a frame that grows in WIDTH only adds margins left and right, a frame that grows in HEIGHT only
      adds them above and below, and a frame that grows in both makes the drawing bigger — and it never
      stretches, reflows or spills. The comic is exactly as wide as its own box, never wider — 533px, a real length and not a percentage (a percentage would be measured against a cell the solver sizes from this table): half of the 1146px in-block row, less 40px for the space between two cells, and 355px tall so it takes the same box as the map. One drawing per panel; the 2 x 2 is the table's, never the svg's. */
-  table.comic{width:533px;max-width:100%;margin-inline:auto;--comic-h:116px;
+  table.comic{width:533px;height:355px;max-width:100%;margin-inline:auto;--comic-h:163.5px;
     table-layout:fixed;border-collapse:separate;border-spacing:8px}
   /* the CELL IS THE FRAME and it stays a table cell: `display:table-cell`, 50% of the table. A cell that is
      declared `display:block` stops being a row cell and the four panels stack, which is the layout change
      this rule exists to prevent. */
-  table.comic td.strip{display:table-cell;width:50%;padding:0;text-align:center;vertical-align:middle}
+  table.comic td.strip{position:relative;display:table-cell;width:50%;padding:0;line-height:0;text-align:center;vertical-align:middle}
+  /* THE SENTENCE HANGS OVER ITS PANEL, never inside it: taken out of the flow, so two rows of panels are two
+     heights and nothing the sentence does can make the comic taller than the map beside it. One line, the
+     panel's width, an ellipsis when it does not fit: `-webkit-line-clamp` does the cutting, because a plain
+     `white-space:nowrap` is overridden by the `text-wrap:pretty` every `p` carries. */
+  table.comic td.strip>p{position:absolute;left:2px;right:2px;bottom:2px;margin:0;padding:1px 4px;
+    display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden;
+    text-overflow:ellipsis;line-height:1.25;border-radius:3px;
+    background:color-mix(in oklab,var(--paper) 88%,transparent)}
   /* THE DRAWING IS AN SVG WITH width:100% AND THE FRAME'S HEIGHT, and nothing else: its viewBox plus the
      default `preserveAspectRatio="xMidYMid meet"` scale it uniformly inside that box and centre it, so a
      frame that grows in width only adds margins left and right, one that grows in height only adds them
      above and below, and one that grows in both makes the drawing bigger. `--comic-h` is the height every
-     panel of one comic takes — 116px by default, so the two rows of panels and their one-line sentences fill
-     the 533 x 355 box the map uses — and `--strip-h` overrides it for one panel. Never
+     panel of one comic takes — 163.5px by default, so two rows and the 8px between them fill the 355px the
+     map is tall — and `--strip-h` overrides it for one panel. Never
      write width/height attributes on the svg: the sheet sizes the drawing, and a second size in the markup
      is one the sheet has to fight. */
   .strip>svg{display:block;width:100%;height:var(--strip-h,var(--comic-h,96px));margin-inline:auto}
