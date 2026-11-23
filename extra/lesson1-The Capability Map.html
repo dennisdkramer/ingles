@@ -1400,6 +1400,7 @@ next();
       &lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;tr&gt;…a checkbox row, a gap row…&lt;/tr&gt;
   &lt;/table&gt;
+  &lt;!-- the number stands beside the control it numbers, never in a column of its own --&gt;
   &lt;!-- one example of each control type is shown — an activity may mix them or use a single type, as its content needs --&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
@@ -1648,7 +1649,7 @@ next();
 <li><b>The index files are build artifacts that ship with the page.</b> <code>npm run build:lessons</code> writes <code>lessons.json</code> and <code>tracks.json</code> from the page filenames, and <code>--check</code> refuses a stale pair; a lesson pushed without that run is live but unlisted.</li>
 <li><b>Every page carries the sheet's stamp, and a solver page carries the solver's too.</b> <code>build-lessons.mjs</code> writes the sheet's stamp into every page that links it — the lesson pages and the root pages, and any page the manifest does not list — and <code>equalize.js?v=…</code> into every page that loads it — the hash of the file itself — so a changed stylesheet or solver is fetched on the next load and a stale stamp fails <code>build:check</code>. The shell's script slot lists the other engines; a changed engine still needs a hard refresh.</li>
 <li><b>This map is built to be extended.</b> Every direct child of <code>.content-area</code> is a row cell and its <code>data-span</code> sums to 12 (12 when unset); a <code>pre</code> in a markup box holds escaped tags only, because a real one inside it is parsed as markup; <code>node qa/cmcheck.mjs</code> checks both, and the dead links.</li>
-<li><b>A chart row is answered by a keyed gap.</b> The typed form of <code>chartanswer</code> carries <code>data-answer</code> in the row's answer cell with its <code>.qnum</code> beside it; a row of options is markable only when its cell holds a <code>.qitem</code> with <code>data-a</code>, so a chart of bare radios has no key the engine can read.</li>
+<li><b>A chart row is answered by a keyed gap.</b> The typed form of <code>chartanswer</code> carries <code>data-answer</code> in the row's answer cell; a row of options is markable only when its cell holds a <code>.qitem</code> with <code>data-a</code>, so a chart of bare radios has no key the engine can read.</li>
 <li><b>A game records the control under it, not its own name.</b> Items answered with options are <code>mc</code> in the ledger; items answered by typing a word are <code>fill</code>, because the field is what the student writes in.</li>
 <li><b>The map redraws inside every <code>.qitem</code>.</b> Two questions about one map are two drawings, and each checkbox keeps its place because its position is a percentage of the drawing, not of the cell.</li>
 <li><b>A dictation's answer can be a gap.</b> <code>.listen</code> speaks its <code>data-say</code> text and the field that follows it takes <code>data-answer</code>; a one-word answer needs no <code>textarea.write</code>, and the block is still a dictation.</li>
