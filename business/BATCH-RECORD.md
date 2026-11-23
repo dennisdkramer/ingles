@@ -1,9 +1,10 @@
 # BUSINESS · batch record — the ledger, not a plan
 
-One line per lesson, appended in two phases. It is the only memory: pass 1 of the next lesson reads the last rows, and `npm run batchcheck` reads all of them and the pages.
+One line per lesson, appended in three phases. It is the only memory: pass 1 of the next lesson reads the last rows, and `npm run batchcheck` reads all of them and the pages.
 
-**Pass 1 writes** the sections: `S<number>-<subject>[@<device>]:<block subjects>`, and the quiz as `Q:<block subjects>`.
-**Pass 2 appends** what it built: `el:<element>[:count]`, `qel:<element>[:count]`, `reg:<sections in voice>/<sections>`.
+**Pass 1 writes** the sections and the quiz: `S<number>-<subject>[@<device>]` for each section, and `Q:<block subjects>`.
+**Pass 2 appends** what it built: `el:<element>[:count]`, `qel:<element>[:count]`.
+**The checks append** the register score, judged section by section: `reg:<sections in voice>/<sections>`.
 
 ```
 ```

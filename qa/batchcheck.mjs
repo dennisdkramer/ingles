@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 // qa/batchcheck.mjs — the ledger's rules, checked against the ledger and the pages.
 //
-// The ledger is <track>/BATCH-RECORD.md. One line per lesson, appended in two phases:
-//   pass 1 writes the sections (key, subject, device) and their block subjects, and the quiz;
-//   pass 2 appends the elements it built, the quiz's elements, and the register score.
+// The ledger is <track>/BATCH-RECORD.md. One line per lesson, appended in three phases:
+//   pass 1 writes the sections (key, subject, device) and the quiz, before any block exists;
+//   pass 2 fills in each section's block subjects and appends the elements it built and the quiz's;
+//   the checks append the register score.
 //
 //   L07 | S1-rul@chart:rsn>ex>con>rul | S2-voc:mng>voc>mng | Q:rul>mng>rul>ex | el:dialoggap:3,mc:1 | qel:mc:1,flip:1 | reg:3/5
 //
@@ -79,12 +80,14 @@ function parseRow(line) {
       row.sep = (row.sep || []).concat(seg.slice(4).trim());
       continue;
     }
-    const s = /^S(\d+)-([a-z]{2,3})(?:@([a-z-]+))?:(.+)$/.exec(seg);
+    /* the block list is optional: pass 1 writes a section before its blocks exist, so `S1-rul@chart`
+       is a complete segment then and pass 2 fills in `:rsn>ex>con` */
+    const s = /^S(\d+)-([a-z]{2,3})(?:@([a-z-]+))?(?::(.*))?$/.exec(seg);
     if (!s) { warn(`L${row.L}`, `segment not understood: "${seg}"`); continue; }
     if (!SUBJECTS.includes(s[2])) warn(`L${row.L}`, `unknown subject "${s[2]}" in ${seg}`);
     row.sections.push({
       n: Number(s[1]), subject: s[2], device: s[3] || null,
-      blocks: s[4].split('>').map(t => t.trim()).filter(Boolean)
+      blocks: (s[4] || '').split('>').map(t => t.trim()).filter(Boolean)
     });
   }
   row.sections.sort((a, b) => a.n - b.n);
@@ -411,6 +414,11 @@ function selfTest() {
         { n: 3, subject: 'tim', device: null, blocks: ['rul', 'ex'] }]);
       checkBlocks([r], 'T L');
     }, 'every section'],
+    /* pass 1 writes a section before its blocks exist, so a segment with no block list is complete */
+    ['a pass-1 segment parses with no block subjects', () => {
+      const r = parseRow('L1 | S1-rul@chart | Q:rul>ex');
+      if (r.sections.length !== 1 || r.sections[0].blocks.length) fail('T', 'pass-1 segment did not parse as an empty block list');
+    }, null],
   ];
   let bad = 0;
   for (const [name, run, expect] of cases) {
