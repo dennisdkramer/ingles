@@ -1,9 +1,11 @@
 /* ---- layout editor (layout.js) ------------------------------------------------------
-   Teacher-only, and only while engine2.js has its edit mode open. It drags any node
-   inside .content-area — a block, a .rows cell, a paragraph, a div, a table, a whole
-   .rows — together with its subtree, and drops it before or after any sibling, or inside
-   any container that holds items. Nothing is stored here: the DOM is the only thing this
-   file changes, and edit mode's own Done (engine2.js → saveContent) or Save to repo
+   Teacher-only, and only while engine2.js has its edit mode open. TWO GESTURES, ONE MODIFIER:
+   a plain click places a caret and edits text; holding SHIFT engages this file — Shift+drag
+   picks a node up and drops it, Shift+click (no travel) selects it for the width panel.
+   "Dragging any node" means inside .content-area — a block, a .rows cell, a paragraph, a div,
+   a table, a whole .rows — together with its subtree, and drops it before or after any sibling,
+   or inside any container that holds items. Nothing is stored here: the DOM is the only thing
+   this file changes, and edit mode's own Done (engine2.js → saveContent) or Save to repo
    writes the result.
    WHAT MAY NOT MOVE — h1/h2 (a section is left alone), a block's h3 (the block letter is
    drawn from it), and the parts of a control item: a td, a .qopts, a .qstem, a .qnum, an
@@ -362,7 +364,7 @@ window.LayoutEditor = (function () {
       document.body.appendChild(chipEl);
     }
     chipEl.style.display = 'block';
-    chipEl.textContent = 'layout · ' + moved + ' move' + (moved === 1 ? '' : 's') +
+    chipEl.textContent = 'Shift+drag a block · ' + moved + ' move' + (moved === 1 ? '' : 's') +
       (hist.length ? ' · undo' : '') + ' · Esc to stop';
   }
 
@@ -407,11 +409,16 @@ window.LayoutEditor = (function () {
   }
 
   /* ---- the gesture -----------------------------------------------------------------
-     A press becomes a drag only after 4px, so a click still places a caret; while a drag
-     is live the area leaves contenteditable, because a live contenteditable starts a text
-     drag of its own and the gesture never arrives. */
+     ONE MODIFIER DECIDES WHAT A PRESS DOES. Without Shift the press belongs to the text: the
+     area is contenteditable while edit mode is open, so a click places a caret and the teacher
+     types. With Shift the press belongs to this file: a drag moves the node, a shift-click that
+     never travels selects it for the width panel. A press that becomes a drag still takes the
+     area out of contenteditable, because a live contenteditable starts a text drag of its own
+     and the gesture never arrives. */
   function down(e) {
     if (!ON || e.button !== 0) return;
+    if (!e.shiftKey) return;           /* the caret's press, not the layout's */
+    e.preventDefault();                /* a shift-press must not also extend a text selection */
     if (!chipEl) paintChip();          /* a save cleaned the chrome away; the press brings it back */
     var n = e.target && e.target.nodeType === 1 ? e.target : null;
     if (!n) return;
@@ -466,9 +473,17 @@ window.LayoutEditor = (function () {
 
   function key(e) {
     if (!ON) return;
+    /* the Shift state is SHOWN, not guessed: while the modifier is down the page reads as a canvas
+       (grab cursor, and the chip says what the press will do), and it goes back to text the moment
+       it lifts. Without it the only clue to the gesture is the sentence in the toast. */
+    if (e.key === 'Shift') {
+      document.body.classList.toggle('layout-shift', e.type === 'keydown');
+      return;
+    }
     if (e.key === 'Escape') disable();
     else if (e.key === 'z' && (e.ctrlKey || e.metaKey) && e.altKey) { undo(); e.preventDefault(); }
   }
+  function blurShift() { document.body.classList.remove('layout-shift'); }
 
   /* ---- on and off ------------------------------------------------------------------
      clean() is what the save path calls: it strips the tool's own traces from the DOM and
@@ -492,7 +507,7 @@ window.LayoutEditor = (function () {
     }
     sel = null;
     drag = null;
-    document.body.classList.remove('layout-drag', 'layout-panelled');
+    document.body.classList.remove('layout-drag', 'layout-panelled', 'layout-shift');
     if (!ON) document.body.classList.remove('layout-on');
     /* the chip is NOT repainted here: clean() runs immediately before a save, and the chip is
        a body child, so leaving it would put the tool's own chrome into the saved document.
@@ -506,6 +521,8 @@ window.LayoutEditor = (function () {
     var c = ca();
     if (c) c.addEventListener('pointerdown', down, true);
     document.addEventListener('keydown', key, true);
+    document.addEventListener('keyup', key, true);
+    window.addEventListener('blur', blurShift);
     markPins(); paintChip(); paintPanel();
   }
 
@@ -515,6 +532,8 @@ window.LayoutEditor = (function () {
     var c = ca();
     if (c) c.removeEventListener('pointerdown', down, true);
     document.removeEventListener('keydown', key, true);
+    document.removeEventListener('keyup', key, true);
+    window.removeEventListener('blur', blurShift);
     if (line) line.style.display = 'none';
     clean();
   }

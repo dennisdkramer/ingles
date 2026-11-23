@@ -1783,8 +1783,14 @@
      being dragged, the line that shows where it lands, and the chip that counts the moves.
      Every rule here is a build tool's chrome: a student's page never carries .layout-on.
      USE: engine2 opens the layer with edit mode. Vary: --accent (the line), --paper (chip) */
-  body.layout-on .content-area{cursor:grab}
+  /* TWO STATES, TWO CURSORS. Edit mode defaults to TEXT, because a plain click is the caret's press;
+     holding Shift turns the page into a canvas, which is the only time a press picks a node up. */
+  body.layout-on .content-area{cursor:text}
   body.layout-on .content-area :is(input,textarea,button,select,label.opt,a,[contenteditable="false"] *){cursor:auto}
+  /* the sheet's own `[contenteditable]{cursor:text}` lives in the base layer, and a layer outranks
+     this one whatever the selector says — so the canvas cursor states its priority itself */
+  body.layout-shift .content-area,body.layout-shift .content-area *{cursor:grab!important}
+  body.layout-shift .content-area :is(input,textarea,button,select,label.opt,a){cursor:auto!important}
   body.layout-drag,body.layout-drag *{cursor:grabbing!important;user-select:none!important}
   .layout-dragging{opacity:.35;outline:2px dashed var(--accent);outline-offset:2px}
   .layout-line{position:fixed;z-index:9998;pointer-events:none;border-radius:2px;
