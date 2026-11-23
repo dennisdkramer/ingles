@@ -107,91 +107,159 @@ window.LayoutEditor = (function () {
     return { box: box, ref: ref, inside: false, host: host, before: before, ax: ax };
   }
 
-  /* ---- where would the node land? -------------------------------------------------
-     Two answers only: BETWEEN two siblings (a line is drawn at the boundary), or INSIDE a
-     container that accepts it (the container is tinted). Everything is measured at the pointer,
-     so scrolling and a re-flowed row need no bookkeeping.
-     THREE KINDS OF BETWEEN, and they are told apart in this order:
-       1. the pointer is on a ROW'S OWN AREA — its padding, or the gap between two cells. That
-          used to be read as "inside the row" and the item landed at the END of it; it is now the
-          position between the two cells the pointer sits between.
-       2. the pointer is in the SPACE AROUND A ROW — the top or bottom band of the row, or the
-          parent's own gap between two rows. The item becomes a SIBLING of that row in its parent
-          and never a cell of a neighbouring row.
-       3. an item's own edge inside any other container: between that item and its neighbour.
-     The bands are generous on purpose (a quarter of the row's height, 14–30px): aiming at a gap
-     should not require pixel accuracy. */
+  /* ---- the three levels, read off the markup ----------------------------------------
+     THE PAGE IS THREE ROWS DEEP ([1A] in PEDAGOGY-MAP): the section's row, the row inside one of
+     its cells, and the row inside that cell, whose only job is to let two short things stand side
+     by side. Depth is the nesting itself, so nothing is marked and nothing is counted twice. */
+  function isRow(n) { return !!(n && n.nodeType === 1 && n.classList && n.classList.contains('rows')); }
+  function isCell(n) { return !!(n && n.nodeType === 1 && n.parentElement && isRow(n.parentElement)); }
+  function rowsAbove(n) {
+    var d = 0;
+    for (var p = n && n.parentElement; p; p = p.parentElement) if (isRow(p)) d++;
+    return d;
+  }
+  function levelOf(row) { return rowsAbove(row) + 1; }
+  function cellLevel(cell) { var r = cell && cell.parentElement; return isRow(r) ? levelOf(r) : 0; }
+  function kindOf(n) { return isRow(n) ? 'row' : (isCell(n) ? 'cell' : 'item'); }
+  /* the side band of a level-3 cell: the strip that reads as "beside", not "above" or "below" */
+  var BAND = 24;
+
+  function midY(el) { var r = el.getBoundingClientRect(); return r.top + r.height / 2; }
+  /* the position a drop would give, against the place the node already holds: equal means no move */
+  function samePlace(t, n) {
+    if (!t || t.merge || !t.box) return false;
+    if (t.box !== n.parentElement) return false;
+    var ref = t.ref || null;
+    return ref === n || ref === n.nextElementSibling;
+  }
+
+  /* ---- where would the node land? ---------------------------------------------------
+     A CONTAINER ALTERNATES: a page and a block hold rows, a row holds cells, a cell at level 1
+     or 2 holds rows or the block that owns them, and a level-3 cell holds items. So a drop is one
+     of four shapes, and the level decides which are legal:
+        A CELL INTO A ROW     it becomes a cell beside the ones already there.
+        A ROW INTO A CELL     it becomes a row among the rows already there.
+        A CELL INTO A CELL    there is no cell inside a cell, so the dropped cell's children move
+                              into the target at the pointer's edge, in their own order, and the
+                              emptied cell — and the row it left empty — go with it.
+        A CELL BETWEEN ROWS   a cell inside a cell has no shape of its own, so a row is made for it
+                              at that boundary and the cell becomes that row's only cell.
+     WHAT EACH KIND MAY ENTER
+        a row    never a cell, so a row dropped on a row's own area belongs to that row's parent;
+                 a level-3 row is never dragged at all (down() refuses the press).
+        a cell   a row, or a cell at any level (the merge above).
+        an item  a level-3 cell from the side, where it becomes a cell that cell's row can hold;
+                 a level-2 cell as a level-3 row of its own; anywhere else, an item joins the cell
+                 it was dropped in, which is a place a cell has always been allowed to hold.
+     A DROP OVER THE NODE ITSELF IS NOT A DROP. The pointer inside the dragged subtree returns no
+     target at all: no line, and the release changes nothing — which is what makes putting a thing
+     back where it came from safe.
+     WHERE THE LINE GOES: every drop draws the line at the boundary it will land on. The tint is
+     kept for a container with nothing to draw against — an empty cell. */
   function pick(x, y) {
+    var n = drag.node;
     var el = document.elementFromPoint(x, y);
     if (!el) return null;
-    var n = drag.node;
-    while (el && (el === n || n.contains(el))) el = el.parentElement;
-    if (!el) return null;
-    if (el === ca()) return accepts(n, ca()) ? between(ca(), x, y) : null;
+    if (el === n || n.contains(el)) return null;        /* over itself: not a drop */
     if (!inside(el)) return null;
 
     var row = el.closest ? el.closest('.rows') : null;
+    if (!row) return el === ca() ? inPage(x, y) : null;
 
-    /* (1) the row's own area — its padding, or the gap between two of its cells. The strip ABOVE or
-       BELOW its cells is the space around the row; at the cells' own height it is a position BETWEEN
-       them, which is what a drop in the gap means and what used to land at the end of the row. */
-    if (row) {
-      var cells = slots(row), top = Infinity, bottom = -Infinity;
-      for (var k = 0; k < cells.length; k++) {
-        top = Math.min(top, cells[k].r.top); bottom = Math.max(bottom, cells[k].r.bottom);
+    /* the space AROUND a row is its parent's: the band above or below the row's own cells */
+    var cs = slots(row), top = Infinity, bottom = -Infinity;
+    for (var i = 0; i < cs.length; i++) { top = Math.min(top, cs[i].r.top); bottom = Math.max(bottom, cs[i].r.bottom); }
+    if (cs.length && (y < top - 2 || y > bottom + 2)) {
+      var up = row.parentElement;
+      if (!up || up === ca() || !isCell(up)) return inPage(x, y);
+      var beforeIt = y < (top + bottom) / 2;
+      var ref = beforeIt ? row : (row.nextElementSibling || null);
+      /* A ROW DROPPED THERE joins the rows already in the cell. A CELL DROPPED THERE needs a row
+         of its own at that boundary, because a cell inside a cell is not a shape the page has —
+         the row is made at the drop, and the cell goes into it. */
+      if (drag.kind === 'row') {
+        var tr = { box: up, ref: ref, inside: !ref, host: ref || row, before: beforeIt, ax: 'y', insert: 'row' };
+        return samePlace(tr, drag.node) ? null : tr;
       }
-      var around = cells.length && (y < top || y > bottom);
-      if (around && row.parentElement && accepts(n, row.parentElement)) {
-        return between(row.parentElement, x, y);      /* the space above or below the row: its parent */
-      }
-      if (el === row && accepts(n, row)) return between(row, x, y);   /* the gap between two cells */
+      return { box: up, ref: ref, host: ref || row, before: beforeIt, ax: 'y', insert: 'row', wrapCell: true };
     }
 
-    /* (2) the pointer is over a CONTAINER THAT HOLDS ROWS, in the space between them: that space is the
-       container's, so the item becomes a sibling of the rows — never a cell of the row it is nearest */
-    if (!row && el.children && accepts(n, el)) {
-      for (var q = 0; q < el.children.length; q++) {
-        if (el.children[q].classList && el.children[q].classList.contains('rows')) return between(el, x, y);
-      }
-    }
+    if (el === row) return inRow(row, x, y);            /* the row's padding, or the gap between cells */
 
-    /* (2b) A CELL IS A CONTAINER, AND ITS OWN CHILDREN ARE ITS ITEMS. A drop in the body of an occupied
-       cell adds the item to that cell, and it lands ABOVE OR BELOW THE CHILD UNDER THE POINTER rather
-       than always at the cell's end — the cell now positions what it holds the way a row positions its
-       cells. The child aimed at is the one that belongs directly to the cell, never something deeper,
-       so a drop inside a question's own options still reads as a drop into the cell that holds them.
-       A cell whose only child is the thing under the pointer appends above or below that child, which
-       is how a second block joins the first in one column. The cell's own edges stay "between the
-       cells" (1) and its outer band stays "around the row", so nothing here changes a row's shape. */
-    var cell = el.closest ? el.closest('.rows>*') : null;
-    if (cell && cell !== el) {
-      var cr = cell.getBoundingClientRect();
-      var edge = x < cr.left + 14 || x > cr.right - 14 || y < cr.top + 10 || y > cr.bottom - 10;
-      if (!edge && accepts(n, cell)) {
-        var kid = el;
-        while (kid && kid.parentElement && kid.parentElement !== cell) kid = kid.parentElement;
-        if (kid && kid.parentElement === cell && kid !== n && !n.contains(kid) && movable(kid))
-          return between(cell, x, y);
-        return { box: cell, inside: true, host: cell };
-      }
-    }
-
-    /* (3) an item's edge, or its middle */
-    var r = el.getBoundingClientRect(), f = flow(el), e = 22;
-    var onEdge = f === 'x' ? (x < r.left + e || x > r.right - e)
-                           : (y < r.top + e || y > r.bottom - e);
-    if (!onEdge && accepts(n, el)) return { box: el, inside: true, host: el };
-    var p = el.parentElement;
-    if (!p || (!inside(p) && p !== ca()) || !accepts(n, p)) return { box: ca(), inside: true, host: null };
-    return between(p, x, y);
+    var cell = el.closest('.rows>*');
+    if (!cell) return inPage(x, y);
+    return inCell(cell, x, y, null, false);
   }
 
+  /* a row's own area: a cell goes in beside the cells already there; a row cannot be a cell */
+  function inRow(row, x, y) {
+    if (drag.kind === 'row') {
+      var up = row.parentElement;
+      if (!up || up === ca() || !isCell(up)) return inPage(x, y);
+      var t = between(up, x, y);
+      t.insert = 'row';
+      return samePlace(t, drag.node) ? null : t;
+    }
+    var t2 = between(row, x, y);
+    t2.insert = 'cell';
+    return samePlace(t2, drag.node) ? null : t2;
+  }
+
+  /* the content area's own area: a row goes in among the rows; anything else is given a row */
+  function inPage(x, y) {
+    var t = between(ca(), x, y);
+    t.insert = 'row';
+    return samePlace(t, drag.node) ? null : t;
+  }
+
+  /* a cell's body — the place a row lands, and the place a cell merges into. */
+  function inCell(cell, x, y) {
+    var k = drag.kind, lvl = cellLevel(cell);
+
+    /* a level-3 cell is a positioning device, not a place: only an item may enter it, and only
+       from the side. Everything else is read one level up — a new level-3 row in the level-2 cell. */
+    if (lvl >= 3) {
+      var cr = cell.getBoundingClientRect();
+      var side = x < cr.left + BAND ? 'left' : (x > cr.right - BAND ? 'right' : null);
+      if (k === 'item' && side) {
+        var at = side === 'left' ? cell : (cell.nextElementSibling || null);
+        var ts = { box: cell.parentElement, ref: at, host: cell, before: side === 'left', ax: 'x', insert: 'cell' };
+        return samePlace(ts, drag.node) ? null : ts;
+      }
+      var upCell = cell.parentElement && cell.parentElement.parentElement;
+      if (!upCell || !isCell(upCell)) return inPage(x, y);
+      var l3row = cell.parentElement;
+      var up = y < midY(l3row);
+      /* an item or a cell arriving here gets a level-3 row of its own, with a cell inside it, so
+         what lands keeps the same shape as what it landed beside */
+      var ty = { box: upCell, ref: up ? l3row : (l3row.nextElementSibling || null),
+                 host: l3row, before: up, ax: 'y', insert: 'row', wrapCell: k !== 'row' };
+      return samePlace(ty, drag.node) ? null : ty;
+    }
+
+    /* A CELL INTO A CELL: the target takes the dropped cell's children at the pointer's edge, in
+       their own order, and the emptied cell goes when the drop is recorded. */
+    if (k === 'cell') {
+      if (cell === drag.node.parentElement) return null;      /* its own cell: no merge to make */
+      var tm = between(cell, x, y);
+      tm.insert = 'merge'; tm.merge = cell;
+      return samePlace(tm, drag.node) ? null : tm;
+    }
+
+    /* a row into a cell, or an item: a new row among the rows already here */
+    var t4 = between(cell, x, y);
+    t4.insert = 'row';
+    return samePlace(t4, drag.node) ? null : t4;
+  }
+
+  /* the line, drawn at the boundary the drop will land on. A target with no host is a container
+     with nothing to draw against (an empty cell), and that one is tinted instead. */
   function showLine(t) {
     if (!line) { line = document.createElement('div'); line.className = 'layout-line'; document.body.appendChild(line); }
     if (!t) { line.style.display = 'none'; return; }
     line.style.display = 'block';
     var r;
-    if (t.inside) {
+    if (!t.host) {
       r = t.box.getBoundingClientRect();
       line.className = 'layout-line is-inside';
       line.style.left = r.left + 'px'; line.style.top = r.top + 'px';
@@ -199,15 +267,8 @@ window.LayoutEditor = (function () {
       return;
     }
     line.className = 'layout-line';
-    if (!t.host) {                      /* an empty container: the drop is inside it */
-      r = t.box.getBoundingClientRect();
-      line.className = 'layout-line is-inside';
-      line.style.left = r.left + 'px'; line.style.top = r.top + 'px';
-      line.style.width = r.width + 'px'; line.style.height = r.height + 'px';
-      return;
-    }
     r = t.host.getBoundingClientRect();
-    var ax = t.ax || (flow(t.host) === 'x' ? 'x' : 'y');
+    var ax = t.ax || axisOf(t.box);
     if (ax === 'x') {
       line.style.left = ((t.before ? r.left : r.right) - 2) + 'px'; line.style.top = r.top + 'px';
       line.style.width = '4px'; line.style.height = r.height + 'px';
@@ -277,6 +338,7 @@ window.LayoutEditor = (function () {
     [].forEach.call(c.querySelectorAll(GRAIN + ',' + COMPOSITE), function (n) {
       if (!movable(n) || isItem(n)) return;      /* a cell already has a frame of its own */
       if (!n.closest('.rows>*')) return;         /* only what stands inside a cell is content */
+      if (isRow(n) && levelOf(n) >= 3) return;   /* a level-3 row cannot be carried: no frame */
       n.setAttribute('data-layout-grain', '');
     });
   }
@@ -417,27 +479,28 @@ window.LayoutEditor = (function () {
     var p = from.parentElement;
     return p && p.classList && p.classList.contains('rows') ? p : null;
   }
-  function dropRows(from) {
-    var row = rowOf(from);
-    if (!row || row.children.length) return [];
-    var rec = { row: row, parent: row.parentNode, next: row.nextElementSibling };
-    if (rec.parent) rec.parent.removeChild(row);
-    return [rec];
-  }
-
-  /* AN EMPTY CELL PRUNES ITSELF. A cell whose last item has been dragged or deleted out of it is not
-     a place anything can be dropped into once it is invisible, so it goes, and the row with it when
-     it was the last cell. Both are remembered on the same stack as the move, in the order they must
-     come back: the row first, because the cell has to have a parent to be put back into. */
-  function pruneCells(from) {
-    var out = [], row = rowOf(from);
-    if (!row) return out;
-    [].slice.call(row.children).forEach(function (k) {
-      if (k.children.length || (k.textContent || '').trim()) return;
-      out.push({ cell: k, parent: row, next: k.nextElementSibling });
-      row.removeChild(k);
-    });
-    return out;
+  /* NOTHING EMPTY STAYS. An emptied cell prunes itself, and the row it leaves empty prunes itself,
+     and the cell THAT leaves empty prunes too — the page climbs until it meets something that still
+     holds content. Each removal is recorded in the order it happened, because undo has to put the
+     outermost box back first: a cell can only return to a parent that exists again.
+     AN EMPTY DIV COUNTS: a wrapper the tool made is as empty as a cell the author made. */
+  function tidy(from) {
+    var gone = [], n = from;
+    while (n && n.nodeType === 1 && n !== ca()) {
+      var row = rowOf(n);
+      if (!row) break;
+      [].slice.call(row.children).forEach(function (k) {
+        if (k.children.length || (k.textContent || '').trim()) return;
+        gone.push({ el: k, parent: row, next: k.nextElementSibling });
+        row.removeChild(k);
+      });
+      if (row.children.length) break;
+      var up = row.parentNode;
+      gone.push({ el: row, parent: up, next: row.nextElementSibling });
+      if (up) up.removeChild(row);
+      n = up;                              /* the cell the row was in: now possibly empty itself */
+    }
+    return gone;
   }
 
   /* EVERY BLOCK LIVES IN A ROW. A node dropped at section level used to become a bare child of
@@ -461,26 +524,72 @@ window.LayoutEditor = (function () {
     cell.appendChild(n);
     return row;
   }
+  /* a bare item standing in a ROW becomes a cell of its own: `.rows>*` is a flex column, so the page
+     never lets a paragraph play the part of a box. A DIV is already the page's own cell. */
+  function cellAround(n) {
+    if (!n || !n.parentNode || !isRow(n.parentNode)) return null;
+    if (n.tagName === 'DIV') return null;
+    var cell = document.createElement('div');
+    n.parentNode.insertBefore(cell, n);
+    cell.appendChild(n);
+    return cell;
+  }
   function unwrap(w) {
     if (!w || !w.parentNode) return;
     if (w.textContent.trim() || w.querySelector('input,img,svg,table,audio,textarea')) return;
     w.parentNode.removeChild(w);
   }
 
+  /* a .rows holding exactly one node, made at the drop. Used when the shape the drop needs does not
+     exist yet: a cell that has to stand between two rows, and that no row can hold as it is. */
+  function rowAround(n) {
+    var p = n && n.parentNode;
+    if (!p) return null;
+    var row = document.createElement('div');
+    row.className = 'rows';
+    var cell = document.createElement('div');
+    row.appendChild(cell);
+    p.insertBefore(row, n);
+    cell.appendChild(n);
+    return row;
+  }
+
   function applyDrop(d) {
     var n = d.node, t = d.t;
     if (!t) return;
     var from = { parent: n.parentNode, next: n.nextElementSibling };
-    if (t.inside) {
-      if (t.box === from.parent && t.box.lastElementChild === n) return;     /* already there */
-      t.box.appendChild(n);
+    var back = null, wraps = [];
+    /* A MERGE MOVES WHAT THE CELL HELD, not the cell: a cell inside a cell is not a shape the page
+       has, so its children go into the target at the edge the pointer is on, keeping their order,
+       and the emptied cell is pruned with the rest. The record keeps them so undo can put them
+       back before the cell returns. */
+    if (t.insert === 'merge') {
+      var dest = t.merge, kids = [].slice.call(n.children);
+      if (!kids.length) return;
+      var at = t.ref || null;
+      for (var i = 0; i < kids.length; i++) dest.insertBefore(kids[i], at);
+      back = { cell: n, kids: kids };
     } else {
-      if (t.box === from.parent && (t.ref || null) === from.next) return;     /* already there */
-      t.box.insertBefore(n, t.ref || null);
+      if (t.inside) {
+        if (t.box === from.parent && t.box.lastElementChild === n) return;   /* already there */
+        if (t.ref) t.box.insertBefore(n, t.ref);
+        else t.box.appendChild(n);
+      } else {
+        if (t.box === from.parent && (t.ref || null) === from.next) return;  /* already there */
+        t.box.insertBefore(n, t.ref || null);
+      }
+      var roww = t.wrapCell ? rowAround(n) : wrap(n, d.cell);
+      if (roww) wraps.push(roww);
+      /* AN ITEM THAT LANDS AS A CELL GETS A DIV FOR ITS CELL: the page keeps one shape — a cell is a
+         div and the item is its content — instead of a paragraph playing the part of a box. */
+      if (t.insert === 'cell' && n.tagName !== 'DIV' && isRow(n.parentNode)) {
+        var cw = cellAround(n); if (cw) wraps.push(cw);
+      }
     }
-    var row = wrap(n, d.cell);
-    var cells = pruneCells(from.parent);
-    hist.push({ node: n, from: from, cells: cells, rows: dropRows(from.parent), wrap: row });
+    /* tidy() starts at the cell the node left: it finds that cell's row itself, so the row does not
+       have to be captured before the prune any more. */
+    var gone = tidy(from.parent);
+    hist.push({ node: n, from: from, gone: gone, wraps: wraps, back: back });
     if (hist.length > 40) hist.shift();
     moved++; markPins(); markGrains(); paintChip();
   }
@@ -492,10 +601,9 @@ window.LayoutEditor = (function () {
     if (!n || !inside(n) || still(n)) return false;
     var parent = n.parentNode;
     if (!parent) return false;
-    var rec = { node: n, from: { parent: parent, next: n.nextElementSibling }, cells: [], rows: [], wrap: null };
+    var rec = { node: n, from: { parent: parent, next: n.nextElementSibling }, gone: [], wraps: [], back: null };
     parent.removeChild(n);
-    rec.cells = pruneCells(parent);
-    rec.rows = dropRows(parent);
+    rec.gone = tidy(parent);
     hist.push(rec);
     if (hist.length > 40) hist.shift();
     moved++; markPins(); markGrains(); select(null); paintChip();
@@ -505,19 +613,17 @@ window.LayoutEditor = (function () {
   function undo() {
     var s = hist.pop();
     if (!s) return false;
-    /* the row comes back first, then the cell, then the node that lived in it — the order the page
-       was taken apart in, reversed */
-    for (var i = s.rows.length - 1; i >= 0; i--) {
-      var r = s.rows[i];
-      if (r.parent) r.parent.insertBefore(r.row, r.next && r.next.parentNode === r.parent ? r.next : null);
-    }
-    for (var j = (s.cells || []).length - 1; j >= 0; j--) {
-      var k = s.cells[j];
-      if (k.parent) k.parent.insertBefore(k.cell, k.next && k.next.parentNode === k.parent ? k.next : null);
+    /* WHAT WENT IS PUT BACK IN THE REVERSE OF THE ORDER IT WENT, so every box returns to a parent
+       that is there again: the outermost cell first, then the row it left, then the cell inside it. */
+    for (var i = (s.gone || []).length - 1; i >= 0; i--) {
+      var g = s.gone[i];
+      if (g.parent) g.parent.insertBefore(g.el, g.next && g.next.parentNode === g.parent ? g.next : null);
     }
     s.from.parent.insertBefore(s.node,
       s.from.next && s.from.next.parentNode === s.from.parent ? s.from.next : null);
-    unwrap(s.wrap);
+    /* a merge takes a cell apart, so its children come home before the cell does */
+    if (s.back) s.back.kids.forEach(function (k) { s.back.cell.appendChild(k); });
+    for (var j = (s.wraps || []).length - 1; j >= 0; j--) unwrap(s.wraps[j]);
     moved = Math.max(0, moved - 1);
     markPins(); markGrains(); paintChip();
     return true;
@@ -545,8 +651,12 @@ window.LayoutEditor = (function () {
       n = n.parentElement;
     }
     if (!n) return;
+    /* A LEVEL-3 ROW IS NOT A THING TO CARRY. It exists to put two short things beside each other,
+       and where it sits is decided by the level-2 cell it belongs to, so a press on it grabs
+       nothing and the page stays where it is. */
+    if (isRow(n) && levelOf(n) >= 3) return;
     drag = { node: n, x: e.clientX, y: e.clientY, on: false, t: null, attr: null, target: n,
-             cell: isItem(n) };
+             kind: kindOf(n), cell: isItem(n) };
     window.addEventListener('pointermove', move, true);
     window.addEventListener('pointerup', up, true);
     window.addEventListener('pointercancel', up, true);
@@ -567,6 +677,12 @@ window.LayoutEditor = (function () {
       document.body.classList.add('layout-drag');
     }
     drag.t = pick(e.clientX, e.clientY);
+    if (window.__LAYOUT_DEBUG) {
+      var tg = drag.t;
+      window.__lastPick = tg ? { ax: tg.ax, insert: tg.insert, merge: !!tg.merge, wrapCell: !!tg.wrapCell,
+        box: tg.box && (tg.box.id || tg.box.className), host: tg.host && (tg.host.id || tg.host.tagName),
+        before: !!tg.before, kind: drag.kind } : null;
+    }
     showLine(drag.t);
     e.preventDefault();
     e.stopPropagation();

@@ -295,8 +295,18 @@
   }
 
   function run(selector) {
-    var rows = document.querySelectorAll(selector || ".content-area .rows:not(.markup-row)");
-    Array.prototype.forEach.call(rows, solveFixedRow);
+    /* TWO LEVELS ARE SOLVED, THE THIRD IS NOT. A page is authored three rows deep (PEDAGOGY-MAP
+       [1A]); level 3 exists only to put two short things side by side, and it has no spacing of
+       its own, so there is nothing there to solve — solving it would only give a cell of a
+       three-deep row a width it was never meant to have. Depth is the nesting count, so no marker
+       is needed. */
+    var all = document.querySelectorAll(selector || ".content-area .rows:not(.markup-row)");
+    Array.prototype.forEach.call(all, function (r) {
+      var d = 0;
+      for (var p = r.parentElement; p; p = p.parentElement)
+        if (p.classList && p.classList.contains("rows")) d++;
+      if (d < 2) solveFixedRow(r);
+    });
   }
 
   /* the save path clones the document and asks for the authored page back */
