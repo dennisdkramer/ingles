@@ -148,6 +148,22 @@ function quiet(inner, destInner) {
       out = out.slice(0, e.start) + text + out.slice(e.end);
     }
   }
+  /* the browser rewrites an inline style as it parses it — `calc(100% + 8px)` comes back without its
+     spaces — so the same declaration is a different string and every styled element counts as
+     changed. Where a style differs from the author's only in whitespace, the author's spelling wins.
+     ONLY a style written on one line is taken: the file also quotes styles inside <pre> specimens,
+     wrapped across lines, and adopting one of those would pull a specimen's wrapping into the page. */
+  const styleBag = new Map();
+  for (const m of (destInner || '').matchAll(/\sstyle="([^"\n]*)"/g)) {
+    const key = m[1].replace(/\s+/g, '');
+    if (!styleBag.has(key)) styleBag.set(key, m[1]);
+  }
+  if (styleBag.size) {
+    out = out.replace(/(\sstyle=")([^"\n]*)(")/g, (all, a, v, z) => {
+      const want = styleBag.get(v.replace(/\s+/g, ''));
+      return want === undefined ? all : a + want + z;
+    });
+  }
   const destOpen = [...(destInner || '').matchAll(/<details\b([^>]*)>/g)].map(m => /\bopen\b/.test(m[1]));
   let i = 0;
   out = out.replace(/<details\b([^>]*)>/g, (m, attrs) => {
@@ -157,6 +173,86 @@ function quiet(inner, destInner) {
     if (!want && has) return '<details' + attrs.replace(/\s*open\b/, '') + '>';
     return m;
   });
+  return out;
+}
+
+/* WHAT AN ENGINE WRITES INTO THE PAGE IS THE PAGE'S STATE, NOT ITS CONTENT. A player builds no markup:
+   it decorates the authored figure and then reports where the audio is — `is-enhanced` on the figure,
+   `aria-valuenow` on the bar, an inline width on the fill, `is-now` on the line being sung, a running
+   clock. A save taken while a track was playing therefore carries a song's position into the file, and
+   the next reader finds a page that starts at 0:42. The same goes for any attribute the browser adds
+   to an element the author gave an id: Chrome does not write `popover` back out.
+   So a save is put back into the AUTHOR'S state for the parts the author wrote:
+     · elements with an id — the destination's opening tag wins, attribute for attribute;
+     · a container an engine decorates (RESTORE) — the destination's inner HTML wins, in order;
+     · comments — the destination's line wrapping wins, matched on the text without its whitespace.
+   Nothing here touches a part of the page an engine only reads. */
+const RESTORE = ['figure.vz-play', 'h4.flip-ask'];
+
+/* the elements of one tag whose opening tag passes `want`, with their whole extent */
+function els(html, tag, want) {
+  const out = [];
+  const open = new RegExp('<' + tag + '\\b[^>]*>', 'gi');
+  let m;
+  while ((m = open.exec(html))) {
+    if (want && !want(m[0])) continue;
+    const start = m.index, after = m.index + m[0].length;
+    if (/\/\s*>$/.test(m[0])) { out.push({ start, innerStart: after, innerEnd: after, end: after }); continue; }
+    const re = new RegExp('<' + tag + '\\b[^>]*>|</' + tag + '\\s*>', 'gi');
+    re.lastIndex = after;
+    let depth = 1, x;
+    while ((x = re.exec(html))) {
+      if (x[0][1] === '/') { depth--; if (!depth) { out.push({ start, innerStart: after, innerEnd: x.index, end: x.index + x[0].length }); break; } }
+      else if (!/\/\s*>$/.test(x[0])) depth++;
+    }
+  }
+  return out;
+}
+
+function authoredState(inner, destInner) {
+  let out = inner;
+
+  /* 1. an id is the author's name for an element, so the author's tag is the true one */
+  const byId = new Map();
+  for (const t of els(destInner, 'div').concat(els(destInner, 'span'), els(destInner, 'details'), els(destInner, 'figure'))) {
+    const tag = destInner.slice(t.start, t.innerStart);
+    const id = /\sid="([^"]*)"/.exec(tag);
+    if (id) byId.set(id[1], tag);
+  }
+  if (byId.size) {
+    out = out.replace(/<(div|span|details|figure)\b[^>]*\sid="([^"]*)"[^>]*>/gi, (tag, name, id) => {
+      const want = byId.get(id);
+      return want || tag;
+    });
+  }
+
+  /* 2. a decorated container: keep the author's contents, not the engine's state */
+  for (const sel of RESTORE) {
+    const tag = sel.slice(0, sel.indexOf('.'));
+    const cls = sel.slice(sel.indexOf('.') + 1);
+    const want = t => new RegExp('class="[^"]*\\b' + cls + '\\b', 'i').test(t);
+    const mine = els(out, tag, want), theirs = els(destInner || '', tag, want);
+    if (!mine.length || mine.length !== theirs.length) continue;
+    for (let i = mine.length - 1; i >= 0; i--) {
+      /* the opening tag belongs to the author too: `is-enhanced` is a class the player adds, and the
+         figure it decorates is the one the file wrote */
+      out = out.slice(0, mine[i].start) + destInner.slice(theirs[i].start, theirs[i].innerStart) +
+        destInner.slice(theirs[i].innerStart, theirs[i].innerEnd) + out.slice(mine[i].innerEnd);
+    }
+  }
+
+  /* 3. a comment is one node however it was wrapped, and the file's wrapping is the authored form */
+  const bag = new Map();
+  for (const c of (destInner || '').matchAll(/<!--([\s\S]*?)-->/g)) {
+    const key = c[1].replace(/\s+/g, ' ').trim();
+    if (!bag.has(key)) bag.set(key, '<!--' + c[1] + '-->');
+  }
+  if (bag.size) {
+    out = out.replace(/<!--([\s\S]*?)-->/g, (m, body) => {
+      const key = body.replace(/\s+/g, ' ').trim();
+      return bag.get(key) || m;
+    });
+  }
   return out;
 }
 
@@ -201,7 +297,7 @@ function land(file, by) {
   saved = { inner: crlf ? saved.inner.replace(/\r?\n/g, '\r\n') : saved.inner.replace(/\r\n/g, '\n') };
   /* the browser writes `class=""`, `style=""`, `popover=""`, closes empty SVG elements as pairs and
      reports a details' open state: quiet() puts all three back into the shape the file is written in */
-  const inner = quiet(saved.inner, now.inner);
+  const inner = authoredState(quiet(saved.inner, now.inner), now.inner);
   const same = inner.replace(/\s+/g, ' ').trim() === now.inner.replace(/\s+/g, ' ').trim();
   if (same) return 'unchanged — ' + rel + ' already holds this content';
   if (DIFF) {
