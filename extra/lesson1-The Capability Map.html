@@ -628,8 +628,8 @@
   &lt;div class="side" data-state="correct"&gt;&lt;p&gt;&lt;i class="mark"&gt;&lt;/i&gt; the sentence that is right&lt;/p&gt;&lt;/div&gt;
 &lt;/div&gt;
 
-&lt;!-- the two versions stack, one above the other, and each is only as wide as its own sentence --&gt;
-&lt;!-- data-state colours the side and draws the glyph; the .mark element is what draws it --&gt;
+&lt;!-- the two versions stack, each only as wide as its own sentence --&gt;
+&lt;!-- data-state colours the side; the .mark element draws the glyph --&gt;
 &lt;!-- .sides (two columns) is the other shape, for a block whose whole content is the pair --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #pos · the job each word carries, and the fence</summary><div class="body"><div>
@@ -719,14 +719,13 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;/div&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #map · the street map</summary><div class="body"><div>
-<pre>&lt;!-- as a display: THE DRAWING, COPIED WHOLE. A lesson never draws its own streets: it copies this
-     viewBox, these two roads and two lanes, all nine places and the MAP GEOMETRY table that goes with
-     them, and writes nothing of its own inside the svg. --&gt;
+<pre>&lt;!-- as a display: copy this drawing whole — this viewBox, these two roads and two lanes, all nine
+     places and the map-geometry table — and write nothing inside the svg. --&gt;
 &lt;div class="vz-map viz"&gt;
   &lt;svg viewBox="0 0 360 240" width="100%" role="img"
        aria-label="everything the drawing shows, named"&gt;…the same drawing, all nine places…&lt;/svg&gt;
 &lt;/div&gt;</pre>
-<p class="dim">The frame keeps the viewBox's 3:2 box and the cell around it holds the rest. <b>The drawing is capped at 573px</b> — half of an in-block row, measured at the sheet's own 1200px content width — so it never grows to a comic width beside a paragraph; below that it is as wide as its cell, so a narrow screen shrinks it instead of clipping it (the cap lives in <code>style.css</code>, on <code>.vz-map</code>, and a single drawing may still be capped smaller with <code>--map-w</code>). <code>aria-label</code> names everything in the drawing, because the drawing is all a screen reader gets. <b>Nine places, and the table that places them:</b> left column 16%, middle 52%, right 86% of the width; top row 17%, middle 53%, bottom 86% of the height. Station, café and park on the top row; bank, library and post office in the middle; bus stop, market and hotel on the bottom. A page that needs a place the drawing does not show asks about one that it does, and a new place means redrawing this one drawing for every page — never a second map. Both forms are drawn above: the display with the visuals, the question at the end of the activities.</p>
+<p class="dim">The frame keeps the viewBox's 3:2 box and the cell around it holds the rest. <b>The drawing is capped at 573px</b> — half of an in-block row, measured at the sheet's own 1200px content width — so it never grows to a comic width beside a paragraph; below that it is as wide as its cell, so a narrow screen shrinks it instead of clipping it (the cap lives in <code>style.css</code>, on <code>.vz-map</code>, and a single drawing may still be capped smaller with <code>--map-w</code>). <code>aria-label</code> names everything in the drawing, because the drawing is all a screen reader gets. <b>The drawing carries its own geometry table — canvas, road positions, the tick percentages and the nine places by column and row — and a lesson copies all of it verbatim.</b> A page that needs a place the drawing does not show asks about one that it does, and a new place means redrawing this one drawing for every page — never a second map. Both forms are drawn above: the display with the visuals, the question at the end of the activities.</p>
 <pre>&lt;!-- as an activity: the same drawing, a tick at each place, and one key --&gt;
 &lt;div class="block" data-activity="map"&gt;
   &lt;div class="qitem" data-a="bank"&gt;
@@ -804,9 +803,8 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 &lt;!-- a turn's side is its SPEAKER's side, never its place in the list: every turn carries data-side; the
      speaker who opens the dialog takes the left, the second speaker takes the right, and any further speaker
-     joins the first on the left — so Mike answers from the right however many turns he holds. A turn that
-     follows another by the SAME speaker keeps its .who and the sheet hides it, so a run of two bubbles
-     carries the name once --&gt;</pre>
+     joins the first on the left. A turn that follows another by the SAME speaker keeps its .who and the
+     sheet hides it --&gt;</pre>
 </div></div></details>
 </div>
 
@@ -1373,7 +1371,7 @@ next();
 &lt;!-- the prompt is one card's back, in a centred h4, and it is the whole prompt · any number of cards may be turned in a round --&gt;
 &lt;!-- a turn tints red when it is not the answer and green when it is; only the right one turns every card back and brings the next prompt 4 s later --&gt;
 &lt;!-- the script turns the card itself (it cancels the label's own toggle and sets the box), so a click is never doubled · --flip-h is the height both faces share --&gt;
-&lt;!-- no data-answer and no data-a here: nothing marks this block, so it cannot be a quiz --&gt;</pre>
+&lt;!-- no data-answer and no data-a here: the block cannot be a quiz --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #dialoggap · a dialog with a gap</summary><div class="body"><div>
 <pre>&lt;li data-side="right"&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;
@@ -1386,9 +1384,7 @@ next();
       &lt;span class="qnum" style="position:absolute;left:calc(100% + 8px);top:2px"&gt;2.&lt;/span&gt;
       Not yet — I need &lt;input class="gap" data-answer="two days" style="--gap-w:5em"&gt; to read it.&lt;/span&gt;&lt;/li&gt;
 
-&lt;!-- data-side is the SPEAKER's side, not the turn's place: Jess opens the dialog and keeps the left;
-     Mike answers from the right and keeps the right wherever he answers again.
-     The number sits outside the bubble, on the side that faces the middle of the dialog: the .say is
+&lt;!-- the number sits outside the bubble, on the side that faces the middle of the dialog: the .say is
      position:relative and the number is absolute at right:calc(100% + 8px) on a RIGHT-hand turn and at
      left:calc(100% + 8px) on a LEFT-hand turn. On a left-hand bubble a number at right:100% hangs outside
      the dialog's own edge --&gt;</pre>
@@ -1404,7 +1400,6 @@ next();
       &lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;tr&gt;…a checkbox row, a gap row…&lt;/tr&gt;
   &lt;/table&gt;
-  &lt;!-- the number stands beside the control it numbers, never in a column of its own --&gt;
   &lt;!-- one example of each control type is shown — an activity may mix them or use a single type, as its content needs --&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
@@ -1420,7 +1415,8 @@ next();
 
 &lt;!-- data-a on the .qitem is the key and matches the value of the right input · one .qitem per item --&gt;
 &lt;!-- a set of items gets its own name per item (mc1, mc2), so two items never share one radio group --&gt;
-&lt;!-- the set's shape follows the length of its options: data-layout="row" holds one- and two-word options on one line, data-layout="grid" style="--cols:2" sets three- and four-word options two by two, and a set with neither stacks phrases one per line — the stem and its options stay in the same cell --&gt;</pre>
+&lt;!-- the set's shape follows the length of its options: data-layout="row" for one- and two-word
+     options, data-layout="grid" style="--cols:2" for three- and four-word options --&gt;</pre>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #matching · a pool of meanings</summary><div class="body"><div>
 <pre>&lt;div class="rows"&gt;
@@ -1462,7 +1458,7 @@ next();
           placeholder="what you hear"&gt;&lt;/textarea&gt;
 
 &lt;!-- .listen is wired by engine2 and speaks its data-say text, so dictation needs no recording --&gt;
-&lt;!-- --lines is how many text lines tall the box is, set here to 2: the page sizes every field and the
+&lt;!-- --lines is the box's height in text lines (2 here); the page sizes every field and the
      student cannot drag it bigger --&gt;
 &lt;!-- with a .vz-play player in the block instead, the same field is the dictation --&gt;
 &lt;!-- as a translation it is the same field: data-say carries the Portuguese (or the English) and the answer
@@ -1481,7 +1477,7 @@ next();
 &lt;!-- one set, or as many as the activity needs: a further .chips over its own answer line, one after
      another vertically as here, side by side in a .rows of their own, or mixed with the prose, the chart
      or the strip they are read with. --&gt;
-&lt;!-- every activity carries its instruction line in the block: this one is the line above the chips --&gt;
+&lt;!-- this activity's instruction is the line above the chips --&gt;
 &lt;!-- the chips are in a full shuffle: no chip sits at its own place in the sentence, and one moved chip
      is not a shuffle — the whole order is re-dealt. the number is the display order, never the answer --&gt;
 &lt;!-- the number sits at the head of the words, on their line — never alone on the answer line --&gt;</pre>
@@ -1523,8 +1519,7 @@ next();
   &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;!-- a gap inside the sentence the block already carries: the line is the stem, so there is no separate stem --&gt;
-&lt;!-- --gap-w is 1.3× the longest accepted answer, its own padding included, in em (never 100%, never calc) · data-answer takes the accepted forms, | between them --&gt;
+&lt;!-- a gap inside the sentence the block already carries: the line is the stem --&gt;
 &lt;!-- one gap or several lines, whichever the content needs; each gap is keyed on its own --&gt;
 &lt;!-- the count runs through the block: typed blanks and option blanks continue one sequence --&gt;</pre>
 </div></div></details>
