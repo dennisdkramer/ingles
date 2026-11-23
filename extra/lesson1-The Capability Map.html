@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Extra · Lesson 1 — The Capability Map</title>
-<link rel="stylesheet" href="../style.css?v=797b2b60d8">
+<link rel="stylesheet" href="../style.css?v=320d4f21e7">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="../logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>EXTRA <span>DEMO 1</span></h1>
@@ -112,7 +112,7 @@
 <li>Read every <code>.pt</code> sentence and every translation stem as a Brazilian colleague would — a calque, a wrong tense or a missing subjunctive is a defect.</li>
 <li>Read the examples of speech: is every form the course has contracted written contracted, <code>have</code> after a modal included, and is the reduced spelling used only as the thing not to write?</li>
 <li>Read the page for the register's <code>locale</code> list: two occurrences warn, three fail, and a word the register marks as another variety of English is a mistake at any level.</li>
-<li>Read the defences, one sentence per training block, and read them together: two that are the same sentence in different words mean one block was never justified.</li>
+<li>Read the defences in the <code>p1</code> comments, one per activity, and read them together: two that are the same sentence in different words mean one of the two was never chosen.</li>
 <li>For a lesson about time, check that a timeline block is planned with an example and what the drawing shows, in words — where the action sits, how long it lasts, where the tense sits on the line.</li>
 <li>For a page that teaches a sound, check that the sound is on the page and that at least one item asks the student to hear it or say it.</li>
 </ul></div></div>
@@ -130,9 +130,11 @@
 <div class="rows"><div><p><b>Arrange a section's content however its teaching needs it.</b> A row is one line, and its direct children are its cells; a cell holds as many items as its content needs — one, two or several — and its share of the line is settled by that content against the cells beside it when the page loads. A section can hold as many rows as its content needs, or none: a block, a chart or a paragraph can stand directly in it. <code>.row</code> is only the utility for a line of chips or buttons — never a layout row.</p></div></div>
 <div class="rows"><div><p><b>Split the page only where the split helps the student read it</b> — two tenses side by side, a contrast, an element set apart so it is seen as distinct — and never to separate things that need no separation. A section can hold several concepts, and a block can hold several activities, teaching elements and rows of content: splitting without need is noise.</p></div></div>
 <div class="rows"><div><p><b>Pass 2 may make defensible structuring improvements</b>: split a section carrying two things, merge two that teach one, rename a heading that names a topic, add the section the training needs, drop one the content no longer fills. Each one is defensible by a reason the student's reading gains. Then correct the ledger row to the page as it was built.</p></div></div>
+<div class="rows"><div><p><b>Build what the notes name, and delete them when you have.</b> A note says what its element carries — a chart's rows, who speaks each line, the words a key sits above, the sentence to mark, the song's line — and the element is built from that, never re-decided.</p></div></div>
+<div class="rows"><div><p><b>Assess each defence as you arrange the page.</b> It says why this activity is the instrument for that work, so a defence that no longer holds means the activity or its place is wrong, and one that exposes work the page never asks the student to do is where you may add. <b>Add instances, never a proposition</b> — another example of a rule the page already states, the exception that rule carries, a contrast between two things it has already named — written in the drafted level, register and voice. Nothing of a note or a defence reaches the student's text.</p></div></div>
 </div>
 <div>
-<div class="rows"><div><p class="dim"><b>Every element in this section is drawn with the markup that builds it, and the drawing is the default</b>: what the element contains, what text it carries, where that text sits, and whether it carries a title at all. Its item count is the example's own, never a count to copy. <b>Read the <code>p1</code> comment, build what it names, and delete the comment.</b></p></div></div>
+<div class="rows"><div><p class="dim"><b>Every element in this section is drawn with the markup that builds it, and the drawing is the default</b>: what the element contains, what text it carries, where that text sits, and whether it carries a title at all. Its item count is the example's own, never a count to copy.</p></div></div>
 <div class="rows"><div><p class="dim"><b>Declare <code>data-look</code> on the block</b>, never infer it from what it holds: it changes the paint only.</p></div></div>
 </div>
 </div>
@@ -317,7 +319,7 @@
 <div class="rows">
 <div id="map">
   <div class="vz-map viz">
-  <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, with nine places, each named on a sign in the drawing — a station with a canopy and a platform clock, a café with a striped awning and two tables outside, a park with trees behind railings, a bank with a columned front and steps, a library with tall windows, a post office with a postbox on the pavement, a bus stop with a shelter and a bench, a market with two stalls, and a hotel with a door canopy">
+  <svg viewBox="0 0 360 240" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, with nine places, each named on a sign in the drawing — a station with a canopy and a platform clock, a café with a striped awning and two tables outside, a park with trees behind railings, a bank with a columned front and steps, a library with tall windows, a post office with a postbox on the pavement, a bus stop with a shelter and a bench, a market with two stalls, and a hotel with a door canopy">
   <!-- MAP GEOMETRY — THE ONE TABLE. Every number in this drawing, and every tick a lesson lays over it,
        is read from this table, so a tick can never sit off its building.
          canvas      360 x 240
@@ -574,15 +576,15 @@
   </div>
 </div>
 <div id="comic">
-<table class="chart">
+<table class="chart comic">
   <tbody>
     <tr>
-      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0;text-align:center">Ana waited at the stop in the rain.</p></td>
-      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0;text-align:center">A bus came down the road.</p></td>
+      <td class="strip"><svg viewBox="0 0 120 64" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0;text-align:center">Ana waited at the stop in the rain.</p></td>
+      <td class="strip"><svg viewBox="0 0 120 64" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0;text-align:center">A bus came down the road.</p></td>
     </tr>
     <tr>
-      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><p style="margin:6px 0 0;text-align:center">She ran to catch it.</p></td>
-      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0;text-align:center">It pulled away without her.</p></td>
+      <td class="strip"><svg viewBox="0 0 120 64" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><p style="margin:6px 0 0;text-align:center">She ran to catch it.</p></td>
+      <td class="strip"><svg viewBox="0 0 120 64" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><p style="margin:6px 0 0;text-align:center">It pulled away without her.</p></td>
     </tr>
   </tbody>
 </table>
@@ -730,10 +732,10 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <pre>&lt;!-- as a display: copy this drawing whole — this viewBox, these two roads and two lanes, all nine
      places and the map-geometry table — and write nothing inside the svg. --&gt;
 &lt;div class="vz-map viz"&gt;
-  &lt;svg viewBox="0 0 360 240" width="100%" role="img"
+  &lt;svg viewBox="0 0 360 240" role="img"
        aria-label="everything the drawing shows, named"&gt;…the same drawing, all nine places…&lt;/svg&gt;
 &lt;/div&gt;</pre>
-<p class="dim">The frame keeps the viewBox's 3:2 box and the cell around it holds the rest. <b>The drawing is capped at 573px</b> — half of an in-block row, measured against the 1200px content width <code>style.css</code> is built on — so it never grows to a comic width beside a paragraph; below that it is as wide as its cell, so a narrow screen shrinks it instead of clipping it (the cap lives in <code>style.css</code>, on <code>.vz-map</code>, and a single drawing may still be capped smaller with <code>--map-w</code>). <code>aria-label</code> names everything in the drawing, because the drawing is all a screen reader gets. <b>The drawing carries its own geometry table — canvas, road positions, the tick percentages and the nine places by column and row — and a lesson copies all of it verbatim.</b> A page that needs a place the drawing does not show asks about one that it does, and a new place means redrawing this one drawing for every page — never a second map. Both versions are drawn above: the display with the visuals, the question at the end of the activities.</p>
+<p class="dim">The frame keeps the viewBox's 3:2 box and the cell around it holds the rest. <b>The drawing is capped at half the width of the cell that holds it</b> (the cap lives in <code>style.css</code>, on <code>.vz-map</code>), so it never grows to full width beside a paragraph; below that it is as wide as its cell, so a narrow screen shrinks it instead of clipping it, and a single drawing may still be capped smaller with <code>--map-w</code>. <code>aria-label</code> names everything in the drawing, because the drawing is all a screen reader gets. <b>The drawing carries its own geometry table — canvas, road positions, the tick percentages and the nine places by column and row — and a lesson copies all of it verbatim.</b> A page that needs a place the drawing does not show asks about one that it does, and a new place means redrawing this one drawing for every page — never a second map. Both versions are drawn above: the display with the visuals, the question at the end of the activities.</p>
 <pre>&lt;!-- as an activity: the same drawing, a tick at each place, and one key --&gt;
 &lt;div class="block" data-activity="map"&gt;
   &lt;div class="qitem" data-a="bank"&gt;
@@ -755,10 +757,11 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <p class="dim">Each place gets its own checkbox, sitting on that place, its <code>value</code> the place, its <code>aria-label</code> the name the drawing shows — and the answer is the one place named by <code>data-a</code> on the <code>.qitem</code>, the same key a radio group uses, so engine2 marks it and freezes it on Complete. The prose is free and may point at the place any way the lesson teaches — a route (<i>turn right out of the café, then your first left, then back a block — the destination is on your left</i>), a relation (<i>to the left of the café</i>), or its use (<i>where you send a letter</i>) — but the answer is always one place on the drawing. Only the keyed place is marked correct. The tick's position is a percentage of the drawing, so it stays on its place at any width.</p>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #comic · the comic strip</summary><div class="body"><div>
-<pre>&lt;table class="chart"&gt;
+<pre>&lt;table class="chart comic"&gt;
+  &lt;!-- --comic-h:96px is the height of every panel; --strip-h on one td overrides it --&gt;
   &lt;tbody&gt;
     &lt;tr&gt;&lt;td class="strip"&gt;
-          &lt;svg viewBox="0 0 120 64" width="120" height="64" role="img"
+          &lt;svg viewBox="0 0 120 64" role="img"
                aria-label="what the panel shows"&gt;…&lt;/svg&gt;
           &lt;p style="margin:6px 0 0;text-align:center"&gt;the sentence under the panel&lt;/p&gt;&lt;/td&gt;
         &lt;td class="strip"&gt;…the second panel…&lt;/td&gt;&lt;/tr&gt;
@@ -766,7 +769,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
         &lt;td class="strip"&gt;…the fourth panel…&lt;/td&gt;&lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;</pre>
-<p class="dim"><b>The frame and the drawing are two sizes, chosen independently.</b> The frame is the <code>td</code> — <code>.strip</code> — and it takes whatever width the table's columns give it and whatever height the row needs, or <code>--strip-h</code> when a panel must be taller; <code>--strip-w</code> on the cell does the same for a wider frame. The drawing keeps its own size, <b>120×64 written as real attributes</b> and never <code>width="100%"</code>: it is centred in the frame, vertically and horizontally, so a wider cell shows the same picture with more room around it and a taller one does the same. Both dimensions must be written on the <code>svg</code>, because that pair is what stops the drawing from stretching when only one of them changes. Beside a taller neighbour the strip fills the row, and its rows split the height it was given.</p>
+<p class="dim"><b>The frame and the drawing are two sizes, chosen independently.</b> The frame is the <code>td</code> — <code>.strip</code> — and it takes whatever width the table's columns give it and whatever height the row needs. <b><code>--comic-h</code> sets the drawing's height for every panel of one comic</b> — <code>96px</code> unless the table sets it — and <code>--strip-h</code> overrides it for a single panel: a taller one is <code>&lt;td class="strip" style="--strip-h:120px"&gt;</code>, and the table takes <code>--comic-h</code> the same way. <b>Write no <code>width</code> and no <code>height</code> on the <code>svg</code></b>: the sheet gives it the frame's width and that height, so a size written by hand is a second size the sheet has to fight. The drawing is centred in the frame, so a wider cell shows the same picture with more room around it. <b>A comic is capped at half the width of the cell that holds it</b>, the same default as the map, and a panel that must be taller than its neighbour fills the row it was given.</p>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #audio · the recording</summary><div class="body"><div>
 <pre>&lt;figure class="vz-play viz"&gt;
@@ -821,7 +824,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <div>
 <div class="block" data-look="stripes" id="flip" data-activity="flip">
 <h3>Training</h3>
-<h4 class="flip-ask" style="text-align:center;padding-top:10px" aria-live="polite">…</h4>
+<h4 class="flip-ask" style="text-align:center" aria-live="polite">…</h4>
 <div class="rows"><div><p><b>Teach thoroughly, train what was taught, and test with the quiz.</b> <b>Training may sit inside the teaching section it belongs to or stand in a section of its own</b>; the lesson chooses the flow its content wants, and neither arrangement is the default. <b>Show every concept at least three times, and make the three do different work</b>: one in its plainest setting, one where something around it changes what it means, and one where the rule does not apply or the wrong form tempts. Three lines with one subject and one verb are one example written three times.</p></div></div>
 <div class="rows"><div><p><b>Close the lesson with the quiz</b> — the last section before the notebook — and ask it for the concepts and the vocabulary that are new, in phrases the page has never shown: passing it must require having learned the lesson, not having read it. <b>Explain each point past its rule</b>: beside the rule, the reason and the Portuguese contrast it carries, give <b>the neighbour it is mistaken for</b> — the sentence the student would say instead, and the word in it that makes it wrong here — and <b>one note the student could not have inferred</b>: where native speakers use the form, what it sounds like in a mail as against a meeting, the words that travel with this one, the false friend, or the small word whose presence changes the line.</p></div></div>
 
@@ -946,30 +949,30 @@ next();
 
 <div class="rows">
 <div id="chunks" data-activity="chunks">
-  <div class="rows"><div><p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px"><span class="qnum" style="margin-right:-10px">1.</span>
-    <span><b style="font-size:.8em">1</b> never</span>
-    <span><b style="font-size:.8em">2</b> that</span>
-    <span><b style="font-size:.8em">3</b> has</span>
-    <span><b style="font-size:.8em">4</b> anyone</span>
-    <span><b style="font-size:.8em">5</b> she</span>
-    <span><b style="font-size:.8em">6</b> told</span>
+  <div class="rows"><div><p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px"><span class="qnum">1.</span>
+    <span><b>1</b> never</span>
+    <span><b>2</b> that</span>
+    <span><b>3</b> has</span>
+    <span><b>4</b> anyone</span>
+    <span><b>5</b> she</span>
+    <span><b>6</b> told</span>
   </p></div></div>
   <div class="rows"><div><p style="text-align:center;margin-top:6px"><input class="gap" style="--gap-w:9em"></p></div></div>
-  <div class="rows"><div><p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px"><span class="qnum" style="margin-right:-10px">2.</span>
-    <span><b style="font-size:.8em">1</b> when</span>
-    <span><b style="font-size:.8em">2</b> I got there</span>
-    <span><b style="font-size:.8em">3</b> he</span>
-    <span><b style="font-size:.8em">4</b> already</span>
-    <span><b style="font-size:.8em">5</b> had</span>
-    <span><b style="font-size:.8em">6</b> left</span>
+  <div class="rows"><div><p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding-top:4px"><span class="qnum">2.</span>
+    <span><b>1</b> when</span>
+    <span><b>2</b> I got there</span>
+    <span><b>3</b> he</span>
+    <span><b>4</b> already</span>
+    <span><b>5</b> had</span>
+    <span><b>6</b> left</span>
   </p></div></div>
   <div class="rows"><div><p style="text-align:center;margin-top:6px"><input class="gap" style="--gap-w:9em"></p></div></div>
-<div class="rows"><div><div id="correction" data-activity="correction" style="padding-top:26px">
+<div class="rows"><div><div id="correction" data-activity="correction">
 <p class="dim" style="text-align:center">One word is wrong. Write the sentence again.</p>
 <p style="text-align:center"><span class="qnum">3.</span> He <b>have</b> clocked in early.</p>
 <input class="gap" data-answer="He has clocked in early.|He's clocked in early." style="--gap-w:16.2em;margin-inline:auto">
 </div></div></div>
-<div class="rows"><div><div id="dictation" data-activity="dictation" style="padding-top:20px">
+<div class="rows"><div><div id="dictation" data-activity="dictation">
 <p class="dim" style="display:flex;align-items:center;justify-content:center;gap:10px"><span class="qnum">4.</span> <button class="listen" type="button" data-say="I clocked in at six forty.">▶</button><span>Listen, then write what you hear.</span></p>
 <textarea class="write" rows="2" style="field-sizing:fixed;--lines:2" data-answer="I clocked in at six forty." placeholder="what you hear"></textarea>
 </div></div></div>
@@ -978,12 +981,12 @@ next();
 <table class="chart">
   <tbody>
     <tr>
-      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">1.</span> <input class="gap" style="--gap-w:9em"></td>
-      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">2.</span> <input class="gap" style="--gap-w:9em"></td>
+      <td class="strip"><svg viewBox="0 0 120 64" role="img" aria-label="a person waiting at a stop in the rain"><line x1="90" y1="6" x2="84" y2="20" style="stroke:var(--blue);stroke-width:2"></line><line x1="104" y1="6" x2="98" y2="20" style="stroke:var(--blue);stroke-width:2"></line><circle cx="40" cy="26" r="7" style="fill:var(--ink)"></circle><rect x="35" y="34" width="10" height="18" style="fill:var(--ink)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">1.</span> <input class="gap" style="--gap-w:9em"></td>
+      <td class="strip"><svg viewBox="0 0 120 64" role="img" aria-label="a bus far down the road"><rect x="96" y="34" width="18" height="18" style="fill:var(--tan)"></rect><rect x="100" y="38" width="5" height="5" style="fill:var(--paper)"></rect><rect x="107" y="38" width="5" height="5" style="fill:var(--paper)"></rect><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">2.</span> <input class="gap" style="--gap-w:9em"></td>
     </tr>
     <tr>
-      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><span class="qnum">3.</span> <input class="gap" style="--gap-w:9em"></td>
-      <td class="strip"><svg viewBox="0 0 120 64" width="120" height="64" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">4.</span> <input class="gap" style="--gap-w:9em"></td>
+      <td class="strip"><svg viewBox="0 0 120 64" role="img" aria-label="a person running"><circle cx="60" cy="22" r="7" style="fill:var(--ink)"></circle><line x1="60" y1="29" x2="56" y2="42" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="46" y2="52" style="stroke:var(--ink);stroke-width:3"></line><line x1="56" y1="42" x2="70" y2="50" style="stroke:var(--ink);stroke-width:3"></line><line x1="60" y1="32" x2="74" y2="26" style="stroke:var(--ink);stroke-width:3"></line></svg><span class="qnum">3.</span> <input class="gap" style="--gap-w:9em"></td>
+      <td class="strip"><svg viewBox="0 0 120 64" role="img" aria-label="a bus leaving and a person with an arm up"><rect x="30" y="30" width="26" height="22" style="fill:var(--tan)"></rect><rect x="35" y="35" width="6" height="6" style="fill:var(--paper)"></rect><circle cx="86" cy="34" r="7" style="fill:var(--ink)"></circle><rect x="81" y="42" width="10" height="12" style="fill:var(--ink)"></rect><line x1="86" y1="42" x2="98" y2="28" style="stroke:var(--ink);stroke-width:3"></line><line x1="10" y1="54" x2="110" y2="54" style="stroke:var(--ink);stroke-width:2"></line></svg><span class="qnum">4.</span> <input class="gap" style="--gap-w:9em"></td>
     </tr>
   </tbody>
 </table>
@@ -1054,10 +1057,10 @@ next();
 <div class="rows">
 <div class="block" data-activity="map" id="mapq">
 <h3>The street map as a question</h3>
-<div class="rows"><div><div class="qitem" data-a="bank" style="padding-top:12px">
+<div class="rows"><div><div class="qitem" data-a="bank">
 <p class="qstem"><span class="qnum">1.</span> You just finished eating at the café, took a right out of the building, and then your first left. You went to the end of the street there, but then realized you went too far. You turned around and walked back a block — your destination is on your left. Tick it on the map.</p>
 <div class="vz-map viz">
-<svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, with nine places, each named on a sign in the drawing — a station with a canopy and a platform clock, a café with a striped awning and two tables outside, a park with trees behind railings, a bank with a columned front and steps, a library with tall windows, a post office with a postbox on the pavement, a bus stop with a shelter and a bench, a market with two stalls, and a hotel with a door canopy">
+<svg viewBox="0 0 360 240" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, with nine places, each named on a sign in the drawing — a station with a canopy and a platform clock, a café with a striped awning and two tables outside, a park with trees behind railings, a bank with a columned front and steps, a library with tall windows, a post office with a postbox on the pavement, a bus stop with a shelter and a bench, a market with two stalls, and a hotel with a door canopy">
   <!-- MAP GEOMETRY — THE ONE TABLE. Every number in this drawing, and every tick a lesson lays over it,
        is read from this table, so a tick can never sit off its building.
          canvas      360 x 240
@@ -1361,7 +1364,7 @@ next();
 <div class="rows markup-row">
 <details class="reveal" open><summary>Markup — #flip · the cards, the prompt, and the pick</summary><div class="body"><div>
 <pre>&lt;div class="block" id="flip"&gt;
-  &lt;h4 class="flip-ask" style="text-align:center;padding-top:10px" aria-live="polite"&gt;…&lt;/h4&gt;
+  &lt;h4 class="flip-ask" style="text-align:center" aria-live="polite"&gt;…&lt;/h4&gt;
   &lt;div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"&gt;
     &lt;label class="flip" style="--flip-h:112px"&gt;
       &lt;input type="checkbox"&gt;
@@ -1496,7 +1499,7 @@ next();
   &lt;p&gt;Describe what is happening in each picture,
      using the &lt;b&gt;past simple&lt;/b&gt;.&lt;/p&gt;
   &lt;table class="chart"&gt;
-    &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" width="100%" role="img"
+    &lt;tr&gt;&lt;td&gt;&lt;svg viewBox="0 0 120 64" role="img"
                  aria-label="what the panel shows"&gt;…&lt;/svg&gt;
               &lt;span class="qnum"&gt;1.&lt;/span&gt; &lt;input class="gap" style="--gap-w:9em"&gt;&lt;/td&gt;
         …two panels to a row, each with its own number…
@@ -1622,7 +1625,7 @@ next();
 <li>Read the finished row against the ledger's last three rows: <b>the section subjects and their order</b>, the block subjects, and the elements with their counts. A repeat is repaired by the arrangement if the words will carry it, and by pass 1 if they will not.</li>
 <li>Score the register section by section on the built page — which sections are defensibly in this track's voice, its room, its people, its words — and put the number in the row: <code>reg:&lt;in voice&gt;/&lt;sections&gt;</code>, with the page's section count as the denominator.</li>
 <li>Open the finished page from the index, never by its address: a lesson URL typed or shared lands on sign-in by design, so a page that will not open that way is working correctly.</li>
-<li>Read the source for a <code>&lt;!-- p1: … --&gt;</code> comment: a note that reached the page was never built, or never deleted.</li>
+<li>Read the source for a <code>&lt;!-- p1: … --&gt;</code> comment: a note that reached the page was never built or never deleted, and a defence that reached the prose was copied to the page.</li>
 </ul></div></div>
 <div class="rows"><div><p>The batch's mechanical checks follow — <code>npm run mapcheck</code>, <code>npm run batchcheck</code>, <code>npm run build:lessons</code> — and a failure is repaired in its own lesson. <b>The lesson is finished when this is clean, and it is not opened again in the task; alignment is the batch's, at the end.</b></p></div></div>
 </div>

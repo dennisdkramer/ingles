@@ -1644,18 +1644,20 @@
      svg's default `preserveAspectRatio="xMidYMid meet"` scales it UNIFORMLY to fit the frame and centres
      it, so a frame that grows in WIDTH only adds margins left and right, a frame that grows in HEIGHT only
      adds them above and below, and a frame that grows in both makes the drawing bigger — and it never
-     stretches, reflows or spills. One drawing per panel; the 2 x 2 is the table's, never the svg's. */
-  table.comic{width:100%;max-width:min(100%,573px);margin-inline:auto;
+     stretches, reflows or spills. The comic is capped at `50%` of its host's width and centres itself, the same default as the map. One drawing per panel; the 2 x 2 is the table's, never the svg's. */
+  table.comic{width:100%;max-width:50%;margin-inline:auto;
     table-layout:fixed;border-collapse:separate;border-spacing:8px}
-  /* the CELL IS THE FRAME and it stays a table cell: `display:table-cell`, 50% of the table, height set by
-     `--comic-h`. A cell that is declared `display:block` stops being a row cell and the four panels stack,
-     which is the layout change this rule exists to prevent. */
+  /* the CELL IS THE FRAME and it stays a table cell: `display:table-cell`, 50% of the table. A cell that is
+     declared `display:block` stops being a row cell and the four panels stack, which is the layout change
+     this rule exists to prevent. */
   table.comic td.strip{display:table-cell;width:50%;padding:0;text-align:center;vertical-align:middle}
   /* THE DRAWING IS AN SVG WITH width:100% AND THE FRAME'S HEIGHT, and nothing else: its viewBox plus the
      default `preserveAspectRatio="xMidYMid meet"` scale it uniformly inside that box and centre it, so a
      frame that grows in width only adds margins left and right, one that grows in height only adds them
-     above and below, and one that grows in both makes the drawing bigger. Never write width/height
-     attributes on the svg: they win over these two lines and the picture stops fitting its frame. */
+     above and below, and one that grows in both makes the drawing bigger. `--comic-h` is the height every
+     panel of one comic takes — 96px unless a page sets it on the table — and `--strip-h` overrides it for
+     one panel. Never write width/height attributes on the svg: the sheet sizes the drawing, and a second
+     size in the markup is one the sheet has to fight. */
   .strip>svg{display:block;width:100%;height:var(--strip-h,var(--comic-h,96px));margin-inline:auto}
   .chartcap{font-size:calc(var(--s0) + 2pt);font-weight:300;color:var(--ink-2);text-align:center;
     letter-spacing:normal;margin:0 0 6px}
@@ -1691,12 +1693,12 @@
   .vz-audio{display:block;width:100%}
   /* An in-block drawing is the builder's to size: `--map-w` caps the wrapper's width (any CSS length),
      and unset it is the host's own width. It is a cap and not a width so a drawing can never overflow the
-     host that holds it. THE STREET MAP HAS A FIXED CAP: half of an in-block row, measured in Chrome at
-     the standard 1200px content width (.block>.rows is 1146px there), so max-width is 573px. Below that
-     the drawing is as wide as its host, so a narrow screen shrinks it rather than clipping it. The wrapper
+     host that holds it. THE STREET MAP HAS A FIXED CAP — half the width of the host that holds it, the same
+     default as the comic — so a map never grows to full width beside a paragraph. Below that the drawing is
+     as wide as its host, so a narrow screen shrinks it rather than clipping it. The wrapper
      hugs the drawing (the svg is the only thing that gives the wrapper its height) so the tick labels laid
      over it in % stay on their places at every width. */
-  .vz-map{position:relative;width:var(--map-w,100%);max-width:min(100%,573px)}
+  .vz-map{position:relative;width:var(--map-w,100%);max-width:50%}
   .vz-map>svg{display:block;width:100%;height:auto}
   .vz-controls{display:none;align-items:center;gap:10px;margin:8px 0 10px}
   .vz-play.is-enhanced .vz-controls{display:flex}
