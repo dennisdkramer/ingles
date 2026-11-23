@@ -722,8 +722,20 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
     …
   &lt;/ol&gt;
   &lt;p&gt;one paragraph explaining the words, never the block&lt;/p&gt;
+&lt;/figure&gt;
+
+&lt;!-- no usable recording: the same figure, the player swapped for a link and the lyrics written out --&gt;
+&lt;figure class="vz-play viz"&gt;
+  &lt;h4&gt;the song's own name&lt;/h4&gt;
+  &lt;p class="dim"&gt;the performer&lt;/p&gt;
+  &lt;p&gt;&lt;a href="https://…"&gt;hear it online — the quoted line starts at 0:42&lt;/a&gt;&lt;/p&gt;
+  &lt;ol class="vz-lyrics"&gt;
+    &lt;li&gt;one line of the song, written out&lt;/li&gt;
+    …
+  &lt;/ol&gt;
+  &lt;p&gt;one paragraph explaining the words, never the block&lt;/p&gt;
 &lt;/figure&gt;</pre>
-<p class="dim"><code>data-t</code> and <code>data-duration</code> come from <code>qa/audio.mjs</code>, never typed by eye. The song's own name is the <code>h4</code>, the performer the credit line under it.</p>
+<p class="dim"><code>data-t</code> and <code>data-duration</code> come from <code>qa/audio.mjs</code>, never typed by eye. The song's own name is the <code>h4</code>, the performer the credit line under it. <b>A song with no usable recording ships the same figure without the player</b>: the link carries the time the quoted line starts, the lyrics are written out with no <code>data-t</code> because nothing plays, and the credit line under the link is what says where the song came from — no check follows an external link, so the page is the only place that is written down.</p>
 </div></div></details>
 <details class="reveal" open><summary>Markup — #dialog · a dialog</summary><div class="body"><div>
 <pre>&lt;ol class="seq viz" data-mode="turns"&gt;
