@@ -1644,8 +1644,8 @@
      svg's default `preserveAspectRatio="xMidYMid meet"` scales it UNIFORMLY to fit the frame and centres
      it, so a frame that grows in WIDTH only adds margins left and right, a frame that grows in HEIGHT only
      adds them above and below, and a frame that grows in both makes the drawing bigger — and it never
-     stretches, reflows or spills. The comic is exactly as wide as its own box, never wider — 573px, half of the 1146px in-block width, and 100% on a narrower screen. One drawing per panel; the 2 x 2 is the table's, never the svg's. */
-  table.comic{width:min(573px,100%);max-width:100%;margin-inline:auto;--comic-h:187px;
+     stretches, reflows or spills. The comic is exactly as wide as its own box, never wider — 573px, a real length and not a percentage (a percentage would be measured against a cell the solver sizes from this table), half of the 1146px in-block width, and capped at 100% on a narrower screen. One drawing per panel; the 2 x 2 is the table's, never the svg's. */
+  table.comic{width:573px;max-width:100%;margin-inline:auto;--comic-h:187px;
     table-layout:fixed;border-collapse:separate;border-spacing:8px}
   /* the CELL IS THE FRAME and it stays a table cell: `display:table-cell`, 50% of the table. A cell that is
      declared `display:block` stops being a row cell and the four panels stack, which is the layout change
@@ -1692,13 +1692,14 @@
   button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
   .vz-play{display:block;margin:0}
   .vz-audio{display:block;width:100%}
-  /* An in-block drawing is the builder's to size: `--map-w` replaces the default width (any CSS length),
-     and the wrapper is never wider than the drawing it holds or than the host that holds it. THE STREET MAP
-     HAS A FIXED DEFAULT — 573px, half of the 1146px in-block width at the 1200px content width the sheet is
-     built for, and 100% on a narrower screen — so a map is exactly as wide as its drawing and never grows to
-     full width beside a paragraph. The wrapper hugs the drawing (the svg is the only thing that gives the
-     wrapper its height) so the tick labels laid over it in % stay on their places at every width. */
-  .vz-map{position:relative;width:min(var(--map-w,573px),100%);max-width:100%}
+  /* An in-block drawing is the builder's to size: `--map-w` replaces the default width (any CSS length).
+     THE WIDTH IS A REAL LENGTH, NOT A PERCENTAGE — 573px, half of the 1146px in-block width at the 1200px
+     content width the sheet is built for — because a percentage here is measured against a cell the solver
+     sizes from this drawing, and that circle collapses the drawing to a fraction of the row. `max-width:100%`
+     is the only cap: on a narrow screen the drawing takes the screen's width instead of being clipped. The
+     wrapper hugs the drawing (the svg is the only thing that gives the wrapper its height) so the tick labels
+     laid over it in % stay on their places at every width. */
+  .vz-map{position:relative;width:var(--map-w,573px);max-width:100%;margin-inline:auto}
   .vz-map>svg{display:block;width:100%;height:auto}
   .vz-controls{display:none;align-items:center;gap:10px;margin:8px 0 10px}
   .vz-play.is-enhanced .vz-controls{display:flex}
