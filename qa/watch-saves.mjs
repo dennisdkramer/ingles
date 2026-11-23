@@ -15,6 +15,12 @@
            npm run saves -- --dry-run  report what a save would land, write nothing
            npm run saves -- --no-push  watch, but commit without pushing
            npm run saves -- --all      with --import: sweep every download, however old
+
+   A SAVE MADE WHILE THE MACHINE WAS OFF IS STILL A SAVE. The watcher remembers when it last started
+   and lands anything saved since, so an edit made at night while the computer was shut down goes live
+   at the next login instead of waiting for someone to notice a download. Two downloads of the same
+   page are one edit: the newest lands and the ones it supersedes are deleted, so an older copy can
+   never overwrite what was written after it.
 */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -37,6 +43,16 @@ const DIFF = argv.includes('--diff');
    the page, and landing it would undo whatever the repo has learned since — so import takes only what
    is recent, and `--all` is the deliberate sweep. */
 const FRESH_MS = 20 * 60 * 1000;
+/* WHEN THE WATCHER LAST STARTED is this machine's state, not the repo's, so it lives beside the log
+   and never in the tree. `since` is the cutoff a save must be newer than: the previous start, so an
+   edit made while the computer was off still lands. A first run has no state and falls back to now. */
+const STATE = path.join(process.env.LOCALAPPDATA || path.join(os.homedir(), '.cache'), 'ingles-saves', 'state.json');
+function lastRun() {
+  try { return Number(JSON.parse(fs.readFileSync(STATE, 'utf8')).since) || 0; } catch (e) { return 0; }
+}
+function markRun(t) {
+  try { fs.mkdirSync(path.dirname(STATE), { recursive: true }); fs.writeFileSync(STATE, JSON.stringify({ since: t })); } catch (e) { }
+}
 /* A LOG FILE IS THE WATCHER'S OWN WRITE. The login task starts node through wscript with no
    console: stdout has nowhere to go, and a process writing to a closed handle is a process that
    can die on its own first line. So `--log <path>` (or `--log=<path>`) appends every line to that
@@ -78,6 +94,14 @@ function pageIndex() {
     if (!by.has(legacy)) by.set(legacy, rel);
   }
   return by;
+}
+
+/* A SECOND SAVE OF THE SAME PAGE IS THE SAME PAGE. A browser that will not overwrite an existing
+   download names the next one `lesson1-The Capability Map (1).html`, and that copy is a later edit,
+   not another page — so the number Chrome appends is not part of a page's name. */
+const NTH = / \(\d+\)(?=\.html$)/i;
+function pageOf(by, name) {
+  return by.get(name.toLowerCase().replace(NTH, '')) || by.get(name.toLowerCase());
 }
 
 /* WHAT A BROWSER WRITES THAT AN AUTHORED FILE DOES NOT. A serialised DOM spells every attribute it
@@ -281,8 +305,8 @@ function git(args) {
 }
 
 function land(file, by) {
-  const name = path.basename(file).toLowerCase();
-  const rel = by.get(name);
+  const name = path.basename(file);
+  const rel = pageOf(by, name);
   if (!rel) return 'no page has that name';
   const dest = path.join(ROOT, rel);
   const current = fs.readFileSync(dest, 'utf8');
@@ -334,26 +358,48 @@ console.log('saves: watching ' + DL + ' for ' + by.size + ' page name(s)');
 if (!fs.existsSync(DL)) { console.error('saves: no Downloads folder at ' + DL); process.exit(1); }
 
 const started = Date.now();
+const since = ONCE ? 0 : (lastRun() || started);
+if (!ONCE && !DRY) markRun(started);
 const done = new Set();
 function scan() {
-  let found = 0, files = [];
+  let files = [];
   try { files = fs.readdirSync(DL); } catch (e) { console.error('saves: cannot read ' + DL + ' - ' + e.message); return 0; }
+  /* ONE SAVE PER PAGE, NEWEST FIRST. Two downloads of the same lesson are one edit written twice: a
+     save, then a second save after a change of mind, or the browser's `(1)` copy. Landing them in
+     name order would leave the older text in the file, so they are grouped by the page they resolve
+     to, the newest lands, and the ones it supersedes are deleted — a copy left in Downloads would
+     land on a later start and undo the newer one. */
+  const groups = new Map();
   for (const f of files) {
     if (!/\.html$/i.test(f)) continue;
     const full = path.join(DL, f);
     let st;
     try { st = fs.statSync(full); } catch (e) { continue; }
-    if (!ONCE && st.mtimeMs < started) continue;      /* only what you saved after the watcher started */
+    if (!ONCE && st.mtimeMs < since) continue;   /* saved before the previous start: already seen */
     if (ONCE && !ALL && Date.now() - st.mtimeMs > FRESH_MS) continue;   /* an old download is old content */
-    const key = f + ':' + st.mtimeMs;
+    const rel = pageOf(by, f);
+    if (!rel) continue;
+    if (!groups.has(rel)) groups.set(rel, []);
+    groups.get(rel).push({ f, full, st });
+  }
+  let found = 0;
+  for (const list of groups.values()) {
+    list.sort((a, b) => b.st.mtimeMs - a.st.mtimeMs);
+    const newest = list[0];
+    for (const old of list.slice(1)) {
+      if (DRY) { console.log('  ' + old.f + ' → superseded by ' + newest.f + ' (dry run, kept)'); continue; }
+      try { fs.unlinkSync(old.full); } catch (e) { }
+      console.log('  ' + old.f + ' → superseded by ' + newest.f + ', deleted');
+    }
+    const key = newest.f + ':' + newest.st.mtimeMs;
     if (done.has(key)) continue;
     done.add(key);
     let verdict;
-    try { verdict = land(full, by); }
+    try { verdict = land(newest.full, by); }
     catch (e) { verdict = 'FAILED - ' + (e && e.message ? e.message : e); }
     if (verdict === 'no page has that name') { done.delete(key); continue; }
     found++;
-    console.log('  ' + f + ' → ' + verdict);
+    console.log('  ' + newest.f + ' → ' + verdict);
   }
   return found;
 }
