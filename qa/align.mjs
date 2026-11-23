@@ -10,7 +10,10 @@
  * (EqualizeRows.clean()), holds every cell at its own height, and reads what each cell actually carries.
  *
  * WHAT IT PRINTS: one line per row whose cells differ by more than TOL px, at each measured width, and
- * exit 1 if there is one. A row of a single cell has nothing to balance and is skipped.
+ * exit 1 if there is one. A row of a single cell has nothing to balance and is skipped — but the
+ * activities inside it are not: a .qgrid puts its questions in adjacent cells of its own, so its items
+ * are measured too, and a scramble's answer line (input.gap declared in em from its answer) is reported
+ * when it is wider than the cell that holds it, because that line is what wraps the chips above it.
  *
  * It is NOT behind qa/off.mjs. The kill switch silences harnesses that judge a style choice; this is a
  * measurement the batch's own last step runs (PEDAGOGY-MAP.md [ALIGN]), and a silent pass would let a
@@ -118,25 +121,95 @@ async function openBrowser(port) {
 const MEASURE = `(() => {
   const E = window.EqualizeRows;
   if (!E) return JSON.stringify({ error: 'this page does not load equalize.js' });
+  const SEL = '.content-area .rows:not(.markup-row)';
+  /* FIRST READ — the page as the student sees it, after the solver has redistributed widths. This is the
+     only state in which a squeezed cell exists: the authored page gives every cell its half, and the solver
+     then hands the wide content its share. A chip run or a chart that no longer fits is read here. */
+  const solved = [];
+  document.querySelectorAll(SEL).forEach(r => {
+    solved.push(Array.prototype.slice.call(r.children).map(c => {
+      const cw = c.getBoundingClientRect().width;
+      const sq = [];
+      Array.prototype.forEach.call(c.querySelectorAll('.chips'), el => {
+        const kids = Array.prototype.slice.call(el.children);
+        if (!kids.length) return;
+        const st = getComputedStyle(el);
+        const gap = parseFloat(st.columnGap || st.gap) || 0;
+        const nat = kids.reduce((a, k) => a + k.getBoundingClientRect().width, 0) + gap * (kids.length - 1);
+        const first = kids[0].getBoundingClientRect().height || 1;
+        const rows = Math.max(1, Math.round(el.getBoundingClientRect().height / first));
+        if (nat > cw + 2) {
+          const n = el.closest('.block') && el.closest('.block').querySelector('h3');
+          sq.push({ what: (n ? n.textContent : 'chips').trim().slice(0, 22), want: Math.round(nat), have: Math.round(cw), rows: rows });
+        }
+      });
+      Array.prototype.forEach.call(c.querySelectorAll('table.chart'), el => {
+        const nat = el.scrollWidth;
+        if (nat > cw + 2) {
+          const n = el.closest('.block') && el.closest('.block').querySelector('h3');
+          sq.push({ what: 'chart in ' + (n ? n.textContent.trim().slice(0, 18) : 'block'), want: Math.round(nat), have: Math.round(cw), rows: 0 });
+        }
+      });
+      return { w: Math.round(cw), squeeze: sq };
+    }));
+  });
+  /* THIRD READ, inside an activity: a .qgrid lays its questions in adjacent cells, so the questions are
+     cells too — one long question beside two short ones is the same fault as a lopsided row, and only the
+     rendered page can see it. Also read every answer line: a scramble's input.gap is declared in em from
+     its answer, and one that does not fit its cell is what squeezes the chips above it. */
+  const inside = [];
+  document.querySelectorAll('.content-area .qgrid').forEach(g => {
+    const items = Array.prototype.slice.call(g.children);
+    const hs = items.map(i => Math.round(i.getBoundingClientRect().height));
+    if (items.length < 2) return;
+    const d = Math.max(...hs) - Math.min(...hs);
+    if (d > ${TOL}) {
+      const n = g.closest('.block') && g.closest('.block').querySelector('h3');
+      inside.push({ what: (n ? n.textContent : 'a question grid').trim().slice(0, 32), d: d,
+                    items: hs.join(' / ') });
+    }
+  });
+  document.querySelectorAll('.content-area .gap').forEach(el => {
+    const want = el.getBoundingClientRect().width;
+    const cell = el.closest('.rows') && el.closest('.rows').children;
+    let have = 0;
+    for (const c of (cell || [])) if (c.contains(el)) have = c.getBoundingClientRect().width;
+    if (have && want > have + 2) {
+      const n = el.closest('.block') && el.closest('.block').querySelector('h3');
+      inside.push({ what: 'answer line in ' + (n ? n.textContent.trim().slice(0, 20) : 'a block'),
+                    d: 0, items: Math.round(want) + 'px wants > ' + Math.round(have) + 'px of cell' });
+    }
+  });
+  /* SECOND READ — the authored page. clean() restores widths, align-self, the centred cell and the margins
+     the spacing lever wrote; run is then a no-op so a late font cannot put the solver back. */
   E.clean(document);
   E.run = function () {};
   const out = [];
-  document.querySelectorAll('.content-area .rows:not(.markup-row)').forEach((r, i) => {
+  document.querySelectorAll(SEL).forEach((r, i) => {
     const cs = Array.prototype.slice.call(r.children);
     if (cs.length < 2) { out.push({ row: i + 1, cells: [] }); return; }
     const prev = cs.map(c => c.style.alignSelf);
     cs.forEach(c => { c.style.alignSelf = 'flex-start'; });
-    const cells = cs.map(c => {
+    const cells = cs.map((c, j) => {
       const h3 = c.querySelector('h3');
       const first = c.querySelector('p,li,td');
       const label = h3 ? h3.textContent.trim()
         : (first ? first.textContent.trim() : '(empty)');
-      return { h: Math.round(c.getBoundingClientRect().height), head: label.slice(0, 34) };
+      /* a cell may hold more than one block: read each one, so a stacked column reports its parts and
+         not just their sum */
+      const blocks = Array.prototype.slice.call(c.children).filter(b => b.classList.contains('block'));
+      const parts = blocks.length > 1 ? blocks.map(b => {
+        const t = b.querySelector('h3');
+        return { head: (t ? t.textContent : '?').trim().slice(0, 24), h: Math.round(b.getBoundingClientRect().height) };
+      }) : null;
+      const s = (solved[i] && solved[i][j]) || { w: Math.round(c.getBoundingClientRect().width), squeeze: [] };
+      return { h: Math.round(c.getBoundingClientRect().height), head: label.slice(0, 34),
+               w: s.w, authoredW: Math.round(c.getBoundingClientRect().width), parts: parts, squeeze: s.squeeze };
     });
     cs.forEach((c, j) => { if (prev[j]) c.style.alignSelf = prev[j]; else c.style.removeProperty('align-self'); });
     out.push({ row: i + 1, cells });
   });
-  return JSON.stringify({ rows: out });
+  return JSON.stringify({ rows: out, inside: inside });
 })()`;
 
 /** print one lesson's rows; return the uneven ones */
@@ -146,12 +219,25 @@ function report(rows) {
     if (!r.cells || r.cells.length < 2) continue;
     const hs = r.cells.map(c => c.h);
     const d = Math.max(...hs) - Math.min(...hs);
-    if (d <= TOL && !VERBOSE) continue;
-    const short = r.cells.filter(c => c.h < Math.max(...hs) - TOL).map(c => c.head);
-    console.log('  ' + (d > TOL ? '**' : '  ') + ' row ' + String(r.row).padStart(2) + '  d=' + String(d).padStart(3) + 'px  ' +
-      r.cells.map(c => c.head + ' [' + c.h + ']').join('   |   ') +
-      (short.length ? '   -> short: ' + short.join(' / ') : ''));
-    if (d > TOL) bad.push({ row: r.row, d, short });
+    const squz = [];
+    r.cells.forEach(c => (c.squeeze || []).forEach(s => squz.push(
+      s.what + ' wants ' + s.want + 'px in ' + s.have + 'px' + (s.rows > 1 ? ' (chips on ' + s.rows + ' rows)' : ''))));
+    const squeeze = squz.length > 0;
+    if (d <= TOL && !VERBOSE && !squeeze) continue;
+    const short = r.cells.filter(c => c.h < Math.max(...hs) - TOL).map(c => {
+      const gapPx = Math.max(...hs) - c.h;
+      if (c.parts && c.parts.length) {
+        const last = c.parts[c.parts.length - 1].head;
+        return c.head + ' (last block there: ' + last + ' — ' + gapPx + 'px)';
+      }
+      return c.head + ' (' + gapPx + 'px)';
+    });
+    const parts = r.cells.map(c => (c.parts ? ' {' + c.parts.map(p => p.head + ' ' + p.h).join(' + ') + '}' : ''));
+    console.log('  ' + (d > TOL ? '**' : squeeze ? '~~' : '  ') + ' row ' + String(r.row).padStart(2) + '  d=' + String(d).padStart(3) + 'px  ' +
+      r.cells.map((c, i) => c.head + parts[i] + ' [' + c.h + ' / ' + c.w + 'w]').join('   |   ') +
+      (short.length ? '   -> short: ' + short.join(' / ') : '') +
+      (squeeze ? '   -> squeeze: ' + squz.join('; ') : ''));
+    if (d > TOL || squeeze) bad.push({ row: r.row, d, short, squeeze: squz });
   }
   return bad;
 }
@@ -201,6 +287,12 @@ async function main() {
         if (data.error) { console.log('  ?? ' + j.track + ' ' + j.n + ' — ' + data.error); continue; }
         console.log(' ' + j.track + ' ' + j.n + ':');
         const bad = report(data.rows);
+        if (data.inside && data.inside.length) {
+          for (const s of data.inside) {
+            console.log('  ** inside  ' + s.what + '  ' + (s.d ? 'items ' + s.items + ' (d=' + s.d + 'px)' : s.items));
+          }
+          bad.push({ row: 'inside', d: 0, short: [], squeeze: data.inside.map(s => s.what + ' — ' + s.items) });
+        }
         if (bad.length) failing.push({ j, w, bad });
       }
       b.close();
