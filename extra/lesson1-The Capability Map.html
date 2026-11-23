@@ -40,6 +40,8 @@
 <div class="rows"><div><p class="dim"><code>data-look</code> is declared on the block, never inferred from what it holds, and changes the paint only.</p></div></div>
 </div>
 </div>
+<div class="rows"><div><p><b>Every item under a section or a block is in a row, and a row is a line whose direct children are its cells.</b> A paragraph, a list, a chart, a drawing or a block that arrives directly under a section's heading is put in a <code>.rows</code> with a cell of its own before anything else is done, and a block's own children are written the same way one level deeper — so any item can be picked up and placed beside another, and nothing on the page is a bare leaf. A cell may hold several items, stacked, when they belong together: the point of the cell is that something can be dragged beside it, not that it holds one thing.</p></div></div>
+<div class="rows"><div><p class="dim">A block opens with its <code>h3</code> — its letter, its anchor and its place in the index are drawn from that headline. Text that introduces or applies to a whole section or block goes at the top of its container, and may be a row of its own. A lone element at the end of a section is centred or given the full width, whichever reads better. No height is authored anywhere: the spacing is the sheet's at each level and the solver's inside a row.</p></div></div>
 </div>
 </div>
 </div>
@@ -648,7 +650,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
     …
   &lt;/tbody&gt;
 &lt;/table&gt;</pre>
-<p class="dim">A chart carries no title of its own: the sentence beside it names it. <code>th.vlab</code> puts a family label outside the chart's edge; <code>tr.bare</code> collapses a nameless header row to a rule. A block takes <code>data-structure="grid"</code> with a <code>thead</code> and optional <code>caption</code>, and <code>tr.note</code> for a remark row. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each. <b>Content beside a chart should flex to fill the row</b>; where it does not, the chart is centred in the space it was given, or the row is spaced around it.</p>
+<p class="dim">A chart carries no title of its own: the sentence beside it names it. <code>th.vlab</code> puts a family label outside the chart's edge; <code>tr.bare</code> collapses a nameless header row to a rule. A block takes <code>data-structure="grid"</code> with a <code>thead</code> and optional <code>caption</code>, and <code>tr.note</code> for a remark row. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each. <b>Content beside a chart should flex to fill the row</b>; where it does not, the chart is centred in the space it was given, or the row is spaced around it. <b>A column header is content, written only when it names something the student must tell apart</b> — a contrast, a category, or the question the column answers; a header that only names what a column obviously holds is removed and the row collapses to <code>tr.bare</code>. <b>Where the teaching turns on two groups that behave differently, the two sides are told apart</b> — by appearance (colour, <code>opacity</code>, a heavier border) or by arrangement — so the student sees which side the point belongs to without counting rows; a contrast the student cannot see has cost them the chart.</p>
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;…the sentence, and the chart it reads…&lt;/div&gt;
   &lt;div&gt;
