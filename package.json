@@ -17,6 +17,7 @@
     "mapcheck": "node qa/mapcheck.mjs",
     "batchcheck": "node qa/batchcheck.mjs",
     "batchcheck:self": "node qa/batchcheck.mjs --self-test",
+    "saves": "node qa/watch-saves.mjs",
     "align": "node qa/align.mjs"
   },
   "devDependencies": {

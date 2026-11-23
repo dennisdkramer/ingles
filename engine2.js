@@ -93,7 +93,14 @@ function saveToRepo() {
      clone taken now would carry them into the saved file. */
   try { if (window.LayoutEditor) LayoutEditor.clean(); } catch (e) { }
   const html = fullPageHTML();
-  const name = (location.pathname.split("/").pop() || "lesson.html").replace(/[^\w.\-]+/g, "-");
+  /* THE PAGE KEEPS ITS OWN NAME. `location.pathname` is percent-encoded, so a title with a space used to
+     arrive as `lesson1-The-20Capability-20Map.html` — a file no watcher could match to the page it came
+     from. Decoding first and then removing only the characters a filesystem refuses leaves the name the
+     page actually has, spaces and all. */
+  let name = "";
+  try { name = decodeURIComponent(location.pathname.split("/").pop() || ""); } catch (e) { name = location.pathname.split("/").pop() || ""; }
+  name = (name || "lesson.html").replace(/[<>:"/\\|?*\x00-\x1f]+/g, "-").trim() || "lesson.html";
+  if (!/\.html?$/i.test(name)) name += ".html";
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([html], { type: "text/html;charset=utf-8" }));
   a.download = name;
@@ -102,7 +109,7 @@ function saveToRepo() {
   a.click();
   setTimeout(function () { URL.revokeObjectURL(a.href); if (a.parentNode) a.remove(); }, 5000);
   saveContent();                       /* the backend row stays the safety net, exactly as before */
-  toast("Saved to Downloads — the watcher puts it in " + TRACK + "/ and pushes");
+  toast("Saved to Downloads — run `npm run saves` to land it in the file and push");
 }
 async function clearInk() {
   const gone = { highlight: 1, note: 1, answer: 1, complete: 1 };
@@ -157,17 +164,24 @@ function toggleEditMode(){
   hlReflow();ntReflow();
   loadLayout();editingOnly(true);      /* the drag layer rides with edit mode, and only with it */
   if(eb)eb.textContent="✔️ Done";
-  toast("Edit mode — drag anything to re-arrange it; ✔️ Done saves");
+  toast(OPENPAGE
+    ? "Edit mode — drag anything to re-arrange it; 💾 Save to repo keeps it"
+    : "Edit mode — drag anything to re-arrange it; ✔️ Done saves");
  }else{
   if(ca)ca.removeAttribute("contenteditable");
   unloadLayout();editingOnly(false);   /* disable() also strips the chip and the drag line, so the save is clean */
   if(eb)eb.textContent="✏️ Edit";
   saveContent();
-  ca.innerHTML=savedLive;
+  /* On a gate page the server holds the layout and the reload reads it from there, so the live page goes
+     back to what it was before the edit. An OPEN page has no server: reverting here would throw away the
+     arrangement the teacher just made, and nothing exists to load it back from. It keeps what it has. */
+  if (!OPENPAGE) ca.innerHTML = savedLive;
   if(eqRun){EqualizeRows.run=eqRun;eqRun=null;try{EqualizeRows.run();}catch(e){}}
   renderCompleteBtn();
   const fdn=document.getElementById("feed");if(fdn)fdn.value=nbkVal;
-  toast("Saved");
+  toast(OPENPAGE
+    ? "Layout kept in this tab. 💾 Save to repo writes it to the file."
+    : "Saved");
  }
 }
 /* shared notebook: a plain textarea, one per student+lesson, auto-saved (debounced) */

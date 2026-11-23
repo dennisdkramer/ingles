@@ -32,7 +32,7 @@ const FILE = path.join(ROOT, 'CONTENT_EXAMPLES.md');
 const text = fs.readFileSync(FILE, 'utf8');
 const lines = text.split(/\r?\n/);
 const previewFile = path.join(ROOT, 'qa', 'preview-blocks.html');
-/* the specimen page was folded into capability-map.html and deleted; the shape-atom checks have no
+/* the specimen page was folded into `extra/lesson1-The Capability Map.html` (the map page) and deleted; the shape-atom checks have no
    subject without it, so they are skipped rather than failing on a missing file */
 const preview = fs.existsSync(previewFile) ? fs.readFileSync(previewFile, 'utf8') : '';
 

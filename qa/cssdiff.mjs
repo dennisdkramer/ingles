@@ -32,7 +32,7 @@ const BASELINE = path.join(__dirname, '.css-baseline.json');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 /* two pages cover the sheet's consumers: the block catalogue, games included, and a real lesson */
-const DEFAULT_PAGES = ['capability-map.html',
+const DEFAULT_PAGES = ['extra/lesson1-The Capability Map.html',
   path.relative(ROOT, lessonFile('business', 40) || path.join(ROOT, 'business/lesson40.html')).split(path.sep).join('/')];
 
 function server() {

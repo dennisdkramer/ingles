@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// [DEPRECATED] not a generation input — see capability-map.html. `--revive` runs it anyway.
+// [DEPRECATED] not a generation input — see the map page (`extra/lesson1-The Capability Map.html`). `--revive` runs it anyway.
 if (!process.argv.includes('--revive')) {
-  console.error('qa/brief.mjs is deprecated and is not a generation input. See capability-map.html; pass --revive to run it.');
+  console.error('qa/brief.mjs is deprecated and is not a generation input. See the map page, extra/lesson1-The Capability Map.html; pass --revive to run it.');
   process.exit(1);
 }
 import fs from 'node:fs';

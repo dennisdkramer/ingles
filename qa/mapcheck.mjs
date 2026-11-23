@@ -1,7 +1,12 @@
 /* qa/mapcheck.mjs — the consistency gate for the two contract files.
    Run before a generation task and before any commit that touches
-   capability-map.html or PEDAGOGY-MAP.md. Exits 1 on a hard failure:
-   a pointer that resolves to nothing is a page a fresh task cannot build. */
+   the map page or PEDAGOGY-MAP.md. Exits 1 on a hard failure:
+   a pointer that resolves to nothing is a page a fresh task cannot build.
+
+   THE MAP IS A PAGE, NOT A ROOT FILE. It lives in the demo folder
+   (`extra/lesson1-The Capability Map.html`) with every other page, so one
+   path here is the whole contract: the page the checks read is the page an
+   author opens. */
 import fs from 'node:fs';
 import path from 'node:path';
 import {JSDOM} from 'jsdom';
@@ -12,7 +17,8 @@ const read = f => fs.readFileSync(path.join(root, f), 'utf8');
 const fails = [], warns = [];
 const fail = m => fails.push(m), warn = m => warns.push(m);
 
-const map = read('capability-map.html');
+const MAP = 'extra/lesson1-The Capability Map.html';
+const map = read(MAP);
 const ped = read('PEDAGOGY-MAP.md');
 const css = read('style.css');
 const shell = read('_shell.html');
@@ -35,7 +41,7 @@ for (const s of stubs) {
 }
 
 /* 3 — no lettered block/section labels survive (4a, 5B …) */
-for (const [f, txt] of [['capability-map.html', map], ['PEDAGOGY-MAP.md', ped]]) {
+for (const [f, txt] of [[MAP, map], ['PEDAGOGY-MAP.md', ped]]) {
   const hits = [...txt.matchAll(/\b[45][a-e]\b/g)].map(m => m[0]).filter(v => v !== '4b' && v !== '5e');
   if (hits.length) warn(`${f}: lettered labels ${[...new Set(hits)].join(',')} — sections have names, not letters`);
 }
@@ -93,8 +99,19 @@ for (const ph of ['{{TRACK_TITLE}}', '{{TRACK_UPPER}}', '{{TRACK}}', '{{LESSON_T
 }
 if (/<!--/.test(shell) && /LESSON CONTENT|opener/.test(shell)) fail('_shell.html carries a content instruction');
 
-/* 8 — every file PEDAGOGY-MAP names exists (catches a renamed or deleted input) */
+/* 8 — every file PEDAGOGY-MAP names exists (catches a renamed or deleted input). A path is taken as
+   whole when it sits inside backticks: a page name with spaces in it (`extra/lesson1-The Capability
+   Map.html`) is one file, and reading the last word of it as a path reports a file nobody wrote. */
+const named = new Set();
+for (const m of ped.matchAll(/`([^`]+)`/g)) {
+  const s = m[1].trim();
+  if (/^[\w./ -]+\.(?:mjs|json|js|md|html|css|mp3)$/.test(s)) named.add(s);
+}
 for (const tok of new Set(ped.match(/[\w./-]+\.(?:mjs|json|js|md|html|css|mp3)/g) || [])) {
+  if ([...named].some(p => p.endsWith(tok))) continue;
+  named.add(tok);
+}
+for (const tok of named) {
   if (/[<>*]/.test(tok) || tok.startsWith('-') || tok.startsWith('/')) continue;
   if (!fs.existsSync(path.join(root, tok))) warn(`PEDAGOGY-MAP names a file that is not there: ${tok}`);
 }

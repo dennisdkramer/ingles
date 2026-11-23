@@ -134,7 +134,7 @@ const scriptRe = /<script src="((?:\.\.\/)?)equalize\.js(?:\?v=[0-9a-f]*)?"/;
 /* every page that links the sheet carries the same stamp: the root pages draw the menu and the map, and a
    lesson page must not keep a cached sheet after the sheet changes. The manifest cannot list every page —
    a lesson folder may hold pages the book does not list — so the rest are found in the tree. */
-const stampedPages = new Set(['index.html', 'capability-map.html', '_shell.html', '_shell-preview.html']);
+const stampedPages = new Set(['index.html', '_shell.html', '_shell-preview.html']);
 for (const [track, entries] of Object.entries(manifest)) {
   for (const entry of entries) stampedPages.add(track + '/' + entry.file);
 }

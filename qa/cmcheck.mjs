@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const root = process.cwd();
-const file = path.join(root, 'capability-map.html');
+const file = path.join(root, 'extra', 'lesson1-The Capability Map.html');
 const dom = new JSDOM(fs.readFileSync(file, 'utf8'));
 const doc = dom.window.document;
 const out = [];
@@ -45,7 +45,9 @@ for (const a of doc.querySelectorAll('a[href^="#"]')) {
 out.push(`ids: ` + [...doc.querySelectorAll('[id]')].map(e => e.id).join(', '));
 
 for (const el of doc.querySelectorAll('img[src],audio[src]')) {
-  const p = path.join(root, el.getAttribute('src'));
+  /* resolved from the PAGE's folder, not the repo root: the map lives in extra/, so its
+     `../logo.png` is the root logo and `../assets/…` is the root asset folder. */
+  const p = path.join(path.dirname(file), el.getAttribute('src'));
   if (!fs.existsSync(p)) fail.push('missing file ' + el.getAttribute('src'));
 }
 

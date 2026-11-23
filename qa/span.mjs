@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // qa/span.mjs — measures each frame in a rendered page and writes its `data-span`.
-// The span is measured, never chosen: node qa/span.mjs --page=capability-map.html [--write|--json]
+// The span is measured, never chosen: node qa/span.mjs --page="extra/lesson1-The Capability Map.html" [--write|--json]
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
