@@ -1,6 +1,10 @@
 /* MOTOR 2 — control bar, camadas, fala (speechSynthesis), realces persistentes */
 /* Behaviour contract: FUNCTION.md - read it before changing anything here. */
 const LAYER_VER="v4-server-truth-20261006"; /* Bump to mark a fresh data era */
+/* THE SITE ROOT AS THIS PAGE SEES IT: a lesson lives one folder down ("../"), the capability map sits in
+   the root (""). Read from this script's own address, so a page at any depth — and the repo served under
+   /<repo>/ on GitHub Pages — resolves to the same place. */
+const SITE=new URL(".",(document.currentScript&&document.currentScript.src)||location.href).pathname;
 let wipeGuard=0; /* a Clear-page wipe in flight: the poll must not resurrect the rows it is deleting */
 let lastPollChange=Date.now(); /* last time the poll saw a change — keeps the poll fast while the student watches */
 let lastFull=""; /* the layer content signature used to detect that change */
@@ -10,7 +14,7 @@ let completeNow=false; /* optimistic state of the "Complete?" tag button */
 let LSN=null;
 function lessonHref(n){const hit=(LSN||[]).find(x=>x.n===n);return hit&&hit.file?encodeURIComponent(hit.file):null;}
 async function goLesson(n){
- if(!LSN){try{const r=await fetch("../lessons.json");if(r.ok){const j=await r.json();LSN=(j&&j[TRACK])||null;}}catch(e){}}
+ if(!LSN){try{const r=await fetch(SITE+"lessons.json");if(r.ok){const j=await r.json();LSN=(j&&j[TRACK])||null;}}catch(e){}}
  const h=lessonHref(n);if(h)location.href=h;
 }
 
@@ -46,6 +50,9 @@ document.querySelectorAll("[contenteditable]").forEach(function(n){n.removeAttri
 /* ---- content edit mode (teacher): a separate editable copy; live page + marks stay untouched ---- */
 const contentId=()=>"content_"+TRACK+"_"+L;
 let savedLive="",nbkVal="";
+/* the solver's real run(), kept while edit mode holds it at a no-op — see toggleEditMode */
+let eqRun=null;
+
 function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop,#completebtn,#completerow").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style],b[style],i[style],u[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|px|font-style|background/.test(st))s.removeAttribute("style")});cl.querySelectorAll(".content-area .block[data-state]").forEach(n=>n.removeAttribute("data-state"));try{if(window.EqualizeRows)window.EqualizeRows.clean(cl);}catch(e){}return "<!doctype html>"+cl.outerHTML;}
 function contentAreaHTML(saved){const d=new DOMParser().parseFromString(saved,"text/html");const ca=d.querySelector(".content-area");return ca?ca.innerHTML:saved;}
 function saveContent(){if(!document.querySelector(".content-area"))return;const o={action:"set",id:contentId(),type:"content",anchor:"",data:fullPageHTML(),email:gate.email,lesson:L,author:"prof",track:TRACK};notePending(o);outboxPush(o);scheduleFlush();}
@@ -63,7 +70,7 @@ function loadLayout() {
   if (layoutState) return;
   layoutState = 1;
   const s = document.createElement("script");
-  s.src = "../layout.js";
+  s.src = SITE+"layout.js";
   s.onload = function () { layoutState = 2; try { LayoutEditor.enable(); } catch (e) { } };
   s.onerror = function () { layoutState = 0; toast("Layout tool unavailable."); };
   document.body.appendChild(s);
@@ -124,7 +131,19 @@ function toggleEditMode(){
  document.body.classList.toggle("editing",editing);
  const ca=document.querySelector(".content-area"),eb=document.getElementById("editpage");
  if(editing){
+  /* THE AUTHORED PAGE IS THE CANVAS. The solver writes its numbers into the live DOM (flex, width,
+     justify-content, the spacing margins, and a data-eq mark on every cell it sized), so a drag taken
+     on the solved page carries one page's arithmetic into the layout. clean() erases exactly those and
+     run is a no-op afterwards, so a late font cannot put them back mid-drag; Done restores both. The
+     reveal class has to come back with it: the sheet hides .content-area while it is missing. */
+  if(window.EqualizeRows){
+   eqRun=EqualizeRows.run;
+   try{EqualizeRows.clean(document);}catch(e){}
+   EqualizeRows.run=function(){};
+   document.documentElement.classList.add("eq-ready");
+  }
   savedLive=ca.innerHTML;
+
   nbkVal=(document.getElementById("feed")||{}).value||"";
   const cov=layer.find(r=>r.type==="content"&&r.data);
   if(cov)ca.innerHTML=contentAreaHTML(cov.data);
@@ -141,6 +160,7 @@ function toggleEditMode(){
   if(eb)eb.textContent="✏️ Edit";
   saveContent();
   ca.innerHTML=savedLive;
+  if(eqRun){EqualizeRows.run=eqRun;eqRun=null;try{EqualizeRows.run();}catch(e){}}
   renderCompleteBtn();
   const fdn=document.getElementById("feed");if(fdn)fdn.value=nbkVal;
   toast("Saved");
@@ -527,7 +547,7 @@ function renderCompleteBtn(){
   +extra
   +' <button type="button" id="prevlesson"'+(L>1?'':' disabled')+' title="Lesson '+(L-1)+'">&#8592; Last</button>'
   +' <button type="button" id="nextlesson" title="Lesson '+(L+1)+'">Next &#8594;</button>';
- const ib=document.getElementById("idxbtn");if(ib)ib.onclick=()=>location.href="../index.html";
+ const ib=document.getElementById("idxbtn");if(ib)ib.onclick=()=>location.href=SITE+"index.html";
  /* the book's lessons, built on FIRST OPEN so a lesson page pays nothing for a list it may never open; the
     label and the swatch come from tracks.json and the items from lessons.json — the same two sources the
     Index page reads, so the two lists cannot drift apart. */
@@ -535,7 +555,7 @@ function renderCompleteBtn(){
  const escT=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  let selLoaded=false;
  if(sb&&sm){
-  fetch("../tracks.json").then(r=>r.ok?r.json():null).then(list=>{
+  fetch(SITE+"tracks.json").then(r=>r.ok?r.json():null).then(list=>{
    const m=(Array.isArray(list)?list:[]).find(x=>x&&x.name===folder);if(!m)return;
    if(m.label)sb.textContent=m.label+(m.icon?" "+m.icon:"")+" \u25BE";
    if(/^#[0-9a-f]{3,8}$/i.test(String(m.color||"")))sb.style.setProperty("--sw",m.color);
