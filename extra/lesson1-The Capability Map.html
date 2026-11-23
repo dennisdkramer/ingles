@@ -24,7 +24,67 @@
 </div>
 </div>
 
-<h2>How a page gets built</h2>
+<h2>Pass 1 — the words</h2>
+<div class="rows">
+<div>
+<p><b>The order never changes.</b> A generation begins by copying <code>_shell.html</code> and renaming the file <code>lesson&lt;N&gt;-&lt;Title&gt;.html</code>: the title names the main thing the lesson teaches, in the words a student would use — never a slogan, a metaphor or a question — and the filename is the only place the site index learns it. Then this page is worked through in its own order: <b>pass 1</b> writes the words, <b>checks</b> reads them back, <b>pass 2</b> builds the page, <b>verify</b> reads what was built, and the batch is aligned once every lesson in it is finished. <b>Everything a lesson changes</b> — its difficulty, its voice, its roadmap section, what the ledger has already spent — is stated in <code>PEDAGOGY-MAP.md</code>, which outranks this page.</p>
+</div>
+</div>
+
+
+
+<div class="rows">
+<div>
+<div class="block">
+<h3>The mapping</h3>
+<div class="rows">
+<div>
+<p class="dim">The first column is the occasion, the second the visual that answers it, and every name opens it drawn. A concept with no row is one no visual shows yet. <b>None of these items is mandatory or even preferred: a text-only explanation is equally valid if it accomplishes the teaching goal of its block.</b> The lesson teaches; a visual is one of the ways its example is drawn. <b>The order of the items here means nothing</b> — it is not a ranking, a precedence or a sequence, and nothing is more important for coming first.</p>
+</div>
+<div>
+<table class="chart">
+<thead><tr class="bare"><th colspan="2"></th></tr></thead>
+<tbody>
+<tr><td>word order and the jobs inside a sentence</td><td><a href="#pos">parts-of-speech marking</a></td></tr>
+<tr><td>teach english use of indirect object</td><td><a href="#recipient">the recipient and its arrow</a></td></tr>
+<tr><td>teach verb tenses - timelines anchored to phrases</td><td><a href="#axis">the timeline</a></td></tr>
+<tr><td>chart for bulk vocabulary, definitions/translations/etc</td><td><a href="#chart">a chart</a></td></tr>
+<tr><td>standout note for special case words/phrases</td><td><a href="#gloss">a card at the word</a></td></tr>
+<tr><td>how one word is said</td><td><a href="#key-sound">the pronunciation key, above the word</a></td></tr>
+<tr><td>include music w/ relevant lyrics - script fetch &amp; audio player</td><td><a href="#audio">the player</a></td></tr>
+<tr><td>locations, directions, relative positions</td><td><a href="#map">the street map</a></td></tr>
+<tr><td>the student writes the sentence a panel shows</td><td><a href="#stripgaps">the strip with a gap under each panel</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="rows">
+<div>
+<div class="block">
+<h3>The lesson is written here, in full</h3>
+<div class="rows"><div><p><b>The whole lesson is written in full, as the sentences the student reads</b> — every explanation, every example, every dialog, every item with its answer, every list, every chart's rows. A placeholder, a note to self, or a line saying what a section will contain leaves the lesson unfinished: pass 2 builds what is written and cannot build what was only meant.</p></div></div>
+<div class="rows"><div><p>It is written as it would read printed, and imagined from scratch: the number of sections, their order, the first thing the page does and where the training sits are decided for this lesson alone, out of what it teaches — never out of how the last page was built. <b>A raw lesson that could be moved into another lesson's place by changing its words is a copy.</b> The page opens on the point it teaches: a scene, a dialog or a story is an example of content already stated, never the introduction.</p></div></div>
+<div class="rows"><div><p>Teaching is sentences that explain and examples that show; an element below is one way an example is drawn, chosen because it answers a question the sentence cannot. <b>Every sentence about the language is a statement of fact</b>: would a grammar written for teachers print it as it stands, and would every example on the page agree with it? A note is read for what it adds — a test, a mistake it stops, the word's real use.</p></div></div>
+<div class="rows"><div><p><b>Nothing here caps how much teaching or training a lesson carries.</b> A point the student must master gets the teaching and the training it needs, and a section can contain several ideas; the depth the page must reach is the depth that point demands.</p></div></div>
+<div class="rows"><div><p class="dim"><b>Difficulty is not decided on this page.</b> The level guidance in <code>PEDAGOGY-MAP.md</code> is the only statement of it and outranks everything here; every instruction, example and item written in this pass is written to it. The one piece of markup pass 1 writes is <code>.pt</code>, because <code>qa/batchcheck</code> reads Portuguese by that mark: everything else is words — headings, paragraphs, lists, an activity as its numbered prompts with their keys, and a chart as its rows inline in the text, one row per line, cells separated by <code> | </code>, a header line first or <code>-</code> for none.</p></div></div>
+</div>
+</div>
+</div>
+
+<h2>Checks</h2>
+
+<div class="rows">
+<div>
+<p>The draft is read back before anything is built — coverage, prose, the quiz, the register, the level, and the skeleton against the ledger's last rows. <b>What the reading finds goes back to pass 1</b>: a page whose flow or teaching is wrong is repaired in the words, not in the arrangement. Nothing is built until the words stand.</p>
+</div>
+</div>
+
+<h2>Pass 2 — the page</h2>
 
 <div class="rows">
 <div>
@@ -68,39 +128,6 @@
 </div></div></details>
 </div>
 
-<h2>Choosing a visual</h2>
-
-<div class="rows">
-<div>
-<div class="block">
-<h3>The mapping</h3>
-<div class="rows">
-<div>
-<p class="dim">The first column is the occasion, the second the visual that answers it, and every name opens it drawn. A concept with no row is one no visual shows yet. <b>None of these items is mandatory or even preferred: a text-only explanation is equally valid if it accomplishes the teaching goal of its block.</b> The lesson teaches; a visual is one of the ways its example is drawn. <b>The order of the items here means nothing</b> — it is not a ranking, a precedence or a sequence, and nothing is more important for coming first.</p>
-</div>
-<div>
-<table class="chart">
-<thead><tr class="bare"><th colspan="2"></th></tr></thead>
-<tbody>
-<tr><td>word order and the jobs inside a sentence</td><td><a href="#pos">parts-of-speech marking</a></td></tr>
-<tr><td>teach english use of indirect object</td><td><a href="#recipient">the recipient and its arrow</a></td></tr>
-<tr><td>teach verb tenses - timelines anchored to phrases</td><td><a href="#axis">the timeline</a></td></tr>
-<tr><td>chart for bulk vocabulary, definitions/translations/etc</td><td><a href="#chart">a chart</a></td></tr>
-<tr><td>standout note for special case words/phrases</td><td><a href="#gloss">a card at the word</a></td></tr>
-<tr><td>how one word is said</td><td><a href="#key-sound">the pronunciation key, above the word</a></td></tr>
-<tr><td>include music w/ relevant lyrics - script fetch &amp; audio player</td><td><a href="#audio">the player</a></td></tr>
-<tr><td>locations, directions, relative positions</td><td><a href="#map">the street map</a></td></tr>
-<tr><td>the student writes the sentence a panel shows</td><td><a href="#stripgaps">the strip with a gap under each panel</a></td></tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-
-<h2>In-Block Features</h2>
 
 <div class="rows">
 <div>
@@ -753,7 +780,6 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 </div></div></details>
 </div>
 
-<h2>Activities</h2>
 
 <div class="rows">
 <div>
@@ -1470,7 +1496,6 @@ next();
 </div></div></details>
 </div>
 
-<h2>Games</h2>
 
 <div class="rows">
 <div>
@@ -1543,6 +1568,22 @@ next();
      answer (engine4 matches it against data-say) --&gt;</pre>
 <p class="dim">Words the game needs on the item, not on the block: <code>data-answer="&lt;word&gt;"</code> for <code>wordleBoard</code> and <code>crosswordBoard</code>, <code>data-first</code> and <code>data-lives</code> for <code>echoPads</code>, <code>data-train</code> for <code>trainOrder</code>, <code>data-buckets</code> for <code>catchBasket</code>. Every game answers with the same radios, so engine4 checks the option and the page's own marking still saves it.</p>
 </div></div></details>
+</div>
+
+<h2>Verify</h2>
+
+<div class="rows">
+<div>
+<p>Everything the built page can show and the words cannot is read here: the frame of each visual, every class and attribute against this page, the option sets, the engine behind each instruction, the marks a tool printed, a music section's provenance, and the ledger row against the page. Then the batch's mechanical checks — <code>npm run mapcheck</code>, <code>npm run batchcheck</code>, <code>npm run build:lessons</code>. <b>A defect of arrangement is repaired here; a defect in what the page teaches goes back to pass 1.</b> The lesson is finished when this reading is clean, and it is not opened again in the task.</p>
+</div>
+</div>
+
+<h2>Align</h2>
+
+<div class="rows">
+<div>
+<p>After every lesson in the batch is finished and its checks are green, the pages are measured on the rendered page — <code>npm run align -- --track=&lt;track&gt; --lessons=&lt;range&gt;</code> — because heights come from the authored page and widths from the solved one. A row whose two cells differ by more than 30px of content takes content in the shorter cell, or the pairing is broken; a squeezed cell is repaired structurally. Then the three checks run again and the batch is committed and pushed.</p>
+</div>
 </div>
 
 <h2>Learned during build generation</h2>
