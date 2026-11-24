@@ -123,11 +123,17 @@ window.LayoutEditor = (function () {
   function kindOf(n) { return isRow(n) ? 'row' : (isCell(n) ? 'cell' : 'item'); }
   /* the side band of a level-3 cell: the strip that reads as "beside", not "above" or "below" */
   var BAND = 24;
+  /* the edge of the item inside a cell: held this close, the drop is the level-3 gesture rather than
+     the level-2 one, so "beside this paragraph" and "beside this cell" are different targets */
+  var EDGE3 = 7;
 
   function midY(el) { var r = el.getBoundingClientRect(); return r.top + r.height / 2; }
   /* the position a drop would give, against the place the node already holds: equal means no move */
   function samePlace(t, n) {
     if (!t || t.merge || !t.box) return false;
+    /* a drop beside the item itself always makes a row it does not have yet, so it is never "already
+       where it is" — the box it lands in is a cell both of them stand in, not the arrival's own place */
+    if (t.insert === 'cell3') return false;
     if (t.box !== n.parentElement) return false;
     var ref = t.ref || null;
     return ref === n || ref === n.nextElementSibling;
@@ -193,7 +199,15 @@ window.LayoutEditor = (function () {
 
     var cell = el.closest('.rows>*');
     if (!cell) return inPage(x, y);
-    return inCell(cell, x, y, null, false);
+    /* the ITEM under the pointer, if there is one: an edge of it is the level-3 gesture, and the cell
+       around it is the wider level-2 one */
+    var inner = null;
+    if (el !== cell && cell.contains(el)) {
+      var n2 = el;
+      while (n2 && n2 !== cell && !movable(n2)) n2 = n2.parentElement;
+      if (n2 && n2 !== cell && cell.contains(n2) && !isRow(n2)) inner = n2;
+    }
+    return inCell(cell, x, y, inner);
   }
 
   /* a row's own area: a cell goes in beside the cells already there; a row cannot be a cell */
@@ -218,7 +232,7 @@ window.LayoutEditor = (function () {
   }
 
   /* a cell's body — the place a row lands, and the place a cell merges into. */
-  function inCell(cell, x, y) {
+  function inCell(cell, x, y, inner) {
     var k = drag.kind, lvl = cellLevel(cell);
 
     /* a level-3 cell is a positioning device, not a place: only an item may enter it, and only
@@ -247,14 +261,39 @@ window.LayoutEditor = (function () {
        object, it is placed and never merged. */
     var loose = !!(drag.node.closest && drag.node.closest('.markup-row')) && k === 'cell' ? 'item' : k;
 
+    /* LEVEL 3 IS A GESTURE OF ITS OWN — HELD ALMOST EXACTLY ON THE EDGE of the item inside this cell.
+       The drop then puts the dragged thing beside THAT item one level down: the level-2 cell gains a
+       level-3 row holding two cells, the item and the arrival. A few pixels further in is the level-2
+       drop instead, which is deliberately a much wider target: the whole side of the cell. The line's
+       colour says which of the two is about to happen — blue for level 2, red for level 3. */
+    if (loose !== 'row' && inner && lvl <= 2) {
+      var ir = inner.getBoundingClientRect();
+      var near = x < ir.left + EDGE3 ? 'left' : (x > ir.right - EDGE3 ? 'right' : null);
+      if (near) {
+        var t3 = { box: cell, ref: null, host: inner, before: near === 'left', ax: 'x', insert: 'cell3', item: inner };
+        return samePlace(t3, drag.node) ? null : t3;
+      }
+    }
+
     /* BESIDE, AT EVERY LEVEL, IS THE CELL'S OWN EDGE — the same rule the level-3 cell already had, read
        one level up. A cell dropped on another cell's side sits beside it in that row; dropped in the
        middle it merges, as it always did. An item dropped on the same edge becomes a cell of that row,
        because the side is the only place an item can arrive without going inside the cell. */
     var er = cell.getBoundingClientRect();
-    /* the band is a share of the cell, capped: a narrow cell still has a middle to merge into */
-    var band = Math.min(BAND, Math.round(er.width * 0.25));
+    /* BESIDE AT LEVEL 2 IS A WIDE TARGET — a fifth of the cell, capped — because that is the ordinary
+       gesture: put this thing on the line beside that one. LEVEL 3 IS NOT: it asks for the pointer to
+       be held almost exactly on the edge of the item inside (EDGE3), so the narrow gesture is the one
+       that goes a level down. */
+    var band = Math.min(200, Math.round(er.width * 0.2));
     var edge = x < er.left + band ? 'left' : (x > er.right - band ? 'right' : null);
+    if (edge && loose === 'row') {
+      /* A ROW BESIDE A ROW: two rows cannot stand side by side — a row is a line, not a box — so the
+         dropped row's cells join the row it was dropped on, which puts what the two rows held beside
+         each other on one line. That is the only shape "row beside row" has. */
+      var tj = { box: cell.parentElement, ref: edge === 'left' ? cell : (cell.nextElementSibling || null),
+                 host: cell, before: edge === 'left', ax: 'x', insert: 'join' };
+      return samePlace(tj, drag.node) ? null : tj;
+    }
     if (edge && (loose === 'cell' || loose === 'item')) {
       if (loose === 'cell' && cell === drag.node.parentElement) return null;
       var atC = edge === 'left' ? cell : (cell.nextElementSibling || null);
@@ -277,21 +316,33 @@ window.LayoutEditor = (function () {
     return samePlace(t4, drag.node) ? null : t4;
   }
 
+  /* THE LEVEL THE DROP WILL LAND ON, which is what the line's colour says: the level of the row the
+     arrival becomes a cell of, or the level of the row that is made for it. */
+  function targetLevel(t) {
+    if (!t || !t.box) return 0;
+    var box = t.box;
+    if (box === ca()) return 1;
+    if (isRow(box)) return levelOf(box);
+    if (isCell(box)) return cellLevel(box) + 1;
+    return 0;
+  }
+
   /* the line, drawn at the boundary the drop will land on. A target with no host is a container
      with nothing to draw against (an empty cell), and that one is tinted instead. */
   function showLine(t) {
     if (!line) { line = document.createElement('div'); line.className = 'layout-line'; document.body.appendChild(line); }
     if (!t) { line.style.display = 'none'; return; }
     line.style.display = 'block';
+    var lvl = targetLevel(t), lvlCls = lvl >= 1 && lvl <= 3 ? ' lvl' + lvl : '';
     var r;
     if (!t.host) {
       r = t.box.getBoundingClientRect();
-      line.className = 'layout-line is-inside';
+      line.className = 'layout-line is-inside' + lvlCls;
       line.style.left = r.left + 'px'; line.style.top = r.top + 'px';
       line.style.width = r.width + 'px'; line.style.height = r.height + 'px';
       return;
     }
-    line.className = 'layout-line';
+    line.className = 'layout-line' + lvlCls;
     r = t.host.getBoundingClientRect();
     var ax = t.ax || axisOf(t.box);
     if (ax === 'x') {
@@ -599,6 +650,31 @@ window.LayoutEditor = (function () {
     return row;
   }
 
+  /* THE ROW THE ITEM SITS IN, ONE LEVEL DOWN, MADE IF IT IS NOT THERE: a paragraph bare in a row gets
+     its cell; a paragraph inside a level-2 cell gets a level-3 row with a cell inside it. What was made
+     is recorded, so the undo can take it apart again. */
+  function ensureRow3(item, rec) {
+    var p = item && item.parentElement;
+    if (!p) return null;
+    if (isRow(p)) {
+      var c = document.createElement('div');
+      p.insertBefore(c, item);
+      c.appendChild(item);
+      rec.cell = c;
+      return p;
+    }
+    if (isCell(p) && cellLevel(p) <= 2) {
+      var row = document.createElement('div'); row.className = 'rows';
+      var box = document.createElement('div');
+      row.appendChild(box);
+      p.insertBefore(row, item);
+      box.appendChild(item);
+      rec.row = row;
+      return row;
+    }
+    return null;
+  }
+
   function applyDrop(d) {
     var n = d.node, t = d.t;
     if (!t) return;
@@ -608,7 +684,28 @@ window.LayoutEditor = (function () {
        has, so its children go into the target at the edge the pointer is on, keeping their order,
        and the emptied cell is pruned with the rest. The record keeps them so undo can put them
        back before the cell returns. */
-    if (t.insert === 'merge') {
+    if (t.insert === 'cell3') {
+      /* BESIDE THE ITEM ITSELF, ONE LEVEL DOWN. The item's own row is made first — the cell it needs
+         if it was bare in a row, or a whole level-3 row inside its cell — and the arrival goes beside
+         it as a cell of that row. */
+      var host = t.item;
+      var made = { host: host, parent: host.parentElement, next: host.nextElementSibling, row: null, cell: null };
+      var row3 = ensureRow3(host, made);
+      var hcell = host.parentElement;
+      if (row3 && hcell && isCell(hcell)) {
+        var ref3 = t.before ? hcell : (hcell.nextElementSibling || null);
+        row3.insertBefore(n, ref3);
+        if (n.tagName !== 'DIV') { var cw3 = cellAround(n); if (cw3) wraps.push(cw3); }
+      }
+      back = { made: made };
+    } else if (t.insert === 'join') {
+      /* the dropped row's cells move into the row it was dropped on, at the edge, in their order; the
+         emptied row goes with the rest and comes back on undo, with its cells */
+      var cells = [].slice.call(n.children);
+      if (!cells.length) return;
+      for (var j = 0; j < cells.length; j++) t.box.insertBefore(cells[j], t.ref || null);
+      back = { join: { row: n, cells: cells } };
+    } else if (t.insert === 'merge') {
       var dest = t.merge, kids = [].slice.call(n.children);
       if (!kids.length) return;
       var at = t.ref || null, moves = [];
@@ -681,7 +778,21 @@ window.LayoutEditor = (function () {
     /* a merge takes a cell apart, so its children come home before the cell does — and the row a
        child was carried in comes out with it, so the cell goes back to holding what it held */
     if (s.back) {
-      if (s.back.moves) {
+      if (s.back.made) {
+        /* the row (or the cell) that was made for the item beside it comes out, and the item goes back
+           where it stood first, because the box that was made for it is about to go */
+        var mk = s.back.made;
+        if (mk.host && mk.parent) {
+          var bk = mk.next && mk.next.parentNode === mk.parent ? mk.next : null;
+          mk.parent.insertBefore(mk.host, bk);
+        }
+        if (mk.row && mk.row.parentNode) mk.row.parentNode.removeChild(mk.row);
+        if (mk.cell && mk.cell.parentNode) mk.cell.parentNode.removeChild(mk.cell);
+      } else if (s.back.join) {
+        /* the cells go back into the row they came out of, in the order they were carried */
+        var jn = s.back.join;
+        for (var k2 = 0; k2 < jn.cells.length; k2++) jn.row.appendChild(jn.cells[k2]);
+      } else if (s.back.moves) {
         s.back.moves.forEach(function (m) {
           s.back.cell.appendChild(m.item);
           if (m.row && m.row.parentNode) m.row.parentNode.removeChild(m.row);

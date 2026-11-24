@@ -1,9 +1,10 @@
 /**
  * qa/rows3.mjs — the drop shapes of the layout editor, in a REAL browser (hit testing is the
  * instrument, so jsdom cannot answer it): a cell on the band between two rows, a cell merged into a
- * cell, an item on a level-3 cell's side band, an item dropped in a level-3 cell's middle, a row
- * picked up by its grip, and a block made with Shift + right click — and undo after each, which must
- * put the page back exactly.
+ * cell, an item on a level-3 cell's side band, an item dropped in a level-3 cell's middle, an item
+ * held on the exact edge of another item (the level-3 gesture, red line) and on the wide side of the
+ * cell (the level-2 gesture, blue line), a row picked up by its grip, and a block made with Shift +
+ * right click — and undo after each, which must put the page back exactly.
  *
  * Why a browser: `pick()` asks `document.elementFromPoint(x, y)`, so the answer depends on the box
  * the pointer is actually over. A jsdom page has no boxes, and a probe that aims at coordinates no
@@ -202,22 +203,62 @@ const PROBE = `(function () {
   }
   ok('a grip release over nothing leaves the page alone', snap() === s5, snap() === s5 ? '' : diff(s5, snap()));
 
+  /* 5b — HELD ALMOST EXACTLY ON AN ITEM'S EDGE: the level-3 gesture. Two paragraphs stand in one
+     level-2 cell; dragging one onto the other's edge puts them two cells deep in one row inside that
+     cell, and the line turns red while the pointer is there. */
+  var s5b = snap(), e1 = document.getElementById('e1'), e2 = document.getElementById('e2');
+  var e1r = e1.getBoundingClientRect(), e2r = e2.getBoundingClientRect();
+  e2.dispatchEvent(ev('pointerdown', e2r.left + 10, e2r.top + 6, 1));
+  window.dispatchEvent(ev('pointermove', e2r.left + 30, e2r.top + 20, 1));
+  window.dispatchEvent(ev('pointermove', e1r.left + 3, e1r.top + e1r.height / 2, 1));
+  var l3line = (document.querySelector('.layout-line') || {}).className || '';
+  var pick3 = JSON.stringify(window.__lastPick);
+  ok('the line is red on an item\\'s edge', /lvl3/.test(l3line), 'line=' + l3line + ' pick=' + pick3);
+  window.dispatchEvent(ev('pointerup', e1r.left + 3, e1r.top + e1r.height / 2, 0));
+  var erow = e1.closest('.rows');
+  ok('the arrival and the item are two cells of one level-3 row inside that cell',
+     !!erow && rowsIn(erow) === 3 && erow.children.length === 2 &&
+     e2.closest('.rows') === erow && e2.parentElement !== e1.parentElement,
+     'rows=' + (erow && rowsIn(erow)) + ' cells=' + (erow && erow.children.length) + ' pick=' + pick3);
+  E.undo();
+  ok('undo puts the page back', snap() === s5b, snap() === s5b ? '' : diff(s5b, snap()));
+
+  /* 5c — the wider part of the cell is the level-2 gesture, and the line is blue there */
+  var s5c = snap(), ecell = document.getElementById('edgecell').getBoundingClientRect();
+  e2.dispatchEvent(ev('pointerdown', e2r.left + 10, e2r.top + 6, 1));
+  window.dispatchEvent(ev('pointermove', e2r.left + 30, e2r.top + 20, 1));
+  window.dispatchEvent(ev('pointermove', ecell.left + 20, e1r.top + e1r.height / 2, 1));
+  var l2line = (document.querySelector('.layout-line') || {}).className || '';
+  var pick2 = JSON.stringify(window.__lastPick);
+  ok('the line is blue on the wide side of a cell', /lvl2/.test(l2line), 'line=' + l2line + ' pick=' + pick2);
+  window.dispatchEvent(ev('pointerup', ecell.left + 20, e1r.top + e1r.height / 2, 0));
+  var row2 = document.getElementById('edgecell').parentElement;
+  ok('the arrival is a cell of the level-2 row', e2.parentElement !== document.getElementById('edgecell') && !!e2.parentElement,
+     'parent=' + (e2.parentElement && e2.parentElement.tagName));
+  E.undo();
+  ok('undo puts the page back', snap() === s5c, snap() === s5c ? '' : diff(s5c, snap()));
+
   /* 6 — SHIFT + RIGHT CLICK above, below or between what is already there makes a block. It arrives
      as a level-1 row with one empty cell in it, and the undo takes the row away again. */
   var s6 = snap();
-  var topRows = [].filter.call(CA.querySelectorAll('.rows'), function (r) { return r.parentElement === CA; });
-  var r1b = topRows[0] && topRows[0].getBoundingClientRect();
+  window.scrollTo(0, 0);                       /* the page scrolled during the earlier drags; a hit test
+                                                  is viewport-relative, so the view is put back first */
+  var anchor = document.getElementById('stays').getBoundingClientRect();
   var blocksBefore = CA.querySelectorAll('.block').length;
   var car = CA.getBoundingClientRect();
-  var hit = document.elementFromPoint(car.left + car.width / 2, r1b.bottom - 2);
+  var mv0 = E.moves();
+  var hit = document.elementFromPoint(anchor.left + 6, anchor.bottom - 2);
   if (hit) hit.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, shiftKey: true,
-    clientX: car.left + car.width / 2, clientY: r1b.bottom - 2 }));
+    clientX: anchor.left + 6, clientY: anchor.bottom - 2 }));
   var blocksAfter = CA.querySelectorAll('.block').length;
   var nb = [].filter.call(CA.querySelectorAll('.block'), function (b) {
     var h = b.querySelector('h3'); return !!h && !h.textContent;
   })[0];
   ok('Shift + right click makes a block', blocksAfter === blocksBefore + 1,
-     'before=' + blocksBefore + ' after=' + blocksAfter);
+     'before=' + blocksBefore + ' after=' + blocksAfter + ' hit=' + (hit && (hit.tagName + '.' + hit.className))
+     + ' mov=' + E.moves() + '/' + mv0 + ' body=' + document.body.className
+     + ' scroll=' + window.scrollY + ' vis=' + getComputedStyle(CA).visibility
+     + ' anchor=' + Math.round(anchor.left) + ',' + Math.round(anchor.top) + ',' + Math.round(anchor.width) + 'x' + Math.round(anchor.height));
   ok('the new block is a level-1 row holding one empty cell',
      !!nb && rowsIn(nb.closest('.rows')) === 1 && nb.closest('.rows').parentElement === CA &&
      nb.parentElement === nb.closest('.rows').firstElementChild,
