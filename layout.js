@@ -167,26 +167,65 @@ window.LayoutEditor = (function () {
      back where it came from safe.
      WHERE THE LINE GOES: every drop draws the line at the boundary it will land on. The tint is
      kept for a container with nothing to draw against — an empty cell. */
-  /* A ROW'S OWN CAP: four cells across at level 1 and 2, two in a level-3 row. A drop that would make
-     one too many shows NO LINE AT ALL — the pointer has to find a place inside a cell that fits, and
-     nothing tells the teacher a drop is available when it is not. */
-  function capOf(row) { return levelOf(row) >= 3 ? 2 : 4; }
+  /* A ROW'S OWN CAP, AND THE HORIZONTAL BUDGET BEHIND IT.
+     Four cells is the width of the page, and a level-1 row and the level-2 rows inside its cells all
+     end up side by side across it — so the four is counted ACROSS that whole tree, not per row: four
+     level-1 cells each holding four level-2 cells is sixteen columns on one line, not four. Any mix
+     that comes to four works: four level-1 cells, one level-1 cell holding four level-2 cells, or two
+     and two. A level-3 row is separate and holds two. A drop that would make one too many shows NO LINE
+     AT ALL — the pointer has to find a place inside a cell that fits. */
+  function elemKids(row) {
+    var n = 0;
+    for (var i = 0; i < row.children.length; i++) if (row.children[i].nodeType === 1) n++;
+    return n;
+  }
+  function firstRowOfLevel(cell, lvl) {
+    var best = null;
+    for (var i = 0; i < cell.children.length; i++) {
+      var c = cell.children[i];
+      if (isRow(c) && levelOf(c) === lvl && elemKids(c) > (best ? elemKids(best) : 0)) best = c;
+    }
+    return best;
+  }
+  function colsIn(l1row) {
+    var n = 0;
+    for (var i = 0; i < l1row.children.length; i++) {
+      if (l1row.children[i].nodeType !== 1) continue;
+      var l2 = firstRowOfLevel(l1row.children[i], 2);
+      n += l2 ? elemKids(l2) : 1;
+    }
+    return n;
+  }
+  function l1Of(row) {
+    for (var p = row; p && p !== ca(); p = p.parentElement) if (isRow(p) && levelOf(p) === 1) return p;
+    return null;
+  }
+  /* the level-3 row the level-3 gesture would put the arrival into, or null when one has to be made
+     (which is always two cells, so it fits) */
+  function rowFor3(item) {
+    var p = item && item.parentElement;
+    if (!p) return null;
+    if (isRow(p)) return p;
+    if (isCell(p) && cellLevel(p) >= 3) return p.parentElement;
+    return null;
+  }
   function fits(t, n) {
     if (!t || !t.insert) return true;
     if (t.insert === 'merge' || t.insert === 'row') return true;
+    if (t.insert === 'cell3') {
+      var r3 = rowFor3(t.item);
+      if (!r3) return true;
+      var have3 = elemKids(r3) + (isRow(t.item.parentElement) ? 1 : 0);
+      return have3 + 1 <= 2;
+    }
     var row = null, add = 1;
     if (t.insert === 'cell') row = isRow(t.box) ? t.box : null;
-    else if (t.insert === 'join') { row = isRow(t.box) ? t.box : null; add = n.children.length; }
-    else if (t.insert === 'cell3') {
-      var r3 = t.item && rowOf(t.item);
-      if (!r3 || levelOf(r3) < 3) return true;            /* its level-3 row does not exist yet */
-      row = r3;
-    }
+    else if (t.insert === 'join') { row = isRow(t.box) ? t.box : null; add = elemKids(n); }
     if (!row) return true;
-    var have = 0;
-    for (var i = 0; i < row.children.length; i++) if (row.children[i].nodeType === 1) have++;
+    var base = levelOf(row) === 1 ? row : l1Of(row);
+    if (!base) return true;
     if (t.insert === 'cell' && n.parentElement === row) add = 0;   /* already one of its cells */
-    return have + add <= capOf(row);
+    return colsIn(base) + add <= 4;
   }
   function pick(x, y) {
     var t = pickRaw(x, y);
