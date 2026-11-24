@@ -1188,6 +1188,23 @@ window.LayoutEditor = (function () {
     window.addEventListener('pointermove', move, true);
     window.addEventListener('pointerup', up, true);
     window.addEventListener('pointercancel', up, true);
+    /* THE PAGE SCROLLS UNDER A DRAG. A row picked up near the bottom of the screen has to be able to
+       reach the top of the page without letting go, so the wheel moves the page and the target is read
+       again at the point the pointer is still holding. */
+    window.addEventListener('wheel', duringWheel, { passive: false, capture: true });
+  }
+
+  function duringWheel(e) {
+    if (!drag || !drag.on) return;
+    e.preventDefault();
+    e.stopPropagation();
+    window.scrollBy(e.deltaX || 0, e.deltaY);
+    var x = drag.px, y = drag.py;
+    requestAnimationFrame(function () {
+      if (!drag) return;
+      drag.t = pick(x, y);
+      showLine(drag.t);
+    });
   }
 
   function move(e) {
@@ -1205,6 +1222,8 @@ window.LayoutEditor = (function () {
       document.body.classList.add('layout-drag');
     }
     drag.t = pick(e.clientX, e.clientY);
+    /* the last point the pointer was seen at, so the wheel can re-read the page under it after a scroll */
+    drag.px = e.clientX; drag.py = e.clientY;
     if (window.__LAYOUT_DEBUG) {
       var tg = drag.t;
       window.__lastPick = tg ? { ax: tg.ax, insert: tg.insert, merge: !!tg.merge, wrapCell: !!tg.wrapCell,
@@ -1222,6 +1241,7 @@ window.LayoutEditor = (function () {
     window.removeEventListener('pointermove', move, true);
     window.removeEventListener('pointerup', up, true);
     window.removeEventListener('pointercancel', up, true);
+    window.removeEventListener('wheel', duringWheel, { capture: true });
     if (!d) return;
     showLine(null);
     d.node.classList.remove('layout-dragging');
@@ -1313,6 +1333,9 @@ window.LayoutEditor = (function () {
     window.addEventListener('scroll', placeGrips, true);   /* the grips are fixed, the page is not */
     window.addEventListener('resize', placeGrips);
     markPins(); markGrains(); paintChip(); paintPanel();
+    /* ENTERING SOLVES. The layer turns off content-visibility for every section, so every row now has
+       a width to measure — solve once here and the page opens as the reader gets it. */
+    resolve();
   }
 
   function disable() {
@@ -1330,6 +1353,17 @@ window.LayoutEditor = (function () {
        is the geometry a reader gets — including the heights that moved because a row above changed. */
     resolve();
   }
+
+  /* ---- A HOTKEY, SO THE LAYER IS REACHED FROM ANYWHERE -----------------------------------------
+     Alt+E toggles the layer. The chip is at the top of the page and a teacher working at the bottom
+     should not have to scroll back to it; the combo is a modifier plus a letter, so it cannot collide
+     with typing. Registered once, at load, so it works whether or not the layer is on. */
+  document.addEventListener('keydown', function (e) {
+    if (e.altKey && !e.ctrlKey && !e.metaKey && (e.key === 'e' || e.key === 'E')) {
+      e.preventDefault();
+      if (ON) disable(); else enable();
+    }
+  }, true);
 
   return {
     enable: enable,

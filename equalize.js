@@ -346,7 +346,30 @@
 
   window.EqualizeRows = { run: run, solve: solveFixedRow, clean: clean };
 
-  function all() { run(); }
+  /* A SECTION IS SOLVED WHEN IT IS RENDERED. `content-visibility:auto` keeps a section below the fold
+     out of layout, so a row there measures nothing and the solver skips it — the row then shows equal
+     shares, which is what a reader sees after scrolling and what made edit mode look unsolved. Each
+     section is observed once, and its rows are solved the first time it is rendered near the screen. */
+  function watchSections() {
+    if (!window.IntersectionObserver) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        Array.prototype.forEach.call(en.target.querySelectorAll(".rows"), function (r) {
+          var d = 0;
+          for (var p = r.parentElement; p; p = p.parentElement)
+            if (p.classList && p.classList.contains("rows")) d++;
+          if (d < 2) solveFixedRow(r);
+        });
+      });
+    }, { rootMargin: "300px 0px" });
+    Array.prototype.forEach.call(document.querySelectorAll(".content-area>section"), function (s) {
+      io.observe(s);
+    });
+  }
+
+  function all() { watchSections(); run(); }
 
   /* a page that loads this file is marked `data-eq`; the sheet holds its content area at
      `visibility:hidden` until `eq-ready`. the first solve runs while hidden; the reveal

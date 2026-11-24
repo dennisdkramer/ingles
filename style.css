@@ -1855,6 +1855,10 @@ p:has(>input.gap:only-child){text-align:center}
      An inline width the sheet never meant to be there is marked red: that is the cell that will
      not fill its row. */
   body.layout-on .content-area{counter-reset:lrow}
+  /* EDITING IS DONE ON THE SOLVED PAGE. A section below the fold is skipped by content-visibility, so
+     its rows have no width to solve against and fall back to equal shares — which is why the page
+     looked unsolved the moment the layer came on. In edit mode every section is laid out. */
+  body.layout-on .content-area>section{content-visibility:visible}
   body.layout-on .content-area .rows{position:relative;counter-increment:lrow;counter-reset:lcell;
     outline:2px dashed color-mix(in oklab,var(--blue) 45%,transparent);outline-offset:7px}
   body.layout-on .content-area .rows::before{content:"R" counter(lrow);position:absolute;
