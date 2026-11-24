@@ -126,6 +126,86 @@
 <div class="rows">
 <div>
 <div class="block">
+<h3>The options, and what each one is for</h3>
+<div class="rows"><div><div class="rows"><div><p><b>An option is chosen by what the content has to do, never to vary the paint.</b> A block with no <code>data-look</code> is what a block looks like; a look is added when the thing inside it is a note, an activity, a quotation or the rule a section turns on. <b>Never add an option to fill a line, to finish a row, or because the row above it carries the same phrase</b> — an element that is not doing the work it is named for is taken out, never styled.</p></div></div></div></div>
+<div class="rows"><div><div class="rows"><div><p class="dim">Each drawing below is the markup that serves the option, at its smallest, with what the option is for and what it is not for. <b>The six looks follow as cards of their own</b>, each painted exactly the way it paints a block.</p></div></div></div></div>
+<div class="rows"><div><div class="rows"><div><p class="dim"><b>Choice sets.</b> One element, <code>.opts</code>, with one switch: unset it stacks, <code>data-layout="row"</code> puts the set on one line, and <code>compact</code> is the row that shares a line with other words.</p></div></div></div></div>
+<div class="rows">
+<div><div class="rows"><div><div class="opts">
+<label class="opt"><input type="radio" name="oa"><span>routine</span></label>
+<label class="opt"><input type="radio" name="oa"><span>surprise</span></label>
+<label class="opt"><input type="radio" name="oa"><span>scene</span></label>
+</div></div></div></div>
+<div><div class="rows"><div><p><b><code>&lt;div class="opts"&gt;</code></b> — the default, and the answer to most sets: each option on its own line, read one after another. <b>Not for</b> two or three one-word options, which leave a column of white space.</p></div></div></div>
+</div>
+<div class="rows">
+<div><div class="rows"><div><div class="opts" data-layout="row">
+<label class="opt"><input type="radio" name="ob"><span>routine</span></label>
+<label class="opt"><input type="radio" name="ob"><span>surprise</span></label>
+<label class="opt"><input type="radio" name="ob"><span>scene</span></label>
+</div></div></div></div>
+<div><div class="rows"><div><p><b><code>data-layout="row"</code></b> — for short options the student compares at a glance. <b>Not for</b> options of a phrase or more: on one line they either wrap without a plan or run past the cell.</p></div></div></div>
+</div>
+<div class="rows">
+<div><div class="rows"><div><div class="opts compact" data-layout="row">
+<label class="opt"><input type="radio" name="oc"><span>a</span></label>
+<label class="opt"><input type="radio" name="oc"><span>b</span></label>
+<label class="opt"><input type="radio" name="oc"><span>c</span></label>
+</div></div></div></div>
+<div><div class="rows"><div><p><b><code>class="opts compact"</code></b> — for a set that belongs on the same line as the sentence or the cell it answers, inside a chart row or after a stem. <b>Not for</b> a set the student must weigh: the smaller target and tighter spacing cost the reading.</p></div></div></div>
+</div>
+<div class="rows"><div><div class="rows"><div><p class="dim"><b>Charts.</b> Three switches, each answering a different question about the table underneath.</p></div></div></div></div>
+<div class="rows">
+<div><div class="rows"><div><figure class="chartwrap"><table class="chart">
+<thead><tr class="bare"><th colspan="2"></th></tr></thead>
+<tbody><tr><td>walk</td><td>walked</td></tr><tr><td>go</td><td>went</td></tr></tbody>
+</table></figure></div></div></div>
+<div><div class="rows"><div><p><b><code>&lt;tr class="bare"&gt;</code></b> — when no column needs a heading, because the student can see what each holds. The row is <b>collapsed to a 3px rule, never deleted</b>, so the chart keeps its top edge. <b>Not for</b> a column whose contents are not obvious: the student then reads two columns with nothing to tell them apart.</p></div></div></div>
+</div>
+<div class="rows">
+<div><div class="rows"><div><figure class="chartwrap"><table class="chart">
+<tbody><tr><th class="vlab" rowspan="2"><span>Regular</span></th><td>walk</td><td>walked</td></tr>
+<tr><td>play</td><td>played</td></tr></tbody>
+</table></figure></div></div></div>
+<div><div class="rows"><div><p><b><code>&lt;th class="vlab" rowspan="2"&gt;</code></b> — when the table holds two or more families and the word naming each must stand outside the frame. <b>Not for</b> one family: a label that names the only thing in the table repeats the sentence beside it.</p></div></div></div>
+</div>
+<div class="rows">
+<div><div class="rows"><div><figure class="chartwrap"><table class="chart">
+<thead><tr><th>Word</th><th>Which?</th></tr></thead>
+<tbody><tr class="grp"><th colspan="2">The past you can point at</th></tr>
+<tr><td>yesterday</td><td>a finished day</td></tr>
+<tr class="grp"><th colspan="2">The past you cannot</th></tr>
+<tr><td>lately</td><td>a stretch of days</td></tr></tbody>
+</table></figure></div></div></div>
+<div><div class="rows"><div><p><b><code>&lt;tr class="grp"&gt;</code></b> — when rows divide into groups and each group needs a phrase across them. It is a <b>group heading inside the table</b>, and it belongs where the groups divide. <b>Not for</b> a remark under the last row: a phrase added at the bottom of a table is a sentence about the table, and the sentence beside the chart is where that goes.</p></div></div></div>
+</div>
+<div class="rows"><div><div class="rows"><div><p class="dim"><b>The knobs.</b> Five variables, each set on the element it sizes and each drawn at its own card: <code>--gap-w</code> the answer gap's width (<b>#fill</b>), <code>--cols</code> the columns of a grid of options (<b>#mc</b>), <code>--lines</code> the height of a written field in text lines (<b>#dictation</b>), <code>--comic-h</code> every panel of one comic (<b>#strip</b>), <code>--strip-h</code> one panel of it.</p></div></div></div></div>
+</div>
+</div>
+</div>
+
+<div class="rows">
+<div><div class="block" data-look="tint"><h3>tint</h3>
+<div class="rows"><div><div class="rows"><div><p><b>For</b> the one block a section turns on — the definition, the rule everything after it is read against. <b>Not for</b> an example, and not twice in one row: two tinted blocks stop marking anything. <code>data-look="tint"</code>.</p></div></div></div></div></div></div>
+<div><div class="block" data-look="outline"><h3>outline</h3>
+<div class="rows"><div><div class="rows"><div><p><b>For</b> the block the page returns to — a checklist, a summary, a reference read after the lesson. <b>Not for</b> teaching prose, and not for a warning: the option carries no meaning of its own. <code>data-look="outline"</code>.</p></div></div></div></div></div></div>
+</div>
+<div class="rows">
+<div><div class="block" data-look="stripes"><h3>stripes</h3>
+<div class="rows"><div><div class="rows"><div><p><b>For</b> an activity — the block the student writes in. <b>Not for</b> prose: stripes behind three paragraphs make them harder to read. <code>data-look="stripes"</code>.</p></div></div></div></div></div></div>
+<div><div class="block" data-look="tape"><h3>tape</h3>
+<div class="rows"><div><div class="rows"><div><p><b>For</b> a note pinned onto the page — a tip, an aside, a reminder read on the way past. <b>Not for</b> the lesson's own teaching, and never two in one row. <code>data-look="tape"</code>.</p></div></div></div></div></div></div>
+</div>
+<div class="rows">
+<div><div class="block" data-look="float"><h3>float</h3>
+<div class="rows"><div><div class="rows"><div><p><b>For</b> text that applies to the whole section and must not look boxed. <b>Not for</b> an activity: a block the student writes in is a block. <code>data-look="float"</code>.</p></div></div></div></div></div></div>
+<div><div class="block" data-look="dark"><h3>dark</h3>
+<div class="rows"><div><div class="rows"><div><p><b>For</b> a block that reads as another medium — a quoted message, a screen, a transcript. <b>Not for</b> emphasis, and never for the page's own prose. <code>data-look="dark"</code>.</p></div></div></div></div></div></div>
+</div>
+
+<div class="rows">
+<div>
+<div class="block">
 <h3>Arrange it, and give it a look</h3>
 <div class="rows">
 <div>
