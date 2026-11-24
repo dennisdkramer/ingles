@@ -1638,36 +1638,53 @@
   .chartwrap>.chart{margin:0}
   /* #STRIP — A COMIC PANEL, AND THE COMIC AROUND IT. A comic is a TABLE: `table.comic` with two columns,
      one `td.strip` per panel, so the panels are always a 2 x 2 grid and a resize never re-arranges them.
-     TWO SIZES, CHOSEN SEPARATELY. THE FRAME is the cell: its width is the table's column, its height is
-     `--strip-h` — set once on the table, so every panel of one comic is the same height. THE DRAWING is
-     the svg, written with a `viewBox` and NO width/height attributes: `width:100%;height:100%` plus the
-     svg's default `preserveAspectRatio="xMidYMid meet"` scales it UNIFORMLY to fit the frame and centres
-     it, so a frame that grows in WIDTH only adds margins left and right, a frame that grows in HEIGHT only
-     adds them above and below, and a frame that grows in both makes the drawing bigger — and it never
-     stretches, reflows or spills. The comic is exactly as wide as its own box, never wider — 533px, a real length and not a percentage (a percentage would be measured against a cell the solver sizes from this table): half of the 1146px in-block row, less 40px for the space between two cells, and 355px tall so it takes the same box as the map. One drawing per panel; the 2 x 2 is the table's, never the svg's. */
-  table.comic{width:533px;height:355px;max-width:100%;margin-inline:auto;--comic-h:163.5px;
-    table-layout:fixed;border-collapse:separate;border-spacing:8px}
+     ONE SHAPE, EVERY PANEL AND EVERY STRIP. THE DRAWING is the svg, written with a `viewBox` and NO
+     width/height attributes, and its frame is the drawing's own 3:2 — the map's box — so a panel is never
+     squatter or taller than the map it sits beside. `aspect-ratio` sets that from the cell's width:
+     a 2 x 2 of 3:2 panels in a 533px table is 533 x 355, which is the map's box exactly. `--strip-h` (one
+     panel) and `--comic-h` (every panel of one comic) still override the height, and then the drawing is
+     fitted and centred inside the frame it was given, uniformly, by `preserveAspectRatio="xMidYMid meet"`.
+     The comic is exactly as wide as its own box, never wider — 533px, a real length and not a percentage
+     (a percentage would be measured against a cell the solver sizes from this table): half of the 1146px
+     in-block row, less 40px for the space between two cells. One drawing per panel; the 2 x 2 is the
+     table's, never the svg's. */
+  table.comic{width:533px;max-width:100%;margin-inline:auto;table-layout:fixed;border-collapse:separate;border-spacing:0}
+  /* no cell border: the panels' grid is the gutter ring below, so two rows of 3:2 panels are exactly the
+     355px the map is tall and no line is drawn twice */
+  table.comic td.strip{border:0;overflow:hidden}
+  /* the GUTTER is painted, never laid out: a 4px ring outside each drawing's box, so the panels keep their
+     white separation without the spacing eating into the 355px the map is tall */
+  table.comic td.strip>svg{box-shadow:0 0 0 4px var(--paper)}
+  /* A PAIR OF DRAWINGS PINS ITS OWN CELLS. The solver sizes a cell from the prose it holds or from the
+     table in it, and a drawing's own pixel width is neither — so a row of two drawings is given the widths
+     it was authored with, and its cells are exactly the drawings they hold. `.viz-pair` is that row: the
+     only place a cell width is authored, because the drawings beside each other are the one case the
+     solver cannot measure. */
+  .viz-pair{justify-content:center}
+  .viz-pair>div{flex:0 0 auto!important;width:533px!important;min-width:0;max-width:100%}
+  @media (max-width:1120px){.viz-pair>div{flex:1 1 0!important;width:auto!important}}
+  /* A STRIP ACTIVITY TAKES THE SAME BOX AS A COMIC: a `chart` whose panels are `td.strip` is capped at the
+     map's width, so its 2 x 2 is 533 x 355 too instead of stretching across the block and dwarfing the
+     drawing it holds */
+  table.chart:has(td.strip){width:533px;max-width:100%;margin-inline:auto}
   /* the CELL IS THE FRAME and it stays a table cell: `display:table-cell`, 50% of the table. A cell that is
      declared `display:block` stops being a row cell and the four panels stack, which is the layout change
      this rule exists to prevent. */
   table.comic td.strip{position:relative;display:table-cell;width:50%;padding:0;line-height:0;text-align:center;vertical-align:middle}
   /* THE SENTENCE HANGS OVER ITS PANEL, never inside it: taken out of the flow, so two rows of panels are two
-     heights and nothing the sentence does can make the comic taller than the map beside it. One line, the
-     panel's width, an ellipsis when it does not fit: `-webkit-line-clamp` does the cutting, because a plain
-     `white-space:nowrap` is overridden by the `text-wrap:pretty` every `p` carries. */
+     heights and nothing the sentence does can make the comic taller than the map beside it. It WRAPS over
+     the panel and is cut at two lines — wrapping, not `nowrap`, because an unwrapped line still counts
+     towards the table's widest row and would widen the cell the comic sits in. */
   table.comic td.strip>p{position:absolute;left:2px;right:2px;bottom:2px;margin:0;padding:1px 4px;
-    display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden;
-    text-overflow:ellipsis;line-height:1.25;border-radius:3px;
+    max-height:2.5em;overflow:hidden;line-height:1.25;border-radius:3px;
     background:color-mix(in oklab,var(--paper) 88%,transparent)}
-  /* THE DRAWING IS AN SVG WITH width:100% AND THE FRAME'S HEIGHT, and nothing else: its viewBox plus the
-     default `preserveAspectRatio="xMidYMid meet"` scale it uniformly inside that box and centre it, so a
-     frame that grows in width only adds margins left and right, one that grows in height only adds them
-     above and below, and one that grows in both makes the drawing bigger. `--comic-h` is the height every
-     panel of one comic takes — 163.5px by default, so two rows and the 8px between them fill the 355px the
-     map is tall — and `--strip-h` overrides it for one panel. Never
-     write width/height attributes on the svg: the sheet sizes the drawing, and a second size in the markup
-     is one the sheet has to fight. */
-  .strip>svg{display:block;width:100%;height:var(--strip-h,var(--comic-h,96px));margin-inline:auto}
+  /* THE DRAWING IS AN SVG WITH width:100% AND ITS OWN 3:2, and nothing else: `aspect-ratio` makes the frame
+     the drawing's shape, so every panel of every strip is the map's proportion and no cell is bigger than
+     what it holds. `--comic-h` (all panels) or `--strip-h` (one) replaces that height when a page wants a
+     taller box, and the drawing is then fitted and centred inside it, never stretched. Never write
+     width/height attributes on the svg: the sheet sizes the drawing, and a second size in the markup is one
+     the sheet has to fight. */
+  .strip>svg{display:block;width:100%;height:var(--strip-h,var(--comic-h,auto));aspect-ratio:3/2;margin-inline:auto}
   .chartcap{font-size:calc(var(--s0) + 2pt);font-weight:300;color:var(--ink-2);text-align:center;
     letter-spacing:normal;margin:0 0 6px}
   /* a label for more than one column draws no column: its cell is zero wide, its borders are gone, and the
