@@ -17,3 +17,7 @@ Nothing here is fetched at run time: a page that shows one of these files works 
 | `wheregoing.mp3` | lines 1–4 of that sheet's 26, 20.65 s, 497133 bytes — **cut from 11.57 s to 32.27 s**, re-encoded once with a 0.5 s fade at each end, every line placed 1 s before its sheet time | https://www.youtube.com/watch?v=07Uddzq_H9Q | Diana Ross | **not stated** |
 
 | `business-l36-someone-like-you.mp3` | lines 1–4 of that sheet's 43, 33.62 s, 808173 bytes — **cut from 11.16 s to 44.81 s**, re-encoded once with a 0.5 s fade at each end, every line placed 1 s before its sheet time | https://www.youtube.com/watch?v=hLQl3WQQoQ0 | Adele | **not stated** |
+
+| `country-roads.mp3` | lines 5–8 of that sheet's 30, 29.71 s, 714285 bytes — **cut from 26.83 s to 56.57 s**, re-encoded once with a 0.5 s fade at each end, every line placed 1 s before its sheet time | LRCLIB record 38428903 ("John Denver - Take Me Home, Country Roads") | John Denver | **not stated** |
+
+| `penny-lane.mp3` | lines 5–8 of that sheet's 32, 22.13 s, 532845 bytes — **cut from 17.02 s to 39.20 s**, re-encoded once with a 0.5 s fade at each end, every line placed 1 s before its sheet time | LRCLIB record 12328880 ("The Beatles - Penny Lane") | The Beatles | **not stated** |
