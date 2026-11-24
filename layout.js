@@ -167,13 +167,16 @@ window.LayoutEditor = (function () {
      back where it came from safe.
      WHERE THE LINE GOES: every drop draws the line at the boundary it will land on. The tint is
      kept for a container with nothing to draw against — an empty cell. */
-  /* A ROW'S OWN CAP, AND THE HORIZONTAL BUDGET BEHIND IT.
-     Four cells is the width of the page, and a level-1 row and the level-2 rows inside its cells all
-     end up side by side across it — so the four is counted ACROSS that whole tree, not per row: four
-     level-1 cells each holding four level-2 cells is sixteen columns on one line, not four. Any mix
-     that comes to four works: four level-1 cells, one level-1 cell holding four level-2 cells, or two
-     and two. A level-3 row is separate and holds two. A drop that would make one too many shows NO LINE
-     AT ALL — the pointer has to find a place inside a cell that fits. */
+  /* A BLOCK'S WIDTH, AND THE FOUR COLUMNS BEHIND IT.
+     A cell does not occupy one column — it occupies as many as the widest row of cells it holds, so a
+     block whose rows are one cell and then two counts TWO at every point in its height, and only two
+     more fit beside it. The count is structural, never geometric: it asks the DOM, never the browser's
+     flex answer, so a row that solves with unequal widths cannot make a fifth cell look like a fourth.
+     A level-2 line holds four cells and a level-1 line holds four widths, so any mix that comes to four
+     works: four blocks one wide, one block four wide, or two and two. A level-3 row is private to its
+     cell — it holds two and is NEVER counted upward, because a pair of items side by side is a detail
+     of that cell and not a column of the page. A drop that would make one too many shows NO LINE AT
+     ALL — the pointer has to find a place inside a cell that fits. */
   function elemKids(row) {
     var n = 0;
     for (var i = 0; i < row.children.length; i++) if (row.children[i].nodeType === 1) n++;
@@ -187,15 +190,21 @@ window.LayoutEditor = (function () {
     }
     return best;
   }
-  function colsIn(l1row) {
+  /* the columns a cell occupies: its widest row of cells, and never less than one */
+  function weight(el) {
+    if (!el || el.nodeType !== 1) return 1;
+    var r = firstRowOfLevel(el, 2);
+    return r ? Math.max(1, elemKids(r)) : 1;
+  }
+  /* the columns the cells of a row occupy, together */
+  function widths(row) {
     var n = 0;
-    for (var i = 0; i < l1row.children.length; i++) {
-      if (l1row.children[i].nodeType !== 1) continue;
-      var l2 = firstRowOfLevel(l1row.children[i], 2);
-      n += l2 ? elemKids(l2) : 1;
+    for (var i = 0; row && i < row.children.length; i++) {
+      if (row.children[i].nodeType === 1) n += weight(row.children[i]);
     }
     return n;
   }
+  function colsIn(l1row) { return widths(l1row); }
   function l1Of(row) {
     for (var p = row; p && p !== ca(); p = p.parentElement) if (isRow(p) && levelOf(p) === 1) return p;
     return null;
@@ -218,9 +227,15 @@ window.LayoutEditor = (function () {
       var have3 = elemKids(r3) + (isRow(t.item.parentElement) ? 1 : 0);
       return have3 + 1 <= 2;
     }
-    var row = null, add = 1;
-    if (t.insert === 'cell') row = isRow(t.box) ? t.box : null;
-    else if (t.insert === 'join') { row = isRow(t.box) ? t.box : null; add = elemKids(n); }
+    /* HOW WIDE THE ARRIVAL IS. A cell arrives as wide as the widest row it holds; a joined row
+       arrives as the sum of its cells' widths. A LEVEL-2 LINE COUNTS CELLS, not widths, because a
+       level-3 row inside a cell is private to that cell and never widens the line above it. */
+    var row = null, add = 1, addW = 1;
+    if (t.insert === 'cell') { row = isRow(t.box) ? t.box : null; addW = weight(n); }
+    else if (t.insert === 'join') {
+      row = isRow(t.box) ? t.box : null;
+      add = elemKids(n); addW = widths(n);
+    }
     if (!row) return true;
     var base = levelOf(row) === 1 ? row : l1Of(row);
     if (!base) return true;
@@ -228,13 +243,17 @@ window.LayoutEditor = (function () {
        does not add a column — it trades one for another — so the move is allowed even in a full row. */
     var srcRow = n.parentElement;
     var sameTree = isRow(srcRow) && l1Of(srcRow) === base;
-    if (t.insert === 'cell' && n.parentElement === row) add = 0;
-    else if (sameTree) add = t.insert === 'join' ? Math.max(0, add - elemKids(srcRow)) : 0;
-    /* A LEVEL-2 ROW IS COUNTED ON ITS OWN: filling it is not limited by the level-2 row in the cell
-       beside it. A LEVEL-1 ROW IS THE PAGE: its four is the four columns the page shows, so a new
-       level-1 cell is counted across the row's whole tree. */
+    if (t.insert === 'cell' && n.parentElement === row) { add = 0; addW = 0; }
+    else if (sameTree) {
+      if (t.insert === 'join') {
+        add = Math.max(0, add - elemKids(srcRow));
+        addW = Math.max(0, addW - widths(srcRow));
+      } else { add = 0; addW = 0; }
+    }
+    /* A LEVEL-2 ROW HOLDS FOUR CELLS. A LEVEL-1 ROW HOLDS FOUR WIDTHS: its cells hold their own rows,
+       so the columns that end up side by side across the page are that row's whole tree. */
     if (levelOf(row) === 2) return elemKids(row) + add <= 4;
-    return colsIn(base) + add <= 4;
+    return colsIn(base) + addW <= 4;
   }
   function pick(x, y) {
     var t = pickRaw(x, y);
