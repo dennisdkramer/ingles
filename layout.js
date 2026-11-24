@@ -266,7 +266,7 @@ window.LayoutEditor = (function () {
        level-3 row holding two cells, the item and the arrival. A few pixels further in is the level-2
        drop instead, which is deliberately a much wider target: the whole side of the cell. The line's
        colour says which of the two is about to happen — blue for level 2, red for level 3. */
-    if (loose !== 'row' && inner && lvl <= 2) {
+    if (loose === 'item' && inner && lvl <= 2) {
       var ir = inner.getBoundingClientRect();
       var near = x < ir.left + EDGE3 ? 'left' : (x > ir.right - EDGE3 ? 'right' : null);
       if (near) {
@@ -675,11 +675,39 @@ window.LayoutEditor = (function () {
     return null;
   }
 
+  /* NOTHING ARRIVES WITHOUT ITS THREE LEVELS. An ITEM dropped anywhere is read from where it landed: a
+     bare item in a row gets a cell, and an item standing in a cell above level 3 gets the row and the
+     cell it needs, one level at a time. Only the arrival is wrapped — a cell or a row arrives with its
+     own contents, and touching those would restructure a page the teacher did not touch. What is made
+     is recorded, so an undo takes it apart again. */
+  function ensureDeepArrival(n, rec, kind) {
+    if (!n || !n.parentElement) return;
+    if (kind !== 'item') return;
+    var guard = 0;
+    while (n.parentElement && guard++ < 4) {
+      var p = n.parentElement;
+      if (isRow(p) && !isCell(n)) {
+        var c = document.createElement('div');
+        p.insertBefore(c, n);
+        c.appendChild(n);
+        rec.cells.push(c);
+      }
+      var cell = n.parentElement;
+      if (!isCell(cell) || cellLevel(cell) >= 3) break;
+      var row = document.createElement('div'); row.className = 'rows';
+      var box = document.createElement('div');
+      row.appendChild(box);
+      cell.insertBefore(row, n);
+      box.appendChild(n);
+      rec.rows.push(row);
+    }
+  }
+
   function applyDrop(d) {
     var n = d.node, t = d.t;
     if (!t) return;
     var from = { parent: n.parentNode, next: n.nextElementSibling };
-    var back = null, wraps = [];
+    var back = null, wraps = [], fill = { rows: [], cells: [] };
     /* A MERGE MOVES WHAT THE CELL HELD, not the cell: a cell inside a cell is not a shape the page
        has, so its children go into the target at the edge the pointer is on, keeping their order,
        and the emptied cell is pruned with the rest. The record keeps them so undo can put them
@@ -732,6 +760,10 @@ window.LayoutEditor = (function () {
         var cw = cellAround(n); if (cw) wraps.push(cw);
       }
     }
+    /* THE ARRIVAL IS WRAPPED TO ITS THREE LEVELS before anything is pruned */
+    ensureDeepArrival(n, fill, d.kind);
+    if (fill.rows.length || fill.cells.length) { back = back || {}; back.fill = fill; }
+
     /* tidy() starts at the cell the node left: it finds that cell's row itself, so the row does not
        have to be captured before the prune any more. */
     var gone = tidy(from.parent);
@@ -802,6 +834,29 @@ window.LayoutEditor = (function () {
       }
     }
     for (var j = (s.wraps || []).length - 1; j >= 0; j--) unwrap(s.wraps[j]);
+    /* the rows the drop made to give the arrival its levels go when they hold nothing: the node has
+       already been put back where it came from, so what is left is an empty box */
+    if (s.back && s.back.fill) {
+      var fr = s.back.fill.rows;
+      for (var f1 = fr.length - 1; f1 >= 0; f1--) {
+        var r0 = fr[f1];
+        var host = r0.parentNode;
+        if (!host) continue;
+        /* what the row was made around goes back where the row stood, then the row itself goes */
+        for (var f2 = r0.children.length - 1; f2 >= 0; f2--) {
+          var box = r0.children[f2];
+          while (box.children.length) host.insertBefore(box.children[box.children.length - 1], r0);
+        }
+        host.removeChild(r0);
+      }
+      var fc = s.back.fill.cells || [];
+      for (var f3 = fc.length - 1; f3 >= 0; f3--) {
+        var c0 = fc[f3];
+        if (!c0.parentNode) continue;
+        while (c0.children.length) c0.parentNode.insertBefore(c0.children[c0.children.length - 1], c0);
+        c0.parentNode.removeChild(c0);
+      }
+    }
     moved = Math.max(0, moved - 1);
     markPins(); markGrains(); paintChip();
     return true;

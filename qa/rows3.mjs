@@ -94,6 +94,10 @@ const PROBE = `(function () {
     window.dispatchEvent(ev('pointerup', x1, y1, 0));
   }
   function rowOf(el) { var p = el && el.parentElement; return p && p.classList && p.classList.contains('rows') ? p : null; }
+  /* THE PAGE'S OWN INVARIANT, read off the DOM: nothing above level 3 holds an item, nothing below
+     level 3 holds a row, and a block's children are rows. An empty string means every item on the page
+     has its three levels. */
+  function lvlOfRow(r) { var d = 0; for (var p = r; p && p !== CA; p = p.parentElement) if (p.classList && p.classList.contains('rows')) d++; return d; }
   /* the row a node stands in: the node may be the cell itself, or the item inside a cell */
   function rowUnder(el) {
     var p = el && el.parentElement;
@@ -118,6 +122,11 @@ const PROBE = `(function () {
       }
     })(c);
     return c.innerHTML;
+  }
+  function pathOf(el) {
+    var out = [];
+    for (var p = el; p && p !== CA; p = p.parentElement) out.unshift(p.tagName.toLowerCase() + (p.id ? '#' + p.id : '') + (p.classList && p.classList.contains('rows') ? '[R]' : ''));
+    return out.join('>');
   }
   function at(x, y) { var e = document.elementFromPoint(x, y); return e ? e.tagName + '#' + (e.id || '') + '.' + (e.className || '') : 'none'; }
   /* every scenario is scrolled into the viewport before it is read: elementFromPoint answers nothing
@@ -162,7 +171,8 @@ const PROBE = `(function () {
   var holder = document.getElementById('banditem'), cell = holder && holder.parentElement;
   ok('an item takes the side band as a cell beside the one it was dropped on',
      !!cell && cell.tagName === 'DIV' && cell.parentElement && cell.parentElement.id === 'l3',
-     'parent=' + (cell && cell.parentElement && (cell.parentElement.id || cell.parentElement.className)));
+     'parent=' + (cell && cell.parentElement && (cell.parentElement.id || cell.parentElement.className))
+     + ' path=' + (holder && pathOf(holder)) + ' pick=' + JSON.stringify(window.__lastPick));
   E.undo();
   ok('undo puts the page back', snap() === s3, snap() === s3 ? '' : diff(s3, snap()));
 
@@ -265,6 +275,20 @@ const PROBE = `(function () {
      'rows in chain=' + (nb && rowsIn(nb.closest('.rows'))));
   E.undo();
   ok('undo takes the new block away', snap() === s6, snap() === s6 ? '' : diff(s6, snap()));
+
+  /* 7 — AN ITEM DROPPED INTO A LEVEL-2 CELL'S MIDDLE arrives with its own level-3 row, so nothing on
+     the page is left without its three levels. */
+  var s7 = snap(), e2v = view('e2'), e1r7 = R('e1'), e2r7 = R('e2');
+  var e2c = e2v;
+  drag(e2c, e2r7.left + 10, e2r7.top + 6, e1r7.left + e1r7.width / 2, e1r7.top + e1r7.height / 2);
+  var arrived = document.getElementById('e2');
+  ok('an item dropped into a level-2 cell is wrapped to level 3',
+     !!arrived && !!arrived.closest('.rows') && lvlOfRow(arrived.closest('.rows')) === 3,
+     'row level=' + (arrived && arrived.closest('.rows') ? lvlOfRow(arrived.closest('.rows')) : '?')
+     + ' path=' + (arrived && pathOf(arrived)) + ' moves=' + E.moves()
+     + ' from=' + at(e2r7.left + 10, e2r7.top + 6) + ' to=' + at(e1r7.left + e1r7.width / 2, e1r7.top + e1r7.height / 2));
+  E.undo();
+  ok('undo puts the page back', snap() === s7, snap() === s7 ? '' : diff(s7, snap()));
 
   E.disable();
   return JSON.stringify({ res: res });
