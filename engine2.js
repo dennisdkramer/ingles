@@ -147,17 +147,12 @@ function toggleEditMode(){
  document.body.classList.toggle("editing",editing);
  const ca=document.querySelector(".content-area"),eb=document.getElementById("editpage");
  if(editing){
-  /* THE AUTHORED PAGE IS THE CANVAS. The solver writes its numbers into the live DOM (flex, width,
-     justify-content, the spacing margins, and a data-eq mark on every cell it sized), so a drag taken
-     on the solved page carries one page's arithmetic into the layout. clean() erases exactly those and
-     run is a no-op afterwards, so a late font cannot put them back mid-drag; Done restores both. The
-     reveal class has to come back with it: the sheet hides .content-area while it is missing. */
-  if(window.EqualizeRows){
-   eqRun=EqualizeRows.run;
-   try{EqualizeRows.clean(document);}catch(e){}
-   EqualizeRows.run=function(){};
-   document.documentElement.classList.add("eq-ready");
-  }
+  /* THE PAGE IS EDITED AS IT IS SOLVED. The solver's numbers stay on the live page while the layer is
+     on — flex, width, the spacing margins and the data-eq mark — so what the teacher drags against is
+     the geometry a reader gets, and a cell carries its own width when it moves. A drop re-solves the
+     row it landed in (LayoutEditor.resolve), and Done re-solves the whole page. The reveal class has to
+     be present: the sheet hides .content-area while it is missing. */
+  if(window.EqualizeRows) document.documentElement.classList.add("eq-ready");
   savedLive=ca.innerHTML;
 
   nbkVal=(document.getElementById("feed")||{}).value||"";
@@ -181,7 +176,10 @@ function toggleEditMode(){
      back to what it was before the edit. An OPEN page has no server: reverting here would throw away the
      arrangement the teacher just made, and nothing exists to load it back from. It keeps what it has. */
   if (!OPENPAGE) ca.innerHTML = savedLive;
-  if(eqRun){EqualizeRows.run=eqRun;eqRun=null;try{EqualizeRows.run();}catch(e){}}
+  /* DONE RE-SOLVES: the widths are measured again for the page the teacher left, so the geometry is the
+     solver's and not a sum of what the drags happened to carry. */
+  if(window.EqualizeRows){ try{ EqualizeRows.clean(document); EqualizeRows.run(); }catch(e){} }
+  eqRun=null;
   renderCompleteBtn();
   const fdn=document.getElementById("feed");if(fdn)fdn.value=nbkVal;
   toast(OPENPAGE

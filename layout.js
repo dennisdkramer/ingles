@@ -867,18 +867,36 @@ window.LayoutEditor = (function () {
     }
   }
 
-  /* THE PAGE IS EDITED AS THE READER GETS IT. The solver writes each cell's width inline, so a row
-     that gains or loses a cell is solved again the moment the drop lands — what the teacher moves is
-     what the page will look like, not a stale geometry from the last load. Nothing is solved while a
-     drag is in flight; the line and the grips are measured on the fly. */
-  function resolve() {
+  /* A ROW IS RE-SOLVED WHERE THE DROP LANDED. The page is edited on its solved geometry, so a row that
+     gained or lost a cell is measured again straight away — the whole page is solved on Done, because
+     heights settle across rows. Cleaning only that row leaves every other row's widths untouched. */
+  function resolve(el) {
     var E = window.EqualizeRows;
     if (!E) return;
     try {
-      E.clean();
-      document.documentElement.classList.add('eq-ready');
-      E.run();
+      var row = el && el.closest ? el.closest('.rows') : null;
+      if (row) { E.clean(row); E.solve(row); }
+      checkCap(row);
     } catch (e) { /* a page without the solver keeps the widths it has */ }
+  }
+
+  /* THE CAP IS CHECKED ON THE PAGE, NOT ONLY ON THE GESTURE. Every drop already refuses a fifth column,
+     but a cap that lives only in a decision cannot be trusted: this reads the row after the drop and
+     says so in the console when a line carries more than four, so a hole in the gestures is visible
+     instead of silent. */
+  function checkCap(el) {
+    if (!el) return;
+    if (el.classList && el.classList.contains('markup-row')) return;   /* a gallery of boxes, not a line of columns */
+    var l1 = levelOf(el) === 1 ? el : l1Of(el);
+    if (l1 && colsIn(l1) > 4) console.warn('layout: level-1 line carries ' + colsIn(l1) + ' columns', l1);
+    if (levelOf(el) === 2 && elemKids(el) > 4) console.warn('layout: level-2 row holds ' + elemKids(el) + ' cells', el);
+    if (levelOf(el) === 3 && elemKids(el) > 2) console.warn('layout: level-3 row holds ' + elemKids(el) + ' cells', el);
+  }
+
+  function resolveAll() {
+    var E = window.EqualizeRows;
+    if (!E) return;
+    try { E.clean(); document.documentElement.classList.add('eq-ready'); E.run(); } catch (e) {}
   }
 
   function applyDrop(d) {
@@ -947,7 +965,9 @@ window.LayoutEditor = (function () {
     var gone = tidy(from.parent);
     hist.push({ node: n, from: from, gone: gone, wraps: wraps, back: back });
     if (hist.length > 40) hist.shift();
-    moved++; markPins(); markGrains(); paintChip(); resolve();
+    moved++; markPins(); markGrains(); paintChip();
+    /* the row it landed in, and the row it left, are solved again — nothing else is touched */
+    resolve(t.box || n); if (from.parent) resolve(from.parent);
   }
 
   /* DELETE IS A MOVE, AND IT UNDOES LIKE ONE. The node leaves the page and the record of where it came
@@ -962,7 +982,7 @@ window.LayoutEditor = (function () {
     rec.gone = tidy(parent);
     hist.push(rec);
     if (hist.length > 40) hist.shift();
-    moved++; markPins(); markGrains(); select(null); paintChip(); resolve();
+    moved++; markPins(); markGrains(); select(null); paintChip(); resolveAll();
     return true;
   }
 
@@ -974,7 +994,7 @@ window.LayoutEditor = (function () {
     if (s.added) {
       if (s.node.parentNode) s.node.parentNode.removeChild(s.node);
       moved = Math.max(0, moved - 1);
-      markPins(); markGrains(); paintChip(); resolve();
+      markPins(); markGrains(); paintChip(); resolveAll();
       return true;
     }
     /* WHAT WENT IS PUT BACK IN THE REVERSE OF THE ORDER IT WENT, so every box returns to a parent
@@ -1036,7 +1056,7 @@ window.LayoutEditor = (function () {
       }
     }
     moved = Math.max(0, moved - 1);
-    markPins(); markGrains(); paintChip(); resolve();
+    markPins(); markGrains(); paintChip(); resolveAll();
     return true;
   }
 
@@ -1111,7 +1131,7 @@ window.LayoutEditor = (function () {
     if (!n || !inside(n)) return;
     e.preventDefault();
     newBlockAt(e.clientX, e.clientY);
-    resolve();
+    resolveAll();
   }
 
   /* ---- ROW GRIPS ---------------------------------------------------------------------
@@ -1335,7 +1355,7 @@ window.LayoutEditor = (function () {
     markPins(); markGrains(); paintChip(); paintPanel();
     /* ENTERING SOLVES. The layer turns off content-visibility for every section, so every row now has
        a width to measure — solve once here and the page opens as the reader gets it. */
-    resolve();
+    resolveAll();
   }
 
   function disable() {
@@ -1351,16 +1371,18 @@ window.LayoutEditor = (function () {
     clean();
     /* DONE RE-SOLVES THE WHOLE PAGE: every row is measured again, so the geometry the teacher leaves
        is the geometry a reader gets — including the heights that moved because a row above changed. */
-    resolve();
+    resolveAll();
   }
 
   /* ---- A HOTKEY, SO THE LAYER IS REACHED FROM ANYWHERE -----------------------------------------
-     Alt+E toggles the layer. The chip is at the top of the page and a teacher working at the bottom
-     should not have to scroll back to it; the combo is a modifier plus a letter, so it cannot collide
-     with typing. Registered once, at load, so it works whether or not the layer is on. */
+     Alt+E presses the page's own Edit / Done button, so the hotkey does exactly what the button does:
+     the button's path saves, leaves edit mode and re-solves the page. A fallback toggles the layer when
+     the page has no such button. */
   document.addEventListener('keydown', function (e) {
     if (e.altKey && !e.ctrlKey && !e.metaKey && (e.key === 'e' || e.key === 'E')) {
       e.preventDefault();
+      var b = document.getElementById('editpage');
+      if (b && !b.disabled) { b.click(); return; }
       if (ON) disable(); else enable();
     }
   }, true);
