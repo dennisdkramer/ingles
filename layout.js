@@ -190,11 +190,28 @@ window.LayoutEditor = (function () {
     }
     return best;
   }
-  /* the columns a cell occupies: its widest row of cells, and never less than one */
+  /* a cell's own rows: the .rows it holds directly, and any it holds through a wrapper such as
+     .block — but never a row inside one of ITS rows, which belongs to that row's cells. A row stops
+     the walk, so the count is the cell's own line and not the depth below it. */
+  function ownRows(cell) {
+    var out = [];
+    (function walk(el) {
+      for (var i = 0; i < el.children.length; i++) {
+        var c = el.children[i];
+        if (isRow(c)) { out.push(c); continue; }
+        walk(c);
+      }
+    })(cell);
+    return out;
+  }
+  /* the columns a cell occupies: its widest own row of cells, and never less than one */
   function weight(el) {
     if (!el || el.nodeType !== 1) return 1;
-    var r = firstRowOfLevel(el, 2);
-    return r ? Math.max(1, elemKids(r)) : 1;
+    var rs = ownRows(el);
+    if (!rs.length) return 1;
+    var w = 1;
+    for (var i = 0; i < rs.length; i++) w = Math.max(w, elemKids(rs[i]));
+    return w;
   }
   /* the columns the cells of a row occupy, together */
   function widths(row) {
@@ -256,8 +273,10 @@ window.LayoutEditor = (function () {
        page are that row's whole tree. */
     if (levelOf(row) === 2) {
       if (elemKids(row) + add > 4) return false;
-      var cell = row.parentElement;
-      if (!isCell(cell)) return true;
+      /* the cell this row sits in, through any wrapper (.block) between them */
+      var cell = null;
+      for (var p = row.parentElement; p && p !== ca(); p = p.parentElement) if (isCell(p)) { cell = p; break; }
+      if (!cell) return true;
       var others = colsIn(base) - weight(cell);
       var grown = Math.max(weight(cell), elemKids(row) + add);
       return others + grown <= 4;
