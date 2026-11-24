@@ -1696,7 +1696,10 @@ p:has(>input.gap:only-child){text-align:center}
   .chart th.vlab>span{position:absolute;right:100%;top:0;bottom:0;display:grid;place-items:center;
     writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;padding-right:8px;
     font-size:calc(var(--s0) + 2pt);font-weight:300;letter-spacing:normal;color:var(--ink-2)}
-  .chart:has(>tbody>tr>th.vlab){overflow:visible;margin-inline-start:30px}
+  /* THE 30px GUTTER COMES OUT OF THE WIDTH, NOT OUT OF THE BLOCK. The label is absolutely positioned at
+     `right:100%` of a zero-width column, so the table is pushed right by its own start margin; with
+     `width:100%` on top of that the table ends 30px past its container and a narrow cell clips it. */
+  .chart:has(>tbody>tr>th.vlab){overflow:visible;width:calc(100% - 30px);margin-inline-start:30px}
   /* the label column draws nothing at all: no cell, no border where it meets the data, so the chart's own
      frame is the only line at its left edge */
   .chart:has(>tbody>tr>th.vlab) tbody td:first-of-type{border-left:0}
