@@ -237,12 +237,23 @@ window.LayoutEditor = (function () {
   }
   function fits(t, n) {
     if (!t || !t.insert) return true;
-    if (t.insert === 'merge' || t.insert === 'row') return true;
     if (t.insert === 'cell3') {
       var r3 = rowFor3(t.item);
       if (!r3) return true;
       var have3 = elemKids(r3) + (isRow(t.item.parentElement) ? 1 : 0);
       return have3 + 1 <= 2;
+    }
+    /* MERGING AND ROW-DROPPING WIDEN A CELL TOO. A cell merged into another brings its own rows with
+       it, and a row dropped into a cell becomes one more row of cells there — either can push the
+       line above four with no cell ever being added to a row. Count what arrives, not what lands. */
+    if (t.insert === 'row' || t.insert === 'merge') {
+      var host = isCell(t.box) ? t.box : (isCell(t.merge) ? t.merge : null);
+      if (!host || cellLevel(host) > 2) return true;
+      var b1 = l1Of(host);
+      if (!b1) return true;
+      var comes = t.insert === 'merge' ? weight(n) : (isRow(n) ? Math.max(1, elemKids(n)) : 1);
+      var rest = colsIn(b1) - weight(host);
+      return rest + Math.max(weight(host), comes) <= 4;
     }
     /* HOW WIDE THE ARRIVAL IS. A cell arrives as wide as the widest row it holds; a joined row
        arrives as the sum of its cells' widths. A LEVEL-2 LINE COUNTS CELLS, not widths, because a
