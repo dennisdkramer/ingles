@@ -170,11 +170,13 @@ function wrapPage(src) {
      editor and half of it does not. Each item gets a row of its own, one per item, which is what keeps
      the page's appearance: what stood one above the other still stands one above the other, one level
      deeper. That is also what makes the tool a FIXED POINT — what it writes is cells holding rows, so
-     a second run finds no item left in a cell. */
+     a second run finds no item left in a cell. A `.qitem` is atomic: its stem and its options are one
+     question and are never taken apart by the wrap. */
   for (const level of [1, 2]) {
     for (const row of rowsAt(level)) {
       for (const cell of row.children) {
-        if (cell.kind !== 'el' || cell.tag !== 'div' || isBlock(cell) || classes(cell).includes('reveal')) continue;
+        if (cell.kind !== 'el' || cell.tag !== 'div' || isBlock(cell) || classes(cell).includes('reveal')
+          || classes(cell).includes('qitem')) continue;
         const pred = n => n.kind === 'el' && !isRow(n) && !isBlock(n) && !CONTROL.has(n.tag);
         if (cell.children.filter(pred).length < 1) continue;
         targets.push([cell, pred]);
@@ -194,6 +196,48 @@ function wrapPage(src) {
       report.added++;
     }
     parent.children = out;
+  }
+
+  /* A QUESTION AUTHORED AS A CELL — `<div class="rows"><div class="qitem">` — IS PUT IN A CELL OF ITS
+     OWN, so the row's child is a box and the question is that box's content; the next pass then gives
+     the question its level-3 row like any other item. The cell is written here rather than through the
+     loop above, because the loop's shape is a row around a cell and this needs only the cell. */
+  for (const level of [1, 2]) {
+    for (const row of rowsAt(level)) {
+      const out = [];
+      for (const n of row.children) {
+        if (n.kind === 'el' && classes(n).includes('qitem')) {
+          /* a question the wrap itself had already taken apart is put back together first: the rows
+             inside it lose their boxes, so the question stays one item and the page stays three deep */
+          const flat = [];
+          for (const kid of n.children || []) {
+            const oneCell = kid.kind === 'el' && kid.raw === ROW_OPEN && kid.children.length === 1
+              && kid.children[0].kind === 'el' && kid.children[0].raw === '<div>';
+            if (oneCell) { for (const g of kid.children[0].children) flat.push(g); }
+            else flat.push(kid);
+          }
+          n.children = flat;
+          out.push({ kind: 'el', tag: 'div', raw: '<div>', close: '</div>', children: [n] });
+          report.added++;
+        } else out.push(n);
+      }
+      row.children = out;
+    }
+  }
+
+  /* A QUESTION HOLDS ITS OWN TEXT AND ITS OWN OPTIONS, never a row of its own: a row the wrap put
+     inside it earlier is flattened back, so the question is one item and the page never reaches a
+     fourth level. Only the tool's own boxes are flattened — one with an attribute of its own is
+     content and stays. */
+  for (const q of walk(tree, [], 0).filter(n => n.kind === 'el' && classes(n).includes('qitem'))) {
+    const flat = [];
+    for (const kid of q.children || []) {
+      const oneCell = kid.kind === 'el' && kid.raw === ROW_OPEN && kid.children.length === 1
+        && kid.children[0].kind === 'el' && kid.children[0].raw === '<div>';
+      if (oneCell) { for (const g of kid.children[0].children) flat.push(g); report.added++; }
+      else flat.push(kid);
+    }
+    q.children = flat;
   }
 
   /* the shape of the page the wrap produced, read back off the tree */
