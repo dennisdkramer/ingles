@@ -294,6 +294,14 @@ const PROBE = `(function () {
   E.undo();
   ok('undo puts the page back', snap() === s7, snap() === s7 ? '' : diff(s7, snap()));
 
+
+  /* 8 — A LEVEL-3 ROW HOLDS TWO CELLS, and a third is refused: the pointer is held on the side line
+     of an item in a row that already holds two, and nothing moves because there is no place for it. */
+  var s8 = snap(), b8 = view('banditem'), a8 = R('l3a'), st8 = E.moves();
+  drag(b8, b8.getBoundingClientRect().left + 10, b8.getBoundingClientRect().top + 8, a8.right - 2, a8.top + a8.height / 2);
+  var still8 = document.getElementById('banditem');
+  ok('a third cell in a level-3 row is refused', E.moves() === st8 && !!still8 && rowsIn(still8) === 2,
+     'moves=' + st8 + '->' + E.moves() + ' path=' + (still8 && pathOf(still8)));
   E.disable();
   return JSON.stringify({ res: res });
 })()`;

@@ -224,7 +224,16 @@ window.LayoutEditor = (function () {
     if (!row) return true;
     var base = levelOf(row) === 1 ? row : l1Of(row);
     if (!base) return true;
-    if (t.insert === 'cell' && n.parentElement === row) add = 0;   /* already one of its cells */
+    /* WHAT LEAVES COUNTS. A cell or a row moved from one place to another inside the same level-1 tree
+       does not add a column — it trades one for another — so the move is allowed even in a full row. */
+    var srcRow = n.parentElement;
+    var sameTree = isRow(srcRow) && l1Of(srcRow) === base;
+    if (t.insert === 'cell' && n.parentElement === row) add = 0;
+    else if (sameTree) add = t.insert === 'join' ? Math.max(0, add - elemKids(srcRow)) : 0;
+    /* A LEVEL-2 ROW IS COUNTED ON ITS OWN: filling it is not limited by the level-2 row in the cell
+       beside it. A LEVEL-1 ROW IS THE PAGE: its four is the four columns the page shows, so a new
+       level-1 cell is counted across the row's whole tree. */
+    if (levelOf(row) === 2) return elemKids(row) + add <= 4;
     return colsIn(base) + add <= 4;
   }
   function pick(x, y) {
