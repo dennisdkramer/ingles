@@ -300,6 +300,27 @@ window.LayoutEditor = (function () {
        one level up. A cell dropped on another cell's side sits beside it in that row; dropped in the
        middle it merges, as it always did. An item dropped on the same edge becomes a cell of that row,
        because the side is the only place an item can arrive without going inside the cell. */
+    /* THE TOP OR BOTTOM LINE OF A LEVEL-3 CELL IS THAT CELL: held within three pixels of either edge,
+       the arrival goes IN — above or below what the cell already holds — instead of making a new
+       level-3 row beside it. It is the level-3 cell's own edge, not the item's. */
+    var deep = null;
+    if (el && el !== cell) {
+      var dn = el;
+      while (dn && dn !== cell) {
+        if (isCell(dn) && cellLevel(dn) >= 3) { deep = dn; break; }
+        dn = dn.parentElement;
+      }
+    }
+    if (loose !== 'row' && deep && deep !== drag.node) {
+      var dr = deep.getBoundingClientRect();
+      var atTop = y <= dr.top + EDGE3, atBot = y >= dr.bottom - EDGE3;
+      if (atTop || atBot) {
+        var td = { box: deep, ref: atTop ? (deep.firstElementChild || null) : null,
+                   host: deep, before: atTop, ax: 'y', insert: 'row' };
+        return samePlace(td, drag.node) ? null : td;
+      }
+    }
+
     var er = cell.getBoundingClientRect();
     /* BESIDE AT LEVEL 2 IS A WIDE TARGET — a fifth of the cell, capped — because that is the ordinary
        gesture: put this thing on the line beside that one. LEVEL 3 IS NOT: it asks for the pointer to
@@ -349,7 +370,7 @@ window.LayoutEditor = (function () {
     var box = t.box;
     if (box === ca()) return 1;
     if (isRow(box)) return levelOf(box);
-    if (isCell(box)) return cellLevel(box) + 1;
+    if (isCell(box)) return cellLevel(box) + (t.insert === 'cell3' ? 1 : 0);
     return 0;
   }
 
@@ -699,6 +720,7 @@ window.LayoutEditor = (function () {
       rec.cell = c;
       return p;
     }
+    if (isCell(p) && cellLevel(p) >= 3) return rowOf(p) || null;   /* already in a level-3 cell: its row */
     if (isCell(p) && cellLevel(p) <= 2) {
       var row = document.createElement('div'); row.className = 'rows';
       var box = document.createElement('div');
