@@ -22,6 +22,7 @@ A batch and its steps must be removed from this file when all of the batch steps
 - `.ans` belongs to `engine2.js` (the answer pill it writes after a checked field, style.css:1283). A page never writes class="ans"; the line holding a gap is a plain `<p>`. A wrong `<p class="ans">` paints a full-width green pill behind the gap. This was fixed in 25 places and in the #chunks/#fill boxes; do not reintroduce it.
 - Keys are copied from `dictionary.json` through `PronKey.render` (e.g. straight = s[t]raigh[t]). The rule is now written in the #key-sound box. Live pages fetch the dictionary for the 🔑 popup; file:// blocks that fetch, http does not.
 - `PEDAGOGY-MAP.md` is never edited without the owner approving the exact words (it line 9 reword is still pending sign-off).
+- Edit mode has three presses: a click types, Shift+drag moves, and **Alt+click centres the item under the pointer** (`layout.js` `centre()`). The write is the item's own inline style — `text-align:center`, plus `margin-left/right:auto` for an item standing inside a cell (never on a cell itself: its width is the panel's) — so the centring is page content: Done and Save keep it and `clean()` leaves it. A second click restores the exact inline values it replaced. The layer's panel carries the same action as `centre` (`data-act="mid"`), and the gesture is named in the chip, engine2's edit-mode toast, the demo page's `#barhelp` and `FUNCTION.md` [LAYOUT].
 
 # [CURRENT]
 
@@ -57,3 +58,4 @@ A batch and its steps must be removed from this file when all of the batch steps
 
 ## [B7] - The edit-mode width buttons <"if we want to remove hand-authoring entirely ... the buttons shouldnt be there if they dont work"> either they stick or they go
 - [S1] The width buttons in the edit panel do not survive leaving edit mode. Make the choice persist (localStorage, or written into the block markup), or remove the buttons and record that hand-authoring of widths is gone.
+

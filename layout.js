@@ -1,7 +1,8 @@
 /* ---- layout editor (layout.js) ------------------------------------------------------
-   Teacher-only, and only while engine2.js has its edit mode open. TWO GESTURES, ONE MODIFIER:
+   Teacher-only, and only while engine2.js has its edit mode open. THREE PRESSES, TWO MODIFIERS:
    a plain click places a caret and edits text; holding SHIFT engages this file — Shift+drag
-   picks a node up and drops it, Shift+click (no travel) selects it for the width panel.
+   picks a node up and drops it, Shift+click (no travel) selects it for the width panel; holding
+   ALT and clicking centres the item in its container, and clicking it again takes that back.
    "Dragging any node" means inside .content-area — a block, a .rows cell, a paragraph, a div,
    a table, a whole .rows — together with its subtree, and drops it before or after any sibling,
    or inside any container that holds items. Nothing is stored here: the DOM is the only thing
@@ -581,6 +582,51 @@ window.LayoutEditor = (function () {
     if (sel) sel.setAttribute('data-layout-sel', '');
     paintPanel();
   }
+  /* ---- the centring ----------------------------------------------------------------
+     ALT+CLICK CENTRES THE ITEM IN ITS CONTAINER, and the same click takes the centring back.
+     The write is the item's own inline style and nothing else — `text-align:center` centres
+     its lines, and the two auto margins centre the box of an item that hugs its content
+     (a figure, a table) inside the width of its cell. So a centring is CONTENT: it is in the
+     page a save writes, and clean() leaves it alone. Inline rather than a class because the
+     sheet's layers are ordered, not flat: the drawing family sets `margin:0` in a layer above
+     the utilities, so no class below it could move a timeline figure at all. The width actions
+     below clear `flex`, `width` and `min-width` only, so a centring and a width never undo
+     each other. */
+  var MID = { textAlign: 'text-align', marginLeft: 'margin-left', marginRight: 'margin-right' };
+  /* what a centring replaced, so a second click restores those values instead of guessing at
+     the sheet's defaults; session-only, like the rest of this tool's memory */
+  var midWas = typeof WeakMap === 'function' ? new WeakMap() : null;
+  function mid(n) { return !!(n && n.style && n.style.textAlign === 'center'); }
+  function centre(n) {
+    if (!n || !inside(n) || still(n) || n === ca()) return false;
+    var was = midWas && midWas.get(n);
+    if (mid(n)) {
+      Object.keys(MID).forEach(function (p) {
+        if (was && was[p]) n.style[p] = was[p];
+        else n.style.removeProperty(MID[p]);
+      });
+      if (midWas) midWas['delete'](n);
+    } else {
+      if (midWas) {
+        var keep = {};
+        Object.keys(MID).forEach(function (p) { keep[p] = n.style[p] || ''; });
+        midWas.set(n, keep);
+      }
+      n.style.textAlign = 'center';
+      /* A CELL IS NOT MOVED BY A MARGIN. Its width is the width panel's business, and an auto
+         margin on one cell of a row spends the row's slack on one side instead of centring it —
+         so a cell centres what it holds, and an item inside a cell centres itself. */
+      if (!isItem(n)) { n.style.marginLeft = 'auto'; n.style.marginRight = 'auto'; }
+    }
+    /* a style attribute emptied by the toggle is removed, so a page that had none keeps none */
+    if (!n.getAttribute('style')) n.removeAttribute('style');
+    /* the click says which way it went: an item already as wide as its column shows no change
+       when its lines centre, and a gesture that reports nothing reads as a dead one */
+    if (typeof window.toast === 'function') {
+      try { window.toast(mid(n) ? 'Centred in its container — Alt+click again to undo' : 'Centring removed'); } catch (e) { }
+    }
+    return true;
+  }
   /* ---- the width actions -------------------------------------------------------------
      A row's cells are `flex:1 1 auto` with a floor of a quarter of the page (style.css
      .rows>*), so their widths come from their own content and grow by equal shares: nothing
@@ -611,6 +657,10 @@ window.LayoutEditor = (function () {
     if (!sel) return;
     var n = sel, row = n.classList.contains('rows') ? n : n.parentElement;
     if (what === 'del') { remove(n); return; }
+    if (what === 'mid') {
+      if (centre(n)) { select(n); markPins(); paintChip(); }
+      return;
+    }
     if (what === 'even') {
       if (!row || !row.classList || !row.classList.contains('rows')) return;
       var kids = [].filter.call(row.children, function (k) { return k.nodeType === 1; }), c = kids.length;
@@ -650,6 +700,7 @@ window.LayoutEditor = (function () {
       panelEl.setAttribute('role', 'status');
       panelEl.innerHTML = '<div class="layout-facts"></div><div class="layout-acts">' +
         '<button type="button" data-act="even">even row</button>' +
+        '<button type="button" data-act="mid">centre</button>' +
         '<button type="button" data-act="min">min</button>' +
         '<button type="button" data-act="natural">natural</button>' +
         '<button type="button" data-act="half">half</button>' +
@@ -678,6 +729,7 @@ window.LayoutEditor = (function () {
          cell; the width actions need a cell, because a flex value on a container does nothing (and
          hiding them is what stops it being tried) */
       if (a === 'del') b.disabled = !(sel && sel !== ca() && !still(sel) && inside(sel));
+      else if (a === 'mid') b.disabled = !(sel && sel !== ca() && !still(sel) && inside(sel));
       else if (a === 'even') b.disabled = !(item || isRow);
       else b.disabled = !item;
     });
@@ -699,7 +751,7 @@ window.LayoutEditor = (function () {
       document.body.appendChild(chipEl);
     }
     chipEl.style.display = 'block';
-    chipEl.textContent = 'Shift+drag a block · ' + moved + ' change' + (moved === 1 ? '' : 's') +
+    chipEl.textContent = 'Shift+drag a block · Alt+click centres · ' + moved + ' change' + (moved === 1 ? '' : 's') +
       (hist.length ? ' · Ctrl+Z undo' : '') + ' · Esc to stop';
   }
 
@@ -1216,6 +1268,20 @@ window.LayoutEditor = (function () {
 
   function down(e) {
     if (!ON || e.button !== 0) return;
+    /* ALT IS READ FIRST. It is a press of its own — no drag and no caret — so the walk to the
+       item is the drag's own walk, and a person who happens to hold Shift as well still gets
+       the centring rather than a node picked up. */
+    if (e.altKey) {
+      var m = e.target && e.target.nodeType === 1 ? e.target : null;
+      while (m && !movable(m)) {
+        if (m === ca() || !m.parentElement) return;
+        m = m.parentElement;
+      }
+      if (!m) return;
+      e.preventDefault(); e.stopPropagation();
+      if (centre(m)) { select(m); markPins(); paintChip(); }
+      return;
+    }
     if (!e.shiftKey) return;           /* the caret's press, not the layout's */
     var n = e.target && e.target.nodeType === 1 ? e.target : null;
     if (!n) return;

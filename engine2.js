@@ -165,8 +165,8 @@ function toggleEditMode(){
   loadLayout();editingOnly(true);      /* the drag layer rides with edit mode, and only with it */
   if(eb)eb.textContent="✔️ Done";
   toast(OPENPAGE
-    ? "Edit mode — click to type, Shift+drag to move a block; 💾 Save to repo keeps it"
-    : "Edit mode — click to type, Shift+drag to move a block; ✔️ Done saves");
+    ? "Edit mode — click to type, Shift+drag to move a block, Alt+click to centre one; 💾 Save to repo keeps it"
+    : "Edit mode — click to type, Shift+drag to move a block, Alt+click to centre one; ✔️ Done saves");
  }else{
   if(ca)ca.removeAttribute("contenteditable");
   unloadLayout();editingOnly(false);   /* disable() also strips the chip and the drag line, so the save is clean */
