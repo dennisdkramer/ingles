@@ -5,6 +5,9 @@
      · level 1 — the section's row, a direct child of .content-area;
      · level 2 — the row inside a cell: a block's own children, and the items of a level-1 cell;
      · level 3 — the row inside a level-2 cell, whose only job is horizontal positioning.
+   EVERY ITEM GETS ITS OWN LEVEL-3 ROW, alone in its cell or not. An item with no level 3 has nowhere
+   to be placed beside another, which made half a page answer the editor and half of it not; the row
+   is one cell wide, so nothing moves.
    A heading (h1–h4), a block's own <script>, the notebook and a markup box (`details.reveal`, a
    control and not a container) stand alone. Nothing is written at level 4. Each item gets a row
    with ONE cell in it, so the wrap is spacing-neutral: the gap between two items moves from the
@@ -160,17 +163,20 @@ function wrapPage(src) {
   for (const b of all.filter(isBlock)) {
     targets.push([b, n => n.kind === 'el' && !HEADING.has(n.tag) && !CONTROL.has(n.tag) && !isRow(n)]);
   }
-  /* level 2 and 3 — the items of a cell. A cell that already holds ONE item is finished: the item
-     is a cell of a row, which is the whole of what the wrap promises, and a row made around it
-     could hold nothing beside it. A cell holding several items is the case level 3 exists for, so
-     each of those items gets a cell of its own in a row one level down. That is also what makes the
-     tool a FIXED POINT: what it writes is a cell holding rows, so a second run adds no row. */
+  /* EVERY ITEM IS ONE CELL OF A LEVEL-3 ROW, whatever its cell holds. A single item used to be
+     left bare — "the cell is finished" — and that is exactly what made the page uneven: an item with
+     a level-3 row can be dropped beside another and the pair read side by side, while an item sitting
+     straight in a level-1 or level-2 cell has no level 3 to be placed in, so half a page answers the
+     editor and half of it does not. Each item gets a row of its own, one per item, which is what keeps
+     the page's appearance: what stood one above the other still stands one above the other, one level
+     deeper. That is also what makes the tool a FIXED POINT — what it writes is cells holding rows, so
+     a second run finds no item left in a cell. */
   for (const level of [1, 2]) {
     for (const row of rowsAt(level)) {
       for (const cell of row.children) {
         if (cell.kind !== 'el' || cell.tag !== 'div' || isBlock(cell) || classes(cell).includes('reveal')) continue;
         const pred = n => n.kind === 'el' && !isRow(n) && !isBlock(n) && !CONTROL.has(n.tag);
-        if (cell.children.filter(pred).length < 2) continue;
+        if (cell.children.filter(pred).length < 1) continue;
         targets.push([cell, pred]);
       }
     }
@@ -243,12 +249,28 @@ function main(argv) {
   for (const f of files) {
     const src = fs.readFileSync(f, 'utf8');
     const roundTrip = serialize(parse(src)) === src;
-    const { tree, report } = wrapPage(src);
+    /* THE WRAP RUNS TO A FIXED POINT. Wrapping an item makes the cell around it one level deeper,
+       which can leave that cell holding something else bare: on this page the second pass found six
+       more. So --write repeats until a pass adds nothing, and reports the total the page gained. */
+    let cur = src, tree = null, report = null, passes = 0, total = 0;
+    for (;;) {
+      const r = wrapPage(cur);
+      tree = r.tree; report = r.report;
+      if (report.error || !report.added) break;
+      const next = serialize(tree);
+      if (next === cur) break;                 /* nothing the tool can do: report what is left */
+      total += report.added;
+      cur = next;
+      if (++passes > 8) break;
+    }
+    const { tree: _t, report: _r } = wrapPage(src);
+    report.added = total || report.added;
     const out = serialize(tree);
     const censusOk = sameCensus(attrCensus(src), attrCensus(out));
-    const shape = `rows ${report.before ? report.before.rows : '?'} → ${report.rows} · cells ${report.before ? report.before.cells : '?'} → ${report.cells}`
+    const shape = `rows ${_r.before ? _r.before.rows : '?'} → ${report.rows} · cells ${_r.before ? _r.before.cells : '?'} → ${report.cells}`
       + ` · depth ${Object.entries(report.depth).sort().map(([k, v]) => `${k}:${v}`).join(' ')}`
       + ` · +${report.added} row${report.added === 1 ? '' : 's'}`;
+
     const notes = [];
     if (!roundTrip) notes.push('SCANNER ALTERS THE PAGE (round trip differs) — nothing written');
     if (!censusOk) notes.push('ATTRIBUTES CHANGED (id/style/data-*/aria-* census differs) — nothing written');
