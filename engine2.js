@@ -187,6 +187,16 @@ function toggleEditMode(){
     : "Saved");
  }
 }
+/* ALT+E TOGGLES EDIT MODE, FROM ANYWHERE. The hotkey lives here rather than in layout.js because
+   layout.js is only loaded when the layer is; this file is on the page from the start, so the combo can
+   ENTER edit mode as well as leave it. It runs the button's own function, so it does exactly what
+   Edit / Done does — save, revert where the server holds the layout, and re-solve. */
+document.addEventListener("keydown",function(e){
+ if(!e.altKey||e.ctrlKey||e.metaKey)return;
+ if(e.key!=="e"&&e.key!=="E")return;
+ e.preventDefault();e.stopPropagation();
+ toggleEditMode();
+},true);
 /* shared notebook: a plain textarea, one per student+lesson, auto-saved (debounced) */
 const nbId=()=>"notebook_"+STUDENT+"_"+L;
 let nbTimer=null;

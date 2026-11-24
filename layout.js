@@ -899,10 +899,35 @@ window.LayoutEditor = (function () {
     try { E.clean(); document.documentElement.classList.add('eq-ready'); E.run(); } catch (e) {}
   }
 
+  /* does every line this drop touched still hold its cap? level 1: four columns, level 2: four cells,
+     level 3: two cells — and only a line that the drop made WORSE is a failure. */
+  function capHolds(guards) {
+    for (var i = 0; i < guards.length; i++) {
+      var g = guards[i], lvl = levelOf(g.row);
+      var now = lvl === 1 ? colsIn(g.row) : elemKids(g.row);
+      var max = lvl === 1 ? 4 : (lvl === 3 ? 2 : 4);
+      if (now > max && now > g.was) return false;
+    }
+    return true;
+  }
+
   function applyDrop(d) {
     var n = d.node, t = d.t;
     if (!t) return;
     var from = { parent: n.parentNode, next: n.nextElementSibling };
+    /* the lines this drop could widen, read BEFORE the page changes: the one the node left, and the one
+       it lands in. Compared after the drop, a line that went over the cap is taken back. */
+    var guards = [];
+    (function () {
+      var a = l1Of(n); if (a) guards.push({ row: a, was: colsIn(a) });
+      var tb = t.box || n;
+      var b = levelOf(tb) === 1 ? tb : l1Of(tb);
+      if (b && b !== a) guards.push({ row: b, was: colsIn(b) });
+      var l3 = isRow(tb) ? tb : null;
+      if (l3 && levelOf(l3) === 3) guards.push({ row: l3, was: elemKids(l3) });
+      var l2 = isRow(tb) ? tb : null;
+      if (l2 && levelOf(l2) === 2) guards.push({ row: l2, was: elemKids(l2) });
+    })();
     var back = null, wraps = [], fill = { rows: [], cells: [] };
     /* A MERGE MOVES WHAT THE CELL HELD, not the cell: a cell inside a cell is not a shape the page
        has, so its children go into the target at the edge the pointer is on, keeping their order,
@@ -965,6 +990,12 @@ window.LayoutEditor = (function () {
     var gone = tidy(from.parent);
     hist.push({ node: n, from: from, gone: gone, wraps: wraps, back: back });
     if (hist.length > 40) hist.shift();
+    /* THE CAP IS A POST-CONDITION, NOT ONLY A DECISION. A gesture can reach a row by a path `fits` did
+       not model — a level-2 side band that lands a line wider than four, an arrival that carries a row
+       of its own. If the drop made a line wider than four, or a level-3 row wider than two, it is taken
+       back before anything is counted as a move. A page that was ALREADY over stays as it is: only a
+       drop that makes it worse is refused. */
+    if (!capHolds(guards)) { undo(); return; }
     moved++; markPins(); markGrains(); paintChip();
     /* the row it landed in, and the row it left, are solved again — nothing else is touched */
     resolve(t.box || n); if (from.parent) resolve(from.parent);
@@ -1373,19 +1404,6 @@ window.LayoutEditor = (function () {
        is the geometry a reader gets — including the heights that moved because a row above changed. */
     resolveAll();
   }
-
-  /* ---- A HOTKEY, SO THE LAYER IS REACHED FROM ANYWHERE -----------------------------------------
-     Alt+E presses the page's own Edit / Done button, so the hotkey does exactly what the button does:
-     the button's path saves, leaves edit mode and re-solves the page. A fallback toggles the layer when
-     the page has no such button. */
-  document.addEventListener('keydown', function (e) {
-    if (e.altKey && !e.ctrlKey && !e.metaKey && (e.key === 'e' || e.key === 'E')) {
-      e.preventDefault();
-      var b = document.getElementById('editpage');
-      if (b && !b.disabled) { b.click(); return; }
-      if (ON) disable(); else enable();
-    }
-  }, true);
 
   return {
     enable: enable,
