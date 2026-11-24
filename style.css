@@ -995,6 +995,15 @@
        and back out of it instead of snapping; both lists hold two shadows, so they interpolate */
     transition:border-color .5s ease,box-shadow .5s ease}
   .game>:is(h3,h4):first-child{margin-top:0}
+  /* THE HEADLINE NEVER MOVES. equalize centres a cell's contents when two cells in a row hold things of a
+     similar height, and a block that was shorter than its cell went with it, taking its h3 down the page.
+     A block that is a cell's child now fills the cell, so there is nothing left to centre, and what follows
+     the headline is centred in the room the headline leaves: the h3 stays at the block's top left, where its
+     letter, its anchor and the reader's eye all expect it. */
+  .rows>*>.block:only-child{flex:1 0 auto;display:flex;flex-direction:column}
+  .rows>*>.block:only-child>h3{flex:0 0 auto}
+  .rows>*>.block:only-child>h3+*{margin-block-start:auto}
+  .rows>*>.block:only-child>:last-child{margin-block-end:auto}
   /* text that sits directly in a frame keeps 3px at its sides, so a paragraph or a list never runs flush
      against the frame's inner edge; the vertical gap is the level's, in #44 FLOW */
   :is(.block,.panel,.card,.dialog)>:is(p,ul,ol,dl,blockquote){padding-inline:3px}
