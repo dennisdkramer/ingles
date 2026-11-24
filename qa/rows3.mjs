@@ -143,7 +143,7 @@ const PROBE = `(function () {
   /* 2 — a CELL merged into a cell: its children arrive as rows, not as bare items */
   var s2 = snap(), mm = view('mergeme'), tgt = document.getElementById('target');
   var mmr = R('mergeme'), blk = tgt.querySelector('.block').getBoundingClientRect();
-  drag(mm, mmr.left + 10, mmr.bottom - 6, blk.right - 12, blk.bottom - 8);
+  drag(mm, mmr.left + 10, mmr.bottom - 6, blk.left + blk.width / 2, blk.bottom - 8);
   var kids = [].slice.call(document.getElementById('target').children);
   var carried = kids.filter(function (k) { return k.classList.contains('rows'); })[0];
   ok('a merged cell leaves its content in a row, beside the block',

@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Extra · Lesson 1 — The Capability Map</title>
-<link rel="stylesheet" href="../style.css?v=7a8a3ffd0a">
+<link rel="stylesheet" href="../style.css?v=0783317261">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="../logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>EXTRA <span>DEMO 1</span></h1>
@@ -917,7 +917,7 @@ next();
 <div>
 <div class="block" data-look="stripes">
 <h3>Marked activities with controls</h3>
-<div class="rows"><div><p>An activity is a unit the student completes, and its instruction is written inside the block that holds it. <b>Write the instruction to describe what the control actually does, in the direction the student works it</b> — whether the prompt carries the answer and the student finds the word, or carries the word and the student supplies the answer — and write it after reading the engine that runs the control, never from the activity's name. The four controls — a gap, a radio, a checkbox, a written field — are what an activity is built from, chosen by what the student must do; none of them is an activity on its own, and a lone keyed gap is a component beside other teaching, never an activity. <b>Choose the control by the length of the answer</b>: a gap holds anything that fits on the line, and a written field is for an answer that cannot — a paragraph, a list, several sentences — because a gap that has to scroll has stopped showing the answer. <b>Every item the student answers is numbered</b> — <code>&lt;span class="qnum"&gt;1.&lt;/span&gt;</code> beside the control it numbers, the count running through the activity block so the next activity starts again at 1 — so a teacher can name the item they mean.</p></div></div>
+<div class="rows"><div><p>An activity is a unit the student completes, and its instruction is written inside the block that holds it. <b>Write the instruction to describe what the control actually does, in the direction the student works it</b> — whether the prompt carries the answer and the student finds the word, or carries the word and the student supplies the answer — and write it after reading the engine that runs the control, never from the activity's name. The four controls — a gap, a radio, a checkbox, a written field — are what an activity is built from, chosen by what the student must do; none of them is an activity on its own, and a lone keyed gap is a component beside other teaching, never an activity. <b>Choose the control by the length of the answer</b>: a gap holds anything that fits on the line, and a written field is for an answer that cannot — a paragraph, a list, several sentences — because a gap that has to scroll has stopped showing the answer. <b>An item and the control that answers it are one element</b> — <code>&lt;div class="qitem"&gt;</code> holding the prompt and its answer line — never two paragraphs: a question in one element and its answer in another is a pair the editor can drag apart, and a question further from its answer than from the next question cannot be read. <b>Every item the student answers is numbered</b> — <code>&lt;span class="qnum"&gt;1.&lt;/span&gt;</code> beside the control it numbers, the count running through the activity block so the next activity starts again at 1 — so a teacher can name the item they mean.</p></div></div>
 <div class="rows"><div><p class="dim"><code>data-answer</code> keys a gap, <code>|</code> separating alternatives; <b><code>--gap-w</code> is 1.3× the width of the longest accepted answer</b>, the field's own padding included, written in <code>em</code> — a gap with no key takes 1.3× the prompt written beside it, or <code>9em</code>. Never <code>100%</code> and never <code>calc()</code>: a field as wide as its block has stopped showing its answer, and on its own line it stops being a gap. A radio group's key is <code>data-a</code> on <code>.qitem</code>; engine2.js marks the right option and writes <code>.ans</code> beside a typed field.</p></div></div>
 <div class="rows"><div><p>Each of these can stand as a block of its own or sit inside a block with the prose, the chart or the drawing it accompanies; every row below is the in-block size.</p></div></div>
 
@@ -953,6 +953,7 @@ next();
 <div class="rows">
 <div id="chunks" data-activity="chunks">
   <div class="rows"><div>
+<div class="qitem">
   <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center"><span class="qnum">1.</span>
     <span><b>1</b> never</span>
     <span><b>2</b> that</span>
@@ -961,9 +962,11 @@ next();
     <span><b>5</b> she</span>
     <span><b>6</b> told</span>
   </p>
-  <p style="text-align:center"><input class="gap" style="--gap-w:9em"></p>
+  <p class="ans"><input class="gap" style="--gap-w:9em"></p>
+</div>
 </div></div>
 <div class="rows"><div>
+<div class="qitem">
   <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center"><span class="qnum">2.</span>
     <span><b>1</b> when</span>
     <span><b>2</b> I got there</span>
@@ -972,16 +975,21 @@ next();
     <span><b>5</b> had</span>
     <span><b>6</b> left</span>
   </p>
-  <p style="text-align:center"><input class="gap" style="--gap-w:9em"></p>
+  <p class="ans"><input class="gap" style="--gap-w:9em"></p>
+</div>
 </div></div>
 <div class="rows"><div><div id="correction" data-activity="correction">
 <p class="dim" style="text-align:center">One word is wrong. Write the sentence again.</p>
+<div class="qitem">
 <p style="text-align:center"><span class="qnum">3.</span> He <b>have</b> clocked in early.</p>
-<p style="text-align:center"><input class="gap" data-answer="He has clocked in early.|He's clocked in early." style="--gap-w:16.2em"></p>
+<p class="ans"><input class="gap" data-answer="He has clocked in early.|He's clocked in early." style="--gap-w:16.2em"></p>
+</div>
 </div></div></div>
 <div class="rows"><div><div id="dictation" data-activity="dictation">
+<div class="qitem">
 <p class="dim" style="display:flex;align-items:center;justify-content:center;gap:10px"><span class="qnum">4.</span> <button class="listen" type="button" data-say="I clocked in at six forty.">▶</button><span>Listen, then write what you hear.</span></p>
-<p style="text-align:center"><input class="gap" data-answer="I clocked in at six forty." style="--gap-w:18em"></p>
+<p class="ans"><input class="gap" data-answer="I clocked in at six forty." style="--gap-w:18em"></p>
+</div>
 </div></div></div>
 </div>
 <div id="stripgaps" data-activity="stripgaps">
@@ -1484,17 +1492,23 @@ next();
 </div></div></details>
 <details class="reveal" open><summary>Markup — #chunks · chunks in the wrong order</summary><div class="body"><div>
 <pre>&lt;p&gt;Unscramble the sentences:&lt;/p&gt;
-&lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
-   justify-content:center;align-items:center"&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt;
-  &lt;span&gt;&lt;b&gt;1&lt;/b&gt; never&lt;/span&gt;
-  &lt;span&gt;&lt;b&gt;2&lt;/b&gt; that&lt;/span&gt;
-  …
-&lt;/p&gt;
-&lt;p style="text-align:center"&gt;&lt;input class="gap" style="--gap-w:9em"&gt;&lt;/p&gt;
+&lt;div class="qitem"&gt;
+  &lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
+     justify-content:center;align-items:center"&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt;
+    &lt;span&gt;&lt;b&gt;1&lt;/b&gt; never&lt;/span&gt;
+    &lt;span&gt;&lt;b&gt;2&lt;/b&gt; that&lt;/span&gt;
+    …
+  &lt;/p&gt;
+  &lt;p class="ans"&gt;&lt;input class="gap" style="--gap-w:9em"&gt;&lt;/p&gt;
+&lt;/div&gt;
 
-&lt;!-- the chips and their answer line are two paragraphs of ONE cell: an item and the control that
-     answers it are never in two cells, because two cells are a row apart and the answer would sit
+&lt;!-- THE ITEM AND ITS ANSWER ARE ONE ELEMENT: the .qitem holds the prompt and the answer line, so
+     the pair is one thing to drag, one thing to move and one thing to delete. A question in one
+     element and its answer in another is a pair the editor can pull apart, and the answer then sits
      further from its question than the next question does --&gt;
+
+&lt;!-- no text-align is written on the answer line: a paragraph holding only a gap is centred by the
+     sheet, so no page has to remember it --&gt;
 
 &lt;!-- one set, or as many as the activity needs: a further .chips over its own answer line, one after
      another vertically as here, side by side in a .rows of their own, or mixed with the prose, the chart

@@ -147,10 +147,15 @@ window.LayoutEditor = (function () {
      WHAT EACH KIND MAY ENTER
         a row    never a cell, so a row dropped on a row's own area belongs to that row's parent;
                  a level-3 row is never dragged at all (down() refuses the press).
-        a cell   a row, or a cell at any level (the merge above).
-        an item  a level-3 cell from the side, where it becomes a cell that cell's row can hold;
-                 a level-2 cell as a level-3 row of its own; anywhere else, an item joins the cell
-                 it was dropped in, which is a place a cell has always been allowed to hold.
+        a cell   a cell's SIDE EDGE at any level, where it sits beside it in that row; its middle,
+                 where it merges (the merge above); a row, where it becomes a cell.
+        an item  a cell's SIDE EDGE at any level, where it becomes a cell of that row; a level-3
+                 cell straight on, where it becomes a cell that cell's row can hold; a level-2 cell
+                 as a level-3 row of its own; anywhere else, an item joins the cell it was dropped
+                 in, which is a place a cell has always been allowed to hold.
+     THE EDGE IS THE SAME RULE AT EVERY LEVEL: `band` is a quarter of the cell, capped at BAND, so a
+     narrow cell still has a middle to merge into. A markup box (.markup-row) is read as one object
+     and placed, never merged, because its parent is a `.rows` and the shape test calls it a cell.
      A DROP OVER THE NODE ITSELF IS NOT A DROP. The pointer inside the dragged subtree returns no
      target at all: no line, and the release changes nothing — which is what makes putting a thing
      back where it came from safe.
@@ -237,9 +242,29 @@ window.LayoutEditor = (function () {
       return samePlace(ty, drag.node) ? null : ty;
     }
 
+    /* A MARKUP BOX MOVES WHOLE. It is a `details` in a .markup-row, so its parent is a `.rows` and the
+       shape test calls it a cell — which would merge its summary and body into another cell. Read as one
+       object, it is placed and never merged. */
+    var loose = !!(drag.node.closest && drag.node.closest('.markup-row')) && k === 'cell' ? 'item' : k;
+
+    /* BESIDE, AT EVERY LEVEL, IS THE CELL'S OWN EDGE — the same rule the level-3 cell already had, read
+       one level up. A cell dropped on another cell's side sits beside it in that row; dropped in the
+       middle it merges, as it always did. An item dropped on the same edge becomes a cell of that row,
+       because the side is the only place an item can arrive without going inside the cell. */
+    var er = cell.getBoundingClientRect();
+    /* the band is a share of the cell, capped: a narrow cell still has a middle to merge into */
+    var band = Math.min(BAND, Math.round(er.width * 0.25));
+    var edge = x < er.left + band ? 'left' : (x > er.right - band ? 'right' : null);
+    if (edge && (loose === 'cell' || loose === 'item')) {
+      if (loose === 'cell' && cell === drag.node.parentElement) return null;
+      var atC = edge === 'left' ? cell : (cell.nextElementSibling || null);
+      var tc = { box: cell.parentElement, ref: atC, host: cell, before: edge === 'left', ax: 'x', insert: 'cell' };
+      return samePlace(tc, drag.node) ? null : tc;
+    }
+
     /* A CELL INTO A CELL: the target takes the dropped cell's children at the pointer's edge, in
        their own order, and the emptied cell goes when the drop is recorded. */
-    if (k === 'cell') {
+    if (loose === 'cell') {
       if (cell === drag.node.parentElement) return null;      /* its own cell: no merge to make */
       var tm = between(cell, x, y);
       tm.insert = 'merge'; tm.merge = cell;
