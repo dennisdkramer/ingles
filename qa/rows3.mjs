@@ -165,14 +165,18 @@ const PROBE = `(function () {
   E.undo();
   ok('undo puts the page back', snap() === s2, snap() === s2 ? '' : diff(s2, snap()));
 
-  /* 3 — an ITEM dropped on a level-3 cell's side band */
-  var s3 = snap(), bi = view('banditem'), a = R('l3a'), bir = R('banditem');
-  drag(bi, bir.left + 10, bir.top + 8, a.right - 8, a.top + a.height / 2);
+  /* 3 — an ITEM dropped ON THE SIDE LINE OF AN ITEM: the level-3 gesture, three pixels wide, and it
+     becomes a cell of that item's own level-3 row one level down. */
+  var s3 = snap(), bi = view('banditem'), e1r3 = R('e1'), bir = R('banditem');
+  drag(bi, bir.left + 10, bir.top + 8, e1r3.left + 2, e1r3.top + e1r3.height / 2);
   var holder = document.getElementById('banditem'), cell = holder && holder.parentElement;
-  ok('an item takes the side band as a cell beside the one it was dropped on',
-     !!cell && cell.tagName === 'DIV' && cell.parentElement && cell.parentElement.id === 'l3',
-     'parent=' + (cell && cell.parentElement && (cell.parentElement.id || cell.parentElement.className))
-     + ' path=' + (holder && pathOf(holder)) + ' pick=' + JSON.stringify(window.__lastPick));
+  ok('an item on an item side line becomes a cell of its level-3 row',
+     !!cell && cell.tagName === 'DIV' && !!cell.parentElement && rowsIn(cell) === 3
+     && cell.parentElement.children.length === 2 && cell.parentElement.parentElement.id === 'edgecell',
+     'rows in chain=' + (cell ? rowsIn(cell) : '?') + ' row kids='
+     + (cell && cell.parentElement ? cell.parentElement.children.length : '?')
+     + ' grand=' + (cell && cell.parentElement && cell.parentElement.parentElement
+        ? (cell.parentElement.parentElement.id || cell.parentElement.parentElement.className) : '?'));
   E.undo();
   ok('undo puts the page back', snap() === s3, snap() === s3 ? '' : diff(s3, snap()));
 

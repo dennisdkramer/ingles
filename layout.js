@@ -125,7 +125,7 @@ window.LayoutEditor = (function () {
   var BAND = 24;
   /* the edge of the item inside a cell: held this close, the drop is the level-3 gesture rather than
      the level-2 one, so "beside this paragraph" and "beside this cell" are different targets */
-  var EDGE3 = 7;
+  var EDGE3 = 3;
 
   function midY(el) { var r = el.getBoundingClientRect(); return r.top + r.height / 2; }
   /* the position a drop would give, against the place the node already holds: equal means no move */
@@ -167,7 +167,32 @@ window.LayoutEditor = (function () {
      back where it came from safe.
      WHERE THE LINE GOES: every drop draws the line at the boundary it will land on. The tint is
      kept for a container with nothing to draw against — an empty cell. */
+  /* A ROW'S OWN CAP: four cells across at level 1 and 2, two in a level-3 row. A drop that would make
+     one too many shows NO LINE AT ALL — the pointer has to find a place inside a cell that fits, and
+     nothing tells the teacher a drop is available when it is not. */
+  function capOf(row) { return levelOf(row) >= 3 ? 2 : 4; }
+  function fits(t, n) {
+    if (!t || !t.insert) return true;
+    if (t.insert === 'merge' || t.insert === 'row') return true;
+    var row = null, add = 1;
+    if (t.insert === 'cell') row = isRow(t.box) ? t.box : null;
+    else if (t.insert === 'join') { row = isRow(t.box) ? t.box : null; add = n.children.length; }
+    else if (t.insert === 'cell3') {
+      var r3 = t.item && rowOf(t.item);
+      if (!r3 || levelOf(r3) < 3) return true;            /* its level-3 row does not exist yet */
+      row = r3;
+    }
+    if (!row) return true;
+    var have = 0;
+    for (var i = 0; i < row.children.length; i++) if (row.children[i].nodeType === 1) have++;
+    if (t.insert === 'cell' && n.parentElement === row) add = 0;   /* already one of its cells */
+    return have + add <= capOf(row);
+  }
   function pick(x, y) {
+    var t = pickRaw(x, y);
+    return fits(t, drag && drag.node) ? t : null;
+  }
+  function pickRaw(x, y) {
     var n = drag.node;
     var el = document.elementFromPoint(x, y);
     if (!el) return null;
@@ -207,7 +232,7 @@ window.LayoutEditor = (function () {
       while (n2 && n2 !== cell && !movable(n2)) n2 = n2.parentElement;
       if (n2 && n2 !== cell && cell.contains(n2) && !isRow(n2)) inner = n2;
     }
-    return inCell(cell, x, y, inner);
+    return inCell(cell, x, y, inner, el);
   }
 
   /* a row's own area: a cell goes in beside the cells already there; a row cannot be a cell */
@@ -232,45 +257,41 @@ window.LayoutEditor = (function () {
   }
 
   /* a cell's body — the place a row lands, and the place a cell merges into. */
-  function inCell(cell, x, y, inner) {
-    var k = drag.kind, lvl = cellLevel(cell);
+  function inCell(cell, x, y, inner, el) {
+    var k = drag.kind;
 
-    /* a level-3 cell is a positioning device, not a place: only an item may enter it, and only
-       from the side. Everything else is read one level up — a new level-3 row in the level-2 cell. */
-    if (lvl >= 3) {
-      var cr = cell.getBoundingClientRect();
-      var side = x < cr.left + BAND ? 'left' : (x > cr.right - BAND ? 'right' : null);
-      if (k === 'item' && side) {
-        var at = side === 'left' ? cell : (cell.nextElementSibling || null);
-        var ts = { box: cell.parentElement, ref: at, host: cell, before: side === 'left', ax: 'x', insert: 'cell' };
-        return samePlace(ts, drag.node) ? null : ts;
-      }
-      var upCell = cell.parentElement && cell.parentElement.parentElement;
-      if (!upCell || !isCell(upCell)) return inPage(x, y);
-      var l3row = cell.parentElement;
-      var up = y < midY(l3row);
-      /* an item or a cell arriving here gets a level-3 row of its own, with a cell inside it, so
-         what lands keeps the same shape as what it landed beside */
-      var ty = { box: upCell, ref: up ? l3row : (l3row.nextElementSibling || null),
-                 host: l3row, before: up, ax: 'y', insert: 'row', wrapCell: k !== 'row' };
-      return samePlace(ty, drag.node) ? null : ty;
+    /* EVERY GESTURE IS MEASURED ON THE LEVEL-2 CELL. Whatever the pointer is over — a level-2 cell, a
+       level-3 row, a level-3 cell, the item itself — the drop is read against the box that holds them
+       all, so the three gestures sit inside one another instead of competing:
+
+         the side line of an item  -> a cell beside that item, one level down (level 3)
+         the cell's own sides      -> a cell beside the cell, on its row      (level 2)
+         the bottom, and all else  -> into the cell, among what it holds      (level 3 inside it)
+
+       Measuring the level-3 cell's own edges as "beside" is what made level 2 unreachable: every item
+       sits inside one, so its edges were one level too deep. */
+    var guard = 0;
+    while (cell && guard++ < 4 && isCell(cell) && cellLevel(cell) > 2) {
+      var upRow = rowOf(cell);
+      if (!upRow || !upRow.parentElement || !isCell(upRow.parentElement)) break;
+      cell = upRow.parentElement;
     }
+    var lvl = cellLevel(cell);
 
     /* A MARKUP BOX MOVES WHOLE. It is a `details` in a .markup-row, so its parent is a `.rows` and the
        shape test calls it a cell — which would merge its summary and body into another cell. Read as one
        object, it is placed and never merged. */
     var loose = !!(drag.node.closest && drag.node.closest('.markup-row')) && k === 'cell' ? 'item' : k;
 
-    /* LEVEL 3 IS A GESTURE OF ITS OWN — HELD ALMOST EXACTLY ON THE EDGE of the item inside this cell.
-       The drop then puts the dragged thing beside THAT item one level down: the level-2 cell gains a
-       level-3 row holding two cells, the item and the arrival. A few pixels further in is the level-2
-       drop instead, which is deliberately a much wider target: the whole side of the cell. The line's
-       colour says which of the two is about to happen — blue for level 2, red for level 3. */
-    if (loose === 'item' && inner && lvl <= 2) {
-      var ir = inner.getBoundingClientRect();
-      var near = x < ir.left + EDGE3 ? 'left' : (x > ir.right - EDGE3 ? 'right' : null);
+    /* LEVEL 3 IS THE SIDE LINE OF AN ITEM, from the side that leaves the item where it is. Three pixels,
+       because it is the finer of the two side gestures: past that line is the cell's own side, which is
+       level 2. */
+    var it = itemUnder(cell, el) || inner;
+    if (loose === 'item' && it && it !== drag.node && lvl <= 2) {
+      var ir = it.getBoundingClientRect();
+      var near = x <= ir.left + EDGE3 ? 'left' : (x >= ir.right - EDGE3 ? 'right' : null);
       if (near) {
-        var t3 = { box: cell, ref: null, host: inner, before: near === 'left', ax: 'x', insert: 'cell3', item: inner };
+        var t3 = { box: cell, ref: null, host: it, before: near === 'left', ax: 'x', insert: 'cell3', item: it };
         return samePlace(t3, drag.node) ? null : t3;
       }
     }
@@ -285,7 +306,12 @@ window.LayoutEditor = (function () {
        be held almost exactly on the edge of the item inside (EDGE3), so the narrow gesture is the one
        that goes a level down. */
     var band = Math.min(200, Math.round(er.width * 0.2));
-    var edge = x < er.left + band ? 'left' : (x > er.right - band ? 'right' : null);
+    var bband = Math.min(40, Math.round(er.height * 0.25));
+    /* THE BOTTOM OF THE CELL IS ITS OWN BAND AND IT WINS OVER THE SIDES: the bottom is where "add this
+       to what the cell holds" lives, so the corner keeps that gesture rather than the side's. */
+    var nearBottom = y > er.bottom - bband;
+    var edge = !nearBottom && x < er.left + band ? 'left'
+             : (!nearBottom && x > er.right - band ? 'right' : null);
     if (edge && loose === 'row') {
       /* A ROW BESIDE A ROW: two rows cannot stand side by side — a row is a line, not a box — so the
          dropped row's cells join the row it was dropped on, which puts what the two rows held beside
@@ -555,6 +581,16 @@ window.LayoutEditor = (function () {
     if (from.classList && from.classList.contains('rows')) return from;
     var p = from.parentElement;
     return p && p.classList && p.classList.contains('rows') ? p : null;
+  }
+  /* THE ITEM UNDER THE POINTER: the deepest thing standing in a cell, which is what the level-3 gesture
+     is measured against. Null when the pointer is over a cell's padding rather than its content. */
+  function itemUnder(cell, el) {
+    var n = el;
+    while (n && n !== cell) {
+      if (n.parentElement && isCell(n.parentElement)) return n;
+      n = n.parentElement;
+    }
+    return null;
   }
   /* NOTHING EMPTY STAYS. An emptied cell prunes itself, and the row it leaves empty prunes itself,
      and the cell THAT leaves empty prunes too — the page climbs until it meets something that still
