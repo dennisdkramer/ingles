@@ -141,6 +141,104 @@ async function clearInk() {
   try { hlReflow(); ntReflow(); } catch (e) { }
   toast("Cleared " + rows.length + " item(s)");
 }
+/* ---- TEXT MODE: ONE ITEM IS THE EDITING HOST ------------------------------------------------
+   THE AREA IS NOT EDITABLE. An element may merge, delete and split only inside its editing host,
+   so with `.content-area` as the host a Backspace at the start of a cell's paragraph reached into
+   the row above, Enter built structure wherever it was pressed, Ctrl+A selected the whole page
+   and a paste could arrive as markup. The host is the ITEM under the press — the nearest
+   paragraph, list item, cell, heading, figure, table, summary or item div, never a `.rows` and
+   never a `.block` — chosen on pointerdown, which runs before the browser places the caret.
+   None of it reaches the saved page: fullPageHTML() strips every contenteditable, and leaving
+   edit mode drops the host.
+   INSIDE A HOST, AN EDIT NEVER BUILDS STRUCTURE: Enter and Shift+Enter are one line break, and a
+   paste is its plain text, one line at a time. The break and the pasted text are the browser's own
+   edit commands where it has them and written by hand where it declines, so the caret stays the
+   browser's and undo keeps working. */
+let hostEl = null;
+const HOSTY = 'p,li,td,th,dt,dd,figure,table,pre,blockquote,h1,h2,h3,h4,h5,h6,summary';
+function hostArea(){ return document.querySelector('.content-area'); }
+/* the nearest item a press belongs to; null where there is none (a row's own padding, the page) */
+function hostFor(t) {
+  const area = hostArea();
+  if (!area || !t || t.nodeType !== 1 || !area.contains(t)) return null;
+  const box = (t.closest && (t.closest('.rows>*') || t.closest('.block'))) || null;
+  let div = null;
+  for (let n = t; n && n !== area; n = n.parentElement) {
+    if (n.nodeType !== 1) break;
+    if (n.matches(HOSTY)) return n;
+    if (n.tagName === 'DIV' && n !== box && !(n.classList && n.classList.contains('rows'))) div = n;
+    if (n === box) break;
+  }
+  return div || box;
+}
+function setHost(n) {
+  if (hostEl === n) return;
+  if (hostEl) hostEl.removeAttribute('contenteditable');
+  hostEl = n && n.nodeType === 1 ? n : null;
+  if (hostEl) hostEl.setAttribute('contenteditable', 'true');
+}
+/* the one door to the host: layout.js drops it for the length of a drag and hands a new block's
+   headline to it, so no second file keeps its own idea of what is editable */
+window.editText = { host: function () { return hostEl; }, set: setHost, drop: function () { setHost(null); } };
+/* A LINE BREAK IS WRITTEN HERE, NOT BUILT: the browser's own command first, and a `<br>` by hand
+   where it declines (a cancelled `beforeinput` is not always a command it will run). A break at
+   the end of the item takes a second `<br>`, or the empty line the caret sits on has no height. */
+function lineBreak() {
+  const s = window.getSelection();
+  if (!s || !s.rangeCount) return;
+  try { if (document.execCommand('insertLineBreak')) return; } catch (e) { }
+  const r = s.getRangeAt(0);
+  r.deleteContents();
+  const br = document.createElement('br');
+  r.insertNode(br);
+  let tail = br.nextSibling;
+  while (tail && tail.nodeType === 3 && !tail.nodeValue.trim()) tail = tail.nextSibling;
+  const caret = document.createRange();
+  if (!tail && br.parentNode) {
+    const pad = document.createElement('br');
+    br.parentNode.insertBefore(pad, br.nextSibling);
+    caret.setStartBefore(pad);
+  } else caret.setStartAfter(br);
+  caret.collapse(true);
+  s.removeAllRanges();
+  s.addRange(caret);
+}
+function insertText(s) { try { document.execCommand('insertText', false, s); } catch (e) { } }
+function textPress(e) {
+  if (!editing) return;
+  const t = e.target && e.target.nodeType === 1 ? e.target : null;
+  if (!t || !t.closest) return;
+  /* a press on a control is the control's, not the text's */
+  if (t.closest('input,textarea,button,select,option,a,label,.pop,.layout-panel,.layout-chip,.layout-grip')) return;
+  setHost(hostFor(t));
+}
+function textInput(e) {
+  if (!editing || !hostEl) return;
+  const t = e.target;
+  if (!(t === hostEl || (t && hostEl.contains(t)))) return;
+  const type = e.inputType;
+  if (type === 'insertParagraph' || type === 'insertLineBreak') {
+    e.preventDefault();
+    lineBreak();
+  } else if (type === 'insertFromPaste' || type === 'insertFromDrop') {
+    e.preventDefault();
+    const dt = e.dataTransfer;
+    const txt = dt ? String(dt.getData('text/plain') || '') : '';
+    txt.replace(/\r/g, '').split('\n').forEach(function (line, i) {
+      if (i) lineBreak();
+      if (line) insertText(line);
+    });
+  }
+}
+function textMode(on) {
+  if (!on) setHost(null);
+  const area = hostArea();
+  if (!area || area.__textMode === !!on) return;
+  area.__textMode = !!on;
+  const add = on ? 'addEventListener' : 'removeEventListener';
+  area[add]('pointerdown', textPress, true);
+  area[add]('beforeinput', textInput, true);
+}
 function toggleEditMode(){
  if(STUDENT!==gate.email){toast("Switch to your own account to edit content.");return;}
  editing=!editing;
@@ -160,7 +258,7 @@ function toggleEditMode(){
   if(cov)ca.innerHTML=contentAreaHTML(cov.data);
   else document.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});
   wireListen();
-  if(ca)ca.setAttribute("contenteditable","true");
+  textMode(true);                     /* the item under the press becomes the editing host */
   hlReflow();ntReflow();
   loadLayout();editingOnly(true);      /* the drag layer rides with edit mode, and only with it */
   if(eb)eb.textContent="✔️ Done";
@@ -168,7 +266,7 @@ function toggleEditMode(){
     ? "Edit mode — click to type, Shift+drag to move a block, Alt+click to centre one; 💾 Save to repo keeps it"
     : "Edit mode — click to type, Shift+drag to move a block, Alt+click to centre one; ✔️ Done saves");
  }else{
-  if(ca)ca.removeAttribute("contenteditable");
+  textMode(false);                    /* drops the host, so nothing stays editable */
   unloadLayout();editingOnly(false);   /* disable() also strips the chip and the drag line, so the save is clean */
   if(eb)eb.textContent="✏️ Edit";
   saveContent();

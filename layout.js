@@ -1150,14 +1150,14 @@ window.LayoutEditor = (function () {
   }
 
   /* ---- the gesture -----------------------------------------------------------------
-     ONE MODIFIER DECIDES WHAT A PRESS DOES. Without Shift the press belongs to the text: the
-     area is contenteditable while edit mode is open, so a click places a caret and the teacher
-     types. With Shift the press belongs to this file: a drag moves the node, a shift-click that
-     never travels selects it for the width panel.
+     ONE MODIFIER DECIDES WHAT A PRESS DOES. Without Shift the press belongs to the text: the item
+     under the pointer becomes the editing host (engine2.js, text mode), so a click places a caret
+     and the teacher types. With Shift the press belongs to this file: a drag moves the node, a
+     shift-click that never travels selects it for the width panel.
      THE CARET IS NOT TAKEN AWAY BY SHIFT. The press is not cancelled, so a Shift+click still lands
      a caret and typing still works; only a press that TRAVELS becomes a drag, and only then is the
-     area taken out of contenteditable (a live contenteditable starts a text drag of its own) and
-     the text selection cleared. */
+     text host dropped (a live contenteditable starts a text drag of its own) and the text selection
+     cleared. */
   /* ---- A NEW BLOCK -----------------------------------------------------------------------
      SHIFT + RIGHT CLICK ABOVE, BELOW OR BETWEEN what is already on the page, and a block arrives
      where the click landed. It is a level-1 row with one cell in it and nothing else: a `.block`
@@ -1200,6 +1200,9 @@ window.LayoutEditor = (function () {
     hist.push({ node: wrap, from: null, added: true, gone: [], wraps: [], back: null });
     if (hist.length > 40) hist.shift();
     moved++; markPins(); markGrains(); paintChip();
+    /* THE NEW HEADLINE IS THE EDITION HOST, or the caret would be in a node nothing may type in:
+       text mode makes one item editable at a time, and a block just made is that item. */
+    try { if (window.editText) window.editText.set(h3); } catch (err) { }
     caretIn(h3);
     return true;
   }
@@ -1302,7 +1305,7 @@ window.LayoutEditor = (function () {
   /* one gesture from two doors: a Shift press on the page, and a press on a row's grip */
   function beginDrag(n, e) {
     if (!chipEl) { paintChip(); markGrains(); }   /* a save cleaned the chrome away; the press brings it back */
-    drag = { node: n, x: e.clientX, y: e.clientY, on: false, t: null, attr: null, target: n,
+    drag = { node: n, x: e.clientX, y: e.clientY, on: false, t: null, target: n,
              kind: kindOf(n), cell: isItem(n),
              /* whether the node carried a class attribute at all: a drag adds `layout-dragging`
                 and takes it away again, and a div that never had a class must not be left with
@@ -1335,12 +1338,13 @@ window.LayoutEditor = (function () {
     if (!drag.on) {
       if (Math.abs(e.clientX - drag.x) < THRESH && Math.abs(e.clientY - drag.y) < THRESH) return;
       drag.on = true;
-      var c = ca();
-      drag.attr = c ? c.getAttribute('contenteditable') : null;
+      /* THE TEXT EDITOR'S HOST IS DROPPED FOR THE LENGTH OF THE DRAG. The press belongs to the
+         layout now: a live contenteditable starts a text drag of its own, and its host would take
+         the selection the drag is about to make. */
+      try { if (window.editText) window.editText.drop(); } catch (err) { }
       /* the Shift press left a selection behind, because the caret kept its rights; a drag does not
          want one, and nothing may be dragged as text while a node is being moved */
       try { var sel = window.getSelection(); if (sel) sel.removeAllRanges(); } catch (err) { }
-      if (c) c.setAttribute('contenteditable', 'false');
       drag.node.classList.add('layout-dragging');
       document.body.classList.add('layout-drag');
     }
@@ -1371,16 +1375,9 @@ window.LayoutEditor = (function () {
     /* a node that carried no class attribute keeps none: the drag's own class was the only one */
     if (!d.hadClass && !d.node.getAttribute('class')) d.node.removeAttribute('class');
     document.body.classList.remove('layout-drag');
-    /* ONLY A PRESS THAT TRAVELLED TOUCHES THE PAGE'S EDITABILITY. A Shift+click is an inspection,
-       and taking `contenteditable` away from it is what used to lock the caret out of the page. */
-    if (d.on) {
-      var c = ca();
-      if (c) {
-        if (d.attr === null) c.removeAttribute('contenteditable');
-        else c.setAttribute('contenteditable', d.attr);
-      }
-      applyDrop(d); e.preventDefault();
-    }
+    /* a press that travelled moved a node; a press that never travelled inspects. Neither puts the
+       text host back: the next click places the caret, which is the door engine2's text mode owns. */
+    if (d.on) { applyDrop(d); e.preventDefault(); }
     else if (d.target) { select(pickNode(d.target)); }   /* a press that never travelled inspects */
   }
 
@@ -1438,7 +1435,6 @@ window.LayoutEditor = (function () {
       for (var i = 0; i < d.length; i++) d[i].classList.remove('layout-dragging');
       var m = c.querySelectorAll('[data-layout-sel],[data-layout-pin],[data-layout-grain]');
       for (var j = 0; j < m.length; j++) { m[j].removeAttribute('data-layout-sel'); m[j].removeAttribute('data-layout-pin'); m[j].removeAttribute('data-layout-grain'); }
-      if (c.getAttribute && c.getAttribute('contenteditable') === 'false') c.setAttribute('contenteditable', 'true');
     });
     sel = null;
     drag = null;

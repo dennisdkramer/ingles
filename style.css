@@ -1271,6 +1271,37 @@ p:has(>input.gap:only-child){text-align:center}
 }
 @media print{ .markup-row{display:none} }
 
+/* #66 FOLD — <details class="sec"><summary>title</summary>…</details>; a top-level section, shut.
+   USE a build section at the head of the map page: the sheet numbers it and draws the bar.
+   Vary: none */
+@layer structure{
+  .content-area>details.sec{counter-increment:fold;margin:18px 0 0;background:var(--paper);
+    border:1px solid var(--line);border-left:4px solid var(--tan);border-radius:var(--r2);
+    box-shadow:2px 2px 0 var(--line-2),var(--shadow-1)}
+  .content-area>details.sec[open]{border-left-color:var(--dkblue)}
+  .content-area>details.sec>summary{display:flex;align-items:center;gap:14px;padding:13px 20px;
+    cursor:pointer;list-style:none;font-family:var(--display);font-weight:700;
+    font-size:calc(var(--s2) + 3pt);color:var(--ink)}
+  .content-area>details.sec>summary::-webkit-details-marker{display:none}
+  .content-area>details.sec>summary::before{content:counter(fold,decimal-leading-zero);
+    font:700 .74rem/1 var(--mono);letter-spacing:.1em;color:var(--dkblue);
+    padding:5px 7px 4px;border:1px solid var(--line-2);border-radius:6px;
+    background:color-mix(in oklab,var(--tan) 14%,var(--paper))}
+  .content-area>details.sec>summary::after{content:"";margin-left:auto;flex:0 0 auto;
+    width:10px;height:10px;border-right:3px solid var(--ink-2);border-bottom:3px solid var(--ink-2);
+    rotate:-45deg;transition:rotate .22s ease,border-color .22s ease}
+  .content-area>details.sec>summary:hover::after{border-color:var(--dkblue)}
+  .content-area>details.sec[open]>summary::after{rotate:45deg}
+  .content-area>details.sec>summary:hover{background:color-mix(in oklab,var(--tan) 8%,var(--paper));
+    border-radius:calc(var(--r2) - 1px)}
+  .content-area>details.sec[open]>summary{border-bottom:1px solid var(--line-2);
+    border-radius:calc(var(--r2) - 1px) calc(var(--r2) - 1px) 0 0}
+  html.kbd .content-area>details.sec>summary:focus-visible{outline:2.5px solid var(--dkblue);
+    outline-offset:-4px;border-radius:calc(var(--r2) - 2px)}
+  .content-area>details.sec>:not(summary){margin-inline:20px}
+  .content-area>details.sec>:not(summary):last-child{margin-bottom:18px}
+}
+
 /* #76 ENGINE — engine2.js writes label.opt.correct and label.opt.wrong on a choice, .ans beside a typed field, and reads .qitem[data-a] on .opts. Vary: --ok, --err (colour) */
 @layer state{
   label.opt.correct{border-color:var(--ok);
