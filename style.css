@@ -1702,26 +1702,28 @@ p:has(>input.gap:only-child){text-align:center}
   .chart th.vlab>span{display:block;writing-mode:vertical-rl;transform:rotate(180deg);
     white-space:nowrap;font-size:calc(var(--s0) + 2pt);font-weight:300;letter-spacing:normal;color:var(--ink-2)}
   /* THE FRAME IS THE DATA, NOT THE LABEL. A ring on the table would enclose the label column, so a
-     labelled chart draws its frame on the outer edges of the DATA cells instead: 2px on the left of
-     the first data column, the right of the last, and the top and bottom of each tbody group. The
-     label column keeps no border and no fill, so the word stands outside the frame on the same paper.
-     The 3px omitted-header band would paint across the label column (it is one cell spanning every
-     column), so it is not drawn here: the frame's top edge takes its place, and the 2px top border of
-     the second group is the divider between the groups. */
+     labelled chart draws its frame on the outer edges of the DATA cells instead, and the label column
+     keeps no border and no fill: the word stands outside the frame on the same paper.
+     A COLLAPSED TABLE CANNOT ROUND A CORNER — border-radius is ignored on collapsed borders — so a
+     labelled chart does not collapse: the grid is drawn by a right and a bottom border on every data
+     cell, the frame takes the outer edges, and the corners round because the borders are separate. */
   .chart:has(>tbody>tr>th.vlab){
+    border-collapse:separate;border-spacing:0;
     box-shadow:none;border-radius:0;overflow:visible;
     --edge:color-mix(in oklab,color-mix(in oklab,var(--ink-2) 72%,var(--paper)) 80%,transparent)}
   .chart:has(>tbody>tr>th.vlab) tr.bare{display:none}
+  /* the grid: one line between cells, never two */
+  .chart:has(>tbody>tr>th.vlab) tbody>tr>td{border:0;
+    border-right:1px solid var(--tan);border-bottom:1px solid var(--tan)}
+  /* the frame, on the data cells' outer edges */
   .chart:has(>tbody>tr>th.vlab) tbody>tr>td:first-of-type{border-left:2px solid var(--edge)}
   .chart:has(>tbody>tr>th.vlab) tbody>tr>td:last-of-type{border-right:2px solid var(--edge)}
   .chart:has(>tbody>tr>th.vlab) tbody>tr.bare+tr>td{border-top:2px solid var(--edge)}
+  .chart:has(>tbody>tr>th.vlab) tbody>tr.bare+tr>td:first-of-type{border-top-left-radius:8px}
   .chart:has(>tbody>tr>th.vlab) tbody>tr:last-child>td{border-bottom:2px solid var(--edge)}
-  /* the corners of each framed group: the cell carries the radius, because a collapsed table has no
-     box of its own to round */
-  .chart:has(>tbody>tr>th.vlab) tbody>tr.bare+tr>td:first-of-type{border-top-left-radius:7px}
-  .chart:has(>tbody>tr>th.vlab) tbody>tr.bare+tr>td:last-of-type{border-top-right-radius:7px}
-  .chart:has(>tbody>tr>th.vlab) tbody>tr:last-child>td:first-of-type{border-bottom-left-radius:7px}
-  .chart:has(>tbody>tr>th.vlab) tbody>tr:last-child>td:last-of-type{border-bottom-right-radius:7px}
+  .chart:has(>tbody>tr>th.vlab) tbody>tr.bare+tr>td:last-of-type{border-top-right-radius:8px}
+  .chart:has(>tbody>tr>th.vlab) tbody>tr:last-child>td:first-of-type{border-bottom-left-radius:8px}
+  .chart:has(>tbody>tr>th.vlab) tbody>tr:last-child>td:last-of-type{border-bottom-right-radius:8px}
   /* the label column draws nothing at all: no cell, no border where it meets the data, so the chart's own
      frame is the only line at its left edge */
   .chart:has(>tbody>tr>th.vlab) tbody td:first-of-type{border-left:0}
