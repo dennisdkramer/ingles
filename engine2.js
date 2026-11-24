@@ -62,7 +62,12 @@ let eqRun=null;
    pixels — `right:calc(100% + 8px)`, `margin-right:-10px` — so a rule keyed on `px` deleted authored
    styles from every save; a style that names a position, a margin, a width or a gap is the author's. */
 
-function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop,#completebtn,#completerow").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style],b[style],i[style],u[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|font-style|background|text-shadow/.test(st)&&!/right:|left:|margin|width|gap/.test(st))s.removeAttribute("style")});cl.querySelectorAll(".content-area .block[data-state]").forEach(n=>n.removeAttribute("data-state"));try{if(window.EqualizeRows)window.EqualizeRows.clean(cl);}catch(e){}return "<!doctype html>"+cl.outerHTML;}
+/* THE COPY IS CLEANED BEFORE IT IS SERIALISED. A save taken while edit mode is open copies a live
+   page that carries the tool's own marks — a `data-layout-grain` frame on every item a drag could
+   take, and the chip, the panel and the drag line as body children — so the sweep runs inside the
+   copy (`LayoutEditor.clean(cl)`) and the chrome is removed from it. A saved file is a page a reader
+   opens: what the tool wrote on the page, the file does not write down. */
+function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop,#completebtn,#completerow,.layout-chip,.layout-panel,.layout-line,.layout-grip").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style],b[style],i[style],u[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|font-style|background|text-shadow/.test(st)&&!/right:|left:|margin|width|gap/.test(st))s.removeAttribute("style")});cl.querySelectorAll(".content-area .block[data-state]").forEach(n=>n.removeAttribute("data-state"));try{if(window.LayoutEditor)window.LayoutEditor.clean(cl);}catch(e){}try{if(window.EqualizeRows)window.EqualizeRows.clean(cl);}catch(e){}return "<!doctype html>"+cl.outerHTML;}
 function contentAreaHTML(saved){const d=new DOMParser().parseFromString(saved,"text/html");const ca=d.querySelector(".content-area");return ca?ca.innerHTML:saved;}
 function saveContent(){if(!document.querySelector(".content-area"))return;const o={action:"set",id:contentId(),type:"content",anchor:"",data:fullPageHTML(),email:gate.email,lesson:L,author:"prof",track:TRACK};notePending(o);outboxPush(o);scheduleFlush();}
 /* ---- the layout layer, and the two buttons that finish an edit ---------------------------
@@ -230,6 +235,18 @@ function textInput(e) {
     });
   }
 }
+/* A SUMMARY'S SPACE AND ENTER ARE THE FOLD'S, NOT THE CARET'S. A `<summary>` answers Space and
+   Enter by opening or shutting its `<details>`, so a title typed in edit mode lost every space — a
+   section saved as "Authoranoptimallesson" instead of "Author an optimal lesson" — and Enter folded
+   the section instead of breaking the line. The press is taken here, before the fold acts on it, and
+   the character is written by hand: a real space (execCommand, so undo still walks back through it),
+   a real break (the same `lineBreak()` the rest of the mode uses). */
+function textFold(e) {
+  if (!editing || !hostEl || hostEl.tagName !== 'SUMMARY') return;
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.key === ' ') { e.preventDefault(); insertText(' '); }
+  else if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); lineBreak(); }
+}
 function textMode(on) {
   if (!on) setHost(null);
   const area = hostArea();
@@ -238,6 +255,7 @@ function textMode(on) {
   const add = on ? 'addEventListener' : 'removeEventListener';
   area[add]('pointerdown', textPress, true);
   area[add]('beforeinput', textInput, true);
+  area[add]('keydown', textFold, true);
 }
 function toggleEditMode(){
  if(STUDENT!==gate.email){toast("Switch to your own account to edit content.");return;}

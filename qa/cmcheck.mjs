@@ -31,6 +31,15 @@ out.push(`blocks=${blocks} bare-charts=${bare} panels=${panels} data-step=${step
 if (panels) fail.push('a .panel is still on the page');
 if (steps) fail.push('data-step is still on the page');
 
+/* THE TOOL'S CHROME IS NOT PAGE CONTENT. Edit mode marks what a drag could take and keeps a chip,
+   a panel and a drag line on the body; a save has to write a copy with none of it (engine2.js
+   fullPageHTML), so finding any of these here means a save landed the tool instead of the page. */
+const chrome = [...doc.querySelectorAll('[data-layout-grain],[data-layout-pin],[data-layout-sel],.layout-chip,.layout-panel,.layout-line,.layout-grip')];
+const editable = [...doc.querySelectorAll('[contenteditable]')];
+out.push(`tool chrome in the page=${chrome.length} contenteditable=${editable.length}`);
+if (chrome.length) fail.push(`the edit tool's chrome reached the file (${chrome.length}): ` + chrome.slice(0, 2).map(n => n.outerHTML.slice(0, 60)).join(' | '));
+if (editable.length) fail.push(`contenteditable reached the file (${editable.length})`);
+
 const h2 = [...doc.querySelectorAll('.content-area>h2')];
 out.push(`h2 sections=${h2.length}: ` + h2.map(h => h.textContent.trim()).join(' | '));
 

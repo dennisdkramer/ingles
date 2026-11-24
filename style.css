@@ -1273,6 +1273,8 @@ p:has(>input.gap:only-child){text-align:center}
 
 /* #66 FOLD — <details class="sec"><summary>title</summary>…</details>; a top-level section, shut.
    USE a build section at the head of the map page: the sheet numbers it and draws the bar.
+   A summary's Space and Enter are the fold's, not a caret's — the editing side of that lives in
+   engine2.js `textFold`, because a title typed in edit mode would otherwise lose its spaces.
    Vary: none */
 @layer structure{
   .content-area>details.sec{counter-increment:fold;margin:18px 0 0;background:var(--paper);
