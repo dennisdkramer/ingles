@@ -359,6 +359,7 @@ window.LayoutEditor = (function () {
   function markGrains() {
     var c = ca(); if (!c) return;
     [].forEach.call(c.querySelectorAll('[data-layout-grain]'), function (n) { n.removeAttribute('data-layout-grain'); });
+    markGrips();                                  /* the row handles follow every change to the page */
     if (!ON) return;
     [].forEach.call(c.querySelectorAll(GRAIN + ',' + COMPOSITE), function (n) {
       if (!movable(n) || isItem(n)) return;      /* a cell already has a frame of its own */
@@ -696,10 +697,52 @@ window.LayoutEditor = (function () {
      a caret and typing still works; only a press that TRAVELS becomes a drag, and only then is the
      area taken out of contenteditable (a live contenteditable starts a text drag of its own) and
      the text selection cleared. */
+  /* ---- ROW GRIPS ---------------------------------------------------------------------
+     THE `R1` AND THE CELL NUMBERS ARE CSS COUNTERS. They are pseudo-elements, so they cannot be
+     pressed: nothing can start a drag from them, which is why pulling a row by its number did
+     nothing. The grip is a real button laid over the row's left edge, outside every cell, so a row
+     is picked up without having to find the gap between two cells first. A level-3 row gets none,
+     because a level-3 row is never carried — its two items are dragged themselves. */
+  var grips = [];
+  function clearGrips() {
+    for (var i = 0; i < grips.length; i++) grips[i].remove();
+    grips = [];
+  }
+  function placeGrip(g) {
+    var r = g.__row;
+    if (!r || !r.isConnected) return;
+    var b = r.getBoundingClientRect();
+    g.style.left = Math.round(b.left - 22) + 'px';
+    g.style.top = Math.round(b.top + 1) + 'px';
+  }
+  function placeGrips() { for (var i = 0; i < grips.length; i++) placeGrip(grips[i]); }
+  function markGrips() {
+    clearGrips();
+    var c = ca();
+    if (!ON || !c) return;
+    [].forEach.call(c.querySelectorAll('.rows'), function (r) {
+      if (levelOf(r) >= 3) return;
+      var g = document.createElement('button');
+      g.type = 'button';
+      g.className = 'layout-grip';
+      g.textContent = '\u28FF';
+      g.setAttribute('aria-label', 'drag this row');
+      g.__row = r;
+      g.addEventListener('pointerdown', function (e) {
+        if (!ON || e.button !== 0) return;
+        e.preventDefault();
+        e.stopPropagation();
+        beginDrag(r, e);
+      });
+      document.body.appendChild(g);
+      grips.push(g);
+      placeGrip(g);
+    });
+  }
+
   function down(e) {
     if (!ON || e.button !== 0) return;
     if (!e.shiftKey) return;           /* the caret's press, not the layout's */
-    if (!chipEl) { paintChip(); markGrains(); }   /* a save cleaned the chrome away; the press brings it back */
     var n = e.target && e.target.nodeType === 1 ? e.target : null;
     if (!n) return;
     /* walk up to the nearest thing that may be picked up: a word becomes its paragraph, a chart's cell
@@ -713,6 +756,12 @@ window.LayoutEditor = (function () {
        and where it sits is decided by the level-2 cell it belongs to, so a press on it grabs
        nothing and the page stays where it is. */
     if (isRow(n) && levelOf(n) >= 3) return;
+    beginDrag(n, e);
+  }
+
+  /* one gesture from two doors: a Shift press on the page, and a press on a row's grip */
+  function beginDrag(n, e) {
+    if (!chipEl) { paintChip(); markGrains(); }   /* a save cleaned the chrome away; the press brings it back */
     drag = { node: n, x: e.clientX, y: e.clientY, on: false, t: null, attr: null, target: n,
              kind: kindOf(n), cell: isItem(n),
              /* whether the node carried a class attribute at all: a drag adds `layout-dragging`
@@ -843,6 +892,8 @@ window.LayoutEditor = (function () {
     document.addEventListener('keyup', key, true);
     document.addEventListener('dragstart', noNativeDrag, true);
     window.addEventListener('blur', blurShift);
+    window.addEventListener('scroll', placeGrips, true);   /* the grips are fixed, the page is not */
+    window.addEventListener('resize', placeGrips);
     markPins(); markGrains(); paintChip(); paintPanel();
   }
 

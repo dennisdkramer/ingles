@@ -1,8 +1,8 @@
 /**
- * qa/rows3.mjs — the four drop shapes of the layout editor, in a REAL browser (hit testing is the
+ * qa/rows3.mjs — the drop shapes of the layout editor, in a REAL browser (hit testing is the
  * instrument, so jsdom cannot answer it): a cell on the band between two rows, a cell merged into a
- * cell, an item on a level-3 cell's side band, an item dropped in a level-3 cell's middle — and undo
- * after each, which must put the page back exactly.
+ * cell, an item on a level-3 cell's side band, an item dropped in a level-3 cell's middle, and a row
+ * picked up by its grip — and undo after each, which must put the page back exactly.
  *
  * Why a browser: `pick()` asks `document.elementFromPoint(x, y)`, so the answer depends on the box
  * the pointer is actually over. A jsdom page has no boxes, and a probe that aims at coordinates no
@@ -180,6 +180,27 @@ const PROBE = `(function () {
   E.undo();
   ok('undo puts the page back', snap() === s4, snap() === s4 ? '' : diff(s4, snap()));
 
+  /* 5 — A ROW'S GRIP picks the row up. The R1 mark is a pseudo-element and cannot be pressed, so
+     the grip is a real button laid over the row's left edge; pressing it must start the same drag a
+     Shift press starts, and releasing over nothing must leave the page as it was. */
+  var s5 = snap();
+  var grips = [].slice.call(document.querySelectorAll('.layout-grip'));
+  var rowsL12 = [].filter.call(CA.querySelectorAll('.rows'), function (r) { return rowsIn(r) <= 2 && r.parentElement; });
+  ok('every row above level 3 has a grip, and no level-3 row has one',
+     grips.length === rowsL12.length && grips.length > 0,
+     'grips=' + grips.length + ' rows=' + rowsL12.length);
+  var g0 = grips[0], r0 = g0 && g0.__row, gr0 = g0 && g0.getBoundingClientRect();
+  ok('a grip sits at its row\\'s left edge', !!gr0 && Math.abs(gr0.left - (r0.getBoundingClientRect().left - 22)) <= 2,
+     'grip=' + (gr0 && Math.round(gr0.left)) + ' row=' + (r0 && Math.round(r0.getBoundingClientRect().left)));
+  if (g0) {
+    g0.dispatchEvent(ev('pointerdown', gr0.left + 4, gr0.top + 4, 1));
+    window.dispatchEvent(ev('pointermove', gr0.left + 40, gr0.top + 40, 1));
+    ok('pressing a grip starts a drag of that row', r0.classList.contains('layout-dragging'),
+       'class=' + r0.className);
+    window.dispatchEvent(ev('pointerup', gr0.left + 40, gr0.top + 40, 0));
+  }
+  ok('a grip release over nothing leaves the page alone', snap() === s5, snap() === s5 ? '' : diff(s5, snap()));
+
   E.disable();
   return JSON.stringify({ res: res });
 })()`;
@@ -213,7 +234,7 @@ try {
     const out = JSON.parse(r.result.value);
     if (out.fatal) { console.log('✗ ' + out.fatal); process.exitCode = 1; }
     else {
-      console.log('rows3 — the four drop shapes, through the pointer path layout.js binds');
+      console.log('rows3 — the drop shapes and the row grip, through the pointer path layout.js binds');
       for (const t of out.res) console.log(`  ${t.ok ? 'ok  ' : 'FAIL'} ${t.name}${t.ok || !t.detail ? '' : ' — ' + t.detail}`);
       const bad = out.res.filter(t => !t.ok).length;
       console.log(bad ? `\n${bad} of ${out.res.length} failed` : `\n✅ ${out.res.length}/${out.res.length} pass`);
