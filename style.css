@@ -1702,16 +1702,20 @@ p:has(>input.gap:only-child){text-align:center}
   .chart th.vlab>span{display:block;writing-mode:vertical-rl;transform:rotate(180deg);
     white-space:nowrap;font-size:calc(var(--s0) + 2pt);font-weight:300;letter-spacing:normal;color:var(--ink-2)}
   /* A LABEL OUTSIDE THE FRAME. The column is zero width and the word hangs at `right:100%` of it, so the
-     table's own box — and the ring it draws — is exactly the data, and the label stands outside it on
-     the paper. The 30px start margin is the room the word needs, and it comes OUT OF THE WIDTH: with
-     `width:100%` on top of the margin the table ended 30px past its cell, which is what clipped a
-     narrow chart. */
+     table's own box — and the ring it draws — is exactly the data, and the label stands outside it.
+     THE ROOM IS THE WRAPPER'S PADDING, NOT THE TABLE'S MARGIN. Padding sits inside the cell, so the word
+     cannot stick out of the block; a margin on the table would have to be taken back out of its width,
+     and that arithmetic is what pushed the table past its container. 48px is the word's own width
+     (a rotated line is about 30px tall) plus the spacing that separates it from the frame. */
+  .chartwrap:has(th.vlab){padding-inline-start:48px}
   .chart th.vlab{width:0;padding:0;border:0;background:none;position:relative}
   .chart th.vlab>span{position:absolute;right:100%;top:0;bottom:0;display:grid;place-items:center;
-    writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;padding-right:8px;
+    writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;padding-right:10px;
     font-size:calc(var(--s0) + 2pt);font-weight:300;letter-spacing:normal;color:var(--ink-2)}
-  .chart:has(>tbody>tr>th.vlab){overflow:visible;width:calc(100% - 30px);
-    margin-inline-start:30px;border-radius:8px}
+  /* the label is outside the table's box, so the table must not clip it — and a collapsed table cannot
+     round a border either, so the ring keeps the sheet's 3px corner and the corner cells stay square
+     inside it, exactly as they were before */
+  .chart:has(>tbody>tr>th.vlab){overflow:visible}
   /* the label column draws nothing at all: no cell, no border where it meets the data, so the chart's own
      frame is the only line at its left edge */
   .chart:has(>tbody>tr>th.vlab) tbody td:first-of-type{border-left:0}
