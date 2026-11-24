@@ -662,6 +662,14 @@ window.LayoutEditor = (function () {
   function undo() {
     var s = hist.pop();
     if (!s) return false;
+    /* A NEW BLOCK UNDOES BY GOING: the record is the row this tool made, so the undo takes it out
+       rather than putting it back. */
+    if (s.added) {
+      if (s.node.parentNode) s.node.parentNode.removeChild(s.node);
+      moved = Math.max(0, moved - 1);
+      markPins(); markGrains(); paintChip();
+      return true;
+    }
     /* WHAT WENT IS PUT BACK IN THE REVERSE OF THE ORDER IT WENT, so every box returns to a parent
        that is there again: the outermost cell first, then the row it left, then the cell inside it. */
     for (var i = (s.gone || []).length - 1; i >= 0; i--) {
@@ -697,6 +705,70 @@ window.LayoutEditor = (function () {
      a caret and typing still works; only a press that TRAVELS becomes a drag, and only then is the
      area taken out of contenteditable (a live contenteditable starts a text drag of its own) and
      the text selection cleared. */
+  /* ---- A NEW BLOCK -----------------------------------------------------------------------
+     SHIFT + RIGHT CLICK ABOVE, BELOW OR BETWEEN what is already on the page, and a block arrives
+     where the click landed. It is a level-1 row with one cell in it and nothing else: a `.block`
+     holding an empty `h3`, because a page is wrapped to the depth its content needs — an empty row
+     inside an empty cell is a shape with nothing in it, and the drop that fills the block makes the
+     levels it needs. The caret goes straight into the headline, so the title is the next thing typed.
+     The click reads the OUTERMOST row under the pointer, level 1 or 2 or 3 down: a block is never
+     made inside a cell, only between the things that stand in the section. */
+  function newBlockAt(x, y) {
+    var c = ca();
+    if (!c) return false;
+    var el = document.elementFromPoint(x, y);
+    if (!el || !c.contains(el)) return false;
+    var row = el.closest ? el.closest('.rows') : null;
+    /* climb to the outermost row: the one whose parent is not itself a cell's row */
+    while (row && row.parentElement && row.parentElement !== c) {
+      var up = row.parentElement.closest ? row.parentElement.closest('.rows') : null;
+      if (!up || !c.contains(up)) break;
+      row = up;
+    }
+    var host = row ? row.parentElement : c;
+    var ref;
+    if (row) {
+      var b = row.getBoundingClientRect();
+      ref = y < b.top + b.height / 2 ? row : (row.nextElementSibling || null);
+    } else if (el === c) {
+      ref = null;
+    } else {
+      var eb = el.getBoundingClientRect();
+      ref = y < eb.top + eb.height / 2 ? el : (el.nextElementSibling || null);
+    }
+    var wrap = document.createElement('div'); wrap.className = 'rows';
+    var cell = document.createElement('div');
+    var block = document.createElement('div'); block.className = 'block';
+    var h3 = document.createElement('h3');
+    block.appendChild(h3);
+    cell.appendChild(block);
+    wrap.appendChild(cell);
+    host.insertBefore(wrap, ref || null);
+    hist.push({ node: wrap, from: null, added: true, gone: [], wraps: [], back: null });
+    if (hist.length > 40) hist.shift();
+    moved++; markPins(); markGrains(); paintChip();
+    caretIn(h3);
+    return true;
+  }
+
+  /* the caret goes inside the new headline: a block with no title is a block nobody can name */
+  function caretIn(node) {
+    try {
+      var r = document.createRange();
+      r.selectNodeContents(node); r.collapse(true);
+      var s = window.getSelection();
+      s.removeAllRanges(); s.addRange(r);
+    } catch (err) { }
+  }
+
+  function menu(e) {
+    if (!ON || !e.shiftKey) return;
+    var n = e.target && e.target.nodeType === 1 ? e.target : null;
+    if (!n || !inside(n)) return;
+    e.preventDefault();
+    newBlockAt(e.clientX, e.clientY);
+  }
+
   /* ---- ROW GRIPS ---------------------------------------------------------------------
      THE `R1` AND THE CELL NUMBERS ARE CSS COUNTERS. They are pseudo-elements, so they cannot be
      pressed: nothing can start a drag from them, which is why pulling a row by its number did
@@ -891,6 +963,7 @@ window.LayoutEditor = (function () {
     document.addEventListener('keydown', key, true);
     document.addEventListener('keyup', key, true);
     document.addEventListener('dragstart', noNativeDrag, true);
+    document.addEventListener('contextmenu', menu, true);   /* Shift + right click makes a block */
     window.addEventListener('blur', blurShift);
     window.addEventListener('scroll', placeGrips, true);   /* the grips are fixed, the page is not */
     window.addEventListener('resize', placeGrips);

@@ -1,8 +1,9 @@
 /**
  * qa/rows3.mjs — the drop shapes of the layout editor, in a REAL browser (hit testing is the
  * instrument, so jsdom cannot answer it): a cell on the band between two rows, a cell merged into a
- * cell, an item on a level-3 cell's side band, an item dropped in a level-3 cell's middle, and a row
- * picked up by its grip — and undo after each, which must put the page back exactly.
+ * cell, an item on a level-3 cell's side band, an item dropped in a level-3 cell's middle, a row
+ * picked up by its grip, and a block made with Shift + right click — and undo after each, which must
+ * put the page back exactly.
  *
  * Why a browser: `pick()` asks `document.elementFromPoint(x, y)`, so the answer depends on the box
  * the pointer is actually over. A jsdom page has no boxes, and a probe that aims at coordinates no
@@ -200,6 +201,29 @@ const PROBE = `(function () {
     window.dispatchEvent(ev('pointerup', gr0.left + 40, gr0.top + 40, 0));
   }
   ok('a grip release over nothing leaves the page alone', snap() === s5, snap() === s5 ? '' : diff(s5, snap()));
+
+  /* 6 — SHIFT + RIGHT CLICK above, below or between what is already there makes a block. It arrives
+     as a level-1 row with one empty cell in it, and the undo takes the row away again. */
+  var s6 = snap();
+  var topRows = [].filter.call(CA.querySelectorAll('.rows'), function (r) { return r.parentElement === CA; });
+  var r1b = topRows[0] && topRows[0].getBoundingClientRect();
+  var blocksBefore = CA.querySelectorAll('.block').length;
+  var car = CA.getBoundingClientRect();
+  var hit = document.elementFromPoint(car.left + car.width / 2, r1b.bottom - 2);
+  if (hit) hit.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, shiftKey: true,
+    clientX: car.left + car.width / 2, clientY: r1b.bottom - 2 }));
+  var blocksAfter = CA.querySelectorAll('.block').length;
+  var nb = [].filter.call(CA.querySelectorAll('.block'), function (b) {
+    var h = b.querySelector('h3'); return !!h && !h.textContent;
+  })[0];
+  ok('Shift + right click makes a block', blocksAfter === blocksBefore + 1,
+     'before=' + blocksBefore + ' after=' + blocksAfter);
+  ok('the new block is a level-1 row holding one empty cell',
+     !!nb && rowsIn(nb.closest('.rows')) === 1 && nb.closest('.rows').parentElement === CA &&
+     nb.parentElement === nb.closest('.rows').firstElementChild,
+     'rows in chain=' + (nb && rowsIn(nb.closest('.rows'))));
+  E.undo();
+  ok('undo takes the new block away', snap() === s6, snap() === s6 ? '' : diff(s6, snap()));
 
   E.disable();
   return JSON.stringify({ res: res });
