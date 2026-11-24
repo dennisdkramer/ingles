@@ -1716,6 +1716,12 @@ p:has(>input.gap:only-child){text-align:center}
   .chart:has(>tbody>tr>th.vlab) tbody>tr>td:last-of-type{border-right:2px solid var(--edge)}
   .chart:has(>tbody>tr>th.vlab) tbody>tr.bare+tr>td{border-top:2px solid var(--edge)}
   .chart:has(>tbody>tr>th.vlab) tbody>tr:last-child>td{border-bottom:2px solid var(--edge)}
+  /* the corners of each framed group: the cell carries the radius, because a collapsed table has no
+     box of its own to round */
+  .chart:has(>tbody>tr>th.vlab) tbody>tr.bare+tr>td:first-of-type{border-top-left-radius:7px}
+  .chart:has(>tbody>tr>th.vlab) tbody>tr.bare+tr>td:last-of-type{border-top-right-radius:7px}
+  .chart:has(>tbody>tr>th.vlab) tbody>tr:last-child>td:first-of-type{border-bottom-left-radius:7px}
+  .chart:has(>tbody>tr>th.vlab) tbody>tr:last-child>td:last-of-type{border-bottom-right-radius:7px}
   /* the label column draws nothing at all: no cell, no border where it meets the data, so the chart's own
      frame is the only line at its left edge */
   .chart:has(>tbody>tr>th.vlab) tbody td:first-of-type{border-left:0}
