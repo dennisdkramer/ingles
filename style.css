@@ -889,7 +889,10 @@
   /* the rounded grey frame belongs to the page body, inset from the ink edge — not to the 1200px column */
   .page-container::before{content:"";position:absolute;inset:6px;pointer-events:none;
     border:2px solid color-mix(in oklab,var(--ink-2) 50%,var(--paper));border-radius:14px}
-  .content-area{width:1200px;margin:0 auto;padding:98px 0 16px;position:relative}
+  /* THE TITLE'S AIR IS 58px, NOT 98px: the h1 at the head of the sheet sat too far down the page, and
+     its air is the one number that moves it — with the frame's top edge where it was (the container is
+     absolute at its static position) the title and everything under it rise 40px. */
+  .content-area{width:1200px;margin:0 auto;padding:58px 0 16px;position:relative}
 
   /* #41 GRID — the page is twelve tracks. A block takes the whole line unless it is given a span of 3, 4,
      6, 8 or 9; a tall thin block may also cover 2 or 3 rows, and the blocks that follow fill beside it.
