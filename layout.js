@@ -250,9 +250,18 @@ window.LayoutEditor = (function () {
         addW = Math.max(0, addW - widths(srcRow));
       } else { add = 0; addW = 0; }
     }
-    /* A LEVEL-2 ROW HOLDS FOUR CELLS. A LEVEL-1 ROW HOLDS FOUR WIDTHS: its cells hold their own rows,
-       so the columns that end up side by side across the page are that row's whole tree. */
-    if (levelOf(row) === 2) return elemKids(row) + add <= 4;
+    /* A LEVEL-2 ROW HOLDS FOUR CELLS, and widening it also widens the block it sits in: the block
+       beside it keeps its own width, so the line above must still come to four. A LEVEL-1 ROW HOLDS
+       FOUR WIDTHS: its cells hold their own rows, so the columns that end up side by side across the
+       page are that row's whole tree. */
+    if (levelOf(row) === 2) {
+      if (elemKids(row) + add > 4) return false;
+      var cell = row.parentElement;
+      if (!isCell(cell)) return true;
+      var others = colsIn(base) - weight(cell);
+      var grown = Math.max(weight(cell), elemKids(row) + add);
+      return others + grown <= 4;
+    }
     return colsIn(base) + addW <= 4;
   }
   function pick(x, y) {
