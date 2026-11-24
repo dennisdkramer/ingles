@@ -18,6 +18,9 @@ window.LayoutEditor = (function () {
   'use strict';
 
   var ON = false, CA = null, drag = null, hist = [], moved = 0, line = null, chipEl = null;
+  /* whether the teacher has TYPED since the last move: Ctrl+Z belongs to the caret while it is true, and
+     to the layout while it is false */
+  var typed = false;
   var sel = null, panelEl = null;
   var THRESH = 4;   /* px of travel before a press counts as a drag, so a click keeps its caret */
 
@@ -697,7 +700,7 @@ window.LayoutEditor = (function () {
     }
     chipEl.style.display = 'block';
     chipEl.textContent = 'Shift+drag a block · ' + moved + ' change' + (moved === 1 ? '' : 's') +
-      (hist.length ? ' · undo' : '') + ' · Esc to stop';
+      (hist.length ? ' · Ctrl+Z undo' : '') + ' · Esc to stop';
   }
 
   /* ---- the move, and taking it back ----------------------------------------------- */
@@ -996,6 +999,7 @@ window.LayoutEditor = (function () {
        back before anything is counted as a move. A page that was ALREADY over stays as it is: only a
        drop that makes it worse is refused. */
     if (!capHolds(guards)) { undo(); return; }
+    typed = false;
     moved++; markPins(); markGrains(); paintChip();
     /* the row it landed in, and the row it left, are solved again — nothing else is touched */
     resolve(t.box || n); if (from.parent) resolve(from.parent);
@@ -1013,6 +1017,7 @@ window.LayoutEditor = (function () {
     rec.gone = tidy(parent);
     hist.push(rec);
     if (hist.length > 40) hist.shift();
+    typed = false;
     moved++; markPins(); markGrains(); select(null); paintChip(); resolveAll();
     return true;
   }
@@ -1020,6 +1025,7 @@ window.LayoutEditor = (function () {
   function undo() {
     var s = hist.pop();
     if (!s) return false;
+    typed = false;
     /* A NEW BLOCK UNDOES BY GOING: the record is the row this tool made, so the undo takes it out
        rather than putting it back. */
     if (s.added) {
@@ -1322,9 +1328,19 @@ window.LayoutEditor = (function () {
       return;
     }
     if (e.key === 'Escape') disable();
-    else if (e.key === 'z' && (e.ctrlKey || e.metaKey) && e.altKey) { undo(); e.preventDefault(); }
+    /* CTRL+Z UNDOES THE LAST MOVE, unless the teacher has typed since — then it is the browser's text
+       undo, which is what a caret needs. Ctrl+Alt+Z always undoes a move, whatever came before. */
+    else if ((e.key === 'z' || e.key === 'Z') && (e.ctrlKey || e.metaKey)) {
+      if (e.altKey || (!typed && hist.length)) { undo(); e.preventDefault(); }
+    }
   }
   function blurShift() { document.body.classList.remove('layout-shift'); }
+  /* typing takes Ctrl+Z back for the caret; a move gives it to the layout again */
+  document.addEventListener('input', function (e) {
+    if (!ON) return;
+    var t = e.target;
+    if (t && t.closest && t.closest('.content-area')) typed = true;
+  }, true);
   /* a browser drag of selected text would swallow the pointer events a layout drag needs; while
      Shift is held (or a node is already moving) the native drag is refused */
   function noNativeDrag(e) {
