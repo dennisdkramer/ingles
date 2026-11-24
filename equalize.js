@@ -31,11 +31,28 @@
     return w;
   }
 
+  /* A DRAWING WITH A WIDTH OF ITS OWN OWNS ITS CELL, the same way a table does: `.vz-map` is authored
+     in px, so its computed width is the width it will be drawn at, whatever the cell it lands in is
+     doing. Without this the cell is measured as prose, the drawing is capped by a percentage of a cell
+     the solver is sizing from the drawing, and the map collapses — the one shape on a page whose width
+     is neither prose nor a table. Any element with a fixed px width gets the same treatment. */
+  function fixedFrameWidth(col) {
+    var els = col.querySelectorAll(".vz-map, .chartwrap"), best = 0;
+    for (var i = 0; i < els.length; i++) {
+      var w = parseFloat(getComputedStyle(els[i]).width) || 0;
+      if (w > best && w < col.getBoundingClientRect().width * 4) best = w;
+    }
+    return best;
+  }
+
   /* the cell must be at least as wide as its table's widest nowrap row. `.chart` is
      width:100%;max-width:100%, so both are cleared for the measure and put back after. */
   function getTableFloor(col) {
     var table = col.querySelector("table");
-    if (!table) return PROSE_FLOOR;
+    if (!table) {
+      var fw = fixedFrameWidth(col);
+      return fw ? Math.max(MIN_CELL, fw + (col.offsetWidth - col.clientWidth)) : PROSE_FLOOR;
+    }
     var s = table.style, prev = [s.whiteSpace, s.width, s.maxWidth];
     s.whiteSpace = "nowrap";
     s.width = "auto";
@@ -188,11 +205,11 @@
     var media = cols.map(visual);
     /* a table or a drawing is the row's absorber; the prose beside it stops at its own content
        width, so the absorber takes the slack instead of the prose becoming blank space */
-    var hasAbsorber = cols.some(function (c) { return c.querySelector("table") || visual(c); });
+    var hasAbsorber = cols.some(function (c) { return c.querySelector("table") || visual(c) || fixedFrameWidth(c); });
     var maxW = cols.map(function (c, i) {
       var mediaCap = getMediaMaxWidth(c);
       if (mediaCap !== Infinity || !hasAbsorber) return mediaCap;
-      if (c.querySelector("table") || media[i]) return Infinity;
+      if (c.querySelector("table") || media[i] || fixedFrameWidth(c)) return Infinity;
       return Math.max(PROSE_FLOOR, getProseMaxWidth(c));
     });
 

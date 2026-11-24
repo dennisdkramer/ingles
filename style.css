@@ -1655,12 +1655,11 @@
   /* the GUTTER is painted, never laid out: a 4px ring outside each drawing's box, so the panels keep their
      white separation without the spacing eating into the 355px the map is tall */
   table.comic td.strip>svg{box-shadow:0 0 0 4px var(--paper)}
-  /* A PAIR OF DRAWINGS IN ONE ROW. The solver sizes a cell from the prose it holds or from the table in
-     it, and two drawings side by side are neither, so its split is uneven; `.viz-pair` centres the pair
-     and lets each drawing fit the cell it was given. Whatever the cells come out as, the row holds the
-     map and the comic and nothing else. */
-  .viz-pair{justify-content:center}
-  .viz-pair>div{min-width:0}
+  /* A CELL HOLDING A DRAWING THAT WIDTHS ITSELF. The solver measures prose and tables; a `.vz-map` is
+     neither, and it is measured by `fixedFrameWidth` in equalize.js, which lets such a cell take its
+     share of the row so the drawing is never squeezed or overlapped. Nothing here is specific to one
+     page: any row of drawings sorts itself out this way. */
+  .rows>div>div>.vz-map{margin-inline:auto}
   /* A STRIP ACTIVITY TAKES THE SAME BOX AS A COMIC: a `chart` whose panels are `td.strip` is capped at the
      map's width, so its 2 x 2 is 533 x 355 too instead of stretching across the block and dwarfing the
      drawing it holds */
