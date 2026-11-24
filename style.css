@@ -1271,12 +1271,15 @@ p:has(>input.gap:only-child){text-align:center}
 }
 @media print{ .markup-row{display:none} }
 
-/* #76 ENGINE — engine2.js writes label.opt.correct and .ans beside a typed field, and reads .qitem[data-a] on .opts. Vary: --ok (colour) */
+/* #76 ENGINE — engine2.js writes label.opt.correct and label.opt.wrong on a choice, .ans beside a typed field, and reads .qitem[data-a] on .opts. Vary: --ok, --err (colour) */
 @layer state{
   label.opt.correct{border-color:var(--ok);
     background:color-mix(in oklab,var(--ok) 10%,var(--surface-2))}
   label.opt.correct::after{content:"";margin-left:auto;width:6px;height:11px;rotate:45deg;
     border:2.5px solid var(--ok);border-top:0;border-left:0}
+  label.opt.wrong{border-color:var(--err);
+    background:color-mix(in oklab,var(--err) 9%,var(--surface-2))}
+  label.opt.wrong::after{content:"\00d7";margin-left:auto;font:700 1rem/1 var(--sans);color:var(--err)}
   .ans{display:inline-block;margin-left:7px;padding:1px 9px;border-radius:99px;
     background:color-mix(in oklab,var(--ok) 14%,transparent);
     color:color-mix(in oklab,var(--ok) 68%,var(--ink));font:600 .82rem var(--sans)}

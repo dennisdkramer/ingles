@@ -515,7 +515,8 @@ function ensureCompleteBtn(){
 }
 /* ---- reveal & lock: Complete shows each key and freezes the page, Clear takes both back ----
    The key lives in the page: data-answer on a typed control (pipes separate accepted forms), data-a on
-   the .qitem for a radio group. Nothing here touches the backend, and the student's own answer stays an
+   the .qitem for a radio group or a tick set (one place per pipe).
+   An option the student ticked that the key does not name is marked wrong. Nothing here touches the backend, and the student's own answer stays an
    ordinary answer row - this only reads the page and marks it. */
 function ansKeyText(el){
  const raw=el.getAttribute("data-answer")||"";
@@ -546,6 +547,9 @@ function applyCompleted(on){
   q.querySelectorAll(".qopts label").forEach(lab=>{
    const inp=lab.querySelector('input[type="radio"],input[type="checkbox"]');
    lab.classList.toggle("correct",!!on&&!!inp&&rights.includes(inp.value));
+   /* THE KEY IS GREEN, THE STUDENT'S MISTAKE IS RED: an option the student ticked that the key does not
+      name is marked wrong, so an extra tick in a multi-place answer is visible rather than silent. */
+   lab.classList.toggle("wrong",!!on&&!!inp&&!!inp.checked&&!rights.includes(inp.value));
   });
  });
  document.querySelectorAll("input.gap, textarea").forEach(el=>{
