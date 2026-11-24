@@ -542,10 +542,10 @@ function applyCompleted(on){
   const v=ansKeyText(el);if(sp.textContent!==v)sp.textContent=v;
  });
  document.querySelectorAll(".qitem[data-a]").forEach(q=>{
-  const right=q.getAttribute("data-a");
+  const right=q.getAttribute("data-a"), rights=right.split("|").map(t=>t.trim());
   q.querySelectorAll(".qopts label").forEach(lab=>{
    const inp=lab.querySelector('input[type="radio"],input[type="checkbox"]');
-   lab.classList.toggle("correct",!!on&&!!inp&&inp.value===right);
+   lab.classList.toggle("correct",!!on&&!!inp&&rights.includes(inp.value));
   });
  });
  document.querySelectorAll("input.gap, textarea").forEach(el=>{

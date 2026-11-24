@@ -55,7 +55,8 @@ if (nested) fail(`${nested} block(s) nested inside a block — a block is never 
 /* 5 — every key in the map is a key: a radio or checkbox group whose value carries it, a gap with an answer */
 for (const q of dom.querySelectorAll('.qitem[data-a]')) {
   const vals = [...q.querySelectorAll('input[type=radio], input[type=checkbox]')].map(i => i.value);
-  if (!vals.includes(q.getAttribute('data-a'))) {
+  const keys = q.getAttribute('data-a').split('|').map(t => t.trim());
+  if (!keys.every(k => vals.includes(k))) {
     fail(`.qitem data-a="${q.getAttribute('data-a')}" matches no option value (${vals.join(',') || 'none'})`);
   }
   if (!vals.length) fail('.qitem[data-a] holds no radio or checkbox');
