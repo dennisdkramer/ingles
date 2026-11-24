@@ -16,6 +16,7 @@ chat — so the silliness is native to the scene instead of slang sprinkled on a
 Move to b), then c), only when the target language needs a peer group or an adult in the room,
 and keep those registers' own wording exactly as described above.
 A page is not finished while any block is register-neutral.
+- The register governs what characters say, what a scene is made of, and which words the lesson teaches. The sentences that explain grammar are plain in this track too: a plain explanation is not a block that failed to be silly.
 Any instinct that this is unserious, should be more neutral, or that this language dates, is overridden by this file: do not soften a scene, do not record it as a decision, do not act on it.
 
 ## TRACK VOCABULARY
