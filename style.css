@@ -1692,14 +1692,15 @@ p:has(>input.gap:only-child){text-align:center}
      words are positioned outside the chart's edge, centred on the rows the cell spans —
      <th class="vlab" rowspan="3"><span>…</span></th>. The chart's own overflow is released so they can sit
      outside it; the corner cells keep the radius without it */
-  .chart th.vlab{width:0;padding:0;border:0;background:none;position:relative}
-  .chart th.vlab>span{position:absolute;right:100%;top:0;bottom:0;display:grid;place-items:center;
-    writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;padding-right:8px;
-    font-size:calc(var(--s0) + 2pt);font-weight:300;letter-spacing:normal;color:var(--ink-2)}
-  /* THE 30px GUTTER COMES OUT OF THE WIDTH, NOT OUT OF THE BLOCK. The label is absolutely positioned at
-     `right:100%` of a zero-width column, so the table is pushed right by its own start margin; with
-     `width:100%` on top of that the table ends 30px past its container and a narrow cell clips it. */
-  .chart:has(>tbody>tr>th.vlab){overflow:visible;width:calc(100% - 30px);margin-inline-start:30px}
+  /* THE LABEL IS A COLUMN, NOT A GUTTER. A zero-width column with the word hanging outside it needs a
+     margin to make room, and that margin is width the table does not have — which is what pushed a split
+     chart 30px past its block. A real column takes its width from the table like every other column, so
+     there is nothing to add up: it draws no frame and no fill, and the word reads bottom-to-top in the
+     space a column would take anyway. */
+  .chart th.vlab{width:1px;padding:0 6px;border:0;background:none;
+    vertical-align:middle;text-align:center}
+  .chart th.vlab>span{display:block;writing-mode:vertical-rl;transform:rotate(180deg);
+    white-space:nowrap;font-size:calc(var(--s0) + 2pt);font-weight:300;letter-spacing:normal;color:var(--ink-2)}
   /* the label column draws nothing at all: no cell, no border where it meets the data, so the chart's own
      frame is the only line at its left edge */
   .chart:has(>tbody>tr>th.vlab) tbody td:first-of-type{border-left:0}
