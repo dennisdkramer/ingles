@@ -867,6 +867,20 @@ window.LayoutEditor = (function () {
     }
   }
 
+  /* THE PAGE IS EDITED AS THE READER GETS IT. The solver writes each cell's width inline, so a row
+     that gains or loses a cell is solved again the moment the drop lands — what the teacher moves is
+     what the page will look like, not a stale geometry from the last load. Nothing is solved while a
+     drag is in flight; the line and the grips are measured on the fly. */
+  function resolve() {
+    var E = window.EqualizeRows;
+    if (!E) return;
+    try {
+      E.clean();
+      document.documentElement.classList.add('eq-ready');
+      E.run();
+    } catch (e) { /* a page without the solver keeps the widths it has */ }
+  }
+
   function applyDrop(d) {
     var n = d.node, t = d.t;
     if (!t) return;
@@ -933,7 +947,7 @@ window.LayoutEditor = (function () {
     var gone = tidy(from.parent);
     hist.push({ node: n, from: from, gone: gone, wraps: wraps, back: back });
     if (hist.length > 40) hist.shift();
-    moved++; markPins(); markGrains(); paintChip();
+    moved++; markPins(); markGrains(); paintChip(); resolve();
   }
 
   /* DELETE IS A MOVE, AND IT UNDOES LIKE ONE. The node leaves the page and the record of where it came
@@ -948,7 +962,7 @@ window.LayoutEditor = (function () {
     rec.gone = tidy(parent);
     hist.push(rec);
     if (hist.length > 40) hist.shift();
-    moved++; markPins(); markGrains(); select(null); paintChip();
+    moved++; markPins(); markGrains(); select(null); paintChip(); resolve();
     return true;
   }
 
@@ -960,7 +974,7 @@ window.LayoutEditor = (function () {
     if (s.added) {
       if (s.node.parentNode) s.node.parentNode.removeChild(s.node);
       moved = Math.max(0, moved - 1);
-      markPins(); markGrains(); paintChip();
+      markPins(); markGrains(); paintChip(); resolve();
       return true;
     }
     /* WHAT WENT IS PUT BACK IN THE REVERSE OF THE ORDER IT WENT, so every box returns to a parent
@@ -1022,7 +1036,7 @@ window.LayoutEditor = (function () {
       }
     }
     moved = Math.max(0, moved - 1);
-    markPins(); markGrains(); paintChip();
+    markPins(); markGrains(); paintChip(); resolve();
     return true;
   }
 
@@ -1097,6 +1111,7 @@ window.LayoutEditor = (function () {
     if (!n || !inside(n)) return;
     e.preventDefault();
     newBlockAt(e.clientX, e.clientY);
+    resolve();
   }
 
   /* ---- ROW GRIPS ---------------------------------------------------------------------
@@ -1311,6 +1326,9 @@ window.LayoutEditor = (function () {
     window.removeEventListener('blur', blurShift);
     if (line) line.style.display = 'none';
     clean();
+    /* DONE RE-SOLVES THE WHOLE PAGE: every row is measured again, so the geometry the teacher leaves
+       is the geometry a reader gets — including the heights that moved because a row above changed. */
+    resolve();
   }
 
   return {
