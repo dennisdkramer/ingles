@@ -60,7 +60,7 @@ with `node qa/page.mjs --track=<track> <N>`. That page and no others: a sweep is
 shows a build the shapes of pages it may not read. A red is fixed in the page, never in the threshold.
 `live` is not in that loop — it opens a real browser and belongs to the end of a batch.
 **`qa/page.mjs` is the one harness that runs as written.** Every other harness prints one line and exits 0
-unless `QA_ON=1` is in the environment (`qa/off.mjs`, owner instruction 2026-11-10, ISSUES.md) — so a green
+unless `QA_ON=1` is in the environment (`qa/off.mjs`, owner instruction 2026-11-10 — its text moves to `[QA OFF]` at the head of `qa/checks.mjs`) — so a green
 from one of them without that variable is the switch reporting, not the page.
 
 Which of those to run, and how deep, is the caller's decision, not the harness's: when scope is most or
