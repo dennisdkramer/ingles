@@ -1,7 +1,7 @@
 /* MOTOR 2 — control bar, camadas, fala (speechSynthesis), realces persistentes */
 /* Behaviour contract: FUNCTION.md - read it before changing anything here. */
 const LAYER_VER="v4-server-truth-20261006"; /* Bump to mark a fresh data era */
-/* THE SITE ROOT AS THIS PAGE SEES IT: a lesson lives one folder down ("../"), the capability map sits in
+/* THE SITE ROOT AS THIS PAGE SEES IT: a lesson lives two folders down ("../../"), the capability map sits in
    the root (""). Read from this script's own address, so a page at any depth — and the repo served under
    /<repo>/ on GitHub Pages — resolves to the same place. */
 const SITE=new URL(".",(document.currentScript&&document.currentScript.src)||location.href).pathname;
@@ -16,7 +16,7 @@ let completeNow=false; /* optimistic state of the "Complete?" tag button */
 /* THE LESSON'S TITLE IS IN ITS FILENAME, so a neighbour's address cannot be built from a number alone:
    lessons.json is read once, and every link in this file asks it. */
 let LSN=null;
-function lessonHref(n){const hit=(LSN||[]).find(x=>x.n===n);return hit&&hit.file?encodeURIComponent(hit.file):null;}
+function lessonHref(n){const hit=(LSN||[]).find(x=>x.n===n);return hit&&hit.file?SITE+TRACK+"/"+encodeURIComponent(hit.file):null;}
 async function goLesson(n){
  if(!LSN){try{const r=await fetch(SITE+"lessons.json");if(r.ok){const j=await r.json();LSN=(j&&j[TRACK])||null;}}catch(e){}}
  const h=lessonHref(n);if(h)location.href=h;
@@ -716,7 +716,7 @@ function renderCompleteBtn(){
    const wasOpen=!sm.hidden;sm.hidden=true;if(wasOpen)return;
    if(!selLoaded){
     let ls=[];
-    try{const r=await fetch("../lessons.json");if(r.ok){const j=await r.json();ls=(j&&j[folder])||[];}}catch(err){}
+    try{const r=await fetch(SITE+"lessons.json");if(r.ok){const j=await r.json();ls=(j&&j[folder])||[];}}catch(err){}
     if(!ls.length){
      sm.innerHTML='<div class="bookitem"><span class="lnum">&mdash;</span><span class="ltitle dim">no lessons</span></div>';
     }else{
@@ -724,7 +724,7 @@ function renderCompleteBtn(){
      sm.innerHTML=ls.map(le=>{
       const n=le.n,num=(n<10?"0":"")+n,t=le.title?escT(le.title):"&mdash;";
       /* the entry carries its FILENAME; an entry without one is a stale list and is not linked */
-      const h=le.file?encodeURIComponent(le.file):"";
+      const h=le.file?SITE+folder+"/"+encodeURIComponent(le.file):"";
       return '<div class="bookitem'+(n===L?' cur':'')+'"><span class="lnum">'+num+'</span>'
        +(h?'<a class="ltitle" href="'+h+'" title="'+num+'. '+t+'"'+(n===L?' aria-current="page"':'')+'>'+t+'</a>'
            :'<span class="ltitle dim" title="'+t+'">'+t+'</span>')+'</div>';

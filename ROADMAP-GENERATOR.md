@@ -2,7 +2,7 @@
 
 # What this produces
 
-A `<TRACK>-ROADMAP.md` for one track: what is taught at which lesson, and which lesson owns each thing, so that nothing is taught twice and nothing is used before it is taught. Pass A writes one lesson from one entry.
+A `<TRACK>/roadmap.md` for one track: what is taught at which lesson, and which lesson owns each thing, so that nothing is taught twice and nothing is used before it is taught. Pass A writes one lesson from one entry.
 
 # Process
 
@@ -94,7 +94,7 @@ Rules:
 - No entry names a page, a class, a width or a section order.
 - `Test-Roadmap.ps1 -Path <file> -Report <file>` exits 0. A roadmap that has not been run through it is not finished — most of the failures it reports are cheap at five lessons and expensive at fifty.
 
-# Output to (<TRACK>-ROADMAP.md) - DO NOT MODIFY WITHOUT USER SIGN-OFF
+# Output to (<track>/roadmap.md) - DO NOT MODIFY WITHOUT USER SIGN-OFF
 
 ## How to read an entry
 

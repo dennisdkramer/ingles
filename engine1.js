@@ -20,7 +20,7 @@ window.addEventListener("error",e=>{let b=document.getElementById("errb");
 const h=s=>{let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return x};
 const norm=s=>(s||"").toLowerCase().replace(/[^a-z']/g,"");
 const lineNorm=s=>String(s==null?"":s).replace(/[\r\n]/g," "); /* newline -> space (length-preserving), so the anchor always matches the rendered text */
-/* THE SITE ROOT AS THIS PAGE SEES IT. A lesson page lives one folder down and reaches the root with
+/* THE SITE ROOT AS THIS PAGE SEES IT. A lesson page lives two folders down and reaches the root with
    "../"; the capability map sits in the root itself. The base is read from this script's own address, so
    a page at any depth — and the repo served under /<repo>/ on GitHub Pages — resolves to the same place. */
 const E1_SITE=new URL(".",(document.currentScript&&document.currentScript.src)||location.href).pathname;

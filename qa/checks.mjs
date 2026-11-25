@@ -157,7 +157,7 @@ export function qaOff(name) {
    ===================================================================================== */
 export const {
   ROOT, TRACKS, hasTrackFlag, pickTracks, scopeLabel, pickNumbers, missingTargets,
-  lessonsOnDisk, lessonFile, pickLessons, hasAllFlag, touchedScope, pickLessonsFlag, authoredLessons,
+  lessonsOnDisk, lessonDir, lessonFile, pickLessons, hasAllFlag, touchedScope, pickLessonsFlag, authoredLessons,
   pickVoiceTracks, pickVoiceLessons, startServer, flags, MIME,
 } = (() => {
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -177,6 +177,9 @@ function discoverTracks() {
     let files = [];
     try { files = fs.readdirSync(path.join(ROOT, d.name)); } catch (e) { continue; }
     if (isDemo(ROOT, d.name)) continue;
+    if (files.indexOf('lessons') >= 0) {
+      try { files = files.concat(fs.readdirSync(path.join(ROOT, d.name, 'lessons'))); } catch (e) { /* no folder */ }
+    }
     if (files.some(f => /^lesson\d+.*\.html$/.test(f)) || files.indexOf('track.json') >= 0) out.push(d.name);
   }
   return out.sort();
@@ -227,9 +230,15 @@ function missingTargets(tracks, numbers) {
   return numbers.filter(n => !have.has(n));
 }
 
+/** a track's lesson pages live in <track>/lessons; a folder that has none is looked in directly */
+function lessonDir(track) {
+  const deep = path.join(ROOT, track, 'lessons');
+  return fs.existsSync(deep) ? deep : path.join(ROOT, track);
+}
+
 /** the lesson numbers that exist on disk for a track, ascending (empty array = nothing to audit) */
 function lessonsOnDisk(track) {
-  const dir = path.join(ROOT, track);
+  const dir = lessonDir(track);
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir)
     .map(f => (f.match(/^lesson(\d+)(?:-.*)?\.html$/) || [])[1])
@@ -239,7 +248,7 @@ function lessonsOnDisk(track) {
 /** THE FILE a lesson number names: `lesson7-<Title>.html`. The title lives in the filename — no page is
  *  read to find it — so a number is looked up, never concatenated into a path. */
 function lessonFile(track, n) {
-  const dir = path.join(ROOT, track);
+  const dir = lessonDir(track);
   if (!fs.existsSync(dir)) return null;
   const hit = fs.readdirSync(dir).find(f => new RegExp('^lesson' + n + '(?:-.*)?\\.html$').test(f));
   return hit ? path.join(dir, hit) : null;
@@ -270,12 +279,12 @@ function hasAllFlag(argv = process.argv.slice(2)) {
 }
 
 /** A rename line counts its destination. The leading class
- *  tolerates git's porcelain prefix (`?? adult/lesson22-The Clock.html`) and quoted paths, so an untracked page —
+ *  tolerates git's porcelain prefix (`?? adult/lessons/lesson22-The Clock.html`) and quoted paths, so an untracked page —
  *  which is exactly what a page being written looks like — is in scope. The track alternation is built from
  *  the DISCOVERED tracks, so a page in a track that did not exist when this line was written still counts. */
 const PAGE_PATH = TRACKS.length
   ? new RegExp('(?:^|[\\s"\'\\\\/])(' + TRACKS.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')
-      + ')[\\\\/]lesson(\\d+)(?:-[^"]*)?\\.html["\']?$')
+      + ')[\\\\/](?:lessons[\\\\/])?lesson(\\d+)(?:-[^"]*)?\\.html["\']?$')
   : /(?!)/;
 
 function gitPagePaths(args) {
@@ -436,7 +445,7 @@ function flags(opts = {}) {
 
 return {
   ROOT, TRACKS, hasTrackFlag, pickTracks, scopeLabel, pickNumbers, missingTargets, lessonsOnDisk,
-  lessonFile, pickLessons, hasAllFlag, touchedScope, pickLessonsFlag, authoredLessons, pickVoiceTracks,
+  lessonDir, lessonFile, pickLessons, hasAllFlag, touchedScope, pickLessonsFlag, authoredLessons, pickVoiceTracks,
   pickVoiceLessons, startServer, flags, MIME,
 };
 
@@ -875,7 +884,7 @@ export const check1 = (() => {
   }
 
   function roadmapSection(track, n) {
-    const f = path.join(ROOT, track.toUpperCase() + '-ROADMAP.md');
+    const f = path.join(ROOT, track, 'roadmap.md');
     if (!fs.existsSync(f)) return [];
     const lines = fs.readFileSync(f, 'utf8').split(/\r?\n/);
     const at = lines.findIndex(l => new RegExp('^## (?:\\[' + n + '\\]|Lesson ' + n + '\\b)').test(l));
@@ -887,7 +896,7 @@ export const check1 = (() => {
 
   /* the ledger is one line under each roadmap heading: `- Ledger: rul>ex>mc>…` */
   function ledgerTail(track, n) {
-    const f = path.join(ROOT, track.toUpperCase() + '-ROADMAP.md');
+    const f = path.join(ROOT, track, 'roadmap.md');
     if (!fs.existsSync(f)) return [];
     const out = [];
     let lesson = 0;
@@ -1055,7 +1064,7 @@ const RUNTIME_CLASSES = new Set(['eq-ready', 'layout-on', 'layout-panelled', 'la
    types that page built, in page order. A lesson is ledgered when that line exists. */
 function ledgerLine(track, n) {
   if (!track || !n) return '';
-  const f = path.join(ROOT, track.toUpperCase() + '-ROADMAP.md');
+  const f = path.join(ROOT, track, 'roadmap.md');
   if (!fs.existsSync(f)) return '';
   let lesson = 0;
   for (const line of fs.readFileSync(f, 'utf8').split(/\r?\n/)) {
@@ -1271,7 +1280,7 @@ async function runtime(base, p, html) {
       const file = path.isAbsolute(PAGE) ? PAGE : path.join(ROOT, PAGE.replace(/\\/g, '/'));
       if (!fs.existsSync(file)) refuse('no such page: ' + PAGE);
       const rel = path.relative(ROOT, file).split(path.sep).join('/');
-      const m = /^([^/]+)\/lesson(\d+)-/.exec(rel);
+      const m = /^([^/]+)\/(?:lessons\/)?lesson(\d+)-/.exec(rel);
       const track = m && TRACKS.includes(m[1]) ? m[1] : null;
       return [{ file, rel, track, n: m ? Number(m[2]) : null, demo: !!track && isDemo(ROOT, track) }];
     }
@@ -1598,7 +1607,7 @@ function report(rows) {
           await b.send('Page.addScriptToEvaluateOnNewDocument', {
             source: `sessionStorage.gate = JSON.stringify({ email: ${JSON.stringify(EMAIL)}, track: ${JSON.stringify(j.track)}, teacher: false, sig: ${sig} });`,
           }, b.sid);
-          const url = 'http://127.0.0.1:' + site.port + '/' + j.track + '/' + encodeURIComponent(path.basename(j.file)) + '?v=' + Date.now();
+          const url = 'http://127.0.0.1:' + site.port + '/' + j.track + '/lessons/' + encodeURIComponent(path.basename(j.file)) + '?v=' + Date.now();
           await b.send('Page.navigate', { url }, b.sid);
           let ready = false;
           for (let i = 0; i < 60 && !ready; i++) {
@@ -1648,7 +1657,7 @@ export const live = (() => {
   const OUT = path.join(ROOT, 'qa', '_live');
   const EMAIL = 'live.qa@ingles.test';
   const SECRET = 'abreportas2025';
-  let LESSON = 1, TRACK = 'business', PAGE_REL = '/business/lesson1.html', GATE = null, PROBE = '';
+  let LESSON = 1, TRACK = 'business', PAGE_REL = '/business/lessons/lesson1.html', GATE = null, PROBE = '';
   let ARGV = [];
   const has = n => ARGV.includes(n);
   const arg = (n, d) => { const a = ARGV.find(x => x.startsWith(n + '=')); return a ? a.slice(n.length + 1) : d };
@@ -3019,7 +3028,7 @@ function session(cdp, id) {
       console.error('❌ --track must be one of: ' + TRACKS.join(' | ') + '  (got "' + TRACK + '")');
       return 1;
     }
-    PAGE_REL = '/' + TRACK + '/' + encodeURIComponent(path.basename(lessonFile(TRACK, LESSON) || ('lesson' + LESSON + '.html')));
+    PAGE_REL = '/' + TRACK + '/lessons/' + encodeURIComponent(path.basename(lessonFile(TRACK, LESSON) || ('lesson' + LESSON + '.html')));
     GATE = { email: EMAIL, track: TRACK, sig: hashStr(EMAIL + TRACK + SECRET), teacher: false };
     PROBE = '(' + probeFn.toString() + ')(' + JSON.stringify(GATE) + ')';
     if (isExcluded(TRACK, LESSON)) {
@@ -4043,6 +4052,9 @@ for (const d of fs.readdirSync(ROOT, { withFileTypes: true })) {
   if (isDemo(ROOT, d.name)) continue;
   let files = [];
   try { files = fs.readdirSync(path.join(ROOT, d.name)); } catch (e) { continue; }
+  if (files.indexOf('lessons') >= 0) {
+    try { files = files.concat(fs.readdirSync(path.join(ROOT, d.name, 'lessons'))); } catch (e) { /* none */ }
+  }
   if (files.some(f => /^lesson\d+.*\.html$/.test(f))) {
     console.warn('WARN: ' + d.name + '/ has lesson pages but is not in the TRACKS table of this file');
   }
@@ -4077,8 +4089,9 @@ for (const meta of TRACKS) {
   const entries = [];
   /* a track this run was not asked about is neither rebuilt nor read */
   if (ONLY && track !== ONLY) { manifest[track] = PREV[track] || []; continue; }
-  if (fs.existsSync(dir)) {
-    for (const name of fs.readdirSync(dir)) {
+  const pageDir = lessonDir(track);
+  if (fs.existsSync(pageDir)) {
+    for (const name of fs.readdirSync(pageDir)) {
       /* THE FILENAME IS THE ADDRESS: `lesson<N>-<Title>.html` decides the number and the file served. The
          headline inside the page is the name. No other page is read — the stylesheet stamp at the foot of
          this file is the one edit the build makes inside a page. */
@@ -4086,7 +4099,9 @@ for (const meta of TRACKS) {
       if (!m) continue;
       const n = Number(m[1]);
       const slug = m[2] ? m[2].replace(/-+/g, ' ').trim() : '';
-      entries.push({ n, title: pageTitle(path.join(dir, name), slug || 'Lesson ' + n), file: name });
+      /* the address is the page's path under the track: `lessons/lesson7-….html` */
+      const rel = path.relative(dir, path.join(pageDir, name)).split(path.sep).join('/');
+      entries.push({ n, title: pageTitle(path.join(pageDir, name), slug || 'Lesson ' + n), file: rel });
     }
   }
   entries.sort((a, b) => a.n - b.n);
@@ -4113,13 +4128,13 @@ const wroteTracks = emit('tracks.json', JSON.stringify(trackList, null, 2) + '\n
 const cssText = fs.readFileSync(path.join(ROOT, 'style.css'), 'utf8').replace(/\r\n/g, '\n');
 const cssHash = createHash('sha256').update(cssText).digest('hex').slice(0, 10);
 const cssUrl = 'style.css?v=' + cssHash;
-const linkRe = /<link rel="stylesheet" href="((?:\.\.\/)?)style\.css(?:\?v=[0-9a-f]*)?"/;
+const linkRe = /<link rel="stylesheet" href="((?:\.\.\/)*)style\.css(?:\?v=[0-9a-f]*)?"/;
 // The solver is stamped the same way: a cached equalize.js would leave a page hidden waiting for a
 // script that never ran, and a changed solver would measure against the widths it wrote last time.
 const jsText = fs.readFileSync(path.join(ROOT, 'equalize.js'), 'utf8').replace(/\r\n/g, '\n');
 const jsHash = createHash('sha256').update(jsText).digest('hex').slice(0, 10);
 const jsUrl = 'equalize.js?v=' + jsHash;
-const scriptRe = /<script src="((?:\.\.\/)?)equalize\.js(?:\?v=[0-9a-f]*)?"/;
+const scriptRe = /<script src="((?:\.\.\/)*)equalize\.js(?:\?v=[0-9a-f]*)?"/;
 /* every page that links the sheet carries the same stamp: the root pages draw the menu and the map, and a
    lesson page must not keep a cached sheet after the sheet changes. The manifest cannot list every page —
    a lesson folder may hold pages the book does not list — so the rest are found in the tree. */

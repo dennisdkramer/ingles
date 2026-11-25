@@ -1079,7 +1079,7 @@ const fig = full
       '<figure class="vz-play viz">',
       '<h4>' + esc(songName) + '</h4>',
       '<p class="dim">' + esc(performer) + '</p>',
-      '  <audio class="vz-audio" src="../' + destRel + '" data-duration="' + cutM.duration.toFixed(2) +
+      '  <audio class="vz-audio" src="../../' + destRel + '" data-duration="' + cutM.duration.toFixed(2) +
         '" controls preload="metadata"></audio>',
       '  <div class="vz-controls">',
       '    <button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>',
@@ -1098,7 +1098,7 @@ const fig = full
       '<figure class="vz-play viz">',
       '<h4>' + esc(songName) + '</h4>',
       '<p class="dim">' + esc(performer) + '</p>',
-      '  <audio class="vz-audio" src="../' + destRel + '" data-duration="' + cutM.duration.toFixed(2) +
+      '  <audio class="vz-audio" src="../../' + destRel + '" data-duration="' + cutM.duration.toFixed(2) +
         '" controls preload="metadata"></audio>',
       '  <div class="vz-controls">',
       '    <button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>',
