@@ -28,7 +28,7 @@
 **As-Needed only Inputs**:
 	- `assets/` and `assets/README.md` — the shipped media files, and the provenance row that records where each came from.
 
-**Withheld** — nothing outside this list is an input, an allowed read, or a reference: not `style.css`, not `HANDOFF.md`, `STATUS.md`, `ISSUES.md`, `FILESYSTEM.md`, `PENDING.md` or `PAST_BATCHES.md`, not `CONTENT_EXAMPLES.md` or ANY other file in the repo.
+**Withheld** — nothing outside this list is an input, an allowed read, or a reference: not `style.css`, not `HANDOFF.md`, `STATUS.md`, `FILESYSTEM.md`, `PENDING.md` or `PAST_BATCHES.md`, not `CONTENT_EXAMPLES.md` or ANY other file in the repo.
 
 ## [PROCESS] — the process is detailed in [I/O] 3, in this order
 The lessons are built by working through `extra/lesson1-The Capability Map.html` — which states how, and every rule of the work is there — in sequential, independent steps:
