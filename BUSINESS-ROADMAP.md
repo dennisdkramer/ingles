@@ -2,7 +2,10 @@
 
 *Vocabulary mix — about half the track's own working words, a quarter everyday life, a quarter from the wider world (culture, sport, travel, food, weather, news) — and always after the more important word: a basic the student will use tomorrow outranks a flavour word that illustrates the lesson. No lesson is all workplace, and the first lessons are the basics first.*
 
+*The ledger is one line under each lesson's heading — `- Ledger: rul>ex>mc>…`, the block types that page built, in page order. A block names its type in `data-type`: a teaching block one of `rul` `rsn` `con` `ex` `exc` `voc` `mng` `prn` `tim` `soc` `rcp`; an activity block the element it builds (`mc`, `fill`, `matching`, `chunks`, `correction`, `translation`, `dictation`, `flip`, `chartanswer`, `dialoggap`, `stripgaps`, `map`). The three lines before this lesson are read before the page is written.*
+
 ## Lesson 1: Welcome - how this track works
+- Ledger: rsn>ex>voc>ex>exc>con>exc>ex>voc>mng>ex>mng>voc
 
 
    - Focus: An introduction to how these lessons work and to English in general — the two ideas every later lesson uses: English vowels have no fixed sound, and the Portuguese suffix code already gives you thousands of English words.
@@ -14,6 +17,7 @@
    - Real-world relevance: The student already reads this vocabulary in their inbox; the lesson shows how much of it they can already decode and why they mispronounce it.
 
 ## Lesson 2: Word order, be, and the pronouns: your first sentence at work
+- Ledger: rul>ex>con>rsn>voc>ex>rsn>ex>con>voc>mng>ex>rsn>con>exc>voc>prn>mng>ex>soc>ex>mng>ex
 
    - Focus: The fixed order of an English sentence, and `be` as the first verb in it.
    - teaches: `clause/word-order`, `be/linking-verb`, `pronoun/subject-object`
@@ -24,6 +28,7 @@
    - Real-world relevance: The first sentence every student needs at work is who they are and what they do; the second is who someone else is.
 
 ## Lesson 3: It and there: the subject every English sentence needs
+- Ledger: rul>ex>con>rsn>ex>mng>rul>voc>ex>con>voc>ex>voc>con>exc>mng>con>ex>ex>exc>ex
 
    - Focus: English always has a subject, so `it` and `there` fill the position Portuguese leaves empty.
    - teaches: `clause/dummy-subject`, `be/existence-there`, `pronoun/possessive`
@@ -34,6 +39,7 @@
    - Real-world relevance: "Está difícil", "é importante", "tem um problema" are constant in work talk, and each one needs an English subject before anything else can be said.
 
 ## Lesson 4: Facts and habits - the -s on the third person
+- Ledger: rul>ex>con>voc>mng>prn>rul>con>ex>rul>prn>ex>rul>con>exc>ex>mng>soc>ex>rul>ex>ex>con>ex
 
    - Focus: The simple present states facts and habits, and in the third person singular the verb adds -s.
    - teaches: `present-simple/facts-not-now`, `present-simple/third-person-s`, `present-simple/frequency-position`
@@ -44,6 +50,7 @@
    - Real-world relevance: A colleague's first questions are about routine and schedule, and the -s is what separates "I check" from "she checks" in a shared inbox.
 
 ## Lesson 5: Do and does: the mode indicator that carries the tense
+- Ledger: rsn>ex>con>voc>prn>mng>rul>ex>rsn>con>exc>ex>mng>con>exc>soc>ex>mng>voc>mng>ex
 
    - Focus: Do and does carry the tense and the person, and the main verb returns to its base form when they are there.
    - teaches: `mode/place`, `mode/verb-returns-base`, `mode/negation`
@@ -54,6 +61,7 @@
    - Real-world relevance: Saying no and correcting a fact is half of a working day, and the -s moves off the verb the moment "doesn't" enters the sentence.
 
 ## Lesson 6: Prepositions: the meaning each one adds
+- Ledger: rul>ex>mng>ex>rul>exc>ex>con>ex>ex>voc>mng>ex>ex>soc>ex>ex
 
    - Focus: in, on and at mean something in themselves, and Portuguese "para" splits into to and for.
    - teaches: `prep/location-in-on-at`, `prep/time-in-on-at`, `prep/to-vs-for`
@@ -64,6 +72,7 @@
    - Real-world relevance: Where things are, when things happen and who a thing is for are the three facts of every work message, and "para" covers all three in Portuguese.
 
 ## Lesson 7: Gonna, wanna, woulda - and the meanings of get
+- Ledger: prn>rul>ex>rul>ex>ex>mng>ex>con>ex>voc>ex>rul>mng>soc>ex>ex
 
    - Focus: The three spoken reductions, and the meaning `get` has in each phrase it appears in.
    - teaches: `reduction/gonna-future-mode`, `reduction/wanna-woulda`, `get/meaning-changes`
@@ -74,6 +83,7 @@
    - Real-world relevance: Native speech uses gonna and wanna constantly, and English uses `get` in many everyday phrases where Portuguese uses a different verb for each.
 
 ## Lesson 8: Questions: the word order that gets an answer
+- Ledger: rul>ex>ex>rul>ex>con>ex>mng>ex>soc>ex>mng>soc>ex
 
    - Focus: The mode goes first in a question, and the wh-word goes before the mode.
    - teaches: `question/yes-no-order`, `question/wh-order`, `question/tag-check`
@@ -84,6 +94,7 @@
    - Real-world relevance: Work moves forward by asking, and a question the student cannot form is the reason a Brazilian professional stays silent in a meeting.
 
 ## Lesson 9: Right now against in general
+- Ledger: rul>ex>mng>rul>ex>con>ex>soc>ex>mng>ex>exc>ex>ex
 
    - Focus: am/is/are + -ing means now, and the same verb in the simple present means in general.
    - teaches: `present-continuous/now`, `present-continuous/vs-simple`, `present-continuous/temporary-change`
@@ -94,6 +105,7 @@
    - Real-world relevance: "Estou estudando" is the sentence that comes out wrong most often; one contrast between two forms, not a new tense, is what it needs.
 
 ## Lesson 10: Numbers, dates, money and data
+- Ledger: rul>ex>ex>rul>ex>mng>ex>voc>ex>rsn>ex>ex
 
    - Focus: How English says a figure, a date, a time, and a change in a figure.
    - teaches: `number/read-and-group`, `number/date-and-time`, `number/figure-comparison`
@@ -104,6 +116,7 @@
    - Real-world relevance: The student reads and reports figures every week, and a number reported wrongly costs money, and it is reported with confidence in most cases.
 
 ## Lesson 11: What you can count and what you cannot
+- Ledger: rul>ex>rsn>ex>con>rul>voc>ex>mng>voc>soc>exc>rul>rcp>mng>ex
 
    - Focus: Countable and uncountable nouns, and the articles and quantity words that follow them.
    - teaches: `noun/count-uncountable`, `article/a-the-zero`, `quantity/some-any-much-many`
@@ -114,6 +127,7 @@
    - Real-world relevance: The words the student uses most - information, feedback, data, research, staff - are the ones that take no plural and no "a".
 
 ## Lesson 12: The past - saying when it happened
+- Ledger: rul>ex>rul>con>voc>ex>prn>ex>rul>ex>soc>soc>rcp>ex>ex
 
    - Focus: was/were, -ed, and the irregular verbs whose past form has no ending.
    - teaches: `past-simple/was-were`, `past-simple/regular-ed`, `past-simple/irregular`
@@ -124,6 +138,7 @@
    - Real-world relevance: Every status update starts with what already happened, and choosing -ed or did is what makes the sentence clear the first time.
 
 ## Lesson 13: Verb + preposition: the preposition each verb takes
+- Ledger: mng>ex>con>ex>voc>mng>rul>con>ex>soc>ex
 
    - Focus: Each verb takes its own preposition, and a different preposition gives a different meaning.
    - teaches: `prep/verb-unit`, `prep/contrast-pairs`, `prep/no-translation`
@@ -134,6 +149,7 @@
    - Real-world relevance: "Depender de", "pensar em" and "esperar por" map onto different English prepositions, and this is the error that survives longest in a Brazilian professional's speech.
 
 ## Lesson 14: The future without a future tense
+- Ledger: rul>ex>con>ex>mng>ex>voc>ex>rul>con>soc>ex>ex
 
    - Focus: Intentions, decisions and arrangements, each with the form English uses for it.
    - teaches: `future/gonna-plan`, `future/will-now-decision`, `future/present-arrangement`
@@ -144,6 +160,7 @@
    - Real-world relevance: A professional life is a list of commitments, and the form chosen says how firm the commitment is: plan, promise or booking.
 
 ## Lesson 15: Can, could, would: ability, permission and polite requests
+- Ledger: rul>ex>voc>mng>con>ex>mng>ex>soc>ex>rul>con>ex>ex
 
    - Focus: Ability, permission, and the three forms that make a request more polite.
    - teaches: `modal/can-could-ability`, `modal/politeness-levels`, `modal/may-permission`
@@ -154,6 +171,7 @@
    - Real-world relevance: Asking a manager, a coworker or a client to do something is the highest-frequency risk in the student's day.
 
 ## Lesson 16: Because, so, but, although
+- Ledger: rsn>ex>con>ex>voc>mng>exc>con>soc>mng>ex>rcp>ex>ex
 
    - Focus: Two clauses, and the word that shows which one gives the reason, the result or the contrast.
    - teaches: `connector/cause-result`, `connector/contrast`, `connector/sequence`
@@ -164,6 +182,7 @@
    - Real-world relevance: A status conversation asks why something changed, and a Brazilian sentence most often stops before the second half of the reason-and-result pair.
 
 ## Lesson 17: More, less, and as ... as
+- Ledger: rul>ex>con>ex>voc>mng>rul>con>rcp>soc>ex>mng>ex>ex
 
    - Focus: Comparing two things, and scaling the comparison up or down.
    - teaches: `compare/er-more-forms`, `compare/as-as`, `compare/degree-adverbs`
@@ -174,6 +193,7 @@
    - Real-world relevance: Recommending one option over another is the student's daily output, and the dropped "than" is what makes the recommendation unclear.
 
 ## Lesson 18: Phrasal verbs: the verb and the particle as one meaning
+- Ledger: rul>ex>mng>ex>voc>mng>rul>con>soc>ex>rcp>ex>ex
 
    - Focus: The phrasal verb is the usual choice in speech, and each particle adds one meaning of its own.
    - teaches: `phrase-verb/default-form`, `phrase-verb/root-family-get`, `phrase-verb/particle-meaning`
@@ -184,6 +204,7 @@
    - Real-world relevance: Meeting speech is built out of these, and the student writes the Latin verb while the room says the phrasal one.
 
 ## Lesson 19: Must, have to, should - rules and advice
+- Ledger: rul>ex>mng>ex>voc>mng>rul>con>soc>soc>ex>rcp>ex>ex
 
    - Focus: Obligation from the speaker, obligation from outside, advice, and no obligation at all.
    - teaches: `modal/must-have-to`, `modal/should-advice`, `modal/no-obligation`
@@ -194,6 +215,7 @@
    - Real-world relevance: Process, compliance and recommendations are what a manager gives a new team member, and "don't have to" against "mustn't" is a costly confusion.
 
 ## Lesson 20: Polite and direct: the three ways to soften a sentence
+- Ledger: con>ex>voc>mng>soc>ex
 
    - Focus: The same message has a direct form and a polite form, and three changes make it politer.
    - teaches: `axis/direct-vs-indirect`, `axis/hedge`, `axis/contraction`
@@ -204,6 +226,7 @@
    - Real-world relevance: The same three changes are used by every function in the rest of the course; a correct sentence at the wrong level of politeness reads as rude, and that is what makes a colleague take offence.
 
 ## Lesson 21: Your role is a noun, and the words after it say which one
+- Ledger: rul>ex>ex>voc>mng>soc>ex
 
    - Focus: A role is a noun phrase: a noun and the words after it. The name and the role, said one after the other, are what an introduction needs.
    - teaches: `noun-phrase/post-modifier`, `apposition/role-statement`, `discourse/question-return`
@@ -215,6 +238,7 @@
 
 
 ## Lesson 22: It, that and one - what each one replaces
+- Ledger: rul>ex>voc>mng>rul>con>mng>ex
 
    - Focus: English repeats words rarely: it and that replace something already said, one replaces a noun, and an echo question asks about the one word you missed.
    - teaches: `reference/anaphora`, `substitution/one-and-do-so`, `question/echo-clarify`
@@ -226,6 +250,7 @@
 
 
 ## Lesson 23: Until, by, within and ago - the four words for a deadline
+- Ledger: rul>ex>voc>mng>soc>ex
 
    - Focus: A point in time, a deadline, a duration and a window are four different things.
    - teaches: `prep/until-vs-by`, `prep/ago-vs-for`, `prep/in-vs-within`
@@ -236,6 +261,7 @@
    - Real-world relevance: The student negotiates deadlines all day, and "until" used for "by" is a commitment made by accident.
 
 ## Lesson 24: Could you tell me - the question inside the question
+- Ledger: rul>ex>voc>mng>soc>ex
 
    - Focus: Inside a polite frame the question stops inverting, and that is what makes it sound professional.
    - teaches: `question/embedded-order`, `question/embedded-wh`, `question/soft-opener`
@@ -246,6 +272,7 @@
    - Real-world relevance: This is the difference between sounding like a demand and sounding like a colleague, and it is how a junior asks a director for something.
 
 ## Lesson 25: EXAM - block 1
+- Ledger: rul>voc>soc>rcp
 
    - Focus: Test whether the student can run a simple workday unaided: say who they are, describe a routine and a current task, ask for something politely, put something in the past, and commit to a date.
    - teaches: -
@@ -257,6 +284,7 @@
    - Real-world relevance: The mark is not accuracy on isolated items but whether the student can hold a short exchange without switching back to Portuguese.
 
 ## Lesson 26: I've worked here for five years
+- Ledger: rul>rsn>con>ex>voc>mng>ex>soc>ex>rcp
 
    - Focus: The present perfect for something that started in the past and continues now.
    - teaches: `present-perfect/have-participle`, `present-perfect/duration-for-since`, `present-perfect/since-point`
@@ -267,6 +295,7 @@
    - Real-world relevance: "Trabalho aqui há cinco anos" is the sentence a Brazilian professional most often gets wrong in an interview, and this is the first sentence an interview asks for.
 
 ## Lesson 27: Have you ever ...? - experience against finished time
+- Ledger: con>rul>ex>rul>rsn>ex>voc>mng>ex>soc>ex>ex
 
    - Focus: Finished time forces the past simple, and unfinished time allows the perfect.
    - teaches: `present-perfect/vs-past-simple`, `present-perfect/experience-vs-news`, `present-perfect/been-vs-gone`
@@ -277,6 +306,7 @@
    - Real-world relevance: Answering "did you" where "have you" was meant, or the reverse, is what makes an experienced professional sound junior.
 
 ## Lesson 28: Two verbs in a row
+- Ledger: rul>rsn>con>voc>exc>con>ex>rcp>ex>ex
 
    - Focus: The first verb fixes whether the second one takes to or -ing.
    - teaches: `pattern/verb-to-infinitive`, `pattern/verb-ing`, `pattern/meaning-change`
@@ -287,6 +317,7 @@
    - Real-world relevance: A sentence with two verbs is where the student's word order breaks first, and "suggest me to" is the error Portuguese speakers make most often in a meeting.
 
 ## Lesson 29: If it rains, we'll move it
+- Ledger: rul>rsn>con>ex>rul>con>ex>voc>mng>con>soc>ex>rcp
 
    - Focus: A real condition about the future takes the present in the if-clause and will in the other half.
    - teaches: `condition/zero-fact`, `condition/first-will`, `condition/unless-when`
@@ -297,6 +328,7 @@
    - Real-world relevance: Most plans in the student's week depend on a condition, and "will" inside the if-clause is the error that marks a non-native speaker immediately.
 
 ## Lesson 30: Describing data: the verbs for a figure that changes
+- Ledger: rul>ex>ex>voc>mng>rsn>soc>ex>rcp
 
    - Focus: A figure changing over time, described with the verb for its direction and speed.
    - teaches: `data/trend-verb`, `data/change-rate`, `data/forecast`, `hedge/data-limitation`, `discourse/framing-marker`
@@ -307,6 +339,7 @@
    - Real-world relevance: Describing a chart without a script is precisely the student's output, and it tests whether block 1's numbers can be used.
 
 ## Lesson 31: Films and series: understanding fast dialogue
+- Ledger: prn>rul>ex>prn>con>ex>soc>voc>ex
 
    - Focus: Screen dialogue is fast, contracted and full of chunks the dictionary teaches separately, so the work is recognising the ordinary sentence in fast speech.
    - teaches: `sound/contraction-in-speech`, `sound/swallowed-syllable`, `pragmatics/line-vs-words`
@@ -317,6 +350,7 @@
    - Real-world relevance: Films and series are where the student actually meets English outside work, and a line understood at speed is the difference between following a scene and reading the subtitles.
 
 ## Lesson 32: Sports and games - the language of winning and losing
+- Ledger: mng>rsn>ex>rul>ex>con>soc>ex>rcp
 
    - Focus: Sports phrases are used away from sport: the same words describe a match, a project and a week.
    - teaches: `idiom/game-metaphor`, `idiom/result-words`, `phrase-verb/score-family`
@@ -328,6 +362,7 @@
 
 
 ## Lesson 33: What was done, by whom - the passive
+- Ledger: rul>ex>con>ex>voc>mng>voc>rul>con>soc>ex>rcp>ex>ex
 
    - Focus: The thing acted on becomes the subject, and the doer can disappear.
    - teaches: `passive/be-participle`, `passive/process-subject`, `passive/reporting`
@@ -338,6 +373,7 @@
    - Real-world relevance: Reports, processes and audit trails are written in the passive, and reading them without it is a daily handicap at this level.
 
 ## Lesson 34: If I had the budget: the second conditional
+- Ledger: rul>con>rsn>rul>mng>ex>voc>mng>ex>soc>ex>rcp
 
    - Focus: An unreal present takes if + past and would + base, and the past form does not mean past time.
    - teaches: `condition/second-would`, `condition/if-i-were-you`, `modal/would-offer`
@@ -348,6 +384,7 @@
    - Real-world relevance: Every negotiation opens with an unreal version of the plan, and this is how a professional proposes without demanding.
 
 ## Lesson 35: The report that I sent - relative clauses
+- Ledger: rul>con>ex>exc>rul>ex>voc>mng>ex>soc>ex>rcp
 
    - Focus: A clause that describes a noun, and when the link word can disappear.
    - teaches: `relative/who-which-that`, `relative/omitting-object`, `relative/where-whose`
@@ -358,6 +395,7 @@
    - Real-world relevance: A meeting spends much of its time identifying which report, which supplier or which person, and without this clause the student repeats the noun instead.
 
 ## Lesson 36: He said the launch was delayed
+- Ledger: rul>ex>con>rul>ex>exc>prn>ex>rul>voc>mng>ex>tim>rul>ex>soc>ex>rcp
 
    - Focus: Reporting what someone said, with say and tell kept apart and the verb one tense back.
    - teaches: `report/say-vs-tell`, `report/backshift`, `report/time-shift`

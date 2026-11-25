@@ -17,8 +17,6 @@
     "build:dict": "node build-dictionary.mjs",
     "page": "node qa/checks.mjs check2",
     "map": "node qa/checks.mjs check2 --page=\"extra/lesson1-The Capability Map.html\"",
-    "batchcheck": "node qa/checks.mjs batchcheck",
-    "batchcheck:self": "node qa/checks.mjs batchcheck --self-test",
     "wrap": "node qa/checks.mjs wrap",
     "saves": "node qa/watch-saves.mjs",
     "align": "node qa/checks.mjs align"

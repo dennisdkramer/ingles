@@ -96,18 +96,17 @@
 
 <div class="rows">
 <div>
-<div class="rows"><div><div class="rows"><div><p>Read the draft back against the roadmap and the register, and send what you find back to pass 1 — a fault in flow or teaching is repaired in the words, not in the arrangement. <code>qa/batchcheck</code> reads the ledger against the pages and enforces what may not repeat.</p></div></div></div></div>
+<div class="rows"><div><div class="rows"><div><p>Read the draft back against the roadmap and the register, and send what you find back to pass 1 — a fault in flow or teaching is repaired in the words, not in the arrangement. <code>npm run page</code> reads the ledger lines in the roadmap and fails a page whose block sequence runs four in a row the same as one of the three lessons before it.</p></div></div></div></div>
 <div class="rows"><div><div class="rows"><div><ul>
 <li>Read the roadmap section line by line: name where each concept is explained and where the student practises it. A concept with no sentence stating its rule is a label, a table row, a chart cell or a drawing; one the student never practises is unfinished.</li>
 <li>Read the register: remove a scene, person, word or topic that belongs to another track, however well it shows the grammar.</li>
-<li>Read the quiz: it is the last section before the notebook, it tests every concept the lesson taught on material the student has not seen, and every item carries its key.</li>
 <li>Read three examples and three drill items at random — the wording around them is not the evidence — and name the level they demand and the register they speak.</li>
 <li>Read the section headings alone, in order, with the body hidden: each names the point its section teaches, and each may assume only what the headings before it established. <i>Past hypotheticals</i> names a topic; <i>would have: the result of a condition that did not happen</i> names a point. No heading carries a number.</li>
 <li>Read the first block on its own. It states what the lesson teaches; if it is a conversation or a scene, the page opened on an example of something it never said.</li>
 <li>Read the difficulty against the lesson's number, as <code>PEDAGOGY-MAP.md</code>'s level section states it, in both halves: nothing depends on English the course has not taught, and at least one item's answer is not printed beside it and one must be produced rather than picked.</li>
 <li>Cases that break a rule are always taught and included in training and testing.</li>
 <li>Search the page for the names this page bans — <i>third form</i>, <i>little verb</i>, <i>slot</i>, <i>shape</i> standing for a form, <i>turn</i> for a line — and for a number standing where a grammatical name belongs.</li>
-<li>Read the section subjects and their order against the ledger's last three rows, never against the previous page — that page is closed. If they are the same sequence, this page is that page's skeleton with new words. The list pass 2 corrected, the blocks and the elements are compared at verify, once they exist.</li>
+<li>Read the block sequence against the three ledger lines under the headings before this lesson, never against the previous page — that page is closed. If the run of block types is the same, this page is that page's skeleton with new words.</li>
 <li>Read the wording as a judgement, not a measurement: any sentence that pads, hedges, restates the one before it, or explains what the example beside it already shows is cut.</li>
 <li>Apply the language test to the wording, the stems and the options: rewrite a word used in a sense a dictionary does not give it, a sentence that describes an effect instead of naming the form, and a sentence that would be false once the examples are deleted, as the plain statement each replaces.</li>
 <li>Try to break every rule the draft states: write the ordinary English sentence that contradicts it. If one exists, the rule is too wide — narrow it until nothing normal breaks it.</li>
@@ -174,6 +173,7 @@
 <p>A section is a <b>.rows</b> row and a block is one cell of it. One block in a row fills the width; two split it; three is the widest a lesson goes. A block never sits inside another block: it may hold prose, a chart, a figure or a set of items, and the next block is its sibling, in a row of its own.</p>
 <p>Group by what the student does next, not by what the block holds. The rule and the drawing it is read with share a row, as two cells. The training that tests that rule starts a new row. A second voice of the same beat is its own row, under the first. A single cell is the default; two is for a rule beside its drawing; three is for the six looks and for nothing else.</p>
 <p>Every markup box sits in its own <b>.rows.markup-row</b>, under the block it documents, never beside it — and it is closed until a builder opens it.</p>
+<p>Every block names its type in <code>data-type</code> — on a block that teaches <code>rul</code>, <code>rsn</code>, <code>con</code>, <code>ex</code>, <code>voc</code>, <code>mng</code>, <code>prn</code>, <code>tim</code>, <code>soc</code>, <code>rcp</code> or <code>exc</code>; on a block the student works in, the element it builds (<code>mc</code>, <code>fill</code>, <code>matching</code>, <code>chunks</code>, <code>correction</code>, <code>translation</code>, <code>dictation</code>, <code>flip</code>, <code>chartanswer</code>, <code>dialoggap</code>, <code>stripgaps</code>, <code>map</code>). The type is what the lesson's ledger line is written from, and the next page is read against that line.</p>
 </div></div>
 </div>
 </div>

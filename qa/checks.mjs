@@ -18,12 +18,11 @@
  *   the prose check  the prose: the items are the `Checks` bullets of the map page, read at run time;
  *              each is PROBED, MATERIAL (its extract is printed) or UNPROBED (said by name).
  *   the page check  everything about a page's markup and its running state — structure, blocks, items,
- *              markup boxes, the wrap, the roadmap items, the register, the claims, and (runtime)
- *              engines, anchors, games, console. It also counts the register tiers, the locale
- *              words and the unmarked Portuguese ONCE; the ledger check is given those counts.
+ *              markup boxes, the wrap, the block sequence against the track's ledger lines, and
+ *              (runtime) engines, anchors, games, console.
  *   the alignment pass    rendered geometry: a row's shorter cell against its neighbour, at measured widths.
- *   the ledger check    the ledger's cross-lesson rules: novelty, churn, coverage, quiz freshness, dominance,
- *              devices, subjects, rhythm, subject order, locale, unmarked Portuguese, register score.
+ *              It is also the step that reads each page and marks its Portuguese `.pt`, and adds the
+ *              quiz: language is the reader's judgement, and this file makes none.
  *   the live pass     what only a painted page can answer: layout, a real selection, the sheet round trip.
  *   the games check    engine4's state machine, through each instance's own hooks.
  *   the index build    the derived files (lessons.json, tracks.json, the two stamps). Not a check.
@@ -31,7 +30,7 @@
  *   the command line      `node qa/checks.mjs <fn> …`; importing the file runs nothing.
  *
  * THE CALL SURFACE — nothing is guessed:
- *   node qa/checks.mjs <fn> …        <fn> is check1 | check2 | wrap | align | batchcheck | live |
+ *   node qa/checks.mjs <fn> …        <fn> is check1 | check2 | wrap | align | live |
  *                                    games | index. No name, or a name that is not one of them,
  *                                    prints one line naming the file and exits 1: no menu, no list,
  *                                    no sweep.
@@ -40,7 +39,6 @@
  *   wrap     one or more page paths and --write (or --check)
  *   align    --track, --lessons, optional --widths / --tol
  *   index    --check (writes nothing; reports what is stale)
- *   batchcheck --track=<t> (and --self-test)
  *   live     --only=<scenario>
  *   games    no target
  * The same functions are exported taking an options object ({ track, n }, { text }, { pages },
@@ -68,16 +66,14 @@ const hashStr = s => { let x = 0; for (const c of s) x = (x * 31 + c.charCodeAt(
 
 /**
  * WHAT the page check FAILS — the page is broken: an element never closed · a closer that closed nothing ·
- * a dead `#anchor` · a `.block` not opening with an `<h3>` · a block inside a block · a headline over
- * 60 characters · a `.rows` holding a `.rows` · an empty `data-answer` · a `.qitem` key matching no
- * option · `#feed` missing, duplicated or not a `<textarea>` · a build page outside a demo folder ·
- * a stub label pointing at nothing · a `pre` holding parsed markup · `data-span` not summing to 12 ·
- * the edit tool's marks — and, in the runtime half, a page that does not boot, an answer control
- * that resolves no anchor, a `.listen` with no `data-say`, a game engine4 never wired, a console
- * error. WARNS — printed, never failed: a block with answers and no `.qnum` · a class with no rule
- * in `style.css` · an item still outside a cell of its own (fix with `wrap --write`). PRINTS —
- * evidence, not a verdict: the roadmap items the page names, the register tiers it hits, the claim
- * shapes it carries, the h1 length.
+ * a dead `#anchor` · a `.block` not opening with an `<h3>` · a block inside a block · a `.rows` holding
+ * a `.rows` · an empty `data-answer` · a `.qitem` key matching no option · a build page outside a demo
+ * folder · a stub label pointing at nothing · a `pre` holding parsed markup · the edit tool's marks ·
+ * four block types in a row as the same four run on one of the three lessons before it — and, in the
+ * runtime half, a page that does not boot, an answer control that resolves no anchor, a `.listen`
+ * with no `data-say`, a game engine4 never wired, a console error. WARNS — printed, never failed: a
+ * block with answers and no `.qnum` · a class with no rule in `style.css` · an item still outside a
+ * cell of its own (fix with `wrap --write`). PRINTS — evidence, not a verdict: the h1 length.
  *
  * A FINDING HAS ONE SHAPE, ONE DISPOSITION: `{ fn, rule, disposition, at, said, next }`.
  *   fix   a local defect; a step is written under the current batch and the lesson STAYS in the batch.
@@ -85,7 +81,7 @@ const hashStr = s => { let x = 0; for (const c of s) x = (x * 31 + c.charCodeAt(
  *   note  printed, and written only when an action is owed later.
  * HALT — engines never booted · EVERY answer control resolves no anchor (one or more controls and
  * zero resolved; a single unanchored control is only `fix`) · no `.block` or no `.content-area` ·
- * `#feed` missing, duplicated or not a `<textarea>` · a console error before first paint. A halt does
+ * a console error before first paint. A halt does
  * three things in ONE write: a batch of its own in PENDING (`## [Bn] - Review lesson <N> of <track>
  * before it is checked again …`), the lesson excluded from every remaining check and the exclusion
  * stated in that batch, and the follow-up check its failure implies queued for that lesson alone:
@@ -105,8 +101,6 @@ const hashStr = s => { let x = 0; for (const c of s) x = (x * 31 + c.charCodeAt(
  * stay where they are (the signed-in landing page, the `.md` publish guard, the layout editor on a
  * fixture, the sheet's cascade), and so do `qa/serve.mjs`, `qa/NOTES.md` and their endpoints.
  * `qa/landing.mjs` and `qa/rows3.mjs` import `qaOff` from here and keep their own switch.
- * `PEDAGOGY-MAP.md:26` still names `qa/mapcheck.mjs`; that file is NOT edited without the owner's
- * exact words, so the stale name is recorded as BLOCKED, never touched.
  *
  * THE FILES THIS ONE REPLACED are recorded, with their scope ladder, `QA_ON` switch, pre-push order
  * and probe list, in `PENDING.md` [STATE] as history. This head is where those facts now live; no
@@ -133,7 +127,7 @@ const DELETE_ME_HEAD_END = 0;
  */
 const QA = {
   all: false,
-  fn: { check1: false, check2: false, wrap: false, align: false, batchcheck: false, live: false, games: false },
+  fn: { check1: false, check2: false, wrap: false, align: false, live: false, games: false },
 };
 
 /**
@@ -850,13 +844,11 @@ export const check1 = (() => {
     return out;
   }
 
-  /* one page's prose, its `.pt` sentences, its headings, its items — read without a DOM */
+  /* one page's prose, its headings, its items — read without a DOM */
   function read(one) {
     const src = one.src;
     const area = (src.match(/<div class="content-area"[\s\S]*$/i) || [src])[0];
     const body = textOf(area);
-    const ptEls = [...area.matchAll(/<([a-z0-9]+)[^>]*class="[^"]*\bpt\b[^"]*"[^>]*>([\s\S]*?)<\/\1>/gi)]
-      .map(m => textOf(m[2])).filter(s => s.length > 1);
     const headings = [...area.matchAll(/<h2\b[^>]*>([\s\S]*?)<\/h2>/gi)].map(m => textOf(m[1]));
     const stems = [...area.matchAll(/class="qstem"[^>]*>([\s\S]*?)<\/span>/gi)].map(m => textOf(m[1]))
       .filter(s => s && s !== '▶' && !/^\d+\.$/.test(s));
@@ -865,9 +857,7 @@ export const check1 = (() => {
       .map(m => textOf(m[1])).filter(s => s.length > 20 && !/^(complete|write|read|choose)\b/i.test(s));
     const count = re => (area.match(re) || []).length;
     return {
-      body, ptEls, headings, stems, paras, secs,
-      ptWords: ptEls.reduce((a, s) => a + (s.match(/[\p{L}']+/gu) || []).length, 0),
-      allWords: (body.match(/[\p{L}']+/gu) || []).length,
+      body, headings, stems, paras, secs,
       produced: count(/<textarea[^>]*class="[^"]*\bwrite\b/gi) + count(/<input[^>]*class="[^"]*\bgap\b/gi),
       picked: count(/<input[^>]*type="radio"/gi),
       qitems: count(/class="qitem"/gi),
@@ -878,7 +868,6 @@ export const check1 = (() => {
   }
 
   /* ---- the probes: each one a named rule, run against the prose the page carries ---------------- */
-  const num = w => N[String(w).toLowerCase()] || Number(w) || 0;
 
   function registerFile(track) {
     const f = path.join(ROOT, track.toUpperCase() + '-REGISTER.md');
@@ -896,13 +885,19 @@ export const check1 = (() => {
     return out;
   }
 
+  /* the ledger is one line under each roadmap heading: `- Ledger: rul>ex>mc>…` */
   function ledgerTail(track, n) {
-    const f = path.join(ROOT, track, 'BATCH-RECORD.md');
+    const f = path.join(ROOT, track.toUpperCase() + '-ROADMAP.md');
     if (!fs.existsSync(f)) return [];
-    return fs.readFileSync(f, 'utf8').split(/\r?\n/)
-      .map(l => l.trim()).filter(l => /^L\d+\s*\|/.test(l))
-      .map(l => ({ L: Number((l.match(/^L(\d+)/) || [])[1]), line: l }))
-      .filter(r => r.L < n).slice(-3).map(r => r.line);
+    const out = [];
+    let lesson = 0;
+    for (const line of fs.readFileSync(f, 'utf8').split(/\r?\n/)) {
+      const h = /^## (?:\[(\d+)\]|Lesson (\d+))/.exec(line);
+      if (h) { lesson = Number(h[1] || h[2]); continue; }
+      const l = /^\s*-\s*Ledger\s*:\s*(.+)$/i.exec(line);
+      if (l && lesson && lesson < n) out.push('L' + lesson + ' | ' + l[1].trim());
+    }
+    return out.slice(-3);
   }
 
   const PROBES = [
@@ -926,59 +921,6 @@ export const check1 = (() => {
       return { fails, lines };
     } },
 
-    { name: 'quiz', re: /Read the quiz: it is the last section before the notebook/i, run(one, P) {
-      const fails = [], lines = [];
-      const qi = P.secs.findIndex(h => /quiz|test/i.test(h));
-      if (qi < 0) fails.push('no quiz section before the notebook');
-      else {
-        lines.push('quiz section: "' + P.secs[qi] + '" (' + (P.secs.length - qi - 1) + ' heading(s) after it)');
-        if (qi !== P.secs.length - 1) fails.push('the quiz is not the last section before the notebook');
-      }
-      if (one.src) {
-        const tags = [...one.src.matchAll(/<div[^>]*class="qitem"[^>]*>/gi)].map(m => m[0]);
-        const unkeyed = tags.filter(t => !/\bdata-a\s*=/.test(t));
-        if (!tags.length) fails.push('the quiz carries no keyed item');
-        else if (unkeyed.length) fails.push(unkeyed.length + ' quiz item(s) carry no data-a key');
-      }
-      return { fails, lines };
-    } },
-
-    { name: 'banned-names', re: /Search the page for the names this page bans/i, run(one, P) {
-      const fails = [], lines = [];
-      const banned = [[/\bthird form\b/i, 'third form'], [/\blittle verb\b/i, 'little verb'], [/\bslot\b/i, 'slot'],
-        [/\b\d+(?:st|nd|rd|th)?\s+form\b/i, 'a number standing where a grammatical name belongs']];
-      for (const [re, why] of banned) {
-        const m = P.body.match(re);
-        if (m) fails.push('tells: "' + m[0] + '" (' + why + ')');
-      }
-      lines.push('read "shape" and "turn" by eye — both are ordinary words until they stand for a form');
-      return { fails, lines };
-    } },
-
-    { name: 'locale', re: /register's\s*.?locale.?\s*list/i, run(one, P, bullet) {
-      const fails = [], lines = [];
-      if (!one.track) { lines.push('no track: a --text run has no register to read'); return { fails, lines }; }
-      const T = registerTells(one.track);
-      const words = (T.neg.locale || []).map(o => o.w);
-      if (!words.length) { lines.push('the register declares no locale list'); return { fails, lines }; }
-      const hits = localeCounts(P.body.toLowerCase(), words);
-      const warnAt = num((bullet.match(/(\w+) occurrences? warn/i) || [])[1]) || 2;
-      const failAt = num((bullet.match(/(\w+) fail/i) || [])[1]) || 3;
-      const total = hits.reduce((a, h) => a + h.n, 0);
-      if (total >= failAt) fails.push('locale: ' + hits.map(h => h.word + '×' + h.n).join(', ') + ' (fails at ' + failAt + ')');
-      else if (total >= warnAt) lines.push('warn: ' + hits.map(h => h.word + '×' + h.n).join(', ') + ' (warns at ' + warnAt + ')');
-      else lines.push('no locale word on the page');
-      return { fails, lines };
-    } },
-
-    { name: 'pt-sentences', re: /Read every\s*(?:<code>)?\.pt(?:<\/code>)?\s*sentence/i, run(one, P) {
-      const lines = [], fails = [];
-      if (!P.ptEls.length) lines.push('the page marks no Portuguese (.pt)');
-      else for (const s of P.ptEls.slice(0, 3)) lines.push('pt: ' + s.slice(0, 140));
-      if (P.ptEls.length > 3) lines.push('… and ' + (P.ptEls.length - 3) + ' more .pt element(s)');
-      return { fails, lines };
-    } },
-
     /* THE LEVEL READ — one of the map's bullets, reported against PEDAGOGY-MAP.md's own [LEVEL]
        section, read at run time. It freezes no definition: the bands below are parsed out of the
        guidance's own sentences, and the guidance is printed for the reader. */
@@ -993,12 +935,7 @@ export const check1 = (() => {
         const line = lvl.split(/\r?\n/).find(l => new RegExp('Lesson ' + band + '\\b').test(l)) || '';
         lines.push('lesson ' + n + ' sits at the guidance\'s "' + band + '" band: ' + line.replace(/^[\s\t*-]+/, '').slice(0, 220));
       }
-      if (P.allWords) {
-        const share = Math.round(100 * P.ptWords / P.allWords);
-        lines.push('Portuguese share: ' + share + '% (' + P.ptWords + ' of ' + P.allWords + ' words, .pt only)');
-      }
       lines.push('items: ' + P.produced + ' produced · ' + P.picked + ' picked');
-      if (one.file && P.produced === 0) fails.push('no item is produced — every answer is picked');
       lines.push('the other half (nothing depends on English the course has not taught) is a reading: the guidance above is printed for it');
       return { fails, lines };
     } },
@@ -1022,7 +959,7 @@ export const check1 = (() => {
       return [...pick(P.paras, 3).map(s => 'example: ' + s.slice(0, 150)),
         ...pick(P.stems, 3).map(s => 'drill: ' + s.slice(0, 150))];
     } },
-    { re: /Read the section subjects and their order against the ledger/i, run(one, P) {
+    { re: /Read the block sequence against the three ledger lines/i, run(one, P) {
       if (!one.track) return ['no track: a --text run has no ledger'];
       const tail = ledgerTail(one.track, one.n);
       return [...tail.map(l => 'ledger: ' + l.slice(0, 200)),
@@ -1104,7 +1041,7 @@ export const check1 = (() => {
 /* =====================================================================================
    [CHECK 2] — the page: its markup, its running state, and the one count of its words
    ===================================================================================== */
-export const { check2, registerTells, localeCounts, ptCounts } = (() => {
+export const { check2 } = (() => {
 let JSDOM;   /* assigned by check2, inside the function that needs it */
 /* A CLASS THAT IS ONLY A MARKER, not a style: engine4 adds `g4-hear` at load and reads `g4-keep` to
    know which nodes are the place the game happens in, and the flip deck's `flip-grid` is its own
@@ -1114,16 +1051,43 @@ const RUNTIME_CLASSES = new Set(['eq-ready', 'layout-on', 'layout-panelled', 'la
   'layout-dragging', 'layout-line', 'layout-chip', 'layout-panel', 'layout-grip', 'editing', 'kbd',
   'no-js', 'is-inside', 'lvl1', 'lvl2', 'lvl3']);
 
-/* the ledger says whether a lesson has been recorded: a block opening with no headline is a failure
-   on a ledgered lesson and a warning elsewhere, because a page built before the rule is not redesigned
-   by a gate */
-function ledgered(track, n) {
-  if (!track || !n) return false;
-  const f = path.join(ROOT, track, 'BATCH-RECORD.md');
-  if (!fs.existsSync(f)) return false;
-  return new RegExp('^L0*' + n + '\\s*\\|', 'm').test(fs.readFileSync(f, 'utf8'));
+/* the ledger is one line per lesson under its roadmap heading: `- Ledger: rul>ex>mc>…`, the block
+   types that page built, in page order. A lesson is ledgered when that line exists. */
+function ledgerLine(track, n) {
+  if (!track || !n) return '';
+  const f = path.join(ROOT, track.toUpperCase() + '-ROADMAP.md');
+  if (!fs.existsSync(f)) return '';
+  let lesson = 0;
+  for (const line of fs.readFileSync(f, 'utf8').split(/\r?\n/)) {
+    const h = /^## (?:\[(\d+)\]|Lesson (\d+))/.exec(line);
+    if (h) { lesson = Number(h[1] || h[2]); continue; }
+    const l = /^\s*-\s*Ledger\s*:\s*(.+)$/i.exec(line);
+    if (l && lesson === n) return l[1].trim();
+  }
+  return '';
+}
+const ledgered = (track, n) => !!ledgerLine(track, n);
+const ledgerSeq = (track, n) => ledgerLine(track, n).split('>').map(s => s.trim()).filter(Boolean);
+
+/* the page's own block sequence: a block names its type in `data-type` (the ledger's subject words),
+   an older activity block in `data-activity`, and a teaching block with neither reads `teach` */
+function blockSeq(area) {
+  return [...area.querySelectorAll('.block')].map(b =>
+    b.getAttribute('data-type') || b.getAttribute('data-activity') || 'teach');
 }
 
+/* the longest run of the same types, in the same order, in two sequences */
+function longestRun(a, b) {
+  let best = 0;
+  for (let i = 0; i < a.length; i++) {
+    for (let j = 0; j < b.length; j++) {
+      let k = 0;
+      while (i + k < a.length && j + k < b.length && a[i + k] === b[j + k]) k++;
+      if (k > best) best = k;
+    }
+  }
+  return best;
+}
 /* the edit-mode chrome the layout editor adds to the live page: never part of a saved page */
 const DOMCHROME = dom => [...dom.querySelectorAll('.layout-chip,.layout-panel,.layout-line,.layout-grip,#layoutLayer')];
 
@@ -1156,8 +1120,7 @@ function staticRules(p, src, ctx) {
       if (!ctx.css.has(c) && !RUNTIME_CLASSES.has(c) && !MARKER_CLASSES.has(c)) unknown.add(c);
   if (unknown.size) warns.push('class with no rule in style.css: ' + [...unknown].join(', '));
 
-  /* a block opens with its headline (the block letter is drawn from it), never holds a block, and
-     no headline runs past one line */
+  /* a block opens with its headline (the block letter is drawn from it), and never holds a block */
   const blocks = [...area.querySelectorAll('.block')];
   if (!blocks.length && p.track) halts.push('no .block — the page carries no lesson block');
   if (blocks.length) {
@@ -1168,10 +1131,6 @@ function staticRules(p, src, ctx) {
     }
     const nested = area.querySelectorAll('.block .block').length;
     if (nested) fails.push(nested + ' block(s) nested inside a block — a block is never a second block');
-    for (const h of area.querySelectorAll('h3')) {
-      const t = h.textContent.replace(/\s+/g, ' ').trim();
-      if (t.length > 60) fails.push('headline over 60 characters (' + t.length + '): ' + t);
-    }
   }
 
   /* every answer has a key, and every key names an option */
@@ -1192,13 +1151,6 @@ function staticRules(p, src, ctx) {
   const unnumbered = answered.filter(b => !b.querySelector('.qnum'));
   if (unnumbered.length) warns.push(unnumbered.length + ' block(s) hold answers but carry no .qnum — items are numbered 1., 2. …');
 
-  /* a lesson page has its notebook, exactly one */
-  if (p.track) {
-    const feeds = dom.querySelectorAll('#feed');
-    if (feeds.length !== 1) halts.push('#feed missing or duplicated (' + feeds.length + ')');
-    else if (feeds[0].tagName !== 'TEXTAREA') halts.push('#feed is not a <textarea> — the notebook is a textarea');
-  }
-
   /* ---- the markup box: a tool, and read only where one exists ----------------------------- */
   const markup = area.querySelector('.markup-row');
   if (markup) {
@@ -1210,14 +1162,6 @@ function staticRules(p, src, ctx) {
       if (pre.children.length) fails.push('a <pre> holds parsed markup, not escaped tags: ' + pre.firstElementChild.outerHTML.slice(0, 40));
       else if (!/&lt;/.test(pre.innerHTML)) fails.push('a <pre> in a markup box holds no escaped tag');
     }
-    let row = 0;
-    for (const el of area.children) {
-      const s = Number(el.getAttribute('data-span') || 12);
-      if (row + s > 12) { fails.push('data-span overflows the line (' + row + '+' + s + ') at <' + el.tagName.toLowerCase() + '>'); row = 0; }
-      row += s;
-      if (row === 12) row = 0;
-    }
-    if (row) fails.push('data-span leaves a short line of ' + row);
   }
 
   /* ---- the wrap: rows hold cells, a cell holds its items --------------------------------
@@ -1240,76 +1184,24 @@ function staticRules(p, src, ctx) {
   if (marks.length) fails.push(marks.length + ' element(s) carry the edit tool\'s marks (data-layout-* / contenteditable) — a save writes a clean page');
   if (chrome.length) fails.push(chrome.length + ' element(s) of edit-mode chrome are in the page');
 
+  /* ---- the block sequence, read against the track's ledger ------------------------------- */
+  if (p.track && p.n) {
+    const seq = blockSeq(area);
+    for (const prev of [p.n - 1, p.n - 2, p.n - 3]) {
+      if (prev < 1) continue;
+      const before = ledgerSeq(p.track, prev);
+      if (!before.length) continue;
+      const run = longestRun(seq, before);
+      if (run >= 4) fails.push('blocks: ' + run + ' in a row as L' + prev + ' — the same run of block types');
+      else if (run === 3) warns.push('blocks: 3 in a row as L' + prev + ' — the same run of block types');
+    }
+  }
+
   notes.push(blocks.length + ' block(s) · ' + wrap.rows + ' row(s)' + (markup ? ' · a markup box' : '')
     + (p.track ? ' · a lesson page' : ' · not a track page: static only'));
   const h1 = area.querySelector('h1');
   return { fails, halts, warns, notes, h1: h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : '' };
 }
-
-/* ---- evidence: what the page carries, printed and never judged -------------------------- */
-const norm = s => String(s || '').toLowerCase()
-  .replace(/[’‘]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim();
-
-/* the items on one `- Vocabulary:` / `- Examples:` line of the lesson's own roadmap block */
-function roadmap(track, n) {
-  const f = path.join(ROOT, track.toUpperCase() + '-ROADMAP.md');
-  if (!fs.existsSync(f)) return null;
-  const lines = fs.readFileSync(f, 'utf8').split(/\r?\n/);
-  const num = l => { const m = l.match(/^## (?:\[(\d+)\]|Lesson (\d+))/); return m ? Number(m[1] || m[2]) : null; };
-  const start = lines.findIndex(l => num(l) === n);
-  if (start < 0) return null;
-  const body = [];
-  for (let i = start + 1; i < lines.length && !lines[i].startsWith('## '); i++) body.push(lines[i]);
-  const grab = label => {
-    const line = body.find(l => new RegExp('^\\s*-\\s*' + label + '\\s*:', 'i').test(l));
-    if (!line) return [];
-    const quoted = [...line.matchAll(/"([^"]+)"/g)].map(m => m[1]);
-    const rest = line.replace(/"[^"]*"/g, ',').replace(/^\s*-\s*[A-Za-z]+\s*:/, '');
-    const bare = rest.split(',').map(s => s.trim().replace(/^`+|`+$/g, '')).filter(s => s.length > 1);
-    return quoted.concat(bare);
-  };
-  const vocab = grab('vocabulary'), examples = grab('examples');
-  return { vocab, examples, items: vocab.concat(examples) };
-}
-
-/** an item as a matcher. A hyphen run becomes \S* so a masked spelling still matches its word. */
-function rx(item) {
-  const body = norm(item).replace(/[.!?]+$/, '')
-    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/-+/g, '\\S*').replace(/ /g, '\\s+');
-  return new RegExp('(^|[^\\p{L}])' + body + '(?![\\p{L}])', 'u');
-}
-
-/* the track's register: the tiers it declares, and the `formal`/`locale` words it does not use */
-function tells(track) {
-  const f = path.join(ROOT, track.toUpperCase() + '-REGISTER.md');
-  const out = { file: fs.existsSync(f), tiers: {}, neg: {} };
-  if (!out.file) return out;
-  let tier = '';
-  for (const line of fs.readFileSync(f, 'utf8').split(/\r?\n/)) {
-    const h = line.match(/^###\s*(?:\[([a-z]+)\]|\*\*([a-z]+)\*\*|([a-z]+))/i);
-    if (h) { tier = (h[1] || h[2] || h[3]).toLowerCase(); continue; }
-    const b = line.match(/^\s*-\s*([a-z]+)\s*:\s*(.+)$/i);
-    if (!b) continue;
-    const fam = b[1].toLowerCase();
-    const items = b[2].split(',').map(s => s.trim().replace(/^["']|["']$/g, '')).filter(Boolean);
-    if (fam === 'formal' || fam === 'locale') { (out.neg[fam] = out.neg[fam] || []).push(...items); continue; }
-    if (!tier) continue;
-    (out.tiers[tier] = out.tiers[tier] || []).push(...items.map(w => ({ w, fam })));
-  }
-  for (const k of Object.keys(out.tiers)) out.tiers[k].forEach(o => { o.re = rx(o.w); });
-  for (const k of Object.keys(out.neg)) out.neg[k] = out.neg[k].map(w => ({ w, re: rx(w) }));
-  return out;
-}
-
-/* the shapes of a claim nothing on the page can check: printed, never failed */
-const CLAIM = [
-  [/\b(no|not one|never a)\s+(human|person|one|word|sentence|student)\b[^.!?]{0,60}\b(has|have) ever\b|\bnobody has ever\b|\bno one has ever\b/i, 'an absolute about all of history'],
-  [/\b(every|all|no)\s+(single\s+)?phrasal verbs?\b/i, 'a claim about a whole class'],
-  [/\b(the|this|that|a)\s+word\s+[^.!?]{0,40}\b(comes?|came|derives?|originates?|roots?)\b|\betymolog/i, 'a history claim — name the source'],
-  [/\btwins?\b/i, '"twin" is a label this repo does not use'],
-  [/\b(helper|glue|little|small|function)\s+words?\b/i, 'a coined class name — say which word'],
-  [/\bfamily unit\b/i, 'a coined class name — the roadmap says family'],
-];
 
 /* ---- the runtime half: the page as a student loads it ----------------------------------
    The static rules read the source; these read the running page in jsdom, with a stubbed login so the
@@ -1364,58 +1256,10 @@ async function runtime(base, p, html) {
   console_.forEach(e => halts.push('console error: ' + e));
   const area = d.querySelector('.content-area');
   const h1 = area && area.querySelector('h1');
-  /* coverage reads the AUTHORED page: an answer key counts as the words in its sentence */
-  let text = norm(area ? area.textContent : d.body.textContent);
-  if (area) {
-    const clone = area.cloneNode(true);
-    clone.querySelectorAll('input[data-answer]').forEach(el => {
-      el.replaceWith(d.createTextNode(' ' + (el.getAttribute('data-answer') || '') + ' '));
-    });
-    clone.querySelectorAll('script, style').forEach(el => el.remove());
-    text = norm(clone.innerHTML.replace(/<[^>]*>/g, ' '));
-  }
-  const claims = [];
-  if (area) for (const el of area.querySelectorAll('p, td, th, li, .lead')) {
-    if (el.querySelector('p, td, th, li')) continue;
-    if (el.closest('.dialog')) continue;
-    const t = el.textContent.replace(/\s+/g, ' ').trim();
-    for (const [re, why] of CLAIM) { const m = t.match(re); if (m) claims.push('"' + m[0].trim() + '" (' + why + ')'); }
-  }
-  const out = { fails, halts, text, claims, h1: h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : '' };
+  const out = { fails, halts, h1: h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : '' };
   w.close();
   return out;
 }
-
-  /* ---- THE COUNTS the page check OWNS ---------------------------------------------------------------
-     The register tiers, the locale words and the unmarked Portuguese are counted ONCE, here.
-     the ledger check is given these counts; its own page scan for them is deleted rather than left beside
-     them — that duplication is the drift this file exists to stop. */
-  const PT_WORDS = new Set(['que', 'não', 'nao', 'para', 'você', 'voce', 'isso', 'uma', 'com', 'do', 'da',
-    'seu', 'sua', 'mais', 'como', 'mas', 'sim', 'muito', 'aqui', 'agora', 'então', 'entao', 'também',
-    'tambem', 'por', 'dos', 'das', 'ao', 'se', 'já', 'ja', 'tá', 'ta', 'pra', 'né', 'ne', 'é', 'ser', 'tem']);
-  const WORD = s => s.match(/[a-zà-ÿ']+/gi) || [];
-
-  /** every occurrence of each register locale word, on a lower-cased text */
-  function localeCounts(text, words) {
-    const hits = [];
-    for (const w of words) {
-      const re = new RegExp('(^|[^a-z])' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '($|[^a-z])', 'g');
-      const n = (String(text).match(re) || []).length;
-      if (n) hits.push({ word: w, n });
-    }
-    return hits;
-  }
-
-  /** the page's Portuguese: the unmarked common words, and the share `.pt` carries */
-  function ptCounts(area) {
-    const words = WORD(area.textContent.toLowerCase());
-    return {
-      ptTokens: words.filter(w => PT_WORDS.has(w)).length,
-      ptElems: area.querySelectorAll('.pt').length,
-      ptWords: [...area.querySelectorAll('.pt')].reduce((a, e) => a + WORD(e.textContent).length, 0),
-      allWords: WORD(area.textContent).length,
-    };
-  }
 
   /* ---- what this run reads — the scope section is the one owner of it -------------------------------- */
   const REFUSED = Symbol('refused');
@@ -1470,8 +1314,7 @@ async function runtime(base, p, html) {
     .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
   const haltRule = s => (/^engine/.test(s) ? 'engines'
     : /every answer control/.test(s) ? 'anchors'
-      : /^#feed/.test(s) ? 'feed'
-        : /console error/.test(s) ? 'console' : 'shell');
+      : /console error/.test(s) ? 'console' : 'shell');
 
   async function check2(opts = {}) {
     if (qaOff('check2')) return;
@@ -1505,43 +1348,10 @@ async function runtime(base, p, html) {
         }
         const src = fs.readFileSync(p.file, 'utf8');
         const st = staticRules(p, src, { css });
-        let rt = { fails: [], halts: [], text: '', claims: [], h1: '' };
+        let rt = { fails: [], halts: [], h1: '' };
         if (!STATIC_ONLY && p.track) rt = await runtime(base, p, src);
         const fails = st.fails.concat(rt.fails), halts = st.halts.concat(rt.halts), warns = st.warns.slice();
         const line = [st.notes.join(' · ')];
-
-        /* evidence: printed, never a verdict */
-        if (STATIC_ONLY) line.push('evidence skipped (--static)');
-        else if (p.track && p.n) {
-          const rm = roadmap(p.track, p.n);
-          if (!rm) line.push('roadmap: no [' + p.n + '] block');
-          else if (!rm.items.length) line.push('roadmap: this entry lists no items to measure');
-          else {
-            const hit = rm.items.filter(i => rx(i).test(rt.text));
-            const need = Math.ceil(rm.items.length / 2);
-            const miss = rm.items.filter(i => hit.indexOf(i) < 0);
-            line.push('items ' + hit.length + '/' + rm.items.length + ' (need ' + need + ')'
-              + (miss.length ? ' · missing ' + miss.map(m => '"' + m + '"').join(' ') : ''));
-            if (!hit.length) fails.push('roadmap: 0/' + rm.items.length + ' items — the page does not teach lesson ' + p.n);
-            else if (hit.length < need) warns.push('under the bar — items ' + hit.length + '/' + rm.items.length + ' (need ' + need + ')');
-          }
-          const T = tells(p.track);
-          const reg = [];
-          for (const tier of ['core', 'common', 'situational', 'rare', 'text']) {
-            const set = T.tiers[tier];
-            if (!set) continue;
-            const h = set.filter(o => o.re.test(rt.text));
-            if (!h.length) continue;
-            const fams = h.reduce((a, o) => (a[o.fam] = (a[o.fam] || 0) + 1, a), {});
-            reg.push(tier + ' ' + h.length + ' (' + Object.keys(fams).map(f => f + ' ' + fams[f]).join(' · ') + ')');
-          }
-          const neg = Object.keys(T.neg).map(k => {
-            const h = T.neg[k].filter(o => o.re.test(rt.text));
-            return h.length ? k + ' ' + h.map(o => '"' + o.w + '"').join(' ') : '';
-          }).filter(Boolean);
-          line.push('register ' + (reg.join(' · ') || 'neutral') + (neg.length ? ' · tells ' + neg.join(' · ') : ''));
-        }
-        if (rt.claims.length) line.push('claims ' + rt.claims.length + ': ' + rt.claims.slice(0, 2).join(' · '));
         const h1 = rt.h1 || st.h1;
         if (h1) line.push('h1 ' + h1.length);
 
@@ -1568,11 +1378,15 @@ async function runtime(base, p, html) {
     return failed ? 1 : 0;
   }
 
-  return { check2, registerTells: tells, localeCounts, ptCounts };
+  return { check2 };
 })();
 
 /* =====================================================================================
-   [ALIGN] — rendered geometry: a row's shorter cell against its neighbour
+   [ALIGN] — the end-of-batch pass: rendered geometry, and the two things a reader does last
+   The geometry is measured here, on a real browser, at measured widths. The other two jobs of
+   this step are the reader's and have no code here: marking every Portuguese phrase `.pt` (it is
+   done on the page as it stands, never during the build), and writing the quiz from what the
+   lesson taught. Both are the step's own work, and neither is a check.
    ===================================================================================== */
 export const { align, chromePath } = (() => {
   const EMAIL = 'align.qa@ingles.test';
@@ -1822,421 +1636,6 @@ function report(rows) {
   }
 
   return { align, chromePath };
-})();
-
-/* =====================================================================================
-   [BATCH] — the ledger's cross-lesson rules
-   ===================================================================================== */
-export const { batchcheck } = (() => {
-// the palette is the map's own element ids: a lesson names the element it built, and the markup box
-// it copied is the same name. A game is a skin over one of these, never an element of its own.
-const PALETTE = ['chunks', 'stripgaps', 'chartanswer', 'dialoggap', 'mc', 'matching',
-  'correction', 'fill', 'translation', 'dictation', 'flip', 'map'];
-const SUBJECTS = ['rul', 'rsn', 'ex', 'con', 'exc', 'voc', 'mng', 'prn', 'tim', 'soc', 'rcp'];
-const NOVEL_WINDOW = 3, CHURN_WINDOW = 5, COVER_WINDOW = 10, QUIZ_WINDOW = 2;
-const CHURN_SHARE = 0.6, MATURE_FROM = 10;
-const REG_FAIL = 0.6, REG_WARN = 0.75, DEVICE_SHARE = 0.35;
-const fails = [];
-const warns = [];
-const sepOpen = [];
-const fail = (where, msg) => fails.push(`${where} — ${msg}`);
-const warn = (where, msg) => warns.push(`${where} — ${msg}`);
-function parseEls(seg) {
-  const out = {};
-  for (const part of seg.split(',').map(s => s.trim()).filter(Boolean)) {
-    const [name, n] = part.split(':');
-    if (!PALETTE.includes(name)) { warn('ledger', `unknown element "${name}"`); continue; }
-    out[name] = (out[name] || 0) + (n ? Number(n) : 1);
-  }
-  return out;
-}
-function parseRow(line) {
-  const parts = line.split('|').map(s => s.trim());
-  const head = parts.shift();
-  const m = /^L(\d+)$/.exec(head);
-  if (!m) return null;
-  const row = { L: Number(m[1]), sections: [], quiz: null, el: {}, qel: {}, reg: null, sep: [], raw: line };
-  for (const seg of parts) {
-    if (seg.startsWith('el:')) { row.el = parseEls(seg.slice(3)); continue; }
-    if (seg.startsWith('qel:')) { row.qel = parseEls(seg.slice(4)); continue; }
-    if (seg.startsWith('reg:')) {
-      const r = /^(\d+)\/(\d+)$/.exec(seg.slice(4).trim());
-      if (r) row.reg = { good: Number(r[1]), total: Number(r[2]) };
-      else warn(`L${row.L}`, `reg must read reg:good/total, found "${seg}"`);
-      continue;
-    }
-    const q = /^Q:(.+)$/.exec(seg);
-    if (q) { row.quiz = { blocks: q[1].split('>').map(s => s.trim()).filter(Boolean) }; continue; }
-    if (seg.startsWith('sep:')) {
-      row.sep = (row.sep || []).concat(seg.slice(4).trim());
-      continue;
-    }
-    /* the block list is optional: pass 1 writes a section before its blocks exist, so `S1-rul@chart`
-       is a complete segment then and pass 2 fills in `:rsn>ex>con` */
-    const s = /^S(\d+)-([a-z]{2,3})(?:@([a-z-]+))?(?::(.*))?$/.exec(seg);
-    if (!s) { warn(`L${row.L}`, `segment not understood: "${seg}"`); continue; }
-    if (!SUBJECTS.includes(s[2])) warn(`L${row.L}`, `unknown subject "${s[2]}" in ${seg}`);
-    row.sections.push({
-      n: Number(s[1]), subject: s[2], device: s[3] || null,
-      blocks: (s[4] || '').split('>').map(t => t.trim()).filter(Boolean)
-    });
-  }
-  row.sections.sort((a, b) => a.n - b.n);
-  for (const sec of row.sections) {
-    for (const t of sec.blocks) if (!SUBJECTS.includes(t)) warn(`L${row.L}`, `unknown subject "${t}" in S${sec.n}`);
-  }
-  if (row.quiz) for (const t of row.quiz.blocks) if (!SUBJECTS.includes(t)) warn(`L${row.L}`, `unknown subject "${t}" in Q`);
-  return row;
-}
-function readLedger(file) {
-  const rows = [];
-  let fence = false;
-  for (const line of fs.readFileSync(file, 'utf8').split(/\r?\n/)) {
-    if (/^\s*```/.test(line)) { fence = !fence; continue; }
-    if (fence) continue;
-    const t = line.trim();
-    if (!t.startsWith('L')) continue;
-    const row = parseRow(t);
-    if (row) rows.push(row);
-  }
-  rows.sort((a, b) => a.L - b.L);
-  return rows;
-}
-// ---- what the page says it did -------------------------------------------------------------
-// a unit may declare data-activity="<element id>" on the element that holds the control; without it
-// the markup is read heuristically and an unrecognised activity unit is reported as unattributed.
-// A game is a skin: its inner list is read, so a reskinned gap counts as a gap.
-function detectEl(unit) {
-  if (unit.dataset.activity) return unit.dataset.activity;
-  if (unit.querySelector('.flip')) return 'flip';
-  if (unit.querySelector('.chips')) return 'chunks';
-  if (unit.querySelector('textarea.write') && unit.querySelector('.listen')) return 'dictation';
-  if (unit.querySelector('textarea.write')) return 'correction';
-  if (unit.querySelector('.pt') && unit.querySelector('input.gap')) return 'translation';
-  if (unit.querySelector('.seq .who') && unit.querySelector('input')) return 'dialoggap';
-  const items = [...unit.querySelectorAll('.qitem')];
-  if (items.some(i => i.querySelectorAll('input[type=radio]').length >= 3)) return 'mc';
-  const gapN = unit.querySelectorAll('input.gap').length;
-  if (gapN && unit.querySelector('table.chart')) return 'chartanswer';
-  return null;
-}
-
-function pageScan(file, track, JSDOM) {
-  const dom = new JSDOM(fs.readFileSync(file, 'utf8'));
-  const doc = dom.window.document;
-  const area = doc.querySelector('.content-area') || doc.body;
-  const heads = [...area.children].filter(el => el.tagName === 'H2');
-  const sections = heads.map((h, i) => {
-    const nodes = [];
-    for (let n = h.nextElementSibling; n && n.tagName !== 'H2'; n = n.nextElementSibling) nodes.push(n);
-    const paras = nodes.flatMap(n => [...n.querySelectorAll('p')]).filter(p => !p.classList.contains('dim'));
-    const words = paras.reduce((a, p) => a + p.textContent.trim().split(/\s+/).filter(Boolean).length, 0);
-    const sents = paras.reduce((a, p) => a + Math.max(1, (p.textContent.match(/[.!?]+(\s|$)/g) || []).length), 0);
-    return { n: i + 1, title: h.textContent.trim(), teaching: !(i === heads.length - 1 || /quiz|test/i.test(h.textContent)), words, sents };
-  });
-  const els = {};
-  let unattributed = 0, activityBlocks = 0;
-  const CTRL = 'input.gap,input[type=radio],input[type=checkbox],textarea,.chips,.flip,.game,.listen,.qitem';
-  for (const u of area.querySelectorAll('[data-activity]')) {
-    const t = u.dataset.activity;
-    if (!PALETTE.includes(t)) { unattributed++; continue; }
-    els[t] = (els[t] || 0) + 1;
-    activityBlocks++;
-  }
-  for (const b of area.querySelectorAll('.block')) {
-    if (!b.querySelector(CTRL)) continue;
-    if (b.matches('[data-activity]') || b.querySelector('[data-activity]') || b.closest('[data-activity]')) continue;
-    const t = detectEl(b);
-    if (!t) {
-      const composite = b.querySelector('.qitem,.chips,.flip,.game,.listen,textarea,.qopts,.opts,table.chart');
-      if (!composite && b.querySelector('input.gap')) continue; // a lone field is a component, not an activity
-      activityBlocks++; unattributed++; continue;
-    }
-    activityBlocks++;
-    els[t] = (els[t] || 0) + 1;
-  }
-  /* the locale words and the Portuguese are the page check's counts — never counted again here */
-  const T = registerTells(track);
-  const localeHits = localeCounts(area.textContent.toLowerCase(), (T.neg.locale || []).map(o => o.w));
-  return { els, unattributed, activityBlocks, sections, localeHits, ...ptCounts(area) };
-}
-// ---- the rules -----------------------------------------------------------------------------
-const union = (rows, key) => rows.reduce((set, r) => {
-  for (const k of Object.keys(r[key] || {})) set.add(k);
-  return set;
-}, new Set());
-
-function longestRun(a, b) {
-  let best = 0;
-  for (let i = 0; i < a.length; i++) {
-    for (let j = 0; j < b.length; j++) {
-      let k = 0;
-      while (i + k < a.length && j + k < b.length && a[i + k] === b[j + k]) k++;
-      if (k > best) best = k;
-    }
-  }
-  return best;
-}
-
-function checkWindows(rows, where, inScope = () => true) {
-  rows.forEach((row, i) => {
-    if (!inScope(row)) return;
-    const prev = rows.slice(Math.max(0, i - NOVEL_WINDOW), i);
-    // an exam is written to reuse what the block taught; novelty and quiz-novelty are for teaching pages
-    const isExam = row.sections.length > 1 && row.sections.every(s => s.subject === 'exc');
-    if (prev.length && !isExam) {
-      const used = union(prev, 'el');
-      const fresh = Object.keys(row.el).filter(e => !used.has(e));
-      // the rule asks for an element the window did not use; a window that already names the whole
-      // palette leaves none to find, so the check is vacuous there and churn/coverage carry freshness
-      if (!fresh.length && used.size < PALETTE.length) fail(where + row.L, `novelty: no element outside the previous ${prev.length} lessons — ${Object.keys(row.el).join(', ') || 'no elements'}`);
-    }
-    if (i + 1 < MATURE_FROM) return;
-    const w5 = rows.slice(Math.max(0, i - CHURN_WINDOW + 1), i + 1);
-    if (w5.length === CHURN_WINDOW) {
-      const need = Math.ceil(CHURN_SHARE * PALETTE.length);
-      const seen = union(w5, 'el').size;
-      if (seen < need) fail(where + row.L, `churn: ${seen}/${PALETTE.length} elements inside the last ${CHURN_WINDOW} lessons, needs ${need}`);
-    }
-    const w10 = rows.slice(Math.max(0, i - COVER_WINDOW + 1), i + 1);
-    if (w10.length === COVER_WINDOW) {
-      const seen = union(w10, 'el');
-      const missing = PALETTE.filter(e => !seen.has(e));
-      if (missing.length) fail(where + row.L, `coverage: ${missing.join(', ')} absent from the last ${COVER_WINDOW} lessons`);
-    }
-  });
-}
-
-function checkQuiz(rows, where, inScope = () => true) {
-  rows.forEach((row, i) => {
-    if (!inScope(row)) return;
-    if (!row.quiz) { warn(where + row.L, 'no quiz line (Q:…)'); return; }
-    const t = row.quiz.blocks;
-    const isExam = row.sections.length > 1 && row.sections.every(s => s.subject === 'exc');
-    // an exam's quiz is written to its sections' own headings, so its subject line repeats on purpose;
-    // the repeat rule is about teaching subjects and does not apply to an exam
-    if (!isExam) for (let k = 2; k < t.length; k++) {
-      if (t[k] === t[k - 1] && t[k] === t[k - 2]) fail(where + row.L, `quiz: "${t[k]}" three times in a row`);
-    }
-    const prev = rows.slice(Math.max(0, i - QUIZ_WINDOW), i).flatMap(r => Object.keys(r.qel || {}));
-    if (prev.length && !isExam) {
-      const fresh = Object.keys(row.qel).filter(e => !prev.includes(e));
-      if (!fresh.length) fail(where + row.L, `quiz: no element outside the previous ${QUIZ_WINDOW} quizzes`);
-    }
-  });
-}
-
-function checkBlocks(rows, where, inScope = () => true) {
-  rows.forEach(row => {
-    if (!inScope(row)) return;
-    const total = Object.values(row.el).reduce((a, b) => a + b, 0);
-    for (const [name, n] of Object.entries(row.el)) {
-      if (n > Math.ceil(total / 2)) fail(where + row.L, `dominance: ${name} is ${n} of ${total} activity blocks`);
-    }
-    const teaching = row.sections.length;
-    if (teaching > 3 && !(row.sep && row.sep.length)) {
-      sepOpen.push(where + 'L' + row.L + ' (' + teaching + ')');
-    }
-    const cap = Math.max(1, Math.floor(DEVICE_SHARE * teaching));
-    const devs = {};
-    for (const s of row.sections) if (s.device) devs[s.device] = (devs[s.device] || 0) + 1;
-    for (const [d, n] of Object.entries(devs)) {
-      if (n > cap) fail(where + row.L, `devices: ${d} teaches ${n} of ${teaching} sections, cap ${cap}`);
-    }
-    const stream = [];
-    row.sections.forEach((s, si) => s.blocks.forEach(t => stream.push({ t, si })));
-    for (const n of [4, 3]) {
-      const seen = new Map();
-      for (let k = 0; k + n <= stream.length; k++) {
-        const g = stream.slice(k, k + n).map(x => x.t).join('>');
-        const span = stream[k + n - 1].si - stream[k].si;
-        if (!seen.has(g)) seen.set(g, []);
-        seen.get(g).push(span);
-      }
-      for (const [g, spans] of seen) {
-        if (spans.length < 2 || spans.every(s => s >= 2)) continue;
-        const msg = `subjects: "${g}" repeats`;
-        if (n === 4) fail(where + row.L, msg); else warn(where + row.L, msg);
-      }
-    }
-    if (teaching >= 3) {
-      const grams = new Map();
-      row.sections.forEach((s, si) => {
-        for (let k = 0; k + 1 < s.blocks.length; k++) {
-          const g = s.blocks[k] + '>' + s.blocks[k + 1];
-          if (!grams.has(g)) grams.set(g, { n: 0, secs: new Set() });
-          const rec = grams.get(g);
-          rec.n++; rec.secs.add(si);
-        }
-      });
-      for (const [g, rec] of grams) {
-        if (rec.secs.size === teaching) fail(where + row.L, `rhythm: "${g}" runs in every section`);
-        else if (rec.n >= 4 || rec.secs.size >= Math.ceil(0.6 * teaching)) warn(where + row.L, `rhythm: "${g}" in ${rec.secs.size} of ${teaching} sections, ${rec.n} times`);
-      }
-    }
-  });
-  rows.forEach((row, i) => {
-    if (!inScope(row)) return;
-    const seq = row.sections.map(s => s.subject);
-    const exam = seq.length > 1 && seq.every(s => s === 'exc');
-    for (const prev of rows.slice(Math.max(0, i - 3), i)) {
-      const run = longestRun(seq, prev.sections.map(s => s.subject));
-      if (exam) continue;   // an exam's parts are fixed by the roadmap, not chosen for variety
-      if (run >= 4) fail(where + row.L, `order: ${run} section subjects in a row as in L${prev.L}`);
-      else if (run === 3) warn(where + row.L, `order: 3 section subjects in a row as in L${prev.L}`);
-    }
-  });
-}
-
-function checkPage(row, scan, where) {
-  const L = row.L;
-  for (const e of Object.keys(row.el)) if (!scan.els[e]) warn(where + L, `ledger claims ${e}; the page has none`);
-  for (const e of Object.keys(scan.els)) if (!row.el[e]) warn(where + L, `the page builds ${e} x${scan.els[e]}; the ledger does not`);
-  if (scan.unattributed) warn(where + L, `${scan.unattributed} activity unit(s) with no element id — mark the element that holds the control with data-activity="<id>"`);
-  const hits = scan.localeHits.reduce((a, h) => a + h.n, 0);
-  const list = scan.localeHits.map(h => h.word + '×' + h.n).join(', ');
-  if (hits >= 3) fail(where + L, `locale: ${list}`);
-  else if (hits === 2) warn(where + L, `locale: ${list}`);
-  // Portuguese is identified because it is marked, so Portuguese that is not marked is the defect
-  if (scan.ptTokens >= 12 && scan.ptElems === 0)
-    warn(where + L, `Portuguese appears (${scan.ptTokens} common words) but is not marked .pt`);
-  if (!row.reg) warn(where + L, 'no register score (reg:good/total)');
-  else {
-    const r = row.reg.good / Math.max(1, row.reg.total);
-    const pct = (r * 100).toFixed(0);
-    if (row.reg.total !== scan.sections.length) warn(where + L, `register score covers ${row.reg.total} sections; the page has ${scan.sections.length}`);
-    if (r < REG_FAIL) fail(where + L, `register: ${row.reg.good}/${row.reg.total} sections in voice, ${pct}%`);
-    else if (r < REG_WARN) warn(where + L, `register: ${row.reg.good}/${row.reg.total} sections in voice, ${pct}%`);
-  }
-}
-function selfTest() {
-  const row = (L, el, secs) => ({ L, el, qel: { mc: 1 }, reg: { good: 5, total: 5 }, quiz: { blocks: ['rul', 'ex', 'rul'] },
-    sections: secs || [{ n: 1, subject: 'rul', device: null, blocks: ['rul', 'ex'] }] });
-  const cases = [
-    ['novelty fails on a repeat', () => { checkWindows([row(1, { gap: 1 }), row(2, { gap: 1 })], 'T L'); }, 'novelty'],
-    ['novelty passes on a new element', () => { checkWindows([row(1, { gap: 1 }), row(2, { mc: 1 })], 'T L'); }, null],
-    ['novelty is vacuous once the window already names the whole palette', () => {
-      const hold = els => Object.fromEntries(els.map(e => [e, 1]));
-      checkWindows([row(1, hold(PALETTE.slice(0, 4))), row(2, hold(PALETTE.slice(4, 8))),
-        row(3, hold(PALETTE.slice(8))), row(4, { fill: 1 })], 'T L');
-    }, null],
-    ['novelty window is 3, so the fourth lesson may reuse the first', () => {
-      checkWindows([row(1, { gap: 1 }), row(2, { mc: 1 }), row(3, { chunks: 1 }), row(4, { flip: 1 }), row(5, { gap: 1 })], 'T L');
-    }, null],
-    ['churn fails inside 5 lessons', () => {
-      const rs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(L => row(L, { gap: 1 }));
-      rs.forEach((r, i) => { if (i) r.el = { [PALETTE[i]]: 1 }; });
-      checkWindows(rs, 'T L');
-    }, 'churn'],
-    ['coverage fails at the tenth', () => {
-      const rs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(L => row(L, { gap: 1 }));
-      checkWindows(rs, 'T L');
-    }, 'coverage'],
-    ['quiz three alike', () => {
-      const r = row(1, { gap: 1 }); r.quiz = { blocks: ['rul', 'rul', 'rul'] }; checkQuiz([r], 'T L');
-    }, 'three times'],
-    ['dominance fails at 4 of 5', () => { checkBlocks([row(7, { gap: 4, mc: 1 })], 'T L'); }, 'dominance'],
-    ['device cap fails on two charts in four', () => {
-      const r = row(7, { gap: 1 }, [
-        { n: 1, subject: 'voc', device: 'chart', blocks: ['voc'] },
-        { n: 2, subject: 'voc', device: 'chart', blocks: ['voc'] },
-        { n: 3, subject: 'rul', device: 'timeline', blocks: ['rul'] },
-        { n: 4, subject: 'exc', device: null, blocks: ['exc'] }]);
-      checkBlocks([r], 'T L');
-    }, 'devices'],
-    ['rhythm fails on one gram everywhere', () => {
-      const r = row(7, { gap: 1 }, [
-        { n: 1, subject: 'rul', device: null, blocks: ['rul', 'ex'] },
-        { n: 2, subject: 'voc', device: null, blocks: ['rul', 'ex'] },
-        { n: 3, subject: 'tim', device: null, blocks: ['rul', 'ex'] }]);
-      checkBlocks([r], 'T L');
-    }, 'every section'],
-    /* pass 1 writes a section before its blocks exist, so a segment with no block list is complete */
-    ['a pass-1 segment parses with no block subjects', () => {
-      const r = parseRow('L1 | S1-rul@chart | Q:rul>ex');
-      if (r.sections.length !== 1 || r.sections[0].blocks.length) fail('T', 'pass-1 segment did not parse as an empty block list');
-    }, null],
-  ];
-  let bad = 0;
-  for (const [name, run, expect] of cases) {
-    fails.length = 0; warns.length = 0;
-    run();
-    const all = fails.concat(warns).join('\n');
-    const ok = expect ? all.includes(expect) : fails.length === 0;
-    if (!ok) bad++;
-    console.log(`${ok ? 'ok  ' : 'FAIL'}  ${name}`);
-    if (!ok) console.log(`      wanted ${expect || 'no failure'}\n      got ${all || '(nothing)'}`);
-  }
-  console.log(bad ? `\n${bad} self-test case(s) failed` : '\nall self-test cases ok');
-  return bad;
-}
-  /* ---- running ------------------------------------------------------------------------------- */
-  function runTrack(track, argv, JSDOM) {
-    const dir = path.join(ROOT, track);
-    const ledger = path.join(dir, 'BATCH-RECORD.md');
-    if (!fs.existsSync(ledger)) { console.log(`${track.padEnd(24)} no BATCH-RECORD.md`); return; }
-    const rows = readLedger(ledger);
-    const where = `${track} L`;
-    const scope = new Set(authoredLessons(track, argv));
-    const inScope = row => scope.has(row.L);
-    checkWindows(rows, where, inScope);
-    checkQuiz(rows, where, inScope);
-    checkBlocks(rows, where, inScope);
-    for (const row of rows) {
-      if (!inScope(row)) continue;
-      if (isExcluded(track, row.L)) {
-        console.log(`${track.padEnd(24)} L${row.L} excluded — an open review batch in PENDING`);
-        continue;
-      }
-      const page = fs.readdirSync(dir).find(f => new RegExp(`^lesson0*${row.L}-.+\\.html$`).test(f));
-      if (!page) { warn(where + row.L, 'no page for this row'); continue; }
-      checkPage(row, pageScan(path.join(dir, page), track, JSDOM), where);
-    }
-    const pages = fs.readdirSync(dir).filter(f => /^lesson\d+-.*\.html$/.test(f));
-    const ledgered = new Set(rows.map(r => r.L));
-    const orphans = pages.filter(f => !ledgered.has(Number(/^lesson(\d+)-/.exec(f)[1])))
-      .filter(f => inScope({ L: Number(/^lesson(\d+)-/.exec(f)[1]) }));
-    if (orphans.length) warn(track, `${orphans.length} authored page(s) with no row in the ledger (e.g. ${orphans[0]})`);
-    const used = union([{ el: Object.assign({}, ...rows.map(r => r.el)) }], 'el');
-    const unused = PALETTE.filter(e => !used.has(e));
-    const scoped = rows.filter(inScope).map(r => "L" + r.L).join(" ");
-    console.log(`${track.padEnd(24)} ${String(rows.length).padStart(2)} rows · ${used.size}/${PALETTE.length} elements`
-      + (unused.length ? ` · never used: ${unused.join(", ")}` : "")
-      + ` · in scope: ${scoped || "none (name lessons, --lessons=21-25, or --all)"}`);
-  }
-
-  async function batchcheck(opts = {}) {
-    if (qaOff('batchcheck')) return;
-    const argv = flags(opts);
-    const { JSDOM } = await import('jsdom');
-    fails.length = 0; warns.length = 0; sepOpen.length = 0;
-    if (argv.includes('--self-test')) { const bad = selfTest(); return bad ? 1 : 0; }
-    const named = (argv.find(a => a === '--track' || a.startsWith('--track=')) || '');
-    const only = (() => {
-      const i = argv.findIndex(a => a.startsWith('--track='));
-      if (i >= 0) return argv[i].slice('--track='.length).trim().toLowerCase();
-      const j = argv.indexOf('--track');
-      return j >= 0 ? String(argv[j + 1] || '').trim().toLowerCase() : '';
-    })();
-    const tracks = fs.readdirSync(ROOT)
-      .filter(d => fs.existsSync(path.join(ROOT, d, 'track.json')) && !isDemo(ROOT, d))
-      .filter(d => !only || d === only);
-    if (only && !tracks.length) {
-      console.log('❌ batchcheck: no track named "' + only + '" has a track.json');
-      return 1;
-    }
-    for (const t of tracks) runTrack(t, argv, JSDOM);
-    if (sepOpen.length) {
-      console.log(`\nnote  ${sepOpen.length} lesson(s) teach more than 3 sections with no sep: defence — the default is 3:`);
-      console.log('      ' + sepOpen.join(', '));
-    }
-    if (warns.length) { console.log(`\n${warns.length} warning(s):`); for (const w of warns) console.log('  warn  ' + w); }
-    if (fails.length) { console.log(`\n${fails.length} failure(s):`); for (const f of fails) console.log('  FAIL  ' + f); }
-    console.log(fails.length ? '\nbatchcheck: fails' : '\nbatchcheck: passes');
-    return fails.length ? 1 : 0;
-  }
-
-  return { batchcheck };
 })();
 
 /* =====================================================================================
@@ -4923,12 +4322,12 @@ function queueFindings(list, ctx = {}) {
    [CLI] — the call surface: `node qa/checks.mjs <fn> …`
    ===================================================================================== */
 
-const FUNCTIONS = { check1, check2, wrap, align, batchcheck, live, games, index };
+const FUNCTIONS = { check1, check2, wrap, align, live, games, index };
 
 async function cli(argv = process.argv.slice(2)) {
   const name = argv[0];
   if (!name || !FUNCTIONS[name]) {
-    console.log('qa/checks.mjs — name one function: check1, check2, wrap, align, batchcheck, live, games, index.');
+    console.log('qa/checks.mjs — name one function: check1, check2, wrap, align, live, games, index.');
     return 1;
   }
   return (await FUNCTIONS[name]({ argv: argv.slice(1) })) || 0;

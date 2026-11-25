@@ -2,6 +2,8 @@
 
 *Vocabulary mix — about half the track's own working words, a quarter everyday life, a quarter from the wider world (culture, sport, travel, food, weather, news) — and always after the more important word: a basic the student will use tomorrow outranks a flavour word that illustrates the lesson. No lesson is all workplace, and the first lessons are the basics first.*
 
+*The ledger is one line under each lesson's heading — `- Ledger: rul>ex>mc>…`, the block types that page built, in page order. A block names its type in `data-type`: a teaching block one of `rul` `rsn` `con` `ex` `exc` `voc` `mng` `prn` `tim` `soc` `rcp`; an activity block the element it builds (`mc`, `fill`, `matching`, `chunks`, `correction`, `translation`, `dictation`, `flip`, `chartanswer`, `dialoggap`, `stripgaps`, `map`). The three lines before this lesson are read before the page is written.*
+
 ## [1] - `sound/letter-vs-sound`, `sound/cognate-suffix-code`, `sound/reduction-preview` · name, day, work, home, water, food, friend, good, like, want · "This restaurant is a f---in' rip-off, bro."
 
    - Focus: open the track, show that English vowels have no fixed sound, and prove that Portuguese already hands you thousands of English words.
