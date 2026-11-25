@@ -57,7 +57,7 @@ A batch and its steps must be removed from this file when all of the batch steps
 ## [B4] - Rebuild section 1 as Pass 1 whole input <"Pass 1 needs to know what it actually DOES when it chooses them"> the element catalogue
 - [S1] One row per element: the student work, choose it when, what it cannot do, what it asks of the words, its cost, and the note form it declares in its p1 comment.
 - [S2] The lookup that replaces judgement: produce a form -> fill; choose between forms that compete -> mc; fix a written form -> correction; recall a meaning with nothing written -> flip; write more than a line -> write.
-- [S3] Counts: 5 controls per activity included, 20 in the quiz, per-type targets with no maximums.
+- [S3] Counts: 5 controls per activity included, per-type targets with no maximums.
 - [S4] Draft the `PEDAGOGY-MAP.md` line 9 rewording for sign-off; that file is not edited before approval.
 
 ## [B5] - Prune and clean the page <"do the final cleanup of the page, markup, and place the instructions all in their own section/dropdown with pointers to the blocks or items that they reference"> the finished page
