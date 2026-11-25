@@ -15,7 +15,7 @@
  * The last case is the one that matters for the future: a track that exists in NO file today must still get
  * a column, its track.json label and a grantable option.
  */
-import { qaOff } from './off.mjs'; qaOff('landing'); /* QA OFF - see qa/off.mjs */
+import { qaOff } from './checks.mjs'; qaOff('landing'); /* QA OFF - see qa/checks.mjs */
 import { JSDOM, VirtualConsole } from 'jsdom';
 import fs from 'fs';
 import crypto from 'crypto';
@@ -360,8 +360,8 @@ ok('the track row keeps three cards per row, from a one-third basis',
   /\.track-card\{[^}]*flex:1 1 calc\(33\.33% -/.test(css) &&
   !/grid-template-columns:repeat\(auto-fit/.test(css),
   (css.match(/\.tracks\{[^}]*/) || [''])[0]);
-/* the stamp is the file's own hash with CRLF folded to LF, exactly as build-lessons.mjs computes it — a
-   Windows checkout must pass the same assertion a Linux one does. */
+/* the stamp is the file's own hash with CRLF folded to LF, exactly as the index build (qa/checks.mjs)
+   computes it — a Windows checkout must pass the same assertion a Linux one does. */
 const cssHash = crypto.createHash('sha256')
   .update(fs.readFileSync('style.css', 'utf8').replace(/\r\n/g, '\n')).digest('hex').slice(0, 10);
 const linkTag = (html.match(/<link rel="stylesheet" href="style\.css[^"]*"/) || [''])[0];

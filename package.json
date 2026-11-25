@@ -5,8 +5,8 @@
   "type": "module",
   "description": "Ingles Abre Portas - static English-lessons site (GitHub Pages) plus its QA harnesses.",
   "scripts": {
-    "build:lessons": "node build-lessons.mjs",
-    "build:check": "node build-lessons.mjs --check",
+    "build:lessons": "node qa/checks.mjs index",
+    "build:check": "node qa/checks.mjs index --check",
     "qa": "node qa/run.mjs",
     "qa:page": "node qa/run.mjs page",
     "qa:games": "node qa/run.mjs games",
@@ -15,13 +15,13 @@
     "qa:rowctx": "node qa/run.mjs rowctx",
     "qa:rows3": "node qa/run.mjs rows3",
     "build:dict": "node build-dictionary.mjs",
-    "page": "node qa/page.mjs",
-    "map": "node qa/page.mjs --page=\"extra/lesson1-The Capability Map.html\"",
-    "batchcheck": "node qa/batchcheck.mjs",
-    "batchcheck:self": "node qa/batchcheck.mjs --self-test",
-    "wrap": "node qa/wrap.mjs",
+    "page": "node qa/checks.mjs check2",
+    "map": "node qa/checks.mjs check2 --page=\"extra/lesson1-The Capability Map.html\"",
+    "batchcheck": "node qa/checks.mjs batchcheck",
+    "batchcheck:self": "node qa/checks.mjs batchcheck --self-test",
+    "wrap": "node qa/checks.mjs wrap",
     "saves": "node qa/watch-saves.mjs",
-    "align": "node qa/align.mjs"
+    "align": "node qa/checks.mjs align"
   },
   "devDependencies": {
     "ffmpeg-static": "^5.3.0",

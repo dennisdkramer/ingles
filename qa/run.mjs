@@ -22,7 +22,7 @@
  * `scope` below was read off each file's import block, never assumed: check imports the track
  * resolver, and games4, landing, live, build and liquid import none.
  */
-import { qaOff } from './off.mjs'; /* this dispatcher stays live; each member keeps its own switch */
+import { qaOff } from './checks.mjs'; /* this dispatcher stays live; each member keeps its own switch */
 import path from 'path';
 import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
@@ -30,15 +30,15 @@ import { fileURLToPath } from 'url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const MEMBERS = {
-  build:    { file: 'build-lessons.mjs', scope: false,
+  build:    { file: 'qa/checks.mjs', fn: 'index', scope: false,
               what: 'derive lessons.json and tracks.json from the page FILENAMES — writes files, audits nothing (--check: refuse if stale)' },
-  page:     { file: 'qa/page.mjs',       scope: true,
+  page:     { file: 'qa/checks.mjs', fn: 'check2', scope: true,
               what: 'THE page gate: structure, blocks, items, markup boxes, the wrap, and the runtime (boots, answers, games)' },
-  games:    { file: 'qa/games4.mjs',     scope: false,
+  games:    { file: 'qa/checks.mjs', fn: 'games', scope: false,
               what: 'engine4.js and every plugin state machine' },
   landing:  { file: 'qa/landing.mjs',    scope: false,
               what: 'index.html: a column per track, titles as links, jump button' },
-  live:     { file: 'qa/live.mjs',       scope: false,
+  live:     { file: 'qa/checks.mjs', fn: 'live', scope: false,
               what: 'real-Chrome probe for what jsdom cannot reproduce (--only=<scenario>)' },
   liquid:   { file: 'qa/liquid.mjs',     scope: false,
               what: 'the .md GitHub renders as pages: a Liquid opener left unclosed kills the Pages build' },
@@ -83,8 +83,8 @@ if (asked.length && !m.scope) {
     '   Run it with no scope flag, or pick a member that does: ' + honourable);
 }
 
-console.log('▶ ' + name + ' — ' + m.file + ' ' + rest.join(' ').trim());
-const r = spawnSync(process.execPath, [path.join(ROOT, m.file), ...rest],
+console.log('▶ ' + name + ' — ' + m.file + ' ' + [m.fn, ...rest].filter(Boolean).join(' ').trim());
+const r = spawnSync(process.execPath, [path.join(ROOT, m.file), ...(m.fn ? [m.fn] : []), ...rest],
   { cwd: ROOT, stdio: 'inherit', windowsHide: true });
 
 if (r.error) { console.log('❌ could not start ' + m.file + ': ' + r.error.message); process.exit(1); }

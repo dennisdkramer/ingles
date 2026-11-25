@@ -14,10 +14,10 @@
  * band its shape needs — qa/rows3.mjs does not measure the page, it drives the same pointer events a
  * teacher's Shift+drag produces and reads the DOM the tool leaves behind.
  *
- *   node qa/rows3.mjs            (QA_ON=1 for the run: the kill switch in qa/off.mjs)
+ *   node qa/rows3.mjs            (QA_ON=1 for the run: the kill switch in qa/checks.mjs)
  *   $env:CHROME="C:\\path\\to\\chrome.exe"   override the browser
  */
-import { qaOff } from './off.mjs';
+import { qaOff } from './checks.mjs';
 qaOff('rows3');
 
 import { spawn } from 'node:child_process';
