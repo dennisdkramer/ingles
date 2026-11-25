@@ -14,9 +14,6 @@
  *   GET  /__qa-notes/ping   { ok, file }        what notes.js probes for; another static server answers 404
  *   GET  /__qa-notes        the markdown       what the boxes read, every 2 s
  *   POST /__qa-notes        the markdown       written temp-then-renamed, so a dropped tab cannot half-write
- *   GET  /__qa-menu         the menu's index   `readMenu()` from qa/menu.mjs, which is what the preview
- *                                              page's nav and the line above each block are a readout of
- *                                              (qa/readout.js)
  *
  * Everything else is the repo, unchanged: the page, style.css, the engines, logo.png.
  *
@@ -28,11 +25,11 @@ import fs from 'fs';
 import path from 'path';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
-import { readMenu } from './menu.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const NOTES = path.join(ROOT, 'qa', 'NOTES.md');
-const PAGE = '/qa/preview-menu.html?notes=server';
+/* the page this opens: the demo, because it is the one page that needs no login */
+const PAGE = '/extra/lesson1-The Capability Map.html';
 const CHROME = process.env.CHROME || 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 
 const argv = process.argv.slice(2);
@@ -75,12 +72,6 @@ const server = http.createServer((req, res) => {
   const rel = decodeURIComponent((req.url || '/').split('?')[0]);
 
   if (rel === '/__qa-notes/ping') return json(res, 200, { ok: true, file: 'qa/NOTES.md' });
-
-  /* the preview pages' nav: the menu index, from the one parser */
-  if (rel === '/__qa-menu') {
-    try { return json(res, 200, readMenu()); }
-    catch (e) { return json(res, 500, { ok: false, error: 'cannot read the menu: ' + e.message }); }
-  }
 
   if (rel === '/__qa-notes') {
     if (req.method === 'GET' || req.method === 'HEAD') {

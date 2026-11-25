@@ -32,8 +32,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MEMBERS = {
   build:    { file: 'build-lessons.mjs', scope: false,
               what: 'derive lessons.json and tracks.json from the page FILENAMES — writes files, audits nothing (--check: refuse if stale)' },
-  check:    { file: 'qa/check.mjs',      scope: true,
-              what: 'the lesson gate: page works, every answer saves, roadmap coverage and register printed' },
+  page:     { file: 'qa/page.mjs',       scope: true,
+              what: 'THE page gate: structure, blocks, items, markup boxes, the wrap, and the runtime (boots, answers, games)' },
   games:    { file: 'qa/games4.mjs',     scope: false,
               what: 'engine4.js and every plugin state machine' },
   landing:  { file: 'qa/landing.mjs',    scope: false,

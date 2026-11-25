@@ -3,11 +3,21 @@
 Five checks, all narrow. None of them judges how a page is laid out: block widths, columns, option
 counts, spacing and class names are generation decisions, not defects.
 
-- `node qa/check.mjs [--track=…] [n …] [--all]` — the page works: engine1/engine2 executed, exactly one
-  `#feed` that is a textarea, every `.listen` has `data-say`, every answer control resolves an anchor (an
-  unanchored one is never saved), no console errors, no game block engine4 failed to wire. It also PRINTS —
-  never fails — half-coverage of the lesson's roadmap items, the register tiers the page hits, the formal and
-  locale words it uses and the `<h1>` length, for the reader to judge.
+- `node qa/page.mjs` — **THE page gate**, and the only one that reads a page's markup. Its
+  subfunctions switch on what the page IS, not on its folder: a page carrying `.block`s is read as a
+  lesson page, a page carrying a `markup-row` is read as a build page, and a build page inside a
+  track is a failure. FAILS: an element never closed · a closer that closed nothing · a dead
+  `#anchor` · a `.block` not opening with an `<h3>` · a block inside a block · a headline over 60
+  characters · a row inside a row · an empty `data-answer` · a `.qitem` key naming no option · `#feed`
+  missing, duplicated or not a textarea · a stub label pointing at nothing · a `pre` holding parsed
+  markup · `data-span` not summing to 12 · a `.listen` with no `data-say` · and, in its runtime half,
+  the page not booting, an answer control resolving no anchor, a game engine4 never wired, a console
+  error. WARNS (printed, never failed): a block with answers and no `.qnum` · a class with no rule in
+  `style.css` · an item still outside a cell of its own (run `node qa/wrap.mjs --write`). It also
+  PRINTS — never fails — half-coverage of the lesson's roadmap items, the register tiers the page
+  hits, the formal and locale words it uses, the claim shapes nothing can check, and the `<h1>`
+  length, for the reader to judge. `npm run map` runs it on the contract page
+  (`--page="extra/lesson1-The Capability Map.html"`).
 - `node qa/landing.mjs` — the student index (index.html) in jsdom: one column per track in the list, plus a
   track that exists in no file (it must still get a column, its `track.json` label and a grant option),
   title as the link, continue above the list, locked tracks inert, the `go()` gate, the teacher's
@@ -30,25 +40,26 @@ counts, spacing and class names are generation decisions, not defects.
   with `git config --get core.hooksPath` — silence means unprotected. `--no-verify` skips it, and that flag
   is how the guard was missed on 2026-11-10.
 
-Scope belongs to the harnesses, not the caller: with no lesson numbers every page in every track that has
-pages is swept, `--track=kids|business|adult` narrows it (qa/track.mjs), and a named lesson that does not
-exist is a failure. `npm run qa -- <member>` runs ONE harness and nothing else (`qa/run.mjs`);
-`node qa/run.mjs` with no member prints the menu and exits non-zero, and a member that does not honour
+Scope belongs to the harnesses, not the caller: **no flag reads the ONE track whose pages the working
+tree touches** — two tracks touched is a refusal, because a green that reads two tracks is not a green
+about the one being written. `--track=kids|business|adult` narrows it to that track — and names no
+page, so it needs `--lessons=21-25` (or bare numbers) or `--all`; `--page=<path>` reads exactly one
+page in any folder; `--all` is every track, said out loud, and it is the only full sweep.
+`npm run qa -- <member>` runs ONE harness and nothing else (`qa/run.mjs`); `node qa/run.mjs` with no
+member prints the menu and exits non-zero, and a member that does not honour
 `--track`/`--all`/lesson numbers is refused when one is passed rather than silently sweeping every
-track. `npm run qa:live` = the CDP probe. Every
-harness exits non-zero on a finding.
+track. `npm run qa:live` = the CDP probe. Every harness exits non-zero on a finding.
 
-**`qa/cssdiff.mjs` runs once per batch, at the commit boundary — never per step.** It photographs the computed
-style of every element on three pages and diffs it against a saved baseline, so it is the only thing that can tell
-a CSS reorder from damage; it is also the slowest check here and needed two determinism fixes before it was
-trustworthy. A per-step run buys nothing a per-batch run does not, and the artefacts it produced when run casually
-cost more attention than the defects it found.
+**The computed-style baseline is gone (2026-11-24).** `qa/cssdiff.mjs` and its 330 KB
+`.css-baseline.json` were switched off and referenced by nothing; `qa/rowctx.mjs` proves the cascade
+on the shapes that matter, and a stored photograph of every computed style is drift bait — it fails on
+a font fallback and passes on a rule that moved.
 
 **A build runs the gate on itself.** Before a lesson is reported as done, the page it just wrote is checked
-with `node qa/check.mjs --track=<track> <N>`. That page and no others: a sweep is not a self-check, and it
+with `node qa/page.mjs --track=<track> <N>`. That page and no others: a sweep is not a self-check, and it
 shows a build the shapes of pages it may not read. A red is fixed in the page, never in the threshold.
 `live` is not in that loop — it opens a real browser and belongs to the end of a batch.
-**`qa/check.mjs` is the one harness that runs as written.** Every other harness prints one line and exits 0
+**`qa/page.mjs` is the one harness that runs as written.** Every other harness prints one line and exits 0
 unless `QA_ON=1` is in the environment (`qa/off.mjs`, owner instruction 2026-11-10, ISSUES.md) — so a green
 from one of them without that variable is the switch reporting, not the page.
 

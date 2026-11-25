@@ -276,6 +276,53 @@ function attrCensus(src) {
 }
 const sameCensus = (a, b) => JSON.stringify(Object.entries(a).sort()) === JSON.stringify(Object.entries(b).sort());
 
+/* ---- THE PAGE'S TAGS, BALANCED, read by the same scanner -----------------------------------
+   Counting `<div` against `</div>` is fooled by a specimen inside a `pre` and by a comment. This
+   reads the tree instead: an element that never got a closer, or a closer that closed nothing, is the
+   defect — and both are things the parser can only know by having parsed the page. */
+export function balance(src) {
+  const tree = parse(src);
+  const bad = [];
+  (function visit(n, inRaw) {
+    for (const c of n.children) {
+      if (c.kind === 'text') {
+        /* A SCRIPT'S OWN STRINGS ARE NOT MARKUP. An inline script that writes `<div …></div>` into the
+           page carries a closer in a string, and the scanner keeps a script's body whole — so text
+           inside a raw-text element is never read as a tag. */
+        if (inRaw) continue;
+        const m = /<\/[a-zA-Z][^>]*>/.exec(c.raw);
+        if (m) bad.push('a closer with nothing to close: ' + m[0]);
+        continue;
+      }
+      if (!c.close && !VOID.has(c.tag) && !/\/>$/.test(c.raw) && !RAWTEXT.has(c.tag))
+        bad.push('<' + c.tag + '> is never closed');
+      visit(c, RAWTEXT.has(c.tag));
+    }
+  })(tree, false);
+  return bad;
+}
+
+/* ---- THE WRAP AS A RULE, read off the same tree the writer uses -----------------------------
+   A page is wrapped when every item has a cell of its own, a row's children are cells, and no row
+   stands directly in a row. NOTHING HERE COUNTS A LEVEL: the shape is rows holding cells and cells
+   holding items, so another container around the page — or around the whole site — moves no
+   assertion. `added` is the writer's own answer to "what is still outside a cell", so the gate and
+   the fix can never disagree about what is left. */
+export function audit(src) {
+  const { tree, report } = wrapPage(src);
+  const all = walk(tree, [], 0);
+  const bad = [];
+  for (const n of all) {
+    if (!isRow(n)) continue;
+    for (const c of n.children) {
+      if (c.kind !== 'el') continue;
+      if (isRow(c)) bad.push({ rule: 'row-in-row', detail: 'a .rows holds a .rows directly — a row is a cell\'s child, never a row\'s' });
+      else if (c.tag !== 'div') bad.push({ rule: 'row-child', detail: 'a .rows holds a <' + c.tag + '> — a row\'s children are cells' });
+    }
+  }
+  return { added: report.added, error: report.error, bad, rows: all.filter(isRow).length };
+}
+
 /* ---- 4. the command line ---------------------------------------------------------------- */
 function main(argv) {
   const write = argv.includes('--write');

@@ -18,6 +18,18 @@ import { isDemo } from './qa/demo.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const CHECK = process.argv.includes('--check');
+/* --track=<t> WRITES ONE TRACK'S SLICE AND NOTHING ELSE. A task that is writing kids must not rewrite
+   adult's entry, and must not read adult's pages to find out it would not. The other slices are
+   carried over from lessons.json exactly as they stand; the stylesheet stamp is a site-wide edit and
+   is skipped, which `--check` (the pre-push gate) still imposes on the whole repo. */
+const ONLY = (process.argv.find(a => a.startsWith('--track=')) || '').slice('--track='.length);
+if (ONLY && CHECK) {
+  console.error('build-lessons: --check is the whole-repo statement and cannot be narrowed. Run it with no --track.');
+  process.exit(1);
+}
+const PREV = (() => {
+  try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'lessons.json'), 'utf8')); } catch (e) { return {}; }
+})();
 
 /* every derived file goes through here: identical content is left alone, and --check reports instead of writes.
    Line endings are the CHECKOUT's, never a reason to report drift: core.autocrlf=true means a Windows working
@@ -48,6 +60,11 @@ const TRACKS = [
   { name: 'gramatica-redacao', label: 'Gramática e Redação', icon: '✍️', order: 8 },
   { name: 'linguagem-figurativa-giria', label: 'Linguagem Figurativa e Giria', icon: '🎭', order: 9 },
 ];
+
+if (ONLY && !TRACKS.some(t => t.name === ONLY)) {
+  console.error('build-lessons: no track named "' + ONLY + '" — the tracks are: ' + TRACKS.map(t => t.name).join(', '));
+  process.exit(1);
+}
 
 /* a folder with lesson pages that the table does not know: say so, rather than publish a site without it */
 for (const d of fs.readdirSync(ROOT, { withFileTypes: true })) {
@@ -88,6 +105,8 @@ for (const meta of TRACKS) {
   const track = meta.name;
   const dir = path.join(ROOT, track);
   const entries = [];
+  /* a track this run was not asked about is neither rebuilt nor read */
+  if (ONLY && track !== ONLY) { manifest[track] = PREV[track] || []; continue; }
   if (fs.existsSync(dir)) {
     for (const name of fs.readdirSync(dir)) {
       /* THE FILENAME IS THE ADDRESS: `lesson<N>-<Title>.html` decides the number and the file served. The
@@ -134,8 +153,8 @@ const scriptRe = /<script src="((?:\.\.\/)?)equalize\.js(?:\?v=[0-9a-f]*)?"/;
 /* every page that links the sheet carries the same stamp: the root pages draw the menu and the map, and a
    lesson page must not keep a cached sheet after the sheet changes. The manifest cannot list every page —
    a lesson folder may hold pages the book does not list — so the rest are found in the tree. */
-const stampedPages = new Set(['index.html', '_shell.html', '_shell-preview.html']);
-for (const [track, entries] of Object.entries(manifest)) {
+const stampedPages = new Set(ONLY ? [] : ['index.html', '_shell.html', '_shell-preview.html']);
+if (!ONLY) for (const [track, entries] of Object.entries(manifest)) {
   for (const entry of entries) stampedPages.add(track + '/' + entry.file);
 }
 function walkHtml(dir, out = []) {
@@ -147,7 +166,7 @@ function walkHtml(dir, out = []) {
   }
   return out;
 }
-for (const file of walkHtml(ROOT)) {
+if (!ONLY) for (const file of walkHtml(ROOT)) {
   const rel = path.relative(ROOT, file).split(path.sep).join('/');
   if (stampedPages.has(rel)) continue;
   if (/\.old\.html$/i.test(rel)) continue;
