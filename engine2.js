@@ -337,8 +337,35 @@ function fmWrap(def) {
   document.execCommand('insertHTML', false, open + body + (def.tag ? '</' + def.tag + '>' : '</span>'));
   return true;
 }
+/* THE BAR IS PLACED OVER A RANGE, SO THE RANGE IS REMEMBERED. Anything on a lesson page may take the
+   selection away between the bar appearing and a button being pressed — a stray focus change, or a
+   press that lands on a control the browser hands focus to. `fmRestore()` puts the remembered range
+   and the host's focus back before the command runs, so a format is applied to the text the teacher
+   selected even when the live selection no longer says so. */
+let fmLast = null;
+function fmRestore() {
+  const h = fmHost();
+  if (!h) return false;
+  try { h.focus({ preventScroll: true }); } catch (e) { try { h.focus(); } catch (e2) { } }
+  const s = fmSel();
+  if (s && !s.isCollapsed && s.anchorNode && h.contains(s.anchorNode)) return true;
+  if (fmLast && fmLast.host === h && fmLast.range) {
+    try {
+      const sel = window.getSelection();
+      sel.removeAllRanges(); sel.addRange(fmLast.range);
+      return true;
+    } catch (e) { }
+  }
+  return false;
+}
+/* IS EDIT MODE OPEN? `editing` is engine1.js's own global (`let editing=false`, engine1.js:41) and this
+   file only ever assigns it (`editing=!editing`), so a read can meet a binding that is not there yet —
+   a selection change fires during load, before engine1 has run. A read that throws is a read that says
+   no, never an exception in a listener the browser calls on every selection. */
+function fmOn() { try { return !!editing; } catch (e) { return false; } }
 function fmApply(key) {
-  if (!editing || !fmHost()) return;
+  if (!fmOn() || !fmHost()) { console.warn('[format] no editing host', { editing: fmOn(), host: !!fmHost() }); return; }
+  fmRestore();
   if (key === 'b') document.execCommand('bold');
   else if (key === 'i') document.execCommand('italic');
   else {
@@ -382,15 +409,30 @@ function fmBuild() {
       '" aria-label="' + a[1] + '">' + a[1].slice(0, 1) + '</button>';
   });
   fmBar.innerHTML = html;
-  /* THE SELECTION SURVIVES THE PRESS: a mousedown in the bar would move the caret out of the text
-     before the click landed, and the format would apply to nothing. */
+  /* THE PRESS IS TAKEN AT POINTERDOWN, NOT AT CLICK. A press that hides the bar (a stray selection
+     change, a focus loss) never delivers a click to the button it started on, so the action would be
+     lost with the bar; the press is the earliest event there is, and it cannot be taken away.
+     A keyboard activation has no pointerdown, so `click` still runs it — after a grace period, so a
+     real press is never applied twice. */
+  let fmPressed = 0;
+  const act = k => {
+    if (k.indexOf('al-') === 0) { fmAlign(k.slice(3)); fmPaint(); } else fmApply(k);
+  };
+  fmBar.addEventListener('pointerdown', e => {
+    const b = e.target && e.target.closest ? e.target.closest('[data-fm]') : null;
+    e.preventDefault();                       /* keep the caret and the selection where they are */
+    if (!b) return;
+    fmPressed = Date.now();
+    e.stopPropagation();
+    act(b.getAttribute('data-fm'));
+  });
   fmBar.addEventListener('mousedown', e => { e.preventDefault(); });
   fmBar.addEventListener('click', e => {
     const b = e.target && e.target.closest ? e.target.closest('[data-fm]') : null;
     if (!b) return;
     e.preventDefault(); e.stopPropagation();
-    const k = b.getAttribute('data-fm');
-    if (k.indexOf('al-') === 0) { fmAlign(k.slice(3)); fmPaint(); } else fmApply(k);
+    if (Date.now() - fmPressed < 800) return;  /* already done at the press */
+    act(b.getAttribute('data-fm'));
   });
   document.body.appendChild(fmBar);
   return fmBar;
@@ -411,11 +453,13 @@ function fmPaint() {
 }
 /* the bar rides the selection: it appears over a range of text and goes when the caret folds */
 function fmPlace() {
-  if (!fmBar || !editing || !fmHost()) { fmHide(); return; }
+  if (!fmBar || !fmOn() || !fmHost()) { fmHide(); return; }
   const s = fmSel();
   if (!s || s.isCollapsed) { fmHide(); return; }
   const r = s.getRangeAt(0).getBoundingClientRect();
   if (!r || (!r.width && !r.height)) { fmHide(); return; }
+  /* the range the bar stands over, kept for the press — see fmRestore() */
+  try { fmLast = { host: fmHost(), range: s.getRangeAt(0).cloneRange() }; } catch (e) { fmLast = null; }
   fmBar.style.display = 'flex';
   const b = fmBar.getBoundingClientRect();
   const left = Math.min(Math.max(8, r.left + r.width / 2 - b.width / 2), window.innerWidth - b.width - 8);
@@ -425,12 +469,12 @@ function fmPlace() {
   fmBar.style.top = Math.round(top) + 'px';
 }
 document.addEventListener('selectionchange', () => {
-  if (!editing || !fmHost()) { fmHide(); return; }
+  if (!fmOn() || !fmHost()) { fmHide(); return; }
   fmBuild(); fmPlace(); fmPaint();
 });
 /* ALT+LETTER FORMATS, ALT+1–4 ALIGNS. Alt+E (edit mode) is read before this and is not touched. */
 document.addEventListener('keydown', e => {
-  if (!editing || !fmHost() || !e.altKey || e.ctrlKey || e.metaKey) return;
+  if (!fmOn() || !fmHost() || !e.altKey || e.ctrlKey || e.metaKey) return;
   const k = String(e.key || '').toLowerCase();
   const fmt = { b: 'b', i: 'i', c: 'code', p: 'pt' };
   if (fmt[k]) { e.preventDefault(); e.stopPropagation(); fmApply(fmt[k]); return; }
