@@ -1540,6 +1540,22 @@ p:has(>input.gap:only-child){text-align:center}
   /* the page's own subtitle, directly under the lesson title */
   .content-area>h1+.lead{max-width:none;margin-inline:auto;text-align:center}
   .mono{font-family:var(--mono);font-size:.92em}
+  /* THE EDITOR'S PALETTE AND FAMILIES. Classes, not inline styles: the sheet stays the owner, the
+     save path needs no exception, and a dark look re-points the variables these read (an inline
+     `color:#…` cannot, and `engine2.js` strips inline colour and font-family from a saved page). */
+  .c-ink{color:var(--ink)}
+  .c-ink2{color:var(--ink-2)}
+  .c-dim{color:var(--dim)}
+  .c-ptw{color:var(--ptw)}
+  .c-accent{color:var(--accent)}
+  .c-blue{color:var(--blue)}
+  .c-green{color:var(--green)}
+  .c-err{color:var(--err)}
+  .c-warn{color:var(--warn)}
+  .f-serif{font-family:var(--serif)}
+  .f-mono{font-family:var(--mono)}
+  .f-display{font-family:var(--display)}
+  .f-sans{font-family:var(--sans)}
   /* a lyric line is a line: the player's own rule is legacy, and legacy sits below base, so its
      margin:0 never reaches `li` — the reset has to ride here, above base, to take effect */
   .vz-lyrics li{margin-block:0}
@@ -1921,6 +1937,20 @@ p:has(>input.gap:only-child){text-align:center}
   .layout-chip{position:fixed;left:16px;bottom:16px;z-index:9999;cursor:pointer;
     padding:6px 12px;border:1px solid var(--line);border-radius:99px;background:var(--paper);
     color:var(--ink);font:600 .76rem var(--sans);box-shadow:var(--shadow-2)}
+  /* THE FORMAT BAR: the text editor's own chrome, floated over the selection. It is a body child like
+     the chip, so `engine2.js` removes it from the copy a save writes — nothing here is page content. */
+  .fm-bar{position:fixed;z-index:9999;display:none;align-items:center;gap:4px;flex-wrap:wrap;
+    max-width:min(96vw,720px);padding:5px 7px;border:1px solid var(--line);border-radius:10px;
+    background:var(--paper);color:var(--ink);font:600 .72rem var(--sans);
+    box-shadow:var(--shadow-2)}
+  .fm-bar button{font:700 .72rem var(--sans);min-width:26px;height:26px;padding:0 6px;cursor:pointer;
+    border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);
+    line-height:1}
+  .fm-bar button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .fm-bar .fm-sep{width:1px;height:20px;background:var(--line);margin:0 2px}
+  .fm-bar .fm-sw{width:20px;min-width:20px;border-radius:50%;padding:0;
+    border:1px solid var(--line-2)}
+  .fm-bar .fm-sw[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:1px}
   /* the inspector: every row (R1, R2 …) and every cell (1, 2, 3) outlined and numbered while the
      layer is on. CSS only — nothing is written into the page, so a save cannot carry it.
      An inline width the sheet never meant to be there is marked red: that is the cell that will
@@ -1970,7 +2000,7 @@ p:has(>input.gap:only-child){text-align:center}
   .layout-panel .layout-w{flex:1 1 9em;min-width:8em;font:600 .68rem var(--sans);
     padding:3px 8px;border:1px solid var(--line);border-radius:99px;background:var(--paper);
     color:var(--ink)}
-  @media print{.layout-line,.layout-chip,.layout-panel,.layout-grip{display:none!important}}
+  @media print{.layout-line,.layout-chip,.layout-panel,.layout-grip,.fm-bar{display:none!important}}
 
   html.kbd .tswitch input:focus-visible~.tsw-track{outline:2px solid var(--tan);
     outline-offset:3px}

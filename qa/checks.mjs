@@ -1105,8 +1105,8 @@ function longestRun(a, b) {
   }
   return best;
 }
-/* the edit-mode chrome the layout editor adds to the live page: never part of a saved page */
-const DOMCHROME = dom => [...dom.querySelectorAll('.layout-chip,.layout-panel,.layout-line,.layout-grip,#layoutLayer')];
+/* the edit-mode chrome the layout editor and the format bar add to the live page: never part of a saved page */
+const DOMCHROME = dom => [...dom.querySelectorAll('.layout-chip,.layout-panel,.layout-line,.layout-grip,.fm-bar,#layoutLayer')];
 
 /* ---- the static rules: what the page is made of ----------------------------------------- */
 function staticRules(p, src, ctx) {

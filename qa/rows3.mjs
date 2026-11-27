@@ -345,6 +345,42 @@ const PROBE = `(function () {
      'line=' + no10 + ' chip=' + chip10 + ' moves=' + st10 + '->' + E.moves());
   ok('the page is unchanged', snap() === s10, snap() === s10 ? '' : diff(s10, snap()));
 
+  /* 11 — A SECTION HEADING IS SELECTED BY A SHIFT PRESS, deleted from the panel, and undone. */
+  var s11 = snap(), h11 = CA.querySelector('h2'), h11r = h11.getBoundingClientRect(), st11 = E.moves();
+  h11.scrollIntoView({ block: 'center' });
+  h11r = h11.getBoundingClientRect();
+  h11.dispatchEvent(ev('pointerdown', h11r.left + 12, h11r.top + 8, 1));
+  var del11 = document.querySelector('.layout-panel [data-act="del"]');
+  ok('a shift press on a section heading selects it, and the panel may delete it',
+     !!del11 && !del11.disabled && h11.hasAttribute('data-layout-sel'),
+     'selected=' + h11.hasAttribute('data-layout-sel') + ' delete-disabled=' + (del11 && del11.disabled));
+  if (del11) del11.click();
+  ok('the panel deletes the heading, and only the heading',
+     !h11.isConnected && E.moves() === st11 + 1 && CA.querySelectorAll('h2').length > 0,
+     'connected=' + h11.isConnected + ' moves=' + st11 + '->' + E.moves()
+     + ' h2s=' + CA.querySelectorAll('h2').length);
+  E.undo();
+  ok('undo puts the heading back', h11.isConnected && snap() === s11,
+     'connected=' + h11.isConnected + ' ' + (snap() === s11 ? '' : diff(s11, snap())));
+
+  /* 12 — A HEADING PASTED IN LANDS AS A HEADING: cleaned to the page's own vocabulary, placed where a
+     section may start, and recorded so one undo takes it out. */
+  var s12 = snap(), p12 = CA.querySelector('p'), st12 = E.moves();
+  var r12 = E.pasteHeading('<h2 class="junk"><b>Pasted</b> heading</h2>', p12);
+  var made12 = [].filter.call(CA.children, function (n) {
+    return n.tagName === 'H2' && /Pasted heading/.test(n.textContent || '');
+  })[0];
+  ok('a pasted heading becomes a section heading, cleaned of its own class',
+     r12 === true && !!made12 && !made12.getAttribute('class') && made12.innerHTML.indexOf('<b>Pasted</b>') === 0,
+     'ok=' + r12 + ' found=' + !!made12 + ' class=' + (made12 && made12.getAttribute('class'))
+     + ' html=' + (made12 && made12.innerHTML.slice(0, 60)));
+  ok('the pasted heading stands where a section may start, before the next one',
+     !!made12 && made12.nextElementSibling && (made12.nextElementSibling.tagName === 'H2' || made12.nextElementSibling.tagName === 'H1'),
+     'next=' + (made12 && made12.nextElementSibling && made12.nextElementSibling.tagName) + ' moves=' + st12 + '->' + E.moves());
+  E.undo();
+  ok('undo takes the pasted heading out', !made12.isConnected && snap() === s12,
+     'connected=' + (made12 && made12.isConnected) + ' ' + (snap() === s12 ? '' : diff(s12, snap())));
+
   E.disable();
   return JSON.stringify({ res: res });
 })()`;
@@ -375,14 +411,20 @@ try {
   if (!ready) { console.log('✗ the fixture never loaded: ' + FIXTURE); process.exitCode = 1; }
   else {
     const r = await ses('Runtime.evaluate', { expression: PROBE, returnByValue: true });
-    const out = JSON.parse(r.result.value);
-    if (out.fatal) { console.log('✗ ' + out.fatal); process.exitCode = 1; }
-    else {
-      console.log('rows3 — the drop shapes and the row grip, through the pointer path layout.js binds');
-      for (const t of out.res) console.log(`  ${t.ok ? 'ok  ' : 'FAIL'} ${t.name}${t.ok || !t.detail ? '' : ' — ' + t.detail}`);
-      const bad = out.res.filter(t => !t.ok).length;
-      console.log(bad ? `\n${bad} of ${out.res.length} failed` : `\n✅ ${out.res.length}/${out.res.length} pass`);
-      process.exitCode = bad ? 1 : 0;
+    if (r.exceptionDetails) {
+      const d = r.exceptionDetails;
+      console.log('✗ the probe threw: ' + ((d.exception && (d.exception.description || d.exception.value)) || d.text));
+      process.exitCode = 1;
+    } else {
+      const out = JSON.parse(r.result.value);
+      if (out.fatal) { console.log('✗ ' + out.fatal); process.exitCode = 1; }
+      else {
+        console.log('rows3 — the drop shapes and the row grip, through the pointer path layout.js binds');
+        for (const t of out.res) console.log(`  ${t.ok ? 'ok  ' : 'FAIL'} ${t.name}${t.ok || !t.detail ? '' : ' — ' + t.detail}`);
+        const bad = out.res.filter(t => !t.ok).length;
+        console.log(bad ? `\n${bad} of ${out.res.length} failed` : `\n✅ ${out.res.length}/${out.res.length} pass`);
+        process.exitCode = bad ? 1 : 0;
+      }
     }
   }
 } catch (e) {

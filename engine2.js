@@ -69,7 +69,7 @@ let eqRun=null;
    take, and the chip, the panel and the drag line as body children — so the sweep runs inside the
    copy (`LayoutEditor.clean(cl)`) and the chrome is removed from it. A saved file is a page a reader
    opens: what the tool wrote on the page, the file does not write down. */
-function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop,#completebtn,#completerow,.layout-chip,.layout-panel,.layout-line,.layout-grip").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style],b[style],i[style],u[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|font-style|background|text-shadow/.test(st)&&!/right:|left:|margin|width|gap/.test(st))s.removeAttribute("style")});cl.querySelectorAll(".content-area .block[data-state]").forEach(n=>n.removeAttribute("data-state"));try{if(window.LayoutEditor)window.LayoutEditor.clean(cl);}catch(e){}try{if(window.EqualizeRows)window.EqualizeRows.clean(cl);}catch(e){}return "<!doctype html>"+cl.outerHTML;}
+function fullPageHTML(){const cl=document.documentElement.cloneNode(true);const cb=cl.querySelector("#controlbar");if(cb)cb.innerHTML="";const to=cl.querySelector("#toast");if(to){to.textContent="";to.removeAttribute("style");}const fd=cl.querySelector("#feed");if(fd)fd.innerHTML="";cl.querySelectorAll("#hlLayer,#noteLayer,#printRoot,#errb,.pop,#completebtn,#completerow,.layout-chip,.layout-panel,.layout-line,.layout-grip,.fm-bar").forEach(n=>n.remove());cl.querySelectorAll("mark.nb").forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});cl.querySelectorAll("[contenteditable]").forEach(n=>n.removeAttribute("contenteditable"));const b=cl.querySelector("body");if(b){b.removeAttribute("class");b.removeAttribute("style");}cl.querySelectorAll("[data-glasp-print],.glasp-extension,.glasp-extension-toaster").forEach(n=>n.remove());cl.querySelectorAll("span[style],b[style],i[style],u[style]").forEach(s=>{const st=s.getAttribute("style")||"";if(/rgb\(|font-family|letter-spacing|font-style|background|text-shadow/.test(st)&&!/right:|left:|margin|width|gap/.test(st))s.removeAttribute("style")});cl.querySelectorAll(".content-area .block[data-state]").forEach(n=>n.removeAttribute("data-state"));try{if(window.LayoutEditor)window.LayoutEditor.clean(cl);}catch(e){}try{if(window.EqualizeRows)window.EqualizeRows.clean(cl);}catch(e){}return "<!doctype html>"+cl.outerHTML;}
 function contentAreaHTML(saved){const d=new DOMParser().parseFromString(saved,"text/html");const ca=d.querySelector(".content-area");return ca?ca.innerHTML:saved;}
 function saveContent(){if(!document.querySelector(".content-area"))return;const o={action:"set",id:contentId(),type:"content",anchor:"",data:fullPageHTML(),email:gate.email,lesson:L,author:"prof",track:TRACK};notePending(o);outboxPush(o);scheduleFlush();}
 /* ---- the layout layer, and the two buttons that finish an edit ---------------------------
@@ -230,6 +230,11 @@ function textInput(e) {
   } else if (type === 'insertFromPaste' || type === 'insertFromDrop') {
     e.preventDefault();
     const dt = e.dataTransfer;
+    const html = dt ? String(dt.getData('text/html') || '') : '';
+    /* A HEADING COPIED FROM ANOTHER PAGE ARRIVES AS A HEADING, not as its text inside whatever the
+       caret was in. layout.js owns where a section heading may stand, so it places it and records it
+       on its own undo stack; anything else on the clipboard is the plain text below. */
+    if (html && window.LayoutEditor && LayoutEditor.pasteHeading && LayoutEditor.pasteHeading(html, hostEl)) return;
     const txt = dt ? String(dt.getData('text/plain') || '') : '';
     txt.replace(/\r/g, '').split('\n').forEach(function (line, i) {
       if (i) lineBreak();
@@ -250,7 +255,7 @@ function textFold(e) {
   else if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); lineBreak(); }
 }
 function textMode(on) {
-  if (!on) setHost(null);
+  if (!on) { setHost(null); fmHide(); }
   const area = hostArea();
   if (!area || area.__textMode === !!on) return;
   area.__textMode = !!on;
@@ -259,6 +264,179 @@ function textMode(on) {
   area[add]('beforeinput', textInput, true);
   area[add]('keydown', textFold, true);
 }
+
+/* ---- FORMATTING: what the page already owns, from a hotkey or from the bar --------------------
+   THE OUTPUT IS THE SHEET'S OWN VOCABULARY: <b>, <i>, <code>, <span lang="pt">, and one class from
+   the editor's palette (.c-…, .f-…). No inline colour and no inline font-family, for two reasons:
+   `fullPageHTML()` strips both from a saved page, and a class is re-pointed by a dark look while an
+   inline value is not. JUSTIFICATION IS THE ONE INLINE STYLE, on the item the caret is in — the same
+   property layout.js's Alt+click centring writes, and the save keeps it.
+   EVERY COMMAND IS THE BROWSER'S OWN (execCommand), so Ctrl+Z walks back through a format exactly as
+   it walks back through typing — the page's structure is not touched. */
+const FM_SW = [['c-ink', 'Ink'], ['c-ink2', 'Second ink'], ['c-dim', 'Grey'], ['c-ptw', 'Portuguese'],
+  ['c-accent', 'Accent'], ['c-blue', 'Blue'], ['c-green', 'Green'], ['c-err', 'Red'], ['c-warn', 'Amber']];
+const FM_FAM = [['f-serif', 'Serif'], ['f-mono', 'Mono'], ['f-display', 'Display'], ['f-sans', 'Sans']];
+const FM_ALIGN = [['left', 'Left'], ['center', 'Centre'], ['right', 'Right'], ['justify', 'Justify']];
+const FM_KEEP = { B: 1, I: 1, EM: 1, STRONG: 1, CODE: 1, BR: 1 };
+const FM_CLASS = /^(c-(ink2?|dim|ptw|accent|blue|green|err|warn)|f-(serif|mono|display|sans))$/;
+let fmBar = null;
+function fmVar(cls) { return cls === 'c-ink2' ? '--ink-2' : '--' + cls.slice(2); }
+/* a fragment in, safe HTML out: the tags above, `lang="pt"`, the palette classes, and text. Anything
+   else — a wrapper div, a style, a foreign class — is unwrapped and its content kept. */
+function fmClean(src) {
+  const box = document.createElement('div');
+  (function walk(node, out) {
+    for (let n = node.firstChild; n; n = n.nextSibling) {
+      if (n.nodeType === 3) { out.appendChild(document.createTextNode(n.nodeValue)); continue; }
+      if (n.nodeType !== 1) continue;
+      if (/^(SCRIPT|STYLE|IFRAME|OBJECT|TEMPLATE)$/.test(n.tagName)) continue;   /* never pasted in */
+      if (n.tagName === 'SPAN') {
+        const cls = String(n.getAttribute('class') || '').split(/\s+/).filter(c => FM_CLASS.test(c));
+        const pt = n.getAttribute('lang') === 'pt';
+        if (!cls.length && !pt) { walk(n, out); continue; }
+        const sp = document.createElement('span');
+        if (pt) sp.setAttribute('lang', 'pt');
+        if (cls.length) sp.setAttribute('class', cls.join(' '));
+        walk(n, sp); out.appendChild(sp); continue;
+      }
+      if (!FM_KEEP[n.tagName]) { walk(n, out); continue; }
+      const el = document.createElement(n.tagName.toLowerCase());
+      walk(n, el); out.appendChild(el);
+    }
+  })(src, box);
+  return box.innerHTML;
+}
+function fmSel() { const s = window.getSelection(); return s && s.rangeCount ? s : null; }
+function fmHost() { return window.editText && window.editText.host(); }
+/* the element of the selection that already carries this format, if any */
+function fmInside(def) {
+  const s = fmSel(), host = fmHost();
+  if (!s) return null;
+  let n = s.anchorNode;
+  n = n && n.nodeType === 1 ? n : (n && n.parentElement);
+  for (; n && n !== host; n = n.parentElement) {
+    if (def.tag && n.tagName === def.tag.toUpperCase()) return n;
+    if (def.lang && n.getAttribute && n.getAttribute('lang') === def.lang) return n;
+    if (def.cls && n.classList && n.classList.contains(def.cls)) return n;
+  }
+  return null;
+}
+function fmUnwrap(el) {
+  const s = fmSel(); if (!s) return;
+  const r = document.createRange();
+  r.selectNode(el);
+  s.removeAllRanges(); s.addRange(r);
+  document.execCommand('insertHTML', false, fmClean(el));
+}
+function fmWrap(def) {
+  const s = fmSel(); if (!s || s.isCollapsed) return false;
+  const body = fmClean(s.getRangeAt(0).cloneContents());
+  const open = def.tag ? '<' + def.tag + '>'
+    : def.lang ? '<span lang="' + def.lang + '">'
+      : '<span class="' + def.cls + '">';
+  document.execCommand('insertHTML', false, open + body + (def.tag ? '</' + def.tag + '>' : '</span>'));
+  return true;
+}
+function fmApply(key) {
+  if (!editing || !fmHost()) return;
+  if (key === 'b') document.execCommand('bold');
+  else if (key === 'i') document.execCommand('italic');
+  else {
+    const def = key === 'code' ? { tag: 'code' } : key === 'pt' ? { lang: 'pt' } : { cls: key };
+    const have = fmInside(def);
+    if (have) fmUnwrap(have); else fmWrap(def);
+  }
+  fmPaint();
+}
+/* justification is the item's own property, never a box around it */
+function fmAlign(dir) {
+  const h = fmHost();
+  if (!h) return false;
+  h.style.textAlign = dir;
+  if (!h.getAttribute('style')) h.removeAttribute('style');
+  return true;
+}
+function fmBuild() {
+  if (fmBar) return fmBar;
+  fmBar = document.createElement('div');
+  fmBar.className = 'fm-bar';
+  fmBar.setAttribute('role', 'toolbar');
+  fmBar.setAttribute('aria-label', 'formatting');
+  let html = '<button type="button" data-fm="b" title="Bold — Alt+B"><b>B</b></button>' +
+    '<button type="button" data-fm="i" title="Italic — Alt+I"><i>I</i></button>' +
+    '<button type="button" data-fm="code" title="Code — Alt+C">&lt;/&gt;</button>' +
+    '<button type="button" data-fm="pt" title="Portuguese — Alt+P" lang="pt">PT</button>' +
+    '<span class="fm-sep"></span>';
+  FM_SW.forEach(c => {
+    html += '<button type="button" class="fm-sw" data-fm="' + c[0] + '" title="' + c[1] +
+      '" aria-label="' + c[1] + '" style="background:var(' + fmVar(c[0]) + ')"></button>';
+  });
+  html += '<span class="fm-sep"></span>';
+  FM_FAM.forEach(c => {
+    html += '<button type="button" data-fm="' + c[0] + '" title="' + c[1] +
+      '" style="font-family:var(' + fmVar(c[0]) + ')">Aa</button>';
+  });
+  html += '<span class="fm-sep"></span>';
+  FM_ALIGN.forEach((a, i) => {
+    html += '<button type="button" data-fm="al-' + a[0] + '" title="' + a[1] + ' — Alt+' + (i + 1) +
+      '" aria-label="' + a[1] + '">' + a[1].slice(0, 1) + '</button>';
+  });
+  fmBar.innerHTML = html;
+  /* THE SELECTION SURVIVES THE PRESS: a mousedown in the bar would move the caret out of the text
+     before the click landed, and the format would apply to nothing. */
+  fmBar.addEventListener('mousedown', e => { e.preventDefault(); });
+  fmBar.addEventListener('click', e => {
+    const b = e.target && e.target.closest ? e.target.closest('[data-fm]') : null;
+    if (!b) return;
+    e.preventDefault(); e.stopPropagation();
+    const k = b.getAttribute('data-fm');
+    if (k.indexOf('al-') === 0) { fmAlign(k.slice(3)); fmPaint(); } else fmApply(k);
+  });
+  document.body.appendChild(fmBar);
+  return fmBar;
+}
+function fmHide() { if (fmBar) fmBar.style.display = 'none'; }
+function fmPaint() {
+  if (!fmBar) return;
+  [].forEach.call(fmBar.querySelectorAll('[data-fm]'), b => {
+    const k = b.getAttribute('data-fm');
+    let on = false;
+    if (k === 'b' || k === 'i') { try { on = document.queryCommandState(k === 'b' ? 'bold' : 'italic'); } catch (e) { } }
+    else if (k === 'code') on = !!fmInside({ tag: 'code' });
+    else if (k === 'pt') on = !!fmInside({ lang: 'pt' });
+    else if (k.indexOf('al-') === 0) { const h = fmHost(); on = !!h && String(h.style.textAlign || '') === k.slice(3); }
+    else on = !!fmInside({ cls: k });
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+}
+/* the bar rides the selection: it appears over a range of text and goes when the caret folds */
+function fmPlace() {
+  if (!fmBar || !editing || !fmHost()) { fmHide(); return; }
+  const s = fmSel();
+  if (!s || s.isCollapsed) { fmHide(); return; }
+  const r = s.getRangeAt(0).getBoundingClientRect();
+  if (!r || (!r.width && !r.height)) { fmHide(); return; }
+  fmBar.style.display = 'flex';
+  const b = fmBar.getBoundingClientRect();
+  const left = Math.min(Math.max(8, r.left + r.width / 2 - b.width / 2), window.innerWidth - b.width - 8);
+  let top = r.top - b.height - 8;
+  if (top < 8) top = r.bottom + 8;
+  fmBar.style.left = Math.round(left) + 'px';
+  fmBar.style.top = Math.round(top) + 'px';
+}
+document.addEventListener('selectionchange', () => {
+  if (!editing || !fmHost()) { fmHide(); return; }
+  fmBuild(); fmPlace(); fmPaint();
+});
+/* ALT+LETTER FORMATS, ALT+1–4 ALIGNS. Alt+E (edit mode) is read before this and is not touched. */
+document.addEventListener('keydown', e => {
+  if (!editing || !fmHost() || !e.altKey || e.ctrlKey || e.metaKey) return;
+  const k = String(e.key || '').toLowerCase();
+  const fmt = { b: 'b', i: 'i', c: 'code', p: 'pt' };
+  if (fmt[k]) { e.preventDefault(); e.stopPropagation(); fmApply(fmt[k]); return; }
+  const al = { '1': 'left', '2': 'center', '3': 'right', '4': 'justify' };
+  if (al[k]) { e.preventDefault(); e.stopPropagation(); fmAlign(al[k]); fmPaint(); }
+}, true);
 function toggleEditMode(){
  if(STUDENT!==gate.email){toast("Switch to your own account to edit content.");return;}
  editing=!editing;

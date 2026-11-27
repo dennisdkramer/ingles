@@ -12,7 +12,9 @@
    drawn from it), and the parts of a control item: a td, a .qopts, a .qstem, a .qnum, an
    input, a textarea, a button. Those travel only with the item that holds them, so no drop
    can leave a control answering nothing; a .qitem, a label.flip, a figure or a table moves
-   whole and takes its controls with it.
+   whole and takes its controls with it. A heading is NOT carved out of the rest of the tool:
+   it may be selected (a Shift press on an h1/h2) and deleted from the panel with undo, and a
+   heading pasted from another page is placed as a heading — what it may not do is travel.
    Entry points: LayoutEditor.enable() · .disable() · .undo() · .clean() · .moves()
    ---------------------------------------------------------------------------------- */
 window.LayoutEditor = (function () {
@@ -770,7 +772,8 @@ window.LayoutEditor = (function () {
       /* `delete` takes anything the drag may pick up, including a row; `even row` takes a row or a
          cell; the width actions need a cell, because a flex value on a container does nothing (and
          hiding them is what stops it being tried) */
-      if (a === 'del') b.disabled = !(sel && sel !== ca() && !still(sel) && inside(sel));
+      if (a === 'del') b.disabled = !(sel && sel !== ca() && inside(sel) &&
+        (!still(sel) || /^H[123]$/.test(sel.tagName)));
       else if (a === 'mid') b.disabled = !(sel && sel !== ca() && !still(sel) && inside(sel));
       else if (a === 'even') b.disabled = !(item || isRow);
       else b.disabled = !item;
@@ -1134,7 +1137,10 @@ window.LayoutEditor = (function () {
      from goes on the same stack as a drag, so one click on the chip puts it back — which is the whole
      reason the tool needs no confirmation dialog. */
   function remove(n) {
-    if (!n || !inside(n) || still(n)) return false;
+    /* A HEADING MAY BE DELETED. It may not be carried, but leaving the page without a section title is
+       an editorial act the tool should allow — with the same undo every other delete gets. */
+    if (!n || !inside(n)) return false;
+    if (still(n) && !/^H[123]$/.test(n.tagName)) return false;
     var parent = n.parentNode;
     if (!parent) return false;
     var rec = { node: n, from: { parent: parent, next: n.nextElementSibling }, gone: [], wraps: [], back: null };
@@ -1361,6 +1367,12 @@ window.LayoutEditor = (function () {
     if (!e.shiftKey) return;           /* the caret's press, not the layout's */
     var n = e.target && e.target.nodeType === 1 ? e.target : null;
     if (!n) return;
+    /* A SECTION HEADING IS SELECTED, NOT CARRIED. It cannot travel — its rows would lose the address
+       they stand under — but it can be inspected and deleted from the panel, so the press stops here
+       instead of walking up to the page and selecting nothing. The caret is left alone: a press on a
+       heading still types into it. */
+    var head = n.closest ? n.closest('h1,h2') : null;
+    if (head && inside(head)) { select(head); markPins(); paintChip(); return; }
     /* walk up to the nearest thing that may be picked up: a word becomes its paragraph, a chart's cell
        becomes its table, an option becomes the whole question */
     while (n && !movable(n)) {
@@ -1459,6 +1471,78 @@ window.LayoutEditor = (function () {
        text host back: the next click places the caret, which is the door engine2's text mode owns. */
     if (d.on) { applyDrop(d); e.preventDefault(); }
     else if (d.target) { select(pickNode(d.target)); }   /* a press that never travelled inspects */
+  }
+
+  /* ---- A HEADING PASTED IN ----------------------------------------------------------------
+     A heading copied from another page (or from this one) arrives as a heading, not as its text
+     inside whatever the caret stood in. The clipboard's HTML is read only when it holds ONE heading
+     and nothing else; everything it carried — classes, styles, wrapper divs — is dropped, and its
+     text keeps only the inline tags the page owns. WHERE IT MAY STAND is this file's business: an
+     h1/h2 opens a section, so it goes before the next heading after the caret; an h3 is a block's
+     headline, so it goes at the top of the block the caret is in, and only if that block has none.
+     THE PASTE IS RECORDED on the same stack a drag uses, so Ctrl+Z or the chip takes it straight
+     back out — nothing this tool does is one-way. */
+  var P_KEEP = { B: 1, I: 1, EM: 1, STRONG: 1, CODE: 1, BR: 1 };
+  var P_CLASS = /^(c-(ink2?|dim|ptw|accent|blue|green|err|warn)|f-(serif|mono|display|sans))$/;
+  function pasteClean(src) {
+    var box = document.createElement('div');
+    (function walk(node, out) {
+      for (var n = node.firstChild; n; n = n.nextSibling) {
+        if (n.nodeType === 3) { out.appendChild(document.createTextNode(n.nodeValue)); continue; }
+        if (n.nodeType !== 1) continue;
+        if (/^(SCRIPT|STYLE|IFRAME|OBJECT|TEMPLATE)$/.test(n.tagName)) continue;   /* never pasted in */
+        if (n.tagName === 'SPAN') {
+          var cls = String(n.getAttribute('class') || '').split(/\s+/).filter(function (c) { return P_CLASS.test(c); });
+          var pt = n.getAttribute('lang') === 'pt';
+          if (!cls.length && !pt) { walk(n, out); continue; }
+          var sp = document.createElement('span');
+          if (pt) sp.setAttribute('lang', 'pt');
+          if (cls.length) sp.setAttribute('class', cls.join(' '));
+          walk(n, sp); out.appendChild(sp); continue;
+        }
+        if (!P_KEEP[n.tagName]) { walk(n, out); continue; }
+        var el = document.createElement(n.tagName.toLowerCase());
+        walk(n, el); out.appendChild(el);
+      }
+    })(src, box);
+    return box.innerHTML;
+  }
+  function pastedHeading(html) {
+    var box = document.createElement('div');
+    box.innerHTML = html;
+    var kids = [].filter.call(box.childNodes, function (n) {
+      return n.nodeType === 1 || (n.nodeType === 3 && /\S/.test(n.nodeValue || ''));
+    });
+    if (kids.length !== 1 || kids[0].nodeType !== 1 || !/^H[1-6]$/.test(kids[0].tagName)) return null;
+    return kids[0];
+  }
+  function pasteHeading(html, caret) {
+    if (!ON || !html || !caret) return false;
+    var c = ca();
+    if (!c || !c.contains(caret)) return false;
+    var src = pastedHeading(html);
+    if (!src) return false;
+    var lvl = Number(src.tagName.charAt(1));
+    var made = document.createElement(lvl >= 3 ? 'h3' : (lvl === 1 ? 'h1' : 'h2'));
+    made.innerHTML = pasteClean(src);
+    if (lvl >= 3) {
+      var blk = caret.closest ? caret.closest('.block') : null;
+      if (!blk || blk.querySelector('h3')) return false;      /* a block has one headline */
+      blk.insertBefore(made, blk.firstChild);
+    } else {
+      var top = caret;
+      while (top && top.parentElement !== c) top = top.parentElement;
+      var ref = null;
+      for (var e = top ? top.nextElementSibling : c.firstElementChild; e; e = e.nextElementSibling) {
+        if (e.tagName === 'H1' || e.tagName === 'H2') { ref = e; break; }
+      }
+      c.insertBefore(made, ref);
+    }
+    hist.push({ added: true, node: made });
+    if (hist.length > 40) hist.shift();
+    typed = false; moved++;
+    markGrains(); paintChip(); select(made); resolveAll();
+    return true;
   }
 
   function key(e) {
@@ -1574,6 +1658,7 @@ window.LayoutEditor = (function () {
     undo: undo,
     clean: clean,
     moves: function () { return moved; },
-    active: function () { return ON; }
+    active: function () { return ON; },
+    pasteHeading: pasteHeading
   };
 })();
