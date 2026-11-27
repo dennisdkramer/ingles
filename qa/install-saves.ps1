@@ -34,16 +34,29 @@ if (-not (Test-Path -LiteralPath $watch)) { throw "no watcher at $watch" }
 New-Item -ItemType Directory -Force -Path $dir | Out-Null
 
 # the launcher: VBScript doubles a quote to embed one; building it from [char]34 keeps this file
-# free of the escaping games that make a launcher unreadable six months later
+# free of the escaping games that make a launcher unreadable six months later.
+# THE LOOP IS THE RECOVERY. A repetition on a logon trigger only starts counting after a logon, so a
+# watcher that dies mid-session would stay dead until the next one; the blocking Run returns when
+# node exits and the loop brings it back a minute later, for as long as the task instance lives.
 $q       = [char]34
 $q2      = $q + $q
 $runner  = 'node ' + $q2 + $watch + $q2 + ' --log ' + $q2 + $log + $q2
-$vbsLine = 'CreateObject(' + $q + 'WScript.Shell' + $q + ').Run ' + $q + $runner + $q + ', 0, False'
-Set-Content -LiteralPath $vbs -Value $vbsLine -Encoding ASCII
+$vbsText = @(
+  ('Set sh = CreateObject(' + $q + 'WScript.Shell' + $q + ')'),
+  ('Do'),
+  ('  sh.Run ' + $q + $runner + $q + ', 0, True'),
+  ('  WScript.Sleep 60000'),
+  ('Loop')
+)
+[System.IO.File]::WriteAllLines($vbs, [string[]]$vbsText, [System.Text.Encoding]::ASCII)
 
 $action  = New-ScheduledTaskAction -Execute 'wscript.exe' -Argument ($q + $vbs + $q)
 $trigger = New-ScheduledTaskTrigger -AtLogOn -User ($env:USERNAME)
-$set     = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -ExecutionTimeLimit ([TimeSpan]::Zero)
+# A second net: after a logon, the task repeats and IgnoreNew skips it while the loop is alive.
+$every   = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 15)
+$trigger.Repetition = $every.Repetition
+$trigger.Repetition.StopAtDurationEnd = $false
+$set     = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -ExecutionTimeLimit ([TimeSpan]::Zero) -MultipleInstances IgnoreNew
 Register-ScheduledTask -TaskName $task -Action $action -Trigger $trigger -Settings $set -Description 'Lands Save to repo downloads in the ingles checkout, commits and pushes.' -Force | Out-Null
 
 Start-Process -FilePath 'wscript.exe' -ArgumentList ($q + $vbs + $q)
