@@ -837,7 +837,7 @@ export const check1 = (() => {
     const file = path.join(ROOT, MAP);
     if (!fs.existsSync(file)) return null;
     const src = fs.readFileSync(file, 'utf8');
-    const at = src.indexOf('<summary>Checks</summary>');
+    const at = src.indexOf('<h2>Checks</h2>');
     if (at < 0) return null;
     const open = src.indexOf('<ul>', at), shut = src.indexOf('</ul>', open);
     if (open < 0 || shut < 0) return null;
