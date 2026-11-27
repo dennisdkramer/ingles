@@ -425,7 +425,7 @@
 
 ## [43] - `taboo/worst-words`, `taboo/slurs`, `taboo/censor-policy`, `taboo/relevance-advice` · "c---", "cross the line", "out of line" · "Don't ever call her that — c--- is the hardest word in English, and you don't get to use it."
 
-   - Focus: explain c--- and slurs accurately, state the masking rules, and give the hard relevance advice about reputation.
+   - Focus: explain the least acceptable slurs: n----- (and how it is reclaimed as n---a), fa----(and its common use to mean "really shitty person" independent from sexuality), c--- (and how it is unacceptable in the US but normal in daily use in the UK). Give the hard relevance advice about reputation.
    - Deepens: `swear/masked-forms` — the masking rules now stretch to the worst words, with slurs explained and never spoken here.
    - Uses: `swear/where-not-to-use`
    - Vocabulary: "off limits", "watch your mouth", "no-go", taboo, offensive, insult, respect
