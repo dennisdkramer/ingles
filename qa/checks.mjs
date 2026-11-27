@@ -109,6 +109,11 @@ const hashStr = s => { let x = 0; for (const c of s) x = (x * 31 + c.charCodeAt(
 
 const DELETE_ME_HEAD_END = 0;
 
+/* THE PAGE NAME IS THE ADDRESS: `lesson<N>-<Title>.html` and `lesson_<NN>.html` are the same lesson, so
+   every place that reads a page name reads it through this one pattern (number, then the optional tail).
+   It sits at module scope because the index build and the page checks are different sections of this file. */
+const LESSON_NAME = /^lesson[_-]?(\d+)(?:[-_](.*))?\.html$/;
+
 /* [QA OFF] — THE KILL SWITCH, and the owner instruction behind it (2026-11-10).
  *
  * WHY IT EXISTS: a lesson is judged on the page it produces, with nothing between the prompt and the
@@ -180,7 +185,7 @@ function discoverTracks() {
     if (files.indexOf('lessons') >= 0) {
       try { files = files.concat(fs.readdirSync(path.join(ROOT, d.name, 'lessons'))); } catch (e) { /* no folder */ }
     }
-    if (files.some(f => /^lesson\d+.*\.html$/.test(f)) || files.indexOf('track.json') >= 0) out.push(d.name);
+    if (files.some(f => LESSON_NAME.test(f)) || files.indexOf('track.json') >= 0) out.push(d.name);
   }
   return out.sort();
 }
@@ -241,7 +246,7 @@ function lessonsOnDisk(track) {
   const dir = lessonDir(track);
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir)
-    .map(f => (f.match(/^lesson(\d+)(?:-.*)?\.html$/) || [])[1])
+    .map(f => (f.match(LESSON_NAME) || [])[1])
     .filter(Boolean).map(Number).sort((a, b) => a - b);
 }
 
@@ -250,7 +255,10 @@ function lessonsOnDisk(track) {
 function lessonFile(track, n) {
   const dir = lessonDir(track);
   if (!fs.existsSync(dir)) return null;
-  const hit = fs.readdirSync(dir).find(f => new RegExp('^lesson' + n + '(?:-.*)?\\.html$').test(f));
+  const hit = fs.readdirSync(dir).find(f => {
+    const m = f.match(LESSON_NAME);
+    return m && Number(m[1]) === n;
+  });
   return hit ? path.join(dir, hit) : null;
 }
 
@@ -4057,7 +4065,7 @@ for (const d of fs.readdirSync(ROOT, { withFileTypes: true })) {
   if (files.indexOf('lessons') >= 0) {
     try { files = files.concat(fs.readdirSync(path.join(ROOT, d.name, 'lessons'))); } catch (e) { /* none */ }
   }
-  if (files.some(f => /^lesson\d+.*\.html$/.test(f))) {
+  if (files.some(f => LESSON_NAME.test(f))) {
     console.warn('WARN: ' + d.name + '/ has lesson pages but is not in the TRACKS table of this file');
   }
 }
@@ -4097,7 +4105,7 @@ for (const meta of TRACKS) {
       /* THE FILENAME IS THE ADDRESS: `lesson<N>-<Title>.html` decides the number and the file served. The
          headline inside the page is the name. No other page is read — the stylesheet stamp at the foot of
          this file is the one edit the build makes inside a page. */
-      const m = name.match(/^lesson(\d+)(?:-(.*))?\.html$/);
+      const m = name.match(LESSON_NAME);
       if (!m) continue;
       const n = Number(m[1]);
       const slug = m[2] ? m[2].replace(/-+/g, ' ').trim() : '';
