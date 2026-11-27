@@ -10,9 +10,9 @@
  * the pointer is actually over. A jsdom page has no boxes, and a probe that aims at coordinates no
  * element covers would "pass" by testing nothing.
  *
- * The fixture is qa/fixtures/rows3.html: four sections, one shape each. Every section carries the
- * band its shape needs — qa/rows3.mjs does not measure the page, it drives the same pointer events a
- * teacher's Shift+drag produces and reads the DOM the tool leaves behind.
+ * The fixture is qa/fixtures/rows3.html: a section per shape, and a section for each way a drop is
+ * refused or made to land one level out — qa/rows3.mjs does not measure the page, it drives the same
+ * pointer events a teacher's Shift+drag produces and reads the DOM the tool leaves behind.
  *
  *   node qa/rows3.mjs            (QA_ON=1 for the run: the kill switch in qa/checks.mjs)
  *   $env:CHROME="C:\\path\\to\\chrome.exe"   override the browser
@@ -302,6 +302,49 @@ const PROBE = `(function () {
   var still8 = document.getElementById('banditem');
   ok('a third cell in a level-3 row is refused', E.moves() === st8 && !!still8 && rowsIn(still8) === 2,
      'moves=' + st8 + '->' + E.moves() + ' path=' + (still8 && pathOf(still8)));
+  /* 9 — A BLOCK'S OWN PROSE COVERS THE ROW IT STANDS ON. Over the block's body the pointer resolves to
+     the block's level-2 cell, which is why the row the block stands in used to be unreachable there.
+     Holding the out key ([) steps the same pointer out one level, and the drop lands beside the block. */
+  var s9 = snap(), l9el = view('left'), l9r = R('left'), wide9 = R('wide'), inner9 = R('innercell');
+  var dropX = wide9.right - Math.min(200, Math.round(wide9.width * 0.2)) + 6;
+  var dropY = inner9.top + inner9.height / 2;
+  var st9 = E.moves();
+  l9el.dispatchEvent(ev('pointerdown', l9r.left + 10, l9r.top + 8, 1));
+  window.dispatchEvent(ev('pointermove', l9r.left + 40, l9r.top + 20, 1));
+  window.dispatchEvent(ev('pointermove', dropX, dropY, 1));
+  var lineDeep = (document.querySelector('.layout-line') || {}).className || '';
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: '[', bubbles: true }));
+  var lineOut = (document.querySelector('.layout-line') || {}).className || '';
+  var chip9 = (document.querySelector('.layout-chip') || {}).textContent || '';
+  window.dispatchEvent(ev('pointerup', dropX, dropY, 0));
+  var left9 = document.getElementById('left');
+  ok('over a block body the drop is its level-2 cell, and the out key steps it to the page row',
+     /lvl2/.test(lineDeep) && /lvl1/.test(lineOut),
+     'default=' + lineDeep + ' stepped=' + lineOut + ' chip=' + chip9);
+  ok('stepped out, the drop lands beside the block in the page row',
+     E.moves() === st9 + 1 && !!left9 && !!left9.parentElement && left9.parentElement.id === 'outer'
+     && !!left9.nextElementSibling && left9.nextElementSibling.id === 'right',
+     'moves=' + st9 + '->' + E.moves()
+     + ' parent=' + (left9 && left9.parentElement && (left9.parentElement.id || left9.parentElement.className))
+     + ' next=' + (left9 && left9.nextElementSibling && (left9.nextElementSibling.id || left9.nextElementSibling.className)));
+  E.undo();
+  ok('undo puts the page back', snap() === s9, snap() === s9 ? '' : diff(s9, snap()));
+
+  /* 10 — A LINE THAT ALREADY HOLDS FOUR COLUMNS says so: the line is drawn in the "no" style and the
+     chip carries the reason, instead of the drop simply drawing nothing. */
+  var s10 = snap(), s1el = view('s1'), s1r = R('s1'), f2r = R('f2'), st10 = E.moves();
+  var gapX = f2r.left - 6, gapY = f2r.top + f2r.height / 2;
+  s1el.dispatchEvent(ev('pointerdown', s1r.left + 10, s1r.top + 8, 1));
+  window.dispatchEvent(ev('pointermove', s1r.left + 40, s1r.top + 16, 1));
+  window.dispatchEvent(ev('pointermove', gapX, gapY, 1));
+  var no10 = (document.querySelector('.layout-line') || {}).className || '';
+  var chip10 = (document.querySelector('.layout-chip') || {}).textContent || '';
+  window.dispatchEvent(ev('pointerup', gapX, gapY, 0));
+  ok('a fifth column is refused with a reason, and nothing moves',
+     /is-no/.test(no10) && E.moves() === st10 && /four columns/.test(chip10),
+     'line=' + no10 + ' chip=' + chip10 + ' moves=' + st10 + '->' + E.moves());
+  ok('the page is unchanged', snap() === s10, snap() === s10 ? '' : diff(s10, snap()));
+
   E.disable();
   return JSON.stringify({ res: res });
 })()`;

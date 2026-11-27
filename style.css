@@ -1905,6 +1905,10 @@ p:has(>input.gap:only-child){text-align:center}
   .layout-line.is-inside.lvl1{border-color:#2f9e44}
   .layout-line.is-inside.lvl2{border-color:#1c7ed6}
   .layout-line.is-inside.lvl3{border-color:#e03131}
+  /* A PLACE THAT CANNOT TAKE THE DROP IS STILL A PLACE: the line is drawn dashed and colourless, so the
+     refusal is visible and the chip can say why. Silence would read as "there is nowhere to put this". */
+  .layout-line.is-no{background:transparent;border:2px dashed #868e96;box-sizing:border-box}
+  .layout-line.is-inside.is-no{background:transparent;border:2px dashed #868e96}
   /* THE ROW GRIP: the `R1` and cell numbers are pseudo-elements and cannot be pressed, so a row is
      picked up here — a real button at the row's left edge, outside its cells. Level-3 rows get none. */
   .layout-grip{position:fixed;z-index:9997;width:18px;height:16px;padding:0;display:flex;

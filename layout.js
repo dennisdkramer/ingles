@@ -124,6 +124,17 @@ window.LayoutEditor = (function () {
   }
   function levelOf(row) { return rowsAbove(row) + 1; }
   function cellLevel(cell) { var r = cell && cell.parentElement; return isRow(r) ? levelOf(r) : 0; }
+  /* THE CELL AT A NAMED LEVEL, up the chain the pointer is standing in. The chain is what makes an
+     outer level reachable at all: a cell that holds a full-width `.rows` covers its own parent's
+     whole body, so without this walk the row a block stands on can never be aimed at. */
+  function cellAtLevel(cell, want) {
+    var n = cell;
+    while (n && cellLevel(n) > want) {
+      var row = n.parentElement;
+      n = row && isCell(row.parentElement) ? row.parentElement : null;
+    }
+    return n && cellLevel(n) === want ? n : null;
+  }
   function kindOf(n) { return isRow(n) ? 'row' : (isCell(n) ? 'cell' : 'item'); }
   /* the side band of a level-3 cell: the strip that reads as "beside", not "above" or "below" */
   var BAND = 24;
@@ -202,7 +213,10 @@ window.LayoutEditor = (function () {
     (function walk(el) {
       for (var i = 0; i < el.children.length; i++) {
         var c = el.children[i];
-        if (isRow(c)) { out.push(c); continue; }
+        /* A MARKUP GALLERY IS NOT A LINE OF COLUMNS. `.markup-row` holds ten or twelve specimen boxes
+           side by side, so counting it as the cell's widest row would make that cell ten columns wide
+           and refuse every drop beside it. It takes the page's width as a strip and contributes none. */
+        if (isRow(c)) { if (!c.classList.contains('markup-row')) out.push(c); continue; }
         walk(c);
       }
     })(cell);
@@ -239,25 +253,27 @@ window.LayoutEditor = (function () {
     if (isCell(p) && cellLevel(p) >= 3) return p.parentElement;
     return null;
   }
-  function fits(t, n) {
-    if (!t || !t.insert) return true;
+  /* WHY A TARGET IS REFUSED, as a sentence: '' means the drop fits. The reason is shown while the pointer
+     is there, because a refusal that draws no line at all reads as "there is nowhere to put this". */
+  function whyNot(t, n) {
+    if (!t || !t.insert) return '';
     if (t.insert === 'cell3') {
       var r3 = rowFor3(t.item);
-      if (!r3) return true;
+      if (!r3) return '';
       var have3 = elemKids(r3) + (isRow(t.item.parentElement) ? 1 : 0);
-      return have3 + 1 <= 2;
+      return have3 + 1 <= 2 ? '' : 'a pair holds two';
     }
     /* MERGING AND ROW-DROPPING WIDEN A CELL TOO. A cell merged into another brings its own rows with
        it, and a row dropped into a cell becomes one more row of cells there — either can push the
        line above four with no cell ever being added to a row. Count what arrives, not what lands. */
     if (t.insert === 'row' || t.insert === 'merge') {
       var host = isCell(t.box) ? t.box : (isCell(t.merge) ? t.merge : null);
-      if (!host || cellLevel(host) > 2) return true;
+      if (!host || cellLevel(host) > 2) return '';
       var b1 = l1Of(host);
-      if (!b1) return true;
+      if (!b1) return '';
       var comes = t.insert === 'merge' ? weight(n) : (isRow(n) ? Math.max(1, elemKids(n)) : 1);
       var rest = colsIn(b1) - weight(host);
-      return rest + Math.max(weight(host), comes) <= 4;
+      return rest + Math.max(weight(host), comes) <= 4 ? '' : 'this line already holds four columns';
     }
     /* HOW WIDE THE ARRIVAL IS. A cell arrives as wide as the widest row it holds; a joined row
        arrives as the sum of its cells' widths. A LEVEL-2 LINE COUNTS CELLS, not widths, because a
@@ -268,9 +284,9 @@ window.LayoutEditor = (function () {
       row = isRow(t.box) ? t.box : null;
       add = elemKids(n); addW = widths(n);
     }
-    if (!row) return true;
+    if (!row) return '';
     var base = levelOf(row) === 1 ? row : l1Of(row);
-    if (!base) return true;
+    if (!base) return '';
     /* WHAT LEAVES COUNTS. A cell or a row moved from one place to another inside the same level-1 tree
        does not add a column — it trades one for another — so the move is allowed even in a full row. */
     var srcRow = n.parentElement;
@@ -287,20 +303,32 @@ window.LayoutEditor = (function () {
        FOUR WIDTHS: its cells hold their own rows, so the columns that end up side by side across the
        page are that row's whole tree. */
     if (levelOf(row) === 2) {
-      if (elemKids(row) + add > 4) return false;
+      if (elemKids(row) + add > 4) {
+        /* A ROW ALREADY OVER FOUR IS OUT OF SPEC ALREADY: nothing done to it can make it worse, and
+           refusing every drop there would make the row a dead zone that no gesture can reach. */
+        if (elemKids(row) <= 4) return 'this row already holds four cells';
+      }
       /* the cell this row sits in, through any wrapper (.block) between them */
       var cell = null;
       for (var p = row.parentElement; p && p !== ca(); p = p.parentElement) if (isCell(p)) { cell = p; break; }
-      if (!cell) return true;
+      if (!cell) return '';
       var others = colsIn(base) - weight(cell);
       var grown = Math.max(weight(cell), elemKids(row) + add);
-      return others + grown <= 4;
+      return others + grown <= 4 ? '' : 'this line already holds four columns';
     }
-    return colsIn(base) + addW <= 4;
+    /* a line already over four is out of spec already: refusing these drops would only make it a dead
+       zone no gesture can reach, and the reason would say "four columns" about a line holding twelve */
+    if (colsIn(base) > 4) return '';
+    return colsIn(base) + addW <= 4 ? '' : 'this line already holds four columns';
   }
   function pick(x, y) {
     var t = pickRaw(x, y);
-    return fits(t, drag && drag.node) ? t : null;
+    if (!t) return null;
+    /* A REFUSAL IS A TARGET TOO, carrying its reason: the line is drawn in the "no" style and the chip
+       says why, so a place that cannot take the drop is never mistaken for a place with no drop. */
+    var why = whyNot(t, drag && drag.node);
+    if (why) t.no = why;
+    return t;
   }
   function pickRaw(x, y) {
     var n = drag.node;
@@ -342,11 +370,22 @@ window.LayoutEditor = (function () {
       while (n2 && n2 !== cell && !movable(n2)) n2 = n2.parentElement;
       if (n2 && n2 !== cell && cell.contains(n2) && !isRow(n2)) inner = n2;
     }
+    /* THE LEVEL THE DRAG ASKED FOR, when it asked for one: the same pointer, read against the cell that
+       stands at that level instead of the deepest one under it. */
+    if (drag.want) {
+      var at = cellAtLevel(cell, drag.want);
+      if (at) return inCell(at, x, y, null, el, false);
+    }
     return inCell(cell, x, y, inner, el);
   }
 
   /* a row's own area: a cell goes in beside the cells already there; a row cannot be a cell */
   function inRow(row, x, y) {
+    /* the row's own area, read at a level the drag asked for: its parent cell stands one level out */
+    if (drag.want && levelOf(row) > drag.want) {
+      var upCell = row.parentElement;
+      if (isCell(upCell)) return inCell(upCell, x, y, null, null, false);
+    }
     if (drag.kind === 'row') {
       var up = row.parentElement;
       if (!up || up === ca() || !isCell(up)) return inPage(x, y);
@@ -369,6 +408,9 @@ window.LayoutEditor = (function () {
   /* a cell's body — the place a row lands, and the place a cell merges into. */
   function inCell(cell, x, y, inner, el) {
     var k = drag.kind;
+    /* THE COARSE READ. With an explicit level held, the fine gestures are skipped: the level-3 side
+       line of an item and the narrow edge of a level-3 cell are what would pull the target back down. */
+    var fine = arguments.length < 6 || arguments[5] !== false;
 
     /* EVERY GESTURE IS MEASURED ON THE LEVEL-2 CELL. Whatever the pointer is over — a level-2 cell, a
        level-3 row, a level-3 cell, the item itself — the drop is read against the box that holds them
@@ -397,7 +439,7 @@ window.LayoutEditor = (function () {
        because it is the finer of the two side gestures: past that line is the cell's own side, which is
        level 2. */
     var it = itemUnder(cell, el) || inner;
-    if (loose === 'item' && it && it !== drag.node && lvl <= 2) {
+    if (fine && loose === 'item' && it && it !== drag.node && lvl <= 2) {
       var ir = it.getBoundingClientRect();
       var near = x <= ir.left + EDGE3 ? 'left' : (x >= ir.right - EDGE3 ? 'right' : null);
       if (near) {
@@ -421,7 +463,7 @@ window.LayoutEditor = (function () {
         dn = dn.parentElement;
       }
     }
-    if (loose !== 'row' && deep && deep !== drag.node) {
+    if (fine && loose !== 'row' && deep && deep !== drag.node) {
       var dr = deep.getBoundingClientRect();
       var atTop = y <= dr.top + EDGE3, atBot = y >= dr.bottom - EDGE3;
       if (atTop || atBot) {
@@ -494,12 +536,12 @@ window.LayoutEditor = (function () {
     var r;
     if (!t.host) {
       r = t.box.getBoundingClientRect();
-      line.className = 'layout-line is-inside' + lvlCls;
+      line.className = 'layout-line is-inside' + (t.no ? ' is-no' : '') + lvlCls;
       line.style.left = r.left + 'px'; line.style.top = r.top + 'px';
       line.style.width = r.width + 'px'; line.style.height = r.height + 'px';
       return;
     }
-    line.className = 'layout-line' + lvlCls;
+    line.className = 'layout-line' + (t.no ? ' is-no' : '') + lvlCls;
     r = t.host.getBoundingClientRect();
     var ax = t.ax || axisOf(t.box);
     if (ax === 'x') {
@@ -755,6 +797,36 @@ window.LayoutEditor = (function () {
       (hist.length ? ' · Ctrl+Z undo' : '') + ' · Esc to stop';
   }
 
+  /* THE CHIP WHILE A DRAG IS LIVE: the level the drop would land on, and the reason when it is refused.
+     It is the only place the level can be read, so it is also where the level is changed — `[` steps the
+     target one level out, `]` steps it back in, and past the deepest reading the plain gesture returns. */
+  function paintDrag() {
+    if (!ON || !chipEl || !drag) return;
+    var t = drag.t, lvl = t ? targetLevel(t) : 0;
+    chipEl.textContent = 'moving ' + drag.kind + ' → ' + (lvl ? 'L' + lvl : 'no place') +
+      (t && t.no ? ' · ' + t.no : '') +
+      (drag.want ? ' · level held' : '') + ' · [ ] changes the level';
+  }
+  /* the level of the cell the pointer is actually over, which is what `[` steps out from */
+  function deepestUnder() {
+    var el = document.elementFromPoint(drag.px || drag.x, drag.py || drag.y);
+    var c = el && el.closest ? el.closest('.rows>*') : null;
+    return c ? cellLevel(c) : 0;
+  }
+  function stepLevel(out) {
+    if (!drag) return;
+    var deep = deepestUnder();
+    if (out) drag.want = drag.want ? Math.max(1, drag.want - 1) : Math.max(1, deep - 1);
+    else {
+      if (!drag.want) return;
+      var next = drag.want + 1;
+      drag.want = next >= (deep || 3) ? 0 : next;
+    }
+    drag.t = pick(drag.px || drag.x, drag.py || drag.y);
+    showLine(drag.t);
+    paintDrag();
+  }
+
   /* ---- the move, and taking it back ----------------------------------------------- */
   /* an emptied .rows is removed, and remembered, so nothing leaves an empty flex row behind.
      A node's parent may be the ROW it left or the CELL it left inside one, so both are read here. */
@@ -959,6 +1031,7 @@ window.LayoutEditor = (function () {
   function capHolds(guards) {
     for (var i = 0; i < guards.length; i++) {
       var g = guards[i], lvl = levelOf(g.row);
+      if (g.row.classList && g.row.classList.contains('markup-row')) continue;  /* a gallery, not a line */
       var now = lvl === 1 ? colsIn(g.row) : elemKids(g.row);
       var max = lvl === 1 ? 4 : (lvl === 3 ? 2 : 4);
       if (now > max && now > g.was) return false;
@@ -968,7 +1041,7 @@ window.LayoutEditor = (function () {
 
   function applyDrop(d) {
     var n = d.node, t = d.t;
-    if (!t) return;
+    if (!t || t.no) return;          /* a refused target is shown, not taken */
     var from = { parent: n.parentNode, next: n.nextElementSibling };
     /* the lines this drop could widen, read BEFORE the page changes: the one the node left, and the one
        it lands in. Compared after the drop, a line that went over the cap is taken back. */
@@ -1307,6 +1380,10 @@ window.LayoutEditor = (function () {
     if (!chipEl) { paintChip(); markGrains(); }   /* a save cleaned the chrome away; the press brings it back */
     drag = { node: n, x: e.clientX, y: e.clientY, on: false, t: null, target: n,
              kind: kindOf(n), cell: isItem(n),
+             /* THE LEVEL THE DRAG AIMS AT. 0 = the deepest cell under the pointer, which is the
+                ordinary gesture; 1, 2 or 3 holds the target at that row level instead, so the row a
+                block stands on stays reachable however much of its body a nested cell covers. */
+             want: 0,
              /* whether the node carried a class attribute at all: a drag adds `layout-dragging`
                 and takes it away again, and a div that never had a class must not be left with
                 class="" in the page a save writes */
@@ -1330,6 +1407,7 @@ window.LayoutEditor = (function () {
       if (!drag) return;
       drag.t = pick(x, y);
       showLine(drag.t);
+      paintDrag();
     });
   }
 
@@ -1358,6 +1436,7 @@ window.LayoutEditor = (function () {
         before: !!tg.before, kind: drag.kind } : null;
     }
     showLine(drag.t);
+    paintDrag();
     e.preventDefault();
     e.stopPropagation();
   }
@@ -1371,6 +1450,7 @@ window.LayoutEditor = (function () {
     window.removeEventListener('wheel', duringWheel, { capture: true });
     if (!d) return;
     showLine(null);
+    paintChip();
     d.node.classList.remove('layout-dragging');
     /* a node that carried no class attribute keeps none: the drag's own class was the only one */
     if (!d.hadClass && !d.node.getAttribute('class')) d.node.removeAttribute('class');
@@ -1391,6 +1471,11 @@ window.LayoutEditor = (function () {
       return;
     }
     if (e.key === 'Escape') disable();
+    /* THE LEVEL OF A LIVE DRAG: `[` one row out, `]` back in. Nothing else in the page reads these,
+       and they are only live while a node is being carried. */
+    else if (e.type === 'keydown' && drag && (e.key === '[' || e.key === ']')) {
+      e.preventDefault(); stepLevel(e.key === '[');
+    }
     /* CTRL+Z UNDOES THE LAST MOVE, unless the teacher has typed since — then it is the browser's text
        undo, which is what a caret needs. Ctrl+Alt+Z always undoes a move, whatever came before. */
     else if ((e.key === 'z' || e.key === 'Z') && (e.ctrlKey || e.metaKey)) {
