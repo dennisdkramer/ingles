@@ -108,7 +108,7 @@ The **host block** owns the container and the   control, and the figure is writt
   `.mk-stress` (`[64]`) the loud syllable under the rise is one picture, not two. Draw one contour per
   sentence; a second on the same page is a second sentence, and a page of contours teaches nothing.
 
-### Sets a pronunciation key above the words of a line -`<p>` (element-as-plate: `ruby`/`rt`); each word wrapped as `<ruby>thought<rp>(</rp><rt>th<span class="pt">O<span class="pr-g">T</span></span></rt><rp>)</rp></ruby>` — the `rt` is the answer `PRONPARSE.md` returns for that word
+### Sets a pronunciation key above the words of a line -`<p>` (element-as-plate: `ruby`/`rt`); each word wrapped as `<ruby>thought<rp>(</rp><rt>th<span lang="pt">O<span class="pr-g">T</span></span></rt><rp>)</rp></ruby>` — the `rt` is the answer `PRONPARSE.md` returns for that word
 
 - **the key is the `PRONPARSE.md` answer and the `rt` is a copy of it**: run the word through that file and paste what it returns. The notation, the voice and the substitution cases live there and are not restated here.
 - **`ruby` is a reminder, not the lesson**: it sits over a single word the page has already taught. Introducing a word, or keying a short phrase, is written **full-size inline** in the prose instead (a `<p>`/`<li>`, the same spans, no `rt`), because a key above the text reads as a hint and a key in the text reads as the answer. What the two do differently: `rt` keys **one word in the line it is teaching**, prints with the sentence and survives a copy; the inline key teaches the word or phrase inside the sentence that carries it. Neither marks stress, so a syllable pattern needs `[64]` or `[69]`.

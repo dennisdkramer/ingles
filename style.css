@@ -152,7 +152,7 @@
   input,textarea,[contenteditable]{cursor:text;caret-color:auto}
   p:last-child,li:last-child{margin-bottom:0}
   b,strong{font-weight:700}
-  :lang(pt){font-family:var(--pt-serif);font-style:italic;font-weight:400}
+  :lang(pt){font-style:italic}
   a{color:var(--ink);font-weight:600;text-underline-offset:.18em;
     text-decoration-thickness:.07em;text-decoration-color:var(--accent-line)}
   a:hover{text-decoration-color:var(--accent)}
@@ -1527,15 +1527,14 @@ p:has(>input.gap:only-child){text-align:center}
   #feed:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
 }
 
-/* #99 U — utilities, wins over every layer above: .dim .lead .pt .ptw .mono .stack .row .center .mt .sr .stress mark Vary: --measure (length) */
+/* #99 U — utilities, wins over every layer above: .dim .lead .ptw .mono .stack .row .center .mt .sr .stress mark Vary: --measure (length) */
 @layer u{
   .dim{color:var(--dim);font-size:15px;line-height:1.45;font-style:italic}
   .lead{font-family:var(--playfair);font-size:18px;font-style:italic;color:var(--lead);
     margin:.2em 0 .7em;line-height:1.5;max-width:var(--measure,62ch)}
-  .pt{font-family:var(--pt-serif);font-style:italic;color:var(--ptw)}
   /* Portuguese is italic AND ochre; an English quotation stays italic in ink, so the two never look
      like the same voice (an `i` inside a PT phrase keeps the phrase's colour) */
-  :lang(pt),.ptw{font-family:var(--pt-serif);font-style:italic;color:var(--ptw)}
+  :lang(pt),.ptw{color:var(--ptw)}
   /* the activity's prompt line — the sentence right under the heading of a `train` block.
      Quarantined with the kind hue: the look is declared now */
   /* the page's own subtitle, directly under the lesson title */
@@ -1874,7 +1873,7 @@ p:has(>input.gap:only-child){text-align:center}
   /* a number beside an item is the item's own number and reads the same wherever it sits:
      inside a .qgrid, at the head of a chart row, or in front of a lone gap */
   .qnum{font-variant-numeric:tabular-nums}
-  .pt b,.lead b{font-style:normal}
+  .lead b{font-style:normal}
   .chart tr.note td{background:#fff8ea;font-style:italic;color:#5c5347;border-top:0;
     padding:10px 14px}
   .pr-g{color:grey}

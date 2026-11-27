@@ -345,7 +345,7 @@ function ansQstem(radio){let el=radio&&radio.closest?radio.closest("label"):null
  return null}
 /* THE TEXT A GAP ANSWERS = the nearest ancestor that carries text: its own parent for a normal prompt
    ("a ___ locker"), the ROW for a gap alone in a table cell (<td><input class="gap"></td>), the BLOCK for a
-   lone .blanks line whose only text is the sibling .pt gloss. (hlBlockOf is no help: a <div> IS a text
+   lone .blanks line whose only text is the sibling Portuguese (`lang="pt"`) gloss. (hlBlockOf is no help: a <div> IS a text
    block, so the empty wrapper would be the block.)
 
    ITS PLACE = the ordinal among the gaps sharing that anchor (-1, -2, …) whenever the parent holds more than

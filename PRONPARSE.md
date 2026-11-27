@@ -9,24 +9,27 @@ A native US English speaker talking to friends at the fastest rate possible — 
 ## [MARKUP]
 
 ```
-  plain letter              the letter's sound is there
-  plain ə                   a vowel (or vowel pair), heard as a schwa
-  <span class="pr-g">x</span>  letter(s) not heard at full value
-  ·                         syllable break inside a word
+  plain letter              	→ the letter's sound is there
+  plain ə                   	→ a vowel (or vowel pair), heard as a schwa
+  <span class="pr-g">x</span>  	→ letter(s) not heard at full value
+  ·                         	→ syllable break inside a word
+  <span lang="pt">XR</span>	→ [SUBSTITUTIONS] only, marked with PT sounds
 ```
 
 The word's letters are **never reordered**, and vowel rendering as ə and the below [SUBSTITUTIONS] cases are the **only accepted alterations** of the original letters. Sandhi'd letters are marked up as though the following word began with a consonant.
 
 ## Examples
 
-### [SUBSTITUTIONS] Of consonants (su-, -tion, -ought/-aught, -ough) in these specific phonetic edge cases to aid brasilian learners - NO OTHER SUBSTITUTION OR REMOVAL OF CONSONANTS IS ALLOWED
+### [SUBSTITUTIONS] Of consonants (su-, -tion, -ought/-aught, -ough) in these specific phonetic edge cases to aid Brazilian learners
+**NO OTHER SUBSTITUTION OR REMOVAL OF CONSONANTS IS ALLOWED**
 ```
-Sure, sugar. → <span class="pt">XR</span>, <span class="pt">X</span>·g<span class="pr-g">ə</span>r.
-Nation, station, education. → Na·<span class="pt">XN</span>, sta·<span class="pt">XN</span>, e·du·ca·<span class="pt">XN</span>.
-I thought we taught that we'd had a drought → I th<span class="pt">O<span class="pr-g">T</span></span> we t<span class="pt">O<span class="pr-g">T</span></span> tha<span class="pr-g">t</span> w<span class="pr-g">e</span>'d <span class="pr-g">h</span>ad a dr<span class="pt">O<span class="pr-g">T</span></span>
-The dough was rough though. → The d<span class="pt">O</span> was r<span class="pt">AF</span> th<span class="pt">O</span>.
+Sure, sugar. → <span lang="pt">XR</span>, <span lang="pt">X</span>·g<span class="pr-g">ə</span>r.
+Nation, station, education. → Na·<span lang="pt">XN</span>, sta·<span lang="pt">XN</span>, e·du·ca·<span lang="pt">XN</span>.
+I thought we taught that we'd had a drought → I th<span lang="pt">O<span class="pr-g">T</span></span> we t<span lang="pt">O<span class="pr-g">T</span></span> tha<span class="pr-g">t</span> w<span class="pr-g">e</span>'d <span class="pr-g">h</span>ad a dr<span lang="pt">O<span class="pr-g">T</span></span>
+The dough was rough though. → The d<span lang="pt">O</span> was r<span lang="pt">AF</span> th<span lang="pt">O</span>.
 ```
 
+### [REDUCTIONS] The everyday case - greyed letters, ə, and syllable breaks
 ```
 Tongue tied or get fried → To<span class="pr-g">ngue</span> tie<span class="pr-g">d</span> <span class="pr-g">o</span>r ge<span class="pr-g">t</span> frie<span class="pr-g">d</span>
 I felt fear standing on the pier → I fel<span class="pr-g">t</span> fea<span class="pr-g">r</span> sta<span class="pr-g">n</span>·din<span class="pr-g">g</span> on the pi<span class="pr-g">er</span>

@@ -5,6 +5,7 @@ You are authoring lesson content directly inside a shell HTML file for an intera
 ## Presentation & Conciseness Guardrails
 - **Explain Once, Don't Repeat:** State the rule once, in the section that needs it, then use it. A later section may apply, extend or test it, but never restates it: if two sections make the same point, one of them goes. Two passes at the same idea is a failed lesson, not a thorough one.
 - **No Robotic Circumlocutions:** Never invent awkward English phrases (like *"the thing the pause points at"*) to dodge an unlearned word. If a phrase sounds unnatural in simple English, write that specific clause in natural Brazilian Portuguese instead.
+- **Portuguese Is Marked, Never Inferred:** Every run of Portuguese is `<span lang="pt">…</span>` around Portuguese words only - never a block, and never with English inside it. It is the page's only language marker, and its look (italic, ochre) comes from the attribute alone.
 - **Strict Key Consistency:** Every pronunciation key is the answer `PRONPARSE.md` gives for that word or phrase, pasted as it comes—never a Portuguese phonetic spelling (`plêi-in`, `uán-nâ`), never a key written by ear.
 
 ## 1. Generative Rules Over Memorization

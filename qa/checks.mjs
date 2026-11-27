@@ -21,7 +21,7 @@
  *              markup boxes, the wrap, the block sequence against the track's ledger lines, and
  *              (runtime) engines, anchors, games, console.
  *   the alignment pass    rendered geometry: a row's shorter cell against its neighbour, at measured widths.
- *              It is also the step that reads each page and marks its Portuguese `.pt`, and adds the
+ *              It is also the step that reads each page and marks its Portuguese `lang="pt"`, and adds the
  *              quiz: language is the reader's judgement, and this file makes none.
  *   the live pass     what only a painted page can answer: layout, a real selection, the sheet round trip.
  *   the games check    engine4's state machine, through each instance's own hooks.
@@ -1393,7 +1393,7 @@ async function runtime(base, p, html) {
 /* =====================================================================================
    [ALIGN] — the end-of-batch pass: rendered geometry, and the two things a reader does last
    The geometry is measured here, on a real browser, at measured widths. The other two jobs of
-   this step are the reader's and have no code here: marking every Portuguese phrase `.pt` (it is
+   this step are the reader's and have no code here: marking every Portuguese phrase `lang="pt"` (it is
    done on the page as it stands, never during the build), and writing the quiz from what the
    lesson taught. Both are the step's own work, and neither is a check.
    ===================================================================================== */
@@ -2428,7 +2428,9 @@ async function scenBF4(live, site) {
   await noteSpan(live, Pos(P1b, 0), Pos(P2b, 0), 'nota que cruza');
   /* WHY the note may not be painted at all: a stored anchor is re-found ONLY by its text (findRange),
      so measure the anchor bytes against the page text and ask the engine itself. Read-only. */
-  const why = await live.ev('(function(){var t=document.querySelector("p.pt").textContent;var i=t.indexOf("Meu nome");' +
+  const why = await live.ev('(function(){var ps=Array.prototype.slice.call(document.querySelectorAll("p"));' +
+    'var p=ps.filter(function(e){return e.textContent.indexOf(' + JSON.stringify(P1a) + ')>=0})[0]||ps[0];' +
+    'var t=p?p.textContent:"";var i=t.indexOf("Meu nome");' +
     'var row=(layer.filter(function(r){return r.type==="note"})[0]||{});var a=String(row.anchor||"");' +
     'return{a:a,found:!!findRange(a),marks:nbMarks(a).length,slice:i<0?null:t.slice(i-2,i+40)}})()');
   log('   · the note row anchor is ' + JSON.stringify(why.a));
