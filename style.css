@@ -244,7 +244,7 @@
 }
 
 /* #92 PRON — <ruby>word<rp>(</rp><rt>key</rt><rp>)</rp></ruby>.
-     USE: how a word is said, one word at a time; rt text is dictionary.json notation and rp is never omitted. Vary: none */
+     USE: a reminder of how one already-taught word is said; the rt is the PRONPARSE.md answer and rp is never omitted. Vary: none */
 @layer rx{
   ruby{ruby-position:over}
   ruby rt{font-size:.85em;font-family:var(--sans);font-weight:600;color:var(--ink-2);

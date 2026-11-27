@@ -1,6 +1,6 @@
 /* ---- pronunciation key engine (pronkey.js) --------------------------------------
-   Thin display + lookup layer for the pronunciation key. The dictionary data lives in
-   dictionary.json (fetched on load) — the single source of truth: one key per word.
+   The popup's word lookup, and nothing else: one key per word, from dictionary.json
+   (fetched on load). Lesson content takes its keys from PRONPARSE.md, never from here.
    Notation rules live in FUNCTION.md.
    Entry points:
      PronKey.words(text)    parse a word / text string into whole words (partial words thrown out)

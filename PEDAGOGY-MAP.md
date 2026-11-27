@@ -22,7 +22,7 @@
 **Tools the page is built with** — run them, never read them as a source of lesson content:
 	- `qa/pos.mjs` — `node qa/pos.mjs "<sentence>"` emits the `.pos-*` markup for a sentence the page already wrote; the marks are pasted, never written by hand.
 	- `qa/AUDIO.md` and `qa/audio.mjs` — find, fetch, cut and time a recording; the command prints the player figure with its `data-t` values, its `data-duration`, and the provenance row for `assets/README.md`. A lesson page sits in `<track>/lessons/`, two folders below the root, so the map's `assets/<name>.mp3` is written `../../assets/<name>.mp3` on the page.
-	- `dictionary.json` is the pronunciation markup, and `pronkey.js` is the renderer and display format that the lessons use to present pronunciation (`PronKey.render`). This is the only pronunciation system used in the course. Emphasis, syllables, tone, and pronunciation are not taught by anything outside of this system, and a key is never typed by eye.
+	- `PRONPARSE.md` is the pronunciation system: feed it a word or a phrase and it returns the key in the course's markup. `dictionary.json` and `pronkey.js` remain only behind the popup's 📖 Pronunciation 🔑 lookup, and lesson content takes no key from them. Emphasis, syllables, tone, and pronunciation are not taught by anything outside of this system, and a key is never typed by eye.
 	- `qa/checks.mjs` is run by `npm` (`npm run page`, `npm run align`), it reads the repo so the lesson does not have to, and its output is not page content. Running it is allowed; opening a page because it mentioned one is not.
 
 **As-Needed only Inputs**:
