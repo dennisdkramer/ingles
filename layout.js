@@ -705,6 +705,13 @@ window.LayoutEditor = (function () {
       if (centre(n)) { select(n); markPins(); paintChip(); }
       return;
     }
+    /* A PARAGRAPH OR A LIST ITEM MAY BE SELECTED — it is what a press picks up, and `delete` takes it.
+       Everything below writes a WIDTH, and a flex value belongs on the cell, so the finer selection is
+       resolved to the cell it stands in: the grain decides what delete removes, never where a width goes. */
+    if (!isItem(n) && n.closest) {
+      var near = n.closest('.rows>*');
+      if (near && isItem(near)) { n = near; row = n.parentElement; }
+    }
     if (what === 'even') {
       if (!row || !row.classList || !row.classList.contains('rows')) return;
       var kids = [].filter.call(row.children, function (k) { return k.nodeType === 1; }), c = kids.length;
@@ -767,6 +774,9 @@ window.LayoutEditor = (function () {
       document.body.appendChild(panelEl);
     }
     var item = isItem(sel), isRow = !!(sel && sel.classList && sel.classList.contains('rows'));
+    /* a finer selection (a paragraph, a list item) still has a cell, and the width actions write there */
+    var near = !item && sel && sel.closest ? sel.closest('.rows>*') : null;
+    var inCell = !!(near && isItem(near));
     [].forEach.call(panelEl.querySelectorAll('[data-act]'), function (b) {
       var a = b.getAttribute('data-act');
       /* `delete` takes anything the drag may pick up, including a row; `even row` takes a row or a
@@ -775,8 +785,8 @@ window.LayoutEditor = (function () {
       if (a === 'del') b.disabled = !(sel && sel !== ca() && inside(sel) &&
         (!still(sel) || /^H[123]$/.test(sel.tagName)));
       else if (a === 'mid') b.disabled = !(sel && sel !== ca() && !still(sel) && inside(sel));
-      else if (a === 'even') b.disabled = !(item || isRow);
-      else b.disabled = !item;
+      else if (a === 'even') b.disabled = !(item || isRow || inCell);
+      else b.disabled = !(item || inCell);
     });
     document.body.classList.add('layout-panelled');
     var box = panelEl.querySelector('.layout-facts');
@@ -1470,7 +1480,7 @@ window.LayoutEditor = (function () {
     /* a press that travelled moved a node; a press that never travelled inspects. Neither puts the
        text host back: the next click places the caret, which is the door engine2's text mode owns. */
     if (d.on) { applyDrop(d); e.preventDefault(); }
-    else if (d.target) { select(pickNode(d.target)); }   /* a press that never travelled inspects */
+    else if (d.target && d.target !== ca()) { select(d.target); }   /* the grain the press picked, not its cell */
   }
 
   /* ---- A HEADING PASTED IN ----------------------------------------------------------------

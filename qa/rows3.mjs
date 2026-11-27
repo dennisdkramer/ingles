@@ -381,6 +381,26 @@ const PROBE = `(function () {
   ok('undo takes the pasted heading out', !made12.isConnected && snap() === s12,
      'connected=' + (made12 && made12.isConnected) + ' ' + (snap() === s12 ? '' : diff(s12, snap())));
 
+  /* 13 — A PARAGRAPH IS ITS OWN SELECTION: the press picks the paragraph, not the cell it stands in,
+     so the panel deletes the paragraph and leaves the cell. The width actions still write to the cell. */
+  var s13 = snap(), p13 = view('innercell').querySelector('p'), p13r = p13.getBoundingClientRect(), st13 = E.moves();
+  p13.dispatchEvent(ev('pointerdown', p13r.left + 8, p13r.top + 6, 1));
+  window.dispatchEvent(ev('pointerup', p13r.left + 8, p13r.top + 6, 0));   /* a press that never travelled */
+  var del13 = document.querySelector('.layout-panel [data-act="del"]');
+  var half13 = document.querySelector('.layout-panel [data-act="half"]');
+  ok('a press on a paragraph selects the paragraph, and its cell keeps the width actions',
+     !!del13 && !del13.disabled && p13.hasAttribute('data-layout-sel') && !!half13 && !half13.disabled,
+     'selected=' + p13.hasAttribute('data-layout-sel') + ' delete-disabled=' + (del13 && del13.disabled)
+     + ' half-disabled=' + (half13 && half13.disabled));
+  if (del13) del13.click();
+  ok('the panel deletes the paragraph, and the cell it emptied goes with it',
+     !document.querySelector('#innercell p') && !document.getElementById('innercell') && !!document.getElementById('wide'),
+     'p=' + !!document.querySelector('#innercell p') + ' cell=' + !!document.getElementById('innercell')
+     + ' block=' + !!document.getElementById('wide') + ' moves=' + st13 + '->' + E.moves());
+  E.undo();
+  ok('undo puts the paragraph back', !!document.querySelector('#innercell p') && snap() === s13,
+     'p=' + !!document.querySelector('#innercell p') + ' ' + (snap() === s13 ? '' : diff(s13, snap())));
+
   E.disable();
   return JSON.stringify({ res: res });
 })()`;

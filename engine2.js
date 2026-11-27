@@ -283,7 +283,7 @@ let fmBar = null;
 function fmVar(cls) { return cls === 'c-ink2' ? '--ink-2' : '--' + cls.slice(2); }
 /* a fragment in, safe HTML out: the tags above, `lang="pt"`, the palette classes, and text. Anything
    else — a wrapper div, a style, a foreign class — is unwrapped and its content kept. */
-function fmClean(src) {
+function fmClean(src, drop) {
   const box = document.createElement('div');
   (function walk(node, out) {
     for (let n = node.firstChild; n; n = n.nextSibling) {
@@ -291,7 +291,11 @@ function fmClean(src) {
       if (n.nodeType !== 1) continue;
       if (/^(SCRIPT|STYLE|IFRAME|OBJECT|TEMPLATE)$/.test(n.tagName)) continue;   /* never pasted in */
       if (n.tagName === 'SPAN') {
-        const cls = String(n.getAttribute('class') || '').split(/\s+/).filter(c => FM_CLASS.test(c));
+        /* `drop` takes the classes of the family being applied away from what is INSIDE the selection:
+           a colour set over a paragraph has to win over the blue on three words of it, or the outer
+           class is inherited and the inner one still paints. */
+        const cls = String(n.getAttribute('class') || '').split(/\s+/)
+          .filter(c => FM_CLASS.test(c) && !(drop && drop.test(c)));
         const pt = n.getAttribute('lang') === 'pt';
         if (!cls.length && !pt) { walk(n, out); continue; }
         const sp = document.createElement('span');
@@ -330,7 +334,9 @@ function fmUnwrap(el) {
 }
 function fmWrap(def) {
   const s = fmSel(); if (!s || s.isCollapsed) return false;
-  const body = fmClean(s.getRangeAt(0).cloneContents());
+  /* a colour replaces a colour and a family replaces a family, across the whole selection */
+  const drop = def.cls ? (/^c-/.test(def.cls) ? /^c-/ : /^f-/) : null;
+  const body = fmClean(s.getRangeAt(0).cloneContents(), drop);
   const open = def.tag ? '<' + def.tag + '>'
     : def.lang ? '<span lang="' + def.lang + '">'
       : '<span class="' + def.cls + '">';
