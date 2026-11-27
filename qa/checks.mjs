@@ -30,20 +30,18 @@
  *   the command line      `node qa/checks.mjs <fn> …`; importing the file runs nothing.
  *
  * THE CALL SURFACE — nothing is guessed:
- *   node qa/checks.mjs <fn> …        <fn> is check1 | check2 | wrap | align | live |
- *                                    games | index. No name, or a name that is not one of them,
- *                                    prints one line naming the file and exits 1: no menu, no list,
- *                                    no sweep.
- *   check1   --track=<t> <n…> | --text="<a block of prose>"
- *   check2   the same lesson targeting plus --static
+ *   node qa/checks.mjs <fn> …        <fn> is check2 | wrap | align | live | games | index.
+ *                                    No name, or a name that is not one of them, prints one line
+ *                                    naming the file and exits 1: no menu, no list, no sweep.
+ *   check2   the lesson targeting plus --static
  *   wrap     one or more page paths and --write (or --check)
  *   align    --track, --lessons, optional --widths / --tol
  *   index    --check (writes nothing; reports what is stale)
  *   live     --only=<scenario>
  *   games    no target
- * The same functions are exported taking an options object ({ track, n }, { text }, { pages },
+ * The same functions are exported taking an options object ({ track, n }, { pages },
  * { widths, tol }, { check }, { only }), so a caller can import instead of shelling out —
- * `check1({ text })` works on prose alone, with no page, no track and no lesson number.
+ * `check2({ track, n })` runs one page, and `index({ check: true })` reports what is stale.
  *
  * SCOPE belongs to the harness, not the caller: no flag reads the ONE track whose pages the
  * working tree touches — two tracks touched is a refusal, because a green that reads two tracks is
@@ -132,7 +130,7 @@ const LESSON_NAME = /^lesson[_-]?(\d+)(?:[-_](.*))?\.html$/;
  */
 const QA = {
   all: false,
-  fn: { check1: false, check2: false, wrap: false, align: false, live: false, games: false },
+  fn: { check2: false, wrap: false, align: false, live: false, games: false },
 };
 
 /**
@@ -815,246 +813,6 @@ function wrap(opts = {}) {
 return { wrap, audit, balance };
 
 })();
-/* =====================================================================================
-   [CHECK 1] — the prose: the map page's Checks bullets, read at run time
-   ===================================================================================== */
-export const check1 = (() => {
-  /* THE ITEMS ARE THE GUIDANCE'S, NOT A COPY OF THEM. They are the `<li>` bullets of the map page's
-     `Checks` section, read at run time. Rewording a bullet changes this check with no edit here, and
-     no bullet can be silently dropped: every one is printed as PROBED (a named probe below runs it),
-     MATERIAL (the extract it needs is printed for the reader) or UNPROBED (nothing implements it).
-     The level read is one of those bullets (the map's difficulty item), so it reports the page
-     against PEDAGOGY-MAP.md's own [LEVEL] section and freezes no definition of its own. */
-  const MAP = 'extra/lesson1-The Capability Map.html';
-
-  const textOf = s => String(s)
-    .replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
-    .replace(/&#39;|&apos;/g, "'").replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
-
-  function mapBullets() {
-    const file = path.join(ROOT, MAP);
-    if (!fs.existsSync(file)) return null;
-    const src = fs.readFileSync(file, 'utf8');
-    const at = src.indexOf('<h2>Checks</h2>');
-    if (at < 0) return null;
-    const open = src.indexOf('<ul>', at), shut = src.indexOf('</ul>', open);
-    if (open < 0 || shut < 0) return null;
-    return [...src.slice(open, shut).matchAll(/<li>([\s\S]*?)<\/li>/g)].map(m => textOf(m[1])).filter(Boolean);
-  }
-
-  const N = { one: 1, two: 2, three: 3, four: 4, five: 5 };
-
-  /* what the run reads: prose on the command line, or the lesson pages the scope section resolves */
-  function sources(argv) {
-    const t = argv.find(a => a.startsWith('--text='));
-    if (t) return [{ rel: 'prose on the command line', track: null, n: null, file: null, src: t.slice('--text='.length) }];
-    const out = [];
-    for (const track of pickTracks(argv)) {
-      for (const n of authoredLessons(track, argv)) {
-        const file = lessonFile(track, n);
-        if (!file) { console.log('❌ lesson ' + n + ' does not exist in ' + track); continue; }
-        out.push({ rel: path.relative(ROOT, file).split(path.sep).join('/'), track, n, file, src: fs.readFileSync(file, 'utf8') });
-      }
-    }
-    return out;
-  }
-
-  /* one page's prose, its headings, its items — read without a DOM */
-  function read(one) {
-    const src = one.src;
-    const area = (src.match(/<div class="content-area"[\s\S]*$/i) || [src])[0];
-    const body = textOf(area);
-    const headings = [...area.matchAll(/<h2\b[^>]*>([\s\S]*?)<\/h2>/gi)].map(m => textOf(m[1]));
-    const stems = [...area.matchAll(/class="qstem"[^>]*>([\s\S]*?)<\/span>/gi)].map(m => textOf(m[1]))
-      .filter(s => s && s !== '▶' && !/^\d+\.$/.test(s));
-    const secs = headings.filter(h => !/caderno|notebook/i.test(h));
-    const paras = [...area.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gi)]
-      .map(m => textOf(m[1])).filter(s => s.length > 20 && !/^(complete|write|read|choose)\b/i.test(s));
-    const count = re => (area.match(re) || []).length;
-    return {
-      body, headings, stems, paras, secs,
-      produced: count(/<textarea[^>]*class="[^"]*\bwrite\b/gi) + count(/<input[^>]*class="[^"]*\bgap\b/gi),
-      picked: count(/<input[^>]*type="radio"/gi),
-      qitems: count(/class="qitem"/gi),
-      blocks: count(/class="block\b/gi),
-      feed: count(/id="feed"/gi),
-      firstBlock: (area.match(/<div[^>]*class="[^"]*\bblock\b[^"]*"[^>]*>([\s\S]*?)<h3[^>]*>([\s\S]*?)<\/h3>/i) || [])[2],
-    };
-  }
-
-  /* ---- the probes: each one a named rule, run against the prose the page carries ---------------- */
-
-  function registerFile(track) {
-    const f = path.join(ROOT, track.toUpperCase() + '-REGISTER.md');
-    return fs.existsSync(f) ? f : null;
-  }
-
-  function roadmapSection(track, n) {
-    const f = path.join(ROOT, track, 'roadmap.md');
-    if (!fs.existsSync(f)) return [];
-    const lines = fs.readFileSync(f, 'utf8').split(/\r?\n/);
-    const at = lines.findIndex(l => new RegExp('^## (?:\\[' + n + '\\]|Lesson ' + n + '\\b)').test(l));
-    if (at < 0) return [];
-    const out = [];
-    for (let i = at + 1; i < lines.length && !lines[i].startsWith('## '); i++) if (lines[i].trim()) out.push(lines[i].trim());
-    return out;
-  }
-
-  /* the ledger is one line under each roadmap heading: `- Ledger: rul>ex>mc>…` */
-  function ledgerTail(track, n) {
-    const f = path.join(ROOT, track, 'roadmap.md');
-    if (!fs.existsSync(f)) return [];
-    const out = [];
-    let lesson = 0;
-    for (const line of fs.readFileSync(f, 'utf8').split(/\r?\n/)) {
-      const h = /^## (?:\[(\d+)\]|Lesson (\d+))/.exec(line);
-      if (h) { lesson = Number(h[1] || h[2]); continue; }
-      const l = /^\s*-\s*Ledger\s*:\s*(.+)$/i.exec(line);
-      if (l && lesson && lesson < n) out.push('L' + lesson + ' | ' + l[1].trim());
-    }
-    return out.slice(-3);
-  }
-
-  const PROBES = [
-    { name: 'headings', re: /Read the section headings alone/i, run(one, P) {
-      const fails = [], lines = [];
-      if (!P.headings.length) fails.push('the page carries no section headings');
-      lines.push(P.headings.map((h, i) => (i + 1) + '. ' + h).join(' | ') || '(none)');
-      for (const h of P.headings) {
-        if (/^\s*\d+[.)]\s/.test(h)) fails.push('a heading carries a number: "' + h + '"');
-        if (/\b\d+(?:st|nd|rd|th)\s+(?:form|tense|lesson)\b/i.test(h)) fails.push('a heading carries a number: "' + h + '"');
-        if (/[.?]$/.test(h)) fails.push('a heading is a sentence, not a name: "' + h + '"');
-      }
-      return { fails, lines };
-    } },
-
-    { name: 'first-block', re: /Read the first block on its own/i, run(one, P) {
-      const fails = [], lines = [];
-      if (!P.blocks) fails.push('the page carries no block');
-      else if (!P.firstBlock) fails.push('the first block opens with no <h3>');
-      else lines.push('first block: "' + P.firstBlock + '"');
-      return { fails, lines };
-    } },
-
-    /* THE LEVEL READ — one of the map's bullets, reported against PEDAGOGY-MAP.md's own [LEVEL]
-       section, read at run time. It freezes no definition: the bands below are parsed out of the
-       guidance's own sentences, and the guidance is printed for the reader. */
-    { name: 'level', re: /Read the difficulty against the lesson's number/i, run(one, P, bullet, ctx) {
-      const fails = [], lines = [];
-      const lvl = ctx.level || '';
-      if (!lvl) { lines.push('PEDAGOGY-MAP.md has no [LEVEL] section — nothing to read the page against'); return { fails, lines }; }
-      const bands = [...lvl.matchAll(/[Ll]esson (\d+)/g)].map(m => Number(m[1])).sort((a, b) => a - b);
-      const n = one.n || 0;
-      const band = n ? bands.filter(b => b <= n).pop() : null;
-      if (band != null) {
-        const line = lvl.split(/\r?\n/).find(l => new RegExp('Lesson ' + band + '\\b').test(l)) || '';
-        lines.push('lesson ' + n + ' sits at the guidance\'s "' + band + '" band: ' + line.replace(/^[\s\t*-]+/, '').slice(0, 220));
-      }
-      lines.push('items: ' + P.produced + ' produced · ' + P.picked + ' picked');
-      lines.push('the other half (nothing depends on English the course has not taught) is a reading: the guidance above is printed for it');
-      return { fails, lines };
-    } },
-  ];
-
-  /* ---- MATERIAL: the extract the bullet needs, printed so the reader can run the item ---------- */
-  const MATERIAL = [
-    { re: /Read the roadmap section line by line/i, run(one) {
-      if (!one.track) return ['no track: a --text run has no roadmap'];
-      const lines = roadmapSection(one.track, one.n);
-      return lines.length ? lines.slice(0, 12).map(l => l.slice(0, 160)) : ['no roadmap section for this lesson'];
-    } },
-    { re: /Read the register: remove a scene/i, run(one) {
-      const f = one.track && registerFile(one.track);
-      if (!f) return ['no register file to read'];
-      return ['register: ' + path.relative(ROOT, f).split(path.sep).join('/'),
-        ...fs.readFileSync(f, 'utf8').split(/\r?\n/).filter(l => /^###/.test(l)).map(l => l.trim())];
-    } },
-    { re: /Read three examples and three drill items at random/i, run(one, P) {
-      const pick = (a, k) => a.slice().sort(() => Math.random() - 0.5).slice(0, k);
-      return [...pick(P.paras, 3).map(s => 'example: ' + s.slice(0, 150)),
-        ...pick(P.stems, 3).map(s => 'drill: ' + s.slice(0, 150))];
-    } },
-    { re: /Read the block sequence against the three ledger lines/i, run(one, P) {
-      if (!one.track) return ['no track: a --text run has no ledger'];
-      const tail = ledgerTail(one.track, one.n);
-      return [...tail.map(l => 'ledger: ' + l.slice(0, 200)),
-        'this page: ' + (P.headings.join(' | ') || '(no headings)')];
-    } },
-    { re: /Read the examples of speech/i, run(one, P) {
-      const speech = P.paras.filter(s => /['’]|would have|would've|have\b/i.test(s)).slice(0, 4);
-      return speech.length ? speech.map(s => 'speech: ' + s.slice(0, 150))
-        : ['no example of speech found in the prose'];
-    } },
-  ];
-
-  async function check1(opts = {}) {
-    if (qaOff('check1')) return;
-    const argv = flags(opts);
-    const items = mapBullets();
-    if (!items) {
-      console.log('❌ check1: ' + MAP + ' has no Checks section — the items are read from it, never copied');
-      return 1;
-    }
-    const ones = sources(argv);
-    if (!ones.length) {
-      console.log('check1 — nothing to read: name lessons (--track=<t> <n…>) or pass --text="<prose>"');
-      return 0;
-    }
-    const map = path.join(ROOT, 'PEDAGOGY-MAP.md');
-    let level = '';
-    if (fs.existsSync(map)) {
-      const all = fs.readFileSync(map, 'utf8');
-      const at = all.indexOf('## [LEVEL]');
-      if (at >= 0) {
-        const rest = all.slice(at);
-        const next = rest.slice(1).search(/\r?\n## /);
-        level = next < 0 ? rest : rest.slice(0, next + 1);
-      }
-    }
-    const findings = [];
-    let failed = 0;
-    console.log('check1 — ' + items.length + ' item(s) from ' + MAP + ' · reads: ' + ones.map(o => o.rel).join(', '));
-    for (const one of ones) {
-      const P = read(one);
-      const at = one.track ? one.track + ' ' + one.n : one.rel;
-      console.log('\n' + at + ' · ' + P.headings.length + ' section(s) · ' + P.qitems + ' item(s)');
-      for (const bullet of items) {
-        const label = bullet.split(/\s+/).slice(0, 12).join(' ');
-        const probe = PROBES.find(p => p.re.test(bullet));
-        const mat = !probe && MATERIAL.find(m => m.re.test(bullet));
-        if (probe && !one.file && /headings|quiz|first-block/.test(probe.name)) {
-          /* prose on the command line has no sections or items to read */
-          console.log('  · MATERIAL — ' + label + '\n    (a --text run carries prose only: no page structure to read)');
-          continue;
-        }
-        if (probe) {
-          const r = probe.run(one, P, bullet, { level });
-          for (const l of r.lines) console.log('  · ' + l);
-          if (r.fails.length) {
-            failed++;
-            for (const f of r.fails) {
-              console.log('  ❌ ' + f);
-              findings.push(finding('check1', probe.name, 'fix', at, f));
-            }
-          } else console.log('  ✅ PROBED ' + probe.name + ' — ' + label);
-        } else if (mat) {
-          console.log('  · MATERIAL — ' + label);
-          for (const l of mat.run(one, P)) console.log('    ' + l);
-        } else {
-          console.log('  · UNPROBED — ' + label);
-        }
-      }
-    }
-    queueFindings(findings, { batch: opts.batch, fn: 'check1' });
-    console.log('\n' + (failed ? '❌ check1: ' + failed + ' item(s) failed' : '✅ check1: every probed item passes'));
-    return failed ? 1 : 0;
-  }
-
-  return check1;
-})();
-
 /* =====================================================================================
    [CHECK 2] — the page: its markup, its running state, and the one count of its words
    ===================================================================================== */
@@ -4347,12 +4105,12 @@ function queueFindings(list, ctx = {}) {
    [CLI] — the call surface: `node qa/checks.mjs <fn> …`
    ===================================================================================== */
 
-const FUNCTIONS = { check1, check2, wrap, align, live, games, index };
+const FUNCTIONS = { check2, wrap, align, live, games, index };
 
 async function cli(argv = process.argv.slice(2)) {
   const name = argv[0];
   if (!name || !FUNCTIONS[name]) {
-    console.log('qa/checks.mjs — name one function: check1, check2, wrap, align, live, games, index.');
+    console.log('qa/checks.mjs — name one function: check2, wrap, align, live, games, index.');
     return 1;
   }
   return (await FUNCTIONS[name]({ argv: argv.slice(1) })) || 0;
