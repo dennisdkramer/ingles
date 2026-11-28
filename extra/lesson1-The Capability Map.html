@@ -55,18 +55,18 @@
 <div class="rows"><div><table class="chart">
 <thead><tr><th>What it is best for</th><th>The activity</th></tr></thead>
 <tbody>
-<tr><td>checking one meaning at a time, with the meaning as the prompt</td><td><a href="#flip">the flip cards</a></td></tr>
-<tr><td>answering inside a conversation the lesson already wrote</td><td><a href="#dialoggap">the dialog with a gap</a></td></tr>
-<tr><td>items that share columns, each row answered in place</td><td><a href="#chartanswer">a chart whose rows are answered</a></td></tr>
-<tr><td>word order, rebuilding a sentence from its pieces</td><td><a href="#chunks">chunks in the wrong order</a></td></tr>
-<tr><td>finding and repairing the one word that is wrong</td><td><a href="#correction">correction</a></td></tr>
-<tr><td>writing what is heard</td><td><a href="#dictation">dictation</a></td></tr>
-<tr><td>writing the sentence a picture shows</td><td><a href="#stripgaps">the strip with a gap under each panel</a></td></tr>
-<tr><td>choosing between forms that compete</td><td><a href="#mc">multiple choice</a></td></tr>
-<tr><td>pairing phrases with a shared pool of meanings</td><td><a href="#matching">matching</a></td></tr>
-<tr><td>locating a place, and following a route</td><td><a href="#mapq">the street map as a question</a></td></tr>
-<tr><td>typing the exact form into the sentence</td><td><a href="#fill">fill in the blank</a></td></tr>
-<tr><td>turning Portuguese into the English the lesson taught</td><td><a href="#translation">translation</a></td></tr>
+<tr><td>checking one meaning at a time, with the meaning as the prompt</td><td><a href="#flip">the flip cards</a> · <a href="#markup-controls">controls</a></td></tr>
+<tr><td>answering inside a conversation the lesson already wrote</td><td><a href="#dialoggap">the dialog with a gap</a> · <a href="#markup-controls">controls</a></td></tr>
+<tr><td>items that share columns, each row answered in place</td><td><a href="#chartanswer">a chart whose rows are answered</a> · <a href="#markup-controls">controls</a></td></tr>
+<tr><td>word order, rebuilding a sentence from its pieces</td><td><a href="#chunks">chunks in the wrong order</a> · <a href="#markup-controls">controls</a></td></tr>
+<tr><td>finding and repairing the one word that is wrong</td><td><a href="#correction">correction</a> · <a href="#markup-controls">controls</a></td></tr>
+<tr><td>writing what is heard</td><td><a href="#dictation">dictation</a> · <a href="#markup-controls">controls</a></td></tr>
+<tr><td>writing the sentence a picture shows</td><td><a href="#stripgaps">the strip with a gap under each panel</a> · <a href="#markup-controls">controls</a></td></tr>
+<tr><td>choosing between forms that compete</td><td><a href="#mc">multiple choice</a> · <a href="#markup-controls">controls</a></td></tr>
+<tr><td>pairing phrases with a shared pool of meanings</td><td><a href="#matching">matching</a> · <a href="#markup-controls">controls</a></td></tr>
+<tr><td>locating a place, and following a route</td><td><a href="#mapq">the street map as a question</a> · <a href="#markup-controls">controls</a></td></tr>
+<tr><td>typing the exact form into the sentence</td><td><a href="#fill">fill in the blank</a> · <a href="#markup-controls">controls</a></td></tr>
+<tr><td>turning Portuguese into the English the lesson taught</td><td><a href="#translation">translation</a> · <a href="#markup-controls">controls</a></td></tr>
 </tbody>
 </table></div></div>
 </div>
@@ -86,7 +86,7 @@
 <h2>Pass 2 — Skin, Mechanics, Structure, Content Fetching</h2>
 
 <div class="rows"><div class="block" data-look="float"><h3>How the blocks sit on the page</h3>
-<div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><span class="f-serif">Text that applies to the whole section may live outside of a block, or it may be&nbsp;<code>data-look="float"</code>.</span></p><div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;">Every block names its type in <code>data-type</code> — on a block that teaches <code>rul</code>, <code>rsn</code>, <code>con</code>, <code>ex</code>, <code>voc</code>, <code>mng</code>, <code>prn</code>, <code>tim</code>, <code>soc</code>, <code>rcp</code> or <code>exc</code>; on a block the student works in, the element it builds (<code>mc</code>, <code>fill</code>, <code>matching</code>, <code>chunks</code>, <code>correction</code>, <code>translation</code>, <code>dictation</code>, <code>flip</code>, <code>chartanswer</code>, <code>dialoggap</code>, <code>stripgaps</code>, <code>map</code>). The type is what the lesson's ledger line is written from, and the next page is read against that line.</p></div></div></div></div></div><div class="block" data-look="dark"><h3>Dark</h3>
+<div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><span class="f-serif">Text that applies to the whole section may live outside of a block, or it may be&nbsp;<code>data-look="float"</code>.</span></p><div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;">Every block names its type in <code>data-type</code> — on a block that teaches <code>rul</code>, <code>rsn</code>, <code>con</code>, <code>ex</code>, <code>voc</code>, <code>mng</code>, <code>prn</code>, <code>tim</code>, <code>soc</code>, <code>rcp</code> or <code>exc</code>; on a block the student works in, the element it builds (<code>mc</code>, <code>fill</code>, <code>matching</code>, <code>chunks</code>, <code>correction</code>, <code>translation</code>, <code>dictation</code>, <code>flip</code>, <code>chartanswer</code>, <code>dialoggap</code>, <code>stripgaps</code>, <code>map</code>). The type is what the lesson's ledger line is written from, and the next page is read against that line. <b>The type is the engine's record of what the block is, never the plugin's own name:</b> a block the student answers with options is <code>mc</code>, one answered by typing a word is <code>fill</code>, because the field is what the student writes in.</p></div></div></div></div></div><div class="block" data-look="dark"><h3>Dark</h3>
 <div class="rows"><div><div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><code><font face="Georgia, Iowan Old Style, Palatino Linotype, Book Antiqua, serif"><span><b>'Night mode' block, used optionally for content that relates to the night or night life.&nbsp;</b></span></font>data-look="dark"</code></p></div></div></div></div></div><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><b>The text on this page is illustrative </b>and pertains to mechanics and structure. Nothing on this page is an example or reference for prose.&nbsp;</p><div class="rows"><div><div class="rows"><div><p class="dim" style="text-align: center; margin-left: auto; margin-right: auto;"><b>Declare <code>data-look</code> on the block</b>, never infer it from what it holds: it changes the paint only.</p></div></div></div></div></div></div>
 <!-- THE DEMO LESSON — what each block is, and where its markup is written.
      The blocks below are a lesson's blocks, in a lesson's order. Element-wide rules are the page's own prose,
@@ -236,7 +236,7 @@
 
 
 <div class="rows markup-row">
-<details class="reveal"><summary>Markup — rows · a row, and an element on its own</summary><div class="body"><div>
+<details class="reveal" id="markup-rows"><summary>Markup — rows · a row, and an element on its own</summary><div class="body"><div>
 <pre>&lt;h2&gt;a section the sheet numbers&lt;/h2&gt;
 
 &lt;div class="rows"&gt;
@@ -315,7 +315,7 @@
 
 
 <div class="rows markup-row">
-<details class="reveal" open><summary>Markup — #pair · one sentence, two versions</summary><div class="body"><div>
+<details class="reveal" open id="markup-pair"><summary>Markup — #pair · one sentence, two versions</summary><div class="body"><div>
 <pre>&lt;div class="pair-stack"&gt;
   &lt;div class="side" data-state="wrong"&gt;&lt;p&gt;&lt;i class="mark"&gt;&lt;/i&gt; the sentence that is wrong&lt;/p&gt;&lt;/div&gt;
   &lt;div class="side" data-state="correct"&gt;&lt;p&gt;&lt;i class="mark"&gt;&lt;/i&gt; the sentence that is right&lt;/p&gt;&lt;/div&gt;
@@ -325,7 +325,7 @@
 &lt;!-- data-state colours the side; the .mark element draws the glyph --&gt;
 &lt;!-- .sides (two columns) is the other arrangement, for a block whose whole content is the pair --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #pos · the job each word carries, and the fence</summary><div class="body"><div>
+<details class="reveal" open id="markup-pos"><summary>Markup — #pos · the job each word carries, and the fence</summary><div class="body"><div>
 <pre>&lt;p class="pos"&gt;
   &lt;span class="pos-adj"&gt;The old&lt;/span&gt;
   &lt;span class="pos-n pos-subj"&gt;man&lt;/span&gt;
@@ -339,7 +339,7 @@
 <p class="dim"><code>data-rel</code>: add · contrast · alternative · cause · condition · time · place · comparison · content.</p>
 <p class="dim">Apply the marks to the modal, the verb, the noun and the preposition only; the tagger knows other groups, and a lesson leaves them alone. <b>If the marks do not land on the words the lesson teaches, leave the sentence unmarked and move on</b> — a sentence is never rewritten to suit the tagger. Where a page must show the parts without the marks, the part of speech goes in parentheses above the word.</p>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #recipient · the recipient and its arrow</summary><div class="body"><div>
+<details class="reveal" open id="markup-recipient"><summary>Markup — #recipient · the recipient and its arrow</summary><div class="body"><div>
 <pre>&lt;!-- the recipient: no line of its own, an arrow from the side the direct object sits on --&gt;
 I gave &lt;span class="pos-n pos-i" data-side="right"&gt;her
   &lt;i class="pos-i-arr" aria-hidden="true"&gt;
@@ -351,12 +351,12 @@ I gave &lt;span class="pos-n pos-i" data-side="right"&gt;her
 
 I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #key · a word and the text above it</summary><div class="body"><div>
+<details class="reveal" open id="markup-key"><summary>Markup — #key · a word and the text above it</summary><div class="body"><div>
 <pre>&lt;p&gt;I can't
   &lt;ruby&gt;record&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;gravar&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
   it tonight.&lt;/p&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #key-sound · a word and the dictionary's key</summary><div class="body"><div>
+<details class="reveal" open id="markup-key-sound"><summary>Markup — #key-sound · a word and the dictionary's key</summary><div class="body"><div>
 <pre>&lt;ruby&gt;library&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;
   &lt;b&gt;li&lt;/b&gt;·&lt;b&gt;br&lt;/b&gt;&lt;span class="pr-g"&gt;e&lt;/span&gt;&lt;b&gt;ry&lt;/b&gt;
 &lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
@@ -365,7 +365,7 @@ dictionary.json:  "library": "li-br[e]ry"
 PronKey.render("li-br[e]ry") → the rt above</pre>
 <p class="dim">The key is the entry in <code>dictionary.json</code>, rendered by <code>PronKey.render</code>: <code>-</code> a syllable break, a greyed letter written and not said, <code>ə</code> the schwa. <code>rp</code> is never omitted. <b>It is copied, never typed</b>: a key that does not come from the dictionary is a guess, and a word with no entry carries no key at all.</p>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #gloss · a word and its card</summary><div class="body"><div>
+<details class="reveal" open id="markup-gloss"><summary>Markup — #gloss · a word and its card</summary><div class="body"><div>
 <pre>&lt;p&gt;
   &lt;button class="glossbtn" popovertarget="d1"&gt;Clock in&lt;/button&gt;
   before eight.&lt;/p&gt;
@@ -376,7 +376,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;/div&gt;</pre>
 <p class="dim">One card per <code>id</code>, opened at its word by <code>popovertarget</code>.</p>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #axis · the timeline</summary><div class="body"><div>
+<details class="reveal" open id="markup-axis"><summary>Markup — #axis · the timeline</summary><div class="body"><div>
 <pre>&lt;figure class="tlw" data-tense="simple-past"&gt;
   &lt;p class="tlw-say"&gt;I &lt;span class="pos-m pos-v an"&gt;wrote&lt;/span&gt; it.&lt;/p&gt;
   &lt;i class="tln-link" data-mark="dot"&gt;…tapered tail, swept barb…&lt;/i&gt;
@@ -389,7 +389,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;/figure&gt;</pre>
 <p class="dim"><code>.tlgrid</code> holds a family — one line per tense, <code>&lt;h4&gt;</code> naming a cell. A bare <code>.tln</code> with no <code>.tlw</code> draws the axis alone. <code>data-grow="1"</code> fills the container, <code>data-grow="2"</code> takes the anchor string's width. Marks: <code>tln-span</code> · <code>tln-that</code> · <code>tln-bar</code> · <code>tln-gloss</code> · <code>tln-arc</code> · <code>tln-out</code> (the two on a <code>simple-present</code> figure, which carries no <code>tln-link</code>). <code>data-tense</code>: simple-present · present-continuous · present-perfect · simple-past · past-continuous · past-perfect · going-to · future-perfect.</p>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #chart · the chart, and the split chart</summary><div class="body"><div>
+<details class="reveal" open id="markup-chart"><summary>Markup — #chart · the chart, and the split chart</summary><div class="body"><div>
 <pre>&lt;figure class="chartwrap"&gt;
   &lt;table class="chart"&gt;…&lt;/table&gt;
 &lt;/figure&gt;</pre>
@@ -411,7 +411,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;/div&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #map · the street map</summary><div class="body"><div>
+<details class="reveal" open id="markup-map"><summary>Markup — #map · the street map</summary><div class="body"><div>
 <pre>&lt;!-- as a display: copy this drawing whole — this viewBox, these two roads and two lanes, all nine
      places and the map-geometry table — and write nothing inside the svg. --&gt;
 &lt;div class="vz-map viz"&gt;
@@ -439,7 +439,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;/div&gt;</pre>
 <p class="dim">Each place gets its own checkbox, at that place's <b>bottom centre</b> — under the drawing, where it never covers the name — its <code>value</code> the place, its <code>aria-label</code> the name the drawing shows — and the answer is the one place named by <code>data-a</code> on the <code>.qitem</code>, the same key a radio group uses, so engine2 marks it and freezes it on Complete. The text is free and may point at the place any way the lesson teaches — a route (<i>turn right out of the café, then your first left, then back a block — the destination is on your left</i>), a relation (<i>to the left of the café</i>), or its use (<i>where you send a letter</i>) — but the answer is always one place on the drawing. Only the keyed place is marked correct. The tick's position is a percentage of the drawing, so it stays on its place at any width.</p>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #comic · the comic strip</summary><div class="body"><div>
+<details class="reveal" open id="markup-comic"><summary>Markup — #comic · the comic strip</summary><div class="body"><div>
 <pre>&lt;table class="chart comic"&gt;
   &lt;!-- a panel is 3:2 from its own width -- two rows of them are the map's 533 x 355 box. The sentence
        below hangs over the panel and never changes the table's height. --comic-h (all panels) or
@@ -456,7 +456,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;/table&gt;</pre>
 <p class="dim"><b>A panel is the map's 3:2, and the comic is the map's box — 533 × 355 — whatever its sentences say.</b> The table is the frame and each <code>td</code> is a panel (<code>.strip</code>): <b>the panel drawing's <code>viewBox</code> is 3:2</b> (<code>0 -8 120 80</code> — the old <code>120 × 64</code> strip, given the height it was missing) and the sheet sizes it from the cell's width, so two rows of 3:2 panels in a 533px table are 533 × 355, the same box as the map beside it. <b><code>--comic-h</code> (every panel) or <code>--strip-h</code> (one)</b> replaces that height when a page wants a taller drawing, and the drawing is then fitted and centred inside the frame, never stretched. <b>The sentence under a panel hangs over its bottom edge</b> — out of the flow, wrapped, cut at two lines — so a long sentence never makes the comic taller. <b>Write no <code>width</code> and no <code>height</code> on the <code>svg</code></b>: the sheet gives it the frame's width and height. <b>Pass 2 may resize the comic or the map when the page needs it</b>, and the two are otherwise the same box.</p>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #audio · the recording</summary><div class="body"><div>
+<details class="reveal" open id="markup-audio"><summary>Markup — #audio · the recording</summary><div class="body"><div>
 <pre>&lt;figure class="vz-play viz"&gt;
   &lt;h4&gt;the song's own name&lt;/h4&gt;
   &lt;p class="dim"&gt;the performer&lt;/p&gt;
@@ -492,7 +492,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;/figure&gt;</pre>
 <p class="dim"><code>data-t</code> and <code>data-duration</code> come from <code>qa/audio.mjs</code>, never typed by eye. The song's own name is the <code>h4</code>, the performer the credit line under it. <b>Ship the same figure without the player when the song has no usable recording</b>: the link carries the time the quoted line starts, the lyrics are written out with no <code>data-t</code> because nothing plays, and the credit line under the link is what says where the song came from — no check follows an external link, so the page is the only place that is written down. <b>A song accompanies a lesson; it never takes the place of the teaching or the training it sits with.</b> Its block has a teaching point that its heading names, and it runs the lesson's own sequence on that line: the student predicts what they will hear, hears it, the line is read and marked, the rule is stated as it appears in this line, and the student then produces the same structure from words that are not the song's. If the block would teach the same thing with the audio removed, it is not a music block and the line was not the reason for it.</p>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #dialog · a dialog</summary><div class="body"><div>
+<details class="reveal" open id="markup-dialog"><summary>Markup — #dialog · a dialog</summary><div class="body"><div>
 <pre>&lt;ol class="seq viz" data-mode="turns"&gt;
   &lt;li data-side="left"&gt;&lt;span class="who"&gt;Jess&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
   &lt;li data-side="right"&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
@@ -936,8 +936,29 @@ next();
 
 
 
+<details class="reveal" open id="markup-controls"><summary>Markup — every activity · the controls, their name and their key</summary><div class="body"><div>
+<pre>&lt;!-- READ THIS BEFORE AN ACTIVITY'S OWN BOX: these rules hold for every control in every activity --&gt;
+
+&lt;!-- A CONTROL'S NAME IS ITS KEY, AND THE KEY IS A NUMBER — a&lt;section&gt;c&lt;block letter&gt;&lt;item&gt;.
+     a7c2 is section 7's third block, second item. One name for a whole radio group, one for a whole
+     checkbox group; a set of items gets its own name per item (mc1, mc2), so two items never share
+     one group --&gt;
+&lt;!-- TWO CONTROLS IN ONE CELL TAKE TWO NUMBERS: both share the cell's words and its first offset, and
+     Complete draws one key pill per control — two fields with one number draw one answer over the
+     other --&gt;
+&lt;!-- A CONTROL LEFT UNNAMED FALLS BACK TO THE WORDS AROUND IT PLUS A POSITION, {block, offset}. The
+     offset counts blocks on the page, and a game inserts its stage into its own block when it loads,
+     so a position saved before a game ran and read after it can be off by that stage. A number does
+     not move; a position can. Name every control --&gt;
+&lt;!-- A BLOCK REPORTS ITS OWN PROGRESS: data-state="done" on its .block is the sheet's green frame,
+     written by engine2 when every question in the block has an answer — a gap with a character, a
+     field with text, one option in each radio group, one box in each checkbox group — and taken away
+     when a question is emptied. A teaching block holds no control and never reports, and the saved
+     clone strips the state, so a file never keeps a student's report --&gt;</pre>
+</div></div></details>
+
 <div class="rows markup-row">
-<details class="reveal" open><summary>Markup — #flip · the cards, the prompt, and the pick</summary><div class="body"><div>
+<details class="reveal" open id="markup-flip"><summary>Markup — #flip · the cards, the prompt, and the pick</summary><div class="body"><div>
 <pre>&lt;div class="block" id="flip"&gt;
   &lt;h4 class="flip-ask" style="text-align:center" aria-live="polite"&gt;…&lt;/h4&gt;
   &lt;div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"&gt;
@@ -958,7 +979,7 @@ next();
 &lt;!-- the script turns the card itself (it cancels the label's own toggle and sets the box), so a click is never doubled · --flip-h is the height both faces share --&gt;
 &lt;!-- no data-answer and no data-a here: the block cannot be a quiz --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #dialoggap · a dialog with a gap</summary><div class="body"><div>
+<details class="reveal" open id="markup-dialoggap"><summary>Markup — #dialoggap · a dialog with a gap</summary><div class="body"><div>
 <pre>&lt;li data-side="right"&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;
     &lt;span class="say" style="position:relative"&gt;
       &lt;span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px"&gt;1.&lt;/span&gt;
@@ -974,7 +995,7 @@ next();
      left:calc(100% + 8px) on a left-hand line. On a left-hand bubble a number at right:100% hangs outside
      the dialog's own edge --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #chartanswer · a chart whose rows are answered</summary><div class="body"><div>
+<details class="reveal" open id="markup-chartanswer"><summary>Markup — #chartanswer · a chart whose rows are answered</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes"&gt;
   &lt;table class="chart"&gt;
     &lt;tr&gt;&lt;td&gt;6:40&lt;/td&gt;&lt;td&gt;He clocked in.&lt;/td&gt;
@@ -987,9 +1008,12 @@ next();
   &lt;/table&gt;
   &lt;!-- the number stands beside the control it numbers, never in a column of its own --&gt;
   &lt;!-- one example of each control type is shown — an activity may mix them or use a single type, as its content needs --&gt;
+  &lt;!-- A ROW IS ANSWERED BY A KEYED GAP: the typed form carries data-answer in the row's answer cell.
+      A row of options is markable only when its cell holds a .qitem with data-a — a chart of bare
+      radios has no key the engine can read --&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #mc · four options, one answer</summary><div class="body"><div>
+<details class="reveal" open id="markup-mc"><summary>Markup — #mc · four options, one answer</summary><div class="body"><div>
 <pre>&lt;div class="qitem" data-a="b"&gt;
   &lt;p class="qstem"&gt;the line the student reads&lt;/p&gt;
   &lt;div class="qopts"&gt;
@@ -1004,7 +1028,7 @@ next();
 &lt;!-- the set's layout follows the length of its options: data-layout="row" for one- and two-word
      options, data-layout="grid" style="--cols:2" for three- and four-word options --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #matching · a pool of meanings</summary><div class="body"><div>
+<details class="reveal" open id="markup-matching"><summary>Markup — #matching · a pool of meanings</summary><div class="body"><div>
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;
     &lt;figure class="chartwrap"&gt;&lt;table class="chart"&gt;
@@ -1022,7 +1046,7 @@ next();
      and one swapped pair is not a shuffle — the whole order is re-dealt --&gt;
 &lt;!-- each .gap keys the letter it expects; engine2 marks them on Complete --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #correction · one word wrong</summary><div class="body"><div>
+<details class="reveal" open id="markup-correction"><summary>Markup — #correction · one word wrong</summary><div class="body"><div>
 <pre>&lt;p class="dim" style="text-align:center"&gt;One word is wrong. Write the sentence again.&lt;/p&gt;
 &lt;p style="text-align:center"&gt;&lt;span class="qnum"&gt;3.&lt;/span&gt; He &lt;b&gt;have&lt;/b&gt; clocked in early.&lt;/p&gt;
 &lt;input class="gap" data-answer="He has clocked in early.|He's clocked in early."
@@ -1033,7 +1057,7 @@ next();
 &lt;!-- used as a translation, the line above is Portuguese and the gap holds the English: the block is then
      recorded as a translation activity (data-activity="translation") and not as a correction --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #dictation · listen, then write</summary><div class="body"><div>
+<details class="reveal" open id="markup-dictation"><summary>Markup — #dictation · listen, then write</summary><div class="body"><div>
 <pre>&lt;p class="dim" style="display:flex;align-items:center;
    justify-content:center;gap:10px"&gt;
   &lt;span class="qnum"&gt;4.&lt;/span&gt;
@@ -1047,10 +1071,12 @@ next();
 &lt;!-- --lines is the box's height in text lines (2 here); the page sizes every field and the
      student cannot drag it bigger --&gt;
 &lt;!-- with a .vz-play player in the block instead, the same field is the dictation --&gt;
+&lt;!-- a one-word answer needs no .write: a .gap after the .listen button takes data-answer the same way,
+     and the block is still a dictation --&gt;
 &lt;!-- as a translation it is the same field: data-say carries the Portuguese (or the English) and the answer
      is the other language — record the block as data-activity="translation", not as dictation --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #chunks · chunks in the wrong order</summary><div class="body"><div>
+<details class="reveal" open id="markup-chunks"><summary>Markup — #chunks · chunks in the wrong order</summary><div class="body"><div>
 <pre>&lt;p&gt;Unscramble the sentences:&lt;/p&gt;
 &lt;div class="qitem"&gt;
   &lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
@@ -1078,7 +1104,7 @@ next();
      is not a shuffle — the whole order is re-dealt. the number is the display order, never the answer --&gt;
 &lt;!-- the number sits at the head of the words, on their line — never alone on the answer line --&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #stripgaps · the strip as an activity</summary><div class="body"><div>
+<details class="reveal" open id="markup-stripgaps"><summary>Markup — #stripgaps · the strip as an activity</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes"&gt;
   &lt;h3&gt;the task the panels set&lt;/h3&gt;
   &lt;p&gt;Describe what is happening in each picture,
@@ -1093,7 +1119,7 @@ next();
   &lt;/table&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
-<details class="reveal" open><summary>Markup — #fill · fill in the blank</summary><div class="body"><div>
+<details class="reveal" open id="markup-fill"><summary>Markup — #fill · fill in the blank</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes" id="fill" data-activity="fill"&gt;
   &lt;h3&gt;Fill in the blank&lt;/h3&gt;
   &lt;p&gt;what the line asks the student to complete&lt;/p&gt;
@@ -1162,7 +1188,7 @@ next();
 
 
 <div class="rows markup-row">
-<details class="reveal" open><summary>Markup — 6 · a game, and the levers on it</summary><div class="body"><div>
+<details class="reveal" open id="markup-game"><summary>Markup — 6 · a game, and the levers on it</summary><div class="body"><div>
 <pre>&lt;div class="game" data-game="skeetRange" data-time="6000" data-kind="train"&gt;
   &lt;p class="game-how"&gt;one line: how to play&lt;/p&gt;
   &lt;div class="game-list"&gt;
@@ -1188,7 +1214,7 @@ next();
 &lt;!-- with a .listen chip the item may leave data-a off: the option whose text the clip speaks is the
      answer (engine4 matches it against data-say) --&gt;</pre>
 <p class="dim">Words the game needs on the item, not on the block: <code>data-answer="&lt;word&gt;"</code> for <code>wordleBoard</code> and <code>crosswordBoard</code>, <code>data-first</code> and <code>data-lives</code> for <code>echoPads</code>, <code>data-train</code> for <code>trainOrder</code>, <code>data-buckets</code> for <code>catchBasket</code>. Every game answers with the same radios, so engine4 checks the option and the page's own marking still saves it.</p>
-</div></div><details class="reveal" open><summary>Markup — a keyed gap inside a sentence</summary><div class="body"><div>
+</div></div><details class="reveal" open id="markup-gap"><summary>Markup — a keyed gap inside a sentence</summary><div class="body"><div>
 <pre>&lt;p&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt; I'm &lt;input class="gap" data-answer="in"
     style="--gap-w:3em"&gt; the café.&lt;/p&gt;
 
@@ -1230,42 +1256,9 @@ next();
 
 <div class="rows"><div><div class="rows"><div><p><b>Heights come from the authored page and widths from the solved one.</b> <code>equalize.js</code> makes a lopsided row look level, so a height read from the finished page measures the solver: the pass calls <code>EqualizeRows.clean()</code> for the authored heights and reads the solved widths, where a cell is actually squeezed. <b>A row is uneven when its two cells differ by more than 30px of content</b> — the tolerance a reader does not notice — and a row of one cell is not measured. A cell short of width is repaired structurally: the row is broken, or the wide cell is given the line. A cell short of content takes content.</p></div></div></div></div>
 <div class="rows"><div><div class="rows"><div><p><b>The repair goes in the shorter cell, and it is content — but only after the pairing is checked.</b> First read the row against the rule that made it: if the two cells were paired for size, balance or a filled line, the pairing was never a claim about content and the row is broken. Where the pairing is real, an activity takes another item of the kind it runs — the case it has not asked for, the exception the section named — and a teaching cell takes the example, the contrast or the note the section stopped short of; it may also take an open-licence picture, cropped to what the cell asks for, kept in <code>assets/</code> with its credit line. <b>Rewrapping comes last</b>: a line is not cut to reach a height, and a headline that comes out cut short is reworded shorter and never left cut.</p></div></div></div></div>
-<div class="rows"><div><div class="rows"><div><p>Inside an activity is read as well: a question standing far taller than its neighbours in a <code>.qgrid</code> is the same imbalance, and the repair is a question moved out of the grid onto its own line, never a question shortened to fit a share of the page. The pass repeats until it prints no row above 30px; then <code>npm run page</code> and <code>build:lessons</code> run again, and the batch is committed and pushed with the alignment stated in the commit message.</p></div></div></div></div>
+<div class="rows"><div><div class="rows"><div><p>Inside an activity is read as well: a question standing far taller than its neighbours in a <code>.qgrid</code> is the same imbalance, and the repair is a question moved out of the grid onto its own line, never a question shortened to fit a share of the page. The pass repeats until it prints no row above 30px; then <code>npm run page</code> and <code>build:lessons</code> run again, and the batch is committed and pushed with the alignment stated in the commit message. <b><code>build:lessons</code> writes <code>lessons.json</code> and <code>tracks.json</code> from the page filenames</b> — a lesson pushed without that run is live but unlisted, and <code>--check</code> refuses a stale pair — <b>and it stamps every page that links <code>style.css</code> or <code>equalize.js</code></b> with the file's own hash, so a changed sheet is fetched on the next load and a stale stamp fails <code>build:check</code>.</p></div></div></div></div>
 </div>
 </div>
-
-<h2>Learned during build generation</h2>
-
-
-<div class="rows">
-<div class="block" data-look="float">
-<h3>What building a lesson has taught the build</h3>
-
-<div class="rows"><div><div class="rows"><div><ul>
-<li><b>A row is sized at load, not authored.</b> <code>equalize.js</code> writes the widths: a table keeps its widest row, a drawing never passes its own size, and text takes the remainder above 200px — but beside a table or a drawing the text stops at its widest line, and that cell takes the slack. An authored <code>flex</code> or <code>width</code> on a cell is stale and the solver overwrites it. A question cell or a list cell also keeps a floor at its widest authored item, and it is spaced at load: the gaps between its numbered items (or between its list's items) are opened or closed until the cell meets the row's tallest cell that cannot space, each gap held between 6px and its authored gap + 48px. The solver strips that spacing from the saved clone only; the live page keeps it. (limit this to what the builder actually needs to know, even if its simply 'dont author flex or width')</li>
-<li><b>Every vertical gap is its container's, at one value per level.</b> <code>@layer spacing</code> gives the content area's grid a 20px row gap, a frame's direct children 20px, and a cell's direct children 14px; a cell's first child and its answer fields are 0, so every cell starts flush and a short cell's blank sits below its content — except in a two-cell row, where a gap of more than 12px that width cannot close centers the shorter cell's content instead — and a question cell's or a list cell's own gaps are spread or compressed before that decision, so centering decides only what spacing cannot close. No element carries a vertical margin or padding of its own at those levels; <code>h1</code> and <code>h2</code> keep theirs. (true but i dont think the builder needs to know this)</li>
-<li><b>A row's authored balance can only be read before the solver runs.</b> <code>equalize.js</code> equalizes a row by redistributing widths, then by spreading a question cell's own gaps, then by centring a two-cell row's shorter cell — so a height measured on the finished page reports the solver's work, not the author's. <code>EqualizeRows.clean()</code> restores the authored page (widths, <code>align-self</code>, <code>justify-content</code>, the spacing lever's margins); with every cell held at <code>align-self:flex-start</code> each rect is that cell's own content, and two cells differing by more than 30px there are a row whose shorter cell is missing content. <code>npm run align</code> reads it at 1280 and 1024px. ( is this necessary for the builder to know prior to the align step?)</li>
-<li><b>A squeeze is read in the solved state, a height in the authored one.</b> The solver hands width to whatever needs it — a table keeps its widest row, a drawing never passes its own size — so a chip run or an answer line in the cell beside them can be left narrower than its content and wrap. <code>npm run align</code> reads the page twice: the solved widths first (<code>~~</code>, <code>wants 479px in 189px (chips on 6 rows)</code>), then <code>clean()</code> for the authored heights. A squeeze is repaired by the structure — the row broken, the wide cell given the line — and never by an item, which answers a shortage of content and not of width. (is this necessary for the builder to know? if so, it should probably be in the align section)</li>
-<li><b>A page that loads the solver is hidden until its rows are sized.</b> <code>data-eq</code> on <code>&lt;html&gt;</code> makes the sheet hold <code>.content-area</code> at <code>visibility:hidden</code>; <code>equalize.js</code> solves once, then writes <code>eq-ready</code> when the fonts settle or after 1.5s. The page loads under a 50% veil with its paper, frame, header and content transparent; at <code>eq-ready</code> the veil fades evenly for 1s while the paper, frame and header fade in, and at 0.8s the content begins its own 1s fade (1.8s). A 4s/5s CSS fallback shows a page whose script never ran; the editor's <code>body.layout-on</code> and <code>body.editing</code> stay visible. The header wrapper holds the brand, the control bar and its legend, so the fade and every header rule reach all three. (i dont think this is necessary for the builder to know, correct?</li>
-<li><b>A block reports its own progress.</b> <code>data-state="done"</code> on a <code>.block</code> is the sheet's green frame (<code>#80 STATE</code>), and on a page whose <code>&lt;html&gt;</code> carries <code>data-done</code> engine2.js writes it: every question in the block has an answer on it — a gap with at least one character, a written field with text, one option picked in each radio group, at least one box ticked in each group of checkboxes — and a question emptied takes the state away again. A teaching block holds no control and never reports. The saved clone strips the state, so a file never keeps the report of the student who saved it. (put in general control markup box as described below)</li>
-<li><b>The control's <code>name</code> is its key, and the key is a number</b> — <code>a&lt;section&gt;c&lt;block letter&gt;&lt;item&gt;</code> (<code>a7c2</code> is section 7's third block, second item), one number for a whole radio group. A control left unnamed falls back to the words around it plus a <code>{block, offset}</code> position. (put in general control markup box as described below)</li>
-<li><b>That <code>offset</code> counts blocks on the page, and a game inserts its stage into its own block when it loads</b> — so a position saved before a game ran and read after it can be off by that stage. A number does not move; a position can. (i dont understand this, is it relevant? if its necessary to keep it should be in a general game markup box)</li>
-<li><b>Two controls in one cell take two numbers.</b> Both share the cell's words and its first offset, and Complete draws one key pill per control: two fields in one cell need two numbers, or one answer is drawn over the other.(put where relevant. some info is relevant to all control types so instead of having it repeated 5x have a markup box that holds any markup into that applies to all of them, and add a second pointer so they all point to the general info AND their specific markup</li>
-<li><b>The index files are build artifacts that ship with the page.</b> <code>npm run build:lessons</code> writes <code>lessons.json</code> and <code>tracks.json</code> from the page filenames, and <code>--check</code> refuses a stale pair; a lesson pushed without that run is live but unlisted. (put in section about pushing the page - end of align?)</li>
-<li><b>Every page carries the stylesheet's stamp, and a page that loads the solver carries its stamp too.</b> <code>build-lessons.mjs</code> writes the stylesheet's stamp into every page that links it — the lesson pages and the root pages, and any page the manifest does not list — and <code>equalize.js?v=…</code> into every page that loads it — the hash of the file itself — so a changed stylesheet or solver is fetched on the next load and a stale stamp fails <code>build:check</code>. The shell's script slot lists the other engines; a changed engine still needs a hard refresh. (this can go to the part of the process where it happens - end of align?)</li>
-<li><b>This page is built to be extended.</b> A <code>pre</code> in a markup box holds escaped tags only, because a real one inside it is parsed as markup; <code>npm run map</code> checks that and the dead links. ( i dont think this is necessary to keep, delete if no objections)</li>
-<li><b>A chart row is answered by a keyed gap.</b> The typed form of <code>chartanswer</code> carries <code>data-answer</code> in the row's answer cell; a row of options is markable only when its cell holds a <code>.qitem</code> with <code>data-a</code>, so a chart of bare radios has no key the engine can read. (move to the relevant markup block)</li>
-<li><b>A game records the control under it, not its own name.</b> A block the student answers with options is <code>mc</code> in <code>data-type</code>; a block answered by typing a word is <code>fill</code>, because the field is what the student writes in. (move this to where data-type is elaborated)</li>
-<li><b>The street map redraws inside every <code>.qitem</code>.</b> Two questions about one street map are two drawings, and each checkbox keeps its place because its position is a percentage of the drawing, not of the cell. (wrong, delete)</li>
-<li><b>A dictation's answer can be a gap.</b> <code>.listen</code> speaks its <code>data-say</code> text and the field that follows it takes <code>data-answer</code>; a one-word answer needs no <code>textarea.write</code>, and the block is still a dictation. (i think this is redundant, delete if no objections)</li>
-<li><b>A timeline family is a full-width child of its block.</b> <code>.tlgrid</code> holds one <code>&lt;div&gt;</code> per figure with its <code>&lt;h4&gt;</code> name; inside a half-width row cell the pair is too narrow to read, so it sits under the text rather than beside it. (delete)</li>
-<li><b>Order is a run-length check, not a rule about what the page may look like.</b> The page’s block types are compared with the three lessons before it: three in a row warns and four fails. The repair is a block typed for what it does — a rules block with an exception is <code>exc</code>, a tenses block is <code>tim</code> — never a reshuffle of the page to dodge the count. (this instruction is nonsensical, defend it or drop it)</li>
-<li><b>An option set is reflowed by its own attribute.</b> <code>data-layout="row"</code> on a <code>.qopts</code> set holds the set on one line, <code>data-layout="grid"</code> with <code>style="--cols:2"</code> wraps it into two columns, and a set with neither stacks one option per line — so four short options read as 4×1, 2×2 or 1×4 by the length of the words rather than by habit, and the stem and its options stay in one cell. The rule is written after the <code>.qgrid</code> rules it refines, so it wins on source order at equal specificity. (i dont know why we would need to hand-write layout="row"? either way this should be in the multiple choice markup)</li>
-<li><b>A flip card's prompt is its back.</b> The deck prints the text of the flipped face in <code>.flip-ask</code>, so the student reads the back's words and turns the card whose front matches them; the instruction states that direction, and the pairs are chosen for the decision they force rather than for the rule they repeat. (if this is necessary to keep it should be in the flash card markup box.)</li>
-</ul></div></div></div></div>
-</div>
-</div>
-
 
 </div>
 <footer>MATERIAIS SIMPLES E INOVADORES · INGLES CERTO EUA</footer>
