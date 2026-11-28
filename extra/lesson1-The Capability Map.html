@@ -408,25 +408,10 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 </div>
 
 <div class="rows">
-<div>
-
 <div class="block" data-look="stripes">
-<h3>Marked activities with controls</h3>
-<div class="rows"><div><p><b>A question may sit inside the teaching block it belongs to, in a block with the map or player it asks about, or in a block of its own</b> — wherever it teaches best. There is no default and the lesson chooses. A lone keyed gap is a component beside other teaching, never an activity and never a block of its own.</p></div></div>
-<div class="rows"><div><p class="dim">Write the instruction for the direction the control actually runs: the prompt carries the answer and the student supplies the word, or the prompt carries the word and the student finds the answer. Read the control, then write its line.</p></div></div>
-
-
-<div class="rows">
-
-
-</div>
-
-
-
-</div></div></div><div class="rows"><div><div class="block" data-look="stripes">
 <h3>Street map</h3>
 <!-- #map · a town drawn once, so places and routes have somewhere to point -->
-<div class="rows"><div><div class="qitem" data-a="post office">
+<div class="rows"><div><div class="rows"><div><p><b>A question may sit inside the teaching block it belongs to, in a block with the map or player it asks about, or in a block of its own</b> — wherever it teaches best. There is no default and the lesson chooses. A lone keyed gap is a component beside other teaching, never an activity and never a block of its own.</p></div></div></div><div><div class="qitem" data-a="post office">
 <p class="qstem" style="text-align:center">Name the place where you post a letter.</p>
 <div class="vz-map" style="border:2px solid var(--tan);border-radius:3px">
 <svg viewBox="0 0 360 240" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, with nine places, each named on a sign in the drawing — a station with a canopy and a platform clock, a café with a striped awning and two tables outside, a park with trees behind railings, a bank with a columned front and steps, a library with tall windows, a post office with a mailbox on the sidewalk, a bus stop with a shelter and a bench, a market with two stalls, and a hotel with a door canopy">
@@ -667,7 +652,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 </div>
 </div>
 </div></div></div>
-</div></div><div class="block" data-look="stripes">
+</div></div><div class="rows"><div class="block" data-look="stripes">
 <h3>Dialog with a gap</h3>
 <!-- #dialoggap · answering inside a conversation the lesson wrote -->
 <div class="rows"><div><ol class="seq" data-mode="turns" style="text-align:center;margin-inline:auto;width:100%;border:2px solid var(--tan);border-radius:3px;padding:10px 12px">
@@ -675,6 +660,17 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <li data-side="right"><span class="who">Mike</span><span class="say" style="position:relative"><span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px">1.</span>Three times. I <input class="gap" data-answer="have|'ve" style="--gap-w:3.5em"> already posted it.</span></li>
 <li data-side="left"><span class="who">Jess</span><span class="say">Then why is it still on the table?</span></li>
 </ol></div></div>
+</div><div class="block" data-look="stripes">
+<h3>Matching</h3>
+<!-- #matching · pairing each item with its meaning from one shared pool -->
+<div class="rows"><div><table class="chart" id="matching">
+<tbody>
+<tr><td><b>a</b> shared the gossip</td><td><span class="qnum">1.</span> <b>clocked in</b> <input class="gap" data-answer="c" style="--gap-w:3em"></td></tr>
+<tr><td><b>b</b> got out of a situation</td><td><span class="qnum">2.</span> <b>spilled the tea</b> <input class="gap" data-answer="a" style="--gap-w:3em"></td></tr>
+<tr><td><b>c</b> recorded the time you got to work</td><td><span class="qnum">3.</span> <b>threw shade</b> <input class="gap" data-answer="d" style="--gap-w:3em"></td></tr>
+<tr><td><b>d</b> insulted someone indirectly</td><td><span class="qnum">4.</span> <b>bailed</b> <input class="gap" data-answer="b" style="--gap-w:3em"></td></tr>
+</tbody>
+</table><div class="rows"><div><p class="dim">Write the instruction for the direction the control actually runs: the prompt carries the answer and the student supplies the word, or the prompt carries the word and the student finds the answer. Read the control, then write its line.</p></div></div></div></div>
 </div></div>
 
 
@@ -728,7 +724,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <div class="rows"><div><div class="block" data-look="stripes">
 <h3>Multiple choice</h3>
 <!-- #mc · choosing the one right answer among the wrong ones -->
-<div class="rows"><div><div class="qitem" data-a="b" style="text-align:center;margin-inline:auto">
+<div class="rows"><div style="text-align: left;"><div class="qitem" data-a="b" style="margin-inline: auto; text-align: center; margin-left: auto; margin-right: auto;">
 <p class="qstem"><span class="qnum">1.</span> By the time I arrived, the crew <b>___</b> the truck.</p>
 <div class="opts compact" data-layout="row">
 <label class="opt"><input type="radio" name="mc1" value="a"><span>loaded</span></label>
@@ -740,26 +736,15 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 </div></div><div class="block" data-look="stripes">
 <h3>Fill in the blank</h3>
 <!-- #fill · typing the exact form into the sentence that needs it -->
-<div class="rows"><div><div class="qitem">
-  <p style="text-align:center"><span class="qnum">1.</span> Mike <input class="gap" data-answer="has" style="--gap-w:3em"> already posted it.</p>
-  <p style="text-align:center"><span class="qnum">2.</span> The crew <input class="gap" data-answer="had|'d" style="--gap-w:3.5em"> loaded the truck before I arrived.</p>
+<div class="rows"><div><div class="qitem" style="text-align: center; margin-left: auto; margin-right: auto;">
+  <p style="text-align: left;"><span class="qnum">1.</span> Mike <input class="gap" data-answer="has" style="--gap-w:3em"> already posted it.</p>
+  <p style="text-align: left;"><span class="qnum">2.</span> The crew <input class="gap" data-answer="had|'d" style="--gap-w:3.5em"> loaded the truck before I arrived.</p>
 </div></div></div>
 </div></div>
 
 
 
-<div class="rows"><div><div class="block" data-look="stripes">
-<h3>Matching</h3>
-<!-- #matching · pairing each item with its meaning from one shared pool -->
-<div class="rows"><div><table class="chart" id="matching">
-<tbody>
-<tr><td><b>a</b> shared the gossip</td><td><span class="qnum">1.</span> <b>clocked in</b> <input class="gap" data-answer="c" style="--gap-w:3em"></td></tr>
-<tr><td><b>b</b> got out of a situation</td><td><span class="qnum">2.</span> <b>spilled the tea</b> <input class="gap" data-answer="a" style="--gap-w:3em"></td></tr>
-<tr><td><b>c</b> recorded the time you got to work</td><td><span class="qnum">3.</span> <b>threw shade</b> <input class="gap" data-answer="d" style="--gap-w:3em"></td></tr>
-<tr><td><b>d</b> insulted someone indirectly</td><td><span class="qnum">4.</span> <b>bailed</b> <input class="gap" data-answer="b" style="--gap-w:3em"></td></tr>
-</tbody>
-</table></div></div>
-</div></div></div>
+
 
 <details
 
