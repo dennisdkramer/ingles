@@ -38,6 +38,7 @@
     --orange:#c2601a; --purple:#8c3b2f; --green:#2f9e44; --greenbg:#e8f7ee;
     --surface:var(--cream); --surface-2:var(--paper); --sunken:#efe6d6;
     --ink-2:#5c5347; --line:var(--rose); --line-2:#e7dbc9; --dim:#6b6154; --lead:#5c5347;
+    --h3-ink:oklch(38% .03 250);
     --para-gap:8px; --level-gap:20px; --cell-gap:14px;
     --teach-h:65; --train-h:28; --show-h:350; --game-h:96;
     /* the word-mark colours for #94 POS. Loud on purpose: these marks carry meaning, so they are
@@ -105,7 +106,7 @@
     background:linear-gradient(90deg,transparent 0,var(--rose) 8px,
       var(--rose) calc(100% - 8px),transparent 100%) bottom left/100% 2px no-repeat border-box;
     padding-bottom:6px;margin:1.6em 0 .3em;font-weight:700}
-  h3{font-family:var(--display);font-size:calc(var(--s1) + 7pt);color:oklch(38% .03 250);
+  h3{font-family:var(--display);font-size:calc(var(--s1) + 7pt);color:var(--h3-ink);
     position:relative;
     padding-bottom:6px;margin:22px 0 0;
     letter-spacing:.02em;
@@ -139,7 +140,7 @@
   .content-area>h2:has(+#feed)::before{content:none}
   /* inline-block keeps the lettered prefix out of the heading's underline: a decoration propagates to
      in-flow text but is not drawn across an inline-block, which is where the letter sits */
-  h3::before{content:counter(blk,upper-alpha) ". ";color:oklch(38% .03 250);padding-right:.5em;
+  h3::before{content:counter(blk,upper-alpha) ". ";color:var(--h3-ink);padding-right:.5em;
     display:inline-block;font-family:var(--display);font-size:calc(.8em + 4.4pt);font-weight:700}
   h4{font-family:var(--serif);font-weight:700;font-size:calc(var(--s-1) + 4px);
     color:var(--ink);margin:0 0 8px;padding:0;text-align:center;text-transform:none;
@@ -1360,6 +1361,7 @@ p:has(>input.gap:only-child){text-align:center}
   .block[data-look="dark"]{--ink:#f2ece1;--ink-2:#b7ab97;--line:#3d372f;--line-2:#2b2620;
     --surface:#14110d;--surface-2:#1e1a14;--paper:#191510;--sunken:#2b241b;
     --ptw:#e0b27a;--accent-h:38;--accent:oklch(76% .12 38);color-scheme:dark;color:var(--ink);
+    --h3-ink:oklch(70% .075 250);
     /* .dim and .lead live in the utilities layer, above this one, so their colour has to arrive as a
        token: a selector here would lose to `u` */
     --dim:var(--ink-2);--lead:var(--ink-2);
