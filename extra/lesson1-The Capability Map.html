@@ -40,8 +40,8 @@
 
 
 
-</div><div class="rows"><div><div class="rows"><div><p>Everything on the page is organized by 3 layers of flexbox rows. The first layer wraps everything in a horizontal row inside the .content-area. The cells within it - like this block - are wrapped as in a layer 2 row.&nbsp;</p></div></div></div></div></div></div><div class="rows"><div><div class="block"><h3>AND</h3></div></div></div><div class="rows"><div class="block" data-look="float"><h3>How the blocks sit on the page</h3>
-<div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><span class="f-serif">Text that applies to the whole section may live outside of a block, or it may be&nbsp;<code>data-look="float"</code>.</span></p><div class="rows"><div><p class="dim" style="text-align: center; margin-left: auto; margin-right: auto;"><b>Declare <code>data-look</code> on the block</b>, never infer it from what it holds: it changes the paint only.</p></div></div></div></div></div><div class="block" data-look="dark"><h3>Dark</h3>
+</div></div></div><div class="rows"><div><div class="block"><h3>Block styling, sizing and layout choice</h3><div class="rows"><div><div class="rows"><div><p>Everything on the page is organized by 3 layers of flexbox rows. The first layer wraps everything in a horizontal row inside the .content-area. The cells within it - like this block - are wrapped as in a layer 2 row.&nbsp; The rows and cells allow content - images, activities, tables, and paragraphs - to be placed adjascent and fit and flow naturally. This is the default block look with no data-look defined.</p></div></div></div></div></div></div></div><div class="rows"><div class="block" data-look="float"><h3>How the blocks sit on the page</h3>
+<div class="rows"><div style="text-align: center;"><p><span class="f-serif">Text that applies to the whole section may live outside of a block, or it may be&nbsp;<code>data-look="float"</code>.</span></p><div class="rows"><div><p class="dim" style="text-align: center; margin-left: auto; margin-right: auto;"><b>Declare <code>data-look</code> on the block</b>, never infer it from what it holds: it changes the paint only.<br>Default text behaviour is full justify, but short strings and text in thin containers often looks better centered.</p></div></div></div></div></div><div class="block" data-look="dark"><h3>Dark</h3>
 <div class="rows"><div><div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><code><font face="Georgia, Iowan Old Style, Palatino Linotype, Book Antiqua, serif"><span><b>'Night mode' block, used optionally for content that relates to the night or night life.&nbsp;</b></span></font>data-look="dark"</code></p></div></div></div></div></div></div>
 <!-- THE PAGE'S CONTRACT — a drawn example is the markup you copy, whole, as it stands.
      The box named by the same token carries what the drawing cannot: its alternates, its options,
@@ -76,14 +76,14 @@
 
 
 
-<div class="rows"><div><div class="rows"><div><p class="dim"><b>Charts.</b> Three switches, each answering a different question about the table underneath.</p></div></div><table class="chart">
+<div class="rows"><div><table class="chart">
 <thead><tr class="bare"><th colspan="3"></th></tr></thead>
 <tbody>
 <tr><td><b>borrow</b></td><td>take something, give it back later</td><td><span lang="pt">emprestar</span> also covers <i>lend</i></td></tr>
 <tr><td><b>lend</b></td><td>give something, get it back later</td><td>one Portuguese word for both directions</td></tr>
 <tr><td><b>owe</b></td><td>still have to give it back</td><td><span lang="pt">dever</span> also means <i>must</i></td></tr>
 </tbody>
-</table></div><div><p><b><code>&lt;tr class="bare"&gt;</code></b> — Tables do not get default headings - they are used only when the student needs them to understand the table contents. . The row is <b>collapsed to a 3px rule, never deleted</b>, so the chart keeps its top edge.&nbsp;</p></div></div><div class="rows">
+</table></div><div><p><b><code>&lt;tr class="bare"&gt;</code></b> — Table headings are authored only when the student will need them to understand the table contents. By default, the row is <b>collapsed to a 3px </b>top edge, not deleted.</p></div></div><div class="rows">
 <div><div class="rows"><div><figure class="chartwrap"></figure></div></div></div>
 
 </div>
@@ -103,20 +103,20 @@
 <tr><td>take</td><td>took</td></tr>
 <tr><td>buy</td><td>bought</td></tr>
 </tbody>
-</table></figure></div></div>
-<!-- #matching · pairing each item with its meaning from one shared pool -->
-
-<div class="rows">
-<div>
-<div class="rows"><div><figure class="chartwrap" id="matching">
-<table class="chart">
+</table></figure></div><div><div class="rows"><div><table class="chart">
 <tbody>
 <tr><td><b>a</b> shared the gossip</td><td><span class="qnum">1.</span> <b>clocked in</b> <input class="gap" data-answer="c" style="--gap-w:3em"></td></tr>
 <tr><td><b>b</b> got out of a situation</td><td><span class="qnum">2.</span> <b>spilled the tea</b> <input class="gap" data-answer="a" style="--gap-w:3em"></td></tr>
 <tr><td><b>c</b> recorded the time you got to work</td><td><span class="qnum">3.</span> <b>threw shade</b> <input class="gap" data-answer="d" style="--gap-w:3em"></td></tr>
 <tr><td><b>d</b> insulted someone indirectly</td><td><span class="qnum">4.</span> <b>bailed</b> <input class="gap" data-answer="b" style="--gap-w:3em"></td></tr>
 </tbody>
-</table>
+</table></div></div></div></div>
+<!-- #matching · pairing each item with its meaning from one shared pool -->
+
+<div class="rows">
+<div>
+<div class="rows"><div><figure class="chartwrap" id="matching">
+
 </figure></div></div>
 </div>
 </div>
@@ -277,7 +277,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
     …
   &lt;/tbody&gt;
 &lt;/table&gt;</pre>
-<p class="dim">A chart carries no title of its own: the sentence beside it names it. <code>th.vlab</code> puts a family label outside the chart's edge; <code>tr.bare</code> collapses a nameless header row to a rule; <code>tr.note</code> is one remark row across the chart. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each.</p>
+<p class="dim">A chart carries no title of its own: the sentence beside it names it. <code>th.vlab</code> puts a family label outside the chart's edge; <code>tr.bare</code> collapses a nameless header row to a rule. A block takes <code>data-structure="grid"</code> with a <code>thead</code> and optional <code>caption</code>, and <code>tr.note</code> for a remark row. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each.</p>
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;…the sentence, and the chart it reads…&lt;/div&gt;
   &lt;div&gt;
@@ -407,14 +407,14 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <input type="checkbox">
 <span class="card3d">
 <span class="face" style="text-align:center"><b>owe</b><span class="dim">the verb</span></span>
-<span class="face back" style="text-align:center"><b>you still have to give it back</b></span>
+<span class="face back" style="text-align: center;"><b>you still have to give it back</b></span>
 </span>
 </label>
 <label class="flip" style="--flip-h:112px">
 <input type="checkbox">
 <span class="card3d">
 <span class="face" style="text-align:center"><b>spill the tea</b><span class="dim">the phrase</span></span>
-<span class="face back" style="text-align:center"><b>share the gossip</b></span>
+<span class="face back" style="text-align: center;"><b>share the gossip</b></span>
 </span>
 </label>
 <label class="flip" style="--flip-h:112px">
@@ -435,14 +435,14 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <input type="checkbox">
 <span class="card3d">
 <span class="face" style="text-align:center"><b>hang out</b><span class="dim">the phrase</span></span>
-<span class="face back" style="text-align:center"><b>spend time somewhere with people</b></span>
+<span class="face back" style="text-align: center;"><b>spend time somewhere with people</b></span>
 </span>
 </label>
 <label class="flip" style="--flip-h:112px">
 <input type="checkbox">
 <span class="card3d">
 <span class="face" style="text-align:center"><b>bail</b><span class="dim">the verb</span></span>
-<span class="face back" style="text-align:center"><b>get out of a situation you don't want</b></span>
+<span class="face back" style="text-align: center;"><b>get out of a situation you don't want</b></span>
 </span>
 </label>
 </div></div></div></div></div>
