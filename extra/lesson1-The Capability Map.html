@@ -858,7 +858,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <div>
 <div class="block" data-look="stripes" id="flip" data-activity="flip">
 <h3>Training</h3>
-<h4 class="flip-ask" style="text-align:center" aria-live="polite">…</h4>
+<h4 class="flip-ask" style="text-align:center" aria-live="polite">get out of a situation you don't want</h4>
 <div class="rows"><div><div class="rows"><div><p><b>Training may sit inside the teaching section it belongs to or stand in a section of its own</b>; the lesson chooses the flow its content wants, and neither arrangement is the default. What the training asks for, and how much of it a point gets, is pass 1's.</p></div></div></div></div>
 
 <div class="rows"><div><div class="rows"><div><div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
@@ -866,7 +866,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 <input type="checkbox">
 <span class="card3d">
 <span class="face" style="text-align:center"><b>borrow</b><span class="dim">the verb</span></span>
-<span class="face back" style="text-align:center"><b>take it now, give it back later</b></span>
+<span class="face back" style="text-align: center;"><b>take it now, give it back later</b></span>
 </span>
 </label>
 <label class="flip" style="--flip-h:112px">
@@ -1577,7 +1577,50 @@ next();
 
 <div class="rows">
 <div>
-<div class="block">
+<div class="rows"><div><div class="rows"><div><div class="block">
+<h3>Listen first, before the rule</h3>
+
+<div class="rows"><div><figure class="vz-play viz">
+<h4>Take Me Home, Country Roads</h4>
+<p class="dim">John Denver, 1971</p>
+<audio class="vz-audio" src="../assets/country-roads.mp3" data-duration="29.71" controls preload="metadata"></audio>
+<div class="vz-controls">
+<button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>
+<span class="vz-time" data-now>0:00</span>
+<div class="vz-bar" role="slider" tabindex="0" aria-label="Play position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="vz-fill"></span><span class="vz-knob"></span></div>
+<span class="vz-time" data-dur>0:00</span>
+</div>
+<ol class="vz-lyrics">
+<li data-t="2.018">Country roads, take me home</li>
+<li data-t="7.948">To the place I belong</li>
+<li data-t="13.708">West Virginia, mountain mamma</li>
+<li data-t="19.488">Take me home, country roads</li>
+</ol>
+</figure></div><div><div class="rows"><div><p>This chorus asks somebody to take the singer home, and in nine seconds it uses three of the words this lesson is about. Play it once with the words in front of you, then read them. <b>Take me home</b> puts the receiver straight after the verb with no preposition, and <i>home</i> takes no <b>to</b> at all: <i>go home</i>, <i>take me home</i>, never <i>to home</i>. <b>To the place I belong</b> keeps <b>to</b> for a destination that is on no map. And <b>country roads</b> are the line the singer is on — the <b>on</b> a street will need.</p></div></div></div></div>
+</div></div></div><div class="rows"><div><div class="block">
+<h3>From and to: a movement with two ends</h3>
+
+<div class="rows"><div>
+<figure class="vz-play viz">
+<h4>Penny Lane</h4>
+<p class="dim">The Beatles, 1967</p>
+<audio class="vz-audio" src="../assets/penny-lane.mp3" data-duration="22.13" controls preload="metadata"></audio>
+<div class="vz-controls">
+<button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>
+<span class="vz-time" data-now>0:00</span>
+<div class="vz-bar" role="slider" tabindex="0" aria-label="Play position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="vz-fill"></span><span class="vz-knob"></span></div>
+<span class="vz-time" data-dur>0:00</span>
+</div>
+<ol class="vz-lyrics">
+<li data-t="2.014">On the corner is a banker with a motorcar</li>
+<li data-t="6.494">The little children laugh at him behind his back</li>
+<li data-t="10.844">And the banker never wears a mac</li>
+<li data-t="14.844">In the pouring rain, very strange</li>
+</ol>
+</figure>
+<p><b>Listen.</b> Penny Lane is one street, sung by somebody standing in it, and four lines give you three prepositions and a place that simply exists. Before you play it: which word comes before <i>the corner</i>, which before <i>the pouring rain</i>, and what is happening <i>behind his back</i>?</p></div><div><div class="rows"><div><p>Now play it and read the four lines. <b>On the corner is a banker</b> gives you the point on the map, and it does it without a verb of movement — English can say a thing simply exists somewhere: <i>on the corner is…</i>, <i>there's a banker on the corner</i>. <b>Behind his back</b> is where the children are, not where he is going. <b>In the pouring rain</b> is a space you are inside of, and the rain is the space. Three prepositions, three shapes, and a fourth thing the lesson keeps saying: the words around the place do the pointing, and the place only answers.</p></div></div></div></div>
+
+</div></div></div></div></div><div class="block">
 <h3>The Games</h3>
 <div class="rows"><div><div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><b>Don’t add a game just to have one.</b> A game is a skin over an activity the lesson already wanted: the activity is chosen first, and a reskinned game is that activity's element in the ledger, never an element of its own. Use one only where the activity would be worse as a plain list.</p></div></div><div class="rows"><div><p class="dim" style="text-align: center; margin-left: auto; margin-right: auto;">A <code>.game</code> draws its own edge, so it stands at page level and is never put inside a <code>.block</code>. Every game reads the same content — <code>.game-list &gt; .qitem</code>, each with a <code>.qstem</code> and radio options, <code>data-a</code> marking the right one — so that list is what prints and what the student answers if the script never runs; <code>data-game</code> chooses only the presentation, never the content. A game in a quiz section carries <code>data-retry="0"</code>; a training game carries nothing. <b>A <code>.listen</code> in the item's stem makes the round SPOKEN</b>: the runner says its <code>data-say</code> on the frame the round opens and keeps a 🔊 replay on the HUD, so a game can ask "which word did you hear?" — <code>data-sound="0"</code> mutes both, and <code>bingoCard</code> is the one presentation that times its own clip and is left alone.</p></div></div><div class="rows"><div><table class="chart">
 <thead><tr><th><code>data-game</code></th><th>What it is good for</th><th>The markup it needs</th></tr></thead>
@@ -1763,37 +1806,18 @@ next();
      returned to at the end. The chart's four rows are the rule's four rows, in its order. The fill asks the same
      question twice: what kind of place it is, and is anything moving towards it. -->
 <!-- demo · trains: the lesson's three words heard in a song before the rule arrives · box: #audio -->
-<div class="rows">
-<div>
-<div class="block">
-<h3>Listen first, before the rule</h3>
-<div class="rows"><div><p>This chorus asks somebody to take the singer home, and in nine seconds it uses three of the words this lesson is about. Play it once with the words in front of you, then read them. <b>Take me home</b> puts the receiver straight after the verb with no preposition, and <i>home</i> takes no <b>to</b> at all: <i>go home</i>, <i>take me home</i>, never <i>to home</i>. <b>To the place I belong</b> keeps <b>to</b> for a destination that is on no map. And <b>country roads</b> are the line the singer is on — the <b>on</b> a street will need.</p></div></div>
-<div class="rows"><div><figure class="vz-play viz">
-<h4>Take Me Home, Country Roads</h4>
-<p class="dim">John Denver, 1971</p>
-<audio class="vz-audio" src="../assets/country-roads.mp3" data-duration="29.71" controls preload="metadata"></audio>
-<div class="vz-controls">
-<button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>
-<span class="vz-time" data-now>0:00</span>
-<div class="vz-bar" role="slider" tabindex="0" aria-label="Play position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="vz-fill"></span><span class="vz-knob"></span></div>
-<span class="vz-time" data-dur>0:00</span>
-</div>
-<ol class="vz-lyrics">
-<li data-t="2.018">Country roads, take me home</li>
-<li data-t="7.948">To the place I belong</li>
-<li data-t="13.708">West Virginia, mountain mamma</li>
-<li data-t="19.488">Take me home, country roads</li>
-</ol>
-</figure></div></div>
-</div>
-</div>
-</div>
+
 
 <h2>Habit, or the trip you are on</h2>
 
 <!-- demo · trains: a habit — repeated points under the two arrows that splay out and sweep to before and then — and one trip as one point · box: #axis -->
+
+
+<!-- demo · trains: choosing the form the sentence's edges ask for · box: #fill -->
 <div class="rows">
+
 <div>
+
 <div class="block">
 <h3>One verb in Portuguese, two forms in English</h3>
 <div class="rows"><div>
@@ -1824,12 +1848,7 @@ next();
 <p>And repetition decides nothing on its own: <span lang="pt">Estou indo ao banco todos os dias essa semana</span> → <b>I'm going to the bank every day this week</b>, because <i>this week</i> puts an end on the series. Take the end away and the present simple is the only form left: <b>I go to the bank every Friday</b>, no last Friday, nothing to finish. So the question is not one trip or many. It is <b>has the sentence got an edge?</b> If a listener can ask "and next Friday?" and you answer "yes, as always", use <i>I go</i>. If the answer is "no, just this week", use <i>I'm going</i>.</p>
 <p>Both mistakes are one mistake: <b>I'm going to the bank every Friday</b> gives a habit an edge it does not have, and <b>I go to the bank now</b> takes the edge off a trip that has one. Both come from using the present for whatever is true at the moment of speaking, which is what Portuguese lets you do and English does not.</p>
 </div></div>
-</div>
-</div>
-</div>
-
-<!-- demo · trains: choosing the form the sentence's edges ask for · box: #fill -->
-<div class="rows">
+</div></div></div><div class="rows">
 <div>
 <div class="block" data-look="stripes">
 <h3>Which form does the sentence need?</h3>
@@ -2437,40 +2456,7 @@ next();
 <h2>Both ends, and the way</h2>
 
 <!-- demo · trains: from and to as the two ends, heard in a second recording · box: #audio -->
-<div class="rows">
-<div>
-<div class="block">
-<h3>From and to: a movement with two ends</h3>
-<div class="rows"><div>
-<p><b>From … to …</b> names both ends of a movement: <b>to</b> is the end you are going towards, <b>from</b> is the end you left. <b>The way</b> is the route itself — <i>on the way</i> is during the movement, <i>the way back</i> is the route home.</p>
-<p>This pair crosses from Portuguese without trouble: <span lang="pt">de segunda a sexta</span> is <b>from Monday to Friday</b>, and <span lang="pt">do banco até a estação</span> — <i>até</i>, as far as — is <b>from the bank to the station</b>. What does not cross is <i>até</i> itself: where the sentence names a time instead of a place, <i>até</i> is <b>until</b> — <span lang="pt">até sexta</span> is <b>until Friday</b>, and <i>to Friday</i> is not a sentence.</p>
-<p><b>Listen.</b> Penny Lane is one street, sung by somebody standing in it, and four lines give you three prepositions and a place that simply exists. Before you play it: which word comes before <i>the corner</i>, which before <i>the pouring rain</i>, and what is happening <i>behind his back</i>?</p>
-</div></div>
-<div class="rows"><div>
-<figure class="vz-play viz">
-<h4>Penny Lane</h4>
-<p class="dim">The Beatles, 1967</p>
-<audio class="vz-audio" src="../assets/penny-lane.mp3" data-duration="22.13" controls preload="metadata"></audio>
-<div class="vz-controls">
-<button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>
-<span class="vz-time" data-now>0:00</span>
-<div class="vz-bar" role="slider" tabindex="0" aria-label="Play position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="vz-fill"></span><span class="vz-knob"></span></div>
-<span class="vz-time" data-dur>0:00</span>
-</div>
-<ol class="vz-lyrics">
-<li data-t="2.014">On the corner is a banker with a motorcar</li>
-<li data-t="6.494">The little children laugh at him behind his back</li>
-<li data-t="10.844">And the banker never wears a mac</li>
-<li data-t="14.844">In the pouring rain, very strange</li>
-</ol>
-</figure>
-</div></div>
-<div class="rows"><div>
-<p>Now play it and read the four lines. <b>On the corner is a banker</b> gives you the point on the map, and it does it without a verb of movement — English can say a thing simply exists somewhere: <i>on the corner is…</i>, <i>there's a banker on the corner</i>. <b>Behind his back</b> is where the children are, not where he is going. <b>In the pouring rain</b> is a space you are inside of, and the rain is the space. Three prepositions, three shapes, and a fourth thing the lesson keeps saying: the words around the place do the pointing, and the place only answers.</p>
-</div></div>
-</div>
-</div>
-</div>
+
 
 <!-- demo · trains: from … to … produced with the town's own places · box: #fill -->
 <div class="rows">
@@ -2529,69 +2515,10 @@ next();
 </div>
 
 <!-- demo · trains: the same five sentences as a game on a route · box: 6 (game) -->
-<div class="rows">
-<div>
-<div class="block">
-<h3>Play the route</h3>
-<div class="rows"><div><p>One route, five spaces, and the five sentences you have just answered. The clock is what makes it a test of the choice rather than a second reading.</p></div></div>
-<div class="game g4 g4-ready g4 g4-ready g4 g4-ready g4 g4-ready g4 g4-ready g4 g4-ready" data-game="skeetRange" data-time="6000" data-kind="train"><div class="g4-stage"><div class="g4-poster"><div class="g4-target g4-bit" style="left: 4%; top: 14%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;in&lt;/span&gt;</div><div class="g4-target g4-bit" style="left: 34.7%; top: 42%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;on&lt;/span&gt;</div><div class="g4-target g4-bit" style="left: 65.3%; top: 14%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;at&lt;/span&gt;</div><div class="g4-cross g4-bit" style="left: 52%; top: 56%; width: 46px; height: 46px; margin: -23px 0px 0px -23px;"></div></div><div class="g4-scene"><svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><rect width="400" height="260" fill="url(#g4-dawn)"></rect><circle cx="316" cy="42" r="54.4" fill="url(#g4-glow)"></circle><circle cx="316" cy="42" r="16" fill="#fff1c4"></circle><g opacity="0.85" fill="#fff"><ellipse cx="74" cy="38" rx="23.400000000000002" ry="9.9"></ellipse><ellipse cx="59.6" cy="41.6" rx="14.4" ry="7.2"></ellipse><ellipse cx="90.2" cy="42.5" rx="16.2" ry="8.1"></ellipse></g><g opacity="0.7" fill="#fff"><ellipse cx="208" cy="24" rx="16.900000000000002" ry="7.15"></ellipse><ellipse cx="197.6" cy="26.6" rx="10.4" ry="5.2"></ellipse><ellipse cx="219.7" cy="27.25" rx="11.700000000000001" ry="5.8500000000000005"></ellipse></g><path d="M0 156 Q70 130 140 156 T280 156 T420 156 V260 H0Z" fill="#a8d8b4" opacity="0.9"></path><path d="M0 188 Q70 162 140 188 T280 188 T420 188 V260 H0Z" fill="#4f7a52" opacity="1"></path><rect y="204" width="400" height="56" fill="url(#g4-grass)"></rect><path d="M12 216h376" stroke="#8a5622" stroke-width="4" stroke-linecap="round" opacity=".85"></path><g stroke="#6b4520" stroke-width="5" stroke-linecap="round" opacity=".9"><path d="M22 216v38"></path><path d="M104 216v38"></path><path d="M186 216v38"></path><path d="M268 216v38"></path><path d="M350 216v38"></path></g><rect width="400" height="260" fill="url(#g4-vignette)"></rect></svg></div><div class="g4-hud"><span class="score"></span><span class="clock"></span><button class="g4-hear" type="button" title="Hear it again" aria-label="Hear it again" style="display: none; margin: 0px; padding: 2px 10px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit; font-size: 17px; line-height: 1.25; background: var(--paper); color: var(--ink); border: 2px solid var(--ink); border-radius: 12px; box-shadow: 3px 3px 0 var(--tan); cursor: pointer;">🔊</button></div><div class="g4-prev"><span>Score:</span><b></b></div><div class="g4-prompt"></div><div class="g4-timebar"><i></i></div><div class="g4-intro"><div class="g4-intro-card"><p class="game-how">Answer the sentence on the space you land on. A wrong answer sends you back one.</p><button class="game-start" type="button">▶ Play</button></div></div><div class="g4-range"><div class="g4-discs"></div><div class="g4-cross g4-keep"></div><div class="g4-ammo"></div></div></div><div class="g4-stage"><div class="g4-poster"><div class="g4-target g4-bit" style="left: 4%; top: 14%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;in&lt;/span&gt;</div><div class="g4-target g4-bit" style="left: 34.7%; top: 42%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;on&lt;/span&gt;</div><div class="g4-target g4-bit" style="left: 65.3%; top: 14%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;at&lt;/span&gt;</div><div class="g4-cross g4-bit" style="left: 52%; top: 56%; width: 46px; height: 46px; margin: -23px 0px 0px -23px;"></div></div><div class="g4-scene"><svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><rect width="400" height="260" fill="url(#g4-dawn)"></rect><circle cx="316" cy="42" r="54.4" fill="url(#g4-glow)"></circle><circle cx="316" cy="42" r="16" fill="#fff1c4"></circle><g opacity="0.85" fill="#fff"><ellipse cx="74" cy="38" rx="23.400000000000002" ry="9.9"></ellipse><ellipse cx="59.6" cy="41.6" rx="14.4" ry="7.2"></ellipse><ellipse cx="90.2" cy="42.5" rx="16.2" ry="8.1"></ellipse></g><g opacity="0.7" fill="#fff"><ellipse cx="208" cy="24" rx="16.900000000000002" ry="7.15"></ellipse><ellipse cx="197.6" cy="26.6" rx="10.4" ry="5.2"></ellipse><ellipse cx="219.7" cy="27.25" rx="11.700000000000001" ry="5.8500000000000005"></ellipse></g><path d="M0 156 Q70 130 140 156 T280 156 T420 156 V260 H0Z" fill="#a8d8b4" opacity="0.9"></path><path d="M0 188 Q70 162 140 188 T280 188 T420 188 V260 H0Z" fill="#4f7a52" opacity="1"></path><rect y="204" width="400" height="56" fill="url(#g4-grass)"></rect><path d="M12 216h376" stroke="#8a5622" stroke-width="4" stroke-linecap="round" opacity=".85"></path><g stroke="#6b4520" stroke-width="5" stroke-linecap="round" opacity=".9"><path d="M22 216v38"></path><path d="M104 216v38"></path><path d="M186 216v38"></path><path d="M268 216v38"></path><path d="M350 216v38"></path></g><rect width="400" height="260" fill="url(#g4-vignette)"></rect></svg></div><div class="g4-hud"><span class="score"></span><span class="clock"></span><button class="g4-hear" type="button" title="Hear it again" aria-label="Hear it again" style="display: none; margin: 0px; padding: 2px 10px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit; font-size: 17px; line-height: 1.25; background: var(--paper); color: var(--ink); border: 2px solid var(--ink); border-radius: 12px; box-shadow: 3px 3px 0 var(--tan); cursor: pointer;">🔊</button></div><div class="g4-prev"><span>Score:</span><b></b></div><div class="g4-prompt"></div><div class="g4-timebar"><i></i></div><div class="g4-intro"><div class="g4-intro-card"></div></div><div class="g4-range"><div class="g4-discs"></div><div class="g4-cross g4-keep"></div><div class="g4-ammo"></div></div></div><div class="g4-stage"><div class="g4-poster"><div class="g4-target g4-bit" style="left: 4%; top: 14%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;in&lt;/span&gt;</div><div class="g4-target g4-bit" style="left: 34.7%; top: 42%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;on&lt;/span&gt;</div><div class="g4-target g4-bit" style="left: 65.3%; top: 14%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;at&lt;/span&gt;</div><div class="g4-cross g4-bit" style="left: 52%; top: 56%; width: 46px; height: 46px; margin: -23px 0px 0px -23px;"></div></div><div class="g4-scene"><svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><rect width="400" height="260" fill="url(#g4-dawn)"></rect><circle cx="316" cy="42" r="54.4" fill="url(#g4-glow)"></circle><circle cx="316" cy="42" r="16" fill="#fff1c4"></circle><g opacity="0.85" fill="#fff"><ellipse cx="74" cy="38" rx="23.400000000000002" ry="9.9"></ellipse><ellipse cx="59.6" cy="41.6" rx="14.4" ry="7.2"></ellipse><ellipse cx="90.2" cy="42.5" rx="16.2" ry="8.1"></ellipse></g><g opacity="0.7" fill="#fff"><ellipse cx="208" cy="24" rx="16.900000000000002" ry="7.15"></ellipse><ellipse cx="197.6" cy="26.6" rx="10.4" ry="5.2"></ellipse><ellipse cx="219.7" cy="27.25" rx="11.700000000000001" ry="5.8500000000000005"></ellipse></g><path d="M0 156 Q70 130 140 156 T280 156 T420 156 V260 H0Z" fill="#a8d8b4" opacity="0.9"></path><path d="M0 188 Q70 162 140 188 T280 188 T420 188 V260 H0Z" fill="#4f7a52" opacity="1"></path><rect y="204" width="400" height="56" fill="url(#g4-grass)"></rect><path d="M12 216h376" stroke="#8a5622" stroke-width="4" stroke-linecap="round" opacity=".85"></path><g stroke="#6b4520" stroke-width="5" stroke-linecap="round" opacity=".9"><path d="M22 216v38"></path><path d="M104 216v38"></path><path d="M186 216v38"></path><path d="M268 216v38"></path><path d="M350 216v38"></path></g><rect width="400" height="260" fill="url(#g4-vignette)"></rect></svg></div><div class="g4-hud"><span class="score"></span><span class="clock"></span><button class="g4-hear" type="button" title="Hear it again" aria-label="Hear it again" style="display: none; margin: 0px; padding: 2px 10px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit; font-size: 17px; line-height: 1.25; background: var(--paper); color: var(--ink); border: 2px solid var(--ink); border-radius: 12px; box-shadow: 3px 3px 0 var(--tan); cursor: pointer;">🔊</button></div><div class="g4-prev"><span>Score:</span><b></b></div><div class="g4-prompt"></div><div class="g4-timebar"><i></i></div><div class="g4-intro"><div class="g4-intro-card"></div></div><div class="g4-range"><div class="g4-discs"></div><div class="g4-cross g4-keep"></div><div class="g4-ammo"></div></div></div><div class="g4-stage"><div class="g4-poster"><div class="g4-target g4-bit" style="left: 4%; top: 14%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;in&lt;/span&gt;</div><div class="g4-target g4-bit" style="left: 34.7%; top: 42%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;on&lt;/span&gt;</div><div class="g4-target g4-bit" style="left: 65.3%; top: 14%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;at&lt;/span&gt;</div><div class="g4-cross g4-bit" style="left: 52%; top: 56%; width: 46px; height: 46px; margin: -23px 0px 0px -23px;"></div></div><div class="g4-scene"><svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><rect width="400" height="260" fill="url(#g4-dawn)"></rect><circle cx="316" cy="42" r="54.4" fill="url(#g4-glow)"></circle><circle cx="316" cy="42" r="16" fill="#fff1c4"></circle><g opacity="0.85" fill="#fff"><ellipse cx="74" cy="38" rx="23.400000000000002" ry="9.9"></ellipse><ellipse cx="59.6" cy="41.6" rx="14.4" ry="7.2"></ellipse><ellipse cx="90.2" cy="42.5" rx="16.2" ry="8.1"></ellipse></g><g opacity="0.7" fill="#fff"><ellipse cx="208" cy="24" rx="16.900000000000002" ry="7.15"></ellipse><ellipse cx="197.6" cy="26.6" rx="10.4" ry="5.2"></ellipse><ellipse cx="219.7" cy="27.25" rx="11.700000000000001" ry="5.8500000000000005"></ellipse></g><path d="M0 156 Q70 130 140 156 T280 156 T420 156 V260 H0Z" fill="#a8d8b4" opacity="0.9"></path><path d="M0 188 Q70 162 140 188 T280 188 T420 188 V260 H0Z" fill="#4f7a52" opacity="1"></path><rect y="204" width="400" height="56" fill="url(#g4-grass)"></rect><path d="M12 216h376" stroke="#8a5622" stroke-width="4" stroke-linecap="round" opacity=".85"></path><g stroke="#6b4520" stroke-width="5" stroke-linecap="round" opacity=".9"><path d="M22 216v38"></path><path d="M104 216v38"></path><path d="M186 216v38"></path><path d="M268 216v38"></path><path d="M350 216v38"></path></g><rect width="400" height="260" fill="url(#g4-vignette)"></rect></svg></div><div class="g4-hud"><span class="score"></span><span class="clock"></span><button class="g4-hear" type="button" title="Hear it again" aria-label="Hear it again" style="display: none; margin: 0px; padding: 2px 10px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit; font-size: 17px; line-height: 1.25; background: var(--paper); color: var(--ink); border: 2px solid var(--ink); border-radius: 12px; box-shadow: 3px 3px 0 var(--tan); cursor: pointer;">🔊</button></div><div class="g4-prev"><span>Score:</span><b></b></div><div class="g4-prompt"></div><div class="g4-timebar"><i></i></div><div class="g4-intro"><div class="g4-intro-card"></div></div><div class="g4-range"><div class="g4-discs"></div><div class="g4-cross g4-keep"></div><div class="g4-ammo"></div></div></div><div class="g4-stage"><div class="g4-poster"><div class="g4-target g4-bit" style="left: 4%; top: 14%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;in&lt;/span&gt;</div><div class="g4-target g4-bit" style="left: 34.7%; top: 42%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;on&lt;/span&gt;</div><div class="g4-target g4-bit" style="left: 65.3%; top: 14%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;at&lt;/span&gt;</div><div class="g4-cross g4-bit" style="left: 52%; top: 56%; width: 46px; height: 46px; margin: -23px 0px 0px -23px;"></div></div><div class="g4-scene"><svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><rect width="400" height="260" fill="url(#g4-dawn)"></rect><circle cx="316" cy="42" r="54.4" fill="url(#g4-glow)"></circle><circle cx="316" cy="42" r="16" fill="#fff1c4"></circle><g opacity="0.85" fill="#fff"><ellipse cx="74" cy="38" rx="23.400000000000002" ry="9.9"></ellipse><ellipse cx="59.6" cy="41.6" rx="14.4" ry="7.2"></ellipse><ellipse cx="90.2" cy="42.5" rx="16.2" ry="8.1"></ellipse></g><g opacity="0.7" fill="#fff"><ellipse cx="208" cy="24" rx="16.900000000000002" ry="7.15"></ellipse><ellipse cx="197.6" cy="26.6" rx="10.4" ry="5.2"></ellipse><ellipse cx="219.7" cy="27.25" rx="11.700000000000001" ry="5.8500000000000005"></ellipse></g><path d="M0 156 Q70 130 140 156 T280 156 T420 156 V260 H0Z" fill="#a8d8b4" opacity="0.9"></path><path d="M0 188 Q70 162 140 188 T280 188 T420 188 V260 H0Z" fill="#4f7a52" opacity="1"></path><rect y="204" width="400" height="56" fill="url(#g4-grass)"></rect><path d="M12 216h376" stroke="#8a5622" stroke-width="4" stroke-linecap="round" opacity=".85"></path><g stroke="#6b4520" stroke-width="5" stroke-linecap="round" opacity=".9"><path d="M22 216v38"></path><path d="M104 216v38"></path><path d="M186 216v38"></path><path d="M268 216v38"></path><path d="M350 216v38"></path></g><rect width="400" height="260" fill="url(#g4-vignette)"></rect></svg></div><div class="g4-hud"><span class="score"></span><span class="clock"></span><button class="g4-hear" type="button" title="Hear it again" aria-label="Hear it again" style="display: none; margin: 0px; padding: 2px 10px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit; font-size: 17px; line-height: 1.25; background: var(--paper); color: var(--ink); border: 2px solid var(--ink); border-radius: 12px; box-shadow: 3px 3px 0 var(--tan); cursor: pointer;">🔊</button></div><div class="g4-prev"><span>Score:</span><b></b></div><div class="g4-prompt"></div><div class="g4-timebar"><i></i></div><div class="g4-intro"><div class="g4-intro-card"></div></div><div class="g4-range"><div class="g4-discs"></div><div class="g4-cross g4-keep"></div><div class="g4-ammo"></div></div></div><div class="g4-stage"><div class="g4-poster"><div class="g4-target g4-bit" style="left: 4%; top: 14%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;in&lt;/span&gt;</div><div class="g4-target g4-bit" style="left: 34.7%; top: 42%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;on&lt;/span&gt;</div><div class="g4-target g4-bit" style="left: 65.3%; top: 14%; width: 24%; animation: auto ease 0s 1 normal none running none;">&lt;span class="g4-ring"&gt;&lt;/span&gt;&lt;span class="g4-target-t"&gt;at&lt;/span&gt;</div><div class="g4-cross g4-bit" style="left: 52%; top: 56%; width: 46px; height: 46px; margin: -23px 0px 0px -23px;"></div></div><div class="g4-scene"><svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><rect width="400" height="260" fill="url(#g4-dawn)"></rect><circle cx="316" cy="42" r="54.4" fill="url(#g4-glow)"></circle><circle cx="316" cy="42" r="16" fill="#fff1c4"></circle><g opacity="0.85" fill="#fff"><ellipse cx="74" cy="38" rx="23.400000000000002" ry="9.9"></ellipse><ellipse cx="59.6" cy="41.6" rx="14.4" ry="7.2"></ellipse><ellipse cx="90.2" cy="42.5" rx="16.2" ry="8.1"></ellipse></g><g opacity="0.7" fill="#fff"><ellipse cx="208" cy="24" rx="16.900000000000002" ry="7.15"></ellipse><ellipse cx="197.6" cy="26.6" rx="10.4" ry="5.2"></ellipse><ellipse cx="219.7" cy="27.25" rx="11.700000000000001" ry="5.8500000000000005"></ellipse></g><path d="M0 156 Q70 130 140 156 T280 156 T420 156 V260 H0Z" fill="#a8d8b4" opacity="0.9"></path><path d="M0 188 Q70 162 140 188 T280 188 T420 188 V260 H0Z" fill="#4f7a52" opacity="1"></path><rect y="204" width="400" height="56" fill="url(#g4-grass)"></rect><path d="M12 216h376" stroke="#8a5622" stroke-width="4" stroke-linecap="round" opacity=".85"></path><g stroke="#6b4520" stroke-width="5" stroke-linecap="round" opacity=".9"><path d="M22 216v38"></path><path d="M104 216v38"></path><path d="M186 216v38"></path><path d="M268 216v38"></path><path d="M350 216v38"></path></g><rect width="400" height="260" fill="url(#g4-vignette)"></rect></svg></div><div class="g4-hud"><span class="score"></span><span class="clock"></span><button class="g4-hear" type="button" title="Hear it again" aria-label="Hear it again" style="display: none; margin: 0px; padding: 2px 10px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-family: inherit; font-optical-sizing: inherit; font-size-adjust: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-language-override: inherit; font-size: 17px; line-height: 1.25; background: var(--paper); color: var(--ink); border: 2px solid var(--ink); border-radius: 12px; box-shadow: 3px 3px 0 var(--tan); cursor: pointer;">🔊</button></div><div class="g4-prev"><span>Score:</span><b></b></div><div class="g4-prompt"></div><div class="g4-timebar"><i></i></div><div class="g4-intro"><div class="g4-intro-card"></div></div><div class="g4-range"><div class="g4-discs"></div><div class="g4-cross g4-keep"></div><div class="g4-ammo"></div></div></div>
 
-<div class="game-list">
-<div class="qitem" data-a="b"><div class="qline"><span class="qnum">1.</span><span class="qstem">I'm ______ the bus, so I'll call you when I get off.</span></div><div class="qopts"><label><input type="radio" name="g1" value="a">in</label><label><input type="radio" name="g1" value="b">on</label><label><input type="radio" name="g1" value="c">at</label></div></div>
-<div class="qitem" data-a="c"><div class="qline"><span class="qnum">2.</span><span class="qstem">The bank is ______ the corner of Low Street and Mill Lane.</span></div><div class="qopts"><label><input type="radio" name="g2" value="a">in</label><label><input type="radio" name="g2" value="b">on</label><label><input type="radio" name="g2" value="c">at</label></div></div>
-<div class="qitem" data-a="c"><div class="qline"><span class="qnum">3.</span><span class="qstem">He gets ______ the station at eight every morning.</span></div><div class="qopts"><label><input type="radio" name="g3" value="a">in</label><label><input type="radio" name="g3" value="b">at</label><label><input type="radio" name="g3" value="c">to</label></div></div>
-<div class="qitem" data-a="b"><div class="qline"><span class="qnum">4.</span><span class="qstem">Meet me ______ the café — I'll be at the table by the door.</span></div><div class="qopts"><label><input type="radio" name="g4" value="a">at</label><label><input type="radio" name="g4" value="b">in</label><label><input type="radio" name="g4" value="c">to</label></div></div>
-<div class="qitem" data-a="c"><div class="qline"><span class="qnum">5.</span><span class="qstem">We sent ______ the file this morning.</span></div><div class="qopts"><label><input type="radio" name="g5" value="a">they</label><label><input type="radio" name="g5" value="b">their</label><label><input type="radio" name="g5" value="c">them</label></div></div>
-</div>
-
-</div>
-</div>
-</div>
-</div>
 
 <!-- demo · trains: the lesson's phrases recalled before the card turns · box: #flip -->
-<div class="rows">
-<div>
-<div class="block" data-look="stripes">
-<h3>Flip the cards</h3>
-<div class="rows"><div><p>The prompt above the board is one card's back. Turn the card whose front matches it. A wrong card turns back and you try again; a right one clears the board and deals the next prompt.</p></div></div>
-<div id="flip-demo">
-<h4 class="flip-ask" style="text-align:center" aria-live="polite"></h4>
-<div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
-<label class="flip" style="--flip-h:112px"><input type="checkbox"><span class="card3d"><span class="face" style="text-align:center"><b>go to the bank</b><span class="dim">the phrase</span></span><span class="face back" style="text-align:center"><b>the movement, and the place it ends at</b></span></span></label>
-<label class="flip" style="--flip-h:112px"><input type="checkbox"><span class="card3d"><span class="face" style="text-align:center"><b>at the station</b><span class="dim">the phrase</span></span><span class="face back" style="text-align:center"><b>a point on the map</b></span></span></label>
-<label class="flip" style="--flip-h:112px"><input type="checkbox"><span class="card3d"><span class="face" style="text-align:center"><b>in the bank</b><span class="dim">the phrase</span></span><span class="face back" style="text-align:center"><b>inside the building</b></span></span></label>
-<label class="flip" style="--flip-h:112px"><input type="checkbox"><span class="card3d"><span class="face" style="text-align:center"><b>on High Street</b><span class="dim">the phrase</span></span><span class="face back" style="text-align:center"><b>a street is a line</b></span></span></label>
-<label class="flip" style="--flip-h:112px"><input type="checkbox"><span class="card3d"><span class="face" style="text-align:center"><b>at work</b><span class="dim">the phrase</span></span><span class="face back" style="text-align:center"><b>a fixed phrase: at your job, not the building</b></span></span></label>
-<label class="flip" style="--flip-h:112px"><input type="checkbox"><span class="card3d"><span class="face" style="text-align:center"><b>on the bus</b><span class="dim">the phrase</span></span><span class="face back" style="text-align:center"><b>the vehicle English puts you on</b></span></span></label>
-<label class="flip" style="--flip-h:112px"><input type="checkbox"><span class="card3d"><span class="face" style="text-align:center"><b>get back</b><span class="dim">the phrase</span></span><span class="face back" style="text-align:center"><b>arrive back: I get back at six</b></span></span></label>
-<label class="flip" style="--flip-h:112px"><input type="checkbox"><span class="card3d"><span class="face" style="text-align:center"><b>every Friday</b><span class="dim">the phrase</span></span><span class="face back" style="text-align:center"><b>the habit, so the present simple</b></span></span></label>
-</div>
-<script>
-(function(){
-var B=document.currentScript.parentElement,A=B.querySelector('.flip-ask'),
-C=[].slice.call(B.querySelectorAll('.flip')),P=[],T=-1,lock=0,
-M=C.map(function(c){return c.querySelector('.back').textContent.replace(/\s+/g,' ').trim();});
-function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
-function next(){if(!P.length)P=sh(C.map(function(_,i){return i;}));T=P.pop();A.textContent=M[T];}
-function tint(c,ok){c.querySelector('.back').style.background='color-mix(in oklab, var('+(ok?'--ok':'--err')+') 26%, var(--paper))';}
-function clear(){C.forEach(function(c){c.querySelector('input').checked=false;c.querySelector('.back').style.background='';});}
-C.forEach(function(c,i){c.addEventListener('click',function(e){
-e.preventDefault();
-if(lock)return;
-c.querySelector('input').checked=true;
-tint(c,i===T);
-if(i!==T){setTimeout(function(){if(lock)return;c.querySelector('input').checked=false;c.querySelector('.back').style.background='';},700);return;}
-lock=1;
-setTimeout(function(){clear();lock=0;next();},1400);
-});});
-next();
-})();
-</script>
-</div>
-</div>
-</div>
-</div>
+
 
 <!-- demo · trains: the route, the two tenses and the desk written unaided · box: #dictation (the .write note) -->
 <div class="rows">
@@ -2623,41 +2550,12 @@ next();
 </div>
 </div>
 
-<h2>Quiz</h2>
+
 
 <!-- demo · trains: every point of the lesson, checked once · box: #fill (20 controls) -->
-<div class="rows">
-<div>
-<div class="block" data-look="outline">
-<h3>Quiz</h3>
-<div class="rows"><div><p>Complete each sentence with one word or one form of the verb. The verb is in parentheses where you need to change it.</p></div></div>
-<div class="rows"><div>
-<p><span class="qnum">1.</span> Our office is <input class="gap" data-answer="on" style="--gap-w:4em"> High Street, next to the library.</p>
-<p><span class="qnum">2.</span> Don't call her now — she <input class="gap" data-answer="is driving|'s driving" style="--gap-w:11em"> (drive) to the airport.</p>
-<p><span class="qnum">3.</span> The café is <input class="gap" data-answer="at" style="--gap-w:4em"> the corner of Mill Lane.</p>
-<p><span class="qnum">4.</span> What time do you get <input class="gap" data-answer="back" style="--gap-w:5em"> from the meeting?</p>
-<p><span class="qnum">5.</span> I'll be <input class="gap" data-answer="in" style="--gap-w:4em"> the bank until four — ask for me at the counter.</p>
-<p><span class="qnum">6.</span> They <input class="gap" data-answer="meet" style="--gap-w:5em"> (meet) in the library every Tuesday.</p>
-<p><span class="qnum">7.</span> Can you send the address <input class="gap" data-answer="to" style="--gap-w:4em"> the new client?</p>
-<p><span class="qnum">8.</span> The office is quiet <input class="gap" data-answer="at" style="--gap-w:4em"> night.</p>
-<p><span class="qnum">9.</span> Send <input class="gap" data-answer="us" style="--gap-w:4em"> the file when you have it. (we)</p>
-<p><span class="qnum">10.</span> She gets <input class="gap" data-answer="to" style="--gap-w:4em"> work at eight thirty.</p>
-<p><span class="qnum">11.</span> I'm <input class="gap" data-answer="on" style="--gap-w:4em"> the train, so the call may drop.</p>
-<p><span class="qnum">12.</span> Come <input class="gap" data-answer="back" style="--gap-w:5em"> to the office when you're done — I'm here until six.</p>
-<p><span class="qnum">13.</span> The meeting is <input class="gap" data-answer="in" style="--gap-w:4em"> May, not April.</p>
-<p><span class="qnum">14.</span> I <input class="gap" data-answer="go" style="--gap-w:4em"> (go) to the market every Saturday.</p>
-<p><span class="qnum">15.</span> The clerk showed <input class="gap" data-answer="me" style="--gap-w:4em"> the route. (I)</p>
-<p><span class="qnum">16.</span> We went <input class="gap" data-answer="back" style="--gap-w:5em"> to the hotel after dinner.</p>
-<p><span class="qnum">17.</span> Is there a pharmacy <input class="gap" data-answer="near" style="--gap-w:5em"> here?</p>
-<p><span class="qnum">18.</span> I'm <input class="gap" data-answer="at" style="--gap-w:4em"> work until six, then I'm free.</p>
-<p><span class="qnum">19.</span> It's ten minutes <input class="gap" data-answer="from" style="--gap-w:5em"> the station to the office.</p>
-<p><span class="qnum">20.</span> We walk <input class="gap" data-answer="to" style="--gap-w:4em"> the office every morning.</p>
-</div></div>
-</div>
-</div>
-</div>
 
-<div class="rows markup-row">
+
+<h2>Quiz</h2><div class="rows markup-row">
 <details class="reveal"><summary>Markup — the map: one drawing, and every way to answer it</summary><div class="body"><div>
 <pre>&lt;!-- ONE DRAWING, AND ONE ONLY: copied whole, and no page draws its own --&gt;
 &lt;div class="qitem" data-a="library|market"&gt;      &lt;!-- several ticks: the pipe separates the keyed places --&gt;
