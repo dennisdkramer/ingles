@@ -156,31 +156,20 @@
 
 
 <div class="rows"><div><div class="rows"><div><p class="dim"><b>Charts.</b> Three switches, each answering a different question about the table underneath.</p></div></div></div></div><div class="rows">
-<div><div class="rows"><div><figure class="chartwrap"><table class="chart">
-<thead><tr class="bare"><th colspan="2"></th></tr></thead>
-<tbody><tr><td>walk</td><td>walked</td></tr><tr><td>go</td><td>went</td></tr></tbody>
-</table></figure></div></div></div>
-<div><div class="rows"><div><p><b><code>&lt;tr class="bare"&gt;</code></b> — when no column needs a heading, because the student can see what each holds. The row is <b>collapsed to a 3px rule, never deleted</b>, so the chart keeps its top edge. <b>Not for</b> a column whose contents are not obvious: the student then reads two columns with nothing to tell them apart.</p></div></div></div>
+<div><table class="chart">
+<thead><tr class="bare"><th colspan="3"></th></tr></thead>
+<tbody>
+<tr><td><b>borrow</b></td><td>take something, give it back later</td><td><span lang="pt">emprestar</span> also covers <i>lend</i></td></tr>
+<tr><td><b>lend</b></td><td>give something, get it back later</td><td>one Portuguese word for both directions</td></tr>
+<tr><td><b>owe</b></td><td>still have to give it back</td><td><span lang="pt">dever</span> also means <i>must</i></td></tr>
+</tbody>
+</table><div class="rows"><div><figure class="chartwrap"></figure></div></div></div>
+<div><p><b><code>&lt;tr class="bare"&gt;</code></b> — Tables do not get default headings - they are used only when the student needs them to understand the table contents. . The row is <b>collapsed to a 3px rule, never deleted</b>, so the chart keeps its top edge.&nbsp;</p></div>
 </div>
 <div class="rows">
-<div><div class="rows"><div><figure class="chartwrap"><table class="chart">
-<tbody><tr><th class="vlab" rowspan="2"><span>Regular</span></th><td>walk</td><td>walked</td></tr>
-<tr><td>play</td><td>played</td></tr></tbody>
-</table></figure></div></div></div>
-<div><div class="rows"><div><p><b><code>&lt;th class="vlab" rowspan="2"&gt;</code></b> — when the table holds two or more families and the word naming each must stand outside the frame. <b>Not for</b> one family: a label that names the only thing in the table repeats the sentence beside it.</p></div></div></div>
-</div>
-<div class="rows">
-<div><div class="rows"><div><figure class="chartwrap"><table class="chart">
-<thead><tr><th>Time Span</th><th>Triggered Tense</th></tr></thead>
-<tbody><tr class="grp"><th colspan="2">Then, last night, the other day</th></tr>
-<tr><td>yesterday</td><td>Simple Past - "I worked a lot yesterday"</td></tr>
-<tr class="grp"><th colspan="2">Before,&nbsp;</th></tr>
-<tr><td>lately</td><td>Past Perfect - "I've worked a lot lately"</td></tr></tbody>
-</table></figure></div></div></div>
-<div><div class="rows"><div><p><b><code>&lt;tr class="grp"&gt;</code></b> — when rows divide into groups and each group needs a phrase across them. It is a <b>group heading inside the table</b>, and it belongs where the groups divide. <b>Not for</b> a remark under the last row: a phrase added at the bottom of a table is a sentence about the table, and the sentence beside the chart is where that goes.</p></div></div></div>
-<div id="chart-split">
-<div class="rows"><div><figure class="chartwrap">
-<table class="chart">
+
+
+<div><p><b><code>&lt;th class="vlab" rowspan="2"&gt;</code></b> — when the table holds two or more families and the word naming each must stand outside the frame. <b>Not for</b> one family: a label that names the only thing in the table repeats the sentence beside it.</p></div><div><table class="chart">
 <tbody>
 <tr class="bare"><th colspan="3"></th></tr>
 <tr><th class="vlab" rowspan="3"><span>Regular</span></th><td>walk</td><td>walked</td></tr>
@@ -193,10 +182,33 @@
 <tr><td>take</td><td>took</td></tr>
 <tr><td>buy</td><td>bought</td></tr>
 </tbody>
-</table>
-</figure></div></div>
-</div></div>
-<div class="rows"><div><div class="rows"><div><p class="dim"><b>The knobs.</b> Five variables, each set on the element it sizes and each drawn at its own card: <code>--gap-w</code> the answer gap's width (<b>#fill</b>), <code>--cols</code> the columns of a grid of options (<b>#mc</b>), <code>--lines</code> the height of a written field in text lines (<b>#dictation</b>), <code>--comic-h</code> every panel of one comic (<b>#strip</b>), <code>--strip-h</code> one panel of it.</p></div></div></div></div>
+</table></div></div>
+<div class="rows">
+<div><div class="rows"><div><figure class="chartwrap"><table class="chart">
+<thead><tr><th>Time Span</th><th>Triggered Tense</th></tr></thead>
+<tbody><tr class="grp"><th colspan="2">Then, last night, the other day</th></tr>
+<tr><td>yesterday</td><td>Simple Past - "I worked a lot yesterday"</td></tr>
+<tr class="grp"><th colspan="2">Before,&nbsp;</th></tr>
+<tr><td>lately</td><td>Past Perfect - "I've worked a lot lately"</td></tr></tbody>
+</table></figure></div></div></div>
+<div><p><b><code>&lt;tr class="grp"&gt;</code></b> — when rows divide into groups and each group needs a phrase across them. It is a <b>group heading inside the table</b>, and it belongs where the groups divide. <b>Not for</b> a remark under the last row: a phrase added at the bottom of a table is a sentence about the table, and the sentence beside the chart is where that goes.</p></div>
+</div>
+<div class="rows"><div><table class="chart center">
+<thead><tr><th>Time</th><th>What he did</th><th>Which is it?</th></tr></thead>
+<tbody>
+<tr><td>6:40</td><td>He <b>clocked in</b>.</td>
+<td style="display:flex;align-items:center;gap:8px"><span class="qnum">1.</span><div class="opts" data-layout="row">
+<label class="opt"><input type="radio" name="m1"><span>routine</span></label>
+<label class="opt"><input type="radio" name="m1"><span>surprise</span></label>
+</div></td></tr>
+<tr><td>6:44</td><td>The pallet <b>was tipping</b>.</td>
+<td style="display:flex;align-items:center;gap:8px"><span class="qnum">2.</span><div class="opts" data-layout="row">
+<label class="opt"><input type="checkbox"><span>scene</span></label>
+<label class="opt"><input type="checkbox"><span>event</span></label>
+</div></td></tr>
+<tr><td>7:10</td><td>Nobody had told the office.</td>
+<td><span class="qnum">3.</span> <input class="gap" data-answer="past perfect" style="--gap-w:8.3em"></td></tr>
+</tbody></table><div class="rows"><div><p class="dim"><b>REVIEW THIS::<br>The knobs.</b> Five variables, each set on the element it sizes and each drawn at its own card: <code>--gap-w</code> the answer gap's width (<b>#fill</b>), <code>--cols</code> the columns of a grid of options (<b>#mc</b>), <code>--lines</code> the height of a written field in text lines (<b>#dictation</b>), <code>--comic-h</code> every panel of one comic (<b>#strip</b>), <code>--strip-h</code> one panel of it.</p></div></div></div></div>
 </div></div></div></div></div><div class="block">
 <h3>Arrange it, and give it a look</h3>
 <div class="rows">
@@ -338,7 +350,27 @@
 <div class="rows"><div><div class="rows"><div><p class="dim">The anchored version: <code>.an</code> marks the word the line pins to, <code>data-tense</code> chooses which point sits under it, one anchor per host.</p></div></div></div></div>
 
 </div>
+<div class="rows"><div><div class="rows"><div><figure class="vz-play viz is-enhanced">
+<h4>Take Me Home, Country Roads</h4>
+<p class="dim">John Denver, 1971</p>
+<audio class="vz-audio" src="../assets/country-roads.mp3" data-duration="29.71" preload="metadata"></audio>
+<div class="vz-controls">
+<button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>
+<span class="vz-time" data-now="">0:13</span>
+<div class="vz-bar" role="slider" tabindex="0" aria-label="Play position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="46" aria-valuetext="0:13 of 0:29"><span class="vz-fill" style="width: 46.1393%;"></span><span class="vz-knob" style="left: 46.1393%;"></span></div>
+<span class="vz-time" data-dur="">0:29</span>
 </div>
+<ol class="vz-lyrics">
+<li data-t="2.018" role="button" tabindex="0">Country roads, take me home</li>
+<li data-t="7.948" role="button" tabindex="0">To the place I belong</li>
+<li data-t="13.708" role="button" tabindex="0" class="is-now">West Virginia, mountain mamma</li>
+<li data-t="19.488" role="button" tabindex="0">Take me home, country roads</li>
+</ol>
+</figure></div></div></div><div class="block">
+<h3>The Music Player</h3>
+
+<div class="rows"><div><div class="rows"><div><p>The music player&nbsp;</p></div></div></div></div>
+</div></div></div>
 </div>
 <div class="rows">
 <div>
@@ -352,14 +384,7 @@
 <div class="rows"><div><p><b>A column header must name something the student has to tell apart</b> — a contrast, a category, or the question a column answers (<i>Written / Said</i>, <i>Now / Past</i>, <i>Which one?</i>). One that only says what a column obviously holds — <i>The sentence</i>, <i>What it means</i>, <i>The form</i>, <i>The piece</i>, <i>Letter</i> — is not written: collapse the header row to the same 3px rule the chart below uses.</p></div></div>
 <div class="rows"><div><p class="dim">An omitted header row is collapsed, never deleted — <code>&lt;thead&gt;&lt;tr class="bare"&gt;&lt;th colspan="N"&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</code>, N the table's real column count — so the chart keeps its top edge.</p></div></div>
 <div class="rows"><div><figure class="chartwrap">
-<table class="chart">
-<thead><tr class="bare"><th colspan="3"></th></tr></thead>
-<tbody>
-<tr><td><b>borrow</b></td><td>take something, give it back later</td><td><span lang="pt">emprestar</span> also covers <i>lend</i></td></tr>
-<tr><td><b>lend</b></td><td>give something, get it back later</td><td>one Portuguese word for both directions</td></tr>
-<tr><td><b>owe</b></td><td>still have to give it back</td><td><span lang="pt">dever</span> also means <i>must</i></td></tr>
-</tbody>
-</table>
+
 </figure></div></div>
 </div>
 
@@ -614,19 +639,19 @@
 
 <div class="rows">
 <div id="audio">
-<div class="rows"><div><figure class="vz-play viz">
+<div class="rows"><div><figure class="vz-play viz is-enhanced">
 <h4>I Love You, California</h4>
 <p class="dim">Knickerbocker Quartet and Elizabeth Spencer</p>
-<audio class="vz-audio" src="../assets/california.mp3" data-duration="35.87" controls preload="metadata"></audio>
+<audio class="vz-audio" src="../assets/california.mp3" data-duration="35.87" preload="metadata"></audio>
 <div class="vz-controls"><button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>
-<span class="vz-time" data-now>0:00</span>
-<div class="vz-bar" role="slider" tabindex="0" aria-label="Play position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="vz-fill"></span><span class="vz-knob"></span></div>
-<span class="vz-time" data-dur>0:00</span></div>
+<span class="vz-time" data-now="">0:08</span>
+<div class="vz-bar" role="slider" tabindex="0" aria-label="Play position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="23" aria-valuetext="0:08 of 0:35"><span class="vz-fill" style="width: 23.4737%;"></span><span class="vz-knob" style="left: 23.4737%;"></span></div>
+<span class="vz-time" data-dur="">0:35</span></div>
 <ol class="vz-lyrics">
-<li data-t="0.02">I love you, California, you’re the greatest state of all.</li>
-<li data-t="8.42">I love you in the winter, summer, spring and in the fall.</li>
-<li data-t="16.12">I love your fertile valleys; your dear mountains I adore.</li>
-<li data-t="26.82">I love your grand old ocean and I love her rugged shore.</li>
+<li data-t="0.02" role="button" tabindex="0">I love you, California, you’re the greatest state of all.</li>
+<li data-t="8.42" role="button" tabindex="0" class="is-now">I love you in the winter, summer, spring and in the fall.</li>
+<li data-t="16.12" role="button" tabindex="0">I love your fertile valleys; your dear mountains I adore.</li>
+<li data-t="26.82" role="button" tabindex="0">I love your grand old ocean and I love her rugged shore.</li>
 </ol>
 </figure></div></div>
 </div>
@@ -946,22 +971,7 @@ next();
 <div id="chartanswer" data-activity="chartanswer">
 <div class="rows"><div><p><b>A chart whose rows are the items.</b> The questions are the table own rows and the student answers in the last column, so the shared columns stay aligned and the student reads one column at a time. <b>Three uses:</b> a row answered by a gap, a radio pair or a checkbox pair; <b>matching</b>, where the options are one pool of meanings shared by every row instead of a letter written beside each phrase; and the <b>grid</b>, which lays four options of one or two words 2x2 inside a row answer cell.</p></div></div>
 <div class="rows"><div><figure class="chartwrap">
-<table class="chart center">
-<thead><tr><th>Time</th><th>What he did</th><th>Which is it?</th></tr></thead>
-<tbody>
-<tr><td>6:40</td><td>He <b>clocked in</b>.</td>
-<td style="display:flex;align-items:center;gap:8px"><span class="qnum">1.</span><div class="opts" data-layout="row">
-<label class="opt"><input type="radio" name="m1"><span>routine</span></label>
-<label class="opt"><input type="radio" name="m1"><span>surprise</span></label>
-</div></td></tr>
-<tr><td>6:44</td><td>The pallet <b>was tipping</b>.</td>
-<td style="display:flex;align-items:center;gap:8px"><span class="qnum">2.</span><div class="opts" data-layout="row">
-<label class="opt"><input type="checkbox"><span>scene</span></label>
-<label class="opt"><input type="checkbox"><span>event</span></label>
-</div></td></tr>
-<tr><td>7:10</td><td>Nobody had told the office.</td>
-<td><span class="qnum">3.</span> <input class="gap" data-answer="past perfect" style="--gap-w:8.3em"></td></tr>
-</tbody></table>
+
 </figure></div></div>
 </div>
 </div>
@@ -1220,7 +1230,7 @@ next();
 </div>
 </div><div>
 <div class="qitem">
-  <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center"><span class="qnum">2.</span>
+  <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center"><span class="qnum">1.</span>
     <span><b>1</b> when</span>
     <span><b>2</b> I got there</span>
     <span><b>3</b> he</span>
@@ -1230,12 +1240,12 @@ next();
   </p>
   <p><input class="gap" style="--gap-w:9em"></p>
 </div><div class="qitem">
-<p style="text-align:center"><span class="qnum">3.</span> He <b>have</b> clocked in early.</p>
+<p style="text-align:center"><span class="qnum">2.</span> He <b>have</b> clocked in early.</p>
 <p><input class="gap" data-answer="He has clocked in early.|He's clocked in early." style="--gap-w:16.2em"></p>
 </div><div class="qitem">
-<p class="dim" style="display:flex;align-items:center;justify-content:center;gap:10px"><span class="qnum">4.</span> <button class="listen" type="button" data-say="I clocked in at six forty.">▶</button><span>Listen, then write what you hear.</span></p>
+<p class="dim" style="display:flex;align-items:center;justify-content:center;gap:10px"><span class="qnum">3.</span> <button class="listen" type="button" data-say="I clocked in at six forty.">▶</button><span>Listen, then write what you hear.</span></p>
 <p><input class="gap" data-answer="I clocked in at six forty." style="--gap-w:18em"></p>
-</div><p style="text-align:center"><span class="qnum">1.</span> <span lang="pt">Vou no banco toda sexta.</span></p>
+</div><p style="text-align:center"><span class="qnum">4.</span> <span lang="pt">Vou no banco toda sexta.</span></p>
 
 
 <p><input class="gap" data-answer="I'm going to the bank now." style="--gap-w:19em"></p>
@@ -1246,14 +1256,14 @@ next();
 
 
 <div class="qitem" data-a="b" style="text-align: center; margin-left: auto; margin-right: auto;">
-<p class="qstem"><span class="qnum">3.</span> By the time I arrived, the crew <b>___</b> the truck.</p>
+<p class="qstem"><span class="qnum">5.</span> By the time I arrived, the crew <b>___</b> the truck.</p>
 <div class="opts compact" data-layout="row">
 <label class="opt"><input type="radio" name="fb1" value="a"><span>loaded</span></label>
 <label class="opt"><input type="radio" name="fb1" value="b"><span>had loaded</span></label>
 <label class="opt"><input type="radio" name="fb1" value="c"><span>were loading</span></label>
 <label class="opt"><input type="radio" name="fb1" value="d"><span>load</span></label>
 </div>
-</div><p style="text-align: center; margin-left: auto; margin-right: auto;"><span class="qnum">1.</span> Mike <input class="gap" data-answer="has" style="--gap-w:3em"> already posted it.</p></div></div>
+</div><p style="text-align: center; margin-left: auto; margin-right: auto;"><span class="qnum">6.</span> Mike <input class="gap" data-answer="has" style="--gap-w:3em"> already posted it.</p></div></div>
 </div></div></div></div></div></div>
 </div>
 
@@ -1290,23 +1300,11 @@ next();
 </div>
 </div>
 
-<div class="rows">
-<div class="block" data-activity="map" id="mapq">
-<h3>The street map as a question</h3>
-<div class="rows"><div><p><b>An answer may be marked using checkboxes on the map</b>&nbsp;-&nbsp; a route which, or directions, which ask the student to name one or more places. The key names one or&nbsp;both eg.&nbsp;<code>data-a="bank|library"</code>, witha pipe separating them.&nbsp; ****&gt;markup&gt;<b>A tick sits at the bottom centre of its place</b>, a percentage of the drawing, and its value is the place name.&nbsp;</p></div></div>
-
-</div>
-
-
-</div>
 
 
 
-<div class="rows">
-<div>
-<div class="rows"><div><div class="rows"><div><p class="dim">Markup — the code to copy for the elements this section draws. No lesson page carries one of these boxes.</p></div></div></div></div>
-</div>
-</div>
+
+
 <div class="rows markup-row">
 <details class="reveal" open><summary>Markup — #flip · the cards, the prompt, and the pick</summary><div class="body"><div>
 <pre>&lt;div class="block" id="flip"&gt;
@@ -1504,50 +1502,7 @@ next();
 
 <div class="rows">
 <div>
-<div class="rows"><div><div class="rows"><div><div class="block">
-<h3>Listen first, before the rule</h3>
-
-<div class="rows"><div><figure class="vz-play viz">
-<h4>Take Me Home, Country Roads</h4>
-<p class="dim">John Denver, 1971</p>
-<audio class="vz-audio" src="../assets/country-roads.mp3" data-duration="29.71" controls preload="metadata"></audio>
-<div class="vz-controls">
-<button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>
-<span class="vz-time" data-now>0:00</span>
-<div class="vz-bar" role="slider" tabindex="0" aria-label="Play position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="vz-fill"></span><span class="vz-knob"></span></div>
-<span class="vz-time" data-dur>0:00</span>
-</div>
-<ol class="vz-lyrics">
-<li data-t="2.018">Country roads, take me home</li>
-<li data-t="7.948">To the place I belong</li>
-<li data-t="13.708">West Virginia, mountain mamma</li>
-<li data-t="19.488">Take me home, country roads</li>
-</ol>
-</figure></div><div><div class="rows"><div><p>This chorus asks somebody to take the singer home, and in nine seconds it uses three of the words this lesson is about. Play it once with the words in front of you, then read them. <b>Take me home</b> puts the receiver straight after the verb with no preposition, and <i>home</i> takes no <b>to</b> at all: <i>go home</i>, <i>take me home</i>, never <i>to home</i>. <b>To the place I belong</b> keeps <b>to</b> for a destination that is on no map. And <b>country roads</b> are the line the singer is on — the <b>on</b> a street will need.</p></div></div></div></div>
-</div></div></div><div class="rows"><div><div class="block">
-<h3>From and to: a movement with two ends</h3>
-
-<div class="rows"><div>
-<figure class="vz-play viz">
-<h4>Penny Lane</h4>
-<p class="dim">The Beatles, 1967</p>
-<audio class="vz-audio" src="../assets/penny-lane.mp3" data-duration="22.13" controls preload="metadata"></audio>
-<div class="vz-controls">
-<button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>
-<span class="vz-time" data-now>0:00</span>
-<div class="vz-bar" role="slider" tabindex="0" aria-label="Play position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="vz-fill"></span><span class="vz-knob"></span></div>
-<span class="vz-time" data-dur>0:00</span>
-</div>
-<ol class="vz-lyrics">
-<li data-t="2.014">On the corner is a banker with a motorcar</li>
-<li data-t="6.494">The little children laugh at him behind his back</li>
-<li data-t="10.844">And the banker never wears a mac</li>
-<li data-t="14.844">In the pouring rain, very strange</li>
-</ol>
-</figure>
-<p><b>Listen.</b> Penny Lane is one street, sung by somebody standing in it, and four lines give you three prepositions and a place that simply exists. Before you play it: which word comes before <i>the corner</i>, which before <i>the pouring rain</i>, and what is happening <i>behind his back</i>?</p></div><div><div class="rows"><div><p>Now play it and read the four lines. <b>On the corner is a banker</b> gives you the point on the map, and it does it without a verb of movement — English can say a thing simply exists somewhere: <i>on the corner is…</i>, <i>there's a banker on the corner</i>. <b>Behind his back</b> is where the children are, not where he is going. <b>In the pouring rain</b> is a space you are inside of, and the rain is the space. Three prepositions, three shapes, and a fourth thing the lesson keeps saying: the words around the place do the pointing, and the place only answers.</p></div></div></div></div>
-
-</div></div></div></div></div><div class="block">
+<div class="block">
 <h3>The Games</h3>
 <div class="rows"><div><div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><b>Don’t add a game just to have one.</b> A game is a skin over an activity the lesson already wanted: the activity is chosen first, and a reskinned game is that activity's element in the ledger, never an element of its own. Use one only where the activity would be worse as a plain list.</p></div></div><div class="rows"><div><p class="dim" style="text-align: center; margin-left: auto; margin-right: auto;">A <code>.game</code> draws its own edge, so it stands at page level and is never put inside a <code>.block</code>. Every game reads the same content — <code>.game-list &gt; .qitem</code>, each with a <code>.qstem</code> and radio options, <code>data-a</code> marking the right one — so that list is what prints and what the student answers if the script never runs; <code>data-game</code> chooses only the presentation, never the content. A game in a quiz section carries <code>data-retry="0"</code>; a training game carries nothing. <b>A <code>.listen</code> in the item's stem makes the round SPOKEN</b>: the runner says its <code>data-say</code> on the frame the round opens and keeps a 🔊 replay on the HUD, so a game can ask "which word did you hear?" — <code>data-sound="0"</code> mutes both, and <code>bingoCard</code> is the one presentation that times its own clip and is left alone.</p></div></div><div class="rows"><div><table class="chart">
 <thead><tr><th><code>data-game</code></th><th>What it is good for</th><th>The markup it needs</th></tr></thead>
