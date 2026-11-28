@@ -663,7 +663,8 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <label class="opt" style="position:absolute;left:86%;top:63.2%;transform:translate(-50%,-50%)" aria-label="the post office"><input type="checkbox" value="post office"></label>
 <label class="opt" style="position:absolute;left:16%;top:95%;transform:translate(-50%,-50%)" aria-label="the bus stop"><input type="checkbox" value="bus stop"></label>
 <label class="opt" style="position:absolute;left:52%;top:95%;transform:translate(-50%,-50%)" aria-label="the market"><input type="checkbox" value="market"></label>
-<label class="opt" style="position:absolute;left:86%;top:95%;transform:translate(-50%,-50%)" aria-label="the hotel"><input type="checkbox" value="hotel"></label></div>
+<label class="opt" style="position:absolute;left:86%;top:95%;transform:translate(-50%,-50%)" aria-label="the hotel"><input type="checkbox" value="hotel"></label>
+</div>
 </div>
 </div></div></div>
 </div></div></div>
@@ -955,17 +956,17 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <tbody>
 <tr><td><code>skeetRange</code></td><td>telling the right word from near misses, fast: every option is a target thrown across the range</td><td><code>.qitem</code> per item, 2–4 options; <code>data-a</code>; <code>data-time</code> is both the deadline and the flight time (0 = no clock)</td></tr>
 <tr><td><code>whackMole</code></td><td>recognition under a clock, one option per mole, hit before it ducks</td><td><code>.qitem</code> per item, one option per mole; <code>data-time</code></td></tr>
-<tr><td><code>catchBasket</code></td><td>sorting: each card dragged into the pot it belongs in, and a right one grows a flower</td><td><code>.qitem</code> per card, the pots are the option labels or <code>data-buckets="left|right"</code></td></tr>
-<tr><td><code>stackDrop</code></td><td>telling the right phrase from the wrong one, built into a tower that reaches a roof</td><td>6–10 <code>.qitem</code>, options are the blocks; <code>data-time</code> per block</td></tr>
-<tr><td><code>flapGate</code></td><td>choice at speed: fly through the gap whose meaning fits the clue — the wall is the clock</td><td><code>.qitem</code> per item, one option per gap; <code>data-time</code> is not used</td></tr>
+<tr><td><code>catchBasket</code></td><td>**IGNORE** sorting: each card dragged into the pot it belongs in, and a right one grows a flower</td><td><code>.qitem</code> per card, the pots are the option labels or <code>data-buckets="left|right"</code></td></tr>
+<tr><td><code>stackDrop</code></td><td>**IGNORE** telling the right phrase from the wrong one, built into a tower that reaches a roof</td><td>6–10 <code>.qitem</code>, options are the blocks; <code>data-time</code> per block</td></tr>
+<tr><td><code>flapGate</code></td><td>**IGNORE** choice at speed: fly through the gap whose meaning fits the clue — the wall is the clock</td><td><code>.qitem</code> per item, one option per gap; <code>data-time</code> is not used</td></tr>
 <tr><td><code>mineGrid</code></td><td>one answer per item among four doors; three snakes end the run</td><td>one <code>.qitem</code> per question, <b>exactly four</b> options</td></tr>
 <tr><td><code>wordleBoard</code></td><td>spelling a word letter by letter with feedback, from its clue</td><td><code>data-answer="&lt;word&gt;"</code> per item plus <code>.qstem</code>; <code>data-lives</code> (2)</td></tr>
 <tr><td><code>crosswordBoard</code></td><td>a set of words that cross, each clued — the letters are shared</td><td><code>data-answer="&lt;word&gt;"</code> on every item plus <code>.qstem</code></td></tr>
-<tr><td><code>echoPads</code></td><td>building one sentence word by word, each word chosen from pads</td><td><code>data-first</code> the opening, <code>data-lives</code> (3), one <code>.qitem</code> per word, four single-word pads, order is the sentence</td></tr>
+<tr><td><code>echoPads</code></td><td>**IGNORE** building one sentence word by word, each word chosen from pads</td><td><code>data-first</code> the opening, <code>data-lives</code> (3), one <code>.qitem</code> per word, four single-word pads, order is the sentence</td></tr>
 <tr><td><code>bingoCard</code></td><td>hearing a word once and finding it on a card before the curtain falls</td><td><code>.qitem</code> per item, <code>data-a</code> the right option (or a <code>.listen</code> clip); leave <code>data-time</code> at 0</td></tr>
 <tr><td><code>ladderRun</code></td><td>climbing to the question itself, one rung per right answer, sliding back on a miss</td><td><code>.qitem</code> per rung, options the answers</td></tr>
 <tr><td><code>bossRaid</code></td><td>a long drill with a fight around it: every right answer is the fighter's attack</td><td><code>.qitem</code> per question, options are the answers; <code>data-time</code></td></tr>
-<tr><td><code>trainOrder</code></td><td>loading one train per group of items, a car per answer</td><td><code>data-train</code> grouping the items of one train, <code>.qitem</code> per car</td></tr>
+<tr><td><code>trainOrder</code></td><td>**IGNORE** loading one train per group of items, a car per answer</td><td><code>data-train</code> grouping the items of one train, <code>.qitem</code> per car</td></tr>
 </tbody>
 </table></div></div></div></div>
 </div>
