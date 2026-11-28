@@ -169,7 +169,10 @@ window.LayoutEditor = (function () {
                               at that boundary and the cell becomes that row's only cell.
      WHAT EACH KIND MAY ENTER
         a row    never a cell, so a row dropped on a row's own area belongs to that row's parent;
-                 a level-3 row is never dragged at all (down() refuses the press).
+                 a level-1 row goes ACROSS the page only — above or below another level-1 row, in
+                 .content-area, never joined into it and never inside a block (amongL1); a level-2
+                 row keeps the two row shapes below; a level-3 row is never dragged at all (down()
+                 refuses the press).
         a cell   a cell's SIDE EDGE at any level, where it sits beside it in that row; its middle,
                  where it merges (the merge above); a row, where it becomes a cell.
         an item  a cell's SIDE EDGE at any level, where it becomes a cell of that row; a level-3
@@ -340,6 +343,13 @@ window.LayoutEditor = (function () {
     if (!inside(el)) return null;
 
     var row = el.closest ? el.closest('.rows') : null;
+    /* A LEVEL-1 ROW IS PLACED AMONG LEVEL-1 ROWS, NEVER INSIDE ONE. Since the page was flattened back
+       to one row per block, the row a block stands on IS the page's line, and it has exactly one place
+       it can go: above or below the line under the pointer. Joining it into that line (its cells
+       becoming cells of the row) and dropping it into a block both read as "attached" — the line
+       arrives somewhere it was not aimed at. A narrower arrival than a line — a block beside a block —
+       is the CELL's gesture: drag the block itself, not the row it stands on. */
+    if (drag.kind === 'row' && levelOf(drag.node) === 1) return amongL1(row, x, y);
     if (!row) return el === ca() ? inPage(x, y) : null;
 
     /* the space AROUND a row is its parent's: the band above or below the row's own cells */
@@ -379,6 +389,21 @@ window.LayoutEditor = (function () {
       if (at) return inCell(at, x, y, null, el, false);
     }
     return inCell(cell, x, y, inner, el);
+  }
+
+  /* A LEVEL-1 ROW'S ONE PLACE: before or after the level-1 row under the pointer, as a row of
+     .content-area. The line under the pointer is read out to its level-1 ancestor, so a drop anywhere
+     inside a block means that block's whole line rather than the inner row it landed on. The half of
+     the row the pointer is in decides the side, so the boundary line is always drawn where the row
+     would actually go. */
+  function amongL1(row, x, y) {
+    var r1 = row ? (levelOf(row) === 1 ? row : l1Of(row)) : null;
+    if (!r1) return inPage(x, y);
+    var rr = r1.getBoundingClientRect();
+    var before = y < rr.top + rr.height / 2;
+    var t = { box: ca(), ref: before ? r1 : (r1.nextElementSibling || null),
+              host: r1, before: before, ax: 'y', insert: 'row' };
+    return samePlace(t, drag.node) ? null : t;
   }
 
   /* a row's own area: a cell goes in beside the cells already there; a row cannot be a cell */
@@ -490,7 +515,9 @@ window.LayoutEditor = (function () {
     if (edge && loose === 'row') {
       /* A ROW BESIDE A ROW: two rows cannot stand side by side — a row is a line, not a box — so the
          dropped row's cells join the row it was dropped on, which puts what the two rows held beside
-         each other on one line. That is the only shape "row beside row" has. */
+         each other on one line. That is the only shape "row beside row" has. It is a LEVEL-2 gesture
+         only: a level-1 row was answered by amongL1 before the pointer ever reached a cell, because a
+         page's own line is placed between lines, not folded into one. */
       var tj = { box: cell.parentElement, ref: edge === 'left' ? cell : (cell.nextElementSibling || null),
                  host: cell, before: edge === 'left', ax: 'x', insert: 'join' };
       return samePlace(tj, drag.node) ? null : tj;
