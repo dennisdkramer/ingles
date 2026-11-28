@@ -37,6 +37,9 @@
      the solver is sizing from the drawing, and the map collapses — the one shape on a page whose width
      is neither prose nor a table. Any element with a fixed px width gets the same treatment. */
   function fixedFrameWidth(col) {
+    /* a `.block` is a frame, never a box sized by a drawing inside it: a block that is its own
+       row would otherwise collapse onto the map it holds */
+    if (col.classList && col.classList.contains("block")) return 0;
     var els = col.querySelectorAll(".vz-map, .chartwrap, .chart:has(>tbody>tr>th.vlab)"), best = 0;
     for (var i = 0; i < els.length; i++) {
       /* a drawing inside a `.block` this cell wraps is not this cell's own content — the cell holds a
