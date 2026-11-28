@@ -83,7 +83,7 @@
 
 <div class="rows"><div><div class="block">
 <h3>Teaching Markup</h3>
-<div class="rows"><div><div class="rows"><div><figure class="tlw" data-tense="simple-present" style="margin-inline:auto">
+<div class="rows"><div><div class="rows"><div><figure class="tlw" id="axis" data-tense="simple-present" style="margin-inline:auto">
   <p class="tlw-say"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v an">work</span> <span class="pos-prep">at</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>.</p>
   <i class="tln-arc" data-arc="l" aria-hidden="true"><i class="tln-fly"><svg class="tln-curve" viewBox="0 0 24 21" preserveAspectRatio="none"><path pathLength="100" d="M24 0 Q 14 10 5 21"></path></svg></i></i>
   <i class="tln-arc" data-arc="r" aria-hidden="true"><i class="tln-fly"><svg class="tln-curve" viewBox="0 0 24 21" preserveAspectRatio="none"><path pathLength="100" d="M24 0 Q 14 10 5 21"></path></svg></i></i>
@@ -113,7 +113,7 @@
 </table></div></div></div><div><div class="pair-stack" style="text-align: center; margin-left: auto; margin-right: auto;">
 <div class="side" data-state="wrong"><p><i class="mark"></i> I <b>am knowing</b> the answer.</p></div>
 <div class="side" data-state="correct"><p><i class="mark"></i> I <b>know</b> the answer.</p></div>
-</div><div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><ruby>The<rp>(</rp><rt>Thə</rt><rp>)</rp></ruby> <ruby>library<rp>(</rp><rt>li·br<span class="pr-g">e</span>·ry</rt><rp>)</rp></ruby> <ruby>closes<rp>(</rp><rt>clo·s<span class="pr-g">e</span>s</rt><rp>)</rp></ruby> <ruby>at<rp>(</rp><rt>ət</rt><rp>)</rp></ruby> <ruby>six<rp>(</rp><rt>six</rt><rp>)</rp></ruby>.</p></div></div><div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;">I ca<span class="pr-g">n't</span> <ruby>r<span class="pr-g">ə</span>·cord<rp>(</rp><rt><span lang="pt">gravar</span></rt><rp>)</rp></ruby> i<span class="pr-g">t</span> t<span class="pr-g">o</span>·night.</p></div></div></div><div>
+</div><div class="rows"><div><!-- #key-sound · how a word is said, syllable by syllable, above it --><p style="text-align: center; margin-left: auto; margin-right: auto;"><ruby>The<rp>(</rp><rt>Thə</rt><rp>)</rp></ruby> <ruby>library<rp>(</rp><rt>li·br<span class="pr-g">e</span>·ry</rt><rp>)</rp></ruby> <ruby>closes<rp>(</rp><rt>clo·s<span class="pr-g">e</span>s</rt><rp>)</rp></ruby> <ruby>at<rp>(</rp><rt>ət</rt><rp>)</rp></ruby> <ruby>six<rp>(</rp><rt>six</rt><rp>)</rp></ruby>.</p></div></div><div class="rows"><div><!-- #key · a translation read in place, above the word it explains --><p style="text-align: center; margin-left: auto; margin-right: auto;">I ca<span class="pr-g">n't</span> <ruby>r<span class="pr-g">ə</span>·cord<rp>(</rp><rt><span lang="pt">gravar</span></rt><rp>)</rp></ruby> i<span class="pr-g">t</span> t<span class="pr-g">o</span>·night.</p></div></div></div><div>
 <div class="rows"><div><!-- #pos · making a sentence's structure visible by marking the job each word does --><p class="pos" id="pos"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p></div></div>
 <!-- #recipient · where a movement ends, and which of the two orders puts it there --><div class="rows" id="recipient"><div><p class="pos" style="text-align: center; margin-left: auto; margin-right: auto;"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-i" data-side="right">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span> <span class="pos-adj">the</span> <span class="pos-n pos-o">book</span>.</p></div></div><div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><button type="button" class="glossbtn" popovertarget="d1">Clock in</button> before eight.</p></div></div></div><div><div class="rows"><div><figure class="vz-play is-enhanced" style="border:2px solid var(--tan);border-radius:3px;padding:10px 12px">
 <h4>Take Me Home, Country Roads</h4>
@@ -311,6 +311,8 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
   &lt;li data-side="left"&gt;&lt;span class="who"&gt;Jess&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
   &lt;li data-side="right"&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
 
+&lt;!-- the drawn conversation is this same list with a gap in it (#dialoggap): drop the .qnum and the
+     input and this is the plain form a DIALOG_HERE asks for --&gt;
 &lt;!-- a line's side is its SPEAKER's side, never its place in the list: every line carries data-side; the
      speaker who opens the dialog takes the left, the second speaker takes the right, and any further speaker
      joins the first on the left. A line that follows another by the SAME speaker keeps its .who and
@@ -672,7 +674,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
     <span><b>5</b> had</span>
     <span><b>6</b> left</span>
   </p>
-  <p style="text-align:center"><input class="gap" data-answer="He had already left when I got there." style="--gap-w:22em"></p>
+  <p><input class="gap" data-answer="He had already left when I got there." style="--gap-w:22em"></p>
 </div></div></div>
 </div></div><div class="block" data-look="stripes">
 <h3>Correction</h3>
@@ -680,7 +682,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <div class="rows"><div><div class="qitem">
   <p class="dim" style="text-align:center">One word is wrong. Write the sentence again:</p>
   <p style="text-align:center"><span class="qnum">1.</span> He <b>have</b> clocked in early.</p>
-  <p style="text-align:center"><input class="gap" data-answer="He has clocked in early.|He's clocked in early." style="--gap-w:16.2em"></p>
+  <p><input class="gap" data-answer="He has clocked in early.|He's clocked in early." style="--gap-w:16.2em"></p>
 </div></div></div>
 </div></div>
 
@@ -694,14 +696,14 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <div class="rows"><div><div class="qitem">
   <p class="dim" style="text-align:center">Say it in English:</p>
   <p style="text-align:center"><span class="qnum">1.</span> <span lang="pt">Vou no banco toda sexta.</span></p>
-  <p style="text-align:center"><input class="gap" data-answer="I go to the bank every Friday.|I'm going to the bank now." style="--gap-w:19em"></p>
+  <p><input class="gap" data-answer="I go to the bank every Friday.|I'm going to the bank now." style="--gap-w:19em"></p>
 </div></div></div>
 </div></div><div class="block" data-look="stripes">
 <h3>Dictation</h3>
 <!-- #dictation · hearing a sentence once and writing it down -->
 <div class="rows"><div><div class="qitem">
   <p class="dim" style="display:flex;align-items:center;justify-content:center;gap:10px"><span class="qnum">1.</span> <button class="listen" type="button" data-say="I clocked in at six forty.">▶</button><span>Write what you hear:</span></p>
-  <p style="text-align:center"><input class="gap" data-answer="I clocked in at six forty." style="--gap-w:18em"></p>
+  <p><input class="gap" data-answer="I clocked in at six forty." style="--gap-w:18em"></p>
 </div></div></div>
 </div></div>
 
@@ -786,7 +788,8 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 &lt;!-- no data-answer and no data-a here: the block cannot be a quiz --&gt;</pre>
 </div></div></details>
 <details class="reveal" open id="markup-dialoggap"><summary>Markup — #dialoggap · answering inside a conversation the lesson already wrote · the turns, each gap numbered</summary><div class="body"><div>
-<pre>&lt;li data-side="right"&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;
+<pre>&lt;ol class="seq" data-mode="turns" style="width:100%;border:2px solid var(--tan);border-radius:3px;padding:10px 12px"&gt;
+&lt;li data-side="right"&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;
     &lt;span class="say" style="position:relative"&gt;
       &lt;span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px"&gt;1.&lt;/span&gt;
       Three times. I &lt;input class="gap" data-answer="have|'ve" style="--gap-w:4em"&gt; already posted it.&lt;/span&gt;&lt;/li&gt;
@@ -798,7 +801,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 
 &lt;!-- the number sits outside the bubble, on the side that faces the middle of the dialog: the .say is
      position:relative and the number is absolute at right:calc(100% + 8px) on a right-hand line and at
-     left:calc(100% + 8px) on a left-hand line --&gt;</pre>
+     left:calc(100% + 8px) on a left-hand line --&gt;&lt;/ol&gt;</pre>
 </div></div></details>
 
 <details class="reveal" open id="markup-mc"><summary>Markup — #mc · choosing the one right answer among the wrong ones — a word, a form, a meaning or a fact · the stem, the options, the key</summary><div class="body"><div>
@@ -860,7 +863,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
      is the other language — it is a translation, not a dictation --&gt;</pre>
 </div></div></details>
 <details class="reveal" open id="markup-chunks"><summary>Markup — #chunks · rebuilding a sentence from its pieces, word order under pressure · the shuffled chips and the answer line</summary><div class="body"><div>
-<pre>&lt;p&gt;Unscramble the sentences:&lt;/p&gt;
+<pre>&lt;p class="dim" style="text-align:center"&gt;Unscramble - write the sentence in order:&lt;/p&gt;
 &lt;div class="qitem"&gt;
   &lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
      justify-content:center;align-items:center"&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt;
@@ -948,7 +951,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 
 <div class="rows markup-row">
 <details class="reveal" open id="markup-game"><summary>Markup — #game · reskinning an activity the lesson already wanted, as a game · the item list and the levers</summary><div class="body"><div>
-<pre>&lt;div class="game" data-game="skeetRange" data-time="6000" data-kind="train"&gt;
+<pre>&lt;div class="game" data-game="skeetRange" data-time="6000"&gt;
   &lt;p class="game-how"&gt;one line: how to play&lt;/p&gt;
   &lt;div class="game-list"&gt;
     &lt;div class="qitem" data-a="a"&gt;
