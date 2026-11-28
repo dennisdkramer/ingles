@@ -1700,6 +1700,96 @@ function wireBackpack(cdp) {
     return out.filter(function (b) { return b.width > 0 || b.height > 0 })
       .map(function (b) { return [Math.round(b.left + sx), Math.round(b.top + sy), Math.round(b.width), Math.round(b.height)] });
   };
+  /* THE FIXTURES COME FROM THE PAGE, NOT FROM A SENTENCE WRITTEN INTO A CHECK. A scenario needs a SHAPE
+     — a phrase the reader can drag, the same phrase twice, two adjacent runs inside one paragraph, a
+     phrase before and one after them — and this answers for whatever page is under test. A run is a
+     stretch of ONE text node: a drag of a single phrase never crosses <b>/<i>, and Q.find is byte-based,
+     so a cross-element stretch would lie about which occurrence a gesture touched. `multi` says the text
+     occurs more than once AND each of the first `want` occurrences paints a rect: one inside a closed
+     fold or a hidden block could never be re-found after a reload, so it is not a fixture. */
+  Q.fixtures = function (want) {
+    want = Math.max(1, want || 1);
+    var seen = {}, phrases = [], pairs = [], w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), n;
+    var trim = function (s) {
+      return String(s || '').replace(/^[\s"'\u201c\u201d\u2018\u2019(\[]+/, '')
+        .replace(/[\s"'\u201c\u201d\u2018\u2019)\[\].,;:!?\u2014\u2013]+$/, '');
+    };
+    /* the runs of one block, in document order, each with the index of its first occurrence */
+    var runsIn = function (el) {
+      var out = [], wt = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), tn;
+      while ((tn = wt.nextNode())) {
+        if (!tn.parentElement || tn.parentElement.closest('mark')) continue;
+        var v = trim(tn.data), loc = v && Q.find(v, 0);
+        if (loc) out.push({ t: v, at: loc.i, len: v.length });
+      }
+      return out;
+    };
+    while ((n = w.nextNode())) {
+      var p = n.parentElement;
+      if (!p || !p.closest('.content-area')) continue;
+      var junk = p.closest('script,style,.pop,#hlLayer,#toast,.markup-row,mark,.game');
+      if (junk) continue;
+      /* a PAIR: two adjacent inline runs inside one block — the multi-node anchor B-F4 is about. Read
+         before the LANGUAGE filter and before the candidate filters: the block holding an English example
+         is often marked `lang="pt"` as a whole (English included), and a Portuguese block's own text has
+         accents, so a phrase test would drop it while its two inline runs are exactly the pair. */
+      var box = p.closest('p,li,dd,dt,td,blockquote');
+      if (box && !pairs.some(function (x) { return x.host === box }) && box.getBoundingClientRect().height > 0) {
+        var runs = [].slice.call(box.querySelectorAll('b,strong,i,em')).filter(function (e) {
+          return !e.closest('mark') && trim(e.textContent).length >= 3;
+        });
+        if (runs.length >= 2) {
+          var ra = trim(runs[0].textContent), rb = trim(runs[1].textContent);
+          var la = Q.find(ra, 0), lb = Q.find(rb, 0);
+          if (ra && rb && la && lb && la.i < lb.i) {
+            /* NEIGHBOURS, because a drag is measured in VIEWPORT pixels: a phrase three screens away gives
+               a dot nobody can reach, and the browser then selects from the top of the page to the caret.
+               `pre` and `post` are the nearest runs either side — the pair's own block first, then its
+               adjacent blocks — so every gesture in B-F4 stays on one screen. */
+            var mine = runsIn(box), end = lb.i + rb.length;
+            var pre = mine.filter(function (x) { return x.at + x.len <= la.i }).pop();
+            var post = mine.filter(function (x) { return x.at >= end })[0];
+            for (var s = box.previousElementSibling, k2 = 0; !pre && s && k2 < 3; s = s.previousElementSibling, k2++)
+              pre = runsIn(s).pop() || null;
+            for (var t2 = box.nextElementSibling, k3 = 0; !post && t2 && k3 < 3; t2 = t2.nextElementSibling, k3++)
+              post = runsIn(t2)[0] || null;
+            if (pre && post && post.at > end && pre.at + pre.len <= la.i) {
+              pairs.push({ a: ra, b: rb, atA: la.i, atB: end, pre: pre.t, post: post.t,
+                atPre: pre.at, atPost: post.at, host: box.tagName });
+            }
+          }
+        }
+      }
+      if (p.closest('[lang="pt"]')) continue;
+      var fold = p.closest('details'); if (fold && !fold.open) continue;
+      var host = p.closest('p,li,td,th,dd,dt,blockquote,b,strong,i,em,span');
+      if (!host) continue;
+      var t = trim(n.data), words = t.split(/\s+/).filter(Boolean);
+      if (words.length < 2 || words.length > 6) continue;
+      if (/[0-9\/|]/.test(t) || /[^\x20-\x7e]/.test(t)) continue;
+      if (!seen[t]) {
+        seen[t] = 1;
+        var loc = Q.find(t, 0);
+        if (loc) {
+          var all = Q.T().all, cnt = 0, i = -1, k, hit = 0;
+          while ((i = all.indexOf(t, i + 1)) >= 0) cnt++;
+          for (k = 0; k < Math.min(want, cnt); k++) if (Q.rectsOf(t, k).length) hit++;
+          if (hit >= Math.min(want, cnt)) {
+            phrases.push({ t: t, at: loc.i, words: words.length, n: cnt, multi: cnt >= want && hit >= want, host: host.tagName });
+          }
+        }
+      }
+    }
+    /* PROSE FIRST. A chart's table header holds a suffix pattern like `-ant / -ent`, which is a run of text
+       but nothing anyone drags; a highlighted example or a paragraph is what the reader actually selects.
+       Ranked, not filtered, so a page of tables still yields a fixture — it just yields one only after the
+       prose. The inline runs rank first because on a teaching page that is where the English lives. */
+    var rank = function (h) {
+      return /^(B|STRONG|I|EM)$/.test(h) ? 0 : h === 'P' ? 1 : h === 'LI' ? 2 : h === 'BLOCKQUOTE' ? 3 : 4;
+    };
+    phrases.sort(function (a, b) { return rank(a.host) - rank(b.host) });
+    return { phrases: phrases, pairs: pairs, text: (Q.T().all || '').length };
+  };
   Q.rectOf = function (sub, occ) { var d = Q.dot(sub, occ); return d.err ? d.err : d.rect };
   Q.docRect = function (node) { var r = node.getBoundingClientRect(); return [Math.round(r.left + scrollX), Math.round(r.top + scrollY), Math.round(r.width), Math.round(r.height)] };
   Q.rects = function () {
@@ -1974,9 +2064,12 @@ const api = (site, q) => fetch('http://127.0.0.1:' + site.port + '/__bp?' + q).t
    --------------------------------------------------------------------------------------------- */
 async function scenBF2(live, site) {
   log('\n================ B-F2 · HIGHLIGHT PERMANENCE (painted #hlLayer) ================');
-  const H = "I'm Marina.";
   await api(site, 'reset=1');
   await live.nav();
+  const fx = await fixtures(live, 1);
+  const H = fx.phrases[0] && fx.phrases[0].t;
+  if (!H) return skip('bf2', 'this page holds no draggable 2-6 word phrase in body text');
+  log('   · fixture: ' + JSON.stringify(H) + '   (page text ' + fx.text + ' chars, ' + fx.phrases.length + ' candidate(s))');
   await live.dump('page loaded', true);
 
   log('\n step 1 — Ctrl+drag a phrase: it must be painted AND written as one "hl" row');
@@ -2020,9 +2113,12 @@ function box(doc) {                     /* a small screenshot window around a do
    12s pending window (the row is in flight for longer than the grace window protects it). */
 async function scenBF2b(live, site) {
   log('\n step 4 — the SAME string twice in the page: block+offset must win over the text alone');
-  const T2 = 'Are you from São Paulo?';
   await api(site, 'reset=1');
   await live.nav();
+  const fx = await fixtures(live, 2);
+  const T2 = (fx.phrases.filter(x => x.multi)[0] || {}).t;
+  if (!T2) return skip('bf2b', 'this page holds no phrase that occurs twice, and both visible');
+  log('   · fixture: ' + JSON.stringify(T2) + '   (occurs ' + (fx.phrases.filter(x => x.t === T2)[0] || {}).n + '×)');
   await paint(live, T2, 0);
   await paint(live, T2, 1);
   const wantA = await live.ev('window.__q.rectsOf(' + JSON.stringify(T2) + ',0)');
@@ -2040,9 +2136,10 @@ async function scenBF2b(live, site) {
   await live.shot('bf2-3-two-identical', box(wantA[0] || [0, 0, 400, 200]));
 
   log('\n step 5 — a write SLOWER than the 12s pending window (in flight longer than the grace window)');
+  const H3 = (fx.phrases.filter(x => x.t !== T2)[0] || {}).t;
+  if (!H3) return skip('bf2b', 'no second phrase for the slow-write step');
   await api(site, 'reset=1&delay=14000');
   await live.nav();
-  const H3 = 'Nice to meet you.';
   await paint(live, H3, 0);
   const t0 = Date.now();
   let empty = 0, samples = 0, minN = 99;
@@ -2070,6 +2167,13 @@ const piecesOf = (live, a) => live.ev('window.__q.pieces(' + JSON.stringify(a) +
 const flagged = (ms, f) => ms.filter(m => String(m.cls || '').indexOf(f) >= 0);
 const selNow = live => live.ev('(function(){var s=getSelection();return s?s.toString():""})()');
 const hits = (live, ms, want) => live.ev('window.__q.rectsHit(' + JSON.stringify(ms.map(m => m.doc)) + ',' + JSON.stringify(want) + ')');
+/* ASK THE PAGE FOR A SHAPE, NEVER FOR A SENTENCE. `fixtures` is one walk of the live page (Q.fixtures);
+   each scenario takes what it needs from it, and when the page cannot supply a shape the scenario SKIPS
+   — said out loud, and counted as a skip rather than a failure. A rewritten page, a renumbered lesson or
+   a deleted one cannot turn the notebook engine red. */
+const fixtures = (live, want) => live.ev('window.__q.fixtures(' + (want || 1) + ')');
+const SKIPPED = [];
+function skip(name, why) { SKIPPED.push(name + ' — ' + why); log('   · ' + name + ' SKIPPED: ' + why); return 0; }
 /* a REAL drag from the START of `from` to the END of `to`: ONE contiguous selection that may cross
    inline elements (<b>/<i>), which is exactly what makes a mark cover several child nodes — and only
    a multi-node mark can be split by a later save (engine1 nbWrap/nbSplitEl). This is the gesture the
@@ -2159,9 +2263,8 @@ async function clickPiece(live, a, i) {
       owner: "when a note overlaps a previous one the previous one gets cut"; "the recording gets
       split in two"; "after a reload it is still cut"
    --------------------------------------------------------------------------------------------- */
-const P1a = "My name's Daniel.", P1b = "Meu nome é Daniel.";   /* the pair on line 31 of lesson 1 */
-const P2b = "I'm from Brazil.";                                /* the tail the note reaches (line 32) */
-/* ⏺ Record over a multi-node span (a phrase PAIR: <b>…</b> = <i>…</i>) */
+/* the fixtures are read from the page — see fixtures() — because a sentence written here cannot survive
+   a rewritten lesson: it is the SHAPE (a pair, a phrase either side of it) that B-F4 is about. */
 async function recSpan(live, from, to) {
   await selectSpan(live, from, to, 'the recording’s selection was made');
   await live.clickSel('#pR');
@@ -2176,10 +2279,17 @@ async function noteSpan(live, from, to, text) {
 }
 async function scenBF4(live, site) {
   log('\n================ B-F4 · OVERLAPPING SAVES (cut / split marks) ================');
-
+  /* the fixtures are the page's own words: a PAIR (two adjacent inline runs in one paragraph), a phrase
+     AFTER the pair for the crossing note to reach, and a phrase BEFORE it for the widening note in step 6 */
   log('\n step 1 — a recording across a phrase PAIR (one mark over <b>…</b> = <i>…</i>)');
   await api(site, 'reset=1');
   await live.nav();
+  const fx = await fixtures(live, 2);
+  const pair = fx.pairs[0];
+  if (!pair) return skip('bf4', 'this page has no block holding two adjacent inline runs, with a phrase either side');
+  const P1a = pair.a, P1b = pair.b;
+  const P2b = pair.post, MA = pair.pre;
+  log('   · fixtures: pair ' + JSON.stringify([P1a, P1b]) + ' · after ' + JSON.stringify(P2b) + ' · before ' + JSON.stringify(MA));
   await recSpan(live, Pos(P1a, 0), Pos(P1b, 0));
   let ms = await marksNow(live);
   let s = await live.dump('the recording, before any overlap', true);
@@ -2196,7 +2306,7 @@ async function scenBF4(live, site) {
      so measure the anchor bytes against the page text and ask the engine itself. Read-only. */
   const why = await live.ev('(function(){var ps=Array.prototype.slice.call(document.querySelectorAll("p"));' +
     'var p=ps.filter(function(e){return e.textContent.indexOf(' + JSON.stringify(P1a) + ')>=0})[0]||ps[0];' +
-    'var t=p?p.textContent:"";var i=t.indexOf("Meu nome");' +
+    'var t=p?p.textContent:"";var i=t.indexOf(' + JSON.stringify(P1b) + ');' +
     'var row=(layer.filter(function(r){return r.type==="note"})[0]||{});var a=String(row.anchor||"");' +
     'return{a:a,found:!!findRange(a),marks:nbMarks(a).length,slice:i<0?null:t.slice(i-2,i+40)}})()');
   log('   · the note row anchor is ' + JSON.stringify(why.a));
@@ -2227,7 +2337,7 @@ async function scenBF4(live, site) {
   checkInvariants(ms, 'crossing note reload');
 
   log('\n step 4 — CONTROL: two DISJOINT pairs, saved one after the other (no overlap → no cut)');
-  const SP = 'Are you from São Paulo?';        /* the third pair of the same <p> (occurrence 0) */
+  const SP = MA;                               /* a phrase before the pair: disjoint by construction */
   await api(site, 'reset=1');
   await live.nav();
   await makeNote(live, Pos(P1a, 0), 'primeira frase');
@@ -2250,7 +2360,6 @@ async function scenBF4(live, site) {
   checkInvariants(ms, 'note inside a recording');
 
   log('\n step 6 — CONTROL: widening a note over itself must RE-ANCHOR its row (never duplicate)');
-  const MA = "I'm Marina.";                    /* the first pair of the same <p> (occurrence 0) */
   await api(site, 'reset=1');
   await live.nav();
   await makeNote(live, Pos(P1b, 0), 'nota curta');
@@ -2279,14 +2388,19 @@ async function scenBF4(live, site) {
       owner: "notes/recordings are not anchored to the right place"; "selecting part of the phrase
       does not present the note"; "after a reload the recording lands on another phrase"
    --------------------------------------------------------------------------------------------- */
-const D1 = "My name's Daniel.";        /* phrase list (0) · dialogue (1) · quiz label (2) */
-const SUB = "name's Daniel.";          /* a PIECE of that phrase (same occurrence 0) */
+/* the fixtures are read from the page — see fixtures() */
 async function scenBF3(live, site) {
   log('\n================ B-F3 · NOTES/RECORDINGS ANCHORING + PRESENTATION ================');
-
-  log('\n step 1 — a note on the phrase: stored, painted ONCE, covering exactly its own text');
   await api(site, 'reset=1');
   await live.nav();
+  const fx = await fixtures(live, 2);
+  const D1 = (fx.phrases.filter(x => x.multi && x.words >= 3)[0] || {}).t;
+  if (!D1) return skip('bf3', 'this page holds no phrase of 3+ words that occurs twice');
+  /* a PIECE of the phrase: everything but its first word, so the selection is a strict part of the anchor */
+  const SUB = D1.split(/\s+/).slice(1).join(' ');
+  log('   · fixtures: ' + JSON.stringify(D1) + ' and the piece ' + JSON.stringify(SUB));
+
+  log('\n step 1 — a note on the phrase: stored, painted ONCE, covering exactly its own text');
   await makeNote(live, Pos(D1, 0), 'nota do Daniel');
   let ms = await marksNow(live);
   let s = await live.dump('after the note', true);
@@ -2478,7 +2592,11 @@ async function scenGeo(live, site) {
    --------------------------------------------------------------------------------------------- */
 async function scenDiag(live, site) {
   log('\n================ DIAG · does real input reach the page? ================');
-  const T = "My name's Daniel.";
+  await api(site, 'reset=1');
+  await live.nav();
+  const fxD = await fixtures(live, 1);
+  const T = fxD.phrases[0] && fxD.phrases[0].t;
+  if (!T) return skip('diag', 'this page holds no draggable phrase to prove input with');
   const COUNT = 'window.__ct={mousemove:0,mousedown:0,mouseup:0,keydown:0};' +
     'Object.keys(window.__ct).forEach(function(t){document.addEventListener(t,function(){window.__ct[t]++},true)});1';
   /* does anything call preventDefault on the gesture? a WINDOW bubble listener runs after every
@@ -2488,8 +2606,6 @@ async function scenDiag(live, site) {
     'window.addEventListener("mousedown",function(e){window.__dp.md=e.defaultPrevented},false);' +
     'window.addEventListener("mouseup",function(e){window.__dp.mu=e.defaultPrevented},false);' +
     'document.addEventListener("selectstart",function(e){window.__ss++;window.__dp.ss=e.defaultPrevented},true);1';
-  await api(site, 'reset=1');
-  await live.nav();
   log('   · hasFocus=' + await live.ev('document.hasFocus()') + '  innerHeight=' + await live.ev('window.innerHeight') +
     '  dpr=' + await live.ev('window.devicePixelRatio'));
   await live.ev(COUNT);
@@ -2780,6 +2896,29 @@ async function scenLanding(live, site) {
    --------------------------------------------------------------------------------------------- */
 const SCEN = { diag: scenDiag, geo: scenGeo, bar: scenBar, landing: scenLanding, bf2: scenBF2, bf2b: scenBF2b, bf3: scenBF3, bf4: scenBF4 };
 
+/* THE PAGE IS A CHAIN, NOT A CONSTANT: the lesson asked for, else the first page on disk that can boot
+   (its engine scripts resolve from where the page sits) and carries body text. Every fixture is read
+   from the page itself (Q.fixtures), so any page with prose will do — and a renamed, deleted or emptied
+   lesson can no longer take the pass down before a scenario runs. A page whose `../engine1.js` points
+   one folder too high cannot answer a single scenario, so it is not a candidate. */
+function livePage(track, n) {
+  const named = lessonFile(track, n);
+  if (named && fs.existsSync(path.join(ROOT, named))) return named;
+  const seen = [];
+  for (const t of TRACKS) {
+    let files = [];
+    try { files = fs.readdirSync(path.join(ROOT, t, 'lessons')).filter(f => LESSON_NAME.test(f)).sort() } catch (e) { continue }
+    for (const f of files) {
+      let src = '';
+      try { src = fs.readFileSync(path.join(ROOT, t, 'lessons', f), 'utf8') } catch (e) { continue }
+      if (src.indexOf('class="content-area"') < 0 || !/<p[^>]*>[^<]{60,}/.test(src)) continue;
+      seen.push(t + '/lessons/' + f);
+      if (src.indexOf('../../engine1.js') > 0) return t + '/lessons/' + f;
+    }
+  }
+  return seen[0] || named || null;
+}
+
 /* a page-scoped view of the connection: every command/event carries the page's session id */
 function session(cdp, id) {
   return {
@@ -2792,11 +2931,19 @@ function session(cdp, id) {
     if (qaOff('live')) return;
     ARGV = flags(opts);
     TRACK = String(arg('--track', 'business')).trim().toLowerCase();
+    LESSON = Number(arg('--lesson', arg('--lessons', LESSON))) || LESSON;   /* one page, addressed */
     if (!TRACKS.includes(TRACK)) {
       console.error('❌ --track must be one of: ' + TRACKS.join(' | ') + '  (got "' + TRACK + '")');
       return 1;
     }
-    PAGE_REL = '/' + TRACK + '/lessons/' + encodeURIComponent(path.basename(lessonFile(TRACK, LESSON) || ('lesson' + LESSON + '.html')));
+    const asked = lessonFile(TRACK, LESSON);
+    const rel = livePage(TRACK, LESSON);
+    if (!rel) { console.log('live — no page on disk carries body text'); return 1; }
+    PAGE_REL = '/' + rel.split('/').map(encodeURIComponent).join('/');
+    if (rel !== asked) {
+      log('· page   (fallback) ' + rel + ' — ' + TRACK + ' ' + LESSON + ' is not on disk, so the pass'
+        + ' runs on the first page that has body text');
+    }
     GATE = { email: EMAIL, track: TRACK, sig: hashStr(EMAIL + TRACK + SECRET), teacher: false };
     PROBE = '(' + probeFn.toString() + ')(' + JSON.stringify(GATE) + ')';
     if (isExcluded(TRACK, LESSON)) {
@@ -2872,6 +3019,7 @@ function session(cdp, id) {
       }).catch(() => { });
 
       const lv = new Live(ses, url);
+      SKIPPED.length = 0;
       for (const n of names) {
         log('\n\n################### scenario ' + n + ' ###################');
         const t0 = Date.now();
@@ -2892,6 +3040,7 @@ function session(cdp, id) {
       log('\n' + '─'.repeat(78));
       log(fail === 0 ? ('✅ live harness: ' + pass + ' checks passed, 0 failed')
         : ('❌ live harness: ' + fail + ' failed, ' + pass + ' passed'));
+      if (SKIPPED.length) log('   skipped (the page could not supply the shape):\n     · ' + SKIPPED.join('\n     · '));
       if (failures.length) log('   failures:\n     · ' + failures.join('\n     · '));
       log('   log  : ' + path.join(OUT, 'run.txt'));
       await clean();
