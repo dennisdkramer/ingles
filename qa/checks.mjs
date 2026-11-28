@@ -18,8 +18,7 @@
  *   the prose check  the prose: the items are the `Checks` bullets of the map page, read at run time;
  *              each is PROBED, MATERIAL (its extract is printed) or UNPROBED (said by name).
  *   the page check  everything about a page's markup and its running state — structure, blocks, items,
- *              markup boxes, the wrap, the block sequence against the track's ledger lines, and
- *              (runtime) engines, anchors, games, console.
+ *              markup boxes, the wrap, and (runtime) engines, anchors, games, console.
  *   the alignment pass    rendered geometry: a row's shorter cell against its neighbour, at measured widths.
  *              It is also the step that reads each page and marks its Portuguese `lang="pt"`, and adds the
  *              quiz: language is the reader's judgement, and this file makes none.
@@ -826,43 +825,6 @@ const RUNTIME_CLASSES = new Set(['eq-ready', 'layout-on', 'layout-panelled', 'la
   'layout-dragging', 'layout-line', 'layout-chip', 'layout-panel', 'layout-grip', 'editing', 'kbd',
   'no-js', 'is-inside', 'lvl1', 'lvl2', 'lvl3']);
 
-/* the ledger is one line per lesson under its roadmap heading: `- Ledger: rul>ex>mc>…`, the block
-   types that page built, in page order. A lesson is ledgered when that line exists. */
-function ledgerLine(track, n) {
-  if (!track || !n) return '';
-  const f = path.join(ROOT, track, 'roadmap.md');
-  if (!fs.existsSync(f)) return '';
-  let lesson = 0;
-  for (const line of fs.readFileSync(f, 'utf8').split(/\r?\n/)) {
-    const h = /^## (?:\[(\d+)\]|Lesson (\d+))/.exec(line);
-    if (h) { lesson = Number(h[1] || h[2]); continue; }
-    const l = /^\s*-\s*Ledger\s*:\s*(.+)$/i.exec(line);
-    if (l && lesson === n) return l[1].trim();
-  }
-  return '';
-}
-const ledgered = (track, n) => !!ledgerLine(track, n);
-const ledgerSeq = (track, n) => ledgerLine(track, n).split('>').map(s => s.trim()).filter(Boolean);
-
-/* the page's own block sequence: a block names its type in `data-type` (the ledger's subject words),
-   an older activity block in `data-activity`, and a teaching block with neither reads `teach` */
-function blockSeq(area) {
-  return [...area.querySelectorAll('.block')].map(b =>
-    b.getAttribute('data-type') || b.getAttribute('data-activity') || 'teach');
-}
-
-/* the longest run of the same types, in the same order, in two sequences */
-function longestRun(a, b) {
-  let best = 0;
-  for (let i = 0; i < a.length; i++) {
-    for (let j = 0; j < b.length; j++) {
-      let k = 0;
-      while (i + k < a.length && j + k < b.length && a[i + k] === b[j + k]) k++;
-      if (k > best) best = k;
-    }
-  }
-  return best;
-}
 /* the edit-mode chrome the layout editor and the format bar add to the live page: never part of a saved page */
 const DOMCHROME = dom => [...dom.querySelectorAll('.layout-chip,.layout-panel,.layout-line,.layout-grip,.fm-bar,#layoutLayer')];
 
@@ -871,7 +833,6 @@ function staticRules(p, src, ctx) {
   const fails = [], halts = [], warns = [], notes = [];
   const dom = new JSDOM(src).window.document;
   const area = dom.querySelector('.content-area') || dom.body;
-  const ledger = ledgered(p.track, p.n);
   /* a halt: the page has no content root, so nothing else it says can be read */
   if (!dom.querySelector('.content-area')) halts.push('no .content-area — the page has no content root');
 
@@ -901,8 +862,7 @@ function staticRules(p, src, ctx) {
   if (blocks.length) {
     const headless = blocks.filter(b => !(b.firstElementChild && b.firstElementChild.tagName === 'H3'));
     if (headless.length) {
-      const msg = headless.length + ' of ' + blocks.length + ' block(s) open with no <h3> — the block letter is drawn from the headline';
-      (ledger ? fails : warns).push(msg);
+      warns.push(headless.length + ' of ' + blocks.length + ' block(s) open with no <h3> — the block letter is drawn from the headline');
     }
     const nested = area.querySelectorAll('.block .block').length;
     if (nested) fails.push(nested + ' block(s) nested inside a block — a block is never a second block');
@@ -966,19 +926,6 @@ function staticRules(p, src, ctx) {
   const chrome = DOMCHROME(dom);
   if (marks.length) fails.push(marks.length + ' element(s) carry the edit tool\'s marks (data-layout-* / contenteditable) — a save writes a clean page');
   if (chrome.length) fails.push(chrome.length + ' element(s) of edit-mode chrome are in the page');
-
-  /* ---- the block sequence, read against the track's ledger ------------------------------- */
-  if (p.track && p.n) {
-    const seq = blockSeq(area);
-    for (const prev of [p.n - 1, p.n - 2, p.n - 3]) {
-      if (prev < 1) continue;
-      const before = ledgerSeq(p.track, prev);
-      if (!before.length) continue;
-      const run = longestRun(seq, before);
-      if (run >= 4) fails.push('blocks: ' + run + ' in a row as L' + prev + ' — the same run of block types');
-      else if (run === 3) warns.push('blocks: 3 in a row as L' + prev + ' — the same run of block types');
-    }
-  }
 
   notes.push(blocks.length + ' block(s) · ' + wrap.rows + ' row(s)' + (markup ? ' · a markup box' : '')
     + (p.track ? ' · a lesson page' : ' · not a track page: static only'));

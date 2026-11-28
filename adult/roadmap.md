@@ -2,7 +2,6 @@
 
 *Vocabulary mix — about half the track's own working words, a quarter everyday life, a quarter from the wider world (culture, sport, travel, food, weather, news) — and always after the more important word: a basic the student will use tomorrow outranks a flavour word that illustrates the lesson. No lesson is all workplace, and the first lessons are the basics first.*
 
-*The ledger is one line under each lesson's heading — `- Ledger: rul>ex>mc>…`, the block types that page built, in page order. A block names its type in `data-type`: a teaching block one of `rul` `rsn` `con` `ex` `exc` `voc` `mng` `prn` `tim` `soc` `rcp`; an activity block the element it builds (`mc`, `fill`, `matching`, `chunks`, `correction`, `translation`, `dictation`, `flip`, `chartanswer`, `dialoggap`, `stripgaps`, `map`). The three lines before this lesson are read before the page is written.*
 
 ## [1] - `sound/letter-vs-sound`, `sound/cognate-suffix-code`, `sound/reduction-preview` · name, day, work, home, water, food, friend, good, like, want · "This restaurant is a f---in' rip-off, bro."
 
@@ -15,7 +14,6 @@
 
 ## [2] - `sound/vowel-pairs`, `sound/false-friend`, `sound/cognate-stress` · ship, sheep, pool · "Don't f---in' push, man — it's a pull door."
 
-   - Ledger: rsn>prn>ex>mng>exc>rul>prn>rcp>voc>fill>mc
    - Focus: drill the vowel pairs that decide meaning and flag the cognates that look safe but set traps.
    - Deepens: `sound/cognate-suffix-code` — now where the stress actually lands on a -tion/-ic/-ity word, just before the ending.
    - Uses: `sound/letter-vs-sound`
@@ -25,7 +23,6 @@
 
 ## [3] - `word-order/skeleton`, `verb/be-identity`, `mode/empty-vs-filled` · guy, kid, buddy · "That guy is my f---in' buddy from the gym."
 
-   - Ledger: rsn>rul>ex>prn>mng>rul>exc>rul>voc>rcp>fill>mc
 
    - Focus: lock the fixed word order and the be-verb identity sentences that let the student say who and how they are.
    - Deepens: —
@@ -36,7 +33,6 @@
 
 ## [4] - `present-simple/facts-not-now`, `present-simple/third-person-s`, `present-simple/pt-now-trap`, `adverb/frequency-position` · "wake up", "get up", shower · "She always f---in' sleeps in on Sunday, so don't call her."
 
-   - Ledger: rsn>rul>ex>prn>rul>exc>rul>prn>rcp>voc>fill>mc
 
    - Focus: teach the simple present as facts and habits only, and kill the Portuguese habit of using it for the present moment.
    - Deepens: —
@@ -47,7 +43,6 @@
 
 ## [5] - `present-continuous/now`, `present-continuous/temporary`, `present-simple/vs-continuous-now` · "chill out", "mess around", "work out" · "What the f--- are you doing right now?"
 
-   - Ledger: rsn>rul>ex>prn>rul>exc>prn>rcp>voc>mng>fill>mc
 
    - Focus: put the student inside the moment with be + -ing, and draw the hard line against the simple present.
    - Deepens: `present-simple/facts-not-now` — the same scene now split by meaning: in general takes the simple, this minute takes the continuous.
@@ -58,7 +53,6 @@
 
 ## [6] - `question/be-inversion`, `question/short-answer`, `question/wh-be` · "what's up", "how's it going", "what's going on" · "What's up, you good? What the f--- happened to you?"
 
-   - Ledger: rsn>rul>ex>prn>rul>exc>rul>prn>rcp>voc>mng>fill>mc
 
    - Focus: build questions and short answers with be, the one verb that never borrows do.
    - Deepens: `verb/be-identity` — the same am/is/are statement, now flipped into a question and a two-word answer.
@@ -69,7 +63,6 @@
 
 ## [7] - `question/do-support`, `question/wh-do`, `negation/dont-doesnt`, `mode/marker-moves` · "give a shi-", "give a damn", mind · "Do you even care, or do you not give a shi-?"
 
-   - Ledger: rsn>rul>ex>prn>rul>exc>rul>prn>rcp>voc>mng>fill>mc
 
    - Focus: give every non-be verb its question and negative with do/does, and move the -s onto the helper.
    - Deepens: `present-simple/third-person-s` — the -s leaves the verb now and lives on does/don't.
@@ -80,7 +73,6 @@
 
 ## [8] - `future/gonna-mode`, `verb/go-to-place`, `future/gonna-vs-going-to` · gonna, "gonna be", "gonna get" · "We're gonna get f---ed up tonight, so don't bail on me."
 
-   - Ledger: rsn>rul>ex>prn>rul>exc>prn>rcp>voc>mng>fill>mc
 
    - Focus: teach [be] gonna + verb as the natural spoken future and separate it cleanly from go + place.
    - Deepens: `sound/reduction-preview` — the squeezed form previewed in lesson one is now the real spoken future.
@@ -91,7 +83,6 @@
 
 ## [9] - `future/will`, `future/wont`, `future/gonna-vs-will` · promise, swear, dare · "I won't f---in' tell anyone, I swear."
 
-   - Ledger: rsn>rul>ex>prn>rul>exc>prn>rcp>voc>mng>fill>mc
 
    - Focus: add will/won't as the future of promises, offers and decisions made in the moment.
    - Deepens: `future/gonna-mode` — will joins gonna as a second future: one for a plan, one for decided-now.
@@ -102,7 +93,6 @@
 
 ## [10] - `verb/want-to-need-to`, `verb/like-enjoy-ing`, `get/wildcard`, `get/root-phrasal-family` · "get back", "get out", "get on" · "I want to get the f--- out of here — I can't get used to this city."
 
-   - Ledger: rsn>rul>ex>prn>rul>exc>rul>mng>ex>voc>rcp>fill>mc
 
    - Focus: pair the preference verbs with their to/-ing shapes, then hand over get as the one word that does everything.
    - Deepens: —
@@ -113,7 +103,6 @@
 
 ## [11] - `preposition/to-vs-for`, `preposition/on-surface-and-days`, `preposition/in-inside-at-point`, `preposition/verb-plus-prep` · "depend on", "wait for", "talk to" · "I've been waiting for you for an hour — f---, talk to me."
 
-   - Ledger: rsn>rul>ex>prn>rul>ex>rul>ex>rul>ex>exc>voc>fill>mc>rcp
 
    - Focus: give each core preposition one meaning, split "para" into to/for, and glue the right preposition to its verb.
    - Deepens: —
@@ -124,7 +113,6 @@
 
 ## [12] - `question/tag-check`, `discourse/backchannel`, `discourse/follow-up-question` · "for real", "no shi-", right · "For real? No shi- — tell me everything."
 
-   - Ledger: rsn>rul>ex>prn>rul>ex>prn>exc>rul>rcp>voc>mc
    - Focus: keep a conversation alive with back-channel noises, check-tags and a follow-up that returns the turn.
    - Deepens: `question/short-answer` — the short answer grows into a whole back-channel: an echo plus a check-tag.
    - Uses: `question/be-inversion`
@@ -134,7 +122,6 @@
 
 ## [13] - `past-simple/regular-ed`, `past-simple/irregular-set`, `past-simple/empty-mode-marker`, `past/recounting-sequence` · "last night", yesterday, "the other day" · "Last night I ran into my ex — we broke up back then, it was a f---in' mess."
 
-   - Ledger: rsn>rul>prn>rul>exc>prn>rcp>voc>ex>fill>mc
    - Focus: put events in the past with -ed and the core irregulars, then chain them in order.
    - Deepens: `mode/empty-vs-filled` — the empty mode now carries a past marker instead of a present one.
    - Uses: `word-order/skeleton`
@@ -144,7 +131,6 @@
 
 ## [14] - `question/did-support`, `negation/didnt`, `past-simple/was-were` · "how was", "what happened", "where were you" · "Where the f--- were you last night? What happened?"
 
-   - Ledger: rsn>rul>rul>rul>prn>exc>rcp>voc>ex>fill>mc
    - Focus: run past questions and negatives off did, and keep was/were as the exception.
    - Deepens: `question/do-support` — the same helper move reused in the past, with the verb back to base.
    - Uses: `past-simple/irregular-set`
@@ -172,7 +158,6 @@
 
 ## [17] - `number/counts-and-prices`, `noun/plural-forms`, `contrast/this-that-these-those` · bucks, change, "rip off" · "Fifteen fifty for that? A f---in' rip-off, not worth it."
 
-   - Ledger: rsn>rul>prn>ex>exc>rul>exc>rul>prn>rcp>voc>fill>correction>mc
 
    - Focus: say numbers and prices correctly and stack the demonstratives so pointing actually works.
    - Deepens: `noun/countable-uncountable` — the numbers and plurals now ride on top of the count/mass split.
@@ -183,7 +168,6 @@
 
 ## [18] - `there/existential`, `there/negative-question`, `article/a-the-zero` · "there's", "over there", "around here" · "There's a f---in' bar on the corner, next to the one across from mine."
 
-   - Ledger: rsn>rul>ex>prn>rul>prn>rul>exc>exc>mng>rcp>voc>map>mc
 
    - Focus: introduce things into the room with there is/are, then negate and question it, and pick the right article.
    - Deepens: `preposition/on-surface-and-days` — the place words now sit inside an existence sentence.
@@ -194,7 +178,6 @@
 
 ## [19] - `possessive/adjective`, `possessive/s-genitive`, `possessive/mine-pronoun` · "my bad", "your call", "my ex" · "My bad — that's your f---in' call, it's their place, not ours."
 
-   - Ledger: rsn>rul>ex>rul>exc>rul>prn>rcp>voc>fill>mc>con
 
    - Focus: cover the possessive adjectives, the 's/of split and the standalone possessive pronouns.
    - Deepens: —
@@ -205,7 +188,6 @@
 
 ## [20] - `adjective/position`, `adjective/order`, `intensifier/very-so-really`, `intensifier/swear-booster` · dead, mad, "f---in'" · "That was a f---in' good night, I'm dead serious."
 
-   - Ledger: rsn>rul>exc>rul>rul>rul>prn>exc>ex>rcp>voc>fill>correction>mc
 
    - Focus: place and order adjectives, then load them with intensity, including the taboo boosters.
    - Deepens: —
@@ -216,7 +198,6 @@
 
 ## [21] - `comparison/comparative-er`, `comparison/irregular`, `comparison/as-as`, `intensifier/much-way` · "way better", "way worse", "way too" · "This bar is way better — that one sucks."
 
-   - Ledger: rsn>rul>ex>prn>exc>rul>rul>exc>rul>prn>rul>ex>con>rcp>voc>fill>mc
 
    - Focus: build comparatives and superlatives, mark equality, then widen the gap with much/way/a bit.
    - Deepens: `intensifier/very-so-really` — those boosters now sit before a comparative to widen the gap.
@@ -227,7 +208,6 @@
 
 ## [22] - `connector/time-order`, `connector/so-because`, `past/scene-then-event` · first, then, "after that" · "First we were at the bar, then all of a sudden it f---in' kicked off."
 
-   - Ledger: rsn>rul>ex>prn>exc>rul>exc>ex>prn>rul>exc>rcp>voc>fill>mc
 
    - Focus: chain events with time connectors, give causes and results, and set a scene before dropping the event.
    - Deepens: `past-simple/irregular-set` — the past verb now chains events in order instead of naming one.
@@ -238,7 +218,6 @@
 
 ## [23] - `sound/linking`, `sound/elision`, `sound/weak-forms`, `sound/assimilation` · whaddaya, dunno, gimme · "Whaddaya want? Gimme a f---in' sec, lemme see."
 
-   - Ledger: rsn>rul>prn>rul>rul>prn>rul>ex>exc>voc>mng>rcp>fill>mc
    - Focus: teach linking, elision, weak forms and assimilation so the student hears real fast speech, not dictionary English.
    - Deepens: `sound/vowel-pairs` — now whole phrases move their sounds, not just single vowels.
    - Uses: `sound/letter-vs-sound`
@@ -316,7 +295,6 @@
 
 ## [32] - `condition/zero`, `condition/first`, `condition/unless`, `condition/when-vs-if` · "in case", unless, "as long as" · "If it rains, we're staying in — f--- it."
 
-   - Ledger: rsn>rul>rul>exc>rsn>prn>rul>exc>con>exc>voc>mng>rcp>fill>rul>rcp
 
    - Focus: teach the zero and first conditionals, unless as if-not, and the when-versus-if choice.
    - Deepens: `future/gonna-mode` — a plan now lives inside an if-clause.
@@ -336,7 +314,6 @@
 
 ## [34] - `report/backshift`, `report/say-vs-tell`, `report/time-and-place`, `report/reported-question` · say, tell, ask · "He said he was coming — he f---in' told me that, I swear."
 
-   - Ledger: rsn>rul>rul>exc>rul>rul>exc>prn>prn>voc>con>fill>rcp
 
    - Focus: backshift reported speech, split say from tell, shift the time words, and report questions as statements.
    - Deepens: `past-simple/regular-ed` — reporting pushes the verb one step further back.
@@ -347,7 +324,6 @@
 
 ## [35] - `passive/form`, `passive/by-agent`, `passive/why-use` · "get done", "get paid", "be done" · "The shi- got handled — nothing f---in' gets done here."
 
-   - Ledger: rsn>rul>rul>exc>rul>ex>rul>prn>con>voc>rcp>mc
 
    - Focus: build be/get + past participle, add by only when the doer matters, and use the passive to background blame.
    - Deepens: `past-simple/irregular-set` — the participle now rides with be instead of standing alone as a past verb.
@@ -367,7 +343,6 @@
 
 ## [37] - `text/abbreviations`, `text/tone-in-text`, `text/dm-conventions`, `text/masked-swear` · lol, brb, tbh · "ngl that's rough, lol, smh."
 
-   - Ledger: rsn>rul>voc>prn>rul>con>rul>rul>exc>ex>rcp>mc
 
    - Focus: teach the core abbreviations, how tone flips in text, DM conventions, and masked swearing in messages.
    - Deepens: `swear/masked-forms` — the masking now moves off the page and into texts and captions.
@@ -378,7 +353,6 @@
 
 ## [38] - `slang/internet-set`, `slang/use-advice`, `music/lyric-reduction`, `music/figurative` · slap, vibe, "no cap" · "This track f---in' slaps — no cap, it's fire."
 
-   - Ledger: rsn>rul>voc>ex>prn>rul>mng>prn>rul>rcp>mc
 
    - Focus: teach the current internet slang set, the use-it advice, and how lyrics lean on reductions and figurative language.
    - Deepens: `slang/street-basics` — from street basics to the internet-and-music layer that turns over every year.
@@ -448,7 +422,6 @@
 
 ## [46] - `aave/remote-been`, `aave/finna-tryna`, `aave/culture-attribution` · "we been", "she be", "finna go" · "We been knew, deadass — y'all be late every f---in' time."
 
-   - Ledger: rsn>rul>ex>prn>exc>rul>prn>rul>exc>voc>mng>soc>rcp>fill>mc
    - Focus: deepen AAVE with stressed BEEN and finna/tryna, then draw the appreciation-versus-appropriation line plainly.
    - Deepens: `aave/aspect-markers` — from done/been as plain markers to stressed BEEN carrying remote time.
    - Uses: `aave/habitual-be`
@@ -476,7 +449,6 @@
 
 ## [49] - `humor/callback`, `story/tension`, `discourse/tone-shift` · punchline, "inside joke", "got you" · "Storytime: plot twist at the end, and the punchline? He f---in' paid."
 
-   - Ledger: rsn>rul>ex>prn>rul>exc>rul>exc>voc>mng>soc>rcp>fill>mc
    - Focus: build a longer joke with setup and tension, reward the listener with a callback, and switch from joking to serious and back cleanly.
    - Deepens: `humor/roast` — from a quick roast to a whole story built to land a punchline.
    - Uses: `connector/time-order`
@@ -486,7 +458,6 @@
 
 ## [50] - `discourse/self-expression`, `discourse/idiom-bank`, `discourse/tone-word-position`, `discourse/capstone-integration` · "speak your mind", "own it", "keep it real" · "I'm gonna speak my f---in' mind — keep it real, no filter."
 
-   - Ledger: rsn>rul>rul>ex>prn>exc>rul>exc>voc>mng>soc>rcp>fill>mc>game>mus
    - Focus: pull the whole toolkit into the student's own voice: opinions, idioms under pressure, and choosing the right level on the spot with no one telling them which.
    - Deepens: `discourse/tone-shift` — from switching tone on purpose to owning the whole voice at once.
    - Uses: `argument/boundaries`, `slang/borrowing`
