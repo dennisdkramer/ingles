@@ -295,13 +295,20 @@
        leaving the whole gap below it. three or more cells stay top-aligned so their lines
        agree. the cells are still at their own height here, so these heights are their
        content's, not the row's. the previous run's decision is cleared first, because a
-       photo that loads late can change the gap the next run sees. */
+       photo that loads late can change the gap the next run sees.
+       THE HEADLINE NEVER MOVES: a cell whose first child is a heading (a block a page put
+       straight into the row) keeps that heading at the cell's top. Centering its content would
+       carry the h3 down the page, and where the headline sits would then depend on how much
+       text the cell holds beside it. */
     cols.forEach(function (c) { c.style.removeProperty("justify-content"); });
     if (cols.length === 2) {
       var lastH = cols.map(function (c) { return c.getBoundingClientRect().height; });
       var lo = Math.min.apply(null, lastH), hi = Math.max.apply(null, lastH);
       if (hi - lo > CENTER_MIN) {
-        cols[lastH[0] <= lastH[1] ? 0 : 1].style.justifyContent = "center";
+        var k = lastH[0] <= lastH[1] ? 0 : 1;
+        var first = cols[k].firstElementChild;
+        var headed = !!(first && /^H[34]$/.test(first.tagName));
+        if (!headed) cols[k].style.justifyContent = "center";
       }
     }
 

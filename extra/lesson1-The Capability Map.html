@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Extra · Lesson 1 — The Capability Map</title>
-<link rel="stylesheet" href="../style.css?v=6aa5e4a062">
+<link rel="stylesheet" href="../style.css?v=c27bd65e4a">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="../logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>EXTRA <span>DEMO 1</span></h1>
@@ -50,7 +50,23 @@
 <tr><td>how one word is said</td><td><a href="#key-sound">the pronunciation key, above the word</a></td></tr>
 <tr><td>include music w/ relevant lyrics - script fetch &amp; audio player</td><td><a href="#audio">the player</a></td></tr>
 <tr><td>locations, directions, relative positions</td><td><a href="#map">the street map</a></td></tr>
-<tr><td>the student writes the sentence a panel shows</td><td><a href="#stripgaps">the strip with a gap under each panel</a></td></tr>
+</tbody>
+</table></div></div>
+<div class="rows"><div><table class="chart">
+<thead><tr><th>What it is best for</th><th>The activity</th></tr></thead>
+<tbody>
+<tr><td>checking one meaning at a time, with the meaning as the prompt</td><td><a href="#flip">the flip cards</a></td></tr>
+<tr><td>answering inside a conversation the lesson already wrote</td><td><a href="#dialoggap">the dialog with a gap</a></td></tr>
+<tr><td>items that share columns, each row answered in place</td><td><a href="#chartanswer">a chart whose rows are answered</a></td></tr>
+<tr><td>word order, rebuilding a sentence from its pieces</td><td><a href="#chunks">chunks in the wrong order</a></td></tr>
+<tr><td>finding and repairing the one word that is wrong</td><td><a href="#correction">correction</a></td></tr>
+<tr><td>writing what is heard</td><td><a href="#dictation">dictation</a></td></tr>
+<tr><td>writing the sentence a picture shows</td><td><a href="#stripgaps">the strip with a gap under each panel</a></td></tr>
+<tr><td>choosing between forms that compete</td><td><a href="#mc">multiple choice</a></td></tr>
+<tr><td>pairing phrases with a shared pool of meanings</td><td><a href="#matching">matching</a></td></tr>
+<tr><td>locating a place, and following a route</td><td><a href="#mapq">the street map as a question</a></td></tr>
+<tr><td>typing the exact form into the sentence</td><td><a href="#fill">fill in the blank</a></td></tr>
+<tr><td>turning Portuguese into the English the lesson taught</td><td><a href="#translation">translation</a></td></tr>
 </tbody>
 </table></div></div>
 </div>
@@ -225,7 +241,7 @@
 <div class="rows">
 <div>
 <div class="rows"><div><p class="pos" id="pos"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p></div></div>
-<div class="rows"><div><p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-i" data-side="right">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span> <span class="pos-adj">the</span> <span class="pos-n pos-o">book</span>.</p></div><div><p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-o">it</span> <span class="pos-prep">to</span> <span class="pos-n pos-i" data-side="left">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span>.</p></div></div></div>
+<div class="rows" id="recipient"><div><p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-i" data-side="right">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span> <span class="pos-adj">the</span> <span class="pos-n pos-o">book</span>.</p></div><div><p class="pos"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-o">it</span> <span class="pos-prep">to</span> <span class="pos-n pos-i" data-side="left">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span>.</p></div></div></div>
 <div id="pair">
 <div class="rows"><div><div class="pair-stack">
 <div class="side" data-state="wrong"><p><i class="mark"></i> I <b>am knowing</b> the answer.</p></div>
@@ -2006,7 +2022,7 @@ next();
 <!-- demo · trains: the lesson's Portuguese sentences turned into its English ones · box: #dictation (the translation note) -->
 <div class="rows">
 <div>
-<div class="block" data-look="stripes" data-activity="translation">
+<div class="block" data-look="stripes" data-activity="translation" id="translation">
 <h3>Say it in English</h3>
 <div class="rows"><div><p>Translate each sentence into English.</p></div></div>
 <div class="rows"><div>
@@ -2712,7 +2728,7 @@ window.OPEN=true;
 <script src="../engine4.js"></script>
 <!-- BLOCK SCRIPTS ARE DECLARED BY THE HEADER OF THE CSS THEY USE -->
 <script src="../player.js"></script>
-<script src="../equalize.js?v=0438a3006e"></script>
+<script src="../equalize.js?v=48367f628d"></script>
 <script>
 if(!window.__A)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine1.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');
 else if(!window.__B)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine2.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');

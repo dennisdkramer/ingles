@@ -3206,6 +3206,11 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
   /* level 3: a cell's children; the first starts flush and a field stays with its question */
   .rows>div>*{margin-block:var(--cell-gap) 0}
   .rows>div>:first-child{margin-block-start:0}
+  /* A BLOCK'S HEADLINE SITS AT THE SAME HEIGHT WHETHER THE BLOCK IS THE CELL OR STANDS IN ONE. The line
+     above starts a cell flush, but when the cell IS the block its first child is the headline inside
+     the frame, and that air is the frame's own --level-gap — the same height a block gets when it sits
+     inside a cell. Without this, the same headline sat 20px higher on a block that was its own cell. */
+  .rows>.block>h3:first-child{margin-block-start:var(--level-gap)}
   :is(.block,.panel,.card,.dialog)>:is(input,textarea,select,button),
   .rows>div>:is(input,textarea,select,button){margin-block-start:0}
   /* THE THIRD LEVEL ADDS NOTHING. Three `.rows` in a chain is a third-level row, so its cells'
