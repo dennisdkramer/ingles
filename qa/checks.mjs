@@ -930,9 +930,17 @@ function staticRules(p, src, ctx) {
   const markup = area.querySelector('.markup-row');
   if (markup) {
     if (p.track) fails.push('a markup box on a lesson page — a markup box is a build tool, never content');
-    for (const s of area.querySelectorAll('.markup-row summary'))
-      for (const h of (s.textContent.match(/#[a-z0-9][a-z0-9-]*/g) || []))
-        if (!ids.has(h.slice(1))) fails.push('stub label points at nothing: ' + h);
+    /* The token a box opens with is a LABEL, not an anchor: it names the element the box documents,
+       and the drawing that carries the same token in a comment is what it is matched to. A label with
+       no drawing is legitimate — a box may document an element this page does not draw — so the gate
+       is that the label and the box's own id agree, which cannot rot into a token pointing nowhere. */
+    for (const box of area.querySelectorAll('.markup-row details[id]')) {
+      const summary = box.querySelector('summary');
+      const tok = ((summary ? summary.textContent : '').match(/Markup\s*—\s*(#[a-z0-9][a-z0-9-]*)/) || [])[1];
+      if (!tok) continue;
+      if (box.id !== 'markup-' + tok.slice(1))
+        fails.push('markup box ' + box.id + ' opens with ' + tok + ' — a box is named markup-' + tok.slice(1));
+    }
     for (const pre of area.querySelectorAll('.markup-row pre')) {
       if (pre.children.length) fails.push('a <pre> holds parsed markup, not escaped tags: ' + pre.firstElementChild.outerHTML.slice(0, 40));
       else if (!/&lt;/.test(pre.innerHTML)) fails.push('a <pre> in a markup box holds no escaped tag');

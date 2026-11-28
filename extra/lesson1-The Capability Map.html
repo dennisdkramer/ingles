@@ -20,69 +20,6 @@
 </div>
 </div>
 
-<h2>[AUTHORING] Sections divide concepts, Blocks divide for organization</h2>
-
-<div class="rows">
-<div>
-<div class="rows"><div><div class="rows"><div><p style="text-align: left; margin-left: auto; margin-right: auto;">The H1 title names the mai<span class="c-ink">n concept&nbsp;</span><span class="f-display"><span class="c-ink">th</span><span class="f-serif"><span class="c-ink">e lesson teac</span></span></span><span class="f-sans">hes, in the words a<span class="c-accent">&nbsp;</span><span class="c-ink">student would us</span>e —&nbsp;never a slogan, a metaphor or a question. Lesson page text and teaching is authored independently, aware of the teaching tools and activity types in this section. Text is&nbsp;full justified by default, but lone thin paragraphs such as this one often look better centered.</span></p></div></div></div></div>
-</div>
-</div>
-
-
-
-<div class="rows">
-<div>
-<div class="block">
-<h3>The Index - Lesson features, visuals, tools, and activity types</h3>
-<div class="rows">
-<div>
-<div class="rows"><div><p class="dim"><b>These are the available teaching tools.</b> Pass 1 chooses, Pass 2 builds: the first column gives an example of when you might use a tool; the second is its name and a link to it, drawn as an example on this page. These tools are the elements a lesson page is built from: none of them is required or ranked above another, a text explanation is as valid as any, and the order of the rows means nothing.</p></div></div>
-</div>
-<div>
-<div class="rows"><div><table class="chart">
-<thead><tr class="bare"><th colspan="2"></th></tr></thead>
-<tbody>
-<tr><td>word order and the jobs inside a sentence</td><td><a href="#pos">parts-of-speech marking</a></td></tr>
-<tr><td>teach english use of indirect object</td><td><a href="#recipient">the recipient and its arrow</a></td></tr>
-<tr><td>teach verb tenses - timelines anchored to phrases</td><td><a href="#axis">the timeline</a></td></tr>
-<tr><td>chart for bulk vocabulary, definitions/translations/etc</td><td><a href="#chart">a chart</a></td></tr>
-<tr><td>standout note for special case words/phrases</td><td><a href="#gloss">a card at the word</a></td></tr>
-<tr><td>how one word is said</td><td><a href="#key-sound">the pronunciation key, above the word</a></td></tr>
-<tr><td>include music w/ relevant lyrics - script fetch &amp; audio player</td><td><a href="#audio">the player</a></td></tr>
-<tr><td>locations, directions, relative positions</td><td><a href="#map">the street map</a></td></tr>
-</tbody>
-</table></div></div>
-<div class="rows"><div><table class="chart">
-<thead><tr><th>What it is best for</th><th>The activity</th></tr></thead>
-<tbody>
-<tr><td>checking one meaning at a time, with the meaning as the prompt</td><td><a href="#flip">the flip cards</a> · <a href="#markup-controls">controls</a></td></tr>
-<tr><td>answering inside a conversation the lesson already wrote</td><td><a href="#dialoggap">the dialog with a gap</a> · <a href="#markup-controls">controls</a></td></tr>
-<tr><td>items that share columns, each row answered in place</td><td><a href="#chartanswer">a chart whose rows are answered</a> · <a href="#markup-controls">controls</a></td></tr>
-<tr><td>word order, rebuilding a sentence from its pieces</td><td><a href="#chunks">chunks in the wrong order</a> · <a href="#markup-controls">controls</a></td></tr>
-<tr><td>finding and repairing the one word that is wrong</td><td><a href="#correction">correction</a> · <a href="#markup-controls">controls</a></td></tr>
-<tr><td>writing what is heard</td><td><a href="#dictation">dictation</a> · <a href="#markup-controls">controls</a></td></tr>
-<tr><td>writing the sentence a picture shows</td><td><a href="#stripgaps">the strip with a gap under each panel</a> · <a href="#markup-controls">controls</a></td></tr>
-<tr><td>choosing between forms that compete</td><td><a href="#mc">multiple choice</a> · <a href="#markup-controls">controls</a></td></tr>
-<tr><td>pairing phrases with a shared pool of meanings</td><td><a href="#matching">matching</a> · <a href="#markup-controls">controls</a></td></tr>
-<tr><td>locating a place, and following a route</td><td><a href="#mapq">the street map as a question</a> · <a href="#markup-controls">controls</a></td></tr>
-<tr><td>typing the exact form into the sentence</td><td><a href="#fill">fill in the blank</a> · <a href="#markup-controls">controls</a></td></tr>
-<tr><td>turning Portuguese into the English the lesson taught</td><td><a href="#translation">translation</a> · <a href="#markup-controls">controls</a></td></tr>
-</tbody>
-</table></div></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-
-
-
-
-
-
-
-
 <h2>Pass 2 — Skin, Mechanics, Structure, Content Fetching</h2>
 
 <div class="rows"><div><div class="block">
@@ -108,44 +45,11 @@
 </div></div></div><div class="rows"><div class="block" data-look="float"><h3>How the blocks sit on the page</h3>
 <div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><span class="f-serif">Text that applies to the whole section may live outside of a block, or it may be&nbsp;<code>data-look="float"</code>.</span></p><div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;">Every block names its type in <code>data-type</code> — on a block that teaches <code>rul</code>, <code>rsn</code>, <code>con</code>, <code>ex</code>, <code>voc</code>, <code>mng</code>, <code>prn</code>, <code>tim</code>, <code>soc</code>, <code>rcp</code> or <code>exc</code>; on a block the student works in, the element it builds (<code>mc</code>, <code>fill</code>, <code>matching</code>, <code>chunks</code>, <code>correction</code>, <code>translation</code>, <code>dictation</code>, <code>flip</code>, <code>chartanswer</code>, <code>dialoggap</code>, <code>stripgaps</code>, <code>map</code>). The type is what the lesson's ledger line is written from, and the next page is read against that line. <b>The type is the engine's record of what the block is, never the plugin's own name:</b> a block the student answers with options is <code>mc</code>, one answered by typing a word is <code>fill</code>, because the field is what the student writes in.</p></div></div></div></div></div><div class="block" data-look="dark"><h3>Dark</h3>
 <div class="rows"><div><div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><code><font face="Georgia, Iowan Old Style, Palatino Linotype, Book Antiqua, serif"><span><b>'Night mode' block, used optionally for content that relates to the night or night life.&nbsp;</b></span></font>data-look="dark"</code></p></div></div></div></div></div><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><b>The text on this page is illustrative </b>and pertains to mechanics and structure. Nothing on this page is an example or reference for prose.&nbsp;</p><div class="rows"><div><div class="rows"><div><p class="dim" style="text-align: center; margin-left: auto; margin-right: auto;"><b>Declare <code>data-look</code> on the block</b>, never infer it from what it holds: it changes the paint only.</p></div></div></div></div></div></div>
-<!-- THE DEMO LESSON — what each block is, and where its markup is written.
-     The blocks below are a lesson's blocks, in a lesson's order. Element-wide rules are the page's own prose,
-     above each element's section further down; a block here is the demonstration, and its markup is the element's
-     own box, so this demo adds no second copy of it. Every block also carries one comment of its own, saying what
-     it trains and which element box documents it. Section by section:
-       1 A place is a point, a space, or a line ......... chart · markup #chart (below, "the chart")
-         Where the place is, and what kind of place ... fill · #fill
-         Listen first, before the rule ............... recording · #audio  (the song opens the lesson)
-       2 One verb in Portuguese, two forms in English .. timeline, two figures · #axis  (the simple-present
-         figure carries the two arcs, tln-arc, and no tln-link; the continuous figure carries the link)
-         Which form does the sentence need? ......... fill · #fill
-         The same sentence in pieces ................. chunks · #chunks
-       3 Where a movement ends, and who receives ...... parts of speech · #pos  (both orders) ; recipient
-         arrow · #recipient ; pronunciation key on "directions" · #key-sound
-         One event, said the other way .............. matching · #matching  (pool of six for five items)
-         Say it the other way ....................... fill · #fill  (the transform, after the recognition)
-       4 Two the rule reaches, three it cannot ........ prose only, no element
-         One word is wrong .......................... correction · #correction
-         The same town after dark ................... prose only, no element  (the page's one dark block)
-       5 The same movement, plus back ................. glossary card on "get back" · #gloss  (every example
-         is a sentence the lesson has already used)
-         Say it in English .......................... translation · #dictation (translation note at its foot)
-       6 Write what you hear ......................... dictation · #dictation  (the clerk's own lines)
-       7 The same walk, kid voice ..................... prose in the kid register, no element
-         The same walk, adult voice ................. prose in the adult register, no element
-       8 A route names three things ................... the street map · #map  (one drawing, nine ticks, and
-         one question keyed data-a="library|market")
-         What the question asks for, and what the answer names ... dialog · #dialog  (the desk dialog, under
-         the drawing it describes)
-         Where each route takes you ................. multiple choice, four routes keyed to a place name · #mc
-       9 From and to: a movement with two ends ....... recording · #audio
-         Both ends of the same movement ............. fill · #fill  (one frame, It's … from … to …)
-      10 Choose the right word or form ................ multiple choice, options on one line · #mc
-         Play the route ............................. game · 6  (five items, the same five sentences)
-         Flip the cards ............................. flip · #flip  (the prompt is a card's back; a wrong card
-         turns back, a right one clears the board and deals the next prompt)
-         Write it in your own words ................. write field · #dictation (the .write note)
-      11 Quiz ........................................ fill, 20 controls -->
+<!-- THE PAGE'S CONTRACT — a drawn example is the markup you copy, whole, as it stands.
+     The box named by the same token carries what the drawing cannot: its alternates, its options,
+     and the rules the drawing does not show. Open that box when you choose the element, and not
+     before — the drawing is what builds the page, and the box is what you check the build against.
+     A drawing's comment is its label, never part of it: the token, and what the element is for. -->
 
 
 
@@ -203,6 +107,8 @@
 </tbody>
 </table></div></div>
 <div class="rows">
+<!-- #chart · many items that share columns, read as a set -->
+
 <div><div class="rows"><div><figure class="chartwrap"><table class="chart">
 <thead><tr><th>Time Span</th><th>Triggered Tense</th></tr></thead>
 <tbody><tr class="grp"><th colspan="2">Then, last night, the other day</th></tr>
@@ -243,9 +149,9 @@
 <h3>Augment existing text</h3>
 <div class="rows">
 <div>
-<div class="rows"><div><p class="pos" id="pos"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p></div></div>
-<div class="rows" id="recipient"><div><p class="pos" style="text-align: center; margin-left: auto; margin-right: auto;"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-i" data-side="right">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span> <span class="pos-adj">the</span> <span class="pos-n pos-o">book</span>.</p></div><div><p class="pos" style="text-align: center; margin-left: auto; margin-right: auto;"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-o">it</span> <span class="pos-prep">to</span> <span class="pos-n pos-i" data-side="left">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span>.</p></div></div></div>
-<div id="pair">
+<div class="rows"><div><!-- #pos · making a sentence's structure visible by marking the job each word does --><p class="pos" id="pos"><span class="pos-adj">The</span> <span class="pos-adj">old</span> <span class="pos-n pos-subj">man</span> <span class="pos-m">can</span> <span class="pos-v">carry</span> <span class="pos-adj">the</span> <span class="pos-n pos-o">box</span> <span class="pos-adv">slowly</span> <span class="pos-prep">to</span> <span class="pos-adj">the</span> <span class="pos-n">shop</span>, <span class="pos-join" data-rel="contrast">but</span> <span class="pos-n pos-subj">it</span> <span class="pos-m pos-v">is</span> <span class="pos-adj">shut</span>.</p></div></div>
+<!-- #recipient · where a movement ends, and which of the two orders puts it there --><div class="rows" id="recipient"><div><p class="pos" style="text-align: center; margin-left: auto; margin-right: auto;"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-i" data-side="right">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span> <span class="pos-adj">the</span> <span class="pos-n pos-o">book</span>.</p></div><div><p class="pos" style="text-align: center; margin-left: auto; margin-right: auto;"><span class="pos-n pos-subj">I</span> <span class="pos-m pos-v">gave</span> <span class="pos-n pos-o">it</span> <span class="pos-prep">to</span> <span class="pos-n pos-i" data-side="left">her<i class="pos-i-arr" aria-hidden="true"><svg viewBox="0 0 20 18" fill="none"><path class="shaft" d="M18.5 1.8C12 2.2 7.2 6 6.4 13"></path><path class="head" d="M2.2 10.2 6.4 13.8 10.2 10.4"></path></svg></i></span>.</p></div></div></div>
+<!-- #pair · a right form against the wrong one the student would reach for --><div id="pair">
 <div class="rows"><div><div class="pair-stack" style="text-align: center; margin-left: auto; margin-right: auto;">
 <div class="side" data-state="wrong"><p><i class="mark"></i> I <b>am knowing</b> the answer.</p></div>
 <div class="side" data-state="correct"><p><i class="mark"></i> I <b>know</b> the answer.</p></div>
@@ -264,13 +170,15 @@
   <i class="tln-arc" data-arc="l" aria-hidden="true"><i class="tln-fly"><svg class="tln-curve" viewBox="0 0 24 21" preserveAspectRatio="none"><path pathLength="100" d="M24 0 Q 14 10 5 21"></path></svg></i></i>
   <i class="tln-arc" data-arc="r" aria-hidden="true"><i class="tln-fly"><svg class="tln-curve" viewBox="0 0 24 21" preserveAspectRatio="none"><path pathLength="100" d="M24 0 Q 14 10 5 21"></path></svg></i></i>
   <div class="tln"><b class="tln-before">before</b><i class="tln-past"></i><i class="tln-head"><svg class="tln-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7Z"></path></svg><b>now</b></i><i class="tln-ahead"></i><i class="tln-end"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h13M11 7l5 5-5 5M16 7l5 5-5 5"></path></svg></i><b class="tln-then">then</b><i class="tln-out" data-dir="l"></i><i class="tln-out" data-dir="r"></i><span class="tln-gloss" data-at="before">sempre assim</span><span class="tln-gloss" data-at="now">descreve</span><span class="tln-gloss" data-at="then">fato</span></div>
-</figure></div></div></div><div id="gloss">
+</figure></div></div></div><!-- #gloss · a special case explained in a card at its word --><div id="gloss">
 
 <div class="rows"><div><div class="defcard" popover id="d1"><b>clock in</b>bater o ponto — the punch clock at work, not <i>entrar</i>.</div></div></div>
 </div>
 </div>
 
 
+
+<!-- #audio · a song's own words, heard and read at once -->
 
 </div><div class="rows"><div><div class="rows"><div><figure class="vz-play viz is-enhanced">
 <h4>Take Me Home, Country Roads</h4>
@@ -299,7 +207,7 @@
 
 
 <div class="rows markup-row">
-<details class="reveal" open id="markup-pair"><summary>Markup — #pair · one sentence, two versions</summary><div class="body"><div>
+<details class="reveal" open id="markup-pair"><summary>Markup — #pair · a right form against the wrong one the student would reach for · the two sides, stacked or in columns</summary><div class="body"><div>
 <pre>&lt;div class="pair-stack"&gt;
   &lt;div class="side" data-state="wrong"&gt;&lt;p&gt;&lt;i class="mark"&gt;&lt;/i&gt; the sentence that is wrong&lt;/p&gt;&lt;/div&gt;
   &lt;div class="side" data-state="correct"&gt;&lt;p&gt;&lt;i class="mark"&gt;&lt;/i&gt; the sentence that is right&lt;/p&gt;&lt;/div&gt;
@@ -309,7 +217,7 @@
 &lt;!-- data-state colours the side; the .mark element draws the glyph --&gt;
 &lt;!-- .sides (two columns) is the other arrangement, for a block whose whole content is the pair --&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-pos"><summary>Markup — #pos · the job each word carries, and the fence</summary><div class="body"><div>
+<details class="reveal" open id="markup-pos"><summary>Markup — #pos · making a sentence's structure visible by marking the job each word does · the spans, and the fence around a group</summary><div class="body"><div>
 <pre>&lt;p class="pos"&gt;
   &lt;span class="pos-adj"&gt;The old&lt;/span&gt;
   &lt;span class="pos-n pos-subj"&gt;man&lt;/span&gt;
@@ -323,7 +231,7 @@
 <p class="dim"><code>data-rel</code>: add · contrast · alternative · cause · condition · time · place · comparison · content.</p>
 <p class="dim">Apply the marks to the modal, the verb, the noun and the preposition only; the tagger knows other groups, and a lesson leaves them alone. <b>If the marks do not land on the words the lesson teaches, leave the sentence unmarked and move on</b> — a sentence is never rewritten to suit the tagger. Where a page must show the parts without the marks, the part of speech goes in parentheses above the word.</p>
 </div></div></details>
-<details class="reveal" open id="markup-recipient"><summary>Markup — #recipient · the recipient and its arrow</summary><div class="body"><div>
+<details class="reveal" open id="markup-recipient"><summary>Markup — #recipient · showing where a movement ends, and which of the two orders puts it there · both sentences, and the arrow</summary><div class="body"><div>
 <pre>&lt;!-- the recipient: no line of its own, an arrow from the side the direct object sits on --&gt;
 I gave &lt;span class="pos-n pos-i" data-side="right"&gt;her
   &lt;i class="pos-i-arr" aria-hidden="true"&gt;
@@ -335,12 +243,12 @@ I gave &lt;span class="pos-n pos-i" data-side="right"&gt;her
 
 I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-key"><summary>Markup — #key · a word and the text above it</summary><div class="body"><div>
+<details class="reveal" open id="markup-key"><summary>Markup — #key · a translation read in place, above the word it explains · the ruby, and the fallback text</summary><div class="body"><div>
 <pre>&lt;p&gt;I can't
   &lt;ruby&gt;record&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;gravar&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
   it tonight.&lt;/p&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-key-sound"><summary>Markup — #key-sound · a word and the dictionary's key</summary><div class="body"><div>
+<details class="reveal" open id="markup-key-sound"><summary>Markup — #key-sound · how a word is said, syllable by syllable, above it · the ruby, and the key it is pasted from</summary><div class="body"><div>
 <pre>&lt;ruby&gt;library&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;
   &lt;b&gt;li&lt;/b&gt;·&lt;b&gt;br&lt;/b&gt;&lt;span class="pr-g"&gt;e&lt;/span&gt;&lt;b&gt;ry&lt;/b&gt;
 &lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
@@ -349,7 +257,7 @@ dictionary.json:  "library": "li-br[e]ry"
 PronKey.render("li-br[e]ry") → the rt above</pre>
 <p class="dim">The key is the entry in <code>dictionary.json</code>, rendered by <code>PronKey.render</code>: <code>-</code> a syllable break, a greyed letter written and not said, <code>ə</code> the schwa. <code>rp</code> is never omitted. <b>It is copied, never typed</b>: a key that does not come from the dictionary is a guess, and a word with no entry carries no key at all.</p>
 </div></div></details>
-<details class="reveal" open id="markup-gloss"><summary>Markup — #gloss · a word and its card</summary><div class="body"><div>
+<details class="reveal" open id="markup-gloss"><summary>Markup — #gloss · a special case explained in a card at its word, without leaving the line · the button and the popover</summary><div class="body"><div>
 <pre>&lt;p&gt;
   &lt;button class="glossbtn" popovertarget="d1"&gt;Clock in&lt;/button&gt;
   before eight.&lt;/p&gt;
@@ -360,7 +268,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;/div&gt;</pre>
 <p class="dim">One card per <code>id</code>, opened at its word by <code>popovertarget</code>.</p>
 </div></div></details>
-<details class="reveal" open id="markup-axis"><summary>Markup — #axis · the timeline</summary><div class="body"><div>
+<details class="reveal" open id="markup-axis"><summary>Markup — #axis · where a form sits in time, drawn against now · the sentence, the line, and the marks on it</summary><div class="body"><div>
 <pre>&lt;figure class="tlw" data-tense="simple-past"&gt;
   &lt;p class="tlw-say"&gt;I &lt;span class="pos-m pos-v an"&gt;wrote&lt;/span&gt; it.&lt;/p&gt;
   &lt;i class="tln-link" data-mark="dot"&gt;…tapered tail, swept barb…&lt;/i&gt;
@@ -373,7 +281,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;/figure&gt;</pre>
 <p class="dim"><code>.tlgrid</code> holds a family — one line per tense, <code>&lt;h4&gt;</code> naming a cell. A bare <code>.tln</code> with no <code>.tlw</code> draws the axis alone. <code>data-grow="1"</code> fills the container, <code>data-grow="2"</code> takes the anchor string's width. Marks: <code>tln-span</code> · <code>tln-that</code> · <code>tln-bar</code> · <code>tln-gloss</code> · <code>tln-arc</code> · <code>tln-out</code> (the two on a <code>simple-present</code> figure, which carries no <code>tln-link</code>). <code>data-tense</code>: simple-present · present-continuous · present-perfect · simple-past · past-continuous · past-perfect · going-to · future-perfect.</p>
 </div></div></details>
-<details class="reveal" open id="markup-chart"><summary>Markup — #chart · the chart, and the split chart</summary><div class="body"><div>
+<details class="reveal" open id="markup-chart"><summary>Markup — #chart · many items that share columns, read as a set · the table, the split chart, and the labels beside it</summary><div class="body"><div>
 <pre>&lt;figure class="chartwrap"&gt;
   &lt;table class="chart"&gt;…&lt;/table&gt;
 &lt;/figure&gt;</pre>
@@ -395,7 +303,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;/div&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-map"><summary>Markup — #map · the street map</summary><div class="body"><div>
+<details class="reveal" open id="markup-map"><summary>Markup — #map · a town drawn once, so places and routes have somewhere to point · the drawing, and the same drawing as a question</summary><div class="body"><div>
 <pre>&lt;!-- as a display: copy this drawing whole — this viewBox, these two roads and two lanes, all nine
      places and the map-geometry table — and write nothing inside the svg. --&gt;
 &lt;div class="vz-map viz"&gt;
@@ -423,7 +331,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;/div&gt;</pre>
 <p class="dim">Each place gets its own checkbox, at that place's <b>bottom centre</b> — under the drawing, where it never covers the name — its <code>value</code> the place, its <code>aria-label</code> the name the drawing shows — and the answer is the one place named by <code>data-a</code> on the <code>.qitem</code>, the same key a radio group uses, so engine2 marks it and freezes it on Complete. The text is free and may point at the place any way the lesson teaches — a route (<i>turn right out of the café, then your first left, then back a block — the destination is on your left</i>), a relation (<i>to the left of the café</i>), or its use (<i>where you send a letter</i>) — but the answer is always one place on the drawing. Only the keyed place is marked correct. The tick's position is a percentage of the drawing, so it stays on its place at any width.</p>
 </div></div></details>
-<details class="reveal" open id="markup-comic"><summary>Markup — #comic · the comic strip</summary><div class="body"><div>
+<details class="reveal" open id="markup-comic"><summary>Markup — #comic · a short scene told in panels, one sentence under each · the table of panels</summary><div class="body"><div>
 <pre>&lt;table class="chart comic"&gt;
   &lt;!-- a panel is 3:2 from its own width -- two rows of them are the map's 533 x 355 box. The sentence
        below hangs over the panel and never changes the table's height. --comic-h (all panels) or
@@ -440,7 +348,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;/table&gt;</pre>
 <p class="dim"><b>A panel is the map's 3:2, and the comic is the map's box — 533 × 355 — whatever its sentences say.</b> The table is the frame and each <code>td</code> is a panel (<code>.strip</code>): <b>the panel drawing's <code>viewBox</code> is 3:2</b> (<code>0 -8 120 80</code> — the old <code>120 × 64</code> strip, given the height it was missing) and the sheet sizes it from the cell's width, so two rows of 3:2 panels in a 533px table are 533 × 355, the same box as the map beside it. <b><code>--comic-h</code> (every panel) or <code>--strip-h</code> (one)</b> replaces that height when a page wants a taller drawing, and the drawing is then fitted and centred inside the frame, never stretched. <b>The sentence under a panel hangs over its bottom edge</b> — out of the flow, wrapped, cut at two lines — so a long sentence never makes the comic taller. <b>Write no <code>width</code> and no <code>height</code> on the <code>svg</code></b>: the sheet gives it the frame's width and height. <b>Pass 2 may resize the comic or the map when the page needs it</b>, and the two are otherwise the same box.</p>
 </div></div></details>
-<details class="reveal" open id="markup-audio"><summary>Markup — #audio · the recording</summary><div class="body"><div>
+<details class="reveal" open id="markup-audio"><summary>Markup — #audio · a song's own words, heard and read at once · the player, the timed lyrics, and the credit line</summary><div class="body"><div>
 <pre>&lt;figure class="vz-play viz"&gt;
   &lt;h4&gt;the song's own name&lt;/h4&gt;
   &lt;p class="dim"&gt;the performer&lt;/p&gt;
@@ -476,7 +384,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 &lt;/figure&gt;</pre>
 <p class="dim"><code>data-t</code> and <code>data-duration</code> come from <code>qa/audio.mjs</code>, never typed by eye. The song's own name is the <code>h4</code>, the performer the credit line under it. <b>Ship the same figure without the player when the song has no usable recording</b>: the link carries the time the quoted line starts, the lyrics are written out with no <code>data-t</code> because nothing plays, and the credit line under the link is what says where the song came from — no check follows an external link, so the page is the only place that is written down. <b>A song accompanies a lesson; it never takes the place of the teaching or the training it sits with.</b> Its block has a teaching point that its heading names, and it runs the lesson's own sequence on that line: the student predicts what they will hear, hears it, the line is read and marked, the rule is stated as it appears in this line, and the student then produces the same structure from words that are not the song's. If the block would teach the same thing with the audio removed, it is not a music block and the line was not the reason for it.</p>
 </div></div></details>
-<details class="reveal" open id="markup-dialog"><summary>Markup — #dialog · a dialog</summary><div class="body"><div>
+<details class="reveal" open id="markup-dialog"><summary>Markup — #dialog · a conversation the lesson writes, each line on its speaker's side · the turn list</summary><div class="body"><div>
 <pre>&lt;ol class="seq viz" data-mode="turns"&gt;
   &lt;li data-side="left"&gt;&lt;span class="who"&gt;Jess&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
   &lt;li data-side="right"&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
@@ -491,6 +399,8 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
 
 <div class="rows">
 <div>
+<!-- #flip · rote training on single words and short phrases, one prompt at a time -->
+
 <div class="block" data-look="stripes" id="flip" data-activity="flip">
 <h3>Flash Cards</h3>
 <h4 class="flip-ask" style="text-align:center" aria-live="polite">get out of a situation you don't want</h4>
@@ -602,7 +512,7 @@ next();
 
 </div><div class="rows"><div><div class="rows"><div><div class="block" data-look="stripes" data-activity="translation" id="translation">
 <h3>Activity Types</h3>
-<div class="rows"><div><p><b>All elements</b> here including dialogs, maps, and the audio player may be included and referenced for teaching purposes <b>and/or</b> used for marked activities<br>An answer may be marked using checkboxes on the map -  a route which, or directions, which ask the student to name one or more places. The key names one or both eg. data-a="bank|library", witha pipe separating them.  ****&gt;markup&gt;A tick sits at the bottom centre of its place, a percentage of the drawing, and its value is the place name.&nbsp;</p></div><div class="vz-map viz">
+<div class="rows"><div><p><b>All elements</b> here including dialogs, maps, and the audio player may be included and referenced for teaching purposes <b>and/or</b> used for marked activities<br>An answer may be marked using checkboxes on the map -  a route which, or directions, which ask the student to name one or more places. The key names one or both eg. data-a="bank|library", witha pipe separating them.  ****&gt;markup&gt;A tick sits at the bottom centre of its place, a percentage of the drawing, and its value is the place name.&nbsp;</p></div><!-- #map · a town drawn once, so places and routes have somewhere to point --><div class="vz-map viz">
 <svg viewBox="0 0 360 240" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, with nine places, each named on a sign in the drawing — a station with a canopy and a platform clock, a café with a striped awning and two tables outside, a park with trees behind railings, a bank with a columned front and steps, a library with tall windows, a post office with a mailbox on the sidewalk, a bus stop with a shelter and a bench, a market with two stalls, and a hotel with a door canopy">
   <!-- MAP GEOMETRY — THE ONE TABLE. Every number in this drawing, and every tick a lesson lays over it,
        is read from this table, so a tick can never sit off its building.
@@ -884,6 +794,8 @@ next();
 
 <div class="rows">
 
+<!-- #matching · pairing each item with its meaning from one shared pool -->
+
 <div class="block" data-look="stripes" id="matching" data-activity="matching">
 <h3>Matching</h3>
 <div class="rows"><div><div class="rows"><div><p>Write the letter of the meaning beside each phrase. One letter is left over. The phrases are in no order.</p></div></div></div></div>
@@ -920,7 +832,7 @@ next();
 
 
 
-<details class="reveal" open id="markup-controls"><summary>Markup — every activity · the controls, their name and their key</summary><div class="body"><div>
+<details class="reveal" open id="markup-controls"><summary>Markup — every activity · the rules every control obeys: its name is its key, one number per control, progress on the block · read before any activity's own box</summary><div class="body"><div>
 <pre>&lt;!-- READ THIS BEFORE AN ACTIVITY'S OWN BOX: these rules hold for every control in every activity --&gt;
 
 &lt;!-- A CONTROL'S NAME IS ITS KEY, AND THE KEY IS A NUMBER — a&lt;section&gt;c&lt;block letter&gt;&lt;item&gt;.
@@ -942,7 +854,7 @@ next();
 </div></div></details>
 
 <div class="rows markup-row">
-<details class="reveal" open id="markup-flip"><summary>Markup — #flip · the cards, the prompt, and the pick</summary><div class="body"><div>
+<details class="reveal" open id="markup-flip"><summary>Markup — #flip · rote training on single words and short phrases, one prompt at a time · the prompt, the grid, and the pick</summary><div class="body"><div>
 <pre>&lt;div class="block" id="flip"&gt;
   &lt;h4 class="flip-ask" style="text-align:center" aria-live="polite"&gt;…&lt;/h4&gt;
   &lt;div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"&gt;
@@ -963,7 +875,7 @@ next();
 &lt;!-- the script turns the card itself (it cancels the label's own toggle and sets the box), so a click is never doubled · --flip-h is the height both faces share --&gt;
 &lt;!-- no data-answer and no data-a here: the block cannot be a quiz --&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-dialoggap"><summary>Markup — #dialoggap · a dialog with a gap</summary><div class="body"><div>
+<details class="reveal" open id="markup-dialoggap"><summary>Markup — #dialoggap · answering inside a conversation the lesson already wrote · the turns, each gap numbered</summary><div class="body"><div>
 <pre>&lt;li data-side="right"&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;
     &lt;span class="say" style="position:relative"&gt;
       &lt;span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px"&gt;1.&lt;/span&gt;
@@ -979,7 +891,7 @@ next();
      left:calc(100% + 8px) on a left-hand line. On a left-hand bubble a number at right:100% hangs outside
      the dialog's own edge --&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-chartanswer"><summary>Markup — #chartanswer · a chart whose rows are answered</summary><div class="body"><div>
+<details class="reveal" open id="markup-chartanswer"><summary>Markup — #chartanswer · items that share columns, each row answered where it sits · the table, one control per row</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes"&gt;
   &lt;table class="chart"&gt;
     &lt;tr&gt;&lt;td&gt;6:40&lt;/td&gt;&lt;td&gt;He clocked in.&lt;/td&gt;
@@ -997,7 +909,7 @@ next();
       radios has no key the engine can read --&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-mc"><summary>Markup — #mc · four options, one answer</summary><div class="body"><div>
+<details class="reveal" open id="markup-mc"><summary>Markup — #mc · choosing the one right answer among the wrong ones — a word, a form, a meaning or a fact · the stem, the options, the key</summary><div class="body"><div>
 <pre>&lt;div class="qitem" data-a="b"&gt;
   &lt;p class="qstem"&gt;the line the student reads&lt;/p&gt;
   &lt;div class="qopts"&gt;
@@ -1012,7 +924,7 @@ next();
 &lt;!-- the set's layout follows the length of its options: data-layout="row" for one- and two-word
      options, data-layout="grid" style="--cols:2" for three- and four-word options --&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-matching"><summary>Markup — #matching · a pool of meanings</summary><div class="body"><div>
+<details class="reveal" open id="markup-matching"><summary>Markup — #matching · pairing each item with its meaning from one shared pool · the items, the pool, and one meaning too many</summary><div class="body"><div>
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;
     &lt;figure class="chartwrap"&gt;&lt;table class="chart"&gt;
@@ -1030,7 +942,7 @@ next();
      and one swapped pair is not a shuffle — the whole order is re-dealt --&gt;
 &lt;!-- each .gap keys the letter it expects; engine2 marks them on Complete --&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-correction"><summary>Markup — #correction · one word wrong</summary><div class="body"><div>
+<details class="reveal" open id="markup-correction"><summary>Markup — #correction · finding the one word that is wrong and writing the sentence again · the marked line, the answer field</summary><div class="body"><div>
 <pre>&lt;p class="dim" style="text-align:center"&gt;One word is wrong. Write the sentence again.&lt;/p&gt;
 &lt;p style="text-align:center"&gt;&lt;span class="qnum"&gt;3.&lt;/span&gt; He &lt;b&gt;have&lt;/b&gt; clocked in early.&lt;/p&gt;
 &lt;input class="gap" data-answer="He has clocked in early.|He's clocked in early."
@@ -1041,7 +953,7 @@ next();
 &lt;!-- used as a translation, the line above is Portuguese and the gap holds the English: the block is then
      recorded as a translation activity (data-activity="translation") and not as a correction --&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-dictation"><summary>Markup — #dictation · listen, then write</summary><div class="body"><div>
+<details class="reveal" open id="markup-dictation"><summary>Markup — #dictation · hearing a sentence once and writing it down · the play button and the answer field</summary><div class="body"><div>
 <pre>&lt;p class="dim" style="display:flex;align-items:center;
    justify-content:center;gap:10px"&gt;
   &lt;span class="qnum"&gt;4.&lt;/span&gt;
@@ -1060,7 +972,7 @@ next();
 &lt;!-- as a translation it is the same field: data-say carries the Portuguese (or the English) and the answer
      is the other language — record the block as data-activity="translation", not as dictation --&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-chunks"><summary>Markup — #chunks · chunks in the wrong order</summary><div class="body"><div>
+<details class="reveal" open id="markup-chunks"><summary>Markup — #chunks · rebuilding a sentence from its pieces, word order under pressure · the shuffled chips and the answer line</summary><div class="body"><div>
 <pre>&lt;p&gt;Unscramble the sentences:&lt;/p&gt;
 &lt;div class="qitem"&gt;
   &lt;p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;
@@ -1088,7 +1000,7 @@ next();
      is not a shuffle — the whole order is re-dealt. the number is the display order, never the answer --&gt;
 &lt;!-- the number sits at the head of the words, on their line — never alone on the answer line --&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-stripgaps"><summary>Markup — #stripgaps · the strip as an activity</summary><div class="body"><div>
+<details class="reveal" open id="markup-stripgaps"><summary>Markup — #stripgaps · writing the sentence each picture shows · the panels, a numbered gap under each</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes"&gt;
   &lt;h3&gt;the task the panels set&lt;/h3&gt;
   &lt;p&gt;Describe what is happening in each picture,
@@ -1103,7 +1015,7 @@ next();
   &lt;/table&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-fill"><summary>Markup — #fill · fill in the blank</summary><div class="body"><div>
+<details class="reveal" open id="markup-fill"><summary>Markup — #fill · typing the exact form into the sentence that needs it · the blank, typed or picked</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes" id="fill" data-activity="fill"&gt;
   &lt;h3&gt;Fill in the blank&lt;/h3&gt;
   &lt;p&gt;what the line asks the student to complete&lt;/p&gt;
@@ -1172,7 +1084,7 @@ next();
 
 
 <div class="rows markup-row">
-<details class="reveal" open id="markup-game"><summary>Markup — 6 · a game, and the levers on it</summary><div class="body"><div>
+<details class="reveal" open id="markup-game"><summary>Markup — #game · reskinning an activity the lesson already wanted, as a game · the item list and the levers</summary><div class="body"><div>
 <pre>&lt;div class="game" data-game="skeetRange" data-time="6000" data-kind="train"&gt;
   &lt;p class="game-how"&gt;one line: how to play&lt;/p&gt;
   &lt;div class="game-list"&gt;
@@ -1198,7 +1110,7 @@ next();
 &lt;!-- with a .listen chip the item may leave data-a off: the option whose text the clip speaks is the
      answer (engine4 matches it against data-say) --&gt;</pre>
 <p class="dim">Words the game needs on the item, not on the block: <code>data-answer="&lt;word&gt;"</code> for <code>wordleBoard</code> and <code>crosswordBoard</code>, <code>data-first</code> and <code>data-lives</code> for <code>echoPads</code>, <code>data-train</code> for <code>trainOrder</code>, <code>data-buckets</code> for <code>catchBasket</code>. Every game answers with the same radios, so engine4 checks the option and the page's own marking still saves it.</p>
-</div></div><details class="reveal" open id="markup-gap"><summary>Markup — a keyed gap inside a sentence</summary><div class="body"><div>
+</div></div><details class="reveal" open id="markup-gap"><summary>Markup — #gap · a keyed blank inside a sentence — a component, not an activity · the gap and its key</summary><div class="body"><div>
 <pre>&lt;p&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt; I'm &lt;input class="gap" data-answer="in"
     style="--gap-w:3em"&gt; the café.&lt;/p&gt;
 
@@ -1207,10 +1119,10 @@ next();
 </div></div></details></details>
 </div>
 
-<!-- demo · trains: the lesson's Portuguese sentences turned into its English ones · box: #dictation (the translation note) -->
 
 
-<h2>Sections divide concepts, Blocks divide for organization</h2><h2>Sections divide concepts, Blocks divide for organization</h2><h2>Verify</h2>
+
+<h2>Verify</h2>
 
 
 <div class="rows">

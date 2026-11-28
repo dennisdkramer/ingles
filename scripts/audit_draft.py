@@ -100,7 +100,8 @@ def audit_html_lesson(html_path: str, ledger_path: str, override_lesson_num: int
         raw_html = f.read()
 
     lesson_num = override_lesson_num if override_lesson_num is not None else ledger["current_lesson"]
-    game_count = len(re.findall(r"<!--\s*GAME_HERE", raw_html))
+    train_count = len(re.findall(r"<!--\s*TRAIN_HERE", raw_html))
+    quiz_count = len(re.findall(r"<!--\s*QUIZ_HERE", raw_html))
     music_count = len(re.findall(r"<!--\s*MUSIC_HERE", raw_html))
 
     soup = BeautifulSoup(raw_html, "html.parser")
@@ -140,7 +141,7 @@ def audit_html_lesson(html_path: str, ledger_path: str, override_lesson_num: int
     min_ratio = get_min_en_ratio(lesson_num)
 
     print(f"=== AUDIT REPORT: Lesson {lesson_num} ({ledger['track']}) ===")
-    print(f"GAME_HERE blocks: {game_count} (Required: exactly 1)")
+    print(f"TRAIN_HERE blocks: {train_count} · QUIZ_HERE blocks: {quiz_count}")
     print(f"MUSIC_HERE blocks: {music_count}")
     print(f"Headings in English: {len(en_headings)} / {len(headings)}")
     print(f"English words: {en_word_count} / {total_prose_words} ({en_ratio:.1%})")
@@ -148,10 +149,6 @@ def audit_html_lesson(html_path: str, ledger_path: str, override_lesson_num: int
     print(f"Minimum English ratio required for Lesson {lesson_num}: {min_ratio:.0%}")
 
     failed = False
-
-    if game_count != 1:
-        print("FAIL: Lesson must contain EXACTLY 1 <!-- GAME_HERE --> directive block.")
-        failed = True
 
     if ("🎧" in raw_html or "música" in full_prose or "faixa" in full_prose) and music_count == 0:
         print("FAIL: Lesson references a song/music in prose without a <!-- MUSIC_HERE --> directive block.")

@@ -36,3 +36,10 @@ Modulate the language of your explanations based on `track_ledger.json`:
 
 **Example B (Advanced — Default English + Surgical PT Contrast):**
 "You've seen the past and present perfect before — in Portuguese you might say 'eu não teria ido', but in English there isn't much of a difference: 'I wouldn't have gone' and 'I wouldn't have been there' imply each other." -> *"E olha que 'ia ser' se torna 'was going to be', não 'would be', que é mais reservado para o hipotético e evitado quando algo realmente rolou assim."*
+## 5. Sections, Practice & Retention
+- **Sections divide concepts, blocks divide for organization.** One section is the default: split only where the split earns its place in clarity. Meaning, formation and contraction are aspects of one ability, not three sections.
+- **The training is yours.** For each section decide what must become automatic and what the student will say instead, then write the activity where it trains that — inline under the section it teaches, or in a closing quiz when the lesson wants one.
+  - Why a thing is trained is one of four: **difficulty** (rare or irregular — examples are enough, do not drill it), **selection** (two known forms compete and the right one must come out without a pause), **interference** (Portuguese offers a form English does not), **chunk** (it must leave the mouth assembled — contractions, *get up*, *I'd rather*).
+- **An item never introduces vocabulary the lesson has not taught.** Difficulty is the student's, not yours: an early lesson trains few things slowly, a late one trains many and fast.
+- **Training is thorough and the student should be comfortable and well-practiced with the lesson concepts and vocabulary when they finish.**
+
