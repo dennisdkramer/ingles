@@ -1710,9 +1710,9 @@ function wireBackpack(cdp) {
   };
   /* every piece of a note/recording anchor. A piece is one mark.nb[data-a=…] element: engine1's
      nbWrap deliberately SPLITS a mark an overlapping save merely crosses, so an anchor can be painted
-     by several pieces. The dump therefore carries b/o (the stored occurrence, once the engine records
-     it), kids (how many nodes the mark covers: only a MULTI-node mark can be split) and the mark's
-     own document rectangle. */
+     by several pieces — B-F4 is exactly the question of whether it should be. The dump therefore
+     carries b/o (the stored occurrence, once the engine records it), kids (how many nodes the mark
+     covers: only a MULTI-node mark can be split) and the mark's own document rectangle. */
   Q.marks = function () {
     var out = [].slice.call(document.querySelectorAll('mark.nb')).map(function (m) {
       return {
@@ -2155,6 +2155,126 @@ async function clickPiece(live, a, i) {
 }
 
 /* ---------------------------------------------------------------------------------------------
+   9. SCENARIO B-F4 — a later save that OVERLAPS an earlier mark must never cut or split it
+      owner: "when a note overlaps a previous one the previous one gets cut"; "the recording gets
+      split in two"; "after a reload it is still cut"
+   --------------------------------------------------------------------------------------------- */
+const P1a = "My name's Daniel.", P1b = "Meu nome é Daniel.";   /* the pair on line 31 of lesson 1 */
+const P2b = "I'm from Brazil.";                                /* the tail the note reaches (line 32) */
+/* ⏺ Record over a multi-node span (a phrase PAIR: <b>…</b> = <i>…</i>) */
+async function recSpan(live, from, to) {
+  await selectSpan(live, from, to, 'the recording’s selection was made');
+  await live.clickSel('#pR');
+  await live.wait('!!document.querySelector("mark.nb.has-rec")', 16000, 'the recording’s underline');
+  await sleep(300);
+  await dismiss(live);
+}
+/* 📝 note over a multi-node span */
+async function noteSpan(live, from, to, text) {
+  await selectSpan(live, from, to, 'the note’s selection was made');
+  await saveNote(live, text);
+}
+async function scenBF4(live, site) {
+  log('\n================ B-F4 · OVERLAPPING SAVES (cut / split marks) ================');
+
+  log('\n step 1 — a recording across a phrase PAIR (one mark over <b>…</b> = <i>…</i>)');
+  await api(site, 'reset=1');
+  await live.nav();
+  await recSpan(live, Pos(P1a, 0), Pos(P1b, 0));
+  let ms = await marksNow(live);
+  let s = await live.dump('the recording, before any overlap', true);
+  check('the recording is ONE mark covering the whole pair',
+    ms.length === 1 && !!ms[0] && ms[0].txt.indexOf(P1a) === 0 && ms[0].txt.indexOf(P1b) > 0, ms);
+  check('ONE rec row, anchored to exactly what the mark paints',
+    rowsOf('rec').length === 1 && !!ms[0] && rowsOf('rec')[0].anchor === ms[0].a, rowsOf('rec'));
+  log('   · the recording row is anchored to ' + JSON.stringify(ms[0] && ms[0].a));
+  checkInvariants(ms, 'recording only');
+
+  log('\n step 2 — THE GESTURE: a NOTE starting inside the recording and ending on the NEXT pair');
+  await noteSpan(live, Pos(P1b, 0), Pos(P2b, 0), 'nota que cruza');
+  /* WHY the note may not be painted at all: a stored anchor is re-found ONLY by its text (findRange),
+     so measure the anchor bytes against the page text and ask the engine itself. Read-only. */
+  const why = await live.ev('(function(){var ps=Array.prototype.slice.call(document.querySelectorAll("p"));' +
+    'var p=ps.filter(function(e){return e.textContent.indexOf(' + JSON.stringify(P1a) + ')>=0})[0]||ps[0];' +
+    'var t=p?p.textContent:"";var i=t.indexOf("Meu nome");' +
+    'var row=(layer.filter(function(r){return r.type==="note"})[0]||{});var a=String(row.anchor||"");' +
+    'return{a:a,found:!!findRange(a),marks:nbMarks(a).length,slice:i<0?null:t.slice(i-2,i+40)}})()');
+  log('   · the note row anchor is ' + JSON.stringify(why.a));
+  log('   · the page text around it is ' + JSON.stringify(why.slice));
+  log('   · findRange(anchor)=' + why.found + '   nbMarks(anchor)=' + why.marks);
+  ms = await marksNow(live);
+  s = await live.dump('after the overlapping note', true);
+  const v2 = invariants(ms);
+  check('the earlier recording is still ONE mark (not split into pieces)', v2.split.length === 0,
+    { split: v2.split, marks: ms.map(m => ({ a: m.a, txt: m.txt })) });
+  check('...still covering exactly its own anchor text (not cut)', v2.cut.length === 0, v2.cut);
+  check('the note itself is one mark covering its own anchor', rowsOf('note').length === 1 &&
+    ms.some(m => m.a === rowsOf('note')[0].anchor && String(m.txt || '').indexOf(m.a) >= 0),
+    { note: rowsOf('note'), marks: ms.map(m => ({ a: m.a, txt: m.txt })) });
+  check('exactly 2 rows on the server (1 rec + 1 note)', bp.rows.length === 2, bp.rows.map(r => r.type + ':' + r.anchor));
+  log('   · marks now: ' + JSON.stringify(ms.map(m => ({ a: m.a, txt: m.txt, cls: m.cls }))));
+  checkInvariants(ms, 'after the crossing note');
+
+  log('\n step 3 — RELOAD: the cut/split must not survive (the rows are one anchor each)');
+  await live.reload();
+  await live.wait('!!document.querySelector("mark.nb")', 9000, 'the marks restored after a reload');
+  await sleep(800);
+  ms = await marksNow(live);
+  const v3 = invariants(ms);
+  check('after a reload the recording is STILL one whole mark', v3.split.length === 0 && v3.cut.length === 0, { split: v3.split, cut: v3.cut });
+  check('...and both rows are still there, one anchor each',
+    rowsOf('rec').length === 1 && rowsOf('note').length === 1, bp.rows.map(r => r.type + ':' + r.anchor));
+  checkInvariants(ms, 'crossing note reload');
+
+  log('\n step 4 — CONTROL: two DISJOINT pairs, saved one after the other (no overlap → no cut)');
+  const SP = 'Are you from São Paulo?';        /* the third pair of the same <p> (occurrence 0) */
+  await api(site, 'reset=1');
+  await live.nav();
+  await makeNote(live, Pos(P1a, 0), 'primeira frase');
+  await makeNote(live, Pos(SP, 0), 'segunda frase');
+  ms = await marksNow(live);
+  check('two notes, two anchors, two whole marks', rowsOf('note').length === 2 && ms.length === 2,
+    { rows: rowsOf('note').map(r => r.anchor), marks: ms.map(m => m.txt) });
+  checkInvariants(ms, 'two disjoint notes');
+
+  log('\n step 5 — CONTROL: a note strictly INSIDE a recording (nested, nothing crossed)');
+  await api(site, 'reset=1');
+  await live.nav();
+  await recSpan(live, Pos(P1a, 0), Pos(P1b, 0));
+  await makeNote(live, Pos(P1b, 0), 'nota dentro');
+  ms = await marksNow(live);
+  check('the recording is still ONE whole mark (the note sits nested inside it)',
+    ms.length === 2 && invariants(ms).split.length === 0 && invariants(ms).cut.length === 0,
+    { marks: ms.map(m => ({ a: m.a, txt: m.txt, cls: m.cls })) });
+  check('1 rec row + 1 note row', rowsOf('rec').length === 1 && rowsOf('note').length === 1, bp.rows.map(r => r.type + ':' + r.anchor));
+  checkInvariants(ms, 'note inside a recording');
+
+  log('\n step 6 — CONTROL: widening a note over itself must RE-ANCHOR its row (never duplicate)');
+  const MA = "I'm Marina.";                    /* the first pair of the same <p> (occurrence 0) */
+  await api(site, 'reset=1');
+  await live.nav();
+  await makeNote(live, Pos(P1b, 0), 'nota curta');
+  const before = rowsOf('note').map(r => r.anchor);
+  await noteSpan(live, Pos(MA, 0), Pos(P1b, 0), 'nota mais longa');
+  await sleep(600);
+  ms = await marksNow(live);
+  const rowsNow = rowsOf('note').map(r => r.anchor);
+  check('still ONE note row (re-anchored, not duplicated)', rowsNow.length === 1, { before: before, now: rowsNow });
+  check('the row now covers the WIDER span',
+    rowsNow.length === 1 && ms.some(m => m.a === rowsNow[0] && m.txt === m.a && m.txt.indexOf(MA) === 0),
+    { now: rowsNow, marks: ms.map(m => ({ a: m.a, txt: m.txt })) });
+  checkInvariants(ms, 'note expansion');
+
+  log('\n step 7 — a RECORDING containing a NOTE anchors to the SELECTION, never the note');
+  await api(site, 'reset=1');
+  await live.nav();
+  await makeNote(live, Pos(P1a, 0), 'nota da frase');
+  await recSpan(live, Pos(P1a, 0), Pos(P1b, 0));   /* the selection (the whole pair) CONTAINS the note on P1a */
+  const recAnchor = rowsOf('rec')[0] && rowsOf('rec')[0].anchor;
+  check('the recording is anchored to the SELECTION (the whole pair), not the note',
+    !!recAnchor && recAnchor.indexOf(P1a) >= 0 && recAnchor.indexOf(P1b) >= 0 && recAnchor !== P1a,
+    { anchor: recAnchor, note: P1a });
+}/* ---------------------------------------------------------------------------------------------
    10. SCENARIO B-F3 — the OCCURRENCE a note/recording belongs to, and its presentation
       owner: "notes/recordings are not anchored to the right place"; "selecting part of the phrase
       does not present the note"; "after a reload the recording lands on another phrase"
@@ -2658,7 +2778,7 @@ async function scenLanding(live, site) {
 }/* ---------------------------------------------------------------------------------------------
    12. THE RUNNER — one browser, one fake sheet, the scenarios that were asked for
    --------------------------------------------------------------------------------------------- */
-const SCEN = { diag: scenDiag, geo: scenGeo, bar: scenBar, landing: scenLanding, bf2: scenBF2, bf2b: scenBF2b, bf3: scenBF3 };
+const SCEN = { diag: scenDiag, geo: scenGeo, bar: scenBar, landing: scenLanding, bf2: scenBF2, bf2b: scenBF2b, bf3: scenBF3, bf4: scenBF4 };
 
 /* a page-scoped view of the connection: every command/event carries the page's session id */
 function session(cdp, id) {
