@@ -39,6 +39,13 @@
   function fixedFrameWidth(col) {
     var els = col.querySelectorAll(".vz-map, .chartwrap, .chart:has(>tbody>tr>th.vlab)"), best = 0;
     for (var i = 0; i < els.length; i++) {
+      /* a drawing inside a `.block` this cell wraps is not this cell's own content — the cell holds a
+         block, and the block is as wide as the row; only a drawing the cell carries directly counts */
+      var inBlock = false;
+      for (var p = els[i].parentElement; p && p !== col; p = p.parentElement) {
+        if (p.classList && p.classList.contains("block")) { inBlock = true; break; }
+      }
+      if (inBlock) continue;
       var w = parseFloat(getComputedStyle(els[i]).width) || 0;
       if (w > best && w < col.getBoundingClientRect().width * 4) best = w;
     }
