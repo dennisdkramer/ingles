@@ -123,21 +123,13 @@
 <div class="rows"><div><figure class="chartwrap" id="matching">
 <table class="chart">
 <tbody>
-<tr><td><b>clocked in</b></td><td><span class="qnum">1.</span> <input class="gap" data-answer="c" style="--gap-w:3em"></td></tr>
-<tr><td><b>spilled the tea</b></td><td><span class="qnum">2.</span> <input class="gap" data-answer="a" style="--gap-w:3em"></td></tr>
-<tr><td><b>threw shade</b></td><td><span class="qnum">3.</span> <input class="gap" data-answer="d" style="--gap-w:3em"></td></tr>
-<tr><td><b>bailed</b></td><td><span class="qnum">4.</span> <input class="gap" data-answer="b" style="--gap-w:3em"></td></tr>
+<tr><td><b>a</b> shared the gossip</td><td><span class="qnum">1.</span> clocked in <input class="gap" data-answer="c" style="--gap-w:3em"></td></tr>
+<tr><td><b>b</b> got out of a situation</td><td><span class="qnum">2.</span> spilled the tea <input class="gap" data-answer="a" style="--gap-w:3em"></td></tr>
+<tr><td><b>c</b> recorded the time you got to work</td><td><span class="qnum">3.</span> threw shade <input class="gap" data-answer="d" style="--gap-w:3em"></td></tr>
+<tr><td><b>d</b> insulted someone indirectly</td><td><span class="qnum">4.</span> bailed <input class="gap" data-answer="b" style="--gap-w:3em"></td></tr>
 </tbody>
 </table>
 </figure></div></div>
-</div>
-<div>
-<div class="rows"><div><ul>
-<li><b>a</b> shared the gossip</li>
-<li><b>b</b> got out of a situation</li>
-<li><b>c</b> recorded the time you got to work</li>
-<li><b>d</b> insulted someone indirectly</li>
-</ul></div></div>
 </div>
 </div>
 </div></div></div>
@@ -889,22 +881,19 @@ next();
 &lt;!-- the set's layout follows the length of its options: data-layout="row" for one- and two-word
      options, data-layout="grid" style="--cols:2" for three- and four-word options --&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-matching"><summary>Markup — #matching · pairing each item with its meaning from one shared pool · the items and the pool</summary><div class="body"><div>
-<pre>&lt;div class="rows"&gt;
-  &lt;div&gt;
-    &lt;figure class="chartwrap"&gt;&lt;table class="chart"&gt;
-      &lt;tr&gt;&lt;td&gt;&lt;b&gt;the phrase&lt;/b&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt; &lt;input class="gap" data-answer="c" style="--gap-w:3em"&gt;&lt;/td&gt;&lt;/tr&gt;
-      …one row per item…
-    &lt;/table&gt;&lt;/figure&gt;
-  &lt;/div&gt;
-  &lt;div&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;a&lt;/b&gt; the first meaning&lt;/li&gt;…&lt;/ul&gt;&lt;/div&gt;
-&lt;/div&gt;
+<details class="reveal" open id="markup-matching"><summary>Markup — #matching · pairing each item with its meaning from one shared pool · the lettered meanings, the numbered items and their blanks</summary><div class="body"><div>
+<pre>&lt;figure class="chartwrap" id="matching"&gt;&lt;table class="chart"&gt;
+  &lt;tr&gt;&lt;td&gt;&lt;b&gt;a&lt;/b&gt; the first meaning&lt;/td&gt;
+      &lt;td&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt; the phrase &lt;input class="gap" data-answer="c" style="--gap-w:3em"&gt;&lt;/td&gt;&lt;/tr&gt;
+  …one row per item…
+&lt;/table&gt;&lt;/figure&gt;
 
-&lt;!-- the pool of letters is visible beside the items, and that shared pool is what makes it matching --&gt;
-&lt;!-- the phrases are in a full shuffle: no row's letter is the meaning at that row's place in the pool,
-     and one swapped pair is not a shuffle — the whole order is re-dealt --&gt;
-&lt;!-- each .gap keys the letter it expects --&gt;</pre>
+&lt;!-- THE POOL IS THE CHART'S FIRST COLUMN and the numbered items with their blanks are its second, so a
+     meaning and a blank stand side by side; the pool is never a list outside the table --&gt;
+&lt;!-- the pool's letters run in order and the items do not: no row's letter is the meaning at that row's
+     place in the pool, and one swapped pair is not a shuffle — the whole order is re-dealt --&gt;
+&lt;!-- each .gap keys the letter it expects; every row is one numbered item — the number first, the gap
+     after its phrase, and never a column of its own --&gt;</pre>
 </div></div></details>
 <details class="reveal" open id="markup-correction"><summary>Markup — #correction · finding the one word that is wrong and writing the sentence again · the marked line, the answer field</summary><div class="body"><div>
 <pre>&lt;p class="dim" style="text-align:center"&gt;One word is wrong. Write the sentence again.&lt;/p&gt;
