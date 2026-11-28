@@ -22,4 +22,12 @@ A batch and its steps must be removed from this file when all of the batch steps
 - [S15] extra/lesson1-The Capability Map.html — stub label points at nothing: #chunks (`check2` · `stub-label-points-at-nothing` · fix)
 - [S16] extra/lesson1-The Capability Map.html — stub label points at nothing: #stripgaps (`check2` · `stub-label-points-at-nothing` · fix)
 - [S17] extra/lesson1-The Capability Map.html — stub label points at nothing: #fill (`check2` · `stub-label-points-at-nothing` · fix)
+- [S16] extra/lesson1-The Capability Map.html — dead anchor: #axis (`check2` · `dead-anchor` · fix)
+- [S17] extra/lesson1-The Capability Map.html — dead anchor: #key-sound (`check2` · `dead-anchor` · fix)
+- [S18] extra/lesson1-The Capability Map.html — dead anchor: #audio (`check2` · `dead-anchor` · fix)
+- [S19] extra/lesson1-The Capability Map.html — stub label points at nothing: #key-sound (`check2` · `stub-label-points-at-nothing` · fix)
+- [S20] extra/lesson1-The Capability Map.html — stub label points at nothing: #axis (`check2` · `stub-label-points-at-nothing` · fix)
+- [S21] extra/lesson1-The Capability Map.html — stub label points at nothing: #map (`check2` · `stub-label-points-at-nothing` · fix)
+- [S22] extra/lesson1-The Capability Map.html — stub label points at nothing: #comic (`check2` · `stub-label-points-at-nothing` · fix)
+- [S23] extra/lesson1-The Capability Map.html — stub label points at nothing: #audio (`check2` · `stub-label-points-at-nothing` · fix)
 
