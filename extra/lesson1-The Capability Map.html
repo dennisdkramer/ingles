@@ -69,15 +69,8 @@
 
 <h2>Pass 2 — Skin, Mechanics, Structure, Content Fetching</h2>
 
-<div class="rows"><div><p><b>The text on this page is illustrative and pertains to mechanics and structure. Nothing on this page is an example or reference for prose. Bare text like this block serves to introduce a section of the page&nbsp;</b></p><div class="rows"><div><div class="rows"><div><p>Every markup box sits in its own .rows.markup-row, under the block it documents, never beside it — and it is closed until a builder opens it.</p></div></div></div></div></div><div class="block" data-look="float">
-<h3>How the blocks sit on the page</h3>
-
-<div class="rows"><div>
-
-<p>A section is a <b>.rows</b> row and a block is one cell of it. One block in a row fills the width; two split it; three is the widest a lesson goes. A block never sits inside another block: it may hold prose, a chart, a figure or a set of items, and the next block is its sibling, in a row of its own.</p>
-<p><br></p>
-<p>Every block names its type in <code>data-type</code> — on a block that teaches <code>rul</code>, <code>rsn</code>, <code>con</code>, <code>ex</code>, <code>voc</code>, <code>mng</code>, <code>prn</code>, <code>tim</code>, <code>soc</code>, <code>rcp</code> or <code>exc</code>; on a block the student works in, the element it builds (<code>mc</code>, <code>fill</code>, <code>matching</code>, <code>chunks</code>, <code>correction</code>, <code>translation</code>, <code>dictation</code>, <code>flip</code>, <code>chartanswer</code>, <code>dialoggap</code>, <code>stripgaps</code>, <code>map</code>). The type is what the lesson's ledger line is written from, and the next page is read against that line.</p>
-</div></div></div></div>
+<div class="rows"><div class="block" data-look="float"><h3>How the blocks sit on the page</h3>
+<div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><span class="f-serif">Text that applies to the whole section may live outside of a block, or it may be&nbsp;<code>data-look="float"</code>.</span></p><div class="rows"><div><p>Everything on the page is organized by 3 layers of flexbox rows. The first layer wraps everything in a horizontal row inside the .content-area. The cells within it - like this block - are wrapped as in a layer 2 row.&nbsp;</p><p>Every block names its type in <code>data-type</code> — on a block that teaches <code>rul</code>, <code>rsn</code>, <code>con</code>, <code>ex</code>, <code>voc</code>, <code>mng</code>, <code>prn</code>, <code>tim</code>, <code>soc</code>, <code>rcp</code> or <code>exc</code>; on a block the student works in, the element it builds (<code>mc</code>, <code>fill</code>, <code>matching</code>, <code>chunks</code>, <code>correction</code>, <code>translation</code>, <code>dictation</code>, <code>flip</code>, <code>chartanswer</code>, <code>dialoggap</code>, <code>stripgaps</code>, <code>map</code>). The type is what the lesson's ledger line is written from, and the next page is read against that line.</p></div></div></div></div></div><div><p><b>The text on this page is illustrative </b>and pertains to mechanics and structure. Nothing on this page is an example or reference for prose.&nbsp;</p><div class="rows"><div><div class="rows"><div><p><br></p></div></div></div></div></div></div>
 <!-- THE DEMO LESSON — what each block is, and where its markup is written.
      The blocks below are a lesson's blocks, in a lesson's order. Element-wide rules are the page's own prose,
      above each element's section further down; a block here is the demonstration, and its markup is the element's
@@ -117,12 +110,7 @@
          Write it in your own words ................. write field · #dictation (the .write note)
       11 Quiz ........................................ fill, 20 controls -->
 
-<div class="rows">
-<div>
-<div class="rows"><div><div class="rows"><div><div class="block" data-look="float"><h3>Block type - float</h3>
-<div class="rows"><div><div class="rows"><div><p><b>For</b> text that applies to the whole section and must not look boxed. <b>Not for</b> an activity: a block the student writes in is a block. <code>data-look="float"</code>.</p></div></div></div></div></div></div></div></div></div>
-</div>
-</div>
+
 
 <div class="rows markup-row">
 <details class="reveal"><summary>Markup — a keyed gap inside a sentence</summary><div class="body"><div>
@@ -137,12 +125,12 @@
 
 
 <div class="rows">
-<div><div class="block" data-look="tint"><h3>tint</h3>
-<div class="rows"><div><div class="rows"><div><p><b>For content that is specific to the track - Technical terms that only the business track will use, youth slang that only the kids track will use, etc..</b></p></div></div></div></div></div></div>
-<div class="block" data-look="outline"><h3>outline</h3>
-<div class="rows"><div><div class="rows"><div><p><b>For</b> the block the page returns to — a checklist, a summary, a reference read after the lesson. <b>Not for</b> teaching text, and not for a warning: the option carries no meaning of its own. <code>data-look="outline"</code>.</p></div></div></div></div></div>
-<div class="block" data-look="stripes"><h3>stripes</h3>
-<div class="rows"><div><div class="rows"><div><p><b>For</b> an activity — the block the student writes in. <b>Not for</b> text: stripes behind three paragraphs make them harder to read. <code>data-look="stripes"</code>.</p></div></div></div></div></div><div class="block" data-look="tape"><h3>tape</h3>
+<div><div class="block" data-look="tint"><h3>Tint</h3>
+<div class="rows"><div><div class="rows"><div><p>For content that is<b> specific to the track </b>- Technical terms that only the business track will use, youth slang that only the kids track will use, etc..<br>data-look="outline".</p></div></div></div></div></div></div>
+<div class="block" data-look="outline"><h3>Outline</h3>
+<div class="rows"><div><div class="rows"><div><p><b>For</b>&nbsp;highly important or interesting content that should stand out&nbsp;<code>data-look="outline"</code>.</p></div></div></div></div></div>
+<div class="block" data-look="stripes"><h3>Activity</h3>
+<div class="rows"><div><div class="rows"><div><p><b>For</b> an activity — the block the student writes in. <b>Not for</b> text: stripes behind three paragraphs make them harder to read. <code>data-look="stripes"</code>.</p></div></div></div></div></div><div class="block" data-look="tape"><h3>Tape</h3>
 <div class="rows"><div><div class="rows"><div><p><b>For</b> a note pinned onto the page — a tip, an aside, a reminder read on the way past. <b>Not for</b> the lesson's own teaching, and never two in one row. <code>data-look="tape"</code>.</p></div></div></div></div></div></div>
 
 <div class="rows">
