@@ -1754,7 +1754,7 @@ p:has(>input.gap:only-child){text-align:center}
   .chart:has(>tbody>tr>th.vlab) tbody td:first-of-type{border-left:0}
   /* THE VOCABULARY CHART IS AS WIDE AS ITS ITEMS. Every other chart fills its cell; this one is a thin
      list, so it takes the width of the words in it and leaves the rest of the row to its neighbour. */
-  .chart:has(>tbody>tr>th.vlab){width:auto;max-width:100%}
+  .chart:has(>tbody>tr>th.vlab){width:fit-content;max-width:100%}
   .chart.center th,.chart.center td{text-align:center}
   .thsub{display:block;font-weight:400;font-size:.78em;letter-spacing:0;opacity:.82}
   /* alternating row tint. A chart with more than one section bands by section instead of by row: one

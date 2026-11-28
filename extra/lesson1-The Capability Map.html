@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Extra · Lesson 1 — The Capability Map</title>
-<link rel="stylesheet" href="../style.css?v=bf2b6833e2">
+<link rel="stylesheet" href="../style.css?v=d9b902cec0">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="../logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>EXTRA <span>DEMO 1</span></h1>
@@ -90,9 +90,9 @@
 <tr><td><b>lend</b></td><td>give something, get it back later</td><td>one Portuguese word for both directions</td></tr>
 <tr><td><b>owe</b></td><td>still have to give it back</td><td><span lang="pt">dever</span> also means <i>must</i></td></tr>
 </tbody>
-</table></div><div><p><b><code>&lt;tr class="bare"&gt;</code></b> — Table headings are authored only when the student will need them to understand the table contents. By default, the row is <b>collapsed to a 3px</b> top edge, not deleted.</p></div></div>
+</table></div></div>
 
-<div class="rows"><div><p><b><code>&lt;th class="vlab" rowspan="3"&gt;</code></b> — when the table holds two or more families and the word naming each must stand outside the frame; <b>the rowspan is how many items that family holds</b>, so it changes with the list. <b>Not for</b> one family: a label that names the only thing in the table repeats the sentence beside it. <b>The chart's own cell gives the label its room</b> — 48px of the cell's padding, and no wrapper around the table.</p></div><div><table class="chart">
+<div class="rows"><div><table class="chart">
 <tbody>
 <tr class="bare"><th colspan="3"></th></tr>
 <tr><th class="vlab" rowspan="3"><span>Regular</span></th><td>walk</td><td>walked</td></tr>
@@ -249,7 +249,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
     …
   &lt;/tbody&gt;
 &lt;/table&gt;</pre>
-<p class="dim">A chart carries no title of its own: the sentence beside it names it, and the chart wears no frame but its own. <code>th.vlab</code> puts a family label outside that frame, and the cell the chart stands in gives it the room. <code>tr.bare</code> collapses a nameless header row to a rule; <code>tr.note</code> is one remark row across the chart. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each.</p>
+<p class="dim">A chart carries no title of its own: the sentence beside it names it, and the chart wears no frame but its own. <code>tr.bare</code> collapses a nameless header row to a <b>3px</b> rule, never deleted — headings are authored only where the student needs them to read the table. <code>th.vlab</code> puts a family label outside the frame: only where the table holds <b>two or more families</b>, <code>rowspan</code> counting that family's own items, so it changes with the list; never for a single family, where the label only repeats the sentence beside it, and the cell the chart stands in gives the label its 48px. <b>A chart that carries a <code>th.vlab</code> is as wide as its own items</b> — never stretched to its cell. <code>tr.note</code> is one remark row across the chart. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each.</p>
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;…the sentence, and the chart it reads…&lt;/div&gt;
   &lt;div&gt;
@@ -688,7 +688,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
     <span><b>5</b> had</span>
     <span><b>6</b> left</span>
   </p>
-  <p><input class="gap" data-answer="He had already left when I got there." style="--gap-w:22em"></p>
+  <p style="text-align:center"><input class="gap" data-answer="He had already left when I got there." style="--gap-w:22em"></p>
 </div></div></div>
 </div></div><div class="block" data-look="stripes">
 <h3>Correction</h3>
@@ -696,7 +696,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <div class="rows"><div><div class="qitem">
   <p class="dim" style="text-align:center">One word is wrong. Write the sentence again:</p>
   <p style="text-align:center"><span class="qnum">1.</span> He <b>have</b> clocked in early.</p>
-  <p><input class="gap" data-answer="He has clocked in early.|He's clocked in early." style="--gap-w:16.2em"></p>
+  <p style="text-align:center"><input class="gap" data-answer="He has clocked in early.|He's clocked in early." style="--gap-w:16.2em"></p>
 </div></div></div>
 </div></div>
 
@@ -710,21 +710,21 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <div class="rows"><div><div class="qitem">
   <p class="dim" style="text-align:center">Say it in English:</p>
   <p style="text-align:center"><span class="qnum">1.</span> <span lang="pt">Vou no banco toda sexta.</span></p>
-  <p><input class="gap" data-answer="I go to the bank every Friday.|I'm going to the bank now." style="--gap-w:19em"></p>
+  <p style="text-align:center"><input class="gap" data-answer="I go to the bank every Friday.|I'm going to the bank now." style="--gap-w:19em"></p>
 </div></div></div>
 </div></div><div class="block" data-look="stripes">
 <h3>Dictation</h3>
 <!-- #dictation · hearing a sentence once and writing it down -->
 <div class="rows"><div><div class="qitem">
   <p class="dim" style="display:flex;align-items:center;justify-content:center;gap:10px"><span class="qnum">1.</span> <button class="listen" type="button" data-say="I clocked in at six forty.">▶</button><span>Write what you hear:</span></p>
-  <p><input class="gap" data-answer="I clocked in at six forty." style="--gap-w:18em"></p>
+  <p style="text-align:center"><input class="gap" data-answer="I clocked in at six forty." style="--gap-w:18em"></p>
 </div></div></div>
 </div></div>
 
 <div class="rows"><div><div class="block" data-look="stripes">
 <h3>Multiple choice</h3>
 <!-- #mc · choosing the one right answer among the wrong ones -->
-<div class="rows"><div style="text-align: left;"><div class="qitem" data-a="b" style="margin-inline: auto; text-align: center; margin-left: auto; margin-right: auto;">
+<div class="rows"><div><div class="qitem" data-a="b">
 <p class="qstem"><span class="qnum">1.</span> By the time I arrived, the crew <b>___</b> the truck.</p>
 <div class="opts compact" data-layout="row">
 <label class="opt"><input type="radio" name="mc1" value="a"><span>loaded</span></label>
@@ -736,9 +736,9 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 </div></div><div class="block" data-look="stripes">
 <h3>Fill in the blank</h3>
 <!-- #fill · typing the exact form into the sentence that needs it -->
-<div class="rows"><div><div class="qitem" style="text-align: center; margin-left: auto; margin-right: auto;">
-  <p style="text-align: left;"><span class="qnum">1.</span> Mike <input class="gap" data-answer="has" style="--gap-w:3em"> already posted it.</p>
-  <p style="text-align: left;"><span class="qnum">2.</span> The crew <input class="gap" data-answer="had|'d" style="--gap-w:3.5em"> loaded the truck before I arrived.</p>
+<div class="rows"><div><div class="qitem">
+  <p><span class="qnum">1.</span> Mike <input class="gap" data-answer="has" style="--gap-w:3em"> already posted it.</p>
+  <p><span class="qnum">2.</span> The crew <input class="gap" data-answer="had|'d" style="--gap-w:3.5em"> loaded the truck before I arrived.</p>
 </div></div></div>
 </div></div>
 
