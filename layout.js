@@ -379,9 +379,29 @@ window.LayoutEditor = (function () {
       if (y < rr1.top + EDGE1) return inPage(x, y);
     }
 
+    /* A FRESH BLOCK IS A CONTAINER, NOT AN ITEM. A block that holds no `.rows` is read by the cell
+       around it as an item, so a drop inside it resolved to the cell and the arrival went BESIDE the
+       block: nothing could ever be put into a block the moment it was made. A pointer inside such a
+       block now targets the block itself, and the arrival is wrapped into the row and cell the page
+       expects. The row's top edge is read before this, so "above this block" still means the line. */
+    var fresh = el.closest ? el.closest('.block') : null;
+    if (fresh && !fresh.querySelector('.rows')) {
+      return { box: fresh, inside: true, ref: null, host: fresh, before: false, ax: 'y',
+               insert: drag.kind === 'row' ? 'row' : 'cell', wrapCell: drag.kind !== 'row' };
+    }
+
     /* the space AROUND a row is its parent's: the band above or below the row's own cells */
     var cs = slots(row), top = Infinity, bottom = -Infinity;
     for (var i = 0; i < cs.length; i++) { top = Math.min(top, cs[i].r.top); bottom = Math.max(bottom, cs[i].r.bottom); }
+    /* A ROW INSIDE A BLOCK HAS NO CELL AROUND IT. An empty row — the one a fresh block holds before
+       its first content — has no slots at all, and a block's padding is not a cell, so both readings
+       fell through to the page. An arrival there goes INTO the row, which is where a block's content
+       begins. */
+    var up0 = row.parentElement;
+    if (up0 && up0.closest && up0.closest('.block') && (!cs.length || y < top - 2 || y > bottom + 2)) {
+      return { box: row, inside: true, ref: null, host: row, before: false, ax: 'y',
+               insert: drag.kind === 'row' ? 'row' : 'cell', wrapCell: drag.kind !== 'row' };
+    }
     if (cs.length && (y < top - 2 || y > bottom + 2)) {
       var up = row.parentElement;
       if (!up || up === ca() || !isCell(up)) return inPage(x, y);
@@ -1204,8 +1224,9 @@ window.LayoutEditor = (function () {
     if (!capHolds(guards)) { undo(); return; }
     typed = false;
     moved++; markPins(); markGrains(); paintChip();
-    /* the row it landed in, and the row it left, are solved again — nothing else is touched */
-    resolve(t.box || n); if (from.parent) resolve(from.parent);
+    /* the row it landed in, and the row it left, are solved again — nothing else is touched. `n` is
+       read too: a drop into a fresh block makes the row `t.box` does not contain. */
+    resolve(t.box || n); resolve(n); if (from.parent) resolve(from.parent);
   }
 
   /* DELETE IS A MOVE, AND IT UNDOES LIKE ONE. The node leaves the page and the record of where it came
