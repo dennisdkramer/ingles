@@ -6,6 +6,14 @@ A batch and its steps must be removed from this file when all of the batch steps
 
 # [CURRENT]
 
+## [B1] - Section 5's annotations, answered <defend/respond/move the items as appropriate> <extra/lesson1-The Capability Map.html>
+- [S1] A general controls box (`#markup-controls`) holding the name/key, the two-numbers rule, the offset fallback and the done-state; every activity row in the index points at it as a second pointer. Done.
+- [S2] chartanswer's keyed gap into its own box; the engine's record of a control into the `data-type` paragraph; the dictation gap kept in its box. Done.
+- [S3] The index files and the stamp into Align's commit-and-push sentence. Done.
+- [S4] Delete the rest of the list — each line duplicates the page, the Align pass, or a box — and the section with it. Done.
+- [S5] extra/lesson1-The Capability Map.html — dead anchor: #chart (`check2` · `dead-anchor` · fix)
+- [S6] extra/lesson1-The Capability Map.html — stub label points at nothing: #chart (`check2` · `stub-label-points-at-nothing` · fix)
+
 ## [B1] - Resolve the ids the section-6 deletion orphaned <we will report everything - all the boxes should have ids> <extra/lesson1-The Capability Map.html>
 - [S3] extra/lesson1-The Capability Map.html — dead anchor: #dialoggap (`check2` · `dead-anchor` · fix)
 - [S4] extra/lesson1-The Capability Map.html — dead anchor: #chunks (`check2` · `dead-anchor` · fix)
