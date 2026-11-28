@@ -1889,7 +1889,9 @@ p:has(>input.gap:only-child){text-align:center}
   .blanks.sent.wide{display:block}
   .blanks.sent>*{display:block;margin:8px 0}
   .blanks.sent>* input.gap{display:inline-block;margin:0 .2em}
-  .dialog-title,.qnum,.qgrid .qstem,.bookitem.cur a.ltitle{font-weight:700}
+  .dialog-title,.qnum,.qstem,.bookitem.cur a.ltitle{font-weight:700}
+  /* THE STEM IS BOLD BY DEFAULT, wherever it sits: .qstem is the class a question's own line carries,
+     and a page never writes the weight itself. */
   /* a number beside an item is the item's own number and reads the same wherever it sits:
      inside a .qgrid, at the head of a chart row, or in front of a lone gap */
   .qnum{font-variant-numeric:tabular-nums}
