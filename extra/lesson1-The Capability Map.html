@@ -85,7 +85,27 @@
 
 <h2>Pass 2 — Skin, Mechanics, Structure, Content Fetching</h2>
 
-<div class="rows"><div class="block" data-look="float"><h3>How the blocks sit on the page</h3>
+<div class="rows"><div><div class="block">
+<h3>Sections divide concepts, blocks divide for organization</h3>
+<div class="rows">
+<div>
+
+
+<div class="rows"><div><p><b>Pass 2 may</b>: fix errors, split a massive text block, rearrange to improve flow, add training items. Add instances, never a proposition — another useful example of a rule the page already states, the exception that rule carries, a contrast— written in the drafted level, register and voice.&nbsp;</p></div></div>
+<div class="rows"><div><p><b>Build what the notes name, and delete them when you have.</b> A note says what its element carries — a chart's rows, who speaks each line, the words a key sits above, the sentence to mark, the song's line — and the element is built from that, never re-decided.</p></div></div>
+
+</div>
+<div>
+<div class="rows"><div><p class="dim"><b>Every element in this section is drawn with the markup that builds it.</b>&nbsp;Its item count is the example's own, never a count to copy.</p></div></div>
+
+<div class="rows"><div><p><b>Use positional contrast</b>— opposites or two tenses side by side,&nbsp; an element set apart so it is seen as distinct.</p></div></div></div>
+</div>
+<div class="rows"><div><div class="rows"><div><p><b>Let a cell hold several items, stacked, when they belong together</b>: the point of the cell is that something can be dragged beside it, not that it holds one thing.</p></div></div></div><div><div class="rows"><div><p><b>Author no <code>flex</code> and no width on a cell</b>: the page sizes the line when it loads, and an authored width is stale on the next screen. <b>Give the width to whatever needs it</b> — a cell holding a chart, a table or long answer lines takes its share first.</p></div></div><div class="rows"><div><p><code>.row</code> is only the utility for a line of chips or buttons — never a layout row.</p></div></div></div></div>
+
+
+
+
+</div></div></div><div class="rows"><div class="block" data-look="float"><h3>How the blocks sit on the page</h3>
 <div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><span class="f-serif">Text that applies to the whole section may live outside of a block, or it may be&nbsp;<code>data-look="float"</code>.</span></p><div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;">Every block names its type in <code>data-type</code> — on a block that teaches <code>rul</code>, <code>rsn</code>, <code>con</code>, <code>ex</code>, <code>voc</code>, <code>mng</code>, <code>prn</code>, <code>tim</code>, <code>soc</code>, <code>rcp</code> or <code>exc</code>; on a block the student works in, the element it builds (<code>mc</code>, <code>fill</code>, <code>matching</code>, <code>chunks</code>, <code>correction</code>, <code>translation</code>, <code>dictation</code>, <code>flip</code>, <code>chartanswer</code>, <code>dialoggap</code>, <code>stripgaps</code>, <code>map</code>). The type is what the lesson's ledger line is written from, and the next page is read against that line. <b>The type is the engine's record of what the block is, never the plugin's own name:</b> a block the student answers with options is <code>mc</code>, one answered by typing a word is <code>fill</code>, because the field is what the student writes in.</p></div></div></div></div></div><div class="block" data-look="dark"><h3>Dark</h3>
 <div class="rows"><div><div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><code><font face="Georgia, Iowan Old Style, Palatino Linotype, Book Antiqua, serif"><span><b>'Night mode' block, used optionally for content that relates to the night or night life.&nbsp;</b></span></font>data-look="dark"</code></p></div></div></div></div></div><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><b>The text on this page is illustrative </b>and pertains to mechanics and structure. Nothing on this page is an example or reference for prose.&nbsp;</p><div class="rows"><div><div class="rows"><div><p class="dim" style="text-align: center; margin-left: auto; margin-right: auto;"><b>Declare <code>data-look</code> on the block</b>, never infer it from what it holds: it changes the paint only.</p></div></div></div></div></div></div>
 <!-- THE DEMO LESSON — what each block is, and where its markup is written.
@@ -209,47 +229,11 @@
 <td><span class="qnum">3.</span> <input class="gap" data-answer="past perfect" style="--gap-w:8.3em"></td></tr>
 </tbody></table></div></div>
 </div></div></div>
-<div class="rows"><div><div class="block">
-<h3>Arrange it, and give it a look</h3>
-<div class="rows">
-<div>
-
-
-<div class="rows"><div><p><b>Pass 2 may</b>: fix errors, split a massive text block, rearrange to improve flow, add training items. Add instances, never a proposition — another useful example of a rule the page already states, the exception that rule carries, a contrast— written in the drafted level, register and voice.&nbsp;</p></div></div>
-<div class="rows"><div><p><b>Build what the notes name, and delete them when you have.</b> A note says what its element carries — a chart's rows, who speaks each line, the words a key sits above, the sentence to mark, the song's line — and the element is built from that, never re-decided.</p></div></div>
-
-</div>
-<div>
-<div class="rows"><div><p class="dim"><b>Every element in this section is drawn with the markup that builds it.</b>&nbsp;Its item count is the example's own, never a count to copy.</p></div></div>
-
-<div class="rows"><div><p><b>Use positional contrast</b>— opposites or two tenses side by side,&nbsp; an element set apart so it is seen as distinct.</p></div></div></div>
-</div>
-<div class="rows"><div><div class="rows"><div><p><b>Let a cell hold several items, stacked, when they belong together</b>: the point of the cell is that something can be dragged beside it, not that it holds one thing.</p></div></div></div><div><div class="rows"><div><p><b>Author no <code>flex</code> and no width on a cell</b>: the page sizes the line when it loads, and an authored width is stale on the next screen. <b>Give the width to whatever needs it</b> — a cell holding a chart, a table or long answer lines takes its share first.</p></div></div><div class="rows"><div><p><code>.row</code> is only the utility for a line of chips or buttons — never a layout row.</p></div></div></div></div>
 
 
 
 
-</div>
-</div>
-</div>
 
-
-
-<div class="rows markup-row">
-<details class="reveal" id="markup-rows"><summary>Markup — rows · a row, and an element on its own</summary><div class="body"><div>
-<pre>&lt;h2&gt;a section the sheet numbers&lt;/h2&gt;
-
-&lt;div class="rows"&gt;
-  &lt;div&gt;&lt;p&gt;the rule this section teaches&lt;/p&gt;&lt;/div&gt;
-  &lt;div&gt;&lt;figure class="chartwrap"&gt;…the chart the rule is read with…&lt;/figure&gt;&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;table class="chart"&gt;…nothing purposeful to accompany it, so it stands outside a block…&lt;/table&gt;
-
-&lt;div class="block"&gt;…a block on its own, with no width of its own…&lt;/div&gt;</pre>
-<p class="dim">Looks, and why each is chosen: <code>float</code> for text that applies to everything in the section and belongs to no single block · <code>tint</code> for content about the track's own voice — how a word taught in that voice compares with the same word in another voice, what it really means or the use cases a slang word has · <code>outline</code> for content important enough to stand out from the page · <code>stripes</code> for an activity the student answers, whose top rule turns red · <code>tape</code> for a note pinned to the page rather than taught in sequence · <code>dark</code> for content that <i>is</i> a night, a screen or a stage. A section is an <code>&lt;h2&gt;</code>: <code>style.css</code> numbers it, so it is never typed, and it restarts the lettering under it. An unset block is paper with the 2px accent rule. The markup box you are reading is <code>&lt;details class="reveal" open&gt;&lt;summary&gt;…&lt;/summary&gt;&lt;div class="body"&gt;&lt;div&gt;&lt;pre&gt;…&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;/details&gt;</code>.</p>
-</div></div></details>
-</div>
 
 
 <div class="rows">
@@ -1226,7 +1210,7 @@ next();
 <!-- demo · trains: the lesson's Portuguese sentences turned into its English ones · box: #dictation (the translation note) -->
 
 
-<h2>Verify</h2>
+<h2>Sections divide concepts, Blocks divide for organization</h2><h2>Sections divide concepts, Blocks divide for organization</h2><h2>Verify</h2>
 
 
 <div class="rows">
