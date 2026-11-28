@@ -37,7 +37,7 @@ Q2: ... | answer
 The same item format, gathered in one block at the lesson's end when the lesson wants one, drawing only on what the lesson taught.
 
 ### 3. Music Clip Hook (When teaching rhythm, reductions, contractions, or slang in the wild)
-- **Song Selection:** Pick a **real, recognizable song** that genuinely contains the exact grammar rule, contraction, or connected-speech reduction being taught, matching the track's register (`kids` = clean pop/viral/gaming hits; `business` = clean mainstream pop/rock/soul; `adult` = hip-hop, R&B, rock, or unfiltered street tracks).
+- **Song Selection:** Pick a **real, recognizable song** that genuinely contains the exact grammar rule, contraction, or connected-speech reduction being taught, matching the track's register (`kids` = clean pop/viral/gaming hits; `business` = mainstream rock/metal/pop; `adult` = rap, hip-hop, R&B, rock, or unfiltered street tracks).
 - **Pedagogical Integration:** Tie the song directly into the lesson's teaching prose—introduce why the line is a great example of the rule, show how the singer actually pronounces/reduces the words at speed (run that lyric through `PRONPARSE.md` and paste its answer), and place the `MUSIC_HERE` directive right where the clip should play.
 
 ```html
@@ -67,30 +67,5 @@ EXPLANATION: One tight paragraph explaining the words, reductions, and rhythm in
 <!-- MAP_HERE:
 PLACES: the café · the bank · the library
 TARGET_EXAMPLES: 2-3 example sentences grounded in those places
--->
-```
-
-
-
-### 2. Music Clip Hook (When teaching rhythm, reductions, contractions, or slang in the wild)
-- **Song Selection:** Pick a **real, recognizable song** that genuinely contains the exact grammar rule, contraction, or connected-speech reduction being taught, matching the track's register (`kids` = clean pop/viral/gaming hits; `business` = clean mainstream pop/rock/soul; `adult` = hip-hop, R&B, rock, or unfiltered street tracks).
-- **Pedagogical Integration:** Tie the song directly into the lesson's teaching prose—introduce why the line is a great example of the rule, show how the singer actually pronounces/reduces the words at speed (run that lyric through `PRONPARSE.md` and paste its answer), and place the `MUSIC_HERE` directive right where the clip should play.
-
-```html
-<!-- MUSIC_HERE:
-SONG: Exact Song Title
-ARTIST: Exact Artist Name
-TARGET_LYRICS: Exact 1-2 lyric lines containing the target grammar/reduction
-PRONPARSE_BREAKDOWN: Run the reduced/linked words of TARGET_LYRICS through PRONPARSE.md and paste its answer
-EXPLANATION: One tight paragraph explaining the words, reductions, and rhythm in that specific lyric—never mention the UI player
--->
-```
-
-### 3. Map Reference (For prepositions like `at` vs `in`, directions, relative positions)
-- Tie the spatial examples directly into your lesson prose, then place the directive where the visual map should render:
-```html
-<!-- MAP_HERE:
-SCENE: Brief description of the spatial layout/landmarks needed
-TARGET_EXAMPLES: 2-3 example sentences grounded in that map scene
 -->
 ```
