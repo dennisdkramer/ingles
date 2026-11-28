@@ -211,7 +211,6 @@
   &lt;div class="side" data-state="correct"&gt;&lt;p&gt;&lt;i class="mark"&gt;&lt;/i&gt; the sentence that is right&lt;/p&gt;&lt;/div&gt;
 &lt;/div&gt;
 
-&lt;!-- the two versions stack, each only as wide as its own sentence --&gt;
 &lt;!-- data-state colours the side; the .mark element draws the glyph --&gt;
 &lt;!-- .sides (two columns) is the other arrangement, for a block whose whole content is the pair --&gt;</pre>
 </div></div></details>
@@ -227,7 +226,7 @@
 
 &lt;table class="poschart"&gt;…one column per group…&lt;/table&gt;</pre>
 <p class="dim"><code>data-rel</code>: add · contrast · alternative · cause · condition · time · place · comparison · content.</p>
-<p class="dim">Apply the marks to the modal, the verb, the noun and the preposition only; the tagger knows other groups, and a lesson leaves them alone. <b>If the marks do not land on the words the lesson teaches, leave the sentence unmarked and move on</b> — a sentence is never rewritten to suit the tagger. Where a page must show the parts without the marks, the part of speech goes in parentheses above the word.</p>
+<p class="dim">Apply the marks to the modal, the verb, the noun and the preposition only. <b>If the marks do not land on the words the lesson teaches, leave the sentence unmarked and move on</b> — a sentence is never rewritten to suit the tagger. Where a page must show the parts without the marks, the part of speech goes in parentheses above the word.</p>
 </div></div></details>
 <details class="reveal" open id="markup-recipient"><summary>Markup — #recipient · showing where a movement ends, and which of the two orders puts it there · both sentences, and the arrow</summary><div class="body"><div>
 <pre>&lt;!-- the recipient: no line of its own, an arrow from the side the direct object sits on --&gt;
@@ -251,9 +250,8 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
   &lt;b&gt;li&lt;/b&gt;·&lt;b&gt;br&lt;/b&gt;&lt;span class="pr-g"&gt;e&lt;/span&gt;&lt;b&gt;ry&lt;/b&gt;
 &lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;
 
-dictionary.json:  "library": "li-br[e]ry"
-PronKey.render("li-br[e]ry") → the rt above</pre>
-<p class="dim">The key is the entry in <code>dictionary.json</code>, rendered by <code>PronKey.render</code>: <code>-</code> a syllable break, a greyed letter written and not said, <code>ə</code> the schwa. <code>rp</code> is never omitted. <b>It is copied, never typed</b>: a key that does not come from the dictionary is a guess, and a word with no entry carries no key at all.</p>
+&lt;!-- the rt holds PRONPARSE.md's answer for the word, pasted --&gt;</pre>
+<p class="dim">The key is the answer <code>PRONPARSE.md</code> gives for that word or phrase, pasted as it comes: <code>·</code> a syllable break, a greyed letter written and not said, <code>ə</code> the schwa. <code>rp</code> is never omitted. <b>It is copied, never typed</b>, and never re-spelled from your own reading.</p>
 </div></div></details>
 <details class="reveal" open id="markup-gloss"><summary>Markup — #gloss · a special case explained in a card at its word, without leaving the line · the button and the popover</summary><div class="body"><div>
 <pre>&lt;p&gt;
@@ -291,7 +289,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
     …
   &lt;/tbody&gt;
 &lt;/table&gt;</pre>
-<p class="dim">A chart carries no title of its own: the sentence beside it names it. <code>th.vlab</code> puts a family label outside the chart's edge; <code>tr.bare</code> collapses a nameless header row to a rule. A block takes <code>data-structure="grid"</code> with a <code>thead</code> and optional <code>caption</code>, and <code>tr.note</code> for a remark row. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each. <b>Let content beside a chart fill the row</b>; where it cannot, the chart centres in the space it was given, or the row is spaced around it. <b>Tell apart two groups that behave differently</b> — by appearance (colour, <code>opacity</code>, a heavier border) or by arrangement — so the student sees which side the point belongs to without counting rows: a contrast the student cannot see has cost them the chart.</p>
+<p class="dim">A chart carries no title of its own: the sentence beside it names it. <code>th.vlab</code> puts a family label outside the chart's edge; <code>tr.bare</code> collapses a nameless header row to a rule. A block takes <code>data-structure="grid"</code> with a <code>thead</code> and optional <code>caption</code>, and <code>tr.note</code> for a remark row. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each.</p>
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;…the sentence, and the chart it reads…&lt;/div&gt;
   &lt;div&gt;
@@ -308,7 +306,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;svg viewBox="0 0 360 240" role="img"
        aria-label="everything the drawing shows, named"&gt;…the same drawing, all nine places…&lt;/svg&gt;
 &lt;/div&gt;</pre>
-<p class="dim">The frame keeps the viewBox's 3:2 box and the cell around it holds the rest. <b>The drawing is 533px wide — half the 1146px in-block row, less 40px for the space between two cells — and the wrapper is exactly that size, never wider than the drawing: 355px tall, the 3:2 of its viewBox.</b> The map and the comic are one row of two 533px cells, so both drawings are the same box side by side. <code>--map-w</code> replaces the default for a single drawing — <b>pass 2 may set it when the page needs a narrower map</b>. <code>aria-label</code> names everything in the drawing, because the drawing is all a screen reader gets. <b>The drawing carries its own geometry table — canvas, road positions, the tick percentages and the nine places by column and row — and a lesson copies all of it verbatim.</b> A page that needs a place the drawing does not show asks about one that it does, and a new place means redrawing this one drawing for every page — never a second map. Both versions are drawn above: the display with the visuals, the question at the end of the activities.</p>
+<p class="dim">The wrapper is the drawing's own box — 533 × 355, the 3:2 of its viewBox — never wider. <code>--map-w</code> sets a narrower map where the page needs one. <code>aria-label</code> names everything in the drawing: it is all a screen reader gets. <b>The drawing carries its own geometry table — canvas, road positions, the tick percentages and the nine places by column and row — and a lesson copies all of it verbatim.</b> A page that needs a place the drawing does not show asks about one that it does: a new place means redrawing this one drawing for every page, never a second map.</p>
 <pre>&lt;!-- as an activity: the same drawing, a tick at each place, and one key --&gt;
 &lt;div class="block" data-activity="map"&gt;
   &lt;div class="qitem" data-a="bank"&gt;
@@ -327,13 +325,11 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</pre>
-<p class="dim">Each place gets its own checkbox, at that place's <b>bottom centre</b> — under the drawing, where it never covers the name — its <code>value</code> the place, its <code>aria-label</code> the name the drawing shows — and the answer is the one place named by <code>data-a</code> on the <code>.qitem</code>, the same key a radio group uses, so engine2 marks it and freezes it on Complete. The text is free and may point at the place any way the lesson teaches — a route (<i>turn right out of the café, then your first left, then back a block — the destination is on your left</i>), a relation (<i>to the left of the café</i>), or its use (<i>where you send a letter</i>) — but the answer is always one place on the drawing. Only the keyed place is marked correct. The tick's position is a percentage of the drawing, so it stays on its place at any width.</p>
+<p class="dim">Each place gets its own checkbox at that place's <b>bottom centre</b>, where it never covers the name: its <code>value</code> the place, its <code>aria-label</code> the name the drawing shows — and the answer is the one place named by <code>data-a</code> on the <code>.qitem</code>, the same key a radio group uses. The <code>.qstem</code> is free text. The tick's position is a percentage of the drawing, so it stays on its place at any width.</p>
 </div></div></details>
 <details class="reveal" open id="markup-comic"><summary>Markup — #comic · a short scene told in panels, one sentence under each · the table of panels</summary><div class="body"><div>
 <pre>&lt;table class="chart comic"&gt;
-  &lt;!-- a panel is 3:2 from its own width -- two rows of them are the map's 533 x 355 box. The sentence
-       below hangs over the panel and never changes the table's height. --comic-h (all panels) or
-       --strip-h (one) replaces the height when a page needs a taller drawing. --&gt;
+  &lt;!-- a panel is 3:2 from its own width; the sentence below hangs over it and never changes the table's height --&gt;
   &lt;tbody&gt;
     &lt;tr&gt;&lt;td class="strip"&gt;
           &lt;svg viewBox="0 -8 120 80" role="img"
@@ -344,7 +340,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
         &lt;td class="strip"&gt;…the fourth panel…&lt;/td&gt;&lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;</pre>
-<p class="dim"><b>A panel is the map's 3:2, and the comic is the map's box — 533 × 355 — whatever its sentences say.</b> The table is the frame and each <code>td</code> is a panel (<code>.strip</code>): <b>the panel drawing's <code>viewBox</code> is 3:2</b> (<code>0 -8 120 80</code> — the old <code>120 × 64</code> strip, given the height it was missing) and the sheet sizes it from the cell's width, so two rows of 3:2 panels in a 533px table are 533 × 355, the same box as the map beside it. <b><code>--comic-h</code> (every panel) or <code>--strip-h</code> (one)</b> replaces that height when a page wants a taller drawing, and the drawing is then fitted and centred inside the frame, never stretched. <b>The sentence under a panel hangs over its bottom edge</b> — out of the flow, wrapped, cut at two lines — so a long sentence never makes the comic taller. <b>Write no <code>width</code> and no <code>height</code> on the <code>svg</code></b>: the sheet gives it the frame's width and height. <b>Pass 2 may resize the comic or the map when the page needs it</b>, and the two are otherwise the same box.</p>
+<p class="dim"><b>The comic is the map's box</b> — 533 × 355 — whatever its sentences say. Each <code>td</code> is a panel (<code>.strip</code>) and its <code>viewBox</code> is 3:2 (<code>0 -8 120 80</code>); the sheet sizes it from the cell's width. <b><code>--comic-h</code> (every panel) or <code>--strip-h</code> (one)</b> replaces that height, and the drawing is then fitted and centred inside the frame, never stretched. <b>The sentence under a panel hangs over its bottom edge</b> — out of the flow, wrapped, cut at two lines. <b>Write no <code>width</code> and no <code>height</code> on the <code>svg</code></b>: the sheet gives it the frame's width and height.</p>
 </div></div></details>
 <details class="reveal" open id="markup-audio"><summary>Markup — #audio · a song's own words, heard and read at once · the player, the timed lyrics, and the credit line</summary><div class="body"><div>
 <pre>&lt;figure class="vz-play viz"&gt;
@@ -380,7 +376,7 @@ PronKey.render("li-br[e]ry") → the rt above</pre>
   &lt;/ol&gt;
   &lt;p&gt;one paragraph explaining the words, never the block&lt;/p&gt;
 &lt;/figure&gt;</pre>
-<p class="dim"><code>data-t</code> and <code>data-duration</code> come from <code>qa/audio.mjs</code>, never typed by eye. The song's own name is the <code>h4</code>, the performer the credit line under it. <b>Ship the same figure without the player when the song has no usable recording</b>: the link carries the time the quoted line starts, the lyrics are written out with no <code>data-t</code> because nothing plays, and the credit line under the link is what says where the song came from — no check follows an external link, so the page is the only place that is written down. <b>A song accompanies a lesson; it never takes the place of the teaching or the training it sits with.</b> Its block has a teaching point that its heading names, and it runs the lesson's own sequence on that line: the student predicts what they will hear, hears it, the line is read and marked, the rule is stated as it appears in this line, and the student then produces the same structure from words that are not the song's. If the block would teach the same thing with the audio removed, it is not a music block and the line was not the reason for it.</p>
+<p class="dim"><code>data-t</code> and <code>data-duration</code> come from <code>qa/audio.mjs</code>, never typed by eye. The song's own name is the <code>h4</code>, the performer the credit line under it. <b>Ship the same figure without the player when the song has no usable recording</b>: the link carries the time the quoted line starts, the lyrics are written out with no <code>data-t</code> because nothing plays, and the credit line under the link says where the song came from.</p>
 </div></div></details>
 <details class="reveal" open id="markup-dialog"><summary>Markup — #dialog · a conversation the lesson writes, each line on its speaker's side · the turn list</summary><div class="body"><div>
 <pre>&lt;ol class="seq viz" data-mode="turns"&gt;
@@ -840,15 +836,11 @@ next();
 &lt;!-- TWO CONTROLS IN ONE CELL TAKE TWO NUMBERS: both share the cell's words and its first offset, and
      Complete draws one key pill per control — two fields with one number draw one answer over the
      other --&gt;
-&lt;!-- A CONTROL LEFT UNNAMED FALLS BACK TO THE WORDS AROUND IT PLUS A POSITION, {block, offset}. The
-     offset counts blocks on the page, and a game inserts its stage into its own block when it loads,
-     so a position saved before a game ran and read after it can be off by that stage. A number does
-     not move; a position can. Name every control --&gt;
+&lt;!-- A CONTROL LEFT UNNAMED FALLS BACK TO THE WORDS AROUND IT PLUS A POSITION, AND A POSITION MOVES.
+     Name every control --&gt;
 &lt;!-- A BLOCK REPORTS ITS OWN PROGRESS: data-state="done" on its .block is the sheet's green frame,
-     written by engine2 when every question in the block has an answer — a gap with a character, a
-     field with text, one option in each radio group, one box in each checkbox group — and taken away
-     when a question is emptied. A teaching block holds no control and never reports, and the saved
-     clone strips the state, so a file never keeps a student's report --&gt;</pre>
+     written when every question in the block has an answer and taken away when one is emptied. A
+     teaching block holds no control and never reports --&gt;</pre>
 </div></div></details>
 
 <div class="rows markup-row">
@@ -865,12 +857,11 @@ next();
     &lt;/label&gt;
     …eight cards, four to a row, two rows…
   &lt;/div&gt;
-  &lt;script&gt;…below, inside the same block…&lt;/script&gt;
+  &lt;script&gt;…inside the same block…&lt;/script&gt;
 &lt;/div&gt;
 
 &lt;!-- the prompt is one card's back, in a centred h4, and it is the whole prompt · any number of cards may be turned in a round --&gt;
-&lt;!-- a turn tints red when it is not the answer and green when it is; only the right one turns every card back and brings the next prompt 4 s later --&gt;
-&lt;!-- the script turns the card itself (it cancels the label's own toggle and sets the box), so a click is never doubled · --flip-h is the height both faces share --&gt;
+&lt;!-- --flip-h is the height both faces share --&gt;
 &lt;!-- no data-answer and no data-a here: the block cannot be a quiz --&gt;</pre>
 </div></div></details>
 <details class="reveal" open id="markup-dialoggap"><summary>Markup — #dialoggap · answering inside a conversation the lesson already wrote · the turns, each gap numbered</summary><div class="body"><div>
@@ -886,8 +877,7 @@ next();
 
 &lt;!-- the number sits outside the bubble, on the side that faces the middle of the dialog: the .say is
      position:relative and the number is absolute at right:calc(100% + 8px) on a right-hand line and at
-     left:calc(100% + 8px) on a left-hand line. On a left-hand bubble a number at right:100% hangs outside
-     the dialog's own edge --&gt;</pre>
+     left:calc(100% + 8px) on a left-hand line --&gt;</pre>
 </div></div></details>
 <details class="reveal" open id="markup-chartanswer"><summary>Markup — #chartanswer · items that share columns, each row answered where it sits · the table, one control per row</summary><div class="body"><div>
 <pre>&lt;div class="block" data-look="stripes"&gt;
@@ -901,7 +891,7 @@ next();
     &lt;tr&gt;…a checkbox row, a gap row…&lt;/tr&gt;
   &lt;/table&gt;
   &lt;!-- the number stands beside the control it numbers, never in a column of its own --&gt;
-  &lt;!-- one example of each control type is shown — an activity may mix them or use a single type, as its content needs --&gt;
+  &lt;!-- an activity may mix the control types or use one --&gt;
   &lt;!-- A ROW IS ANSWERED BY A KEYED GAP: the typed form carries data-answer in the row's answer cell.
       A row of options is markable only when its cell holds a .qitem with data-a — a chart of bare
       radios has no key the engine can read --&gt;
@@ -938,7 +928,7 @@ next();
 &lt;!-- one meaning more than there are items, so the last answer cannot be reached by elimination --&gt;
 &lt;!-- the phrases are in a full shuffle: no row's letter is the meaning at that row's place in the pool,
      and one swapped pair is not a shuffle — the whole order is re-dealt --&gt;
-&lt;!-- each .gap keys the letter it expects; engine2 marks them on Complete --&gt;</pre>
+&lt;!-- each .gap keys the letter it expects --&gt;</pre>
 </div></div></details>
 <details class="reveal" open id="markup-correction"><summary>Markup — #correction · finding the one word that is wrong and writing the sentence again · the marked line, the answer field</summary><div class="body"><div>
 <pre>&lt;p class="dim" style="text-align:center"&gt;One word is wrong. Write the sentence again.&lt;/p&gt;
@@ -961,9 +951,8 @@ next();
 &lt;textarea class="write" rows="2" style="--lines:2" data-answer="I clocked in at six forty."
           placeholder="what you hear"&gt;&lt;/textarea&gt;
 
-&lt;!-- .listen is wired by engine2 and speaks its data-say text, so dictation needs no recording --&gt;
-&lt;!-- --lines is the box's height in text lines (2 here); the page sizes every field and the
-     student cannot drag it bigger --&gt;
+&lt;!-- .listen speaks its data-say text, so dictation needs no recording --&gt;
+&lt;!-- --lines is the box's height in text lines (2 here) --&gt;
 &lt;!-- with a .vz-play player in the block instead, the same field is the dictation --&gt;
 &lt;!-- a one-word answer needs no .write: a .gap after the .listen button takes data-answer the same way,
      and the block is still a dictation --&gt;
@@ -983,16 +972,12 @@ next();
 &lt;/div&gt;
 
 &lt;!-- THE ITEM AND ITS ANSWER ARE ONE ELEMENT: the .qitem holds the prompt and the answer line, so
-     the pair is one thing to drag, one thing to move and one thing to delete. A question in one
-     element and its answer in another is a pair the editor can pull apart, and the answer then sits
-     further from its question than the next question does --&gt;
+     the pair is one thing to drag and one thing to delete --&gt;
 
 &lt;!-- no text-align is written on the answer line: a paragraph holding only a gap is centred by the
      sheet, so no page has to remember it --&gt;
 
-&lt;!-- one set, or as many as the activity needs: a further .chips over its own answer line, one after
-     another vertically as here, side by side in a .rows of their own, or mixed with the text, the chart
-     or the strip they are read with. --&gt;
+&lt;!-- one set or as many as the activity needs: a further .chips over its own answer line --&gt;
 &lt;!-- this activity's instruction is the line above the chips --&gt;
 &lt;!-- the chips are in a full shuffle: no chip sits at its own place in the sentence, and one moved chip
      is not a shuffle — the whole order is re-dealt. the number is the display order, never the answer --&gt;
@@ -1020,10 +1005,8 @@ next();
   &lt;p&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt; Mike &lt;input class="gap" data-answer="has" style="--gap-w:5em"&gt; already posted it.&lt;/p&gt;
 
   &lt;!-- the same blank with options instead of a field: a .qitem, the blank written ___ in the stem, and
-       3 or 4 options of one or two words that could fill it. This is the multiple-choice form of the
-       blank, a different activity from the .gap form — the student picks the word instead of typing it.
-       A block of nothing but option blanks is recorded as mc; a block that mixes typed and option
-       blanks is recorded as fill, because the blank is what the two have in common --&gt;
+       3 or 4 options of one or two words. A block of nothing but option blanks is recorded as mc; a
+       block that mixes typed and option blanks is recorded as fill --&gt;
   &lt;!-- opts compact with data-layout="row" keeps three or four one-word options on one line: the radio
        and the padding shrink, the option text does not --&gt;
   &lt;div class="qitem" data-a="b"&gt;
@@ -1106,8 +1089,8 @@ next();
   &lt;span class="qstem"&gt;&lt;button class="listen" type="button" data-say="borrow"&gt;▶&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;
 
 &lt;!-- with a .listen chip the item may leave data-a off: the option whose text the clip speaks is the
-     answer (engine4 matches it against data-say) --&gt;</pre>
-<p class="dim">Words the game needs on the item, not on the block: <code>data-answer="&lt;word&gt;"</code> for <code>wordleBoard</code> and <code>crosswordBoard</code>, <code>data-first</code> and <code>data-lives</code> for <code>echoPads</code>, <code>data-train</code> for <code>trainOrder</code>, <code>data-buckets</code> for <code>catchBasket</code>. Every game answers with the same radios, so engine4 checks the option and the page's own marking still saves it.</p>
+     answer --&gt;</pre>
+<p class="dim">Words the game needs on the item, not on the block: <code>data-answer="&lt;word&gt;"</code> for <code>wordleBoard</code> and <code>crosswordBoard</code>, <code>data-first</code> and <code>data-lives</code> for <code>echoPads</code>, <code>data-train</code> for <code>trainOrder</code>, <code>data-buckets</code> for <code>catchBasket</code>.</p>
 </div></div><details class="reveal" open id="markup-gap"><summary>Markup — #gap · a keyed blank inside a sentence — a component, not an activity · the gap and its key</summary><div class="body"><div>
 <pre>&lt;p&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt; I'm &lt;input class="gap" data-answer="in"
     style="--gap-w:3em"&gt; the café.&lt;/p&gt;

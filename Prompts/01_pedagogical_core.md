@@ -40,6 +40,7 @@ Modulate the language of your explanations based on `track_ledger.json`:
 - **Sections divide concepts, blocks divide for organization.** One section is the default: split only where the split earns its place in clarity. Meaning, formation and contraction are aspects of one ability, not three sections.
 - **The training is yours.** For each section decide what must become automatic and what the student will say instead, then write the activity where it trains that — inline under the section it teaches, or in a closing quiz when the lesson wants one.
   - Why a thing is trained is one of four: **difficulty** (rare or irregular — examples are enough, do not drill it), **selection** (two known forms compete and the right one must come out without a pause), **interference** (Portuguese offers a form English does not), **chunk** (it must leave the mouth assembled — contractions, *get up*, *I'd rather*).
+- **A dialog is not required, and a lesson is better with one where the grammar lives in a conversation.** The student and the teacher read it together, and turn-taking, register and rhythm appear in context — which no single-sentence item tests. A dialog's gaps make it the training.
 - **An item never introduces vocabulary the lesson has not taught.** Difficulty is the student's, not yours: an early lesson trains few things slowly, a late one trains many and fast.
 - **Training is thorough and the student should be comfortable and well-practiced with the lesson concepts and vocabulary when they finish.**
 
