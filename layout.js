@@ -140,6 +140,11 @@ window.LayoutEditor = (function () {
   function kindOf(n) { return isRow(n) ? 'row' : (isCell(n) ? 'cell' : 'item'); }
   /* the side band of a level-3 cell: the strip that reads as "beside", not "above" or "below" */
   var BAND = 24;
+  /* THE TOP EDGE OF A PAGE ROW: held this close (the block's own 12px padding and a couple of pixels
+     over), the drop is the boundary ABOVE the row rather than a place in its first cell. It is what
+     makes "put this block at the top of the section" a gesture with a target, instead of a few pixels
+     of gap between the heading and the row. */
+  var EDGE1 = 14;
   /* the edge of the item inside a cell: held this close, the drop is the level-3 gesture rather than
      the level-2 one, so "beside this paragraph" and "beside this cell" are different targets */
   var EDGE3 = 3;
@@ -182,6 +187,9 @@ window.LayoutEditor = (function () {
      THE EDGE IS THE SAME RULE AT EVERY LEVEL: `band` is a quarter of the cell, capped at BAND, so a
      narrow cell still has a middle to merge into. A markup box (.markup-row) is read as one object
      and placed, never merged, because its parent is a `.rows` and the shape test calls it a cell.
+     THE TOP OF A SECTION is reachable as its own boundary: a drop on an <h1>/<h2> lands UNDER it, and
+     a drop within EDGE1 of a level-1 row's top lands ABOVE that row — both a row of .content-area, so
+     a block can be put at the top of a section without being attached to what already stands there.
      A DROP OVER THE NODE ITSELF IS NOT A DROP. The pointer inside the dragged subtree returns no
      target at all: no line, and the release changes nothing — which is what makes putting a thing
      back where it came from safe.
@@ -343,6 +351,19 @@ window.LayoutEditor = (function () {
     if (!inside(el)) return null;
 
     var row = el.closest ? el.closest('.rows') : null;
+    /* A HEADING IS A WALL, NOT A PLACE. A drop on `2. Pass 2 — …` lands UNDER it, at the top of its
+       section, never above it into the section that ends there: a section's rows live under its
+       heading, and the heading itself may not move. The line is drawn along the heading's own bottom
+       edge, so the boundary the reader aims at is the boundary the drop uses. */
+    if (!row) {
+      var head = el.closest ? el.closest('h1,h2') : null;
+      if (head && head.parentElement === ca()) {
+        var th = { box: ca(), ref: head.nextElementSibling || null, host: head, before: false, ax: 'y', insert: 'row' };
+        return samePlace(th, drag.node) ? null : th;
+      }
+      /* anything else standing in the page but not in a row — the h1's own area, the area's padding */
+      return inPage(x, y);
+    }
     /* A LEVEL-1 ROW IS PLACED AMONG LEVEL-1 ROWS, NEVER INSIDE ONE. Since the page was flattened back
        to one row per block, the row a block stands on IS the page's line, and it has exactly one place
        it can go: above or below the line under the pointer. Joining it into that line (its cells
@@ -350,7 +371,13 @@ window.LayoutEditor = (function () {
        arrives somewhere it was not aimed at. A narrower arrival than a line — a block beside a block —
        is the CELL's gesture: drag the block itself, not the row it stands on. */
     if (drag.kind === 'row' && levelOf(drag.node) === 1) return amongL1(row, x, y);
-    if (!row) return el === ca() ? inPage(x, y) : null;
+    /* THE TOP EDGE OF A PAGE ROW IS THE BOUNDARY ABOVE IT. Held within EDGE1 of a level-1 row's top,
+       any arrival — a block, a row — is placed ABOVE that row instead of inside its first cell, so the
+       top of a section is reachable without aiming at the few pixels between the heading and the row. */
+    if (levelOf(row) === 1) {
+      var rr1 = row.getBoundingClientRect();
+      if (y < rr1.top + EDGE1) return inPage(x, y);
+    }
 
     /* the space AROUND a row is its parent's: the band above or below the row's own cells */
     var cs = slots(row), top = Infinity, bottom = -Infinity;
@@ -1010,10 +1037,16 @@ window.LayoutEditor = (function () {
      bare item in a row gets a cell, and an item standing in a cell above level 3 gets the row and the
      cell it needs, one level at a time. Only the arrival is wrapped — a cell or a row arrives with its
      own contents, and touching those would restructure a page the teacher did not touch. What is made
-     is recorded, so an undo takes it apart again. */
+     is recorded, so an undo takes it apart again.
+     A BLOCK IS NOT A BARE ITEM. `kindOf` calls anything inside a cell an item, and a `.block` is one —
+     but it carries its three levels already: its cell, its rows and their cells. Wrapped like a
+     paragraph it would arrive as row > cell > row > cell > row > cell > block, a frame buried two
+     levels deeper than the row it was dropped on. It arrives as the cell of the row `wrap` gives it,
+     and nothing more is made. */
   function ensureDeepArrival(n, rec, kind) {
     if (!n || !n.parentElement) return;
     if (kind !== 'item') return;
+    if (n.classList && n.classList.contains('block')) return;
     var guard = 0;
     while (n.parentElement && guard++ < 4) {
       var p = n.parentElement;
@@ -1089,7 +1122,12 @@ window.LayoutEditor = (function () {
     (function () {
       var a = l1Of(n); if (a) guards.push({ row: a, was: colsIn(a) });
       var tb = t.box || n;
-      var b = levelOf(tb) === 1 ? tb : l1Of(tb);
+      /* THE PAGE IS NOT A LINE. A drop into .content-area lands among the rows, so `t.box` is the page,
+         whose children are rows and not columns: `colsIn` on it sums every row's width and a new row
+         always makes that sum larger. Guarding it refused every arrival at section level — the drop
+         that puts a block above the first row of a section was undone as "over four columns". Only a
+         row or a cell names a line to guard. */
+      var b = isRow(tb) ? (levelOf(tb) === 1 ? tb : l1Of(tb)) : (isCell(tb) ? l1Of(tb) : null);
       if (b && b !== a) guards.push({ row: b, was: colsIn(b) });
       var l3 = isRow(tb) ? tb : null;
       if (l3 && levelOf(l3) === 3) guards.push({ row: l3, was: elemKids(l3) });
