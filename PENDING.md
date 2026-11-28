@@ -6,6 +6,4 @@ A batch and its steps must be removed from this file when all of the batch steps
 
 # [CURRENT]
 
-- [S4] extra/lesson1-The Capability Map.html — dead anchor: #recipient (`check2` · `dead-anchor` · fix)
-- [S5] extra/lesson1-The Capability Map.html — stub label points at nothing: #recipient (`check2` · `stub-label-points-at-nothing` · fix)
 
