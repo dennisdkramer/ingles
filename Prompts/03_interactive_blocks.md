@@ -25,7 +25,8 @@ Q2: She ___ tired. | is
   - `translation` — the Portuguese into the English the lesson taught, or the English back into Portuguese.
   - `dictation` — hearing a sentence once and writing it down.
   - `dialoggap` — answering gaps inside the conversation the lesson itself wrote.
-- Every directive carries its stems with their answers, whatever the type. What an answer looks like is the type's business — a letter for `matching`, an order for `chunks`, a sentence for `correction`, a spoken line for `dictation` — and `|` separates two accepted forms.
+  - `flip` — rote recall of single words and short phrases: one prompt, one answer, a set of cards.
+- Every directive carries its stems with their answers, whatever the type. What an answer looks like is the type's business — a letter for `matching`, an order for `chunks`, a sentence for `correction`, a spoken line for `dictation`, the meaning beside the word for `flip` — and `|` separates two accepted forms.
 - An item never uses vocabulary the lesson has not taught.
 - **Every key on the page is `PRONPARSE.md`'s answer** for that word or phrase, pasted as it comes — never typed, never re-spelled from your own reading.
 

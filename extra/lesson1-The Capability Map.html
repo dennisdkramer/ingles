@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Extra · Lesson 1 — The Capability Map</title>
-<link rel="stylesheet" href="../style.css?v=fdeadefcd0">
+<link rel="stylesheet" href="../style.css?v=38a45a0444">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="../logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>EXTRA <span>DEMO 1</span></h1>
@@ -47,7 +47,17 @@
      The box named by the same token carries what the drawing cannot: its alternates, its options,
      and the rules the drawing does not show. Open that box when you choose the element, and not
      before — the drawing is what builds the page, and the box is what you check the build against.
-     A drawing's comment is its label, never part of it: the token, and what the element is for. -->
+     A drawing's comment is its label, never part of it: the token, and what the element is for.
+
+     IN A BLOCK OR OUT OF ONE. An element stands free when it is what the passage is about — the
+     player, a map, a chart with its own prose beside it. It goes in a block when it needs a
+     headline, a look, or a neighbour, or when several things share one frame. A block is as wide
+     as the cell it stands in: nothing carries a width of its own, and a narrower block stands
+     beside something rather than being narrowed.
+
+     HOW MANY ITEMS. A block is not opened until the teaching fills it. One or two questions join a
+     block that already holds content; a set of six to ten earns a block of its own. One type or a
+     mix, whichever the teaching needs — and the number starts again in each block. -->
 
 
 
@@ -61,7 +71,7 @@
 <div class="block" data-look="outline"><h3>Outline</h3>
 <div class="rows"><div><div class="rows"><div><p style="text-align: center;"><b>For</b>&nbsp;highly important or interesting content that should stand out&nbsp;<code>data-look="outline"</code>.</p></div></div></div></div></div>
 <div class="block" data-look="stripes"><h3>Activity</h3>
-<div class="rows"><div><div class="rows"><div><p style="text-align: center;"><b>For</b> an activity — the block the student writes in. <b>Not for</b> text: stripes behind three paragraphs make them harder to read. <code>data-look="stripes"</code>.</p></div></div></div></div></div><div class="block" data-look="tape"><h3>Tape</h3>
+<div class="rows"><div><div class="rows"><div><p style="text-align: center;"><b>For</b> an activity — the block the student works in: typing, ticking, clicking a card. <b>Not for</b> text: stripes behind three paragraphs make them harder to read. <code>data-look="stripes"</code>.</p></div></div></div></div></div><div class="block" data-look="tape"><h3>Tape</h3>
 <div class="rows"><div><div class="rows"><div><p style="text-align: center;"><b>For</b> a note pinned onto the page — a tip, an aside, a reminder read on the way past. <b>Not for</b> the lesson's own teaching, and never two in one row. <code>data-look="tape"</code>.</p></div></div></div></div></div></div>
 
 
@@ -69,13 +79,6 @@
 
 <div class="rows"><div><div class="block">
 <h3>Charts</h3>
-
-
-
-
-
-
-
 <div class="rows"><div><table class="chart">
 <thead><tr class="bare"><th colspan="3"></th></tr></thead>
 <tbody>
@@ -83,14 +86,9 @@
 <tr><td><b>lend</b></td><td>give something, get it back later</td><td>one Portuguese word for both directions</td></tr>
 <tr><td><b>owe</b></td><td>still have to give it back</td><td><span lang="pt">dever</span> also means <i>must</i></td></tr>
 </tbody>
-</table></div><div><p><b><code>&lt;tr class="bare"&gt;</code></b> — Table headings are authored only when the student will need them to understand the table contents. By default, the row is <b>collapsed to a 3px </b>top edge, not deleted.</p></div></div><div class="rows">
-<div><div class="rows"><div><figure class="chartwrap"></figure></div></div></div>
+</table></div><div><p><b><code>&lt;tr class="bare"&gt;</code></b> — Table headings are authored only when the student will need them to understand the table contents. By default, the row is <b>collapsed to a 3px</b> top edge, not deleted.</p></div></div>
 
-</div>
-<div class="rows">
-
-
-<div><p><b><code>&lt;th class="vlab" rowspan="3"&gt;</code></b> — when the table holds two or more families and the word naming each must stand outside the frame; <b>the rowspan is how many items that family holds</b>, so it changes with the list. <b>Not for</b> one family: a label that names the only thing in the table repeats the sentence beside it. <b>It goes in a <code>figure.chartwrap</code></b>: the wrapper's own padding is the room the label stands in.</p></div><div><figure class="chartwrap"><table class="chart">
+<div class="rows"><div><p><b><code>&lt;th class="vlab" rowspan="3"&gt;</code></b> — when the table holds two or more families and the word naming each must stand outside the frame; <b>the rowspan is how many items that family holds</b>, so it changes with the list. <b>Not for</b> one family: a label that names the only thing in the table repeats the sentence beside it. <b>The chart's own cell gives the label its room</b> — 48px of the cell's padding, and no wrapper around the table.</p></div><div><table class="chart">
 <tbody>
 <tr class="bare"><th colspan="3"></th></tr>
 <tr><th class="vlab" rowspan="3"><span>Regular</span></th><td>walk</td><td>walked</td></tr>
@@ -103,35 +101,7 @@
 <tr><td>take</td><td>took</td></tr>
 <tr><td>buy</td><td>bought</td></tr>
 </tbody>
-</table></figure></div><div><div class="rows"><div><table class="chart">
-<tbody>
-<tr><td><b>a</b> shared the gossip</td><td><span class="qnum">1.</span> <b>clocked in</b> <input class="gap" data-answer="c" style="--gap-w:3em"></td></tr>
-<tr><td><b>b</b> got out of a situation</td><td><span class="qnum">2.</span> <b>spilled the tea</b> <input class="gap" data-answer="a" style="--gap-w:3em"></td></tr>
-<tr><td><b>c</b> recorded the time you got to work</td><td><span class="qnum">3.</span> <b>threw shade</b> <input class="gap" data-answer="d" style="--gap-w:3em"></td></tr>
-<tr><td><b>d</b> insulted someone indirectly</td><td><span class="qnum">4.</span> <b>bailed</b> <input class="gap" data-answer="b" style="--gap-w:3em"></td></tr>
-</tbody>
-</table></div></div></div></div>
-<!-- #matching · pairing each item with its meaning from one shared pool -->
-
-<div class="rows">
-<div>
-<div class="rows"><div><figure class="chartwrap" id="matching">
-
-</figure></div></div>
-</div>
-</div>
-</div></div></div>
-
-
-
-
-
-
-
-<div class="rows">
-<div>
-
-<div class="block">
+</table></div></div>
 <h3>Augment existing text</h3>
 <div class="rows">
 <div>
@@ -166,10 +136,10 @@
 
 <!-- #audio · a song's own words, heard and read at once -->
 
-</div><div class="rows"><div><div class="rows"><div><figure class="vz-play viz is-enhanced">
+</div><div class="rows"><div><div class="rows"><div><figure class="vz-play is-enhanced">
 <h4>Take Me Home, Country Roads</h4>
 <p class="dim">John Denver, 1971</p>
-<audio class="vz-audio" src="../assets/country-roads.mp3" data-duration="29.71" preload="metadata"></audio>
+<audio class="vz-audio" src="../assets/country-roads.mp3" data-duration="29.71" controls preload="metadata"></audio>
 <div class="vz-controls">
 <button class="vz-btn" type="button" aria-label="play" aria-pressed="false">▶</button>
 <span class="vz-time" data-now="">0:13</span>
@@ -266,9 +236,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <p class="dim"><code>.tlgrid</code> holds a family — one line per tense, <code>&lt;h4&gt;</code> naming a cell. A bare <code>.tln</code> with no <code>.tlw</code> draws the axis alone. <code>data-grow="1"</code> fills the container, <code>data-grow="2"</code> takes the anchor string's width. Marks: <code>tln-span</code> · <code>tln-that</code> · <code>tln-bar</code> · <code>tln-gloss</code> · <code>tln-arc</code> · <code>tln-out</code> (the two on a <code>simple-present</code> figure, which carries no <code>tln-link</code>). <code>data-tense</code>: simple-present · present-continuous · present-perfect · simple-past · past-continuous · past-perfect · going-to · future-perfect.</p>
 </div></div></details>
 <details class="reveal" open id="markup-chart"><summary>Markup — #chart · many items that share columns, read as a set · the table, the split chart, and the labels beside it</summary><div class="body"><div>
-<pre>&lt;figure class="chartwrap"&gt;
-  &lt;table class="chart"&gt;…&lt;/table&gt;
-&lt;/figure&gt;</pre>
+<pre>&lt;table class="chart"&gt;…&lt;/table&gt;</pre>
 <pre>&lt;table class="chart"&gt;
   &lt;tbody&gt;
     &lt;tr class="bare"&gt;&lt;th colspan="3"&gt;&lt;/th&gt;&lt;/tr&gt;
@@ -277,29 +245,27 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
     …
   &lt;/tbody&gt;
 &lt;/table&gt;</pre>
-<p class="dim">A chart carries no title of its own: the sentence beside it names it. <code>th.vlab</code> puts a family label outside the chart's edge; <code>tr.bare</code> collapses a nameless header row to a rule. A block takes <code>data-structure="grid"</code> with a <code>thead</code> and optional <code>caption</code>, and <code>tr.note</code> for a remark row. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each.</p>
+<p class="dim">A chart carries no title of its own: the sentence beside it names it, and the chart wears no frame but its own. <code>th.vlab</code> puts a family label outside that frame, and the cell the chart stands in gives it the room. <code>tr.bare</code> collapses a nameless header row to a rule; <code>tr.note</code> is one remark row across the chart. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each.</p>
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;…the sentence, and the chart it reads…&lt;/div&gt;
   &lt;div&gt;
-    &lt;figure class="chartwrap"&gt;
-      &lt;table class="chart"&gt;…&lt;/table&gt;
-    &lt;/figure&gt;
+    &lt;table class="chart"&gt;…&lt;/table&gt;
   &lt;/div&gt;
 &lt;/div&gt;</pre>
 </div></div></details>
 <details class="reveal" open id="markup-map"><summary>Markup — #map · a town drawn once, so places and routes have somewhere to point · the drawing, and the same drawing as a question</summary><div class="body"><div>
 <pre>&lt;!-- as a display: copy this drawing whole — this viewBox, these two roads and two lanes, all nine
      places and the map-geometry table — and write nothing inside the svg. --&gt;
-&lt;div class="vz-map viz"&gt;
+&lt;div class="vz-map"&gt;
   &lt;svg viewBox="0 0 360 240" role="img"
        aria-label="everything the drawing shows, named"&gt;…the same drawing, all nine places…&lt;/svg&gt;
 &lt;/div&gt;</pre>
 <p class="dim">The wrapper is the drawing's own box — 533 × 355, the 3:2 of its viewBox — never wider. <code>--map-w</code> sets a narrower map where the page needs one. <code>aria-label</code> names everything in the drawing: it is all a screen reader gets. <b>The drawing carries its own geometry table — canvas, road positions, the tick percentages and the nine places by column and row — and a lesson copies all of it verbatim.</b> A page that needs a place the drawing does not show asks about one that it does: a new place means redrawing this one drawing for every page, never a second map.</p>
 <pre>&lt;!-- as an activity: the same drawing, a tick at each place, and one key --&gt;
-&lt;div class="block" data-activity="map"&gt;
+&lt;div class="block" data-look="stripes"&gt;
   &lt;div class="qitem" data-a="bank"&gt;
     &lt;p class="qstem"&gt;any text that points at one place&lt;/p&gt;
-    &lt;div class="vz-map viz"&gt;
+    &lt;div class="vz-map"&gt;
       &lt;svg viewBox="0 0 360 240" …&gt;…the same drawing, all nine places…&lt;/svg&gt;
       &lt;div class="qopts"&gt;
         &lt;label class="opt" style="position:absolute;left:16%;top:27.75%;
@@ -315,23 +281,9 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 &lt;/div&gt;</pre>
 <p class="dim">Each place gets its own checkbox at that place's <b>bottom centre</b>, where it never covers the name: its <code>value</code> the place, its <code>aria-label</code> the name the drawing shows — and the answer is the one place named by <code>data-a</code> on the <code>.qitem</code>, the same key a radio group uses. The <code>.qstem</code> is free text. The tick's position is a percentage of the drawing, so it stays on its place at any width.</p>
 </div></div></details>
-<details class="reveal" open id="markup-comic"><summary>Markup — #comic · a short scene told in panels, one sentence under each · the table of panels</summary><div class="body"><div>
-<pre>&lt;table class="chart comic"&gt;
-  &lt;!-- a panel is 3:2 from its own width; the sentence below hangs over it and never changes the table's height --&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;&lt;td class="strip"&gt;
-          &lt;svg viewBox="0 -8 120 80" role="img"
-               aria-label="what the panel shows"&gt;…&lt;/svg&gt;
-          &lt;p&gt;the sentence under the panel&lt;/p&gt;&lt;/td&gt;
-        &lt;td class="strip"&gt;…the second panel…&lt;/td&gt;&lt;/tr&gt;
-    &lt;tr&gt;&lt;td class="strip"&gt;…the third panel…&lt;/td&gt;
-        &lt;td class="strip"&gt;…the fourth panel…&lt;/td&gt;&lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;</pre>
-<p class="dim"><b>The comic is the map's box</b> — 533 × 355 — whatever its sentences say. Each <code>td</code> is a panel (<code>.strip</code>) and its <code>viewBox</code> is 3:2 (<code>0 -8 120 80</code>); the sheet sizes it from the cell's width. <b><code>--comic-h</code> (every panel) or <code>--strip-h</code> (one)</b> replaces that height, and the drawing is then fitted and centred inside the frame, never stretched. <b>The sentence under a panel hangs over its bottom edge</b> — out of the flow, wrapped, cut at two lines. <b>Write no <code>width</code> and no <code>height</code> on the <code>svg</code></b>: the sheet gives it the frame's width and height.</p>
-</div></div></details>
+
 <details class="reveal" open id="markup-audio"><summary>Markup — #audio · a song's own words, heard and read at once · the player, the timed lyrics, and the credit line</summary><div class="body"><div>
-<pre>&lt;figure class="vz-play viz"&gt;
+<pre>&lt;figure class="vz-play"&gt;
   &lt;h4&gt;the song's own name&lt;/h4&gt;
   &lt;p class="dim"&gt;the performer&lt;/p&gt;
   &lt;audio class="vz-audio" src="../../assets/&lt;name&gt;.mp3" data-duration="35.87"
@@ -354,7 +306,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 &lt;/figure&gt;
 
 &lt;!-- no usable recording: the same figure, the player swapped for a link and the lyrics written out --&gt;
-&lt;figure class="vz-play viz"&gt;
+&lt;figure class="vz-play"&gt;
   &lt;h4&gt;the song's own name&lt;/h4&gt;
   &lt;p class="dim"&gt;the performer&lt;/p&gt;
   &lt;p&gt;&lt;a href="https://…"&gt;hear it online — the quoted line starts at 0:42&lt;/a&gt;&lt;/p&gt;
@@ -367,7 +319,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <p class="dim"><code>data-t</code> and <code>data-duration</code> come from <code>qa/audio.mjs</code>, never typed by eye. The song's own name is the <code>h4</code>, the performer the credit line under it. <b>Ship the same figure without the player when the song has no usable recording</b>: the link carries the time the quoted line starts, the lyrics are written out with no <code>data-t</code> because nothing plays, and the credit line under the link says where the song came from.</p>
 </div></div></details>
 <details class="reveal" open id="markup-dialog"><summary>Markup — #dialog · a conversation the lesson writes, each line on its speaker's side · the turn list</summary><div class="body"><div>
-<pre>&lt;ol class="seq viz" data-mode="turns"&gt;
+<pre>&lt;ol class="seq" data-mode="turns"&gt;
   &lt;li data-side="left"&gt;&lt;span class="who"&gt;Jess&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
   &lt;li data-side="right"&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
 
@@ -383,7 +335,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <div>
 <!-- #flip · rote training on single words and short phrases, one prompt at a time -->
 
-<div class="block" data-look="tint" id="flip" data-activity="flip">
+<div class="block" data-look="stripes" id="flip">
 <h3>Flash Cards</h3>
 <h4 class="flip-ask" style="text-align:center" aria-live="polite">get out of a situation you don't want</h4>
 
@@ -446,27 +398,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 </span>
 </label>
 </div></div></div></div></div>
-<script>
-(function(){
-var B=document.currentScript.closest('#flip'),A=B.querySelector('.flip-ask'),
-C=[].slice.call(B.querySelectorAll('.flip')),P=[],T=-1,lock=0,
-M=C.map(function(c){return c.querySelector('.back').textContent.replace(/\s+/g,' ').trim();});
-function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
-function next(){if(!P.length)P=sh(C.map(function(_,i){return i;}));T=P.pop();A.textContent=M[T];}
-function tint(c,ok){c.querySelector('.back').style.background='color-mix(in oklab, var('+(ok?'--ok':'--err')+') 26%, var(--paper))';}
-function clear(){C.forEach(function(c){c.querySelector('input').checked=false;c.querySelector('.back').style.background='';});}
-C.forEach(function(c,i){c.addEventListener('click',function(e){
-e.preventDefault();
-if(lock)return;
-c.querySelector('input').checked=true;
-tint(c,i===T);
-if(i!==T){setTimeout(function(){if(lock)return;c.querySelector('input').checked=false;c.querySelector('.back').style.background='';},700);return;}
-lock=1;
-setTimeout(function(){clear();lock=0;next();},1400);
-});});
-next();
-})();
-</script>
+
 </div>
 </div>
 </div>
@@ -476,25 +408,23 @@ next();
 
 <div class="block" data-look="stripes">
 <h3>Marked activities with controls</h3>
-<div class="rows"><div><div class="rows"><div><p><b>Marked activities and questions may sit inside a teaching block, in a block with a map or audio player that its questions relate to, or in its own block or section inline - whichever is better for teacing purposes. T</b>he lesson chooses the flow its content wants, there is no default.</p></div></div><div class="rows"><div><p><b>Write the instruction to describe what the control actually does, in the direction the student works it</b> — whether the prompt carries the answer and the student finds the word, or carries the word and the student supplies the answer — and write it after reading the engine that runs the control, never from the activity's name. The four controls — a gap, a radio, a checkbox, a written field — are what an activity is built from, chosen by what the student must do. A lone keyed gap is a component beside other teaching, never an activity or separated into its own block. <b>A</b>&nbsp;gap holds anything that fits on the line, and a written field is for an answer that cannot — a paragraph, a list, several sentences — because a gap that has to scroll has stopped showing the answer. <b>An item and the control that answers it are one element</b> — <code>&lt;div class="qitem"&gt;</code> holding the prompt and its answer line — never two paragraphs.&nbsp;<b>Every item the student answers is numbered</b> — <code>&lt;span class="qnum"&gt;1.&lt;/span&gt;</code> beside the control it numbers, the count running through the activity block so the next activity starts again at 1 — so a teacher can name the item they mean.</p></div></div></div></div>
-<div class="rows"><div><div class="rows"><div><p class="dim"><code>data-answer</code> keys a gap, <code>|</code> separating alternatives; <b><code>--gap-w</code> is 1.3× the width of the longest accepted answer</b>, the field's own padding included, written in <code>em</code> — a gap with no key takes 1.3× the prompt written beside it, or <code>9em</code>. Never <code>100%</code> and never <code>calc()</code>: a field as wide as its block has stopped showing its answer, and on its own line it stops being a gap. A radio group's key is <code>data-a</code> on <code>.qitem</code>; engine2.js marks the right option and writes <code>.ans</code> beside a typed field. <b>The line holding the gap is a plain <code>&lt;p&gt;</code></b>: <code>.ans</code> is the engine's own pill, written after a checked field, and never a class a page writes.</p></div></div></div></div>
+<div class="rows"><div><p><b>A question may sit inside the teaching block it belongs to, in a block with the map or player it asks about, or in a block of its own</b> — wherever it teaches best. There is no default and the lesson chooses. A lone keyed gap is a component beside other teaching, never an activity and never a block of its own.</p></div></div>
+<div class="rows"><div><p class="dim">Write the instruction for the direction the control actually runs: the prompt carries the answer and the student supplies the word, or the prompt carries the word and the student finds the answer. Read the control, then write its line.</p></div></div>
 
 
 <div class="rows">
 
-<div id="chartanswer" data-activity="chartanswer">
 
-<div class="rows"><div><p><b>A chart whose rows are the items.</b> The questions are the table own rows and the student answers in the last column, so the shared columns stay aligned and the student reads one column at a time. <b>Three uses:</b> a row answered by a gap, a radio pair or a checkbox pair; <b>matching</b>, where the options are one pool of meanings shared by every row instead of a letter written beside each phrase; and the <b>grid</b>, which lays four options of one or two words 2x2 inside a row answer cell.</p></div></div><div class="rows"><div><figure class="chartwrap">
-
-</figure></div></div>
-</div>
 </div>
 
 
 
-</div><div class="rows"><div><div class="rows"><div><div class="block" data-look="stripes" data-activity="translation" id="translation">
-<h3>Activity Types</h3>
-<div class="rows"><div><p><b>All elements</b> here including dialogs, maps, and the audio player may be included and referenced for teaching purposes <b>and/or</b> used for marked activities<br>An answer may be marked using checkboxes on the map -  a route which, or directions, which ask the student to name one or more places. The key names one or both eg. data-a="bank|library", witha pipe separating them.  ****&gt;markup&gt;A tick sits at the bottom centre of its place, a percentage of the drawing, and its value is the place name.&nbsp;</p></div><!-- #map · a town drawn once, so places and routes have somewhere to point --><div class="vz-map viz">
+</div><div class="rows"><div><div class="rows"><div><div class="rows"><div><div class="block" data-look="stripes">
+<h3>Street map</h3>
+<!-- #map · a town drawn once, so places and routes have somewhere to point -->
+<div class="rows"><div><div class="qitem" data-a="post office">
+<p class="qstem" style="text-align:center">Name the place where you post a letter.</p>
+<div class="vz-map">
 <svg viewBox="0 0 360 240" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, with nine places, each named on a sign in the drawing — a station with a canopy and a platform clock, a café with a striped awning and two tables outside, a park with trees behind railings, a bank with a columned front and steps, a library with tall windows, a post office with a mailbox on the sidewalk, a bus stop with a shelter and a bench, a market with two stalls, and a hotel with a door canopy">
   <!-- MAP GEOMETRY — THE ONE TABLE. Every number in this drawing, and every tick a lesson lays over it,
        is read from this table, so a tick can never sit off its building.
@@ -729,14 +659,26 @@ next();
 <label class="opt" style="position:absolute;left:86%;top:63.2%;transform:translate(-50%,-50%)" aria-label="the post office"><input type="checkbox" value="post office"></label>
 <label class="opt" style="position:absolute;left:16%;top:95%;transform:translate(-50%,-50%)" aria-label="the bus stop"><input type="checkbox" value="bus stop"></label>
 <label class="opt" style="position:absolute;left:52%;top:95%;transform:translate(-50%,-50%)" aria-label="the market"><input type="checkbox" value="market"></label>
-<label class="opt" style="position:absolute;left:86%;top:95%;transform:translate(-50%,-50%)" aria-label="the hotel"><input type="checkbox" value="hotel"></label>
+<label class="opt" style="position:absolute;left:86%;top:95%;transform:translate(-50%,-50%)" aria-label="the hotel"><input type="checkbox" value="hotel"></label></div>
 </div>
-</div></div>
-<div class="rows"><div><ol class="seq viz" data-mode="turns" style="text-align: center; margin-left: auto; margin-right: auto;">
+</div></div></div>
+</div></div></div>
+
+<div class="rows"><div><div class="block" data-look="stripes">
+<h3>Dialog with a gap</h3>
+<!-- #dialoggap · answering inside a conversation the lesson wrote -->
+<div class="rows"><div><ol class="seq" data-mode="turns" style="text-align:center;margin-inline:auto">
 <li data-side="left"><span class="who">Jess</span><span class="say">Did you post the letter?</span></li>
 <li data-side="right"><span class="who">Mike</span><span class="say" style="position:relative"><span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px">1.</span>Three times. I <input class="gap" data-answer="have|'ve" style="--gap-w:3.5em"> already posted it.</span></li>
-</ol></div><div>
-<div class="qitem">
+<li data-side="left"><span class="who">Jess</span><span class="say">Then why is it still on the table?</span></li>
+</ol></div></div>
+</div></div></div>
+
+<div class="rows"><div><div class="block" data-look="stripes">
+<h3>Chunks</h3>
+<!-- #chunks · rebuilding a sentence from its pieces, word order under pressure -->
+<div class="rows"><div><div class="qitem">
+  <p class="dim" style="text-align:center">Unscramble: write the sentence in order.</p>
   <p class="chips" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center"><span class="qnum">1.</span>
     <span><b>1</b> when</span>
     <span><b>2</b> I got there</span>
@@ -745,39 +687,76 @@ next();
     <span><b>5</b> had</span>
     <span><b>6</b> left</span>
   </p>
-  <p><input class="gap" style="--gap-w:9em"></p>
-</div><div class="qitem">
-<p style="text-align:center"><span class="qnum">2.</span> He <b>have</b> clocked in early.</p>
-<p><input class="gap" data-answer="He has clocked in early.|He's clocked in early." style="--gap-w:16.2em"></p>
-</div><div class="qitem">
-<p class="dim" style="display:flex;align-items:center;justify-content:center;gap:10px"><span class="qnum">3.</span> <button class="listen" type="button" data-say="I clocked in at six forty.">▶</button><span>Listen, then write what you hear.</span></p>
-<p><input class="gap" data-answer="I clocked in at six forty." style="--gap-w:18em"></p>
-</div><p style="text-align:center"><span class="qnum">4.</span> <span lang="pt">Vou no banco toda sexta.</span></p>
+  <p><input class="gap" data-answer="He had already left when I got there." style="--gap-w:22em"></p>
+</div></div></div>
+</div></div></div>
 
+<div class="rows"><div><div class="block" data-look="stripes">
+<h3>Correction</h3>
+<!-- #correction · finding the one word that is wrong and writing the sentence again -->
+<div class="rows"><div><div class="qitem">
+  <p class="dim" style="text-align:center">One word is wrong. Write the sentence again.</p>
+  <p style="text-align:center"><span class="qnum">1.</span> He <b>have</b> clocked in early.</p>
+  <p><input class="gap" data-answer="He has clocked in early.|He's clocked in early." style="--gap-w:16.2em"></p>
+</div></div></div>
+</div></div></div>
 
-<p><input class="gap" data-answer="I'm going to the bank now." style="--gap-w:19em"></p>
+<div class="rows"><div><div class="block" data-look="stripes">
+<h3>Dictation</h3>
+<!-- #dictation · hearing a sentence once and writing it down -->
+<div class="rows"><div><div class="qitem">
+  <p class="dim" style="display:flex;align-items:center;justify-content:center;gap:10px"><span class="qnum">1.</span> <button class="listen" type="button" data-say="I clocked in at six forty.">▶</button><span>Listen, then write what you hear.</span></p>
+  <p><input class="gap" data-answer="I clocked in at six forty." style="--gap-w:18em"></p>
+</div></div></div>
+</div></div></div>
 
+<div class="rows"><div><div class="block" data-look="stripes">
+<h3>Translation</h3>
+<!-- #translation · the Portuguese into the English the lesson taught -->
+<div class="rows"><div><div class="qitem">
+  <p class="dim" style="text-align:center">Say it in English.</p>
+  <p style="text-align:center"><span class="qnum">1.</span> <span lang="pt">Vou no banco toda sexta.</span></p>
+  <p><input class="gap" data-answer="I go to the bank every Friday.|I'm going to the bank now." style="--gap-w:19em"></p>
+</div></div></div>
+</div></div></div>
 
-
-
-
-
-<div class="qitem" data-a="b" style="text-align: center; margin-left: auto; margin-right: auto;">
-<p class="qstem"><span class="qnum">5.</span> By the time I arrived, the crew <b>___</b> the truck.</p>
+<div class="rows"><div><div class="block" data-look="stripes">
+<h3>Multiple choice</h3>
+<!-- #mc · choosing the one right answer among the wrong ones -->
+<div class="rows"><div><div class="qitem" data-a="b" style="text-align:center;margin-inline:auto">
+<p class="qstem"><span class="qnum">1.</span> By the time I arrived, the crew <b>___</b> the truck.</p>
 <div class="opts compact" data-layout="row">
-<label class="opt"><input type="radio" name="fb1" value="a"><span>loaded</span></label>
-<label class="opt"><input type="radio" name="fb1" value="b"><span>had loaded</span></label>
-<label class="opt"><input type="radio" name="fb1" value="c"><span>were loading</span></label>
-<label class="opt"><input type="radio" name="fb1" value="d"><span>load</span></label>
+<label class="opt"><input type="radio" name="mc1" value="a"><span>loaded</span></label>
+<label class="opt"><input type="radio" name="mc1" value="b"><span>had loaded</span></label>
+<label class="opt"><input type="radio" name="mc1" value="c"><span>were loading</span></label>
+<label class="opt"><input type="radio" name="mc1" value="d"><span>load</span></label>
 </div>
-</div><p style="text-align: center; margin-left: auto; margin-right: auto;"><span class="qnum">6.</span> Mike <input class="gap" data-answer="has" style="--gap-w:3em"> already posted it.</p></div></div>
+</div></div></div>
+</div></div></div>
+
+<div class="rows"><div><div class="block" data-look="stripes">
+<h3>Fill in the blank</h3>
+<!-- #fill · typing the exact form into the sentence that needs it -->
+<div class="rows"><div><div class="qitem">
+  <p style="text-align:center"><span class="qnum">1.</span> Mike <input class="gap" data-answer="has" style="--gap-w:3em"> already posted it.</p>
+  <p style="text-align:center"><span class="qnum">2.</span> The crew <input class="gap" data-answer="had|'d" style="--gap-w:3.5em"> loaded the truck before I arrived.</p>
+</div></div></div>
+</div></div></div>
+
+<div class="rows"><div><div class="block" data-look="stripes">
+<h3>Matching</h3>
+<!-- #matching · pairing each item with its meaning from one shared pool -->
+<div class="rows"><div><table class="chart" id="matching">
+<tbody>
+<tr><td><b>a</b> shared the gossip</td><td><span class="qnum">1.</span> <b>clocked in</b> <input class="gap" data-answer="c" style="--gap-w:3em"></td></tr>
+<tr><td><b>b</b> got out of a situation</td><td><span class="qnum">2.</span> <b>spilled the tea</b> <input class="gap" data-answer="a" style="--gap-w:3em"></td></tr>
+<tr><td><b>c</b> recorded the time you got to work</td><td><span class="qnum">3.</span> <b>threw shade</b> <input class="gap" data-answer="d" style="--gap-w:3em"></td></tr>
+<tr><td><b>d</b> insulted someone indirectly</td><td><span class="qnum">4.</span> <b>bailed</b> <input class="gap" data-answer="b" style="--gap-w:3em"></td></tr>
+</tbody>
+</table></div></div>
+</div></div></div>
+
 </div></div></div></div></div></div>
-</div>
-
-
-
-
-
 
 
 <details class="reveal" open id="markup-controls"><summary>Markup — every activity · the rules every control obeys: its name is its key, one number per control, progress on the block · read before any activity's own box</summary><div class="body"><div>
@@ -795,14 +774,26 @@ next();
 &lt;!-- A BLOCK REPORTS ITS OWN PROGRESS: data-state="done" on its .block is the sheet's green frame,
      written when every question in the block has an answer and taken away when one is emptied. A
      teaching block holds no control and never reports --&gt;
+&lt;!-- THE FOUR CONTROLS, chosen by what the student must do: a gap, a radio, a checkbox, a written field.
+     A gap holds anything that fits on the line; a written field (.write) is for an answer that cannot —
+     a paragraph, a list, several sentences — because a gap that has to scroll has stopped showing its
+     answer --&gt;
+&lt;!-- ONE ITEM, ONE ELEMENT: a .qitem holds the prompt and the answer line, never two paragraphs, so an
+     item is one thing to drag and one thing to delete --&gt;
+&lt;!-- EVERY ITEM IS NUMBERED: &lt;span class="qnum"&gt;1.&lt;/span&gt; beside the control it numbers, the count running
+     through the block and starting again at 1 in the next one, so a teacher can name an item --&gt;
+&lt;!-- A GAP IS KEYED BY data-answer, | between accepted forms; a radio or checkbox group by data-a on the
+     .qitem. --gap-w is 1.3x the width of the longest accepted answer, written in em with the field's own
+     padding included, and 9em where there is no key. Never 100%, never calc() --&gt;
 &lt;!-- AN ITEM MAY SIT INSIDE A CHART: any activity item — a gap, a radio pair, a checkbox pair — can be one
      of a chart's rows where the shared columns are what the student has to read it against. The row
-     holds the item with its control, and the table stays the frame --&gt;</pre>
+     holds the item with its control, and the table stays the frame. A row of bare radios is not
+     markable: its cell needs a .qitem with data-a, or the engine has no key to read --&gt;</pre>
 </div></div></details>
 
 <div class="rows markup-row">
 <details class="reveal" open id="markup-flip"><summary>Markup — #flip · rote training on single words and short phrases, one prompt at a time · the prompt, the grid, and the pick</summary><div class="body"><div>
-<pre>&lt;div class="block" data-look="tint" id="flip"&gt;
+<pre>&lt;div class="block" data-look="stripes" id="flip"&gt;
   &lt;h4 class="flip-ask" style="text-align:center" aria-live="polite"&gt;…&lt;/h4&gt;
   &lt;div class="flip-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"&gt;
     &lt;label class="flip" style="--flip-h:112px"&gt;
@@ -814,9 +805,9 @@ next();
     &lt;/label&gt;
     …eight cards, four to a row, two rows…
   &lt;/div&gt;
-  &lt;script&gt;…inside the same block…&lt;/script&gt;
 &lt;/div&gt;
 
+&lt;!-- THE BEHAVIOUR SHIPS IN engine5.js, loaded by the page shell: copy this markup and no script --&gt;
 &lt;!-- the prompt is one card's back, in a centred h4, and it is the whole prompt · any number of cards may be turned in a round --&gt;
 &lt;!-- --flip-h is the height both faces share --&gt;
 &lt;!-- no data-answer and no data-a here: the block cannot be a quiz --&gt;</pre>
@@ -836,24 +827,7 @@ next();
      position:relative and the number is absolute at right:calc(100% + 8px) on a right-hand line and at
      left:calc(100% + 8px) on a left-hand line --&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-chartanswer"><summary>Markup — #chartanswer · items that share columns, each row answered where it sits · the table, one control per row</summary><div class="body"><div>
-<pre>&lt;div class="block" data-look="stripes"&gt;
-  &lt;table class="chart"&gt;
-    &lt;tr&gt;&lt;td&gt;6:40&lt;/td&gt;&lt;td&gt;He clocked in.&lt;/td&gt;
-      &lt;td style="display:flex;align-items:center;gap:8px"&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt;
-        &lt;div class="opts" data-layout="row"&gt;
-        &lt;label class="opt"&gt;&lt;input type="radio" name="m1"&gt;&lt;span&gt;routine&lt;/span&gt;&lt;/label&gt;
-        &lt;label class="opt"&gt;&lt;input type="radio" name="m1"&gt;&lt;span&gt;surprise&lt;/span&gt;&lt;/label&gt;
-      &lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;
-    &lt;tr&gt;…a checkbox row, a gap row…&lt;/tr&gt;
-  &lt;/table&gt;
-  &lt;!-- the number stands beside the control it numbers, never in a column of its own --&gt;
-  &lt;!-- an activity may mix the control types or use one --&gt;
-  &lt;!-- A ROW IS ANSWERED BY A KEYED GAP: the typed form carries data-answer in the row's answer cell.
-      A row of options is markable only when its cell holds a .qitem with data-a — a chart of bare
-      radios has no key the engine can read --&gt;
-&lt;/div&gt;</pre>
-</div></div></details>
+
 <details class="reveal" open id="markup-mc"><summary>Markup — #mc · choosing the one right answer among the wrong ones — a word, a form, a meaning or a fact · the stem, the options, the key</summary><div class="body"><div>
 <pre>&lt;div class="qitem" data-a="b"&gt;
   &lt;p class="qstem"&gt;the line the student reads&lt;/p&gt;
@@ -870,11 +844,11 @@ next();
      options, data-layout="grid" style="--cols:2" for three- and four-word options --&gt;</pre>
 </div></div></details>
 <details class="reveal" open id="markup-matching"><summary>Markup — #matching · pairing each item with its meaning from one shared pool · the lettered meanings, the numbered items and their blanks</summary><div class="body"><div>
-<pre>&lt;figure class="chartwrap" id="matching"&gt;&lt;table class="chart"&gt;
+<pre>&lt;table class="chart" id="matching"&gt;
   &lt;tr&gt;&lt;td&gt;&lt;b&gt;a&lt;/b&gt; the first meaning&lt;/td&gt;
       &lt;td&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt; &lt;b&gt;the phrase&lt;/b&gt; &lt;input class="gap" data-answer="c" style="--gap-w:3em"&gt;&lt;/td&gt;&lt;/tr&gt;
   …one row per item…
-&lt;/table&gt;&lt;/figure&gt;
+&lt;/table&gt;
 
 &lt;!-- THE POOL IS THE CHART'S FIRST COLUMN and the numbered items with their blanks are its second, so a
      meaning and a blank stand side by side; the pool is never a list outside the table --&gt;
@@ -924,9 +898,6 @@ next();
   &lt;p&gt;&lt;input class="gap" style="--gap-w:9em"&gt;&lt;/p&gt;
 &lt;/div&gt;
 
-&lt;!-- THE ITEM AND ITS ANSWER ARE ONE ELEMENT: the .qitem holds the prompt and the answer line, so
-     the pair is one thing to drag and one thing to delete --&gt;
-
 &lt;!-- no text-align is written on the answer line: a paragraph holding only a gap is centred by the
      sheet, so no page has to remember it --&gt;
 
@@ -936,23 +907,9 @@ next();
      is not a shuffle — the whole order is re-dealt. the number is the display order, never the answer --&gt;
 &lt;!-- the number sits at the head of the words, on their line — never alone on the answer line --&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-stripgaps"><summary>Markup — #stripgaps · writing the sentence each picture shows · the panels, a numbered gap under each</summary><div class="body"><div>
-<pre>&lt;div class="block" data-look="stripes"&gt;
-  &lt;h3&gt;the task the panels set&lt;/h3&gt;
-  &lt;p&gt;Describe what is happening in each picture,
-     using the &lt;b&gt;past simple&lt;/b&gt;.&lt;/p&gt;
-  &lt;table class="chart"&gt;
-    &lt;tr&gt;&lt;td class="strip"&gt;&lt;svg viewBox="0 -8 120 80" role="img"
-                 aria-label="what the panel shows"&gt;…&lt;/svg&gt;
-              &lt;span class="qnum"&gt;1.&lt;/span&gt; &lt;input class="gap" style="--gap-w:9em"&gt;&lt;/td&gt;
-        …two panels to a row, each with its own number…
-    &lt;/tr&gt;
-    &lt;tr&gt;…the next two panels…&lt;/tr&gt;
-  &lt;/table&gt;
-&lt;/div&gt;</pre>
-</div></div></details>
+
 <details class="reveal" open id="markup-fill"><summary>Markup — #fill · typing the exact form into the sentence that needs it · the blank, typed or picked</summary><div class="body"><div>
-<pre>&lt;div class="block" data-look="stripes" id="fill" data-activity="fill"&gt;
+<pre>&lt;div class="block" data-look="stripes" id="fill"&gt;
   &lt;h3&gt;Fill in the blank&lt;/h3&gt;
   &lt;p&gt;what the line asks the student to complete&lt;/p&gt;
   &lt;p&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt; Mike &lt;input class="gap" data-answer="has" style="--gap-w:5em"&gt; already posted it.&lt;/p&gt;
@@ -972,8 +929,7 @@ next();
 &lt;/div&gt;
 
 &lt;!-- a gap inside the sentence the block already carries: the line is the stem --&gt;
-&lt;!-- one gap or several lines, whichever the content needs; each gap is keyed on its own --&gt;
-&lt;!-- the count runs through the block: typed blanks and option blanks continue one sequence --&gt;</pre>
+&lt;!-- one gap or several lines, whichever the content needs; each gap is keyed on its own --&gt;</pre>
 </div></div></details>
 </div>
 
@@ -1103,9 +1059,10 @@ window.OPEN=true;
 <script src="../engine1.js"></script>
 <script src="../engine2.js"></script>
 <script src="../engine4.js"></script>
+<script src="../engine5.js"></script>
 <!-- BLOCK SCRIPTS ARE DECLARED BY THE HEADER OF THE CSS THEY USE -->
 <script src="../player.js"></script>
-<script src="../equalize.js?v=48367f628d"></script>
+<script src="../equalize.js?v=2296e2f6a2"></script>
 <script>
 if(!window.__A)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine1.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');
 else if(!window.__B)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine2.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');

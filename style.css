@@ -973,23 +973,10 @@
   .content-area>h2{margin-block:var(--section-gap,34px) 0}
 }
 
-/* #50 STRUCTURE — data-structure="prose|set|sequence|grid|pair|media" on .block; the hue is the track's.
-   .viz — the frame for the dialog, the player and the map: their content draws no frame of its own.
-   Never a second .block. Vary: --h (hue 0-360), --viz-pad (length, 10px 12px) */
+/* #50 STRUCTURE — data-structure="prose|set|sequence|pair|media" on .block; the hue is the track's.
+   NOTHING ON THE PAGE IS FRAMED: a drawing, a list or a player sits straight in its cell and draws no
+   box of its own. Vary: --h (hue 0-360) */
 @layer structure{
-  /* one object on the page: the edge is a 2px outline and a short shadow, so the thing reads as drawn rather
-     than as another frame. The edge is the track's rule hue held at 60% and the shadow is the same hue at
-     half the lightness a chart's shadow uses — the object is ours, so it wears the track rather than the ink */
-  .viz{--viz-pad:10px 12px;--viz-edge:color-mix(in oklab,var(--track-rule) 60%,transparent);
-    --viz-shade:oklch(22.4% .04 var(--track-h) / .55);
-    background:var(--paper);border-radius:3px;padding:var(--viz-pad);
-    box-shadow:0 0 0 2px var(--viz-edge), -3px 3px 8px -2px var(--viz-shade)}
-  /* a list is a grid with its own padding reset, so the frame's inset is restated for it */
-  .seq.viz{padding:var(--viz-pad)}
-  /* the map is drawn to its own edges and its ticks sit in % of that box: a padded frame moves every tick off
-     its place, so the map takes the outline and none of the padding */
-  .vz-map.viz{--viz-pad:0}
-
   .block{position:relative;
     --h:var(--track-h);--accent-h:var(--h);
     --accent:oklch(58% .14 var(--accent-h));
@@ -1679,13 +1666,10 @@ p:has(>input.gap:only-child){text-align:center}
      says nothing it does not need to say. */
   .chart tr.bare th{height:3px;padding:0;font-size:0;line-height:0;border:0;opacity:1;
     background:color-mix(in srgb,var(--tan) 26%,var(--paper))}
-  /* a line naming what the chart is: outside the chart, above its collapsed row. The wrapper hugs the table
-     so the line is centred on the chart rather than on the column it happens to sit in */
-  .chartwrap{width:100%;max-width:100%;margin:0}
-  /* a chart that sits in a cell beside another element, or under other content, is centred in that cell:
-     it never hugs one edge with the slack piled on the other. A chart standing as its own frame is not
-     affected — it is the cell, so it has nothing to centre within */
-  .rows>div>.chartwrap{margin-inline:auto}
+  /* NO WRAPPER AROUND A TABLE: a chart is the cell's own child and draws nothing around itself. These two
+     rules are kept only for the pages already built — a <figure> carries a UA margin, and one that wrapped a
+     chart has to stay flushed with its cell rather than indented */
+  .chartwrap{margin:0}
   .chartwrap>.chart{margin:0}
   /* #STRIP — A COMIC PANEL, AND THE COMIC AROUND IT. A comic is a TABLE: `table.comic` with two columns,
      one `td.strip` per panel, so the panels are always a 2 x 2 grid and a resize never re-arranges them.
@@ -1750,11 +1734,13 @@ p:has(>input.gap:only-child){text-align:center}
     white-space:nowrap;font-size:calc(var(--s0) + 2pt);font-weight:300;letter-spacing:normal;color:var(--ink-2)}
   /* A LABEL OUTSIDE THE FRAME. The column is zero width and the word hangs at `right:100%` of it, so the
      table's own box — and the ring it draws — is exactly the data, and the label stands outside it.
-     THE ROOM IS THE WRAPPER'S PADDING, NOT THE TABLE'S MARGIN. Padding sits inside the cell, so the word
-     cannot stick out of the block; a margin on the table would have to be taken back out of its width,
-     and that arithmetic is what pushed the table past its container. 48px is the word's own width
-     (a rotated line is about 30px tall) plus the spacing that separates it from the frame. */
+     THE ROOM IS THE CELL'S PADDING, NOT THE TABLE'S. Padding sits inside the cell, so the word cannot stick
+     out of the block; a margin on the table would have to be taken back out of its width, and that arithmetic
+     is what pushed the table past its container. 48px is the word's own width (a rotated line is about 30px
+     tall) plus the spacing that separates it from the frame. A page built while a figure still wrapped the
+     chart keeps its inset on the figure; a chart standing bare takes the room from its own cell. */
   .chartwrap:has(th.vlab){padding-inline-start:48px}
+  .rows>div:has(.chart>tbody>tr>th.vlab){padding-inline-start:48px}
   .chart th.vlab{width:0;padding:0;border:0;background:none;position:relative}
   .chart th.vlab>span{position:absolute;right:100%;top:0;bottom:0;display:grid;place-items:center;
     writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;padding-right:10px;

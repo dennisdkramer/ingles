@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>business · Lesson 21 — English Opens Doors</title>
-<link rel="stylesheet" href="../../style.css?v=113c17666f">
+<link rel="stylesheet" href="../../style.css?v=38a45a0444">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="../../logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>BUSINESS <span>LESSON 21</span></h1>
@@ -208,26 +208,7 @@
 </span>
 </label>
 </div>
-<script>
-(function(){
-var B=document.currentScript.closest('#flip')||document.currentScript.parentElement,A=B.querySelector('.flip-ask'),
-C=[].slice.call(B.querySelectorAll('.flip')),P=[],T=-1,done=0,
-M=C.map(function(c){return c.querySelector('.back').textContent.replace(/\s+/g,' ').trim();});
-function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
-function next(){if(!P.length)P=sh(C.map(function(_,i){return i;}));T=P.pop();A.textContent=M[T];}
-function clear(){C.forEach(function(c){c.querySelector('input').checked=false;c.querySelector('.back').style.background='';});done=0;}
-C.forEach(function(c,i){c.addEventListener('click',function(e){
-e.preventDefault();
-if(done)return;
-c.querySelector('input').checked=true;
-c.querySelector('.back').style.background='color-mix(in oklab, var('+(i===T?'--ok':'--err')+') 26%, var(--paper))';
-if(i!==T)return;
-done=1;
-setTimeout(function(){clear();next();},4000);
-});});
-next();
-})();
-</script>
+
 </div>
 
 
@@ -292,7 +273,7 @@ next();
 <p lang="pt">Responder e devolver a pergunta é o que separa uma resposta de uma conversa. Duas palavras fazem isso: <i>And you?</i></p>
 </div>
 <div>
-<ol class="seq viz" data-mode="turns">
+<ol class="seq" data-mode="turns">
 <li data-side="left"><span class="who">Jess</span><span class="say">What do you do, Ana?</span></li>
 <li data-side="right"><span class="who">Ana</span><span class="say">I look after the models, so I'm on the revenue side. And you?</span></li>
 <li data-side="left"><span class="who">Jess</span><span class="say">Nothing has changed for me — I still run the Monday call. What about you?</span></li>
@@ -304,7 +285,7 @@ next();
 <div class="block" data-look="stripes" data-activity="dialoggap">
 <h3>Fill in the first minute with a new colleague</h3>
 <p>Write the missing words. Each gap is one of the phrases this page taught.</p>
-<ol class="seq viz" data-mode="turns">
+<ol class="seq" data-mode="turns">
 <li data-side="left"><span class="who">Jess</span><span class="say" style="position:relative"><span class="qnum" style="position:absolute;left:calc(100% + 8px);top:2px">1.</span>Hi — I'm Jess. I work <input class="gap" data-answer="in" style="--gap-w:3em" name="a5a1"> support.</span></li>
 <li data-side="right"><span class="who">Bruno</span><span class="say" style="position:relative"><span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px">2.</span>Bruno. I'm the one who <input class="gap" data-answer="owns" style="--gap-w:4.1em" name="a5a2"> pricing.</span></li>
 <li data-side="left"><span class="who">Jess</span><span class="say" style="position:relative"><span class="qnum" style="position:absolute;left:calc(100% + 8px);top:2px">3.</span>So you're <input class="gap" data-answer="responsible for" style="--gap-w:10.7em" name="a5a3"> the forecast?</span></li>
@@ -490,8 +471,9 @@ const SECRET="abreportas2025", TRACK="business", L=21;
 <script src="../../engine1.js"></script>
 <script src="../../engine2.js"></script>
 <script src="../../engine4.js"></script>
+<script src="../../engine5.js"></script>
 <script src="../../player.js"></script>
-<script src="../../equalize.js?v=48367f628d"></script>
+<script src="../../equalize.js?v=2296e2f6a2"></script>
 <script>
 if(!window.__A)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine1.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');
 else if(!window.__B)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine2.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');

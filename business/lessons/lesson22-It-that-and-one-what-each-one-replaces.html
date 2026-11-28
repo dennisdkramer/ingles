@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>business · Lesson 22 — English Opens Doors</title>
-<link rel="stylesheet" href="../../style.css?v=113c17666f">
+<link rel="stylesheet" href="../../style.css?v=38a45a0444">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="../../logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>BUSINESS <span>LESSON 22</span></h1>
@@ -165,26 +165,7 @@
 </span>
 </label>
 </div>
-<script>
-(function(){
-var B=document.currentScript.closest('#flip')||document.currentScript.parentElement,A=B.querySelector('.flip-ask'),
-C=[].slice.call(B.querySelectorAll('.flip')),P=[],T=-1,done=0,
-M=C.map(function(c){return c.querySelector('.back').textContent.replace(/\s+/g,' ').trim();});
-function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
-function next(){if(!P.length)P=sh(C.map(function(_,i){return i;}));T=P.pop();A.textContent=M[T];}
-function clear(){C.forEach(function(c){c.querySelector('input').checked=false;c.querySelector('.back').style.background='';});done=0;}
-C.forEach(function(c,i){c.addEventListener('click',function(e){
-e.preventDefault();
-if(done)return;
-c.querySelector('input').checked=true;
-c.querySelector('.back').style.background='color-mix(in oklab, var('+(i===T?'--ok':'--err')+') 26%, var(--paper))';
-if(i!==T)return;
-done=1;
-setTimeout(function(){clear();next();},4000);
-});});
-next();
-})();
-</script>
+
 </div>
 
 
@@ -224,7 +205,7 @@ next();
 <div class="block" data-look="stripes" data-activity="map">
 <h3>Find the one the sentence means</h3>
 <p>Each sentence names a place by where it is, and the word <b>one</b> stands for that place. Read the map, then write the name that is on the place's own sign.</p>
-<div class="vz-map viz">
+<div class="vz-map">
   <svg viewBox="0 0 360 240" width="100%" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, with nine places, each named on a sign in the drawing — a station with a canopy and a platform clock, a café with a striped awning and two tables outside, a park with trees behind railings, a bank with a columned front and steps, a library with tall windows, a post office with a postbox on the pavement, a bus stop with a shelter and a bench, a market with two stalls, and a hotel with a door canopy">
   <!-- MAP GEOMETRY — THE ONE TABLE. The drawing below and every tick a lesson lays over it read
        from these numbers, so a tick can never sit off its building.
@@ -553,7 +534,7 @@ next();
 <p lang="pt">Peça a palavra, não a frase: <b>sorry, the what?</b> Para o sujeito: <b>who moved what?</b> O resto da frase já foi ouvido e não precisa ser repetido.</p>
 </div>
 <div>
-<ol class="seq viz" data-mode="turns">
+<ol class="seq" data-mode="turns">
 <li data-side="left"><span class="who">Jess</span><span class="say">They moved the date to the thirty-first.</span></li>
 <li data-side="right"><span class="who">Bruno</span><span class="say">Wait, who moved what?</span></li>
 <li data-side="left"><span class="who">Jess</span><span class="say">The client moved the date. Not us.</span></li>
@@ -566,7 +547,7 @@ next();
 <div class="block" data-look="stripes" data-activity="dialoggap">
 <h3>Ask for the word you missed</h3>
 <p>Write the missing word in each reply. One word in each gap.</p>
-<ol class="seq viz" data-mode="turns">
+<ol class="seq" data-mode="turns">
 <li data-side="left"><span class="who">Jess</span><span class="say">Ana forwarded the quote on Monday.</span></li>
 <li data-side="right"><span class="who">Bruno</span><span class="say" style="position:relative"><span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px">1.</span>Sorry, the <input class="gap" data-answer="what" style="--gap-w:3.9em" name="a5a1"> now?</span></li>
 <li data-side="left"><span class="who">Jess</span><span class="say">The quote. The price on the new contract.</span></li>
@@ -624,7 +605,7 @@ next();
 <p>Before you press play, decide: in <b>I want it that way</b>, is <b>it</b> a thing you could hold, or something already said?</p>
 <p>Listen once. Then read the line and look at the two replacements in it: <b>it</b> stands for the thing already named, and <b>that way</b> stands for the way already described. Neither word adds information; both keep the sentence from repeating it.</p>
 <p>The last line of the clip says the same sentence with a word in front — <b>That I want it that way</b> — and the only addition is <i>that</i>, which refers to what was said before it. The two replacement words keep the sentence short: neither the thing nor the way is named again.</p>
-<figure class="vz-play viz">
+<figure class="vz-play">
 <h4>Backstreet Boys - I Want It That Way</h4>
 <p class="dim">Backstreet Boys</p>
   <audio class="vz-audio" src="../../assets/thatway.mp3" data-duration="28.59" controls="" preload="metadata"></audio>
@@ -755,8 +736,9 @@ const SECRET="abreportas2025", TRACK="business", L=22;
 <script src="../../engine1.js"></script>
 <script src="../../engine2.js"></script>
 <script src="../../engine4.js"></script>
+<script src="../../engine5.js"></script>
 <script src="../../player.js"></script>
-<script src="../../equalize.js?v=48367f628d"></script>
+<script src="../../equalize.js?v=2296e2f6a2"></script>
 <script>
 if(!window.__A)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine1.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');
 else if(!window.__B)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine2.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');

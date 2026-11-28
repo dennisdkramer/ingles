@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>business · Lesson 7 — English Opens Doors</title>
-<link rel="stylesheet" href="../../style.css?v=113c17666f">
+<link rel="stylesheet" href="../../style.css?v=38a45a0444">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="../../logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>BUSINESS <span>LESSON 7</span></h1>
@@ -96,7 +96,7 @@
 <p class="dim">In an email write <i>want to</i>. <b>wanna</b> belongs to the call, the chat and the corridor.</p>
 </div>
 <div style="min-width:calc(33% - 13px)">
-<ol class="seq viz" data-mode="turns">
+<ol class="seq" data-mode="turns">
 <li data-side="left"><span class="who">Ana</span><span class="say">Do you wanna check the numbers before the call?</span></li>
 <li data-side="right"><span class="who">Mike</span><span class="say">I wanna look at one thing first.</span></li>
 <li data-side="left"><span class="who">Ana</span><span class="say">And Paulo?</span></li>
@@ -109,7 +109,7 @@
 <div class="block" data-look="stripes" data-activity="dialoggap">
 <h3>Fill the gaps in the call</h3>
 <p class="dim">Write the form the subject allows.</p>
-<ol class="seq viz" data-mode="turns">
+<ol class="seq" data-mode="turns">
 <li data-side="left"><span class="who">Ana</span><span class="say" style="position:relative"><span class="qnum" style="position:absolute;left:calc(100% + 8px);top:2px">1.</span>Do you <input class="gap" data-answer="wanna" style="--gap-w:4.9em"> see the new numbers?</span></li>
 <li data-side="right"><span class="who">Mike</span><span class="say" style="position:relative"><span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px">2.</span>I <input class="gap" data-answer="wanna" style="--gap-w:4.9em"> check one thing first.</span></li>
 <li data-side="left"><span class="who">Ana</span><span class="say">And Paulo?</span></li>
@@ -282,26 +282,7 @@
 </span>
 </label>
 </div>
-<script>
-(function(){
-var B=document.currentScript.closest('#flip'),A=B.querySelector('.flip-ask'),
-C=[].slice.call(B.querySelectorAll('.flip')),P=[],T=-1,done=0,
-M=C.map(function(c){return c.querySelector('.back').textContent.replace(/\s+/g,' ').trim();});
-function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
-function next(){if(!P.length)P=sh(C.map(function(_,i){return i;}));T=P.pop();A.textContent=M[T];}
-function clear(){C.forEach(function(c){c.querySelector('input').checked=false;c.querySelector('.back').style.background='';});done=0;}
-C.forEach(function(c,i){c.addEventListener('click',function(e){
-e.preventDefault();
-if(done)return;
-c.querySelector('input').checked=true;
-c.querySelector('.back').style.background='color-mix(in oklab, var('+(i===T?'--ok':'--err')+') 26%, var(--paper))';
-if(i!==T)return;
-done=1;
-setTimeout(function(){clear();next();},4000);
-});});
-next();
-})();
-</script>
+
 </div>
 
 <h2>The reduction you hear is wanna, and the verb stays base</h2>
@@ -309,7 +290,7 @@ next();
 <div class="block">
 <h3>One line, said twice: wanna is want to</h3>
 <p>Before you press play: the singer repeats one short line. Will you hear <b>want to</b> or <b>wanna</b>? Listen once for the sound, then read the words under the player.</p>
-<figure class="vz-play viz">
+<figure class="vz-play">
 <h4>I Wanna Hold Your Hand</h4>
 <p class="dim">The Beatles</p>
   <audio class="vz-audio" src="../../assets/iwannahold.mp3" data-duration="11.90" controls preload="metadata"></audio>
@@ -434,9 +415,10 @@ const SECRET="abreportas2025", TRACK="business", L=7;
 <script src="../../engine1.js"></script>
 <script src="../../engine2.js"></script>
 <script src="../../engine4.js"></script>
+<script src="../../engine5.js"></script>
 <!-- BLOCK SCRIPTS ARE DECLARED BY THE HEADER OF THE CSS THEY USE -->
 <script src="../../player.js"></script>
-<script src="../../equalize.js?v=48367f628d"></script>
+<script src="../../equalize.js?v=2296e2f6a2"></script>
 <script>
 if(!window.__A)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine1.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');
 else if(!window.__B)document.body.insertAdjacentHTML("afterbegin",'<div style="background:#a33327;color:#fff;padding:10px;text-align:center;font:600 14px system-ui">⚠ engine2.js não carregou — confira se o arquivo existe na raiz e está completo.</div>');

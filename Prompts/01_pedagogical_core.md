@@ -41,6 +41,8 @@ Modulate the language of your explanations based on `track_ledger.json`:
 - **The training is yours.** For each section decide what must become automatic and what the student will say instead, then write the activity where it trains that — inline under the section it teaches, or in a closing quiz when the lesson wants one.
   - Why a thing is trained is one of four: **difficulty** (rare or irregular — examples are enough, do not drill it), **selection** (two known forms compete and the right one must come out without a pause), **interference** (Portuguese offers a form English does not), **chunk** (it must leave the mouth assembled — contractions, *get up*, *I'd rather*).
 - **A dialog is not required, and a lesson is better with one where the grammar lives in a conversation.** The student and the teacher read it together, and turn-taking, register and rhythm appear in context — which no single-sentence item tests. A dialog's gaps make it the training.
+- **Flash cards are for the set whose meaning must arrive instantly** — a vocabulary lesson, a set of idioms, a family of irregular forms. Where the lesson's target is a form instead of a word, the cards have nothing to hold and are left out.
+- **A block is opened when the teaching fills it.** One or two questions join a block that already holds content; a set of six to ten earns a block of its own.
 - **An item never introduces vocabulary the lesson has not taught.** Difficulty is the student's, not yours: an early lesson trains few things slowly, a late one trains many and fast.
 - **Training is thorough and the student should be comfortable and well-practiced with the lesson concepts and vocabulary when they finish.**
 
