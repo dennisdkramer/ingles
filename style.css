@@ -1105,26 +1105,6 @@
     border:2px solid var(--accent);z-index:1}
 }
 
-/* #52 GRID — data-structure="grid" > <table> with <thead> and optional <caption>; tr.note = remark row. Vary: --row-h (length) */
-@layer structure{
-  .block[data-structure="grid"] table{width:100%;border-collapse:separate;border-spacing:0;
-    font-size:1rem}
-  .block[data-structure="grid"] caption{caption-side:top;text-align:left;
-    font:600 .88rem var(--sans);letter-spacing:.05em;text-transform:uppercase;
-    color:var(--ink-2);padding:0 0 7px}
-  .block[data-structure="grid"] th{font:700 .88rem var(--sans);letter-spacing:.07em;
-    text-transform:uppercase;color:var(--ink-2);text-align:left;padding:8px 11px;
-    background:var(--accent-soft);border-bottom:2px solid var(--accent-line);white-space:nowrap}
-  .block[data-structure="grid"] th:first-child{border-radius:var(--r1) 0 0 0}
-  .block[data-structure="grid"] th:last-child{border-radius:0 var(--r1) 0 0}
-  .block[data-structure="grid"] td{padding:9px 11px;border-bottom:1px solid var(--line-2);
-    height:var(--row-h,auto);vertical-align:top;text-align:left}
-  .block[data-structure="grid"] tbody tr:nth-child(even) td{
-    background:color-mix(in oklab,var(--accent) 4%,transparent)}
-  .block[data-structure="grid"] tbody tr:last-child td{border-bottom:0}
-  .block[data-structure="grid"] tr.note td{font-size:.88em;color:var(--ink-2);
-    background:var(--sunken);border-radius:0 0 var(--r1) var(--r1)}
-}
 
 /* #53 PAIR — data-structure="pair" > .sides > 2x .side, the same child count in each (subgrid rows).
      USE: two languages, or two versions, of one sentence. Vary: --pair-rows */
