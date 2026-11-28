@@ -1740,7 +1740,7 @@ p:has(>input.gap:only-child){text-align:center}
      tall) plus the spacing that separates it from the frame. A page built while a figure still wrapped the
      chart keeps its inset on the figure; a chart standing bare takes the room from its own cell. */
   .chartwrap:has(th.vlab){padding-inline-start:48px}
-  .rows>div:has(.chart>tbody>tr>th.vlab){padding-inline-start:48px}
+  .rows>div:has(>.chart>tbody>tr>th.vlab){padding-inline-start:48px}
   .chart th.vlab{width:0;padding:0;border:0;background:none;position:relative}
   .chart th.vlab>span{position:absolute;right:100%;top:0;bottom:0;display:grid;place-items:center;
     writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;padding-right:10px;

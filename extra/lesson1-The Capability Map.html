@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Extra · Lesson 1 — The Capability Map</title>
-<link rel="stylesheet" href="../style.css?v=38a45a0444">
+<link rel="stylesheet" href="../style.css?v=bf2b6833e2">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="../logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>EXTRA <span>DEMO 1</span></h1>
@@ -48,6 +48,10 @@
      and the rules the drawing does not show. Open that box when you choose the element, and not
      before — the drawing is what builds the page, and the box is what you check the build against.
      A drawing's comment is its label, never part of it: the token, and what the element is for.
+
+     A FRAME BELONGS TO THE ELEMENT. Where a drawing needs an edge — the map, the player, a dialog —
+     the border is declared on that element in the markup, so the ring never grows past what it wraps
+     and never becomes a container of its own. No wrapper figure, and no painted frame in the sheet.
 
      IN A BLOCK OR OUT OF ONE. An element stands free when it is what the passage is about — the
      player, a map, a chart with its own prose beside it. It goes in a block when it needs a
@@ -136,7 +140,7 @@
 
 <!-- #audio · a song's own words, heard and read at once -->
 
-</div><div class="rows"><div><div class="rows"><div><figure class="vz-play is-enhanced">
+</div><div class="rows"><div><div class="rows"><div><figure class="vz-play is-enhanced" style="border:2px solid var(--tan);border-radius:3px;padding:10px 12px">
 <h4>Take Me Home, Country Roads</h4>
 <p class="dim">John Denver, 1971</p>
 <audio class="vz-audio" src="../assets/country-roads.mp3" data-duration="29.71" controls preload="metadata"></audio>
@@ -256,7 +260,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <details class="reveal" open id="markup-map"><summary>Markup — #map · a town drawn once, so places and routes have somewhere to point · the drawing, and the same drawing as a question</summary><div class="body"><div>
 <pre>&lt;!-- as a display: copy this drawing whole — this viewBox, these two roads and two lanes, all nine
      places and the map-geometry table — and write nothing inside the svg. --&gt;
-&lt;div class="vz-map"&gt;
+&lt;div class="vz-map" style="border:2px solid var(--tan);border-radius:3px"&gt;
   &lt;svg viewBox="0 0 360 240" role="img"
        aria-label="everything the drawing shows, named"&gt;…the same drawing, all nine places…&lt;/svg&gt;
 &lt;/div&gt;</pre>
@@ -265,7 +269,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 &lt;div class="block" data-look="stripes"&gt;
   &lt;div class="qitem" data-a="bank"&gt;
     &lt;p class="qstem"&gt;any text that points at one place&lt;/p&gt;
-    &lt;div class="vz-map"&gt;
+    &lt;div class="vz-map" style="border:2px solid var(--tan);border-radius:3px"&gt;
       &lt;svg viewBox="0 0 360 240" …&gt;…the same drawing, all nine places…&lt;/svg&gt;
       &lt;div class="qopts"&gt;
         &lt;label class="opt" style="position:absolute;left:16%;top:27.75%;
@@ -283,7 +287,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 </div></div></details>
 
 <details class="reveal" open id="markup-audio"><summary>Markup — #audio · a song's own words, heard and read at once · the player, the timed lyrics, and the credit line</summary><div class="body"><div>
-<pre>&lt;figure class="vz-play"&gt;
+<pre>&lt;figure class="vz-play" style="border:2px solid var(--tan);border-radius:3px;padding:10px 12px"&gt;
   &lt;h4&gt;the song's own name&lt;/h4&gt;
   &lt;p class="dim"&gt;the performer&lt;/p&gt;
   &lt;audio class="vz-audio" src="../../assets/&lt;name&gt;.mp3" data-duration="35.87"
@@ -306,7 +310,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 &lt;/figure&gt;
 
 &lt;!-- no usable recording: the same figure, the player swapped for a link and the lyrics written out --&gt;
-&lt;figure class="vz-play"&gt;
+&lt;figure class="vz-play" style="border:2px solid var(--tan);border-radius:3px;padding:10px 12px"&gt;
   &lt;h4&gt;the song's own name&lt;/h4&gt;
   &lt;p class="dim"&gt;the performer&lt;/p&gt;
   &lt;p&gt;&lt;a href="https://…"&gt;hear it online — the quoted line starts at 0:42&lt;/a&gt;&lt;/p&gt;
@@ -319,7 +323,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <p class="dim"><code>data-t</code> and <code>data-duration</code> come from <code>qa/audio.mjs</code>, never typed by eye. The song's own name is the <code>h4</code>, the performer the credit line under it. <b>Ship the same figure without the player when the song has no usable recording</b>: the link carries the time the quoted line starts, the lyrics are written out with no <code>data-t</code> because nothing plays, and the credit line under the link says where the song came from.</p>
 </div></div></details>
 <details class="reveal" open id="markup-dialog"><summary>Markup — #dialog · a conversation the lesson writes, each line on its speaker's side · the turn list</summary><div class="body"><div>
-<pre>&lt;ol class="seq" data-mode="turns"&gt;
+<pre>&lt;ol class="seq" data-mode="turns" style="width:100%;border:2px solid var(--tan);border-radius:3px;padding:10px 12px"&gt;
   &lt;li data-side="left"&gt;&lt;span class="who"&gt;Jess&lt;/span&gt;&lt;span class="say"&gt;Did you post it?&lt;/span&gt;&lt;/li&gt;
   &lt;li data-side="right"&gt;&lt;span class="who"&gt;Mike&lt;/span&gt;&lt;span class="say"&gt;Three times.&lt;/span&gt;&lt;/li&gt;
 
@@ -419,12 +423,12 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 
 
 
-</div><div class="rows"><div><div class="rows"><div><div class="rows"><div><div class="block" data-look="stripes">
+</div></div></div><div class="rows"><div><div class="block" data-look="stripes">
 <h3>Street map</h3>
 <!-- #map · a town drawn once, so places and routes have somewhere to point -->
 <div class="rows"><div><div class="qitem" data-a="post office">
 <p class="qstem" style="text-align:center">Name the place where you post a letter.</p>
-<div class="vz-map">
+<div class="vz-map" style="border:2px solid var(--tan);border-radius:3px">
 <svg viewBox="0 0 360 240" role="img" aria-label="a street map: High Street and Low Street crossed by Mill Lane and Park Lane, with nine places, each named on a sign in the drawing — a station with a canopy and a platform clock, a café with a striped awning and two tables outside, a park with trees behind railings, a bank with a columned front and steps, a library with tall windows, a post office with a mailbox on the sidewalk, a bus stop with a shelter and a bench, a market with two stalls, and a hotel with a door canopy">
   <!-- MAP GEOMETRY — THE ONE TABLE. Every number in this drawing, and every tick a lesson lays over it,
        is read from this table, so a tick can never sit off its building.
@@ -667,7 +671,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <div class="rows"><div><div class="block" data-look="stripes">
 <h3>Dialog with a gap</h3>
 <!-- #dialoggap · answering inside a conversation the lesson wrote -->
-<div class="rows"><div><ol class="seq" data-mode="turns" style="text-align:center;margin-inline:auto">
+<div class="rows"><div><ol class="seq" data-mode="turns" style="text-align:center;margin-inline:auto;width:100%;border:2px solid var(--tan);border-radius:3px;padding:10px 12px">
 <li data-side="left"><span class="who">Jess</span><span class="say">Did you post the letter?</span></li>
 <li data-side="right"><span class="who">Mike</span><span class="say" style="position:relative"><span class="qnum" style="position:absolute;right:calc(100% + 8px);top:2px">1.</span>Three times. I <input class="gap" data-answer="have|'ve" style="--gap-w:3.5em"> already posted it.</span></li>
 <li data-side="left"><span class="who">Jess</span><span class="say">Then why is it still on the table?</span></li>
@@ -756,8 +760,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 </table></div></div>
 </div></div></div>
 
-</div></div></div></div></div></div>
-
+<details
 
 <details class="reveal" open id="markup-controls"><summary>Markup — every activity · the rules every control obeys: its name is its key, one number per control, progress on the block · read before any activity's own box</summary><div class="body"><div>
 <pre>&lt;!-- READ THIS BEFORE AN ACTIVITY'S OWN BOX: these rules hold for every control in every activity --&gt;
