@@ -40,6 +40,9 @@
     --ink-2:#5c5347; --line:var(--rose); --line-2:#e7dbc9; --dim:#6b6154; --lead:#5c5347;
     --h3-ink:oklch(38% .03 250);
     --para-gap:8px; --level-gap:20px; --cell-gap:14px;
+    /* the air above a frame's headline: the level gap less 10px, so a block's headline sits 24px from the
+       block's top edge (2px rule + 12px padding + this) and reads as the block's title, not its first line */
+    --headline-gap:calc(var(--level-gap) - 10px);
     --teach-h:65; --train-h:28; --show-h:350; --game-h:96;
     /* the word-mark colours for #94 POS. Loud on purpose: these marks carry meaning, so they are
        the one place a cool hue is allowed to appear in the warm scheme. Change a mark's colour here. */
@@ -1345,9 +1348,9 @@ p:has(>input.gap:only-child){text-align:center}
     clip-path:polygon(3% 0,100% 7%,96% 100%,0 92%)}
 
   .block[data-look="float"]{background:transparent;border-color:transparent;
-    border-top-color:transparent;box-shadow:none;padding:0 10px}
-  /* an intro is text under the section rule, not a frame: it keeps the 10px inset and nothing else, so the
-     space above and below it is the page's own row gap rather than a frame's padding */
+    border-top-color:transparent;box-shadow:none}
+  /* an intro is text under the section rule, not a frame: it takes no border, no fill and no shadow, and
+     keeps the frame's own inner padding, so its text sits exactly where every other block's text sits */
   .block[data-look="float"]>:first-child{margin-top:0}
 
   /* the top rule is the only place a look spends colour, and only the top edge changes:
@@ -3205,6 +3208,10 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
   .content-area>:not(h1):not(h2){margin-block:0}
   /* level 2: a frame's children */
   :is(.block,.panel,.card,.dialog)>*{margin-block:var(--level-gap) 0}
+  /* THE HEADLINE'S AIR IS ITS OWN, AND SHORTER THAN A PARAGRAPH'S. A title sits 10px closer to the frame's
+     top edge than the first line of body text sits to it, in every frame and on every page — the one gap
+     that is a title's rather than a block's. */
+  :is(.block,.panel,.card,.dialog)>h3:first-child{margin-block-start:var(--headline-gap)}
   /* level 3: a cell's children; the first starts flush and a field stays with its question */
   .rows>div>*{margin-block:var(--cell-gap) 0}
   .rows>div>:first-child{margin-block-start:0}
@@ -3212,7 +3219,7 @@ html.kbd .g4-tcard:focus-visible{outline:3px solid var(--tan);outline-offset:2px
      above starts a cell flush, but when the cell IS the block its first child is the headline inside
      the frame, and that air is the frame's own --level-gap — the same height a block gets when it sits
      inside a cell. Without this, the same headline sat 20px higher on a block that was its own cell. */
-  .rows>.block>h3:first-child{margin-block-start:var(--level-gap)}
+  .rows>.block>h3:first-child{margin-block-start:var(--headline-gap)}
   :is(.block,.panel,.card,.dialog)>:is(input,textarea,select,button),
   .rows>div>:is(input,textarea,select,button){margin-block-start:0}
   /* THE THIRD LEVEL ADDS NOTHING. Three `.rows` in a chain is a third-level row, so its cells'
