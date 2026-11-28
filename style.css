@@ -1786,9 +1786,9 @@ p:has(>input.gap:only-child){text-align:center}
   /* the label column draws nothing at all: no cell, no border where it meets the data, so the chart's own
      frame is the only line at its left edge */
   .chart:has(>tbody>tr>th.vlab) tbody td:first-of-type{border-left:0}
-  /* the label column draws nothing at all: no cell, no border where it meets the data, so the chart's own
-     frame is the only line at its left edge */
-  .chart:has(>tbody>tr>th.vlab) tbody td:first-of-type{border-left:0}
+  /* THE VOCABULARY CHART IS AS WIDE AS ITS ITEMS. Every other chart fills its cell; this one is a thin
+     list, so it takes the width of the words in it and leaves the rest of the row to its neighbour. */
+  .chart:has(>tbody>tr>th.vlab){width:auto;max-width:100%}
   /* a merged row that divides a chart into sections rather than naming a column */
   .chart tr.grp th{background:color-mix(in srgb,var(--tan) 26%,var(--paper));color:var(--ink);
     font-weight:700;font-size:.88em;letter-spacing:normal;text-transform:none;text-align:center}

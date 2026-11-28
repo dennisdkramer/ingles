@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-eq><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Extra · Lesson 1 — The Capability Map</title>
-<link rel="stylesheet" href="../style.css?v=113c17666f">
+<link rel="stylesheet" href="../style.css?v=1f09001c71">
 </head><body>
 <div id="toast"></div>
 <header class="brand"><img src="../logo.png" onerror="this.outerHTML='<div class=logoFallback>🐕‍</div>'"><h1>EXTRA <span>DEMO 1</span></h1>
@@ -90,18 +90,20 @@
 <div class="rows">
 
 
-<div><p><b><code>&lt;th class="vlab" rowspan="2"&gt;</code></b> — when the table holds two or more families and the word naming each must stand outside the frame. <b>Not for</b> one family: a label that names the only thing in the table repeats the sentence beside it.</p></div><div><table class="chart">
+<div><p><b><code>&lt;th class="vlab" rowspan="3"&gt;</code></b> — when the table holds two or more families and the word naming each must stand outside the frame; <b>the rowspan is how many items that family holds</b>, so it changes with the list. <b>Not for</b> one family: a label that names the only thing in the table repeats the sentence beside it. <b>It goes in a <code>figure.chartwrap</code></b>: the wrapper's own padding is the room the label stands in.</p></div><div><figure class="chartwrap"><table class="chart">
 <tbody>
 <tr class="bare"><th colspan="3"></th></tr>
-<tr><th class="vlab" rowspan="2"><span>Regular</span></th><td>walk</td><td>walked</td></tr>
+<tr><th class="vlab" rowspan="3"><span>Regular</span></th><td>walk</td><td>walked</td></tr>
 <tr><td>call</td><td>called</td></tr>
+<tr><td>start</td><td>started</td></tr>
 </tbody>
 <tbody>
 <tr class="bare"><th colspan="3"></th></tr>
-<tr><th class="vlab" rowspan="2"><span>Irregular</span></th><td>go</td><td>went</td></tr>
+<tr><th class="vlab" rowspan="3"><span>Irregular</span></th><td>go</td><td>went</td></tr>
 <tr><td>take</td><td>took</td></tr>
+<tr><td>buy</td><td>bought</td></tr>
 </tbody>
-</table></div></div>
+</table></figure></div></div>
 <div class="rows">
 <!-- #chart · many items that share columns, read as a set -->
 
@@ -123,7 +125,7 @@
 <tbody>
 <tr><td><b>clocked in</b></td><td><span class="qnum">1.</span> <input class="gap" data-answer="c" style="--gap-w:3em"></td></tr>
 <tr><td><b>spilled the tea</b></td><td><span class="qnum">2.</span> <input class="gap" data-answer="a" style="--gap-w:3em"></td></tr>
-<tr><td><b>threw shade</b></td><td><span class="qnum">3.</span> <input class="gap" data-answer="e" style="--gap-w:3em"></td></tr>
+<tr><td><b>threw shade</b></td><td><span class="qnum">3.</span> <input class="gap" data-answer="d" style="--gap-w:3em"></td></tr>
 <tr><td><b>bailed</b></td><td><span class="qnum">4.</span> <input class="gap" data-answer="b" style="--gap-w:3em"></td></tr>
 </tbody>
 </table>
@@ -134,8 +136,7 @@
 <li><b>a</b> shared the gossip</li>
 <li><b>b</b> got out of a situation</li>
 <li><b>c</b> recorded the time you got to work</li>
-<li><b>d</b> paid for everyone</li>
-<li><b>e</b> insulted someone indirectly</li>
+<li><b>d</b> insulted someone indirectly</li>
 </ul></div></div>
 </div>
 </div>
@@ -813,7 +814,10 @@ next();
      Name every control --&gt;
 &lt;!-- A BLOCK REPORTS ITS OWN PROGRESS: data-state="done" on its .block is the sheet's green frame,
      written when every question in the block has an answer and taken away when one is emptied. A
-     teaching block holds no control and never reports --&gt;</pre>
+     teaching block holds no control and never reports --&gt;
+&lt;!-- AN ITEM MAY SIT INSIDE A CHART: any activity item — a gap, a radio pair, a checkbox pair — can be one
+     of a chart's rows where the shared columns are what the student has to read it against. The row
+     holds the item with its control, and the table stays the frame --&gt;</pre>
 </div></div></details>
 
 <div class="rows markup-row">
@@ -885,7 +889,7 @@ next();
 &lt;!-- the set's layout follows the length of its options: data-layout="row" for one- and two-word
      options, data-layout="grid" style="--cols:2" for three- and four-word options --&gt;</pre>
 </div></div></details>
-<details class="reveal" open id="markup-matching"><summary>Markup — #matching · pairing each item with its meaning from one shared pool · the items, the pool, and one meaning too many</summary><div class="body"><div>
+<details class="reveal" open id="markup-matching"><summary>Markup — #matching · pairing each item with its meaning from one shared pool · the items and the pool</summary><div class="body"><div>
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;
     &lt;figure class="chartwrap"&gt;&lt;table class="chart"&gt;
@@ -898,7 +902,6 @@ next();
 &lt;/div&gt;
 
 &lt;!-- the pool of letters is visible beside the items, and that shared pool is what makes it matching --&gt;
-&lt;!-- one meaning more than there are items, so the last answer cannot be reached by elimination --&gt;
 &lt;!-- the phrases are in a full shuffle: no row's letter is the meaning at that row's place in the pool,
      and one swapped pair is not a shuffle — the whole order is re-dealt --&gt;
 &lt;!-- each .gap keys the letter it expects --&gt;</pre>
