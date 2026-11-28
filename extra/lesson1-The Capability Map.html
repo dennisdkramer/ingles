@@ -90,9 +90,9 @@
 <tr><td><b>lend</b></td><td>give something, get it back later</td><td>one Portuguese word for both directions</td></tr>
 <tr><td><b>owe</b></td><td>still have to give it back</td><td><span lang="pt">dever</span> also means <i>must</i></td></tr>
 </tbody>
-</table></div><div><p><b><code>&lt;tr class="bare"&gt;</code></b> — Table headings are authored only when the student will need them to understand the table contents. By default, the row is <b>collapsed to a 3px</b> top edge, not deleted.</p></div></div>
+</table></div></div>
 
-<div class="rows"><div><p><b><code>&lt;th class="vlab" rowspan="3"&gt;</code></b> — when the table holds two or more families and the word naming each must stand outside the frame; <b>the rowspan is how many items that family holds</b>, so it changes with the list. <b>Not for</b> one family: a label that names the only thing in the table repeats the sentence beside it. <b>The chart's own cell gives the label its room</b> — 48px of the cell's padding, and no wrapper around the table.</p></div><div><table class="chart">
+<div class="rows"><div><table class="chart">
 <tbody>
 <tr class="bare"><th colspan="3"></th></tr>
 <tr><th class="vlab" rowspan="3"><span>Regular</span></th><td>walk</td><td>walked</td></tr>
@@ -249,7 +249,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
     …
   &lt;/tbody&gt;
 &lt;/table&gt;</pre>
-<p class="dim">A chart carries no title of its own: the sentence beside it names it, and the chart wears no frame but its own. <code>th.vlab</code> puts a family label outside that frame, and the cell the chart stands in gives it the room. <code>tr.bare</code> collapses a nameless header row to a rule; <code>tr.note</code> is one remark row across the chart. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each.</p>
+<p class="dim">A chart carries no title of its own: the sentence beside it names it, and the chart wears no frame but its own. <code>tr.bare</code> collapses a nameless header row to a <b>3px</b> rule, never deleted — headings are authored only where the student needs them to read the table. <code>th.vlab</code> puts a family label outside the frame: only where the table holds <b>two or more families</b>, <code>rowspan</code> counting that family's own items, so it changes with the list; never for a single family, where the label only repeats the sentence beside it. The cell the chart stands in gives the label its 48px. <code>tr.note</code> is one remark row across the chart. <code>data-structure="pair"</code> &gt; <code>.sides</code> &gt; two <code>.side</code>, the same number of children in each.</p>
 <pre>&lt;div class="rows"&gt;
   &lt;div&gt;…the sentence, and the chart it reads…&lt;/div&gt;
   &lt;div&gt;
@@ -951,22 +951,22 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 <div>
 <div class="block">
 <h3>The Games</h3>
-<div class="rows"><div><div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><b>Don’t add a game just to have one.</b> A game is a skin over an activity the lesson already wanted: the activity is chosen first, and a reskinned game is that activity in another skin, never an element of its own. Use one only where it is materially better than the plain activity.</p></div></div><div class="rows"><div><p class="dim" style="text-align: center; margin-left: auto; margin-right: auto;">A <code>.game</code> draws its own edge, so it stands at page level and is never put inside a <code>.block</code>. Every game reads the same content — <code>.game-list &gt; .qitem</code>, each with a <code>.qstem</code> and radio options, <code>data-a</code> marking the right one — so that list is what prints and what the student answers if the script never runs; <code>data-game</code> chooses only the presentation, never the content. A game in a quiz section carries <code>data-retry="0"</code>; a training game carries nothing. <b>A <code>.listen</code> in the item's stem makes the round SPOKEN</b>: the runner says its <code>data-say</code> on the frame the round opens and keeps a 🔊 replay on the HUD, so a game can ask "which word did you hear?" — <code>data-sound="0"</code> mutes both, and <code>bingoCard</code> is the one presentation that times its own clip and is left alone.</p></div></div><div class="rows"><div><table class="chart">
+<div class="rows"><div><div class="rows"><div><p style="text-align: center; margin-left: auto; margin-right: auto;"><b>Don’t add a game just to have one.</b> A game is a skin over an activity the lesson already wanted: the activity is chosen first, and a reskinned game is that activity in another skin, never an element of its own. Use one only where it is materially better than the plain activity.</p></div></div><div class="rows"><div><p class="dim" style="text-align: center; margin-left: auto; margin-right: auto;">A <code>.game</code> draws its own edge, so it stands at page level and is never put inside a <code>.block</code>. Every game reads the same content — <code>.game-list &gt; .qitem</code>, each with a <code>.qstem</code> and radio options, <code>data-a</code> marking the right one — so that list is what prints and what the student answers if the script never runs; <code>data-game</code> chooses only the presentation, never the content. A game in a quiz section carries <code>data-retry="0"</code>; a training game carries nothing. <b>A <code>.listen</code> in the item's stem makes the round SPOKEN</b>: the runner says its <code>data-say</code> on the frame the round opens and keeps a 🔊 replay on the HUD, so a game can ask "which word did you hear?" — <code>data-sound="0"</code> mutes both, and <code>bingoCard</code> is the one presentation that times its own clip and is left alone.</p></div></div><div class="rows"><div><p class="dim" style="text-align: center; margin-left: auto; margin-right: auto;"><b>Five of these are built but held back:</b> a row marked <b>not available yet</b> must be updated before any lesson uses it; the eight that remain are ready to choose.</p></div></div><div class="rows"><div><table class="chart">
 <thead><tr><th><code>data-game</code></th><th>What it is good for</th><th>The markup it needs</th></tr></thead>
 <tbody>
 <tr><td><code>skeetRange</code></td><td>telling the right word from near misses, fast: every option is a target thrown across the range</td><td><code>.qitem</code> per item, 2–4 options; <code>data-a</code>; <code>data-time</code> is both the deadline and the flight time (0 = no clock)</td></tr>
 <tr><td><code>whackMole</code></td><td>recognition under a clock, one option per mole, hit before it ducks</td><td><code>.qitem</code> per item, one option per mole; <code>data-time</code></td></tr>
-<tr><td><code>catchBasket</code></td><td>**IGNORE** sorting: each card dragged into the pot it belongs in, and a right one grows a flower</td><td><code>.qitem</code> per card, the pots are the option labels or <code>data-buckets="left|right"</code></td></tr>
-<tr><td><code>stackDrop</code></td><td>**IGNORE** telling the right phrase from the wrong one, built into a tower that reaches a roof</td><td>6–10 <code>.qitem</code>, options are the blocks; <code>data-time</code> per block</td></tr>
-<tr><td><code>flapGate</code></td><td>**IGNORE** choice at speed: fly through the gap whose meaning fits the clue — the wall is the clock</td><td><code>.qitem</code> per item, one option per gap; <code>data-time</code> is not used</td></tr>
+<tr><td><code>catchBasket</code></td><td>sorting: each card dragged into the pot it belongs in, and a right one grows a flower <b>not available yet</b></td><td><code>.qitem</code> per card, the pots are the option labels or <code>data-buckets="left|right"</code></td></tr>
+<tr><td><code>stackDrop</code></td><td>telling the right phrase from the wrong one, built into a tower that reaches a roof <b>not available yet</b></td><td>6–10 <code>.qitem</code>, options are the blocks; <code>data-time</code> per block</td></tr>
+<tr><td><code>flapGate</code></td><td>choice at speed: fly through the gap whose meaning fits the clue — the wall is the clock <b>not available yet</b></td><td><code>.qitem</code> per item, one option per gap; <code>data-time</code> is not used</td></tr>
 <tr><td><code>mineGrid</code></td><td>one answer per item among four doors; three snakes end the run</td><td>one <code>.qitem</code> per question, <b>exactly four</b> options</td></tr>
 <tr><td><code>wordleBoard</code></td><td>spelling a word letter by letter with feedback, from its clue</td><td><code>data-answer="&lt;word&gt;"</code> per item plus <code>.qstem</code>; <code>data-lives</code> (2)</td></tr>
 <tr><td><code>crosswordBoard</code></td><td>a set of words that cross, each clued — the letters are shared</td><td><code>data-answer="&lt;word&gt;"</code> on every item plus <code>.qstem</code></td></tr>
-<tr><td><code>echoPads</code></td><td>**IGNORE** building one sentence word by word, each word chosen from pads</td><td><code>data-first</code> the opening, <code>data-lives</code> (3), one <code>.qitem</code> per word, four single-word pads, order is the sentence</td></tr>
+<tr><td><code>echoPads</code></td><td>building one sentence word by word, each word chosen from pads <b>not available yet</b></td><td><code>data-first</code> the opening, <code>data-lives</code> (3), one <code>.qitem</code> per word, four single-word pads, order is the sentence</td></tr>
 <tr><td><code>bingoCard</code></td><td>hearing a word once and finding it on a card before the curtain falls</td><td><code>.qitem</code> per item, <code>data-a</code> the right option (or a <code>.listen</code> clip); leave <code>data-time</code> at 0</td></tr>
 <tr><td><code>ladderRun</code></td><td>climbing to the question itself, one rung per right answer, sliding back on a miss</td><td><code>.qitem</code> per rung, options the answers</td></tr>
 <tr><td><code>bossRaid</code></td><td>a long drill with a fight around it: every right answer is the fighter's attack</td><td><code>.qitem</code> per question, options are the answers; <code>data-time</code></td></tr>
-<tr><td><code>trainOrder</code></td><td>**IGNORE** loading one train per group of items, a car per answer</td><td><code>data-train</code> grouping the items of one train, <code>.qitem</code> per car</td></tr>
+<tr><td><code>trainOrder</code></td><td>loading one train per group of items, a car per answer <b>not available yet</b></td><td><code>data-train</code> grouping the items of one train, <code>.qitem</code> per car</td></tr>
 </tbody>
 </table></div></div></div></div>
 </div>
@@ -979,7 +979,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 
 <div class="rows markup-row">
 <details class="reveal" open id="markup-game"><summary>Markup — #game · reskinning an activity the lesson already wanted, as a game · the item list and the levers</summary><div class="body"><div>
-<pre>&lt;div class="game" data-game="skeetRange" data-time="6000" data-kind="train"&gt;
+<pre>&lt;div class="game" data-game="skeetRange" data-time="6000"&gt;
   &lt;p class="game-how"&gt;one line: how to play&lt;/p&gt;
   &lt;div class="game-list"&gt;
     &lt;div class="qitem" data-a="a"&gt;
@@ -996,7 +996,9 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 &lt;/div&gt;
 
 &lt;!-- levers on .game: data-game · data-time (ms per item, 0 = none) · data-limit · data-retry
-     · data-shuffle · data-rounds · data-prompt · data-sound · data-skin --&gt;</pre>
+     · data-shuffle · data-rounds · data-prompt · data-sound · data-skin · data-noun --&gt;
+&lt;!-- data-noun on .game: the noun the prompt card's blank sits in front of, with data-prompt —
+     without one the card shows the blank alone --&gt;</pre>
 <pre>&lt;!-- the question can be a spoken word instead of a written stem --&gt;
 &lt;div class="qline"&gt;&lt;span class="qnum"&gt;1.&lt;/span&gt;
   &lt;span class="qstem"&gt;&lt;button class="listen" type="button" data-say="borrow"&gt;▶&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;
@@ -1025,7 +1027,7 @@ I gave it to &lt;span class="pos-n pos-i" data-side="left"&gt;her…&lt;/span&gt
 
 <div class="rows"><div><div class="rows"><div><ul>
 <li>No option set leaves one option wrapped alone under the rest: four options read 4×1, 2×2 or 1×4.</li>
-<li>Check every block, class and attribute against this page: an element this page does not draw is not used, and a class remembered from another page is not used.</li>
+<li>Check every block, class and attribute against this page: an element this page does not draw is not used, unless its box is its only form (a game is an activity plus <code>data-game</code>); a class remembered from another page is not used.</li>
 <li>For a music section: its recording has a provenance row in <code>assets/README.md</code>, and the section teaches something the sound carries.</li>
 <li>Every translation reads as a Brazilian colleague would write it — a calque, a wrong tense or a missing subjunctive is a defect.</li>
 <li>Read the source for a directive comment left in the page — <code>TRAIN_HERE</code>, <code>QUIZ_HERE</code>, <code>MUSIC_HERE</code>, <code>MAP_HERE</code>, <code>DIALOG_HERE</code>: it was never built, or it was built and the comment never deleted.</li>
